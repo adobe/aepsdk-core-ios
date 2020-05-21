@@ -86,4 +86,35 @@ class SystemInfoServiceTest: XCTestCase {
     func testGetActiveLocaleName() {
         XCTAssertFalse(systemInfoService.getActiveLocaleName().isEmpty)
     }
+    
+    func testGetDeviceName() {
+        XCTAssertFalse(systemInfoService.getDeviceName().isEmpty)
+    }
+    
+    func testGetRunMode() {
+        XCTAssertNotNil(systemInfoService.getRunMode())
+    }
+    
+    func testGetApplicationName() {
+        XCTAssertNotNil(systemInfoService.getApplicationName())
+    }
+    
+    func testGetApplicationVersion() {
+        XCTAssertNotNil(systemInfoService.getApplicationVersion())
+    }
+    
+    func testGetApplicationVersionCode() {
+        XCTAssertNotNil(systemInfoService.getApplicationVersionCode())
+    }
+    
+    func testGetOperatinSystemName() {
+        XCTAssertNotNil(systemInfoService.getOperatingSystemName())
+    }
+    
+    func testGetDisplayInformation() {
+        let displayInfo = NativeDisplayInformation()
+        let testDisplayInfo = systemInfoService.getDisplayInformation()
+        XCTAssertEqual(displayInfo.heightPixels, testDisplayInfo.heightPixels)
+        XCTAssertEqual(displayInfo.widthPixels, testDisplayInfo.widthPixels)
+    }
 }
