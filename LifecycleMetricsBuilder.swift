@@ -14,18 +14,25 @@ import Foundation
 // Builds the LifecycleMetricsData and handles Lifecycle metrics data storage updates
 struct LifecycleMetricsBuilder {
     private var lifecycleMetrics: LifecycleMetrics = LifecycleMetrics()
-    private let systemInfoService = AEPServiceProvider.shared.systemInfoService
     
     private typealias KEYS = LifecycleConstants.Keys
 
     private let dataStore: NamedKeyValueStore
     private let date: Date
+ 
+    private var systemInfoService: SystemInfoService {
+        get {
+            AEPServiceProvider.shared.systemInfoService
+        }
+    }
     
     init(dataStore: NamedKeyValueStore, date: Date) {
         self.dataStore = dataStore
         self.date = date
     }
-        
+    
+    /// Builds the LifecycleMetrics
+    /// - Return: `LifecycleMetrics` as they are upon building
     func build() -> LifecycleMetrics {
         return lifecycleMetrics
     }
@@ -46,14 +53,14 @@ struct LifecycleMetricsBuilder {
         return self
     }
     
-    /// Adds the launch data to the lifecycle metrics and sets the days since last launch and days since first launch values in the data store.
+    /// Adds the launch data to the lifecycle metrics 
     /// Launch Metrics includes:
     /// - Daily engaged event
     /// - Monthly engaged event
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     mutating func addLaunchData() -> LifecycleMetricsBuilder {
         guard let lastLaunchDate: Date = self.dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE),
-            let firstLaunchDate: Date = self.dataStore.getObject(key: KEYS.FIRST_LAUNCH_DATE) else {
+            let firstLaunchDate: Date = self.dataStore.getObject(key: KEYS.INSTALL_DATE) else {
             return self
         }
 
@@ -65,9 +72,9 @@ struct LifecycleMetricsBuilder {
             return self
         }
         
-        dataStore.set(key: KEYS.DAYS_SINCE_LAST_LAUNCH, value: daysSinceLastLaunch)
-        dataStore.set(key: KEYS.DAYS_SINCE_FIRST_LAUNCH, value: daysSinceFirstLaunch)
-        
+        lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
+        lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
+
         let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: self.date)
         let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
         // Check if we have launched this month already
@@ -77,6 +84,7 @@ struct LifecycleMetricsBuilder {
         } else if currentDateComponents.day != lastLaunchDateComponents.day {
             lifecycleMetrics.dailyEngagedEvent = true
         }
+        
         
         return self
     }
@@ -168,7 +176,7 @@ struct LifecycleMetricsBuilder {
         
         lifecycleMetrics.deviceResolution = getResolution()
         lifecycleMetrics.operatingSystem = systemInfoService.getOperatingSystemName()
-        lifecycleMetrics.locale = systemInfoService.getActiveLocaleName()
+        lifecycleMetrics.locale = getLocale()
         
         if let runMode = systemInfoService.getRunMode() {
             lifecycleMetrics.runMode = runMode
@@ -178,7 +186,7 @@ struct LifecycleMetricsBuilder {
     }
     
     /// MARK: - Private helper functions
-    /// Combines the application name, verseion, and version code into a formatted application identifier
+    /// Combines the application name, version, and version code into a formatted application identifier
     /// - Return: `String` formatted Application identifier
     private func getApplicationIdentifier() -> String {
         let applicationName = systemInfoService.getApplicationName() ?? ""
@@ -193,6 +201,13 @@ struct LifecycleMetricsBuilder {
     private func getResolution() -> String {
         let displayInfo = systemInfoService.getDisplayInformation()
         return "\(displayInfo.widthPixels)x\(displayInfo.heightPixels)"
+    }
+    
+    /// Gets the formatted locale
+    /// - Return: `String` formatted locale
+    private func getLocale() -> String {
+        let locale = systemInfoService.getActiveLocaleName()
+        return locale.replacingOccurrences(of: "_", with: "-")
     }
 }
 

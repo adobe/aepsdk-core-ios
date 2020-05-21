@@ -20,13 +20,10 @@ struct LifecycleConstants {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
         // LifecycleDataStore Keys
-        static let INSTALL_DATE = "installDateKey"
-        static let LAST_LAUNCH_DATE = "lastLaunchDateKey"
-        static let FIRST_LAUNCH_DATE = "firstLaunchDateKey"
-        static let DAYS_SINCE_LAST_LAUNCH = "daysSinceLastLaunchKey"
-        static let DAYS_SINCE_FIRST_LAUNCH = "daysSinceFirstLaunchKey"
-        static let LAUNCHES = "launchesKey"
-        static let UPGRADE_DATE = "upgradeKey"
-        static let LAUNCHES_SINCE_UPGRADE = "launchesSinceUpgradeKey"
+        static let INSTALL_DATE = "InstallDate"
+        static let LAST_LAUNCH_DATE = "LastDateUsed"
+        static let LAUNCHES = "Launches"
+        static let UPGRADE_DATE = "UpgradeDate"
+        static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
     }
 }

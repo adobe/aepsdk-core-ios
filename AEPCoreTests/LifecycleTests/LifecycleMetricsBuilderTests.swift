@@ -52,12 +52,12 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         
         let _ = metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
-        // Check that the "daysSinceLastLaunch" and "daysSinceFirstLaunch" values are correct
-        XCTAssertEqual(dataStore?.setIntValues[0], 1)
-        XCTAssertEqual(dataStore?.setIntValues[1], 2)
-        
+
         XCTAssertTrue(metrics!.dailyEngagedEvent)
         XCTAssertFalse(metrics!.monthlyEngagedEvent)
+        // Check that the "daysSinceLastLaunch" and "daysSinceFirstLaunch" values are correct
+        XCTAssertEqual(metrics?.daysSinceLastLaunch, 1)
+        XCTAssertEqual(metrics?.daysSinceFirstLaunch, 2)
     }
     
     // Tests add launch data when last launch was a month before this launch
@@ -69,12 +69,12 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         
         let _ = metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
-        // Check that the "daysSinceLastLaunch" and "daysSinceFirstLaunch" values are correct when last launch was a month prior, and first launch was one day before that
-        XCTAssertEqual(dataStore?.setIntValues[0], 30)
-        XCTAssertEqual(dataStore?.setIntValues[1], 31)
-        
+
         XCTAssertTrue(metrics!.dailyEngagedEvent)
         XCTAssertTrue(metrics!.monthlyEngagedEvent)
+        // Check that the "daysSinceLastLaunch" and "daysSinceFirstLaunch" values are correct when last launch was a month prior, and first launch was one day before that
+        XCTAssertEqual(metrics?.daysSinceLastLaunch, 30)
+        XCTAssertEqual(metrics?.daysSinceFirstLaunch, 31)
     }
     
     func testAddGenericDataWithLaunches() {
@@ -156,7 +156,8 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let resolution = "\(widthPixels)x\(heightPixels)"
         let displayInformation = MockDisplayInformation(widthPixels: widthPixels, heightPixels: heightPixels)
         self.systemInfoService?.displayInformation = displayInformation
-        let locale = "US"
+        let locale = "US_OF_A"
+        let formattedLocale = "US-OF-A"
         self.systemInfoService?.activeLocaleName = locale
         let runMode = "Application"
         self.systemInfoService?.runMode = runMode
@@ -168,7 +169,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.appId, applicationIdentifier)
         XCTAssertEqual(metrics?.deviceResolution, resolution)
         XCTAssertEqual(metrics?.operatingSystem, operatingSystemName)
-        XCTAssertEqual(metrics?.locale, locale)
+        XCTAssertEqual(metrics?.locale, formattedLocale)
         XCTAssertEqual(metrics?.runMode, runMode)
     }
 }
