@@ -38,7 +38,8 @@ class LifecycleSessionTests: XCTestCase {
     private func loadPersistedContext() -> LifecyclePersistedContext? {
         return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
     }
-
+    
+    /// Tests session is updated correctly after a first launch session start
     func testStartFirstLaunchSession() {
         // test
         let previousSessionInfo = session.start(startDate: currentDate, sessionTimeoutInSeconds: sessionTimeoutInSeconds, coreData: [:])
@@ -55,6 +56,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertFalse(previousSessionInfo?.isCrash ?? true)
     }
     
+    /// Tests the session is in the correct state after start -> pause -> start
     func testStartResumeSession() {
         // setup
         let previousSessionStartDate = currentDate
@@ -79,6 +81,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertNil(previousSessionInfo)
     }
     
+    /// Tests that OS version and app identifier are properly persisted by the LifecycleSession
     func testStartVerifyAppIdAndOsVersion() {
         // setup
         let osVersion = "iOS 13.0"
@@ -94,6 +97,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertEqual(sessionContext?.appId, appId)
     }
     
+    /// Tests the behavior when calling start two times in a row, the second call should have no affect
     func testLifecycleHasAlreadyRan() {
         // test
         session.start(startDate: currentDate, sessionTimeoutInSeconds: sessionTimeoutInSeconds, coreData: [:])
@@ -109,6 +113,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertNil(previousSessionInfo)
     }
     
+    /// Tests starting a new session after the previous start session exceeded timeout
     func testStartSessionExpired() {
         // setup
         let previousSessionStartDate = currentDate
@@ -132,6 +137,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertFalse(previousSessionInfo?.isCrash ?? true)
     }
     
+    /// Tests that pause correctly persists the pause date and that it was a successful close close
     func testPauseSimple() {
         // test
         session.pause(pauseDate: currentDate)
@@ -142,6 +148,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertTrue(sessionContext?.successfulClose ?? false)
     }
     
+    /// Tests that when there is no previous session returns an empty dict for getSessionData
     func testGetSessionDataNotANewSession() {
         // test
         session.start(startDate: currentDate, sessionTimeoutInSeconds: sessionTimeoutInSeconds, coreData: [:])
@@ -152,6 +159,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertTrue(sessionData.isEmpty)
     }
     
+    /// Tests that we get the proper session data when starting a session within the ignore timeframe
     func testGetSessionDataDroppedSession() {
         // test
         session.start(startDate: currentDate, sessionTimeoutInSeconds: sessionTimeoutInSeconds, coreData: [:])
@@ -166,6 +174,7 @@ class LifecycleSessionTests: XCTestCase {
         XCTAssertEqual(expectedData, sessionData)
     }
     
+    /// Tests that previous session length is calculated correctly
     func testGetSessionDataPreviousSessionValid() {
         // test
         session.start(startDate: currentDate, sessionTimeoutInSeconds: sessionTimeoutInSeconds, coreData: [:])
