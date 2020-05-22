@@ -17,7 +17,7 @@ class ConfigurationState {
     let appIdManager: AppIDManager
     let configDownloader: ConfigurationDownloadable
     
-    private(set) var currentConfiguration = [String: Any]() // should only be read/modified when responding to an event via `eventQueue`
+    private(set) var currentConfiguration = [String: Any]()
     private(set) var programmaticConfig: [String: AnyCodable] {
         set {
             dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: newValue)
@@ -29,6 +29,11 @@ class ConfigurationState {
         }
     }
     
+    /// Creates a new `ConfigurationState` with an empty current configuration
+    /// - Parameters:
+    ///   - dataStore: The datastore in which configurations are cached
+    ///   - appIdManager: An `AppIDManager` which will manage loading and saving appIds to persistence
+    ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration from various locations
     init(dataStore: NamedKeyValueStore, appIdManager: AppIDManager, configDownloader: ConfigurationDownloadable) {
         self.dataStore = dataStore
         self.appIdManager = appIdManager
@@ -104,6 +109,8 @@ class ConfigurationState {
         return true
     }
     
+    /// Replaces `currentConfiguration` with `newConfig` and then applies the existing programmatic configuration on-top
+    /// - Parameter newConfig: A configuration to replace the current configuration
     private func replaceConfigurationWith(newConfig: [String: Any]) {
         currentConfiguration = newConfig
         // Apply any programmatic configuration updates
