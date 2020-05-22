@@ -1,0 +1,47 @@
+/*
+Copyright 2020 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
+
+import Foundation
+
+/// Handles loading and saving the appId to the data store and manifest
+struct AppIDManager {
+    let dataStore: NamedKeyValueStore
+    
+    /// Loads the appId from the data store, if not present in the data store loads from the manifest
+    /// - Returns: appId loaded from persistence or manifest, nil if not present in either
+    func loadAppId() -> String? {
+        // Prefer appId stored in persistence over in manifest
+        return loadAppIdFromPersistence() ?? loadAppIdFromManifest()
+    }
+    
+    /// Saves the appId to the data store
+    /// - Parameter appId: appId to be saved to data store
+    func saveAppIdToPersistence(appId: String) {
+        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: appId)
+    }
+    
+    /// Loads the appId from the data store
+    /// - Returns: appId loaded from persistence, nil if not present
+    func loadAppIdFromPersistence() -> String? {
+        return dataStore.getString(key: ConfigurationConstants.Keys.PERSISTED_APPID)
+    }
+    
+    /// Loads the appId from the manifest
+    /// - Returns: appId loaded from the manifest, nil if not present
+    func loadAppIdFromManifest() -> String? {
+        if let appId = AEPServiceProvider.shared.systemInfoService.getProperty(for: ConfigurationConstants.CONFIG_MANIFEST_APPID_KEY) {
+            saveAppIdToPersistence(appId: appId)
+            return appId
+        }
+
+        return nil
+    }
+}
