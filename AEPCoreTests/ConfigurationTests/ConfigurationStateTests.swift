@@ -64,20 +64,20 @@ class ConfigurationStateTests: XCTestCase {
         configState = ConfigurationState(dataStore: dataStore, appIdManager: appIdManager, configDownloader: configDownloader)
     }
 
-    private func putAppIdInPersistence() {
-        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: "some-valid-app-id")
+    private func putAppIdInPersistence(appId: String) {
+        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: appId)
     }
 
-    private func putCachedConfigInPersistence(appId: String? = nil) {
+    private func putCachedConfigInPersistence(config: [String: Any]) {
         configDownloader.configFromCache = cachedConfig
     }
 
-    private func putProgrammaticConfigInPersistence() {
-        dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: programmaticConfig)
+    private func putProgrammaticConfigInPersistence(config: [String: AnyCodable]) {
+        dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: config)
     }
 
-    private func putConfigInManifest() {
-        configDownloader.configFromManifest = bundledConfig
+    private func putConfigInManifest(config: [String: Any]) {
+        configDownloader.configFromManifest = config
     }
 
     private func assertHasProgrammaticConfig() {
@@ -91,10 +91,10 @@ class ConfigurationStateTests: XCTestCase {
     /// #1, appId present, cached config present, bundled config present, programmatic config present
     func testAppIdAndCachedConfigAndBundledConfigAndProgrammaticConfig() {
         // setup
-        putAppIdInPersistence()
-        putCachedConfigInPersistence()
-        putProgrammaticConfigInPersistence()
-        putConfigInManifest()
+        putAppIdInPersistence(appId: "some-test-app-id")
+        putCachedConfigInPersistence(config: cachedConfig)
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
+        putConfigInManifest(config: bundledConfig)
 
         // test
         configState.loadInitialConfig()
@@ -108,9 +108,9 @@ class ConfigurationStateTests: XCTestCase {
     /// #2, appId present, cached config present, bundled config present, programmatic config not present
     func testAppIdAndCachedConfigAndBundledConfig() {
         // setup
-        putAppIdInPersistence()
-        putCachedConfigInPersistence()
-        putConfigInManifest()
+        putAppIdInPersistence(appId: "some-test-app-id")
+        putCachedConfigInPersistence(config: cachedConfig)
+        putConfigInManifest(config: bundledConfig)
 
         // test
         configState.loadInitialConfig()
@@ -122,9 +122,9 @@ class ConfigurationStateTests: XCTestCase {
 
     /// #3, appId present, cached config present, no bundled config, programmatic config present
     func testAppIdAndCachedAndProgrammatic() {
-        putAppIdInPersistence()
-        putCachedConfigInPersistence()
-        putProgrammaticConfigInPersistence()
+        putAppIdInPersistence(appId: "some-test-app-id")
+        putCachedConfigInPersistence(config: cachedConfig)
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
         configState.loadInitialConfig()
@@ -137,8 +137,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #4, appId present, cached config present, no bundled config, no programmatic config
     func testAppIdAndCachedConfig() {
         // setup
-        putAppIdInPersistence()
-        putCachedConfigInPersistence()
+        putAppIdInPersistence(appId: "some-test-app-id")
+        putCachedConfigInPersistence(config: cachedConfig)
 
         // test
         configState.loadInitialConfig()
@@ -150,9 +150,9 @@ class ConfigurationStateTests: XCTestCase {
     /// #5, appId present, no cached config, bundled config present, programmatic config present
     func testAppIdAndBundledConfigAndProgrammatic() {
         // setup
-        putAppIdInPersistence()
-        putProgrammaticConfigInPersistence()
-        putConfigInManifest()
+        putAppIdInPersistence(appId: "some-test-app-id")
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
+        putConfigInManifest(config: bundledConfig)
 
         // test
         configState.loadInitialConfig()
@@ -167,8 +167,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #6, appId present, no cached config, bundled config present, no programmatic
     func testAppIdAndBundledConfig() {
         // setup
-        putAppIdInPersistence()
-        putConfigInManifest()
+        putAppIdInPersistence(appId: "some-test-app-id")
+        putConfigInManifest(config: bundledConfig)
 
         // test
         configState.loadInitialConfig()
@@ -181,8 +181,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #7, appId present, no cached config, no bundled config, programmatic config present
     func testAppIdAndProgrammatic() {
         // setup
-        putAppIdInPersistence()
-        putProgrammaticConfigInPersistence()
+        putAppIdInPersistence(appId: "some-test-app-id")
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
         configState.loadInitialConfig()
@@ -195,7 +195,7 @@ class ConfigurationStateTests: XCTestCase {
     /// #8, appId present, no cached config, no bundled config, no programmatic config
     func testOnlyAppId() {
         // setup
-        putAppIdInPersistence()
+        putAppIdInPersistence(appId: "some-test-app-id")
 
         // test
         configState.loadInitialConfig()
@@ -207,9 +207,9 @@ class ConfigurationStateTests: XCTestCase {
     /// #9, no appId, cached config present, bundled config present, programmatic config present
     func testCachedConfigAndBundledConfigAndProgrammaticConfig() {
         // verify
-        putCachedConfigInPersistence()
-        putConfigInManifest()
-        putProgrammaticConfigInPersistence()
+        putCachedConfigInPersistence(config: cachedConfig)
+        putConfigInManifest(config: bundledConfig)
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
         configState.loadInitialConfig()
@@ -224,8 +224,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #10, no appId present, cached config present, bundled config present, no programmatic config
     func testCachedConfigAndBundledConfig() {
         // verify
-        putCachedConfigInPersistence()
-        putConfigInManifest()
+        putCachedConfigInPersistence(config: cachedConfig)
+        putConfigInManifest(config: bundledConfig)
 
         // test
         configState.loadInitialConfig()
@@ -239,8 +239,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #11, no appId, cached config present, no bundled config, programmatic config present
     func testCachedConfigAndProgrammatic() {
         // verify
-        putCachedConfigInPersistence()
-        putProgrammaticConfigInPersistence()
+        putCachedConfigInPersistence(config: cachedConfig)
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
         configState.loadInitialConfig()
@@ -253,7 +253,7 @@ class ConfigurationStateTests: XCTestCase {
     /// #12, no appId, cached config present, no bundled config, no programmatic config
     func testCachedConfig() {
         // setup
-        putCachedConfigInPersistence()
+        putCachedConfigInPersistence(config: cachedConfig)
 
         // test
         configState.loadInitialConfig()
@@ -265,8 +265,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #13, no appId, no cached config, bundled config present, programmatic config present
     func testBundledConfigAndProgrammaticConfig() {
         // setup
-        putConfigInManifest()
-        putProgrammaticConfigInPersistence()
+        putConfigInManifest(config: bundledConfig)
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
         configState.loadInitialConfig()
@@ -281,7 +281,7 @@ class ConfigurationStateTests: XCTestCase {
     /// #14, no appId, no cached config, bundled config present, no programmatic config
     func testBundledConfig() {
         // setup
-        putConfigInManifest()
+        putConfigInManifest(config: bundledConfig)
 
         // test
         configState.loadInitialConfig()
@@ -295,7 +295,7 @@ class ConfigurationStateTests: XCTestCase {
     /// #15, no appId, no cached config, no bundled config, programmatic config present
     func testProgrammaticConfig() {
         // setup
-        putProgrammaticConfigInPersistence()
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
         configState.loadInitialConfig()
@@ -348,7 +348,7 @@ class ConfigurationStateTests: XCTestCase {
     /// Test that programmatic config and updateConfigWith merge the existing configs together
     func testUpdateConfigNewConfigPersistedConfigPresent() {
         // setup
-        putProgrammaticConfigInPersistence()
+        putProgrammaticConfigInPersistence(config: programmaticConfig)
         let expectedConfig = ["programmaticKey": "programmaticVal"]
 
         // test
