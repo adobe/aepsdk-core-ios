@@ -14,43 +14,6 @@ import XCTest
 @testable import AEPCore
 
 class ConfigurationStateTests: XCTestCase {
-    let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
-    let cachedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
-                                                 "target.clientCode": "yourclientcode",
-                                                 "target.timeout": 5,
-                                                 "audience.server": "omniture.demdex.net",
-                                                 "audience.timeout": 5,
-                                                 "analytics.rsids": "mobilersidsample",
-                                                 "analytics.server": "obumobile1.sc.omtrdc.net",
-                                                 "analytics.aamForwardingEnabled": false,
-                                                 "analytics.offlineEnabled": true,
-                                                 "analytics.batchLimit": 0,
-                                                 "analytics.backdatePreviousSessionInfo": false,
-                                                 "global.privacy": "optedin",
-                                                 "lifecycle.sessionTimeout": 300,
-                                                 "rules.url": "https://link.to.rules/test.zip",
-                                                 "exampleKey": "exampleVal",
-                                                 "exampleKey1": "exampleVal1"]
-    
-    let bundledConfig: [String: Any] = ["target.timeout": 5,
-                          "global.privacy": "optedin",
-                          "analytics.backdatePreviousSessionInfo": false,
-                          "analytics.offlineEnabled": true,
-                          "build.environment": "prod",
-                          "rules.url": "https://assets.adobedtm.com/launch-EN1a68f9bc5b3c475b8c232adc3f8011fb-rules.zip",
-                          "target.clientCode": "",
-                          "experienceCloud.org": "972C898555E9F7BC7F000101@AdobeOrg",
-                          "lifecycle.sessionTimeout": 300,
-                          "target.environmentId": "",
-                          "analytics.server": "obumobile5.sc.omtrdc.net",
-                          "analytics.rsids": "adobe.bundled.config",
-                          "analytics.batchLimit": 3,
-                          "property.id": "PR3dd64c475eb747339f0319676d56b1df",
-                          "global.ssl": true,
-                          "analytics.aamForwardingEnabled": true,
-                          "bundled.config.key": "bundled.config.value"
-                        ]
-
     var configState: ConfigurationState!
     let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     var appIdManager: AppIDManager!
@@ -69,7 +32,7 @@ class ConfigurationStateTests: XCTestCase {
     }
 
     private func putCachedConfigInPersistence(config: [String: Any]) {
-        configDownloader.configFromCache = cachedConfig
+        configDownloader.configFromCache = config
     }
 
     private func putProgrammaticConfigInPersistence(config: [String: AnyCodable]) {
@@ -88,9 +51,19 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual(configState.currentConfiguration["bundled.config.key"] as! String, "bundled.config.value")
     }
     
+    private func assertContainsConfig(config: [String: Any]) {
+        for (key, _) in config {
+            XCTAssertTrue(configState.currentConfiguration.contains(where: {$0.key == key}))
+        }
+    }
+    
     /// #1, appId present, cached config present, bundled config present, programmatic config present
     func testAppIdAndCachedConfigAndBundledConfigAndProgrammaticConfig() {
         // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
@@ -101,13 +74,16 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(cachedConfig.count + programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: programmaticConfig)
         XCTAssertFalse(configDownloader.calledLoadDefaultConfig) // bundled config should not even be looked at in this case
     }
 
     /// #2, appId present, cached config present, bundled config present, programmatic config not present
     func testAppIdAndCachedConfigAndBundledConfig() {
         // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
         putConfigInManifest(config: bundledConfig)
@@ -122,6 +98,10 @@ class ConfigurationStateTests: XCTestCase {
 
     /// #3, appId present, cached config present, no bundled config, programmatic config present
     func testAppIdAndCachedAndProgrammatic() {
+        // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
@@ -137,6 +117,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #4, appId present, cached config present, no bundled config, no programmatic config
     func testAppIdAndCachedConfig() {
         // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
 
@@ -150,6 +132,9 @@ class ConfigurationStateTests: XCTestCase {
     /// #5, appId present, no cached config, bundled config present, programmatic config present
     func testAppIdAndBundledConfigAndProgrammatic() {
         // setup
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putAppIdInPersistence(appId: "some-test-app-id")
         putProgrammaticConfigInPersistence(config: programmaticConfig)
         putConfigInManifest(config: bundledConfig)
@@ -167,6 +152,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #6, appId present, no cached config, bundled config present, no programmatic
     func testAppIdAndBundledConfig() {
         // setup
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putAppIdInPersistence(appId: "some-test-app-id")
         putConfigInManifest(config: bundledConfig)
 
@@ -181,6 +168,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #7, appId present, no cached config, no bundled config, programmatic config present
     func testAppIdAndProgrammatic() {
         // setup
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        
         putAppIdInPersistence(appId: "some-test-app-id")
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
@@ -206,7 +195,11 @@ class ConfigurationStateTests: XCTestCase {
 
     /// #9, no appId, cached config present, bundled config present, programmatic config present
     func testCachedConfigAndBundledConfigAndProgrammaticConfig() {
-        // verify
+        // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putCachedConfigInPersistence(config: cachedConfig)
         putConfigInManifest(config: bundledConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
@@ -223,7 +216,10 @@ class ConfigurationStateTests: XCTestCase {
 
     /// #10, no appId present, cached config present, bundled config present, no programmatic config
     func testCachedConfigAndBundledConfig() {
-        // verify
+        // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putCachedConfigInPersistence(config: cachedConfig)
         putConfigInManifest(config: bundledConfig)
 
@@ -238,7 +234,10 @@ class ConfigurationStateTests: XCTestCase {
 
     /// #11, no appId, cached config present, no bundled config, programmatic config present
     func testCachedConfigAndProgrammatic() {
-        // verify
+        // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        
         putCachedConfigInPersistence(config: cachedConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
@@ -253,6 +252,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #12, no appId, cached config present, no bundled config, no programmatic config
     func testCachedConfig() {
         // setup
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
+        
         putCachedConfigInPersistence(config: cachedConfig)
 
         // test
@@ -265,6 +266,9 @@ class ConfigurationStateTests: XCTestCase {
     /// #13, no appId, no cached config, bundled config present, programmatic config present
     func testBundledConfigAndProgrammaticConfig() {
         // setup
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putConfigInManifest(config: bundledConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
@@ -281,6 +285,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #14, no appId, no cached config, bundled config present, no programmatic config
     func testBundledConfig() {
         // setup
+        let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
+        
         putConfigInManifest(config: bundledConfig)
 
         // test
@@ -295,6 +301,8 @@ class ConfigurationStateTests: XCTestCase {
     /// #15, no appId, no cached config, no bundled config, programmatic config present
     func testProgrammaticConfig() {
         // setup
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
+        
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
@@ -348,6 +356,7 @@ class ConfigurationStateTests: XCTestCase {
     /// Test that programmatic config and updateConfigWith merge the existing configs together
     func testUpdateConfigNewConfigPersistedConfigPresent() {
         // setup
+        let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
         putProgrammaticConfigInPersistence(config: programmaticConfig)
         let expectedConfig = ["programmaticKey": "programmaticVal"]
 
@@ -387,11 +396,12 @@ class ConfigurationStateTests: XCTestCase {
         let expectation = XCTestExpectation(description: "ConfigurationDownloader closure should be invoked")
         expectation.assertForOverFulfill = true
 
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromUrl = cachedConfig
         
         // test & verify
         configState.updateWith(appId: "valid-app-id") { (config) in
-            XCTAssertEqual(16, config?.count)
+            XCTAssertEqual(cachedConfig.count, config?.count)
             expectation.fulfill()
         }
 
@@ -423,15 +433,16 @@ class ConfigurationStateTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
         
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromUrl = cachedConfig
         
         // test
         configState.updateWith(appId: "valid-app-id") { (config) in
-            XCTAssertEqual(16, config?.count)
+            XCTAssertEqual(cachedConfig.count, config?.count)
             expectation.fulfill()
             
             self.configState.updateWith(appId: "newAppId") { (newConfig) in
-                XCTAssertEqual(16, newConfig?.count)
+                XCTAssertEqual(cachedConfig.count, newConfig?.count)
                 expectation.fulfill()
             }
         }
@@ -447,17 +458,18 @@ class ConfigurationStateTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
         
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromUrl = cachedConfig
         
         // test
         configState.updateWith(appId: "valid-app-id") { (config) in
-            XCTAssertEqual(16, config?.count)
+            XCTAssertEqual(cachedConfig.count, config?.count)
             self.configDownloader.configFromUrl = nil
             expectation.fulfill()
             
             self.configState.updateWith(appId: "invalid-app-id") { (newConfig) in
                 XCTAssertNil(newConfig)
-                XCTAssertEqual(16, self.configState.currentConfiguration.count)
+                XCTAssertEqual(cachedConfig.count, self.configState.currentConfiguration.count)
                 expectation.fulfill()
             }
         }
@@ -480,20 +492,22 @@ class ConfigurationStateTests: XCTestCase {
     
     /// When the configuration downloader returns a valid config we properly update the current configuration
     func testUpdateConfigWithPathSimple() {
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromPath = cachedConfig // simulate file found
         XCTAssertTrue(configState.updateWith(filePath: "validPath"))
-        XCTAssertEqual(16, configState.currentConfiguration.count)
+        XCTAssertEqual(cachedConfig.count, configState.currentConfiguration.count)
     }
     
     /// Tests that when we have loaded a config from a file path, then we pass in an invalid path that the previous valid configuration is preserved
     func testUpdateConfigWithValidPathThenInvalid() {
+        let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromPath = cachedConfig // simulate file found
         XCTAssertTrue(configState.updateWith(filePath: "validPath"))
-        XCTAssertEqual(16, configState.currentConfiguration.count)
+        XCTAssertEqual(cachedConfig.count, configState.currentConfiguration.count)
 
         configDownloader.configFromPath = nil // simulate file not found
         XCTAssertFalse(configState.updateWith(filePath: "Invalid/Path/ADBMobile.json"))
-        XCTAssertEqual(16, configState.currentConfiguration.count)
+        XCTAssertEqual(cachedConfig.count, configState.currentConfiguration.count)
     }
 
 }
