@@ -80,7 +80,7 @@ class ConfigurationState {
     
     /// Attempts to download the configuration associated with `appId`, if downloading the remote config fails we check cache for cached config
     /// - Parameter appId: appId associated with the remote config
-    /// - Returns: True if the configuration was downloaded or if it was loaded from cache, false otherwise
+    /// - Parameter completion: A closure that is invoked with the downloaded config, nil if unable to download config with `appId`
     func updateConfigWith(appId: String, completion: @escaping ([String: Any]?) -> ()) {
         // Save the AppID in persistence for loading configuration on future launches.
         appIdManager.saveAppIdToPersistence(appId: appId)
