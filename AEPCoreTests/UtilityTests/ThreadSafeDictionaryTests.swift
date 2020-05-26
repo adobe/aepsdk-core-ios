@@ -101,7 +101,7 @@ class ThreadSafeDictionaryTests: XCTestCase {
     func testSyncMultipleTimesWithConcurrent() {
         // setup
         let count = 1000
-        let expectation = XCTestExpectation(description: "todo")
+        let expectation = XCTestExpectation(description: "Expectation is full-filled 1000 times")
         expectation.expectedFulfillmentCount = count
         let dispatchQueue1 = DispatchQueue(label: "ThreadSafeDictionaryTests.queue1", attributes: .concurrent)
         let dispatchQueue2 = DispatchQueue(label: "ThreadSafeDictionaryTests.queue2", attributes: .concurrent)
