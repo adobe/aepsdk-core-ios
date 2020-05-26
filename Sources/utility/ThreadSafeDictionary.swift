@@ -21,7 +21,7 @@ final class ThreadSafeDictionary<K: Hashable, V> {
     /// Creates a new thread safe dictionary
     /// - Parameter identifier: A unique identifier for this dictionary, a reverse-DNS naming style (com.example.myqueue) is recommended
     init(identifier: String = "com.adobe.threadsafedictionary.queue") {
-        queue = DispatchQueue(label: identifier, attributes: .concurrent)
+        queue = DispatchQueue(label: identifier)
     }
     
     /// How many key pair values are preset in the dictionary
@@ -35,7 +35,7 @@ final class ThreadSafeDictionary<K: Hashable, V> {
             return queue.sync { return self.dictionary[key] }
          }
          set {
-            queue.sync(flags: .barrier) {
+            queue.async {
                 self.dictionary[key] = newValue
              }
          }
