@@ -28,7 +28,6 @@ class SystemInfoServiceTest: XCTestCase {
     override func setUp() {
         self.bundle = Bundle(for: type(of: self))
         self.systemInfoService = ApplicationSystemInfoService(bundle: bundle)
-        
     }
 
     func testGetProperty() {

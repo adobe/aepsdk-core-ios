@@ -20,6 +20,8 @@ public class AEPServiceProvider {
 
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()
+    private var overrideKeyValueService: NamedKeyValueService?
+    private var defaultKeyValueService = NamedUserDefaultKeyValueService()
     private var overrideNetworkService: NetworkService?
     private var defaultNetworkService = AEPNetworkService()
 
@@ -36,9 +38,6 @@ public class AEPServiceProvider {
             }
         }
     }
-    
-    private var overrideKeyValueService: NamedKeyValueService?
-    private var defaultKeyValueService = NamedUserDefaultKeyValueService()
 
     public var namedKeyValueService: NamedKeyValueService {
         get {
