@@ -87,13 +87,11 @@ class ConfigurationState {
 
         // Try to download config from network, if fails try to load from cache
         configDownloader.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { [weak self] (config) in
-            if let store = self?.dataStore, let loadedConfig = config ?? self?.configDownloader.loadConfigFromCache(appId: appId, dataStore: store) {
+            if let loadedConfig = config {
                 self?.replaceConfigurationWith(newConfig: loadedConfig)
-                completion(loadedConfig)
-            } else {
-                completion(config)
             }
             
+            completion(config)
         })
     }
     

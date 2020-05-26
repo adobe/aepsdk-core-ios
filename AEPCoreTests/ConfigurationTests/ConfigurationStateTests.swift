@@ -399,25 +399,7 @@ class ConfigurationStateTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
-    /// case 2: network is down, but cached config exists
-    func testUpdateConfigWithAppIdFailedRequestExistsInCache() {
-        // setup
-        let expectation = XCTestExpectation(description: "ConfigurationDownloader closure should be invoked")
-        expectation.assertForOverFulfill = true
-        let appId = "app-id-not-on-server"
-        putCachedConfigInPersistence(appId: appId)
-
-        // test
-        configState.updateConfigWith(appId: appId) { (config) in
-            XCTAssertEqual(16, config?.count)
-            expectation.fulfill()
-        }
-        
-        // verify
-        wait(for: [expectation], timeout: 0.5)
-    }
-
-    /// case 3: network is down or app id is invalid, no cached config
+    /// case 2: network is down or app id is invalid, no cached config
     func testUpdateConfigWithAppIdInvalidId() {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader closure should be invoked")
@@ -434,7 +416,7 @@ class ConfigurationStateTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
-    /// case 4: can configure with multiple app ids
+    /// case 3: can configure with multiple app ids
     func testUpdateConfigWithAppIdMultiple() {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader closure should be invoked")
@@ -458,7 +440,7 @@ class ConfigurationStateTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
-    /// case 5: valid config is preserved even when an invalid app id is passed
+    /// case 4: valid config is preserved even when an invalid app id is passed
     func testUpdateConfigWithValidThenInvalidId() {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader closure should be invoked")
