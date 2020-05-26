@@ -42,14 +42,6 @@ class ConfigurationStateTests: XCTestCase {
     private func putConfigInManifest(config: [String: Any]) {
         configDownloader.configFromManifest = config
     }
-
-    private func assertHasProgrammaticConfig() {
-        XCTAssertEqual(configState.currentConfiguration["testKey"] as! String, "testVal")
-    }
-
-    private func assertHasBundledConfig() {
-        XCTAssertEqual(configState.currentConfiguration["bundled.config.key"] as! String, "bundled.config.value")
-    }
     
     private func assertContainsConfig(config: [String: Any]) {
         for (key, _) in config {
@@ -111,7 +103,7 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(cachedConfig.count + programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: programmaticConfig)
     }
 
     /// #4, appId present, cached config present, no bundled config, no programmatic config
@@ -144,7 +136,7 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(bundledConfig.count + programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: programmaticConfig)
         XCTAssertTrue(configDownloader.calledLoadDefaultConfig)
         XCTAssertNotNil(configState.currentConfiguration["bundled.config.key"])
     }
@@ -178,7 +170,7 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: programmaticConfig)
     }
 
     /// #8, appId present, no cached config, no bundled config, no programmatic config
@@ -209,8 +201,8 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(bundledConfig.count + programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasProgrammaticConfig()
-        assertHasBundledConfig()
+        assertContainsConfig(config: programmaticConfig)
+        assertContainsConfig(config: bundledConfig)
         XCTAssertTrue(configDownloader.calledLoadDefaultConfig)
     }
 
@@ -229,7 +221,7 @@ class ConfigurationStateTests: XCTestCase {
         // verify
         XCTAssertEqual(bundledConfig.count, configState.currentConfiguration.count)
         XCTAssertTrue(configDownloader.calledLoadDefaultConfig)
-        assertHasBundledConfig()
+        assertContainsConfig(config: bundledConfig)
     }
 
     /// #11, no appId, cached config present, no bundled config, programmatic config present
@@ -246,7 +238,7 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: programmaticConfig)
     }
 
     /// #12, no appId, cached config present, no bundled config, no programmatic config
@@ -277,8 +269,8 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(bundledConfig.count + programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasBundledConfig()
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: bundledConfig)
+        assertContainsConfig(config: programmaticConfig)
         XCTAssertTrue(configDownloader.calledLoadDefaultConfig)
     }
 
@@ -294,7 +286,7 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(bundledConfig.count, configState.currentConfiguration.count)
-        assertHasBundledConfig()
+        assertContainsConfig(config: bundledConfig)
         XCTAssertTrue(configDownloader.calledLoadDefaultConfig)
     }
 
@@ -310,7 +302,7 @@ class ConfigurationStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(programmaticConfig.count, configState.currentConfiguration.count)
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: programmaticConfig)
     }
 
     /// #16, No appId, no cached config, no bundled config, no programmatic config
@@ -367,7 +359,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual(2, configState.currentConfiguration.count)
         XCTAssertEqual("programmaticVal", configState.currentConfiguration["programmaticKey"] as! String)
         XCTAssertEqual("testVal", configState.currentConfiguration["testKey"] as! String)
-        assertHasProgrammaticConfig()
+        assertContainsConfig(config: programmaticConfig)
     }
 
     // MARK: updateProgrammaticConfig tests
