@@ -18,7 +18,7 @@ class ConfigurationState {
     let configDownloader: ConfigurationDownloadable
     
     private(set) var currentConfiguration = [String: Any]()
-    private(set) var programmaticConfig: [String: AnyCodable] {
+    private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
         set {
             dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: newValue)
         }
@@ -63,7 +63,7 @@ class ConfigurationState {
         currentConfiguration.merge(newConfig) { (_, updated) in updated }
 
         // Apply any programmatic configuration updates
-        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfig) ?? [:]) { (_, updated) in updated }
+        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
     
     /// Updates the programmatic config, then applies these changes to the current configuration
@@ -72,10 +72,10 @@ class ConfigurationState {
         // Any existing programmatic configuration updates are retrieved from persistence.
         // New configuration updates are applied over the existing persisted programmatic configurations
         // New programmatic configuration updates are saved to persistence.
-        programmaticConfig.merge(AnyCodable.from(dictionary: updatedConfig) ?? [:]) { (_, updated) in updated }
+        programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: updatedConfig) ?? [:]) { (_, updated) in updated }
         
         // The current configuration is updated with these new programmatic configuration changes.
-        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfig) ?? [:]) { (_, updated) in updated }
+        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
     
     /// Attempts to download the configuration associated with `appId`, if downloading the remote config fails we check cache for cached config
@@ -114,6 +114,6 @@ class ConfigurationState {
     private func replaceConfigurationWith(newConfig: [String: Any]) {
         currentConfiguration = newConfig
         // Apply any programmatic configuration updates
-        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfig) ?? [:]) { (_, updated) in updated }
+        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
 }

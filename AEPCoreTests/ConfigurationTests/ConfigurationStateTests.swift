@@ -375,9 +375,9 @@ class ConfigurationStateTests: XCTestCase {
         // verify
         XCTAssertEqual(1, configState.currentConfiguration.count)
         XCTAssertEqual("testVal", configState.currentConfiguration["testKey"] as! String)
-        XCTAssertEqual(1, configState.programmaticConfig.count)
-        XCTAssertEqual("testVal", configState.programmaticConfig["testKey"]?.stringValue)
-        XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfig)
+        XCTAssertEqual(1, configState.programmaticConfigInDataStore.count)
+        XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.stringValue)
+        XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
     }
 
     // MARK: updateConfigWith(appId) tests
