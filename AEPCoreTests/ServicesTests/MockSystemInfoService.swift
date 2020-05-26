@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPCore
 
 class MockSystemInfoService: SystemInfoService {
+
     var property: String? = nil
     func getProperty(for key: String) -> String? {
         return property
@@ -49,8 +50,8 @@ class MockSystemInfoService: SystemInfoService {
         return mobileCarrierName
     }
     
-    var runMode: String? = nil
-    func getRunMode() -> String? {
+    var runMode: String = ""
+    func getRunMode() -> String {
         return runMode
     }
     
@@ -59,14 +60,14 @@ class MockSystemInfoService: SystemInfoService {
         return applicationName
     }
     
-    var applicationVersion: String? = nil
-    func getApplicationVersion() -> String? {
-        return applicationVersion
+    var applicationBuildNumber: String? = nil
+    func getApplicationBuildNumber() -> String? {
+        return applicationBuildNumber
     }
     
-    var applicationVersionCode: String? = nil
-    func getApplicationVersionCode() -> String? {
-        return applicationVersionCode
+    var applicationVersionNumber: String? = nil
+    func getApplicationVersionNumber() -> String? {
+        return applicationVersionNumber
     }
     
     var operatingSystemName: String = ""

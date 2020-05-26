@@ -92,9 +92,9 @@ class ApplicationSystemInfoService: SystemInfoService {
         return carrier?.carrierName
     }
     
-    func getRunMode() -> String? {
+    func getRunMode() -> String {
         guard let executablePath = bundle.executablePath else {
-            return nil
+            return "Application"
         }
         if executablePath.contains(".appex/") {
             return "Extension"
@@ -112,11 +112,11 @@ class ApplicationSystemInfoService: SystemInfoService {
         return appName
     }
     
-    func getApplicationVersion() -> String? {
+    func getApplicationBuildNumber() -> String? {
         return bundle.infoDictionary?["CFBundleVersion"] as? String
     }
     
-    func getApplicationVersionCode() -> String? {
+    func getApplicationVersionNumber() -> String? {
         return bundle.infoDictionary?["CFBundleShortVersionString"] as? String
     }
     

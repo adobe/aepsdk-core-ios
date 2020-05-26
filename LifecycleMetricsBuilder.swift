@@ -59,54 +59,53 @@ struct LifecycleMetricsBuilder {
     /// - Monthly engaged event
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     mutating func addLaunchData() -> LifecycleMetricsBuilder {
-        guard let lastLaunchDate: Date = self.dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE),
-            let firstLaunchDate: Date = self.dataStore.getObject(key: KEYS.INSTALL_DATE) else {
-            return self
-        }
-
-        guard let daysSinceLastLaunch = Calendar.current.dateComponents([.day], from: lastLaunchDate, to: self.date).day else {
-            return self
-        }
-        
-        guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: self.date).day else {
-            return self
+        if let firstLaunchDate: Date = self.dataStore.getObject(key: KEYS.INSTALL_DATE) {
+            guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: self.date).day else {
+                return self
+            }
+            
+            lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
         }
         
-        lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
-        lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
-
-        let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: self.date)
-        let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
-        // Check if we have launched this month already
-        if currentDateComponents.month != lastLaunchDateComponents.month || currentDateComponents.year != lastLaunchDateComponents.year {
-            self.lifecycleMetrics.dailyEngagedEvent = true
-            self.lifecycleMetrics.monthlyEngagedEvent = true
-        } else if currentDateComponents.day != lastLaunchDateComponents.day {
-            lifecycleMetrics.dailyEngagedEvent = true
+        if let lastLaunchDate: Date = self.dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE) {
+            guard let daysSinceLastLaunch = Calendar.current.dateComponents([.day], from: lastLaunchDate, to: self.date).day else {
+                return self
+            }
+            
+            lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
+            let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: self.date)
+            let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
+            // Check if we have launched this month already
+            if currentDateComponents.month != lastLaunchDateComponents.month || currentDateComponents.year != lastLaunchDateComponents.year {
+                self.lifecycleMetrics.dailyEngagedEvent = true
+                self.lifecycleMetrics.monthlyEngagedEvent = true
+            } else if currentDateComponents.day != lastLaunchDateComponents.day {
+                lifecycleMetrics.dailyEngagedEvent = true
+            }
         }
-        
         
         return self
     }
     
-    /// Adds the generic data to the lifecycle metrics
-    /// Generic data includes:
+    /// Adds the launch count, event, and time data to the lifecycle metrics
+    /// Launch event and time data includes:
     /// - Launches
+    /// - Launch event
     /// - Day off the week
     /// - Hour of the day
-    /// - Launch event
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addGenericData() -> LifecycleMetricsBuilder {
+    mutating func addLaunchEventData() -> LifecycleMetricsBuilder {
         if let launches = dataStore.getInt(key: KEYS.LAUNCHES) {
             lifecycleMetrics.launches = launches
         }
+        
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
+        lifecycleMetrics.launchEvent = true
         lifecycleMetrics.dayOfTheWeek = currentDateComponents.weekday
         lifecycleMetrics.hourOfTheDay = currentDateComponents.hour
-        lifecycleMetrics.launchEvent = true
         return self
     }
-    
+
     /// Adds the upgrade data to the lifecycle metrics, sets the following values to the data store:
     /// - Upgrade date
     /// - Launches since upgrade
@@ -150,7 +149,7 @@ struct LifecycleMetricsBuilder {
         return self
     }
     
-    /// Adds the core data to the lifecycle metrics
+    /// Adds the device data to the lifecycle metrics
     /// Core data includes:
     /// - Device name
     /// - Carrier name
@@ -160,7 +159,7 @@ struct LifecycleMetricsBuilder {
     /// - Locale
     /// - Run mode
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addCoreData() -> LifecycleMetricsBuilder {
+    mutating func addDeviceData() -> LifecycleMetricsBuilder {
         let deviceName = systemInfoService.getDeviceName()
         if !deviceName.isEmpty {
             lifecycleMetrics.deviceName = deviceName
@@ -177,10 +176,7 @@ struct LifecycleMetricsBuilder {
         lifecycleMetrics.deviceResolution = getResolution()
         lifecycleMetrics.operatingSystem = systemInfoService.getOperatingSystemName()
         lifecycleMetrics.locale = getLocale()
-        
-        if let runMode = systemInfoService.getRunMode() {
-            lifecycleMetrics.runMode = runMode
-        }
+        lifecycleMetrics.runMode = systemInfoService.getRunMode()
 
         return self
     }
@@ -190,10 +186,10 @@ struct LifecycleMetricsBuilder {
     /// - Return: `String` formatted Application identifier
     private func getApplicationIdentifier() -> String {
         let applicationName = systemInfoService.getApplicationName() ?? ""
-        let applicationVersion = systemInfoService.getApplicationVersion() ?? ""
-        let applicationVersionCode = systemInfoService.getApplicationVersionCode() ?? ""
+        let applicationVersion = systemInfoService.getApplicationBuildNumber() ?? ""
+        let applicationVersionCode = systemInfoService.getApplicationVersionNumber() ?? ""
         
-        return "\(applicationName) \(applicationVersion) (\(applicationVersionCode))"
+        return "\(applicationName) \(applicationVersion) (\(applicationVersionCode))".trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     /// Gets the resolution of the current device

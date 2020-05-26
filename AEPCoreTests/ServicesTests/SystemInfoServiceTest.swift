@@ -100,11 +100,11 @@ class SystemInfoServiceTest: XCTestCase {
     }
     
     func testGetApplicationVersion() {
-        XCTAssertNotNil(systemInfoService.getApplicationVersion())
+        XCTAssertNotNil(systemInfoService.getApplicationBuildNumber())
     }
     
     func testGetApplicationVersionCode() {
-        XCTAssertNotNil(systemInfoService.getApplicationVersionCode())
+        XCTAssertNotNil(systemInfoService.getApplicationVersionNumber())
     }
     
     func testGetOperatinSystemName() {

@@ -47,8 +47,8 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     func testAddLaunchDataSameMonth() {
         let lastLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: self.date)
         let firstLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: lastLaunchDate!)
-        dataStore?.getObjectValues.append(lastLaunchDate!)
         dataStore?.getObjectValues.append(firstLaunchDate!)
+        dataStore?.getObjectValues.append(lastLaunchDate!)
         
         let _ = metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
@@ -64,8 +64,8 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     func testAddLaunchDataDifferentMonth() {
         let lastLaunchDate = Calendar.current.date(byAdding: .month, value: -1, to: self.date)
         let firstLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: lastLaunchDate!)
-        dataStore?.getObjectValues.append(lastLaunchDate!)
         dataStore?.getObjectValues.append(firstLaunchDate!)
+        dataStore?.getObjectValues.append(lastLaunchDate!)
         
         let _ = metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
@@ -82,7 +82,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         dataStore?.getIntValues.append(numberOfLaunches)
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
         
-        let _ = metricsBuilder?.addGenericData()
+        let _ = metricsBuilder?.addLaunchEventData()
         let metrics = metricsBuilder?.build()
         
         XCTAssertEqual(metrics?.launches, numberOfLaunches)
@@ -94,7 +94,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     func testAddGenericDataWithoutLaunches() {
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
         
-        let _ = metricsBuilder?.addGenericData()
+        let _ = metricsBuilder?.addLaunchEventData()
         let metrics = metricsBuilder?.build()
         
         XCTAssertNil(metrics?.launches)
@@ -144,11 +144,11 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.systemInfoService?.mobileCarrierName = mobileCarrierName
         let applicationName = "testAppName"
         self.systemInfoService?.applicationName = applicationName
-        let applicationVersion = "1.0.1"
-        self.systemInfoService?.applicationVersion = applicationVersion
-        let applicationVersionCode = "1.0.0"
-        self.systemInfoService?.applicationVersionCode = applicationVersionCode
-        let applicationIdentifier = "\(applicationName) \(applicationVersion) (\(applicationVersionCode))"
+        let applicationBuildNumber = "1.0.1"
+        self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
+        let applicationVersionNumber = "11C29"
+        self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
+        let applicationIdentifier = "\(applicationName) \(applicationBuildNumber) (\(applicationVersionNumber))"
         let operatingSystemName = "iOS"
         self.systemInfoService?.operatingSystemName = operatingSystemName
         let widthPixels = 375
@@ -162,7 +162,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let runMode = "Application"
         self.systemInfoService?.runMode = runMode
         
-        let _ = metricsBuilder?.addCoreData()
+        let _ = metricsBuilder?.addDeviceData()
         let metrics = metricsBuilder?.build()
         XCTAssertEqual(metrics?.deviceName, deviceName)
         XCTAssertEqual(metrics?.carrierName, mobileCarrierName)

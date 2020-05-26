@@ -42,19 +42,19 @@ public protocol SystemInfoService {
     
     /// Gets the run mode (Extension, or Application) as a string
     /// - Return: `String` the run mode as a string
-    func getRunMode() -> String?
+    func getRunMode() -> String
     
     /// Gets the application name
     /// - Return: `String` the application name
     func getApplicationName() -> String?
     
-    /// Gets the application's version
-    /// - Return: `String` the application's version
-    func getApplicationVersion() -> String?
+    /// Gets the application's build number
+    /// - Return: `String` the application's build number
+    func getApplicationBuildNumber() -> String?
     
-    /// Gets the application's short version
-    /// - Return: `String` the application's short version
-    func getApplicationVersionCode() -> String?
+    /// Gets the application's version number
+    /// - Return: `String` the application's version number
+    func getApplicationVersionNumber() -> String?
     
     /// Gets the operating system's name
     /// - Return: `String` the operating system's name
