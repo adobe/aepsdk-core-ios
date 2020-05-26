@@ -59,7 +59,6 @@ class ConfigurationStateTests: XCTestCase {
 
     override func setUp() {
         dataStore.removeAll()
-        AEPServiceProvider.shared.systemInfoService = MockSystemInfoService()
         appIdManager = AppIDManager(dataStore: dataStore)
         configDownloader = MockConfigurationDownloader()
         configState = ConfigurationState(dataStore: dataStore, appIdManager: appIdManager, configDownloader: configDownloader)
