@@ -322,7 +322,7 @@ class ConfigurationStateTests: XCTestCase {
         let expectedConfig = ["testKey": "testVal"]
 
         // test
-        configState.updateConfigWith(newConfig: expectedConfig)
+        configState.updateWith(newConfig: expectedConfig)
 
         // verify
         XCTAssertEqual(1, configState.currentConfiguration.count)
@@ -336,8 +336,8 @@ class ConfigurationStateTests: XCTestCase {
         let expectedConfig1 = ["testKey": "overwrittenVal", "newKey": "newVal"]
 
         // test
-        configState.updateConfigWith(newConfig: expectedConfig)
-        configState.updateConfigWith(newConfig: expectedConfig1)
+        configState.updateWith(newConfig: expectedConfig)
+        configState.updateWith(newConfig: expectedConfig1)
 
         // verify
         XCTAssertEqual(2, configState.currentConfiguration.count)
@@ -352,7 +352,7 @@ class ConfigurationStateTests: XCTestCase {
         let expectedConfig = ["programmaticKey": "programmaticVal"]
 
         // test
-        configState.updateConfigWith(newConfig: expectedConfig)
+        configState.updateWith(newConfig: expectedConfig)
 
         // verify
         XCTAssertEqual(2, configState.currentConfiguration.count)
@@ -369,7 +369,7 @@ class ConfigurationStateTests: XCTestCase {
         let expectedConfig = ["testKey": "testVal"]
 
         // test
-        configState.updateProgrammaticConfig(updatedConfig: expectedConfig)
+        configState.updateWith(programmaticConfig: expectedConfig)
 
         // verify
         XCTAssertEqual(1, configState.currentConfiguration.count)
@@ -390,7 +390,7 @@ class ConfigurationStateTests: XCTestCase {
         configDownloader.configFromUrl = cachedConfig
         
         // test & verify
-        configState.updateConfigWith(appId: "valid-app-id") { (config) in
+        configState.updateWith(appId: "valid-app-id") { (config) in
             XCTAssertEqual(16, config?.count)
             expectation.fulfill()
         }
@@ -407,7 +407,7 @@ class ConfigurationStateTests: XCTestCase {
         let appId = "app-id-not-on-server"
 
         // test
-        configState.updateConfigWith(appId: appId) { (config) in
+        configState.updateWith(appId: appId) { (config) in
             XCTAssertNil(config)
             expectation.fulfill()
         }
@@ -426,11 +426,11 @@ class ConfigurationStateTests: XCTestCase {
         configDownloader.configFromUrl = cachedConfig
         
         // test
-        configState.updateConfigWith(appId: "valid-app-id") { (config) in
+        configState.updateWith(appId: "valid-app-id") { (config) in
             XCTAssertEqual(16, config?.count)
             expectation.fulfill()
             
-            self.configState.updateConfigWith(appId: "newAppId") { (newConfig) in
+            self.configState.updateWith(appId: "newAppId") { (newConfig) in
                 XCTAssertEqual(16, newConfig?.count)
                 expectation.fulfill()
             }
@@ -450,12 +450,12 @@ class ConfigurationStateTests: XCTestCase {
         configDownloader.configFromUrl = cachedConfig
         
         // test
-        configState.updateConfigWith(appId: "valid-app-id") { (config) in
+        configState.updateWith(appId: "valid-app-id") { (config) in
             XCTAssertEqual(16, config?.count)
             self.configDownloader.configFromUrl = nil
             expectation.fulfill()
             
-            self.configState.updateConfigWith(appId: "invalid-app-id") { (newConfig) in
+            self.configState.updateWith(appId: "invalid-app-id") { (newConfig) in
                 XCTAssertNil(newConfig)
                 XCTAssertEqual(16, self.configState.currentConfiguration.count)
                 expectation.fulfill()
@@ -470,29 +470,29 @@ class ConfigurationStateTests: XCTestCase {
     
     /// When an empty path is supplied we return false and don't update the current configuration
     func testUpdateConfigWithFilePathEmpty() {
-        XCTAssertFalse(configState.updateConfigWith(filePath: ""))
+        XCTAssertFalse(configState.updateWith(filePath: ""))
     }
     
     /// When the configuration downloader returns a nil config we properly update the current configuration
     func testUpdateConfigWithFilePathInvalidPath() {
-        XCTAssertFalse(configState.updateConfigWith(filePath: "Invalid/Path/ADBMobile.json"))
+        XCTAssertFalse(configState.updateWith(filePath: "Invalid/Path/ADBMobile.json"))
     }
     
     /// When the configuration downloader returns a valid config we properly update the current configuration
     func testUpdateConfigWithPathSimple() {
         configDownloader.configFromPath = cachedConfig // simulate file found
-        XCTAssertTrue(configState.updateConfigWith(filePath: "validPath"))
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
         XCTAssertEqual(16, configState.currentConfiguration.count)
     }
     
     /// Tests that when we have loaded a config from a file path, then we pass in an invalid path that the previous valid configuration is preserved
     func testUpdateConfigWithValidPathThenInvalid() {
         configDownloader.configFromPath = cachedConfig // simulate file found
-        XCTAssertTrue(configState.updateConfigWith(filePath: "validPath"))
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
         XCTAssertEqual(16, configState.currentConfiguration.count)
 
         configDownloader.configFromPath = nil // simulate file not found
-        XCTAssertFalse(configState.updateConfigWith(filePath: "Invalid/Path/ADBMobile.json"))
+        XCTAssertFalse(configState.updateWith(filePath: "Invalid/Path/ADBMobile.json"))
         XCTAssertEqual(16, configState.currentConfiguration.count)
     }
 

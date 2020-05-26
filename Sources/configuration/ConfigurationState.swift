@@ -54,12 +54,12 @@ class ConfigurationState {
             config = configDownloader.loadDefaultConfigFrom(systemInfoService: systemInfoService) ?? [:]
         }
         
-        updateConfigWith(newConfig: config)
+        updateWith(newConfig: config)
     }
     
     /// Merges the current configuration to `newConfig` then applies programmatic configuration on top
     /// - Parameter newConfig: The new configuration
-    func updateConfigWith(newConfig: [String: Any]) {
+    func updateWith(newConfig: [String: Any]) {
         currentConfiguration.merge(newConfig) { (_, updated) in updated }
 
         // Apply any programmatic configuration updates
@@ -68,11 +68,11 @@ class ConfigurationState {
     
     /// Updates the programmatic config, then applies these changes to the current configuration
     /// - Parameter programmaticConfig: programmatic configuration to be applied
-    func updateProgrammaticConfig(updatedConfig: [String: Any]) {
+    func updateWith(programmaticConfig: [String: Any]) {
         // Any existing programmatic configuration updates are retrieved from persistence.
         // New configuration updates are applied over the existing persisted programmatic configurations
         // New programmatic configuration updates are saved to persistence.
-        programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: updatedConfig) ?? [:]) { (_, updated) in updated }
+        programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: programmaticConfig) ?? [:]) { (_, updated) in updated }
         
         // The current configuration is updated with these new programmatic configuration changes.
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
@@ -81,7 +81,7 @@ class ConfigurationState {
     /// Attempts to download the configuration associated with `appId`, if downloading the remote config fails we check cache for cached config
     /// - Parameter appId: appId associated with the remote config
     /// - Parameter completion: A closure that is invoked with the downloaded config, nil if unable to download config with `appId`
-    func updateConfigWith(appId: String, completion: @escaping ([String: Any]?) -> ()) {
+    func updateWith(appId: String, completion: @escaping ([String: Any]?) -> ()) {
         // Save the AppID in persistence for loading configuration on future launches.
         appIdManager.saveAppIdToPersistence(appId: appId)
 
@@ -98,7 +98,7 @@ class ConfigurationState {
     /// Attempts to load the configuration stored at `filePath`
     /// - Parameter filePath: Path to a configuration file
     /// - Returns: True if the configuration was loaded, false otherwise
-    func updateConfigWith(filePath: String) -> Bool {
+    func updateWith(filePath: String) -> Bool {
          guard let bundledConfig = configDownloader.loadConfigFrom(filePath: filePath) else {
             return false
         }
