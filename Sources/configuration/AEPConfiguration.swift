@@ -56,7 +56,7 @@ class AEPConfiguration: Extension {
     
     /// Handles  the configuration request event and determines which business logic should be invoked
     /// - Parameter event: A configuration request event
-    func handleConfigurationRequest(event: Event) -> Bool {
+    private func handleConfigurationRequest(event: Event) -> Bool {
         guard let eventData = event.data else { return true }
 
         if eventData[ConfigurationConstants.Keys.UPDATE_CONFIG] != nil {
@@ -75,7 +75,7 @@ class AEPConfiguration: Extension {
     
     /// Handles the Lifecycle response event and dispatches a configuration request event if we have an appId in persistence
     /// - Parameter event: The lifecycle response event
-    func handleLifecycle(event: Event) -> Bool {
+    private func handleLifecycle(event: Event) -> Bool {
         // Re-fetch the latest config if appId is present.
         // Lifecycle does not load bundled/manual configuration if appId is absent.
         guard let appId = appIdManager.loadAppId(), !appId.isEmpty else {

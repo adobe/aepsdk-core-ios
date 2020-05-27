@@ -14,20 +14,18 @@ import XCTest
 @testable import AEPCore
 
 class AEPConfigurationTests: XCTestCase {
-    var eventHub = EventHub.shared
     var dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     
     override func setUp() {
         EventHub.reset()
-        eventHub = EventHub.shared
         dataStore.removeAll()
         registerExtension(MockExtension.self)
         
         // Wait for bootup shared state from configuration
         let semaphore = DispatchSemaphore(value: 0)
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { _ in semaphore.signal() }
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { _ in semaphore.signal() }
         registerExtension(AEPConfiguration.self)
-        eventHub.start()
+        EventHub.shared.start()
         semaphore.wait()
     }
     
@@ -35,7 +33,7 @@ class AEPConfigurationTests: XCTestCase {
     // TODO: Move into shared event hub test helpers
     private func registerExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
-        eventHub.registerExtension(type) { (error) in
+        EventHub.shared.registerExtension(type) { (error) in
             XCTAssertNil(error)
             semaphore.signal()
         }
@@ -53,7 +51,7 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Update config dispatches configuration shared state")
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any] else {
@@ -64,7 +62,7 @@ class AEPConfigurationTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -89,7 +87,7 @@ class AEPConfigurationTests: XCTestCase {
         sharedStateExpectation.expectedFulfillmentCount = 2
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as! [String: Any]? else {
@@ -100,7 +98,7 @@ class AEPConfigurationTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
 
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -121,11 +119,11 @@ class AEPConfigurationTests: XCTestCase {
         configResponseExpectation.isInverted = true
         let sharedStateExpectation = XCTestExpectation(description: "Update config with an empty config dispatches a configuration shared state")
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             configResponseExpectation.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             sharedStateExpectation.fulfill()
         }
         
@@ -143,7 +141,7 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Set privacy status dispatches configuration shared state")
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as! [String: Any]? else {
@@ -154,7 +152,7 @@ class AEPConfigurationTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -177,7 +175,7 @@ class AEPConfigurationTests: XCTestCase {
         sharedStateResponseExpectation.expectedFulfillmentCount = 2
         sharedStateResponseExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as! [String: Any]? else {
@@ -188,7 +186,7 @@ class AEPConfigurationTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -282,7 +280,7 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Update config saves to user defaults and dispatches two shared states (1 bootup, 1 from API call)")
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -318,7 +316,7 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Update config saves to user defaults with complex update config and shares state")
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -339,12 +337,12 @@ class AEPConfigurationTests: XCTestCase {
         let configRequestExpectation = XCTestExpectation(description: "Configuration should not dispatch an app id event if app id is empty")
         configRequestExpectation.isInverted = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
             configRequestExpectation.fulfill()
         }
         
         let lifecycleEvent = Event(name: "Lifecycle response content", type: .lifecycle, source: .responseContent, data: nil)
-        eventHub.dispatch(event: lifecycleEvent)
+        EventHub.shared.dispatch(event: lifecycleEvent)
         
         // verify
         wait(for: [configRequestExpectation], timeout: 0.5)
@@ -357,14 +355,14 @@ class AEPConfigurationTests: XCTestCase {
         let testAppId = "test-app-id"
         dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: testAppId) // set appId in persistence
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
             XCTAssertEqual(true, event.data?[ConfigurationConstants.Keys.IS_INTERNAL_EVENT] as! Bool)
             XCTAssertEqual(testAppId, event.data?[ConfigurationConstants.Keys.JSON_APP_ID] as! String)
             configRequestExpectation.fulfill()
         }
         
         let lifecycleEvent = Event(name: "Lifecycle response content", type: .lifecycle, source: .responseContent, data: nil)
-        eventHub.dispatch(event: lifecycleEvent)
+        EventHub.shared.dispatch(event: lifecycleEvent)
         
         // verify
         wait(for: [configRequestExpectation], timeout: 0.5)
@@ -380,14 +378,14 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Configuration should update shared state")
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             XCTAssertEqual(event.data?.count, expectedDictCount)
             configResponseExpectation.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -401,10 +399,10 @@ class AEPConfigurationTests: XCTestCase {
         // verify
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 0.5)
         
-        let configSharedState = eventHub.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
+        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
         XCTAssertEqual(expectedDictCount, configSharedState?.count)
-        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! AnyCodable
-        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus.stringValue)
+        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
+        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
     }
     
     func testLoadInvalidPathBundledConfig() {
@@ -414,11 +412,11 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Configuration still should update shared state")
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             configResponseExpectation.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -441,13 +439,13 @@ class AEPConfigurationTests: XCTestCase {
         sharedStateExpectation.expectedFulfillmentCount = 2
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             configResponseExpectation.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -461,7 +459,7 @@ class AEPConfigurationTests: XCTestCase {
         // verify
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 0.5)
         
-        let configSharedState = eventHub.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
+        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
         let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
         XCTAssertEqual(PrivacyStatus.optedOut.rawValue, sharedPrivacyStatus)
     }
@@ -474,14 +472,14 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Downloading config should update shared state")
         sharedStateExpectation.assertForOverFulfill = true
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             XCTAssertEqual(event.data?.count, expectedDictCount)
             configResponseEvent.fulfill()
         }
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -494,10 +492,10 @@ class AEPConfigurationTests: XCTestCase {
         // verify
         wait(for: [configResponseEvent, sharedStateExpectation], timeout: 2.0)
         
-        let configSharedState = eventHub.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
+        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
         XCTAssertEqual(expectedDictCount, configSharedState?.count)
-        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! AnyCodable
-        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus.stringValue)
+        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
+        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
     }
     
     // IS_INTERNAL_EVENT setAppId with different appID than persisted should not make a network call
@@ -506,7 +504,7 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "IS_INTERNAL_EVENT with different appID than persisted should not make a network call")
         dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: "persisted-app-id") // set appId in persistence
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             sharedStateExpectation.fulfill()
         }
         
@@ -514,7 +512,7 @@ class AEPConfigurationTests: XCTestCase {
         let data: [String: Any] = [ConfigurationConstants.Keys.JSON_APP_ID: "old-app-id",
                                    ConfigurationConstants.Keys.IS_INTERNAL_EVENT: true]
         let event = Event(name: "Configuration Request Event", type: .configuration, source: .requestContent, data: data)
-        eventHub.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
         
         // verify
         wait(for: [sharedStateExpectation], timeout: 0.5)
@@ -527,7 +525,7 @@ class AEPConfigurationTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "IS_INTERNAL_EVENT with same appId as persisted should make a network call")
         dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: "persisted-app-id") // set appId in persistence
         
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             sharedStateExpectation.fulfill()
         }
         
@@ -535,7 +533,7 @@ class AEPConfigurationTests: XCTestCase {
         let data: [String: Any] = [ConfigurationConstants.Keys.JSON_APP_ID: "old-app-id",
                                    ConfigurationConstants.Keys.IS_INTERNAL_EVENT: true]
         let event = Event(name: "Configuration Request Event", type: .configuration, source: .requestContent, data: data)
-        eventHub.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
         
         // verify
         wait(for: [sharedStateExpectation], timeout: 0.5)
