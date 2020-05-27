@@ -28,12 +28,12 @@ struct LifecycleSession {
     /// Returns a `LifecycleSessionInfo` struct containing the previous session's data if it is a new session
     /// Returns nil if the previous session is resumed, or if lifecycle has already run
     /// - Parameters:
-    ///   - startDate: Date at which the start event occurred
-    ///   - sessionTimeoutInSeconds: session timeout in seconds
+    ///   - date: Date at which the start event occurred
+    ///   - sessionTimeout: session timeout in seconds
     ///   - coreData: core data generated from the `LifecycleMetricsBuilder`
     ///   - Returns: `LifecycleSessionInfo` struct containing previous session's data, nil if the previous session is resumed, or if lifecycle has already run
     @discardableResult
-    mutating func start(startDate: Date, sessionTimeoutInSeconds: TimeInterval, coreData: [String: String]) -> LifecycleSessionInfo? {
+    mutating func start(date: Date, sessionTimeout: TimeInterval, coreData: [String: String]) -> LifecycleSessionInfo? {
         guard !lifecycleHasRun else { return nil }
         lifecycleHasRun = true
         
@@ -44,9 +44,9 @@ struct LifecycleSession {
         
         // if we have a pause date, check to see if pausedTime is less than the session timeout threshold
         if let unwrappedPreviousSessionDate = previousSessionPauseDate {
-            let pausedTimeInSeconds = startDate.timeIntervalSince1970 - unwrappedPreviousSessionDate.timeIntervalSince1970
+            let pausedTimeInSeconds = date.timeIntervalSince1970 - unwrappedPreviousSessionDate.timeIntervalSince1970
             
-            if pausedTimeInSeconds < sessionTimeoutInSeconds && previousSessionStartDate != nil {
+            if pausedTimeInSeconds < sessionTimeout && previousSessionStartDate != nil {
                 // handle sessions that did not time out by removing paused time from session
                 // do this by adding the paused time the session start time
                 sessionContainer.startDate = previousSessionStartDate?.addingTimeInterval(pausedTimeInSeconds)
@@ -59,7 +59,7 @@ struct LifecycleSession {
             }
         }
         
-        sessionContainer.startDate = startDate
+        sessionContainer.startDate = date
         sessionContainer.pauseDate = nil
         sessionContainer.successfulClose = false
         sessionContainer.launches += 1
@@ -84,17 +84,17 @@ struct LifecycleSession {
     /// Gets session length data (used for Analytics reporting)
     /// - Parameters:
     ///   - startDate: session start date
-    ///   - sessionTimeoutInSeconds: session timeout in seconds
+    ///   - sessionTimeout: session timeout in seconds
     ///   - previousSessionInfo: `LifecycleSessionInfo` struct containing previous session's data
     ///   - Returns: session length context data
-    func getSessionData(startDate: Date, sessionTimeoutInSeconds: TimeInterval, previousSessionInfo: LifecycleSessionInfo) -> [String: String] {
+    func getSessionData(startDate: Date, sessionTimeout: TimeInterval, previousSessionInfo: LifecycleSessionInfo) -> [String: String] {
         var sessionContextData = [String: String]()
         
         let timeSincePauseInSeconds = startDate.timeIntervalSince1970 - (previousSessionInfo.pauseDate?.timeIntervalSince1970 ?? 0.0)
         let lastSessionTimeSeconds = (previousSessionInfo.pauseDate?.timeIntervalSince1970 ?? 0.0) - (previousSessionInfo.startDate?.timeIntervalSince1970 ?? 0.0)
         
         // if we have not exceeded our timeout, bail
-        if timeSincePauseInSeconds < sessionTimeoutInSeconds {
+        if timeSincePauseInSeconds < sessionTimeout {
             return sessionContextData
         }
         
