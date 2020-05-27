@@ -14,7 +14,7 @@ import Foundation
 struct EventHubConstants {
     static let STATE_CHANGE = "STATE_CHANGE_EVENT"
 
-    struct EventDataKeys {
+    struct Keys {
         struct Configuration {
             static let EVENT_STATE_OWNER = "stateowner"
         }
