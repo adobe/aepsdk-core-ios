@@ -31,7 +31,7 @@ public class AEPServiceProvider {
             }
         }
         set {
-            barrierQueue.async(flags: .barrier) {
+            barrierQueue.async {
                 self.overrideSystemInfoService = newValue
             }
         }
@@ -47,7 +47,7 @@ public class AEPServiceProvider {
             }
         }
         set {
-            barrierQueue.async(flags: .barrier) {
+            barrierQueue.async {
                 self.overrideKeyValueService = newValue
             }
         }
@@ -60,7 +60,7 @@ public class AEPServiceProvider {
                 }
             }
             set {
-                barrierQueue.async(flags: .barrier) {
+                barrierQueue.async {
                     self.overrideNetworkService = newValue
                 }
             }
