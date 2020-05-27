@@ -16,15 +16,13 @@ import XCTest
 class ConfigurationStateTests: XCTestCase {
     var configState: ConfigurationState!
     let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
-    var appIdManager: AppIDManager!
     var configDownloader: MockConfigurationDownloader!
     
 
     override func setUp() {
         dataStore.removeAll()
-        appIdManager = AppIDManager(dataStore: dataStore)
         configDownloader = MockConfigurationDownloader()
-        configState = ConfigurationState(dataStore: dataStore, appIdManager: appIdManager, configDownloader: configDownloader)
+        configState = ConfigurationState(dataStore: dataStore, configDownloader: configDownloader)
     }
 
     private func putAppIdInPersistence(appId: String) {

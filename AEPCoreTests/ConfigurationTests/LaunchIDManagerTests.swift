@@ -12,15 +12,15 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPCore
 
-class AppIDManagerTests: XCTestCase {
+class LaunchIDManagerTests: XCTestCase {
 
     let dataStore = NamedKeyValueStore(name: "AppIDManagerTests")
-    var appIdManager: AppIDManager!
+    var appIdManager: LaunchIDManager!
     
     override func setUp() {
         dataStore.removeAll()
         AEPServiceProvider.shared.systemInfoService = MockSystemInfoService()
-        appIdManager = AppIDManager(dataStore: dataStore)
+        appIdManager = LaunchIDManager(dataStore: dataStore)
     }
     
     /// When no appId is stored in persistence we should return nil when loading the appId

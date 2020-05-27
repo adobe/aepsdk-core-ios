@@ -42,9 +42,9 @@
 		21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DB708C242AAD3D00568A4C /* ExtensionContainer.swift */; };
 		21DB7094242BEBB800568A4C /* ThreadSafeDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21DB7093242BEBB800568A4C /* ThreadSafeDictionary.swift */; };
 		21F02C342477066800D25528 /* ConfigurationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C332477066800D25528 /* ConfigurationState.swift */; };
-		21F02C362477067900D25528 /* AppIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C352477067900D25528 /* AppIDManager.swift */; };
+		21F02C362477067900D25528 /* LaunchIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C352477067900D25528 /* LaunchIDManager.swift */; };
 		21F02C382477077600D25528 /* ConfigurationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C372477077600D25528 /* ConfigurationStateTests.swift */; };
-		21F02C3A247707D800D25528 /* AppIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C39247707D800D25528 /* AppIDManagerTests.swift */; };
+		21F02C3A247707D800D25528 /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C39247707D800D25528 /* LaunchIDManagerTests.swift */; };
 		21F02C3C247707F000D25528 /* MockSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C3B247707F000D25528 /* MockSystemInfoService.swift */; };
 		21F02C3E2477819100D25528 /* MockConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F02C3D2477819100D25528 /* MockConfigurationDownloader.swift */; };
 		21F235BD24325A6200C3E59A /* EventHubConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F235BC24325A6200C3E59A /* EventHubConstants.swift */; };
@@ -132,9 +132,9 @@
 		21DB708C242AAD3D00568A4C /* ExtensionContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionContainer.swift; sourceTree = "<group>"; };
 		21DB7093242BEBB800568A4C /* ThreadSafeDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThreadSafeDictionary.swift; sourceTree = "<group>"; };
 		21F02C332477066800D25528 /* ConfigurationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConfigurationState.swift; path = Sources/configuration/ConfigurationState.swift; sourceTree = SOURCE_ROOT; };
-		21F02C352477067900D25528 /* AppIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppIDManager.swift; path = Sources/configuration/AppIDManager.swift; sourceTree = SOURCE_ROOT; };
+		21F02C352477067900D25528 /* LaunchIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LaunchIDManager.swift; path = Sources/configuration/LaunchIDManager.swift; sourceTree = SOURCE_ROOT; };
 		21F02C372477077600D25528 /* ConfigurationStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationStateTests.swift; sourceTree = "<group>"; };
-		21F02C39247707D800D25528 /* AppIDManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIDManagerTests.swift; sourceTree = "<group>"; };
+		21F02C39247707D800D25528 /* LaunchIDManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchIDManagerTests.swift; sourceTree = "<group>"; };
 		21F02C3B247707F000D25528 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSystemInfoService.swift; sourceTree = "<group>"; };
 		21F02C3D2477819100D25528 /* MockConfigurationDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloader.swift; sourceTree = "<group>"; };
 		21F235BC24325A6200C3E59A /* EventHubConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHubConstants.swift; sourceTree = "<group>"; };
@@ -207,7 +207,7 @@
 			children = (
 				2131A1B12465D81400F1392D /* AEPCore+ConfigurationTests.swift */,
 				21F02C372477077600D25528 /* ConfigurationStateTests.swift */,
-				21F02C39247707D800D25528 /* AppIDManagerTests.swift */,
+				21F02C39247707D800D25528 /* LaunchIDManagerTests.swift */,
 				215AA6202465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift */,
 			);
 			path = ConfigurationTests;
@@ -340,7 +340,7 @@
 				215AA61E2465DFF900CEB4F4 /* ConfigurationDownloader.swift */,
 				21FB910D247639EE00074BF9 /* ConfigurationDownloadable.swift */,
 				21F02C332477066800D25528 /* ConfigurationState.swift */,
-				21F02C352477067900D25528 /* AppIDManager.swift */,
+				21F02C352477067900D25528 /* LaunchIDManager.swift */,
 			);
 			path = configuration;
 			sourceTree = "<group>";
@@ -569,7 +569,7 @@
 				21F361A0246DE4B5009AB88B /* LifecycleData.swift in Sources */,
 				78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */,
 				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
-				21F02C362477067900D25528 /* AppIDManager.swift in Sources */,
+				21F02C362477067900D25528 /* LaunchIDManager.swift in Sources */,
 				21F235BD24325A6200C3E59A /* EventHubConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -578,7 +578,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21F02C3A247707D800D25528 /* AppIDManagerTests.swift in Sources */,
+				21F02C3A247707D800D25528 /* LaunchIDManagerTests.swift in Sources */,
 				215AA6212465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift in Sources */,
 				D4000F2C2458E8350052C536 /* MockNetworkServiceOverrider.swift in Sources */,
 				D4000F272458E1240052C536 /* MockTask.swift in Sources */,

@@ -11,8 +11,8 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// Handles loading and saving the appId to the data store and manifest
-struct AppIDManager {
+/// Handles loading and saving the launch appId to the data store and manifest
+struct LaunchIDManager {
     let dataStore: NamedKeyValueStore
     
     /// Loads the appId from the data store, if not present in the data store loads from the manifest

@@ -14,7 +14,7 @@ import Foundation
 /// Manages the internal state for the `Configuration` extension
 class ConfigurationState {
     let dataStore: NamedKeyValueStore
-    let appIdManager: AppIDManager
+    let appIdManager: LaunchIDManager
     let configDownloader: ConfigurationDownloadable
     
     private(set) var currentConfiguration = [String: Any]()
@@ -32,12 +32,11 @@ class ConfigurationState {
     /// Creates a new `ConfigurationState` with an empty current configuration
     /// - Parameters:
     ///   - dataStore: The datastore in which configurations are cached
-    ///   - appIdManager: An `AppIDManager` which will manage loading and saving appIds to persistence
     ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration from various locations
-    init(dataStore: NamedKeyValueStore, appIdManager: AppIDManager, configDownloader: ConfigurationDownloadable) {
+    init(dataStore: NamedKeyValueStore, configDownloader: ConfigurationDownloadable) {
         self.dataStore = dataStore
-        self.appIdManager = appIdManager
         self.configDownloader = configDownloader
+        self.appIdManager = LaunchIDManager(dataStore: dataStore)
     }
     
     /// Loads the first configuration at launch
