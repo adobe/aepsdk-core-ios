@@ -130,7 +130,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 }
 
-public struct NativeDisplayInformation {
+struct NativeDisplayInformation {
     private var screenRect: CGRect {
         get {
             UIScreen.main.bounds
