@@ -41,16 +41,15 @@ class ConfigurationState {
     
     /// Loads the first configuration at launch
     func loadInitialConfig() {
-        let systemInfoService = AEPServiceProvider.shared.systemInfoService
         var config = [String: Any]()
         
         // Load any existing application ID, either saved in persistence or read from the ADBMobileAppID property in the platform's System Info Service.
         if let appId = appIdManager.loadAppId() {
             config = configDownloader.loadConfigFromCache(appId: appId, dataStore: dataStore)
-                        ?? configDownloader.loadDefaultConfigFrom(systemInfoService: systemInfoService)
+                        ?? configDownloader.loadDefaultConfigFromManifest()
                         ?? [:]
         } else {
-            config = configDownloader.loadDefaultConfigFrom(systemInfoService: systemInfoService) ?? [:]
+            config = configDownloader.loadDefaultConfigFromManifest() ?? [:]
         }
         
         updateWith(newConfig: config)

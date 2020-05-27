@@ -21,7 +21,7 @@ class MockConfigurationDownloader: ConfigurationDownloadable {
     
     var configFromManifest: [String: Any]?
     var calledLoadDefaultConfig = false
-    func loadDefaultConfigFrom(systemInfoService: SystemInfoService) -> [String : Any]? {
+    func loadDefaultConfigFromManifest() -> [String: Any]? {
         calledLoadDefaultConfig = true
         return configFromManifest
     }
