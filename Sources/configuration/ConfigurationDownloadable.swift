@@ -20,9 +20,8 @@ protocol ConfigurationDownloadable {
     func loadConfigFrom(filePath: String) -> [String: Any]?
     
     /// Loads the default config in the main bundled named `ConfigurationConstants.CONFIG_BUNDLED_FILE_NAME`.
-    /// - Parameter systemInfoService: The system info service
     /// - Returns: The default configuration stored in the manifest, nil if not found
-    func loadDefaultConfigFrom(systemInfoService: SystemInfoService) -> [String: Any]?
+    func loadDefaultConfigFromManifest() -> [String: Any]?
     
     /// Loads the cached configuration for `appId`.
     /// - Parameters:
