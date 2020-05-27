@@ -12,7 +12,7 @@
 import Foundation
 
 // Builds the LifecycleMetricsData and handles Lifecycle metrics data storage updates
-struct LifecycleMetricsBuilder {
+class LifecycleMetricsBuilder {
     private var lifecycleMetrics: LifecycleMetrics = LifecycleMetrics()
     
     private typealias KEYS = LifecycleConstants.Keys
@@ -44,7 +44,8 @@ struct LifecycleMetricsBuilder {
     /// - Install event
     /// - Install date
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addInstallData() -> LifecycleMetricsBuilder {
+    @discardableResult
+    func addInstallData() -> LifecycleMetricsBuilder {
         self.lifecycleMetrics.dailyEngagedEvent = true
         self.lifecycleMetrics.monthlyEngagedEvent = true
         self.lifecycleMetrics.installEvent = true
@@ -58,7 +59,8 @@ struct LifecycleMetricsBuilder {
     /// - Daily engaged event
     /// - Monthly engaged event
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addLaunchData() -> LifecycleMetricsBuilder {
+    @discardableResult
+    func addLaunchData() -> LifecycleMetricsBuilder {
         if let firstLaunchDate: Date = self.dataStore.getObject(key: KEYS.INSTALL_DATE) {
             guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: self.date).day else {
                 return self
@@ -94,7 +96,8 @@ struct LifecycleMetricsBuilder {
     /// - Day off the week
     /// - Hour of the day
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addLaunchEventData() -> LifecycleMetricsBuilder {
+    @discardableResult
+    func addLaunchEventData() -> LifecycleMetricsBuilder {
         if let launches = dataStore.getInt(key: KEYS.LAUNCHES) {
             lifecycleMetrics.launches = launches
         }
@@ -114,7 +117,8 @@ struct LifecycleMetricsBuilder {
     /// - Days since last upgrade
     /// - Launches since upgrade
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addUpgradeData(upgrade: Bool) -> LifecycleMetricsBuilder {
+    @discardableResult
+    func addUpgradeData(upgrade: Bool) -> LifecycleMetricsBuilder {
         if upgrade {
             lifecycleMetrics.upgradeEvent = true
         }
@@ -140,7 +144,8 @@ struct LifecycleMetricsBuilder {
     /// - Previous OS version
     /// - Previous app id
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addCrashData(previousSessionCrash: Bool, osVersion: String, appId: String) -> LifecycleMetricsBuilder {
+    @discardableResult
+    func addCrashData(previousSessionCrash: Bool, osVersion: String, appId: String) -> LifecycleMetricsBuilder {
         if previousSessionCrash {
             lifecycleMetrics.crashEvent = true
             lifecycleMetrics.previousOsVersion = osVersion
@@ -159,7 +164,8 @@ struct LifecycleMetricsBuilder {
     /// - Locale
     /// - Run mode
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
-    mutating func addDeviceData() -> LifecycleMetricsBuilder {
+    @discardableResult
+    func addDeviceData() -> LifecycleMetricsBuilder {
         let deviceName = systemInfoService.getDeviceName()
         if !deviceName.isEmpty {
             lifecycleMetrics.deviceName = deviceName

@@ -33,7 +33,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     }
     
     func testAddInstallData() {
-        let _ = metricsBuilder?.addInstallData()
+        metricsBuilder?.addInstallData()
         let metrics = metricsBuilder?.build()
         XCTAssertEqual(metrics?.dailyEngagedEvent, true)
         XCTAssertEqual(metrics?.monthlyEngagedEvent, true)
@@ -50,7 +50,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         dataStore?.getObjectValues.append(firstLaunchDate!)
         dataStore?.getObjectValues.append(lastLaunchDate!)
         
-        let _ = metricsBuilder?.addLaunchData()
+        metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
 
         XCTAssertTrue(metrics!.dailyEngagedEvent)
@@ -67,7 +67,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         dataStore?.getObjectValues.append(firstLaunchDate!)
         dataStore?.getObjectValues.append(lastLaunchDate!)
         
-        let _ = metricsBuilder?.addLaunchData()
+        metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
 
         XCTAssertTrue(metrics!.dailyEngagedEvent)
@@ -82,7 +82,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         dataStore?.getIntValues.append(numberOfLaunches)
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
         
-        let _ = metricsBuilder?.addLaunchEventData()
+        metricsBuilder?.addLaunchEventData()
         let metrics = metricsBuilder?.build()
         
         XCTAssertEqual(metrics?.launches, numberOfLaunches)
@@ -94,7 +94,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     func testAddGenericDataWithoutLaunches() {
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
         
-        let _ = metricsBuilder?.addLaunchEventData()
+        metricsBuilder?.addLaunchEventData()
         let metrics = metricsBuilder?.build()
         
         XCTAssertNil(metrics?.launches)
@@ -104,7 +104,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     }
     
     func testAddUpgradeDataWithUpgrade() {
-        let _ = metricsBuilder?.addUpgradeData(upgrade: true)
+        metricsBuilder?.addUpgradeData(upgrade: true)
         let metrics = metricsBuilder?.build()
         
         XCTAssertTrue(metrics!.upgradeEvent)
@@ -130,7 +130,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let previousSessionCrash = true
         let osVersion = "13.0"
         let appID = "testAppID"
-        let _ = metricsBuilder?.addCrashData(previousSessionCrash: previousSessionCrash, osVersion: osVersion, appId: appID)
+        metricsBuilder?.addCrashData(previousSessionCrash: previousSessionCrash, osVersion: osVersion, appId: appID)
         let metrics = metricsBuilder?.build()
         XCTAssertEqual(metrics?.crashEvent, previousSessionCrash)
         XCTAssertEqual(metrics?.previousOsVersion, osVersion)
@@ -162,7 +162,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let runMode = "Application"
         self.systemInfoService?.runMode = runMode
         
-        let _ = metricsBuilder?.addDeviceData()
+        metricsBuilder?.addDeviceData()
         let metrics = metricsBuilder?.build()
         XCTAssertEqual(metrics?.deviceName, deviceName)
         XCTAssertEqual(metrics?.carrierName, mobileCarrierName)
@@ -179,7 +179,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
         self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
         let applicationIdentifierNoName = "\(applicationBuildNumber) (\(applicationVersionNumber))"
-        let _ = metricsBuilder?.addDeviceData()
+        metricsBuilder?.addDeviceData()
         let metricsNoName = metricsBuilder?.build()
         XCTAssertEqual(metricsNoName?.appId, applicationIdentifierNoName)
     }
@@ -190,7 +190,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.systemInfoService?.applicationName = applicationName
         self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
         let applicationIdentifierNoBuildNumber = "\(applicationName) (\(applicationVersionNumber))"
-        let _ = metricsBuilder?.addDeviceData()
+        metricsBuilder?.addDeviceData()
         let metricsNoBuild = metricsBuilder?.build()
         XCTAssertEqual(metricsNoBuild?.appId, applicationIdentifierNoBuildNumber)
     }
@@ -202,7 +202,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
         self.systemInfoService?.applicationVersionNumber = nil
         let applicationIdentifierNoVersionNumber = "\(applicationName) \(applicationBuildNumber)"
-        let _ = metricsBuilder?.addDeviceData()
+        metricsBuilder?.addDeviceData()
         let metricsNoVersion = metricsBuilder?.build()
         XCTAssertEqual(metricsNoVersion?.appId, applicationIdentifierNoVersionNumber)
     }
@@ -211,7 +211,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let applicationVersionNumber = "11C29"
         self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
         let appIDNoNameOrBuild = "(\(applicationVersionNumber))"
-        let _ = metricsBuilder?.addDeviceData()
+        metricsBuilder?.addDeviceData()
         let metricsNoNameOrBuild = metricsBuilder?.build()
         XCTAssertEqual(metricsNoNameOrBuild?.appId, appIDNoNameOrBuild)
     }
@@ -220,7 +220,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let applicationBuildNumber = "1.0.1"
         self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
         let appIDNoNameOrVersion = "\(applicationBuildNumber)"
-        let _ = metricsBuilder?.addDeviceData()
+        metricsBuilder?.addDeviceData()
         let metricsNoNameOrVersion = metricsBuilder?.build()
         XCTAssertEqual(metricsNoNameOrVersion?.appId, appIDNoNameOrVersion)
     }
@@ -231,7 +231,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.systemInfoService?.applicationBuildNumber = nil
         self.systemInfoService?.applicationVersionNumber = nil
         let appIDNoBuildOrVersion = "\(applicationName)"
-        let _ = metricsBuilder?.addDeviceData()
+        metricsBuilder?.addDeviceData()
         let metricsNoBuildOrVersion = metricsBuilder?.build()
         XCTAssertEqual(metricsNoBuildOrVersion?.appId, appIDNoBuildOrVersion)
     }
