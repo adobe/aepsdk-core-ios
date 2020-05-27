@@ -37,10 +37,10 @@ struct LifecycleSession {
         guard !lifecycleHasRun else { return nil }
         lifecycleHasRun = true
         
-        var sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT) ?? LifecyclePersistedContext()
-        let previousSessionStartDate = sessionContainer?.startDate
-        let previousSessionPauseDate = sessionContainer?.pauseDate
-        let previousSessionCrashed = !(sessionContainer?.successfulClose ?? true)
+        var sessionContainer: LifecyclePersistedContext = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT) ?? LifecyclePersistedContext()
+        let previousSessionStartDate = sessionContainer.startDate
+        let previousSessionPauseDate = sessionContainer.pauseDate
+        let previousSessionCrashed = !(sessionContainer.successfulClose ?? true)
         
         // if we have a pause date, check to see if pausedTime is less than the session timeout threshold
         if let unwrappedPreviousSessionDate = previousSessionPauseDate {
@@ -49,22 +49,22 @@ struct LifecycleSession {
             if pausedTimeInSeconds < sessionTimeoutInSeconds && previousSessionStartDate != nil {
                 // handle sessions that did not time out by removing paused time from session
                 // do this by adding the paused time the session start time
-                sessionContainer?.startDate = previousSessionStartDate?.addingTimeInterval(pausedTimeInSeconds)
+                sessionContainer.startDate = previousSessionStartDate?.addingTimeInterval(pausedTimeInSeconds)
                 
                 // clear lifecycle flags
-                sessionContainer?.successfulClose = false
-                sessionContainer?.pauseDate = nil
+                sessionContainer.successfulClose = false
+                sessionContainer.pauseDate = nil
                 dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: sessionContainer)
                 return nil
             }
         }
         
-        sessionContainer?.startDate = startDate
-        sessionContainer?.pauseDate = nil
-        sessionContainer?.successfulClose = false
-        sessionContainer?.launches += 1
-        sessionContainer?.osVersion = coreData[LifecycleConstants.Keys.OPERATING_SYSTEM]
-        sessionContainer?.appId = coreData[LifecycleConstants.Keys.APP_ID]
+        sessionContainer.startDate = startDate
+        sessionContainer.pauseDate = nil
+        sessionContainer.successfulClose = false
+        sessionContainer.launches += 1
+        sessionContainer.osVersion = coreData[LifecycleConstants.Keys.OPERATING_SYSTEM]
+        sessionContainer.appId = coreData[LifecycleConstants.Keys.APP_ID]
         
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: sessionContainer)
         return LifecycleSessionInfo(startDate: previousSessionStartDate, pauseDate: previousSessionPauseDate, isCrash: previousSessionCrashed)
