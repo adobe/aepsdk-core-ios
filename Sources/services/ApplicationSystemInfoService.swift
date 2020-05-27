@@ -124,17 +124,13 @@ class ApplicationSystemInfoService: SystemInfoService {
         return UIDevice.current.systemName
     }
     
-    func getDisplayInformation() -> DisplayInformation {
-        return NativeDisplayInformation()
+    func getDisplayInformation() -> (width: Int, height: Int) {
+        let displayInfo = NativeDisplayInformation()
+        return (displayInfo.widthPixels, displayInfo.heightPixels)
     }
 }
 
-public protocol DisplayInformation {
-    var widthPixels: Int { get }
-    var heightPixels: Int { get }
-}
-
-struct NativeDisplayInformation: DisplayInformation {
+public struct NativeDisplayInformation {
     private var screenRect: CGRect {
         get {
             UIScreen.main.bounds

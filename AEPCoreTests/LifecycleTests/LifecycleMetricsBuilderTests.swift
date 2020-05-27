@@ -154,8 +154,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let widthPixels = 375
         let heightPixels = 812
         let resolution = "\(widthPixels)x\(heightPixels)"
-        let displayInformation = MockDisplayInformation(widthPixels: widthPixels, heightPixels: heightPixels)
-        self.systemInfoService?.displayInformation = displayInformation
+        self.systemInfoService?.displayInformation = (widthPixels, heightPixels)
         let locale = "US_OF_A"
         let formattedLocale = "US-OF-A"
         self.systemInfoService?.activeLocaleName = locale
@@ -236,11 +235,6 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metricsNoBuildOrVersion?.appId, appIDNoBuildOrVersion)
     }
     
-}
-
-fileprivate struct MockDisplayInformation: DisplayInformation {
-    var widthPixels: Int
-    var heightPixels: Int
 }
 
 fileprivate class FakeDataStore: NamedKeyValueStore {

@@ -75,8 +75,8 @@ class MockSystemInfoService: SystemInfoService {
         return operatingSystemName
     }
     
-    var displayInformation: DisplayInformation = NativeDisplayInformation()
-    func getDisplayInformation() -> DisplayInformation {
+    var displayInformation: (width: Int, height: Int) = (0, 0)
+    func getDisplayInformation() -> (width: Int, height: Int) {
         return displayInformation
     }
     

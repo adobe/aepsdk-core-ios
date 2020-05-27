@@ -62,7 +62,7 @@ public protocol SystemInfoService {
     
     /// Gets the display information for the system
     /// - Return: `DisplayInformation` the system's display information
-    func getDisplayInformation() -> DisplayInformation
+    func getDisplayInformation() -> (width: Int, height: Int)
 
     /// Gets the default platform/device user agent
     /// - Return: `String` representing the default user agent

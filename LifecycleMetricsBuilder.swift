@@ -202,7 +202,7 @@ class LifecycleMetricsBuilder {
     /// - Return: `String` formatted resolution
     private func getResolution() -> String {
         let displayInfo = systemInfoService.getDisplayInformation()
-        return "\(displayInfo.widthPixels)x\(displayInfo.heightPixels)"
+        return "\(displayInfo.width)x\(displayInfo.height)"
     }
     
     /// Gets the formatted locale

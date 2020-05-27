@@ -113,7 +113,7 @@ class SystemInfoServiceTest: XCTestCase {
     func testGetDisplayInformation() {
         let displayInfo = NativeDisplayInformation()
         let testDisplayInfo = systemInfoService.getDisplayInformation()
-        XCTAssertEqual(displayInfo.heightPixels, testDisplayInfo.heightPixels)
-        XCTAssertEqual(displayInfo.widthPixels, testDisplayInfo.widthPixels)
+        XCTAssertEqual(displayInfo.heightPixels, testDisplayInfo.height)
+        XCTAssertEqual(displayInfo.widthPixels, testDisplayInfo.width)
     }
 }
