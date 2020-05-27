@@ -11,10 +11,10 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-///  Responsible to retrieve the configuration for each extension of the SDK, update the shared state and output an event to the `EventHub that will contain these settings.
+/// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
 class AEPConfiguration: Extension {
-    var name: String = ConfigurationConstants.EXTENSION_NAME
-    var version: String = ConfigurationConstants.EXTENSION_VERSION
+    var name = ConfigurationConstants.EXTENSION_NAME
+    var version = ConfigurationConstants.EXTENSION_VERSION
 
     private let eventQueue = OperationOrderer<EventHandlerMapping>(ConfigurationConstants.EXTENSION_NAME)
     private let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
@@ -39,15 +39,23 @@ class AEPConfiguration: Extension {
     func onUnregistered() {}
 
     // MARK: Event Listeners
+    
+    /// Invoked by the `eventQueue` each time a new configuration request event is received
+    /// - Parameter event: A configuration request event
     private func receiveConfigurationRequest(event: Event) {
         eventQueue.add((event, handleConfigurationRequest(event:)))
     }
-
+    
+    /// Invoked by the `eventQueue` each time a new lifecycle response event is received
+    /// - Parameter event: A lifecycle response event
     private func receiveLifecycleResponse(event: Event) {
         eventQueue.add((event, handleLifecycle(event:)))
     }
 
     // MARK: Event Handlers
+    
+    /// Handles  the configuration request event and determines which business logic should be invoked
+    /// - Parameter event: A configuration request event
     func handleConfigurationRequest(event: Event) -> Bool {
         guard let eventData = event.data else { return true }
 
@@ -64,7 +72,9 @@ class AEPConfiguration: Extension {
 
         return true
     }
-
+    
+    /// Handles the Lifecycle response event and dispatches a configuration request event if we have an appId in persistence
+    /// - Parameter event: The lifecycle response event
     func handleLifecycle(event: Event) -> Bool {
         // Re-fetch the latest config if appId is present.
         // Lifecycle does not load bundled/manual configuration if appId is absent.
@@ -80,6 +90,11 @@ class AEPConfiguration: Extension {
     }
 
     // MARK: Event Processors
+    
+    /// Interacts with the `ConfigurationState` to update the configuration with the new configuration contained in `event`
+    /// - Parameters:
+    ///   - event: The `event` which contains the new configuration
+    ///   - sharedStateResolver: Shared state resolver that will be invoked with the new configuration
     private func processUpdateConfig(event: Event, sharedStateResolver: SharedStateResolver) -> Bool {
         // Update the overriddenConfig with the new config from API and persist them in disk, and abort if overridden config is empty
         guard let updatedConfig = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any], !updatedConfig.isEmpty else {
@@ -94,7 +109,12 @@ class AEPConfiguration: Extension {
         dispatchConfigurationResponse(triggerEvent: event, data: event.data)
         return true
     }
-
+    
+    /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
+    /// - Parameters:
+    ///   - appId: The appId for which a configuration should be downloaded from
+    ///   - event: The event responsible for the API call
+    ///   - sharedStateResolver: Shared state resolver that will be invoked with the new configuration
     private func processConfigureWith(appId: String, event: Event, sharedStateResolver: @escaping SharedStateResolver) -> Bool {
         guard let appId = event.data?[ConfigurationConstants.Keys.JSON_APP_ID] as? String, !appId.isEmpty else {
             // Error: No appId provided or its empty, resolve pending shared state with current config
@@ -126,11 +146,11 @@ class AEPConfiguration: Extension {
         return false
     }
     
-    /// Processes the configWithFilePath event
+    /// Interacts with the `ConfigurationState` to fetch the configuration associated with `filePath`
     /// - Parameters:
     ///   - filePath: The file path at which the configuration should be loaded from
-    ///   - event: The 
-    ///   - sharedStateResolver: Shared state resolver that should be invoked with the new configuration
+    ///   - event: The event responsible for the API call
+    ///   - sharedStateResolver: Shared state resolver that will be invoked with the new configuration
     private func processConfigureWith(filePath: String, event: Event, sharedStateResolver: SharedStateResolver) -> Bool {
         guard let filePath = event.data?[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String, !filePath.isEmpty else {
             // Error: Shared state is updated with previous config
@@ -164,18 +184,6 @@ class AEPConfiguration: Extension {
         dispatch(event: event)
     }
 
-    // MARK: Helpers
-    private func bootup() {
-        let pendingResolver = createPendingSharedState(event: nil)
-        // TODO kick off app id download if app id present
-        configState.loadInitialConfig()
-        pendingResolver(configState.currentConfiguration)
-        if !configState.currentConfiguration.isEmpty {
-            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.currentConfiguration)
-            dispatch(event: responseEvent)
-        }
-    }
-    
     /// Shares state with the current configuration and dispatches a configuration response event with the current configuration
     /// - Parameters:
     ///   - event: The event at which this configuration should be published at
@@ -185,6 +193,25 @@ class AEPConfiguration: Extension {
         sharedStateResolver(configState.currentConfiguration)
         // Dispatch a Configuration Response Content event with the new configuration.
         dispatchConfigurationResponse(triggerEvent: event, data: configState.currentConfiguration)
+    }
+    
+    // MARK: Helpers
+    
+    /// Invoked when the extension is registered with the `EventHub`, this is responsible for loading the initial state of the Configuration extension
+    private func bootup() {
+        let pendingResolver = createPendingSharedState(event: nil)
+        
+        // If we have an appId stored in persistence, kick off the configureWithAppId event
+        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
+            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
+        }
+        
+        configState.loadInitialConfig()
+        pendingResolver(configState.currentConfiguration)
+        if !configState.currentConfiguration.isEmpty {
+            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.currentConfiguration)
+            dispatch(event: responseEvent)
+        }
     }
 
     /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
