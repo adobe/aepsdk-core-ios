@@ -40,7 +40,7 @@ struct LifecycleSession {
         var sessionContainer: LifecyclePersistedContext = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT) ?? LifecyclePersistedContext()
         let previousSessionStartDate = sessionContainer.startDate
         let previousSessionPauseDate = sessionContainer.pauseDate
-        let previousSessionCrashed = !(sessionContainer.successfulClose ?? true)
+        let previousSessionCrashed = !sessionContainer.successfulClose
         
         // if we have a pause date, check to see if pausedTime is less than the session timeout threshold
         if let unwrappedPreviousSessionDate = previousSessionPauseDate {
@@ -121,7 +121,7 @@ struct LifecyclePersistedContext: Codable {
     var pauseDate: Date?
     
     /// Set to true when LifecyclePause is called and set to false when LifecycleStart is called. Used to determine if an application crash occurred.
-    var successfulClose: Bool?
+    var successfulClose: Bool = true
     
     /// Number of sessions started.
     var launches: Int = 0
