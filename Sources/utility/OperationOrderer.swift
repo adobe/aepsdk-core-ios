@@ -96,6 +96,13 @@ class OperationOrderer<T> {
         }
     }
     
+    /// Removes the first item in the operation queue
+    func removeFirst() {
+        async {
+            self.array.removeFirst()
+        }
+    }
+    
     /// Triggers the DispatchOr source if the queue is currently active.
     /// - Note: Should only be called from internal `queue`.
     private func triggerSourceIfNeeded() {

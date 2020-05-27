@@ -14,6 +14,7 @@ import Foundation
 
 public typealias EventListener = (Event) -> Void
 public typealias SharedStateResolver = ([String: Any]?) -> Void
+public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
 
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
 final public class EventHub {
