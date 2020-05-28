@@ -79,7 +79,10 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     
     func testAddGenericDataWithLaunches() {
         let numberOfLaunches = 1
-        dataStore?.getIntValues.append(numberOfLaunches)
+        var mockPersistedContext = LifecyclePersistedContext()
+        mockPersistedContext.launches = numberOfLaunches
+        dataStore?.getObjectValues.append(mockPersistedContext)
+        
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
         
         metricsBuilder?.addLaunchEventData()

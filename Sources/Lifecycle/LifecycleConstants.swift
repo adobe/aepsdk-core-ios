@@ -20,12 +20,6 @@ struct LifecycleConstants {
     struct Keys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
-        // LifecycleDataStore Keys
-        static let INSTALL_DATE = "InstallDate"
-        static let LAST_LAUNCH_DATE = "LastDateUsed"
-        static let LAUNCHES = "Launches"
-        static let UPGRADE_DATE = "UpgradeDate"
-        static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
         // LifecycleSession Keys
         static let OPERATING_SYSTEM = "osversion"
         static let APP_ID = "AppId"
@@ -34,6 +28,10 @@ struct LifecycleConstants {
     }
 
     struct DataStoreKeys {
+        static let INSTALL_DATE = "InstallDate"
+        static let LAST_LAUNCH_DATE = "LastDateUsed"
+        static let UPGRADE_DATE = "UpgradeDate"
+        static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
         static let PERSISTED_CONTEXT = "PersistedContext"
     }
 }

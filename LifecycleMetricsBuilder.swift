@@ -15,7 +15,7 @@ import Foundation
 class LifecycleMetricsBuilder {
     private var lifecycleMetrics: LifecycleMetrics = LifecycleMetrics()
     
-    private typealias KEYS = LifecycleConstants.Keys
+    private typealias KEYS = LifecycleConstants.DataStoreKeys
 
     private let dataStore: NamedKeyValueStore
     private let date: Date
@@ -56,6 +56,8 @@ class LifecycleMetricsBuilder {
     
     /// Adds the launch data to the lifecycle metrics 
     /// Launch Metrics includes:
+    /// - Days since first launch
+    /// - Days since last launch
     /// - Daily engaged event
     /// - Monthly engaged event
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
@@ -79,8 +81,8 @@ class LifecycleMetricsBuilder {
             let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
             // Check if we have launched this month already
             if currentDateComponents.month != lastLaunchDateComponents.month || currentDateComponents.year != lastLaunchDateComponents.year {
-                self.lifecycleMetrics.dailyEngagedEvent = true
-                self.lifecycleMetrics.monthlyEngagedEvent = true
+                lifecycleMetrics.dailyEngagedEvent = true
+                lifecycleMetrics.monthlyEngagedEvent = true
             } else if currentDateComponents.day != lastLaunchDateComponents.day {
                 lifecycleMetrics.dailyEngagedEvent = true
             }
@@ -93,15 +95,14 @@ class LifecycleMetricsBuilder {
     /// Launch event and time data includes:
     /// - Launches
     /// - Launch event
-    /// - Day off the week
+    /// - Day of the week
     /// - Hour of the day
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     @discardableResult
     func addLaunchEventData() -> LifecycleMetricsBuilder {
-        if let launches = dataStore.getInt(key: KEYS.LAUNCHES) {
-            lifecycleMetrics.launches = launches
-        }
-        
+        let context: LifecyclePersistedContext? = dataStore.getObject(key: KEYS.PERSISTED_CONTEXT)
+        lifecycleMetrics.launches = context?.launches
+
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
         lifecycleMetrics.launchEvent = true
         lifecycleMetrics.dayOfTheWeek = currentDateComponents.weekday
