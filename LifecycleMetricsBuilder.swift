@@ -193,10 +193,10 @@ class LifecycleMetricsBuilder {
     /// - Return: `String` formatted Application identifier
     private func getApplicationIdentifier() -> String {
         let applicationName = systemInfoService.getApplicationName() ?? ""
-        let applicationVersion = systemInfoService.getApplicationBuildNumber() ?? ""
-        let applicationVersionCode = systemInfoService.getApplicationVersionNumber() ?? ""
+        let applicationVersion = systemInfoService.getApplicationVersionNumber() ?? ""
+        let applicationBuildNumber = systemInfoService.getApplicationBuildNumber() ?? ""
         // Make sure that the formatted identifier removes white space if any of the values are empty, and remove the () version wrapper if version is empty as well
-        return "\(applicationName) \(applicationVersion) (\(applicationVersionCode))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+        return "\(applicationName) \(applicationVersion) (\(applicationBuildNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     /// Gets the resolution of the current device

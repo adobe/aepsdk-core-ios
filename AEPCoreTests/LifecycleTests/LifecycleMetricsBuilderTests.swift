@@ -147,11 +147,11 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.systemInfoService?.mobileCarrierName = mobileCarrierName
         let applicationName = "testAppName"
         self.systemInfoService?.applicationName = applicationName
-        let applicationBuildNumber = "1.0.1"
-        self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
-        let applicationVersionNumber = "11C29"
+        let applicationVersionNumber = "1.0.1"
         self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
-        let applicationIdentifier = "\(applicationName) \(applicationBuildNumber) (\(applicationVersionNumber))"
+        let applicationBuildNumber = "11C29"
+        self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
+        let applicationIdentifier = "\(applicationName) \(applicationVersionNumber) (\(applicationBuildNumber))"
         let operatingSystemName = "iOS"
         self.systemInfoService?.operatingSystemName = operatingSystemName
         let widthPixels = 375
@@ -176,52 +176,51 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     }
     
     func testAddDeviceDataNoName() {
-        let applicationBuildNumber = "1.0.1"
-        let applicationVersionNumber = "11C29"
+        let applicationVersionNumber = "1.0.1"
+        let applicationBuildNumber = "11C29"
         self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
         self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
-        let applicationIdentifierNoName = "\(applicationBuildNumber) (\(applicationVersionNumber))"
+        let applicationIdentifierNoName = "\(applicationVersionNumber) (\(applicationBuildNumber))"
         metricsBuilder?.addDeviceData()
         let metricsNoName = metricsBuilder?.build()
         XCTAssertEqual(metricsNoName?.appId, applicationIdentifierNoName)
     }
     
-    func testAddDeviceDataNoBuildNumber() {
-        let applicationName = "testAppName"
-        let applicationVersionNumber = "11C29"
-        self.systemInfoService?.applicationName = applicationName
-        self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
-        let applicationIdentifierNoBuildNumber = "\(applicationName) (\(applicationVersionNumber))"
-        metricsBuilder?.addDeviceData()
-        let metricsNoBuild = metricsBuilder?.build()
-        XCTAssertEqual(metricsNoBuild?.appId, applicationIdentifierNoBuildNumber)
-    }
-    
     func testAddDeviceDataNoVersionNumber() {
         let applicationName = "testAppName"
-        let applicationBuildNumber = "1.0.1"
+        let applicationBuildNumber = "11C29"
         self.systemInfoService?.applicationName = applicationName
         self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
-        self.systemInfoService?.applicationVersionNumber = nil
-        let applicationIdentifierNoVersionNumber = "\(applicationName) \(applicationBuildNumber)"
+        let applicationIdentifierNoVersionNumber = "\(applicationName) (\(applicationBuildNumber))"
+        metricsBuilder?.addDeviceData()
+        let metricsNoBuild = metricsBuilder?.build()
+        XCTAssertEqual(metricsNoBuild?.appId, applicationIdentifierNoVersionNumber)
+    }
+    
+    func testAddDeviceDataNoBuildNumber() {
+        let applicationName = "testAppName"
+        let applicationVersionNumber = "1.0.1"
+        self.systemInfoService?.applicationName = applicationName
+        self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
+        let applicationIdentifierNoBuildNumber = "\(applicationName) \(applicationVersionNumber)"
         metricsBuilder?.addDeviceData()
         let metricsNoVersion = metricsBuilder?.build()
-        XCTAssertEqual(metricsNoVersion?.appId, applicationIdentifierNoVersionNumber)
+        XCTAssertEqual(metricsNoVersion?.appId, applicationIdentifierNoBuildNumber)
     }
     
     func testAddDeviceDataNoNameOrBuild() {
-        let applicationVersionNumber = "11C29"
+        let applicationVersionNumber = "1.0.1"
         self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
-        let appIDNoNameOrBuild = "(\(applicationVersionNumber))"
+        let appIDNoNameOrBuild = "\(applicationVersionNumber)"
         metricsBuilder?.addDeviceData()
         let metricsNoNameOrBuild = metricsBuilder?.build()
         XCTAssertEqual(metricsNoNameOrBuild?.appId, appIDNoNameOrBuild)
     }
     
     func testAddDeviceDataNoNameOrVersion() {
-        let applicationBuildNumber = "1.0.1"
+        let applicationBuildNumber = "12C33"
         self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
-        let appIDNoNameOrVersion = "\(applicationBuildNumber)"
+        let appIDNoNameOrVersion = "(\(applicationBuildNumber))"
         metricsBuilder?.addDeviceData()
         let metricsNoNameOrVersion = metricsBuilder?.build()
         XCTAssertEqual(metricsNoNameOrVersion?.appId, appIDNoNameOrVersion)
