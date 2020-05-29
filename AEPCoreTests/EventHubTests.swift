@@ -662,7 +662,7 @@ class EventHubTests: XCTestCase {
         let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
         eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
         }
         eventHub.dispatch(event: event)
@@ -688,7 +688,7 @@ class EventHubTests: XCTestCase {
         let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
         eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
         }
         eventHub.dispatch(event: event)
@@ -712,7 +712,7 @@ class EventHubTests: XCTestCase {
 
         eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
         }
 
@@ -794,7 +794,7 @@ class EventHubTests: XCTestCase {
 
         eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
         }
 

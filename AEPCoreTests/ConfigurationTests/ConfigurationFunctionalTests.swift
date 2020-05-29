@@ -64,7 +64,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateExpectation.fulfill()
         }
         
@@ -96,7 +96,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateExpectation.fulfill()
         }
         
@@ -152,7 +152,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateExpectation.fulfill()
         }
 
@@ -185,7 +185,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateResponseExpectation.fulfill()
         }
 
@@ -306,7 +306,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateExpectation.fulfill()
         }
 
@@ -331,7 +331,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateExpectation.fulfill()
         }
 
@@ -359,7 +359,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateExpectation.fulfill()
         }
 
@@ -397,7 +397,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
             sharedStateExpectation.fulfill()
         }
 
