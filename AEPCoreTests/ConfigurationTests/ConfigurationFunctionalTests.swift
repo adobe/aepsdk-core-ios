@@ -18,7 +18,8 @@ class ConfigurationFunctionalTests: XCTestCase {
     var dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     
     override func setUp() {
-        AEPServiceProvider.shared.networkService = AEPNetworkService()
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
+        AEPServiceProvider.shared.systemInfoService = MockSystemInfoService()
         dataStore.removeAll()
         MockExtension.reset()
         EventHub.reset()
