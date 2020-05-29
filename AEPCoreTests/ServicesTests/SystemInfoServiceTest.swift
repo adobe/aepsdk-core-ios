@@ -28,7 +28,6 @@ class SystemInfoServiceTest: XCTestCase {
     override func setUp() {
         self.bundle = Bundle(for: type(of: self))
         self.systemInfoService = ApplicationSystemInfoService(bundle: bundle)
-        
     }
 
     func testGetProperty() {
@@ -85,5 +84,36 @@ class SystemInfoServiceTest: XCTestCase {
     
     func testGetActiveLocaleName() {
         XCTAssertFalse(systemInfoService.getActiveLocaleName().isEmpty)
+    }
+    
+    func testGetDeviceName() {
+        XCTAssertFalse(systemInfoService.getDeviceName().isEmpty)
+    }
+    
+    func testGetRunMode() {
+        XCTAssertNotNil(systemInfoService.getRunMode())
+    }
+    
+    func testGetApplicationName() {
+        XCTAssertNotNil(systemInfoService.getApplicationName())
+    }
+    
+    func testGetApplicationVersion() {
+        XCTAssertNotNil(systemInfoService.getApplicationBuildNumber())
+    }
+    
+    func testGetApplicationVersionCode() {
+        XCTAssertNotNil(systemInfoService.getApplicationVersionNumber())
+    }
+    
+    func testGetOperatinSystemName() {
+        XCTAssertNotNil(systemInfoService.getOperatingSystemName())
+    }
+    
+    func testGetDisplayInformation() {
+        let displayInfo = NativeDisplayInformation()
+        let testDisplayInfo = systemInfoService.getDisplayInformation()
+        XCTAssertEqual(displayInfo.heightPixels, testDisplayInfo.height)
+        XCTAssertEqual(displayInfo.widthPixels, testDisplayInfo.width)
     }
 }
