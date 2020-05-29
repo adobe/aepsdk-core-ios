@@ -15,9 +15,23 @@ import Foundation
 struct LifecycleConstants {
     static let START = "start"
     static let PAUSE = "pause"
+    static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
     
     struct Keys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
+        // LifecycleSession Keys
+        static let OPERATING_SYSTEM = "osversion"
+        static let APP_ID = "AppId"
+        static let PREVIOUS_SESSION_LENGTH = "prevsessionlength"
+        static let IGNORED_SESSION_LENGTH = "ignoredsessionlength"
+    }
+
+    struct DataStoreKeys {
+        static let INSTALL_DATE = "InstallDate"
+        static let LAST_LAUNCH_DATE = "LastDateUsed"
+        static let UPGRADE_DATE = "UpgradeDate"
+        static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
+        static let PERSISTED_CONTEXT = "PersistedContext"
     }
 }

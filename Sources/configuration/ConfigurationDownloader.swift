@@ -20,7 +20,8 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         return AnyCodable.toAnyDictionary(dictionary: decoded)
     }
 
-    func loadDefaultConfigFrom(systemInfoService: SystemInfoService) -> [String: Any]? {
+    func loadDefaultConfigFromManifest() -> [String: Any]? {
+        let systemInfoService = AEPServiceProvider.shared.systemInfoService
         guard let data = systemInfoService.getAsset(fileName: ConfigurationConstants.CONFIG_BUNDLED_FILE_NAME, fileType: "json")?.data(using: .utf8) else { return nil }
         let decoded = try? JSONDecoder().decode([String: AnyCodable].self, from: data)
         return AnyCodable.toAnyDictionary(dictionary: decoded)

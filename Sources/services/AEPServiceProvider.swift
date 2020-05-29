@@ -16,10 +16,12 @@ public class AEPServiceProvider {
     public static let shared = AEPServiceProvider()
     
     // Provide thread safety on the getters and setters
-    private let barrierQueue = DispatchQueue(label: "AEPServiceProvider.barrierQueue", attributes: .concurrent)
+    private let barrierQueue = DispatchQueue(label: "AEPServiceProvider.barrierQueue")
 
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()
+    private var overrideKeyValueService: NamedKeyValueService?
+    private var defaultKeyValueService = NamedUserDefaultKeyValueService()
     private var overrideNetworkService: NetworkService?
     private var defaultNetworkService = AEPNetworkService()
 
@@ -31,14 +33,11 @@ public class AEPServiceProvider {
             }
         }
         set {
-            barrierQueue.async(flags: .barrier) {
+            barrierQueue.async {
                 self.overrideSystemInfoService = newValue
             }
         }
     }
-    
-    private var overrideKeyValueService: NamedKeyValueService?
-    private var defaultKeyValueService = NamedUserDefaultKeyValueService()
 
     public var namedKeyValueService: NamedKeyValueService {
         get {
@@ -47,7 +46,7 @@ public class AEPServiceProvider {
             }
         }
         set {
-            barrierQueue.async(flags: .barrier) {
+            barrierQueue.async {
                 self.overrideKeyValueService = newValue
             }
         }
@@ -60,7 +59,7 @@ public class AEPServiceProvider {
                 }
             }
             set {
-                barrierQueue.async(flags: .barrier) {
+                barrierQueue.async {
                     self.overrideNetworkService = newValue
                 }
             }

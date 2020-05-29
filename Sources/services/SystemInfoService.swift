@@ -29,9 +29,41 @@ public protocol SystemInfoService {
     /// Gets a system asset for the given path
     ///  - Parameter fileName: The asset's name
     ///  - Parameter fileType: The file's extension e.g "txt", "json"
-    ///  - Return: `[UInt8]?` representation of the asset    
+    ///  - Return: `[UInt8]?` representation of the asset
     func getAsset(fileName: String, fileType: String) -> [UInt8]?
     
+    /// Gets the device name
+    /// - Return: `String` the device name
+    func getDeviceName() -> String
+    
+    /// Gets the mobile carrier name
+    /// - Return: `String` the mobile carrier name
+    func getMobileCarrierName() -> String?
+    
+    /// Gets the run mode (Extension, or Application) as a string
+    /// - Return: `String` the run mode as a string
+    func getRunMode() -> String
+    
+    /// Gets the application name
+    /// - Return: `String` the application name
+    func getApplicationName() -> String?
+    
+    /// Gets the application's build number
+    /// - Return: `String` the application's build number
+    func getApplicationBuildNumber() -> String?
+    
+    /// Gets the application's version number
+    /// - Return: `String` the application's version number
+    func getApplicationVersionNumber() -> String?
+    
+    /// Gets the operating system's name
+    /// - Return: `String` the operating system's name
+    func getOperatingSystemName() -> String
+    
+    /// Gets the display information for the system
+    /// - Return: `DisplayInformation` the system's display information
+    func getDisplayInformation() -> (width: Int, height: Int)
+
     /// Gets the default platform/device user agent
     /// - Return: `String` representing the default user agent
     func getDefaultUserAgent() -> String

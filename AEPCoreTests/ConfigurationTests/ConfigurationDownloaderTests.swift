@@ -20,6 +20,7 @@ class ConfigurationDownloaderTests: XCTestCase {
     
     override func setUp() {
         AEPServiceProvider.shared.networkService = AEPNetworkService()
+        AEPServiceProvider.shared.systemInfoService = ApplicationSystemInfoService()
         dataStore.removeAll()
     }
     
@@ -150,10 +151,10 @@ class ConfigurationDownloaderTests: XCTestCase {
     /// Ensures that when a config is present in the manifest it can be loaded.
     func testLoadDefaultBundledConfig() {
         // setup
-        let systemInfoService = ApplicationSystemInfoService(bundle: Bundle(for: type(of: self)))
+        AEPServiceProvider.shared.systemInfoService = ApplicationSystemInfoService(bundle: Bundle(for: type(of: self)))
 
         // test
-        let config = ConfigurationDownloader().loadDefaultConfigFrom(systemInfoService: systemInfoService)
+        let config = ConfigurationDownloader().loadDefaultConfigFromManifest()
 
         // verify
         XCTAssertEqual(16, config?.count)
