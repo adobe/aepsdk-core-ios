@@ -130,28 +130,6 @@ class ConfigurationFunctionalTests: XCTestCase {
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
     }
 
-    func testProgrammaticConfigPersisted() {
-        // setup
-        let configUpdate = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
-
-        let sharedStateExpectation = XCTestExpectation(description: "Update config saves to user defaults and dispatches two shared states (1 bootup, 1 from API call)")
-
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.type, EventType.hub)
-            XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
-            sharedStateExpectation.fulfill()
-        }
-
-        // test
-        AEPCore.updateConfigurationWith(configDict: configUpdate)
-
-        // verify
-        wait(for: [sharedStateExpectation], timeout: 5.0)
-        let persistedConfig = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, fallback: [String: AnyCodable]()) // ensure programmatic config is saved to data store
-        XCTAssertEqual(persistedConfig?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY]?.stringValue, PrivacyStatus.optedOut.rawValue)
-    }
-
     // MARK: setPrivacy(...) tests
 
     /// Tests the happy path for updating the privacy status
@@ -309,27 +287,6 @@ class ConfigurationFunctionalTests: XCTestCase {
         wait(for: [configRequestExpectation], timeout: 2)
     }
 
-    /// Tests that a configuration event is dispatched when a lifecycle response content event and an appId exists in persistence
-    func testHandleLifecycleResponseNonEmptyAppId() {
-        // setup
-        let configRequestExpectation = XCTestExpectation(description: "Configuration should dispatch an app id event if app id is stored in local store")
-        let testAppId = "test-app-id"
-        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: testAppId) // set appId in persistence
-
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(true, event.data?[ConfigurationConstants.Keys.IS_INTERNAL_EVENT] as! Bool)
-            XCTAssertEqual(testAppId, event.data?[ConfigurationConstants.Keys.JSON_APP_ID] as! String)
-            configRequestExpectation.fulfill()
-        }
-
-        // test
-        let lifecycleEvent = Event(name: "Lifecycle response content", type: .lifecycle, source: .responseContent, data: nil)
-        EventHub.shared.dispatch(event: lifecycleEvent)
-
-        // verify
-        wait(for: [configRequestExpectation], timeout: 2)
-    }
-
     // MARK: configureWith(filePath) tests
 
     /// Tests the happy path when passing in a valid path to a bundled config
@@ -359,11 +316,6 @@ class ConfigurationFunctionalTests: XCTestCase {
 
         // verify
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
-
-        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
-        XCTAssertEqual(expectedDictCount, configSharedState?.count)
-        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
-        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
     }
 
     /// Tests the API call where the path to the config is invalid
@@ -395,6 +347,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         // setup
         let configResponseExpectation = XCTestExpectation(description: "Configuration should dispatch response content event with new config")
         let sharedStateExpectation = XCTestExpectation(description: "Configuration should update shared state")
+        let getPrivacyStatusExpectation = XCTestExpectation(description: "Get privacy status callback is invoked")
         sharedStateExpectation.expectedFulfillmentCount = 2
 
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
@@ -415,11 +368,12 @@ class ConfigurationFunctionalTests: XCTestCase {
         AEPCore.configureWith(filePath: "Invalid/Path/ADBMobileConfig.json")
 
         // verify
-        wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
-
-        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
-        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
-        XCTAssertEqual(PrivacyStatus.optedOut.rawValue, sharedPrivacyStatus)
+        AEPCore.getPrivacyStatus { (status) in
+            XCTAssertEqual(PrivacyStatus.optedOut, status)
+            getPrivacyStatusExpectation.fulfill()
+        }
+        
+        wait(for: [configResponseExpectation, sharedStateExpectation, getPrivacyStatusExpectation], timeout: 2)
     }
 
     // MARK: configureWith(appId) tests
@@ -452,11 +406,6 @@ class ConfigurationFunctionalTests: XCTestCase {
 
         // verify
         wait(for: [configResponseEvent, sharedStateExpectation], timeout: 2.0)
-
-        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
-        XCTAssertEqual(mockNetworkService.validResponseDictSize, configSharedState?.count)
-        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
-        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
     }
 
     /// Tests that we can re-try network requests, and it will succeed when the network comes back online
@@ -482,53 +431,6 @@ class ConfigurationFunctionalTests: XCTestCase {
 
         // verify
         wait(for: [configResponseEvent], timeout: 2.0)
-
-        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
-        XCTAssertEqual(mockNetworkService.validResponseDictSize, configSharedState?.count)
-        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
-        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
-    }
-
-    // IS_INTERNAL_EVENT setAppId with different appID than persisted should not make a network call
-    func testProcessConfigureWithAppIdInternalEventWithDifferentAppIdInPersistence() {
-        // setup
-        let sharedStateExpectation = XCTestExpectation(description: "IS_INTERNAL_EVENT with different appID than persisted should not make a network call")
-        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: "persisted-app-id") // set appId in persistence
-
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            sharedStateExpectation.fulfill()
-        }
-
-        // test
-        let data: [String: Any] = [ConfigurationConstants.Keys.JSON_APP_ID: "old-app-id",
-                                   ConfigurationConstants.Keys.IS_INTERNAL_EVENT: true]
-        let event = Event(name: "Configuration Request Event", type: .configuration, source: .requestContent, data: data)
-        EventHub.shared.dispatch(event: event)
-
-        // verify
-        wait(for: [sharedStateExpectation], timeout: 2)
-        XCTAssertEqual(dataStore.getString(key: ConfigurationConstants.Keys.PERSISTED_APPID, fallback: nil), "persisted-app-id")
-    }
-
-    // IS_INTERNAL_EVENT with same appId as persisted should make a network call
-    func testProcessConfigureWithAppIdInternalEventWithSameAppIdInPersistence() {
-        // setup
-        let sharedStateExpectation = XCTestExpectation(description: "IS_INTERNAL_EVENT with same appId as persisted should make a network call")
-        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: "persisted-app-id") // set appId in persistence
-
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            sharedStateExpectation.fulfill()
-        }
-
-        // test
-        let data: [String: Any] = [ConfigurationConstants.Keys.JSON_APP_ID: "old-app-id",
-                                   ConfigurationConstants.Keys.IS_INTERNAL_EVENT: true]
-        let event = Event(name: "Configuration Request Event", type: .configuration, source: .requestContent, data: data)
-        EventHub.shared.dispatch(event: event)
-
-        // verify
-        wait(for: [sharedStateExpectation], timeout: 2)
-        XCTAssertEqual(dataStore.getString(key: ConfigurationConstants.Keys.PERSISTED_APPID, fallback: nil), "persisted-app-id")
     }
 
 }
