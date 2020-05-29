@@ -207,11 +207,11 @@ class AEPConfiguration: Extension {
         }
         
         configState.loadInitialConfig()
-        pendingResolver(configState.currentConfiguration)
         if !configState.currentConfiguration.isEmpty {
             let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.currentConfiguration)
             dispatch(event: responseEvent)
         }
+        pendingResolver(configState.currentConfiguration)
     }
 
     /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
