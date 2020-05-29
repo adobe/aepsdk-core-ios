@@ -41,8 +41,7 @@ struct LifecycleState {
     mutating func start(date: Date, additionalContextData: [String: String]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)) {
         let sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
         // Build default LifecycleMetrics
-        var metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date)
-        metricsBuilder = metricsBuilder.addDeviceData()
+        let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()
         let defaultMetrics = metricsBuilder.build()
         checkForApplicationUpgrade(appId: defaultMetrics.appId)
         
@@ -51,17 +50,16 @@ struct LifecycleState {
         var lifecycleData = LifecycleContextData()
         
         if isInstall() {
-            metricsBuilder = metricsBuilder.addInstallData()
-            metricsBuilder = metricsBuilder.addLaunchEventData()
+            metricsBuilder.addInstallData().addLaunchEventData()
         } else {
             // upgrade and launch hits
-            metricsBuilder = metricsBuilder.addLaunchEventData()
-            metricsBuilder = metricsBuilder.addLaunchData()
             let upgrade = isUpgrade()
-            metricsBuilder = metricsBuilder.addUpgradeData(upgrade: upgrade)
-            metricsBuilder = metricsBuilder.addCrashData(previousSessionCrash: previousSessionInfo.isCrash,
-                                                          osVersion: sessionContainer?.osVersion ?? "unavailable",
-                                                          appId: sessionContainer?.appId ?? "unavailable")
+            metricsBuilder.addLaunchEventData()
+                          .addLaunchData()
+                          .addUpgradeData(upgrade: upgrade)
+                          .addCrashData(previousSessionCrash: previousSessionInfo.isCrash,
+                                                   osVersion: sessionContainer?.osVersion ?? "unavailable",
+                                                       appId: sessionContainer?.appId ?? "unavailable")
             
             let sessionContextData = lifecycleSession.getSessionData(startDate: date, sessionTimeout: sessionTimeout, previousSessionInfo: previousSessionInfo)
             lifecycleData.sessionContextData = sessionContextData
