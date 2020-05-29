@@ -459,37 +459,6 @@ class ConfigurationFunctionalTests: XCTestCase {
         XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
     }
 
-    func testConfigureWithAppIdFails() {
-        // setup
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
-        AEPServiceProvider.shared.networkService = mockNetworkService
-
-        let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
-        configResponseEvent.isInverted = true
-        let sharedStateExpectation = XCTestExpectation(description: "Downloading config should update shared state")
-        // don't assert for overFulfill, we'll get a lot of shared state updates as its going to keep attempting to download the config
-
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
-            configResponseEvent.fulfill()
-        }
-
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.type, EventType.hub)
-            XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
-            sharedStateExpectation.fulfill()
-        }
-
-        // test
-        AEPCore.configureWith(appId: "invalid-app-id")
-
-        // verify
-        wait(for: [sharedStateExpectation], timeout: 2.0)
-
-        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
-        XCTAssertTrue(configSharedState?.isEmpty ?? false)
-    }
-
     /// Tests that we can re-try network requests, and it will succeed when the network comes back online
     func testConfigureWithAppIdNetworkDownThenComesOnline() {
         // setup
