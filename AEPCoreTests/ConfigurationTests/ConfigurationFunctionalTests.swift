@@ -13,7 +13,8 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPCore
 
-class AEPConfigurationTests: XCTestCase {
+/// Functional tests for the Configuration extension
+class ConfigurationFunctionalTests: XCTestCase {
     var dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     
     override func setUp() {
@@ -21,7 +22,7 @@ class AEPConfigurationTests: XCTestCase {
         dataStore.removeAll()
         registerExtension(MockExtension.self)
         
-        // Wait for bootup shared state from configuration
+        // Wait for first shared state from configuration
         let semaphore = DispatchSemaphore(value: 0)
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { _ in semaphore.signal() }
         registerExtension(AEPConfiguration.self)
@@ -30,7 +31,6 @@ class AEPConfigurationTests: XCTestCase {
     }
     
     // helpers
-    // TODO: Move into shared event hub test helpers
     private func registerExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
         EventHub.shared.registerExtension(type) { (error) in
@@ -41,7 +41,9 @@ class AEPConfigurationTests: XCTestCase {
         semaphore.wait()
     }
     
-    // MARK: updateConfigurationWith(dict)
+    // MARK: updateConfigurationWith(dict) tests
+    
+    /// Tests the happy path with for updating the config with a dict
     func testUpdateConfigurationWithDict() {
         // setup
         let configUpdate = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
@@ -54,11 +56,8 @@ class AEPConfigurationTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
-            guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any] else {
-                XCTFail("Could not get update config dict")
-                return
-            }
-            XCTAssertEqual(configUpdate[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String, PrivacyStatus.optedOut.rawValue)
+            XCTAssertNotNil(event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any])
+            XCTAssertEqual(configUpdate[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY]!, PrivacyStatus.optedOut.rawValue)
             configResponseExpectation.fulfill()
         }
         
@@ -76,6 +75,7 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 0.5)
     }
     
+    /// Tests the happy path with updating the config multiple times with a dict
     func testUpdateConfigurationWithDictTwice() {
         // setup
         let configUpdate = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
@@ -90,11 +90,8 @@ class AEPConfigurationTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
-            guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as! [String: Any]? else {
-                XCTFail("Could not get update config dict")
-                return
-            }
-            XCTAssertEqual(configUpdate[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String, PrivacyStatus.optedIn.rawValue)
+            XCTAssertNotNil(event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any])
+            XCTAssertEqual(configUpdate[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY], PrivacyStatus.optedIn.rawValue)
             configResponseExpectation.fulfill()
         }
 
@@ -113,6 +110,7 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 0.5)
     }
     
+    /// Tests the case where the update dict is empty, and should not dispatch a configuration response content event
     func testUpdateConfigurationWithEmptyDict() {
         // setup
         let configResponseExpectation = XCTestExpectation(description: "Update config does not dispatch a configuration response content event when update config is passed an empty dict")
@@ -134,6 +132,32 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 0.5)
     }
     
+    func testProgrammaticConfigPersisted() {
+        // setup
+        let configUpdate = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
+
+        let sharedStateExpectation = XCTestExpectation(description: "Update config saves to user defaults and dispatches two shared states (1 bootup, 1 from API call)")
+        sharedStateExpectation.assertForOverFulfill = true
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+            XCTAssertEqual(event.type, EventType.hub)
+            XCTAssertEqual(event.source, EventSource.sharedState)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            sharedStateExpectation.fulfill()
+        }
+        
+        // test
+        AEPCore.updateConfigurationWith(configDict: configUpdate)
+        
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 5.0)
+        let persistedConfig = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, fallback: [String: AnyCodable]()) // ensure programmatic config is saved to data store
+        XCTAssertEqual(persistedConfig?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY]?.stringValue, PrivacyStatus.optedOut.rawValue)
+    }
+    
+    // MARK: setPrivacy(...) tests
+    
+    /// Tests the happy path for updating the privacy status
     func testSetPrivacyStatusSimple() {
         // setup
         let configResponseExpectation = XCTestExpectation(description: "Set privacy status dispatches a configuration response content event with updated config")
@@ -166,6 +190,7 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 0.5)
     }
     
+    /// Tests that we can set the privacy status for the first time then update it a second time
     func testSetPrivacyStatusTwice() {
         // setup
         let configResponseExpectation = XCTestExpectation(description: "Set privacy dispatches 2 configuration response content events")
@@ -201,6 +226,9 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [configResponseExpectation, sharedStateResponseExpectation], timeout: 1.0)
     }
     
+    // MARK: getPrivacyStatus(...) tests
+    
+    /// Ensures that when not privacy is set that we default to unknown
     func testGetPrivacyStatusDefaultsToUnknown() {
         // setup
         let privacyExpectation = XCTestExpectation(description: "Get privacy status defaults to unknown")
@@ -216,6 +244,7 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [privacyExpectation], timeout: 0.5)
     }
     
+    /// Happy path for setting privacy to opt-in
     func testGetPrivacyStatusSimpleOptIn() {
         // setup
         let privacyExpectation = XCTestExpectation(description: "Get privacy status returns opt-in")
@@ -248,6 +277,7 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [privacyExpectation], timeout: 0.5)
     }
     
+    /// Happy path for setting privacy to opt-in then opt-out
     func testGetPrivacyStatusSimpleOptInThenOptOut() {
         // setup
         let optInExpectation = XCTestExpectation(description: "Get privacy status returns opt-in")
@@ -273,65 +303,9 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [optInExpectation, optOutExpectation], timeout: 0.5)
     }
     
-    func testProgrammaticConfigPersisted() {
-        // setup
-        let configUpdate = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
-
-        let sharedStateExpectation = XCTestExpectation(description: "Update config saves to user defaults and dispatches two shared states (1 bootup, 1 from API call)")
-        sharedStateExpectation.assertForOverFulfill = true
-        
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.type, EventType.hub)
-            XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
-            sharedStateExpectation.fulfill()
-        }
-        
-        // test
-        AEPCore.updateConfigurationWith(configDict: configUpdate)
-        
-        // verify
-        wait(for: [sharedStateExpectation], timeout: 5.0)
-        let persistedConfig = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, fallback: [String: AnyCodable]()) // ensure programmatic config is saved to data store
-        XCTAssertEqual(persistedConfig?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY]?.stringValue, PrivacyStatus.optedOut.rawValue)
-    }
+    // MARK: Lifecycle response event tests
     
-    func testProgrammaticConfigPersistedComplex() {
-        // setup
-        let configUpdate: [String: Any] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
-                                            "target.clientCode": "yourclientcode",
-                                            "target.timeout": 5,
-                                            "audience.server": "omniture.demdex.net",
-                                            "audience.timeout": 5,
-                                            "analytics.rsids": "mobilersidsample",
-                                            "analytics.server": "obumobile1.sc.omtrdc.net",
-                                            "analytics.aamForwardingEnabled": false,
-                                            "analytics.offlineEnabled": true,
-                                            "analytics.batchLimit": 0,
-                                            "analytics.backdatePreviousSessionInfo": false,
-                                            "global.privacy": "optedin",
-                                            "lifecycle.sessionTimeout": 300,
-                                            "rules.url": "https://link.to.rules/test.zip"]
-
-        let sharedStateExpectation = XCTestExpectation(description: "Update config saves to user defaults with complex update config and shares state")
-        sharedStateExpectation.assertForOverFulfill = true
-        
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.type, EventType.hub)
-            XCTAssertEqual(event.source, EventSource.sharedState)
-            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
-            sharedStateExpectation.fulfill()
-        }
-        
-        // test
-        AEPCore.updateConfigurationWith(configDict: configUpdate)
-        
-        // verify
-        wait(for: [sharedStateExpectation], timeout: 0.5)
-        let persistedConfig = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, fallback: [String: AnyCodable]()) // ensure programmatic config is saved to data store
-        XCTAssertEqual(14, persistedConfig?.count)
-    }
-    
+    /// Tests that no configuration event is dispatched when a lifecycle response content event and no appId is stored in persistence
     func testHandleLifecycleResponseEmptyAppId() {
         // setup
         let configRequestExpectation = XCTestExpectation(description: "Configuration should not dispatch an app id event if app id is empty")
@@ -348,6 +322,7 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [configRequestExpectation], timeout: 0.5)
     }
     
+    /// Tests that a configuration event is dispatched when a lifecycle response content event and an appId exists in persistence
     func testHandleLifecycleResponseNonEmptyAppId() {
         // setup
         let configRequestExpectation = XCTestExpectation(description: "Configuration should dispatch an app id event if app id is stored in local store")
@@ -361,6 +336,7 @@ class AEPConfigurationTests: XCTestCase {
             configRequestExpectation.fulfill()
         }
         
+        // test
         let lifecycleEvent = Event(name: "Lifecycle response content", type: .lifecycle, source: .responseContent, data: nil)
         EventHub.shared.dispatch(event: lifecycleEvent)
         
@@ -368,8 +344,9 @@ class AEPConfigurationTests: XCTestCase {
         wait(for: [configRequestExpectation], timeout: 0.5)
     }
     
-    // TODO: Add test when app id is loaded from manifest
-
+    // MARK: configureWith(filePath) tests
+    
+    /// Tests the happy path when passing in a valid path to a bundled config
     func testLoadBundledConfig() {
         // setup
         let expectedDictCount = 16
@@ -404,7 +381,8 @@ class AEPConfigurationTests: XCTestCase {
         let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
         XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
     }
-    
+     
+    /// Tests the API call where the path to the config is invalid
     func testLoadInvalidPathBundledConfig() {
         // setup
         let configResponseExpectation = XCTestExpectation(description: "Configuration should NOT dispatch response content event with new config when path to config is invalid")
@@ -464,9 +442,14 @@ class AEPConfigurationTests: XCTestCase {
         XCTAssertEqual(PrivacyStatus.optedOut.rawValue, sharedPrivacyStatus)
     }
     
+    // MARK: configureWith(appId) tests
+    
+    /// When network service returns a valid response configure with appId succeeds
     func testConfigureWithAppId() {
         // setup
-        let expectedDictCount = 16
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: true)
+        AEPServiceProvider.shared.networkService = mockNetworkService
+        
         let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
         configResponseEvent.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Downloading config should update shared state")
@@ -475,7 +458,7 @@ class AEPConfigurationTests: XCTestCase {
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
-            XCTAssertEqual(event.data?.count, expectedDictCount)
+            XCTAssertEqual(event.data?.count, mockNetworkService.validResponseDictSize)
             configResponseEvent.fulfill()
         }
         
@@ -487,13 +470,76 @@ class AEPConfigurationTests: XCTestCase {
         }
         
         // test
-        AEPCore.configureWith(appId: "launch-EN1a68f9bc5b3c475b8c232adc3f8011fb")
+        AEPCore.configureWith(appId: "valid-app-id")
         
         // verify
         wait(for: [configResponseEvent, sharedStateExpectation], timeout: 2.0)
         
         let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
-        XCTAssertEqual(expectedDictCount, configSharedState?.count)
+        XCTAssertEqual(mockNetworkService.validResponseDictSize, configSharedState?.count)
+        let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
+        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
+    }
+    
+    func testConfigureWithAppIdFails() {
+        // setup
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
+        AEPServiceProvider.shared.networkService = mockNetworkService
+        
+        let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
+        configResponseEvent.assertForOverFulfill = true
+        configResponseEvent.isInverted = true
+        let sharedStateExpectation = XCTestExpectation(description: "Downloading config should update shared state")
+        // don't assert for overFulfill, we'll get a lot of shared state updates as its going to keep attempting to download the config
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+            configResponseEvent.fulfill()
+        }
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+            XCTAssertEqual(event.type, EventType.hub)
+            XCTAssertEqual(event.source, EventSource.sharedState)
+            XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.Keys.Configuration.EVENT_STATE_OWNER] as! String)
+            sharedStateExpectation.fulfill()
+        }
+        
+        // test
+        AEPCore.configureWith(appId: "invalid-app-id")
+        
+        // verify
+        wait(for: [configResponseEvent, sharedStateExpectation], timeout: 2.0)
+        
+        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
+        XCTAssertTrue(configSharedState?.isEmpty ?? false)
+    }
+    
+    /// Tests that we can re-try network requests, and it will succeed when the network comes back online
+    func testConfigureWithAppIdNetworkDownThenComesOnline() {
+        // setup
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
+        AEPServiceProvider.shared.networkService = mockNetworkService
+        
+        let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
+        configResponseEvent.expectedFulfillmentCount = 2
+        configResponseEvent.assertForOverFulfill = true
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .responseContent) { (event) in
+            XCTAssertEqual(event.type, EventType.configuration)
+            XCTAssertEqual(event.source, EventSource.responseContent)
+            XCTAssertEqual(event.data?.count, mockNetworkService.validResponseDictSize)
+            configResponseEvent.fulfill()
+        }
+        
+        // test
+        AEPCore.configureWith(appId: "invalid-app-id")
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: true) // setup a valid network response
+        AEPCore.configureWith(appId: "valid-app-id")
+        
+        // verify
+        wait(for: [configResponseEvent], timeout: 2.0)
+        
+        let configSharedState = EventHub.shared.getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)?.value
+        XCTAssertEqual(mockNetworkService.validResponseDictSize, configSharedState?.count)
         let sharedPrivacyStatus = configSharedState?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as! String
         XCTAssertEqual(PrivacyStatus.optedIn.rawValue, sharedPrivacyStatus)
     }
