@@ -134,12 +134,12 @@ class AEPConfiguration: Extension {
             if let _ = config {
                 self?.publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
                 self?.eventQueue.removeFirst() // remove this event from the queue if downloading successful
+                self?.eventQueue.start()
             } else {
                 // If downloading config failed, resolve shared state with current config and try again later
                 sharedStateResolver(self?.configState.currentConfiguration)
+                self?.eventQueue.start(after: 0.5) // retry config after 0.5 seconds
             }
-            
-            self?.eventQueue.start()
         }
         
         // always return false to pause the queue while the configuration is being downloaded
