@@ -136,8 +136,7 @@ class AEPConfiguration: Extension {
                 self?.eventQueue.removeFirst() // remove this event from the queue if downloading successful
                 self?.eventQueue.start()
             } else {
-                // If downloading config failed, resolve shared state with current config and try again later
-                sharedStateResolver(self?.configState.currentConfiguration)
+                // If downloading config failed try again later
                 self?.eventQueue.start(after: 0.5) // retry config after 0.5 seconds
             }
         }
