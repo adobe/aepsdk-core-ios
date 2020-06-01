@@ -75,16 +75,13 @@ class AEPConfiguration: Extension {
     /// - Parameter event: A configuration request event
     /// - Returns: True if processing the Configuration request event succeeded, otherwise false
     private func handleConfigurationRequest(event: Event) -> Bool {
-        guard let eventData = event.data else { return true }
-
-        if eventData[ConfigurationConstants.Keys.UPDATE_CONFIG] != nil {
+        if event.isUpdateConfigEvent {
             return processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
-        } else if eventData[ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool ?? false {
+        } else if event.isGetConfigEvent {
             dispatchConfigurationResponse(triggerEvent: event, data: configState.currentConfiguration)
-            return true
-        } else if let appId = eventData[ConfigurationConstants.Keys.JSON_APP_ID] as? String {
+        } else if let appId = event.appId {
             return processConfigureWith(appId: appId, event: event, sharedStateResolver: createPendingSharedState(event: event))
-        } else if let filePath = eventData[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String {
+        } else if let filePath = event.filePath {
             return processConfigureWith(filePath: filePath, event: event, sharedStateResolver: createPendingSharedState(event: event))
         }
 
