@@ -22,20 +22,37 @@ class AEPConfiguration: Extension {
     private var configState: ConfigurationState // should only be modified/used within the event queue
     
     // MARK: Extension
+    
+    /// Initializes the Configuration extension and it's dependencies
     required init() {
         eventQueue.setHandler({ return $0.handler($0.event) })
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
     }
-
+    
+    /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
     func onRegistered() {
         registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
         registerListener(type: .lifecycle, source: .responseContent, listener: receiveLifecycleResponse(event:))
         // TODO: AMSDK-9750 - Listen for request identifier events
-        bootup()
+        
+        let pendingResolver = createPendingSharedState(event: nil)
+        
+        // If we have an appId stored in persistence, kick off the configureWithAppId event
+        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
+            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
+        }
+        
+        configState.loadInitialConfig()
+        if !configState.currentConfiguration.isEmpty {
+            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.currentConfiguration)
+            dispatch(event: responseEvent)
+        }
+        pendingResolver(configState.currentConfiguration)
         eventQueue.start()
     }
-
+    
+    /// Invoked when the Configuration extension has been unregistered by the `EventHub`, currently a no-op.
     func onUnregistered() {}
 
     // MARK: Event Listeners
@@ -56,6 +73,7 @@ class AEPConfiguration: Extension {
     
     /// Handles  the configuration request event and determines which business logic should be invoked
     /// - Parameter event: A configuration request event
+    /// - Returns: True if processing the Configuration request event succeeded, otherwise false
     private func handleConfigurationRequest(event: Event) -> Bool {
         guard let eventData = event.data else { return true }
 
@@ -75,6 +93,7 @@ class AEPConfiguration: Extension {
     
     /// Handles the Lifecycle response event and dispatches a configuration request event if we have an appId in persistence
     /// - Parameter event: The lifecycle response event
+    /// - Returns: True if processing the Lifecycle event succeeded, otherwise false
     private func handleLifecycle(event: Event) -> Bool {
         // Re-fetch the latest config if appId is present.
         // Lifecycle does not load bundled/manual configuration if appId is absent.
@@ -95,6 +114,7 @@ class AEPConfiguration: Extension {
     /// - Parameters:
     ///   - event: The `event` which contains the new configuration
     ///   - sharedStateResolver: Shared state resolver that will be invoked with the new configuration
+    /// - Returns: True if processing the update configuration event succeeds, false otherwise
     private func processUpdateConfig(event: Event, sharedStateResolver: SharedStateResolver) -> Bool {
         // Update the overriddenConfig with the new config from API and persist them in disk, and abort if overridden config is empty
         guard let updatedConfig = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any], !updatedConfig.isEmpty else {
@@ -195,23 +215,6 @@ class AEPConfiguration: Extension {
     }
     
     // MARK: Helpers
-    
-    /// Invoked when the extension is registered with the `EventHub`, this is responsible for loading the initial state of the Configuration extension
-    private func bootup() {
-        let pendingResolver = createPendingSharedState(event: nil)
-        
-        // If we have an appId stored in persistence, kick off the configureWithAppId event
-        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
-            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
-        }
-        
-        configState.loadInitialConfig()
-        if !configState.currentConfiguration.isEmpty {
-            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.currentConfiguration)
-            dispatch(event: responseEvent)
-        }
-        pendingResolver(configState.currentConfiguration)
-    }
 
     /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
     /// This method validates the appId for the SetAppIDInternalEvent
