@@ -25,23 +25,29 @@ class ConfigurationFunctionalTests: XCTestCase {
         EventHub.reset()
         registerExtension(MockExtension.self)
         
-        // Wait for first shared state from configuration to signal bootup has completed
-        let semaphore = DispatchSemaphore(value: 0)
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { _ in semaphore.signal() }
-        registerExtension(AEPConfiguration.self)
         EventHub.shared.start()
-        semaphore.wait()
+        // Wait for first shared state from configuration to signal bootup has completed
+        registerConfigAndWaitForSharedState()
     }
     
     // helpers
     private func registerExtension<T: Extension> (_ type: T.Type) {
-        let semaphore = DispatchSemaphore(value: 0)
+        let expectation = XCTestExpectation(description: "Extension should register")
         EventHub.shared.registerExtension(type) { (error) in
             XCTAssertNil(error)
-            semaphore.signal()
+            expectation.fulfill()
         }
 
-        semaphore.wait()
+        wait(for: [expectation], timeout: 0.5)
+    }
+    
+    private func registerConfigAndWaitForSharedState() {
+        let expectation = XCTestExpectation(description: "Configuration should share first shared state")
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { _ in expectation.fulfill() }
+        registerExtension(AEPConfiguration.self)
+        
+        wait(for: [expectation], timeout: 0.5)
     }
     
     // MARK: updateConfigurationWith(dict) tests
