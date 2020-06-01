@@ -26,9 +26,10 @@ class StubACPNetworkService : AEPNetworkService {
 
 class NetworkServiceTests: XCTestCase {
     private var networkStub = StubACPNetworkService()
-    
+    private var systemInfoService: MockSystemInfoService?
     override func setUp() {
-        AEPServiceProvider.shared.systemInfoService = MockNetworkServiceSystemInfo()
+        self.systemInfoService = MockSystemInfoService()
+        AEPServiceProvider.shared.systemInfoService = self.systemInfoService!
     }
     
     override func tearDown() {
@@ -109,6 +110,10 @@ class NetworkServiceTests: XCTestCase {
     }
     
     func testConnectAsync_initiatesConnection_whenValidNetworkRequest() {
+        let mockUserAgent = "mock-user-agent"
+        let mockLocaleName = "mock-locale-name"
+        self.systemInfoService?.defaultUserAgent = mockUserAgent
+        self.systemInfoService?.activeLocaleName = mockLocaleName
         let expectation = XCTestExpectation(description: "Completion handler called")
         
         let testUrl = URL(string: "https://test.com")!
@@ -126,7 +131,7 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertTrue(mockSession.dataTaskWithCompletionHandlerCalled)
         XCTAssertEqual(URLRequest.CachePolicy.reloadIgnoringCacheData, mockSession.calledWithUrlRequest?.cachePolicy)
         XCTAssertEqual(jsonData, mockSession.calledWithUrlRequest?.httpBody)
-        XCTAssertEqual(["Accept": "text/html", "User-Agent": MockNetworkServiceSystemInfo.MOCK_USER_AGENT, "Accept-Language": MockNetworkServiceSystemInfo.MOCK_LOCALE_NAME], mockSession.calledWithUrlRequest?.allHTTPHeaderFields)
+        XCTAssertEqual(["Accept": "text/html", "User-Agent": mockUserAgent, "Accept-Language": mockLocaleName], mockSession.calledWithUrlRequest?.allHTTPHeaderFields)
         XCTAssertEqual("POST", mockSession.calledWithUrlRequest?.httpMethod)
         XCTAssertEqual(testUrl, mockSession.calledWithUrlRequest?.url)
     }

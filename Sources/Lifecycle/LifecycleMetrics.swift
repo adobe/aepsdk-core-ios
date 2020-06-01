@@ -31,7 +31,7 @@ extension Date {
 }
 
 /// A well-typed struct representing Lifecycle data
-struct LifecycleData: Equatable {
+struct LifecycleMetrics: Equatable {
     var installEvent = false
     var launchEvent = false
     var crashEvent = false
@@ -59,7 +59,7 @@ struct LifecycleData: Equatable {
     init() {}
 }
 
-extension LifecycleData {
+extension LifecycleMetrics {
     enum CodingKeys: String, CodingKey {
         case installEvent = "installevent"
         case launchEvent = "launchevent"
@@ -87,7 +87,7 @@ extension LifecycleData {
     }
 }
 
-extension LifecycleData: Encodable {
+extension LifecycleMetrics: Encodable {
     static let DAILY_ENG_USER_EVENT = "DailyEngUserEvent"
     static let MONTHLY_ENG_USER_EVENT = "MonthlyEngUserEvent"
     static let INSTALL_EVENT = "InstallEvent"
@@ -98,12 +98,12 @@ extension LifecycleData: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        if installEvent { try container.encode(LifecycleData.INSTALL_EVENT, forKey: .installEvent) }
-        if launchEvent { try container.encode(LifecycleData.LAUNCH_EVENT, forKey: .launchEvent) }
-        if crashEvent { try container.encode(LifecycleData.CRASH_EVENT, forKey: .crashEvent) }
-        if upgradeEvent { try container.encode(LifecycleData.UPGRADE_EVENT, forKey: .upgradeEvent) }
-        if dailyEngagedEvent { try container.encode(LifecycleData.DAILY_ENG_USER_EVENT, forKey: .dailyEngagedEvent) }
-        if monthlyEngagedEvent { try container.encode(LifecycleData.MONTHLY_ENG_USER_EVENT, forKey: .monthlyEngagedEvent) }
+        if installEvent { try container.encode(LifecycleMetrics.INSTALL_EVENT, forKey: .installEvent) }
+        if launchEvent { try container.encode(LifecycleMetrics.LAUNCH_EVENT, forKey: .launchEvent) }
+        if crashEvent { try container.encode(LifecycleMetrics.CRASH_EVENT, forKey: .crashEvent) }
+        if upgradeEvent { try container.encode(LifecycleMetrics.UPGRADE_EVENT, forKey: .upgradeEvent) }
+        if dailyEngagedEvent { try container.encode(LifecycleMetrics.DAILY_ENG_USER_EVENT, forKey: .dailyEngagedEvent) }
+        if monthlyEngagedEvent { try container.encode(LifecycleMetrics.MONTHLY_ENG_USER_EVENT, forKey: .monthlyEngagedEvent) }
         if let unwrapped = installDate { try container.encode(unwrapped.toSdfString(), forKey: .installDate)}
         if let unwrapped = launches { try container.encode(String(unwrapped), forKey: .launches)}
         if let unwrapped = daysSinceFirstLaunch { try container.encode(String(unwrapped), forKey: .daysSinceFirstLaunch) }
@@ -125,7 +125,7 @@ extension LifecycleData: Encodable {
     
 }
 
-extension LifecycleData: Decodable {
+extension LifecycleMetrics: Decodable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
