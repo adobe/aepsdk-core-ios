@@ -20,14 +20,13 @@ struct LifecycleContextData: Codable {
     
     init() {}
     
-    /// Merges the other `LifecycleContextData` with the `conflictResolver`
+    /// Merges the other `LifecycleContextData` into this, any duplicate keys will resolve the value that is contained within the other `LifecycleContextData`
     /// - Parameters:
     ///   - with: The other `LifecycleContextData` to be merged with
-    ///   - conflictResolver: A closure that takes the current and new values for any duplicate keys. The closure returns the desired value for the final `LifecycleContextData`.
-    func merging(with: LifecycleContextData?, uniquingKeysWith conflictResolver: (Any, Any) throws -> Any) -> LifecycleContextData {
+    func merging(with: LifecycleContextData?) -> LifecycleContextData {
         guard let selfDict = toDictionary(), let otherDict = with?.toDictionary() else { return self }
         
-        let mergedDict = try? selfDict.merging(otherDict, uniquingKeysWith: conflictResolver)
+        let mergedDict = selfDict.merging(otherDict, uniquingKeysWith: { (_, new) in new } )
         guard let mergedDictData = try? JSONSerialization.data(withJSONObject: mergedDict as Any, options: []) else { return self }
         let mergedContextData = try? JSONDecoder().decode(LifecycleContextData.self, from: mergedDictData)
         return mergedContextData ?? self

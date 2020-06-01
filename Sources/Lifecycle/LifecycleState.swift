@@ -72,7 +72,7 @@ struct LifecycleState {
         lifecycleData.advertisingIdentifier = adId
 
         // Update lifecycle context data and persist lifecycle info into local storage
-        lifecycleContextData = lifecycleContextData?.merging(with: lifecycleData, uniquingKeysWith: { (_, new) in new } ) ?? lifecycleData
+        lifecycleContextData = lifecycleContextData?.merging(with: lifecycleData) ?? lifecycleData
         persistLifecycleContextData(startDate: date)
     }
     
@@ -110,7 +110,7 @@ struct LifecycleState {
             dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA, value: lifecycleData)
         } else {
             // if we have the map in memory update it
-            lifecycleContextData = lifecycleData.merging(with: lifecycleData, uniquingKeysWith: { (_, new) in new } )
+            lifecycleContextData = lifecycleData.merging(with: lifecycleData)
         }
     }
     
