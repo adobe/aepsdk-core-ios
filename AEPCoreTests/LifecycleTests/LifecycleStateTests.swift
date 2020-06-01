@@ -333,12 +333,12 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertEqual(actualContextData?.additionalContextData, contextData.additionalContextData)
     }
     
-    // MARK: checkForApplicationUpgrade(...) tests
+    // MARK: applyApplicationUpgrade(...) tests
     
     /// When context data is empty, it should remain empty after invoking `checkForApplicationUpgrade`
     func testCheckApplicationUpgradeWhenContextDataNil() {
         // test
-        lifecycleState.checkForApplicationUpgrade(appId: "")
+        lifecycleState.applyApplicationUpgrade(appId: "")
         
         // verify
         XCTAssertNil(lifecycleState.getContextData())
@@ -354,7 +354,7 @@ class LifecycleStateTests: XCTestCase {
         lifecycleState.lifecycleContextData = contextData
         
         // test
-        lifecycleState.checkForApplicationUpgrade(appId: appId)
+        lifecycleState.applyApplicationUpgrade(appId: appId)
         
         // verify
         XCTAssertEqual(appId, lifecycleState.getContextData()?.lifecycleMetrics.appId)
@@ -370,7 +370,7 @@ class LifecycleStateTests: XCTestCase {
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA, value: contextData)
         
         // test
-        lifecycleState.checkForApplicationUpgrade(appId: appId)
+        lifecycleState.applyApplicationUpgrade(appId: appId)
         
         // verify
         XCTAssertEqual(appId, lifecycleState.getContextData()?.lifecycleMetrics.appId)
@@ -388,7 +388,7 @@ class LifecycleStateTests: XCTestCase {
         dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: appVersion)
         
         // test
-        lifecycleState.checkForApplicationUpgrade(appId: appId)
+        lifecycleState.applyApplicationUpgrade(appId: appId)
         
         // verify
         let actualContextData = lifecycleState.getContextData()

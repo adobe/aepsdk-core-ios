@@ -44,7 +44,7 @@ struct LifecycleState {
         // Build default LifecycleMetrics
         let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()
         let defaultMetrics = metricsBuilder.build()
-        checkForApplicationUpgrade(appId: defaultMetrics.appId)
+        applyApplicationUpgrade(appId: defaultMetrics.appId)
         
         guard let previousSessionInfo =  lifecycleSession.start(date: date, sessionTimeout: sessionTimeout, coreMetrics: defaultMetrics) else { return }
         
@@ -92,7 +92,9 @@ struct LifecycleState {
         return previousSessionLifecycleContextData
     }
     
-    mutating func checkForApplicationUpgrade(appId: String?) {
+    /// Updates the application identifier in the in-memory lifecycle context data
+    /// - Parameter appId: the application identifier
+    mutating func applyApplicationUpgrade(appId: String?) {
         // early out if this isn't an upgrade or if it is an install
         if isInstall() || !isUpgrade() { return }
         
