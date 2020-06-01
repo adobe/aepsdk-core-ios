@@ -154,7 +154,7 @@ class AEPConfiguration: Extension {
                 self?.eventQueue.start()
             } else {
                 // If downloading config failed try again later
-                self?.eventQueue.start(after: 0.5) // retry config after 0.5 seconds
+                self?.eventQueue.start(after: ConfigurationConstants.DOWNLOAD_RETRY_INTERVAL) // retry config every 5 seconds
             }
         }
         
