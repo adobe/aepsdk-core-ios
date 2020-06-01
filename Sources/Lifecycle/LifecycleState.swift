@@ -18,10 +18,14 @@ struct LifecycleState {
     // Access level modified for tests
     #if DEBUG
     var lifecycleContextData: LifecycleContextData?
-    var previousSessionLifecycleContextData: LifecycleContextData?
+    lazy var previousSessionLifecycleContextData: LifecycleContextData? = {
+          return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA)
+       }()
     #else
     private(set) var lifecycleContextData: LifecycleContextData?
-    private(set) var previousSessionLifecycleContextData: LifecycleContextData?
+    lazy private(set) var previousSessionLifecycleContextData: LifecycleContextData? = {
+       return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA)
+    }()
     #endif
     
     private var lifecycleSession: LifecycleSession
@@ -84,12 +88,7 @@ struct LifecycleState {
     
     /// Gets the current context data stored in memory, if none in memory will check data store, if not present will return nil
     mutating func getContextData() -> LifecycleContextData? {
-        if let contextData = lifecycleContextData ?? previousSessionLifecycleContextData {
-            return contextData
-        }
-        
-        previousSessionLifecycleContextData = getPersistedContextData()
-        return previousSessionLifecycleContextData
+        return lifecycleContextData ?? previousSessionLifecycleContextData
     }
     
     /// Updates the application identifier in the in-memory lifecycle context data
@@ -134,12 +133,6 @@ struct LifecycleState {
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LAST_LAUNCH_DATE, value: startDate)
         let appVersion = AEPServiceProvider.shared.systemInfoService.getApplicationVersionNumber()
         dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: appVersion)
-    }
-    
-    /// Gets the `LifecycleContextData` stored in the data store, nil if not present
-    private func getPersistedContextData() -> LifecycleContextData? {
-        let contextData: LifecycleContextData? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA)
-        return contextData
     }
     
 }
