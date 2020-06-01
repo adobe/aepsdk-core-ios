@@ -145,12 +145,14 @@ class AEPConfiguration: Extension {
             return true
         }
         
+        // check if the configuration state has downloaded the config associated with appId, if so early exiti
+        guard !configState.hasDownloadedConfig(appId: appId) else { return true }
+        
         // stop all other event processing while we are attempting to download the config
         eventQueue.stop()
         configState.updateWith(appId: appId) { [weak self] (config) in
             if let _ = config {
                 self?.publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
-                self?.eventQueue.removeFirst() // remove this event from the queue if downloading successful
                 self?.eventQueue.start()
             } else {
                 // If downloading config failed try again later

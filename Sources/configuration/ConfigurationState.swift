@@ -16,6 +16,7 @@ class ConfigurationState {
     let dataStore: NamedKeyValueStore
     let appIdManager: LaunchIDManager
     let configDownloader: ConfigurationDownloadable
+    private var downloadedAppIds = Set<String>() // a set of appIds, if an appId is present then we have downloaded and applied the config
     
     private(set) var currentConfiguration = [String: Any]()
     private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
@@ -86,6 +87,7 @@ class ConfigurationState {
         // Try to download config from network, if fails try to load from cache
         configDownloader.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { [weak self] (config) in
             if let loadedConfig = config {
+                self?.downloadedAppIds.insert(appId)
                 self?.replaceConfigurationWith(newConfig: loadedConfig)
             }
             
@@ -103,6 +105,12 @@ class ConfigurationState {
         
         replaceConfigurationWith(newConfig: bundledConfig)
         return true
+    }
+    
+    /// Determines if we have already downloaded the configuration associated with `appId`
+    /// - Parameter appId: A valid appId
+    func hasDownloadedConfig(appId: String) -> Bool {
+        return downloadedAppIds.contains(appId)
     }
     
     /// Replaces `currentConfiguration` with `newConfig` and then applies the existing programmatic configuration on-top

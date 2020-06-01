@@ -391,9 +391,12 @@ class ConfigurationStateTests: XCTestCase {
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromUrl = cachedConfig
         
+        let appId = "valid-app-id"
+        
         // test & verify
-        configState.updateWith(appId: "valid-app-id") { (config) in
+        configState.updateWith(appId: appId) { (config) in
             XCTAssertEqual(cachedConfig.count, config?.count)
+            XCTAssertTrue(self.configState.hasDownloadedConfig(appId: appId))
             expectation.fulfill()
         }
 
@@ -411,6 +414,7 @@ class ConfigurationStateTests: XCTestCase {
         // test
         configState.updateWith(appId: appId) { (config) in
             XCTAssertNil(config)
+            XCTAssertFalse(self.configState.hasDownloadedConfig(appId: appId))
             expectation.fulfill()
         }
         

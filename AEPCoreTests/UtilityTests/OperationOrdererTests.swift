@@ -242,46 +242,5 @@ class OperationOrdererTests: XCTestCase {
         
         wait(for: [firstHandlerExpectation, secondHandlerExpectation], timeout: 1.0)
     }
-    
-    /// Ensures that we can remove the first item, and it does not invoke the handler
-    func testRemoveFirst() {
-        let expectation = XCTestExpectation()
-        expectation.isInverted = true
-        
-        let queue = OperationOrderer<Int>()
-        queue.setHandler { (_) -> Bool in
-            expectation.fulfill()
-            return true
-        }
-        
-        // dispatch items
-        queue.add(0)
-        
-        // remove first
-        queue.removeFirst()
-        
-        queue.start(after: 0.5)
-        wait(for: [expectation], timeout: 1.0)
-    }
-    
-    /// Ensures that we can remove the first item after we've attempted to process it, and it does not invoke the handler
-    func testRemoveFirstAfterAnAttempt() {
-        let expectation = XCTestExpectation()
-        expectation.assertForOverFulfill = true
-        
-        let queue = OperationOrderer<Int>()
-        queue.setHandler { (_) -> Bool in
-            // remove first, then re-start the queue
-            queue.removeFirst()
-            queue.start()
-            expectation.fulfill()
-            return false
-        }
-        
-        // dispatch items
-        queue.add(0)
-        queue.start()
-        
-        wait(for: [expectation], timeout: 1.0)
-    }
+
 }
