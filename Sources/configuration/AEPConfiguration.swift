@@ -221,6 +221,7 @@ class AEPConfiguration: Extension {
     /// - Parameters:
     ///   - event: event for the API call
     ///   - newAppId: appId passed into the API
+    /// - Returns: true if there was a change to appId via the `IS_INTERNAL_EVENT` event
     private func validateForInternalEventAppIdChange(event: Event, newAppId: String) -> Bool {
         let isInternalEvent = event.data?[ConfigurationConstants.Keys.IS_INTERNAL_EVENT] as? Bool ?? false
 
