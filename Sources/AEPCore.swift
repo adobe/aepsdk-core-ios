@@ -52,5 +52,13 @@ public final class AEPCore {
         
         EventHub.shared.dispatch(event: event)
     }
+    
+    /// Start event processing
+    //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
+    static func start(completion: (()-> Void)) {
+        // Start the event hub processing
+        EventHub.shared.start()
+        completion()
+    }
         
 }
