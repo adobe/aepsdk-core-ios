@@ -15,6 +15,7 @@ import Foundation
 struct LifecycleState {
     let dataStore: NamedKeyValueStore
     
+    // Access level modified for tests
     #if DEBUG
     var lifecycleContextData: LifecycleContextData?
     var previousSessionLifecycleContextData: LifecycleContextData?
