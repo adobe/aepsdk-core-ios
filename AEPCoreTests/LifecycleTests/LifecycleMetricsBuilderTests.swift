@@ -21,6 +21,10 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     private typealias KEYS = LifecycleConstants.Keys
     
     override func setUp() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        let someDateTime = formatter.date(from: "2020/05/02 22:31")
+        self.date = someDateTime!
         self.systemInfoService = MockSystemInfoService()
         AEPServiceProvider.shared.systemInfoService = self.systemInfoService!
         self.dataStore = FakeDataStore(name: "testStore")
