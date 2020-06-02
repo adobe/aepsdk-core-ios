@@ -18,6 +18,9 @@ public final class AEPCore {
     /// Current version of the Core extension
     let version = "0.0.1"
     
+    /// Pending extensions to be registered for legacy support
+    static var pendingExtensions = [Extension.Type]()
+    
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     static func registerExtensions(_ extensions: [Extension.Type]) {
@@ -57,7 +60,7 @@ public final class AEPCore {
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
     static func start(completion: (()-> Void)) {
         // Start the event hub processing
-        EventHub.shared.start()
+        registerExtensions(AEPCore.pendingExtensions)
         completion()
     }
         

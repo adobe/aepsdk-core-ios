@@ -34,12 +34,10 @@ public protocol Extension {
 /// Contains methods for developers to interact with in their own extensions
 public extension Extension {
     
-    /// Registers the `Extension` with the `EventHub` and handles any registration errors which may occur.
+    /// Registers the `Extension` with the `EventHub`
     //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
     static func registerExtension() {
-        EventHub.shared.registerExtension(Self.self) { (error) in
-            // TODO: Log error
-        }
+        AEPCore.pendingExtensions.append(Self.self)
     }
     
     /// Registers a `EventListener` with the `EventHub`

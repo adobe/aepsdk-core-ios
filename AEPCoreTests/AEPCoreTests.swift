@@ -77,76 +77,67 @@ class AEPCoreTests: XCTestCase {
         XCTAssertTrue(MockExtension.calledOnRegistered)
         XCTAssertEqual(MockExtension.receivedEvents.first!.name, eventName)
     }
-//
-//    func testRegisterExtensionsSimpleEventDispatch() {
-//        // test
-//        AEPCore.registerExtensions([MockExtension.self])
-//        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
-//
-//        // verify
-//        sleep(1)
-//        XCTAssertTrue(MockExtension.calledInit)
-//        XCTAssertTrue(MockExtension.calledOnRegistered)
-//        XCTAssertEqual(MockExtension.receivedEvents.first!.name, "test-event")
-//    }
     
+    func testLegacyRegisterMultipleExtensionsSimpleEventDispatch() {
+        MockExtension.registerExtension()
+        MockExtensionTwo.registerExtension()
+        var callbackCalled = false
+        AEPCore.start {
+            callbackCalled = true
+        }
+        let eventName = "test-event"
+        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        
+        sleep(1)
+        XCTAssertTrue(callbackCalled)
+        XCTAssertTrue(MockExtension.calledInit)
+        XCTAssertTrue(MockExtension.calledOnRegistered)
+        XCTAssertTrue(MockExtensionTwo.calledInit)
+        XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
+        XCTAssertEqual(MockExtension.receivedEvents.first!.name, eventName)
+    }
     
-
-//        func testRegisterExtensionsDispatchEventBeforeRegister() {
-    //        // test
-    //        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
-    //        AEPCore.registerExtensions([MockExtension.self])
-    //
-    //        // verify
-    //        sleep(1)
-    //        XCTAssertTrue(MockExtension.calledInit)
-    //        XCTAssertTrue(MockExtension.calledOnRegistered)
-    //        XCTAssertEqual(MockExtension.receivedEvents.first!.name, "test-event")
-    //    }
-    //
-    //    func testRegisterMultipleExtensionsSimpleEventDispatch() {
-    //        // test
-    //        AEPCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
-    //        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
-    //
-    //        // verify
-    //        sleep(1)
-    //        XCTAssertTrue(MockExtension.calledInit)
-    //        XCTAssertTrue(MockExtension.calledOnRegistered)
-    //        XCTAssertEqual(MockExtension.receivedEvents.first!.name, "test-event")
-    //    }
-    //
-    //    func testRegisterMultipleExtensionsDispatchEventBeforeRegister() {
-    //        // test
-    //        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
-    //        AEPCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
-    //
-    //        // verify
-    //        sleep(1)
-    //        XCTAssertTrue(MockExtension.calledInit)
-    //        XCTAssertTrue(MockExtension.calledOnRegistered)
-    //        XCTAssertEqual(MockExtension.receivedEvents.first!.name, "test-event")
-    //    }
-    //
-    //    func testRegisterSameExtensionTwice() {
-    //        // test
-    //        AEPCore.registerExtensions([MockExtension.self])
-    //
-    //        // verify pt. 1
-    //        sleep(1)
-    //        XCTAssertTrue(MockExtension.calledInit)
-    //        XCTAssertTrue(MockExtension.calledOnRegistered)
-    //
-    //        MockExtension.reset()
-    //
-    //        AEPCore.registerExtensions([MockExtension.self])
-    //
-    //        // verify pt. 2
-    //        sleep(1)
-    //        XCTAssertTrue(MockExtension.calledInit)
-    //        XCTAssertFalse(MockExtension.calledOnRegistered)
-    //    }
-
+    func testLegacyRegisterMultipleExtensionsDispatchEventBeforeRegister() {
+        let eventName = "test-event"
+        var callbackCalled = false
+        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        MockExtension.registerExtension()
+        MockExtensionTwo.registerExtension()
+        AEPCore.start {
+            callbackCalled = true
+        }
+        
+        sleep(1)
+        XCTAssertTrue(callbackCalled)
+        XCTAssertTrue(MockExtension.calledInit)
+        XCTAssertTrue(MockExtension.calledOnRegistered)
+        XCTAssertTrue(MockExtensionTwo.calledInit)
+        XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
+        XCTAssertEqual(MockExtension.receivedEvents.first!.name, eventName)
+    }
+    
+    func testLegacyRegisterSameExtensionTwice() {
+        MockExtension.registerExtension()
+        var callbackCalled = false
+        AEPCore.start {
+            callbackCalled = true
+        }
+        sleep(1)
+        XCTAssertTrue(MockExtension.calledInit)
+        XCTAssertTrue(MockExtension.calledOnRegistered)
+        
+        MockExtension.reset()
+        callbackCalled = false
+        MockExtension.registerExtension()
+        AEPCore.start {
+            callbackCalled = true
+        }
+        sleep(1)
+        XCTAssertTrue(MockExtension.calledInit)
+        XCTAssertFalse(MockExtension.calledOnRegistered)
+        
+    }
+    
     func testRegisterExtensionsSimple() {
         // test
         AEPCore.registerExtensions([MockExtension.self])
