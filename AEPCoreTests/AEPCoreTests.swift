@@ -123,6 +123,7 @@ class AEPCoreTests: XCTestCase {
             callbackCalled = true
         }
         sleep(1)
+        XCTAssertTrue(callbackCalled)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
         
@@ -133,6 +134,7 @@ class AEPCoreTests: XCTestCase {
             callbackCalled = true
         }
         sleep(1)
+        XCTAssertTrue(callbackCalled)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertFalse(MockExtension.calledOnRegistered)
         

@@ -60,7 +60,7 @@ public final class AEPCore {
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
     static func start(completion: @escaping (()-> Void)) {
         // Start the event hub processing
-        registerExtensions(AEPCore.pendingExtensions.nonThreadSafeArray)
+        registerExtensions(AEPCore.pendingExtensions.shallowCopy)
         // Use a background thread for the completion handler since calling thread is most likely going to be main thread.
         DispatchQueue.global(qos: .background).async {
             completion()

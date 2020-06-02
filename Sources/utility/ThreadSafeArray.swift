@@ -39,8 +39,8 @@ final class ThreadSafeArray<T> {
         return queue.sync { return self.array.count }
     }
     
-    /// Gets a non thread safe copy of the array
-    var nonThreadSafeArray: [T] {
+    /// Gets a non thread safe shallow copy of the array
+    var shallowCopy: [T] {
         return queue.sync {
             // Copy the array to avoid cross threading issues
             let array = self.array
