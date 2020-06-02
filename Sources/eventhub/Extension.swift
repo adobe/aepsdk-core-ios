@@ -37,7 +37,7 @@ public extension Extension {
     /// Registers the `Extension` with the `EventHub`
     //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
     static func registerExtension() {
-        AEPCore.pendingExtensions.append(Self.self)
+        AEPCore.pendingExtensions.append(newElement: Self.self)
     }
     
     /// Registers a `EventListener` with the `EventHub`
