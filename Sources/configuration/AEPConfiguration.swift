@@ -145,7 +145,7 @@ class AEPConfiguration: Extension {
             return true
         }
         
-        // check if the configuration state has downloaded the config associated with appId, if so early exiti
+        // check if the configuration state has downloaded the config associated with appId, if so early exit
         guard !configState.hasDownloadedConfig(appId: appId) else { return true }
         
         // stop all other event processing while we are attempting to download the config
