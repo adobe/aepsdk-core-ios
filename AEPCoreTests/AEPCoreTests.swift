@@ -22,119 +22,139 @@ class AEPCoreTests: XCTestCase {
     }
     
     func testLegacyRegisterAndStart() {
-        var callbackCalled = false
+        let expectation = XCTestExpectation(description: "callback invoked")
+        expectation.assertForOverFulfill = true
         MockExtension.registerExtension()
         AEPCore.start {
-            callbackCalled = true
+            expectation.fulfill()
         }
-        sleep(1)
+        wait(for: [expectation], timeout: 0.5)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
-        XCTAssertTrue(callbackCalled)
     }
     
     func testLegacyRegisterAndStartMultiple() {
-        var callbackCalled = false
+        let expectation = XCTestExpectation(description: "callback invoked")
+        expectation.assertForOverFulfill = true
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         AEPCore.start {
-            callbackCalled = true
+            expectation.fulfill()
         }
-        sleep(1)
+        wait(for: [expectation], timeout: 0.5)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtensionTwo.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
         XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
-        XCTAssertTrue(callbackCalled)
     }
     
     func testLegacyRegisterEventDispatchSimple() {
-        var callbackCalled = false
+        let expectation = XCTestExpectation(description: "callback invoked")
+        expectation.assertForOverFulfill = true
+        let eventName = "test-event"
         MockExtension.registerExtension()
         AEPCore.start {
-           callbackCalled = true
+            expectation.fulfill()
         }
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
-        sleep(1)
-        XCTAssertTrue(callbackCalled)
+        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
-        XCTAssertEqual(MockExtension.receivedEvents.first!.name, "test-event")
+        
+        sleep(1)
+        guard let event = MockExtension.receivedEvents.first else {
+            XCTFail("Extension did not receive the event")
+            return
+        }
+        XCTAssertEqual(event.name, eventName)
     }
     
     func testLegacyRegisterExtensionsDispatchEventBeforeRegister() {
-        var callbackCalled = false
+        let expectation = XCTestExpectation(description: "callback invoked")
+        expectation.assertForOverFulfill = true
         let eventName = "test-event"
         EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
         MockExtension.registerExtension()
         AEPCore.start {
-            callbackCalled = true
+            expectation.fulfill()
         }
-        
-        sleep(1)
-        XCTAssertTrue(callbackCalled)
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
-        XCTAssertEqual(MockExtension.receivedEvents.first!.name, eventName)
+        
+        sleep(1)
+        guard let event = MockExtension.receivedEvents.first else {
+            XCTFail("Extension did not receive the event")
+            return
+        }
+        XCTAssertEqual(event.name, eventName)
     }
     
     func testLegacyRegisterMultipleExtensionsSimpleEventDispatch() {
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
-        var callbackCalled = false
+        let expectation = XCTestExpectation(description: "callback invoked")
+        expectation.assertForOverFulfill = true
         AEPCore.start {
-            callbackCalled = true
+            expectation.fulfill()
         }
         let eventName = "test-event"
         EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
-        
-        sleep(1)
-        XCTAssertTrue(callbackCalled)
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
         XCTAssertTrue(MockExtensionTwo.calledInit)
         XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
-        XCTAssertEqual(MockExtension.receivedEvents.first!.name, eventName)
+        
+        sleep(1)
+        guard let event = MockExtension.receivedEvents.first else {
+            XCTFail("Extension did not receive the event")
+            return
+        }
+        XCTAssertEqual(event.name, eventName)
     }
     
     func testLegacyRegisterMultipleExtensionsDispatchEventBeforeRegister() {
         let eventName = "test-event"
-        var callbackCalled = false
+        let expectation = XCTestExpectation(description: "callback invoked")
+        expectation.assertForOverFulfill = true
         EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         AEPCore.start {
-            callbackCalled = true
+            expectation.fulfill()
         }
         
-        sleep(1)
-        XCTAssertTrue(callbackCalled)
+        wait(for: [expectation], timeout: 1.0)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
         XCTAssertTrue(MockExtensionTwo.calledInit)
         XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
-        XCTAssertEqual(MockExtension.receivedEvents.first!.name, eventName)
+        
+        sleep(1)
+        guard let event = MockExtension.receivedEvents.first else {
+            XCTFail("Extension did not receive the event")
+            return
+        }
+        XCTAssertEqual(event.name, eventName)
     }
     
     func testLegacyRegisterSameExtensionTwice() {
         MockExtension.registerExtension()
-        var callbackCalled = false
+        let expectation = XCTestExpectation(description: "callback invoked")
+        expectation.assertForOverFulfill = true
         AEPCore.start {
-            callbackCalled = true
+            expectation.fulfill()
         }
-        sleep(1)
-        XCTAssertTrue(callbackCalled)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertTrue(MockExtension.calledOnRegistered)
         
         MockExtension.reset()
-        callbackCalled = false
         MockExtension.registerExtension()
         AEPCore.start {
-            callbackCalled = true
+            
         }
-        sleep(1)
-        XCTAssertTrue(callbackCalled)
+        wait(for: [expectation], timeout: 0.5)
         XCTAssertTrue(MockExtension.calledInit)
         XCTAssertFalse(MockExtension.calledOnRegistered)
         
