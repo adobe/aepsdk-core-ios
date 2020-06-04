@@ -133,7 +133,7 @@ class AEPConfiguration: Extension {
     ///   - event: The event responsible for the API call
     ///   - sharedStateResolver: Shared state resolver that will be invoked with the new configuration
     private func processConfigureWith(appId: String, event: Event, sharedStateResolver: @escaping SharedStateResolver) -> Bool {
-        guard let appId = event.data?[ConfigurationConstants.Keys.JSON_APP_ID] as? String, !appId.isEmpty else {
+        guard !appId.isEmpty else {
             // Error: No appId provided or its empty, resolve pending shared state with current config
             sharedStateResolver(configState.currentConfiguration)
             return true
