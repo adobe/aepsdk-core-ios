@@ -18,6 +18,9 @@ public final class AEPCore {
     /// Current version of the Core extension
     let version = "0.0.1"
     
+    /// Pending extensions to be registered for legacy support
+    static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingextensions.queue")
+    
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     static func registerExtensions(_ extensions: [Extension.Type]) {
@@ -51,6 +54,17 @@ public final class AEPCore {
 //        }
         
         EventHub.shared.dispatch(event: event)
+    }
+    
+    /// Start event processing
+    //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
+    static func start(completion: @escaping (()-> Void)) {
+        // Start the event hub processing
+        registerExtensions(AEPCore.pendingExtensions.shallowCopy)
+        // Use a background thread for the completion handler since calling thread is most likely going to be main thread.
+        DispatchQueue.global(qos: .background).async {
+            completion()
+        }
     }
         
 }

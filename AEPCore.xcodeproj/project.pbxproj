@@ -71,6 +71,8 @@
 		76850D1A24313181003922F4 /* OperationOrderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D1924313181003922F4 /* OperationOrderer.swift */; };
 		785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */; };
 		785220D6245CA92F00B46E90 /* NamedKeyValueServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */; };
+		78A642572486C98E004B4E46 /* ThreadSafeArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A642562486C98E004B4E46 /* ThreadSafeArray.swift */; };
+		78A642592486DABB004B4E46 /* ThreadSafeArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A642582486DABB004B4E46 /* ThreadSafeArrayTests.swift */; };
 		78D754D52437F92300DB9124 /* NamedKeyValueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D42437F92300DB9124 /* NamedKeyValueService.swift */; };
 		78D754D92437F93E00DB9124 /* NamedKeyValueStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */; };
 		78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */; };
@@ -170,6 +172,8 @@
 		76850D1924313181003922F4 /* OperationOrderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationOrderer.swift; sourceTree = "<group>"; };
 		785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedUserDefaultKeyValueService.swift; sourceTree = "<group>"; };
 		785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedKeyValueServiceTest.swift; sourceTree = "<group>"; };
+		78A642562486C98E004B4E46 /* ThreadSafeArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadSafeArray.swift; sourceTree = "<group>"; };
+		78A642582486DABB004B4E46 /* ThreadSafeArrayTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadSafeArrayTests.swift; sourceTree = "<group>"; };
 		78D754D42437F92300DB9124 /* NamedKeyValueService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueService.swift; sourceTree = "<group>"; };
 		78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStoreTest.swift; sourceTree = "<group>"; };
 		78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStore.swift; sourceTree = "<group>"; };
@@ -370,6 +374,7 @@
 				21DB7093242BEBB800568A4C /* ThreadSafeDictionary.swift */,
 				21599655243E4EEB00E202B1 /* AnyCodable.swift */,
 				21315BB924579C4A00D1B254 /* AtomicCounter.swift */,
+				78A642562486C98E004B4E46 /* ThreadSafeArray.swift */,
 			);
 			name = utility;
 			path = Sources/utility;
@@ -381,6 +386,7 @@
 				76850D17242EDE58003922F4 /* OperationOrdererTests.swift */,
 				21599658243E4F0B00E202B1 /* AnyCodableTests.swift */,
 				21C754B224785E52007B8871 /* ThreadSafeDictionaryTests.swift */,
+				78A642582486DABB004B4E46 /* ThreadSafeArrayTests.swift */,
 			);
 			path = UtilityTests;
 			sourceTree = "<group>";
@@ -560,6 +566,7 @@
 				21315BBA24579C4A00D1B254 /* AtomicCounter.swift in Sources */,
 				213C8BD72428822A009F780A /* EventListenerContainer.swift in Sources */,
 				785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */,
+				78A642572486C98E004B4E46 /* ThreadSafeArray.swift in Sources */,
 				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
 				78D754DF243BC34100DB9124 /* SystemInfoService.swift in Sources */,
@@ -623,6 +630,7 @@
 				785220D6245CA92F00B46E90 /* NamedKeyValueServiceTest.swift in Sources */,
 				213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */,
 				21F361A2246DE4C9009AB88B /* LifecycleMetricsTests.swift in Sources */,
+				78A642592486DABB004B4E46 /* ThreadSafeArrayTests.swift in Sources */,
 				21599659243E4F0B00E202B1 /* AnyCodableTests.swift in Sources */,
 				2131A1B22465D81400F1392D /* AEPCore+ConfigurationTests.swift in Sources */,
 				213C8BD524252302009F780A /* MockExtension.swift in Sources */,
