@@ -88,6 +88,14 @@ class OperationOrderer<T> {
         }
     }
     
+    /// Puts queue in active state after a time interval
+    /// - Parameter after: seconds to wait before starting the queue
+    func start(after: TimeInterval) {
+        queue.asyncAfter(deadline: .now() + after) {
+            self.start()
+        }
+    }
+    
     /// Puts queue in inactive state.
     /// - Note: This is not an immediate stop, already queued items may continue to be handled.
     func stop() {

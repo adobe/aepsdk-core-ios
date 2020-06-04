@@ -12,13 +12,14 @@ governing permissions and limitations under the License.
 import Foundation
 
 struct ConfigurationConstants {
-    static let EXTENSION_NAME = "Configuration"
+    static let EXTENSION_NAME = "com.adobe.module.configuration"
     static let EXTENSION_VERSION = "0.0.1"
     static let DATA_STORE_NAME = EXTENSION_NAME
     
     static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
     static let CONFIG_BUNDLED_FILE_NAME  = "ADBMobileConfig"
     static let CONFIG_MANIFEST_APPID_KEY = "ADBMobileAppID"
+    static let DOWNLOAD_RETRY_INTERVAL = TimeInterval(5) // 5 seconds
 
     struct Keys {
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"

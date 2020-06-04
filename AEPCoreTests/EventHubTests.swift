@@ -26,11 +26,7 @@ class EventHubTests: XCTestCase {
         registerMockExtension(MockExtension.self)
     }
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    // helper functions
+    // MARK: Helper functions
     private func validateSharedState(_ extensionName: String, _ event: Event?, _ dictionaryValue: String) {
         XCTAssertEqual(eventHub.getSharedState(extensionName: extensionName, event: event)?.value![SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
     }
