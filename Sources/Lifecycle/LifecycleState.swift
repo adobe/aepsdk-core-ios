@@ -109,7 +109,7 @@ struct LifecycleState {
             dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA, value: lifecycleData)
         } else {
             // if we have the map in memory update it
-            lifecycleContextData = lifecycleData.merging(with: lifecycleData)
+            lifecycleContextData = lifecycleContextData?.merging(with: lifecycleData) ?? lifecycleData
         }
     }
     
