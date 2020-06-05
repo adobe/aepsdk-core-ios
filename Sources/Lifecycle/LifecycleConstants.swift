@@ -13,6 +13,10 @@ import Foundation
 
 /// Constants for `AEPLifecycle`
 struct LifecycleConstants {
+    static let EXTENSION_NAME = "com.adobe.module.lifecycle"
+    static let EXTENSION_VERSION = "0.0.1"
+    static let DATA_STORE_NAME = LifecycleConstants.EXTENSION_NAME
+    
     static let START = "start"
     static let PAUSE = "pause"
     static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
@@ -26,6 +30,13 @@ struct LifecycleConstants {
         static let APP_ID = "AppId"
         static let PREVIOUS_SESSION_LENGTH = "prevsessionlength"
         static let IGNORED_SESSION_LENGTH = "ignoredsessionlength"
+        static let LIFECYCLE_CONTEXT_DATA = "lifecyclecontextdata"
+        static let SESSION_EVENT = "sessionevent"
+        static let SESSION_START_TIMESTAMP = "starttimestampmillis"
+        static let MAX_SESSION_LENGTH  = "maxsessionlength"
+        static let PREVIOUS_SESSION_START_TIMESTAMP = "previoussessionstarttimestampmillis"
+        static let PREVIOUS_SESSION_PAUSE_TIMESTAMP = "previoussessionpausetimestampmillis"
+        static let CONFIG_SESSION_TIMEOUT = "lifecycle.sessionTimeout"
     }
 
     struct DataStoreKeys {
