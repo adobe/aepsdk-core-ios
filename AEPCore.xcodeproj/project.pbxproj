@@ -34,6 +34,9 @@
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
 		2179F183246490140004A7C0 /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DA92461CA3F009D05BF /* Lifecycle.swift */; };
 		2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DAD2461CABE009D05BF /* AEPLifecycle.swift */; };
+		2181948B2489F66D004F869A /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181948A2489F66D004F869A /* Identity.swift */; };
+		2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */; };
+		2181948F2489FC97004F869A /* MobileVisitorId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181948E2489FC97004F869A /* MobileVisitorId.swift */; };
 		218208ED247EED6D003D3591 /* ConfigurationFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218208EC247EED6D003D3591 /* ConfigurationFunctionalTests.swift */; };
 		218CAD7524744A6D004DA1E8 /* NetworkServiceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218CAD7424744A6D004DA1E8 /* NetworkServiceConstants.swift */; };
 		21A10255248170E5009AB015 /* MockConfigurationDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A10254248170E5009AB015 /* MockConfigurationDownloaderNetworkService.swift */; };
@@ -132,6 +135,9 @@
 		21629DAD2461CABE009D05BF /* AEPLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AEPLifecycle.swift; path = Sources/Lifecycle/AEPLifecycle.swift; sourceTree = SOURCE_ROOT; };
 		21629DAF2461CAD0009D05BF /* AEPCore+Lifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AEPCore+Lifecycle.swift"; path = "Sources/Lifecycle/AEPCore+Lifecycle.swift"; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
+		2181948A2489F66D004F869A /* Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
+		2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileVisitorAuthenticationState.swift; sourceTree = "<group>"; };
+		2181948E2489FC97004F869A /* MobileVisitorId.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileVisitorId.swift; sourceTree = "<group>"; };
 		218208EC247EED6D003D3591 /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		218CAD7424744A6D004DA1E8 /* NetworkServiceConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceConstants.swift; sourceTree = "<group>"; };
 		21A10254248170E5009AB015 /* MockConfigurationDownloaderNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloaderNetworkService.swift; sourceTree = "<group>"; };
@@ -268,6 +274,16 @@
 			path = Lifecycle;
 			sourceTree = "<group>";
 		};
+		218194892489F65D004F869A /* identity */ = {
+			isa = PBXGroup;
+			children = (
+				2181948A2489F66D004F869A /* Identity.swift */,
+				2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */,
+				2181948E2489FC97004F869A /* MobileVisitorId.swift */,
+			);
+			path = identity;
+			sourceTree = "<group>";
+		};
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
@@ -290,6 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				21315BB424575ED200D1B254 /* AEPCore.swift */,
+				218194892489F65D004F869A /* identity */,
 				21629DA82461C8EC009D05BF /* Lifecycle */,
 				21FBA5482463DFA100A2A009 /* configuration */,
 				78D754D32437F92300DB9124 /* services */,
@@ -558,6 +575,7 @@
 				2179F183246490140004A7C0 /* Lifecycle.swift in Sources */,
 				213C8BC8242426DC009F780A /* Extension.swift in Sources */,
 				21CAC0F524229CDB00C11388 /* Event.swift in Sources */,
+				2181948F2489FC97004F869A /* MobileVisitorId.swift in Sources */,
 				D4000F122458DE700052C536 /* NetworkService.swift in Sources */,
 				D4000F182458DEB60052C536 /* HttpConnection.swift in Sources */,
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
@@ -580,6 +598,7 @@
 				213C8BC6242426A1009F780A /* EventHub.swift in Sources */,
 				D4000F162458DEA20052C536 /* HttpMethod.swift in Sources */,
 				78E2AC8C2476FFA900E49D64 /* LifecycleMetricsBuilder.swift in Sources */,
+				2181948B2489F66D004F869A /* Identity.swift in Sources */,
 				78D754F42445227D00DB9124 /* ApplicationSystemInfoService.swift in Sources */,
 				21CAC0F424229CDB00C11388 /* EventSource.swift in Sources */,
 				21FBA5502463DFFF00A2A009 /* ConfigurationConstants.swift in Sources */,
@@ -596,6 +615,7 @@
 				78D754D52437F92300DB9124 /* NamedKeyValueService.swift in Sources */,
 				21599656243E4EEB00E202B1 /* AnyCodable.swift in Sources */,
 				21F361A0246DE4B5009AB88B /* LifecycleMetrics.swift in Sources */,
+				2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */,
 				215CA8152481C9430078D778 /* LifecycleState.swift in Sources */,
 				78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */,
 				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
