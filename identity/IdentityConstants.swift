@@ -13,14 +13,14 @@ import Foundation
 
 struct IdentityConstants {
     struct EventDataKeys {
-        static let BASE_URL = ""
-        static let UPDATED_URL = ""
-        static let VISITOR_IDS_LIST = ""
-        static let VISITOR_ID_MID = ""
-        static let IDENTIFIERS = ""
-        static let AUTHENTICATION_STATE = ""
-        static let FORCE_SYNC = ""
-        static let IS_SYNC_EVENT = ""
-        static let URL_VARIABLES = ""
+        static let BASE_URL = "baseurl"
+        static let UPDATED_URL = "updatedurl"
+        static let VISITOR_IDS_LIST = "visitoridslist"
+        static let VISITOR_ID_MID = "mid"
+        static let IDENTIFIERS = "visitoridentifiers"
+        static let AUTHENTICATION_STATE = "authenticationstate"
+        static let FORCE_SYNC = "forcesync"
+        static let IS_SYNC_EVENT = "issyncevent"
+        static let URL_VARIABLES = "urlvariables"
     }
 }
