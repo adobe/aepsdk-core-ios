@@ -158,7 +158,7 @@
 		21F235BC24325A6200C3E59A /* EventHubConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHubConstants.swift; sourceTree = "<group>"; };
 		21F3619F246DE4B5009AB88B /* LifecycleMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifecycleMetrics.swift; path = Sources/Lifecycle/LifecycleMetrics.swift; sourceTree = SOURCE_ROOT; };
 		21F361A1246DE4C9009AB88B /* LifecycleMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsTests.swift; sourceTree = "<group>"; };
-		21F5D9F82485976F00371DF4 /* Event+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Configuration.swift"; sourceTree = "<group>"; };
+		21F5D9F82485976F00371DF4 /* Event+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Event+Configuration.swift"; path = "Sources/configuration/Event+Configuration.swift"; sourceTree = "<group>"; };
 		21F9174B2433E429000743E3 /* MockExtensionTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtensionTwo.swift; sourceTree = "<group>"; };
 		21FB910D247639EE00074BF9 /* ConfigurationDownloadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConfigurationDownloadable.swift; path = Sources/configuration/ConfigurationDownloadable.swift; sourceTree = SOURCE_ROOT; };
 		21FBA5492463DFCE00A2A009 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Sources/configuration/Configuration.swift; sourceTree = SOURCE_ROOT; };
@@ -183,7 +183,7 @@
 		78D754F32445227D00DB9124 /* ApplicationSystemInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationSystemInfoService.swift; sourceTree = "<group>"; };
 		78DEFEF0244A183400D7E9FB /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
 		78DEFEF224509E3C00D7E9FB /* AEPServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPServiceProvider.swift; sourceTree = "<group>"; };
-		78E2AC8B2476FFA900E49D64 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsBuilder.swift; sourceTree = SOURCE_ROOT; };
+		78E2AC8B2476FFA900E49D64 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LifecycleMetricsBuilder.swift; path = Sources/Lifecycle/LifecycleMetricsBuilder.swift; sourceTree = SOURCE_ROOT; };
 		78E2AC8D247700F400E49D64 /* LifecycleMetricsBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsBuilderTests.swift; sourceTree = "<group>"; };
 		D4000F112458DE700052C536 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		D4000F132458DE8E0052C536 /* AEPNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPNetworkService.swift; sourceTree = "<group>"; };
