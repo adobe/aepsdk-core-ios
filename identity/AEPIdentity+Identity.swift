@@ -23,7 +23,7 @@ extension AEPIdentity: Identity {
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteURL ?? ""])
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
-            // TODO: Handle error
+            // TODO: AMSDK-10182 Handle error
             let updatedUrlStr = responseEvent.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String
             completion(URL(string: updatedUrlStr ?? ""), nil)
         }
@@ -42,7 +42,7 @@ extension AEPIdentity: Identity {
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
             let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [MobileVisitorId]
-            // TODO: Handle error
+            // TODO: AMSDK-10182 Handle error
             completion(identifiers, nil)
         }
         
@@ -85,7 +85,7 @@ extension AEPIdentity: Identity {
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
             let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
-            // TODO: Handle error
+            // TODO: AMSDK-10182 Handle error
             completion(urlVariables, nil)
         }
         
@@ -95,6 +95,11 @@ extension AEPIdentity: Identity {
 }
 
 private extension Event {
+    
+    /// Creates an `Event` with the corresponding data for an ID sync
+    /// - Parameters:
+    ///   - identifiers: identifiers for the sync event
+    ///   - authenticationState: the authentication state for the sync, if not provided defaults to unknown
     static func buildIdSyncEvent(identifiers: [String: String]?, authenticationState: MobileVisitorAuthenticationState = .unknown) -> Event {
         var eventData = [String: Any]()
         eventData[IdentityConstants.EventDataKeys.IDENTIFIERS] = identifiers
