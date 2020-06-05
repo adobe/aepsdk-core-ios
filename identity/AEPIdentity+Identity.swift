@@ -13,20 +13,17 @@ import Foundation
 
 extension AEPIdentity: Identity {
     
-    static func appendTo(url: URL?, completion: (URL?) -> ()) {
+    static func appendTo(url: URL?, completion: @escaping (URL?) -> ()) {
         appendTo(url: url) { (url, _) in
             completion(url)
         }
     }
     
-    static func appendTo(url: URL?, completion: (URL?, Error?) -> ()) {
-        // TODO: Figure out how to do error callbacks
-        // Maybe the response event could hold an error to indicate an error
-        
+    static func appendTo(url: URL?, completion: @escaping (URL?, Error?) -> ()) {
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteURL ?? ""])
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
-            // handle stuff
+            // TODO: Handle error
             let updatedUrlStr = responseEvent.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String
             completion(URL(string: updatedUrlStr ?? ""), nil)
         }
@@ -34,40 +31,78 @@ extension AEPIdentity: Identity {
         AEPCore.dispatch(event: event)
     }
     
-    static func getIdentifiers(completion: (String) -> ()) {
+    static func getIdentifiers(completion: @escaping ([MobileVisitorId]?) -> ()) {
         getIdentifiers { (identifiers, _) in
             completion(identifiers)
         }
     }
     
-    static func getIdentifiers(completion: (String, Error) -> ()) {
-        <#code#>
+    static func getIdentifiers(completion: @escaping ([MobileVisitorId]?, Error?) -> ()) {
+        let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
+        
+        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
+            let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [MobileVisitorId]
+            // TODO: Handle error
+            completion(identifiers, nil)
+        }
+        
+        AEPCore.dispatch(event: event)
     }
     
-    static func getExperienceCloudId(completion: (String?) -> ()) {
-        <#code#>
+    static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
+        let event = Event(name: "Get experience cloud ID", type: .identity, source: .requestIdentity, data: nil)
+        
+        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
+            let experienceCloudId = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String
+            completion(experienceCloudId)
+        }
+        
+        AEPCore.dispatch(event: event)
     }
     
     static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState) {
-        <#code#>
+        let event = Event.buildIdSyncEvent(identifiers: [identifierType: identifier], authenticationState: authenticationState)
+        AEPCore.dispatch(event: event)
     }
     
     static func syncIdentifiers(identifiers: [String : String]?) {
-        <#code#>
+        syncIdentifiers(identifiers: identifiers, authenticationState: .unknown)
     }
     
     static func syncIdentifiers(identifiers: [String : String]?, authenticationState: MobileVisitorAuthenticationState) {
-        <#code#>
+        let event = Event.buildIdSyncEvent(identifiers: identifiers, authenticationState: authenticationState)
+        AEPCore.dispatch(event: event)
     }
     
-    static func getUrlVariables(completion: (String?) -> ()) {
+    static func getUrlVariables(completion: @escaping (String?) -> ()) {
         getUrlVariables { (variables, _) in
             completion(variables)
         }
     }
     
-    static func getUrlVariables(completion: (String?, Error?) -> ()) {
-        <#code#>
+    static func getUrlVariables(completion: @escaping (String?, Error?) -> ()) {
+        let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+        
+        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
+            let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
+            // TODO: Handle error
+            completion(urlVariables, nil)
+        }
+        
+        AEPCore.dispatch(event: event)
     }
     
+}
+
+private extension Event {
+    static func buildIdSyncEvent(identifiers: [String: String]?, authenticationState: MobileVisitorAuthenticationState = .unknown) -> Event {
+        var eventData = [String: Any]()
+        eventData[IdentityConstants.EventDataKeys.IDENTIFIERS] = identifiers
+        eventData[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] = authenticationState
+        eventData[IdentityConstants.EventDataKeys.FORCE_SYNC] = false
+        eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
+        let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
+        
+        return event
+    }
 }

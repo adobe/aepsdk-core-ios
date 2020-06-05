@@ -13,15 +13,15 @@ import Foundation
 
 /// Defines the public interface for the Identity extension
 protocol Identity {
-    static func appendTo(url: URL?, completion: (URL?) -> ())
+    static func appendTo(url: URL?, completion: @escaping (URL?) -> ())
     
-    static func appendTo(url: URL?, completion: (URL?, Error?) -> ())
+    static func appendTo(url: URL?, completion: @escaping (URL?, Error?) -> ())
     
-    static func getIdentifiers(completion: (String) -> ())
+    static func getIdentifiers(completion: @escaping ([MobileVisitorId]?) -> ())
     
-    static func getIdentifiers(completion: (String, Error) -> ())
+    static func getIdentifiers(completion: @escaping ([MobileVisitorId]?, Error?) -> ())
     
-    static func getExperienceCloudId(completion: (String?) -> ())
+    static func getExperienceCloudId(completion: @escaping  (String?) -> ())
     
     static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState)
     
@@ -29,7 +29,7 @@ protocol Identity {
     
     static func syncIdentifiers(identifiers: [String: String]?, authenticationState: MobileVisitorAuthenticationState)
     
-    static func getUrlVariables(completion: (String?) -> ())
+    static func getUrlVariables(completion:@escaping (String?) -> ())
     
-    static func getUrlVariables(completion: (String?, Error?) -> ())
+    static func getUrlVariables(completion: @escaping (String?, Error?) -> ())
 }
