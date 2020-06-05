@@ -11,10 +11,9 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// MobileVisitorId contains Visitor Id origin, identifier type, identifier value and authentication state.
-public struct MobileVisitorId {
-    var idOrigin: String?
-    var idType: String?
-    var identifier: String?
-    var authenticationState: MobileVisitorAuthenticationState
+struct IdentityConstants {
+    struct EventDataKeys {
+        static let BASE_URL = ""
+        static let UPDATED_URL = ""
+    }
 }

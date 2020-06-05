@@ -11,10 +11,20 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// MobileVisitorId contains Visitor Id origin, identifier type, identifier value and authentication state.
-public struct MobileVisitorId {
-    var idOrigin: String?
-    var idType: String?
-    var identifier: String?
-    var authenticationState: MobileVisitorAuthenticationState
+class AEPIdentity: Extension {
+    let name = "Identity"
+    let version = "0.0.1"
+    
+    private let eventQueue = OperationOrderer<EventHandlerMapping>("Identity")
+    
+    // MARK: Extension
+    required init() {
+        eventQueue.setHandler({ return $0.handler($0.event) })
+    }
+    
+    func onRegistered() {
+        eventQueue.start()
+    }
+    
+    func onUnregistered() {}
 }

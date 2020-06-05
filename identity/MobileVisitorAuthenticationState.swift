@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// An enum type representing the possible authentication states
-@objc public enum MobileVisitorAuthenticationState: Int {
+public enum MobileVisitorAuthenticationState {
     case unknown
     case authenticated
     case loggedOut
