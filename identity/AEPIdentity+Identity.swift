@@ -20,7 +20,8 @@ extension AEPIdentity: Identity {
     }
     
     static func appendTo(url: URL?, completion: @escaping (URL?, Error?) -> ()) {
-        let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteURL ?? ""])
+        let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
+        let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
             // TODO: AMSDK-10182 Handle error

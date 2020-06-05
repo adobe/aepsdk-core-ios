@@ -42,7 +42,7 @@ class AEPIdentityTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "appendToUrl should dispatch an event")
         expectation.assertForOverFulfill = true
-        let expectedUrl = URL(string: "adobe.com")
+        let expectedUrl = URL(string: "https://www.adobe.com/")
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
             XCTAssertEqual(expectedUrl?.absoluteString, event.data?[IdentityConstants.EventDataKeys.BASE_URL] as? String)
