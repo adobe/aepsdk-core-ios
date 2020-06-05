@@ -75,7 +75,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let metrics = metricsBuilder?.build()
 
         XCTAssertTrue(metrics!.dailyEngagedEvent ?? false)
-        XCTAssertTrue(metrics!.monthlyEngagedEvent ?? true)
+        XCTAssertTrue(metrics!.monthlyEngagedEvent ?? false)
         // Check that the "daysSinceLastLaunch" and "daysSinceFirstLaunch" values are correct when last launch was a month prior, and first launch was one day before that
         XCTAssertEqual(metrics?.daysSinceLastLaunch, 30)
         XCTAssertEqual(metrics?.daysSinceFirstLaunch, 31)
