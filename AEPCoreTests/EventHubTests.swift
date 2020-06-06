@@ -471,340 +471,340 @@ class EventHubTests: XCTestCase {
     // MARK: SharedState Tests
 
     /// Ensures an extension that is not registered cannot publish shared state
-    func testCreateSharedStateExtensionNotRegistered() {
-        // setup
-        eventHub.start()
-
-        // test
-        eventHub.createSharedState(extensionName: "mockExtensionTwo", data: SharedStateTestHelper.ONE, event: nil)
-
-        // verify
-        XCTAssertNil(eventHub.getSharedState(extensionName: "notRegistered", event: nil))
-    }
-
-    /// Tests that a registered extension can publish shared state
-    func testGetSharedStateSimple() {
-        // setup
-        eventHub.start()
-
-        // test
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
-    }
-
-    /// Tests that a registered extension can publish shared state versioned at an event
-    func testGetSharedStateSimpleWithEvent() {
-        // setup
-        eventHub.start()
-
-        // test
-        let event = Event(name: "event", type: .analytics, source: .requestContent, data: nil)
-        eventHub.dispatch(event: event)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
-    }
-
-    /// Tests that you cannot override an existing shared state version
-    func testGetSharedStateSimpleWithEventNotOverride() {
-        // setup
-        eventHub.start()
-
-        // test
-        let event = Event(name: "event", type: .analytics, source: .requestContent, data: nil)
-        eventHub.dispatch(event: event)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
-
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event) // already set shared state for this version, should fail
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
-    }
-
-    /// Tests that shared states are correctly versioned at the event they were created with
-    func testGetSharedStateSimpleWithEventMultiple() {
-        // setup
-        eventHub.start()
-
-        // test
-        let event = Event(name: "event", type: .analytics, source: .requestContent, data: nil)
-        eventHub.dispatch(event: event)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
-        let event1 = Event(name: "event1", type: .analytics, source: .requestContent, data: nil)
-        eventHub.dispatch(event: event1)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event1, "two")
-    }
-
-    /// Tests that shared state for an extension is updated at the latest
-    func testGetSharedStateSimpleCreateTwice() {
-        // setup
-        eventHub.start()
-
-        // test
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
-    }
-
-    /// Tests that multiple shared state updates function properly
-    func testGetSharedStateSimpleCreateThreeTimes() {
-        // setup
-        eventHub.start()
-
-        // test
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.THREE, event: nil)
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "three")
-    }
-
-    /// Shared state is versioned at event correctly
-    func testGetSharedStateAfterEventDispatched() {
-        // setup
-        eventHub.start()
-
-        // test
-        let event = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
-        eventHub.dispatch(event: event)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
-    }
-
-    /// Ensures that events dispatched are associated with the correct shared state versions
-    func testGetSharedStateUsesCorrectVersion() {
-        // setup
-        eventHub.start()
-
-        // test
-        let event = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-        eventHub.dispatch(event: event)
-        let event1 = Event(name: "test1", type: .analytics, source: .requestContent, data: nil)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
-        eventHub.dispatch(event: event1)
-
-        // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event1, "two")
-    }
-
-    /// Tests that events are associated with current shared state when updated rapidly
-    func testGetSharedStateUsesCorrectVersionManyEvents() {
-        // setup
-        eventHub.start()
-        var events = [Event]()
-
-        // test
-        for i in 1...100 {
-            let event = Event(name: "\(i)", type: .analytics, source: .requestContent, data: nil)
-            events.append(event)
-            eventHub.dispatch(event: event)
-            eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: [SharedStateTestHelper.DICT_KEY: "\(i)"], event: event)
-        }
-
-        // verify
-        for event in events {
-            validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, event.name)
-        }
-    }
-
-    /// Tests that events are associated with current shared state when updated rapidly from multiple queues
-    func testGetSharedStateUsesCorrectVersionManyEventsManyQueues() {
-        // setup
-        let expectation = XCTestExpectation(description: "EventHub successfully updates 100 different shared states on many queues")
-        expectation.expectedFulfillmentCount = 100
-        expectation.assertForOverFulfill = true
-        eventHub.start()
-        var events = [Event]()
-
-        // test
-        for i in 1...expectation.expectedFulfillmentCount {
-            let event = Event(name: "\(i)", type: .analytics, source: .requestContent, data: nil)
-            events.append(event)
-            DispatchQueue(label: "Event queue \(i)").sync {
-                self.eventHub.dispatch(event: event)
-                self.eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: [SharedStateTestHelper.DICT_KEY: "\(i)"], event: event)
-                expectation.fulfill()
-            }
-        }
-
-
-        // verify
-        wait(for: [expectation], timeout: 5.0)
-        for event in events {
-            validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, event.name)
-        }
-    }
-
-    /// Tests that we can create and resolve a pending shared state
-    func testCreatePendingAndResolvePendingSimple() {
-        // setup
-        let expectation = XCTestExpectation(description: "Pending shared state resolved correctly")
-        expectation.assertForOverFulfill = true
-        eventHub.start()
-
-        let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
-            expectation.fulfill()
-        }
-        eventHub.dispatch(event: event)
-
-        // test
-        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
-        pendingResolver(SharedStateTestHelper.ONE)
-
-
-        // verify
-        wait(for: [expectation], timeout: 0.5)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
-    }
-
-    /// Ensures that an extension who does not resolve their pending shared state has a nil shared state
-    func testSharedStateEmptyWhenNoResolve() {
-        // setup
-        let expectation = XCTestExpectation(description: "Shared state is nil when pending shared state isn't resolved")
-        expectation.assertForOverFulfill = true
-        expectation.isInverted = true
-        eventHub.start()
-
-        let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
-            expectation.fulfill()
-        }
-        eventHub.dispatch(event: event)
-
-        // test
-        let _ = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
-
-
-        // verify
-        wait(for: [expectation], timeout: 0.5)
-        XCTAssertNil(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)?.value)
-    }
-
-    /// Test: create shared state -> create pending shared state -> resolve pending shared state
-    func testCreatePendingAfterValidState() {
-        // setup
-        let expectation = XCTestExpectation(description: "create shared state -> create pending shared state -> resolve pending shared state")
-        expectation.expectedFulfillmentCount = 2
-        expectation.assertForOverFulfill = true
-        eventHub.start()
-
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
-            expectation.fulfill()
-        }
-
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-
-        // test
-        let event = Event(name: "test", type: .acquisition, source: .sharedState, data: nil)
-        eventHub.dispatch(event: event)
-        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
-        pendingResolver(SharedStateTestHelper.TWO)
-
-        wait(for: [expectation], timeout: 0.5)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
-    }
-
-    /// Tests that we can create and resolve a pending shared state from many queues
-    func testCreatePendingManyEventsManyQueues() {
-        // setup
-        let expectation = XCTestExpectation(description: "EventHub successfully updates 100 different shared states")
-        expectation.expectedFulfillmentCount = 100
-        expectation.assertForOverFulfill = true
-        eventHub.start()
-        var events = [Event]()
-
-         // test
-         for i in 1...expectation.expectedFulfillmentCount {
-             let event = Event(name: "\(i)", type: .analytics, source: .requestContent, data: nil)
-             events.append(event)
-             DispatchQueue(label: "Event queue \(i)").sync {
-                self.eventHub.dispatch(event: event)
-                let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
-                pendingResolver([SharedStateTestHelper.DICT_KEY: "\(i)"])
-                expectation.fulfill()
-             }
-         }
-
-
-         // verify
-         wait(for: [expectation], timeout: 5.0)
-         for event in events {
-             validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, event.name)
-         }
-     }
-
-    /// hasSharedState returns false when we haven't published a shared state
-    func testEventHubHasSharedStateNotPublished() {
-        // setup
-        eventHub.start()
-
-        // test & verify
-        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.none)
-    }
-
-    /// hasSharedState returns true when we have published a shared state
-    func testEventHubHasSharedStatePublished() {
-        // setup
-        let expectation = XCTestExpectation(description: "hasSharedState returns true when we have published a shared state")
-        expectation.assertForOverFulfill = true
-        eventHub.start()
-
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            expectation.fulfill()
-        }
-
-        // test
-        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.none)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: nil, event: nil)
-
-        // verify
-        wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
-    }
-    
-    func testCreatePendingSharedStateNilEvent() {
-        // setup
-        let expectation = XCTestExpectation(description: "Pending shared state resolved correctly")
-        expectation.assertForOverFulfill = true
-        eventHub.start()
-
-        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
-            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
-            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
-            expectation.fulfill()
-        }
-
-        // test
-        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)
-        pendingResolver(SharedStateTestHelper.ONE)
-
-
-        // verify
-        wait(for: [expectation], timeout: 0.5)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
-    }
+//    func testCreateSharedStateExtensionNotRegistered() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        eventHub.createSharedState(extensionName: "mockExtensionTwo", data: SharedStateTestHelper.ONE, event: nil)
+//
+//        // verify
+//        XCTAssertNil(eventHub.getSharedState(extensionName: "notRegistered", event: nil))
+//    }
+//
+//    /// Tests that a registered extension can publish shared state
+//    func testGetSharedStateSimple() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+//    }
+//
+//    /// Tests that a registered extension can publish shared state versioned at an event
+//    func testGetSharedStateSimpleWithEvent() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        let event = Event(name: "event", type: .analytics, source: .requestContent, data: nil)
+//        eventHub.dispatch(event: event)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
+//    }
+//
+//    /// Tests that you cannot override an existing shared state version
+//    func testGetSharedStateSimpleWithEventNotOverride() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        let event = Event(name: "event", type: .analytics, source: .requestContent, data: nil)
+//        eventHub.dispatch(event: event)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
+//
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event) // already set shared state for this version, should fail
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
+//    }
+//
+//    /// Tests that shared states are correctly versioned at the event they were created with
+//    func testGetSharedStateSimpleWithEventMultiple() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        let event = Event(name: "event", type: .analytics, source: .requestContent, data: nil)
+//        eventHub.dispatch(event: event)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
+//        let event1 = Event(name: "event1", type: .analytics, source: .requestContent, data: nil)
+//        eventHub.dispatch(event: event1)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event1, "two")
+//    }
+//
+//    /// Tests that shared state for an extension is updated at the latest
+//    func testGetSharedStateSimpleCreateTwice() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
+//    }
+//
+//    /// Tests that multiple shared state updates function properly
+//    func testGetSharedStateSimpleCreateThreeTimes() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.THREE, event: nil)
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "three")
+//    }
+//
+//    /// Shared state is versioned at event correctly
+//    func testGetSharedStateAfterEventDispatched() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        let event = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
+//        eventHub.dispatch(event: event)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
+//    }
+//
+//    /// Ensures that events dispatched are associated with the correct shared state versions
+//    func testGetSharedStateUsesCorrectVersion() {
+//        // setup
+//        eventHub.start()
+//
+//        // test
+//        let event = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+//        eventHub.dispatch(event: event)
+//        let event1 = Event(name: "test1", type: .analytics, source: .requestContent, data: nil)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
+//        eventHub.dispatch(event: event1)
+//
+//        // verify
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event1, "two")
+//    }
+//
+//    /// Tests that events are associated with current shared state when updated rapidly
+//    func testGetSharedStateUsesCorrectVersionManyEvents() {
+//        // setup
+//        eventHub.start()
+//        var events = [Event]()
+//
+//        // test
+//        for i in 1...100 {
+//            let event = Event(name: "\(i)", type: .analytics, source: .requestContent, data: nil)
+//            events.append(event)
+//            eventHub.dispatch(event: event)
+//            eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: [SharedStateTestHelper.DICT_KEY: "\(i)"], event: event)
+//        }
+//
+//        // verify
+//        for event in events {
+//            validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, event.name)
+//        }
+//    }
+//
+//    /// Tests that events are associated with current shared state when updated rapidly from multiple queues
+//    func testGetSharedStateUsesCorrectVersionManyEventsManyQueues() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "EventHub successfully updates 100 different shared states on many queues")
+//        expectation.expectedFulfillmentCount = 100
+//        expectation.assertForOverFulfill = true
+//        eventHub.start()
+//        var events = [Event]()
+//
+//        // test
+//        for i in 1...expectation.expectedFulfillmentCount {
+//            let event = Event(name: "\(i)", type: .analytics, source: .requestContent, data: nil)
+//            events.append(event)
+//            DispatchQueue(label: "Event queue \(i)").sync {
+//                self.eventHub.dispatch(event: event)
+//                self.eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: [SharedStateTestHelper.DICT_KEY: "\(i)"], event: event)
+//                expectation.fulfill()
+//            }
+//        }
+//
+//
+//        // verify
+//        wait(for: [expectation], timeout: 5.0)
+//        for event in events {
+//            validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, event.name)
+//        }
+//    }
+//
+//    /// Tests that we can create and resolve a pending shared state
+//    func testCreatePendingAndResolvePendingSimple() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "Pending shared state resolved correctly")
+//        expectation.assertForOverFulfill = true
+//        eventHub.start()
+//
+//        let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
+//        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+//            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
+//            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+//            expectation.fulfill()
+//        }
+//        eventHub.dispatch(event: event)
+//
+//        // test
+//        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
+//        pendingResolver(SharedStateTestHelper.ONE)
+//
+//
+//        // verify
+//        wait(for: [expectation], timeout: 0.5)
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+//    }
+//
+//    /// Ensures that an extension who does not resolve their pending shared state has a nil shared state
+//    func testSharedStateEmptyWhenNoResolve() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "Shared state is nil when pending shared state isn't resolved")
+//        expectation.assertForOverFulfill = true
+//        expectation.isInverted = true
+//        eventHub.start()
+//
+//        let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
+//        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+//            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
+//            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+//            expectation.fulfill()
+//        }
+//        eventHub.dispatch(event: event)
+//
+//        // test
+//        let _ = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
+//
+//
+//        // verify
+//        wait(for: [expectation], timeout: 0.5)
+//        XCTAssertNil(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)?.value)
+//    }
+//
+//    /// Test: create shared state -> create pending shared state -> resolve pending shared state
+//    func testCreatePendingAfterValidState() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "create shared state -> create pending shared state -> resolve pending shared state")
+//        expectation.expectedFulfillmentCount = 2
+//        expectation.assertForOverFulfill = true
+//        eventHub.start()
+//
+//        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+//            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
+//            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+//            expectation.fulfill()
+//        }
+//
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+//
+//        // test
+//        let event = Event(name: "test", type: .acquisition, source: .sharedState, data: nil)
+//        eventHub.dispatch(event: event)
+//        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
+//        pendingResolver(SharedStateTestHelper.TWO)
+//
+//        wait(for: [expectation], timeout: 0.5)
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
+//    }
+//
+//    /// Tests that we can create and resolve a pending shared state from many queues
+//    func testCreatePendingManyEventsManyQueues() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "EventHub successfully updates 100 different shared states")
+//        expectation.expectedFulfillmentCount = 100
+//        expectation.assertForOverFulfill = true
+//        eventHub.start()
+//        var events = [Event]()
+//
+//         // test
+//         for i in 1...expectation.expectedFulfillmentCount {
+//             let event = Event(name: "\(i)", type: .analytics, source: .requestContent, data: nil)
+//             events.append(event)
+//             DispatchQueue(label: "Event queue \(i)").sync {
+//                self.eventHub.dispatch(event: event)
+//                let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
+//                pendingResolver([SharedStateTestHelper.DICT_KEY: "\(i)"])
+//                expectation.fulfill()
+//             }
+//         }
+//
+//
+//         // verify
+//         wait(for: [expectation], timeout: 5.0)
+//         for event in events {
+//             validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, event.name)
+//         }
+//     }
+//
+//    /// hasSharedState returns false when we haven't published a shared state
+//    func testEventHubHasSharedStateNotPublished() {
+//        // setup
+//        eventHub.start()
+//
+//        // test & verify
+//        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.none)
+//    }
+//
+//    /// hasSharedState returns true when we have published a shared state
+//    func testEventHubHasSharedStatePublished() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "hasSharedState returns true when we have published a shared state")
+//        expectation.assertForOverFulfill = true
+//        eventHub.start()
+//
+//        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+//            expectation.fulfill()
+//        }
+//
+//        // test
+//        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.none)
+//        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: nil, event: nil)
+//
+//        // verify
+//        wait(for: [expectation], timeout: 0.5)
+//        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
+//    }
+//    
+//    func testCreatePendingSharedStateNilEvent() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "Pending shared state resolved correctly")
+//        expectation.assertForOverFulfill = true
+//        eventHub.start()
+//
+//        eventHub.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+//            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
+//            XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
+//            expectation.fulfill()
+//        }
+//
+//        // test
+//        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)
+//        pendingResolver(SharedStateTestHelper.ONE)
+//
+//
+//        // verify
+//        wait(for: [expectation], timeout: 0.5)
+//        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+//    }
 }

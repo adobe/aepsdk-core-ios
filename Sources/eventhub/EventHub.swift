@@ -17,7 +17,7 @@ public typealias SharedStateResolver = ([String: Any]?) -> Void
 public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
 
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
-final public class EventHub {
+final class EventHub {
     private let eventHubQueue = DispatchQueue(label: "com.adobe.eventhub.queue", attributes: .concurrent) // Allows multi-threaded access to event hub.  Reads are concurrent, Add/Updates act as barriers.
     private var listenerContainers = [EventListenerContainer]()
     private var responseListenerContainers = [EventListenerContainer]()
@@ -98,14 +98,18 @@ final public class EventHub {
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
     ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil, it will be versioned at the latest
-    public func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
+    public func createSharedState<T:Extension>(parentExtension: T.Type, data: [String: Any]?, event: Event?) {
         eventHubQueue.async(flags: .barrier) {
-            guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) else {
+            
+            guard let container = self.registeredExtensions[parentExtension.typeName] else { return }
+            
+            
+            guard let (sharedState, version) = self.versionSharedState(extensionName: container.exten.name, event: event) else {
                 return
             }
 
             sharedState.set(version: version, data: data)
-            self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName))
+            self.dispatch(event: self.createSharedStateEvent(extensionName: container.exten.name))
         }
     }
 
@@ -114,10 +118,13 @@ final public class EventHub {
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - event: Event which has the `SharedState` should be versioned for
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
-    public func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
+    public func createPendingSharedState<T:Extension>(parentExtension: T.Type, event: Event?) -> SharedStateResolver {
         var pendingVersion: Int? = nil
         eventHubQueue.async(flags: .barrier) {
-            guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) else {
+            
+
+            guard let container = self.registeredExtensions[parentExtension.typeName] else { return }
+            guard let (sharedState, version) = self.versionSharedState(extensionName: container.exten.name, event: event) else {
                 return
             }
             
@@ -127,7 +134,9 @@ final public class EventHub {
 
         return { [weak self] data in
             self?.eventHubQueue.async(flags: .barrier) {
-                self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data)
+
+                let container = self?.registeredExtensions[parentExtension.typeName]
+                self?.resolvePendingSharedState(extensionName: container?.exten.name ?? "invalid", version: pendingVersion, data: data)
             }
         }
     }

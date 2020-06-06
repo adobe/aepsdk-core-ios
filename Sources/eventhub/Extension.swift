@@ -31,35 +31,44 @@ public protocol Extension {
     init()
 }
 
-/// Contains methods for developers to interact with in their own extensions
-public extension Extension {
-    
+
+extension Extension{
     /// Registers the `Extension` with the `EventHub`
     //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
     static func registerExtension() {
         AEPCore.pendingExtensions.append(Self.self)
     }
+}
+
+/// Contains methods for developers to interact with in their own extensions
+open class ExtensionContext<T:Extension> {
+    public init(){
+        
+    }
+    
+    
+
     
     /// Registers a `EventListener` with the `EventHub`
     /// - Parameters:
     ///   - type: `EventType` to be listened for
     ///   - source: `EventSource` to be listened for
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches an `Event` with matching `type` and `source`
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
-        getEventHub().registerListener(parentExtension: Self.self, type: type, source: source, listener: listener)
+    public func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+        getEventHub().registerListener(parentExtension: T.self, type: type, source: source, listener: listener)
     }
 
     /// Registers an `EventListener` with the `EventHub` that is invoked when `triggerEvent`'s response event is dispatched
     /// - Parameters:
     ///   - triggerEvent: An event which will trigger a response event
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches the response event to `triggerEvent`
-    func registerResponseListener(triggerEvent: Event, listener: @escaping EventListener) {
-        getEventHub().registerResponseListener(parentExtension: Self.self, triggerEvent: triggerEvent, listener: listener)
+    public func registerResponseListener(triggerEvent: Event, listener: @escaping EventListener) {
+        getEventHub().registerResponseListener(parentExtension: T.self, triggerEvent: triggerEvent, listener: listener)
     }
     
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
-    func dispatch(event: Event) {
+    public func dispatch(event: Event) {
         getEventHub().dispatch(event: event)
     }
 
@@ -69,28 +78,24 @@ public extension Extension {
     /// - Parameters:
     ///   - data: Data for the `SharedState`
     ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned at the latest
-    func createSharedState(data: [String: Any], event: Event?) {
-        getEventHub().createSharedState(extensionName: name, data: data, event: event)
+    public func createSharedState(data: [String: Any], event: Event?) {
+        getEventHub().createSharedState(parentExtension: T.self, data: data, event: event)
     }
 
 
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at
-    func createPendingSharedState(event: Event?) -> SharedStateResolver {
-        return getEventHub().createPendingSharedState(extensionName: name, event: event)
+    public func createPendingSharedState(event: Event?) -> SharedStateResolver {
+        return getEventHub().createPendingSharedState(parentExtension: T.self, event: event)
     }
 
     /// Gets the `SharedState` data for a specified extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
+    public func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
         return getEventHub().getSharedState(extensionName: extensionName, event: event)
     }
-}
-
-/// Contains methods that we don't want developers accessing
-private extension Extension {
     private func getEventHub() -> EventHub {
         return EventHub.shared
     }

@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-class LifecycleExtension: Extension {
+class LifecycleExtension: ExtensionContext<LifecycleExtension>, Extension {
     typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool)) // TODO: Move to event hub to make public?
     
     let name = "Lifecycle"
@@ -20,7 +20,7 @@ class LifecycleExtension: Extension {
     private let eventQueue = OperationOrderer<EventHandlerMapping>("Lifecycle")
     
     // MARK: Extension
-    required init() {
+    required override init() {
         eventQueue.setHandler({ return $0.handler($0.event) })
     }
     

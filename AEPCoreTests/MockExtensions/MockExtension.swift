@@ -14,7 +14,7 @@ import Foundation
 
 @testable import AEPCore
 
-class MockExtension: Extension {
+class MockExtension: ExtensionContext<MockExtension>, Extension{
     var name = "mockExtension"
     var version = "0.0.1"
     
@@ -23,7 +23,7 @@ class MockExtension: Extension {
     static var calledOnUnregistered = false
     static var receivedEvents = [Event]()
     
-    required init() {
+    required override init() {
         MockExtension.calledInit = true
     }
     

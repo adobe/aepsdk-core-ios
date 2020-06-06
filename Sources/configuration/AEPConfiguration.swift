@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
-class AEPConfiguration: Extension {
+class AEPConfiguration: ExtensionContext<AEPConfiguration>, Extension {
     var name = ConfigurationConstants.EXTENSION_NAME
     var version = ConfigurationConstants.EXTENSION_VERSION
 
@@ -24,7 +24,7 @@ class AEPConfiguration: Extension {
     // MARK: Extension
     
     /// Initializes the Configuration extension and it's dependencies
-    required init() {
+    required override init() {
         eventQueue.setHandler({ return $0.handler($0.event) })
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
