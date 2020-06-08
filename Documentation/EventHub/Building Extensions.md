@@ -12,7 +12,7 @@ See [`Extension.swift`](https://github.com/adobe/aepsdk-core-ios/blob/master/Sou
 
 #### Events
 
-##### Pturpose of an `Event`
+##### Purpose of an `Event`
 
 - Triggering actions in the Experience Platform SDKs. Events are used by the extensions to signal when specific actions should occur, for example, to send an Analytics hit. Extensions can send the same types of events that the Experience Platform SDKs would send internally to trigger these actions.
 - Triggering actions in another extension. Some applications might have multiple extensions, and some of these extensions might have their events defined that trigger actions.
