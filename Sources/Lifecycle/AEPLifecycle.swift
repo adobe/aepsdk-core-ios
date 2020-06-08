@@ -15,7 +15,7 @@ class AEPLifecycle: Extension {
     let name = LifecycleConstants.EXTENSION_NAME
     let version = LifecycleConstants.EXTENSION_VERSION
     
-    private let eventQueue = OperationOrderer<EventHandlerMapping>(LifecycleConstants.DATA_STORE_NAME)
+    private let eventQueue = OperationOrderer<EventHandlerMapping>(LifecycleConstants.EXTENSION_NAME)
     private var lifecycleState: LifecycleState
     
     // MARK: Extension
