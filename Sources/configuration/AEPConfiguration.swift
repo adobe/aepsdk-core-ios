@@ -21,6 +21,7 @@ class AEPConfiguration: ExtensionContext<AEPConfiguration>, Extension {
     private var appIdManager: LaunchIDManager
     private var configState: ConfigurationState // should only be modified/used within the event queue
     private var configBussiness: ConfigurationBussiness
+    private var identitiesBussiness: Identities
     
     // MARK: Extension
     
@@ -30,10 +31,15 @@ class AEPConfiguration: ExtensionContext<AEPConfiguration>, Extension {
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
         configBussiness = ConfigurationBussiness()
+        identitiesBussiness = Identities()
     }
     
     /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
     func onRegistered() {
+//        identitiesBussiness.registerListners()
+        
+        registerListener(type: .lifecycle, source: .responseContent, listener: identitiesBussiness.receiveIdentitesRequest(event:))
+        
         registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
         registerListener(type: .lifecycle, source: .responseContent, listener: receiveLifecycleResponse(event:))
         // TODO: AMSDK-9750 - Listen for request identifier events

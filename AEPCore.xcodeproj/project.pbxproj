@@ -71,6 +71,7 @@
 		3FCA8ABB248AF301003CDC7E /* SampleExtension+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCA8ABA248AF301003CDC7E /* SampleExtension+Testable.swift */; };
 		3FCA8ABD248AF4CD003CDC7E /* SampleExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCA8ABC248AF4CD003CDC7E /* SampleExtensionTests.swift */; };
 		3FCA8AD5248DFC04003CDC7E /* ConfigurationBussiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCA8AD4248DFC04003CDC7E /* ConfigurationBussiness.swift */; };
+		3FCA8AD7248E0429003CDC7E /* Identities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCA8AD6248E0429003CDC7E /* Identities.swift */; };
 		7629742C24294215005CCC73 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742B24294215005CCC73 /* SharedState.swift */; };
 		7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742E24294249005CCC73 /* SharedStateTest.swift */; };
 		76850D18242EDE58003922F4 /* OperationOrdererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D17242EDE58003922F4 /* OperationOrdererTests.swift */; };
@@ -187,6 +188,7 @@
 		3FCA8ABA248AF301003CDC7E /* SampleExtension+Testable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SampleExtension+Testable.swift"; sourceTree = "<group>"; };
 		3FCA8ABC248AF4CD003CDC7E /* SampleExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleExtensionTests.swift; sourceTree = "<group>"; };
 		3FCA8AD4248DFC04003CDC7E /* ConfigurationBussiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationBussiness.swift; sourceTree = "<group>"; };
+		3FCA8AD6248E0429003CDC7E /* Identities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identities.swift; sourceTree = "<group>"; };
 		7629742B24294215005CCC73 /* SharedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedState.swift; sourceTree = "<group>"; };
 		7629742E24294249005CCC73 /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
 		76850D17242EDE58003922F4 /* OperationOrdererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationOrdererTests.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				21F02C352477067900D25528 /* LaunchIDManager.swift */,
 				214B5220248AB1710034BF22 /* Event+Configuration.swift */,
 				3FCA8AD4248DFC04003CDC7E /* ConfigurationBussiness.swift */,
+				3FCA8AD6248E0429003CDC7E /* Identities.swift */,
 			);
 			path = configuration;
 			sourceTree = "<group>";
@@ -697,6 +700,7 @@
 				D4000F182458DEB60052C536 /* HttpConnection.swift in Sources */,
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
 				D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */,
+				3FCA8AD7248E0429003CDC7E /* Identities.swift in Sources */,
 				D4000F1A2458DEDE0052C536 /* NetworkRequest.swift in Sources */,
 				21315BBA24579C4A00D1B254 /* AtomicCounter.swift in Sources */,
 				213C8BD72428822A009F780A /* EventListenerContainer.swift in Sources */,

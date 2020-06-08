@@ -286,7 +286,7 @@ class AEPCoreTests: XCTestCase {
         AEPCore.dispatch(event: expectedEvent)
         
         // verify
-        wait(for: [registerExpectation, eventExpectation], timeout: 1.0)
+        wait(for: [registerExpectation, eventExpectation], timeout: 2.0)
     }
     
     // test is disabled until configuration extension is merged
