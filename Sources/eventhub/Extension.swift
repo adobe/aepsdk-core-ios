@@ -53,7 +53,7 @@ public extension Extension {
     /// - Parameters:
     ///   - triggerEvent: An event which will trigger a response event
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches the response event to `triggerEvent`
-    func registerResponseListener(triggerEvent: Event, listener: @escaping EventListener) {
+    func registerResponseListener(triggerEvent: Event, listener: @escaping EventResponseListener) {
         getEventHub().registerResponseListener(parentExtension: Self.self, triggerEvent: triggerEvent, listener: listener)
     }
     

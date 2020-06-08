@@ -225,7 +225,7 @@ class EventHubTests: XCTestCase {
         // test
         // listens for a event of type analytics and source response content
         eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: testEvent) { (event) in
-            XCTAssert(event.name == testResponseEvent.name)
+            XCTAssert(event?.name == testResponseEvent.name)
             expectation.fulfill()
         }
 
@@ -246,7 +246,7 @@ class EventHubTests: XCTestCase {
         // test
         // listens for a event of type analytics and source response content
         eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: testEvent) { (event) in
-            XCTAssert(event.name == testResponseEvent.name)
+            XCTAssert(event?.name == testResponseEvent.name)
             expectation.fulfill()
         }
 
@@ -261,13 +261,14 @@ class EventHubTests: XCTestCase {
     func testEventHubTestResponseListenerNotInvoked() {
         // setup
         let expectation = XCTestExpectation(description: "Response listener is not invoked by other request event")
-        expectation.isInverted = true
+        expectation.assertForOverFulfill = true
         let requestEvent = Event(name: "testEvent", type: .analytics, source: .requestContent, data: nil)
         let otherRequestEvent = Event(name: "testEvent1", type: .analytics, source: .requestContent, data: nil)
         let otherResponseEvent = otherRequestEvent.createResponseEvent(name: "testResponseEvent1", type: otherRequestEvent.type, source: .responseContent, data: nil)
 
         // test
         eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: requestEvent) { (event) in
+            XCTAssertNil(event) // event should be nil since the response listener will have timed-out
             expectation.fulfill()
         }
 
@@ -276,7 +277,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: otherResponseEvent)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubDispatchesEventsWithBlockingListener() {

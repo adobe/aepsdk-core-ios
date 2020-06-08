@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 public typealias EventListener = (Event) -> Void
+public typealias EventResponseListener = (Event?) -> Void
 public typealias SharedStateResolver = ([String: Any]?) -> Void
 public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
 
@@ -54,7 +55,7 @@ final public class EventHub {
         eventHubQueue.async(flags: .barrier) {
             guard self.registeredExtensions[parentExtension.typeName] != nil else { return } // extension must be registered to register a listener
             let listenerContainer = EventListenerContainer(listener: listener, parentExtensionName: parentExtension.typeName,
-                                                           type: type, source: source, triggerEventId: nil)
+                                                           type: type, source: source, triggerEventId: nil, timeoutTask: nil)
             self.listenerContainers.append(listenerContainer)
         }
     }
@@ -64,11 +65,19 @@ final public class EventHub {
     ///   - parentExtension: The extension who is managing this `EventListener`
     ///   - triggerEvent: An `Event` which will trigger a response `Event`
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
-    public func registerResponseListener<T: Extension>(parentExtension: T.Type, triggerEvent: Event, listener: @escaping EventListener) {
+    public func registerResponseListener<T: Extension>(parentExtension: T.Type, triggerEvent: Event, listener: @escaping EventResponseListener) {
         eventHubQueue.async(flags: .barrier) {
             guard self.registeredExtensions[parentExtension.typeName] != nil else { return } // extension must be registered to register a listener
+            
+            let timeoutTask = DispatchWorkItem {
+                listener(nil)
+                self.responseListenerContainers.removeAll(where: {$0.triggerEventId == triggerEvent.id})
+            }
+            
+            self.eventHubQueue.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: timeoutTask)
             let listenerContainer = EventListenerContainer(listener: listener, parentExtensionName: parentExtension.typeName,
-                                                           type: nil, source: nil, triggerEventId: triggerEvent.id)
+                                                           type: nil, source: nil, triggerEventId: triggerEvent.id, timeoutTask: timeoutTask)
+            
             self.responseListenerContainers.append(listenerContainer)
         }
     }
@@ -200,6 +209,7 @@ final public class EventHub {
                 // Notify response listeners
                 for (i, listenerContainer) in self.responseListenerContainers.enumerated().reversed()
                     where listenerContainer.shouldNotify(event: event) {
+                        listenerContainer.timeoutTask?.cancel()
                         self.notifyListener(event: event, listenerContainer: listenerContainer)
                         self.responseListenerContainers.remove(at: i)
                 }

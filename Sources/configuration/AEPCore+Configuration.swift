@@ -46,8 +46,8 @@ extension AEPCore: Configuration {
     }
     
     // MARK: Helper
-    private static func handleGetPrivacyListener(responseEvent: Event, completion: @escaping (PrivacyStatus) -> ()) {
-        guard let privacyStatusString = responseEvent.data?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
+    private static func handleGetPrivacyListener(responseEvent: Event?, completion: @escaping (PrivacyStatus) -> ()) {
+        guard let privacyStatusString = responseEvent?.data?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
             return completion(PrivacyStatus.unknown)
         }
 
