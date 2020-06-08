@@ -16,8 +16,29 @@ public typealias EventListener = (Event) -> Void
 public typealias SharedStateResolver = ([String: Any]?) -> Void
 public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
 
+
+public protocol EventHubProtocol {
+    
+    func start()
+    
+    func registerListener<T: Extension>(parentExtension: T.Type, type: EventType, source: EventSource, listener: @escaping EventListener)
+
+    func registerResponseListener<T: Extension>(parentExtension: T.Type, triggerEvent: Event, listener: @escaping EventListener)
+    
+    func dispatch(event: Event)
+
+    func registerExtension(_ type: Extension.Type, completion: @escaping (_ error: EventHubError?) -> Void)
+
+    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?)
+
+    func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver
+
+    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)?
+}
+
+
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
-final public class EventHub {
+final public class EventHub:EventHubProtocol {
     private let eventHubQueue = DispatchQueue(label: "com.adobe.eventhub.queue", attributes: .concurrent) // Allows multi-threaded access to event hub.  Reads are concurrent, Add/Updates act as barriers.
     private var listenerContainers = [EventListenerContainer]()
     private var responseListenerContainers = [EventListenerContainer]()
@@ -27,9 +48,9 @@ final public class EventHub {
     private let eventQueue = OperationOrderer<Event>("EventHub")
 
     #if DEBUG
-    public internal(set) static var shared = EventHub()
+    public static var shared:EventHubProtocol = EventHub()
     #else
-    internal static let shared = EventHub()
+    internal static let shared:EventHubProtocol = EventHub()
     #endif
 
 
