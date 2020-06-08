@@ -12,15 +12,12 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
-class AEPConfiguration: ExtensionContext<AEPConfiguration>, Extension {
-    var name = ConfigurationConstants.EXTENSION_NAME
-    var version = ConfigurationConstants.EXTENSION_VERSION
+class ConfigurationBussiness: ExtensionContext<AEPConfiguration> {
 
     private let eventQueue = OperationOrderer<EventHandlerMapping>(ConfigurationConstants.EXTENSION_NAME)
     private let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private var appIdManager: LaunchIDManager
     private var configState: ConfigurationState // should only be modified/used within the event queue
-    private var configBussiness: ConfigurationBussiness
     
     // MARK: Extension
     
@@ -29,7 +26,6 @@ class AEPConfiguration: ExtensionContext<AEPConfiguration>, Extension {
         eventQueue.setHandler({ return $0.handler($0.event) })
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
-        configBussiness = ConfigurationBussiness()
     }
     
     /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
@@ -237,4 +233,3 @@ class AEPConfiguration: ExtensionContext<AEPConfiguration>, Extension {
     }
 
 }
-

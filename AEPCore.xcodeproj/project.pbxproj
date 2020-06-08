@@ -70,6 +70,7 @@
 		3FCA8AB9248AF224003CDC7E /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		3FCA8ABB248AF301003CDC7E /* SampleExtension+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCA8ABA248AF301003CDC7E /* SampleExtension+Testable.swift */; };
 		3FCA8ABD248AF4CD003CDC7E /* SampleExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCA8ABC248AF4CD003CDC7E /* SampleExtensionTests.swift */; };
+		3FCA8AD5248DFC04003CDC7E /* ConfigurationBussiness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FCA8AD4248DFC04003CDC7E /* ConfigurationBussiness.swift */; };
 		7629742C24294215005CCC73 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742B24294215005CCC73 /* SharedState.swift */; };
 		7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742E24294249005CCC73 /* SharedStateTest.swift */; };
 		76850D18242EDE58003922F4 /* OperationOrdererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D17242EDE58003922F4 /* OperationOrdererTests.swift */; };
@@ -185,6 +186,7 @@
 		3FCA8AB6248AF1E4003CDC7E /* SampleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleExtension.swift; sourceTree = "<group>"; };
 		3FCA8ABA248AF301003CDC7E /* SampleExtension+Testable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SampleExtension+Testable.swift"; sourceTree = "<group>"; };
 		3FCA8ABC248AF4CD003CDC7E /* SampleExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleExtensionTests.swift; sourceTree = "<group>"; };
+		3FCA8AD4248DFC04003CDC7E /* ConfigurationBussiness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationBussiness.swift; sourceTree = "<group>"; };
 		7629742B24294215005CCC73 /* SharedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedState.swift; sourceTree = "<group>"; };
 		7629742E24294249005CCC73 /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
 		76850D17242EDE58003922F4 /* OperationOrdererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationOrdererTests.swift; sourceTree = "<group>"; };
@@ -403,6 +405,7 @@
 				21F02C332477066800D25528 /* ConfigurationState.swift */,
 				21F02C352477067900D25528 /* LaunchIDManager.swift */,
 				214B5220248AB1710034BF22 /* Event+Configuration.swift */,
+				3FCA8AD4248DFC04003CDC7E /* ConfigurationBussiness.swift */,
 			);
 			path = configuration;
 			sourceTree = "<group>";
@@ -719,6 +722,7 @@
 				21FBA5522463E55200A2A009 /* AEPConfiguration.swift in Sources */,
 				21FBA54E2463DFE800A2A009 /* PrivacyStatus.swift in Sources */,
 				215AA61D2465DFE200CEB4F4 /* CachedConfiguration.swift in Sources */,
+				3FCA8AD5248DFC04003CDC7E /* ConfigurationBussiness.swift in Sources */,
 				215CA8172481C9610078D778 /* LifecycleContextData.swift in Sources */,
 				21DB7094242BEBB800568A4C /* ThreadSafeDictionary.swift in Sources */,
 				215AA61F2465DFF900CEB4F4 /* ConfigurationDownloader.swift in Sources */,

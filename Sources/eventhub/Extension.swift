@@ -42,6 +42,8 @@ extension Extension{
 
 /// Contains methods for developers to interact with in their own extensions
 open class ExtensionContext<T:Extension> {
+    
+    
     public init(){
         
     }
