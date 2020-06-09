@@ -170,7 +170,7 @@ class LifecycleContextDataTests: XCTestCase {
         fillMetrics()
         
         // test
-        let eventData = contextData.toEventData()!
+        let eventData = contextData.toEventData()
         
         // verify
         assertMetrics(eventData)
@@ -183,7 +183,7 @@ class LifecycleContextDataTests: XCTestCase {
         let testAdId = "test-ad-id"
         contextData.advertisingIdentifier = testAdId
         // test
-        let eventData = contextData.toEventData()!
+        let eventData = contextData.toEventData()
         
         // verify
         assertMetrics(eventData)
@@ -200,7 +200,7 @@ class LifecycleContextDataTests: XCTestCase {
         contextData.additionalContextData = additionalContextData
         
         // test
-        let eventData = contextData.toEventData()!
+        let eventData = contextData.toEventData()
         
         // verify
         assertMetrics(eventData)
@@ -220,7 +220,7 @@ class LifecycleContextDataTests: XCTestCase {
         contextData.sessionContextData = sessionData
         
         // test
-        let eventData = contextData.toEventData()!
+        let eventData = contextData.toEventData()
         
         // verify
         assertMetrics(eventData)
