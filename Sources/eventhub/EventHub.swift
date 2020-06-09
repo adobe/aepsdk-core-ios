@@ -74,7 +74,7 @@ final public class EventHub {
                 self.responseListenerContainers.removeAll(where: {$0.triggerEventId == triggerEvent.id})
             }
             
-            self.eventHubQueue.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: timeoutTask)
+            self.eventHubQueue.asyncAfter(deadline: DispatchTime.now() + EventHubConstants.RESPONSE_LISTENER_TIMEOUT, execute: timeoutTask)
             let listenerContainer = EventListenerContainer(listener: listener, parentExtensionName: parentExtension.typeName,
                                                            type: nil, source: nil, triggerEventId: triggerEvent.id, timeoutTask: timeoutTask)
             
