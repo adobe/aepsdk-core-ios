@@ -59,11 +59,11 @@ struct LifecycleContextData: Codable, Equatable {
     func toEventData() -> [String: Any] {
         let selfDict = toDictionary()
         var eventData = [String: Any]()
-
+        
         if let advertisingIdentifier = advertisingIdentifier {
             eventData[CodingKeys.advertisingIdentifier.rawValue] = advertisingIdentifier
         }
-
+        
         if let metricsDict = selfDict?[CodingKeys.lifecycleMetrics.stringValue] as? [String: Any] {
             eventData = eventData.merging(metricsDict, uniquingKeysWith: { (_, new) in new })
         }
