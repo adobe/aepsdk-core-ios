@@ -6,7 +6,7 @@ This document covers the high level concepts about developing your own extension
 
 #### Defining an Extension
 
-For an extension to registered with the `EventHub`, it must conform to the `Extension` protocol. The `Extension` protocol defines an `Extension` as a class which provides a parameterless initializer, a  `name`, `version` and implements two: `onRegistered()` and `onUnregistered()` .
+For an extension to be registered with the `EventHub`, it must conform to the `Extension` protocol. The `Extension` protocol defines an `Extension` as a class which provides a parameterless initializer, a  `name`, `version` and implements two methods: `onRegistered()` and `onUnregistered()` .
 
 See [`Extension.swift`](https://github.com/adobe/aepsdk-core-ios/blob/master/Sources/eventhub/Extension.swift) for the complete definition.
 
@@ -51,7 +51,7 @@ dispatch(event: responseEvent)
 
 #### Listening for Events
 
-Extensions can listen for events that are dispatched through the `EventHub ` with a listener. Listeners define which events they are interested in being notified about through an `EventType` and `EventSource`. A listener is a closure or function which takes in an `Event` as a parameter and does not return a value.
+Extensions can listen for events that are dispatched through the `EventHub` with a listener. Listeners define which events they are interested in being notified about through an `EventType` and `EventSource`. A listener is a closure or function which takes in an `Event` as a parameter and does not return a value.
 
 ```swift
 public typealias EventListener = (Event) -> ()
@@ -112,7 +112,7 @@ registerResponseListener(triggerEvent: triggerEvent) { (responseEvent) in
 
 ##### Defining the public APIs for an `Extension`
 
-Extensions should define their public APIs within a `protocol`, which will then be implemented by your class, which conforms to `Extension`.
+Extensions should define their public APIs within a `protocol`, which is implemented by the class that also conforms to the `Extension` protocol.
 
 All APIs should be static, and for APIs that return a value, _most_ should provide those values in the form of an asynchronous callback. Each API definition should provide clear documentation about it's behavior and the required parameters.
 
@@ -183,13 +183,13 @@ The general pattern for getters follows:
 3. Dispatch the request `Event`.
 4. Handle the returned value within the response listener.
 
-#### Event Processing
+#### Event Processing (TBD)
 
 One of the most fundamental responsibilities for an extension is to process incoming events; these events often represent APIs being invoked. Extensions should only process one `Event` at a time, in a synchronous manner. To assist with this requirement, we provide a utility class `OperationOrderer`. The `OperationOrderer` allows for an extension to synchronously process events and decide if it should pause and wait for incoming data (potentially shared state) or proceed to the next `Event`.
 
 ##### `EventHandlerMapping`
 
-A convince type definition of `EventHandlerMapping` exists in the `EventHub`, which is defined as a tuple containing an `Event` and a reference to a function that takes in an `Event` and returns a `Bool`.
+A convenience type definition of `EventHandlerMapping` exists in the `EventHub`, which is defined as a tuple containing an `Event` and a reference to a function that takes in an `Event` and returns a `Bool`.
 
 ```swift
 public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
