@@ -56,20 +56,26 @@ struct LifecycleContextData: Codable, Equatable {
 
     /// Flattens the context data into a dictionary to be used in event data
     /// - Returns: The context data flattened into the event data format
-    func toEventData() -> [String: Any]? {
-        var selfDict = toDictionary()
-        if let metricsDict = selfDict?.removeValue(forKey: CodingKeys.lifecycleMetrics.stringValue) as? [String: Any] {
-            selfDict = selfDict?.merging(metricsDict, uniquingKeysWith: { (_, new) in new })
+    func toEventData() -> [String: Any] {
+        let selfDict = toDictionary()
+        var eventData = [String: Any]()
+
+        if let advertisingIdentifier = advertisingIdentifier {
+            eventData[CodingKeys.advertisingIdentifier.rawValue] = advertisingIdentifier
         }
 
-        if let additionalContextDataDict = selfDict?.removeValue(forKey: CodingKeys.additionalContextData.stringValue) as? [String: Any] {
-            selfDict = selfDict?.merging(additionalContextDataDict, uniquingKeysWith: { (_, new) in new })
+        if let metricsDict = selfDict?[CodingKeys.lifecycleMetrics.stringValue] as? [String: Any] {
+            eventData = eventData.merging(metricsDict, uniquingKeysWith: { (_, new) in new })
         }
 
-        if let sessionContextDataDict = selfDict?.removeValue(forKey: CodingKeys.sessionContextData.stringValue) as? [String: Any] {
-            selfDict = selfDict?.merging(sessionContextDataDict, uniquingKeysWith: { (_, new) in new })
+        if let additionalContextDataDict = selfDict?[CodingKeys.additionalContextData.stringValue] as? [String: Any] {
+            eventData = eventData.merging(additionalContextDataDict, uniquingKeysWith: { (_, new) in new })
         }
 
-        return selfDict
+        if let sessionContextDataDict = selfDict?[CodingKeys.sessionContextData.stringValue] as? [String: Any] {
+            eventData = eventData.merging(sessionContextDataDict, uniquingKeysWith: { (_, new) in new })
+        }
+
+        return eventData
     }
 }
