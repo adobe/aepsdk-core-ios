@@ -31,7 +31,7 @@ class AEPLifecycle: Extension {
         registerListener(type: .genericLifecycle, source: .requestContent, listener: receiveLifecycleRequest(event:))
         registerListener(type: .hub, source: .sharedState, listener: receiveSharedState(event:))
         
-        let sharedStateData = [LifecycleConstants.Keys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
+        let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String : Any], event: nil)
         eventQueue.start()
     }
@@ -116,7 +116,7 @@ class AEPLifecycle: Extension {
     ///   - event: the event to version the shared state at
     ///   - data: data for the shared state
     private func updateSharedState(event: Event, data: [String: Any]) {
-        let sharedStateData = [LifecycleConstants.Keys.LIFECYCLE_CONTEXT_DATA: data]
+        let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: data]
         createSharedState(data: sharedStateData as [String : Any], event: event)
     }
     
@@ -128,12 +128,12 @@ class AEPLifecycle: Extension {
     ///   - previousPauseDate: end date of the previous session
     private func dispatchSessionStart(date: Date, contextData: LifecycleContextData?, previousStartDate: Date?, previousPauseDate: Date?) {
         let eventData: [String: Any] = [
-            LifecycleConstants.Keys.LIFECYCLE_CONTEXT_DATA: contextData?.toEventData() ?? [:],
-            LifecycleConstants.Keys.SESSION_EVENT: LifecycleConstants.START,
-            LifecycleConstants.Keys.SESSION_START_TIMESTAMP: date.timeIntervalSince1970,
-            LifecycleConstants.Keys.MAX_SESSION_LENGTH: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS,
-            LifecycleConstants.Keys.PREVIOUS_SESSION_START_TIMESTAMP: previousStartDate?.timeIntervalSince1970 ?? 0,
-            LifecycleConstants.Keys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0
+            LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: contextData?.toEventData() ?? [:],
+            LifecycleConstants.EventDataKeys.SESSION_EVENT: LifecycleConstants.START,
+            LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: date.timeIntervalSince1970,
+            LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS,
+            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP: previousStartDate?.timeIntervalSince1970 ?? 0,
+            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0
         ]
         
         dispatch(event: Event(name: "LifecycleStart", type: .lifecycle, source: .responseContent, data: eventData))
@@ -142,7 +142,7 @@ class AEPLifecycle: Extension {
     /// Reads the session timeout from the configuration shared state, if not found returns the default session timeout
     /// - Parameter configurationSharedState: the data associated with the configuration shared state
     private func getSessionTimeoutLength(configurationSharedState: [String: Any]?) -> TimeInterval {
-        guard let sessionTimeoutInt = configurationSharedState?[LifecycleConstants.Keys.CONFIG_SESSION_TIMEOUT] as? Int else {
+        guard let sessionTimeoutInt = configurationSharedState?[LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT] as? Int else {
             return TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)
         }
         

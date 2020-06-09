@@ -35,8 +35,8 @@ class AEPCoreLifecycleTests: XCTestCase {
         let expectedContextData = ["testKey": "testVal"]
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .genericLifecycle, source: .requestContent) { (event) in
-            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.Keys.ACTION_KEY] as! String)
-            XCTAssertEqual(expectedContextData, event.data?[LifecycleConstants.Keys.ADDITIONAL_CONTEXT_DATA] as! [String: String])
+            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.ACTION_KEY] as! String)
+            XCTAssertEqual(expectedContextData, event.data?[LifecycleConstants.EventDataKeys.ADDITIONAL_CONTEXT_DATA] as! [String: String])
             expectation.fulfill()
         }
 
@@ -55,7 +55,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         expectation.assertForOverFulfill = true
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .genericLifecycle, source: .requestContent) { (event) in
-            XCTAssertEqual(LifecycleConstants.PAUSE, event.data?[LifecycleConstants.Keys.ACTION_KEY] as! String)
+            XCTAssertEqual(LifecycleConstants.PAUSE, event.data?[LifecycleConstants.EventDataKeys.ACTION_KEY] as! String)
             expectation.fulfill()
         }
 

@@ -22,7 +22,7 @@ struct LifecycleConstants {
     static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
     static let DEFAULT_LIFECYCLE_TIMEOUT = 300 // 5 min
     
-    struct Keys {
+    struct EventDataKeys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
         // LifecycleSession Keys

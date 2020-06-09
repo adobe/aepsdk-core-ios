@@ -90,12 +90,12 @@ class LifecycleFunctionalTests: XCTestCase {
         EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [:], event: nil)
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .lifecycle, source: .responseContent) { (event) in
-            XCTAssertEqual(0, event.data?[LifecycleConstants.Keys.PREVIOUS_SESSION_START_TIMESTAMP] as? Int)
-            XCTAssertEqual(0, event.data?[LifecycleConstants.Keys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int)
-            XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.Keys.MAX_SESSION_LENGTH] as? Double)
-            XCTAssertNotNil(event.data?[LifecycleConstants.Keys.SESSION_START_TIMESTAMP])
-            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.Keys.SESSION_EVENT] as? String)
-            self.assertContextData(contextData: (event.data?[LifecycleConstants.Keys.LIFECYCLE_CONTEXT_DATA] as? [String: Any])!, launches: 1, additionalContextData: additionalContextData)
+            XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP] as? Int)
+            XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int)
+            XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH] as? Double)
+            XCTAssertNotNil(event.data?[LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP])
+            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.SESSION_EVENT] as? String)
+            self.assertContextData(contextData: (event.data?[LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA] as? [String: Any])!, launches: 1, additionalContextData: additionalContextData)
             
             lifecycleResponseExpectation.fulfill()
         }
@@ -122,12 +122,12 @@ class LifecycleFunctionalTests: XCTestCase {
         EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [:], event: nil)
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .lifecycle, source: .responseContent) { (event) in
-            XCTAssertEqual(0, event.data?[LifecycleConstants.Keys.PREVIOUS_SESSION_START_TIMESTAMP] as? Int)
-            XCTAssertEqual(0, event.data?[LifecycleConstants.Keys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int)
-            XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.Keys.MAX_SESSION_LENGTH] as? Double)
-            XCTAssertNotNil(event.data?[LifecycleConstants.Keys.SESSION_START_TIMESTAMP])
-            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.Keys.SESSION_EVENT] as? String)
-            self.assertContextData(contextData: (event.data?[LifecycleConstants.Keys.LIFECYCLE_CONTEXT_DATA] as? [String: Any])!, launches: 1, additionalContextData: additionalContextData)
+            XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP] as? Int)
+            XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int)
+            XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH] as? Double)
+            XCTAssertNotNil(event.data?[LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP])
+            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.SESSION_EVENT] as? String)
+            self.assertContextData(contextData: (event.data?[LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA] as? [String: Any])!, launches: 1, additionalContextData: additionalContextData)
             
             lifecycleResponseExpectation.fulfill()
         }
@@ -153,14 +153,14 @@ class LifecycleFunctionalTests: XCTestCase {
         sharedStateExpectation.expectedFulfillmentCount = 2 // for config shared state and lifecycle shared state
         let lifecycleResponseExpectation = XCTestExpectation(description: "Lifecycle start dispatches two lifecycle response events")
         lifecycleResponseExpectation.expectedFulfillmentCount = 2
-        EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [LifecycleConstants.Keys.CONFIG_SESSION_TIMEOUT: 1], event: nil)
+        EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1], event: nil)
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .lifecycle, source: .responseContent) { (event) in
-            XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.Keys.MAX_SESSION_LENGTH] as? Double)
-            XCTAssertNotNil(event.data?[LifecycleConstants.Keys.SESSION_START_TIMESTAMP])
-            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.Keys.SESSION_EVENT] as? String)
-            let expectedLaunchCount = event.data?[LifecycleConstants.Keys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int == 0 ? 1 : 2
-            self.assertContextData(contextData: (event.data?[LifecycleConstants.Keys.LIFECYCLE_CONTEXT_DATA] as? [String: Any])!, launches: expectedLaunchCount, additionalContextData: additionalContextData)
+            XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH] as? Double)
+            XCTAssertNotNil(event.data?[LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP])
+            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.SESSION_EVENT] as? String)
+            let expectedLaunchCount = event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int == 0 ? 1 : 2
+            self.assertContextData(contextData: (event.data?[LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA] as? [String: Any])!, launches: expectedLaunchCount, additionalContextData: additionalContextData)
             
             lifecycleResponseExpectation.fulfill()
         }
