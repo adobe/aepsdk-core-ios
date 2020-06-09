@@ -67,6 +67,8 @@ registerListener(type: EventType, source: EventSource, listener: @escaping Event
 registerResponseListener(triggerEvent: Event, listener: @escaping EventListener)
 ```
 
+> Note: Registering listeners should be done in the `onRegistered()` function of an extension.
+
 ##### Listener Example
 
 ```swift
