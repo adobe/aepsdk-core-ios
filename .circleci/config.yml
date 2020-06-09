@@ -1,0 +1,29 @@
+# For a detailed guide to building and testing on iOS, read the docs:
+# https://circleci.com/docs/2.0/testing-ios/
+
+version: 2.1
+
+# Workflows orchestrate a set of jobs to be run;
+workflows:
+  version: 2
+  build-test:
+    jobs:
+      - build-and-test
+
+jobs:
+
+  build-and-test:
+    macos:
+      xcode: 11.0.0 # Specify the Xcode version to use
+
+    steps:
+      - checkout
+
+      # pre-start the simulator to prevent timeouts
+      - run:
+          name: Pre-start Simulator
+          command: xcrun instruments -w "iPhone 8 (13.0) [" || true
+
+      - run:
+          name: Run Tests
+          command: make unit-test
