@@ -73,7 +73,9 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(mockSystemInfoService.deviceName, contextData[LifecycleMetrics.CodingKeys.deviceName.stringValue] as? String)
         XCTAssertNotNil(contextData[LifecycleMetrics.CodingKeys.installDate.stringValue])
         
-        // TODO: Verify format for session data and additional context data
+        for (key, _) in additionalContextData ?? [:] {
+            XCTAssertNotNil(contextData[key])
+        }
     }
     
     // MARK: lifecycleStart(...) tests
