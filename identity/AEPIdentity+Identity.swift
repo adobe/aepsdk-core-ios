@@ -62,8 +62,7 @@ extension AEPIdentity: Identity {
     }
     
     static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState) {
-        let event = Event.buildIdSyncEvent(identifiers: [identifierType: identifier], authenticationState: authenticationState)
-        AEPCore.dispatch(event: event)
+        syncIdentifiers(identifiers: [identifierType: identifier])
     }
     
     static func syncIdentifiers(identifiers: [String : String]?) {
@@ -71,7 +70,13 @@ extension AEPIdentity: Identity {
     }
     
     static func syncIdentifiers(identifiers: [String : String]?, authenticationState: MobileVisitorAuthenticationState) {
-        let event = Event.buildIdSyncEvent(identifiers: identifiers, authenticationState: authenticationState)
+        var eventData = [String: Any]()
+        eventData[IdentityConstants.EventDataKeys.IDENTIFIERS] = identifiers
+        eventData[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] = authenticationState
+        eventData[IdentityConstants.EventDataKeys.FORCE_SYNC] = false
+        eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
+        
+        let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
         AEPCore.dispatch(event: event)
     }
     
@@ -93,22 +98,4 @@ extension AEPIdentity: Identity {
         AEPCore.dispatch(event: event)
     }
     
-}
-
-private extension Event {
-    
-    /// Creates an `Event` with the corresponding data for an ID sync
-    /// - Parameters:
-    ///   - identifiers: identifiers for the sync event
-    ///   - authenticationState: the authentication state for the sync, if not provided defaults to unknown
-    static func buildIdSyncEvent(identifiers: [String: String]?, authenticationState: MobileVisitorAuthenticationState = .unknown) -> Event {
-        var eventData = [String: Any]()
-        eventData[IdentityConstants.EventDataKeys.IDENTIFIERS] = identifiers
-        eventData[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] = authenticationState
-        eventData[IdentityConstants.EventDataKeys.FORCE_SYNC] = false
-        eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
-        let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
-        
-        return event
-    }
 }
