@@ -28,11 +28,11 @@ protocol Identity {
     
     /// Returns all customer identifiers which were previously synced with the Adobe Experience Cloud.
     /// - Parameter completion: closure which will be invoked once the customer identifiers are available.
-    static func getIdentifiers(completion: @escaping ([VisitorId]?) -> ())
+    static func getIdentifiers(completion: @escaping ([Identifiable]?) -> ())
     
     /// Returns all customer identifiers which were previously synced with the Adobe Experience Cloud.
     /// - Parameter completion: closure which will be invoked once the customer identifiers are available.
-    static func getIdentifiers(completion: @escaping ([VisitorId]?, Error?) -> ())
+    static func getIdentifiers(completion: @escaping ([Identifiable]?, Error?) -> ())
     
     /// Returns the Experience Cloud ID.
     /// - Parameter completion: closure which will be invoked once Experience Cloud ID is available.

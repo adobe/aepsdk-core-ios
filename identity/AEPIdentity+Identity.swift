@@ -32,17 +32,17 @@ extension AEPIdentity: Identity {
         AEPCore.dispatch(event: event)
     }
     
-    static func getIdentifiers(completion: @escaping ([VisitorId]?) -> ()) {
+    static func getIdentifiers(completion: @escaping ([Identifiable]?) -> ()) {
         getIdentifiers { (identifiers, _) in
             completion(identifiers)
         }
     }
     
-    static func getIdentifiers(completion: @escaping ([VisitorId]?, Error?) -> ()) {
+    static func getIdentifiers(completion: @escaping ([Identifiable]?, Error?) -> ()) {
         let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
-            let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [VisitorId]
+            let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
             // TODO: AMSDK-10182 Handle error
             completion(identifiers, nil)
         }

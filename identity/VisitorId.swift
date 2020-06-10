@@ -12,13 +12,13 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Defines  a visitor identifier
-@objc protocol VisitorId {
+@objc protocol Identifiable {
     
     /// Origin of the identifier
-    var idOrigin: String? { get }
+    var origin: String? { get }
     
     /// Type of the identifier
-    var idType: String? { get }
+    var type: String? { get }
     
     /// The identifier
     var identifier: String? { get }
