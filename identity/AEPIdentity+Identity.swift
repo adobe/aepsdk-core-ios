@@ -62,7 +62,7 @@ extension AEPIdentity: Identity {
     }
     
     static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState) {
-        syncIdentifiers(identifiers: [identifierType: identifier])
+        syncIdentifiers(identifiers: [identifierType: identifier], authenticationState: authenticationState)
     }
     
     static func syncIdentifiers(identifiers: [String : String]?) {
