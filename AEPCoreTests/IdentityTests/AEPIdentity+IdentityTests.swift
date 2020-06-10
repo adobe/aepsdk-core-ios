@@ -50,7 +50,7 @@ class AEPIdentityTests: XCTestCase {
         }
         
         // test
-        AEPIdentity.appendTo(url: expectedUrl) { (url) in }
+        AEPIdentity.appendTo(url: expectedUrl) { (url, error) in }
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -67,7 +67,7 @@ class AEPIdentityTests: XCTestCase {
         }
         
         // test
-        AEPIdentity.getIdentifiers { (identifiers) in }
+        AEPIdentity.getIdentifiers { (identifiers, error) in }
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -166,7 +166,7 @@ class AEPIdentityTests: XCTestCase {
         }
         
         // test
-        AEPIdentity.getUrlVariables { (variables) in }
+        AEPIdentity.getUrlVariables { (variables, error) in }
         
         // verify
         wait(for: [expectation], timeout: 0.5)

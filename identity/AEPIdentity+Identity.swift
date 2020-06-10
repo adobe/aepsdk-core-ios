@@ -13,12 +13,6 @@ import Foundation
 
 extension AEPIdentity: Identity {
     
-    static func appendTo(url: URL?, completion: @escaping (URL?) -> ()) {
-        appendTo(url: url) { (url, _) in
-            completion(url)
-        }
-    }
-    
     static func appendTo(url: URL?, completion: @escaping (URL?, Error?) -> ()) {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
@@ -30,12 +24,6 @@ extension AEPIdentity: Identity {
         }
         
         AEPCore.dispatch(event: event)
-    }
-    
-    static func getIdentifiers(completion: @escaping ([Identifiable]?) -> ()) {
-        getIdentifiers { (identifiers, _) in
-            completion(identifiers)
-        }
     }
     
     static func getIdentifiers(completion: @escaping ([Identifiable]?, Error?) -> ()) {
@@ -78,12 +66,6 @@ extension AEPIdentity: Identity {
         
         let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
         AEPCore.dispatch(event: event)
-    }
-    
-    static func getUrlVariables(completion: @escaping (String?) -> ()) {
-        getUrlVariables { (variables, _) in
-            completion(variables)
-        }
     }
     
     static func getUrlVariables(completion: @escaping (String?, Error?) -> ()) {
