@@ -37,20 +37,32 @@ struct LifecycleState {
         self.lifecycleSession = LifecycleSession(dataStore: dataStore)
     }
     
+    /// Loads the initial Lifecycle metrics which includes device data and launch event
+    /// - Returns: `LifecycleContextData` with device data, launch event data and any persisted context data
+    mutating func computeBootData() -> LifecycleContextData {
+        let contextData = LifecycleContextData().merging(with: getContextData())
+        let defaultMetrics = LifecycleMetricsBuilder(dataStore: dataStore, date: Date()).addDeviceData().addLaunchEventData().build()
+
+        var bootContextData = LifecycleContextData()
+        bootContextData.lifecycleMetrics = defaultMetrics
+        return contextData.merging(with: bootContextData)
+    }
+    
     /// Starts a new lifecycle session at the given date with the provided data
     /// - Parameters:
     ///   - date: date at which the start event occurred
     ///   - additionalContextData: additional context data for this start event
     ///   - adId: The advertising identifier provided by the identity extension
     ///   - sessionTimeout: The session timeout for this start event, defaults to 300 seconds
-    mutating func start(date: Date, additionalContextData: [String: String]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)) {
+    /// - Returns: The previous session info if exists, otherwise nil
+    mutating func start(date: Date, additionalContextData: [String: String]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT))  -> LifecycleSessionInfo? {
         let sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
         // Build default LifecycleMetrics
         let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()
         let defaultMetrics = metricsBuilder.build()
         applyApplicationUpgrade(appId: defaultMetrics.appId)
         
-        guard let previousSessionInfo =  lifecycleSession.start(date: date, sessionTimeout: sessionTimeout, coreMetrics: defaultMetrics) else { return }
+        guard let previousSessionInfo =  lifecycleSession.start(date: date, sessionTimeout: sessionTimeout, coreMetrics: defaultMetrics) else { return nil }
         
         var lifecycleData = LifecycleContextData()
         
@@ -78,6 +90,8 @@ struct LifecycleState {
         // Update lifecycle context data and persist lifecycle info into local storage
         lifecycleContextData = lifecycleContextData?.merging(with: lifecycleData) ?? lifecycleData
         persistLifecycleContextData(startDate: date)
+        
+        return previousSessionInfo
     }
     
     /// Pauses the current lifecycle session
