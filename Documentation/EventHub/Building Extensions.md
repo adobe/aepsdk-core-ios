@@ -98,12 +98,12 @@ registerListener(type: .wildcard, source: .wildcard) { (event) in
 
 ##### Response Listeners
 
-Response listeners allow extensions to listen for the response event of a given trigger `Event`.
+Response listeners allow extensions to listen for the response event of a given trigger `Event`. Response listeners are only invoked once, and will be invoked with a `nil` `Event` if a response event for `triggerEvent` is not dispatched in time.
 
 ```swift
 let triggerEvent = Event(name: "Trigger Event", type: .identity, source: .requestIdentity, data: nil)
 
-registerResponseListener(triggerEvent: triggerEvent) { (responseEvent) in
+registerResponseListener(triggerEvent: triggerEvent, timeout: 1) { (responseEvent) in
    // invoked when the response event for `triggerEvent` is dispatched through the `EventHub`
 }
 ```
