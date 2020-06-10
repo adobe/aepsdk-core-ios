@@ -12,9 +12,22 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// MobileVisitorId contains Visitor Id origin, identifier type, identifier value and authentication state.
-public struct MobileVisitorId {
+public class MobileVisitorId: VisitorId {
     var idOrigin: String?
     var idType: String?
     var identifier: String?
     var authenticationState: MobileVisitorAuthenticationState
+    
+    /// Creates a new `MobileVisitorId` with the given parameters
+    /// - Parameters:
+    ///   - origin: Origin of the identifier
+    ///   - type: Type of the identifier
+    ///   - identifier: The identifier
+    ///   - authenticationState: Authentication state for the identifier
+    init(origin: String?, type: String?, identifier: String?, authenticationState: MobileVisitorAuthenticationState) {
+        self.idOrigin = origin
+        self.idType = type
+        self.identifier = identifier
+        self.authenticationState = authenticationState
+    }
 }
