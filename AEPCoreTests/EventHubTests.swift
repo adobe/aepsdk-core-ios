@@ -224,7 +224,7 @@ class EventHubTests: XCTestCase {
 
         // test
         // listens for a event of type analytics and source response content
-        eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: testEvent) { (event) in
+        eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: testEvent, timeout: 1) { (event) in
             XCTAssert(event?.name == testResponseEvent.name)
             expectation.fulfill()
         }
@@ -245,7 +245,7 @@ class EventHubTests: XCTestCase {
 
         // test
         // listens for a event of type analytics and source response content
-        eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: testEvent) { (event) in
+        eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: testEvent, timeout: 1) { (event) in
             XCTAssert(event?.name == testResponseEvent.name)
             expectation.fulfill()
         }
@@ -267,7 +267,7 @@ class EventHubTests: XCTestCase {
         let otherResponseEvent = otherRequestEvent.createResponseEvent(name: "testResponseEvent1", type: otherRequestEvent.type, source: .responseContent, data: nil)
 
         // test
-        eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: requestEvent) { (event) in
+        eventHub.registerResponseListener(parentExtension: MockExtension.self, triggerEvent: requestEvent, timeout: 1) { (event) in
             XCTAssertNil(event) // event should be nil since the response listener will have timed-out
             expectation.fulfill()
         }
@@ -277,7 +277,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: otherResponseEvent)
 
         // verify
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: 2)
     }
 
     func testEventHubDispatchesEventsWithBlockingListener() {

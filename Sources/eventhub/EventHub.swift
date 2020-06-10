@@ -64,8 +64,9 @@ final public class EventHub {
     /// - Parameters:
     ///   - parentExtension: The extension who is managing this `EventListener`
     ///   - triggerEvent: An `Event` which will trigger a response `Event`
+    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
-    public func registerResponseListener<T: Extension>(parentExtension: T.Type, triggerEvent: Event, listener: @escaping EventResponseListener) {
+    public func registerResponseListener<T: Extension>(parentExtension: T.Type, triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         eventHubQueue.async(flags: .barrier) {
             guard self.registeredExtensions[parentExtension.typeName] != nil else { return } // extension must be registered to register a listener
             
@@ -74,7 +75,7 @@ final public class EventHub {
                 self.responseListenerContainers.removeAll(where: {$0.triggerEventId == triggerEvent.id})
             }
             
-            self.eventHubQueue.asyncAfter(deadline: DispatchTime.now() + EventHubConstants.RESPONSE_LISTENER_TIMEOUT, execute: timeoutTask)
+            self.eventHubQueue.asyncAfter(deadline: DispatchTime.now() + timeout, execute: timeoutTask)
             let listenerContainer = EventListenerContainer(listener: listener, parentExtensionName: parentExtension.typeName,
                                                            type: nil, source: nil, triggerEventId: triggerEvent.id, timeoutTask: timeoutTask)
             
