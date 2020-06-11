@@ -311,7 +311,8 @@
 				21172894249177FC00BB7BD3 /* Identifiable.swift */,
 				213F662F2492A808000184DE /* MID.swift */,
 			);
-			path = identity;
+			name = identity;
+			path = Sources/identity;
 			sourceTree = "<group>";
 		};
 		21CAC0CC2422917600C11388 = {
