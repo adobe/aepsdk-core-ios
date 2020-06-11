@@ -13,26 +13,33 @@ import Foundation
 
 extension AEPIdentity: Identity {
     
-    static func appendTo(url: URL?, completion: @escaping (URL?, Error?) -> ()) {
+    static func appendTo(url: URL?, completion: @escaping (URL?, AEPError?) -> ()) {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
-            // TODO: AMSDK-10182 Handle error
-            let updatedUrlStr = responseEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String
-            completion(URL(string: updatedUrlStr ?? ""), nil)
+            if let responseEvent = responseEvent {
+                let updatedUrlStr = responseEvent.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String
+                completion(URL(string: updatedUrlStr ?? ""), nil)
+            } else {
+                completion(nil, .callbackTimeout)
+            }
+            
         }
         
         AEPCore.dispatch(event: event)
     }
     
-    static func getIdentifiers(completion: @escaping ([Identifiable]?, Error?) -> ()) {
+    static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError?) -> ()) {
         let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
-            let identifiers = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
-            // TODO: AMSDK-10182 Handle error
-            completion(identifiers, nil)
+            if let responseEvent = responseEvent {
+                let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
+                completion(identifiers, nil)
+            } else {
+                completion(nil, .callbackTimeout)
+            }
         }
         
         AEPCore.dispatch(event: event)
@@ -68,13 +75,16 @@ extension AEPIdentity: Identity {
         AEPCore.dispatch(event: event)
     }
     
-    static func getUrlVariables(completion: @escaping (String?, Error?) -> ()) {
+    static func getUrlVariables(completion: @escaping (String?, AEPError?) -> ()) {
         let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
-            let urlVariables = responseEvent?.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
-            // TODO: AMSDK-10182 Handle error
-            completion(urlVariables, nil)
+            if let responseEvent = responseEvent {
+                let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
+                completion(urlVariables, nil)
+            } else {
+                completion(nil, .callbackTimeout)
+            }
         }
         
         AEPCore.dispatch(event: event)
