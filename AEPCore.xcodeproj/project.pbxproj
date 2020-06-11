@@ -20,6 +20,8 @@
 		213C8BD72428822A009F780A /* EventListenerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213C8BD62428822A009F780A /* EventListenerContainer.swift */; };
 		213C8C0824297773009F780A /* EventHubError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213C8C0724297773009F780A /* EventHubError.swift */; };
 		213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */; };
+		213F66302492A808000184DE /* MID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F662F2492A808000184DE /* MID.swift */; };
+		213F66322492A8B9000184DE /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66312492A8B9000184DE /* MIDTests.swift */; };
 		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
 		214B5221248AB1710034BF22 /* Event+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5220248AB1710034BF22 /* Event+Configuration.swift */; };
 		214B5223248ABC710034BF22 /* AEPIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5222248ABC710034BF22 /* AEPIdentity.swift */; };
@@ -127,6 +129,8 @@
 		213C8BD62428822A009F780A /* EventListenerContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventListenerContainer.swift; sourceTree = "<group>"; };
 		213C8C0724297773009F780A /* EventHubError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHubError.swift; sourceTree = "<group>"; };
 		213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
+		213F662F2492A808000184DE /* MID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MID.swift; sourceTree = "<group>"; };
+		213F66312492A8B9000184DE /* MIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
 		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
 		214B5220248AB1710034BF22 /* Event+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+Configuration.swift"; path = "Sources/configuration/Event+Configuration.swift"; sourceTree = SOURCE_ROOT; };
 		214B5222248ABC710034BF22 /* AEPIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPIdentity.swift; sourceTree = "<group>"; };
@@ -274,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */,
+				213F66312492A8B9000184DE /* MIDTests.swift */,
 			);
 			path = IdentityTests;
 			sourceTree = "<group>";
@@ -304,6 +309,7 @@
 				2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */,
 				2181948E2489FC97004F869A /* CustomIdentity.swift */,
 				21172894249177FC00BB7BD3 /* Identifiable.swift */,
+				213F662F2492A808000184DE /* MID.swift */,
 			);
 			path = identity;
 			sourceTree = "<group>";
@@ -626,6 +632,7 @@
 				D4000F162458DEA20052C536 /* HttpMethod.swift in Sources */,
 				214B5221248AB1710034BF22 /* Event+Configuration.swift in Sources */,
 				78E2AC8C2476FFA900E49D64 /* LifecycleMetricsBuilder.swift in Sources */,
+				213F66302492A808000184DE /* MID.swift in Sources */,
 				2181948B2489F66D004F869A /* Identity.swift in Sources */,
 				78D754F42445227D00DB9124 /* ApplicationSystemInfoService.swift in Sources */,
 				21CAC0F424229CDB00C11388 /* EventSource.swift in Sources */,
@@ -676,6 +683,7 @@
 				78D754E62441205F00DB9124 /* SystemInfoServiceTest.swift in Sources */,
 				21F9174C2433E429000743E3 /* MockExtensionTwo.swift in Sources */,
 				2181947E2489CFEF004F869A /* LifecycleContextDataTests.swift in Sources */,
+				213F66322492A8B9000184DE /* MIDTests.swift in Sources */,
 				21A10255248170E5009AB015 /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				218208ED247EED6D003D3591 /* ConfigurationFunctionalTests.swift in Sources */,
 				7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */,
