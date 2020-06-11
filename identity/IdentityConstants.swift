@@ -13,6 +13,7 @@ import Foundation
 
 struct IdentityConstants {
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
+    static let DEFAULT_TTL = TimeInterval(600)
     
     struct EventDataKeys {
         static let BASE_URL = "baseurl"
