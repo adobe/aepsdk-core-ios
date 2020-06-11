@@ -22,41 +22,18 @@ struct MID:  Equatable, Codable, Hashable, CustomStringConvertible {
     
     /// Generates a new MID
     init() {
-        let uuid = UUID()
-        let uuidBytes = uuid.uuid
+        let uuidBytes = Mirror.init(reflecting: UUID().uuid).children.map({ $0.value })
+        let msb = uuidBytes[..<8].reduce(Int64(0), { base, next in
+            (base << 8) | Int64((next as? UInt8)! & 0xff)
+        })
+        let lsb = uuidBytes[8...].reduce(Int64(0), { base, next in
+            (base << 8) | Int64((next as? UInt8)! & 0xff)
+        })
         
-        var msb: Int64 = 0
-        var lsb: Int64 = 0
+        let correctedMsb = String(msb < 0 ? -msb : msb)
+        let correctedLsb = String(lsb < 0 ? -lsb : lsb)
         
-        msb = (msb << 8) | Int64((uuidBytes.0 & 0xff))
-        msb = (msb << 8) | Int64((uuidBytes.1 & 0xff))
-        msb = (msb << 8) | Int64((uuidBytes.2 & 0xff))
-        msb = (msb << 8) | Int64((uuidBytes.3 & 0xff))
-        msb = (msb << 8) | Int64((uuidBytes.4 & 0xff))
-        msb = (msb << 8) | Int64((uuidBytes.5 & 0xff))
-        msb = (msb << 8) | Int64((uuidBytes.6 & 0xff))
-        msb = (msb << 8) | Int64((uuidBytes.7 & 0xff))
-        
-        lsb = (lsb << 8) | Int64((uuidBytes.8 & 0xff))
-        lsb = (lsb << 8) | Int64((uuidBytes.9 & 0xff))
-        lsb = (lsb << 8) | Int64((uuidBytes.10 & 0xff))
-        lsb = (lsb << 8) | Int64((uuidBytes.11 & 0xff))
-        lsb = (lsb << 8) | Int64((uuidBytes.12 & 0xff))
-        lsb = (lsb << 8) | Int64((uuidBytes.13 & 0xff))
-        lsb = (lsb << 8) | Int64((uuidBytes.14 & 0xff))
-        lsb = (lsb << 8) | Int64((uuidBytes.15 & 0xff))
-        
-        var correctedMsb = String(msb < 0 ? -msb : msb)
-        while correctedMsb.count < 19 {
-            correctedMsb = "0" + correctedMsb
-        }
-        
-        var correctedLsb = String(lsb < 0 ? -lsb : lsb)
-        while correctedLsb.count < 19 {
-            correctedLsb = "0" + correctedLsb
-        }
-        
-        midString = "\(correctedMsb)\(correctedLsb)"
+        midString = "\(String(repeating: "0", count: 19 - correctedMsb.count))\(correctedMsb)\(String(repeating: "0", count: 19 - correctedLsb.count))\(correctedLsb)"
     }
     
 }
