@@ -17,9 +17,9 @@ extension AEPIdentity: Identity {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
         
-        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
+        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
             // TODO: AMSDK-10182 Handle error
-            let updatedUrlStr = responseEvent.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String
+            let updatedUrlStr = responseEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String
             completion(URL(string: updatedUrlStr ?? ""), nil)
         }
         
@@ -29,8 +29,8 @@ extension AEPIdentity: Identity {
     static func getIdentifiers(completion: @escaping ([Identifiable]?, Error?) -> ()) {
         let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
         
-        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
-            let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
+        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
+            let identifiers = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
             // TODO: AMSDK-10182 Handle error
             completion(identifiers, nil)
         }
@@ -41,8 +41,8 @@ extension AEPIdentity: Identity {
     static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
         let event = Event(name: "Get experience cloud ID", type: .identity, source: .requestIdentity, data: nil)
         
-        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
-            let experienceCloudId = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String
+        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
+            let experienceCloudId = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String
             completion(experienceCloudId)
         }
         
@@ -71,8 +71,8 @@ extension AEPIdentity: Identity {
     static func getUrlVariables(completion: @escaping (String?, Error?) -> ()) {
         let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
-        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event) { (responseEvent) in
-            let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
+        EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
+            let urlVariables = responseEvent?.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
             // TODO: AMSDK-10182 Handle error
             completion(urlVariables, nil)
         }

@@ -12,6 +12,8 @@ governing permissions and limitations under the License.
 import Foundation
 
 struct IdentityConstants {
+    static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
+    
     struct EventDataKeys {
         static let BASE_URL = "baseurl"
         static let UPDATED_URL = "updatedurl"
