@@ -17,6 +17,6 @@ import Foundation
     public typealias RawValue = Int
     
     case unexpected
-    case callbackTimeout
     case extensionNotInitialized
+    case callbackTimeout
 }
