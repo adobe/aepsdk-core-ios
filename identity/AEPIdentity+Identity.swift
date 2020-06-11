@@ -18,13 +18,17 @@ extension AEPIdentity: Identity {
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
-            if let responseEvent = responseEvent {
-                let updatedUrlStr = responseEvent.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String
-                completion(URL(string: updatedUrlStr ?? ""), nil)
-            } else {
+            guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
+                return
             }
             
+            guard let updatedUrlStr = responseEvent.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String else {
+                completion(nil, .unexpected)
+                return
+            }
+            
+            completion(URL(string: updatedUrlStr), nil)
         }
         
         AEPCore.dispatch(event: event)
@@ -34,12 +38,13 @@ extension AEPIdentity: Identity {
         let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
-            if let responseEvent = responseEvent {
-                let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
-                completion(identifiers, nil)
-            } else {
+            guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
+                return
             }
+            
+            let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
+            completion(identifiers, nil)
         }
         
         AEPCore.dispatch(event: event)
@@ -79,12 +84,13 @@ extension AEPIdentity: Identity {
         let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
         EventHub.shared.registerResponseListener(parentExtension: AEPIdentity.self, triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
-            if let responseEvent = responseEvent {
-                let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
-                completion(urlVariables, nil)
-            } else {
+            guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
+                return
             }
+            
+            let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
+            completion(urlVariables, nil)
         }
         
         AEPCore.dispatch(event: event)
