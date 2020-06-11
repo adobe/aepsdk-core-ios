@@ -20,6 +20,7 @@ struct ConfigurationConstants {
     static let CONFIG_BUNDLED_FILE_NAME  = "ADBMobileConfig"
     static let CONFIG_MANIFEST_APPID_KEY = "ADBMobileAppID"
     static let DOWNLOAD_RETRY_INTERVAL = TimeInterval(5) // 5 seconds
+    static let API_TIMEOUT = TimeInterval(1) // 1 second
 
     struct Keys {
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"

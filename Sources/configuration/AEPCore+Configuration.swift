@@ -38,7 +38,7 @@ extension AEPCore: Configuration {
     public static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
         let event = Event(name: "Privacy Status Request", type: .configuration, source: .requestContent, data: [ConfigurationConstants.Keys.RETRIEVE_CONFIG: true])
 
-        EventHub.shared.registerResponseListener(parentExtension: AEPConfiguration.self, triggerEvent: event) { (responseEvent) in
+        EventHub.shared.registerResponseListener(parentExtension: AEPConfiguration.self, triggerEvent: event, timeout: ConfigurationConstants.API_TIMEOUT) { (responseEvent) in
             self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
         }
 
@@ -46,8 +46,8 @@ extension AEPCore: Configuration {
     }
     
     // MARK: Helper
-    private static func handleGetPrivacyListener(responseEvent: Event, completion: @escaping (PrivacyStatus) -> ()) {
-        guard let privacyStatusString = responseEvent.data?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
+    private static func handleGetPrivacyListener(responseEvent: Event?, completion: @escaping (PrivacyStatus) -> ()) {
+        guard let privacyStatusString = responseEvent?.data?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
             return completion(PrivacyStatus.unknown)
         }
 

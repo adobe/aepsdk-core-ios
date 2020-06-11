@@ -29,6 +29,9 @@ struct EventListenerContainer {
     /// If `listener` was registered as a response listener, `triggerEventId` will equal the `Event.id` of the `Event` who will trigger the response `Event`
     let triggerEventId: UUID?
     
+    /// A DispatchWorkItem that is scheduled on the `EventHub` thread which will be executed after half a second if the listener has not already be notified to signify a timeout
+    let timeoutTask: DispatchWorkItem?
+
     /// Returns true if `listener` should be notified of the `Event`, false otherwise
     /// - Parameter event: An `Event` being dispatched by `EventHub`
     func shouldNotify(event: Event) -> Bool {
