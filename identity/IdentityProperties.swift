@@ -17,12 +17,22 @@ struct IdentityProperties {
     var pushIdentifier: String?
     var blob: String?
     var locationHint: String?
+    var customerIds: [Identifiable]?
     var lastSync: Date?
     var ttl = IdentityConstants.DEFAULT_TTL
     
-    
-    
+    /// Converts `IdentityProperties` into an event data representation
+    /// - Returns: A dictionary representing this `IdentityProperties`
     func toEventData() -> [String: Any] {
-        return [:]
+        var eventData = [String: Any]()
+        eventData[IdentityConstants.EventDataKeys.VISITOR_ID_MID] = mid
+        eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = advertisingIdentifier
+        eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = pushIdentifier
+        eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
+        eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] = locationHint
+        eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds
+        eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync
+        
+        return eventData
     }
 }
