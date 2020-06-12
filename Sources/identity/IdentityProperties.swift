@@ -51,7 +51,7 @@ struct IdentityProperties: Codable {
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] = locationHint
         eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds
-        eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync
+        eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync?.timeIntervalSince1970
         
         return eventData
     }
