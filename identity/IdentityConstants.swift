@@ -25,10 +25,10 @@ struct IdentityConstants {
         static let FORCE_SYNC = "forcesync"
         static let IS_SYNC_EVENT = "issyncevent"
         static let URL_VARIABLES = "urlvariables"
-        static let ADVERTISING_IDENTIFIER = "urlvariables"
-        static let PUSH_IDENTIFIER = "urlvariables"
-        static let VISITOR_ID_BLOB = "urlvariables"
-        static let VISITOR_ID_LOCATION_HINT = "urlvariables"
-        static let VISITOR_IDS_LAST_SYNC = "urlvariables"
+        static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
+        static let PUSH_IDENTIFIER = "pushidentifier"
+        static let VISITOR_ID_BLOB = "blob"
+        static let VISITOR_ID_LOCATION_HINT = "locationhint"
+        static let VISITOR_IDS_LAST_SYNC = "lastsync"
     }
 }
