@@ -11,15 +11,35 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-struct IdentityProperties {
+/// Represents a type which contains instances variables for the Identity extension
+struct IdentityProperties: Codable {
+    
+    /// The current Experience Cloud ID
     var mid: String?
+    
+    /// The IDFA from retrieved Apple APIs
     var advertisingIdentifier: String?
+    
+    /// The SHA1 hashed push Identifier
     var pushIdentifier: String?
+    
+    /// The Blob value
     var blob: String?
+    
+    /// The Experience Cloud ID service region ID. A region ID (or location hint), is a numeric identifier for the geographic location of a particular ID service data center
     var locationHint: String?
-    var customerIds: [Identifiable]?
+    
+    /// List of all the customer's customer identifiers
+    var customerIds: [CustomIdentity]?
+    
+    /// Date of the last sync with the identity service
     var lastSync: Date?
+    
+    /// Time to live value
     var ttl = IdentityConstants.DEFAULT_TTL
+    
+    /// The current privacy status provided by the Configuration extension, defaults to `unknown`
+    var privacyStatus = PrivacyStatus.unknown
     
     /// Converts `IdentityProperties` into an event data representation
     /// - Returns: A dictionary representing this `IdentityProperties`
