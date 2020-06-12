@@ -15,7 +15,7 @@ import Foundation
 struct IdentityProperties: Codable {
     
     /// The current Experience Cloud ID
-    var mid: String?
+    var mid: MID?
     
     /// The IDFA from retrieved Apple APIs
     var advertisingIdentifier: String?
@@ -45,7 +45,7 @@ struct IdentityProperties: Codable {
     /// - Returns: A dictionary representing this `IdentityProperties`
     func toEventData() -> [String: Any] {
         var eventData = [String: Any]()
-        eventData[IdentityConstants.EventDataKeys.VISITOR_ID_MID] = mid
+        eventData[IdentityConstants.EventDataKeys.VISITOR_ID_MID] = mid?.midString
         eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = advertisingIdentifier
         eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = pushIdentifier
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
