@@ -18,31 +18,31 @@ class NetworkService_IdentityTests: XCTestCase {
         AEPServiceProvider.shared.networkService = mockNetworkService
     }
     
-    // MARK: NetworkRequest(orgId, mid, experienceCloudServer) tests
+    // MARK: URL(experienceCloudServer, orgId, identityProperties, dpids) tests
+    func testIdentityHitURL() {
+        // setup
+        
+    }
     
-    /// Tests that the URL and network request are configured correctly
-    func testOptOutNetworkRequest() {
+    // MARK: URL(orgId, mid, experienceCloudServer) tests
+    
+    /// Tests that the URL is built correctly
+    func testOptOutURL() {
         // setup
         let orgId = "test-org-id"
-        let mid = "test-mid"
+        let mid = MID()
         let experienceCloudServer = "identityServer.com"
         // https://identityServer.com/demoptout.jpg?d_orgid=test-org-id&d_mid=test-mid
-        let expectedUrl = "https://\(experienceCloudServer)/demoptout.jpg?d_orgid=\(orgId)&d_mid=\(mid)"
+        let expectedUrl = "https://\(experienceCloudServer)/demoptout.jpg?d_orgid=\(orgId)&d_mid=\(mid.midString)"
         
         // test
-        guard let networkRequest = NetworkRequest(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
+        guard let url = URL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
             XCTFail("Network request was nil")
             return
         }
         
         // verify
-        print(networkRequest.url)
-        XCTAssertEqual(expectedUrl, networkRequest.url.absoluteString)
-        XCTAssertEqual(HttpMethod.get, networkRequest.httpMethod)
-        XCTAssertTrue(networkRequest.connectPayload.isEmpty)
-        XCTAssertEqual(2, networkRequest.httpHeaders.count)
-        XCTAssertEqual(5, networkRequest.connectTimeout)
-        XCTAssertEqual(5, networkRequest.readTimeout)
+        XCTAssertEqual(expectedUrl, url.absoluteString)
     }
     
     // MARK: NetworkService.sendOptOutRequest(...) tests
@@ -51,10 +51,10 @@ class NetworkService_IdentityTests: XCTestCase {
     func testSendOptOutRequestSimple() {
         // setup
         let orgId = "test-org-id"
-        let mid = "test-mid"
+        let mid = MID()
         let experienceCloudServer = "identityServer.com"
         
-        guard let networkRequest = NetworkRequest(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
+        guard let url = URL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
             XCTFail("Network request was nil")
             return
         }
@@ -64,7 +64,7 @@ class NetworkService_IdentityTests: XCTestCase {
         
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
-        XCTAssertEqual(networkRequest.url, mockNetworkService.connectAsyncCalledWithNetworkRequest?.url)
+        XCTAssertEqual(url, mockNetworkService.connectAsyncCalledWithNetworkRequest?.url)
         XCTAssertNil(mockNetworkService.connectAsyncCalledWithCompletionHandler)
     }
 
