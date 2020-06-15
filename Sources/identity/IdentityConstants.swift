@@ -14,6 +14,10 @@ import Foundation
 struct IdentityConstants {
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
     static let DEFAULT_TTL = TimeInterval(600)
+    static let RESPONSE_KEY_ORGID = "d_orgid"
+    static let RESPONSE_KEY_MID = "d_mid"
+    static let KEY_PATH_OPTOUT = "/demoptout.jpg"
+    static let DEFAULT_SERVER = "dpm.demdex.net"
     
     struct EventDataKeys {
         static let BASE_URL = "baseurl"
