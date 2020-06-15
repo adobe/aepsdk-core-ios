@@ -20,8 +20,6 @@ public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool)
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
 final public class EventHub {
     private let eventHubQueue = DispatchQueue(label: "com.adobe.eventhub.queue", attributes: .concurrent) // Allows multi-threaded access to event hub.  Reads are concurrent, Add/Updates act as barriers.
-    private var listenerContainers = [EventListenerContainer]()
-    private var responseListenerContainers = [EventListenerContainer]()
     private var registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventhub.registeredExtensions.queue")
     private let eventNumberMap = ThreadSafeDictionary<UUID, Int>(identifier: "com.adobe.eventhub.eventNumber.queue")
     private var eventNumberCounter = AtomicCounter()
@@ -53,10 +51,10 @@ final public class EventHub {
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives an `Event` matching `type` and `source`
     public func registerListener<T: Extension>(parentExtension: T.Type, type: EventType, source: EventSource, listener: @escaping EventListener) {
         eventHubQueue.async(flags: .barrier) {
-            guard self.registeredExtensions[parentExtension.typeName] != nil else { return } // extension must be registered to register a listener
+            guard let extensionContainer = self.registeredExtensions[parentExtension.typeName] else { return }
             let listenerContainer = EventListenerContainer(listener: listener, parentExtensionName: parentExtension.typeName,
                                                            type: type, source: source, triggerEventId: nil, timeoutTask: nil)
-            self.listenerContainers.append(listenerContainer)
+            extensionContainer.eventListeners.append(listenerContainer)
         }
     }
 
@@ -68,18 +66,17 @@ final public class EventHub {
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
     public func registerResponseListener<T: Extension>(parentExtension: T.Type, triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         eventHubQueue.async(flags: .barrier) {
-            guard self.registeredExtensions[parentExtension.typeName] != nil else { return } // extension must be registered to register a listener
+            guard let extensionContainer = self.registeredExtensions[parentExtension.typeName] else { return }
             
             let timeoutTask = DispatchWorkItem {
                 listener(nil)
-                self.responseListenerContainers.removeAll(where: {$0.triggerEventId == triggerEvent.id})
+                _ = extensionContainer.responseEventListeners.filterRemove { $0.triggerEventId == triggerEvent.id }
             }
-            
+            // TODO: move this off of the eventhub queue and onto the extension queue
             self.eventHubQueue.asyncAfter(deadline: DispatchTime.now() + timeout, execute: timeoutTask)
             let listenerContainer = EventListenerContainer(listener: listener, parentExtensionName: parentExtension.typeName,
                                                            type: nil, source: nil, triggerEventId: triggerEvent.id, timeoutTask: timeoutTask)
-            
-            self.responseListenerContainers.append(listenerContainer)
+            extensionContainer.responseEventListeners.append(listenerContainer)
         }
     }
 
@@ -168,13 +165,9 @@ final public class EventHub {
     private func initializeExtension(_ type: Extension.Type, completion: @escaping (_ extension: ExtensionContainer) -> Void) {
         // Init the extension on a dedicated queue
         let extensionQueue = DispatchQueue(label: "com.adobe.eventhub.extension.\(type.self)")
-
+        
         extensionQueue.async {
-            let newExtension = type.init()
-            let extensionContainer = ExtensionContainer(exten: newExtension,
-                                                        sharedState: SharedState(newExtension.name),
-                                                        extensionQueue: extensionQueue)
-            completion(extensionContainer)
+            completion(ExtensionContainer(type, extensionQueue))
         }
     }
 
@@ -194,29 +187,19 @@ final public class EventHub {
 
         self.registeredExtensions[typeName] = extensionContainer
         extensionContainer.exten.onRegistered()
+        extensionContainer.eventOrderer.start()
         completion(nil)
     }
 
     private func notifyListeners(event: Event) -> Bool {
         eventHubQueue.async(flags: .barrier) {
-            // Notify non-response listeners
-            for listenerContainer in self.listenerContainers
-                where listenerContainer.shouldNotify(event: event) {
-                    self.notifyListener(event: event, listenerContainer: listenerContainer)
-            }
-
-            // if we have a responseID, process the response listeners.
-            if event.responseID != nil {
-                // Notify response listeners
-                for (i, listenerContainer) in self.responseListenerContainers.enumerated().reversed()
-                    where listenerContainer.shouldNotify(event: event) {
-                        listenerContainer.timeoutTask?.cancel()
-                        self.notifyListener(event: event, listenerContainer: listenerContainer)
-                        self.responseListenerContainers.remove(at: i)
+            self.registeredExtensions.sync {
+                $0.values.forEach {
+                    $0.eventOrderer.add(event)
                 }
             }
         }
-
+ 
         return true
     }
 

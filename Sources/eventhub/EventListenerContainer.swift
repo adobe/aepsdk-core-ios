@@ -13,14 +13,22 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Contains an `EventListener` and additional information related to the listener
-struct EventListenerContainer {
+struct EventListenerContainer: Equatable {
+    /// Equatable
+    static func == (lhs: EventListenerContainer, rhs: EventListenerContainer) -> Bool {
+        lhs.parentExtensionName == rhs.parentExtensionName &&
+            lhs.type == rhs.type &&
+            lhs.source == rhs.source &&
+            lhs.triggerEventId == rhs.triggerEventId
+    }
+    
     /// The `EventListener`
     let listener: EventListener
     
     /// The parent extension which registered this listener
     let parentExtensionName: String
     
-    /// The `EventType` `listener` is listening for, nil if `listener` is a response listener
+    /// The `EventType` `listener` is listening for, nil if `listener`v is a response listener
     let type: EventType?
     
     /// The `EventSource` `listener` is listening for, nil if `listener` is a response listener

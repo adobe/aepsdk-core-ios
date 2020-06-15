@@ -28,7 +28,7 @@ final class ThreadSafeArray<T> {
             self.array.append(newElement)
         }
     }
-    
+        
     /// Returns if the array is empty or not
     var isEmpty: Bool {
         return queue.sync { return self.array.isEmpty }
@@ -47,7 +47,7 @@ final class ThreadSafeArray<T> {
             return array
         }
     }
-    
+        
     // MARK: - Subscript
     subscript(index: Int) -> T {
         get {
@@ -58,6 +58,23 @@ final class ThreadSafeArray<T> {
         set {
             queue.async {
                 self.array[index] = newValue
+            }
+        }
+    }
+}
+
+extension ThreadSafeArray where T: Equatable {
+    /// Filters the `ThreadSafeArray` and removes the matching items from the underlying array.
+    /// - Parameter isIncluded: A predicate closure that defines a match.
+    /// - Returns: Array of objects matching the given predicate
+    func filterRemove(_ isIncluded: (T) throws -> Bool) -> [T] {
+        queue.sync {
+            do {
+                let filteredValues = try self.array.filter(isIncluded)
+                self.array = self.array.filter { !filteredValues.contains($0) }
+                return filteredValues
+            } catch {
+                return [T]()
             }
         }
     }

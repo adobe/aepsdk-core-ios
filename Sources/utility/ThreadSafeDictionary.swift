@@ -30,7 +30,7 @@ final class ThreadSafeDictionary<K: Hashable, V> {
     }
         
     // MARK: Subscript
-     public subscript(key: K) -> V? {
+    public subscript(key: K) -> V? {
          get {
             return queue.sync { return self.dictionary[key] }
          }
@@ -44,6 +44,9 @@ final class ThreadSafeDictionary<K: Hashable, V> {
     @inlinable public func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
         return queue.sync { return try? self.dictionary.first(where: predicate) }
     }
-
+    
+    public func sync(_ block: @escaping (Dictionary<K, V>) -> Void) {
+        queue.sync { block(self.dictionary) }
+    }
 }
 

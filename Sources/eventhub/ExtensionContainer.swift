@@ -23,4 +23,46 @@ struct ExtensionContainer {
     
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
+    
+    /// Operation Orderer queue of `Event` objects for this extension
+    let eventOrderer: OperationOrderer<Event>
+    
+    /// Listeners array of `EventListeners` for this extension
+    let eventListeners: ThreadSafeArray<EventListenerContainer>
+    
+    /// Listeners array of `EventListeners` that are listening for a specific response event
+    let responseEventListeners: ThreadSafeArray<EventListenerContainer>
+    
+    init(_ type: Extension.Type, _ queue: DispatchQueue) {
+        exten = type.init()
+        sharedState = SharedState(exten.name)
+        extensionQueue = queue
+        eventOrderer = OperationOrderer<Event>()
+        eventListeners = ThreadSafeArray<EventListenerContainer>()
+        responseEventListeners = ThreadSafeArray<EventListenerContainer>()
+        eventOrderer.setHandler(eventProcessor)
+    }
+}
+
+private extension ExtensionContainer {
+    private func eventProcessor(_ event: Event) -> Bool {
+        // process events into "standard" listeners
+        eventListeners.shallowCopy.forEach {
+            if ($0.shouldNotify(event: event)) {
+                $0.listener(event)
+            }
+        }
+        
+        // process one-time listeners
+        if let responseID = event.responseID {
+            responseEventListeners.filterRemove {
+                $0.triggerEventId == responseID
+            }.forEach {
+                $0.timeoutTask?.cancel()
+                $0.listener(event)
+            }
+        }
+        
+        return true
+    }
 }
