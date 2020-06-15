@@ -25,6 +25,8 @@
 		213F66322492A8B9000184DE /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66312492A8B9000184DE /* MIDTests.swift */; };
 		213F66342492C06B000184DE /* IdentityProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66332492C06B000184DE /* IdentityProperties.swift */; };
 		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
+		214A24C92497FEBF002C310A /* URLEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214A24C82497FEBF002C310A /* URLEncoder.swift */; };
+		214A24CB2497FFC2002C310A /* URLEncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214A24CA2497FFC1002C310A /* URLEncoderTests.swift */; };
 		214B5221248AB1710034BF22 /* Event+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5220248AB1710034BF22 /* Event+Configuration.swift */; };
 		214B5223248ABC710034BF22 /* AEPIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5222248ABC710034BF22 /* AEPIdentity.swift */; };
 		214B5225248ABCEB0034BF22 /* AEPIdentity+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */; };
@@ -138,6 +140,8 @@
 		213F66312492A8B9000184DE /* MIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
 		213F66332492C06B000184DE /* IdentityProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityProperties.swift; sourceTree = "<group>"; };
 		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
+		214A24C82497FEBF002C310A /* URLEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoder.swift; sourceTree = "<group>"; };
+		214A24CA2497FFC1002C310A /* URLEncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEncoderTests.swift; sourceTree = "<group>"; };
 		214B5220248AB1710034BF22 /* Event+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+Configuration.swift"; path = "Sources/configuration/Event+Configuration.swift"; sourceTree = SOURCE_ROOT; };
 		214B5222248ABC710034BF22 /* AEPIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPIdentity.swift; sourceTree = "<group>"; };
 		214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+Identity.swift"; sourceTree = "<group>"; };
@@ -475,6 +479,7 @@
 				78D754E32441192700DB9124 /* SystemInfoServiceTest.swift */,
 				78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */,
 				785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */,
+				214A24CA2497FFC1002C310A /* URLEncoderTests.swift */,
 			);
 			path = ServicesTests;
 			sourceTree = "<group>";
@@ -498,6 +503,7 @@
 				D4000F192458DEDE0052C536 /* NetworkRequest.swift */,
 				D4000F112458DE700052C536 /* NetworkService.swift */,
 				218CAD7424744A6D004DA1E8 /* NetworkServiceConstants.swift */,
+				214A24C82497FEBF002C310A /* URLEncoder.swift */,
 			);
 			name = NetworkService;
 			sourceTree = "<group>";
@@ -639,6 +645,7 @@
 				21629DB02461CAD0009D05BF /* AEPCore+Lifecycle.swift in Sources */,
 				21CAC0F624229CDB00C11388 /* EventType.swift in Sources */,
 				21FB910E247639EE00074BF9 /* ConfigurationDownloadable.swift in Sources */,
+				214A24C92497FEBF002C310A /* URLEncoder.swift in Sources */,
 				21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */,
 				21FBA54A2463DFCE00A2A009 /* Configuration.swift in Sources */,
 				7629742C24294215005CCC73 /* SharedState.swift in Sources */,
@@ -715,6 +722,7 @@
 				21F02C382477077600D25528 /* ConfigurationStateTests.swift in Sources */,
 				21315BBB24579F1800D1B254 /* AtomicCounter.swift in Sources */,
 				215CA8192481CA780078D778 /* LifecycleStateTests.swift in Sources */,
+				214A24CB2497FFC2002C310A /* URLEncoderTests.swift in Sources */,
 				214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */,
 				21F02C3E2477819100D25528 /* MockConfigurationDownloader.swift in Sources */,
 				78D754D92437F93E00DB9124 /* NamedKeyValueStoreTest.swift in Sources */,
