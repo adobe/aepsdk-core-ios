@@ -32,11 +32,41 @@ class URL_IdentityTests: XCTestCase {
     
     func testIdentityHitURLOneCustomId() {
         // setup
-        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_cid_ic=DSID_20915%01test_ad_id%011"
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_cid_ic=DSID_20915%2501test_ad_id%25011"
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
         let customIds = [CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated)]
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        
+        // test
+        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        
+        // verify
+        XCTAssertEqual(expectedUrl, url?.absoluteString)
+    }
+    
+    func testIdentityHitURLOneDpid() {
+        // setup
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_cid=20920%2501testPushId"
+        let orgId = "testOrg@AdobeOrg"
+        let experienceCloudServer = "dpm.demdex.net"
+        let dpids = ["20920": "testPushId"]
+        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        
+        // test
+        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
+        
+        // verify
+        XCTAssertEqual(expectedUrl, url?.absoluteString)
+    }
+    
+    func testIdentityHitURLWithMidBlobHint() {
+        // setup
+        let mid = MID()
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_mid=\(mid.midString)&d_blob=testBlob&dcs_region=testHint"
+        let orgId = "testOrg@AdobeOrg"
+        let experienceCloudServer = "dpm.demdex.net"
+        let properties = IdentityProperties(mid: mid, advertisingIdentifier: nil, pushIdentifier: nil, blob: "testBlob", locationHint: "testHint", customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test
         let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])

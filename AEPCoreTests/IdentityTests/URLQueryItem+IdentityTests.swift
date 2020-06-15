@@ -21,7 +21,7 @@ class URLQueryItem_IdentityTests: XCTestCase {
          let expected = "d_cid_ic=DSID_20915%01test_ad_id%011"
          
          // test
-         let queryItem = URLQueryItem(customId: CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated))
+         let queryItem = URLQueryItem(identifier: CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated))
          
          // verify
          XCTAssertEqual(expected, queryItem.description)

@@ -40,7 +40,7 @@ extension URL {
         // Add customer ids
         if let customerIds = identityProperties.customerIds {
             for encodedCustomId in customerIds {
-                queryItems += [URLQueryItem(customId: encodedCustomId)]
+                queryItems += [URLQueryItem(identifier: encodedCustomId)]
             }
         }
         
