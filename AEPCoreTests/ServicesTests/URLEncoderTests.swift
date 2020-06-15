@@ -16,7 +16,7 @@ class URLEncoderTests: XCTestCase {
     
     /// Tests that encoding an empty value is still empty
     func testEncodeEmpty() {
-        XCTAssertTrue(URLEncoder.encode(value: "")!.isEmpty)
+        XCTAssertTrue(URLEncoder.encode(value: "").isEmpty)
     }
     
     /// Tests that spaces are encoded correctly
@@ -46,7 +46,7 @@ class URLEncoderTests: XCTestCase {
     
     /// Tests that encoding an empty value is still empty
     func testDecodeEmpty() {
-        XCTAssertTrue(URLEncoder.decode(value: "")!.isEmpty)
+        XCTAssertTrue(URLEncoder.decode(value: "").isEmpty)
     }
     
     /// Tests that spaces are decoded correctly

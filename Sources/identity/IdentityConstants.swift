@@ -16,12 +16,12 @@ struct IdentityConstants {
     static let DEFAULT_TTL = TimeInterval(600)
     static let RESPONSE_KEY_ORGID = "d_orgid"
     static let RESPONSE_KEY_MID = "d_mid"
-    static let RESPONSE_KEY_BLOB = ""
-    static let RESPONSE_KEY_HINT = ""
-    static let VISITOR_ID_PARAMETER_KEY_CUSTOMER = ""
+    static let RESPONSE_KEY_BLOB = "d_blob"
+    static let RESPONSE_KEY_HINT = "dcs_region"
+    static let VISITOR_ID_PARAMETER_KEY_CUSTOMER = "d_cid_ic"
     static let KEY_PATH_OPTOUT = "/demoptout.jpg"
     static let DEFAULT_SERVER = "dpm.demdex.net"
-    static let CID_DELIMITER = ""
+    static let CID_DELIMITER = "%01"
     
     struct EventDataKeys {
         static let BASE_URL = "baseurl"

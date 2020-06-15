@@ -16,18 +16,18 @@ struct URLEncoder {
     
     /// Percent encodes a `String`
     /// - Parameter value: the `String` to be encoded
-    /// - Returns: The percent encoded `String`, nil if encoding failed
-    static func encode(value: String) -> String? {
+    /// - Returns: The percent encoded `String`, empty if encoding failed
+    static func encode(value: String) -> String {
         let unreserved = "-._~"
         let allowed = NSMutableCharacterSet.alphanumeric()
         allowed.addCharacters(in: unreserved)
-        return value.addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet)
+        return value.addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet) ?? ""
     }
     
     /// Percent decodes a `String`
     /// - Parameter value: the `String` to be decoded
-    /// - Returns: The percent decoded `String`, nil if decoding failed
-    static func decode(value: String) -> String? {
-        return value.removingPercentEncoding
+    /// - Returns: The percent decoded `String`, empty if decoding failed
+    static func decode(value: String) -> String {
+        return value.removingPercentEncoding ?? ""
     }
 }
