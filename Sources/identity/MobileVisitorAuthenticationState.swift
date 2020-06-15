@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// An enum type representing the possible authentication states
-@objc public enum MobileVisitorAuthenticationState: Int {
+@objc public enum MobileVisitorAuthenticationState: Int, Codable {
     case unknown
     case authenticated
     case loggedOut
