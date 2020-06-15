@@ -52,9 +52,10 @@ public extension Extension {
     /// Registers an `EventListener` with the `EventHub` that is invoked when `triggerEvent`'s response event is dispatched
     /// - Parameters:
     ///   - triggerEvent: An event which will trigger a response event
+    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches the response event to `triggerEvent`
-    func registerResponseListener(triggerEvent: Event, listener: @escaping EventListener) {
-        getEventHub().registerResponseListener(parentExtension: Self.self, triggerEvent: triggerEvent, listener: listener)
+    func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
+        getEventHub().registerResponseListener(parentExtension: Self.self, triggerEvent: triggerEvent, timeout: timeout, listener: listener)
     }
     
     /// Dispatches an `Event` to the `EventHub`
