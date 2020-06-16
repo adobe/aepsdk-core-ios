@@ -120,4 +120,13 @@ class ConfigurationState {
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
+    
+    private func envAware() {
+        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return }
+        
+        for (key, value) in currentConfiguration
+            where !key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER) {
+            
+        }
+    }
 }
