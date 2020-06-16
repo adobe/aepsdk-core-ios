@@ -41,7 +41,7 @@ class AEPDataQueueServiceTests: XCTestCase {
         // Given
 
         // When
-        _ = AEPDataQueueService.shared.initDataQueue(label: fileName)
+        _ = AEPDataQueueService.shared.getDataQueue(label: fileName)
 
         // Then
         XCTAssertTrue(AEPDataQueueServiceTests.dbFileExist(fileName))
@@ -52,10 +52,10 @@ class AEPDataQueueServiceTests: XCTestCase {
     /// initDataQueue()
     func testDataQueueInstanceShouldBeCached() throws {
         // Given
-        let dataQueueFirst = AEPDataQueueService.shared.initDataQueue(label: fileName)
+        let dataQueueFirst = AEPDataQueueService.shared.getDataQueue(label: fileName)
 
         // When
-        let dataQueueSecond = AEPDataQueueService.shared.initDataQueue(label: fileName)
+        let dataQueueSecond = AEPDataQueueService.shared.getDataQueue(label: fileName)
 
         // Then
         XCTAssertTrue(dataQueueFirst as AnyObject? === dataQueueSecond as AnyObject?)

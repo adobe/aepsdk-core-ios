@@ -22,17 +22,31 @@ extension Date {
     }
 }
 
+/// An implementation of protocol `DataQueue`
+///    - implements a FIFO container (queue) for `DataEntity` objects
+///    - `DataEntity` objects inside this queue will be persisted in SQLite database automatically
+///    - database operations is performed in series
 public class AEPDataQueue: DataQueue {
     public let databaseName: String
     public let databaseFilePath: FileManager.SearchPathDirectory
-    public static let DEFAULT_TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
     private let serialQueue: DispatchQueue
     
+    public static let DEFAULT_TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
+    private let TB_KEY_UUID = "uuid"
+    private let TB_KEY_TIMESTAMP = "timestamp"
+    private let TB_KEY_DATA = "data"
+    
+    /// Creates a  new `DataQueue` with a database file path and a serial dispatch queue
+    /// If it fails to crate database or table, a `nil` will be returned.
+    /// - Parameters:
+    ///   - databaseName: the database name used to create SQLite database
+    ///   - databaseFilePath: the SQLite database file will be stored in this directory
+    ///   - serialQueue: a serial dispatch queue used to perform database operations
     init?(databaseName: String, databaseFilePath: FileManager.SearchPathDirectory = .cachesDirectory, serialQueue: DispatchQueue) {
         self.databaseName = databaseName
         self.databaseFilePath = databaseFilePath
         self.serialQueue = serialQueue
-        guard createTableIfNotExist(tableName: AEPDataQueue.DEFAULT_TABLE_NAME) == true else {
+        guard createTableIfNotExists(tableName: AEPDataQueue.DEFAULT_TABLE_NAME) else {
             print("failed to initialize AEPDataQueue with provided database name: \(databaseName)")
             return nil
         }
@@ -74,11 +88,11 @@ public class AEPDataQueue: DataQueue {
             defer {
                 _ = disconnect(database: connection)
             }
-            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), result.count == 1 else {
+            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let firstColumn = result.first else {
                 return nil
             }
             
-            guard let uuid = result[0]["uuid"], let dateString = result[0]["timestamp"], let dataString = result[0]["data"] else {
+            guard let uuid = firstColumn[TB_KEY_UUID], let dateString = firstColumn[TB_KEY_TIMESTAMP], let dataString = firstColumn[TB_KEY_DATA] else {
                 return nil
             }
             guard let dateInt64 = Int64(dateString) else {
@@ -104,11 +118,11 @@ public class AEPDataQueue: DataQueue {
             defer {
                 _ = disconnect(database: connection)
             }
-            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), result.count == 1 else {
+            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let firstColumn = result.first else {
                 return nil
             }
             
-            guard let uuid = result[0]["uuid"], let dateString = result[0]["timestamp"], let dataString = result[0]["data"] else {
+            guard let uuid = firstColumn[TB_KEY_UUID], let dateString = firstColumn[TB_KEY_TIMESTAMP], let dataString = firstColumn[TB_KEY_DATA] else {
                 return nil
             }
             guard let dateInt64 = Int64(dateString) else {
@@ -120,7 +134,7 @@ public class AEPDataQueue: DataQueue {
             let deleteRowStatement = """
             DELETE FROM \(AEPDataQueue.DEFAULT_TABLE_NAME) WHERE uuid = "\(uuid)";
             """
-            guard SQLiteWrapper.execute(database: connection, sql: deleteRowStatement) == true else {
+            guard SQLiteWrapper.execute(database: connection, sql: deleteRowStatement) else {
                 return nil
             }
             return DataEntity(uuid: uuid, timestamp: date, data: data)
@@ -138,7 +152,7 @@ public class AEPDataQueue: DataQueue {
             defer {
                 _ = disconnect(database: connection)
             }
-            guard SQLiteWrapper.execute(database: connection, sql: dropTableStatement) == true else {
+            guard SQLiteWrapper.execute(database: connection, sql: dropTableStatement) else {
                 return false
             }
             
@@ -155,13 +169,13 @@ public class AEPDataQueue: DataQueue {
     }
     
     private func disconnect(database: OpaquePointer) -> Bool {
-        if SQLiteWrapper.disconnect(database: database) == true {
+        if SQLiteWrapper.disconnect(database: database) {
             return true
         }
         return false
     }
     
-    private func createTableIfNotExist(tableName: String) -> Bool {
+    private func createTableIfNotExists(tableName: String) -> Bool {
         guard let connection = connect() else {
             return false
         }

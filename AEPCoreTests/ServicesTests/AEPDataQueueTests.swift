@@ -34,7 +34,7 @@ class AEPDataQueueTests: XCTestCase {
     /// add()
     func testAddDataEntityToDataQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
         let data = try JSONEncoder().encode(event)
         let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: data)
@@ -66,7 +66,7 @@ class AEPDataQueueTests: XCTestCase {
     /// add()
     func testAddDataEntityWithoutData() throws {
         // Given
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
         let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: nil)
 
@@ -96,7 +96,7 @@ class AEPDataQueueTests: XCTestCase {
     /// peek()
     func testPeekDataEntityFromQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         var events: [EventEntity] = []
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
@@ -133,7 +133,7 @@ class AEPDataQueueTests: XCTestCase {
     func testPeekDataEntityWithoutData() throws {
         // Given
 
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
         let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: nil)
 
@@ -161,7 +161,7 @@ class AEPDataQueueTests: XCTestCase {
     func testPeekDataEntityFromEmptyQueue() throws {
         // Given
 
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
 
         // When
         // Then
@@ -171,7 +171,7 @@ class AEPDataQueueTests: XCTestCase {
     /// pop()
     func testPopDataEntityFromQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         var events: [EventEntity] = []
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
@@ -207,7 +207,7 @@ class AEPDataQueueTests: XCTestCase {
     func testPopDataEntityFromEmptyQueue() throws {
         // Given
 
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
 
         // When
         // Then
@@ -217,7 +217,7 @@ class AEPDataQueueTests: XCTestCase {
     /// clear()
     func testClearQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
 
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
@@ -247,7 +247,7 @@ class AEPDataQueueTests: XCTestCase {
         let dispatchQueue2 = DispatchQueue(label: "ThreadSafeDataQueueOperations.queue2", attributes: .concurrent)
         let dispatchQueue3 = DispatchQueue(label: "ThreadSafeDataQueueOperations.queue3", attributes: .concurrent)
 
-        let queue = AEPDataQueueService.shared.initDataQueue(label: fileName)!
+        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
 
         let loop = 10
         let expectation = self.expectation(description: "Test sync")

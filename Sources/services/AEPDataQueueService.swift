@@ -12,6 +12,9 @@
 
 import Foundation
 
+/// An implementation of protocol `DataQueueService`
+///      - initializes `DataQueue` objects by label name
+///      - caches `DataQueue` objects, then it can be retrieved later by the same label name
 public class AEPDataQueueService: DataQueueService {
     public static let shared: DataQueueService = AEPDataQueueService()
     private let serialQueue = DispatchQueue(label: "com.adobe.marketing.mobile.dataqueueservice")
@@ -19,7 +22,7 @@ public class AEPDataQueueService: DataQueueService {
 
     private init() {}
 
-    public func initDataQueue(label databaseName: String) -> DataQueue? {
+    public func getDataQueue(label databaseName: String) -> DataQueue? {
         if let queue = threadSafeDictionary[databaseName] {
             return queue
         } else {

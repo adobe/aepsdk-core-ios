@@ -14,7 +14,7 @@ import Foundation
 
 /// A thread-safe FIFO (First-In-First-Out) queue used to store `DataEntity` objects
 public protocol DataQueue {
-    /// add a new `DataEntity` object to `DataQueue`
+    /// adds a new `DataEntity` object to `DataQueue`
     ///
     /// - Parameter dataEntity: a `DataEntity` object
     func add(dataEntity: DataEntity) -> Bool

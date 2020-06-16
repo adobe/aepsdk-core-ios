@@ -22,13 +22,18 @@ internal class SQLiteWrapper {
     ///   - databaseName: database name
     /// - Returns: database connection
     static func connect(databaseFilePath: FileManager.SearchPathDirectory, databaseName: String) -> OpaquePointer? {
-        let fileURL = try! FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(databaseName)
+        let fileURL = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(databaseName)
+        guard let url = fileURL else {
+            print("Cant not create database connection due to invalid file path: SearchPathDirectory[\(databaseFilePath.rawValue)]/\(databaseName)")
+            return nil
+        }
+
         var database: OpaquePointer?
-        if sqlite3_open(fileURL.path, &database) != SQLITE_OK {
-            print("Failed to open database at \(fileURL.path)")
+        if sqlite3_open(url.path, &database) != SQLITE_OK {
+            print("Failed to open database at \(url.path)")
             return nil
         } else {
-            print("Successfully opened connection to database at \(fileURL.path)")
+            print("Successfully opened connection to database at \(url.path)")
             return database
         }
     }
@@ -52,7 +57,7 @@ internal class SQLiteWrapper {
     /// - Returns: True, if the SQL statement is executed  successfully, otherwise false
     static func execute(database: OpaquePointer, sql: String) -> Bool {
         if sqlite3_exec(database, sql, nil, nil, nil) != SQLITE_OK {
-            let errMsg = String(cString: sqlite3_errmsg(database)!)
+            let errMsg = String(cString: sqlite3_errmsg(database))
             print("Failed to execute SQL statement, error message: \(errMsg)")
             return false
         }
@@ -75,6 +80,7 @@ internal class SQLiteWrapper {
         defer {
             sqlite3_finalize(statement)
         }
+
         var code = sqlite3_step(statement)
         while code == SQLITE_ROW {
             var dictionary: [String: String] = [:]
@@ -106,8 +112,7 @@ internal class SQLiteWrapper {
     /// - Returns: True, if the database exists, otherwise false
     static func tableExist(database: OpaquePointer, tableName: String) -> Bool {
         let sql = "select count(*) from sqlite_master where type='table' and name='\(tableName)';"
-        if let result = query(database: database, sql: sql), result.count == 1 {
-            let firstColumn = result[0]
+        if let result = query(database: database, sql: sql), let firstColumn = result.first {
             if firstColumn[Array(firstColumn.keys)[0]] == "1" {
                 return true
             }
