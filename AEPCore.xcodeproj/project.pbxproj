@@ -23,6 +23,7 @@
 		213F66302492A808000184DE /* MID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F662F2492A808000184DE /* MID.swift */; };
 		213F66322492A8B9000184DE /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66312492A8B9000184DE /* MIDTests.swift */; };
 		213F66342492C06B000184DE /* IdentityProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66332492C06B000184DE /* IdentityProperties.swift */; };
+		213F662E2492A36A000184DE /* AEPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F662D2492A36A000184DE /* AEPError.swift */; };
 		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
 		214B5221248AB1710034BF22 /* Event+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5220248AB1710034BF22 /* Event+Configuration.swift */; };
 		214B5223248ABC710034BF22 /* AEPIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5222248ABC710034BF22 /* AEPIdentity.swift */; };
@@ -134,6 +135,7 @@
 		213F662F2492A808000184DE /* MID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MID.swift; sourceTree = "<group>"; };
 		213F66312492A8B9000184DE /* MIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
 		213F66332492C06B000184DE /* IdentityProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityProperties.swift; sourceTree = "<group>"; };
+		213F662D2492A36A000184DE /* AEPError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AEPError.swift; path = Sources/AEPError.swift; sourceTree = "<group>"; };
 		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
 		214B5220248AB1710034BF22 /* Event+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+Configuration.swift"; path = "Sources/configuration/Event+Configuration.swift"; sourceTree = SOURCE_ROOT; };
 		214B5222248ABC710034BF22 /* AEPIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPIdentity.swift; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 			isa = PBXGroup;
 			children = (
 				21315BB424575ED200D1B254 /* AEPCore.swift */,
+				213F662D2492A36A000184DE /* AEPError.swift */,
 				218194892489F65D004F869A /* identity */,
 				21629DA82461C8EC009D05BF /* Lifecycle */,
 				21FBA5482463DFA100A2A009 /* configuration */,
@@ -618,6 +621,7 @@
 				D4000F122458DE700052C536 /* NetworkService.swift in Sources */,
 				D4000F182458DEB60052C536 /* HttpConnection.swift in Sources */,
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
+				213F662E2492A36A000184DE /* AEPError.swift in Sources */,
 				D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */,
 				D4000F1A2458DEDE0052C536 /* NetworkRequest.swift in Sources */,
 				21315BBA24579C4A00D1B254 /* AtomicCounter.swift in Sources */,
