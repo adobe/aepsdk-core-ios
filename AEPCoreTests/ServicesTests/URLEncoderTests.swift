@@ -76,7 +76,7 @@ class URLEncoderTests: XCTestCase {
     
     /// Tests that when a string cannot be decoded, nil is returned
     func testDecodeInvalidEncoding() {
-        XCTAssertNil(URLEncoder.decode(value: "%ZZ"))
+        XCTAssertTrue(URLEncoder.decode(value: "%ZZ").isEmpty)
     }
     
 }
