@@ -45,14 +45,14 @@ extension URL {
         
         // Add customer ids
         if let customerIds = identityProperties.customerIds {
-            for encodedCustomId in customerIds {
-                queryItems += [URLQueryItem(identifier: encodedCustomId)]
+            for customIdQueryItem in customerIds {
+                queryItems += [URLQueryItem(identifier: customIdQueryItem)]
             }
         }
         
         // Add dpids
-        for (key, val) in dpids {
-            queryItems += [URLQueryItem(dpidKey: key, dpidValue: val)]
+        for (key, value) in dpids {
+            queryItems += [URLQueryItem(dpidKey: key, dpidValue: value)]
         }
         
         components.queryItems = queryItems
