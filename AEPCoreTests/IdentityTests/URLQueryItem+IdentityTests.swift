@@ -40,4 +40,5 @@ class URLQueryItem_IdentityTests: XCTestCase {
          // verify
          XCTAssertEqual(expected, queryItem.description)
      }
+    
 }
