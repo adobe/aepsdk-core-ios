@@ -11,18 +11,9 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-struct IdentityConstants {
-    static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
-    
-    struct EventDataKeys {
-        static let BASE_URL = "baseurl"
-        static let UPDATED_URL = "updatedurl"
-        static let VISITOR_IDS_LIST = "visitoridslist"
-        static let VISITOR_ID_MID = "mid"
-        static let IDENTIFIERS = "visitoridentifiers"
-        static let AUTHENTICATION_STATE = "authenticationstate"
-        static let FORCE_SYNC = "forcesync"
-        static let IS_SYNC_EVENT = "issyncevent"
-        static let URL_VARIABLES = "urlvariables"
-    }
+/// An enum type representing the possible authentication states
+@objc public enum MobileVisitorAuthenticationState: Int, Codable {
+    case unknown
+    case authenticated
+    case loggedOut
 }
