@@ -27,6 +27,10 @@ extension URLQueryItem {
         self = URLQueryItem(name: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, value: queryString)
     }
     
+    /// Creates a `QueryItem` for the dpid
+    /// - Parameters:
+    ///   - dpidKey: dpid key
+    ///   - dpidValue: dpid value
     init(dpidKey: String, dpidValue: String) {
         let encodedKey = URLEncoder.encode(value: dpidKey)
         let encodedValue = URLEncoder.encode(value: dpidValue)
