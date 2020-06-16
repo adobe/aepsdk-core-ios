@@ -16,6 +16,7 @@ class URL_IdentityTests: XCTestCase {
     
     // MARK: URL(experienceCloudServer, orgId, identityProperties, dpids) tests
     
+    /// Tests that the Identity hit url is constructed properly when all properties are nil
     func testIdentityHitURLSimple() {
         // setup
         let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg"
@@ -30,6 +31,7 @@ class URL_IdentityTests: XCTestCase {
         XCTAssertEqual(expectedUrl, url?.absoluteString)
     }
     
+    /// Tests that one custom id is encoded properly into the URL
     func testIdentityHitURLOneCustomId() {
         // setup
         let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_cid_ic=DSID_20915%2501test_ad_id%25011"
@@ -45,12 +47,46 @@ class URL_IdentityTests: XCTestCase {
         XCTAssertEqual(expectedUrl, url?.absoluteString)
     }
     
+    /// Tests that multiple custom ids are encoded into the URL correctly
+    func testIdentityHitURLMultipleCustomIds() {
+        // setup
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_cid_ic=DSID_20915%2501test_ad_id%25011&d_cid_ic=DSID_20915_2%2501test_ad_id_2%25012"
+        let experienceCloudServer = "dpm.demdex.net"
+        let orgId = "testOrg@AdobeOrg"
+        let customIds = [CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated),
+                        CustomIdentity(origin: "d_cid_ic_2", type: "DSID_20915_2", identifier: "test_ad_id_2", authenticationState: .loggedOut)]
+        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        
+        // test
+        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        
+        // verify
+        XCTAssertEqual(expectedUrl, url?.absoluteString)
+    }
+    
+    /// Tests that one dpid is encoded into the URL correctly
     func testIdentityHitURLOneDpid() {
         // setup
         let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_cid=20920%2501testPushId"
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
         let dpids = ["20920": "testPushId"]
+        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        
+        // test
+        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
+        
+        // verify
+        XCTAssertEqual(expectedUrl, url?.absoluteString)
+    }
+    
+    /// Tests that multiple dpids are encoded into the URL correctly
+    func testIdentityHitURLMultipleDpids() {
+        // setup
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_cid=20920%2501testPushId&d_cid=20920_2%2501testPushId_2"
+        let orgId = "testOrg@AdobeOrg"
+        let experienceCloudServer = "dpm.demdex.net"
+        let dpids = ["20920": "testPushId", "20920_2": "testPushId_2"]
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test

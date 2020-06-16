@@ -13,6 +13,12 @@ import Foundation
 
 extension URL {
     
+    /// Creates a new Identity hit URL
+    /// - Parameters:
+    ///   - experienceCloudServer: the experience cloud server
+    ///   - orgId: the org id from Configuration
+    ///   - identityProperties: the current `IdentityProperties` in the Identity extension
+    ///   - dpids: a dictionary of dpids
     init?(experienceCloudServer: String, orgId: String, identityProperties: IdentityProperties, dpids: [String: String]) {
         var components = URLComponents()
         components.scheme = "https"
