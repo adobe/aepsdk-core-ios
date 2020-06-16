@@ -16,11 +16,11 @@ extension URLQueryItem {
     /// Creates a `URLQueryItem` configured with a `Identifiable`
     /// - Parameter identifier: The `Identifiable` to be encoded into the `URLQueryItem`
     init(identifier: Identifiable) {
-        var queryString = URLEncoder.encode(value: identifier.type ?? "") + IdentityConstants.CID_DELIMITER
+        var queryString = URLEncoder.encode(value: identifier.type ?? "")
         
         let encodedId = URLEncoder.encode(value: identifier.identifier ?? "")
         if !encodedId.isEmpty {
-            queryString += encodedId
+            queryString += IdentityConstants.CID_DELIMITER + encodedId
         }
         
         queryString += "\(IdentityConstants.CID_DELIMITER)\(identifier.authenticationState.rawValue)"
