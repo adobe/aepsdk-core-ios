@@ -119,7 +119,6 @@ class URL_IdentityTests: XCTestCase {
         let orgId = "test-org-id"
         let mid = MID()
         let experienceCloudServer = "identityServer.com"
-        // https://identityServer.com/demoptout.jpg?d_orgid=test-org-id&d_mid=test-mid
         let expectedUrl = "https://\(experienceCloudServer)/demoptout.jpg?d_orgid=\(orgId)&d_mid=\(mid.midString)"
         
         // test
