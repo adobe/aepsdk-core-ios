@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// An enum which describes different errors errors from the AEP SDK can return
+/// An enum which describes different errors from the AEP SDK can return
 @objc public enum AEPError: Int, Error {
     public typealias RawValue = Int
     
