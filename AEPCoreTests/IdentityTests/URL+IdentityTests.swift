@@ -25,7 +25,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test
-        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
         
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -41,7 +41,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test
-        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
         
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -58,7 +58,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test
-        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
         
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -74,7 +74,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test
-        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
         
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -90,7 +90,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test
-        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
         
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -105,7 +105,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: mid, advertisingIdentifier: nil, pushIdentifier: nil, blob: "testBlob", locationHint: "testHint", customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
         
         // test
-        let url = URL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
         
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -122,7 +122,7 @@ class URL_IdentityTests: XCTestCase {
         let expectedUrl = "https://\(experienceCloudServer)/demoptout.jpg?d_orgid=\(orgId)&d_mid=\(mid.midString)"
         
         // test
-        guard let url = URL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
+        guard let url = URL.buildOptOutURL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
             XCTFail("Network request was nil")
             return
         }

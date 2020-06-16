@@ -30,7 +30,7 @@ class NetworkService_IdentityTests: XCTestCase {
         let mid = MID()
         let experienceCloudServer = "identityServer.com"
         
-        guard let url = URL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
+        guard let url = URL.buildOptOutURL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
             XCTFail("Network request was nil")
             return
         }
