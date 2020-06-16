@@ -43,7 +43,11 @@ extension AEPIdentity: Identity {
                 return
             }
             
-            let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable]
+            guard let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable] else {
+                completion(nil, .unexpected)
+                return
+            }
+            
             completion(identifiers, nil)
         }
         
