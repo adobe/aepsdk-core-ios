@@ -12,21 +12,57 @@ import XCTest
 class UnzipperServiceTest: XCTestCase {
     let unzipper = RulesUnzipper()
     let testDataFileName = "TestRules"
+    
+    class var bundle: Bundle {
+        return Bundle(for: self)
+    }
 
     override func setUp() {
-        
+    }
+    
+    func cleanUp() {
+        do {
+            let fileManager = FileManager()
+            guard let path = UnzipperServiceTest.bundle.url(forResource: testDataFileName, withExtension: "zip")?.deletingLastPathComponent().appendingPathComponent("directory") else {
+                return
+            }
+            try fileManager.removeItem(at: path)
+        } catch {
+            return
+        }
     }
     
     func testUnzippingRulesSimple() {
-        let bundle = Bundle(for: type(of: self))
-        let expectation = XCTestExpectation(description: "Unzip test file")
-        if let testFilePath = bundle.path(forResource: testDataFileName, ofType: "zip") {
-            let destinationPath = testFilePath.replacingOccurrences(of: ".zip", with: ".txt")
-            unzipper.unzip(fromPath: testFilePath, to: destinationPath, completion: {
-                expectation.fulfill()
-            })
+        cleanUp()
+        let fileManager = FileManager()
+        guard let sourceURL = UnzipperServiceTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
+            XCTFail()
+            return
+        }
+        guard let archive = Archive(url: sourceURL, accessMode: .read) else {
+            XCTFail("Failed to create archive")
+            return
         }
         
-        wait(for: [expectation], timeout: 0.5)
+        var destinationURL = sourceURL.deletingLastPathComponent()
+        destinationURL.appendPathComponent("directory")
+        do {
+            try fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil)
+            try fileManager.unzipItem(at: sourceURL, to: destinationURL)
+        } catch {
+            XCTFail("Failed to extract item - \(error)")
+            return
+        }
+        
+        var itemExists = false
+        for entry in archive {
+            let directoryURL = destinationURL.appendingPathComponent(entry.path)
+            itemExists = fileManager.itemExists(at: directoryURL)
+            if !itemExists { break }
+        }
+        
+        XCTAssert(itemExists)
+        
+        
     }
 }

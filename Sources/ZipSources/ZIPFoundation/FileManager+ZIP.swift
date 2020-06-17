@@ -23,8 +23,7 @@ extension FileManager {
     ///   - progress: A progress object that can be used to track or cancel the unzip operation.
     ///   - preferredEncoding: Encoding for entry paths. Overrides the encoding specified in the archive.
     /// - Throws: Throws an error if the source item does not exist or the destination URL is not writable.
-    public func unzipItem(at sourceURL: URL, to destinationURL: URL, skipCRC32: Bool = false,
-                          progress: Progress? = nil, preferredEncoding: String.Encoding? = nil) throws {
+    public func unzipItem(at sourceURL: URL, to destinationURL: URL, skipCRC32: Bool = false, preferredEncoding: String.Encoding? = nil) throws {
         let fileManager = FileManager()
         guard fileManager.itemExists(at: sourceURL) else {
             throw CocoaError(.fileReadNoSuchFile, userInfo: [NSFilePathErrorKey: sourceURL.path])
@@ -42,12 +41,6 @@ extension FileManager {
             default: return false
             }
         }
-        var totalUnitCount = Int64(0)
-        if let progress = progress {
-            totalUnitCount = sortedEntries.reduce(0, { $0 + archive.totalUnitCountForReading($1) })
-            progress.totalUnitCount = totalUnitCount
-        }
-
         for entry in sortedEntries {
             let path = preferredEncoding == nil ? entry.path : entry.path(using: preferredEncoding!)
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
@@ -55,13 +48,8 @@ extension FileManager {
                 throw CocoaError(.fileReadInvalidFileName,
                                  userInfo: [NSFilePathErrorKey: destinationEntryURL.path])
             }
-            if let progress = progress {
-                let entryProgress = archive.makeProgressForReading(entry)
-                progress.addChild(entryProgress, withPendingUnitCount: entryProgress.totalUnitCount)
-                _ = try archive.extract(entry, to: destinationEntryURL, skipCRC32: skipCRC32, progress: entryProgress)
-            } else {
-                _ = try archive.extract(entry, to: destinationEntryURL, skipCRC32: skipCRC32)
-            }
+            
+            _ = try archive.extract(entry, to: destinationEntryURL, skipCRC32: skipCRC32)
         }
     }
 
@@ -113,71 +101,6 @@ extension FileManager {
             return entryType == .directory ? defaultDirectoryPermissions : defaultFilePermissions
         }
     }
-//
-//    class func externalFileAttributesForEntry(of type: Entry.EntryType, permissions: UInt16) -> UInt32 {
-//        var typeInt: UInt16
-//        switch type {
-//        case .file:
-//            typeInt = UInt16(S_IFREG)
-//        case .directory:
-//            typeInt = UInt16(S_IFDIR)
-//        case .symlink:
-//            typeInt = UInt16(S_IFLNK)
-//        }
-//        var externalFileAttributes = UInt32(typeInt|UInt16(permissions))
-//        externalFileAttributes = (externalFileAttributes << 16)
-//        return externalFileAttributes
-//    }
-//
-//    class func permissionsForItem(at URL: URL) throws -> UInt16 {
-//        let fileManager = FileManager()
-//        let entryFileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: URL.path)
-//        var fileStat = stat()
-//        lstat(entryFileSystemRepresentation, &fileStat)
-//        let permissions = fileStat.st_mode
-//        return UInt16(permissions)
-//    }
-//
-//    class func fileModificationDateTimeForItem(at url: URL) throws -> Date {
-//        let fileManager = FileManager()
-//        guard fileManager.itemExists(at: url) else {
-//            throw CocoaError(.fileReadNoSuchFile, userInfo: [NSFilePathErrorKey: url.path])
-//        }
-//        let entryFileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
-//        var fileStat = stat()
-//        lstat(entryFileSystemRepresentation, &fileStat)
-//        #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
-//        let modTimeSpec = fileStat.st_mtimespec
-//        #else
-//        let modTimeSpec = fileStat.st_mtim
-//        #endif
-//
-//        let timeStamp = TimeInterval(modTimeSpec.tv_sec) + TimeInterval(modTimeSpec.tv_nsec)/1000000000.0
-//        let modDate = Date(timeIntervalSince1970: timeStamp)
-//        return modDate
-//    }
-//
-//    class func fileSizeForItem(at url: URL) throws -> UInt32 {
-//        let fileManager = FileManager()
-//        guard fileManager.itemExists(at: url) else {
-//            throw CocoaError(.fileReadNoSuchFile, userInfo: [NSFilePathErrorKey: url.path])
-//        }
-//        let entryFileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
-//        var fileStat = stat()
-//        lstat(entryFileSystemRepresentation, &fileStat)
-//        return UInt32(fileStat.st_size)
-//    }
-//
-//    class func typeForItem(at url: URL) throws -> Entry.EntryType {
-//        let fileManager = FileManager()
-//        guard url.isFileURL, fileManager.itemExists(at: url) else {
-//            throw CocoaError(.fileReadNoSuchFile, userInfo: [NSFilePathErrorKey: url.path])
-//        }
-//        let entryFileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
-//        var fileStat = stat()
-//        lstat(entryFileSystemRepresentation, &fileStat)
-//        return Entry.EntryType(mode: fileStat.st_mode)
-//    }
 }
 
 extension Date {
@@ -198,34 +121,6 @@ extension Date {
         self = Date(timeIntervalSince1970: TimeInterval(time))
     }
 
-//    var fileModificationDateTime: (UInt16, UInt16) {
-//        return (self.fileModificationDate, self.fileModificationTime)
-//    }
-
-//    var fileModificationDate: UInt16 {
-//        var time = time_t(self.timeIntervalSince1970)
-//        guard let unixTime = gmtime(&time) else {
-//            return 0
-//        }
-//        var year = unixTime.pointee.tm_year + 1900 // UNIX time structs count in "years since 1900".
-//        // ZIP uses the MSDOS date format which has a valid range of 1980 - 2099.
-//        year = year >= 1980 ? year : 1980
-//        year = year <= 2099 ? year : 2099
-//        let month = unixTime.pointee.tm_mon + 1 // UNIX time struct month entries are zero based.
-//        let day = unixTime.pointee.tm_mday
-//        return (UInt16)(day + ((month) * 32) +  ((year - 1980) * 512))
-//    }
-//
-//    var fileModificationTime: UInt16 {
-//        var time = time_t(self.timeIntervalSince1970)
-//        guard let unixTime = gmtime(&time) else {
-//            return 0
-//        }
-//        let hour = unixTime.pointee.tm_hour
-//        let minute = unixTime.pointee.tm_min
-//        let second = unixTime.pointee.tm_sec
-//        return (UInt16)((second/2) + (minute * 32) + (hour * 2048))
-//    }
 }
 
 #if swift(>=4.2)

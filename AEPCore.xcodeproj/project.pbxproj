@@ -71,12 +71,9 @@
 		78A6426C249020D1004B4E46 /* FileManager+ZIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64264249020D0004B4E46 /* FileManager+ZIP.swift */; };
 		78A6426D249020D1004B4E46 /* Archive+Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64265249020D0004B4E46 /* Archive+Reading.swift */; };
 		78A6426E249020D1004B4E46 /* Archive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64266249020D0004B4E46 /* Archive.swift */; };
-		78A6426F249020D1004B4E46 /* Archive+Writing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64267249020D0004B4E46 /* Archive+Writing.swift */; };
 		78A64270249020D1004B4E46 /* Data+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64268249020D0004B4E46 /* Data+Serialization.swift */; };
 		78A64271249020D1004B4E46 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64269249020D0004B4E46 /* Entry.swift */; };
 		78A64272249020D1004B4E46 /* Data+Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6426A249020D0004B4E46 /* Data+Compression.swift */; };
-		78A64273249020D1004B4E46 /* Archive+MemoryFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6426B249020D1004B4E46 /* Archive+MemoryFile.swift */; };
-		78A64276249020E1004B4E46 /* shim.h in Headers */ = {isa = PBXBuildFile; fileRef = 78A64275249020E1004B4E46 /* shim.h */; };
 		78D754D52437F92300DB9124 /* NamedKeyValueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D42437F92300DB9124 /* NamedKeyValueService.swift */; };
 		78D754D92437F93E00DB9124 /* NamedKeyValueStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */; };
 		78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */; };
@@ -176,13 +173,9 @@
 		78A64264249020D0004B4E46 /* FileManager+ZIP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileManager+ZIP.swift"; path = "Sources/ZipSources/ZIPFoundation/FileManager+ZIP.swift"; sourceTree = SOURCE_ROOT; };
 		78A64265249020D0004B4E46 /* Archive+Reading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Archive+Reading.swift"; path = "Sources/ZipSources/ZIPFoundation/Archive+Reading.swift"; sourceTree = SOURCE_ROOT; };
 		78A64266249020D0004B4E46 /* Archive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Archive.swift; path = Sources/ZipSources/ZIPFoundation/Archive.swift; sourceTree = SOURCE_ROOT; };
-		78A64267249020D0004B4E46 /* Archive+Writing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Archive+Writing.swift"; path = "Sources/ZipSources/ZIPFoundation/Archive+Writing.swift"; sourceTree = SOURCE_ROOT; };
 		78A64268249020D0004B4E46 /* Data+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Serialization.swift"; path = "Sources/ZipSources/ZIPFoundation/Data+Serialization.swift"; sourceTree = SOURCE_ROOT; };
 		78A64269249020D0004B4E46 /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entry.swift; path = Sources/ZipSources/ZIPFoundation/Entry.swift; sourceTree = SOURCE_ROOT; };
 		78A6426A249020D0004B4E46 /* Data+Compression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Compression.swift"; path = "Sources/ZipSources/ZIPFoundation/Data+Compression.swift"; sourceTree = SOURCE_ROOT; };
-		78A6426B249020D1004B4E46 /* Archive+MemoryFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Archive+MemoryFile.swift"; path = "Sources/ZipSources/ZIPFoundation/Archive+MemoryFile.swift"; sourceTree = SOURCE_ROOT; };
-		78A64274249020E1004B4E46 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = Sources/ZipSources/CZLib/module.modulemap; sourceTree = SOURCE_ROOT; };
-		78A64275249020E1004B4E46 /* shim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = shim.h; path = Sources/ZipSources/CZLib/shim.h; sourceTree = SOURCE_ROOT; };
 		78D754D42437F92300DB9124 /* NamedKeyValueService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueService.swift; sourceTree = "<group>"; };
 		78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStoreTest.swift; sourceTree = "<group>"; };
 		78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStore.swift; sourceTree = "<group>"; };
@@ -395,12 +388,8 @@
 		78A64263249020C2004B4E46 /* Unzip */ = {
 			isa = PBXGroup;
 			children = (
-				78A64274249020E1004B4E46 /* module.modulemap */,
-				78A64275249020E1004B4E46 /* shim.h */,
 				78A64266249020D0004B4E46 /* Archive.swift */,
-				78A6426B249020D1004B4E46 /* Archive+MemoryFile.swift */,
 				78A64265249020D0004B4E46 /* Archive+Reading.swift */,
-				78A64267249020D0004B4E46 /* Archive+Writing.swift */,
 				78A6426A249020D0004B4E46 /* Data+Compression.swift */,
 				78A64268249020D0004B4E46 /* Data+Serialization.swift */,
 				78A64269249020D0004B4E46 /* Entry.swift */,
@@ -470,7 +459,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				21CAC0E72422917600C11388 /* AEPCore.h in Headers */,
-				78A64276249020E1004B4E46 /* shim.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,7 +581,6 @@
 				213C8BD72428822A009F780A /* EventListenerContainer.swift in Sources */,
 				785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */,
 				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
-				78A64273249020D1004B4E46 /* Archive+MemoryFile.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
 				78D754DF243BC34100DB9124 /* SystemInfoService.swift in Sources */,
 				78A64271249020D1004B4E46 /* Entry.swift in Sources */,
@@ -626,7 +613,6 @@
 				21F361A0246DE4B5009AB88B /* LifecycleMetrics.swift in Sources */,
 				78A6426C249020D1004B4E46 /* FileManager+ZIP.swift in Sources */,
 				78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */,
-				78A6426F249020D1004B4E46 /* Archive+Writing.swift in Sources */,
 				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
 				21F02C362477067900D25528 /* LaunchIDManager.swift in Sources */,
 				21F235BD24325A6200C3E59A /* EventHubConstants.swift in Sources */,

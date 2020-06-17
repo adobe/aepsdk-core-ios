@@ -142,43 +142,6 @@ public final class Archive: Sequence {
         setvbuf(self.archiveFile, nil, _IOFBF, Int(defaultPOSIXBufferSize))
     }
 
-    #if swift(>=5.0)
-//    var memoryFile: MemoryFile?
-
-    /// Initializes a new in-memory ZIP `Archive`.
-    ///
-    /// You can use this initalizer to create new in-memory archive files or to read and update existing ones.
-    ///
-    /// - Parameters:
-    ///   - data: `Data` object used as backing for in-memory archives.
-    ///   - mode: Access mode of the receiver.
-    ///   - preferredEncoding: Encoding for entry paths. Overrides the encoding specified in the archive.
-    ///                        This encoding is only used when _decoding_ paths from the receiver.
-    ///                        Paths of entries added with `addEntry` are always UTF-8 encoded.
-    /// - Returns: An in-memory archive initialized with passed in backing data.
-    /// - Note:
-    ///   - The backing `data` _must_ contain a valid ZIP archive for `AccessMode.read` and `AccessMode.update`.
-    ///   - The backing `data` _must_ be empty (or omitted) for `AccessMode.create`.
-//    public init?(data: Data = Data(), accessMode mode: AccessMode, preferredEncoding: String.Encoding? = nil) {
-//        guard let url = URL(string: "memory:"),
-//            let (archiveFile, memoryFile) = Archive.configureMemoryBacking(for: data, mode: mode) else {
-//            return nil
-//        }
-//
-//        self.url = url
-//        self.accessMode = mode
-//        self.preferredEncoding = preferredEncoding
-//        self.archiveFile = archiveFile
-//        self.memoryFile = memoryFile
-//        guard let endOfCentralDirectoryRecord = Archive.scanForEndOfCentralDirectoryRecord(in: archiveFile)
-//            else {
-//                fclose(self.archiveFile)
-//                return nil
-//        }
-//        self.endOfCentralDirectoryRecord = endOfCentralDirectoryRecord
-//    }
-    #endif
-
     deinit {
         fclose(self.archiveFile)
     }
@@ -288,19 +251,6 @@ public final class Archive: Sequence {
 }
 
 extension Archive {
-    /// The number of the work units that have to be performed when
-    /// removing `entry` from the receiver.
-    ///
-    /// - Parameter entry: The entry that will be removed.
-    /// - Returns: The number of the work units.
-//    public func totalUnitCountForRemoving(_ entry: Entry) -> Int64 {
-//        return Int64(self.endOfCentralDirectoryRecord.offsetToStartOfCentralDirectory
-//                   - UInt32(entry.localSize))
-//    }
-
-//    func makeProgressForRemoving(_ entry: Entry) -> Progress {
-//        return Progress(totalUnitCount: self.totalUnitCountForRemoving(entry))
-//    }
 
     /// The number of the work units that have to be performed when
     /// reading `entry` from the receiver.
@@ -319,28 +269,6 @@ extension Archive {
     func makeProgressForReading(_ entry: Entry) -> Progress {
         return Progress(totalUnitCount: self.totalUnitCountForReading(entry))
     }
-
-    /// The number of the work units that have to be performed when
-    /// adding the file at `url` to the receiver.
-    /// - Parameter entry: The entry that will be removed.
-    /// - Returns: The number of the work units.
-//    public func totalUnitCountForAddingItem(at url: URL) -> Int64 {
-//        var count = Int64(0)
-//        do {
-//            let type = try FileManager.typeForItem(at: url)
-//            switch type {
-//            case .file, .symlink:
-//                count = Int64(try FileManager.fileSizeForItem(at: url))
-//            case .directory:
-//                count = defaultDirectoryUnitCount
-//            }
-//        } catch { count = -1 }
-//        return count
-//    }
-
-//    func makeProgressForAddingItem(at url: URL) -> Progress {
-//        return Progress(totalUnitCount: self.totalUnitCountForAddingItem(at: url))
-//    }
 }
 
 extension Archive.EndOfCentralDirectoryRecord {
