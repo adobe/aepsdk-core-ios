@@ -57,7 +57,10 @@ extension URL {
         
         components.queryItems = queryItems
         
-        guard let url = components.url else { return nil }
+        guard let url = components.url else {
+            // TODO: Add log for failure
+            return nil
+        }
         return url
     }
     
@@ -77,7 +80,10 @@ extension URL {
             URLQueryItem(name: IdentityConstants.RESPONSE_KEY_MID, value: mid.midString)
         ]
 
-        guard let url = components.url else { return nil }
+        guard let url = components.url else {
+            // TODO: Add log for failure
+            return nil
+        }
         return url
     }
 }
