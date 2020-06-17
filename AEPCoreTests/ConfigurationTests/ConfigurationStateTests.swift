@@ -389,13 +389,13 @@ class ConfigurationStateTests: XCTestCase {
                                                 "analytics.server": "old-server.com"]
         configState.updateWith(newConfig: existingConfig)
         
-
         // test
         configState.updateWith(programmaticConfig: ["analytics.rsids": "updated-dev-rsid"])
 
         // verify
         XCTAssertEqual("updated-dev-rsid", configState.currentConfiguration["__dev__analytics.rsids"] as? String)
         XCTAssertEqual("rsid1,rsid2", configState.currentConfiguration["analytics.rsids"] as? String)
+        XCTAssertEqual("updated-dev-rsid", configState.environmentAwareConfiguration["analytics.rsids"] as? String)
     }
 
     // MARK: updateConfigWith(appId) tests
