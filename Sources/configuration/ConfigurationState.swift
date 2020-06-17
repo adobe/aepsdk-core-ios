@@ -18,10 +18,9 @@ class ConfigurationState {
     let configDownloader: ConfigurationDownloadable
     private var downloadedAppIds = Set<String>() // a set of appIds, if an appId is present then we have downloaded and applied the config
     
-    private(set) var currentConfiguration = [String: Any]() {
-        didSet {
-            currentConfiguration = applyEnvironmentConfig()
-        }
+    private(set) var currentConfiguration = [String: Any]()
+    var environmentAwareConfiguration: [String: Any] {
+        return computeEnvironmentConfig(config: currentConfiguration)
     }
     private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
         set {
@@ -72,10 +71,13 @@ class ConfigurationState {
     /// Updates the programmatic config, then applies these changes to the current configuration
     /// - Parameter programmaticConfig: programmatic configuration to be applied
     func updateWith(programmaticConfig: [String: Any]) {
+        // Map any config keys to their correct environment key
+        let mappedEnvironmentKeyConfig = mapToBuildEnvironmentKeys(programmaticConfig: programmaticConfig)
+        
         // Any existing programmatic configuration updates are retrieved from persistence.
         // New configuration updates are applied over the existing persisted programmatic configurations
         // New programmatic configuration updates are saved to persistence.
-        programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: programmaticConfig) ?? [:]) { (_, updated) in updated }
+        programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: mappedEnvironmentKeyConfig) ?? [:]) { (_, updated) in updated }
         
         // The current configuration is updated with these new programmatic configuration changes.
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
@@ -125,22 +127,37 @@ class ConfigurationState {
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
     
-    /// Inspects the build environment config value and updates any applicable values in the configuration
-    private func applyEnvironmentConfig() -> [String: Any] {
-        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return currentConfiguration }
-        var currentConfigCopy = currentConfiguration
-
-        // Only need to process config keys who do not have the environment prefix
-        for key in currentConfigCopy.keys
-            where !key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER) {
+    /// Computes the environment aware configuration based on `config`
+    /// - Parameter config: The current configuration
+    /// - Returns: A configuration with the correct values for each key given the build environment, while also removing all keys prefix with `ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER`
+    func computeEnvironmentConfig(config: [String: Any]) -> [String: Any] {
+        // Remove all __env__ keys, only need to process config keys who do not have the environment prefix
+        var environmentAwareConfig = currentConfiguration.filter({!$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER)})
+        
+        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return environmentAwareConfig }
+        
+        for key in environmentAwareConfig.keys  {
                 let environmentKey = keyForEnvironment(key: key, environment: buildEnvironment)
                 // If config value for the current build environment exists, replace `key` value with `environmentKey` value
                 if let environmentValue = currentConfiguration[environmentKey] {
-                    currentConfigCopy[key] = environmentValue
+                    environmentAwareConfig[key] = environmentValue
                 }
         }
+        
+        return environmentAwareConfig
+    }
+    
+    func mapToBuildEnvironmentKeys(programmaticConfig: [String: Any]) -> [String: Any] {
+        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return programmaticConfig }
 
-        return currentConfigCopy
+        var mappedConfig = [String: Any]()
+        for (key, value) in programmaticConfig {
+            let environmentKey = keyForEnvironment(key: key, environment: buildEnvironment)
+            let keyToUse = currentConfiguration[environmentKey] != nil ? environmentKey : key
+            mappedConfig[keyToUse] = value
+        }
+        
+        return mappedConfig
     }
     
     /// Formats a configuration key with the build environment prefix
