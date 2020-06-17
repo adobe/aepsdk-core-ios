@@ -28,18 +28,14 @@ extension FileManager {
         guard fileManager.itemExists(at: sourceURL) else {
             throw CocoaError(.fileReadNoSuchFile, userInfo: [NSFilePathErrorKey: sourceURL.path])
         }
-        guard let archive = Archive(url: sourceURL, accessMode: .read, preferredEncoding: preferredEncoding) else {
+        guard let archive = Archive(url: sourceURL, preferredEncoding: preferredEncoding) else {
             throw Archive.ArchiveError.unreadableArchive
         }
         // Defer extraction of symlinks until all files & directories have been created.
         // This is necessary because we can't create links to files that haven't been created yet.
         let sortedEntries = archive.sorted { (left, right) -> Bool in
-            switch (left.type, right.type) {
-            case (.directory, .file): return true
-            case (.directory, .symlink): return true
-            case (.file, .symlink): return true
-            default: return false
-            }
+            // TODO: - Look into removing this
+            return false
         }
         for entry in sortedEntries {
             let path = preferredEncoding == nil ? entry.path : entry.path(using: preferredEncoding!)
@@ -72,10 +68,9 @@ extension FileManager {
 
     class func attributes(from entry: Entry) -> [FileAttributeKey: Any] {
         let centralDirectoryStructure = entry.centralDirectoryStructure
-        let entryType = entry.type
         let fileTime = centralDirectoryStructure.lastModFileTime
         let fileDate = centralDirectoryStructure.lastModFileDate
-        let defaultPermissions = entryType == .directory ? defaultDirectoryPermissions : defaultFilePermissions
+        let defaultPermissions = defaultFilePermissions
         var attributes = [.posixPermissions: defaultPermissions] as [FileAttributeKey: Any]
         // Certain keys are not yet supported in swift-corelibs
         #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
@@ -85,20 +80,19 @@ extension FileManager {
         guard let osType = Entry.OSType(rawValue: UInt(versionMadeBy >> 8)) else { return attributes }
 
         let externalFileAttributes = centralDirectoryStructure.externalFileAttributes
-        let permissions = self.permissions(for: externalFileAttributes, osType: osType, entryType: entryType)
+        let permissions = self.permissions(for: externalFileAttributes, osType: osType)
         attributes[.posixPermissions] = NSNumber(value: permissions)
         return attributes
     }
 
-    class func permissions(for externalFileAttributes: UInt32, osType: Entry.OSType,
-                           entryType: Entry.EntryType) -> UInt16 {
+    class func permissions(for externalFileAttributes: UInt32, osType: Entry.OSType) -> UInt16 {
         switch osType {
         case .unix, .osx:
             let permissions = mode_t(externalFileAttributes >> 16) & (~S_IFMT)
-            let defaultPermissions = entryType == .directory ? defaultDirectoryPermissions : defaultFilePermissions
+            let defaultPermissions = defaultFilePermissions
             return permissions == 0 ? defaultPermissions : UInt16(permissions)
         default:
-            return entryType == .directory ? defaultDirectoryPermissions : defaultFilePermissions
+            return defaultFilePermissions
         }
     }
 }

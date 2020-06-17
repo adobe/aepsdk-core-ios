@@ -27,12 +27,12 @@ let dataDescriptorStructSignature = 0x08074b50
 let centralDirectoryStructSignature = 0x02014b50
 
 /// The compression method of an `Entry` in a ZIP `Archive`.
-public enum CompressionMethod: UInt16 {
-    /// Indicates that an `Entry` has no compression applied to its contents.
-    case none = 0
-    /// Indicates that contents of an `Entry` have been compressed with a zlib compatible Deflate algorithm.
-    case deflate = 8
-}
+//public enum CompressionMethod: UInt16 {
+//    /// Indicates that an `Entry` has no compression applied to its contents.
+//    case none = 0
+//    /// Indicates that contents of an `Entry` have been compressed with a zlib compatible Deflate algorithm.
+//    case deflate = 8
+//}
 
 /// A sequence of uncompressed or compressed ZIP entries.
 ///
@@ -83,17 +83,8 @@ public final class Archive: Sequence {
         case cancelledOperation
     }
 
-    /// The access mode for an `Archive`.
-    public enum AccessMode: UInt {
-        /// Indicates that a newly instantiated `Archive` should create its backing file.
-        case create
-        /// Indicates that a newly instantiated `Archive` should read from an existing backing file.
-        case read
-        /// Indicates that a newly instantiated `Archive` should update an existing backing file.
-        case update
-    }
-
     struct EndOfCentralDirectoryRecord: DataSerializable {
+
         let endOfCentralDirectorySignature = UInt32(endOfCentralDirectoryStructSignature)
         let numberOfDisk: UInt16
         let numberOfDiskStart: UInt16
@@ -110,7 +101,6 @@ public final class Archive: Sequence {
     /// URL of an Archive's backing file.
     public let url: URL
     /// Access mode for an archive file.
-    public let accessMode: AccessMode
     var archiveFile: UnsafeMutablePointer<FILE>
     var endOfCentralDirectoryRecord: EndOfCentralDirectoryRecord
 
@@ -130,11 +120,10 @@ public final class Archive: Sequence {
     ///   - The file URL _must_ point to an existing file for `AccessMode.read`.
     ///   - The file URL _must_ point to a non-existing file for `AccessMode.create`.
     ///   - The file URL _must_ point to an existing file for `AccessMode.update`.
-    public init?(url: URL, accessMode mode: AccessMode, preferredEncoding: String.Encoding? = nil) {
+    public init?(url: URL, preferredEncoding: String.Encoding? = nil) {
         self.url = url
-        self.accessMode = mode
         self.preferredEncoding = preferredEncoding
-        guard let (archiveFile, endOfCentralDirectoryRecord) = Archive.configureFileBacking(for: url, mode: mode) else {
+        guard let (archiveFile, endOfCentralDirectoryRecord) = Archive.configureFileBacking(for: url) else {
             return nil
         }
         self.archiveFile = archiveFile
@@ -162,8 +151,8 @@ public final class Archive: Sequence {
             var dataDescriptor: DataDescriptor?
             if centralDirStruct.usesDataDescriptor {
                 let additionalSize = Int(localFileHeader.fileNameLength + localFileHeader.extraFieldLength)
-                let isCompressed = centralDirStruct.compressionMethod != CompressionMethod.none.rawValue
-                let dataSize = isCompressed ? centralDirStruct.compressedSize : centralDirStruct.uncompressedSize
+//                let isCompressed = centralDirStruct.compressionMethod != CompressionMethod.none.rawValue
+                let dataSize = centralDirStruct.compressedSize
                 let descriptorPosition = offset + LocalFileHeader.size + additionalSize + Int(dataSize)
                 dataDescriptor = Data.readStruct(from: self.archiveFile, at: descriptorPosition)
             }
@@ -187,47 +176,24 @@ public final class Archive: Sequence {
     ///
     /// - Parameter path: A relative file path identifiying the corresponding `Entry`.
     /// - Returns: An `Entry` with the given `path`. Otherwise, `nil`.
-    public subscript(path: String) -> Entry? {
-        if let encoding = preferredEncoding {
-            return self.filter { $0.path(using: encoding) == path }.first
-        }
-        return self.filter { $0.path == path }.first
-    }
+//    public subscript(path: String) -> Entry? {
+//        if let encoding = preferredEncoding {
+//            return self.filter { $0.path(using: encoding) == path }.first
+//        }
+//        return self.filter { $0.path == path }.first
+//    }
 
     // MARK: - Helpers
 
-    private static func configureFileBacking(for url: URL, mode: AccessMode)
+    private static func configureFileBacking(for url: URL)
         -> (UnsafeMutablePointer<FILE>, EndOfCentralDirectoryRecord)? {
         let fileManager = FileManager()
-        switch mode {
-        case .read:
-            let fileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
-            guard let archiveFile = fopen(fileSystemRepresentation, "rb"),
-                let endOfCentralDirectoryRecord = Archive.scanForEndOfCentralDirectoryRecord(in: archiveFile) else {
-                    return nil
-            }
-            return (archiveFile, endOfCentralDirectoryRecord)
-        case .create:
-            let endOfCentralDirectoryRecord = EndOfCentralDirectoryRecord(numberOfDisk: 0, numberOfDiskStart: 0,
-                                                                          totalNumberOfEntriesOnDisk: 0,
-                                                                          totalNumberOfEntriesInCentralDirectory: 0,
-                                                                          sizeOfCentralDirectory: 0,
-                                                                          offsetToStartOfCentralDirectory: 0,
-                                                                          zipFileCommentLength: 0,
-                                                                          zipFileCommentData: Data())
-            do {
-                try endOfCentralDirectoryRecord.data.write(to: url, options: .withoutOverwriting)
-            } catch { return nil }
-            fallthrough
-        case .update:
-            let fileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
-            guard let archiveFile = fopen(fileSystemRepresentation, "rb+"),
-                let endOfCentralDirectoryRecord = Archive.scanForEndOfCentralDirectoryRecord(in: archiveFile) else {
-                    return nil
-            }
-            fseek(archiveFile, 0, SEEK_SET)
-            return (archiveFile, endOfCentralDirectoryRecord)
+        let fileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
+        guard let archiveFile = fopen(fileSystemRepresentation, "rb"),
+            let endOfCentralDirectoryRecord = Archive.scanForEndOfCentralDirectoryRecord(in: archiveFile) else {
+                return nil
         }
+        return (archiveFile, endOfCentralDirectoryRecord)
     }
 
     private static func scanForEndOfCentralDirectoryRecord(in file: UnsafeMutablePointer<FILE>)
@@ -250,26 +216,26 @@ public final class Archive: Sequence {
     }
 }
 
-extension Archive {
-
-    /// The number of the work units that have to be performed when
-    /// reading `entry` from the receiver.
-    ///
-    /// - Parameter entry: The entry that will be read.
-    /// - Returns: The number of the work units.
-    public func totalUnitCountForReading(_ entry: Entry) -> Int64 {
-        switch entry.type {
-        case .file, .symlink:
-            return Int64(entry.uncompressedSize)
-        case .directory:
-            return defaultDirectoryUnitCount
-        }
-    }
-
-    func makeProgressForReading(_ entry: Entry) -> Progress {
-        return Progress(totalUnitCount: self.totalUnitCountForReading(entry))
-    }
-}
+//extension Archive {
+//
+//    /// The number of the work units that have to be performed when
+//    /// reading `entry` from the receiver.
+//    ///
+//    /// - Parameter entry: The entry that will be read.
+//    /// - Returns: The number of the work units.
+//    public func totalUnitCountForReading(_ entry: Entry) -> Int64 {
+//        switch entry.type {
+//        case .file, .symlink:
+//            return Int64(entry.uncompressedSize)
+//        case .directory:
+//            return defaultDirectoryUnitCount
+//        }
+//    }
+//
+//    func makeProgressForReading(_ entry: Entry) -> Progress {
+//        return Progress(totalUnitCount: self.totalUnitCountForReading(entry))
+//    }
+//}
 
 extension Archive.EndOfCentralDirectoryRecord {
     var data: Data {
@@ -309,18 +275,18 @@ extension Archive.EndOfCentralDirectoryRecord {
         self.zipFileCommentData = commentData
     }
 
-    init(record: Archive.EndOfCentralDirectoryRecord,
-         numberOfEntriesOnDisk: UInt16,
-         numberOfEntriesInCentralDirectory: UInt16,
-         updatedSizeOfCentralDirectory: UInt32,
-         startOfCentralDirectory: UInt32) {
-        numberOfDisk = record.numberOfDisk
-        numberOfDiskStart = record.numberOfDiskStart
-        totalNumberOfEntriesOnDisk = numberOfEntriesOnDisk
-        totalNumberOfEntriesInCentralDirectory = numberOfEntriesInCentralDirectory
-        sizeOfCentralDirectory = updatedSizeOfCentralDirectory
-        offsetToStartOfCentralDirectory = startOfCentralDirectory
-        zipFileCommentLength = record.zipFileCommentLength
-        zipFileCommentData = record.zipFileCommentData
-    }
+//    init(record: Archive.EndOfCentralDirectoryRecord,
+//         numberOfEntriesOnDisk: UInt16,
+//         numberOfEntriesInCentralDirectory: UInt16,
+//         updatedSizeOfCentralDirectory: UInt32,
+//         startOfCentralDirectory: UInt32) {
+//        numberOfDisk = record.numberOfDisk
+//        numberOfDiskStart = record.numberOfDiskStart
+//        totalNumberOfEntriesOnDisk = numberOfEntriesOnDisk
+//        totalNumberOfEntriesInCentralDirectory = numberOfEntriesInCentralDirectory
+//        sizeOfCentralDirectory = updatedSizeOfCentralDirectory
+//        offsetToStartOfCentralDirectory = startOfCentralDirectory
+//        zipFileCommentLength = record.zipFileCommentLength
+//        zipFileCommentData = record.zipFileCommentData
+//    }
 }

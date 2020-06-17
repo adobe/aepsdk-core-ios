@@ -15,27 +15,27 @@ import CoreFoundation
 ///
 /// You can retrieve instances of `Entry` from an `Archive` via subscripting or iteration.
 /// Entries are identified by their `path`.
-public struct Entry: Equatable {
-    /// The type of an `Entry` in a ZIP `Archive`.
-    public enum EntryType: Int {
-        /// Indicates a regular file.
-        case file
-        /// Indicates a directory.
-        case directory
-        /// Indicates a symbolic link.
-        case symlink
-
-        init(mode: mode_t) {
-            switch mode & S_IFMT {
-            case S_IFDIR:
-                self = .directory
-            case S_IFLNK:
-                self = .symlink
-            default:
-                self = .file
-            }
-        }
-    }
+public struct Entry {
+//    /// The type of an `Entry` in a ZIP `Archive`.
+//    public enum EntryType: Int {
+//        /// Indicates a regular file.
+//        case file
+//        /// Indicates a directory.
+//        case directory
+//        /// Indicates a symbolic link.
+//        case symlink
+//
+//        init(mode: mode_t) {
+//            switch mode & S_IFMT {
+//            case S_IFDIR:
+//                self = .directory
+//            case S_IFLNK:
+//                self = .symlink
+//            default:
+//                self = .file
+//            }
+//        }
+//    }
 
     enum OSType: UInt {
         case msdos = 0
@@ -122,58 +122,58 @@ public struct Entry: Equatable {
     /// The `CRC32` checksum of the receiver.
     ///
     /// - Note: Always returns `0` for entries of type `EntryType.directory`.
-    public var checksum: CRC32 {
-        var checksum = self.centralDirectoryStructure.crc32
-        if self.centralDirectoryStructure.usesDataDescriptor {
-            guard let dataDescriptor = self.dataDescriptor else { return 0 }
-            checksum = dataDescriptor.crc32
-        }
-        return checksum
-    }
-    /// The `EntryType` of the receiver.
-    public var type: EntryType {
-        // OS Type is stored in the upper byte of versionMadeBy
-        let osTypeRaw = self.centralDirectoryStructure.versionMadeBy >> 8
-        let osType = OSType(rawValue: UInt(osTypeRaw)) ?? .unused
-        var isDirectory = self.path.hasSuffix("/")
-        switch osType {
-        case .unix, .osx:
-            let mode = mode_t(self.centralDirectoryStructure.externalFileAttributes >> 16) & S_IFMT
-            switch mode {
-            case S_IFREG:
-                return .file
-            case S_IFDIR:
-                return .directory
-            case S_IFLNK:
-                return .symlink
-            default:
-                return .file
-            }
-        case .msdos:
-            isDirectory = isDirectory || ((centralDirectoryStructure.externalFileAttributes >> 4) == 0x01)
-            fallthrough // For all other OSes we can only guess based on the directory suffix char
-        default: return isDirectory ? .directory : .file
-        }
-    }
+//    public var checksum: CRC32 {
+//        var checksum = self.centralDirectoryStructure.crc32
+//        if self.centralDirectoryStructure.usesDataDescriptor {
+//            guard let dataDescriptor = self.dataDescriptor else { return 0 }
+//            checksum = dataDescriptor.crc32
+//        }
+//        return checksum
+//    }
+//    /// The `EntryType` of the receiver.
+//    public var type: EntryType {
+//        // OS Type is stored in the upper byte of versionMadeBy
+//        let osTypeRaw = self.centralDirectoryStructure.versionMadeBy >> 8
+//        let osType = OSType(rawValue: UInt(osTypeRaw)) ?? .unused
+//        var isDirectory = self.path.hasSuffix("/")
+//        switch osType {
+//        case .unix, .osx:
+//            let mode = mode_t(self.centralDirectoryStructure.externalFileAttributes >> 16) & S_IFMT
+//            switch mode {
+//            case S_IFREG:
+//                return .file
+//            case S_IFDIR:
+//                return .directory
+//            case S_IFLNK:
+//                return .symlink
+//            default:
+//                return .file
+//            }
+//        case .msdos:
+//            isDirectory = isDirectory || ((centralDirectoryStructure.externalFileAttributes >> 4) == 0x01)
+//            fallthrough // For all other OSes we can only guess based on the directory suffix char
+//        default: return isDirectory ? .directory : .file
+//        }
+//    }
     /// The size of the receiver's compressed data.
-    public var compressedSize: Int {
-        return Int(dataDescriptor?.compressedSize ?? localFileHeader.compressedSize)
-    }
-    /// The size of the receiver's uncompressed data.
-    public var uncompressedSize: Int {
-        return Int(dataDescriptor?.uncompressedSize ?? localFileHeader.uncompressedSize)
-    }
+//    public var compressedSize: Int {
+//        return Int(dataDescriptor?.compressedSize ?? localFileHeader.compressedSize)
+//    }
+//    /// The size of the receiver's uncompressed data.
+//    public var uncompressedSize: Int {
+//        return Int(dataDescriptor?.uncompressedSize ?? localFileHeader.uncompressedSize)
+//    }
     /// The combined size of the local header, the data and the optional data descriptor.
-    var localSize: Int {
-        let localFileHeader = self.localFileHeader
-        var extraDataLength = Int(localFileHeader.fileNameLength)
-        extraDataLength += Int(localFileHeader.extraFieldLength)
-        var size = LocalFileHeader.size + extraDataLength
-        let isCompressed = localFileHeader.compressionMethod != CompressionMethod.none.rawValue
-        size += isCompressed ? self.compressedSize : self.uncompressedSize
-        size += self.dataDescriptor != nil ? DataDescriptor.size : 0
-        return size
-    }
+//    var localSize: Int {
+//        let localFileHeader = self.localFileHeader
+//        var extraDataLength = Int(localFileHeader.fileNameLength)
+//        extraDataLength += Int(localFileHeader.extraFieldLength)
+//        var size = LocalFileHeader.size + extraDataLength
+//        let isCompressed = localFileHeader.compressionMethod != CompressionMethod.none.rawValue
+//        size += isCompressed ? self.compressedSize : self.uncompressedSize
+//        size += self.dataDescriptor != nil ? DataDescriptor.size : 0
+//        return size
+//    }
     var dataOffset: Int {
         var dataOffset = Int(self.centralDirectoryStructure.relativeOffsetOfLocalHeader)
         dataOffset += LocalFileHeader.size
@@ -185,12 +185,12 @@ public struct Entry: Equatable {
     let localFileHeader: LocalFileHeader
     let dataDescriptor: DataDescriptor?
 
-    public static func == (lhs: Entry, rhs: Entry) -> Bool {
-        return lhs.path == rhs.path
-            && lhs.localFileHeader.crc32 == rhs.localFileHeader.crc32
-            && lhs.centralDirectoryStructure.relativeOffsetOfLocalHeader
-            == rhs.centralDirectoryStructure.relativeOffsetOfLocalHeader
-    }
+//    public static func == (lhs: Entry, rhs: Entry) -> Bool {
+//        return lhs.path == rhs.path
+//            && lhs.localFileHeader.crc32 == rhs.localFileHeader.crc32
+//            && lhs.centralDirectoryStructure.relativeOffsetOfLocalHeader
+//            == rhs.centralDirectoryStructure.relativeOffsetOfLocalHeader
+//    }
 
     init?(centralDirectoryStructure: CentralDirectoryStructure,
           localFileHeader: LocalFileHeader,
@@ -335,50 +335,50 @@ extension Entry.CentralDirectoryStructure {
         self.fileCommentData = additionalData.subdata(in: subRangeStart..<subRangeEnd)
     }
 
-    init(localFileHeader: Entry.LocalFileHeader, fileAttributes: UInt32, relativeOffset: UInt32) {
-        versionMadeBy = UInt16(789)
-        versionNeededToExtract = localFileHeader.versionNeededToExtract
-        generalPurposeBitFlag = localFileHeader.generalPurposeBitFlag
-        compressionMethod = localFileHeader.compressionMethod
-        lastModFileTime = localFileHeader.lastModFileTime
-        lastModFileDate = localFileHeader.lastModFileDate
-        crc32 = localFileHeader.crc32
-        compressedSize = localFileHeader.compressedSize
-        uncompressedSize = localFileHeader.uncompressedSize
-        fileNameLength = localFileHeader.fileNameLength
-        extraFieldLength = UInt16(0)
-        fileCommentLength = UInt16(0)
-        diskNumberStart = UInt16(0)
-        internalFileAttributes = UInt16(0)
-        externalFileAttributes = fileAttributes
-        relativeOffsetOfLocalHeader = relativeOffset
-        fileNameData = localFileHeader.fileNameData
-        extraFieldData = Data()
-        fileCommentData = Data()
-    }
-
-    init(centralDirectoryStructure: Entry.CentralDirectoryStructure, offset: UInt32) {
-        let relativeOffset = centralDirectoryStructure.relativeOffsetOfLocalHeader - offset
-        relativeOffsetOfLocalHeader = relativeOffset
-        versionMadeBy = centralDirectoryStructure.versionMadeBy
-        versionNeededToExtract = centralDirectoryStructure.versionNeededToExtract
-        generalPurposeBitFlag = centralDirectoryStructure.generalPurposeBitFlag
-        compressionMethod = centralDirectoryStructure.compressionMethod
-        lastModFileTime = centralDirectoryStructure.lastModFileTime
-        lastModFileDate = centralDirectoryStructure.lastModFileDate
-        crc32 = centralDirectoryStructure.crc32
-        compressedSize = centralDirectoryStructure.compressedSize
-        uncompressedSize = centralDirectoryStructure.uncompressedSize
-        fileNameLength = centralDirectoryStructure.fileNameLength
-        extraFieldLength = centralDirectoryStructure.extraFieldLength
-        fileCommentLength = centralDirectoryStructure.fileCommentLength
-        diskNumberStart = centralDirectoryStructure.diskNumberStart
-        internalFileAttributes = centralDirectoryStructure.internalFileAttributes
-        externalFileAttributes = centralDirectoryStructure.externalFileAttributes
-        fileNameData = centralDirectoryStructure.fileNameData
-        extraFieldData = centralDirectoryStructure.extraFieldData
-        fileCommentData = centralDirectoryStructure.fileCommentData
-    }
+//    init(localFileHeader: Entry.LocalFileHeader, fileAttributes: UInt32, relativeOffset: UInt32) {
+//        versionMadeBy = UInt16(789)
+//        versionNeededToExtract = localFileHeader.versionNeededToExtract
+//        generalPurposeBitFlag = localFileHeader.generalPurposeBitFlag
+//        compressionMethod = localFileHeader.compressionMethod
+//        lastModFileTime = localFileHeader.lastModFileTime
+//        lastModFileDate = localFileHeader.lastModFileDate
+//        crc32 = localFileHeader.crc32
+//        compressedSize = localFileHeader.compressedSize
+//        uncompressedSize = localFileHeader.uncompressedSize
+//        fileNameLength = localFileHeader.fileNameLength
+//        extraFieldLength = UInt16(0)
+//        fileCommentLength = UInt16(0)
+//        diskNumberStart = UInt16(0)
+//        internalFileAttributes = UInt16(0)
+//        externalFileAttributes = fileAttributes
+//        relativeOffsetOfLocalHeader = relativeOffset
+//        fileNameData = localFileHeader.fileNameData
+//        extraFieldData = Data()
+//        fileCommentData = Data()
+//    }
+//
+//    init(centralDirectoryStructure: Entry.CentralDirectoryStructure, offset: UInt32) {
+//        let relativeOffset = centralDirectoryStructure.relativeOffsetOfLocalHeader - offset
+//        relativeOffsetOfLocalHeader = relativeOffset
+//        versionMadeBy = centralDirectoryStructure.versionMadeBy
+//        versionNeededToExtract = centralDirectoryStructure.versionNeededToExtract
+//        generalPurposeBitFlag = centralDirectoryStructure.generalPurposeBitFlag
+//        compressionMethod = centralDirectoryStructure.compressionMethod
+//        lastModFileTime = centralDirectoryStructure.lastModFileTime
+//        lastModFileDate = centralDirectoryStructure.lastModFileDate
+//        crc32 = centralDirectoryStructure.crc32
+//        compressedSize = centralDirectoryStructure.compressedSize
+//        uncompressedSize = centralDirectoryStructure.uncompressedSize
+//        fileNameLength = centralDirectoryStructure.fileNameLength
+//        extraFieldLength = centralDirectoryStructure.extraFieldLength
+//        fileCommentLength = centralDirectoryStructure.fileCommentLength
+//        diskNumberStart = centralDirectoryStructure.diskNumberStart
+//        internalFileAttributes = centralDirectoryStructure.internalFileAttributes
+//        externalFileAttributes = centralDirectoryStructure.externalFileAttributes
+//        fileNameData = centralDirectoryStructure.fileNameData
+//        extraFieldData = centralDirectoryStructure.extraFieldData
+//        fileCommentData = centralDirectoryStructure.fileCommentData
+//    }
 }
 
 extension Entry.DataDescriptor {

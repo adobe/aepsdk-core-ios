@@ -39,7 +39,7 @@ class UnzipperServiceTest: XCTestCase {
             XCTFail()
             return
         }
-        guard let archive = Archive(url: sourceURL, accessMode: .read) else {
+        guard let archive = Archive(url: sourceURL) else {
             XCTFail("Failed to create archive")
             return
         }
