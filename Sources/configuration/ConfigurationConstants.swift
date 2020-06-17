@@ -21,8 +21,6 @@ struct ConfigurationConstants {
     static let CONFIG_MANIFEST_APPID_KEY = "ADBMobileAppID"
     static let DOWNLOAD_RETRY_INTERVAL = TimeInterval(5) // 5 seconds
     static let API_TIMEOUT = TimeInterval(1) // 1 second
-    
-    static let BUILD_ENVIRONMENT = "build.environment"
     static let ENVIRONMENT_PREFIX_DELIMITER = "__"
 
     struct Keys {
@@ -35,6 +33,7 @@ struct ConfigurationConstants {
         static let PERSISTED_APPID = "config.appID"
         static let IS_INTERNAL_EVENT = "config.isinternalevent"
         static let CONFIG_CACHE_PREFIX = "cached.config."
+        static let BUILD_ENVIRONMENT = "build.environment"
     }
 
     struct Privacy {

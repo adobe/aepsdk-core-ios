@@ -72,7 +72,7 @@ class ConfigurationState {
     /// - Parameter programmaticConfig: programmatic configuration to be applied
     func updateWith(programmaticConfig: [String: Any]) {
         // Map any config keys to their correct environment key
-        let mappedEnvironmentKeyConfig = mapToBuildEnvironmentKeys(programmaticConfig: programmaticConfig)
+        let mappedEnvironmentKeyConfig = mapEnvironmentKeys(programmaticConfig: programmaticConfig)
         
         // Any existing programmatic configuration updates are retrieved from persistence.
         // New configuration updates are applied over the existing persisted programmatic configurations
@@ -133,12 +133,11 @@ class ConfigurationState {
     func computeEnvironmentConfig(config: [String: Any]) -> [String: Any] {
         // Remove all __env__ keys, only need to process config keys who do not have the environment prefix
         var environmentAwareConfig = currentConfiguration.filter({!$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER)})
-        
-        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return environmentAwareConfig }
+        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else { return environmentAwareConfig }
         
         for key in environmentAwareConfig.keys  {
                 let environmentKey = keyForEnvironment(key: key, environment: buildEnvironment)
-                // If config value for the current build environment exists, replace `key` value with `environmentKey` value
+                // If a config value for the current build environment exists, replace `key` value with `environmentKey` value
                 if let environmentValue = currentConfiguration[environmentKey] {
                     environmentAwareConfig[key] = environmentValue
                 }
@@ -147,8 +146,11 @@ class ConfigurationState {
         return environmentAwareConfig
     }
     
-    func mapToBuildEnvironmentKeys(programmaticConfig: [String: Any]) -> [String: Any] {
-        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return programmaticConfig }
+    /// Maps config keys to their respective build environment keys if they exist
+    /// - Parameter programmaticConfig: The programmatic config from the user
+    /// - Returns: `programmaticConfig` with all keys mapped to their build environment equivalent
+    func mapEnvironmentKeys(programmaticConfig: [String: Any]) -> [String: Any] {
+        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else { return programmaticConfig }
 
         var mappedConfig = [String: Any]()
         for (key, value) in programmaticConfig {

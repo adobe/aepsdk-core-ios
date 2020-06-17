@@ -614,20 +614,20 @@ class ConfigurationStateTests: XCTestCase {
     }
     
     /// Tests that when there are no environment specific keys, all existing keys are not modified.
-    func testMapToBuildEnvironmentKeysNoEnvKeys() {
+    func testMapEnvironmentKeysNoEnvKeys() {
         // setup
         let newConfig: [String: Any] = ["build.environment": "dev",
                                         "analytics.rsids": "rsid1,rsid2"]
         
         // test
-        let mappedConfig = configState.mapToBuildEnvironmentKeys(programmaticConfig: newConfig)
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: newConfig)
         
         // verify
         XCTAssertEqual(newConfig as? [String: String], mappedConfig as? [String: String])
     }
     
     /// Tests that when a config key that has a build specific key is mapped to the specific key
-    func testMapToBuildEnvironmentKeysDevEnvKeyExist() {
+    func testMapEnvironmentKeysDevEnvKeyExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
                                         "analytics.rsids": "rsid1,rsid2",
@@ -639,14 +639,14 @@ class ConfigurationStateTests: XCTestCase {
         let expected: [String: Any] = ["__dev__analytics.rsids": "updated,rsids"]
         
         // test
-        let mappedConfig = configState.mapToBuildEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids"])
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids"])
         
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
     
     /// Tests that when there is not matching environment specific key that the key is mapped correctly
-    func testMapToBuildEnvironmentKeysDevEnvKeyDoesNotExist() {
+    func testMapEnvironmentKeysDevEnvKeyDoesNotExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
                                         "analytics.rsids": "rsid1,rsid2",
@@ -658,14 +658,14 @@ class ConfigurationStateTests: XCTestCase {
         let expected: [String: Any] = ["analytics.server": "server.com"]
         
         // test
-        let mappedConfig = configState.mapToBuildEnvironmentKeys(programmaticConfig: ["analytics.server": "server.com"])
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.server": "server.com"])
         
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
     
     /// Tests that when keys that have environment specific keys and keys that do not are mapped correctly
-    func testMapToBuildEnvironmentKeysDevEnvKeyExistsAndDoesNotExist() {
+    func testMapEnvironmentKeysDevEnvKeyExistsAndDoesNotExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
                                         "analytics.rsids": "rsid1,rsid2",
@@ -678,7 +678,7 @@ class ConfigurationStateTests: XCTestCase {
         let expected: [String: Any] = ["__dev__analytics.rsids": "updated,rsids", "analytics.server": "server.com"]
         
         // test
-        let mappedConfig = configState.mapToBuildEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids", "analytics.server": "server.com"])
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids", "analytics.server": "server.com"])
         
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
