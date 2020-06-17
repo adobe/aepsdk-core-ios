@@ -505,5 +505,73 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertFalse(configState.updateWith(filePath: "Invalid/Path/ADBMobile.json"))
         XCTAssertEqual(cachedConfig.count, configState.currentConfiguration.count)
     }
+    
+    /// Tests that the correct config values are shared when the build environment value is empty
+    func testEnvironmentConfigEmpty() {
+        // setup
+        let newConfig: [String: Any] = ["build.environment": "",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"
+                                            ]
+
+        // test
+        configState.updateWith(newConfig: newConfig)
+
+        // verify
+        XCTAssertEqual("rsid1,rsid2", configState.currentConfiguration["analytics.rsids"] as? String)
+    }
+    
+    /// Tests that the correct config values are shared when the build environment value is prod
+    func testEnvironmentConfigProd() {
+        // setup
+        let newConfig: [String: Any] = ["build.environment": "prod",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"
+                                            ]
+
+        // test
+        configState.updateWith(newConfig: newConfig)
+
+        // verify
+        XCTAssertEqual("rsid1,rsid2", configState.currentConfiguration["analytics.rsids"] as? String)
+    }
+    
+    /// Tests that the correct config values are shared when the build environment value is staging
+    func testEnvironmentConfigStaging() {
+        // setup
+        let newConfig: [String: Any] = ["build.environment": "stage",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"
+                                            ]
+
+        // test
+        configState.updateWith(newConfig: newConfig)
+
+        // verify
+        XCTAssertEqual("stagersid1,stagersid2", configState.currentConfiguration["analytics.rsids"] as? String)
+    }
+    
+    /// Tests that the correct config values are shared when the build environment value is dev
+    func testEnvironmentConfigDev() {
+        // setup
+        let newConfig: [String: Any] = ["build.environment": "dev",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"
+                                            ]
+
+        // test
+        configState.updateWith(newConfig: newConfig)
+
+        // verify
+        XCTAssertEqual("devrsid1,devrsid2", configState.currentConfiguration["analytics.rsids"] as? String)
+    }
 
 }

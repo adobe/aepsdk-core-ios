@@ -18,7 +18,11 @@ class ConfigurationState {
     let configDownloader: ConfigurationDownloadable
     private var downloadedAppIds = Set<String>() // a set of appIds, if an appId is present then we have downloaded and applied the config
     
-    private(set) var currentConfiguration = [String: Any]()
+    private(set) var currentConfiguration = [String: Any]() {
+        didSet {
+            currentConfiguration = applyEnvironmentConfig()
+        }
+    }
     private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
         set {
             dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: newValue)
@@ -121,12 +125,32 @@ class ConfigurationState {
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
     
-    private func envAware() {
-        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return }
-        
-        for (key, value) in currentConfiguration
+    /// Inspects the build environment config value and updates any applicable values in the configuration
+    private func applyEnvironmentConfig() -> [String: Any] {
+        guard let buildEnvironment = currentConfiguration[ConfigurationConstants.BUILD_ENVIRONMENT] as? String else { return currentConfiguration }
+        var currentConfigCopy = currentConfiguration
+
+        // Only need to process config keys who do not have the environment prefix
+        for key in currentConfigCopy.keys
             where !key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER) {
-            
+                let environmentKey = keyForEnvironment(key: key, environment: buildEnvironment)
+                // If config value for the current build environment exists, replace `key` value with `environmentKey` value
+                if let environmentValue = currentConfiguration[environmentKey] {
+                    currentConfigCopy[key] = environmentValue
+                }
         }
+
+        return currentConfigCopy
+    }
+    
+    /// Formats a configuration key with the build environment prefix
+    /// - Parameters:
+    ///   - key: configuration key to be prefixed
+    ///   - env: the current build environment
+    /// - Returns: the configuration key formatted with the build environment prefix
+    private func keyForEnvironment(key: String, environment: String) -> String {
+        guard !environment.isEmpty else { return key }
+        let delimiter = ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER
+        return "\(delimiter)\(environment)\(delimiter)\(key)"
     }
 }
