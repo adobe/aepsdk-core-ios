@@ -31,8 +31,8 @@ private struct UserID: Codable {
 struct MobileIdentities: Codable {
     
     typealias SharedStateProvider = (String, Event) -> ((value: [String: Any]?, status: SharedStateStatus))
-    private var companyContexts: CompanyContext?
-    private var users: Users?
+    private var companyContexts: [CompanyContext]?
+    private var users: [Users]?
     
     static let NAMESPACE_MCID = "4"
     static let INTEGRATION_CODE = "integrationCode"
@@ -47,7 +47,7 @@ struct MobileIdentities: Codable {
     /// - Returns: a JSON formatted string with all the identities from various extensions
     mutating func getAllIdentifiers(event: Event, sharedStateProvider: SharedStateProvider) -> String? {
         if let companyContexts = getCompanyContexts(event: event, sharedStateProvider: sharedStateProvider) {
-            self.companyContexts = companyContexts
+            self.companyContexts = [companyContexts]
         }
         
         var userIds = [UserID]()
@@ -57,7 +57,7 @@ struct MobileIdentities: Codable {
         // TODO: Target
         
         if !userIds.isEmpty {
-            self.users = Users(userIDs: userIds)
+            self.users = [Users(userIDs: userIds)]
         }
         
         guard let encodedSelf = try? JSONEncoder().encode(self), let jsonString = String(data: encodedSelf, encoding: .utf8) else { return nil }

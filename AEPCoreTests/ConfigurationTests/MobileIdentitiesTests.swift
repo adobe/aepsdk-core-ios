@@ -99,7 +99,7 @@ class MobileIdentitiesTests: XCTestCase {
         }
         
         // verify
-        let expected = "{\"users\":{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]},\"companyContexts\":{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}}"
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
         XCTAssertEqual(expected, identifiers)
     }
     
@@ -119,7 +119,7 @@ class MobileIdentitiesTests: XCTestCase {
         }
         
         // verify
-        let expected = "{\"companyContexts\":{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}}"
+        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
         XCTAssertEqual(expected, identifiers)
     }
     
@@ -139,7 +139,7 @@ class MobileIdentitiesTests: XCTestCase {
         }
         
         // verify
-        let expected = "{\"users\":{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}}"
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}]}"
         XCTAssertEqual(expected, identifiers)
     }
 
