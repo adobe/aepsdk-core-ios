@@ -51,7 +51,7 @@ class MobileIdentitiesTests: XCTestCase {
         XCTAssertFalse(ready)
     }
     
-    /// Tests that when all shared states set to none that we return false
+    /// Tests that when all shared states set to none that we return true
     func testAreSharedStatesReadyAllNone() {
         // setup
         let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
@@ -62,7 +62,7 @@ class MobileIdentitiesTests: XCTestCase {
         }
         
         // verify
-        XCTAssertFalse(ready)
+        XCTAssertTrue(ready)
     }
     
     /// Tests that when all shared states are set that we return true
