@@ -88,7 +88,7 @@ class MobileIdentitiesTests: XCTestCase {
         
         // test
         var mobileIdentities = MobileIdentities()
-        let identifiers = mobileIdentities.getAllIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
             if extensionName == ConfigurationConstants.EXTENSION_NAME {
                 return (configurationSharedState, .set)
             } else if extensionName == IdentityConstants.EXTENSION_NAME {
@@ -97,6 +97,9 @@ class MobileIdentitiesTests: XCTestCase {
             
             return (nil, .set)
         }
+        
+        let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
+        let identifiers = String(data: encodedIdentities!, encoding: .utf8)
         
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
@@ -110,13 +113,16 @@ class MobileIdentitiesTests: XCTestCase {
         
         // test
         var mobileIdentities = MobileIdentities()
-        let identifiers = mobileIdentities.getAllIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
             if extensionName == ConfigurationConstants.EXTENSION_NAME {
                 return (configurationSharedState, .set)
             }
             
             return (nil, .set)
         }
+        
+        let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
+        let identifiers = String(data: encodedIdentities!, encoding: .utf8)
         
         // verify
         let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
@@ -130,13 +136,16 @@ class MobileIdentitiesTests: XCTestCase {
         
         // test
         var mobileIdentities = MobileIdentities()
-        let identifiers = mobileIdentities.getAllIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
              if extensionName == IdentityConstants.EXTENSION_NAME {
                 return (identitySharedState, .set)
             }
             
             return (nil, .set)
         }
+        
+        let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
+        let identifiers = String(data: encodedIdentities!, encoding: .utf8)
         
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}]}"
