@@ -13,7 +13,6 @@ import Foundation
 protocol DataSerializable {
     static var size: Int { get }
     init?(data: Data, additionalDataProvider: (Int) throws -> Data)
-    var data: Data { get }
 }
 
 extension Data {
@@ -41,25 +40,6 @@ extension Data {
         })
         return structure
     }
-
-//    static func consumePart(of size: Int, chunkSize: Int, skipCRC32: Bool = false,
-//                            provider: Provider, consumer: Consumer) throws -> CRC32 {
-//        let readInOneChunk = (size < chunkSize)
-//        var chunkSize = readInOneChunk ? size : chunkSize
-//        var checksum = CRC32(0)
-//        var bytesRead = 0
-//        while bytesRead < size {
-//            let remainingSize = size - bytesRead
-//            chunkSize = remainingSize < chunkSize ? remainingSize : chunkSize
-//            let data = try provider(bytesRead, chunkSize)
-//            try consumer(data)
-//            if !skipCRC32 {
-//                checksum = data.crc32(checksum: checksum)
-//            }
-//            bytesRead += chunkSize
-//        }
-//        return checksum
-//    }
 
     static func readChunk(of size: Int, from file: UnsafeMutablePointer<FILE>) throws -> Data {
         let alignment = MemoryLayout<UInt>.alignment

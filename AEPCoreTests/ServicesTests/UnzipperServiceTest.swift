@@ -46,14 +46,7 @@ class UnzipperServiceTest: XCTestCase {
         
         var destinationURL = sourceURL.deletingLastPathComponent()
         destinationURL.appendPathComponent("directory")
-        do {
-            try fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil)
-            try fileManager.unzipItem(at: sourceURL, to: destinationURL)
-        } catch {
-            XCTFail("Failed to extract item - \(error)")
-            return
-        }
-        
+        unzipper.unzipItem(at: sourceURL, to: destinationURL)
         var itemExists = false
         for entry in archive {
             let directoryURL = destinationURL.appendingPathComponent(entry.path)

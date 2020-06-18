@@ -64,19 +64,6 @@ extension Archive {
 //
 //    // MARK: - Helpers
 //
-//    private func readUncompressed(entry: Entry, bufferSize: UInt32, skipCRC32: Bool,
-//                                  progress: Progress? = nil, with consumer: Consumer) throws -> CRC32 {
-//        let size = Int(entry.centralDirectoryStructure.uncompressedSize)
-//        return try Data.consumePart(of: size, chunkSize: Int(bufferSize), skipCRC32: skipCRC32,
-//                                    provider: { (_, chunkSize) -> Data in
-//            return try Data.readChunk(of: Int(chunkSize), from: self.archiveFile)
-//        }, consumer: { (data) in
-//            if progress?.isCancelled == true { throw ArchiveError.cancelledOperation }
-//            try consumer(data)
-//            progress?.completedUnitCount += Int64(data.count)
-//        })
-//    }
-
     private func readCompressed(entry: Entry, bufferSize: UInt32, skipCRC32: Bool,
                                 progress: Progress? = nil, with consumer: Consumer) throws -> CRC32 {
         let size = Int(entry.centralDirectoryStructure.compressedSize)

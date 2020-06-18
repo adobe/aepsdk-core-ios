@@ -10,11 +10,11 @@ import Foundation
 import Compression
 
 protocol FileUnzipper {
-    func unzipItem(at sourcePath: URL, to destinationPath: URL, completion: @escaping (() -> Void))
+    func unzipItem(at sourcePath: URL, to destinationPath: URL)
 }
 
 struct RulesUnzipper: FileUnzipper {
-    func unzipItem(at sourcePath: URL, to destinationPath: URL, completion: @escaping (() -> Void)) {
+    func unzipItem(at sourcePath: URL, to destinationPath: URL) {
         let fileManager = FileManager()
         do {
             try fileManager.createDirectory(at: destinationPath, withIntermediateDirectories: true, attributes: nil)

@@ -26,14 +26,6 @@ let localFileHeaderStructSignature = 0x04034b50
 let dataDescriptorStructSignature = 0x08074b50
 let centralDirectoryStructSignature = 0x02014b50
 
-/// The compression method of an `Entry` in a ZIP `Archive`.
-//public enum CompressionMethod: UInt16 {
-//    /// Indicates that an `Entry` has no compression applied to its contents.
-//    case none = 0
-//    /// Indicates that contents of an `Entry` have been compressed with a zlib compatible Deflate algorithm.
-//    case deflate = 8
-//}
-
 /// A sequence of uncompressed or compressed ZIP entries.
 ///
 /// You use an `Archive` to create, read or update ZIP files.
@@ -151,7 +143,6 @@ public final class Archive: Sequence {
             var dataDescriptor: DataDescriptor?
             if centralDirStruct.usesDataDescriptor {
                 let additionalSize = Int(localFileHeader.fileNameLength + localFileHeader.extraFieldLength)
-//                let isCompressed = centralDirStruct.compressionMethod != CompressionMethod.none.rawValue
                 let dataSize = centralDirStruct.compressedSize
                 let descriptorPosition = offset + LocalFileHeader.size + additionalSize + Int(dataSize)
                 dataDescriptor = Data.readStruct(from: self.archiveFile, at: descriptorPosition)
@@ -167,21 +158,6 @@ public final class Archive: Sequence {
                          localFileHeader: localFileHeader, dataDescriptor: dataDescriptor)
         }
     }
-
-    /// Retrieve the ZIP `Entry` with the given `path` from the receiver.
-    ///
-    /// - Note: The ZIP file format specification does not enforce unique paths for entries.
-    ///   Therefore an archive can contain multiple entries with the same path. This method
-    ///   always returns the first `Entry` with the given `path`.
-    ///
-    /// - Parameter path: A relative file path identifiying the corresponding `Entry`.
-    /// - Returns: An `Entry` with the given `path`. Otherwise, `nil`.
-//    public subscript(path: String) -> Entry? {
-//        if let encoding = preferredEncoding {
-//            return self.filter { $0.path(using: encoding) == path }.first
-//        }
-//        return self.filter { $0.path == path }.first
-//    }
 
     // MARK: - Helpers
 
@@ -216,50 +192,7 @@ public final class Archive: Sequence {
     }
 }
 
-//extension Archive {
-//
-//    /// The number of the work units that have to be performed when
-//    /// reading `entry` from the receiver.
-//    ///
-//    /// - Parameter entry: The entry that will be read.
-//    /// - Returns: The number of the work units.
-//    public func totalUnitCountForReading(_ entry: Entry) -> Int64 {
-//        switch entry.type {
-//        case .file, .symlink:
-//            return Int64(entry.uncompressedSize)
-//        case .directory:
-//            return defaultDirectoryUnitCount
-//        }
-//    }
-//
-//    func makeProgressForReading(_ entry: Entry) -> Progress {
-//        return Progress(totalUnitCount: self.totalUnitCountForReading(entry))
-//    }
-//}
-
 extension Archive.EndOfCentralDirectoryRecord {
-    var data: Data {
-        var endOfCDSignature = self.endOfCentralDirectorySignature
-        var numberOfDisk = self.numberOfDisk
-        var numberOfDiskStart = self.numberOfDiskStart
-        var totalNumberOfEntriesOnDisk = self.totalNumberOfEntriesOnDisk
-        var totalNumberOfEntriesInCD = self.totalNumberOfEntriesInCentralDirectory
-        var sizeOfCentralDirectory = self.sizeOfCentralDirectory
-        var offsetToStartOfCD = self.offsetToStartOfCentralDirectory
-        var zipFileCommentLength = self.zipFileCommentLength
-        var data = Data()
-        withUnsafePointer(to: &endOfCDSignature, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        withUnsafePointer(to: &numberOfDisk, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        withUnsafePointer(to: &numberOfDiskStart, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        withUnsafePointer(to: &totalNumberOfEntriesOnDisk, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        withUnsafePointer(to: &totalNumberOfEntriesInCD, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        withUnsafePointer(to: &sizeOfCentralDirectory, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        withUnsafePointer(to: &offsetToStartOfCD, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        withUnsafePointer(to: &zipFileCommentLength, { data.append(UnsafeBufferPointer(start: $0, count: 1))})
-        data.append(self.zipFileCommentData)
-        return data
-    }
-
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
         guard data.count == Archive.EndOfCentralDirectoryRecord.size else { return nil }
         guard data.scanValue(start: 0) == endOfCentralDirectorySignature else { return nil }
@@ -274,19 +207,4 @@ extension Archive.EndOfCentralDirectoryRecord {
         guard commentData.count == Int(self.zipFileCommentLength) else { return nil }
         self.zipFileCommentData = commentData
     }
-
-//    init(record: Archive.EndOfCentralDirectoryRecord,
-//         numberOfEntriesOnDisk: UInt16,
-//         numberOfEntriesInCentralDirectory: UInt16,
-//         updatedSizeOfCentralDirectory: UInt32,
-//         startOfCentralDirectory: UInt32) {
-//        numberOfDisk = record.numberOfDisk
-//        numberOfDiskStart = record.numberOfDiskStart
-//        totalNumberOfEntriesOnDisk = numberOfEntriesOnDisk
-//        totalNumberOfEntriesInCentralDirectory = numberOfEntriesInCentralDirectory
-//        sizeOfCentralDirectory = updatedSizeOfCentralDirectory
-//        offsetToStartOfCentralDirectory = startOfCentralDirectory
-//        zipFileCommentLength = record.zipFileCommentLength
-//        zipFileCommentData = record.zipFileCommentData
-//    }
 }

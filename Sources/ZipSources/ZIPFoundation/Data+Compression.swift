@@ -125,22 +125,6 @@ extension Data {
         return result ^ mask
     }
 
-//    /// Compress the output of `provider` and pass it to `consumer`.
-//    /// - Parameters:
-//    ///   - size: The uncompressed size of the data to be compressed.
-//    ///   - bufferSize: The maximum size of the compression buffer.
-//    ///   - provider: A closure that accepts a position and a chunk size. Returns a `Data` chunk.
-//    ///   - consumer: A closure that processes the result of the compress operation.
-//    /// - Returns: The checksum of the processed content.
-//    public static func compress(size: Int, bufferSize: Int, provider: Provider, consumer: Consumer) throws -> CRC32 {
-//        #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
-//        return try self.process(operation: COMPRESSION_STREAM_ENCODE, size: size, bufferSize: bufferSize,
-//                                provider: provider, consumer: consumer)
-//        #else
-//        return try self.encode(size: size, bufferSize: bufferSize, provider: provider, consumer: consumer)
-//        #endif
-//    }
-
     /// Decompress the output of `provider` and pass it to `consumer`.
     /// - Parameters:
     ///   - size: The compressed size of the data to be decompressed.

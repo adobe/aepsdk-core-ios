@@ -394,6 +394,7 @@
 				78A64268249020D0004B4E46 /* Data+Serialization.swift */,
 				78A64269249020D0004B4E46 /* Entry.swift */,
 				78A64264249020D0004B4E46 /* FileManager+ZIP.swift */,
+				78A6425A24896E06004B4E46 /* UnzippingService.swift */,
 			);
 			name = Unzip;
 			sourceTree = "<group>";
@@ -409,7 +410,6 @@
 				78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */,
 				785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */,
 				D4000F2A2458E6EE0052C536 /* NetworkService */,
-				78A6425A24896E06004B4E46 /* UnzippingService.swift */,
 			);
 			name = services;
 			path = Sources/services;
