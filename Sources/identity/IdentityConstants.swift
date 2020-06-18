@@ -12,6 +12,9 @@ governing permissions and limitations under the License.
 import Foundation
 
 struct IdentityConstants {
+    static let EXTENSION_NAME = "com.adobe.module.identity"
+    static let EXTENSION_VERSION = "0.0.1"
+    
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
     static let DEFAULT_TTL = TimeInterval(600)
     static let RESPONSE_KEY_ORGID = "d_orgid"
