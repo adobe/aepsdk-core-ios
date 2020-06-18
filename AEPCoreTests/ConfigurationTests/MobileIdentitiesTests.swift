@@ -80,6 +80,8 @@ class MobileIdentitiesTests: XCTestCase {
     }
     
     // MARK: getAllIdentifiers() tests
+    
+    /// Tests that when configuration and identity provide shared state that we include them in getAllIdentifiers
     func testGetAllIdentifiersHappy() {
         // setup
         let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
@@ -101,6 +103,7 @@ class MobileIdentitiesTests: XCTestCase {
         XCTAssertEqual(expected, identifiers)
     }
     
+    /// Tests that when configuration provides shared state that we include configuration identities in getAllIdentifiers
     func testGetAllIdentifiersOnlyConfiguration() {
         // setup
         let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
@@ -120,6 +123,7 @@ class MobileIdentitiesTests: XCTestCase {
         XCTAssertEqual(expected, identifiers)
     }
     
+    /// Tests that when identity provides shared state that we include identity identities in getAllIdentifiers
     func testGetAllIdentifiersOnlyIdentity() {
         // setup
         let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
