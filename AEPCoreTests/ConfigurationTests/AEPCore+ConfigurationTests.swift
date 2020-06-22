@@ -120,4 +120,20 @@ class AEPCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
+    /// Tests that getSdkIdentities dispatches a configuration request identity event
+    func testGetSdkIdentities() {
+        let expectation = XCTestExpectation(description: "getSdkIdentities dispatches a configuration request identity event")
+        expectation.assertForOverFulfill = true
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestIdentity) { (event) in
+            expectation.fulfill()
+        }
+        
+        // test
+        AEPCore.getSdkIdentities { (_, _) in }
+        
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+    
 }

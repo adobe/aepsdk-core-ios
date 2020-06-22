@@ -61,6 +61,8 @@ extension AEPCore: Configuration {
             
             completion(identities, nil)
         }
+        
+        AEPCore.dispatch(event: event)
     }
     
     // MARK: Helper
