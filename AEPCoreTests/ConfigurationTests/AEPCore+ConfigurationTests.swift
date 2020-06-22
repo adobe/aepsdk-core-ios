@@ -22,6 +22,11 @@ class AEPCore_ConfigurationTests: XCTestCase {
         registerMockExtension(MockExtension.self)
     }
     
+    
+    override func tearDown() {
+        EventHub.reset()
+    }
+    
     private func registerMockExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
         EventHub.shared.registerExtension(type) { (error) in
@@ -39,8 +44,10 @@ class AEPCore_ConfigurationTests: XCTestCase {
         let expectedAppId = "test-app-id"
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(expectedAppId, event.data?[ConfigurationConstants.Keys.JSON_APP_ID] as? String)
-            expectation.fulfill()
+            if let _ = event.data, let appid = event.data![ConfigurationConstants.Keys.JSON_APP_ID] as? String {
+                XCTAssertEqual(expectedAppId, appid)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -57,8 +64,10 @@ class AEPCore_ConfigurationTests: XCTestCase {
         let expectedFilePath = "test-file-path"
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(expectedFilePath, event.data?[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String)
-            expectation.fulfill()
+            if let _ = event.data, let path = event.data![ConfigurationConstants.Keys.JSON_FILE_PATH] as? String {
+                XCTAssertEqual(expectedFilePath, path)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -75,8 +84,10 @@ class AEPCore_ConfigurationTests: XCTestCase {
         let updateDict = ["testKey": "testVal"]
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(updateDict, event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String])
-            expectation.fulfill()
+            if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
+                XCTAssertEqual(updateDict, updateEventData)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -93,8 +104,10 @@ class AEPCore_ConfigurationTests: XCTestCase {
         let updateDict = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(updateDict, event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String])
-            expectation.fulfill()
+            if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
+                XCTAssertEqual(updateDict, updateEventData)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -109,8 +122,10 @@ class AEPCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         
         EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertTrue(event.data?[ConfigurationConstants.Keys.RETRIEVE_CONFIG] as! Bool)
-            expectation.fulfill()
+            if let _ = event.data, let retrieveconfig = event.data![ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool {
+                XCTAssertTrue(retrieveconfig)
+                expectation.fulfill()
+            }
         }
         
         // test

@@ -359,16 +359,14 @@ class EventHubTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Extension is registered successfully after eventHub.start()")
         expectation.assertForOverFulfill = true
-
+        
+        MockExtensionTwo.registrationClosure = { expectation.fulfill() }
         // test
         eventHub.start()
         eventHub.registerExtension(MockExtensionTwo.self) { (error) in
             XCTAssertNil(error)
-            XCTAssertTrue(MockExtensionTwo.calledInit)
-            XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
-            expectation.fulfill()
         }
-
+        
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
@@ -377,13 +375,12 @@ class EventHubTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Extension is registered successfully even if invoked before eventHub.start()")
         expectation.assertForOverFulfill = true
+        
+        MockExtensionTwo.registrationClosure = { expectation.fulfill() }
 
         // test
         eventHub.registerExtension(MockExtensionTwo.self) { (error) in
             XCTAssertNil(error)
-            XCTAssertTrue(MockExtensionTwo.calledInit)
-            XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
-            expectation.fulfill()
         }
         eventHub.start()
 
@@ -394,23 +391,17 @@ class EventHubTests: XCTestCase {
     func testEventHubRegisterSameExtensionTwiceFails() {
         // setup
         let expectation = XCTestExpectation(description: "Extension registration fails with EventHubError.duplicateExtensionName when registered twice")
-        expectation.expectedFulfillmentCount = 2
+        expectation.expectedFulfillmentCount = 1
         expectation.assertForOverFulfill = true
-
+                
         // test
         eventHub.start()
         eventHub.registerExtension(MockExtensionTwo.self) { [weak self] (error) in
             XCTAssertNil(error)
-            XCTAssertTrue(MockExtensionTwo.calledInit)
-            XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
-            expectation.fulfill()
-            MockExtensionTwo.reset()
 
             // register same extension twice
             self?.eventHub.registerExtension(MockExtensionTwo.self) { (error) in
                 XCTAssertEqual(error, EventHubError.duplicateExtensionName)
-                XCTAssertTrue(MockExtensionTwo.calledInit)
-                XCTAssertFalse(MockExtensionTwo.calledOnRegistered)
                 expectation.fulfill()
             }
         }
@@ -423,7 +414,9 @@ class EventHubTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Extensions with poor performance upon registration do not block other extensions from registering")
         expectation.assertForOverFulfill = true
-
+        
+        MockExtensionTwo.registrationClosure = { expectation.fulfill() }
+        
         // test
         eventHub.start()
         eventHub.registerExtension(SlowMockExtension.self) { (error) in
@@ -432,9 +425,6 @@ class EventHubTests: XCTestCase {
 
         eventHub.registerExtension(MockExtensionTwo.self) { (error) in
             XCTAssertNil(error)
-            XCTAssertTrue(MockExtensionTwo.calledInit)
-            XCTAssertTrue(MockExtensionTwo.calledOnRegistered)
-            expectation.fulfill()
         }
 
         // verify
