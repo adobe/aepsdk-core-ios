@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -76,6 +76,7 @@
 		21FBA54E2463DFE800A2A009 /* PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBA54D2463DFE800A2A009 /* PrivacyStatus.swift */; };
 		21FBA5502463DFFF00A2A009 /* ConfigurationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBA54F2463DFFF00A2A009 /* ConfigurationConstants.swift */; };
 		21FBA5522463E55200A2A009 /* AEPConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBA5512463E55200A2A009 /* AEPConfiguration.swift */; };
+		3FE4D8EE249A8C80000C83F6 /* RulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE4D8ED249A8C80000C83F6 /* RulesEngine */; };
 		7629742C24294215005CCC73 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742B24294215005CCC73 /* SharedState.swift */; };
 		7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742E24294249005CCC73 /* SharedStateTest.swift */; };
 		76850D18242EDE58003922F4 /* OperationOrdererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D17242EDE58003922F4 /* OperationOrdererTests.swift */; };
@@ -223,6 +224,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FE4D8EE249A8C80000C83F6 /* RulesEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +520,9 @@
 			dependencies = (
 			);
 			name = AEPCore;
+			packageProductDependencies = (
+				3FE4D8ED249A8C80000C83F6 /* RulesEngine */,
+			);
 			productName = AEPCore;
 			productReference = 21CAC0D62422917600C11388 /* AEPCore.framework */;
 			productType = "com.apple.product-type.framework";
@@ -568,6 +573,9 @@
 				Base,
 			);
 			mainGroup = 21CAC0CC2422917600C11388;
+			packageReferences = (
+				3FE4D8EC249A8C80000C83F6 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
+			);
 			productRefGroup = 21CAC0D72422917600C11388 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -962,6 +970,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3FE4D8EC249A8C80000C83F6 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
+			requirement = {
+				branch = dev;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3FE4D8ED249A8C80000C83F6 /* RulesEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FE4D8EC249A8C80000C83F6 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
+			productName = RulesEngine;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 21CAC0CD2422917600C11388 /* Project object */;
 }
