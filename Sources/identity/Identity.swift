@@ -18,11 +18,11 @@ protocol Identity {
     /// - Parameters:
     ///   - url: URL to which the visitor info needs to be appended. Returned as is if it is nil or empty.
     ///   - completion: closure which will be invoked once the updated url is available, along with an error if any occurred
-    static func appendTo(url: URL?, completion: @escaping (URL?, Error?) -> ())
+    static func appendTo(url: URL?, completion: @escaping (URL?, AEPError?) -> ())
     
     /// Returns all customer identifiers which were previously synced with the Adobe Experience Cloud.
     /// - Parameter completion: closure which will be invoked once the customer identifiers are available.
-    static func getIdentifiers(completion: @escaping ([Identifiable]?, Error?) -> ())
+    static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError?) -> ())
     
     /// Returns the Experience Cloud ID.
     /// - Parameter completion: closure which will be invoked once Experience Cloud ID is available.
@@ -47,5 +47,5 @@ protocol Identity {
     
     /// Gets Visitor ID Service identifiers in URL query string form for consumption in hybrid mobile apps.
     /// - Parameter completion: closure invoked with a value containing the visitor identifiers as a query string upon completion of the service request
-    static func getUrlVariables(completion: @escaping (String?, Error?) -> ())
+    static func getUrlVariables(completion: @escaping (String?, AEPError?) -> ())
 }

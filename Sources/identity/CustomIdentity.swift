@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// CustomIdentity contains identifier origin, identifier type, identifier value and authentication state.
-public class CustomIdentity: Identifiable {
+public class CustomIdentity: Identifiable, Codable {
     var origin: String?
     var type: String?
     var identifier: String?
