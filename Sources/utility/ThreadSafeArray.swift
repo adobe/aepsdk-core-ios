@@ -28,6 +28,13 @@ final class ThreadSafeArray<T> {
             self.array.append(newElement)
         }
     }
+    
+    /// Clears the array by removing all elements
+    func clear() {
+        queue.async {
+            self.array.removeAll()
+        }
+    }
         
     /// Returns if the array is empty or not
     var isEmpty: Bool {

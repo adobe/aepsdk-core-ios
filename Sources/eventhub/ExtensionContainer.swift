@@ -13,13 +13,15 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Contains an `Extension` and additional information related to the extension
-struct ExtensionContainer {
+class ExtensionContainer {
     
     /// The extension held in this container
-    let exten: Extension
+    var exten: Extension? = nil
     
     /// The `SharedState` associated with the extension
-    let sharedState: SharedState
+    var sharedState: SharedState? = nil
+    
+    var sharedStateName: String? = nil
     
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
@@ -34,22 +36,48 @@ struct ExtensionContainer {
     let responseEventListeners: ThreadSafeArray<EventListenerContainer>
     
     init(_ type: Extension.Type, _ queue: DispatchQueue) {
-        exten = type.init()
-        sharedState = SharedState(exten.name)
         extensionQueue = queue
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         responseEventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
+        
+        // initialize the backing extension on the extension queue
+        queue.async {
+            self.exten = type.init()
+            self.sharedState = SharedState(self.exten!.name)
+            self.sharedStateName = self.exten!.name
+            self.exten!.onRegistered()
+            self.eventOrderer.start()
+        }
+    }
+}
+
+extension ExtensionContainer {
+    public func registerListener(type: EventType, source: EventSource, preflight: @escaping EventListenerPreflight = { _ in true }, listener: @escaping EventListener) {
+        let listenerContainer = EventListenerContainer(listener: listener, preflight: preflight,
+                                                       type: type, source: source, triggerEventId: nil, timeoutTask: nil)
+        eventListeners.append(listenerContainer)
+    }
+    
+    public func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
+        let timeoutTask = DispatchWorkItem {
+            listener(nil)
+            _ = self.responseEventListeners.filterRemove { $0.triggerEventId == triggerEvent.id }
+        }
+        extensionQueue.asyncAfter(deadline: DispatchTime.now() + timeout, execute: timeoutTask)
+        let responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEvent.id, timeout: timeoutTask)
+        responseEventListeners.append(responseListenerContainer)
     }
 }
 
 private extension ExtensionContainer {
     private func eventProcessor(_ event: Event) -> Bool {
         // process events into "standard" listeners
-        eventListeners.shallowCopy.forEach {
-            if ($0.shouldNotify(event: event)) {
-                $0.listener(event)
+        for listenerContainer in eventListeners.shallowCopy {
+            guard listenerContainer.preflight(event) else { return false }
+            if listenerContainer.shouldNotify(event) {
+                listenerContainer.listener(event)
             }
         }
         

@@ -23,14 +23,17 @@ public final class AEPCore {
     
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
-    static func registerExtensions(_ extensions: [Extension.Type]) {
+    /// - Parameter completion: Closure to run when extensions have been registered
+    static func registerExtensions(_ extensions: [Extension.Type], _ completion: @escaping () -> Void = { }) {
 //        extensions.insert(AEPConfiguration.self, at: 0) TODO: Uncomment after Configuration is merged
 
         let registeredCounter = AtomicCounter()
+        
         extensions.forEach {
             EventHub.shared.registerExtension($0) { (_) in
                 if registeredCounter.incrementAndGet() == extensions.count {
                     EventHub.shared.start()
+                    completion()
                 }
             }
         }
@@ -59,11 +62,8 @@ public final class AEPCore {
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
     static func start(completion: @escaping (()-> Void)) {
         // Start the event hub processing
-        registerExtensions(AEPCore.pendingExtensions.shallowCopy)
-        // Use a background thread for the completion handler since calling thread is most likely going to be main thread.
-        DispatchQueue.global(qos: .background).async {
-            completion()
-        }
+        let pending = AEPCore.pendingExtensions.shallowCopy
+        AEPCore.pendingExtensions.clear()
+        registerExtensions(pending, { completion() })
     }
-        
 }

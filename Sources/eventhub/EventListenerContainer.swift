@@ -16,7 +16,6 @@ import Foundation
 struct EventListenerContainer: Equatable {
     /// Equatable
     static func == (lhs: EventListenerContainer, rhs: EventListenerContainer) -> Bool {
-        lhs.parentExtensionName == rhs.parentExtensionName &&
             lhs.type == rhs.type &&
             lhs.source == rhs.source &&
             lhs.triggerEventId == rhs.triggerEventId
@@ -25,8 +24,7 @@ struct EventListenerContainer: Equatable {
     /// The `EventListener`
     let listener: EventListener
     
-    /// The parent extension which registered this listener
-    let parentExtensionName: String
+    let preflight: EventListenerPreflight
     
     /// The `EventType` `listener` is listening for, nil if `listener`v is a response listener
     let type: EventType?
@@ -42,12 +40,19 @@ struct EventListenerContainer: Equatable {
 
     /// Returns true if `listener` should be notified of the `Event`, false otherwise
     /// - Parameter event: An `Event` being dispatched by `EventHub`
-    func shouldNotify(event: Event) -> Bool {
+    func shouldNotify(_ event: Event) -> Bool {
         if let listenerTriggerId = triggerEventId {
             return listenerTriggerId == event.responseID
         }
         
         return (event.type == type || type == .wildcard)
                && (event.source == source || source == .wildcard)
+    }
+}
+
+extension EventListenerContainer {
+    // TODO: comment
+    init(listener: @escaping EventListener, triggerEventId: UUID, timeout: DispatchWorkItem?) {
+        self.init(listener: listener, preflight: { _ in true }, type: nil, source: nil, triggerEventId: triggerEventId, timeoutTask: timeout)
     }
 }
