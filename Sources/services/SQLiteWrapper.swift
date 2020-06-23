@@ -18,10 +18,14 @@ internal class SQLiteWrapper {
     /// Connect SQLite database with provide database name and database file path.
     /// If the database file doesn't exist, a new database will be created and return a database connection
     /// - Parameters:
-    ///   - databaseFilePath: path to the database file
-    ///   - databaseName: database name
-    /// - Returns: database connection
+    ///   - databaseFilePath: the path to the database file
+    ///   - databaseName: the database name
+    /// - Returns: the database connection
     static func connect(databaseFilePath: FileManager.SearchPathDirectory, databaseName: String) -> OpaquePointer? {
+        guard !databaseName.isEmpty else {
+            print("Failed to open database - database name is empty")
+            return nil
+        }
         let fileURL = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(databaseName)
         guard let url = fileURL else {
             print("Cant not create database connection due to invalid file path: SearchPathDirectory[\(databaseFilePath.rawValue)]/\(databaseName)")
@@ -39,7 +43,7 @@ internal class SQLiteWrapper {
     }
 
     /// Disconnect the database connection
-    /// - Parameter database: database connection
+    /// - Parameter database: the database connection
     /// - Returns: True, if the database connection is closed  successfully, otherwise false
     static func disconnect(database: OpaquePointer) -> Bool {
         let code = sqlite3_close(database)
@@ -52,8 +56,8 @@ internal class SQLiteWrapper {
 
     /// Execute the provided SQL statement
     /// - Parameters:
-    ///   - database: database connection
-    ///   - sql: SQL statement
+    ///   - database: the database connection
+    ///   - sql: the SQL statement
     /// - Returns: True, if the SQL statement is executed  successfully, otherwise false
     static func execute(database: OpaquePointer, sql: String) -> Bool {
         if sqlite3_exec(database, sql, nil, nil, nil) != SQLITE_OK {
@@ -66,9 +70,9 @@ internal class SQLiteWrapper {
 
     /// Execute the provide SQL statement
     /// - Parameters:
-    ///   - database: database connection
-    ///   - sql: SQL statement
-    /// - Returns: Optional result of a database  query
+    ///   - database: the database connection
+    ///   - sql: the SQL statement
+    /// - Returns: an `Optional` result of a database  query
     static func query(database: OpaquePointer, sql: String) -> [[String: String]]? {
         var result: [[String: String]] = []
         var statement: OpaquePointer?
@@ -107,8 +111,8 @@ internal class SQLiteWrapper {
 
     /// Check existence of the database with provided database name
     /// - Parameters:
-    ///   - database: database connection
-    ///   - tableName: database name
+    ///   - database: the database connection
+    ///   - tableName: the database name
     /// - Returns: True, if the database exists, otherwise false
     static func tableExist(database: OpaquePointer, tableName: String) -> Bool {
         let sql = "select count(*) from sqlite_master where type='table' and name='\(tableName)';"

@@ -15,8 +15,9 @@ import XCTest
 
 class AEPDataQueueServiceTests: XCTestCase {
     let fileName = "db_aep_test_01"
+    
     override func setUp() {
-        AEPDataQueueServiceTests.removeDbFileIfExist(fileName)
+        AEPDataQueueServiceTests.removeDbFileIfExists(fileName)
         if let service = AEPDataQueueService.shared as? AEPDataQueueService {
             service.cleanCache()
         }
@@ -24,14 +25,14 @@ class AEPDataQueueServiceTests: XCTestCase {
 
     override func tearDown() {}
 
-    internal static func removeDbFileIfExist(_ fileName: String) {
+    internal static func removeDbFileIfExists(_ fileName: String) {
         let fileURL = try! FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(fileName)
         if FileManager.default.fileExists(atPath: fileURL.path) {
             try! FileManager.default.removeItem(at: fileURL)
         }
     }
 
-    internal static func dbFileExist(_ fileName: String) -> Bool {
+    internal static func dbFileExists(_ fileName: String) -> Bool {
         let fileURL = try! FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(fileName)
         return FileManager.default.fileExists(atPath: fileURL.path)
     }
@@ -44,9 +45,20 @@ class AEPDataQueueServiceTests: XCTestCase {
         _ = AEPDataQueueService.shared.getDataQueue(label: fileName)
 
         // Then
-        XCTAssertTrue(AEPDataQueueServiceTests.dbFileExist(fileName))
+        XCTAssertTrue(AEPDataQueueServiceTests.dbFileExists(fileName))
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)
         XCTAssertTrue(SQLiteWrapper.tableExist(database: connection!, tableName: AEPDataQueue.DEFAULT_TABLE_NAME))
+    }
+
+    /// initDataQueue()
+    func testInitializeDataQueueWithEmptyLabel() throws {
+        // Given
+
+        // When
+        let result = AEPDataQueueService.shared.getDataQueue(label: "")
+
+        // Then
+        XCTAssertTrue(result == nil)
     }
 
     /// initDataQueue()

@@ -12,8 +12,14 @@
 
 import Foundation
 
-public struct DataEntity {
+/// Represents an entity type which can be stored in `DataQueue`
+public class DataEntity: NSObject {
     let uuid: String
     let timestamp: Date
     let data: Data?
+    public init(uuid: String, timestamp: Date, data: Data?) {
+        self.uuid = uuid
+        self.timestamp = timestamp
+        self.data = data
+    }
 }

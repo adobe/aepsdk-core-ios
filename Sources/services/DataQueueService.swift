@@ -18,6 +18,6 @@ public protocol DataQueueService {
 
     /// Initialize a `DataQueue` object
     /// - Parameter name: the label you assigned to the `DataQueue` at creation time.
-    /// - Returns: object of `DataQueue`, return false if failed to create an object
+    /// - Returns: the object of `DataQueue`, return false if failed to create an object
     func getDataQueue(label: String) -> DataQueue?
 }

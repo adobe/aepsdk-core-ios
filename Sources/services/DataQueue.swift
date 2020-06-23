@@ -13,18 +13,17 @@
 import Foundation
 
 /// A thread-safe FIFO (First-In-First-Out) queue used to store `DataEntity` objects
-public protocol DataQueue {
-    /// adds a new `DataEntity` object to `DataQueue`
-    ///
+@objc public protocol DataQueue {
+    /// Adds a new `DataEntity` object to `DataQueue`
     /// - Parameter dataEntity: a `DataEntity` object
     func add(dataEntity: DataEntity) -> Bool
 
-    /// Returns the `DataEntity` object at the top of the `DataQueue`, else return nil if the `DataQueue` is empty
+    /// Retrieves the head of this `DataQueue`, else return nil if the `DataQueue` is empty
     func peek() -> DataEntity?
 
-    /// Returns the `DataEntity` object at the top of the `DataQueue` and then remove it from the `DataQueue`, else return nil if the `DataQueue` is empty
-    func pop() -> DataEntity?
+    /// Removes the head of this `DataQueue`
+    func remove() -> Bool
 
-    /// Clear all stored `DataEntity` object
+    /// Removes all stored `DataEntity` object
     func clear() -> Bool
 }

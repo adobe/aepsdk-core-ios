@@ -17,7 +17,7 @@ class AEPDataQueueTests: XCTestCase {
     private let fileName = "db-aep-test-01"
 
     override func setUp() {
-        AEPDataQueueServiceTests.removeDbFileIfExist(fileName)
+        AEPDataQueueServiceTests.removeDbFileIfExists(fileName)
         if let service = AEPDataQueueService.shared as? AEPDataQueueService {
             service.cleanCache()
         }
@@ -182,7 +182,7 @@ class AEPDataQueueTests: XCTestCase {
         }
 
         // When
-        let result = queue.pop()!
+        let result = queue.remove()
 
         // Then
         let sql = """
@@ -197,10 +197,7 @@ class AEPDataQueueTests: XCTestCase {
 
         XCTAssertEqual(2, row.count)
         XCTAssertEqual("2", row[0]["id"])
-        let eventObj = try JSONDecoder().decode(EventEntity.self, from: result.data!)
-        XCTAssertEqual(eventObj.id, events[0].id)
-        XCTAssertEqual(eventObj.timestamp, events[0].timestamp)
-        XCTAssertEqual(eventObj.name, events[0].name)
+        XCTAssertTrue(result)
     }
 
     /// pop()
@@ -211,7 +208,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // When
         // Then
-        XCTAssertTrue(queue.pop() == nil)
+        XCTAssertTrue(queue.remove())
     }
 
     /// clear()
@@ -281,7 +278,7 @@ class AEPDataQueueTests: XCTestCase {
 
         for _ in 1...loop {
             dispatchQueue3.async {
-                _ = queue.pop()
+                _ = queue.remove()
                 expectation.fulfill()
             }
         }
