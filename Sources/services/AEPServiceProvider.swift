@@ -24,6 +24,8 @@ public class AEPServiceProvider {
     private var defaultKeyValueService = NamedUserDefaultKeyValueService()
     private var overrideNetworkService: NetworkService?
     private var defaultNetworkService = AEPNetworkService()
+    private var overrideCacheService: CacheService?
+    private var defaultCacheService = DiskCache()
 
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
@@ -53,15 +55,28 @@ public class AEPServiceProvider {
     }
 
     public var networkService: NetworkService {
-            get {
-                return barrierQueue.sync {
-                    return overrideNetworkService ?? defaultNetworkService
-                }
-            }
-            set {
-                barrierQueue.async {
-                    self.overrideNetworkService = newValue
-                }
+        get {
+            return barrierQueue.sync {
+                return overrideNetworkService ?? defaultNetworkService
             }
         }
+        set {
+            barrierQueue.async {
+                self.overrideNetworkService = newValue
+            }
+        }
+    }
+    
+    public var cacheService: CacheService {
+        get {
+            return barrierQueue.sync {
+                return overrideCacheService ?? defaultCacheService
+            }
+        }
+        set {
+            barrierQueue.async {
+                self.overrideCacheService = newValue
+            }
+        }
+    }
 }
