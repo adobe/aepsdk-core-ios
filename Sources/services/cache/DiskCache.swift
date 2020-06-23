@@ -16,38 +16,33 @@ public class DiskCache: CacheService {
     let cachePrefix = "com.adobe.mobile.diskcache"
     let fileManager = FileManager.default
     
-    // MARK: Cache
+    // MARK: CacheService
     
     public func set(cacheName: String, key: String, data: Data?) throws {
-        guard let filePath = filePath(for: cacheName, with: key) else { return }
-        _ = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
+        _ = fileManager.createFile(atPath: filePath(for: cacheName, with: key), contents: data, attributes: nil)
     }
     
     public func get(cacheName: String, key: String) throws -> Data? {
-        guard let filePath = filePath(for: cacheName, with: key) else { return nil }
-        return try Data(contentsOf: URL(fileURLWithPath: filePath))
+        return try Data(contentsOf: URL(fileURLWithPath: filePath(for: cacheName, with: key)))
     }
     
     public func remove(cacheName: String, key: String) throws {
-        guard let filePath = filePath(for: cacheName, with: key) else { return }
-        try fileManager.removeItem(atPath: filePath)
+        try fileManager.removeItem(atPath: filePath(for: cacheName, with: key))
     }
     
     public func removeAll(cacheName: String) throws {
-        guard let cachePath = cachePath(for: cacheName) else { return }
-        try fileManager.removeItem(atPath: cachePath)
+        try fileManager.removeItem(atPath: cachePath(for: cacheName))
     }
     
     // MARK: Helpers
     
-    private func filePath(for cacheName: String, with key: String) -> String? {
-        guard let cachePath = cachePath(for: cacheName) else { return nil }
-        return "\(cachePath)/\(fileName(for: key))"
+    private func filePath(for cacheName: String, with key: String) -> String {
+        return "\(cachePath(for: cacheName))/\(fileName(for: key))"
     }
     
     private func fileName(for key: String) -> String {
       let fileExtension = URL(fileURLWithPath: key).pathExtension
-      let fileName = key // todo hash?
+      let fileName = key
 
       switch fileExtension.isEmpty {
       case true:
@@ -57,9 +52,9 @@ public class DiskCache: CacheService {
       }
     }
     
-    private func cachePath(for name: String) -> String? {
-        guard let url = try? fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else { return nil }
-        return url.appendingPathComponent("\(cachePrefix).\(name)", isDirectory: true).path
+    private func cachePath(for name: String) -> String {
+        let url = try? fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        return url?.appendingPathComponent("\(cachePrefix).\(name)", isDirectory: true).path ?? ""
     }
     
 }
