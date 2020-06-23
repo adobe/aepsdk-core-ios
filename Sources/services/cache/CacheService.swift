@@ -12,9 +12,30 @@ governing permissions and limitations under the License.
 
 import Foundation
 
+/// Describes the interface for a cache
 public protocol CacheService {
+    
+    /// Sets a key value pair in the cache
+    /// - Parameters:
+    ///   - cacheName: name of the cache
+    ///   - key: key for the value
+    ///   - data: data to be stored in the cache
     func set(cacheName: String, key: String, data: Data?) throws
+    
+    /// Gets the value for `key` from the cache with `cacheName`
+    /// - Parameters:
+    ///   - cacheName: name of the cache
+    ///   - key: key to be read from the cache
+    /// - Returns: Data from the cache if found, nil if not found
     func get(cacheName: String, key: String) throws -> Data?
+    
+    /// Removes a key from the cache
+    /// - Parameters:
+    ///   - cacheName: name of the cache
+    ///   - key: key to be removed from the cache
     func remove(cacheName: String, key: String) throws
+    
+    /// Clears the cache for `cacheName`
+    /// - Parameter cacheName: name of the cache to be cleared
     func removeAll(cacheName: String) throws
 }
