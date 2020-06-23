@@ -18,7 +18,11 @@ import Foundation
 public class AEPDataQueueService: DataQueueService {
     public static let shared: DataQueueService = AEPDataQueueService()
     private let serialQueue = DispatchQueue(label: "com.adobe.marketing.mobile.dataqueueservice")
+    #if DEBUG
+    internal var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
+    #else
     private var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
+    #endif
 
     private init() {}
 
@@ -30,9 +34,5 @@ public class AEPDataQueueService: DataQueueService {
             threadSafeDictionary[databaseName] = dataQueue
             return dataQueue
         }
-    }
-
-    internal func cleanCache() {
-        threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
     }
 }

@@ -15,7 +15,7 @@ import XCTest
 
 class AEPDataQueueServiceTests: XCTestCase {
     let fileName = "db_aep_test_01"
-    
+
     override func setUp() {
         AEPDataQueueServiceTests.removeDbFileIfExists(fileName)
         if let service = AEPDataQueueService.shared as? AEPDataQueueService {
@@ -47,7 +47,7 @@ class AEPDataQueueServiceTests: XCTestCase {
         // Then
         XCTAssertTrue(AEPDataQueueServiceTests.dbFileExists(fileName))
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)
-        XCTAssertTrue(SQLiteWrapper.tableExist(database: connection!, tableName: AEPDataQueue.DEFAULT_TABLE_NAME))
+        XCTAssertTrue(SQLiteWrapper.tableExist(database: connection!, tableName: AEPDataQueue.TABLE_NAME))
     }
 
     /// initDataQueue()
@@ -58,7 +58,7 @@ class AEPDataQueueServiceTests: XCTestCase {
         let result = AEPDataQueueService.shared.getDataQueue(label: "")
 
         // Then
-        XCTAssertTrue(result == nil)
+        XCTAssertNil(result)
     }
 
     /// initDataQueue()

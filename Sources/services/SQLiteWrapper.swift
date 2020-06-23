@@ -14,7 +14,7 @@ import Foundation
 import SQLite3
 
 /// Helper class for  SQLite database operations
-internal class SQLiteWrapper {
+internal struct SQLiteWrapper {
     /// Connect SQLite database with provide database name and database file path.
     /// If the database file doesn't exist, a new database will be created and return a database connection
     /// - Parameters:
@@ -28,7 +28,7 @@ internal class SQLiteWrapper {
         }
         let fileURL = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(databaseName)
         guard let url = fileURL else {
-            print("Cant not create database connection due to invalid file path: SearchPathDirectory[\(databaseFilePath.rawValue)]/\(databaseName)")
+            print("Cannot create database connection due to invalid file path: SearchPathDirectory[\(databaseFilePath.rawValue)]/\(databaseName)")
             return nil
         }
 
@@ -89,7 +89,7 @@ internal class SQLiteWrapper {
         while code == SQLITE_ROW {
             var dictionary: [String: String] = [:]
 
-            for i in 0...sqlite3_column_count(statement) - 1 {
+            for i in 0..<sqlite3_column_count(statement) {
                 let column: String = String(cString: sqlite3_column_name(statement, i))
                 if let rowValue = sqlite3_column_text(statement, i) {
                     let value: String = String(cString: rowValue)

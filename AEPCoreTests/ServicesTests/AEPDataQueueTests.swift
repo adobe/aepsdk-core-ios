@@ -37,7 +37,7 @@ class AEPDataQueueTests: XCTestCase {
         let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
         let data = try JSONEncoder().encode(event)
-        let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: data)
+        let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
 
         // When
         let result = queue.add(dataEntity: entity)
@@ -46,7 +46,7 @@ class AEPDataQueueTests: XCTestCase {
         XCTAssertTrue(result)
 
         let sql = """
-        SELECT * from \(AEPDataQueue.DEFAULT_TABLE_NAME)
+        SELECT * from \(AEPDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -55,8 +55,8 @@ class AEPDataQueueTests: XCTestCase {
             _ = SQLiteWrapper.disconnect(database: connection)
         }
 
-        XCTAssertTrue(row[0].count == 4)
-        XCTAssertEqual(event.id.uuidString, row[0]["uuid"])
+        XCTAssertEqual(4, row[0].count)
+        XCTAssertEqual(event.id.uuidString, row[0]["uniqueIdentifier"])
         XCTAssertEqual("1", row[0]["id"])
         let dataString = String(data: data, encoding: .utf8)!
         XCTAssertEqual(dataString, row[0]["data"])
@@ -68,7 +68,7 @@ class AEPDataQueueTests: XCTestCase {
         // Given
         let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
-        let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: nil)
+        let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
 
         // When
         let result = queue.add(dataEntity: entity)
@@ -77,7 +77,7 @@ class AEPDataQueueTests: XCTestCase {
         XCTAssertTrue(result)
 
         let sql = """
-        SELECT * from \(AEPDataQueue.DEFAULT_TABLE_NAME)
+        SELECT * from \(AEPDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -86,8 +86,8 @@ class AEPDataQueueTests: XCTestCase {
             _ = SQLiteWrapper.disconnect(database: connection)
         }
 
-        XCTAssertTrue(row[0].count == 4)
-        XCTAssertEqual(event.id.uuidString, row[0]["uuid"])
+        XCTAssertEqual(4, row[0].count)
+        XCTAssertEqual(event.id.uuidString, row[0]["uniqueIdentifier"])
         XCTAssertEqual("1", row[0]["id"])
         XCTAssertEqual("", row[0]["data"])
         XCTAssertEqual(event.timestamp.millisecondsSince1970, Int64(row[0]["timestamp"]!))
@@ -102,7 +102,7 @@ class AEPDataQueueTests: XCTestCase {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
             events.append(event)
             let data = try JSONEncoder().encode(event)
-            let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: data)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
             _ = queue.add(dataEntity: entity)
         }
 
@@ -111,7 +111,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // Then
         let sql = """
-        SELECT * from \(AEPDataQueue.DEFAULT_TABLE_NAME)
+        SELECT * from \(AEPDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -122,7 +122,7 @@ class AEPDataQueueTests: XCTestCase {
 
         XCTAssertEqual(3, row.count)
         XCTAssertEqual("1", row[0]["id"])
-        XCTAssertEqual(result.uuid, row[0]["uuid"])
+        XCTAssertEqual(result.uniqueIdentifier, row[0]["uniqueIdentifier"])
         let eventObj = try JSONDecoder().decode(EventEntity.self, from: result.data!)
         XCTAssertEqual(eventObj.id, events[0].id)
         XCTAssertEqual(eventObj.timestamp, events[0].timestamp)
@@ -135,7 +135,7 @@ class AEPDataQueueTests: XCTestCase {
 
         let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
-        let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: nil)
+        let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
 
         _ = queue.add(dataEntity: entity)
 
@@ -144,7 +144,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // Then
         let sql = """
-        SELECT * from \(AEPDataQueue.DEFAULT_TABLE_NAME)
+        SELECT * from \(AEPDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -154,7 +154,7 @@ class AEPDataQueueTests: XCTestCase {
         }
 
         XCTAssertEqual(1, row.count)
-        XCTAssertEqual(nil, result.data)
+        XCTAssertNil(result.data)
     }
 
     /// peek()
@@ -165,7 +165,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // When
         // Then
-        XCTAssertTrue(queue.peek() == nil)
+        XCTAssertNil(queue.peek())
     }
 
     /// pop()
@@ -177,7 +177,7 @@ class AEPDataQueueTests: XCTestCase {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
             events.append(event)
             let data = try JSONEncoder().encode(event)
-            let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: data)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
             _ = queue.add(dataEntity: entity)
         }
 
@@ -186,7 +186,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // Then
         let sql = """
-        SELECT * from \(AEPDataQueue.DEFAULT_TABLE_NAME)
+        SELECT * from \(AEPDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -218,7 +218,7 @@ class AEPDataQueueTests: XCTestCase {
 
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
-            let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: nil)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
             _ = queue.add(dataEntity: entity)
         }
 
@@ -228,13 +228,13 @@ class AEPDataQueueTests: XCTestCase {
         // Then
         XCTAssertTrue(result)
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
-        let tableExist = SQLiteWrapper.tableExist(database: connection, tableName: AEPDataQueue.DEFAULT_TABLE_NAME)
+        let tableExist = SQLiteWrapper.tableExist(database: connection, tableName: AEPDataQueue.TABLE_NAME)
 
         defer {
             _ = SQLiteWrapper.disconnect(database: connection)
         }
 
-        XCTAssertTrue(!tableExist)
+        XCTAssertFalse(tableExist)
     }
 
     /// thread-safe APIs
@@ -256,7 +256,7 @@ class AEPDataQueueTests: XCTestCase {
                 do {
                     let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
                     let data = try JSONEncoder().encode(event)
-                    let entity = DataEntity(uuid: event.id.uuidString, timestamp: event.timestamp, data: data)
+                    let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
                     let result = queue.add(dataEntity: entity)
                     XCTAssertTrue(result)
                     if i == 5 {

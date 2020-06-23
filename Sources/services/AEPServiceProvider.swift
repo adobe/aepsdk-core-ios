@@ -16,7 +16,7 @@ public class AEPServiceProvider {
     public static let shared = AEPServiceProvider()
 
     // Provide thread safety on the getters and setters
-    private let barrierQueue = DispatchQueue(label: "AEPServiceProvider.barrierQueue")
+    private let queue = DispatchQueue(label: "AEPServiceProvider.barrierQueue")
 
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()
@@ -29,12 +29,12 @@ public class AEPServiceProvider {
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
         get {
-            return barrierQueue.sync {
+            return queue.sync {
                 return overrideSystemInfoService ?? defaultSystemInfoService
             }
         }
         set {
-            barrierQueue.async {
+            queue.async {
                 self.overrideSystemInfoService = newValue
             }
         }
@@ -42,12 +42,12 @@ public class AEPServiceProvider {
 
     public var namedKeyValueService: NamedKeyValueService {
         get {
-            return barrierQueue.sync {
+            return queue.sync {
                 return overrideKeyValueService ?? defaultKeyValueService
             }
         }
         set {
-            barrierQueue.async {
+            queue.async {
                 self.overrideKeyValueService = newValue
             }
         }
@@ -55,19 +55,19 @@ public class AEPServiceProvider {
 
     public var networkService: NetworkService {
         get {
-            return barrierQueue.sync {
+            return queue.sync {
                 return overrideNetworkService ?? defaultNetworkService
             }
         }
         set {
-            barrierQueue.async {
+            queue.async {
                 self.overrideNetworkService = newValue
             }
         }
     }
 
     public var DataQueueService: DataQueueService {
-        return barrierQueue.sync {
+        return queue.sync {
             return defaultDataQueueService
         }
     }

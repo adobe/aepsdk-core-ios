@@ -117,6 +117,7 @@
 		BB1D74B524A24EDF00269B45 /* AEPDataQueueServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1D74AB24A24EDF00269B45 /* AEPDataQueueServiceTests.swift */; };
 		BB1D74B724A24EDF00269B45 /* NetworkServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1D74AD24A24EDF00269B45 /* NetworkServiceTests.swift */; };
 		BB1D74B824A24EDF00269B45 /* NamedKeyValueStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1D74AE24A24EDF00269B45 /* NamedKeyValueStoreTest.swift */; };
+		BB1D74BF24A29B1E00269B45 /* AEPDataQueueService+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1D74BE24A29B1E00269B45 /* AEPDataQueueService+Testable.swift */; };
 		D4000F122458DE700052C536 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F112458DE700052C536 /* NetworkService.swift */; };
 		D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F132458DE8E0052C536 /* AEPNetworkService.swift */; };
 		D4000F162458DEA20052C536 /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F152458DEA20052C536 /* HttpMethod.swift */; };
@@ -250,6 +251,7 @@
 		BB1D74AB24A24EDF00269B45 /* AEPDataQueueServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPDataQueueServiceTests.swift; sourceTree = "<group>"; };
 		BB1D74AD24A24EDF00269B45 /* NetworkServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceTests.swift; sourceTree = "<group>"; };
 		BB1D74AE24A24EDF00269B45 /* NamedKeyValueStoreTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStoreTest.swift; sourceTree = "<group>"; };
+		BB1D74BE24A29B1E00269B45 /* AEPDataQueueService+Testable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPDataQueueService+Testable.swift"; sourceTree = "<group>"; };
 		D4000F112458DE700052C536 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		D4000F132458DE8E0052C536 /* AEPNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPNetworkService.swift; sourceTree = "<group>"; };
 		D4000F152458DEA20052C536 /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
@@ -512,6 +514,7 @@
 			isa = PBXGroup;
 			children = (
 				BB1D74AB24A24EDF00269B45 /* AEPDataQueueServiceTests.swift */,
+				BB1D74BE24A29B1E00269B45 /* AEPDataQueueService+Testable.swift */,
 				BB1D74A724A24EDF00269B45 /* AEPDataQueueTests.swift */,
 				BB1D74AA24A24EDF00269B45 /* MockSystemInfoService.swift */,
 				BB1D74A524A24EDE00269B45 /* NamedKeyValueServiceTest.swift */,
@@ -757,6 +760,7 @@
 				21C754B324785E52007B8871 /* ThreadSafeDictionaryTests.swift in Sources */,
 				D4000F272458E1240052C536 /* MockTask.swift in Sources */,
 				D4000F252458E10D0052C536 /* MockURLSession.swift in Sources */,
+				BB1D74BF24A29B1E00269B45 /* AEPDataQueueService+Testable.swift in Sources */,
 				BB1D74B024A24EDF00269B45 /* URLEncoderTests.swift in Sources */,
 				BB1D74B124A24EDF00269B45 /* AEPDataQueueTests.swift in Sources */,
 				BB1D74B524A24EDF00269B45 /* AEPDataQueueServiceTests.swift in Sources */,

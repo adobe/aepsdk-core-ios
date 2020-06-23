@@ -14,11 +14,17 @@ import Foundation
 
 /// Represents an entity type which can be stored in `DataQueue`
 public class DataEntity: NSObject {
-    let uuid: String
+    let uniqueIdentifier: String
     let timestamp: Date
     let data: Data?
-    public init(uuid: String, timestamp: Date, data: Data?) {
-        self.uuid = uuid
+
+    /// Generates a new `DataEntity`
+    /// - Parameters:
+    ///   - uniqueIdentifier: a string identifier for `DataEntity`
+    ///   - timestamp: a timestamp for `DataEntity`
+    ///   - data: a JSON-encoded representation for `DataEntity`
+    public init(uniqueIdentifier: String, timestamp: Date, data: Data?) {
+        self.uniqueIdentifier = uniqueIdentifier
         self.timestamp = timestamp
         self.data = data
     }

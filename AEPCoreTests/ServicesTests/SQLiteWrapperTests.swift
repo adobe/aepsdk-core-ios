@@ -59,7 +59,7 @@ class SQLiteWrapperTests: XCTestCase {
         """
         let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement)!
         // Then
-        XCTAssertTrue(result.count == 1)
+        XCTAssertEqual(1, result.count)
         XCTAssertEqual("x", result[0]["name"])
     }
 
@@ -89,6 +89,6 @@ class SQLiteWrapperTests: XCTestCase {
         """
         let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement)!
         // Then
-        XCTAssertTrue(result.count == 0)
+        XCTAssertTrue(result.isEmpty)
     }
 }
