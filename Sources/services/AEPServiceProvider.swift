@@ -25,7 +25,7 @@ public class AEPServiceProvider {
     private var overrideNetworkService: NetworkService?
     private var defaultNetworkService = AEPNetworkService()
     private var overrideCacheService: CacheService?
-    private var defaultCacheService = DiskCache()
+    private var defaultCacheService = DiskCacheService()
 
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
