@@ -38,7 +38,7 @@
 		214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5226248ABD5D0034BF22 /* IdentityConstants.swift */; };
 		214B522A248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */; };
 		2157951E24A2A9F00012ED28 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157951D24A2A9F00012ED28 /* CacheService.swift */; };
-		2157952024A2A9FE0012ED28 /* DiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157951F24A2A9FE0012ED28 /* DiskCache.swift */; };
+		2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */; };
 		2157952224A2AA050012ED28 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157952124A2AA050012ED28 /* Cache.swift */; };
 		21599656243E4EEB00E202B1 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21599655243E4EEB00E202B1 /* AnyCodable.swift */; };
 		21599659243E4F0B00E202B1 /* AnyCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21599658243E4F0B00E202B1 /* AnyCodableTests.swift */; };
@@ -161,7 +161,7 @@
 		214B5226248ABD5D0034BF22 /* IdentityConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
 		214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+IdentityTests.swift"; sourceTree = "<group>"; };
 		2157951D24A2A9F00012ED28 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
-		2157951F24A2A9FE0012ED28 /* DiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCache.swift; sourceTree = "<group>"; };
+		2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCacheService.swift; sourceTree = "<group>"; };
 		2157952124A2AA050012ED28 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		21599655243E4EEB00E202B1 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		21599658243E4F0B00E202B1 /* AnyCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableTests.swift; sourceTree = "<group>"; };
@@ -319,7 +319,7 @@
 			isa = PBXGroup;
 			children = (
 				2157951D24A2A9F00012ED28 /* CacheService.swift */,
-				2157951F24A2A9FE0012ED28 /* DiskCache.swift */,
+				2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */,
 				2157952124A2AA050012ED28 /* Cache.swift */,
 			);
 			path = cache;
@@ -671,7 +671,7 @@
 				214B5225248ABCEB0034BF22 /* AEPIdentity+Identity.swift in Sources */,
 				785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */,
 				78A642572486C98E004B4E46 /* ThreadSafeArray.swift in Sources */,
-				2157952024A2A9FE0012ED28 /* DiskCache.swift in Sources */,
+				2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */,
 				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
 				21172895249177FC00BB7BD3 /* Identifiable.swift in Sources */,

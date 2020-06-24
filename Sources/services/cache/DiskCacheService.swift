@@ -12,7 +12,8 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-public class DiskCache: CacheService {
+/// Implements a cache which saves and retrieves data from the disk
+public class DiskCacheService: CacheService {
     let cachePrefix = "com.adobe.mobile.diskcache"
     let fileManager = FileManager.default
     
@@ -36,25 +37,20 @@ public class DiskCache: CacheService {
     
     // MARK: Helpers
     
+    /// Builds the file path for the given key
+    /// - Parameters:
+    ///   - cacheName: name of the cache
+    ///   - key: key or file name
     private func filePath(for cacheName: String, with key: String) -> String {
-        return "\(cachePath(for: cacheName))/\(fileName(for: key))"
+        return "\(cachePath(for: cacheName))/\(key)"
     }
     
-    private func fileName(for key: String) -> String {
-      let fileExtension = URL(fileURLWithPath: key).pathExtension
-      let fileName = key
-
-      switch fileExtension.isEmpty {
-      case true:
-        return fileName
-      case false:
-        return "\(fileName).\(fileExtension)"
-      }
-    }
-    
-    private func cachePath(for name: String) -> String {
+    /// Builds the directory path for the cache using the cache prefix and cache name
+    /// - Parameter cacheName: name of the cache
+    /// - Returns: a string representing the path to the cache for `name`
+    private func cachePath(for cacheName: String) -> String {
         let url = try? fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        return url?.appendingPathComponent("\(cachePrefix).\(name)", isDirectory: true).path ?? ""
+        return url?.appendingPathComponent("\(cachePrefix).\(cacheName)", isDirectory: true).path ?? ""
     }
     
 }
