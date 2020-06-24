@@ -31,7 +31,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         semaphore.wait()
     }
     
-
+    /// Tests that a configuration request content event is dispatched with the appId
     func testConfigureWithAppId() {
         // setup
         let expectation = XCTestExpectation(description: "Configure with app id dispatches a configuration request content with the app id")
@@ -68,6 +68,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
+    /// Tests that a configuration request content event is dispatched with the updated dict
     func testUpdateConfiguration() {
         // setup
         let expectation = XCTestExpectation(description: "Update configuration dispatches configuration request content with the updated configuration")
@@ -86,6 +87,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
+    /// Tests that set privacy status dispatches a configuration request content event with the new privacy status
     func testSetPrivacy() {
         // setup
         let expectation = XCTestExpectation(description: "Set privacy dispatches configuration request content with the privacy status")
@@ -104,6 +106,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
+    /// Tests that get privacy status dispatches an event of configuration request content with the correct retrieve config data
     func testGetPrivacy() {
         let expectation = XCTestExpectation(description: "Get privacy status dispatches configuration request content with the correct data")
         expectation.assertForOverFulfill = true
@@ -115,6 +118,22 @@ class AEPCore_ConfigurationTests: XCTestCase {
         
         // test
         AEPCore.getPrivacyStatus { (status) in}
+        
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+    
+    /// Tests that getSdkIdentities dispatches a configuration request identity event
+    func testGetSdkIdentities() {
+        let expectation = XCTestExpectation(description: "getSdkIdentities dispatches a configuration request identity event")
+        expectation.assertForOverFulfill = true
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestIdentity) { (event) in
+            expectation.fulfill()
+        }
+        
+        // test
+        AEPCore.getSdkIdentities { (_, _) in }
         
         // verify
         wait(for: [expectation], timeout: 0.5)
