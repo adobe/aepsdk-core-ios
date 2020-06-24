@@ -40,6 +40,8 @@
 		2157951E24A2A9F00012ED28 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157951D24A2A9F00012ED28 /* CacheService.swift */; };
 		2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */; };
 		2157952224A2AA050012ED28 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157952124A2AA050012ED28 /* Cache.swift */; };
+		2157952424A3D9E30012ED28 /* CacheExpiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157952324A3D9E30012ED28 /* CacheExpiry.swift */; };
+		2157952624A3DC410012ED28 /* CacheEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157952524A3DC410012ED28 /* CacheEntry.swift */; };
 		21599656243E4EEB00E202B1 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21599655243E4EEB00E202B1 /* AnyCodable.swift */; };
 		21599659243E4F0B00E202B1 /* AnyCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21599658243E4F0B00E202B1 /* AnyCodableTests.swift */; };
 		2159F4282493FF3C0008851C /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */; };
@@ -163,6 +165,8 @@
 		2157951D24A2A9F00012ED28 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCacheService.swift; sourceTree = "<group>"; };
 		2157952124A2AA050012ED28 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		2157952324A3D9E30012ED28 /* CacheExpiry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheExpiry.swift; sourceTree = "<group>"; };
+		2157952524A3DC410012ED28 /* CacheEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEntry.swift; sourceTree = "<group>"; };
 		21599655243E4EEB00E202B1 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		21599658243E4F0B00E202B1 /* AnyCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableTests.swift; sourceTree = "<group>"; };
 		2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
@@ -321,6 +325,8 @@
 				2157951D24A2A9F00012ED28 /* CacheService.swift */,
 				2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */,
 				2157952124A2AA050012ED28 /* Cache.swift */,
+				2157952324A3D9E30012ED28 /* CacheExpiry.swift */,
+				2157952524A3DC410012ED28 /* CacheEntry.swift */,
 			);
 			path = cache;
 			sourceTree = "<group>";
@@ -664,6 +670,7 @@
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
 				213F662E2492A36A000184DE /* AEPError.swift in Sources */,
 				D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */,
+				2157952624A3DC410012ED28 /* CacheEntry.swift in Sources */,
 				D4000F1A2458DEDE0052C536 /* NetworkRequest.swift in Sources */,
 				2137BA112498311600F01D04 /* URLQueryItem+Identity.swift in Sources */,
 				21315BBA24579C4A00D1B254 /* AtomicCounter.swift in Sources */,
@@ -716,6 +723,7 @@
 				215CA8152481C9430078D778 /* LifecycleState.swift in Sources */,
 				78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */,
 				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
+				2157952424A3D9E30012ED28 /* CacheExpiry.swift in Sources */,
 				21F02C362477067900D25528 /* LaunchIDManager.swift in Sources */,
 				21F235BD24325A6200C3E59A /* EventHubConstants.swift in Sources */,
 			);

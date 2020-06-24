@@ -28,15 +28,15 @@ public class Cache {
     /// Sets data in the cache for `key`
     /// - Parameters:
     ///   - key: key where the data should be stored in the cache
-    ///   - data: data to be stored in the cache
-    public func set(key: String, data: Data?) throws {
-        try cacheService.set(cacheName: name, key: key, data: data)
+    ///   - entry: entry to be stored in the cache
+    public func set(key: String, entry: CacheEntry) throws {
+        try cacheService.set(cacheName: name, key: key, entry: entry)
     }
     
     /// Gets data from the cache for a given key
     /// - Parameter key: the key to be read from the cache
-    /// - Returns: data in the cache if found, nil otherwise
-    public func get(key: String) throws -> Data? {
+    /// - Returns: entry in the cache if found, nil otherwise
+    public func get(key: String) throws -> CacheEntry? {
         return try cacheService.get(cacheName: name, key: key)
     }
     
@@ -44,10 +44,5 @@ public class Cache {
     /// - Parameter key: key to be removed
     public func remove(key: String) throws {
         try cacheService.remove(cacheName: name, key: key)
-    }
-    
-    /// Removes all values from the cache
-    public func removeAll() throws {
-        try cacheService.removeAll(cacheName: name)
     }
 }

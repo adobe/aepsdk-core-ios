@@ -14,25 +14,43 @@ import Foundation
 
 /// Implements a cache which saves and retrieves data from the disk
 public class DiskCacheService: CacheService {
+    let dataStore = NamedKeyValueStore(name: "DiskCacheService")
     let cachePrefix = "com.adobe.mobile.diskcache"
     let fileManager = FileManager.default
     
     // MARK: CacheService
     
-    public func set(cacheName: String, key: String, data: Data?) throws {
-        _ = fileManager.createFile(atPath: filePath(for: cacheName, with: key), contents: data, attributes: nil)
+    public func set(cacheName: String, key: String, entry: CacheEntry) throws {
+        let path = filePath(for: cacheName, with: key)
+        _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
+        try fileManager.setAttributes([.modificationDate: entry.expiry.date], ofItemAtPath: path)
+        dataStore.set(key: path, value: entry.metadata)
     }
     
-    public func get(cacheName: String, key: String) throws -> Data? {
-        return try Data(contentsOf: URL(fileURLWithPath: filePath(for: cacheName, with: key)))
+    public func get(cacheName: String, key: String) throws -> CacheEntry? {
+        let path = filePath(for: cacheName, with: key)
+        let data = try Data(contentsOf: URL(fileURLWithPath: path))
+        let attributes = try fileManager.attributesOfItem(atPath: path)
+        
+        guard let expiryDate = attributes[.modificationDate] as? Date else {
+            return nil
+        }
+        
+        let expiry = CacheExpiry.date(expiryDate)
+        if expiry.isExpired {
+            // item is expired, remove from cache
+            try remove(cacheName: cacheName, key: key)
+            return nil
+        }
+        
+        let meta = dataStore.getDictionary(key: path) as? [String: String]
+        return CacheEntry(data: data, expiry: .date(expiryDate), metadata: meta)
     }
     
     public func remove(cacheName: String, key: String) throws {
-        try fileManager.removeItem(atPath: filePath(for: cacheName, with: key))
-    }
-    
-    public func removeAll(cacheName: String) throws {
-        try fileManager.removeItem(atPath: cachePath(for: cacheName))
+        let path = filePath(for: cacheName, with: key)
+        try fileManager.removeItem(atPath: path)
+        dataStore.remove(key: path)
     }
     
     // MARK: Helpers

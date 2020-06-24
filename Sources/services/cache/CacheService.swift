@@ -19,23 +19,19 @@ public protocol CacheService {
     /// - Parameters:
     ///   - cacheName: name of the cache
     ///   - key: key for the value
-    ///   - data: data to be stored in the cache
-    func set(cacheName: String, key: String, data: Data?) throws
+    ///   - entry: entry to be cached
+    func set(cacheName: String, key: String, entry: CacheEntry) throws
     
     /// Gets the value for `key` from the cache with `cacheName`
     /// - Parameters:
     ///   - cacheName: name of the cache
     ///   - key: key to be read from the cache
-    /// - Returns: Data from the cache if found, nil if not found
-    func get(cacheName: String, key: String) throws -> Data?
+    /// - Returns: the cache entry, nil if not found
+    func get(cacheName: String, key: String) throws -> CacheEntry?
     
     /// Removes a key from the cache
     /// - Parameters:
     ///   - cacheName: name of the cache
     ///   - key: key to be removed from the cache
     func remove(cacheName: String, key: String) throws
-    
-    /// Clears the cache for `cacheName`
-    /// - Parameter cacheName: name of the cache to be cleared
-    func removeAll(cacheName: String) throws
 }
