@@ -379,6 +379,24 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.stringValue)
         XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
     }
+    
+    /// Tests that updating programmatic config updates the correct build environment key
+    func testUpdateProgrammaticConfigCorrectEnvironmentKey() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "dev",
+                                                "analytics.rsids": "rsid1,rsid2",
+                                                "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                                "analytics.server": "old-server.com"]
+        configState.updateWith(newConfig: existingConfig)
+        
+        // test
+        configState.updateWith(programmaticConfig: ["analytics.rsids": "updated-dev-rsid"])
+
+        // verify
+        XCTAssertEqual("updated-dev-rsid", configState.currentConfiguration["__dev__analytics.rsids"] as? String)
+        XCTAssertEqual("rsid1,rsid2", configState.currentConfiguration["analytics.rsids"] as? String)
+        XCTAssertEqual("updated-dev-rsid", configState.environmentAwareConfiguration["analytics.rsids"] as? String)
+    }
 
     // MARK: updateConfigWith(appId) tests
 
@@ -504,6 +522,166 @@ class ConfigurationStateTests: XCTestCase {
         configDownloader.configFromPath = nil // simulate file not found
         XCTAssertFalse(configState.updateWith(filePath: "Invalid/Path/ADBMobile.json"))
         XCTAssertEqual(cachedConfig.count, configState.currentConfiguration.count)
+    }
+    
+    /// Tests that the correct config values are shared when the build environment value is empty and all __env__ keys are removed
+    func testEnvironmentConfigEmptyEnvironment() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+        configState.updateWith(newConfig: existingConfig)
+        
+        let expectedConfig = ["build.environment": "",
+                                "analytics.rsids": "rsid1,rsid2",
+                                "analytics.server": "mycompany.sc.omtrdc.net"]
+
+        
+        // test
+        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+
+        // verify
+        XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
+    }
+    
+    /// Tests that the correct config values are shared when the build environment value is prod
+    func testEnvironmentConfigProd() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "prod",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+        
+        configState.updateWith(newConfig: existingConfig)
+        
+        let expectedConfig = ["build.environment": "prod",
+                                "analytics.rsids": "rsid1,rsid2",
+                                "analytics.server": "mycompany.sc.omtrdc.net"]
+        
+        // test
+        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+
+        // verify
+        XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
+    }
+    
+    /// Tests that the correct config values are shared when the build environment value is staging
+    func testEnvironmentConfigStaging() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "stage",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+        
+        configState.updateWith(newConfig: existingConfig)
+        
+        let expectedConfig = ["build.environment": "stage",
+                                "analytics.rsids": "stagersid1,stagersid2",
+                                "analytics.server": "mycompany.sc.omtrdc.net"]
+        
+        // test
+        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+
+        // verify
+        XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
+    }
+    
+    /// Tests that the correct config values are shared when the build environment value is dev
+    func testEnvironmentConfigDev() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "dev",
+                                            "analytics.rsids": "rsid1,rsid2",
+                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+        
+        configState.updateWith(newConfig: existingConfig)
+        
+        let expectedConfig = ["build.environment": "dev",
+                                "analytics.rsids": "devrsid1,devrsid2",
+                                "analytics.server": "mycompany.sc.omtrdc.net"]
+        
+        
+        // test
+        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+
+        // verify
+        XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
+    }
+    
+    /// Tests that when there are no environment specific keys, all existing keys are not modified.
+    func testMapEnvironmentKeysNoEnvKeys() {
+        // setup
+        let newConfig: [String: Any] = ["build.environment": "dev",
+                                        "analytics.rsids": "rsid1,rsid2"]
+        
+        // test
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: newConfig)
+        
+        // verify
+        XCTAssertEqual(newConfig as? [String: String], mappedConfig as? [String: String])
+    }
+    
+    /// Tests that when a config key that has a build specific key is mapped to the specific key
+    func testMapEnvironmentKeysDevEnvKeyExist() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "dev",
+                                        "analytics.rsids": "rsid1,rsid2",
+                                        "__dev__analytics.rsids": "devrsid1,devrsid2"]
+        
+        configState.updateWith(newConfig: existingConfig)
+        
+        // __dev__ should be prepended to the analytics.rsids key as we are in dev env
+        let expected: [String: Any] = ["__dev__analytics.rsids": "updated,rsids"]
+        
+        // test
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids"])
+        
+        // verify
+        XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
+    }
+    
+    /// Tests that when there is not matching environment specific key that the key is mapped correctly
+    func testMapEnvironmentKeysDevEnvKeyDoesNotExist() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "dev",
+                                        "analytics.rsids": "rsid1,rsid2",
+                                        "__dev__analytics.rsids": "devrsid1,devrsid2"]
+        
+        configState.updateWith(newConfig: existingConfig)
+        
+        // __dev__ should not be prepended to analytics.server as there is no __dev__analytics.sever key in the existing config
+        let expected: [String: Any] = ["analytics.server": "server.com"]
+        
+        // test
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.server": "server.com"])
+        
+        // verify
+        XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
+    }
+    
+    /// Tests that when keys that have environment specific keys and keys that do not are mapped correctly
+    func testMapEnvironmentKeysDevEnvKeyExistsAndDoesNotExist() {
+        // setup
+        let existingConfig: [String: Any] = ["build.environment": "dev",
+                                        "analytics.rsids": "rsid1,rsid2",
+                                        "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                        "analytics.server": "old-server.com"]
+        
+        configState.updateWith(newConfig: existingConfig)
+        
+        // __dev__ should be prepended to rsids but not analytics.server
+        let expected: [String: Any] = ["__dev__analytics.rsids": "updated,rsids", "analytics.server": "server.com"]
+        
+        // test
+        let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids", "analytics.server": "server.com"])
+        
+        // verify
+        XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
 
 }

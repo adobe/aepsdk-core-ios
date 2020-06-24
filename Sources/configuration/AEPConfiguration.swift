@@ -44,11 +44,11 @@ class AEPConfiguration: Extension {
         }
         
         configState.loadInitialConfig()
-        if !configState.currentConfiguration.isEmpty {
-            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.currentConfiguration)
+        if !configState.environmentAwareConfiguration.isEmpty {
+            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.environmentAwareConfiguration)
             dispatch(event: responseEvent)
         }
-        pendingResolver(configState.currentConfiguration)
+        pendingResolver(configState.environmentAwareConfiguration)
         eventQueue.start()
     }
     
@@ -78,7 +78,7 @@ class AEPConfiguration: Extension {
         if event.isUpdateConfigEvent {
             return processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
         } else if event.isGetConfigEvent {
-            dispatchConfigurationResponse(triggerEvent: event, data: configState.currentConfiguration)
+            dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
         } else if let appId = event.appId {
             return processConfigureWith(appId: appId, event: event, sharedStateResolver: createPendingSharedState(event: event))
         } else if let filePath = event.filePath {
@@ -116,13 +116,13 @@ class AEPConfiguration: Extension {
         // Update the overriddenConfig with the new config from API and persist them in disk, and abort if overridden config is empty
         guard let updatedConfig = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any], !updatedConfig.isEmpty else {
             // error, resolve pending shared state with current config
-            sharedStateResolver(configState.currentConfiguration)
+            sharedStateResolver(configState.environmentAwareConfiguration)
             return true
         }
         
         configState.updateWith(programmaticConfig: updatedConfig)
         // Create shared state and dispatch configuration response content
-        sharedStateResolver(configState.currentConfiguration)
+        sharedStateResolver(configState.environmentAwareConfiguration)
         dispatchConfigurationResponse(triggerEvent: event, data: event.data)
         return true
     }
@@ -135,13 +135,13 @@ class AEPConfiguration: Extension {
     private func processConfigureWith(appId: String, event: Event, sharedStateResolver: @escaping SharedStateResolver) -> Bool {
         guard !appId.isEmpty else {
             // Error: No appId provided or its empty, resolve pending shared state with current config
-            sharedStateResolver(configState.currentConfiguration)
+            sharedStateResolver(configState.environmentAwareConfiguration)
             return true
         }
 
         guard validateForInternalEventAppIdChange(event: event, newAppId: appId) else {
             // error: app Id update already in-flight, resolve pending shared state with current config
-            sharedStateResolver(configState.currentConfiguration)
+            sharedStateResolver(configState.environmentAwareConfiguration)
             return true
         }
         
@@ -172,7 +172,7 @@ class AEPConfiguration: Extension {
     private func processConfigureWith(filePath: String, event: Event, sharedStateResolver: SharedStateResolver) -> Bool {
         guard let filePath = event.data?[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String, !filePath.isEmpty else {
             // Error: Shared state is updated with previous config
-            sharedStateResolver(configState.currentConfiguration)
+            sharedStateResolver(configState.environmentAwareConfiguration)
             return true
         }
 
@@ -180,7 +180,7 @@ class AEPConfiguration: Extension {
             publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
         } else {
             // loading from bundled config failed, resolve shared state with current config without dispatching a config response event
-            sharedStateResolver(configState.currentConfiguration)
+            sharedStateResolver(configState.environmentAwareConfiguration)
         }
 
         return true
@@ -208,9 +208,9 @@ class AEPConfiguration: Extension {
     ///   - sharedStateResolver: a closure which is resolved with the current configuration
     private func publishCurrentConfig(event: Event, sharedStateResolver: SharedStateResolver) {
         // Update the shared state with the new configuration
-        sharedStateResolver(configState.currentConfiguration)
+        sharedStateResolver(configState.environmentAwareConfiguration)
         // Dispatch a Configuration Response Content event with the new configuration.
-        dispatchConfigurationResponse(triggerEvent: event, data: configState.currentConfiguration)
+        dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
     }
     
     // MARK: Helpers

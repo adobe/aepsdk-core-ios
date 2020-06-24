@@ -18,12 +18,12 @@ public class NamedKeyValueStore {
     private var storageService: NamedKeyValueService
     private var name: String
     
-    init(name: String) {
+    public init(name: String) {
         self.storageService = AEPServiceProvider.shared.namedKeyValueService
         self.name = name
     }
 
-    subscript(key: String) -> Int? {
+    public subscript(key: String) -> Int? {
         get {
             return getInt(key: key)
         }
@@ -32,15 +32,15 @@ public class NamedKeyValueStore {
         }
     }
     
-    func set(key: String, value: Int?) {
+    public func set(key: String, value: Int?) {
         set(key: key, value: value as Any?)
     }
 
-    func getInt(key: String, fallback: Int? = nil) -> Int? {
+    public func getInt(key: String, fallback: Int? = nil) -> Int? {
         return get(key: key) as? Int ?? fallback
     }
     
-    subscript(key: String) -> String? {
+    public subscript(key: String) -> String? {
         get {
             return getString(key: key)
         }
@@ -49,15 +49,15 @@ public class NamedKeyValueStore {
         }
     }
     
-    func set(key: String, value: String?) {
+    public func set(key: String, value: String?) {
         set(key: key, value: value as Any?)
     }
 
-    func getString(key: String, fallback: String? = nil) -> String? {
+    public func getString(key: String, fallback: String? = nil) -> String? {
         return get(key: key) as? String ?? fallback
     }
     
-    subscript(key: String) -> Double? {
+    public subscript(key: String) -> Double? {
         get {
             return getDouble(key: key)
         }
@@ -66,15 +66,15 @@ public class NamedKeyValueStore {
         }
     }
     
-    func set(key: String, value: Double?) {
+    public func set(key: String, value: Double?) {
         set(key: key, value: value as Any?)
     }
     
-    func getDouble(key: String, fallback: Double? = nil) -> Double? {
+    public func getDouble(key: String, fallback: Double? = nil) -> Double? {
         return get(key: key) as? Double ?? fallback
     }
     
-    subscript(key: String) -> Int64? {
+    public subscript(key: String) -> Int64? {
         get {
             return getLong(key: key)
         }
@@ -83,15 +83,15 @@ public class NamedKeyValueStore {
         }
     }
     
-    func set(key: String, value: Int64?) {
+    public func set(key: String, value: Int64?) {
         set(key: key, value: value as Any?)
     }
     
-    func getLong(key: String, fallback: Int64? = nil) -> Int64? {
+    public func getLong(key: String, fallback: Int64? = nil) -> Int64? {
         return get(key: key) as? Int64 ?? fallback
     }
     
-    subscript(key: String) -> Float? {
+    public subscript(key: String) -> Float? {
         get {
             return getFloat(key: key)
         }
@@ -100,19 +100,19 @@ public class NamedKeyValueStore {
         }
     }
     
-    func set(key: String, value: Float?) {
+    public func set(key: String, value: Float?) {
         set(key: key, value: value as Any?)
     }
     
-    func getFloat(key: String, fallback: Float? = nil) -> Float? {
+    public func getFloat(key: String, fallback: Float? = nil) -> Float? {
         return get(key: key) as? Float ?? fallback
     }
     
-    func set(key: String, value: Bool?) {
+    public func set(key: String, value: Bool?) {
         set(key: key, value: value as Any?)
     }
     
-    subscript(key: String) -> Bool? {
+    public subscript(key: String) -> Bool? {
         get {
             return getBool(key: key)
         }
@@ -121,12 +121,12 @@ public class NamedKeyValueStore {
         }
     }
     
-    func getBool(key: String, fallback: Bool? = nil) -> Bool? {
+    public func getBool(key: String, fallback: Bool? = nil) -> Bool? {
         return get(key: key) as? Bool ?? fallback
     }
     
     
-    subscript(key: String) -> [Any]? {
+    public subscript(key: String) -> [Any]? {
         get {
             return getArray(key: key)
         }
@@ -135,15 +135,15 @@ public class NamedKeyValueStore {
         }
     }
     
-    func set(key: String, value: [Any]?) {
+    public func set(key: String, value: [Any]?) {
         set(key: key, value: value as Any)
     }
     
-    func getArray(key: String, fallback: [Any]? = nil) -> [Any]? {
+    public func getArray(key: String, fallback: [Any]? = nil) -> [Any]? {
         return get(key: key) as? [Any] ?? fallback
     }
     
-    subscript(key: String) -> [AnyHashable: Any]? {
+    public subscript(key: String) -> [AnyHashable: Any]? {
         get {
             return getDictionary(key: key)
         }
@@ -152,15 +152,15 @@ public class NamedKeyValueStore {
         }
     }
     
-    func set(key: String, value: [AnyHashable: Any]?) {
+    public func set(key: String, value: [AnyHashable: Any]?) {
         set(key: key, value: value as Any)
     }
     
-    func getDictionary(key: String, fallback: [AnyHashable: Any]? = nil) -> [AnyHashable: Any]? {
+    public func getDictionary(key: String, fallback: [AnyHashable: Any]? = nil) -> [AnyHashable: Any]? {
         return get(key: key) as? [AnyHashable: Any] ?? fallback
     }
     
-    subscript<T: Codable>(key: String) -> T? {
+    public subscript<T: Codable>(key: String) -> T? {
         get {
             return getObject(key: key)
         }
@@ -169,13 +169,13 @@ public class NamedKeyValueStore {
         }
     }
     
-    func setObject<T: Codable>(key: String, value: T) {
+    public func setObject<T: Codable>(key: String, value: T) {
         let encoder = JSONEncoder()
         let encodedValue = try? encoder.encode(value)
         set(key: key, value: encodedValue)
     }
     
-    func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
+    public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
         if let savedData = get(key: key) as? Data {
             return try? JSONDecoder().decode(T.self, from: savedData)
         }
@@ -183,11 +183,11 @@ public class NamedKeyValueStore {
         return fallback
     }
 
-    func contains(key: String) -> Bool {
+    public func contains(key: String) -> Bool {
         return (get(key: key) != nil) ? true : false
     }
     
-    func remove(key: String) {
+    public func remove(key: String) {
         if key.isEmpty {
             return
         }
@@ -195,7 +195,7 @@ public class NamedKeyValueStore {
         storageService.remove(collectionName: self.name, key: key)
     }
     
-    func removeAll() {
+    public func removeAll() {
         storageService.removeAll(collectionName: self.name)
     }
 

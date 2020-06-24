@@ -43,4 +43,8 @@ public protocol Configuration {
     /// Gets the currently configured `PrivacyStatus` and returns it via `completion`
     /// - Parameter completion: Invoked with the current `PrivacyStatus`
     static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ())
+    
+    /// Get a JSON string containing all of the user's identities known by the SDK  and calls a handler upon completion.
+    /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format a and `AEPError` if the request failed
+    static func getSdkIdentities(completion: @escaping (String?, AEPError?) -> ())
 }

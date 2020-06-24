@@ -13,14 +13,14 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// A thread safe reference type dictionary
-final class ThreadSafeDictionary<K: Hashable, V> {
-    typealias Element = Dictionary<K, V>.Element
-    private var dictionary = [K: V]()
-    private let queue: DispatchQueue
+public final class ThreadSafeDictionary<K: Hashable, V> {
+    public typealias Element = Dictionary<K, V>.Element
+    @usableFromInline internal var dictionary = [K: V]()
+    @usableFromInline internal let queue: DispatchQueue
     
     /// Creates a new thread safe dictionary
     /// - Parameter identifier: A unique identifier for this dictionary, a reverse-DNS naming style (com.example.myqueue) is recommended
-    init(identifier: String = "com.adobe.threadsafedictionary.queue") {
+    public init(identifier: String = "com.adobe.threadsafedictionary.queue") {
         queue = DispatchQueue(label: identifier)
     }
     
