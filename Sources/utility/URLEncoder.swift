@@ -12,12 +12,12 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Provides functions to percent encode and decode a `String`
-struct URLEncoder {
+public struct URLEncoder {
     
     /// Percent encodes a `String`
     /// - Parameter value: the `String` to be encoded
     /// - Returns: The percent encoded `String`, empty if encoding failed
-    static func encode(value: String) -> String {
+    static public func encode(value: String) -> String {
         let unreserved = "-._~"
         let allowed = NSMutableCharacterSet.alphanumeric()
         allowed.addCharacters(in: unreserved)
@@ -27,7 +27,7 @@ struct URLEncoder {
     /// Percent decodes a `String`
     /// - Parameter value: the `String` to be decoded
     /// - Returns: The percent decoded `String`, empty if decoding failed
-    static func decode(value: String) -> String {
+    static public func decode(value: String) -> String {
         return value.removingPercentEncoding ?? ""
     }
 }
