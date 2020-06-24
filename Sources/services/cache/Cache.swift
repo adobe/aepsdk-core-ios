@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Concrete class that provides disk caching capabilities
-class Cache {
+public class Cache {
     private var cacheService: CacheService {
         return AEPServiceProvider.shared.cacheService
     }
