@@ -451,6 +451,7 @@
 		76297427242941EE005CCC73 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				214A24C82497FEBF002C310A /* URLEncoder.swift */,
 				76850D1924313181003922F4 /* OperationOrderer.swift */,
 				21DB7093242BEBB800568A4C /* ThreadSafeDictionary.swift */,
 				21599655243E4EEB00E202B1 /* AnyCodable.swift */,
@@ -464,6 +465,7 @@
 		76850D10242C1E7D003922F4 /* UtilityTests */ = {
 			isa = PBXGroup;
 			children = (
+				214A24CA2497FFC1002C310A /* URLEncoderTests.swift */,
 				76850D17242EDE58003922F4 /* OperationOrdererTests.swift */,
 				21599658243E4F0B00E202B1 /* AnyCodableTests.swift */,
 				21C754B224785E52007B8871 /* ThreadSafeDictionaryTests.swift */,
@@ -494,7 +496,6 @@
 				78D754E32441192700DB9124 /* SystemInfoServiceTest.swift */,
 				78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */,
 				785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */,
-				214A24CA2497FFC1002C310A /* URLEncoderTests.swift */,
 			);
 			path = ServicesTests;
 			sourceTree = "<group>";
@@ -518,7 +519,6 @@
 				D4000F192458DEDE0052C536 /* NetworkRequest.swift */,
 				D4000F112458DE700052C536 /* NetworkService.swift */,
 				218CAD7424744A6D004DA1E8 /* NetworkServiceConstants.swift */,
-				214A24C82497FEBF002C310A /* URLEncoder.swift */,
 			);
 			name = NetworkService;
 			sourceTree = "<group>";
