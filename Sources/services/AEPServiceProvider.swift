@@ -66,7 +66,7 @@ public class AEPServiceProvider {
         }
     }
 
-    public var DataQueueService: DataQueueService {
+    public var dataQueueService: DataQueueService { 
         return queue.sync {
             return defaultDataQueueService
         }

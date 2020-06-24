@@ -29,9 +29,9 @@ extension Date {
 class AEPDataQueue: DataQueue {
     public let databaseName: String
     public let databaseFilePath: FileManager.SearchPathDirectory
-    private let serialQueue: DispatchQueue
-    
     public static let TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
+    
+    private let serialQueue: DispatchQueue
     private let TB_KEY_UNIQUE_IDENTIFIER = "uniqueIdentifier"
     private let TB_KEY_TIMESTAMP = "timestamp"
     private let TB_KEY_DATA = "data"
