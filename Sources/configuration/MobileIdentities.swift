@@ -12,15 +12,18 @@ governing permissions and limitations under the License.
 
 import Foundation
 
+/// Represents the JSON structure for the company context
 private struct CompanyContext: Codable {
     let namespace = "imsOrgID"
     let marketingCloudId: String
 }
 
+/// Represents the JSON structure for a list of `UserID`
 private struct Users: Codable {
     let userIDs: [UserID]
 }
 
+/// Represents a user id with a namespace, value, and type
 private struct UserID: Codable {
     let namespace: String
     let value: String
