@@ -13,6 +13,12 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPCore
 
+/// Test type to ensure we can cache codable types
+private struct Person: Codable, Equatable {
+    let firstName: String
+    let lastName: String
+}
+
 class DiskCacheServiceTests: XCTestCase {
 
     var diskCache = DiskCacheService()
@@ -48,6 +54,23 @@ class DiskCacheServiceTests: XCTestCase {
         // verify
         let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
         XCTAssertEqual(entry, storedEntry)
+    }
+    
+    /// Tests that we can set and get an item in the cache
+    func testSetGetCodable() {
+        // setup
+        let person = Person(firstName: "firstName", lastName: "lastName")
+        let data = try! JSONEncoder().encode(person)
+        let entry = CacheEntry(data: data, expiry: .date(dateOneMinInFuture), metadata: ["metadataKey": "metadataValue"])
+        
+        // test
+        try! diskCache.set(cacheName: CACHE_NAME, key: ENTRY_KEY, entry: entry)
+        
+        // verify
+        let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
+        let decodedPerson = try! JSONDecoder().decode(Person.self, from: storedEntry!.data)
+        XCTAssertEqual(entry, storedEntry)
+        XCTAssertEqual(decodedPerson, person)
     }
     
     /// Tests that we can store many entries in the cache and read them back out
