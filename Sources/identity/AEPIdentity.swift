@@ -12,10 +12,10 @@ governing permissions and limitations under the License.
 import Foundation
 
 class AEPIdentity: Extension {
-    let name = "Identity"
-    let version = "0.0.1"
+    let name = IdentityConstants.EXTENSION_NAME
+    let version = IdentityConstants.EXTENSION_VERSION
     
-    private let eventQueue = OperationOrderer<EventHandlerMapping>("Identity")
+    private let eventQueue = OperationOrderer<EventHandlerMapping>(IdentityConstants.EXTENSION_NAME)
     
     // MARK: Extension
     required init() {
