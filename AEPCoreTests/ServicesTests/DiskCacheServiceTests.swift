@@ -27,7 +27,7 @@ class DiskCacheServiceTests: XCTestCase {
 
     override func tearDown() {
         // clear cache after each test
-        let cachePath = diskCache.cachePath(for: "DiskCacheServiceTests")
+        let cachePath = diskCache.cachePath(for: CACHE_NAME)
         try! FileManager.default.removeItem(atPath: cachePath)
     }
 
@@ -40,7 +40,7 @@ class DiskCacheServiceTests: XCTestCase {
     func testSetGetHappy() {
         // setup
         let data = "Test".data(using: .utf8)!
-        let entry = CacheEntry(data: data, expiry: .date(dateOneMinInFuture), metadata: nil)
+        let entry = CacheEntry(data: data, expiry: .date(dateOneMinInFuture), metadata: ["metadataKey": "metadataValue"])
         
         // test
         try! diskCache.set(cacheName: CACHE_NAME, key: ENTRY_KEY, entry: entry)
@@ -58,7 +58,7 @@ class DiskCacheServiceTests: XCTestCase {
 
         // test
         for i in 0..<count {
-            let entry = CacheEntry(data: "\(i)".data(using: .utf8)!, expiry: .date(dateOneMinInFuture), metadata: nil)
+            let entry = CacheEntry(data: "\(i)".data(using: .utf8)!, expiry: .date(dateOneMinInFuture), metadata: ["metadataKey": "metadataValue"])
             entries.append(entry)
             try! diskCache.set(cacheName: CACHE_NAME, key: "\(i)", entry: entry)
         }
@@ -87,7 +87,7 @@ class DiskCacheServiceTests: XCTestCase {
     func testSetShouldOverwrite() {
         // setup
         let entry = CacheEntry(data: "Test".data(using: .utf8)!, expiry: .never, metadata: nil)
-        let newEntry = CacheEntry(data: "NewData".data(using: .utf8)!, expiry: .date(dateOneMinInFuture), metadata: nil)
+        let newEntry = CacheEntry(data: "NewData".data(using: .utf8)!, expiry: .date(dateOneMinInFuture), metadata: ["metadataKey": "metadataValue"])
         
         // test
         try! diskCache.set(cacheName: CACHE_NAME, key: ENTRY_KEY, entry: entry)

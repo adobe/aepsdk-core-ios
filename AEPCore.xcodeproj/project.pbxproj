@@ -59,7 +59,6 @@
 		21649563249BECE600B24F81 /* MobileIdentitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21649562249BECE600B24F81 /* MobileIdentitiesTests.swift */; };
 		2179F183246490140004A7C0 /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DA92461CA3F009D05BF /* Lifecycle.swift */; };
 		2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DAD2461CABE009D05BF /* AEPLifecycle.swift */; };
-		2181730124A51B3D0053439A /* CacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181730024A51B3D0053439A /* CacheTests.swift */; };
 		2181730324A51BD20053439A /* MockDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181730224A51BD20053439A /* MockDataStore.swift */; };
 		2181730524A526600053439A /* DiskCacheServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181730424A526600053439A /* DiskCacheServiceTests.swift */; };
 		2181947E2489CFEF004F869A /* LifecycleContextDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181947D2489CFEF004F869A /* LifecycleContextDataTests.swift */; };
@@ -199,7 +198,6 @@
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		21649560249BD24E00B24F81 /* MobileIdentities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MobileIdentities.swift; path = Sources/configuration/MobileIdentities.swift; sourceTree = SOURCE_ROOT; };
 		21649562249BECE600B24F81 /* MobileIdentitiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileIdentitiesTests.swift; sourceTree = "<group>"; };
-		2181730024A51B3D0053439A /* CacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheTests.swift; sourceTree = "<group>"; };
 		2181730224A51BD20053439A /* MockDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataStore.swift; sourceTree = "<group>"; };
 		2181730424A526600053439A /* DiskCacheServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCacheServiceTests.swift; sourceTree = "<group>"; };
 		2181947D2489CFEF004F869A /* LifecycleContextDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleContextDataTests.swift; sourceTree = "<group>"; };
@@ -559,7 +557,6 @@
 				BB1D757124A3E09100269B45 /* NetworkServiceTests.swift */,
 				BB1D757324A3E09100269B45 /* SQLiteWrapperTests.swift */,
 				BB1D757424A3E09100269B45 /* SystemInfoServiceTest.swift */,
-				2181730024A51B3D0053439A /* CacheTests.swift */,
 				2181730424A526600053439A /* DiskCacheServiceTests.swift */,
 			);
 			path = ServicesTests;
@@ -797,7 +794,6 @@
 			files = (
 				21F02C3A247707D800D25528 /* LaunchIDManagerTests.swift in Sources */,
 				215AA6212465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift in Sources */,
-				2181730124A51B3D0053439A /* CacheTests.swift in Sources */,
 				D4000F2C2458E8350052C536 /* MockNetworkServiceOverrider.swift in Sources */,
 				2181730324A51BD20053439A /* MockDataStore.swift in Sources */,
 				21C754B324785E52007B8871 /* ThreadSafeDictionaryTests.swift in Sources */,
