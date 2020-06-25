@@ -37,6 +37,11 @@
 		214B5225248ABCEB0034BF22 /* AEPIdentity+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */; };
 		214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5226248ABD5D0034BF22 /* IdentityConstants.swift */; };
 		214B522A248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */; };
+		2157951E24A2A9F00012ED28 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157951D24A2A9F00012ED28 /* CacheService.swift */; };
+		2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */; };
+		2157952224A2AA050012ED28 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157952124A2AA050012ED28 /* Cache.swift */; };
+		2157952424A3D9E30012ED28 /* CacheExpiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157952324A3D9E30012ED28 /* CacheExpiry.swift */; };
+		2157952624A3DC410012ED28 /* CacheEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2157952524A3DC410012ED28 /* CacheEntry.swift */; };
 		21599656243E4EEB00E202B1 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21599655243E4EEB00E202B1 /* AnyCodable.swift */; };
 		21599659243E4F0B00E202B1 /* AnyCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21599658243E4F0B00E202B1 /* AnyCodableTests.swift */; };
 		2159F4282493FF3C0008851C /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */; };
@@ -170,6 +175,11 @@
 		214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+Identity.swift"; sourceTree = "<group>"; };
 		214B5226248ABD5D0034BF22 /* IdentityConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
 		214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+IdentityTests.swift"; sourceTree = "<group>"; };
+		2157951D24A2A9F00012ED28 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
+		2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCacheService.swift; sourceTree = "<group>"; };
+		2157952124A2AA050012ED28 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		2157952324A3D9E30012ED28 /* CacheExpiry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheExpiry.swift; sourceTree = "<group>"; };
+		2157952524A3DC410012ED28 /* CacheEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheEntry.swift; sourceTree = "<group>"; };
 		21599655243E4EEB00E202B1 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		21599658243E4F0B00E202B1 /* AnyCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableTests.swift; sourceTree = "<group>"; };
 		2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
@@ -334,6 +344,18 @@
 				2137BA162498318300F01D04 /* URLQueryItem+IdentityTests.swift */,
 			);
 			path = IdentityTests;
+			sourceTree = "<group>";
+		};
+		2157951C24A2A9E30012ED28 /* cache */ = {
+			isa = PBXGroup;
+			children = (
+				2157951D24A2A9F00012ED28 /* CacheService.swift */,
+				2157951F24A2A9FE0012ED28 /* DiskCacheService.swift */,
+				2157952124A2AA050012ED28 /* Cache.swift */,
+				2157952324A3D9E30012ED28 /* CacheExpiry.swift */,
+				2157952524A3DC410012ED28 /* CacheEntry.swift */,
+			);
+			path = cache;
 			sourceTree = "<group>";
 		};
 		21629DA82461C8EC009D05BF /* Lifecycle */ = {
@@ -506,6 +528,7 @@
 			isa = PBXGroup;
 			children = (
 				BB1D756124A3E06200269B45 /* DataQueueService */,
+				2157951C24A2A9E30012ED28 /* cache */,
 				78DEFEF224509E3C00D7E9FB /* AEPServiceProvider.swift */,
 				78D754DE243BC34100DB9124 /* SystemInfoService.swift */,
 				78D754F32445227D00DB9124 /* ApplicationSystemInfoService.swift */,
@@ -695,6 +718,7 @@
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
 				213F662E2492A36A000184DE /* AEPError.swift in Sources */,
 				D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */,
+				2157952624A3DC410012ED28 /* CacheEntry.swift in Sources */,
 				D4000F1A2458DEDE0052C536 /* NetworkRequest.swift in Sources */,
 				2137BA112498311600F01D04 /* URLQueryItem+Identity.swift in Sources */,
 				21649561249BD24E00B24F81 /* MobileIdentities.swift in Sources */,
@@ -704,6 +728,7 @@
 				785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */,
 				78A642572486C98E004B4E46 /* ThreadSafeArray.swift in Sources */,
 				BB1D756824A3E07F00269B45 /* DataQueue.swift in Sources */,
+				2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */,
 				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
 				BB1D756D24A3E07F00269B45 /* SQLiteWrapper.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
@@ -716,6 +741,7 @@
 				214A24C92497FEBF002C310A /* URLEncoder.swift in Sources */,
 				21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */,
 				BB1D756C24A3E07F00269B45 /* AEPDataQueue.swift in Sources */,
+				2157951E24A2A9F00012ED28 /* CacheService.swift in Sources */,
 				21FBA54A2463DFCE00A2A009 /* Configuration.swift in Sources */,
 				7629742C24294215005CCC73 /* SharedState.swift in Sources */,
 				213C8BC6242426A1009F780A /* EventHub.swift in Sources */,
@@ -746,10 +772,12 @@
 				214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */,
 				2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */,
 				213F66342492C06B000184DE /* IdentityProperties.swift in Sources */,
+				2157952224A2AA050012ED28 /* Cache.swift in Sources */,
 				215CA8152481C9430078D778 /* LifecycleState.swift in Sources */,
 				78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */,
 				BB1D756B24A3E07F00269B45 /* DataEntity.swift in Sources */,
 				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
+				2157952424A3D9E30012ED28 /* CacheExpiry.swift in Sources */,
 				21F02C362477067900D25528 /* LaunchIDManager.swift in Sources */,
 				21F235BD24325A6200C3E59A /* EventHubConstants.swift in Sources */,
 			);
