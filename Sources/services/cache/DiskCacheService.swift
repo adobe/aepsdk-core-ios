@@ -21,25 +21,27 @@ public class DiskCacheService: CacheService {
     // MARK: CacheService
     
     public func set(cacheName: String, key: String, entry: CacheEntry) throws {
+        try createDirectoryIfNeeded(cacheName: cacheName)
         let path = filePath(for: cacheName, with: key)
         _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
         try fileManager.setAttributes([.modificationDate: entry.expiry.date], ofItemAtPath: path)
         dataStore.set(key: path, value: entry.metadata)
     }
     
-    public func get(cacheName: String, key: String) throws -> CacheEntry? {
+    public func get(cacheName: String, key: String) -> CacheEntry? {
+        try? createDirectoryIfNeeded(cacheName: cacheName)
         let path = filePath(for: cacheName, with: key)
-        let data = try Data(contentsOf: URL(fileURLWithPath: path))
-        let attributes = try fileManager.attributesOfItem(atPath: path)
+        guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
+        let attributes = try? fileManager.attributesOfItem(atPath: path)
         
-        guard let expiryDate = attributes[.modificationDate] as? Date else {
+        guard let expiryDate = attributes?[.modificationDate] as? Date else {
             return nil
         }
         
         let expiry = CacheExpiry.date(expiryDate)
         if expiry.isExpired {
             // item is expired, remove from cache
-            try remove(cacheName: cacheName, key: key)
+            try? remove(cacheName: cacheName, key: key)
             return nil
         }
         
@@ -48,12 +50,25 @@ public class DiskCacheService: CacheService {
     }
     
     public func remove(cacheName: String, key: String) throws {
+        try createDirectoryIfNeeded(cacheName: cacheName)
         let path = filePath(for: cacheName, with: key)
         try fileManager.removeItem(atPath: path)
         dataStore.remove(key: path)
     }
     
     // MARK: Helpers
+    
+    /// Creates the directory to store the cache if it does not exist
+    /// - Parameter cacheName: name of the cache to be created if needed
+    private func createDirectoryIfNeeded(cacheName: String) throws {
+        let path = cachePath(for: cacheName)
+      guard !fileManager.fileExists(atPath: path) else {
+        return
+      }
+
+      try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true,
+                                      attributes: nil)
+    }
     
     /// Builds the file path for the given key
     /// - Parameters:
@@ -66,7 +81,7 @@ public class DiskCacheService: CacheService {
     /// Builds the directory path for the cache using the cache prefix and cache name
     /// - Parameter cacheName: name of the cache
     /// - Returns: a string representing the path to the cache for `name`
-    private func cachePath(for cacheName: String) -> String {
+    func cachePath(for cacheName: String) -> String {
         let url = try? fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
         return url?.appendingPathComponent("\(cachePrefix).\(cacheName)", isDirectory: true).path ?? ""
     }

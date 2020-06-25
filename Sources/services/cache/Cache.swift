@@ -36,8 +36,8 @@ public class Cache {
     /// Gets data from the cache for a given key
     /// - Parameter key: the key to be read from the cache
     /// - Returns: entry in the cache if found, nil otherwise
-    public func get(key: String) throws -> CacheEntry? {
-        return try cacheService.get(cacheName: name, key: key)
+    public func get(key: String) -> CacheEntry? {
+        return cacheService.get(cacheName: name, key: key)
     }
     
     /// Removes a key from the cache

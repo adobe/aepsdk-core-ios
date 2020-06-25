@@ -27,7 +27,7 @@ public protocol CacheService {
     ///   - cacheName: name of the cache
     ///   - key: key to be read from the cache
     /// - Returns: the cache entry, nil if not found
-    func get(cacheName: String, key: String) throws -> CacheEntry?
+    func get(cacheName: String, key: String) -> CacheEntry?
     
     /// Removes a key from the cache
     /// - Parameters:
