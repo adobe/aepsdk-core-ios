@@ -15,7 +15,7 @@ struct ConfigurationConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
     static let EXTENSION_VERSION = "0.0.1"
     static let DATA_STORE_NAME = EXTENSION_NAME
-    
+
     static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
     static let CONFIG_BUNDLED_FILE_NAME  = "ADBMobileConfig"
     static let CONFIG_MANIFEST_APPID_KEY = "ADBMobileAppID"
@@ -35,6 +35,7 @@ struct ConfigurationConstants {
         static let CONFIG_CACHE_PREFIX = "cached.config."
         static let ALL_IDENTIFIERS = "config.allidentifiers"
         static let BUILD_ENVIRONMENT = "build.environment"
+        static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
     }
 
     struct Privacy {
