@@ -34,7 +34,7 @@ class DiskCacheServiceTests: XCTestCase {
     override func tearDown() {
         // clear cache after each test
         let cachePath = diskCache.cachePath(for: CACHE_NAME)
-        try! FileManager.default.removeItem(atPath: cachePath)
+        try? FileManager.default.removeItem(atPath: cachePath)
     }
 
     /// When an entry doesn't exist in the cache we should return nil

@@ -25,7 +25,7 @@ public class DiskCacheService: CacheService {
         let path = filePath(for: cacheName, with: key)
         _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
         try fileManager.setAttributes([.modificationDate: entry.expiry.date], ofItemAtPath: path)
-        dataStore.set(key: path, value: entry.metadata)
+        dataStore.set(key: dataStoreKey(for: cacheName, with: key), value: entry.metadata)
     }
     
     public func get(cacheName: String, key: String) -> CacheEntry? {
@@ -45,7 +45,7 @@ public class DiskCacheService: CacheService {
             return nil
         }
         
-        let meta = dataStore.getDictionary(key: path) as? [String: String]
+        let meta = dataStore.getDictionary(key: dataStoreKey(for: cacheName, with: key)) as? [String: String]
         return CacheEntry(data: data, expiry: .date(expiryDate), metadata: meta)
     }
     
@@ -73,6 +73,7 @@ public class DiskCacheService: CacheService {
     /// - Parameters:
     ///   - cacheName: name of the cache
     ///   - key: key or file name
+    /// - Returns: the full path for the location of the cache entry
     private func filePath(for cacheName: String, with key: String) -> String {
         return "\(cachePath(for: cacheName.alphanumeric))/\(key.alphanumeric)"
     }
@@ -82,7 +83,16 @@ public class DiskCacheService: CacheService {
     /// - Returns: a string representing the path to the cache for `name`
     func cachePath(for cacheName: String) -> String {
         let url = try? fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        return url?.appendingPathComponent("\(cachePrefix).\(cacheName.alphanumeric)", isDirectory: true).path ?? ""
+        return url?.appendingPathComponent("\(cachePrefix)\(cacheName.alphanumeric)", isDirectory: true).path ?? ""
+    }
+    
+    /// Formats the key for the entry given a cache name and key
+    /// - Parameters:
+    ///   - cacheName: name of the cache
+    ///   - key: key for the entry
+    /// - Returns: the key to be used in the datastore for the entry
+    func dataStoreKey(for cacheName: String, with key: String) -> String {
+        return "\(cacheName.alphanumeric)/\(key.alphanumeric)"
     }
     
 }
