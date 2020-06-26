@@ -23,10 +23,8 @@ struct EventListenerContainer: Equatable {
     
     /// The `EventListener`
     let listener: EventListener
-    
-    let preflight: EventListenerPreflight
-    
-    /// The `EventType` `listener` is listening for, nil if `listener`v is a response listener
+        
+    /// The `EventType` `listener` is listening for, nil if `listener` is a response listener
     let type: EventType?
     
     /// The `EventSource` `listener` is listening for, nil if `listener` is a response listener
@@ -50,9 +48,13 @@ struct EventListenerContainer: Equatable {
     }
 }
 
-extension EventListenerContainer {
-    // TODO: comment
-    init(listener: @escaping EventListener, triggerEventId: UUID, timeout: DispatchWorkItem?) {
-        self.init(listener: listener, preflight: { _ in true }, type: nil, source: nil, triggerEventId: triggerEventId, timeoutTask: timeout)
+internal extension EventListenerContainer {
+    /// Additional convenience initializer for constructing an `EventResponseListener` based `EventListenerContainer`
+    /// - Parameters:
+    ///     - listener: Closure to be executed when the matching event is received
+    ///     - triggerEventId: The event `UUID` that this `EventResponseListener` is waiting for
+    ///     - timeout: `DispatchWorkItem` to be invoked if the event is not received in time.
+    init(listener: @escaping EventResponseListener, triggerEventId: UUID, timeout: DispatchWorkItem?) {
+        self.init(listener: listener, type: nil, source: nil, triggerEventId: triggerEventId, timeoutTask: timeout)
     }
 }

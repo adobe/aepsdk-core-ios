@@ -31,66 +31,51 @@ class ExtensionContainer {
     
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
-    
-    /// Listeners array of `EventListeners` that are listening for a specific response event
-    let responseEventListeners: ThreadSafeArray<EventListenerContainer>
-    
+        
     init(_ type: Extension.Type, _ queue: DispatchQueue) {
         extensionQueue = queue
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
-        responseEventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
         
         // initialize the backing extension on the extension queue
-        queue.async {
+        extensionQueue.async {
             self.exten = type.init()
-            self.sharedState = SharedState(self.exten!.name)
-            self.sharedStateName = self.exten!.name
-            self.exten!.onRegistered()
+            guard let unwrappedExtension = self.exten else { return }
+            self.sharedState = SharedState(unwrappedExtension.name)
+            self.sharedStateName = unwrappedExtension.name
+            unwrappedExtension.onRegistered()
             self.eventOrderer.start()
         }
     }
 }
 
 extension ExtensionContainer {
-    public func registerListener(type: EventType, source: EventSource, preflight: @escaping EventListenerPreflight = { _ in true }, listener: @escaping EventListener) {
-        let listenerContainer = EventListenerContainer(listener: listener, preflight: preflight,
-                                                       type: type, source: source, triggerEventId: nil, timeoutTask: nil)
+    /// Registers an `EventListener` for the specified `EventType` and `EventSource`
+    /// - Parameters:
+    ///   - type: `EventType` to listen for
+    ///   - source: `EventSource` to listen for
+    ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives an `Event` matching `type` and `source`
+    public func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+        let listenerContainer = EventListenerContainer(listener: listener, type: type, source: source, triggerEventId: nil, timeoutTask: nil)
         eventListeners.append(listenerContainer)
-    }
-    
-    public func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
-        let timeoutTask = DispatchWorkItem {
-            listener(nil)
-            _ = self.responseEventListeners.filterRemove { $0.triggerEventId == triggerEvent.id }
-        }
-        extensionQueue.asyncAfter(deadline: DispatchTime.now() + timeout, execute: timeoutTask)
-        let responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEvent.id, timeout: timeoutTask)
-        responseEventListeners.append(responseListenerContainer)
     }
 }
 
 private extension ExtensionContainer {
+    /// Handles event processing, called by the `OperationOrderer` owned by this `ExtensionContainer`
+    /// - Parameter event: Event currently being processed
+    /// - Returns: *true* if event processing should continue, *false* otherwise
     private func eventProcessor(_ event: Event) -> Bool {
+        guard let _ = exten, exten!.readyForEvent(event) else { return false }
+
         // process events into "standard" listeners
         for listenerContainer in eventListeners.shallowCopy {
-            guard listenerContainer.preflight(event) else { return false }
             if listenerContainer.shouldNotify(event) {
                 listenerContainer.listener(event)
             }
         }
-        
-        // process one-time listeners
-        if let responseID = event.responseID {
-            responseEventListeners.filterRemove {
-                $0.triggerEventId == responseID
-            }.forEach {
-                $0.timeoutTask?.cancel()
-                $0.listener(event)
-            }
-        }
-        
+                
         return true
     }
 }

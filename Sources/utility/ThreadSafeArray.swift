@@ -76,13 +76,9 @@ extension ThreadSafeArray where T: Equatable {
     /// - Returns: Array of objects matching the given predicate
     func filterRemove(_ isIncluded: (T) throws -> Bool) -> [T] {
         queue.sync {
-            do {
-                let filteredValues = try self.array.filter(isIncluded)
-                self.array = self.array.filter { !filteredValues.contains($0) }
-                return filteredValues
-            } catch {
-                return [T]()
-            }
+            let filteredValues = (try? self.array.filter(isIncluded)) ?? []
+            self.array = self.array.filter { !filteredValues.contains($0) }
+            return filteredValues
         }
     }
 }

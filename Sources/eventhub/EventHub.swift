@@ -13,7 +13,6 @@ governing permissions and limitations under the License.
 import Foundation
 
 public typealias EventListener = (Event) -> Void
-public typealias EventListenerPreflight = (Event) -> Bool
 public typealias EventResponseListener = (Event?) -> Void
 public typealias SharedStateResolver = ([String: Any]?) -> Void
 public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
@@ -23,6 +22,7 @@ final public class EventHub {
     private let eventHubQueue = DispatchQueue(label: "com.adobe.eventhub.queue")
     private var registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventhub.registeredExtensions.queue")
     private let eventNumberMap = ThreadSafeDictionary<UUID, Int>(identifier: "com.adobe.eventhub.eventNumber.queue")
+    private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventhub.response.queue")
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
 
@@ -36,7 +36,19 @@ final public class EventHub {
     // MARK: Public API
 
     init() {
+        // Setup eventQueue handler for the main OperationOrderer
         eventQueue.setHandler { (event) -> Bool in
+            // Handle response event listeners first
+            if let responseID = event.responseID {
+                _ = self.responseEventListeners.filterRemove { (eventListenerContainer: EventListenerContainer) -> Bool in
+                    guard eventListenerContainer.triggerEventId == responseID else { return false }
+                    eventListenerContainer.timeoutTask?.cancel()
+                    eventListenerContainer.listener(event)
+                    return true
+                }
+            }
+
+            // Send event to each ExtensionContainer
             self.registeredExtensions.sync {
                 $0.values.forEach {
                     $0.eventOrderer.add(event)
@@ -51,28 +63,6 @@ final public class EventHub {
         eventHubQueue.async {
             self.eventQueue.start()
         }
-    }
-
-    /// Registers an `EventListener` for the specified `EventType` and `EventSource`
-    /// - Parameters:
-    ///   - parentExtension: The extension who is managing this `EventListener`
-    ///   - type: `EventType` to listen for
-    ///   - source: `EventSource` to listen for
-    ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives an `Event` matching `type` and `source`
-    public func registerListener<T: Extension>(parentExtension: T.Type, type: EventType, source: EventSource, preflight: @escaping EventListenerPreflight = { _ in true }, listener: @escaping EventListener) {
-        guard let extensionContainer = self.registeredExtensions[parentExtension.typeName] else { return }
-        extensionContainer.registerListener(type: type, source: source, preflight: preflight, listener: listener)
-    }
-
-    /// Registers an `EventListener` which will be invoked when the response `Event` to `triggerEvent` is dispatched
-    /// - Parameters:
-    ///   - parentExtension: The extension who is managing this `EventListener`
-    ///   - triggerEvent: An `Event` which will trigger a response `Event`
-    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
-    ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
-    public func registerResponseListener<T: Extension>(parentExtension: T.Type, triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
-        guard let extensionContainer = self.registeredExtensions[parentExtension.typeName] else { return }
-        extensionContainer.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
     }
 
     /// Dispatches a new `Event` to the `EventHub`. This `Event` is sent to all listeners who have registered for the `EventType`and `EventSource`
@@ -107,6 +97,22 @@ final public class EventHub {
             completion(nil)
         }
     }
+    
+    /// Registers an `EventListener` which will be invoked when the response `Event` to `triggerEvent` is dispatched
+    /// - Parameters:
+    ///   - triggerEvent: An `Event` which will trigger a response `Event`
+    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
+    ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
+    public func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
+        var responseListenerContainer: EventListenerContainer? = nil // initialized here so we can use in timeout block
+        responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEvent.id, timeout: DispatchWorkItem {
+            listener(nil)
+            _ = self.responseEventListeners.filterRemove { $0 == responseListenerContainer }
+        })
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + timeout, execute: responseListenerContainer!.timeoutTask!)
+        responseEventListeners.append(responseListenerContainer!)
+    }
+
 
     /// Creates a new `SharedState` for the extension with provided data, versioned at `event` if not nil otherwise versioned at latest
     /// - Parameters:
@@ -157,6 +163,15 @@ final public class EventHub {
         }
 
         return sharedState.resolve(version: version)
+    }
+    
+    // MARK: Internal
+    
+    /// Retrieves the `ExtensionContainer` wrapper for the given extension type
+    /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
+    /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
+    internal func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
+        return registeredExtensions[type.typeName]
     }
 
     // MARK: Private

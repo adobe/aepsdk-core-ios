@@ -24,7 +24,7 @@ public final class AEPCore {
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
-    static func registerExtensions(_ extensions: [Extension.Type], _ completion: @escaping () -> Void = { }) {
+    static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
 //        extensions.insert(AEPConfiguration.self, at: 0) TODO: Uncomment after Configuration is merged
 
         let registeredCounter = AtomicCounter()
@@ -33,7 +33,7 @@ public final class AEPCore {
             EventHub.shared.registerExtension($0) { (_) in
                 if registeredCounter.incrementAndGet() == extensions.count {
                     EventHub.shared.start()
-                    completion()
+                    completion?()
                 }
             }
         }
