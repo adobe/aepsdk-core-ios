@@ -91,7 +91,7 @@ public class DiskCacheService: CacheService {
     ///   - cacheName: name of the cache
     ///   - key: key for the entry
     /// - Returns: the key to be used in the datastore for the entry
-    func dataStoreKey(for cacheName: String, with key: String) -> String {
+    private func dataStoreKey(for cacheName: String, with key: String) -> String {
         return "\(cacheName.alphanumeric)/\(key.alphanumeric)"
     }
     
