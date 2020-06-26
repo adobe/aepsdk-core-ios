@@ -56,7 +56,7 @@ class OperationOrdererTests: XCTestCase {
             queue.add(i)
         }
         
-        queue.start(after: 0.5)
+        queue.start(after: 0.25)
         wait(for: [expectation], timeout: 1.0)
     }
     

@@ -230,11 +230,9 @@ class AEPCoreTests: XCTestCase {
         // test
         EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
         AEPCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
-        AEPCore.start {
-        }
         
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1.0)
     }
     
     func testRegisterSameExtensionTwice() {
@@ -251,7 +249,7 @@ class AEPCoreTests: XCTestCase {
         }
             
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 0.25)
     }
     
     func testDispatchEventSimple() {
@@ -270,7 +268,7 @@ class AEPCoreTests: XCTestCase {
         wait(for: [registerExpectation], timeout: 1.0)
             
         // register listener after registration
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: expectedEvent.type, source: expectedEvent.source) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: expectedEvent.type, source: expectedEvent.source) { (event) in
             XCTAssertEqual(event.id, expectedEvent.id)
             eventExpectation.fulfill()
         }
