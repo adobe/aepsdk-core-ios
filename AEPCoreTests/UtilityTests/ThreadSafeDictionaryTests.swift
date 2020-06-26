@@ -126,6 +126,20 @@ class ThreadSafeDictionaryTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
     
+    /// Tests the .shallowCopy functionality to ensure that it doesn't deadlock and returns the appropriate copy of the backing dictionary
+    func testShallowCopyNoDeadlock() {
+        let count = 1000
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+        
+        for i in 0..<count {
+            testDictionary[i] = i
+        }
+        
+        testDictionary.shallowCopy.values.forEach {
+            XCTAssertEqual(testDictionary[$0], $0)
+        }
+    }
+    
     private func dispatchSyncWithDict(i: Int) {
         dispatchQueueSerial.sync {
             self.threadSafeDict?[0] = i

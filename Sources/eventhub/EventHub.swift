@@ -49,11 +49,10 @@ final public class EventHub {
             }
 
             // Send event to each ExtensionContainer
-            self.registeredExtensions.sync {
-                $0.values.forEach {
-                    $0.eventOrderer.add(event)
-                }
+            self.registeredExtensions.shallowCopy.values.forEach {
+                $0.eventOrderer.add(event)
             }
+            
             return true
         }
     }
