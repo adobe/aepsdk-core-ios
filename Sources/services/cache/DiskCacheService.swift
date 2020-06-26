@@ -75,7 +75,7 @@ public class DiskCacheService: CacheService {
     ///   - cacheName: name of the cache
     ///   - key: key or file name
     private func filePath(for cacheName: String, with key: String) -> String {
-        return "\(cachePath(for: cacheName))/\(key)"
+        return "\(cachePath(for: cacheName.alphanumeric))/\(key.alphanumeric)"
     }
     
     /// Builds the directory path for the cache using the cache prefix and cache name
@@ -83,7 +83,14 @@ public class DiskCacheService: CacheService {
     /// - Returns: a string representing the path to the cache for `name`
     func cachePath(for cacheName: String) -> String {
         let url = try? fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-        return url?.appendingPathComponent("\(cachePrefix).\(cacheName)", isDirectory: true).path ?? ""
+        return url?.appendingPathComponent("\(cachePrefix).\(cacheName.alphanumeric)", isDirectory: true).path ?? ""
     }
     
+}
+
+/// Used to sanitize cache name and key
+private extension String {
+    var alphanumeric: String {
+        return self.components(separatedBy: CharacterSet.alphanumerics.inverted).joined().lowercased()
+    }
 }
