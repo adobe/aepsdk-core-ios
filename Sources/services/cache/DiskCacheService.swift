@@ -50,7 +50,6 @@ public class DiskCacheService: CacheService {
     }
     
     public func remove(cacheName: String, key: String) throws {
-        try createDirectoryIfNeeded(cacheName: cacheName)
         let path = filePath(for: cacheName, with: key)
         try fileManager.removeItem(atPath: path)
         dataStore.remove(key: path)
