@@ -13,14 +13,69 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Contains an `Extension` and additional information related to the extension
-struct ExtensionContainer {
+class ExtensionContainer {
     
     /// The extension held in this container
-    let exten: Extension
+    var exten: Extension? = nil
     
     /// The `SharedState` associated with the extension
-    let sharedState: SharedState
+    var sharedState: SharedState? = nil
+    
+    var sharedStateName: String? = nil
     
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
+    
+    /// Operation Orderer queue of `Event` objects for this extension
+    let eventOrderer: OperationOrderer<Event>
+    
+    /// Listeners array of `EventListeners` for this extension
+    let eventListeners: ThreadSafeArray<EventListenerContainer>
+        
+    init(_ type: Extension.Type, _ queue: DispatchQueue) {
+        extensionQueue = queue
+        eventOrderer = OperationOrderer<Event>()
+        eventListeners = ThreadSafeArray<EventListenerContainer>()
+        eventOrderer.setHandler(eventProcessor)
+        
+        // initialize the backing extension on the extension queue
+        extensionQueue.async {
+            self.exten = type.init()
+            guard let unwrappedExtension = self.exten else { return }
+            self.sharedState = SharedState(unwrappedExtension.name)
+            self.sharedStateName = unwrappedExtension.name
+            unwrappedExtension.onRegistered()
+            self.eventOrderer.start()
+        }
+    }
+}
+
+extension ExtensionContainer {
+    /// Registers an `EventListener` for the specified `EventType` and `EventSource`
+    /// - Parameters:
+    ///   - type: `EventType` to listen for
+    ///   - source: `EventSource` to listen for
+    ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives an `Event` matching `type` and `source`
+    public func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+        let listenerContainer = EventListenerContainer(listener: listener, type: type, source: source, triggerEventId: nil, timeoutTask: nil)
+        eventListeners.append(listenerContainer)
+    }
+}
+
+private extension ExtensionContainer {
+    /// Handles event processing, called by the `OperationOrderer` owned by this `ExtensionContainer`
+    /// - Parameter event: Event currently being processed
+    /// - Returns: *true* if event processing should continue, *false* otherwise
+    private func eventProcessor(_ event: Event) -> Bool {
+        guard let _ = exten, exten!.readyForEvent(event) else { return false }
+
+        // process events into "standard" listeners
+        for listenerContainer in eventListeners.shallowCopy {
+            if listenerContainer.shouldNotify(event) {
+                listenerContainer.listener(event)
+            }
+        }
+                
+        return true
+    }
 }

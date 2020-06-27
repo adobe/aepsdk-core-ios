@@ -127,6 +127,96 @@ class ThreadSafeArrayTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
     
+    /// Tests that the filterRemove function works to run provided closure against items and then remove them.
+    func testFilterRemove() {
+        let count = 1000
+        let expectation = XCTestExpectation(description: "filter function called for every item in array")
+        expectation.expectedFulfillmentCount = count
+        expectation.assertForOverFulfill = true
+        let tsArray = ThreadSafeArray<Int>()
+        for i in 0..<count {
+            tsArray.append(i)
+        }
+        
+        XCTAssertEqual(tsArray.count, count)
+        
+        // filter even numbers into filteredItems
+        let filteredItems = tsArray.filterRemove {
+            expectation.fulfill()
+            return $0 % 2 == 0
+        }
+        
+        // validate 50/50 split
+        XCTAssertEqual(filteredItems.count, tsArray.count)
+        
+        // validate correct split
+        filteredItems.forEach { // even numbers should be here
+            XCTAssertEqual($0 % 2, 0)
+        }
+        tsArray.shallowCopy.forEach { // odd numbers should be here
+            XCTAssertEqual($0 % 2, 1)
+        }
+    }
+    
+    // Tests that shallowCopy returns the correct state of the backing array
+    func testShallowCopy() {
+        let count = 1000
+        let tsArray = ThreadSafeArray<Int>()
+        
+        // fill array
+        for i in 0..<count {
+            tsArray.append(i)
+        }
+        
+        XCTAssertEqual(tsArray.shallowCopy.count, count)
+        
+        tsArray.clear()
+        
+        XCTAssertEqual(tsArray.shallowCopy.count, 0)
+        
+        // fill array again
+        for i in 0..<count {
+            tsArray.append(i)
+        }
+        
+        XCTAssertEqual(tsArray.shallowCopy.count, count)
+    }
+    
+    // Tests that clear removes all items from the backing array
+    func testClear() {
+        let count = 1000
+        let tsArray = ThreadSafeArray<Int>()
+        
+        // fill array
+        for i in 0..<count {
+            tsArray.append(i)
+        }
+        
+        XCTAssertEqual(tsArray.count, count)
+        
+        tsArray.clear()
+        
+        XCTAssertEqual(tsArray.count, 0)
+
+    }
+    
+    // Tests that the .shallowCopy functionality doesn't deadlock against the backing array
+    func testShallowCopyNoDeadlock() {
+        let count = 1000
+        let tsArray = ThreadSafeArray<Int>()
+        
+        // fill array
+        for i in 0..<count {
+            tsArray.append(i)
+        }
+        
+        var counter = 0
+        tsArray.shallowCopy.forEach {
+            XCTAssertEqual($0, tsArray[counter])
+            counter = counter+1
+        }
+    }
+    
     private func dispatchSyncWithArray(i: Int) {
         dispatchQueueSerial.sync {
             if threadSafeArray.isEmpty {

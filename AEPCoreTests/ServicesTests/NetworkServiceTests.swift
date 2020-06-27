@@ -141,7 +141,7 @@ class NetworkServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Completion handler called")
 
         let testUrl = URL(string: "https://example.com:81")!
-        let networkRequest = NetworkRequest(url: testUrl, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 1.0, readTimeout: 1.0)
+        let networkRequest = NetworkRequest(url: testUrl, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.25, readTimeout: 0.25)
         defaultNetworkService.connectAsync(networkRequest: networkRequest, completionHandler: {connection in
             XCTAssertNil(connection.data)
             XCTAssertNil(connection.response)
@@ -150,7 +150,7 @@ class NetworkServiceTests: XCTestCase {
             expectation.fulfill()
         })
         
-        wait(for: [expectation], timeout: 1.5)
+        wait(for: [expectation], timeout: 0.6)
     }
     
     func testConnectAsync_initiatesConnection_whenValidUrl_noCompletionHandler() {

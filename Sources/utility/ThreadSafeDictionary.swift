@@ -28,9 +28,17 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     public var count: Int {
         return queue.sync { return self.dictionary.keys.count }
     }
-        
+    
+    // Gets a non-thread-safe shallow copy of the backing dictionary
+    public var shallowCopy: [K: V] {
+        return queue.sync {
+            let dictionary = self.dictionary
+            return dictionary
+        }
+    }
+
     // MARK: Subscript
-     public subscript(key: K) -> V? {
+    public subscript(key: K) -> V? {
          get {
             return queue.sync { return self.dictionary[key] }
          }
@@ -44,6 +52,5 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     @inlinable public func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
         return queue.sync { return try? self.dictionary.first(where: predicate) }
     }
-
 }
 
