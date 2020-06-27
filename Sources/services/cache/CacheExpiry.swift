@@ -14,7 +14,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Represents a cache expiry date
-public enum CacheExpiry {
+public enum CacheExpiry: Equatable {
     case never
     case seconds(TimeInterval)
     case date(Date)
