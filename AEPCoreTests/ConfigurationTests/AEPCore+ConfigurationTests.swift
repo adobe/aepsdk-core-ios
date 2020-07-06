@@ -143,7 +143,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         let expectation = XCTestExpectation(description: "getSdkIdentities dispatches a configuration request identity event")
         expectation.assertForOverFulfill = true
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestIdentity) { (event) in
             expectation.fulfill()
         }
         

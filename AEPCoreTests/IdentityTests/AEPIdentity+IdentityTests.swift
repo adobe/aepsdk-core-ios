@@ -43,8 +43,7 @@ class AEPIdentityTests: XCTestCase {
         let expectation = XCTestExpectation(description: "appendToUrl should dispatch an event")
         expectation.assertForOverFulfill = true
         let expectedUrl = URL(string: "https://www.adobe.com/")
-        
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .identity, source: .responseContent) { (event) in
             XCTAssertEqual(expectedUrl?.absoluteString, event.data?[IdentityConstants.EventDataKeys.BASE_URL] as? String)
             expectation.fulfill()
         }
@@ -62,7 +61,7 @@ class AEPIdentityTests: XCTestCase {
         let expectation = XCTestExpectation(description: "getIdentifiers should dispatch an event")
         expectation.assertForOverFulfill = true
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .identity, source: .requestIdentity) { (event) in
             expectation.fulfill()
         }
         
@@ -78,8 +77,7 @@ class AEPIdentityTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "getExperienceCloudId should dispatch an event")
         expectation.assertForOverFulfill = true
-        
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .identity, source: .requestIdentity) { (event) in
             expectation.fulfill()
         }
         
@@ -101,7 +99,7 @@ class AEPIdentityTests: XCTestCase {
         let expectedIds = [expectedType: expectedId]
         let expectedAuthState = MobileVisitorAuthenticationState.authenticated
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .identity, source: .requestIdentity) { (event) in
             self.assertSyncEvent(event: event, identifiers: expectedIds, authState: expectedAuthState)
             expectation.fulfill()
         }
@@ -121,7 +119,7 @@ class AEPIdentityTests: XCTestCase {
         
         let expectedIds = ["testType": "testId"]
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .identity, source: .requestIdentity) { (event) in
             self.assertSyncEvent(event: event, identifiers: expectedIds, authState: .unknown)
             expectation.fulfill()
         }
@@ -142,7 +140,7 @@ class AEPIdentityTests: XCTestCase {
         let expectedIds = ["testType": "testId"]
         let expectedAuthState = MobileVisitorAuthenticationState.loggedOut
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .identity, source: .requestIdentity) { (event) in
             self.assertSyncEvent(event: event, identifiers: expectedIds, authState: expectedAuthState)
             expectation.fulfill()
         }
@@ -160,7 +158,7 @@ class AEPIdentityTests: XCTestCase {
         let expectation = XCTestExpectation(description: "getUrlVariables should dispatch an event")
         expectation.assertForOverFulfill = true
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .identity, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .identity, source: .requestIdentity) { (event) in
             XCTAssertTrue(event.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? Bool ?? false)
             expectation.fulfill()
         }

@@ -90,8 +90,7 @@ class LifecycleFunctionalTests: XCTestCase {
         lifecycleResponseExpectation.assertForOverFulfill = true
         
         EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [:], event: nil)
-        
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .lifecycle, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .lifecycle, source: .responseContent) { (event) in
             XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP] as? Int)
             XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int)
             XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH] as? Double)
@@ -102,7 +101,7 @@ class LifecycleFunctionalTests: XCTestCase {
             lifecycleResponseExpectation.fulfill()
         }
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             sharedStateExpectation.fulfill()
         }
         
@@ -123,7 +122,7 @@ class LifecycleFunctionalTests: XCTestCase {
         lifecycleResponseExpectation.assertForOverFulfill = true
         EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [:], event: nil)
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .lifecycle, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .lifecycle, source: .responseContent) { (event) in
             XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP] as? Int)
             XCTAssertEqual(0, event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int)
             XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH] as? Double)
@@ -134,7 +133,7 @@ class LifecycleFunctionalTests: XCTestCase {
             lifecycleResponseExpectation.fulfill()
         }
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             sharedStateExpectation.fulfill()
         }
         
@@ -157,7 +156,7 @@ class LifecycleFunctionalTests: XCTestCase {
         lifecycleResponseExpectation.expectedFulfillmentCount = 2
         EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1], event: nil)
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .lifecycle, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .lifecycle, source: .responseContent) { (event) in
             XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH] as? Double)
             XCTAssertNotNil(event.data?[LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP])
             XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.SESSION_EVENT] as? String)
@@ -167,7 +166,7 @@ class LifecycleFunctionalTests: XCTestCase {
             lifecycleResponseExpectation.fulfill()
         }
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             sharedStateExpectation.fulfill()
         }
         
