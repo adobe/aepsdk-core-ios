@@ -15,7 +15,6 @@ class AEPLifecycle: Extension {
     let name = LifecycleConstants.EXTENSION_NAME
     let version = LifecycleConstants.EXTENSION_VERSION
     
-    private let eventQueue = OperationOrderer<EventHandlerMapping>(LifecycleConstants.EXTENSION_NAME)
     private var lifecycleState: LifecycleState
     
     // MARK: Extension
@@ -23,7 +22,6 @@ class AEPLifecycle: Extension {
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     required init() {
         lifecycleState = LifecycleState(dataStore: NamedKeyValueStore(name: name))
-        eventQueue.setHandler({ return $0.handler($0.event) })
     }
     
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
@@ -33,17 +31,31 @@ class AEPLifecycle: Extension {
         
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String : Any], event: nil)
-        eventQueue.start()
     }
     
     func onUnregistered() {}
+    
+    func readyForEvent(_ event: Event) -> Bool {
+        if event.type == .genericLifecycle && event.source == .requestContent {
+            let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)
+            return configurationSharedState?.status == .set
+        }
+        
+        return true
+    }
     
     // MARK: Event Listeners
     
     /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`
     /// - Parameter event: the generic lifecycle event
     private func receiveLifecycleRequest(event: Event) {
-        eventQueue.add((event, handleLifecycleRequest(event:)))
+        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event) else { return }
+        
+        if event.isLifecycleStartEvent {
+            start(event: event, configurationSharedState: configurationSharedState)
+        } else if event.isLifecyclePauseEvent {
+            lifecycleState.pause(pauseDate: event.timestamp)
+        }
     }
     
     /// Invoked when the `EventHub` dispatches a shared state event. If the shared state owner is Configuration we trigger the internal `eventQueue`.
@@ -52,29 +64,8 @@ class AEPLifecycle: Extension {
         guard let stateOwner = event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String else { return }
 
         if stateOwner == ConfigurationConstants.EXTENSION_NAME {
-            eventQueue.start()
+            startEvents()
         }
-    }
-    
-    // MARK: Event Handlers
-    
-    /// Handles the Lifecycle request event by either invoking the start or pause business logic
-    /// - Parameter event: a Lifecycle request event
-    /// - Returns: True if the Lifecycle event was processed, false if the configuration shared state is not yet ready
-    private func handleLifecycleRequest(event: Event) -> Bool {
-        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event) else {
-            return false
-        }
-        
-        guard configurationSharedState.status == .set else { return false }
-        
-        if event.isLifecycleStartEvent {
-            start(event: event, configurationSharedState: configurationSharedState)
-        } else if event.isLifecyclePauseEvent {
-            lifecycleState.pause(pauseDate: event.timestamp)
-        }
-        
-        return true
     }
     
     // MARK: Helpers

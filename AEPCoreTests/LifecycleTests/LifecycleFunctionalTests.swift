@@ -18,14 +18,19 @@ class LifecycleFunctionalTests: XCTestCase {
     var mockSystemInfoService: MockSystemInfoService!
     
     override func setUp() {
-        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
-        setupMockSystemInfoService()
         MockExtension.reset()
         EventHub.reset()
+        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+        setupMockSystemInfoService()
         EventHub.shared.start()
         registerExtension(MockExtension.self)
         registerExtension(AEPConfiguration.self)
         registerExtension(AEPLifecycle.self)
+        AEPCore.updateConfigurationWith(configDict: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1])
+    }
+    
+    override func tearDown() {
+        EventHub.reset()
     }
     
     // helpers
@@ -51,7 +56,6 @@ class LifecycleFunctionalTests: XCTestCase {
         mockSystemInfoService.activeLocaleName = "en-US"
         mockSystemInfoService.displayInformation = (100, 100)
        
-        
         AEPServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
     
@@ -85,7 +89,6 @@ class LifecycleFunctionalTests: XCTestCase {
         // setup
         let additionalContextData = ["testKey": "testVal"]
         let sharedStateExpectation = XCTestExpectation(description: "Lifecycle start dispatches a lifecycle shared state")
-        sharedStateExpectation.expectedFulfillmentCount = 2 // for config shared state and lifecycle shared state
         let lifecycleResponseExpectation = XCTestExpectation(description: "Lifecycle start dispatches a lifecycle response event")
         lifecycleResponseExpectation.assertForOverFulfill = true
         
@@ -102,7 +105,9 @@ class LifecycleFunctionalTests: XCTestCase {
         }
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
-            sharedStateExpectation.fulfill()
+            if let stateOwner = event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String, stateOwner == LifecycleConstants.EXTENSION_NAME {
+                sharedStateExpectation.fulfill()
+            }
         }
         
         // test
@@ -117,7 +122,6 @@ class LifecycleFunctionalTests: XCTestCase {
         // setup
         let additionalContextData = ["testKey": "testVal"]
         let sharedStateExpectation = XCTestExpectation(description: "Lifecycle start dispatches a lifecycle shared state")
-        sharedStateExpectation.expectedFulfillmentCount = 2 // for config shared state and lifecycle shared state
         let lifecycleResponseExpectation = XCTestExpectation(description: "Lifecycle start dispatches a lifecycle response event")
         lifecycleResponseExpectation.assertForOverFulfill = true
         EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [:], event: nil)
@@ -134,7 +138,9 @@ class LifecycleFunctionalTests: XCTestCase {
         }
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
-            sharedStateExpectation.fulfill()
+            if let stateOwner = event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String, stateOwner == LifecycleConstants.EXTENSION_NAME {
+                sharedStateExpectation.fulfill()
+            }
         }
         
         // test
@@ -151,10 +157,8 @@ class LifecycleFunctionalTests: XCTestCase {
         // setup
         let additionalContextData = ["testKey": "testVal"]
         let sharedStateExpectation = XCTestExpectation(description: "Lifecycle start dispatches a lifecycle shared state")
-        sharedStateExpectation.expectedFulfillmentCount = 2 // for config shared state and lifecycle shared state
         let lifecycleResponseExpectation = XCTestExpectation(description: "Lifecycle start dispatches two lifecycle response events")
         lifecycleResponseExpectation.expectedFulfillmentCount = 2
-        EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1], event: nil)
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .lifecycle, source: .responseContent) { (event) in
             XCTAssertEqual(LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, event.data?[LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH] as? Double)
@@ -162,18 +166,25 @@ class LifecycleFunctionalTests: XCTestCase {
             XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.SESSION_EVENT] as? String)
             let expectedLaunchCount = event.data?[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP] as? Int == 0 ? 1 : 2
             self.assertContextData(contextData: (event.data?[LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA] as? [String: Any])!, launches: expectedLaunchCount, additionalContextData: additionalContextData)
-            
+            print("Lifecycle response timeout")
             lifecycleResponseExpectation.fulfill()
         }
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
-            sharedStateExpectation.fulfill()
+            print("Shared state event")
+            print(event)
+            if let stateOwner = event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String, stateOwner == LifecycleConstants.EXTENSION_NAME {
+                sharedStateExpectation.fulfill()
+            }
         }
         
+
+//        AEPCore.updateConfigurationWith(configDict: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1])
         // test
         AEPCore.lifecycleStart(additionalContextData: additionalContextData)
         AEPCore.lifecyclePause()
-        sleep(2) // allow session timeout to expire
+        sleep(3) // allow session timeout to expire
+        print("second lifecycle start")
         AEPCore.lifecycleStart(additionalContextData: additionalContextData)
         
         // verify

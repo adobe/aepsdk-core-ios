@@ -76,6 +76,7 @@ class AEPConfiguration: Extension {
     /// - Returns: True if processing the Configuration request event succeeded, otherwise false
     private func handleConfigurationRequest(event: Event) -> Bool {
         if event.isUpdateConfigEvent {
+            print("procesing update config \(event)")
             return processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
         } else if event.isGetConfigEvent {
             dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
