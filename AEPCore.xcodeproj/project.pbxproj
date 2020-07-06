@@ -68,6 +68,8 @@
 		218208ED247EED6D003D3591 /* ConfigurationFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218208EC247EED6D003D3591 /* ConfigurationFunctionalTests.swift */; };
 		218CAD7524744A6D004DA1E8 /* NetworkServiceConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218CAD7424744A6D004DA1E8 /* NetworkServiceConstants.swift */; };
 		21A10255248170E5009AB015 /* MockConfigurationDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A10254248170E5009AB015 /* MockConfigurationDownloaderNetworkService.swift */; };
+		21B0B61924B3A6C8002A1B1A /* Event+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B0B61824B3A6C8002A1B1A /* Event+Identity.swift */; };
+		21B0B61B24B3A7B7002A1B1A /* IdentityState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B0B61A24B3A7B7002A1B1A /* IdentityState.swift */; };
 		21C754B324785E52007B8871 /* ThreadSafeDictionaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C754B224785E52007B8871 /* ThreadSafeDictionaryTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E52422917600C11388 /* AEPCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CAC0E42422917600C11388 /* AEPCoreTests.swift */; };
@@ -207,6 +209,8 @@
 		218208EC247EED6D003D3591 /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		218CAD7424744A6D004DA1E8 /* NetworkServiceConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceConstants.swift; sourceTree = "<group>"; };
 		21A10254248170E5009AB015 /* MockConfigurationDownloaderNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloaderNetworkService.swift; sourceTree = "<group>"; };
+		21B0B61824B3A6C8002A1B1A /* Event+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Identity.swift"; sourceTree = "<group>"; };
+		21B0B61A24B3A7B7002A1B1A /* IdentityState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityState.swift; sourceTree = "<group>"; };
 		21C754B224785E52007B8871 /* ThreadSafeDictionaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadSafeDictionaryTests.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
@@ -384,6 +388,8 @@
 				2181948A2489F66D004F869A /* Identity.swift */,
 				214B5222248ABC710034BF22 /* AEPIdentity.swift */,
 				214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */,
+				21B0B61824B3A6C8002A1B1A /* Event+Identity.swift */,
+				21B0B61A24B3A7B7002A1B1A /* IdentityState.swift */,
 				214B5226248ABD5D0034BF22 /* IdentityConstants.swift */,
 				2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */,
 				2181948E2489FC97004F869A /* CustomIdentity.swift */,
@@ -722,6 +728,7 @@
 				D4000F182458DEB60052C536 /* HttpConnection.swift in Sources */,
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
 				213F662E2492A36A000184DE /* AEPError.swift in Sources */,
+				21B0B61924B3A6C8002A1B1A /* Event+Identity.swift in Sources */,
 				D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */,
 				2157952624A3DC410012ED28 /* CacheEntry.swift in Sources */,
 				D4000F1A2458DEDE0052C536 /* NetworkRequest.swift in Sources */,
@@ -775,6 +782,7 @@
 				BB1D756A24A3E07F00269B45 /* AEPDataQueueService.swift in Sources */,
 				21F361A0246DE4B5009AB88B /* LifecycleMetrics.swift in Sources */,
 				214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */,
+				21B0B61B24B3A7B7002A1B1A /* IdentityState.swift in Sources */,
 				2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */,
 				213F66342492C06B000184DE /* IdentityProperties.swift in Sources */,
 				2157952224A2AA050012ED28 /* Cache.swift in Sources */,

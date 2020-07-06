@@ -25,6 +25,7 @@ struct IdentityConstants {
     static let KEY_PATH_OPTOUT = "/demoptout.jpg"
     static let DEFAULT_SERVER = "dpm.demdex.net"
     static let CID_DELIMITER = "%01"
+    static let ADID_DSID = "DSID_20915"
     
     struct EventDataKeys {
         static let BASE_URL = "baseurl"
@@ -41,5 +42,6 @@ struct IdentityConstants {
         static let VISITOR_ID_BLOB = "blob"
         static let VISITOR_ID_LOCATION_HINT = "locationhint"
         static let VISITOR_IDS_LAST_SYNC = "lastsync"
+        static let MCPNS_DPID = "20920"
     }
 }
