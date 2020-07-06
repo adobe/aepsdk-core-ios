@@ -1,13 +1,17 @@
-//
-//  IdentityState.swift
-//  AEPCore
-//
-//  Created by Nick Porter on 7/6/20.
-//  Copyright © 2020 Adobe. All rights reserved.
-//
+/*
+Copyright 2020 Adobe. All rights reserved.
+This file is licensed to you under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License. You may obtain a copy
+of the License at http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software distributed under
+the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+OF ANY KIND, either express or implied. See the License for the specific language
+governing permissions and limitations under the License.
+*/
 
 import Foundation
 
+/// Manages the business logic of the Identity extension
 struct IdentityState {
     
     private var identityProperties: IdentityProperties
@@ -40,7 +44,7 @@ struct IdentityState {
             return nil
         }
 
-        // Save push ID if changed
+        // TODO: Save push ID
         
         let authState = event.authenticationState
         
@@ -59,11 +63,10 @@ struct IdentityState {
         identityProperties.customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
         customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
         
-        
         // valid config: check if there's a need to sync. Don't if we're already up to date.
         if shouldSync() {
             let hitUrl = URL.buildIdentityHitURL(experienceCloudServer: "", orgId: "", identityProperties: identityProperties, dpids: event.dpids ?? [:])
-            // queue in DB
+            // TODO: queue in DB
         } else {
             // TODO: Log error
         }
