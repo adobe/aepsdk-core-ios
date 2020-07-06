@@ -52,8 +52,10 @@ struct IdentityState {
         var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)})
         
         // read and update adid
-        if let adId = event.adId {
+        if let adId = event.adId, identityProperties.advertisingIdentifier != adId.identifier {
             // check if changed, update
+            identityProperties.advertisingIdentifier = adId.identifier
+            customerIds?.append(adId)
         }
         
         
@@ -65,7 +67,7 @@ struct IdentityState {
         
         // valid config: check if there's a need to sync. Don't if we're already up to date.
         if shouldSync() {
-            let hitUrl = URL.buildIdentityHitURL(experienceCloudServer: "", orgId: "", identityProperties: identityProperties, dpids: event.dpids ?? [:])
+            let _ = URL.buildIdentityHitURL(experienceCloudServer: "", orgId: "", identityProperties: identityProperties, dpids: event.dpids ?? [:])
             // TODO: queue in DB
         } else {
             // TODO: Log error
@@ -82,7 +84,7 @@ struct IdentityState {
     
     /// Returns a dict where the key is the `identifier` of the identity and the value is the `CustomIdentity`
     /// - Parameter ids: a list of identities
-    func toIdDict(ids: [CustomIdentity]?) -> [String?: CustomIdentity] {
+    private func toIdDict(ids: [CustomIdentity]?) -> [String?: CustomIdentity] {
         guard let ids = ids else { return [:] }
         return Dictionary(uniqueKeysWithValues: ids.map{ ($0.identifier, $0) })
     }
