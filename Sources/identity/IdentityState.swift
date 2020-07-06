@@ -11,24 +11,38 @@ import Foundation
 struct IdentityState {
     
     private var identityProperties: IdentityProperties
-    private var lastValidConfig: [String: Any]
+    private var lastValidConfig: [String: Any]?
     private var db = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: IdentityConstants.EXTENSION_NAME)
     
-    mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any] {
+    mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any]? {
+        var currentEventValidConfig = [String: Any]()
+        let privacyStatus = configurationSharedState[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
         // do not even extract any data if the config is opt-out.
+        guard privacyStatus != .optedOut else { return nil }
         
-        // If privacy status is opt-out return
-        
-        // If orgId is not empty set this to the current valid config, else fallback to prev valid config
+        // org id is a requirement.
+        // Use what's in current config shared state. if that's missing, check latest config.
+        // if latest config doesn't have org id either, Identity can't proceed.
+        if let orgId = configurationSharedState[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
+            lastValidConfig = configurationSharedState
+        } else {
+            if let lastValidConfig = lastValidConfig {
+                currentEventValidConfig = lastValidConfig
+            } else {
+                // can't process this event.
+                return nil
+            }
+        }
         
         // Check privacy status again from the valid config object, return if opt-out
-        
+        if currentEventValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
+            // did process this event but can't sync the call.
+            return nil
+        }
 
         // Save push ID if changed
         
-        
         let authState = event.authenticationState
-        let forceSync = event.forceSync
         
         // generate customer ids
         var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)})
@@ -47,7 +61,6 @@ struct IdentityState {
         
         
         // valid config: check if there's a need to sync. Don't if we're already up to date.
-        
         if shouldSync() {
             let hitUrl = URL.buildIdentityHitURL(experienceCloudServer: "", orgId: "", identityProperties: identityProperties, dpids: event.dpids ?? [:])
             // queue in DB
