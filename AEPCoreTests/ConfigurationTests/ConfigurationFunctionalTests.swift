@@ -15,12 +15,11 @@ import XCTest
 
 /// Functional tests for the Configuration extension
 class ConfigurationFunctionalTests: XCTestCase {
-    var dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     
     override func setUp() {
         AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
         AEPServiceProvider.shared.systemInfoService = MockSystemInfoService()
-        dataStore.removeAll()
+        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
         MockExtension.reset()
         EventHub.reset()
         registerExtension(MockExtension.self)
@@ -434,6 +433,7 @@ class ConfigurationFunctionalTests: XCTestCase {
 
         // test
         AEPCore.configureWith(appId: "invalid-app-id")
+        sleep(5) // give some time for the first network request to fail
         AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: true) // setup a valid network response
         AEPCore.configureWith(appId: "valid-app-id")
 
