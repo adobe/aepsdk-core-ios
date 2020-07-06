@@ -33,7 +33,7 @@ class AEPConfiguration: Extension {
     func onRegistered() {
         registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
         registerListener(type: .lifecycle, source: .responseContent, listener: receiveLifecycleResponse(event:))
-        // TODO: AMSDK-9750 - Listen for request identifier events
+        registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
         
         let pendingResolver = createPendingSharedState(event: nil)
         
@@ -56,6 +56,10 @@ class AEPConfiguration: Extension {
     /// Configuration is always ready for the next event
     /// - Parameter event: an   `Event`
     func readyForEvent(_ event: Event) -> Bool {
+        if event.type == .configuration && event.source == .requestIdentity {
+            return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+        }
+        
         return true
     }
 
@@ -90,6 +94,23 @@ class AEPConfiguration: Extension {
         let data: [String: Any] = [ConfigurationConstants.Keys.JSON_APP_ID: appId,
                                    ConfigurationConstants.Keys.IS_INTERNAL_EVENT: true]
         dispatchConfigurationRequest(data: data)
+    }
+    
+    /// Handles the getSdkIdentities API by collecting all the identities then dispatching a response event with the given identities
+    /// - Parameter event: The event coming from the getSdkIdentities API
+    private func receiveConfigurationIdentity(event: Event) {
+        var mobileIdentities = MobileIdentities()
+        mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+        
+        guard let encodedIdentities = try? JSONEncoder().encode(mobileIdentities) else {
+            // TODO: Error log
+            return
+        }
+        
+        let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
+        let eventData = [ConfigurationConstants.Keys.ALL_IDENTIFIERS: identitiesStr]
+        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: .configuration, source: .responseIdentity, data: eventData as [String : Any])
+        dispatch(event: responseEvent)
     }
 
     // MARK: Event Processors
