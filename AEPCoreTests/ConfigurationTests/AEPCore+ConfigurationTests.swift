@@ -125,8 +125,8 @@ class AEPCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
-            if let _ = event.data, let retrieveconfig = event.data![ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool {
-                XCTAssertTrue(retrieveconfig)
+            if let _ = event.data, let retrieveConfig = event.data![ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool {
+                XCTAssertTrue(retrieveConfig)
                 expectation.fulfill()
             }
         }
