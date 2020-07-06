@@ -48,7 +48,7 @@ extension AEPCore: Configuration {
     public static func getSdkIdentities(completion: @escaping (String?, AEPError?) -> ()) {
         let event = Event(name: "GetSdkIdentities", type: .configuration, source: .requestIdentity, data: nil)
         
-        EventHub.shared.registerResponseListener(parentExtension: AEPConfiguration.self, triggerEvent: event, timeout: 1) { (responseEvent) in
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (responseEvent) in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
