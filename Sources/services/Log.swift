@@ -12,6 +12,7 @@
 
 import Foundation
 
+/// A Log object used to log messages for the SDK
 public class Log: NSObject {
     /// Used to print more verbose information.
     /// - Parameters:
