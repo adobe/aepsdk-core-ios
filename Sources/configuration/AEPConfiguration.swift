@@ -142,8 +142,7 @@ class AEPConfiguration: Extension {
                 self?.startEvents()
             } else {
                 // If downloading config failed try again later
-                // TODO: Don't use main thread
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self?.extensionQueue?.asyncAfter(deadline: .now() + 5) {
                     let _ = self?.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
                 }
             }
