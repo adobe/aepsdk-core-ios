@@ -19,6 +19,7 @@ class AEPConfiguration: Extension {
     private let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private var appIdManager: LaunchIDManager
     private var configState: ConfigurationState // should only be modified/used within the event queue
+    private let retryQueue = DispatchQueue(label: "com.adobe.configuration.retry")
     
     // MARK: Extension
     
@@ -142,7 +143,7 @@ class AEPConfiguration: Extension {
                 self?.startEvents()
             } else {
                 // If downloading config failed try again later
-                self?.extensionQueue?.asyncAfter(deadline: .now() + 5) {
+                self?.retryQueue.asyncAfter(deadline: .now() + 5) {
                     let _ = self?.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
                 }
             }
