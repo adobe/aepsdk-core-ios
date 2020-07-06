@@ -14,37 +14,48 @@ import Foundation
 
 @testable import AEPCore
 
-class MockExtension: Extension {
-    var name = "mockExtension"
-    var version = "0.0.1"
-    
-    static var calledInit = false
-    static var calledOnRegistered = false
-    static var calledOnUnregistered = false
-    static var receivedEvents = [Event]()
-    
-    required init() {
-        MockExtension.calledInit = true
+/// Protocol  defines consistent interface for testable extensions.
+protocol TestableExtension: Extension {
+    static var unregistrationClosure: (() -> Void)? { get set }
+    static var registrationClosure: (() -> Void)? { get set }
+    static var eventReceivedClosure: ((Event) -> Void)? { get set }
+}
+
+/// Provides implementaitons of common functions for a TestableExtension
+extension TestableExtension {
+    static func reset() {
+        self.registrationClosure = nil
+        self.unregistrationClosure = nil
+        self.eventReceivedClosure = nil
     }
     
     func onRegistered() {
-        MockExtension.calledOnRegistered = true
         registerListener(type: .wildcard, source: .wildcard) { (event) in
-            MockExtension.receivedEvents.append(event)
+            if let closure = type(of: self).eventReceivedClosure {
+                closure(event)
+            }
+        }
+        
+        if let closure = type(of: self).registrationClosure {
+            closure()
         }
     }
     
     func onUnregistered() {
-        MockExtension.calledOnUnregistered = true
+        if let closure = type(of: self).unregistrationClosure {
+            closure()
+        }
     }
+}
+
+class MockExtension: TestableExtension {
+    var name = "mockExtension"
+    var version = "0.0.1"
+
+    static var registrationClosure: (() -> Void)? = nil
+    static var unregistrationClosure: (() -> Void)? = nil
+    static var eventReceivedClosure: ((Event) -> Void)? = nil
     
-    // MARK: Test helpers
-    
-    static func reset() {
-        MockExtension.calledInit = false
-        MockExtension.calledOnRegistered = false
-        MockExtension.calledOnUnregistered = false
-        MockExtension.receivedEvents.removeAll()
+    required init() {
     }
-    
 }

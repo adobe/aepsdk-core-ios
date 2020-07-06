@@ -42,7 +42,7 @@ public struct Event {
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    init(name: String, type: EventType, source: EventSource, data: [String: Any]?) {
+    public init(name: String, type: EventType, source: EventSource, data: [String: Any]?) {
         self.init(name: name, type: type, source: source, data: data, requestEvent: nil)
     }
     

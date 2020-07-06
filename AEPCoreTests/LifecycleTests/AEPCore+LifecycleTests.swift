@@ -18,7 +18,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         MockExtension.reset()
         registerMockExtension(MockExtension.self)
     }
-    
+
     private func registerMockExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
         EventHub.shared.registerExtension(type) { (error) in
@@ -27,40 +27,40 @@ class AEPCoreLifecycleTests: XCTestCase {
 
         semaphore.wait()
     }
-    
+
     func testLifecycleStart() {
         // setup
         let expectation = XCTestExpectation(description: "Lifecycle Start dispatches generic lifecycle request content")
         expectation.assertForOverFulfill = true
         let expectedContextData = ["testKey": "testVal"]
-        
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .genericLifecycle, source: .requestContent) { (event) in
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericLifecycle, source: .requestContent) { (event) in
             XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.ACTION_KEY] as! String)
             XCTAssertEqual(expectedContextData, event.data?[LifecycleConstants.EventDataKeys.ADDITIONAL_CONTEXT_DATA] as! [String: String])
             expectation.fulfill()
         }
 
         EventHub.shared.start()
-        
+
         // test
         AEPCore.lifecycleStart(additionalContextData: expectedContextData)
 
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
-    
+
     func testLifecyclePause() {
         // setup
         let expectation = XCTestExpectation(description: "Lifecycle Pause dispatches generic lifecycle request content")
         expectation.assertForOverFulfill = true
-        
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .genericLifecycle, source: .requestContent) { (event) in
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericLifecycle, source: .requestContent) { (event) in
             XCTAssertEqual(LifecycleConstants.PAUSE, event.data?[LifecycleConstants.EventDataKeys.ACTION_KEY] as! String)
             expectation.fulfill()
         }
 
         EventHub.shared.start()
-        
+
         // test
         AEPCore.lifecyclePause()
 

@@ -14,32 +14,14 @@ import Foundation
 
 @testable import AEPCore
 
-class MockExtensionTwo: Extension {
+class MockExtensionTwo: TestableExtension {
     var name = "mockExtensionTwo"
     var version = "0.0.1"
     
-    static var calledInit = false
-    static var calledOnRegistered = false
-    static var calledOnUnregistered = false
+    static var unregistrationClosure: (() -> Void)? = nil
+    static var registrationClosure: (() -> Void)? = nil
+    static var eventReceivedClosure: ((Event) -> Void)? = nil
     
     required init() {
-        MockExtensionTwo.calledInit = true
     }
-    
-    func onRegistered() {
-        MockExtensionTwo.calledOnRegistered = true
-    }
-    
-    func onUnregistered() {
-        MockExtensionTwo.calledOnUnregistered = true
-    }
-    
-    // MARK: Test helpers
-    
-    static func reset() {
-        MockExtensionTwo.calledInit = false
-        MockExtensionTwo.calledOnRegistered = false
-        MockExtensionTwo.calledOnUnregistered = false
-    }
-    
 }

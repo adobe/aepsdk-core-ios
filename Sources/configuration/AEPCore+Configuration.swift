@@ -38,16 +38,36 @@ extension AEPCore: Configuration {
     public static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
         let event = Event(name: "Privacy Status Request", type: .configuration, source: .requestContent, data: [ConfigurationConstants.Keys.RETRIEVE_CONFIG: true])
 
-        EventHub.shared.registerResponseListener(parentExtension: AEPConfiguration.self, triggerEvent: event) { (responseEvent) in
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: ConfigurationConstants.API_TIMEOUT) { (responseEvent) in
             self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
         }
 
         AEPCore.dispatch(event: event)
     }
     
+    public static func getSdkIdentities(completion: @escaping (String?, AEPError?) -> ()) {
+        let event = Event(name: "GetSdkIdentities", type: .configuration, source: .requestIdentity, data: nil)
+        
+        EventHub.shared.registerResponseListener(parentExtension: AEPConfiguration.self, triggerEvent: event, timeout: 1) { (responseEvent) in
+            guard let responseEvent = responseEvent else {
+                completion(nil, .callbackTimeout)
+                return
+            }
+            
+            guard let identities = responseEvent.data?[ConfigurationConstants.Keys.ALL_IDENTIFIERS] as? String else {
+                completion(nil, .unexpected)
+                return
+            }
+            
+            completion(identities, nil)
+        }
+        
+        AEPCore.dispatch(event: event)
+    }
+    
     // MARK: Helper
-    private static func handleGetPrivacyListener(responseEvent: Event, completion: @escaping (PrivacyStatus) -> ()) {
-        guard let privacyStatusString = responseEvent.data?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
+    private static func handleGetPrivacyListener(responseEvent: Event?, completion: @escaping (PrivacyStatus) -> ()) {
+        guard let privacyStatusString = responseEvent?.data?[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
             return completion(PrivacyStatus.unknown)
         }
 

@@ -22,6 +22,11 @@ class AEPCore_ConfigurationTests: XCTestCase {
         registerMockExtension(MockExtension.self)
     }
     
+    
+    override func tearDown() {
+        EventHub.reset()
+    }
+    
     private func registerMockExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
         EventHub.shared.registerExtension(type) { (error) in
@@ -31,16 +36,18 @@ class AEPCore_ConfigurationTests: XCTestCase {
         semaphore.wait()
     }
     
-
+    /// Tests that a configuration request content event is dispatched with the appId
     func testConfigureWithAppId() {
         // setup
         let expectation = XCTestExpectation(description: "Configure with app id dispatches a configuration request content with the app id")
         expectation.assertForOverFulfill = true
         let expectedAppId = "test-app-id"
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(expectedAppId, event.data?[ConfigurationConstants.Keys.JSON_APP_ID] as? String)
-            expectation.fulfill()
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+            if let _ = event.data, let appid = event.data![ConfigurationConstants.Keys.JSON_APP_ID] as? String {
+                XCTAssertEqual(expectedAppId, appid)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -56,9 +63,11 @@ class AEPCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let expectedFilePath = "test-file-path"
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(expectedFilePath, event.data?[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String)
-            expectation.fulfill()
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+            if let _ = event.data, let path = event.data![ConfigurationConstants.Keys.JSON_FILE_PATH] as? String {
+                XCTAssertEqual(expectedFilePath, path)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -68,15 +77,18 @@ class AEPCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
+    /// Tests that a configuration request content event is dispatched with the updated dict
     func testUpdateConfiguration() {
         // setup
         let expectation = XCTestExpectation(description: "Update configuration dispatches configuration request content with the updated configuration")
         expectation.assertForOverFulfill = true
         let updateDict = ["testKey": "testVal"]
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(updateDict, event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String])
-            expectation.fulfill()
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+            if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
+                XCTAssertEqual(updateDict, updateEventData)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -86,15 +98,18 @@ class AEPCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
+    /// Tests that set privacy status dispatches a configuration request content event with the new privacy status
     func testSetPrivacy() {
         // setup
         let expectation = XCTestExpectation(description: "Set privacy dispatches configuration request content with the privacy status")
         expectation.assertForOverFulfill = true
         let updateDict = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertEqual(updateDict, event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String])
-            expectation.fulfill()
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+            if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
+                XCTAssertEqual(updateDict, updateEventData)
+                expectation.fulfill()
+            }
         }
         
         // test
@@ -104,17 +119,36 @@ class AEPCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
     
+    /// Tests that get privacy status dispatches an event of configuration request content with the correct retrieve config data
     func testGetPrivacy() {
         let expectation = XCTestExpectation(description: "Get privacy status dispatches configuration request content with the correct data")
         expectation.assertForOverFulfill = true
         
-        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestContent) { (event) in
-            XCTAssertTrue(event.data?[ConfigurationConstants.Keys.RETRIEVE_CONFIG] as! Bool)
-            expectation.fulfill()
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+            if let _ = event.data, let retrieveconfig = event.data![ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool {
+                XCTAssertTrue(retrieveconfig)
+                expectation.fulfill()
+            }
         }
         
         // test
         AEPCore.getPrivacyStatus { (status) in}
+        
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+    
+    /// Tests that getSdkIdentities dispatches a configuration request identity event
+    func testGetSdkIdentities() {
+        let expectation = XCTestExpectation(description: "getSdkIdentities dispatches a configuration request identity event")
+        expectation.assertForOverFulfill = true
+        
+        EventHub.shared.registerListener(parentExtension: MockExtension.self, type: .configuration, source: .requestIdentity) { (event) in
+            expectation.fulfill()
+        }
+        
+        // test
+        AEPCore.getSdkIdentities { (_, _) in }
         
         // verify
         wait(for: [expectation], timeout: 0.5)
