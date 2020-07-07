@@ -18,7 +18,11 @@ struct IdentityProperties: Codable {
     var mid: MID?
     
     /// The IDFA from retrieved Apple APIs
-    var advertisingIdentifier: String?
+    var advertisingIdentifier: String? {
+        didSet {
+            save()
+        }
+    }
     
     /// The SHA1 hashed push Identifier
     var pushIdentifier: String?

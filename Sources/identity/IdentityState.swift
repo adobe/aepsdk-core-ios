@@ -15,13 +15,21 @@ import Foundation
 struct IdentityState {
     
     private var identityProperties: IdentityProperties
-    private var lastValidConfig: [String: Any]?
+    private var lastValidConfig: [String: Any]? = nil
     
-    mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any]? {
+    init() {
+        identityProperties = IdentityProperties()
+        identityProperties.load()
+    }
+    
+    mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any] {
         var currentEventValidConfig = [String: Any]()
         let privacyStatus = configurationSharedState[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
         // do not even extract any data if the config is opt-out.
-        guard privacyStatus != .optedOut else { return nil }
+        guard privacyStatus != .optedOut else {
+            // TODO: Add log
+            return identityProperties.toEventData()
+        }
         
         // org id is a requirement.
         // Use what's in current config shared state. if that's missing, check latest config.
@@ -33,25 +41,33 @@ struct IdentityState {
                 currentEventValidConfig = lastValidConfig
             } else {
                 // can't process this event.
-                return nil
+                return identityProperties.toEventData()
             }
         }
         
         // Check privacy status again from the valid config object, return if opt-out
-        if currentEventValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
+        guard currentEventValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown != .optedOut else {
             // did process this event but can't sync the call.
-            return nil
+            // TODO: Add log
+            return identityProperties.toEventData()
         }
 
         // TODO: Save push ID AMSDK-10262
+        // When updating the push identifier, if the value changes from empty to set or vice versa,
+        // an Analytics Request Content event is dispatched to track the enable/disable of the push ID.
+        // This happens before the Identity shared state is created. However, Analytics doesn't (currently)
+        // read the push ID from the Identity shared state when processing the event. If Analytics changes
+        // to read the push ID, then the code here will need to change to dispatch the event after
+        // creating the shared state.
+
         
         let authState = event.authenticationState
         
         // generate customer ids
         var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)})
         
-        // read and update advertising id if needed
-        if let adId = event.adId, identityProperties.advertisingIdentifier != adId.identifier {
+        // update adid if changed and extract the new adid value as VisitorId to be synced
+        if let adId = event.adId, shouldUpdateAdId(newAdID: adId.identifier ?? "") {
             // check if changed, update
             identityProperties.advertisingIdentifier = adId.identifier
             customerIds?.append(adId)
@@ -59,6 +75,8 @@ struct IdentityState {
         
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
         // empty adid is also removed from the customer_ids_ list by merging with the new ids then filtering out any empty ids
+        
+        // convert array of IDs to a dict of <identifier, ID>, then merge by taking the new ID for duplicate IDs
         identityProperties.customerIds = toIdDict(ids: identityProperties.customerIds).merging(toIdDict(ids: customerIds), uniquingKeysWith: { (_, new) in new }).map {$0.value}
         identityProperties.customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
         customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
@@ -73,7 +91,6 @@ struct IdentityState {
         
         // save properties
         identityProperties.save()
-        // extension should share state after with identity properties to event data
         return identityProperties.toEventData()
     }
     
@@ -101,7 +118,17 @@ struct IdentityState {
     }
     
     private func canSyncForCurrentConfiguration(config: [String: Any]) -> Bool {
-        return false
+        let orgId = config[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String ?? ""
+        let privacyStatus = config[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
+        return !orgId.isEmpty && privacyStatus != .optedOut
+    }
+    
+    private func shouldUpdateAdId(newAdID: String) -> Bool {
+        if let existingAdId = identityProperties.advertisingIdentifier {
+            return (!newAdID.isEmpty && existingAdId != newAdID) || (newAdID.isEmpty && !existingAdId.isEmpty)
+        }
+        // existing adId is empty or nil, so update as long as the new adId is not empty
+        return !newAdID.isEmpty
     }
     
     /// Returns a dict where the key is the `identifier` of the identity and the value is the `CustomIdentity`

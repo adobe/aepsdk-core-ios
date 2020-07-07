@@ -36,7 +36,7 @@ extension Event {
     }
     
     var adId: CustomIdentity? {
-        guard let adId = data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String else { return nil }
+        let adId = data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String
         return CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER,
                               type: IdentityConstants.ADID_DSID,
                               identifier: adId,

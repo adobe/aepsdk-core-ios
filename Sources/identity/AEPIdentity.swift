@@ -14,6 +14,7 @@ import Foundation
 class AEPIdentity: Extension {
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
+    var state = IdentityState()
     
     // MARK: Extension
     required init() {
@@ -32,10 +33,11 @@ class AEPIdentity: Extension {
     // MARK: Event Listeners
     
     private func handleIdentityRequest(event: Event) {
-        guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.status else { return }
+        guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return }
         
         if event.isSyncEvent || event.type == .genericIdentity {
-            // handle sync identifiers
+            let eventData = state.syncIdentifiers(event: event, configurationSharedState: configSharedState)
+            createSharedState(data: eventData, event: event)
         }
         // TODO: Handle appendUrl, getUrlVariables, IdentifiersRequest
     }
