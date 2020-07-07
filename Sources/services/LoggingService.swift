@@ -14,9 +14,6 @@ import Foundation
 
 /// Represents the interface of the logging service
 public protocol LoggingService {
-    /// Sets and gets the logging level of the SDK
-    var logFilter: LogLevel { get set }
-
     /// Logs a message
     /// - Parameters:
     ///   - level: One of the message level identifiers, e.g., DEBUG
