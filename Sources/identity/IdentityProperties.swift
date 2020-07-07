@@ -55,4 +55,18 @@ struct IdentityProperties: Codable {
         
         return eventData
     }
+    
+    mutating func load() {
+        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        let savedProperties: IdentityProperties? = dataStore.getObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES)
+            
+        if let savedProperties = savedProperties {
+            self = savedProperties
+        }
+    }
+    
+    func save() {
+        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        dataStore.setObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES, value: self)
+    }
 }

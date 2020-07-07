@@ -16,7 +16,6 @@ struct IdentityState {
     
     private var identityProperties: IdentityProperties
     private var lastValidConfig: [String: Any]?
-    private var db = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: IdentityConstants.EXTENSION_NAME)
     
     mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any]? {
         var currentEventValidConfig = [String: Any]()
@@ -44,20 +43,19 @@ struct IdentityState {
             return nil
         }
 
-        // TODO: Save push ID
+        // TODO: Save push ID AMSDK-10262
         
         let authState = event.authenticationState
         
         // generate customer ids
         var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)})
         
-        // read and update adid
+        // read and update advertising id if needed
         if let adId = event.adId, identityProperties.advertisingIdentifier != adId.identifier {
             // check if changed, update
             identityProperties.advertisingIdentifier = adId.identifier
             customerIds?.append(adId)
         }
-        
         
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
         // empty adid is also removed from the customer_ids_ list by merging with the new ids then filtering out any empty ids
@@ -66,19 +64,43 @@ struct IdentityState {
         customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
         
         // valid config: check if there's a need to sync. Don't if we're already up to date.
-        if shouldSync() {
-            let _ = URL.buildIdentityHitURL(experienceCloudServer: "", orgId: "", identityProperties: identityProperties, dpids: event.dpids ?? [:])
-            // TODO: queue in DB
+        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: currentEventValidConfig) {
+            // TODO: AMSDK-10261 queue in DB
+            let _ = URL.buildIdentityHitURL(experienceCloudServer: "TODO", orgId: "TODO", identityProperties: identityProperties, dpids: event.dpids ?? [:])
         } else {
             // TODO: Log error
         }
         
         // save properties
+        identityProperties.save()
         // extension should share state after with identity properties to event data
         return identityProperties.toEventData()
     }
     
-    private func shouldSync() -> Bool {
+    private mutating func shouldSync(customerIds: [CustomIdentity]?, dpids: [String: String]?, forceSync: Bool, currentEventValidConfig: [String: Any]) -> Bool {
+        var syncForProps = true
+        var syncForIds = true
+        
+        // check config
+        if !canSyncForCurrentConfiguration(config: currentEventValidConfig) {
+            // TOOD: Add log
+            syncForProps = false
+        }
+        
+        let needResync = Date().timeIntervalSince1970 - (identityProperties.lastSync?.timeIntervalSince1970 ?? 0) > identityProperties.ttl || forceSync
+        let hasIds = !(customerIds?.isEmpty ?? false)
+        let hasDpids = !(dpids?.isEmpty ?? false)
+        
+        if identityProperties.mid != nil && !hasIds && !hasDpids && !needResync {
+            syncForIds = false
+        } else if identityProperties.mid == nil {
+            identityProperties.mid = MID()
+        }
+        
+        return syncForIds && syncForProps
+    }
+    
+    private func canSyncForCurrentConfiguration(config: [String: Any]) -> Bool {
         return false
     }
     
