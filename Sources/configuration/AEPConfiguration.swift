@@ -59,12 +59,6 @@ class AEPConfiguration: Extension {
         return true
     }
 
-    /// Configuration is always ready for the next event
-    /// - Parameter event: an   `Event`
-    func readyForEvent(_ event: Event) -> Bool {
-        return true
-    }
-
     // MARK: Event Listeners
 
     /// Invoked by the `eventQueue` each time a new configuration request event is received
