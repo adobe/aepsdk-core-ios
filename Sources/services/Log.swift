@@ -13,7 +13,7 @@
 import Foundation
 
 /// A Log object used to log messages for the SDK
-public class Log: NSObject {
+public class Log {
     /// Sets and gets the logging level of the SDK, default value is LogLevel.error
     public static var logFilter: LogLevel = LogLevel.error
 
