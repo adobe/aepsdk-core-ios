@@ -167,7 +167,7 @@ final public class EventHub {
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type
     /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
     /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
-    public func getExtensionContainer(_ type: Extension.Type) -> ExtensionRuntime? {
+    internal func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
         return registeredExtensions[type.typeName]
     }
 
