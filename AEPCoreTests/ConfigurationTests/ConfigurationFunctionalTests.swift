@@ -526,4 +526,26 @@ class ConfigurationFunctionalTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1.0)
     }
+    
+    func testGetSdkIdentitiesPendingThenSet() {
+        // setup
+        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
+        expectation.assertForOverFulfill = true
+        registerExtension(AEPIdentity.self)
+        let resolver = EventHub.shared.createPendingSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)
+        
+        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
+        
+        // test
+        AEPCore.getSdkIdentities { (identities, error) in
+            XCTAssertEqual(expected, identities)
+            XCTAssertNil(error)
+            expectation.fulfill()
+        }
+
+        resolver([ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org-id"])
+        
+        // verify
+        wait(for: [expectation], timeout: 5.0)
+    }
 }
