@@ -56,13 +56,13 @@ public extension Extension {
     ///   - source: `EventSource` to be listened for
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches an `Event` with matching `type` and `source`
     func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
-        getExtensionRuntime()?.registerListener(type: type, source: source, listener: listener)
+        getExtensionContainer()?.registerListener(type: type, source: source, listener: listener)
     }
     
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event) {
-        getExtensionRuntime()?.dispatch(event: event)
+        getExtensionContainer()?.dispatch(event: event)
     }
 
     // MARK: Shared State
@@ -72,14 +72,14 @@ public extension Extension {
     ///   - data: Data for the `SharedState`
     ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned at the latest
     func createSharedState(data: [String: Any], event: Event?) {
-        getExtensionRuntime()?.createSharedState(data: data, event: event)
+        getExtensionContainer()?.createSharedState(data: data, event: event)
     }
 
 
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
-        return getExtensionRuntime()?.createPendingSharedState(event: event) ?? { _ in
+        return getExtensionContainer()?.createPendingSharedState(event: event) ?? { _ in
             //TODO: log            
         }
     }
@@ -89,7 +89,7 @@ public extension Extension {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
-        return getExtensionRuntime()?.getSharedState(extensionName: extensionName, event: event)
+        return getExtensionContainer()?.getSharedState(extensionName: extensionName, event: event)
     }
     
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
@@ -103,12 +103,12 @@ public extension Extension {
     
     /// Starts the `Event` queue for this extension
     func startEvents() {
-        getExtensionRuntime()?.startEvents()
+        getExtensionContainer()?.startEvents()
     }
     
     /// Stops the `Event` queue for this extension
     func stopEvents() {
-        getExtensionRuntime()?.stopEvents()
+        getExtensionContainer()?.stopEvents()
     }
 }
 
@@ -118,7 +118,7 @@ private extension Extension {
         return EventHub.shared
     }
     
-    private func getExtensionRuntime() -> ExtensionRuntime? {
+    private func getExtensionContainer() -> ExtensionRuntime? {
         return runtime
     }
 }

@@ -48,7 +48,7 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: .analytics, source: .requestContent, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.name == testEvent.name)
             expectation.fulfill()
         }
@@ -67,7 +67,7 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: .analytics, source: .requestContent, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: .acquisition, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .acquisition, source: testEvent.source) { (event) in
             expectation.fulfill()
         }
 
@@ -85,7 +85,7 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: .analytics, source: .requestContent, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             expectation.fulfill()
         }
 
@@ -102,7 +102,7 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: .analytics, source: .requestContent, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.name == testEvent.name)
             expectation.fulfill()
         }
@@ -123,7 +123,7 @@ class EventHubTests: XCTestCase {
         let testEvent1 = Event(name: "testEvent1", type: .identity, source: .requestIdentity, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.name == testEvent.name)
             expectation.fulfill()
         }
@@ -145,7 +145,7 @@ class EventHubTests: XCTestCase {
         let testEvent1 = Event(name: "testEvent1", type: testEvent.type, source: testEvent.source, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.type == testEvent.type && event.source == testEvent.source)
             expectation.fulfill()
         }
@@ -169,12 +169,12 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: .analytics, source: .requestContent, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.type == testEvent.type && event.source == testEvent.source)
             expectation.fulfill()
         }
 
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.type == testEvent.type && event.source == testEvent.source)
             expectation1.fulfill()
         }
@@ -197,12 +197,12 @@ class EventHubTests: XCTestCase {
         let testEvent1 = Event(name: "testEvent1", type: .places, source: .responseContent, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.name == testEvent.name)
             expectation.fulfill()
         }
 
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent1.type, source: testEvent1.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent1.type, source: testEvent1.source) { (event) in
             XCTAssert(event.name == testEvent1.name)
             expectation1.fulfill()
         }
@@ -291,13 +291,13 @@ class EventHubTests: XCTestCase {
 
 
         // test
-        eventHub.getExtensionRuntime(MockExtensionTwo.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtensionTwo.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             expectation.fulfill()
             // simulate a long running listener
             sleep(20)
         }
 
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             expectation1.fulfill()
         }
 
@@ -316,7 +316,7 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: .analytics, source: .requestContent, data: nil)
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
             XCTAssert(event.name == testEvent.name)
             expectation.fulfill()
         }
@@ -338,7 +338,7 @@ class EventHubTests: XCTestCase {
         let eventNamePrefix = "testEvent-"
 
         // test
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: type, source: source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: type, source: source) { (event) in
             XCTAssert(type == event.type && source == event.source)
             expectation.fulfill()
         }
@@ -651,7 +651,7 @@ class EventHubTests: XCTestCase {
         eventHub.start()
 
         let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
             XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
@@ -677,7 +677,7 @@ class EventHubTests: XCTestCase {
         eventHub.start()
 
         let event = Event(name: "test", type: .acquisition, source: .requestContent, data: nil)
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
             XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
@@ -701,7 +701,7 @@ class EventHubTests: XCTestCase {
         expectation.assertForOverFulfill = true
         eventHub.start()
 
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
             XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
@@ -764,7 +764,7 @@ class EventHubTests: XCTestCase {
         expectation.assertForOverFulfill = true
         eventHub.start()
 
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             expectation.fulfill()
         }
 
@@ -783,7 +783,7 @@ class EventHubTests: XCTestCase {
         expectation.assertForOverFulfill = true
         eventHub.start()
 
-        eventHub.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
             XCTAssertEqual(event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String, EventHubTests.MOCK_EXTENSION_NAME)
             expectation.fulfill()
