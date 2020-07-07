@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		211728912491680000BB7BD3 /* NetworkService+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211728902491680000BB7BD3 /* NetworkService+IdentityTests.swift */; };
 		21172895249177FC00BB7BD3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21172894249177FC00BB7BD3 /* Identifiable.swift */; };
+		212760FB24B4E1C5003AAC41 /* IdentityStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212760FA24B4E1C5003AAC41 /* IdentityStateTests.swift */; };
 		21315BB524575ED200D1B254 /* AEPCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21315BB424575ED200D1B254 /* AEPCore.swift */; };
 		21315BBA24579C4A00D1B254 /* AtomicCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21315BB924579C4A00D1B254 /* AtomicCounter.swift */; };
 		21315BBB24579F1800D1B254 /* AtomicCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21315BB924579C4A00D1B254 /* AtomicCounter.swift */; };
@@ -151,6 +152,7 @@
 /* Begin PBXFileReference section */
 		211728902491680000BB7BD3 /* NetworkService+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+IdentityTests.swift"; sourceTree = "<group>"; };
 		21172894249177FC00BB7BD3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		212760FA24B4E1C5003AAC41 /* IdentityStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityStateTests.swift; sourceTree = "<group>"; };
 		21315BB424575ED200D1B254 /* AEPCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AEPCore.swift; path = Sources/AEPCore.swift; sourceTree = "<group>"; };
 		21315BB924579C4A00D1B254 /* AtomicCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicCounter.swift; sourceTree = "<group>"; };
 		2131A1B12465D81400F1392D /* AEPCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 				211728902491680000BB7BD3 /* NetworkService+IdentityTests.swift */,
 				2137BA142498317500F01D04 /* URL+IdentityTests.swift */,
 				2137BA162498318300F01D04 /* URLQueryItem+IdentityTests.swift */,
+				212760FA24B4E1C5003AAC41 /* IdentityStateTests.swift */,
 			);
 			path = IdentityTests;
 			sourceTree = "<group>";
@@ -840,6 +843,7 @@
 				2131A1B22465D81400F1392D /* AEPCore+ConfigurationTests.swift in Sources */,
 				BB1D757A24A3E09100269B45 /* NetworkServiceTests.swift in Sources */,
 				213C8BD524252302009F780A /* MockExtension.swift in Sources */,
+				212760FB24B4E1C5003AAC41 /* IdentityStateTests.swift in Sources */,
 				213C8BCA242521BC009F780A /* EventHubTests.swift in Sources */,
 				21F02C382477077600D25528 /* ConfigurationStateTests.swift in Sources */,
 				21315BBB24579F1800D1B254 /* AtomicCounter.swift in Sources */,

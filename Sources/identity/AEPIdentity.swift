@@ -36,8 +36,9 @@ class AEPIdentity: Extension {
         guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return }
         
         if event.isSyncEvent || event.type == .genericIdentity {
-            let eventData = state.syncIdentifiers(event: event, configurationSharedState: configSharedState)
-            createSharedState(data: eventData, event: event)
+            if let eventData = state.syncIdentifiers(event: event, configurationSharedState: configSharedState) {
+                createSharedState(data: eventData, event: event)
+            }
         }
         // TODO: Handle appendUrl, getUrlVariables, IdentifiersRequest
     }

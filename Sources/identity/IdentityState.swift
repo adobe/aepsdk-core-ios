@@ -22,13 +22,13 @@ struct IdentityState {
         identityProperties.load()
     }
     
-    mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any] {
+    mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any]? {
         var currentEventValidConfig = [String: Any]()
         let privacyStatus = configurationSharedState[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
         // do not even extract any data if the config is opt-out.
         guard privacyStatus != .optedOut else {
             // TODO: Add log
-            return identityProperties.toEventData()
+            return nil
         }
         
         // org id is a requirement.
@@ -41,7 +41,7 @@ struct IdentityState {
                 currentEventValidConfig = lastValidConfig
             } else {
                 // can't process this event.
-                return identityProperties.toEventData()
+                return nil
             }
         }
         
@@ -49,21 +49,13 @@ struct IdentityState {
         guard currentEventValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown != .optedOut else {
             // did process this event but can't sync the call.
             // TODO: Add log
-            return identityProperties.toEventData()
+            return nil
         }
 
         // TODO: Save push ID AMSDK-10262
-        // When updating the push identifier, if the value changes from empty to set or vice versa,
-        // an Analytics Request Content event is dispatched to track the enable/disable of the push ID.
-        // This happens before the Identity shared state is created. However, Analytics doesn't (currently)
-        // read the push ID from the Identity shared state when processing the event. If Analytics changes
-        // to read the push ID, then the code here will need to change to dispatch the event after
-        // creating the shared state.
-
-        
-        let authState = event.authenticationState
         
         // generate customer ids
+        let authState = event.authenticationState
         var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)})
         
         // update adid if changed and extract the new adid value as VisitorId to be synced
