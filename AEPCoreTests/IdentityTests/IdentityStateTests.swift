@@ -124,7 +124,7 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props)
         
         // test
-        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
+        let _ = state.syncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
         
         // verify
         // TODO: Assert hit was not queued in DB
