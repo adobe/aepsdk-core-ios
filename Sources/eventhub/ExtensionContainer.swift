@@ -26,18 +26,14 @@ class ExtensionContainer {
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
     
-    /// The eventhub which own this extension container
-    let eventHub: EventHub
-    
     /// Operation Orderer queue of `Event` objects for this extension
     let eventOrderer: OperationOrderer<Event>
     
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
         
-    init(_ type: Extension.Type, _ queue: DispatchQueue, _ eventHub: EventHub) {
+    init(_ type: Extension.Type, _ queue: DispatchQueue) {
         extensionQueue = queue
-        self.eventHub = eventHub
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
@@ -62,23 +58,23 @@ extension ExtensionContainer:ExtensionRuntime {
     }
 
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
-        eventHub.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
+        EventHub.shared.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
     }
     
     func dispatch(event: Event) {
-        eventHub.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
     }
 
     func createSharedState(data: [String: Any], event: Event?) {
-        eventHub.createSharedState(extensionName: sharedStateName, data: data, event: event)
+        EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, event: event)
     }
 
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
-        return eventHub.createPendingSharedState(extensionName: sharedStateName, event: event)
+        return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event)
     }
 
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
-        return eventHub.getSharedState(extensionName: extensionName, event: event)
+        return EventHub.shared.getSharedState(extensionName: extensionName, event: event)
     }
     
     func startEvents() {
