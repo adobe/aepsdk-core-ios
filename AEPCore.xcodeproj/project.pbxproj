@@ -96,6 +96,7 @@
 		21FBA5502463DFFF00A2A009 /* ConfigurationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBA54F2463DFFF00A2A009 /* ConfigurationConstants.swift */; };
 		21FBA5522463E55200A2A009 /* AEPConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBA5512463E55200A2A009 /* AEPConfiguration.swift */; };
 		21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBBB242491553100C66506 /* NetworkService+Identity.swift */; };
+		3FC9665324B3E4EE0096F572 /* ExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */; };
 		7629742C24294215005CCC73 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742B24294215005CCC73 /* SharedState.swift */; };
 		7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742E24294249005CCC73 /* SharedStateTest.swift */; };
 		76850D18242EDE58003922F4 /* OperationOrdererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D17242EDE58003922F4 /* OperationOrdererTests.swift */; };
@@ -238,6 +239,7 @@
 		21FBA54F2463DFFF00A2A009 /* ConfigurationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConfigurationConstants.swift; path = Sources/configuration/ConfigurationConstants.swift; sourceTree = SOURCE_ROOT; };
 		21FBA5512463E55200A2A009 /* AEPConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AEPConfiguration.swift; path = Sources/configuration/AEPConfiguration.swift; sourceTree = SOURCE_ROOT; };
 		21FBBB242491553100C66506 /* NetworkService+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+Identity.swift"; sourceTree = "<group>"; };
+		3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionRuntime.swift; sourceTree = "<group>"; };
 		7629742B24294215005CCC73 /* SharedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedState.swift; sourceTree = "<group>"; };
 		7629742E24294249005CCC73 /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
 		76850D17242EDE58003922F4 /* OperationOrdererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationOrdererTests.swift; sourceTree = "<group>"; };
@@ -465,6 +467,7 @@
 				213C8BD62428822A009F780A /* EventListenerContainer.swift */,
 				21DB708C242AAD3D00568A4C /* ExtensionContainer.swift */,
 				213C8BC7242426DC009F780A /* Extension.swift */,
+				3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */,
 			);
 			name = "Event Hub";
 			path = Sources/eventhub;
@@ -735,6 +738,7 @@
 				BB1D756824A3E07F00269B45 /* DataQueue.swift in Sources */,
 				2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */,
 				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
+				3FC9665324B3E4EE0096F572 /* ExtensionRuntime.swift in Sources */,
 				BB1D756D24A3E07F00269B45 /* SQLiteWrapper.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
 				21172895249177FC00BB7BD3 /* Identifiable.swift in Sources */,

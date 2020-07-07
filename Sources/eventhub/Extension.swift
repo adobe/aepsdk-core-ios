@@ -62,13 +62,13 @@ public extension Extension {
     ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches the response event to `triggerEvent`
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
-        getEventHub().registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
+        getExtensionContainer()?.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
     }
     
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event) {
-        getEventHub().dispatch(event: event)
+        getExtensionContainer()?.dispatch(event: event)
     }
 
     // MARK: Shared State
@@ -78,14 +78,16 @@ public extension Extension {
     ///   - data: Data for the `SharedState`
     ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned at the latest
     func createSharedState(data: [String: Any], event: Event?) {
-        getEventHub().createSharedState(extensionName: name, data: data, event: event)
+        getExtensionContainer()?.createSharedState(data: data, event: event)
     }
 
 
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
-        return getEventHub().createPendingSharedState(extensionName: name, event: event)
+        return getExtensionContainer()?.createPendingSharedState(event: event) ?? { _ in
+            //TODO: log            
+        }
     }
 
     /// Gets the `SharedState` data for a specified extension
@@ -93,7 +95,7 @@ public extension Extension {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
-        return getEventHub().getSharedState(extensionName: extensionName, event: event)
+        return getExtensionContainer()?.getSharedState(extensionName: extensionName, event: event)
     }
     
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
