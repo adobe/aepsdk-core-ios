@@ -53,7 +53,7 @@ class AEPConfiguration: Extension {
     /// Invoked when the Configuration extension has been unregistered by the `EventHub`, currently a no-op.
     func onUnregistered() {}
 
-    /// Configuration is always ready for the next event
+    /// Check if the next event is requesting identities, if so check if ready, otherwise return true
     /// - Parameter event: an   `Event`
     func readyForEvent(_ event: Event) -> Bool {
         if event.type == .configuration && event.source == .requestIdentity {
