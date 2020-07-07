@@ -20,7 +20,8 @@ class IdentityStateTests: XCTestCase {
         AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
         state = IdentityState(identityProperties: IdentityProperties())
     }
-
+    
+    /// Tests that syncIdentifiers appends the MID and the two custom IDs to the visitor ID list
     func testSyncIdentifiersHappyIDs() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
@@ -34,7 +35,7 @@ class IdentityStateTests: XCTestCase {
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(2, idList?.count)
         
-        // TODO: Verify hit was inserted into DB
+        // TODO AMSDK-10261: Verify hit was inserted into DB
     }
     
     // TODO enable after AMSDK-10262
@@ -50,9 +51,10 @@ class IdentityStateTests: XCTestCase {
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual("test-push-id", eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         
-        // TODO: Verify hit was inserted into DB
+        // TODO AMSDK-10261: Verify hit was inserted into DB
     }
     
+    /// Tests that the mid is appended and the ad id is appended to the visitor id list
     func testSyncIdentifiersHappyAdID() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
@@ -71,9 +73,10 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual("d_cid_ic", customId?.origin)
         XCTAssertEqual("DSID_20915", customId?.type)
         
-        // TODO: Verify hit was inserted into DB
+        // TODO AMSDK-10261: Verify hit was inserted into DB
     }
     
+    /// Tests that the ad is is correctly preserved when the same ad id is sync'd
     func testSyncIdentifiersAdIDIsSame() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
@@ -91,9 +94,10 @@ class IdentityStateTests: XCTestCase {
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertTrue(idList?.isEmpty ?? false)
         
-        // TODO: Verify hit was inserted into DB
+        // TODO AMSDK-10261: Verify hit was inserted into DB
     }
     
+    /// Tests that the location hint and blob are present int he event data
     func testSyncIdentifiersAppendsBlobAndLocationHint() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
@@ -110,10 +114,11 @@ class IdentityStateTests: XCTestCase {
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual(props.locationHint, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] as? String)
         XCTAssertEqual(props.blob, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] as? String)
-        // TODO: Assert push identifier
-        // TODO: Verify hit was inserted into DB
+        // TODO AMSDK-10262: Assert push identifier
+        // TODO AMSDK-10261: Verify hit was inserted into DB
     }
     
+    // Disabled, TODO: AMSDK-10261
     func testSyncIdentifiersDoesNotQueue() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
@@ -127,7 +132,7 @@ class IdentityStateTests: XCTestCase {
         let _ = state.syncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
         
         // verify
-        // TODO: Assert hit was not queued in DB
+        // TODO AMSDK-10261: Assert hit was not queued in DB
     }
 
 }
