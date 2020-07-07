@@ -12,14 +12,17 @@ governing permissions and limitations under the License.
 import Foundation
 
 class AEPIdentity: Extension {
+    var runtime: ExtensionRuntime
+    
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
     
     private let eventQueue = OperationOrderer<EventHandlerMapping>(IdentityConstants.EXTENSION_NAME)
     
     // MARK: Extension
-    required init() {
-        eventQueue.setHandler({ return $0.handler($0.event) })
+    
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
     }
     
     func onRegistered() {

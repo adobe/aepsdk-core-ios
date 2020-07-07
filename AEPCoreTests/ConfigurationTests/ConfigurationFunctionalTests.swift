@@ -43,7 +43,7 @@ class ConfigurationFunctionalTests: XCTestCase {
     private func registerConfigAndWaitForSharedState() {
         let expectation = XCTestExpectation(description: "Configuration should share first shared state")
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { _ in expectation.fulfill() }
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { _ in expectation.fulfill() }
         registerExtension(AEPConfiguration.self)
         
         wait(for: [expectation], timeout: 0.5)
@@ -59,7 +59,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         let configResponseExpectation = XCTestExpectation(description: "Update config dispatches a configuration response content event")
         let sharedStateExpectation = XCTestExpectation(description: "Update config dispatches configuration shared state")
         
-        let extensionContainer = EventHub.shared.getExtensionContainer(MockExtension.self)
+        let extensionContainer = EventHub.shared.getExtensionRuntime(MockExtension.self)
         extensionContainer?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
@@ -68,7 +68,7 @@ class ConfigurationFunctionalTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -82,6 +82,38 @@ class ConfigurationFunctionalTests: XCTestCase {
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
     }
     
+    
+    /// Tests the happy path with for updating the config with a dict
+    func testUpdateConfigurationWithDict_New() {
+        // setup
+        let runtime = TestableExtensionRuntime()
+        let configuration = AEPConfiguration.init(runtime: runtime)
+        configuration.onRegistered()
+        XCTAssertEqual(1, runtime.createdSharedStates.count)
+        
+        // test
+        let configUpdate = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
+        let configUpdateEvent = Event(name: "Configuration Update", type: .configuration, source: .requestContent,
+                                 data: [ConfigurationConstants.Keys.UPDATE_CONFIG: configUpdate])
+        runtime.simulateComingEvent(event: configUpdateEvent)
+        
+        // verify
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        XCTAssertEqual(2, runtime.createdSharedStates.count)
+        
+        // verify response event
+        let dispatchedEvent = runtime.dispatchedEvents[0]
+         XCTAssertEqual(dispatchedEvent.type, EventType.configuration)
+        XCTAssertEqual(dispatchedEvent.source, EventSource.responseContent)
+        XCTAssertNotNil(dispatchedEvent.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any])
+        
+        // verify share state update
+        let newSharedState = runtime.createdSharedStates[1]
+        XCTAssertEqual("optedout", newSharedState["global.privacy"] as! String)
+        
+    }
+    
+    
     /// Tests the happy path with updating the config multiple times with a dict
     func testUpdateConfigurationWithDictTwice() {
         // setup
@@ -92,7 +124,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Update config dispatches 2 configuration shared states")
         sharedStateExpectation.expectedFulfillmentCount = 2
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             XCTAssertNotNil(event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any])
@@ -100,7 +132,7 @@ class ConfigurationFunctionalTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -122,11 +154,11 @@ class ConfigurationFunctionalTests: XCTestCase {
         configResponseExpectation.isInverted = true
         let sharedStateExpectation = XCTestExpectation(description: "Update config with an empty config dispatches a configuration shared state")
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             configResponseExpectation.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             sharedStateExpectation.fulfill()
         }
 
@@ -145,7 +177,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         let configResponseExpectation = XCTestExpectation(description: "Set privacy status dispatches a configuration response content event with updated config")
         let sharedStateExpectation = XCTestExpectation(description: "Set privacy status dispatches configuration shared state")
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as! [String: Any]? else {
@@ -156,7 +188,7 @@ class ConfigurationFunctionalTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -178,7 +210,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         let sharedStateResponseExpectation = XCTestExpectation(description: "Set privacy dispatches 2 shared states")
         sharedStateResponseExpectation.expectedFulfillmentCount = 2
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             guard let configUpdate = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as! [String: Any]? else {
@@ -189,7 +221,7 @@ class ConfigurationFunctionalTests: XCTestCase {
             configResponseExpectation.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -283,7 +315,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         let configRequestExpectation = XCTestExpectation(description: "Configuration should not dispatch an app id event if app id is empty")
         configRequestExpectation.isInverted = true
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
             configRequestExpectation.fulfill()
         }
 
@@ -303,14 +335,14 @@ class ConfigurationFunctionalTests: XCTestCase {
         let configResponseExpectation = XCTestExpectation(description: "Configuration should dispatch response content event with new config")
         let sharedStateExpectation = XCTestExpectation(description: "Configuration should update shared state")
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             XCTAssertEqual(event.data?.count, expectedDictCount)
             configResponseExpectation.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -331,11 +363,11 @@ class ConfigurationFunctionalTests: XCTestCase {
         let configResponseExpectation = XCTestExpectation(description: "Configuration should NOT dispatch response content event with new config when path to config is invalid")
         let sharedStateExpectation = XCTestExpectation(description: "Configuration still should update shared state")
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             configResponseExpectation.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -357,13 +389,13 @@ class ConfigurationFunctionalTests: XCTestCase {
         let getPrivacyStatusExpectation = XCTestExpectation(description: "Get privacy status callback is invoked")
         sharedStateExpectation.expectedFulfillmentCount = 2
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             configResponseExpectation.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -394,14 +426,14 @@ class ConfigurationFunctionalTests: XCTestCase {
         let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
         let sharedStateExpectation = XCTestExpectation(description: "Downloading config should update shared state")
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             XCTAssertEqual(event.data?.count, mockNetworkService.validResponseDictSize)
             configResponseEvent.fulfill()
         }
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             XCTAssertEqual(event.type, EventType.hub)
             XCTAssertEqual(event.source, EventSource.sharedState)
             XCTAssertEqual(ConfigurationConstants.EXTENSION_NAME, event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String)
@@ -424,7 +456,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
         configResponseEvent.expectedFulfillmentCount = 2
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: .configuration, source: .responseContent) { (event) in
             XCTAssertEqual(event.type, EventType.configuration)
             XCTAssertEqual(event.source, EventSource.responseContent)
             XCTAssertEqual(event.data?.count, mockNetworkService.validResponseDictSize)

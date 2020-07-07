@@ -12,6 +12,10 @@ governing permissions and limitations under the License.
 import Foundation
 
 class LifecycleExtension: Extension {
+    
+    var runtime: ExtensionRuntime
+    
+    
     typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool)) // TODO: Move to event hub to make public?
     
     let name = "Lifecycle"
@@ -20,8 +24,8 @@ class LifecycleExtension: Extension {
     private let eventQueue = OperationOrderer<EventHandlerMapping>("Lifecycle")
     
     // MARK: Extension
-    required init() {
-        eventQueue.setHandler({ return $0.handler($0.event) })
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
     }
     
     func onRegistered() {

@@ -268,7 +268,7 @@ class AEPCoreTests: XCTestCase {
         wait(for: [registerExpectation], timeout: 1.0)
             
         // register listener after registration
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: expectedEvent.type, source: expectedEvent.source) { (event) in
+        EventHub.shared.getExtensionRuntime(MockExtension.self)?.registerListener(type: expectedEvent.type, source: expectedEvent.source) { (event) in
             XCTAssertEqual(event.id, expectedEvent.id)
             eventExpectation.fulfill()
         }

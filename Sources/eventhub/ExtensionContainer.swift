@@ -44,7 +44,7 @@ class ExtensionContainer {
         
         // initialize the backing extension on the extension queue
         extensionQueue.async {
-            self.exten = type.init()
+            self.exten = type.init(runtime: self)
             guard let unwrappedExtension = self.exten else { return }
             self.sharedState = SharedState(unwrappedExtension.name)
             self.sharedStateName = unwrappedExtension.name
@@ -79,6 +79,14 @@ extension ExtensionContainer:ExtensionRuntime {
 
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
         return eventHub.getSharedState(extensionName: extensionName, event: event)
+    }
+    
+    func startEvents() {
+        eventOrderer.start()
+    }
+    
+    func stopEvents() {
+        eventOrderer.stop()
     }
 }
 

@@ -13,6 +13,7 @@ import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
 class AEPConfiguration: Extension {
+    var runtime: ExtensionRuntime
     var name = ConfigurationConstants.EXTENSION_NAME
     var version = ConfigurationConstants.EXTENSION_VERSION
 
@@ -24,7 +25,8 @@ class AEPConfiguration: Extension {
     // MARK: Extension
     
     /// Initializes the Configuration extension and it's dependencies
-    required init() {
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
     }
@@ -38,9 +40,10 @@ class AEPConfiguration: Extension {
         let pendingResolver = createPendingSharedState(event: nil)
         
         // If we have an appId stored in persistence, kick off the configureWithAppId event
-        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
-            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
-        }
+        // TODO: do we need this?
+//        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
+//            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
+//        }
         
         configState.loadInitialConfig()
         if !configState.environmentAwareConfiguration.isEmpty {

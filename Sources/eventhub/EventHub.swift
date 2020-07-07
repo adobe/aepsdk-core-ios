@@ -14,7 +14,7 @@ import Foundation
 
 public typealias EventListener = (Event) -> Void
 public typealias EventResponseListener = (Event?) -> Void
-public typealias SharedStateResolver = ([String: Any]?) -> Void
+public typealias SharedStateResolver = ([String: Any]) -> Void
 public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
 
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
@@ -164,12 +164,10 @@ final public class EventHub {
         return sharedState.resolve(version: version)
     }
     
-    // MARK: Internal
-    
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type
     /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
     /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
-    internal func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
+    public func getExtensionRuntime(_ type: Extension.Type) -> ExtensionRuntime? {
         return registeredExtensions[type.typeName]
     }
 

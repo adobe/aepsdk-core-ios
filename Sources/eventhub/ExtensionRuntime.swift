@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-
+/// provides all the methods needed by an `Extension`
 public protocol ExtensionRuntime {
     /// Registers an `EventListener` for the specified `EventType` and `EventSource`
     /// - Parameters:
@@ -21,13 +21,6 @@ public protocol ExtensionRuntime {
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives an `Event` matching `type` and `source`
     func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener)
 
-    /// Registers an `EventListener` with the `EventHub` that is invoked when `triggerEvent`'s response event is dispatched
-    /// - Parameters:
-    ///   - triggerEvent: An event which will trigger a response event
-    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
-    ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches the response event to `triggerEvent`
-    func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener)
-    
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event)
@@ -50,4 +43,10 @@ public protocol ExtensionRuntime {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)?
+    
+    /// Starts the `Event` queue for this extension
+    func startEvents()
+    
+    /// Stops the `Event` queue for this extension
+    func stopEvents()
 }

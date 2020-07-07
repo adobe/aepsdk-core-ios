@@ -17,9 +17,11 @@ import Foundation
 class SlowMockExtension: Extension {
     var name = "slowMockExtension"
     var version = "0.0.1"
+    var runtime: ExtensionRuntime
     
-    required init() {
-        sleep(20) // simulate an extension doing heavy work in constructor
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
+         sleep(20) // simulate an extension doing heavy work in constructor
     }
     
     func onRegistered() {}

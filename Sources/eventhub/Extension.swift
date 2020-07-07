@@ -20,6 +20,9 @@ public protocol Extension {
 
     /// Version of the extension
     var version: String { get }
+    
+    /// Name of the extension
+    var runtime: ExtensionRuntime { set get}
 
     /// Invoked when the extension has been registered by the `EventHub`
     func onRegistered()
@@ -35,7 +38,7 @@ public protocol Extension {
     func readyForEvent(_ event: Event) -> Bool
 
     // An `Extension` must support parameterless initializer
-    init()
+    init(runtime:ExtensionRuntime)
 }
 
 /// Contains methods for developers to interact with in their own extensions
@@ -53,22 +56,13 @@ public extension Extension {
     ///   - source: `EventSource` to be listened for
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches an `Event` with matching `type` and `source`
     func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
-        getExtensionContainer()?.registerListener(type: type, source: source, listener: listener)
-    }
-
-    /// Registers an `EventListener` with the `EventHub` that is invoked when `triggerEvent`'s response event is dispatched
-    /// - Parameters:
-    ///   - triggerEvent: An event which will trigger a response event
-    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
-    ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches the response event to `triggerEvent`
-    func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
-        getExtensionContainer()?.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
+        getExtensionRuntime()?.registerListener(type: type, source: source, listener: listener)
     }
     
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event) {
-        getExtensionContainer()?.dispatch(event: event)
+        getExtensionRuntime()?.dispatch(event: event)
     }
 
     // MARK: Shared State
@@ -78,14 +72,14 @@ public extension Extension {
     ///   - data: Data for the `SharedState`
     ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned at the latest
     func createSharedState(data: [String: Any], event: Event?) {
-        getExtensionContainer()?.createSharedState(data: data, event: event)
+        getExtensionRuntime()?.createSharedState(data: data, event: event)
     }
 
 
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
-        return getExtensionContainer()?.createPendingSharedState(event: event) ?? { _ in
+        return getExtensionRuntime()?.createPendingSharedState(event: event) ?? { _ in
             //TODO: log            
         }
     }
@@ -95,7 +89,7 @@ public extension Extension {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
-        return getExtensionContainer()?.getSharedState(extensionName: extensionName, event: event)
+        return getExtensionRuntime()?.getSharedState(extensionName: extensionName, event: event)
     }
     
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
@@ -109,12 +103,12 @@ public extension Extension {
     
     /// Starts the `Event` queue for this extension
     func startEvents() {
-        getExtensionContainer()?.eventOrderer.start()
+        getExtensionRuntime()?.startEvents()
     }
     
     /// Stops the `Event` queue for this extension
     func stopEvents() {
-        getExtensionContainer()?.eventOrderer.stop()
+        getExtensionRuntime()?.stopEvents()
     }
 }
 
@@ -124,7 +118,7 @@ private extension Extension {
         return EventHub.shared
     }
     
-    private func getExtensionContainer() -> ExtensionContainer? {
-        return getEventHub().getExtensionContainer(Self.self)
+    private func getExtensionRuntime() -> ExtensionRuntime? {
+        return runtime
     }
 }
