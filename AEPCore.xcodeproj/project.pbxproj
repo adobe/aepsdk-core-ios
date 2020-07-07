@@ -126,11 +126,12 @@
 		BB1D757D24A3E09100269B45 /* SystemInfoServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1D757424A3E09100269B45 /* SystemInfoServiceTest.swift */; };
 		BB1D757E24A3E09100269B45 /* NamedKeyValueStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1D757524A3E09100269B45 /* NamedKeyValueStoreTest.swift */; };
 		BB1D757F24A3E09100269B45 /* NamedKeyValueServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB1D757624A3E09100269B45 /* NamedKeyValueServiceTest.swift */; };
-		BB55A81824B3F0EF00A23251 /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB55A81724B3F0EF00A23251 /* UIService.swift */; };
-		BB55A81A24B3F2C100A23251 /* AEPUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB55A81924B3F2C100A23251 /* AEPUIService.swift */; };
-		BB55A81D24B3F34200A23251 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB55A81C24B3F34200A23251 /* UIKit.framework */; };
-		BB77F3BB24B4EEB600B3A8B4 /* AEPUrlHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77F3BA24B4EEB600B3A8B4 /* AEPUrlHandler.swift */; };
-		BB77F3BD24B4F40700B3A8B4 /* AEPUIServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77F3BC24B4F40700B3A8B4 /* AEPUIServiceTest.swift */; };
+		BB55A81224B39CE700A23251 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB55A81124B39CE700A23251 /* Log.swift */; };
+		BB55A81424B39D3800A23251 /* LoggingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB55A81324B39D3800A23251 /* LoggingService.swift */; };
+		BB77F3C324B5139300B3A8B4 /* AEPUrlHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77F3C024B5139300B3A8B4 /* AEPUrlHandler.swift */; };
+		BB77F3C424B5139300B3A8B4 /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77F3C124B5139300B3A8B4 /* UIService.swift */; };
+		BB77F3C524B5139300B3A8B4 /* AEPUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77F3C224B5139300B3A8B4 /* AEPUIService.swift */; };
+		BB77F3C724B513A700B3A8B4 /* AEPUIServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB77F3C624B513A700B3A8B4 /* AEPUIServiceTest.swift */; };
 		D4000F122458DE700052C536 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F112458DE700052C536 /* NetworkService.swift */; };
 		D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F132458DE8E0052C536 /* AEPNetworkService.swift */; };
 		D4000F162458DEA20052C536 /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F152458DEA20052C536 /* HttpMethod.swift */; };
@@ -274,11 +275,12 @@
 		BB1D757424A3E09100269B45 /* SystemInfoServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoServiceTest.swift; sourceTree = "<group>"; };
 		BB1D757524A3E09100269B45 /* NamedKeyValueStoreTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStoreTest.swift; sourceTree = "<group>"; };
 		BB1D757624A3E09100269B45 /* NamedKeyValueServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueServiceTest.swift; sourceTree = "<group>"; };
-		BB55A81724B3F0EF00A23251 /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
-		BB55A81924B3F2C100A23251 /* AEPUIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPUIService.swift; sourceTree = "<group>"; };
-		BB55A81C24B3F34200A23251 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		BB77F3BA24B4EEB600B3A8B4 /* AEPUrlHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPUrlHandler.swift; sourceTree = "<group>"; };
-		BB77F3BC24B4F40700B3A8B4 /* AEPUIServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPUIServiceTest.swift; sourceTree = "<group>"; };
+		BB55A81124B39CE700A23251 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
+		BB55A81324B39D3800A23251 /* LoggingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingService.swift; sourceTree = "<group>"; };
+		BB77F3C024B5139300B3A8B4 /* AEPUrlHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPUrlHandler.swift; sourceTree = "<group>"; };
+		BB77F3C124B5139300B3A8B4 /* UIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
+		BB77F3C224B5139300B3A8B4 /* AEPUIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPUIService.swift; sourceTree = "<group>"; };
+		BB77F3C624B513A700B3A8B4 /* AEPUIServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPUIServiceTest.swift; sourceTree = "<group>"; };
 		D4000F112458DE700052C536 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		D4000F132458DE8E0052C536 /* AEPNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPNetworkService.swift; sourceTree = "<group>"; };
 		D4000F152458DEA20052C536 /* HttpMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
@@ -294,7 +296,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB55A81D24B3F34200A23251 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,7 +416,6 @@
 				21CAC0D82422917600C11388 /* AEPCore */,
 				21CAC0E32422917600C11388 /* AEPCoreTests */,
 				21CAC0D72422917600C11388 /* Products */,
-				BB55A81B24B3F34100A23251 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -543,8 +543,8 @@
 		78D754D32437F92300DB9124 /* services */ = {
 			isa = PBXGroup;
 			children = (
-				BB55A82024B4DBC900A23251 /* UIService */,
-				D4000F2A2458E6EE0052C536 /* NetworkService */,
+				BB77F3BF24B5136D00B3A8B4 /* UIService */,
+				BB55A81024B39CC900A23251 /* LoggingService */,
 				BB1D756124A3E06200269B45 /* DataQueueService */,
 				2157951C24A2A9E30012ED28 /* cache */,
 				78DEFEF224509E3C00D7E9FB /* AEPServiceProvider.swift */,
@@ -553,6 +553,7 @@
 				78D754D42437F92300DB9124 /* NamedKeyValueService.swift */,
 				78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */,
 				785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */,
+				D4000F2A2458E6EE0052C536 /* NetworkService */,
 			);
 			name = services;
 			path = Sources/services;
@@ -563,6 +564,7 @@
 			children = (
 				BB1D756E24A3E09100269B45 /* AEPDataQueueService+Testable.swift */,
 				BB1D757224A3E09100269B45 /* AEPDataQueueServiceTests.swift */,
+				BB77F3C624B513A700B3A8B4 /* AEPUIServiceTest.swift */,
 				BB1D756F24A3E09100269B45 /* AEPDataQueueTests.swift */,
 				BB1D757024A3E09100269B45 /* MockSystemInfoService.swift */,
 				BB1D757624A3E09100269B45 /* NamedKeyValueServiceTest.swift */,
@@ -571,7 +573,6 @@
 				BB1D757324A3E09100269B45 /* SQLiteWrapperTests.swift */,
 				BB1D757424A3E09100269B45 /* SystemInfoServiceTest.swift */,
 				2181730424A526600053439A /* DiskCacheServiceTests.swift */,
-				BB77F3BC24B4F40700B3A8B4 /* AEPUIServiceTest.swift */,
 			);
 			path = ServicesTests;
 			sourceTree = "<group>";
@@ -599,20 +600,21 @@
 			name = DataQueueService;
 			sourceTree = "<group>";
 		};
-		BB55A81B24B3F34100A23251 /* Frameworks */ = {
+		BB55A81024B39CC900A23251 /* LoggingService */ = {
 			isa = PBXGroup;
 			children = (
-				BB55A81C24B3F34200A23251 /* UIKit.framework */,
+				BB55A81124B39CE700A23251 /* Log.swift */,
+				BB55A81324B39D3800A23251 /* LoggingService.swift */,
 			);
-			name = Frameworks;
+			name = LoggingService;
 			sourceTree = "<group>";
 		};
-		BB55A82024B4DBC900A23251 /* UIService */ = {
+		BB77F3BF24B5136D00B3A8B4 /* UIService */ = {
 			isa = PBXGroup;
 			children = (
-				BB55A81724B3F0EF00A23251 /* UIService.swift */,
-				BB55A81924B3F2C100A23251 /* AEPUIService.swift */,
-				BB77F3BA24B4EEB600B3A8B4 /* AEPUrlHandler.swift */,
+				BB77F3C224B5139300B3A8B4 /* AEPUIService.swift */,
+				BB77F3C024B5139300B3A8B4 /* AEPUrlHandler.swift */,
+				BB77F3C124B5139300B3A8B4 /* UIService.swift */,
 			);
 			name = UIService;
 			sourceTree = "<group>";
@@ -755,6 +757,7 @@
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
 				213F662E2492A36A000184DE /* AEPError.swift in Sources */,
 				D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */,
+				BB77F3C524B5139300B3A8B4 /* AEPUIService.swift in Sources */,
 				2157952624A3DC410012ED28 /* CacheEntry.swift in Sources */,
 				D4000F1A2458DEDE0052C536 /* NetworkRequest.swift in Sources */,
 				2137BA112498311600F01D04 /* URLQueryItem+Identity.swift in Sources */,
@@ -762,10 +765,12 @@
 				21315BBA24579C4A00D1B254 /* AtomicCounter.swift in Sources */,
 				213C8BD72428822A009F780A /* EventListenerContainer.swift in Sources */,
 				214B5225248ABCEB0034BF22 /* AEPIdentity+Identity.swift in Sources */,
+				BB77F3C424B5139300B3A8B4 /* UIService.swift in Sources */,
 				785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */,
 				78A642572486C98E004B4E46 /* ThreadSafeArray.swift in Sources */,
 				BB1D756824A3E07F00269B45 /* DataQueue.swift in Sources */,
 				2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */,
+				BB55A81424B39D3800A23251 /* LoggingService.swift in Sources */,
 				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
 				BB1D756D24A3E07F00269B45 /* SQLiteWrapper.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
@@ -775,12 +780,12 @@
 				21629DB02461CAD0009D05BF /* AEPCore+Lifecycle.swift in Sources */,
 				21CAC0F624229CDB00C11388 /* EventType.swift in Sources */,
 				21FB910E247639EE00074BF9 /* ConfigurationDownloadable.swift in Sources */,
+				BB55A81224B39CE700A23251 /* Log.swift in Sources */,
 				214A24C92497FEBF002C310A /* URLEncoder.swift in Sources */,
 				21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */,
 				BB1D756C24A3E07F00269B45 /* AEPDataQueue.swift in Sources */,
 				2157951E24A2A9F00012ED28 /* CacheService.swift in Sources */,
 				21FBA54A2463DFCE00A2A009 /* Configuration.swift in Sources */,
-				BB55A81824B3F0EF00A23251 /* UIService.swift in Sources */,
 				7629742C24294215005CCC73 /* SharedState.swift in Sources */,
 				213C8BC6242426A1009F780A /* EventHub.swift in Sources */,
 				D4000F162458DEA20052C536 /* HttpMethod.swift in Sources */,
@@ -809,8 +814,7 @@
 				21F361A0246DE4B5009AB88B /* LifecycleMetrics.swift in Sources */,
 				214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */,
 				2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */,
-				BB55A81A24B3F2C100A23251 /* AEPUIService.swift in Sources */,
-				BB77F3BB24B4EEB600B3A8B4 /* AEPUrlHandler.swift in Sources */,
+				BB77F3C324B5139300B3A8B4 /* AEPUrlHandler.swift in Sources */,
 				213F66342492C06B000184DE /* IdentityProperties.swift in Sources */,
 				2157952224A2AA050012ED28 /* Cache.swift in Sources */,
 				215CA8152481C9430078D778 /* LifecycleState.swift in Sources */,
@@ -859,7 +863,7 @@
 				211728912491680000BB7BD3 /* NetworkService+IdentityTests.swift in Sources */,
 				BB1D757F24A3E09100269B45 /* NamedKeyValueServiceTest.swift in Sources */,
 				BB1D757D24A3E09100269B45 /* SystemInfoServiceTest.swift in Sources */,
-				BB77F3BD24B4F40700B3A8B4 /* AEPUIServiceTest.swift in Sources */,
+				BB77F3C724B513A700B3A8B4 /* AEPUIServiceTest.swift in Sources */,
 				7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */,
 				213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */,
 				21F361A2246DE4C9009AB88B /* LifecycleMetricsTests.swift in Sources */,
