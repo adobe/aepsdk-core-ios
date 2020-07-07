@@ -17,9 +17,9 @@ struct IdentityState {
     private var identityProperties: IdentityProperties
     private var lastValidConfig: [String: Any]? = nil
     
-    init() {
-        identityProperties = IdentityProperties()
-        identityProperties.load()
+    init(identityProperties: IdentityProperties) {
+        self.identityProperties = identityProperties
+        self.identityProperties.load()
     }
     
     mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any]? {
@@ -56,13 +56,13 @@ struct IdentityState {
         
         // generate customer ids
         let authState = event.authenticationState
-        var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)})
+        var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)}) ?? []
         
         // update adid if changed and extract the new adid value as VisitorId to be synced
         if let adId = event.adId, shouldUpdateAdId(newAdID: adId.identifier ?? "") {
             // check if changed, update
             identityProperties.advertisingIdentifier = adId.identifier
-            customerIds?.append(adId)
+            customerIds.append(adId)
         }
         
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
@@ -71,7 +71,7 @@ struct IdentityState {
         // convert array of IDs to a dict of <identifier, ID>, then merge by taking the new ID for duplicate IDs
         identityProperties.customerIds = toIdDict(ids: identityProperties.customerIds).merging(toIdDict(ids: customerIds), uniquingKeysWith: { (_, new) in new }).map {$0.value}
         identityProperties.customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
-        customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
+        customerIds.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
         
         // valid config: check if there's a need to sync. Don't if we're already up to date.
         if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: currentEventValidConfig) {

@@ -14,26 +14,120 @@ import XCTest
 
 class IdentityStateTests: XCTestCase {
 
-    var state = IdentityState()
+    var state = IdentityState(identityProperties: IdentityProperties())
     
     override func setUp() {
-        state = IdentityState()
+        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+        state = IdentityState(identityProperties: IdentityProperties())
     }
 
     func testSyncIdentifiersHappyIDs() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
-        let event = Event.fakeSyncIDEvent()
         
         // test
-        let eventData = state.syncIdentifiers(event: event, configurationSharedState: configSharedState)
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
         
         // verify
-        XCTAssertEqual(2, eventData.count)
-        XCTAssertNotNil(eventData[IdentityConstants.EventDataKeys.VISITOR_ID_MID])
-        let idList = eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(2, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(2, idList?.count)
+        
         // TODO: Verify hit was inserted into DB
+    }
+    
+    // TODO enable after AMSDK-10262
+    func testSyncIdentifiersHappyPushID() {
+        // setup
+        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakePushIDEvent(), configurationSharedState: configSharedState)
+        
+        // verify
+        XCTAssertEqual(2, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("test-push-id", eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
+        
+        // TODO: Verify hit was inserted into DB
+    }
+    
+    func testSyncIdentifiersHappyAdID() {
+        // setup
+        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent(), configurationSharedState: configSharedState)
+        
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(1, idList?.count)
+        let customId = idList?.first!
+        XCTAssertEqual("test-ad-id", customId?.identifier)
+        XCTAssertEqual("d_cid_ic", customId?.origin)
+        XCTAssertEqual("DSID_20915", customId?.type)
+        
+        // TODO: Verify hit was inserted into DB
+    }
+    
+    func testSyncIdentifiersAdIDIsSame() {
+        // setup
+        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = "test-ad-id"
+        state = IdentityState(identityProperties: props)
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent(), configurationSharedState: configSharedState)
+        
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual(props.advertisingIdentifier, eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertTrue(idList?.isEmpty ?? false)
+        
+        // TODO: Verify hit was inserted into DB
+    }
+    
+    func testSyncIdentifiersAppendsBlobAndLocationHint() {
+        // setup
+        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        var props = IdentityProperties()
+        props.locationHint = "locHinty"
+        props.blob = "blobby"
+        state = IdentityState(identityProperties: props)
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakePushIDEvent(), configurationSharedState: configSharedState)
+        
+        // verify
+        XCTAssertEqual(4, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual(props.locationHint, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] as? String)
+        XCTAssertEqual(props.blob, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] as? String)
+        // TODO: Assert push identifier
+        // TODO: Verify hit was inserted into DB
+    }
+    
+    func testSyncIdentifiersDoesNotQueue() {
+        // setup
+        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        var props = IdentityProperties()
+        props.mid = MID() // visitor ID is null initially and set for the first time in
+        // shouldSync(). Mimic a second call to shouldSync by setting the mid
+        props.lastSync = Date() // set last sync to now
+        state = IdentityState(identityProperties: props)
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
+        
+        // verify
+        // TODO: Assert hit was not queued in DB
     }
 
 }
@@ -43,5 +137,15 @@ private extension Event {
         let ids = ["k1": "v1", "k2": "v2"]
         let data = [IdentityConstants.EventDataKeys.IDENTIFIERS: ids, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true] as [String : Any]
         return Event(name: "Fake Sync Event", type: .identity, source: .requestReset, data: data)
+    }
+    
+    static func fakePushIDEvent() -> Event {
+        let data = [IdentityConstants.EventDataKeys.PUSH_IDENTIFIER: "test-push-id"]
+        return Event(name: "Fake Sync Event", type: .genericIdentity, source: .requestReset, data: data)
+    }
+    
+    static func fakeAdIDEvent() -> Event {
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: "test-ad-id"]
+        return Event(name: "Fake Sync Event", type: .genericIdentity, source: .requestReset, data: data)
     }
 }

@@ -14,7 +14,7 @@ import Foundation
 class AEPIdentity: Extension {
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
-    var state = IdentityState()
+    var state = IdentityState(identityProperties: IdentityProperties())
     
     // MARK: Extension
     required init() {
