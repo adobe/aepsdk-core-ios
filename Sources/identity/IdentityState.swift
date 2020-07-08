@@ -75,7 +75,7 @@ struct IdentityState {
         
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
         // empty adid is also removed from the customer_ids_ list by merging with the new ids then filtering out any empty ids
-        identityProperties.mergeCustomerIds(customerIds)
+        identityProperties.mergeAndCleanCustomerIds(customerIds)
         customerIds.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
         
         // valid config: check if there's a need to sync. Don't if we're already up to date.

@@ -76,9 +76,9 @@ struct IdentityProperties: Codable {
         dataStore.setObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES, value: self)
     }
     
-    /// Merges `newCustomIds` into `customerIds` by overwriting duplicate identities with new values in `newCustomIds`
+    /// Merges `newCustomIds` into `customerIds` by overwriting duplicate identities with new values in `newCustomIds`, and removes any identifiers with an empty or nil identifier
     /// - Parameter newCustomIds: a list of new custom ids to be merged into 1customerIds
-    mutating func mergeCustomerIds(_ newCustomerIds: [CustomIdentity]) {
+    mutating func mergeAndCleanCustomerIds(_ newCustomerIds: [CustomIdentity]) {
          // convert array of IDs to a dict of <identifier, ID>, then merge by taking the new ID for duplicate IDs
         customerIds = idListToDict(customerIds).merging(idListToDict(newCustomerIds), uniquingKeysWith: { (_, new) in new }).map {$0.value}
         customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
