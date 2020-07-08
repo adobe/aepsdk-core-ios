@@ -132,7 +132,6 @@ class AEPConfiguration: Extension {
         // Create shared state and dispatch configuration response content
         sharedStateResolver(configState.environmentAwareConfiguration)
         dispatchConfigurationResponse(triggerEvent: event, data: event.data)
-        return
     }
 
     /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
