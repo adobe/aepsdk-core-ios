@@ -292,7 +292,7 @@ class AEPCoreTests: XCTestCase {
         wait(for: [eventExpectation], timeout: 1.0)
     }
     
-    // test is disabled until configuration extension is merged
+    /// Tests that the response callback is invoked when the trigger event is dispatched
     func testDispatchEventWithResponseCallbackSimple() {
         // setup
         let expectedEvent = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
