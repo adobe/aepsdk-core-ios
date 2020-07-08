@@ -19,28 +19,29 @@ class AEPConfiguration: Extension {
     private let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private var appIdManager: LaunchIDManager
     private var configState: ConfigurationState // should only be modified/used within the event queue
-    
+    private let retryQueue = DispatchQueue(label: "com.adobe.configuration.retry")
+
     // MARK: Extension
-    
+
     /// Initializes the Configuration extension and it's dependencies
     required init() {
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
     }
-    
+
     /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
     func onRegistered() {
         registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
         registerListener(type: .lifecycle, source: .responseContent, listener: receiveLifecycleResponse(event:))
-        // TODO: AMSDK-9750 - Listen for request identifier events
-        
+        registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
+
         let pendingResolver = createPendingSharedState(event: nil)
-        
+
         // If we have an appId stored in persistence, kick off the configureWithAppId event
         if let appId = appIdManager.loadAppId(), !appId.isEmpty {
             dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
         }
-        
+
         configState.loadInitialConfig()
         if !configState.environmentAwareConfiguration.isEmpty {
             let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.environmentAwareConfiguration)
@@ -48,18 +49,28 @@ class AEPConfiguration: Extension {
         }
         pendingResolver(configState.environmentAwareConfiguration)
     }
-    
+
     /// Invoked when the Configuration extension has been unregistered by the `EventHub`, currently a no-op.
     func onUnregistered() {}
-    
+
     /// Configuration is always ready for the next event
     /// - Parameter event: an   `Event`
     func readyForEvent(_ event: Event) -> Bool {
         return true
     }
 
+    /// Check if the next event is requesting identities, if so check if ready, otherwise return true
+    /// - Parameter event: an   `Event`
+    func readyForEvent(_ event: Event) -> Bool {
+        if event.type == .configuration && event.source == .requestIdentity {
+            return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+        }
+
+        return true
+    }
+
     // MARK: Event Listeners
-    
+
     /// Invoked by the `eventQueue` each time a new configuration request event is received
     /// - Parameter event: A configuration request event
     private func receiveConfigurationRequest(event: Event) {
@@ -74,7 +85,7 @@ class AEPConfiguration: Extension {
         }
 
     }
-    
+
     /// Invoked by the `eventQueue` each time a new lifecycle response event is received
     /// - Parameter event: A lifecycle response event
     private func receiveLifecycleResponse(event: Event) {
@@ -91,8 +102,25 @@ class AEPConfiguration: Extension {
         dispatchConfigurationRequest(data: data)
     }
 
+    /// Handles the getSdkIdentities API by collecting all the identities then dispatching a response event with the given identities
+    /// - Parameter event: The event coming from the getSdkIdentities API
+    private func receiveConfigurationIdentity(event: Event) {
+        var mobileIdentities = MobileIdentities()
+        mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+
+        guard let encodedIdentities = try? JSONEncoder().encode(mobileIdentities) else {
+            // TODO: Error log
+            return
+        }
+
+        let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
+        let eventData = [ConfigurationConstants.Keys.ALL_IDENTIFIERS: identitiesStr]
+        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: .configuration, source: .responseIdentity, data: eventData as [String : Any])
+        dispatch(event: responseEvent)
+    }
+
     // MARK: Event Processors
-    
+
     /// Interacts with the `ConfigurationState` to update the configuration with the new configuration contained in `event`
     /// - Parameters:
     ///   - event: The `event` which contains the new configuration
@@ -105,14 +133,13 @@ class AEPConfiguration: Extension {
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
-        
+
         configState.updateWith(programmaticConfig: updatedConfig)
         // Create shared state and dispatch configuration response content
         sharedStateResolver(configState.environmentAwareConfiguration)
         dispatchConfigurationResponse(triggerEvent: event, data: event.data)
-        return
     }
-    
+
     /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
     /// - Parameters:
     ///   - appId: The appId for which a configuration should be downloaded from
@@ -130,10 +157,10 @@ class AEPConfiguration: Extension {
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
-        
+
         // check if the configuration state has downloaded the config associated with appId, if so early exit
         guard !configState.hasDownloadedConfig(appId: appId) else { return }
-        
+
         // stop all other event processing while we are attempting to download the config
         stopEvents()
         configState.updateWith(appId: appId) { [weak self] (config) in
@@ -142,13 +169,13 @@ class AEPConfiguration: Extension {
                 self?.startEvents()
             } else {
                 // If downloading config failed try again later
-                self?.extensionQueue?.asyncAfter(deadline: .now() + 5) {
+                self?.retryQueue.asyncAfter(deadline: .now() + 5) {
                     let _ = self?.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
                 }
             }
         }
     }
-    
+
     /// Interacts with the `ConfigurationState` to fetch the configuration associated with `filePath`
     /// - Parameters:
     ///   - filePath: The file path at which the configuration should be loaded from
@@ -170,14 +197,14 @@ class AEPConfiguration: Extension {
     }
 
     // MARK: Dispatchers
-    
+
     /// Dispatches a configuration response content event with corresponding data
     /// - Parameter data: Optional data to be attached to the event
     private func dispatchConfigurationResponse(triggerEvent: Event, data: [String: Any]?) {
         let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: data)
         dispatch(event: responseEvent)
     }
-    
+
     /// Dispatches a configuration request content event with corresponding data
     /// - Parameter data: Data to be attached to the event
     private func dispatchConfigurationRequest(data: [String: Any]) {
@@ -195,7 +222,7 @@ class AEPConfiguration: Extension {
         // Dispatch a Configuration Response Content event with the new configuration.
         dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
     }
-    
+
     // MARK: Helpers
 
     /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
