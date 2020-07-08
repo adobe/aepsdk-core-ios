@@ -142,28 +142,6 @@ class IdentityStateTests: XCTestCase {
         // TODO AMSDK-10261: Assert hit was not queued in DB
     }
     
-    func testSyncIdentifiersShouldSyncWithEmptyCurrentConfigButValidLatestConfig() {
-        // setup
-        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
-        
-        // test
-        let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: [:])
-        
-        // verify
-        XCTAssertTrue(readyForSync)
-    }
-    
-    func testSyncIdentifiersShouldNotSyncWithEmptyCurrentConfigAndNilLatestConfig() {
-        // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: ""] as [String : Any]
-        
-        // test
-        let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
-        
-        // verify
-        XCTAssertFalse(readyForSync)
-    }
-    
     func testSyncIdentifiersWhenPrivacyIsOptIn() {
         // setup
         state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
@@ -208,6 +186,28 @@ class IdentityStateTests: XCTestCase {
     func testReadyForSyncIdentifiersNoValidConfig() {
         // test
         let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: [:])
+        
+        // verify
+        XCTAssertFalse(readyForSync)
+    }
+    
+    func testReadyForSyncIdentifiersShouldSyncWithEmptyCurrentConfigButValidLatestConfig() {
+        // setup
+        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        
+        // test
+        let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: [:])
+        
+        // verify
+        XCTAssertTrue(readyForSync)
+    }
+    
+    func testReadyForSyncIdentifiersShouldNotSyncWithEmptyCurrentConfigAndNilLatestConfig() {
+        // setup
+        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: ""] as [String : Any]
+        
+        // test
+        let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
         
         // verify
         XCTAssertFalse(readyForSync)

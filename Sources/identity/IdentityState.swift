@@ -54,6 +54,12 @@ struct IdentityState {
     ///   - event: event corresponding to sync identifiers call or containing a new ADID value.
     /// - Returns: The data to be used for Identity shared state
     mutating func syncIdentifiers(event: Event) -> [String: Any]? {
+        // sanity check, config should never be empty
+        if lastValidConfig.isEmpty {
+            // TODO: Add log
+            return nil
+        }
+        
         // Early exit if privacy is opt-out
         if identityProperties.privacyStatus == .optedOut
             || lastValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
@@ -89,6 +95,8 @@ struct IdentityState {
         
         // save properties
         identityProperties.saveToPersistence()
+        
+        // return event data to be used in identity shared state
         return identityProperties.toEventData()
     }
     
@@ -113,8 +121,8 @@ struct IdentityState {
         }
         
         let needResync = Date().timeIntervalSince1970 - (identityProperties.lastSync?.timeIntervalSince1970 ?? 0) > identityProperties.ttl || forceSync
-        let hasIds = !(customerIds?.isEmpty ?? false)
-        let hasDpids = !(dpids?.isEmpty ?? false)
+        let hasIds = !(customerIds?.isEmpty ?? true)
+        let hasDpids = !(dpids?.isEmpty ?? true)
         
         if identityProperties.mid != nil && !hasIds && !hasDpids && !needResync {
             syncForIds = false
@@ -138,10 +146,7 @@ struct IdentityState {
     /// - Parameter newAdID: the new ad id
     /// - Returns: True if we should update the ad id, false otherwise
     private func shouldUpdateAdId(newAdID: String) -> Bool {
-        if let existingAdId = identityProperties.advertisingIdentifier {
-            return (!newAdID.isEmpty && existingAdId != newAdID) || (newAdID.isEmpty && !existingAdId.isEmpty)
-        }
-        // existing adId is empty or nil, so update as long as the new adId is not empty
-        return !newAdID.isEmpty
+        let existingAdId = identityProperties.advertisingIdentifier ?? ""
+        return (!newAdID.isEmpty && newAdID != existingAdId) || (newAdID.isEmpty && !existingAdId.isEmpty)
     }
 }
