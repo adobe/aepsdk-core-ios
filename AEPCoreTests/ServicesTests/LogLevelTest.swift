@@ -11,7 +11,6 @@
  */
 
 @testable import AEPCore
-import os.log
 import XCTest
 
 class LogLevelTest: XCTestCase {

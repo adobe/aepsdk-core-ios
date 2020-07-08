@@ -20,6 +20,11 @@ import Foundation
 /// * _LogLevel.error_ - This method should be used when the SDK has determined that there is an unrecoverable error.  The intended audience for _error_ logs is a developer integrating the SDK.  _error_ logs are always enabled, and will be printed to the developer console regardless of the LoggingMode of the SDK.
 ///
 public enum LogLevel: Int, Comparable {
+    case trace = 1
+    case debug
+    case warning
+    case error
+
     /// Compares two `LogLevel`s for order
     /// - Parameters:
     ///   - lhs: the first `LogLevel` to be compared
@@ -28,11 +33,6 @@ public enum LogLevel: Int, Comparable {
     public static func < (lhs: LogLevel, rhs: LogLevel) -> Bool {
         return lhs.rawValue < rhs.rawValue
     }
-
-    case trace = 1
-    case debug
-    case warning
-    case error
 
     public func toString() -> String {
         switch self {
