@@ -18,7 +18,7 @@ struct IdentityState {
     private var lastValidConfig: [String: Any]? = nil
     
     /// Creates a new `IdentityState` with the given identity properties
-    /// - Parameter identityProperties: <#identityProperties description#>
+    /// - Parameter identityProperties: identity
     init(identityProperties: IdentityProperties) {
         self.identityProperties = identityProperties
         self.identityProperties.load()
