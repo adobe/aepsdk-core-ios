@@ -31,7 +31,6 @@ struct IdentityState {
     ///   - configurationSharedState: config shared state corresponding to the event to be processed
     /// - Returns: The data to be used for Identity shared state
     mutating func syncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> [String: Any]? {
-        var currentEventValidConfig = [String: Any]()
         let privacyStatus = configurationSharedState[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
         // do not even extract any data if the config is opt-out.
         guard privacyStatus != .optedOut else {
@@ -42,6 +41,7 @@ struct IdentityState {
         // org id is a requirement.
         // Use what's in current config shared state. if that's missing, check latest config.
         // if latest config doesn't have org id either, Identity can't proceed.
+        var currentEventValidConfig = [String: Any]()
         if let orgId = configurationSharedState[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
             lastValidConfig = configurationSharedState
         } else {
