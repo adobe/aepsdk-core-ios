@@ -50,9 +50,7 @@ public final class AEPCore {
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
     static func dispatch(event: Event, responseCallback: @escaping (Event) -> ()) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
-            print("in aepcore")
             if let event = event {
-                print("invoked callback")
                 responseCallback(event)
             }
         }
