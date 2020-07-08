@@ -10,14 +10,24 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
+@testable import AEPCore
+import os.log
+import XCTest
 
-/// Represents the interface of the logging service
-public protocol LoggingService {
-    /// Logs a message
-    /// - Parameters:
-    ///   - level: One of the message level identifiers, e.g., DEBUG
-    ///   - label: Name of a label to localize message
-    ///   - message: The string message
-    func log(level: LogLevel, label: String, message: String)
+extension AEPLoggingService {
+    func osLogForTest(_ label: String) -> OSLog {
+        return osLog(label)
+    }
+
+    func osLogTypeForTest(_ logLevel: LogLevel) -> OSLogType {
+        return osLogType(logLevel)
+    }
+}
+
+class LoggingServiceTest: XCTestCase {
+    func testLogLevelComparer() throws {
+        XCTAssertTrue(LogLevel.error > LogLevel.warning)
+        XCTAssertTrue(LogLevel.warning > LogLevel.debug)
+        XCTAssertTrue(LogLevel.debug > LogLevel.trace)
+    }
 }
