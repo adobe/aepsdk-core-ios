@@ -153,21 +153,6 @@ class IdentityStateTests: XCTestCase {
         XCTAssertNotNil(eventData)
     }
     
-    /// When the privacy status is currently opt-out we
-    func testSyncIdentifiersTrueWhenConfigPrivacyIsOptOut() {
-        // setup
-        var props = IdentityProperties()
-        props.privacyStatus = .optedOut
-        state = IdentityState(identityProperties: props)
-        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
-        
-        // test
-        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
-        
-        // verify
-        XCTAssertNil(eventData)
-    }
-    
     /// We are ready to process the event when the config shared state has an opt-in privacy status but our previous config has an opt-out
     func testSyncIdentifiersReturnTrueWhenLatestPrivacyIsOptOut() {
         // setup
