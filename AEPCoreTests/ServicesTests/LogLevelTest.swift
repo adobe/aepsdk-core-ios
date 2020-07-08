@@ -14,17 +14,7 @@
 import os.log
 import XCTest
 
-extension AEPLoggingService {
-    func osLogForTest(_ label: String) -> OSLog {
-        return osLog(label)
-    }
-
-    func osLogTypeForTest(_ logLevel: LogLevel) -> OSLogType {
-        return osLogType(logLevel)
-    }
-}
-
-class LoggingServiceTest: XCTestCase {
+class LogLevelTest: XCTestCase {
     func testLogLevelComparer() throws {
         XCTAssertTrue(LogLevel.error > LogLevel.warning)
         XCTAssertTrue(LogLevel.warning > LogLevel.debug)
