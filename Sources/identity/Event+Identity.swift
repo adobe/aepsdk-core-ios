@@ -18,23 +18,28 @@ extension Event {
         return data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
     }
     
+    /// Reads the push identifier from the event data and packages it into dpids format
     var dpids: [String: String]? {
         guard let pushId = data?[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String else { return nil }
         return [IdentityConstants.EventDataKeys.MCPNS_DPID: pushId]
     }
     
+    /// Reads the identifiers from the event data
     var identifiers: [String: String]? {
         return data?[IdentityConstants.EventDataKeys.IDENTIFIERS] as? [String: String]
     }
     
+    /// Reads the authentication state from the event data
     var authenticationState: MobileVisitorAuthenticationState {
         return data?[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] as? MobileVisitorAuthenticationState ?? .unknown
     }
     
+    /// Returns true if the event data contains the force sync flag
     var forceSync: Bool {
         return data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
     }
     
+    /// Reads the advertising from the event data and builds a `CustomIdentity`
     var adId: CustomIdentity? {
         let adId = data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String
         return CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER,

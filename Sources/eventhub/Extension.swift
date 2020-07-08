@@ -41,11 +41,6 @@ public protocol Extension {
 /// Contains methods for developers to interact with in their own extensions
 public extension Extension {
     
-    /// Gets the `DispatchQueue` associated with this `Extension`
-    var extensionQueue: DispatchQueue? {
-        return getExtensionContainer()?.extensionQueue
-    }
-    
     /// Registers the `Extension` with the `EventHub`
     //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
     static func registerExtension() {

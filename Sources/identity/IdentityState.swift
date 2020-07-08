@@ -14,7 +14,6 @@ import Foundation
 /// Manages the business logic of the Identity extension
 struct IdentityState {
     
-    
     private var identityProperties: IdentityProperties
     #if DEBUG
     var lastValidConfig: [String: Any] = [:]
@@ -61,8 +60,7 @@ struct IdentityState {
         }
         
         // Early exit if privacy is opt-out
-        if identityProperties.privacyStatus == .optedOut
-            || lastValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
+        if lastValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
             // TODO: Add log
             return nil
         }
