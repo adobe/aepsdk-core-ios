@@ -21,13 +21,15 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: IdentityProperties())
     }
     
+    // MARK: syncIdentifiers(...) tests
+    
     /// Tests that syncIdentifiers appends the MID and the two custom IDs to the visitor ID list
     func testSyncIdentifiersHappyIDs() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
-        
+        state.lastValidConfig = configSharedState
         // test
-        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
         
         // verify
         XCTAssertEqual(2, eventData!.count)
@@ -42,9 +44,10 @@ class IdentityStateTests: XCTestCase {
     func testSyncIdentifiersHappyPushID() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        state.lastValidConfig = configSharedState
         
         // test
-        let eventData = state.syncIdentifiers(event: Event.fakePushIDEvent(), configurationSharedState: configSharedState)
+        let eventData = state.syncIdentifiers(event: Event.fakePushIDEvent())
         
         // verify
         XCTAssertEqual(2, eventData!.count)
@@ -58,9 +61,10 @@ class IdentityStateTests: XCTestCase {
     func testSyncIdentifiersHappyAdID() {
         // setup
         let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        state.lastValidConfig = configSharedState
         
         // test
-        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent(), configurationSharedState: configSharedState)
+        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent())
         
         // verify
         XCTAssertEqual(3, eventData!.count)
@@ -83,9 +87,10 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.advertisingIdentifier = "test-ad-id"
         state = IdentityState(identityProperties: props)
+        state.lastValidConfig = configSharedState
         
         // test
-        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent(), configurationSharedState: configSharedState)
+        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent())
         
         // verify
         XCTAssertEqual(3, eventData!.count)
@@ -105,9 +110,10 @@ class IdentityStateTests: XCTestCase {
         props.locationHint = "locHinty"
         props.blob = "blobby"
         state = IdentityState(identityProperties: props)
+        state.lastValidConfig = configSharedState
         
         // test
-        let eventData = state.syncIdentifiers(event: Event.fakePushIDEvent(), configurationSharedState: configSharedState)
+        let eventData = state.syncIdentifiers(event: Event.fakePushIDEvent())
         
         // verify
         XCTAssertEqual(4, eventData!.count)
@@ -127,12 +133,75 @@ class IdentityStateTests: XCTestCase {
         // shouldSync(). Mimic a second call to shouldSync by setting the mid
         props.lastSync = Date() // set last sync to now
         state = IdentityState(identityProperties: props)
+        state.lastValidConfig = configSharedState
         
         // test
-        let _ = state.syncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
+        let _ = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
         
         // verify
         // TODO AMSDK-10261: Assert hit was not queued in DB
+    }
+    
+    func testSyncIdentifiersShouldSyncWithEmptyCurrentConfigButValidLatestConfig() {
+        // setup
+        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        
+        // test
+        
+        // verify
+    }
+    
+    func testSyncIdentifiersShouldNotSyncWithEmptyCurrentConfigAndNilLatestConfig() {
+        
+    }
+    
+    func testSyncIdentifiersWhenPrivacyIsOptIn() {
+        // setup
+        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        
+        // verify
+        XCTAssertNotNil(eventData)
+    }
+    
+    /// When the privacy status is currently opt-out we
+    func testSyncIdentifiersTrueWhenConfigPrivacyIsOptOut() {
+        // setup
+        var props = IdentityProperties()
+        props.privacyStatus = .optedOut
+        state = IdentityState(identityProperties: props)
+        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        
+        // verify
+        XCTAssertNil(eventData)
+    }
+    
+    /// We are ready to process the event when the config shared state has an opt-in privacy status but our previous config has an opt-out
+    func testSyncIdentifiersReturnTrueWhenLatestPrivacyIsOptOut() {
+        // setup
+        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
+        
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        
+        // verify
+        XCTAssertNil(eventData)
+    }
+    
+    // MARK: readyForSyncIdentifiers(...)
+    
+    /// When no valid configuration is available we should return false to wait for a valid configuration
+    func testReadyForSyncIdentifiersNoValidConfig() {
+        // test
+        let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: [:])
+        
+        // verify
+        XCTAssertFalse(readyForSync)
     }
 
 }

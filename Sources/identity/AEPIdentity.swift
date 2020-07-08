@@ -27,16 +27,20 @@ class AEPIdentity: Extension {
     func onUnregistered() {}
     
     func readyForEvent(_ event: Event) -> Bool {
+        if event.isSyncEvent || event.type == .genericIdentity {
+            guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return false }
+            return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
+        }
+        
         return getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.status == .set
     }
     
     // MARK: Event Listeners
     
     private func handleIdentityRequest(event: Event) {
-        guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return }
         
         if event.isSyncEvent || event.type == .genericIdentity {
-            if let eventData = state.syncIdentifiers(event: event, configurationSharedState: configSharedState) {
+            if let eventData = state.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)
             }
         }
