@@ -25,10 +25,9 @@ public final class AEPCore {
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
     static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
-        let extensionsCopy = [AEPConfiguration.self] + extensions
         let registeredCounter = AtomicCounter()
-        
-        extensionsCopy.forEach {
+        // TODO: Add configuration as a default extension to be registered
+        extensions.forEach {
             EventHub.shared.registerExtension($0) { (_) in
                 if registeredCounter.incrementAndGet() == extensions.count {
                     EventHub.shared.start()
