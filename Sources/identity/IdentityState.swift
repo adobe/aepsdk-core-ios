@@ -21,7 +21,7 @@ struct IdentityState {
     /// - Parameter identityProperties: identity
     init(identityProperties: IdentityProperties) {
         self.identityProperties = identityProperties
-        self.identityProperties.load()
+        self.identityProperties.loadFromPersistence()
     }
     
     /// WIll queue a sync identifiers hit if there are any new valid identifiers to be synced (non null/empty id_type and id values),
@@ -75,10 +75,7 @@ struct IdentityState {
         
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
         // empty adid is also removed from the customer_ids_ list by merging with the new ids then filtering out any empty ids
-        
-        // convert array of IDs to a dict of <identifier, ID>, then merge by taking the new ID for duplicate IDs
-        identityProperties.customerIds = toIdDict(ids: identityProperties.customerIds).merging(toIdDict(ids: customerIds), uniquingKeysWith: { (_, new) in new }).map {$0.value}
-        identityProperties.customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
+        identityProperties.mergeCustomerIds(customerIds)
         customerIds.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
         
         // valid config: check if there's a need to sync. Don't if we're already up to date.
@@ -90,7 +87,7 @@ struct IdentityState {
         }
         
         // save properties
-        identityProperties.save()
+        identityProperties.saveToPersistence()
         return identityProperties.toEventData()
     }
     
@@ -145,12 +142,5 @@ struct IdentityState {
         }
         // existing adId is empty or nil, so update as long as the new adId is not empty
         return !newAdID.isEmpty
-    }
-    
-    /// Returns a dict where the key is the `identifier` of the identity and the value is the `CustomIdentity`
-    /// - Parameter ids: a list of identities
-    private func toIdDict(ids: [CustomIdentity]?) -> [String?: CustomIdentity] {
-        guard let ids = ids else { return [:] }
-        return Dictionary(uniqueKeysWithValues: ids.map{ ($0.identifier, $0) })
     }
 }
