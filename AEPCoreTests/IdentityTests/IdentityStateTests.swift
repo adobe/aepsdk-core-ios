@@ -147,12 +147,21 @@ class IdentityStateTests: XCTestCase {
         state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         
         // test
+        let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: [:])
         
         // verify
+        XCTAssertTrue(readyForSync)
     }
     
     func testSyncIdentifiersShouldNotSyncWithEmptyCurrentConfigAndNilLatestConfig() {
+        // setup
+        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: ""] as [String : Any]
         
+        // test
+        let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
+        
+        // verify
+        XCTAssertFalse(readyForSync)
     }
     
     func testSyncIdentifiersWhenPrivacyIsOptIn() {
