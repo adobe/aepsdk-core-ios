@@ -16,6 +16,9 @@ import Foundation
 public class Log {
     /// Sets and gets the logging level of the SDK, default value is LogLevel.error
     public static var logFilter: LogLevel = LogLevel.error
+    private static var loggingService: LoggingService {
+        return AEPServiceProvider.shared.loggingService
+    }
 
     /// Used to print more verbose information.
     /// - Parameters:
@@ -23,7 +26,10 @@ public class Log {
     ///   - format: the string to be logged
     ///   - args: the formatting arguments
     public static func trace(label: String, _ format: String, _ args: CVarArg...) {
-        // TODO:
+        if logFilter <= .trace {
+            let message = String(format: format, arguments: args)
+            loggingService.log(level: .trace, label: label, message: message)
+        }
     }
 
     /// Information provided to the debug method should contain high-level details about the data being processed
@@ -32,7 +38,10 @@ public class Log {
     ///   - format: the string to be logged
     ///   - args: the formatting arguments
     public static func debug(label: String, _ format: String, _ args: CVarArg...) {
-        // TODO:
+        if logFilter <= .debug {
+            let message = String(format: format, arguments: args)
+            loggingService.log(level: .debug, label: label, message: message)
+        }
     }
 
     /// Information provided to the warning method indicates that a request has been made to the SDK, but the SDK will be unable to perform the requested task
@@ -41,7 +50,10 @@ public class Log {
     ///   - format: the string to be logged
     ///   - args: the formatting arguments
     public static func warning(label: String, _ format: String, _ args: CVarArg...) {
-        // TODO:
+        if logFilter <= .warning {
+            let message = String(format: format, arguments: args)
+            loggingService.log(level: .warning, label: label, message: message)
+        }
     }
 
     /// Information provided to the error method indicates that there has been an unrecoverable error
@@ -50,6 +62,9 @@ public class Log {
     ///   - format: the string to be logged
     ///   - args: the formatting arguments
     public static func error(label: String, _ format: String, _ args: CVarArg...) {
-        // TODO:
+        if logFilter <= .error {
+            let message = String(format: format, arguments: args)
+            loggingService.log(level: .error, label: label, message: message)
+        }
     }
 }
