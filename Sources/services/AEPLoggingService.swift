@@ -25,7 +25,7 @@ class AEPLoggingService: LoggingService {
         if let osLog = cachedOSLogs[label] {
             return osLog
         } else {
-            let osLog = OSLog(subsystem: AEPLoggingService.LOG_SUB_SYSTEM_NAME, category: label)
+            let osLog = OSLog(subsystem: LOG_SUB_SYSTEM_NAME, category: label)
             cachedOSLogs[label] = osLog
             return osLog
         }
