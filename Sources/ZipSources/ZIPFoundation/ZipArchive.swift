@@ -1,30 +1,5 @@
-//
-//  Archive.swift
-//  ZIPFoundation
-//
-//  Copyright © 2017-2020 Thomas Zoechling, https://www.peakstep.com and the ZIP Foundation project authors.
-//  Released under the MIT License.
-//
-//  See https://github.com/weichsel/ZIPFoundation/blob/master/LICENSE for license information.
-//
 
 import Foundation
-
-/// The default chunk size when reading entry data from an archive.
-public let defaultReadChunkSize = UInt32(16*1024)
-/// The default chunk size when writing entry data to an archive.
-public let defaultWriteChunkSize = defaultReadChunkSize
-/// The default permissions for newly added entries.
-public let defaultFilePermissions = UInt16(0o644)
-public let defaultDirectoryPermissions = UInt16(0o755)
-let defaultPOSIXBufferSize = defaultReadChunkSize
-let defaultDirectoryUnitCount = Int64(1)
-let minDirectoryEndOffset = 22
-let maxDirectoryEndOffset = 66000
-let endOfCentralDirectoryStructSignature = 0x06054b50
-let localFileHeaderStructSignature = 0x04034b50
-let dataDescriptorStructSignature = 0x08074b50
-let centralDirectoryStructSignature = 0x02014b50
 
 /// A sequence of uncompressed or compressed ZIP entries.
 ///
@@ -52,10 +27,11 @@ let centralDirectoryStructSignature = 0x02014b50
 ///     var archiveURL = URL(fileURLWithPath: "/path/file.zip")
 ///     var archive = Archive(url: archiveURL, accessMode: .update)
 ///     try archive?.addEntry("test.txt", relativeTo: baseURL, compressionMethod: .deflate)
-public final class Archive: Sequence {
-    typealias LocalFileHeader = Entry.LocalFileHeader
-    typealias DataDescriptor = Entry.DataDescriptor
-    typealias CentralDirectoryStructure = Entry.CentralDirectoryStructure
+final class ZipArchive: Sequence {
+    
+    typealias LocalFileHeader = ZipEntry.LocalFileHeader
+    typealias DataDescriptor = ZipEntry.DataDescriptor
+    typealias CentralDirectoryStructure = ZipEntry.CentralDirectoryStructure
 
     /// An error that occurs during reading, creating or updating a ZIP file.
     public enum ArchiveError: Error {
@@ -77,7 +53,7 @@ public final class Archive: Sequence {
 
     struct EndOfCentralDirectoryRecord: DataSerializable {
 
-        let endOfCentralDirectorySignature = UInt32(endOfCentralDirectoryStructSignature)
+        let endOfCentralDirectorySignature = UInt32(RulesUnzipperConstants.endOfCentralDirectorySignature)
         let numberOfDisk: UInt16
         let numberOfDiskStart: UInt16
         let totalNumberOfEntriesOnDisk: UInt16
@@ -89,7 +65,6 @@ public final class Archive: Sequence {
         static let size = 22
     }
 
-    private var preferredEncoding: String.Encoding?
     /// URL of an Archive's backing file.
     public let url: URL
     /// Access mode for an archive file.
@@ -112,22 +87,87 @@ public final class Archive: Sequence {
     ///   - The file URL _must_ point to an existing file for `AccessMode.read`.
     ///   - The file URL _must_ point to a non-existing file for `AccessMode.create`.
     ///   - The file URL _must_ point to an existing file for `AccessMode.update`.
-    public init?(url: URL, preferredEncoding: String.Encoding? = nil) {
+    public init?(url: URL) {
         self.url = url
-        self.preferredEncoding = preferredEncoding
-        guard let (archiveFile, endOfCentralDirectoryRecord) = Archive.configureFileBacking(for: url) else {
+        guard let (archiveFile, endOfCentralDirectoryRecord) = ZipArchive.configureFileBacking(for: url) else {
             return nil
         }
         self.archiveFile = archiveFile
         self.endOfCentralDirectoryRecord = endOfCentralDirectoryRecord
-        setvbuf(self.archiveFile, nil, _IOFBF, Int(defaultPOSIXBufferSize))
+        setvbuf(self.archiveFile, nil, _IOFBF, Int(RulesUnzipperConstants.defaultPOSIXBufferSize))
     }
 
     deinit {
         fclose(self.archiveFile)
     }
+    
+    /// Read a ZIP `Entry` from the receiver and write it to `url`.
+    ///
+    /// - Parameters:
+    ///   - entry: The ZIP `Entry` to read.
+    ///   - url: The destination file URL.
+    ///   - bufferSize: The maximum size of the read buffer and the decompression buffer (if needed).
+    ///   - skipCRC32: Optional flag to skip calculation of the CRC32 checksum to improve performance.
+    ///   - progress: A progress object that can be used to track or cancel the extract operation.
+    /// - Returns: The checksum of the processed content or 0 if the `skipCRC32` flag was set to `true`.
+    /// - Throws: An error if the destination file cannot be written or the entry contains malformed content.
+    func extract(_ entry: ZipEntry, to url: URL, bufferSize: UInt32 = RulesUnzipperConstants.defaultReadChunkSize, skipCRC32: Bool = false,
+                 progress: Progress? = nil) throws -> CRC32 {
+        let fileManager = FileManager()
+        var checksum = CRC32(0)
+        guard !fileManager.itemExists(at: url) else {
+            throw CocoaError(.fileWriteFileExists, userInfo: [NSFilePathErrorKey: url.path])
+        }
+        try fileManager.createParentDirectoryStructure(for: url)
+        let destinationRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
+        guard let destinationFile: UnsafeMutablePointer<FILE> = fopen(destinationRepresentation, "wb+") else {
+            throw CocoaError(.fileNoSuchFile)
+        }
+        defer { fclose(destinationFile) }
+        let consumer = { _ = try Data.write(chunk: $0, to: destinationFile) }
+        checksum = try self.extract(entry, bufferSize: bufferSize, skipCRC32: skipCRC32,
+                                    progress: progress, consumer: consumer)
+        let attributes = FileManager.attributes(from: entry)
+        try fileManager.setAttributes(attributes, ofItemAtPath: url.path)
+        return checksum
+    }
+    
+    /// Read a ZIP `Entry` from the receiver and forward its contents to a `Consumer` closure.
+    ///
+    /// - Parameters:
+    ///   - entry: The ZIP `Entry` to read.
+    ///   - bufferSize: The maximum size of the read buffer and the decompression buffer (if needed).
+    ///   - skipCRC32: Optional flag to skip calculation of the CRC32 checksum to improve performance.
+    ///   - progress: A progress object that can be used to track or cancel the extract operation.
+    ///   - consumer: A closure that consumes contents of `Entry` as `Data` chunks.
+    /// - Returns: The checksum of the processed content or 0 if the `skipCRC32` flag was set to `true`..
+    /// - Throws: An error if the destination file cannot be written or the entry contains malformed content.
+    func extract(_ entry: ZipEntry, bufferSize: UInt32 = RulesUnzipperConstants.defaultReadChunkSize, skipCRC32: Bool = false,
+                 progress: Progress? = nil, consumer: Consumer) throws -> CRC32 {
+        var checksum = CRC32(0)
+        fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
+        //progress?.totalUnitCount = self.totalUnitCountForReading(entry)
+        checksum = try self.readCompressed(entry: entry, bufferSize: bufferSize,
+                                           skipCRC32: skipCRC32, progress: progress, with: consumer)
+        return checksum
+    }
+    //
+    //    // MARK: - Helpers
+    //
+    private func readCompressed(entry: ZipEntry, bufferSize: UInt32, skipCRC32: Bool,
+                                progress: Progress? = nil, with consumer: Consumer) throws -> CRC32 {
+        let size = Int(entry.centralDirectoryStructure.compressedSize)
+        return try Data.decompress(size: size, bufferSize: Int(bufferSize), skipCRC32: skipCRC32,
+                                   provider: { (_, chunkSize) -> Data in
+                                    return try Data.readChunk(of: chunkSize, from: self.archiveFile)
+        }, consumer: { (data) in
+            if progress?.isCancelled == true { throw ArchiveError.cancelledOperation }
+            try consumer(data)
+            progress?.completedUnitCount += Int64(data.count)
+        })
+    }
 
-    public func makeIterator() -> AnyIterator<Entry> {
+    func makeIterator() -> AnyIterator<ZipEntry> {
         let endOfCentralDirectoryRecord = self.endOfCentralDirectoryRecord
         var directoryIndex = Int(endOfCentralDirectoryRecord.offsetToStartOfCentralDirectory)
         var index = 0
@@ -154,7 +194,7 @@ public final class Archive: Sequence {
                 directoryIndex += Int(centralDirStruct.fileCommentLength)
                 index += 1
             }
-            return Entry(centralDirectoryStructure: centralDirStruct,
+            return ZipEntry(centralDirectoryStructure: centralDirStruct,
                          localFileHeader: localFileHeader, dataDescriptor: dataDescriptor)
         }
     }
@@ -166,7 +206,7 @@ public final class Archive: Sequence {
         let fileManager = FileManager()
         let fileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
         guard let archiveFile = fopen(fileSystemRepresentation, "rb"),
-            let endOfCentralDirectoryRecord = Archive.scanForEndOfCentralDirectoryRecord(in: archiveFile) else {
+            let endOfCentralDirectoryRecord = ZipArchive.scanForEndOfCentralDirectoryRecord(in: archiveFile) else {
                 return nil
         }
         return (archiveFile, endOfCentralDirectoryRecord)
@@ -175,14 +215,14 @@ public final class Archive: Sequence {
     private static func scanForEndOfCentralDirectoryRecord(in file: UnsafeMutablePointer<FILE>)
         -> EndOfCentralDirectoryRecord? {
         var directoryEnd = 0
-        var index = minDirectoryEndOffset
+        var index = RulesUnzipperConstants.minDirectoryEndOffset
         fseek(file, 0, SEEK_END)
         let archiveLength = ftell(file)
-        while directoryEnd == 0 && index < maxDirectoryEndOffset && index <= archiveLength {
+        while directoryEnd == 0 && index < RulesUnzipperConstants.maxDirectoryEndOffset && index <= archiveLength {
             fseek(file, archiveLength - index, SEEK_SET)
             var potentialDirectoryEndTag: UInt32 = UInt32()
             fread(&potentialDirectoryEndTag, 1, MemoryLayout<UInt32>.size, file)
-            if potentialDirectoryEndTag == UInt32(endOfCentralDirectoryStructSignature) {
+            if potentialDirectoryEndTag == UInt32(RulesUnzipperConstants.endOfCentralDirectorySignature) {
                 directoryEnd = archiveLength - index
                 return Data.readStruct(from: file, at: directoryEnd)
             }
@@ -192,9 +232,9 @@ public final class Archive: Sequence {
     }
 }
 
-extension Archive.EndOfCentralDirectoryRecord {
+extension ZipArchive.EndOfCentralDirectoryRecord {
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
-        guard data.count == Archive.EndOfCentralDirectoryRecord.size else { return nil }
+        guard data.count == ZipArchive.EndOfCentralDirectoryRecord.size else { return nil }
         guard data.scanValue(start: 0) == endOfCentralDirectorySignature else { return nil }
         self.numberOfDisk = data.scanValue(start: 4)
         self.numberOfDiskStart = data.scanValue(start: 6)

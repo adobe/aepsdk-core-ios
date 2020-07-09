@@ -155,7 +155,7 @@ public class NamedKeyValueStore {
     func set(key: String, value: [AnyHashable: Any]?) {
         set(key: key, value: value as Any)
     }
-    
+
     func getDictionary(key: String, fallback: [AnyHashable: Any]? = nil) -> [AnyHashable: Any]? {
         return get(key: key) as? [AnyHashable: Any] ?? fallback
     }

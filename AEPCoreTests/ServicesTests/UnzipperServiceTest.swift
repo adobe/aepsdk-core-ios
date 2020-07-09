@@ -39,7 +39,7 @@ class UnzipperServiceTest: XCTestCase {
             XCTFail()
             return
         }
-        guard let archive = Archive(url: sourceURL) else {
+        guard let zipFile = ZipArchive(url: sourceURL) else {
             XCTFail("Failed to create archive")
             return
         }
@@ -48,7 +48,7 @@ class UnzipperServiceTest: XCTestCase {
         destinationURL.appendPathComponent("directory")
         unzipper.unzipItem(at: sourceURL, to: destinationURL)
         var itemExists = false
-        for entry in archive {
+        for entry in zipFile {
             let directoryURL = destinationURL.appendingPathComponent(entry.path)
             itemExists = fileManager.itemExists(at: directoryURL)
             if !itemExists { break }

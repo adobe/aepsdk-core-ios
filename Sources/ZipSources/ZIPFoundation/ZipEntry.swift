@@ -1,12 +1,3 @@
-//
-//  Entry.swift
-//  ZIPFoundation
-//
-//  Copyright © 2017-2020 Thomas Zoechling, https://www.peakstep.com and the ZIP Foundation project authors.
-//  Released under the MIT License.
-//
-//  See https://github.com/weichsel/ZIPFoundation/blob/master/LICENSE for license information.
-//
 
 import Foundation
 import CoreFoundation
@@ -15,7 +6,7 @@ import CoreFoundation
 ///
 /// You can retrieve instances of `Entry` from an `Archive` via subscripting or iteration.
 /// Entries are identified by their `path`.
-public struct Entry {
+public struct ZipEntry {
     enum OSType: UInt {
         case msdos = 0
         case unix = 3
@@ -25,7 +16,7 @@ public struct Entry {
 
     struct LocalFileHeader: DataSerializable {
 
-        let localFileHeaderSignature = UInt32(localFileHeaderStructSignature)
+        let localFileHeaderSignature = UInt32(RulesUnzipperConstants.localFileHeaderSignature)
         let versionNeededToExtract: UInt16
         let generalPurposeBitFlag: UInt16
         let compressionMethod: UInt16
@@ -43,7 +34,7 @@ public struct Entry {
 
     struct DataDescriptor: DataSerializable {
         let data: Data
-        let dataDescriptorSignature = UInt32(dataDescriptorStructSignature)
+        let dataDescriptorSignature = UInt32(RulesUnzipperConstants.dataDescriptorSignature)
         let crc32: UInt32
         let compressedSize: UInt32
         let uncompressedSize: UInt32
@@ -51,7 +42,7 @@ public struct Entry {
     }
 
     struct CentralDirectoryStructure: DataSerializable {
-        let centralDirectorySignature = UInt32(centralDirectoryStructSignature)
+        let centralDirectorySignature = UInt32(RulesUnzipperConstants.centralDirectorySignature)
         let versionMadeBy: UInt16
         let versionNeededToExtract: UInt16
         let generalPurposeBitFlag: UInt16
@@ -93,12 +84,7 @@ public struct Entry {
         let encoding = self.centralDirectoryStructure.usesUTF8PathEncoding ? .utf8 : codepage437
         return self.path(using: encoding)
     }
-    /// The file attributes of the receiver as key/value pairs.
-    ///
-    /// Contains the modification date and file permissions.
-    public var fileAttributes: [FileAttributeKey: Any] {
-        return FileManager.attributes(from: self)
-    }
+    
     var dataOffset: Int {
         var dataOffset = Int(self.centralDirectoryStructure.relativeOffsetOfLocalHeader)
         dataOffset += LocalFileHeader.size
@@ -129,10 +115,10 @@ public struct Entry {
     }
 }
 
-extension Entry.LocalFileHeader {
+extension ZipEntry.LocalFileHeader {
 
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
-        guard data.count == Entry.LocalFileHeader.size else { return nil }
+        guard data.count == ZipEntry.LocalFileHeader.size else { return nil }
         guard data.scanValue(start: 0) == localFileHeaderSignature else { return nil }
         self.versionNeededToExtract = data.scanValue(start: 4)
         self.generalPurposeBitFlag = data.scanValue(start: 6)
@@ -156,10 +142,10 @@ extension Entry.LocalFileHeader {
     }
 }
 
-extension Entry.CentralDirectoryStructure {
+extension ZipEntry.CentralDirectoryStructure {
 
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
-        guard data.count == Entry.CentralDirectoryStructure.size else { return nil }
+        guard data.count == ZipEntry.CentralDirectoryStructure.size else { return nil }
         guard data.scanValue(start: 0) == centralDirectorySignature else { return nil }
         self.versionMadeBy = data.scanValue(start: 4)
         self.versionNeededToExtract = data.scanValue(start: 6)
@@ -193,9 +179,9 @@ extension Entry.CentralDirectoryStructure {
 
 }
 
-extension Entry.DataDescriptor {
+extension ZipEntry.DataDescriptor {
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
-        guard data.count == Entry.DataDescriptor.size else { return nil }
+        guard data.count == ZipEntry.DataDescriptor.size else { return nil }
         let signature: UInt32 = data.scanValue(start: 0)
         // The DataDescriptor signature is not mandatory so we have to re-arrange the input data if it is missing.
         var readOffset = 0

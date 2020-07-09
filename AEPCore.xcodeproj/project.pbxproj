@@ -65,14 +65,13 @@
 		76850D1A24313181003922F4 /* OperationOrderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D1924313181003922F4 /* OperationOrderer.swift */; };
 		785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */; };
 		785220D6245CA92F00B46E90 /* NamedKeyValueServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */; };
-		78A6425B24896E06004B4E46 /* UnzippingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6425A24896E06004B4E46 /* UnzippingService.swift */; };
+		78A6425B24896E06004B4E46 /* FileUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6425A24896E06004B4E46 /* FileUnzipper.swift */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78A6425F248983D6004B4E46 /* UnzipperServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6425E248983D6004B4E46 /* UnzipperServiceTest.swift */; };
 		78A6426C249020D1004B4E46 /* FileManager+ZIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64264249020D0004B4E46 /* FileManager+ZIP.swift */; };
-		78A6426D249020D1004B4E46 /* Archive+Reading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64265249020D0004B4E46 /* Archive+Reading.swift */; };
-		78A6426E249020D1004B4E46 /* Archive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64266249020D0004B4E46 /* Archive.swift */; };
+		78A6426E249020D1004B4E46 /* ZipArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64266249020D0004B4E46 /* ZipArchive.swift */; };
 		78A64270249020D1004B4E46 /* Data+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64268249020D0004B4E46 /* Data+Serialization.swift */; };
-		78A64271249020D1004B4E46 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64269249020D0004B4E46 /* Entry.swift */; };
+		78A64271249020D1004B4E46 /* ZipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64269249020D0004B4E46 /* ZipEntry.swift */; };
 		78A64272249020D1004B4E46 /* Data+Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6426A249020D0004B4E46 /* Data+Compression.swift */; };
 		78D754D52437F92300DB9124 /* NamedKeyValueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D42437F92300DB9124 /* NamedKeyValueService.swift */; };
 		78D754D92437F93E00DB9124 /* NamedKeyValueStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */; };
@@ -167,14 +166,13 @@
 		76850D1924313181003922F4 /* OperationOrderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationOrderer.swift; sourceTree = "<group>"; };
 		785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedUserDefaultKeyValueService.swift; sourceTree = "<group>"; };
 		785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedKeyValueServiceTest.swift; sourceTree = "<group>"; };
-		78A6425A24896E06004B4E46 /* UnzippingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnzippingService.swift; sourceTree = "<group>"; };
+		78A6425A24896E06004B4E46 /* FileUnzipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUnzipper.swift; sourceTree = "<group>"; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78A6425E248983D6004B4E46 /* UnzipperServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnzipperServiceTest.swift; sourceTree = "<group>"; };
 		78A64264249020D0004B4E46 /* FileManager+ZIP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileManager+ZIP.swift"; path = "Sources/ZipSources/ZIPFoundation/FileManager+ZIP.swift"; sourceTree = SOURCE_ROOT; };
-		78A64265249020D0004B4E46 /* Archive+Reading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Archive+Reading.swift"; path = "Sources/ZipSources/ZIPFoundation/Archive+Reading.swift"; sourceTree = SOURCE_ROOT; };
-		78A64266249020D0004B4E46 /* Archive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Archive.swift; path = Sources/ZipSources/ZIPFoundation/Archive.swift; sourceTree = SOURCE_ROOT; };
+		78A64266249020D0004B4E46 /* ZipArchive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ZipArchive.swift; path = Sources/ZipSources/ZIPFoundation/ZipArchive.swift; sourceTree = SOURCE_ROOT; };
 		78A64268249020D0004B4E46 /* Data+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Serialization.swift"; path = "Sources/ZipSources/ZIPFoundation/Data+Serialization.swift"; sourceTree = SOURCE_ROOT; };
-		78A64269249020D0004B4E46 /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Entry.swift; path = Sources/ZipSources/ZIPFoundation/Entry.swift; sourceTree = SOURCE_ROOT; };
+		78A64269249020D0004B4E46 /* ZipEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ZipEntry.swift; path = Sources/ZipSources/ZIPFoundation/ZipEntry.swift; sourceTree = SOURCE_ROOT; };
 		78A6426A249020D0004B4E46 /* Data+Compression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Compression.swift"; path = "Sources/ZipSources/ZIPFoundation/Data+Compression.swift"; sourceTree = SOURCE_ROOT; };
 		78D754D42437F92300DB9124 /* NamedKeyValueService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueService.swift; sourceTree = "<group>"; };
 		78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStoreTest.swift; sourceTree = "<group>"; };
@@ -388,13 +386,12 @@
 		78A64263249020C2004B4E46 /* Unzip */ = {
 			isa = PBXGroup;
 			children = (
-				78A64266249020D0004B4E46 /* Archive.swift */,
-				78A64265249020D0004B4E46 /* Archive+Reading.swift */,
+				78A6425A24896E06004B4E46 /* FileUnzipper.swift */,
+				78A64266249020D0004B4E46 /* ZipArchive.swift */,
+				78A64269249020D0004B4E46 /* ZipEntry.swift */,
 				78A6426A249020D0004B4E46 /* Data+Compression.swift */,
 				78A64268249020D0004B4E46 /* Data+Serialization.swift */,
-				78A64269249020D0004B4E46 /* Entry.swift */,
 				78A64264249020D0004B4E46 /* FileManager+ZIP.swift */,
-				78A6425A24896E06004B4E46 /* UnzippingService.swift */,
 			);
 			name = Unzip;
 			sourceTree = "<group>";
@@ -576,21 +573,20 @@
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
 				D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */,
 				D4000F1A2458DEDE0052C536 /* NetworkRequest.swift in Sources */,
-				78A6426E249020D1004B4E46 /* Archive.swift in Sources */,
+				78A6426E249020D1004B4E46 /* ZipArchive.swift in Sources */,
 				21315BBA24579C4A00D1B254 /* AtomicCounter.swift in Sources */,
 				213C8BD72428822A009F780A /* EventListenerContainer.swift in Sources */,
 				785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */,
 				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
 				78D754DF243BC34100DB9124 /* SystemInfoService.swift in Sources */,
-				78A64271249020D1004B4E46 /* Entry.swift in Sources */,
+				78A64271249020D1004B4E46 /* ZipEntry.swift in Sources */,
 				21629DAC2461CA88009D05BF /* LifecycleConstants.swift in Sources */,
 				21629DB02461CAD0009D05BF /* AEPCore+Lifecycle.swift in Sources */,
 				21CAC0F624229CDB00C11388 /* EventType.swift in Sources */,
 				21FB910E247639EE00074BF9 /* ConfigurationDownloadable.swift in Sources */,
 				21FBA54A2463DFCE00A2A009 /* Configuration.swift in Sources */,
-				78A6425B24896E06004B4E46 /* UnzippingService.swift in Sources */,
-				78A6426D249020D1004B4E46 /* Archive+Reading.swift in Sources */,
+				78A6425B24896E06004B4E46 /* FileUnzipper.swift in Sources */,
 				7629742C24294215005CCC73 /* SharedState.swift in Sources */,
 				213C8BC6242426A1009F780A /* EventHub.swift in Sources */,
 				78A64272249020D1004B4E46 /* Data+Compression.swift in Sources */,
