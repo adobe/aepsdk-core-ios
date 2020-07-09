@@ -87,7 +87,7 @@ class URLAppenderTests: XCTestCase {
         var result = URLAppender.generateVisitorIdPayload(configSharedState: configSharedState, analyticsSharedState: analyticsSharedState, identityProperties: props)
 
         // verify that the url starts with Visitor Payload key
-        XCTAssertTrue(result.hasPrefix(IdentityConstants.VISITOR_PAYLOAD_KEY))
+        XCTAssertTrue(result.hasPrefix(IdentityConstants.URLKeys.VISITOR_PAYLOAD_KEY))
 
         // verify timestamp parameter
         let tsIndex = result.indexOf(char: "=")!
@@ -113,7 +113,7 @@ class URLAppenderTests: XCTestCase {
         var result = URLAppender.generateVisitorIdPayload(configSharedState: configSharedState, analyticsSharedState: analyticsSharedState, identityProperties: props)
 
         // verify that the url starts with Visitor Payload key
-        XCTAssertTrue(result.hasPrefix(IdentityConstants.VISITOR_PAYLOAD_KEY))
+        XCTAssertTrue(result.hasPrefix(IdentityConstants.URLKeys.VISITOR_PAYLOAD_KEY))
 
         // verify timestamp parameter
         let tsIndex = result.indexOf(char: "=")!
@@ -140,7 +140,7 @@ class URLAppenderTests: XCTestCase {
         var result = URLAppender.generateVisitorIdPayload(configSharedState: configSharedState, analyticsSharedState: analyticsSharedState, identityProperties: props)
 
         // verify that the url starts with Visitor Payload key
-        XCTAssertTrue(result.hasPrefix(IdentityConstants.VISITOR_PAYLOAD_KEY))
+        XCTAssertTrue(result.hasPrefix(IdentityConstants.URLKeys.VISITOR_PAYLOAD_KEY))
 
         // verify timestamp parameter
         let tsIndex = result.indexOf(char: "=")!
