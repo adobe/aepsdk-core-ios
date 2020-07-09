@@ -15,7 +15,7 @@ import os.log
 
 /// Implements a `LoggingService` which will send log message to Apple's unified logging system
 class AEPLoggingService: LoggingService {
-    private static let LOG_SUB_SYSTEM_NAME = "com.adobe.mobile.marketing.aep"
+    private let LOG_SUB_SYSTEM_NAME = "com.adobe.mobile.marketing.aep"
     private let cachedOSLogs = ThreadSafeDictionary<String, OSLog>()
 
     /// Generates or Retrieves an `OSLog` object by a label name
