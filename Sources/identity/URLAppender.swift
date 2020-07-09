@@ -36,25 +36,25 @@ struct URLAppender {
             return baseUrl
         }
 
-        var modifiedUrl = baseUrl
         var idString = generateVisitorIdPayload(configSharedState: configSharedState, analyticsSharedState: analyticsSharedState, identityProperties: identityProperties)
         // add separator based on if url contains query parameters
-        let queryIndex = modifiedUrl.indexOf(char: "?")
+        let queryIndex = baseUrl.indexOf(char: "?")
 
         // account for anchors in url
-        let anchorIndex = modifiedUrl.indexOf(char: "#")
-        let insertIndex = anchorIndex > 0 ? anchorIndex : modifiedUrl.count
+        let anchorIndex = baseUrl.indexOf(char: "#")
+        let insertIndex = anchorIndex > 0 ? anchorIndex : baseUrl.count
 
         // check for case where URL has no query but the fragment (anchor) contains a '?' character
         let isQueryAfterAnchor = anchorIndex > 0 && anchorIndex < queryIndex
 
         // insert query delimiter, account for fragment which contains '?' character
-        if queryIndex > 0 && queryIndex != modifiedUrl.count - 1 && !isQueryAfterAnchor {
+        if queryIndex > 0 && queryIndex != baseUrl.count - 1 && !isQueryAfterAnchor {
             idString.insert("&", at: idString.startIndex)
         } else if queryIndex < 0 || isQueryAfterAnchor {
             idString.insert("?", at: idString.startIndex)
         }
-
+        
+        var modifiedUrl = baseUrl
         modifiedUrl.insert(contentsOf: idString, at: modifiedUrl.index(modifiedUrl.startIndex, offsetBy: insertIndex))
 
         return modifiedUrl
