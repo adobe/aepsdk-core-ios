@@ -101,7 +101,7 @@ struct URLAppender {
     ///   - key: key to be appended to the url, expected to be non-empty
     ///   - value: value to be appended to the url, expected to be non-empty
     /// - Returns: `original` with `key` and `value` properly appended
-    static func appendParameterToVisitorIdString(original: String, key: String, value: String) -> String {
+    private static func appendParameterToVisitorIdString(original: String, key: String, value: String) -> String {
         if key.isEmpty || value.isEmpty {
             return original
         }

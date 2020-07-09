@@ -152,42 +152,5 @@ class URLAppenderTests: XCTestCase {
         result = result.substring(from: mcmidIndex?.lowerBound.utf16Offset(in: result) ?? -1, to: result.count - 1)
         XCTAssertEqual(expected, result)
     }
-
-    // MARK: appendParameterToVisitorIdString(...) tests
     
-    /// Tests that the key value are properly formatter when the original string is empty
-    func testAppendParameterToVisitorIdStringShouldHandleEmpty() {
-        // test
-        let result = URLAppender.appendParameterToVisitorIdString(original: "", key: "key1", value: "val1")
-
-        // verify
-        XCTAssertEqual("key1=val1", result)
-    }
-
-    /// Tests that the value is not appended when the key is empty
-    func testAppendParameterToVisitorIdStringReturnsOriginalIfKeyIsEmpty() {
-        // test
-        let result = URLAppender.appendParameterToVisitorIdString(original: "testOriginal", key: "", value: "val1")
-
-        // verify
-        XCTAssertEqual("testOriginal", result)
-    }
-
-    /// Tests that the key is not appended if the value is empty
-    func testAppendParameterToVisitorIdStringReturnsOriginalIfValueIsEmpty() {
-        // test
-        let result = URLAppender.appendParameterToVisitorIdString(original: "testOriginal", key: "key1", value: "")
-
-        // verify
-        XCTAssertEqual("testOriginal", result)
-    }
-
-    /// Tests that the key value is properly appended when the original string is not empty
-    func testAppendParameterToVisitorIdStringHappy() {
-        // test
-        let result = URLAppender.appendParameterToVisitorIdString(original: "hello=world", key: "key1", value: "val1")
-
-        // verify
-        XCTAssertEqual("hello=world|key1=val1", result)
-    }
 }
