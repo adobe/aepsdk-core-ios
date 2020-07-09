@@ -20,6 +20,16 @@ class AEPCoreTests: XCTestCase {
         MockExtensionTwo.reset()
     }
     
+    private func registerMockExtension<T: Extension> (_ type: T.Type) {
+        let semaphore = DispatchSemaphore(value: 0)
+        EventHub.shared.registerExtension(type) { (error) in
+            XCTAssertNil(error)
+            semaphore.signal()
+        }
+
+        semaphore.wait()
+    }
+    
     func testLegacyRegisterAndStart() {
         let expectation = XCTestExpectation(description: "callback invoked")
         expectation.assertForOverFulfill = true
@@ -282,32 +292,71 @@ class AEPCoreTests: XCTestCase {
         wait(for: [eventExpectation], timeout: 1.0)
     }
     
-    // test is disabled until configuration extension is merged
+    /// Tests that the response callback is invoked when the trigger event is dispatched
     func testDispatchEventWithResponseCallbackSimple() {
         // setup
         let expectedEvent = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
         let expectedResponseEvent = expectedEvent.createResponseEvent(name: "test-response", type: .analytics, source: .responseContent, data: nil)
-        
-        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
-        registerExpectation.assertForOverFulfill = true
         let responseExpectation = XCTestExpectation(description: "Should receive the response event in the response callback")
         responseExpectation.assertForOverFulfill = true
-        
-        EventHub.shared.registerExtension(MockExtension.self) { (error) in
-            registerExpectation.fulfill()
-        }
-        
         EventHub.shared.start()
         
         // test
         AEPCore.dispatch(event: expectedEvent) { (responseEvent) in
             XCTAssertEqual(responseEvent.id, expectedResponseEvent.id)
+            responseExpectation.fulfill()
         }
         // dispatch the response event which should trigger the callback above
         AEPCore.dispatch(event: expectedResponseEvent)
         
         // verify
-        wait(for: [registerExpectation, responseExpectation], timeout: 1.0)
+        wait(for: [responseExpectation], timeout: 1.0)
+    }
+    
+    /// Tests that when setAdvertisingIdentifier is called that we dispatch an event with the advertising identifier in the event data
+    func testSetAdvertisingIdentifierHappy() {
+        // setup
+        let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the ad id")
+        expectation.assertForOverFulfill = true
+        
+        registerMockExtension(MockExtension.self)
+        
+        EventHub.shared.start()
+        
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+            XCTAssertEqual("test-ad-id", event.data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+            expectation.fulfill()
+        })
+        
+        // test
+        AEPCore.setAdvertisingIdentifier(adId: "test-ad-id")
+
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    /// Tests that when nil is passed to setAdvertisingId that we convert it to an empty string since swift cannot hold nil in a dict
+    func testSetAdvertisingIdentifierNil() {
+        // setup
+        let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the ad id")
+        expectation.assertForOverFulfill = true
+        
+        registerMockExtension(MockExtension.self)
+        
+        EventHub.shared.start()
+        
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+            XCTAssertEqual("", event.data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+            expectation.fulfill()
+        })
+        
+        // test
+        AEPCore.setAdvertisingIdentifier(adId: nil)
+
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
     }
 
 }
