@@ -28,9 +28,9 @@ final class ZipArchive: Sequence {
     typealias CRC32 = UInt32
     
     /// a custom handler that consumes a `data` object containing partial entry data.
-    /// - parameters:
+    /// - Parameters:
     ///   - data: a chunk of `data` to consume.
-    /// - throws: can throw to indicate errors during data consumption.
+    /// - Throws: can throw to indicate errors during data consumption.
     typealias EntryDataConsumer = (_ data: Data) throws -> Void
     
     /// A custom handler that receives a position and a size that can be used to provide data from an arbitrary source.
@@ -91,9 +91,13 @@ final class ZipArchive: Sequence {
     /// - Parameter: `url`: File URL to the receivers backing file.
     init?(url: URL) {
         self.url = url
-        guard let (archiveFile, endOfCentralDirectoryRecord) = ZipArchive.configureFileBacking(for: url) else {
+        guard let archiveFile = ZipArchive.getFilePtr(for: url) else {
             return nil
         }
+        guard let endOfCentralDirectoryRecord = ZipArchive.getEndOfCentralDirectoryRecord(for: archiveFile) else {
+            return nil
+        }
+        
         self.archiveFile = archiveFile
         self.endOfCentralDirectoryRecord = endOfCentralDirectoryRecord
     }
@@ -118,12 +122,16 @@ final class ZipArchive: Sequence {
             throw CocoaError(.fileWriteFileExists, userInfo: [NSFilePathErrorKey: url.path])
         }
         try fileManager.createParentDirectoryStructure(for: url)
+        // Get file system representation for C operations
         let destinationRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
+        // Get destination file C pointer
         guard let destinationFile: UnsafeMutablePointer<FILE> = fopen(destinationRepresentation, "wb+") else {
             throw CocoaError(.fileNoSuchFile)
         }
         defer { fclose(destinationFile) }
-        let consumer = { _ = try Data.write(chunk: $0, to: destinationFile) }
+        // Set closure to handle writing data chunks to destination file
+        let consumer = { try Data.write(chunk: $0, to: destinationFile) }
+        // Set file pointer position to the given entry's data offset
         fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
         checksum = try self.readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
         let attributes = FileManager.attributes(from: entry)
@@ -169,6 +177,14 @@ final class ZipArchive: Sequence {
     //
     //    MARK: - Helpers
     //
+    
+    ///
+    /// Decompresses the compressed ZipEntry and returns the checksum
+    /// - Parameters:
+    ///     - entry: The ZipEntry to be decompressed
+    ///     - bufferSize: The bufferSize to be used for the decompression buffer
+    ///     - consumer: The consumer closure which handles the data chunks retrieved from decompression
+    /// - Returns: The checksum for the decompressed entry
     private func readCompressed(entry: ZipEntry, bufferSize: UInt32, with consumer: EntryDataConsumer) throws -> CRC32 {
         let size = Int(entry.centralDirectoryStructure.compressedSize)
         return try decompress(size: size, bufferSize: Int(bufferSize), provider: { (_, chunkSize) -> Data in
@@ -178,24 +194,29 @@ final class ZipArchive: Sequence {
         })
     }
 
-
-    private static func configureFileBacking(for url: URL)
-        -> (UnsafeMutablePointer<FILE>, EndOfCentralDirectoryRecord)? {
+    ///
+    /// Gets the file pointer for the file at the given url
+    /// - Parameter url: The URL to the file
+    /// - Returns: The C style pointer to the file at the given url
+    private static func getFilePtr(for url: URL) -> UnsafeMutablePointer<FILE>? {
         let fileManager = FileManager()
         let fileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
-        guard let archiveFile = fopen(fileSystemRepresentation, "rb"),
-            let endOfCentralDirectoryRecord = ZipArchive.scanForEndOfCentralDirectoryRecord(in: archiveFile) else {
-                return nil
-        }
-        return (archiveFile, endOfCentralDirectoryRecord)
+        return fopen(fileSystemRepresentation, "rb")
     }
-
-    private static func scanForEndOfCentralDirectoryRecord(in file: UnsafeMutablePointer<FILE>)
+    
+    ///
+    /// Gets the end of central directory record for the given file
+    /// - Parameter file: The c style pointer to the file
+    /// - Returns: The EndOfCentralDirectoryRecord for the given file
+    private static func getEndOfCentralDirectoryRecord(for file: UnsafeMutablePointer<FILE>)
         -> EndOfCentralDirectoryRecord? {
         var directoryEnd = 0
         var index = FileUnzipperConstants.minDirectoryEndOffset
+        // Set file pointer position to end of file
         fseek(file, 0, SEEK_END)
+        // Get the length of the file in bytes
         let archiveLength = ftell(file)
+        // Find the end of central directory
         while directoryEnd == 0 && index < FileUnzipperConstants.maxDirectoryEndOffset && index <= archiveLength {
             fseek(file, archiveLength - index, SEEK_SET)
             var potentialDirectoryEndTag: UInt32 = UInt32()

@@ -21,12 +21,22 @@ extension Data {
         case unreadableFile
         case unwritableFile
     }
-
+    
+    ///
+    /// Scans the range of subdata from start to the size of T
+    /// - Parameter start: The start position to start scanning from
+    /// - Returns: The scanned subdata as T
     func scanValue<T>(start: Int) -> T {
         let subdata = self.subdata(in: start..<start+MemoryLayout<T>.size)
         return subdata.withUnsafeBytes { $0.load(as: T.self) }
     }
-
+    
+    ///
+    /// Initializes and returns a DataSerializable from a given file pointer and offset
+    /// - Parameters:
+    ///     - file: The C style file pointer
+    ///     - offset: The offset to use to start reading data
+    /// - Returns: The initialized DataSerializable
     static func readStruct<T>(from file: UnsafeMutablePointer<FILE>, at offset: Int) -> T? where T: DataSerializable {
         fseek(file, offset, SEEK_SET)
         guard let data = try? self.readChunk(of: T.size, from: file) else {
@@ -37,7 +47,13 @@ extension Data {
         })
         return structure
     }
-
+    
+    ///
+    /// Reads a chunk of data of the given size from the file pointer
+    /// - Parameters:
+    ///     - size: The size in bytes of the chunk to read as an Int
+    ///     - file: The C style file pointer to read the data from
+    /// - Returns: The chunk of data read
     static func readChunk(of size: Int, from file: UnsafeMutablePointer<FILE>) throws -> Data {
         let alignment = MemoryLayout<UInt>.alignment
         let bytes = UnsafeMutableRawPointer.allocate(byteCount: size, alignment: alignment)
@@ -48,19 +64,23 @@ extension Data {
         }
         return Data(bytesNoCopy: bytes, count: bytesRead, deallocator: .custom({ buf, _ in buf.deallocate() }))
     }
-
-    static func write(chunk: Data, to file: UnsafeMutablePointer<FILE>) throws -> Int {
-        var sizeWritten = 0
+    
+    ///
+    /// Writes the chunk of data to the given C file pointer
+    /// - Parameters:
+    ///     - chunk: The chunk of data to write
+    ///     - file: The C file pointer to write the data to
+    /// - throws an error
+    static func write(chunk: Data, to file: UnsafeMutablePointer<FILE>) throws {
         chunk.withUnsafeBytes { (rawBufferPointer) in
             if let baseAddress = rawBufferPointer.baseAddress, rawBufferPointer.count > 0 {
                 let pointer = baseAddress.assumingMemoryBound(to: UInt8.self)
-                sizeWritten = fwrite(pointer, 1, chunk.count, file)
+                _ = fwrite(pointer, 1, chunk.count, file)
             }
         }
         let error = ferror(file)
         if error > 0 {
             throw DataError.unwritableFile
         }
-        return sizeWritten
     }
 }

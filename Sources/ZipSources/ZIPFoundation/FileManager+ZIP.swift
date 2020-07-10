@@ -16,16 +16,28 @@ extension FileManager {
 
 
     // MARK: - Helpers
-
+    
+    ///
+    /// Checks if an item exists at the given url
+    /// - Parameter url: The url to check
+    /// - Returns: a boolean indicating if an item exists or not
     func itemExists(at url: URL) -> Bool {
         return (try? url.checkResourceIsReachable()) == true
     }
-
+    
+    ///
+    /// Creates a parent directory structure for a given url
+    /// - Parameter url: The url to create the parent directory for
+    /// - Throws: throws if unable to create the parent directory
     func createParentDirectoryStructure(for url: URL) throws {
         let parentDirectoryURL = url.deletingLastPathComponent()
         try self.createDirectory(at: parentDirectoryURL, withIntermediateDirectories: true, attributes: nil)
     }
 
+    ///
+    /// Returns the File attributes for the given ZipEntry
+    /// - Parameter entry: The ZipEntry to get the attributes for
+    /// - Returns: The attributes as a dictionary
     class func attributes(from entry: ZipEntry) -> [FileAttributeKey: Any] {
         let centralDirectoryStructure = entry.centralDirectoryStructure
         let fileTime = centralDirectoryStructure.lastModFileTime
@@ -41,7 +53,13 @@ extension FileManager {
         attributes[.posixPermissions] = NSNumber(value: permissions)
         return attributes
     }
-
+    
+    ///
+    /// Gets the posix permissions for the ZipEntry
+    /// - Parameters
+    ///     - externalFileAttributes: The external file attributes from teh central directory structure
+    ///     - osType: The OS type
+    /// - Returns: The permissions for the ZipEntry as UInt16
     class func permissions(for externalFileAttributes: UInt32, osType: ZipEntry.OSType) -> UInt16 {
         switch osType {
         case .unix, .osx:

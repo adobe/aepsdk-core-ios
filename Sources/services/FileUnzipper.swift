@@ -15,7 +15,13 @@ import Foundation
 /// A File Unzipper utility class which unzips a zip file at a given source url to a destination url
 ///
 public class FileUnzipper {
-
+    
+    ///
+    /// Unzips a file at a given source url to a destination url
+    /// - Paramaters:
+    ///     - sourceURL: The URL pointing to the file to be unzipped
+    ///     - destinationURL: The URL pointing to the destination where the unzipped contents will go
+    /// - Throws: Throws when an error occurs during unzipping
     func unzipItem(at sourceURL: URL, to destinationURL: URL) throws {
         let fileManager = FileManager()
         // Create directory at destination path
