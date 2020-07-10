@@ -40,10 +40,9 @@ class AEPConfiguration: Extension {
         let pendingResolver = createPendingSharedState(event: nil)
 
         // If we have an appId stored in persistence, kick off the configureWithAppId event
-        // TODO: do we need this?
-//        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
-//            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
-//        }
+        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
+            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
+        }
         
         configState.loadInitialConfig()
         if !configState.environmentAwareConfiguration.isEmpty {

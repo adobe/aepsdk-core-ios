@@ -109,7 +109,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         
         // verify share state update
         let newSharedState = runtime.createdSharedStates[1]
-        XCTAssertEqual("optedout", newSharedState["global.privacy"] as! String)
+        XCTAssertEqual("optedout", newSharedState?["global.privacy"] as! String)
         
     }
     

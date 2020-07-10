@@ -16,7 +16,7 @@ import Foundation
 class TestableExtensionRuntime:ExtensionRuntime{
     var listeners:[String:EventListener] = [:]
     var dispatchedEvents: [Event] = []
-    var createdSharedStates: [[String : Any]] = []
+    var createdSharedStates: [[String : Any]?] = []
     var otherSharedStates: [String: (value: [String : Any]?, status: SharedStateStatus)] = [:]
     
     func getListener(type: EventType, source: EventSource) -> EventListener?{
