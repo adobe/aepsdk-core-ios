@@ -26,9 +26,10 @@ class AEPUIService: UIService {
             print("Fail to open url: \(url), since it's not allowed by urlHandler.")
             return false
         }
-        if let urlType = URL(string: url) {
-            AEPUrlHandler.openUrl(urlType)
+        guard let urlType = URL(string: url) else {
+            return false
         }
+        AEPUrlHandler.openUrl(urlType)
         return true
     }
 }
