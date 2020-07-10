@@ -21,8 +21,8 @@ public protocol Extension {
     /// Version of the extension
     var version: String { get }
     
-    /// Name of the extension
-    var runtime: ExtensionRuntime { set get}
+    /// Provides the methods can be used by extension
+    var runtime: ExtensionRuntime { get}
 
     /// Invoked when the extension has been registered by the `EventHub`
     func onRegistered()
@@ -56,13 +56,13 @@ public extension Extension {
     ///   - source: `EventSource` to be listened for
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches an `Event` with matching `type` and `source`
     func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
-        getExtensionContainer()?.registerListener(type: type, source: source, listener: listener)
+        runtime.registerListener(type: type, source: source, listener: listener)
     }
     
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event) {
-        getExtensionContainer()?.dispatch(event: event)
+        runtime.dispatch(event: event)
     }
 
     // MARK: Shared State
@@ -72,16 +72,14 @@ public extension Extension {
     ///   - data: Data for the `SharedState`
     ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned at the latest
     func createSharedState(data: [String: Any], event: Event?) {
-        getExtensionContainer()?.createSharedState(data: data, event: event)
+        runtime.createSharedState(data: data, event: event)
     }
 
 
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
-        return getExtensionContainer()?.createPendingSharedState(event: event) ?? { _ in
-            //TODO: log            
-        }
+        return runtime.createPendingSharedState(event: event)
     }
 
     /// Gets the `SharedState` data for a specified extension
@@ -89,7 +87,7 @@ public extension Extension {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
-        return getExtensionContainer()?.getSharedState(extensionName: extensionName, event: event)
+        return runtime.getSharedState(extensionName: extensionName, event: event)
     }
     
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
@@ -103,22 +101,11 @@ public extension Extension {
     
     /// Starts the `Event` queue for this extension
     func startEvents() {
-        getExtensionContainer()?.startEvents()
+        runtime.startEvents()
     }
     
     /// Stops the `Event` queue for this extension
     func stopEvents() {
-        getExtensionContainer()?.stopEvents()
-    }
-}
-
-/// Contains methods that we don't want developers accessing
-private extension Extension {
-    private func getEventHub() -> EventHub {
-        return EventHub.shared
-    }
-    
-    private func getExtensionContainer() -> ExtensionRuntime? {
-        return runtime
+        runtime.stopEvents()
     }
 }

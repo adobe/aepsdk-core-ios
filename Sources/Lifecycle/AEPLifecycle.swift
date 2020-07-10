@@ -13,7 +13,7 @@ import Foundation
 
 class LifecycleExtension: Extension {
     
-    var runtime: ExtensionRuntime
+    let runtime: ExtensionRuntime
     
     
     typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool)) // TODO: Move to event hub to make public?

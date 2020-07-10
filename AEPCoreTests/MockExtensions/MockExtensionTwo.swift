@@ -17,7 +17,7 @@ import Foundation
 class MockExtensionTwo: TestableExtension {
     var name = "mockExtensionTwo"
     var version = "0.0.1"
-    var runtime: ExtensionRuntime
+    let runtime: ExtensionRuntime
     
     static var unregistrationClosure: (() -> Void)? = nil
     static var registrationClosure: (() -> Void)? = nil

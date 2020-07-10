@@ -13,7 +13,7 @@ import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
 class AEPConfiguration: Extension {
-    var runtime: ExtensionRuntime
+    let runtime: ExtensionRuntime
     var name = ConfigurationConstants.EXTENSION_NAME
     var version = ConfigurationConstants.EXTENSION_VERSION
 

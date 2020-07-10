@@ -17,7 +17,7 @@ import Foundation
 class SlowMockExtension: Extension {
     var name = "slowMockExtension"
     var version = "0.0.1"
-    var runtime: ExtensionRuntime
+    let runtime: ExtensionRuntime
     
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime

@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 class AEPIdentity: Extension {
-    var runtime: ExtensionRuntime
+    let runtime: ExtensionRuntime
     
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
