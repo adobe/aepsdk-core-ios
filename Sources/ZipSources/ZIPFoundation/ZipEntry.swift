@@ -26,7 +26,7 @@ struct ZipEntry {
 
     struct LocalFileHeader: DataSerializable {
 
-        let localFileHeaderSignature = UInt32(RulesUnzipperConstants.localFileHeaderSignature)
+        let localFileHeaderSignature = UInt32(FileUnzipperConstants.localFileHeaderSignature)
         let versionNeededToExtract: UInt16
         let generalPurposeBitFlag: UInt16
         let compressionMethod: UInt16
@@ -44,7 +44,7 @@ struct ZipEntry {
 
     struct DataDescriptor: DataSerializable {
         let data: Data
-        let dataDescriptorSignature = UInt32(RulesUnzipperConstants.dataDescriptorSignature)
+        let dataDescriptorSignature = UInt32(FileUnzipperConstants.dataDescriptorSignature)
         let crc32: UInt32
         let compressedSize: UInt32
         let uncompressedSize: UInt32
@@ -52,7 +52,7 @@ struct ZipEntry {
     }
 
     struct CentralDirectoryStructure: DataSerializable {
-        let centralDirectorySignature = UInt32(RulesUnzipperConstants.centralDirectorySignature)
+        let centralDirectorySignature = UInt32(FileUnzipperConstants.centralDirectorySignature)
         let versionMadeBy: UInt16
         let versionNeededToExtract: UInt16
         let generalPurposeBitFlag: UInt16

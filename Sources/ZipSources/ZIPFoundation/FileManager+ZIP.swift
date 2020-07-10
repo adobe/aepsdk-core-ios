@@ -1,3 +1,13 @@
+/*
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -20,7 +30,7 @@ extension FileManager {
         let centralDirectoryStructure = entry.centralDirectoryStructure
         let fileTime = centralDirectoryStructure.lastModFileTime
         let fileDate = centralDirectoryStructure.lastModFileDate
-        let defaultPermissions = RulesUnzipperConstants.defaultFilePermissions
+        let defaultPermissions = FileUnzipperConstants.defaultFilePermissions
         var attributes = [.posixPermissions: defaultPermissions] as [FileAttributeKey: Any]
         attributes[.modificationDate] = Date(dateTime: (fileDate, fileTime))
         let versionMadeBy = centralDirectoryStructure.versionMadeBy
@@ -36,10 +46,10 @@ extension FileManager {
         switch osType {
         case .unix, .osx:
             let permissions = mode_t(externalFileAttributes >> 16) & (~S_IFMT)
-            let defaultPermissions = RulesUnzipperConstants.defaultFilePermissions
+            let defaultPermissions = FileUnzipperConstants.defaultFilePermissions
             return permissions == 0 ? defaultPermissions : UInt16(permissions)
         default:
-            return RulesUnzipperConstants.defaultFilePermissions
+            return FileUnzipperConstants.defaultFilePermissions
         }
     }
 }

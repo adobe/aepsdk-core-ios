@@ -63,6 +63,7 @@
 		7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742E24294249005CCC73 /* SharedStateTest.swift */; };
 		76850D18242EDE58003922F4 /* OperationOrdererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D17242EDE58003922F4 /* OperationOrdererTests.swift */; };
 		76850D1A24313181003922F4 /* OperationOrderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D1924313181003922F4 /* OperationOrderer.swift */; };
+		7804BACE24B90DE70071C5BE /* FileUnzipperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7804BACD24B90DE70071C5BE /* FileUnzipperConstants.swift */; };
 		785220D4245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */; };
 		785220D6245CA92F00B46E90 /* NamedKeyValueServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */; };
 		78A6425B24896E06004B4E46 /* FileUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6425A24896E06004B4E46 /* FileUnzipper.swift */; };
@@ -163,6 +164,7 @@
 		7629742E24294249005CCC73 /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
 		76850D17242EDE58003922F4 /* OperationOrdererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationOrdererTests.swift; sourceTree = "<group>"; };
 		76850D1924313181003922F4 /* OperationOrderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationOrderer.swift; sourceTree = "<group>"; };
+		7804BACD24B90DE70071C5BE /* FileUnzipperConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUnzipperConstants.swift; sourceTree = "<group>"; };
 		785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedUserDefaultKeyValueService.swift; sourceTree = "<group>"; };
 		785220D5245CA92F00B46E90 /* NamedKeyValueServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedKeyValueServiceTest.swift; sourceTree = "<group>"; };
 		78A6425A24896E06004B4E46 /* FileUnzipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUnzipper.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				78A64269249020D0004B4E46 /* ZipEntry.swift */,
 				78A64268249020D0004B4E46 /* Data+Serialization.swift */,
 				78A64264249020D0004B4E46 /* FileManager+ZIP.swift */,
+				7804BACD24B90DE70071C5BE /* FileUnzipperConstants.swift */,
 			);
 			name = Unzip;
 			sourceTree = "<group>";
@@ -583,6 +586,7 @@
 				21CAC0F624229CDB00C11388 /* EventType.swift in Sources */,
 				21FB910E247639EE00074BF9 /* ConfigurationDownloadable.swift in Sources */,
 				21FBA54A2463DFCE00A2A009 /* Configuration.swift in Sources */,
+				7804BACE24B90DE70071C5BE /* FileUnzipperConstants.swift in Sources */,
 				78A6425B24896E06004B4E46 /* FileUnzipper.swift in Sources */,
 				7629742C24294215005CCC73 /* SharedState.swift in Sources */,
 				213C8BC6242426A1009F780A /* EventHub.swift in Sources */,

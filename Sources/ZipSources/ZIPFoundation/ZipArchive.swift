@@ -8,6 +8,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+
 import Foundation
 import Compression
 
@@ -57,15 +58,16 @@ final class ZipArchive: Sequence {
         /// Thrown when an extract operation was canceled.
         case cancelledOperation
     }
-
-    enum CompressionError: Error {
+    
+    /// An error that occurs during decompression
+    enum DecompressionError: Error {
         case invalidStream
         case corruptedData
     }
     
     struct EndOfCentralDirectoryRecord: DataSerializable {
 
-        let endOfCentralDirectorySignature = UInt32(RulesUnzipperConstants.endOfCentralDirectorySignature)
+        let endOfCentralDirectorySignature = UInt32(FileUnzipperConstants.endOfCentralDirectorySignature)
         let numberOfDisk: UInt16
         let numberOfDiskStart: UInt16
         let totalNumberOfEntriesOnDisk: UInt16
@@ -109,7 +111,7 @@ final class ZipArchive: Sequence {
     /// - Throws: An error if the destination file cannot be written or the entry contains malformed content.
     @discardableResult
     func extract(_ entry: ZipEntry, to url: URL) throws -> CRC32 {
-        let bufferSize = RulesUnzipperConstants.defaultReadChunkSize
+        let bufferSize = FileUnzipperConstants.defaultReadChunkSize
         let fileManager = FileManager()
         var checksum = CRC32(0)
         guard !fileManager.itemExists(at: url) else {
@@ -122,38 +124,16 @@ final class ZipArchive: Sequence {
         }
         defer { fclose(destinationFile) }
         let consumer = { _ = try Data.write(chunk: $0, to: destinationFile) }
-        checksum = try self.extract(entry, consumer: consumer)
+        fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
+        checksum = try self.readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
         let attributes = FileManager.attributes(from: entry)
         try fileManager.setAttributes(attributes, ofItemAtPath: url.path)
         return checksum
     }
     
-    /// Read a ZIP `Entry` from the receiver and forward its contents to a `Consumer` closure.
     ///
-    /// - Parameters:
-    ///   - entry: The ZIP `Entry` to read.
-    ///   - consumer: A closure that consumes contents of `ZipEntry` as `Data` chunks.
-    /// - Returns: The checksum of the processed content or 0 if the `skipCRC32` flag was set to `true`..
-    /// - Throws: An error if the destination file cannot be written or the entry contains malformed content.
-    func extract(_ entry: ZipEntry, consumer: EntryDataConsumer) throws -> CRC32 {
-        let bufferSize = RulesUnzipperConstants.defaultReadChunkSize
-        var checksum = CRC32(0)
-        fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
-        checksum = try self.readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
-        return checksum
-    }
-    //
-    //    MARK: - Helpers
-    //
-    private func readCompressed(entry: ZipEntry, bufferSize: UInt32, with consumer: EntryDataConsumer) throws -> CRC32 {
-        let size = Int(entry.centralDirectoryStructure.compressedSize)
-        return try decompress(size: size, bufferSize: Int(bufferSize), provider: { (_, chunkSize) -> Data in
-                                    return try Data.readChunk(of: chunkSize, from: self.archiveFile)
-        }, consumer: { (data) in
-            try consumer(data)
-        })
-    }
-
+    /// MARK: - Sequence Protocol makeIterator implementation
+    ///
     func makeIterator() -> AnyIterator<ZipEntry> {
         let endOfCentralDirectoryRecord = self.endOfCentralDirectoryRecord
         var directoryIndex = Int(endOfCentralDirectoryRecord.offsetToStartOfCentralDirectory)
@@ -182,9 +162,22 @@ final class ZipArchive: Sequence {
                 index += 1
             }
             return ZipEntry(centralDirectoryStructure: centralDirStruct,
-                         localFileHeader: localFileHeader, dataDescriptor: dataDescriptor)
+                            localFileHeader: localFileHeader, dataDescriptor: dataDescriptor)
         }
     }
+    
+    //
+    //    MARK: - Helpers
+    //
+    private func readCompressed(entry: ZipEntry, bufferSize: UInt32, with consumer: EntryDataConsumer) throws -> CRC32 {
+        let size = Int(entry.centralDirectoryStructure.compressedSize)
+        return try decompress(size: size, bufferSize: Int(bufferSize), provider: { (_, chunkSize) -> Data in
+                                    return try Data.readChunk(of: chunkSize, from: self.archiveFile)
+        }, consumer: { (data) in
+            try consumer(data)
+        })
+    }
+
 
     private static func configureFileBacking(for url: URL)
         -> (UnsafeMutablePointer<FILE>, EndOfCentralDirectoryRecord)? {
@@ -200,14 +193,14 @@ final class ZipArchive: Sequence {
     private static func scanForEndOfCentralDirectoryRecord(in file: UnsafeMutablePointer<FILE>)
         -> EndOfCentralDirectoryRecord? {
         var directoryEnd = 0
-        var index = RulesUnzipperConstants.minDirectoryEndOffset
+        var index = FileUnzipperConstants.minDirectoryEndOffset
         fseek(file, 0, SEEK_END)
         let archiveLength = ftell(file)
-        while directoryEnd == 0 && index < RulesUnzipperConstants.maxDirectoryEndOffset && index <= archiveLength {
+        while directoryEnd == 0 && index < FileUnzipperConstants.maxDirectoryEndOffset && index <= archiveLength {
             fseek(file, archiveLength - index, SEEK_SET)
             var potentialDirectoryEndTag: UInt32 = UInt32()
             fread(&potentialDirectoryEndTag, 1, MemoryLayout<UInt32>.size, file)
-            if potentialDirectoryEndTag == UInt32(RulesUnzipperConstants.endOfCentralDirectorySignature) {
+            if potentialDirectoryEndTag == UInt32(FileUnzipperConstants.endOfCentralDirectorySignature) {
                 directoryEnd = archiveLength - index
                 return Data.readStruct(from: file, at: directoryEnd)
             }
@@ -223,7 +216,7 @@ final class ZipArchive: Sequence {
     ///   - provider: A closure that accepts a position and a chunk size. Returns a `Data` chunk.
     ///   - consumer: A closure that processes the result of the decompress operation.
     /// - Returns: The checksum of the processed content.
-    func decompress(size: Int, bufferSize: Int, provider: Provider, consumer: EntryDataConsumer) throws -> CRC32 {
+    private func decompress(size: Int, bufferSize: Int, provider: Provider, consumer: EntryDataConsumer) throws -> CRC32 {
         var crc32 = CRC32(0)
         let destPointer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
         defer { destPointer.deallocate() }
@@ -231,7 +224,7 @@ final class ZipArchive: Sequence {
         defer { streamPointer.deallocate() }
         var stream = streamPointer.pointee
         var status = compression_stream_init(&stream, COMPRESSION_STREAM_DECODE, COMPRESSION_ZLIB)
-        guard status != COMPRESSION_STATUS_ERROR else { throw CompressionError.invalidStream }
+        guard status != COMPRESSION_STATUS_ERROR else { throw DecompressionError.invalidStream }
         defer { compression_stream_destroy(&stream) }
         stream.src_size = 0
         stream.dst_ptr = destPointer
@@ -265,7 +258,7 @@ final class ZipArchive: Sequence {
                 crc32 = calcChecksum(data: outputData, checksum: crc32)
                 stream.dst_ptr = destPointer
                 stream.dst_size = bufferSize
-            default: throw CompressionError.corruptedData
+            default: throw DecompressionError.corruptedData
             }
         } while status == COMPRESSION_STATUS_OK
         return crc32
@@ -274,14 +267,14 @@ final class ZipArchive: Sequence {
     /// Calculate the `CRC32` checksum of the receiver.
     ///
     /// - Parameter checksum: The starting seed.
-    /// - Returns: The checksum calcualted from the bytes of the receiver and the starting seed.
-    func calcChecksum(data: Data, checksum: CRC32) -> CRC32 {
+    /// - Returns: The checksum calculated from the bytes of the receiver and the starting seed.
+    private func calcChecksum(data: Data, checksum: CRC32) -> CRC32 {
         // The typecast is necessary on 32-bit platforms because of
         // https://bugs.swift.org/browse/SR-1774
         let mask = 0xffffffff as UInt32
         let bufferSize = data.count/MemoryLayout<UInt8>.size
         var result = checksum ^ mask
-        RulesUnzipperConstants.crcTable.withUnsafeBufferPointer { crcTablePointer in
+        FileUnzipperConstants.crcTable.withUnsafeBufferPointer { crcTablePointer in
             data.withUnsafeBytes { bufferPointer in
                 let bytePointer = bufferPointer.bindMemory(to: UInt8.self)
                 for bufferIndex in 0..<bufferSize {
