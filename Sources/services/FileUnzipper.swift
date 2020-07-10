@@ -1,21 +1,23 @@
-//
-//  CompressionService.swift
-//  AEPCore
-//
-//  Created by Christopher Hoffman on 6/4/20.
-//  Copyright © 2020 Adobe. All rights reserved.
-//
+/*
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 import Compression
 
 protocol FileUnzipper {
-    func unzipItem(at sourcePath: URL, to destinationPath: URL)
+    func unzipItem(at sourcePath: URL, to destinationPath: URL) throws
 }
 
 enum RulesUnzipperConstants {
     
-
     static let defaultReadChunkSize = UInt32(16*1024)
     static let defaultFilePermissions = UInt16(0o644)
     static let defaultDirectoryPermissions = UInt16(0o755)
@@ -86,19 +88,8 @@ enum RulesUnzipperConstants {
 }
 
 class RulesUnzipper: FileUnzipper {
-    
-    
-    func unzipItem(at sourceURL: URL, to destinationURL: URL) {
-        do {
-            try unzip(at: sourceURL, to: destinationURL)
-            
-        } catch {
-            // handle error here
-            print("Extraction of Zip failed with error: \(error)")
-        }
-    }
-    
-    private func unzip(at sourceURL: URL, to destinationURL: URL) throws {
+
+    func unzipItem(at sourceURL: URL, to destinationURL: URL) throws {
         let fileManager = FileManager()
         // Create directory at destination path
         try fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil)
@@ -108,13 +99,8 @@ class RulesUnzipper: FileUnzipper {
         guard let archive = ZipArchive(url: sourceURL) else {
             throw ZipArchive.ArchiveError.unreadableArchive
         }
-        // Defer extraction of symlinks until all files & directories have been created.
-        // This is necessary because we can't create links to files that haven't been created yet.
-        let sortedEntries = archive.sorted { (left, right) -> Bool in
-            // TODO: - Look into removing this
-            return false
-        }
-        for entry in sortedEntries {
+        
+        for entry in archive {
             let path = entry.path
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
             guard destinationEntryURL.isContained(in: destinationURL) else {
@@ -122,7 +108,7 @@ class RulesUnzipper: FileUnzipper {
                                  userInfo: [NSFilePathErrorKey: destinationEntryURL.path])
             }
             
-            _ = try archive.extract(entry, to: destinationEntryURL, skipCRC32: false)
+            try archive.extract(entry, to: destinationEntryURL, skipCRC32: false)
         }
     }
 }
