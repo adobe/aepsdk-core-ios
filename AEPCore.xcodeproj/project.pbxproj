@@ -72,7 +72,6 @@
 		78A6426E249020D1004B4E46 /* ZipArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64266249020D0004B4E46 /* ZipArchive.swift */; };
 		78A64270249020D1004B4E46 /* Data+Serialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64268249020D0004B4E46 /* Data+Serialization.swift */; };
 		78A64271249020D1004B4E46 /* ZipEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A64269249020D0004B4E46 /* ZipEntry.swift */; };
-		78A64272249020D1004B4E46 /* Data+Compression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A6426A249020D0004B4E46 /* Data+Compression.swift */; };
 		78D754D52437F92300DB9124 /* NamedKeyValueService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D42437F92300DB9124 /* NamedKeyValueService.swift */; };
 		78D754D92437F93E00DB9124 /* NamedKeyValueStoreTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */; };
 		78D754DB243B7E1A00DB9124 /* NamedKeyValueStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */; };
@@ -173,7 +172,6 @@
 		78A64266249020D0004B4E46 /* ZipArchive.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ZipArchive.swift; path = Sources/ZipSources/ZIPFoundation/ZipArchive.swift; sourceTree = SOURCE_ROOT; };
 		78A64268249020D0004B4E46 /* Data+Serialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Serialization.swift"; path = "Sources/ZipSources/ZIPFoundation/Data+Serialization.swift"; sourceTree = SOURCE_ROOT; };
 		78A64269249020D0004B4E46 /* ZipEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ZipEntry.swift; path = Sources/ZipSources/ZIPFoundation/ZipEntry.swift; sourceTree = SOURCE_ROOT; };
-		78A6426A249020D0004B4E46 /* Data+Compression.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+Compression.swift"; path = "Sources/ZipSources/ZIPFoundation/Data+Compression.swift"; sourceTree = SOURCE_ROOT; };
 		78D754D42437F92300DB9124 /* NamedKeyValueService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueService.swift; sourceTree = "<group>"; };
 		78D754D82437F93E00DB9124 /* NamedKeyValueStoreTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStoreTest.swift; sourceTree = "<group>"; };
 		78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedKeyValueStore.swift; sourceTree = "<group>"; };
@@ -389,7 +387,6 @@
 				78A6425A24896E06004B4E46 /* FileUnzipper.swift */,
 				78A64266249020D0004B4E46 /* ZipArchive.swift */,
 				78A64269249020D0004B4E46 /* ZipEntry.swift */,
-				78A6426A249020D0004B4E46 /* Data+Compression.swift */,
 				78A64268249020D0004B4E46 /* Data+Serialization.swift */,
 				78A64264249020D0004B4E46 /* FileManager+ZIP.swift */,
 			);
@@ -589,7 +586,6 @@
 				78A6425B24896E06004B4E46 /* FileUnzipper.swift in Sources */,
 				7629742C24294215005CCC73 /* SharedState.swift in Sources */,
 				213C8BC6242426A1009F780A /* EventHub.swift in Sources */,
-				78A64272249020D1004B4E46 /* Data+Compression.swift in Sources */,
 				D4000F162458DEA20052C536 /* HttpMethod.swift in Sources */,
 				78E2AC8C2476FFA900E49D64 /* LifecycleMetricsBuilder.swift in Sources */,
 				78D754F42445227D00DB9124 /* ApplicationSystemInfoService.swift in Sources */,

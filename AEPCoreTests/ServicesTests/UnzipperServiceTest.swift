@@ -13,7 +13,7 @@ import XCTest
 @testable import AEPCore
 
 class UnzipperServiceTest: XCTestCase {
-    let unzipper = RulesUnzipper()
+    let unzipper = FileUnzipper()
     let testDataFileName = "TestRules"
     
     class var bundle: Bundle {
