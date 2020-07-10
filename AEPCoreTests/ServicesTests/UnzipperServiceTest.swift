@@ -21,9 +21,6 @@ class UnzipperServiceTest: XCTestCase {
     }
 
     override func setUp() {
-    }
-    
-    func cleanUp() {
         do {
             let fileManager = FileManager()
             guard let path = UnzipperServiceTest.bundle.url(forResource: testDataFileName, withExtension: "zip")?.deletingLastPathComponent().appendingPathComponent(testDataFileName) else {
@@ -34,9 +31,8 @@ class UnzipperServiceTest: XCTestCase {
             return
         }
     }
-    
+
     func testUnzippingRulesSuccess() {
-        cleanUp()
         let fileManager = FileManager()
         guard let sourceURL = UnzipperServiceTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
             XCTFail()
