@@ -472,5 +472,112 @@ class ConfigurationFunctionalTests: XCTestCase {
         // verify
         wait(for: [configResponseEvent], timeout: 2.0)
     }
+    
+    // MARK: getSdkIdentities() tests
 
+    /// Tests that when all shared states are available that all identities are populated
+    func testGetSdkIdentitiesSimple() {
+        // setup
+        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
+        expectation.assertForOverFulfill = true
+        registerExtension(AEPIdentity.self)
+        EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org-id"], event: nil)
+        let identityData = [IdentityConstants.EventDataKeys.VISITOR_ID_MID: "test-mid", IdentityConstants.EventDataKeys.PUSH_IDENTIFIER: "test-push-id"]
+        EventHub.shared.createSharedState(extensionName: IdentityConstants.EXTENSION_NAME, data: identityData, event: nil)
+        
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"20920\",\"value\":\"test-push-id\",\"type\":\"integrationCode\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
+        
+        // test
+        AEPCore.getSdkIdentities { (identities, error) in
+            XCTAssertEqual(expected, identities)
+            XCTAssertNil(error)
+            expectation.fulfill()
+        }
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    /// Tests that when only configuration has a shared state that it is only included in the returned identities
+    func testGetSdkIdentitiesOnlyConfiguration() {
+        // setup
+        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
+        expectation.assertForOverFulfill = true
+        registerExtension(AEPIdentity.self)
+        EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org-id"], event: nil)
+        
+        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
+        
+        // test
+        AEPCore.getSdkIdentities { (identities, error) in
+            XCTAssertEqual(expected, identities)
+            XCTAssertNil(error)
+            expectation.fulfill()
+        }
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    /// Tests that when only identity has a shared state that it is only included in the returned identities
+    func testGetSdkIdentitiesOnlyIdentity() {
+        // setup
+        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
+        expectation.assertForOverFulfill = true
+        registerExtension(AEPIdentity.self)
+        let identityData = [IdentityConstants.EventDataKeys.VISITOR_ID_MID: "test-mid", IdentityConstants.EventDataKeys.PUSH_IDENTIFIER: "test-push-id"]
+        EventHub.shared.createSharedState(extensionName: IdentityConstants.EXTENSION_NAME, data: identityData, event: nil)
+        
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"20920\",\"value\":\"test-push-id\",\"type\":\"integrationCode\"}]}]}"
+        
+        // test
+        AEPCore.getSdkIdentities { (identities, error) in
+            XCTAssertEqual(expected, identities)
+            XCTAssertNil(error)
+            expectation.fulfill()
+        }
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    /// Tests that when no identities are available that an empty json object is returned
+    func testGetSdkIdentitiesEmpty() {
+        // setup
+        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
+        expectation.assertForOverFulfill = true
+        let expected = "{}"
+        
+        // test
+        AEPCore.getSdkIdentities { (identities, error) in
+            XCTAssertEqual(expected, identities)
+            XCTAssertNil(error)
+            expectation.fulfill()
+        }
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    func testGetSdkIdentitiesPendingThenSet() {
+        // setup
+        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
+        expectation.assertForOverFulfill = true
+        registerExtension(AEPIdentity.self)
+        let resolver = EventHub.shared.createPendingSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)
+        
+        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
+        
+        // test
+        AEPCore.getSdkIdentities { (identities, error) in
+            XCTAssertEqual(expected, identities)
+            XCTAssertNil(error)
+            expectation.fulfill()
+        }
+
+        resolver([ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org-id"])
+        
+        // verify
+        wait(for: [expectation], timeout: 5.0)
+    }
 }

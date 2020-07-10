@@ -33,7 +33,7 @@ private struct UserID: Codable {
 /// Responsible for reading the shared state of multiple extensions to read the identifiers
 struct MobileIdentities: Codable {
     
-    typealias SharedStateProvider = (String, Event) -> ((value: [String: Any]?, status: SharedStateStatus))
+    typealias SharedStateProvider = (String, Event?) -> (value: [String: Any]?, status: SharedStateStatus)?
     private var companyContexts: [CompanyContext]?
     private var users: [Users]?
     
@@ -70,8 +70,8 @@ struct MobileIdentities: Codable {
     ///   - sharedStateProvider: a function that can resolve `SharedState` given an extension name
     /// - Returns: True if all shared states are ready, false otherwise
     func areSharedStatesReady(event: Event, sharedStateProvider: SharedStateProvider) -> Bool {
-        let identityStatus = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event).status
-        let configurationStatus = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event).status
+        let identityStatus = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event)?.status ?? .none
+        let configurationStatus = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event)?.status ?? .none
         // TODO: Analytics
         // TODO: Audience
         // TODO: Target
@@ -86,7 +86,7 @@ struct MobileIdentities: Codable {
     ///   - sharedStateProvider: a function that can resolve `SharedState` given an extension name
     /// - Returns: a list of all the Identity extension identities in the form of a `UserID`
     private func getVisitorIdentifiers(event: Event, sharedStateProvider: SharedStateProvider) -> [UserID] {
-        let identitySharedState = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event)
+        guard let identitySharedState = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event) else { return [] }
         guard identitySharedState.status == .set else { return [] }
 
         var visitorIds = [UserID]()
@@ -118,7 +118,7 @@ struct MobileIdentities: Codable {
     ///   - sharedStateProvider: a function that can resolve `SharedState` given an extension name
     /// - Returns: a list of all the Configuration extension identities in the form of a `CompanyContext`
     private func getCompanyContexts(event: Event, sharedStateProvider: SharedStateProvider) -> CompanyContext? {
-        let configurationSharedState = sharedStateProvider(ConfigurationConstants.EXTENSION_NAME, event)
+        guard let configurationSharedState = sharedStateProvider(ConfigurationConstants.EXTENSION_NAME, event) else { return nil }
         guard configurationSharedState.status == .set else { return nil }
         guard let marketingCloudOrgId = configurationSharedState.value?[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String, !marketingCloudOrgId.isEmpty else { return nil }
         

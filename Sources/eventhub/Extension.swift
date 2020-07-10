@@ -22,7 +22,7 @@ public protocol Extension {
     var version: String { get }
     
     /// Provides the methods can be used by extension
-    var runtime: ExtensionRuntime { get}
+    var runtime: ExtensionRuntime {  get}
 
     /// Invoked when the extension has been registered by the `EventHub`
     func onRegistered()
