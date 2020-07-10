@@ -12,10 +12,6 @@
 import Foundation
 import Compression
 
-protocol FileUnzipper {
-    func unzipItem(at sourcePath: URL, to destinationPath: URL) throws
-}
-
 enum RulesUnzipperConstants {
     
     static let defaultReadChunkSize = UInt32(16*1024)
@@ -87,7 +83,10 @@ enum RulesUnzipperConstants {
         0x2d02ef8d]
 }
 
-class RulesUnzipper: FileUnzipper {
+///
+/// A File Unzipper utility class which unzips a zip file at a given source url to a destination url
+///
+public class FileUnzipper {
 
     func unzipItem(at sourceURL: URL, to destinationURL: URL) throws {
         let fileManager = FileManager()
@@ -96,10 +95,12 @@ class RulesUnzipper: FileUnzipper {
         guard fileManager.itemExists(at: sourceURL) else {
             throw CocoaError(.fileReadNoSuchFile, userInfo: [NSFilePathErrorKey: sourceURL.path])
         }
+        // Create the ZipArchive structure to iterate through the zip entries and extract them
         guard let archive = ZipArchive(url: sourceURL) else {
             throw ZipArchive.ArchiveError.unreadableArchive
         }
         
+        // Iterate through the archive entries and extract them individually
         for entry in archive {
             let path = entry.path
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
@@ -108,9 +109,7 @@ class RulesUnzipper: FileUnzipper {
                                  userInfo: [NSFilePathErrorKey: destinationEntryURL.path])
             }
             
-            try archive.extract(entry, to: destinationEntryURL, skipCRC32: false)
+            try archive.extract(entry, to: destinationEntryURL)
         }
     }
 }
-
-

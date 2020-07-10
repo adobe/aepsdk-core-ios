@@ -10,15 +10,16 @@
  */
 
 import Foundation
+import Compression
 
 /// An unsigned 32-Bit Integer representing a checksum.
-public typealias CRC32 = UInt32
+typealias CRC32 = UInt32
 
 /// a custom handler that consumes a `data` object containing partial entry data.
 /// - parameters:
 ///   - data: a chunk of `data` to consume.
 /// - throws: can throw to indicate errors during data consumption.
-public typealias Consumer = (_ data: Data) throws -> Void
+typealias EntryDataConsumer = (_ data: Data) throws -> Void
 
 /// A custom handler that receives a position and a size that can be used to provide data from an arbitrary source.
 /// - Parameters:
@@ -26,15 +27,14 @@ public typealias Consumer = (_ data: Data) throws -> Void
 ///   - size: The size of the chunk to provide.
 /// - Returns: A chunk of `Data`.
 /// - Throws: Can throw to indicate errors in the data source.
-public typealias Provider = (_ position: Int, _ size: Int) throws -> Data
+typealias Provider = (_ position: Int, _ size: Int) throws -> Data
 
 extension Data {
     enum CompressionError: Error {
         case invalidStream
         case corruptedData
     }
-    
-    
+
     /// Calculate the `CRC32` checksum of the receiver.
     ///
     /// - Parameter checksum: The starting seed.
@@ -62,31 +62,17 @@ extension Data {
     /// - Parameters:
     ///   - size: The compressed size of the data to be decompressed.
     ///   - bufferSize: The maximum size of the decompression buffer.
-    ///   - skipCRC32: Optional flag to skip calculation of the CRC32 checksum to improve performance.
     ///   - provider: A closure that accepts a position and a chunk size. Returns a `Data` chunk.
     ///   - consumer: A closure that processes the result of the decompress operation.
     /// - Returns: The checksum of the processed content.
-    public static func decompress(size: Int, bufferSize: Int, skipCRC32: Bool,
-                                  provider: Provider, consumer: Consumer) throws -> CRC32 {
-        return try self.process(operation: COMPRESSION_STREAM_DECODE, size: size, bufferSize: bufferSize,
-                                skipCRC32: skipCRC32, provider: provider, consumer: consumer)
-    }
-}
-
-// MARK: - Apple Platforms
-
-import Compression
-
-extension Data {
-    static func process(operation: compression_stream_operation, size: Int, bufferSize: Int, skipCRC32: Bool = false,
-                        provider: Provider, consumer: Consumer) throws -> CRC32 {
+    static func decompress(size: Int, bufferSize: Int, provider: Provider, consumer: EntryDataConsumer) throws -> CRC32 {
         var crc32 = CRC32(0)
         let destPointer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
         defer { destPointer.deallocate() }
         let streamPointer = UnsafeMutablePointer<compression_stream>.allocate(capacity: 1)
         defer { streamPointer.deallocate() }
         var stream = streamPointer.pointee
-        var status = compression_stream_init(&stream, operation, COMPRESSION_ZLIB)
+        var status = compression_stream_init(&stream, COMPRESSION_STREAM_DECODE, COMPRESSION_ZLIB)
         guard status != COMPRESSION_STATUS_ERROR else { throw CompressionError.invalidStream }
         defer { compression_stream_destroy(&stream) }
         stream.src_size = 0
@@ -113,13 +99,12 @@ extension Data {
                         status = compression_stream_process(&stream, flags)
                     }
                 }
-                if operation == COMPRESSION_STREAM_ENCODE && !skipCRC32 { crc32 = sourceData.crc32(checksum: crc32) }
             }
             switch status {
             case COMPRESSION_STATUS_OK, COMPRESSION_STATUS_END:
                 let outputData = Data(bytesNoCopy: destPointer, count: bufferSize - stream.dst_size, deallocator: .none)
                 try consumer(outputData)
-                if operation == COMPRESSION_STREAM_DECODE && !skipCRC32 { crc32 = outputData.crc32(checksum: crc32) }
+                crc32 = outputData.crc32(checksum: crc32)
                 stream.dst_ptr = destPointer
                 stream.dst_size = bufferSize
             default: throw CompressionError.corruptedData

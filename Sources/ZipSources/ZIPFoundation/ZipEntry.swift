@@ -12,11 +12,11 @@
 import Foundation
 import CoreFoundation
 
-/// A value that represents a file, a directory or a symbolic link within a ZIP `Archive`.
+/// A value that represents a file, a directory or a symbolic link within a `ZipArchive`.
 ///
-/// You can retrieve instances of `Entry` from an `Archive` via subscripting or iteration.
+/// You can retrieve instances of `ZipEntry` from a `ZipArchive` via subscripting or iteration.
 /// Entries are identified by their `path`.
-public struct ZipEntry {
+struct ZipEntry {
     enum OSType: UInt {
         case msdos = 0
         case unix = 3
@@ -78,15 +78,15 @@ public struct ZipEntry {
         var isEncrypted: Bool { return (self.generalPurposeBitFlag & (1 << 0)) != 0 }
         var isZIP64: Bool { return self.versionNeededToExtract >= 45 }
     }
-    /// Returns the `path` of the receiver within a ZIP `Archive` using a given encoding.
+    /// Returns the `path` of the receiver within a `ZipArchive`
     ///
     /// - Parameters:
     ///   - encoding: `String.Encoding`
-    public func path(using encoding: String.Encoding) -> String {
+    func path(using encoding: String.Encoding) -> String {
         return String(data: self.centralDirectoryStructure.fileNameData, encoding: encoding) ?? ""
     }
-    /// The `path` of the receiver within a ZIP `Archive`.
-    public var path: String {
+    /// The `path` of the receiver within a `ZipArchive`.
+    var path: String {
         let dosLatinUS = 0x400
         let dosLatinUSEncoding = CFStringEncoding(dosLatinUS)
         let dosLatinUSStringEncoding = CFStringConvertEncodingToNSStringEncoding(dosLatinUSEncoding)
@@ -105,13 +105,6 @@ public struct ZipEntry {
     let centralDirectoryStructure: CentralDirectoryStructure
     let localFileHeader: LocalFileHeader
     let dataDescriptor: DataDescriptor?
-
-//    public static func == (lhs: Entry, rhs: Entry) -> Bool {
-//        return lhs.path == rhs.path
-//            && lhs.localFileHeader.crc32 == rhs.localFileHeader.crc32
-//            && lhs.centralDirectoryStructure.relativeOffsetOfLocalHeader
-//            == rhs.centralDirectoryStructure.relativeOffsetOfLocalHeader
-//    }
 
     init?(centralDirectoryStructure: CentralDirectoryStructure,
           localFileHeader: LocalFileHeader,
@@ -196,13 +189,9 @@ extension ZipEntry.DataDescriptor {
         // The DataDescriptor signature is not mandatory so we have to re-arrange the input data if it is missing.
         var readOffset = 0
         if signature == self.dataDescriptorSignature { readOffset = 4 }
-        self.crc32 = data.scanValue(start: readOffset + 0)
+        self.crc32 = data.scanValue(start: readOffset)
         self.compressedSize = data.scanValue(start: readOffset + 4)
         self.uncompressedSize = data.scanValue(start: readOffset + 8)
-        // Our add(_ entry:) methods always maintain compressed & uncompressed
-        // sizes and so we don't need a data descriptor for newly added entries.
-        // Data descriptors of already existing entries are manually preserved
-        // when copying those entries to the tempArchive during remove(_ entry:).
         self.data = Data()
     }
 }
