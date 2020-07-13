@@ -39,6 +39,27 @@ class OperationOrdererTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
     
+    /// testBasicFunctionalityAfterDelay tests the simple case of running some items through an `OperationOrderer` with a delay
+    func testBasicFunctionalityAfterDelay() {
+        let expectation = XCTestExpectation()
+        expectation.assertForOverFulfill = true
+        expectation.expectedFulfillmentCount = itemCount
+        
+        let queue = OperationOrderer<Int>()
+        queue.setHandler { (_) -> Bool in
+            expectation.fulfill()
+            return true
+        }
+        
+        // dispatch items
+        for i in 0..<itemCount {
+            queue.add(i)
+        }
+        
+        queue.start(after: 0.25)
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
     /// Make sure we can destroy an OperationOrderer without any dangling suspended GCD stuff (which would crash)
     func testCanDestroy() {
         var queue: OperationOrderer? = OperationOrderer<Int>()
@@ -221,4 +242,5 @@ class OperationOrdererTests: XCTestCase {
         
         wait(for: [firstHandlerExpectation, secondHandlerExpectation], timeout: 1.0)
     }
+
 }

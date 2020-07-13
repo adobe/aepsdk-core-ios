@@ -13,14 +13,14 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// A thread safe reference type dictionary
-final class ThreadSafeDictionary<K: Hashable, V> {
-    typealias Element = Dictionary<K, V>.Element
-    private var dictionary = [K: V]()
-    private let queue: DispatchQueue
+public final class ThreadSafeDictionary<K: Hashable, V> {
+    public typealias Element = Dictionary<K, V>.Element
+    @usableFromInline internal var dictionary = [K: V]()
+    @usableFromInline internal let queue: DispatchQueue
     
     /// Creates a new thread safe dictionary
     /// - Parameter identifier: A unique identifier for this dictionary, a reverse-DNS naming style (com.example.myqueue) is recommended
-    init(identifier: String = "com.adobe.threadsafedictionary.queue") {
+    public init(identifier: String = "com.adobe.threadsafedictionary.queue") {
         queue = DispatchQueue(label: identifier)
     }
     
@@ -28,9 +28,17 @@ final class ThreadSafeDictionary<K: Hashable, V> {
     public var count: Int {
         return queue.sync { return self.dictionary.keys.count }
     }
-        
+    
+    // Gets a non-thread-safe shallow copy of the backing dictionary
+    public var shallowCopy: [K: V] {
+        return queue.sync {
+            let dictionary = self.dictionary
+            return dictionary
+        }
+    }
+
     // MARK: Subscript
-     public subscript(key: K) -> V? {
+    public subscript(key: K) -> V? {
          get {
             return queue.sync { return self.dictionary[key] }
          }
@@ -44,6 +52,5 @@ final class ThreadSafeDictionary<K: Hashable, V> {
     @inlinable public func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
         return queue.sync { return try? self.dictionary.first(where: predicate) }
     }
-
 }
 

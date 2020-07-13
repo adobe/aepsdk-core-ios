@@ -42,7 +42,7 @@ class LifecycleSessionTests: XCTestCase {
     /// Tests session is updated correctly after a first launch session start
     func testStartFirstLaunchSession() {
         // test
-        let previousSessionInfo = session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        let previousSessionInfo = session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         
         // verify
         let sessionContext = loadPersistedContext()
@@ -66,9 +66,9 @@ class LifecycleSessionTests: XCTestCase {
         let previousSessionPauseTime = newSessionStartDate.timeIntervalSince1970 - previousSessionPauseDate.timeIntervalSince1970
         
         // test
-        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         session.pause(pauseDate: previousSessionPauseDate)
-        let previousSessionInfo = session.start(date: newSessionStartDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        let previousSessionInfo = session.start(date: newSessionStartDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         
         // verify
         let expectedDate = previousSessionStartDate?.addingTimeInterval(previousSessionPauseTime)
@@ -88,8 +88,10 @@ class LifecycleSessionTests: XCTestCase {
         let appId = "test-app-id"
         
         // test
-        let coreData = [LifecycleConstants.Keys.OPERATING_SYSTEM: osVersion, LifecycleConstants.Keys.APP_ID: appId]
-        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: coreData)
+        var metrics = LifecycleMetrics()
+        metrics.operatingSystem = osVersion
+        metrics.appId = appId
+        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: metrics)
         
         // verify
         let sessionContext = loadPersistedContext()
@@ -100,8 +102,8 @@ class LifecycleSessionTests: XCTestCase {
     /// Tests the behavior when calling start two times in a row, the second call should have no affect
     func testLifecycleHasAlreadyRan() {
         // test
-        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
-        let previousSessionInfo = session.start(date: currentDate.addingTimeInterval(60 * 6), sessionTimeout: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, coreData: [:])
+        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
+        let previousSessionInfo = session.start(date: currentDate.addingTimeInterval(60 * 6), sessionTimeout: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS, coreMetrics: LifecycleMetrics())
         
         // verify
         let sessionContext = loadPersistedContext()
@@ -121,9 +123,9 @@ class LifecycleSessionTests: XCTestCase {
         let newSessionStartDate = previousSessionPauseDate.addingTimeInterval(60 * 6)
         
         // test
-        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         session.pause(pauseDate: previousSessionPauseDate)
-        let previousSessionInfo = session.start(date: newSessionStartDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        let previousSessionInfo = session.start(date: newSessionStartDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         
         // verify
         let sessionContext = loadPersistedContext()
@@ -151,7 +153,7 @@ class LifecycleSessionTests: XCTestCase {
     /// Tests that when there is no previous session returns an empty dict for getSessionData
     func testGetSessionDataNotANewSession() {
         // test
-        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         let previousSessionInfo = LifecycleSessionInfo(startDate: currentDateMinusTenMin, pauseDate: currentDateMinusOneMin, isCrash: false)
         let sessionData = session.getSessionData(startDate: currentDate, sessionTimeout: sessionTimeoutInSeconds, previousSessionInfo: previousSessionInfo)
         
@@ -162,7 +164,7 @@ class LifecycleSessionTests: XCTestCase {
     /// Tests that we get the proper session data when starting a session within the ignore timeframe
     func testGetSessionDataDroppedSession() {
         // test
-        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         
         let previousSessionInfo = LifecycleSessionInfo(startDate: Calendar.current.date(byAdding: .day, value: -8, to: currentDate),
                                                        pauseDate: currentDateMinusTenMin, isCrash: false)
@@ -177,7 +179,7 @@ class LifecycleSessionTests: XCTestCase {
     /// Tests that previous session length is calculated correctly
     func testGetSessionDataPreviousSessionValid() {
         // test
-        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreData: [:])
+        session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
         
         let previousSessionInfo = LifecycleSessionInfo(startDate: Calendar.current.date(byAdding: .day, value: -5, to: currentDate),
                                                        pauseDate: currentDateMinusTenMin, isCrash: false)

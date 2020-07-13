@@ -32,12 +32,12 @@ extension Date {
 
 /// A well-typed struct representing Lifecycle data
 struct LifecycleMetrics: Equatable {
-    var installEvent = false
-    var launchEvent = false
-    var crashEvent = false
-    var upgradeEvent = false
-    var dailyEngagedEvent = false
-    var monthlyEngagedEvent = false
+    var installEvent: Bool? = nil
+    var launchEvent: Bool? = nil
+    var crashEvent: Bool? = nil
+    var upgradeEvent: Bool? = nil
+    var dailyEngagedEvent: Bool? = nil
+    var monthlyEngagedEvent: Bool? = nil
     var installDate: Date? = nil
     var launches: Int? = nil
     var daysSinceFirstLaunch: Int? = nil
@@ -98,12 +98,12 @@ extension LifecycleMetrics: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        if installEvent { try container.encode(LifecycleMetrics.INSTALL_EVENT, forKey: .installEvent) }
-        if launchEvent { try container.encode(LifecycleMetrics.LAUNCH_EVENT, forKey: .launchEvent) }
-        if crashEvent { try container.encode(LifecycleMetrics.CRASH_EVENT, forKey: .crashEvent) }
-        if upgradeEvent { try container.encode(LifecycleMetrics.UPGRADE_EVENT, forKey: .upgradeEvent) }
-        if dailyEngagedEvent { try container.encode(LifecycleMetrics.DAILY_ENG_USER_EVENT, forKey: .dailyEngagedEvent) }
-        if monthlyEngagedEvent { try container.encode(LifecycleMetrics.MONTHLY_ENG_USER_EVENT, forKey: .monthlyEngagedEvent) }
+        if installEvent ?? false { try container.encode(LifecycleMetrics.INSTALL_EVENT, forKey: .installEvent) }
+        if launchEvent ?? false { try container.encode(LifecycleMetrics.LAUNCH_EVENT, forKey: .launchEvent) }
+        if crashEvent ?? false  { try container.encode(LifecycleMetrics.CRASH_EVENT, forKey: .crashEvent) }
+        if upgradeEvent ?? false { try container.encode(LifecycleMetrics.UPGRADE_EVENT, forKey: .upgradeEvent) }
+        if dailyEngagedEvent ?? false { try container.encode(LifecycleMetrics.DAILY_ENG_USER_EVENT, forKey: .dailyEngagedEvent) }
+        if monthlyEngagedEvent ?? false { try container.encode(LifecycleMetrics.MONTHLY_ENG_USER_EVENT, forKey: .monthlyEngagedEvent) }
         if let unwrapped = installDate { try container.encode(unwrapped.toSdfString(), forKey: .installDate)}
         if let unwrapped = launches { try container.encode(String(unwrapped), forKey: .launches)}
         if let unwrapped = daysSinceFirstLaunch { try container.encode(String(unwrapped), forKey: .daysSinceFirstLaunch) }
@@ -128,13 +128,13 @@ extension LifecycleMetrics: Encodable {
 extension LifecycleMetrics: Decodable {
     init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        
-        installEvent = (try? values.decode(String?.self, forKey: .installEvent) != nil) ?? false
-        launchEvent = (try? values.decode(String?.self, forKey: .dailyEngagedEvent) != nil) ?? false
-        crashEvent = (try? values.decode(String?.self, forKey: .crashEvent) != nil) ?? false
-        upgradeEvent = (try? values.decode(String?.self, forKey: .upgradeEvent) != nil) ?? false
-        dailyEngagedEvent = (try? values.decode(String?.self, forKey: .dailyEngagedEvent) != nil) ?? false
-        monthlyEngagedEvent = (try? values.decode(String?.self, forKey: .monthlyEngagedEvent) != nil) ?? false
+
+        installEvent = (try? values.decode(String?.self, forKey: .installEvent) != nil) ?? nil
+        launchEvent = (try? values.decode(String?.self, forKey: .launchEvent) != nil) ?? nil
+        crashEvent = (try? values.decode(String?.self, forKey: .crashEvent) != nil) ?? nil
+        upgradeEvent = (try? values.decode(String?.self, forKey: .upgradeEvent) != nil) ?? nil
+        dailyEngagedEvent = (try? values.decode(String?.self, forKey: .dailyEngagedEvent) != nil) ?? nil
+        monthlyEngagedEvent = (try? values.decode(String?.self, forKey: .monthlyEngagedEvent) != nil) ?? nil
         if let sdfDateString = try? values.decode(String?.self, forKey: .installDate) {
             installDate = Date.fromSdfString(sdfString: sdfDateString)
         }

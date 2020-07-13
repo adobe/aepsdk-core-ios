@@ -18,17 +18,20 @@ public final class AEPCore {
     /// Current version of the Core extension
     let version = "0.0.1"
     
+    /// Pending extensions to be registered for legacy support
+    static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingextensions.queue")
+    
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
-    static func registerExtensions(_ extensions: [Extension.Type]) {
-//        extensions.insert(AEPConfiguration.self, at: 0) TODO: Uncomment after Configuration is merged
-        
+    /// - Parameter completion: Closure to run when extensions have been registered
+    static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
-        for exten in extensions {
-            EventHub.shared.registerExtension(exten) { (error) in
-                // Only start `EventHub` processing after all extensions have been registered
+        // TODO: Add configuration as a default extension to be registered
+        extensions.forEach {
+            EventHub.shared.registerExtension($0) { (_) in
                 if registeredCounter.incrementAndGet() == extensions.count {
                     EventHub.shared.start()
+                    completion?()
                 }
             }
         }
@@ -44,13 +47,31 @@ public final class AEPCore {
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
-    static func dispatch(event: Event, responseCallback: (Event) -> ()) {
-        // TODO: Uncomment when configuration is merged
-//        EventHub.shared.registerResponseListener(parentExtension: AEPConfiguration.self, triggerEvent: event) { (event) in
-//            responseCallback(event)
-//        }
+    static func dispatch(event: Event, responseCallback: @escaping (Event) -> ()) {
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
+            if let event = event {
+                responseCallback(event)
+            }
+        }
         
         EventHub.shared.dispatch(event: event)
     }
-        
+    
+    /// Start event processing
+    //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
+    static func start(completion: @escaping (()-> Void)) {
+        // Start the event hub processing
+        let pending = AEPCore.pendingExtensions.shallowCopy
+        AEPCore.pendingExtensions.clear()
+        registerExtensions(pending, { completion() })
+    }
+    
+    /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
+    /// - Parameter identifier: the advertising identifier string.
+    static func setAdvertisingIdentifier(adId: String?) {
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: adId ?? ""]
+        let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        AEPCore.dispatch(event: event)
+    }
+    
 }

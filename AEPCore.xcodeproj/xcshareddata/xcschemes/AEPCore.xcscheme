@@ -42,12 +42,6 @@
                <Test
                   Identifier = "AEPCoreLifecycleTests">
                </Test>
-               <Test
-                  Identifier = "AEPCoreTests">
-               </Test>
-               <Test
-                  Identifier = "AEPCoreTests/testDispatchEventWithResponseCallbackSimple()">
-               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
