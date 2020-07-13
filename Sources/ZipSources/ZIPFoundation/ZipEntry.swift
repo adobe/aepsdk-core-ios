@@ -12,6 +12,14 @@
 import Foundation
 import CoreFoundation
 
+/// An object which represents a serializable Header data structure for Zip Entries
+protocol HeaderDataSerializable {
+    /// The size of the header data
+    static var size: Int { get }
+    /// required failable initializer for the given header
+    init?(data: Data, additionalDataProvider: (Int) throws -> Data)
+}
+
 /// A value that represents a file, a directory or a symbolic link within a `ZipArchive`.
 ///
 /// You can retrieve instances of `ZipEntry` from a `ZipArchive` via subscripting or iteration.
@@ -24,7 +32,7 @@ struct ZipEntry {
         case unused = 20
     }
 
-    struct LocalFileHeader: DataSerializable {
+    struct LocalFileHeader: HeaderDataSerializable {
 
         let localFileHeaderSignature = UInt32(FileUnzipperConstants.localFileHeaderSignature)
         let versionNeededToExtract: UInt16
@@ -42,7 +50,7 @@ struct ZipEntry {
         let extraFieldData: Data
     }
 
-    struct DataDescriptor: DataSerializable {
+    struct DataDescriptor: HeaderDataSerializable {
         let data: Data
         let dataDescriptorSignature = UInt32(FileUnzipperConstants.dataDescriptorSignature)
         let crc32: UInt32
@@ -51,7 +59,7 @@ struct ZipEntry {
         static let size = 16
     }
 
-    struct CentralDirectoryStructure: DataSerializable {
+    struct CentralDirectoryStructure: HeaderDataSerializable {
         let centralDirectorySignature = UInt32(FileUnzipperConstants.centralDirectorySignature)
         let versionMadeBy: UInt16
         let versionNeededToExtract: UInt16
@@ -122,17 +130,17 @@ extension ZipEntry.LocalFileHeader {
 
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
         guard data.count == ZipEntry.LocalFileHeader.size else { return nil }
-        guard data.scanValue(start: 0) == localFileHeaderSignature else { return nil }
-        self.versionNeededToExtract = data.scanValue(start: 4)
-        self.generalPurposeBitFlag = data.scanValue(start: 6)
-        self.compressionMethod = data.scanValue(start: 8)
-        self.lastModFileTime = data.scanValue(start: 10)
-        self.lastModFileDate = data.scanValue(start: 12)
-        self.crc32 = data.scanValue(start: 14)
-        self.compressedSize = data.scanValue(start: 18)
-        self.uncompressedSize = data.scanValue(start: 22)
-        self.fileNameLength = data.scanValue(start: 26)
-        self.extraFieldLength = data.scanValue(start: 28)
+        guard ZipArchive.scanValue(start: 0, data: data) == localFileHeaderSignature else { return nil }
+        self.versionNeededToExtract = ZipArchive.scanValue(start: 4, data: data)
+        self.generalPurposeBitFlag = ZipArchive.scanValue(start: 6, data: data)
+        self.compressionMethod = ZipArchive.scanValue(start: 8, data: data)
+        self.lastModFileTime = ZipArchive.scanValue(start: 10, data: data)
+        self.lastModFileDate = ZipArchive.scanValue(start: 12, data: data)
+        self.crc32 = ZipArchive.scanValue(start: 14, data: data)
+        self.compressedSize = ZipArchive.scanValue(start: 18, data: data)
+        self.uncompressedSize = ZipArchive.scanValue(start: 22, data: data)
+        self.fileNameLength = ZipArchive.scanValue(start: 26, data: data)
+        self.extraFieldLength = ZipArchive.scanValue(start: 28, data: data)
         let additionalDataLength = Int(self.fileNameLength + self.extraFieldLength)
         guard let additionalData = try? provider(additionalDataLength) else { return nil }
         guard additionalData.count == additionalDataLength else { return nil }
@@ -149,23 +157,23 @@ extension ZipEntry.CentralDirectoryStructure {
 
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
         guard data.count == ZipEntry.CentralDirectoryStructure.size else { return nil }
-        guard data.scanValue(start: 0) == centralDirectorySignature else { return nil }
-        self.versionMadeBy = data.scanValue(start: 4)
-        self.versionNeededToExtract = data.scanValue(start: 6)
-        self.generalPurposeBitFlag = data.scanValue(start: 8)
-        self.compressionMethod = data.scanValue(start: 10)
-        self.lastModFileTime = data.scanValue(start: 12)
-        self.lastModFileDate = data.scanValue(start: 14)
-        self.crc32 = data.scanValue(start: 16)
-        self.compressedSize = data.scanValue(start: 20)
-        self.uncompressedSize = data.scanValue(start: 24)
-        self.fileNameLength = data.scanValue(start: 28)
-        self.extraFieldLength = data.scanValue(start: 30)
-        self.fileCommentLength = data.scanValue(start: 32)
-        self.diskNumberStart = data.scanValue(start: 34)
-        self.internalFileAttributes = data.scanValue(start: 36)
-        self.externalFileAttributes = data.scanValue(start: 38)
-        self.relativeOffsetOfLocalHeader = data.scanValue(start: 42)
+        guard ZipArchive.scanValue(start: 0, data: data) == centralDirectorySignature else { return nil }
+        self.versionMadeBy = ZipArchive.scanValue(start: 4, data: data)
+        self.versionNeededToExtract = ZipArchive.scanValue(start: 6, data: data)
+        self.generalPurposeBitFlag = ZipArchive.scanValue(start: 8, data: data)
+        self.compressionMethod = ZipArchive.scanValue(start: 10, data: data)
+        self.lastModFileTime = ZipArchive.scanValue(start: 12, data: data)
+        self.lastModFileDate = ZipArchive.scanValue(start: 14, data: data)
+        self.crc32 = ZipArchive.scanValue(start: 16, data: data)
+        self.compressedSize = ZipArchive.scanValue(start: 20, data: data)
+        self.uncompressedSize = ZipArchive.scanValue(start: 24, data: data)
+        self.fileNameLength = ZipArchive.scanValue(start: 28, data: data)
+        self.extraFieldLength = ZipArchive.scanValue(start: 30, data: data)
+        self.fileCommentLength = ZipArchive.scanValue(start: 32, data: data)
+        self.diskNumberStart = ZipArchive.scanValue(start: 34, data: data)
+        self.internalFileAttributes = ZipArchive.scanValue(start: 36, data: data)
+        self.externalFileAttributes = ZipArchive.scanValue(start: 38, data: data)
+        self.relativeOffsetOfLocalHeader = ZipArchive.scanValue(start: 42, data: data)
         let additionalDataLength = Int(self.fileNameLength + self.extraFieldLength + self.fileCommentLength)
         guard let additionalData = try? provider(additionalDataLength) else { return nil }
         guard additionalData.count == additionalDataLength else { return nil }
@@ -185,13 +193,13 @@ extension ZipEntry.CentralDirectoryStructure {
 extension ZipEntry.DataDescriptor {
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
         guard data.count == ZipEntry.DataDescriptor.size else { return nil }
-        let signature: UInt32 = data.scanValue(start: 0)
+        let signature: UInt32 = ZipArchive.scanValue(start: 0, data: data)
         // The DataDescriptor signature is not mandatory so we have to re-arrange the input data if it is missing.
         var readOffset = 0
         if signature == self.dataDescriptorSignature { readOffset = 4 }
-        self.crc32 = data.scanValue(start: readOffset)
-        self.compressedSize = data.scanValue(start: readOffset + 4)
-        self.uncompressedSize = data.scanValue(start: readOffset + 8)
+        self.crc32 = ZipArchive.scanValue(start: readOffset, data: data)
+        self.compressedSize = ZipArchive.scanValue(start: readOffset + 4, data: data)
+        self.uncompressedSize = ZipArchive.scanValue(start: readOffset + 8, data: data)
         self.data = Data()
     }
 }
