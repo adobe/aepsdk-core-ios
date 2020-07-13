@@ -15,7 +15,14 @@ import XCTest
 class FileUnzipperTest: XCTestCase {
     let unzipper = FileUnzipper()
     let testDataFileName = "TestRules"
-    
+
+    enum TestFileNames: String {
+        case testDataSubFolderRulesName = "rules"
+        case testDataSubFolderRulesItem = "testRules.txt"
+        case testDataSubFolderRulesItem2 = "testRules2.txt"
+        case testDataImageFileName = "TestImage.png"
+    }
+
     class var bundle: Bundle {
         return Bundle(for: self)
     }
@@ -51,12 +58,35 @@ class FileUnzipperTest: XCTestCase {
             XCTFail("unzip item threw with error: \(error)")
         }
         var itemExists = false
+        var subFolderExists = false
+        var subFolderRulesEntryExists = false
+        var subFolderRulesEntry2Exists = false
+        var imageFileExists = false
         for entry in zipFile {
             let directoryURL = destinationURL.appendingPathComponent(entry.path)
+            // When using MacOS to compress folders a hidden directory is created. We should ignore it here for testing purposes
+            if directoryURL.pathComponents.contains("__MACOSX") { continue }
+            let testFileName = TestFileNames(rawValue: directoryURL.lastPathComponent)
+            switch testFileName {
+            case .testDataSubFolderRulesName:
+                subFolderExists = true
+            case .testDataSubFolderRulesItem:
+                subFolderRulesEntryExists = true
+            case .testDataSubFolderRulesItem2:
+                subFolderRulesEntry2Exists = true
+            case .testDataImageFileName:
+                imageFileExists = true
+            default:
+                XCTFail("Unknown entry found: \(String(describing: testFileName?.rawValue))")
+            }
             itemExists = fileManager.itemExists(at: directoryURL)
             if !itemExists { break }
         }
         XCTAssert(itemExists)
+        XCTAssert(subFolderExists)
+        XCTAssert(subFolderRulesEntryExists)
+        XCTAssert(subFolderRulesEntry2Exists)
+        XCTAssert(imageFileExists)
     }
     
     func testUnzippingRulesDoesntExist() {
