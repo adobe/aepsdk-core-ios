@@ -31,6 +31,21 @@ struct ZipEntry {
         case osx = 19
         case unused = 20
     }
+    
+    /// The type of a ZipEntry
+    enum EntryType: Int {
+        case file
+        case directory
+        
+        init(mode: mode_t) {
+            switch mode & S_IFMT {
+            case S_IFDIR:
+                self = .directory
+            default:
+                self = .file
+            }
+        }
+    }
 
     struct LocalFileHeader: HeaderDataSerializable {
 
@@ -101,6 +116,18 @@ struct ZipEntry {
         let codepage437 = String.Encoding(rawValue: dosLatinUSStringEncoding)
         let encoding = self.centralDirectoryStructure.usesUTF8PathEncoding ? .utf8 : codepage437
         return self.path(using: encoding)
+    }
+    
+    var type: EntryType {
+        let mode = mode_t(self.centralDirectoryStructure.externalFileAttributes >> 16) & S_IFMT
+        switch mode {
+        case S_IFREG:
+            return .file
+        case S_IFDIR:
+            return .directory
+        default:
+            return .file
+        }
     }
     
     var dataOffset: Int {

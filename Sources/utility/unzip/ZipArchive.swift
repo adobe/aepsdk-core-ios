@@ -118,22 +118,31 @@ final class ZipArchive: Sequence {
         let bufferSize = FileUnzipperConstants.defaultReadChunkSize
         let fileManager = FileManager()
         var checksum = CRC32(0)
-        guard !fileManager.itemExists(at: url) else {
-            throw CocoaError(.fileWriteFileExists, userInfo: [NSFilePathErrorKey: url.path])
+        switch entry.type {
+        case .file:
+            guard !fileManager.itemExists(at: url) else {
+                throw CocoaError(.fileWriteFileExists, userInfo: [NSFilePathErrorKey: url.path])
+            }
+            try fileManager.createParentDirectoryStructure(for: url)
+            // Get file system representation for C operations
+            let destinationRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
+            // Get destination file C pointer
+            guard let destinationFile: UnsafeMutablePointer<FILE> = fopen(destinationRepresentation, "wb+") else {
+                throw CocoaError(.fileNoSuchFile)
+            }
+            defer { fclose(destinationFile) }
+            // Set closure to handle writing data chunks to destination file
+            let consumer = { try ZipArchive.write(chunk: $0, to: destinationFile) }
+            // Set file pointer position to the given entry's data offset
+            fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
+            checksum = try self.readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
+        case .directory:
+            let consumer = { (_: Data) in
+                try fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+            }
+            fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
+            try consumer(Data())
         }
-        try fileManager.createParentDirectoryStructure(for: url)
-        // Get file system representation for C operations
-        let destinationRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
-        // Get destination file C pointer
-        guard let destinationFile: UnsafeMutablePointer<FILE> = fopen(destinationRepresentation, "wb+") else {
-            throw CocoaError(.fileNoSuchFile)
-        }
-        defer { fclose(destinationFile) }
-        // Set closure to handle writing data chunks to destination file
-        let consumer = { try ZipArchive.write(chunk: $0, to: destinationFile) }
-        // Set file pointer position to the given entry's data offset
-        fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
-        checksum = try self.readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
         let attributes = FileManager.attributes(from: entry)
         try fileManager.setAttributes(attributes, ofItemAtPath: url.path)
         return checksum
