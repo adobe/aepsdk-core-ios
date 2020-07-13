@@ -12,7 +12,7 @@
 import XCTest
 @testable import AEPCore
 
-class UnzipperTest: XCTestCase {
+class FileUnzipperTest: XCTestCase {
     let unzipper = FileUnzipper()
     let testDataFileName = "TestRules"
     
@@ -23,7 +23,7 @@ class UnzipperTest: XCTestCase {
     override func setUp() {
         do {
             let fileManager = FileManager()
-            guard let path = UnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip")?.deletingLastPathComponent().appendingPathComponent(testDataFileName) else {
+            guard let path = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip")?.deletingLastPathComponent().appendingPathComponent(testDataFileName) else {
                 return
             }
             try fileManager.removeItem(at: path)
@@ -34,7 +34,7 @@ class UnzipperTest: XCTestCase {
 
     func testUnzippingRulesSuccess() {
         let fileManager = FileManager()
-        guard let sourceURL = UnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
+        guard let sourceURL = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
             XCTFail()
             return
         }
@@ -62,7 +62,7 @@ class UnzipperTest: XCTestCase {
     func testUnzippingRulesDoesntExist() {
         let testFileName = "doesntExist"
         let testFileExt = ".zip"
-        let sourceURL = UnzipperTest.bundle.bundleURL.appendingPathComponent(testFileName+testFileExt)
+        let sourceURL = FileUnzipperTest.bundle.bundleURL.appendingPathComponent(testFileName+testFileExt)
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testFileName)
         
         do {
