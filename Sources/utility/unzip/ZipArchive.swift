@@ -17,11 +17,7 @@ import Compression
 /// You use a `ZipArchive` to read existing ZIP files.
 ///
 /// A `ZipArchive` is a sequence of ZipEntries. You can
-/// iterate over an archive using a `for`-`in` loop to get access to individual `ZipEntry` objects:
-///
-///     for entry in archive {
-///         print(entry.path)
-///     }
+/// iterate over an archive using a `for`-`in` loop to get access to individual `ZipEntry` objects	
 final class ZipArchive: Sequence {
     
     /// An unsigned 32-Bit Integer representing a checksum.

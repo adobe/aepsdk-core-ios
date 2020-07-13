@@ -20,22 +20,22 @@ protocol Unzipper {
     /// - Paramaters:
     ///     - sourceURL: The URL pointing to the file to be unzipped
     ///     - destinationURL: The URL pointing to the destination where the unzipped contents will go
-    /// - Throws: Throws when an error occurs during unzipping
-    func unzipItem(at sourceURL: URL, to destinationURL: URL) throws
+    /// - Returns: Boolean indicating if unzipping succeeded or failed
+    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool
 }
 
 public class FileUnzipper: Unzipper {
     
-    func unzipItem(at sourceURL: URL, to destinationURL: URL) throws {
+    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool {
         let fileManager = FileManager()
         // Create directory at destination path
-        try fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil)
+        guard let _ = try? fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil) else { return false }
         guard fileManager.itemExists(at: sourceURL) else {
-            throw CocoaError(.fileReadNoSuchFile, userInfo: [NSFilePathErrorKey: sourceURL.path])
+            return false
         }
         // Create the ZipArchive structure to iterate through the zip entries and extract them
         guard let archive = ZipArchive(url: sourceURL) else {
-            throw ZipArchive.ArchiveError.unreadableArchive
+            return false
         }
         
         // Iterate through the archive entries and extract them individually
@@ -43,11 +43,12 @@ public class FileUnzipper: Unzipper {
             let path = entry.path
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
             guard destinationEntryURL.isContained(in: destinationURL) else {
-                throw CocoaError(.fileReadInvalidFileName,
-                                 userInfo: [NSFilePathErrorKey: destinationEntryURL.path])
+                return false
             }
             
-            try archive.extract(entry, to: destinationEntryURL)
+            guard let _  = try? archive.extract(entry, to: destinationEntryURL) else { return false }
         }
+        
+        return true
     }
 }

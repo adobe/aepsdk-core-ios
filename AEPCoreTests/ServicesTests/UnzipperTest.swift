@@ -38,8 +38,18 @@ class FileUnzipperTest: XCTestCase {
             return
         }
     }
+    
+    func testUnzippingRulesSuccessSimple() {
+        guard let sourceURL = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
+            XCTFail()
+            return
+        }
+        let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testDataFileName)
+        let success = unzipper.unzipItem(at: sourceURL, to: destinationURL)
+        XCTAssertTrue(success)
+    }
 
-    func testUnzippingRulesSuccess() {
+    func testUnzippingRulesSuccessFilesExist() {
         let fileManager = FileManager()
         guard let sourceURL = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
             XCTFail()
@@ -51,11 +61,9 @@ class FileUnzipperTest: XCTestCase {
         }
         
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testDataFileName)
-        
-        do {
-            try unzipper.unzipItem(at: sourceURL, to: destinationURL)
-        } catch {
-            XCTFail("unzip item threw with error: \(error)")
+        guard unzipper.unzipItem(at: sourceURL, to: destinationURL) else {
+            XCTFail("Unzipping failed")
+            return
         }
         var itemExists = false
         var subFolderExists = false
@@ -94,15 +102,7 @@ class FileUnzipperTest: XCTestCase {
         let testFileExt = ".zip"
         let sourceURL = FileUnzipperTest.bundle.bundleURL.appendingPathComponent(testFileName+testFileExt)
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testFileName)
-        
-        do {
-            try unzipper.unzipItem(at: sourceURL, to: destinationURL)
-            XCTFail("Expected throw with item not existing at source url")
-        } catch {
-            let e = error as NSError
-            if e.userInfo[NSFilePathErrorKey] as? String != sourceURL.path {
-                XCTFail("unexpected error thrown")
-            }
-        }
+        let success = unzipper.unzipItem(at: sourceURL, to: destinationURL)
+        XCTAssertFalse(success)
     }
 }
