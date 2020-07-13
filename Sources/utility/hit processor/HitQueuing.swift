@@ -20,6 +20,7 @@ public protocol HitQueuing {
     /// Queues a `DataEntity` to be processed
     /// - Parameters:
     ///   - entity: the entity to be processed
+    /// - Returns: True if queuing the entity was successful, false otherwise
     @discardableResult
     func queue(entity: DataEntity) -> Bool
     
