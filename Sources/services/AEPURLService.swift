@@ -18,11 +18,12 @@ class AEPURLService: URLService {
     ///  Open the resource at the specified URL asynchronously.
     /// - Parameter url: the url to open
     /// - Returns: true if have processed the open url action; otherwise you can override the `URLService` and return false for specific urls which not allowed to open
+    private let LOG_TAG = "AEPURLService"
     func openUrl(_ url: URL) -> Bool {
         DispatchQueue.main.async {
             UIApplication.shared.open(url) { success in
                 if !success {
-                    print("Fail to open url: \(url)")
+                    Log.warning(label: self.LOG_TAG, "Fail to open url: \(url)")
                 }
             }
         }

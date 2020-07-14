@@ -10,11 +10,13 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
+@testable import AEPCore
+import XCTest
 
-/// Interface for open url actions
-public protocol URLService {
-    /// Open url with provided url string
-    /// - Parameter url: the url to open
-    func openUrl(_ url: URL) -> Bool
+class LogLevelTest: XCTestCase {
+    func testLogLevelComparer() throws {
+        XCTAssertTrue(LogLevel.error > LogLevel.warning)
+        XCTAssertTrue(LogLevel.warning > LogLevel.debug)
+        XCTAssertTrue(LogLevel.debug > LogLevel.trace)
+    }
 }

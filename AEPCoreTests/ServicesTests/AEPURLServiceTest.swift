@@ -16,6 +16,10 @@ import XCTest
 class AEPURLServiceTest: XCTestCase {
     private let urlService = AEPServiceProvider.shared.urlService
 
+    override func setUp() {
+        AEPServiceProvider.shared.urlService = AEPURLService()
+    }
+
     public class URLServiceReturnFalse: URLService {
         public func openUrl(_ url: URL) -> Bool {
             return false
@@ -32,10 +36,6 @@ class AEPURLServiceTest: XCTestCase {
         if let url = URL(string: "adobe.com") {
             XCTAssertTrue(urlService.openUrl(url))
         }
-    }
-
-    override func setUp() {
-        AEPServiceProvider.shared.urlService = AEPURLService()
     }
 
     func testOverrideUrlHandlerReturnFalse() throws {

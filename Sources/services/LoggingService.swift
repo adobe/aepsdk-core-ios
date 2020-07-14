@@ -21,11 +21,3 @@ public protocol LoggingService {
     ///   - message: The string message
     func log(level: LogLevel, label: String, message: String)
 }
-
-/// An enum type representing different levels of logging used by the SDK.
-public enum LogLevel: Int {
-    case trace = 1
-    case debug
-    case warning
-    case error
-}
