@@ -16,18 +16,37 @@ class AEPIdentity: Extension {
     
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
-    
-    private let eventQueue = OperationOrderer<EventHandlerMapping>(IdentityConstants.EXTENSION_NAME)
+    var state = IdentityState(identityProperties: IdentityProperties())
     
     // MARK: Extension
-    
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
     }
     
     func onRegistered() {
-        eventQueue.start()
+        registerListener(type: .identity, source: .requestIdentity, listener: handleIdentityRequest)
     }
     
     func onUnregistered() {}
+    
+    func readyForEvent(_ event: Event) -> Bool {
+        if event.isSyncEvent || event.type == .genericIdentity {
+            guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return false }
+            return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
+        }
+        
+        return getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.status == .set
+    }
+    
+    // MARK: Event Listeners
+    
+    private func handleIdentityRequest(event: Event) {
+        
+        if event.isSyncEvent || event.type == .genericIdentity {
+            if let eventData = state.syncIdentifiers(event: event) {
+                createSharedState(data: eventData, event: event)
+            }
+        }
+        // TODO: Handle appendUrl, getUrlVariables, IdentifiersRequest
+    }
 }

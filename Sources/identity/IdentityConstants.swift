@@ -14,6 +14,7 @@ import Foundation
 struct IdentityConstants {
     static let EXTENSION_NAME = "com.adobe.module.identity"
     static let EXTENSION_VERSION = "0.0.1"
+    static let DATASTORE_NAME = EXTENSION_NAME
     
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
     static let DEFAULT_TTL = TimeInterval(600)
@@ -25,6 +26,7 @@ struct IdentityConstants {
     static let KEY_PATH_OPTOUT = "/demoptout.jpg"
     static let DEFAULT_SERVER = "dpm.demdex.net"
     static let CID_DELIMITER = "%01"
+    static let ADID_DSID = "DSID_20915"
     
     struct EventDataKeys {
         static let BASE_URL = "baseurl"
@@ -41,6 +43,11 @@ struct IdentityConstants {
         static let VISITOR_ID_BLOB = "blob"
         static let VISITOR_ID_LOCATION_HINT = "locationhint"
         static let VISITOR_IDS_LAST_SYNC = "lastsync"
+        static let MCPNS_DPID = "20920"
+    }
+    
+    struct DataStoreKeys {
+        static let IDENTITY_PROPERTIES = "identitiesproperties"
     }
     
     struct URLKeys {

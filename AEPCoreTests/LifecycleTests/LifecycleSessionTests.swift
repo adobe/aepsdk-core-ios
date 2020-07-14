@@ -172,7 +172,7 @@ class LifecycleSessionTests: XCTestCase {
         let sessionData = session.getSessionData(startDate: currentDate, sessionTimeout: sessionTimeoutInSeconds, previousSessionInfo: previousSessionInfo)
         
         // verify
-        let expectedData = [LifecycleConstants.Keys.IGNORED_SESSION_LENGTH: "690600"]
+        let expectedData = [LifecycleConstants.EventDataKeys.IGNORED_SESSION_LENGTH: "690600"]
         XCTAssertEqual(expectedData, sessionData)
     }
     
@@ -187,7 +187,7 @@ class LifecycleSessionTests: XCTestCase {
         let sessionData = session.getSessionData(startDate: currentDate, sessionTimeout: sessionTimeoutInSeconds, previousSessionInfo: previousSessionInfo)
         
         // verify
-        let expectedData = [LifecycleConstants.Keys.PREVIOUS_SESSION_LENGTH: "431400"]
+        let expectedData = [LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH: "431400"]
         XCTAssertEqual(expectedData, sessionData)
     }
 

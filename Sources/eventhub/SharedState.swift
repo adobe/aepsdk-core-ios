@@ -83,8 +83,8 @@ class SharedState {
                 }
                 cur = unwrapped.previousNode
             }
-
             return (nil, .none)
+            
         }
     }
 
