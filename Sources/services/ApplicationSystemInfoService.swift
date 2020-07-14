@@ -51,7 +51,6 @@ class ApplicationSystemInfoService: SystemInfoService {
         return nil
     }
     
-    
     func getAsset(fileName: String, fileType: String) -> [UInt8]? {
         if fileName.isEmpty {
             return nil
