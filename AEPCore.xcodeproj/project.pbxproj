@@ -89,7 +89,6 @@
 		21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBBB242491553100C66506 /* NetworkService+Identity.swift */; };
 		3F03976524BE43650019F095 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC9665424B4D7620096F572 /* TestableExtensionRuntime.swift */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
-		3F03979524BE5DD30019F095 /* AEPServicesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03979424BE5DD30019F095 /* AEPServicesTests.swift */; };
 		3F0397C224BE5FF30019F095 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F03979E24BE5FF30019F095 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F0397C324BE5FF30019F095 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* CacheService.swift */; };
 		3F0397C424BE5FF30019F095 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A124BE5FF30019F095 /* Cache.swift */; };
@@ -298,7 +297,6 @@
 		21FBBB242491553100C66506 /* NetworkService+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+Identity.swift"; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F03979424BE5DD30019F095 /* AEPServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPServicesTests.swift; sourceTree = "<group>"; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F03979E24BE5FF30019F095 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		3F0397A024BE5FF30019F095 /* CacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
@@ -668,7 +666,6 @@
 				3F03982824BE62480019F095 /* mocks */,
 				3F03980024BE61520019F095 /* services */,
 				3F03980E24BE61520019F095 /* utility */,
-				3F03979424BE5DD30019F095 /* AEPServicesTests.swift */,
 				3F03979624BE5DD30019F095 /* Info.plist */,
 			);
 			name = AEPServicesTests;
@@ -1203,7 +1200,6 @@
 				3F03981B24BE61520019F095 /* NamedKeyValueServiceTest.swift in Sources */,
 				3F03982E24BE62490019F095 /* MockURLSession.swift in Sources */,
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
-				3F03979524BE5DD30019F095 /* AEPServicesTests.swift in Sources */,
 				3F03981D24BE61520019F095 /* MockSystemInfoService.swift in Sources */,
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
