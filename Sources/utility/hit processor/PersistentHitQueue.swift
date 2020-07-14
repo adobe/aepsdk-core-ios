@@ -16,6 +16,7 @@ public class PersistentHitQueue: HitQueuing {
     let dataQueue: DataQueue
     weak public var delegate: HitProcessable?
     
+    private static let DEFAULT_RETRY_INTERVAL = TimeInterval(30)
     private var suspended = true
     private let queue = DispatchQueue(label: "com.adobe.mobile.hitqueue")
     
@@ -58,7 +59,7 @@ public class PersistentHitQueue: HitQueuing {
                     self?.processNextHit()
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
-                    self?.queue.asyncAfter(deadline: .now() + (self?.delegate?.retryInterval ?? 0)) {
+                    self?.queue.asyncAfter(deadline: .now() + (self?.delegate?.retryInterval ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
                         self?.processNextHit()
                     }
                 }
