@@ -140,6 +140,9 @@
 		BB55A81424B39D3800A23251 /* LoggingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB55A81324B39D3800A23251 /* LoggingService.swift */; };
 		BBB2015824B62334000A3250 /* LogLevelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2015724B62334000A3250 /* LogLevelTest.swift */; };
 		BBB2015A24B624B7000A3250 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2015924B624B7000A3250 /* LogLevel.swift */; };
+		BBB2016124BE1E70000A3250 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2015F24BE1E70000A3250 /* URLService.swift */; };
+		BBB2016224BE1E70000A3250 /* AEPURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2016024BE1E70000A3250 /* AEPURLService.swift */; };
+		BBB2016524BE28BA000A3250 /* AEPURLServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB2016424BE28BA000A3250 /* AEPURLServiceTest.swift */; };
 		BBF4D16B24B5227D00E51CE6 /* AEPLoggingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF4D16A24B5227D00E51CE6 /* AEPLoggingService.swift */; };
 		D4000F122458DE700052C536 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F112458DE700052C536 /* NetworkService.swift */; };
 		D4000F142458DE8E0052C536 /* AEPNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4000F132458DE8E0052C536 /* AEPNetworkService.swift */; };
@@ -297,6 +300,9 @@
 		BB55A81324B39D3800A23251 /* LoggingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingService.swift; sourceTree = "<group>"; };
 		BBB2015724B62334000A3250 /* LogLevelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevelTest.swift; sourceTree = "<group>"; };
 		BBB2015924B624B7000A3250 /* LogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
+		BBB2015F24BE1E70000A3250 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
+		BBB2016024BE1E70000A3250 /* AEPURLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPURLService.swift; sourceTree = "<group>"; };
+		BBB2016424BE28BA000A3250 /* AEPURLServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPURLServiceTest.swift; sourceTree = "<group>"; };
 		BBF4D16A24B5227D00E51CE6 /* AEPLoggingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPLoggingService.swift; sourceTree = "<group>"; };
 		D4000F112458DE700052C536 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		D4000F132458DE8E0052C536 /* AEPNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPNetworkService.swift; sourceTree = "<group>"; };
@@ -584,6 +590,8 @@
 				78D754D42437F92300DB9124 /* NamedKeyValueService.swift */,
 				78D754DA243B7E1900DB9124 /* NamedKeyValueStore.swift */,
 				785220D3245C921D00B46E90 /* NamedUserDefaultKeyValueService.swift */,
+				BBB2016024BE1E70000A3250 /* AEPURLService.swift */,
+				BBB2015F24BE1E70000A3250 /* URLService.swift */,
 				D4000F2A2458E6EE0052C536 /* NetworkService */,
 			);
 			name = services;
@@ -604,6 +612,7 @@
 				BB1D757324A3E09100269B45 /* SQLiteWrapperTests.swift */,
 				BB1D757424A3E09100269B45 /* SystemInfoServiceTest.swift */,
 				2181730424A526600053439A /* DiskCacheServiceTests.swift */,
+				BBB2016424BE28BA000A3250 /* AEPURLServiceTest.swift */,
 				BBB2015724B62334000A3250 /* LogLevelTest.swift */,
 			);
 			path = ServicesTests;
@@ -779,6 +788,7 @@
 				213C8BC8242426DC009F780A /* Extension.swift in Sources */,
 				21CAC0F524229CDB00C11388 /* Event.swift in Sources */,
 				2181948F2489FC97004F869A /* CustomIdentity.swift in Sources */,
+				BBB2016224BE1E70000A3250 /* AEPURLService.swift in Sources */,
 				D4000F122458DE700052C536 /* NetworkService.swift in Sources */,
 				D4000F182458DEB60052C536 /* HttpConnection.swift in Sources */,
 				21F02C322476F49F00D25528 /* LifecycleSession.swift in Sources */,
@@ -824,6 +834,7 @@
 				7861450024BCD5C2004CB317 /* SharedState.swift in Sources */,
 				21CAC0F424229CDB00C11388 /* EventSource.swift in Sources */,
 				7861450824BCD6B9004CB317 /* HttpMethod.swift in Sources */,
+				BBB2016124BE1E70000A3250 /* URLService.swift in Sources */,
 				21FBA5502463DFFF00A2A009 /* ConfigurationConstants.swift in Sources */,
 				214B5223248ABC710034BF22 /* AEPIdentity.swift in Sources */,
 				78DEFEF324509E3C00D7E9FB /* AEPServiceProvider.swift in Sources */,
@@ -878,6 +889,7 @@
 				21CD2B23246C7B7F0041E1A2 /* MockSystemInfoService.swift in Sources */,
 				78E2AC8E247700F400E49D64 /* LifecycleMetricsBuilderTests.swift in Sources */,
 				21F02C2F2476F44300D25528 /* LifecycleSessionTests.swift in Sources */,
+				BBB2016524BE28BA000A3250 /* AEPURLServiceTest.swift in Sources */,
 				214B522A248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift in Sources */,
 				2131A1B42465D81E00F1392D /* EventHub+Testable.swift in Sources */,
 				2137BA152498317500F01D04 /* URL+IdentityTests.swift in Sources */,
