@@ -11,25 +11,21 @@
  */
 
 import Foundation
+import UIKit
 
-/// A concrete implementation of protocol `UIService`
-class AEPUIService: UIService {
-    ///  Open the resource at the specified URL asynchronously, and before that calling `urlHandler`  to determine if the provided `url` should be open.
+/// A concrete implementation of protocol `URLService`
+class AEPURLService: URLService {
+    ///  Open the resource at the specified URL asynchronously.
     /// - Parameter url: the url to open
-    /// - Returns: true if have processed the open url action; false if provided url string is empty or if `urlHandler` will not allow to open provided url
-    func openUrl(_ url: String) -> Bool {
-        guard !url.isEmpty else {
-            print("Fail to open an empty url")
-            return false
+    /// - Returns: true if have processed the open url action; otherwise you can override the `URLService` and return false for specific urls which not allowed to open
+    func openUrl(_ url: URL) -> Bool {
+        DispatchQueue.main.async {
+            UIApplication.shared.open(url) { success in
+                if !success {
+                    print("Fail to open url: \(url)")
+                }
+            }
         }
-        if let result = AEPUrlHandler.urlHandler?(url), !result {
-            print("Fail to open url: \(url), since it's not allowed by urlHandler.")
-            return false
-        }
-        guard let urlType = URL(string: url) else {
-            return false
-        }
-        AEPUrlHandler.openUrl(urlType)
         return true
     }
 }

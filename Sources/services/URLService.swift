@@ -11,23 +11,10 @@
  */
 
 import Foundation
-import UIKit
 
-/// Opens the resource specified by the URL.
-class AEPUrlHandler {
-    public typealias URLHandler = (String) -> Bool
-    /// Set the provided callback with a url string and call this callback function before SDK extension open url action
-    static var urlHandler: URLHandler?
-
-    /// Open the resource at the specified URL asynchronously
+/// Interface for UI components
+public protocol URLService {
+    /// Open url with provided url string
     /// - Parameter url: the url to open
-    static func openUrl(_ url: URL) {
-        DispatchQueue.main.async {
-            UIApplication.shared.open(url) { success in
-                if !success {
-                    print("Fail to open url: \(url)")
-                }
-            }
-        }
-    }
+    func openUrl(_ url: URL) -> Bool
 }
