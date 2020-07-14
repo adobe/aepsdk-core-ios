@@ -103,7 +103,7 @@ class IdentityPropertiesTests: XCTestCase {
         properties.mergeAndCleanCustomerIds(newIds)
         
         // verify
-        XCTAssertEqual(existingIds + newIds, properties.customerIds)
+        XCTAssertEqual(existingIds.count + newIds.count, properties.customerIds!.count)
     }
     
     /// Tests that when two `CustomIdentity`'s have the same value for identifier they are properly merged
