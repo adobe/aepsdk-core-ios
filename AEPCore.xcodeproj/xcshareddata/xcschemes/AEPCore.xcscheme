@@ -40,7 +40,7 @@
             </BuildableReference>
             <SkippedTests>
                <Test
-                  Identifier = "AEPCoreLifecycleTests">
+                  Identifier = "AEPCoreTests/testDispatchEventWithResponseCallbackSimple()">
                </Test>
             </SkippedTests>
          </TestableReference>
