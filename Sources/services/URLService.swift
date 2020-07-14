@@ -12,12 +12,9 @@
 
 import Foundation
 
-/// Represents the interface of the logging service
-public protocol LoggingService {
-    /// Logs a message
-    /// - Parameters:
-    ///   - level: One of the message level identifiers, e.g., DEBUG
-    ///   - label: Name of a label to localize message
-    ///   - message: The string message
-    func log(level: LogLevel, label: String, message: String)
+/// Interface for open url actions
+public protocol URLService {
+    /// Open url with provided url string
+    /// - Parameter url: the url to open
+    @discardableResult func openUrl(_ url: URL) -> Bool
 }

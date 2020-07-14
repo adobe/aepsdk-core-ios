@@ -49,4 +49,18 @@ struct IdentityConstants {
     struct DataStoreKeys {
         static let IDENTITY_PROPERTIES = "identitiesproperties"
     }
+    
+    struct URLKeys {
+        static let VISITOR_TIMESTAMP_KEY = "TS"
+        static let VISITOR_PAYLOAD_MARKETING_CLOUD_ID_KEY = "MCMID"
+        static let VISITOR_PAYLOAD_KEY = "adobe_mc"
+        static let VISITOR_PAYLOAD_MARKETING_CLOUD_ORG_ID = "MCORGID"
+        static let VISITOR_PAYLOAD_ANALYTICS_ID_KEY = "MCAID"
+        static let ANALYTICS_PAYLOAD_KEY = "adobe_aa_vid"
+    }
+    
+    struct Analytics {
+        static let ANALYTICS_ID = "aid"
+        static let VISITOR_IDENTIFIER  = "vid"
+    }
 }

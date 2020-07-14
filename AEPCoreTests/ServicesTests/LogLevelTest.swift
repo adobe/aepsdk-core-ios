@@ -10,14 +10,13 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
+@testable import AEPCore
+import XCTest
 
-/// Represents the interface of the logging service
-public protocol LoggingService {
-    /// Logs a message
-    /// - Parameters:
-    ///   - level: One of the message level identifiers, e.g., DEBUG
-    ///   - label: Name of a label to localize message
-    ///   - message: The string message
-    func log(level: LogLevel, label: String, message: String)
+class LogLevelTest: XCTestCase {
+    func testLogLevelComparer() throws {
+        XCTAssertTrue(LogLevel.error > LogLevel.warning)
+        XCTAssertTrue(LogLevel.warning > LogLevel.debug)
+        XCTAssertTrue(LogLevel.debug > LogLevel.trace)
+    }
 }

@@ -27,6 +27,9 @@ public class AEPServiceProvider {
     private var defaultDataQueueService = AEPDataQueueService.shared
     private var overrideCacheService: CacheService?
     private var defaultCacheService = DiskCacheService()
+    private var overrideURLService: URLService?
+    private var defaultURLService = AEPURLService()
+    private var defaultLoggingService = AEPLoggingService()
 
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
@@ -84,6 +87,25 @@ public class AEPServiceProvider {
             queue.async {
                 self.overrideCacheService = newValue
             }
+        }
+    }
+
+    public var urlService: URLService {
+        get {
+            return queue.sync {
+                return overrideURLService ?? defaultURLService
+            }
+        }
+        set {
+            queue.async {
+                self.overrideURLService = newValue
+            }
+        }
+    }
+
+    public var loggingService: LoggingService {
+        return queue.sync {
+            return defaultLoggingService
         }
     }
 }
