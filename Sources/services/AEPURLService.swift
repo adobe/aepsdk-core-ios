@@ -19,7 +19,7 @@ class AEPURLService: URLService {
     /// - Parameter url: the url to open
     /// - Returns: true if have processed the open url action; otherwise you can override the `URLService` and return false for specific urls which not allowed to open
     private let LOG_TAG = "AEPURLService"
-    func openUrl(_ url: URL) -> Bool {
+    @discardableResult func openUrl(_ url: URL) -> Bool {
         DispatchQueue.main.async {
             UIApplication.shared.open(url) { success in
                 if !success {

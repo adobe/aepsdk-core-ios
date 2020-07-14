@@ -16,5 +16,5 @@ import Foundation
 public protocol URLService {
     /// Open url with provided url string
     /// - Parameter url: the url to open
-    func openUrl(_ url: URL) -> Bool
+    @discardableResult func openUrl(_ url: URL) -> Bool
 }
