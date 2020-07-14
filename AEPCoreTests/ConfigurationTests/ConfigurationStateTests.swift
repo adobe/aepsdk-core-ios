@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+import AEPServices
 
 class ConfigurationStateTests: XCTestCase {
     var configState: ConfigurationState!
@@ -376,7 +377,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual(1, configState.currentConfiguration.count)
         XCTAssertEqual("testVal", configState.currentConfiguration["testKey"] as! String)
         XCTAssertEqual(1, configState.programmaticConfigInDataStore.count)
-        XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.stringValue)
+        XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.value as? String)
         XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
     }
     

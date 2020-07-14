@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 public typealias EventListener = (Event) -> Void
 public typealias EventResponseListener = (Event?) -> Void

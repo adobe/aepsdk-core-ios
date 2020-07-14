@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// A type for managing Lifecycle sessions
 struct LifecycleSession {

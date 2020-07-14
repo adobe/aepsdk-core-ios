@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 @testable import AEPCore
+@testable import AEPServices
 
 class MockDataQueue: DataQueue {
     let queue = ThreadSafeArray<DataEntity>()

@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 class AEPLifecycle: Extension {
     let name = LifecycleConstants.EXTENSION_NAME

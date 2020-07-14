@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// Defines a type which fetches configuration from various locations
 protocol ConfigurationDownloadable {
