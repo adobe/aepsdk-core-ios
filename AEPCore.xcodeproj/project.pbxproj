@@ -102,6 +102,8 @@
 		21FBA5502463DFFF00A2A009 /* ConfigurationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBA54F2463DFFF00A2A009 /* ConfigurationConstants.swift */; };
 		21FBA5522463E55200A2A009 /* AEPConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBA5512463E55200A2A009 /* AEPConfiguration.swift */; };
 		21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBBB242491553100C66506 /* NetworkService+Identity.swift */; };
+		3F03976524BE43650019F095 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC9665424B4D7620096F572 /* TestableExtensionRuntime.swift */; };
+		3FC9665324B3E4EE0096F572 /* ExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */; };
 		7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742E24294249005CCC73 /* SharedStateTest.swift */; };
 		76850D18242EDE58003922F4 /* OperationOrdererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D17242EDE58003922F4 /* OperationOrdererTests.swift */; };
 		76850D1A24313181003922F4 /* OperationOrderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76850D1924313181003922F4 /* OperationOrderer.swift */; };
@@ -268,6 +270,8 @@
 		21FBA54F2463DFFF00A2A009 /* ConfigurationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConfigurationConstants.swift; path = Sources/configuration/ConfigurationConstants.swift; sourceTree = SOURCE_ROOT; };
 		21FBA5512463E55200A2A009 /* AEPConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AEPConfiguration.swift; path = Sources/configuration/AEPConfiguration.swift; sourceTree = SOURCE_ROOT; };
 		21FBBB242491553100C66506 /* NetworkService+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+Identity.swift"; sourceTree = "<group>"; };
+		3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionRuntime.swift; sourceTree = "<group>"; };
+		3FC9665424B4D7620096F572 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		7629742E24294249005CCC73 /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
 		76850D17242EDE58003922F4 /* OperationOrdererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationOrdererTests.swift; sourceTree = "<group>"; };
 		76850D1924313181003922F4 /* OperationOrderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationOrderer.swift; sourceTree = "<group>"; };
@@ -353,6 +357,7 @@
 				215AA6202465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift */,
 				218208EC247EED6D003D3591 /* ConfigurationFunctionalTests.swift */,
 				21649562249BECE600B24F81 /* MobileIdentitiesTests.swift */,
+				3FC9665424B4D7620096F572 /* TestableExtensionRuntime.swift */,
 			);
 			path = ConfigurationTests;
 			sourceTree = "<group>";
@@ -527,6 +532,7 @@
 				213C8BD62428822A009F780A /* EventListenerContainer.swift */,
 				21DB708C242AAD3D00568A4C /* ExtensionContainer.swift */,
 				213C8BC7242426DC009F780A /* Extension.swift */,
+				3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */,
 			);
 			name = "Event Hub";
 			path = Sources/eventhub;
@@ -835,6 +841,7 @@
 				BB1D756824A3E07F00269B45 /* DataQueue.swift in Sources */,
 				2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */,
 				BB55A81424B39D3800A23251 /* LoggingService.swift in Sources */,
+				3FC9665324B3E4EE0096F572 /* ExtensionRuntime.swift in Sources */,
 				BB1D756D24A3E07F00269B45 /* SQLiteWrapper.swift in Sources */,
 				216CD93524BE2D1A00C4E060 /* Event+Lifecycle.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
@@ -907,6 +914,7 @@
 				21F02C3A247707D800D25528 /* LaunchIDManagerTests.swift in Sources */,
 				215AA6212465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift in Sources */,
 				D4000F2C2458E8350052C536 /* MockNetworkServiceOverrider.swift in Sources */,
+				3F03976524BE43650019F095 /* TestableExtensionRuntime.swift in Sources */,
 				21C754B324785E52007B8871 /* ThreadSafeDictionaryTests.swift in Sources */,
 				BB1D757C24A3E09100269B45 /* SQLiteWrapperTests.swift in Sources */,
 				BB1D757724A3E09100269B45 /* AEPDataQueueService+Testable.swift in Sources */,

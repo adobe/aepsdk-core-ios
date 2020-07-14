@@ -14,13 +14,16 @@ import Foundation
 class AEPLifecycle: Extension {
     let name = LifecycleConstants.EXTENSION_NAME
     let version = LifecycleConstants.EXTENSION_VERSION
-    
+
+    let runtime: ExtensionRuntime
+
     private var lifecycleState: LifecycleState
     
     // MARK: Extension
     
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
-    required init() {
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
         lifecycleState = LifecycleState(dataStore: NamedKeyValueStore(name: name))
     }
     

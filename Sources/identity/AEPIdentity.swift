@@ -12,12 +12,15 @@ governing permissions and limitations under the License.
 import Foundation
 
 class AEPIdentity: Extension {
+    let runtime: ExtensionRuntime
+    
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
     var state = IdentityState(identityProperties: IdentityProperties())
     
     // MARK: Extension
-    required init() {
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
     }
     
     func onRegistered() {
