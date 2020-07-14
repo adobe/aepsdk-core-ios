@@ -27,7 +27,6 @@ class AEPLifecycle: Extension {
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
     func onRegistered() {
         registerListener(type: .genericLifecycle, source: .requestContent, listener: receiveLifecycleRequest(event:))
-        registerListener(type: .hub, source: .sharedState, listener: receiveSharedState(event:))
         
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String : Any], event: nil)
@@ -55,16 +54,6 @@ class AEPLifecycle: Extension {
             start(event: event, configurationSharedState: configurationSharedState)
         } else if event.isLifecyclePauseEvent {
             lifecycleState.pause(pauseDate: event.timestamp)
-        }
-    }
-    
-    /// Invoked when the `EventHub` dispatches a shared state event. If the shared state owner is Configuration we trigger the internal `eventQueue`.
-    /// - Parameter event: The shared state event
-    private func receiveSharedState(event: Event) {
-        guard let stateOwner = event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String else { return }
-
-        if stateOwner == ConfigurationConstants.EXTENSION_NAME {
-            startEvents()
         }
     }
     

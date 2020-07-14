@@ -57,7 +57,6 @@
 		21649561249BD24E00B24F81 /* MobileIdentities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21649560249BD24E00B24F81 /* MobileIdentities.swift */; };
 		21649563249BECE600B24F81 /* MobileIdentitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21649562249BECE600B24F81 /* MobileIdentitiesTests.swift */; };
 		2179F183246490140004A7C0 /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DA92461CA3F009D05BF /* Lifecycle.swift */; };
-		2179F1842464901A0004A7C0 /* Event+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DAD2461CABE009D05BF /* Event+Lifecycle.swift */; };
 		2181730524A526600053439A /* DiskCacheServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181730424A526600053439A /* DiskCacheServiceTests.swift */; };
 		2181947E2489CFEF004F869A /* LifecycleContextDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181947D2489CFEF004F869A /* LifecycleContextDataTests.swift */; };
 		218194832489D3B7004F869A /* LifecycleFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218194822489D3B7004F869A /* LifecycleFunctionalTests.swift */; };
@@ -815,8 +814,6 @@
 				BB1D756824A3E07F00269B45 /* DataQueue.swift in Sources */,
 				2157952024A2A9FE0012ED28 /* DiskCacheService.swift in Sources */,
 				BB55A81424B39D3800A23251 /* LoggingService.swift in Sources */,
-				2179F1842464901A0004A7C0 /* AEPLifecycle.swift in Sources */,
-				2179F1842464901A0004A7C0 /* Event+Lifecycle.swift in Sources */,
 				BB1D756D24A3E07F00269B45 /* SQLiteWrapper.swift in Sources */,
 				21DB708D242AAD3D00568A4C /* ExtensionContainer.swift in Sources */,
 				21172895249177FC00BB7BD3 /* Identifiable.swift in Sources */,
