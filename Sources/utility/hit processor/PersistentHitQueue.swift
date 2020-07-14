@@ -53,11 +53,15 @@ public class PersistentHitQueue: HitQueuing {
             
             self.delegate?.processHit(entity: hit, completion: { [weak self] (success) in
                 if success {
-                    // successful processing of hit, remove it from the queue, if failed leave in queue to be retried
+                    // successful processing of hit, remove it from the queue, move to next hit
                     let _ = self?.dataQueue.remove()
+                    self?.processNextHit()
+                } else {
+                    // processing hit failed, leave it in the queue, retry after the retry interval
+                    self?.queue.asyncAfter(deadline: .now() + (self?.delegate?.retryInterval ?? 0)) {
+                        self?.processNextHit()
+                    }
                 }
-                
-                self?.processNextHit()
             })
         }
     }

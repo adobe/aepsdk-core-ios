@@ -14,6 +14,9 @@ import Foundation
 /// A class of types who provide the functionality for processing hits
 public protocol HitProcessable: class {
     
+    /// Defines the interval at which hits should be retried if failed
+    var retryInterval: TimeInterval { get }
+    
     /// Function that is invoked with a `DataEntity` and provides functionality for processing the hit
     /// - Parameters:
     ///   - entity: The `DataEntity` to be processed

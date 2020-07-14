@@ -173,6 +173,8 @@ class PersistentHitQueueTests: XCTestCase {
 }
 
 class MockHitProcessor: HitProcessable {
+    var retryInterval: TimeInterval = 1
+    
     let processedHits = ThreadSafeArray<DataEntity>()
     
     func processHit(entity: DataEntity, completion: (Bool) -> ()) {
@@ -182,6 +184,8 @@ class MockHitProcessor: HitProcessable {
 }
 
 class MockHitIntermittentProcessor: HitProcessable {
+    var retryInterval: TimeInterval = 0
+    
     let processedHits = ThreadSafeArray<DataEntity>()
     var failedHits = Set<String>()
     
