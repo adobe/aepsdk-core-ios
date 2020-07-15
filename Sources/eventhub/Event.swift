@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// An Event to be dispatched by the Event Hub
 public struct Event {

@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// Contains an `Extension` and additional information related to the extension
 class ExtensionContainer {

@@ -10,6 +10,7 @@
  */
 
 import Foundation
+import AEPServices
 
 // Builds the LifecycleMetricsData and handles Lifecycle metrics data storage updates
 class LifecycleMetricsBuilder {
