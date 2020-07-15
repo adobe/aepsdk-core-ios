@@ -371,7 +371,7 @@
 		3F03983524BE62AA0019F095 /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
 		3F03983624BE62AA0019F095 /* ADBMobileConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
-		3F03984324BE65A80019F095 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MockSystemInfoService.swift; path = AEPCoreTests/TestHelpers/MockSystemInfoService.swift; sourceTree = "<group>"; };
+		3F03984324BE65A80019F095 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSystemInfoService.swift; sourceTree = "<group>"; };
 		3F03984524BE65B10019F095 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockSystemInfoService.swift; sourceTree = "<group>"; };
 		3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionRuntime.swift; sourceTree = "<group>"; };
 		3FC9665424B4D7620096F572 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
@@ -442,6 +442,7 @@
 			isa = PBXGroup;
 			children = (
 				3F03984524BE65B10019F095 /* MockSystemInfoService.swift */,
+				3F03984324BE65A80019F095 /* MockSystemInfoService.swift */,
 				2131A1B32465D81E00F1392D /* EventHub+Testable.swift */,
 				213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */,
 				D4000F242458E10D0052C536 /* MockURLSession.swift */,
@@ -532,7 +533,6 @@
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
-				3F03984324BE65A80019F095 /* MockSystemInfoService.swift */,
 				21CAC0D82422917600C11388 /* AEPCore */,
 				21CAC0E32422917600C11388 /* AEPCoreTests */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
