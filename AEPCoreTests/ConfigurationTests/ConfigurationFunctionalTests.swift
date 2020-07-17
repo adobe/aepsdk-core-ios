@@ -18,7 +18,7 @@ import AEPServices
 class ConfigurationFunctionalTests: XCTestCase {
     
     override func setUp() {
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
         AEPServiceProvider.shared.systemInfoService = MockSystemInfoService()
         AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
         MockExtension.reset()
@@ -421,7 +421,7 @@ class ConfigurationFunctionalTests: XCTestCase {
     /// When network service returns a valid response configure with appId succeeds
     func testConfigureWithAppId() {
         // setup
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: true)
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         AEPServiceProvider.shared.networkService = mockNetworkService
 
         let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
@@ -451,7 +451,7 @@ class ConfigurationFunctionalTests: XCTestCase {
     /// Tests that we can re-try network requests, and it will succeed when the network comes back online
     func testConfigureWithAppIdNetworkDownThenComesOnline() {
         // setup
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .error)
         AEPServiceProvider.shared.networkService = mockNetworkService
 
         let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
@@ -467,7 +467,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         // test
         AEPCore.configureWith(appId: "invalid-app-id")
         sleep(5) // give some time for the first network request to fail
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: true) // setup a valid network response
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success) // setup a valid network response
         AEPCore.configureWith(appId: "valid-app-id")
 
         // verify
