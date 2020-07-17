@@ -65,7 +65,6 @@ class IdentityHitResponseTests: XCTestCase {
         // test
         let response = try! JSONDecoder().decode(IdentityHitResponse.self, from: jsonStr.data(using: .utf8)!)
 
-
         // verify
         XCTAssertNil(response.mid)
         XCTAssertNil(response.optOutList)
