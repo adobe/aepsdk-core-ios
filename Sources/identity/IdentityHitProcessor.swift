@@ -58,11 +58,11 @@ class IdentityHitProcessor: HitProcessable {
             completion(true)
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
-            Log.error(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url %s failed with error %s and recoverable status code %d", hit.url.absoluteString, connection.error?.localizedDescription ?? "", connection.responseCode ?? -1)
+            Log.warning(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url %s failed with error %s and recoverable status code %d", hit.url.absoluteString, connection.error?.localizedDescription ?? "", connection.responseCode ?? -1)
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
-            Log.error(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, request with url %s failed with error %s and status code %d", hit.url.absoluteString, connection.error?.localizedDescription ?? "", connection.responseCode ?? -1)
+            Log.warning(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, request with url %s failed with error %s and status code %d", hit.url.absoluteString, connection.error?.localizedDescription ?? "", connection.responseCode ?? -1)
             responseHandler(entity, connection.data)
             completion(true)
         }
