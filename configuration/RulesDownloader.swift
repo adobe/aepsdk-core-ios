@@ -18,6 +18,7 @@ import AEPServices
 ///
 struct RulesDownloader: RulesLoader {
     private let cacheService = AEPServiceProvider.shared.cacheService
+    private let loggingService = AEPServiceProvider.shared.loggingService
     
     enum RulesDownloaderError: Error {
         case unableToCreateTempDirectory
@@ -49,12 +50,12 @@ struct RulesDownloader: RulesLoader {
                         if self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
                             completion(AnyCodable.toAnyDictionary(dictionary: rulesDict))
                         } else {
-                            // TODO: - Log error setting cached rules here
+                            self.loggingService.log(level: .warning, label: "rules downloader", message: "Unable to cache rules")
                             completion(nil)
                         }
                     }
-                case .failure(_):
-                    // TODO: - Log error here
+                case .failure(let error):
+                    self.loggingService.log(level: .warning, label: "rules downloader", message: error.localizedDescription)
                     completion(nil)
                 }
             } else if httpConnection.responseCode == 304 {

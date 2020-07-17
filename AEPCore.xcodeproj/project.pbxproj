@@ -172,6 +172,7 @@
 		7861450D24BE166D004CB317 /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861450C24BE166D004CB317 /* RulesDownloader.swift */; };
 		7861451224C23432004CB317 /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451124C23432004CB317 /* RulesLoader.swift */; };
 		7861451324C25726004CB317 /* CachedRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861450F24C233D0004CB317 /* CachedRules.swift */; };
+		7861451524C259DE004CB317 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451424C259DE004CB317 /* RulesDownloaderTests.swift */; };
 		7869CDFB24BCC13F00128625 /* LifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
@@ -386,6 +387,7 @@
 		7861450C24BE166D004CB317 /* RulesDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RulesDownloader.swift; path = configuration/RulesDownloader.swift; sourceTree = SOURCE_ROOT; };
 		7861450F24C233D0004CB317 /* CachedRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedRules.swift; sourceTree = "<group>"; };
 		7861451124C23432004CB317 /* RulesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
+		7861451424C259DE004CB317 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
 		7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifecycleMetricsBuilder.swift; path = Sources/Lifecycle/LifecycleMetricsBuilder.swift; sourceTree = SOURCE_ROOT; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78D754F1244511D100DB9124 /* TestConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
@@ -442,6 +444,7 @@
 				218208EC247EED6D003D3591 /* ConfigurationFunctionalTests.swift */,
 				21649562249BECE600B24F81 /* MobileIdentitiesTests.swift */,
 				3FC9665424B4D7620096F572 /* TestableExtensionRuntime.swift */,
+				7861451424C259DE004CB317 /* RulesDownloaderTests.swift */,
 			);
 			path = ConfigurationTests;
 			sourceTree = "<group>";
@@ -1119,6 +1122,7 @@
 				21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */,
 				2137BA172498318300F01D04 /* URLQueryItem+IdentityTests.swift in Sources */,
 				2182778F24B79320005A468A /* URLAppenderTests.swift in Sources */,
+				7861451524C259DE004CB317 /* RulesDownloaderTests.swift in Sources */,
 				21649563249BECE600B24F81 /* MobileIdentitiesTests.swift in Sources */,
 				21F9174C2433E429000743E3 /* MockExtensionTwo.swift in Sources */,
 				21ABCAF324B39073008C4EDF /* MockDataStore.swift in Sources */,
