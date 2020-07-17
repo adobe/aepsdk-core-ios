@@ -104,6 +104,7 @@
 		7861450024BCD5C2004CB317 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786144FF24BCD5C1004CB317 /* SharedState.swift */; };
 		7861450624BCD6A1004CB317 /* EventHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861450524BCD6A1004CB317 /* EventHub.swift */; };
 		7861450824BCD6B9004CB317 /* HttpMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861450724BCD6B9004CB317 /* HttpMethod.swift */; };
+		7861450D24BE166D004CB317 /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861450C24BE166D004CB317 /* RulesDownloader.swift */; };
 		7869CDFB24BCC13F00128625 /* LifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */; };
 		7869CE0124BCC21D00128625 /* FileUnzipperConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869CDFC24BCC21D00128625 /* FileUnzipperConstants.swift */; };
 		7869CE0224BCC21D00128625 /* FileManager+ZIP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869CDFD24BCC21D00128625 /* FileManager+ZIP.swift */; };
@@ -260,6 +261,7 @@
 		786144FF24BCD5C1004CB317 /* SharedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedState.swift; sourceTree = "<group>"; };
 		7861450524BCD6A1004CB317 /* EventHub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHub.swift; sourceTree = "<group>"; };
 		7861450724BCD6B9004CB317 /* HttpMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpMethod.swift; sourceTree = "<group>"; };
+		7861450C24BE166D004CB317 /* RulesDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RulesDownloader.swift; path = Rules/RulesDownloader.swift; sourceTree = SOURCE_ROOT; };
 		7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifecycleMetricsBuilder.swift; path = Sources/Lifecycle/LifecycleMetricsBuilder.swift; sourceTree = SOURCE_ROOT; };
 		7869CDFC24BCC21D00128625 /* FileUnzipperConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileUnzipperConstants.swift; path = Sources/utility/unzip/FileUnzipperConstants.swift; sourceTree = SOURCE_ROOT; };
 		7869CDFD24BCC21D00128625 /* FileManager+ZIP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "FileManager+ZIP.swift"; path = "Sources/utility/unzip/FileManager+ZIP.swift"; sourceTree = SOURCE_ROOT; };
@@ -453,6 +455,7 @@
 				213F662D2492A36A000184DE /* AEPError.swift */,
 				218194892489F65D004F869A /* identity */,
 				21629DA82461C8EC009D05BF /* Lifecycle */,
+				7861450E24BE1678004CB317 /* Rules */,
 				21FBA5482463DFA100A2A009 /* configuration */,
 				78D754D32437F92300DB9124 /* services */,
 				76297427242941EE005CCC73 /* utility */,
@@ -557,6 +560,14 @@
 				78A642582486DABB004B4E46 /* ThreadSafeArrayTests.swift */,
 			);
 			path = UtilityTests;
+			sourceTree = "<group>";
+		};
+		7861450E24BE1678004CB317 /* Rules */ = {
+			isa = PBXGroup;
+			children = (
+				7861450C24BE166D004CB317 /* RulesDownloader.swift */,
+			);
+			path = Rules;
 			sourceTree = "<group>";
 		};
 		78A64263249020C2004B4E46 /* unzip */ = {
@@ -836,6 +847,7 @@
 				215AA61F2465DFF900CEB4F4 /* ConfigurationDownloader.swift in Sources */,
 				21FBA54C2463DFDB00A2A009 /* AEPCore+Configuration.swift in Sources */,
 				21F02C342477066800D25528 /* ConfigurationState.swift in Sources */,
+				7861450D24BE166D004CB317 /* RulesDownloader.swift in Sources */,
 				7861450624BCD6A1004CB317 /* EventHub.swift in Sources */,
 				218CAD7524744A6D004DA1E8 /* NetworkServiceConstants.swift in Sources */,
 				2137BA132498314000F01D04 /* URL+Identity.swift in Sources */,
