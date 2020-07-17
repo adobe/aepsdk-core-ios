@@ -20,5 +20,11 @@ public struct NetworkServiceConstants {
         public static let IF_NONE_MATCH = "If-None-Match"
         public static let LAST_MODIFIED = "Last-Modified"
         public static let ETAG = "Etag"
+        public static let CONTENT_TYPE = "Content-Type"
     }
+    
+    public struct HeaderValues {
+        public static let CONTENT_TYPE_URL_ENCODED = "application/x-www-form-urlencoded"
+    }
+    
 }

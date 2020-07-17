@@ -36,7 +36,8 @@ class IdentityHitProcessor: HitProcessable {
             return
         }
 
-        let networkRequest = NetworkRequest(url: identityHit.url)
+        let headers = [NetworkServiceConstants.Headers.CONTENT_TYPE: NetworkServiceConstants.HeaderValues.CONTENT_TYPE_URL_ENCODED]
+        let networkRequest = NetworkRequest(url: identityHit.url, httpMethod: .get, connectPayload: "", httpHeaders: headers, connectTimeout: IdentityConstants.DEFAULT_TIMEOUT, readTimeout: IdentityConstants.DEFAULT_TIMEOUT)
         networkService.connectAsync(networkRequest: networkRequest) { (connection) in
             self.handleNetworkResponse(entity: entity, hit: identityHit, connection: connection, completion: completion)
         }
