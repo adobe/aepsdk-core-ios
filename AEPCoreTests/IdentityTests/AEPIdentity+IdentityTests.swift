@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPCore
 
-class AEPIdentityTests: XCTestCase {
+class AEPIdentityAPITests: XCTestCase {
 
     override func setUp() {
         EventHub.reset()

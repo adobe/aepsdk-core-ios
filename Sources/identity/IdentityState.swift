@@ -14,7 +14,7 @@ import Foundation
 /// Manages the business logic of the Identity extension
 struct IdentityState {
     
-    private var identityProperties: IdentityProperties
+    private(set) var identityProperties: IdentityProperties
     #if DEBUG
     var lastValidConfig: [String: Any] = [:]
     #else
