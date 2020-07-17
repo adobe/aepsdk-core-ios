@@ -13,6 +13,8 @@ governing permissions and limitations under the License.
 import Foundation
 
 public struct NetworkServiceConstants {
+    public static let RECOVERABLE_ERROR_CODES = [408, 504, 503]
+    
     public struct Headers {
         public static let IF_MODIFIED_SINCE_HEADER = "If-Modified-Since"
         public static let IF_NONE_MATCH = "If-None-Match"
