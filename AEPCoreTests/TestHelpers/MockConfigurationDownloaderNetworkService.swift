@@ -14,10 +14,15 @@ import Foundation
 @testable import AEPCore
 import AEPServices
 
+enum MockConfigurationDownloaderResponses {
+    case success
+    case error
+    case notModified
+}
+
 struct MockConfigurationDownloaderNetworkService: NetworkService {
-    let shouldReturnValidResponse: Bool
     let validResponseDictSize = 16
-    
+    let responseType: MockConfigurationDownloaderResponses!
     let expectedData = """
                         {
                           "target.timeout": 5,
@@ -41,15 +46,24 @@ struct MockConfigurationDownloaderNetworkService: NetworkService {
     
     let expectedValidHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
     let expectedInValidHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 500, httpVersion: nil, headerFields: [:])
+    let expectedNotModifiedHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 304, httpVersion: nil, headerFields: [:])
     
     func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
-        if shouldReturnValidResponse {
+        
+        switch responseType {
+        case .success:
             let httpConnection = HttpConnection(data: expectedData, response: expectedValidHttpUrlResponse, error: nil)
             completionHandler!(httpConnection)
-        } else {
+        case .error:
             let httpConnection = HttpConnection(data: nil, response: expectedInValidHttpUrlResponse, error: NetworkServiceError.invalidUrl)
             completionHandler!(httpConnection)
+        case .notModified:
+            let httpConnection = HttpConnection(data: nil, response: expectedNotModifiedHttpUrlResponse, error: nil)
+            completionHandler!(httpConnection)
+        case .none:
+            print("invalid response type")
         }
+        
     }
     
 }
