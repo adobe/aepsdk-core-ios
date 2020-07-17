@@ -85,10 +85,10 @@ extension Event: Decodable, Encodable {
         id = try values.decode(UUID.self, forKey: .id)
         type = try values.decode(EventType.self, forKey: .type)
         source = try values.decode(EventSource.self, forKey: .source)
-        let anyCodableDict = try values.decode([String: AnyCodable].self, forKey: .data)
+        let anyCodableDict = try? values.decode([String: AnyCodable].self, forKey: .data)
         data = AnyCodable.toAnyDictionary(dictionary: anyCodableDict)
         timestamp = try values.decode(Date.self, forKey: .timestamp)
-        responseID = try values.decode(UUID.self, forKey: .responseID)
+        responseID = try? values.decode(UUID.self, forKey: .responseID)
     }
     
     public func encode(to encoder: Encoder) throws {
