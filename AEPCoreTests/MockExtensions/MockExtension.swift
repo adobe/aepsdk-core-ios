@@ -56,6 +56,9 @@ class MockExtension: TestableExtension {
     static var unregistrationClosure: (() -> Void)? = nil
     static var eventReceivedClosure: ((Event) -> Void)? = nil
     
-    required init() {
+    let runtime: ExtensionRuntime
+    
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
     }
 }

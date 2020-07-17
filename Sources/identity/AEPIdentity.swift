@@ -12,19 +12,74 @@ governing permissions and limitations under the License.
 import Foundation
 
 class AEPIdentity: Extension {
+    let runtime: ExtensionRuntime
+    
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
-    
-    private let eventQueue = OperationOrderer<EventHandlerMapping>(IdentityConstants.EXTENSION_NAME)
+    var state = IdentityState(identityProperties: IdentityProperties())
     
     // MARK: Extension
-    required init() {
-        eventQueue.setHandler({ return $0.handler($0.event) })
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
     }
     
     func onRegistered() {
-        eventQueue.start()
+        registerListener(type: .identity, source: .requestIdentity, listener: handleIdentityRequest)
     }
     
     func onUnregistered() {}
+    
+    func readyForEvent(_ event: Event) -> Bool {
+        if event.isSyncEvent || event.type == .genericIdentity {
+            guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return false }
+            return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
+        }
+        
+        return getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.status == .set
+    }
+    
+    // MARK: Event Listeners
+    
+    private func handleIdentityRequest(event: Event) {
+        if event.isSyncEvent || event.type == .genericIdentity {
+            if let eventData = state.syncIdentifiers(event: event) {
+                createSharedState(data: eventData, event: event)
+            }
+        } else if let baseUrl = event.baseUrl {
+            processAppendToUrl(baseUrl: baseUrl, event: event)
+        } else if event.urlVariables {
+            processGetUrlVariables(event: event)
+        } else {
+            processIdentifiersRequest(event: event)
+        }
+    }
+    
+    // MARK: Event Handlers
+    private func processAppendToUrl(baseUrl: String, event: Event) {
+        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return }
+        let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
+        let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: state.identityProperties)
+
+        // dispatch identity response event with updated url
+        let responseEvent = event.createResponseEvent(name: "Identity Appended URL", type: .identity, source: .responseIdentity, data: [IdentityConstants.EventDataKeys.UPDATED_URL: updatedUrl])
+        dispatch(event: responseEvent)
+    }
+
+    private func processGetUrlVariables(event: Event) {
+        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return }
+        let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
+        let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: state.identityProperties)
+
+        // dispatch identity response event with url variables
+        let responseEvent = event.createResponseEvent(name: "Identity URL Variables", type: .identity, source: .responseIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: urlVariables])
+        dispatch(event: responseEvent)
+    }
+
+    private func processIdentifiersRequest(event: Event) {
+        let eventData = state.identityProperties.toEventData()
+        let responseEvent = event.createResponseEvent(name: "Identity Response Content", type: .identity, source: .responseIdentity, data: eventData)
+
+        // dispatch identity response event with shared state data
+        dispatch(event: responseEvent)
+    }
 }

@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// Manages the business logic of the Lifecycle extension
 struct LifecycleState {

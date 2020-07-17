@@ -10,9 +10,11 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
 class AEPConfiguration: Extension {
+    let runtime: ExtensionRuntime
     var name = ConfigurationConstants.EXTENSION_NAME
     var version = ConfigurationConstants.EXTENSION_VERSION
 
@@ -24,7 +26,8 @@ class AEPConfiguration: Extension {
     // MARK: Extension
 
     /// Initializes the Configuration extension and it's dependencies
-    required init() {
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
     }
@@ -41,7 +44,7 @@ class AEPConfiguration: Extension {
         if let appId = appIdManager.loadAppId(), !appId.isEmpty {
             dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
         }
-
+        
         configState.loadInitialConfig()
         if !configState.environmentAwareConfiguration.isEmpty {
             let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.environmentAwareConfiguration)

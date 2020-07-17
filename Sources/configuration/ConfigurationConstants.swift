@@ -36,6 +36,7 @@ struct ConfigurationConstants {
         static let ALL_IDENTIFIERS = "config.allidentifiers"
         static let BUILD_ENVIRONMENT = "build.environment"
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
+        static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
     }
 
     struct Privacy {

@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+import AEPServices
 
 /// Functional tests for the Configuration extension
 class ConfigurationFunctionalTests: XCTestCase {
@@ -81,6 +82,38 @@ class ConfigurationFunctionalTests: XCTestCase {
         // verify
         wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
     }
+    
+    
+    /// Tests the happy path with for updating the config with a dict
+    func testUpdateConfigurationWithDict_New() {
+        // setup
+        let runtime = TestableExtensionRuntime()
+        let configuration = AEPConfiguration.init(runtime: runtime)
+        configuration.onRegistered()
+        XCTAssertEqual(1, runtime.createdSharedStates.count)
+        
+        // test
+        let configUpdate = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
+        let configUpdateEvent = Event(name: "Configuration Update", type: .configuration, source: .requestContent,
+                                 data: [ConfigurationConstants.Keys.UPDATE_CONFIG: configUpdate])
+        runtime.simulateComingEvent(event: configUpdateEvent)
+        
+        // verify
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        XCTAssertEqual(2, runtime.createdSharedStates.count)
+        
+        // verify response event
+        let dispatchedEvent = runtime.dispatchedEvents[0]
+         XCTAssertEqual(dispatchedEvent.type, EventType.configuration)
+        XCTAssertEqual(dispatchedEvent.source, EventSource.responseContent)
+        XCTAssertNotNil(dispatchedEvent.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any])
+        
+        // verify share state update
+        let newSharedState = runtime.createdSharedStates[1]
+        XCTAssertEqual("optedout", newSharedState?["global.privacy"] as! String)
+        
+    }
+    
     
     /// Tests the happy path with updating the config multiple times with a dict
     func testUpdateConfigurationWithDictTwice() {

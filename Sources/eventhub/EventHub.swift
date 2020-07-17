@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 public typealias EventListener = (Event) -> Void
 public typealias EventResponseListener = (Event?) -> Void
@@ -163,8 +164,6 @@ final public class EventHub {
 
         return sharedState.resolve(version: version)
     }
-    
-    // MARK: Internal
     
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type
     /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for

@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+@testable import AEPServices
 
 class ConfigurationDownloaderTests: XCTestCase {
 
@@ -19,8 +20,6 @@ class ConfigurationDownloaderTests: XCTestCase {
     let invalidAppId = "invalid-app-id"
     
     override func setUp() {
-        AEPServiceProvider.shared.networkService = AEPNetworkService()
-        AEPServiceProvider.shared.systemInfoService = ApplicationSystemInfoService()
         dataStore.removeAll()
     }
     

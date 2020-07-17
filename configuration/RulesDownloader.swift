@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AEPServices
 
 ///
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
@@ -83,9 +84,8 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter source: source URL for the zip file
     /// - Returns: The unzipped rules as a dictionary
     private func unzipRules(at source: URL) -> [String: AnyCodable]? {
-        let fileUnzipper = FileUnzipper()
         let destination = source.deletingLastPathComponent()
-        if fileUnzipper.unzipItem(at: source, to: destination) {
+        if FileUnzipper.unzipItem(at: source, to: destination) {
             do {
                 let data = try Data(contentsOf: destination, options: .mappedIfSafe)
                 return try JSONDecoder().decode([String: AnyCodable].self, from: data)

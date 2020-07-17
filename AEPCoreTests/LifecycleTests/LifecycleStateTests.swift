@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+import AEPServices
 
 class LifecycleStateTests: XCTestCase {
     
@@ -111,7 +112,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.hourOfTheDay)
         XCTAssertEqual(1, actualContextData?.lifecycleMetrics.daysSinceFirstLaunch)
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.daysSinceLastLaunch)
-        XCTAssertNotNil(actualContextData?.sessionContextData[LifecycleConstants.Keys.IGNORED_SESSION_LENGTH])
+        XCTAssertNotNil(actualContextData?.sessionContextData[LifecycleConstants.EventDataKeys.IGNORED_SESSION_LENGTH])
         XCTAssertEqual(1, actualContextData?.lifecycleMetrics.launches)
         XCTAssertTrue(actualContextData?.lifecycleMetrics.launchEvent ?? false)
         XCTAssertEqual(mockSystemInfoService.getActiveLocaleName(), actualContextData?.lifecycleMetrics.locale)
@@ -250,7 +251,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertTrue(actualContextData?.lifecycleMetrics.launchEvent ?? false)
         XCTAssertEqual(mockSystemInfoService.getActiveLocaleName(), actualContextData?.lifecycleMetrics.locale)
         XCTAssertEqual(mockSystemInfoService.getRunMode(), actualContextData?.lifecycleMetrics.runMode)
-        XCTAssertEqual("3000", actualContextData?.sessionContextData[LifecycleConstants.Keys.PREVIOUS_SESSION_LENGTH])
+        XCTAssertEqual("3000", actualContextData?.sessionContextData[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH])
         XCTAssertEqual(1, actualContextData?.lifecycleMetrics.daysSinceFirstLaunch)
         XCTAssertEqual(0, actualContextData?.lifecycleMetrics.daysSinceLastLaunch)
         XCTAssertEqual(1, actualContext.launches)

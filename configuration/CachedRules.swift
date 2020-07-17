@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AEPServices
 
 ///
 /// Represents a Cached rules type which has some additional metadata on top of the rules

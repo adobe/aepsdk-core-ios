@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// A type for managing Lifecycle sessions
 struct LifecycleSession {
@@ -100,10 +101,10 @@ struct LifecycleSession {
         
         // verify our session time is valid
         if lastSessionTimeSeconds > 0 && lastSessionTimeSeconds < LifecycleConstants.MAX_SESSION_LENGTH_SECONDS {
-            sessionContextData[LifecycleConstants.Keys.PREVIOUS_SESSION_LENGTH] = String(Int(lastSessionTimeSeconds))
+            sessionContextData[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH] = String(Int(lastSessionTimeSeconds))
         } else {
             // data is out of bounds, still record it in context data but put it in a different key
-            sessionContextData[LifecycleConstants.Keys.IGNORED_SESSION_LENGTH] = String(Int(lastSessionTimeSeconds))
+            sessionContextData[LifecycleConstants.EventDataKeys.IGNORED_SESSION_LENGTH] = String(Int(lastSessionTimeSeconds))
         }
         
         return sessionContextData

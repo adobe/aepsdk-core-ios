@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 @testable import AEPCore
+import AEPServices
 
 class MockDataStore: NamedKeyValueService {
     private var dict = [String: Any?]()

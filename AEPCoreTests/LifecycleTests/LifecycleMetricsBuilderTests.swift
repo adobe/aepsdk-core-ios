@@ -11,6 +11,7 @@
 
 import XCTest
 @testable import AEPCore
+@testable import AEPServices
 
 class LifecycleMetricsBuilderTests: XCTestCase {
     
@@ -18,7 +19,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     private var metricsBuilder: LifecycleMetricsBuilder?
     private var systemInfoService: MockSystemInfoService?
     private var date: Date = Date()
-    private typealias KEYS = LifecycleConstants.Keys
+    private typealias KEYS = LifecycleConstants.EventDataKeys
     
     override func setUp() {
         let formatter = DateFormatter()

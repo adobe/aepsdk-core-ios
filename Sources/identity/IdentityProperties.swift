@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// Represents a type which contains instances variables for the Identity extension
 struct IdentityProperties: Codable {
@@ -18,7 +19,11 @@ struct IdentityProperties: Codable {
     var mid: MID?
     
     /// The IDFA from retrieved Apple APIs
-    var advertisingIdentifier: String?
+    var advertisingIdentifier: String? {
+        didSet {
+            saveToPersistence()
+        }
+    }
     
     /// The SHA1 hashed push Identifier
     var pushIdentifier: String?
@@ -54,5 +59,36 @@ struct IdentityProperties: Codable {
         eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync?.timeIntervalSince1970
         
         return eventData
+    }
+    
+    /// Populates the fields with values stored in the Identity data store
+    mutating func loadFromPersistence() {
+        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        let savedProperties: IdentityProperties? = dataStore.getObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES)
+            
+        if let savedProperties = savedProperties {
+            self = savedProperties
+        }
+    }
+    
+    /// Saves this instance of `IdentityProperties` to the Identity data store
+    func saveToPersistence() {
+        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        dataStore.setObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES, value: self)
+    }
+    
+    /// Merges `newCustomIds` into `customerIds` by overwriting duplicate identities with new values in `newCustomIds`, and removes any identifiers with an empty or nil identifier
+    /// - Parameter newCustomIds: a list of new custom ids to be merged into 1customerIds
+    mutating func mergeAndCleanCustomerIds(_ newCustomerIds: [CustomIdentity]) {
+         // convert array of IDs to a dict of <identifier, ID>, then merge by taking the new ID for duplicate IDs, then convert back into an array
+        customerIds = idListToDict(customerIds).merging(idListToDict(newCustomerIds), uniquingKeysWith: { (_, new) in new }).map {$0.value}
+        customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
+    }
+    
+    /// Returns a dict where the key is the `identifier` of the identity and the value is the `CustomIdentity`
+    /// - Parameter ids: a list of identities
+    private func idListToDict(_ ids: [CustomIdentity]?) -> [String?: CustomIdentity] {
+        guard let ids = ids else { return [:] }
+        return Dictionary(uniqueKeysWithValues: ids.map{ ($0.identifier, $0) })
     }
 }

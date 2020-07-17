@@ -10,39 +10,126 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
-class LifecycleExtension: Extension {
-    typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool)) // TODO: Move to event hub to make public?
-    
-    let name = "Lifecycle"
-    let version = "0.0.1"
-    
-    private let eventQueue = OperationOrderer<EventHandlerMapping>("Lifecycle")
+class AEPLifecycle: Extension {
+    let name = LifecycleConstants.EXTENSION_NAME
+    let version = LifecycleConstants.EXTENSION_VERSION
+
+    let runtime: ExtensionRuntime
+
+    private var lifecycleState: LifecycleState
     
     // MARK: Extension
-    required init() {
-        eventQueue.setHandler({ return $0.handler($0.event) })
+    
+    /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
+        lifecycleState = LifecycleState(dataStore: NamedKeyValueStore(name: name))
     }
     
+    /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
     func onRegistered() {
         registerListener(type: .genericLifecycle, source: .requestContent, listener: receiveLifecycleRequest(event:))
-        registerListener(type: .hub, source: .sharedState, listener: receiveSharedState(event:))
-        eventQueue.start()
+        
+        let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
+        createSharedState(data: sharedStateData as [String : Any], event: nil)
     }
     
     func onUnregistered() {}
     
-    // MARK: Event Listeners
-    private func receiveLifecycleRequest(event: Event) {
-        // TODO
+    func readyForEvent(_ event: Event) -> Bool {
+        if event.type == .genericLifecycle && event.source == .requestContent {
+            let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)
+            return configurationSharedState?.status == .set
+        }
+        
+        return true
     }
     
-    private func receiveSharedState(event: Event) {
-        // TODO uncomment when Configuration is merged
-//        guard let stateOwner = event.data?[EventHubConstants.Keys.EVENT_STATE_OWNER]?.stringValue else { return }
-//
-//        if stateOwner == ConfigurationConstants.EXTENSION_NAME {
-//            eventQueue.start()
-//        }
+    // MARK: Event Listeners
+    
+    /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`
+    /// - Parameter event: the generic lifecycle event
+    private func receiveLifecycleRequest(event: Event) {
+        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event) else { return }
+        
+        if event.isLifecycleStartEvent {
+            start(event: event, configurationSharedState: configurationSharedState)
+        } else if event.isLifecyclePauseEvent {
+            lifecycleState.pause(pauseDate: event.timestamp)
+        }
+    }
+    
+    // MARK: Helpers
+    
+    /// Invokes the start business logic and dispatches any shared state and lifecycle response events required
+    /// - Parameters:
+    ///   - event: the lifecycle start event
+    ///   - configurationSharedState: the current configuration shared state
+    private func start(event: Event, configurationSharedState: (value: [String : Any]?, status: SharedStateStatus)) {
+        let prevSessionInfo = lifecycleState.start(date: event.timestamp,
+                                                   additionalContextData: event.additionalData,
+                                                   adId: getAdvertisingIdentifier(event: event),
+                                                   sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value))
+        updateSharedState(event: event, data: lifecycleState.getContextData()?.toEventData() ?? [:])
+        
+        
+        if let prevSessionInfo = prevSessionInfo {
+            dispatchSessionStart(date: event.timestamp, contextData: lifecycleState.getContextData(), previousStartDate: prevSessionInfo.startDate, previousPauseDate: prevSessionInfo.pauseDate)
+        }
+    }
+    
+    /// Attempts to read the advertising identifier from Identity shared state
+    /// - Parameter event: event to version the shared state
+    /// - Returns: the advertising identifier, nil if not found or if Identity shared state is not available
+    private func getAdvertisingIdentifier(event: Event) -> String? {
+        // TODO: Replace with Identity name via constant when Identity extension is merged
+        guard let identitySharedState = getSharedState(extensionName: "com.adobe.module.identity", event: event) else {
+            return nil
+        }
+        
+        if identitySharedState.status == .pending { return nil }
+        
+        // TODO: Replace with data key via constant when Identity extension is merged
+        return identitySharedState.value?["advertisingidentifier"] as? String
+    }
+    
+    /// Updates the Lifecycle shared state versioned at `event` with `data`
+    /// - Parameters:
+    ///   - event: the event to version the shared state at
+    ///   - data: data for the shared state
+    private func updateSharedState(event: Event, data: [String: Any]) {
+        let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: data]
+        createSharedState(data: sharedStateData as [String : Any], event: event)
+    }
+    
+    /// Dispatches a Lifecycle response content event with appropriate event data
+    /// - Parameters:
+    ///   - date: date of the session start event
+    ///   - contextData: current Lifecycle context data
+    ///   - previousStartDate: start date of the previous session
+    ///   - previousPauseDate: end date of the previous session
+    private func dispatchSessionStart(date: Date, contextData: LifecycleContextData?, previousStartDate: Date?, previousPauseDate: Date?) {
+        let eventData: [String: Any] = [
+            LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: contextData?.toEventData() ?? [:],
+            LifecycleConstants.EventDataKeys.SESSION_EVENT: LifecycleConstants.START,
+            LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: date.timeIntervalSince1970,
+            LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS,
+            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP: previousStartDate?.timeIntervalSince1970 ?? 0,
+            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0
+        ]
+        
+        dispatch(event: Event(name: "LifecycleStart", type: .lifecycle, source: .responseContent, data: eventData))
+    }
+    
+    /// Reads the session timeout from the configuration shared state, if not found returns the default session timeout
+    /// - Parameter configurationSharedState: the data associated with the configuration shared state
+    private func getSessionTimeoutLength(configurationSharedState: [String: Any]?) -> TimeInterval {
+        guard let sessionTimeoutInt = configurationSharedState?[LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT] as? Int else {
+            return TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)
+        }
+        
+        return TimeInterval(sessionTimeoutInt)
     }
 }
