@@ -132,8 +132,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-        let expectedConfigSize = 16
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .notModified)
         
         let appId = "test-app-id"
         let expectedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
@@ -162,7 +161,7 @@ class ConfigurationDownloaderTests: XCTestCase {
 
         // verify
         wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(expectedConfigSize, remoteConfig?.count)
+        XCTAssertEqual(expectedConfig.count, remoteConfig?.count)
     }
     
     /// Tests that a nil configuration is returned when an empty appId is passed
