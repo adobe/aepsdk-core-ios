@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+import AEPServices
 
 /// Functional tests for the Configuration extension
 class LifecycleFunctionalTests: XCTestCase {

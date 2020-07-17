@@ -11,6 +11,7 @@
 
 import XCTest
 @testable import AEPCore
+@testable import AEPServices
 
 class LifecycleMetricsBuilderTests: XCTestCase {
     

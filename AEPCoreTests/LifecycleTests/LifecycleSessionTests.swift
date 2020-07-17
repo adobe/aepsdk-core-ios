@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+import AEPServices
 
 class LifecycleSessionTests: XCTestCase {
     let sessionTimeoutInSeconds = TimeInterval(60 * 5) // 5 min

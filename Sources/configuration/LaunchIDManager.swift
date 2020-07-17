@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// Handles loading and saving the launch appId to the data store and manifest
 struct LaunchIDManager {
