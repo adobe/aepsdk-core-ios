@@ -13,39 +13,10 @@
 import Foundation
 
 ///
-/// Represents a Cached rules type which has some additional metadata on top of the rules
-///
-struct CachedRules: Codable {
-    
-    /// The rules dictionary
-    let rules: [String: AnyCodable]
-    
-    let lastModified: String?
-    
-    let eTag: String?
-}
-
-///
-/// Defines a type which can load rules from cache, or download the rules remotely
-///
-protocol RulesLoader {
-    /// Loads the cached rules for `appId`.
-    /// - Parameter rulesUrl: rulesUrl string, if provided the `RulesDownloader` will attempt to load a rules with `appId`
-    /// - Returns: The cached rules for `appId` in `DiskCache`, nil if not found
-    func loadRulesFromCache(rulesUrl: String) -> [String : Any]?
-    
-    /// Loads the remote rules for `appId` and caches the result.
-    /// - Parameters:
-    ///   - appId: Optional app id, if provided the `RulesDownloader` will attempt to download rules with `appId`
-    ///   - completion: Invoked with the loaded rules, nil if loading the rules failed. NOTE: Fails if 304 not-modified is returned from the server
-    func loadRulesFromUrl(rulesUrl: URL, completion: @escaping ([String: Any]?) -> Void)
-}
-
-///
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
 ///
 struct RulesDownloader: RulesLoader {
-    let cacheService = AEPServiceProvider.shared.cacheService
+    private let cacheService = AEPServiceProvider.shared.cacheService
     
     enum RulesDownloaderError: Error {
         case unableToCreateTempDirectory
@@ -70,8 +41,7 @@ struct RulesDownloader: RulesLoader {
             if let data = httpConnection.data {
                 switch self.storeDataInTempDirectory(data: data) {
                 case .success(let url):
-                    let destinationURL = url.deletingLastPathComponent()
-                    if let rulesDict = self.unzipRules(at: url, to: destinationURL) {
+                    if let rulesDict = self.unzipRules(at: url) {
                         let cachedRules = CachedRules(rules: rulesDict,
                                                       lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
                                                       eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
@@ -101,7 +71,7 @@ struct RulesDownloader: RulesLoader {
         guard let temporaryDirectory = try? FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
             return .failure(.unableToCreateTempDirectory)
         }
-        guard let _ = try? data.write(to: temporaryDirectory.appendingPathComponent(RulesConstants.RULES_ZIP_FILE_NAME.rawValue)) else {
+        guard let _ = try? data.write(to: temporaryDirectory.appendingPathComponent(RulesDownloaderConstants.RULES_ZIP_FILE_NAME.rawValue)) else {
             return .failure(.unableToStoreDataInTempDirectory)
         }
         
@@ -110,12 +80,11 @@ struct RulesDownloader: RulesLoader {
     
     ///
     /// Unzips the rules at the source url to a destination url and returns the rules as a dictionary
-    /// - Parameters:
-    ///     - source: source URL for the zip file
-    ///     - destination: The destination url where the unzipped rules will go
+    /// - Parameter source: source URL for the zip file
     /// - Returns: The unzipped rules as a dictionary
-    private func unzipRules(at source: URL, to destination: URL) -> [String: AnyCodable]? {
+    private func unzipRules(at source: URL) -> [String: AnyCodable]? {
         let fileUnzipper = FileUnzipper()
+        let destination = source.deletingLastPathComponent()
         if fileUnzipper.unzipItem(at: source, to: destination) {
             do {
                 let data = try Data(contentsOf: destination, options: .mappedIfSafe)
@@ -133,7 +102,7 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter rulesUrl: The rules url
     /// - Returns: The built cache key for the rules
     private func buildCacheKey(rulesUrl: String) -> String {
-        return RulesConstants.Keys.RULES_CACHE_PREFIX.rawValue + rulesUrl
+        return RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX.rawValue + rulesUrl
     }
    
     ///
@@ -146,7 +115,7 @@ struct RulesDownloader: RulesLoader {
         do {
             let data = try JSONEncoder().encode(cachedRules)
             let cacheEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
-            try self.cacheService.set(cacheName: RulesConstants.RULES_CACHE_NAME.rawValue, key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
+            try self.cacheService.set(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME.rawValue, key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
             return true
         } catch {
             // Handle Error
@@ -159,7 +128,7 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter rulesUrl: The rules url as a string to be used to get the right cached rules
     /// - Returns: The `CachedRules` for the given rulesUrl
     private func getCachedRules(rulesUrl: String) -> CachedRules? {
-        guard let cachedEntry = cacheService.get(cacheName: RulesConstants.RULES_CACHE_NAME.rawValue, key: buildCacheKey(rulesUrl: rulesUrl)) else {
+        guard let cachedEntry = cacheService.get(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME.rawValue, key: buildCacheKey(rulesUrl: rulesUrl)) else {
             return nil
         }
         return try? JSONDecoder().decode(CachedRules.self, from: cachedEntry.data)
@@ -167,13 +136,3 @@ struct RulesDownloader: RulesLoader {
 
 }
 
-enum RulesConstants: String {
-    
-    case RULES_CACHE_NAME = "rules.cache"
-
-    case RULES_ZIP_FILE_NAME = "rules.zip"
-    
-    enum Keys: String {
-        case RULES_CACHE_PREFIX = "cached.rules"
-    }
-}

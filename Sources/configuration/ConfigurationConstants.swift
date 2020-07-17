@@ -44,3 +44,15 @@ struct ConfigurationConstants {
         static let OPT_IN = "optedin"
     }
 }
+
+enum RulesDownloaderConstants: String {
+    
+    case RULES_CACHE_NAME = "rules.cache"
+    
+    case RULES_ZIP_FILE_NAME = "rules.zip"
+    
+    enum Keys: String {
+        case RULES_CACHE_PREFIX = "cached.rules"
+    }
+}
+
