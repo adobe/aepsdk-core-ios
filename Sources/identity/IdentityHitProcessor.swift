@@ -41,7 +41,6 @@ class IdentityHitProcessor: HitProcessable {
         networkService.connectAsync(networkRequest: networkRequest) { (connection) in
             self.handleNetworkResponse(entity: entity, hit: identityHit, connection: connection, completion: completion)
         }
-
     }
 
     // MARK: Helpers
