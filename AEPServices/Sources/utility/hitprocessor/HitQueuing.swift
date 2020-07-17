@@ -14,8 +14,8 @@ import Foundation
 /// A class of types who provide the functionality for queuing hits
 public protocol HitQueuing {
     
-    /// The delegate responsible for implementing the logic for processing an individual hit
-    var delegate: HitProcessable? { get set }
+    /// The processor responsible for implementing the logic for processing an individual hit
+    var processor: HitProcessable { get }
     
     /// Queues a `DataEntity` to be processed
     /// - Parameters:
