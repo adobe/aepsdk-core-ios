@@ -11,17 +11,26 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPEventHub
+import AEPServices
 
 class AEPIdentity: Extension {
     let runtime: ExtensionRuntime
     
     let name = IdentityConstants.EXTENSION_NAME
     let version = IdentityConstants.EXTENSION_VERSION
-    var state = IdentityState(identityProperties: IdentityProperties())
+    var state: IdentityState?
     
     // MARK: Extension
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+        
+        guard let dataQueue = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
+            Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
+            return
+        }
+
+        let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(entity:responseData:)))
+        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue)
     }
     
     func onRegistered() {
@@ -34,7 +43,7 @@ class AEPIdentity: Extension {
     func readyForEvent(_ event: Event) -> Bool {
         if event.isSyncEvent || event.type == .genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
-            return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
+            return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
         } else if event.type == .configuration && event.source == .requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         }
@@ -46,7 +55,7 @@ class AEPIdentity: Extension {
     
     private func handleIdentityRequest(event: Event) {
         if event.isSyncEvent || event.type == .genericIdentity {
-            if let eventData = state.syncIdentifiers(event: event) {
+            if let eventData = state?.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)
             }
         } else if let baseUrl = event.baseUrl {
@@ -77,9 +86,10 @@ class AEPIdentity: Extension {
     
     // MARK: Event Handlers
     private func processAppendToUrl(baseUrl: String, event: Event) {
+        guard let properties = state?.identityProperties else { return }
         guard let configurationSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
-        let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: state.identityProperties)
+        let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with updated url
         let responseEvent = event.createResponseEvent(name: "Identity Appended URL", type: .identity, source: .responseIdentity, data: [IdentityConstants.EventDataKeys.UPDATED_URL: updatedUrl])
@@ -87,9 +97,10 @@ class AEPIdentity: Extension {
     }
 
     private func processGetUrlVariables(event: Event) {
+        guard let properties = state?.identityProperties else { return }
         guard let configurationSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
-        let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: state.identityProperties)
+        let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with url variables
         let responseEvent = event.createResponseEvent(name: "Identity URL Variables", type: .identity, source: .responseIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: urlVariables])
@@ -97,10 +108,19 @@ class AEPIdentity: Extension {
     }
 
     private func processIdentifiersRequest(event: Event) {
-        let eventData = state.identityProperties.toEventData()
+        let eventData = state?.identityProperties.toEventData()
         let responseEvent = event.createResponseEvent(name: "Identity Response Content", type: .identity, source: .responseIdentity, data: eventData)
 
         // dispatch identity response event with shared state data
         dispatch(event: responseEvent)
+    }
+    
+    // MARK: Network Response Handler
+    /// Invoked by the `IdentityHitProcessor` each time we receive a network response
+    /// - Parameters:
+    ///   - entity: The `DataEntity` that was processed by the hit processor
+    ///   - responseData: the network response data if any
+    private func handleNetworkResponse(entity: DataEntity, responseData: Data?) {
+        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:))
     }
 }

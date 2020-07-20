@@ -25,7 +25,6 @@ class IdentityStateTests: XCTestCase {
     override func setUp() {
         AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()))
-
     }
     
     // MARK: syncIdentifiers(...) tests
