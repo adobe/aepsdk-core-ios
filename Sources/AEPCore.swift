@@ -72,7 +72,7 @@ public final class AEPCore {
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
     static func setAdvertisingIdentifier(adId: String?) {
-        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: adId ?? ""]
+        let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
         let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
         AEPCore.dispatch(event: event)
     }

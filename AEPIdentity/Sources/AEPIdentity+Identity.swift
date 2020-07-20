@@ -32,7 +32,7 @@ extension AEPIdentity: Identity {
             completion(URL(string: updatedUrlStr), nil)
         }
         
-        AEPCore.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
     }
     
     static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError?) -> ()) {
@@ -52,7 +52,7 @@ extension AEPIdentity: Identity {
             completion(identifiers, nil)
         }
         
-        AEPCore.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
     }
     
     static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
@@ -63,7 +63,7 @@ extension AEPIdentity: Identity {
             completion(experienceCloudId)
         }
         
-        AEPCore.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
     }
     
     static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState) {
@@ -82,7 +82,7 @@ extension AEPIdentity: Identity {
         eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
         
         let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
-        AEPCore.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
     }
     
     static func getUrlVariables(completion: @escaping (String?, AEPError?) -> ()) {
@@ -98,7 +98,7 @@ extension AEPIdentity: Identity {
             completion(urlVariables, nil)
         }
         
-        AEPCore.dispatch(event: event)
+        EventHub.shared.dispatch(event: event)
     }
     
 }
