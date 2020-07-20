@@ -11,20 +11,13 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-
-@testable import AEPCore
 import AEPEventHub
 
-class MockExtensionTwo: TestableExtension {
-    var name = "mockExtensionTwo"
-    var version = "0.0.1"
-    let runtime: ExtensionRuntime
+public extension Extension {
     
-    static var unregistrationClosure: (() -> Void)? = nil
-    static var registrationClosure: (() -> Void)? = nil
-    static var eventReceivedClosure: ((Event) -> Void)? = nil
-    
-    required init(runtime: ExtensionRuntime) {
-        self.runtime = runtime
+    /// Registers the `Extension` with the `EventHub`
+    //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
+    static func registerExtension() {
+        AEPCore.pendingExtensions.append(Self.self)
     }
 }

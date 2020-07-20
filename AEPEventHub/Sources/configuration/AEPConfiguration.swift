@@ -59,9 +59,10 @@ class AEPConfiguration: Extension {
     /// Check if the next event is requesting identities, if so check if ready, otherwise return true
     /// - Parameter event: an   `Event`
     func readyForEvent(_ event: Event) -> Bool {
-        if event.type == .configuration && event.source == .requestIdentity {
-            return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
-        }
+        //TODO: move to Identity
+//        if event.type == .configuration && event.source == .requestIdentity {
+//            return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+//        }
 
         return true
     }
@@ -102,18 +103,20 @@ class AEPConfiguration: Extension {
     /// Handles the getSdkIdentities API by collecting all the identities then dispatching a response event with the given identities
     /// - Parameter event: The event coming from the getSdkIdentities API
     private func receiveConfigurationIdentity(event: Event) {
-        var mobileIdentities = MobileIdentities()
-        mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
-
-        guard let encodedIdentities = try? JSONEncoder().encode(mobileIdentities) else {
-            // TODO: Error log
-            return
-        }
-
-        let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
-        let eventData = [ConfigurationConstants.Keys.ALL_IDENTIFIERS: identitiesStr]
-        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: .configuration, source: .responseIdentity, data: eventData as [String : Any])
-        dispatch(event: responseEvent)
+        
+        //TODO: move to Identity
+//        var mobileIdentities = MobileIdentities()
+//        mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+//
+//        guard let encodedIdentities = try? JSONEncoder().encode(mobileIdentities) else {
+//            // TODO: Error log
+//            return
+//        }
+//
+//        let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
+//        let eventData = [ConfigurationConstants.Keys.ALL_IDENTIFIERS: identitiesStr]
+//        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: .configuration, source: .responseIdentity, data: eventData as [String : Any])
+//        dispatch(event: responseEvent)
     }
 
     // MARK: Event Processors

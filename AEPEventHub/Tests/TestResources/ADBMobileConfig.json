@@ -1,0 +1,18 @@
+{
+  "target.timeout": 5,
+  "global.privacy": "optedin",
+  "analytics.backdatePreviousSessionInfo": false,
+  "analytics.offlineEnabled": true,
+  "build.environment": "prod",
+  "rules.url": "https://assets.adobedtm.com/launch-EN1a68f9bc5b3c475b8c232adc3f8011fb-rules.zip",
+  "target.clientCode": "",
+  "experienceCloud.org": "972C898555E9F7BC7F000101@AdobeOrg",
+  "lifecycle.sessionTimeout": 300,
+  "target.environmentId": "",
+  "analytics.server": "obumobile5.sc.omtrdc.net",
+  "analytics.rsids": "mobile5adobe.store.sprint.demo",
+  "analytics.batchLimit": 3,
+  "property.id": "PR3dd64c475eb747339f0319676d56b1df",
+  "global.ssl": true,
+  "analytics.aamForwardingEnabled": true
+}

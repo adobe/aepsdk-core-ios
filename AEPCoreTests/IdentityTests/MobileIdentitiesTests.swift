@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import XCTest
+@testable import AEPEventHub
 @testable import AEPCore
 
 class MobileIdentitiesTests: XCTestCase {

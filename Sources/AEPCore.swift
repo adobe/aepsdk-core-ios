@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPServices
+import AEPEventHub
 
 /// Core extension for the Adobe Experience Platform SDK
 public final class AEPCore {

@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPEventHub
 
 class AEPIdentity: Extension {
     let runtime: ExtensionRuntime
@@ -31,11 +32,11 @@ class AEPIdentity: Extension {
     
     func readyForEvent(_ event: Event) -> Bool {
         if event.isSyncEvent || event.type == .genericIdentity {
-            guard let configSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return false }
+            guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
         }
         
-        return getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.status == .set
+        return getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
     }
     
     // MARK: Event Listeners
@@ -56,7 +57,7 @@ class AEPIdentity: Extension {
     
     // MARK: Event Handlers
     private func processAppendToUrl(baseUrl: String, event: Event) {
-        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return }
+        guard let configurationSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: state.identityProperties)
 
@@ -66,7 +67,7 @@ class AEPIdentity: Extension {
     }
 
     private func processGetUrlVariables(event: Event) {
-        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)?.value else { return }
+        guard let configurationSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
         let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: state.identityProperties)
 

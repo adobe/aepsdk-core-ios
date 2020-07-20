@@ -12,19 +12,19 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-@testable import AEPCore
-import AEPEventHub
+@testable import AEPEventHub
 
-class MockExtensionTwo: TestableExtension {
-    var name = "mockExtensionTwo"
+class SlowMockExtension: Extension {
+    var name = "slowMockExtension"
     var version = "0.0.1"
     let runtime: ExtensionRuntime
     
-    static var unregistrationClosure: (() -> Void)? = nil
-    static var registrationClosure: (() -> Void)? = nil
-    static var eventReceivedClosure: ((Event) -> Void)? = nil
-    
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+         sleep(20) // simulate an extension doing heavy work in constructor
     }
+    
+    func onRegistered() {}
+    func onUnregistered() {}
+    
 }
