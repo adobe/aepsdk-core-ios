@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-@testable import AEPCore
+@testable import AEPEventHub
 
 class TestableExtensionRuntime:ExtensionRuntime{
     var listeners:[String:EventListener] = [:]
@@ -48,7 +48,7 @@ class TestableExtensionRuntime:ExtensionRuntime{
     }
     
     func getSharedState(extensionName: String, event: Event?) -> (value: [String : Any]?, status: SharedStateStatus)? {
-        return nil
+        return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
     
     func simulateSharedState(extensionName: String, event: Event?, data: (value: [String : Any]?, status: SharedStateStatus)){

@@ -29,6 +29,16 @@ struct IdentityConstants {
     static let CID_DELIMITER = "%01"
     static let ADID_DSID = "DSID_20915"
     
+    struct SharedStateKeys {
+        static let CONFIGURATION = "com.adobe.module.configuration"
+    }
+    
+    struct Configuration {
+        static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
+        static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
+        static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
+    }
+    
     struct EventDataKeys {
         static let BASE_URL = "baseurl"
         static let UPDATED_URL = "updatedurl"

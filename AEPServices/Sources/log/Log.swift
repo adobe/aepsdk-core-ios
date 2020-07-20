@@ -23,11 +23,9 @@ public class Log {
     /// Used to print more verbose information.
     /// - Parameters:
     ///   - label: the name of the label to localize message
-    ///   - format: the string to be logged
-    ///   - args: the formatting arguments
-    public static func trace(label: String, _ format: String, _ args: CVarArg...) {
+    ///   - message: the string to be logged
+    public static func trace(label: String, _ message: String) {
         if logFilter <= .trace {
-            let message = String(format: format, arguments: args)
             loggingService.log(level: .trace, label: label, message: message)
         }
     }
@@ -35,11 +33,9 @@ public class Log {
     /// Information provided to the debug method should contain high-level details about the data being processed
     /// - Parameters:
     ///   - label: the name of the label to localize message
-    ///   - format: the string to be logged
-    ///   - args: the formatting arguments
-    public static func debug(label: String, _ format: String, _ args: CVarArg...) {
+    ///   - message: the string to be logged
+    public static func debug(label: String, _ message: String) {
         if logFilter <= .debug {
-            let message = String(format: format, arguments: args)
             loggingService.log(level: .debug, label: label, message: message)
         }
     }
@@ -47,11 +43,9 @@ public class Log {
     /// Information provided to the warning method indicates that a request has been made to the SDK, but the SDK will be unable to perform the requested task
     /// - Parameters:
     ///   - label: the name of the label to localize message
-    ///   - format: the string to be logged
-    ///   - args: the formatting arguments
-    public static func warning(label: String, _ format: String, _ args: CVarArg...) {
+    ///   - message: the string to be logged
+    public static func warning(label: String, _ message: String) {
         if logFilter <= .warning {
-            let message = String(format: format, arguments: args)
             loggingService.log(level: .warning, label: label, message: message)
         }
     }
@@ -59,11 +53,9 @@ public class Log {
     /// Information provided to the error method indicates that there has been an unrecoverable error
     /// - Parameters:
     ///   - label: the name of the label to localize message
-    ///   - format: the string to be logged
-    ///   - args: the formatting arguments
-    public static func error(label: String, _ format: String, _ args: CVarArg...) {
+    ///   - message: the string to be logged
+    public static func error(label: String, _ message: String) {
         if logFilter <= .error {
-            let message = String(format: format, arguments: args)
             loggingService.log(level: .error, label: label, message: message)
         }
     }

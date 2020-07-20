@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 
 import Foundation
+import AEPEventHub
 
 /// Represents the JSON structure for the company context
 private struct CompanyContext: Codable {
@@ -118,9 +119,9 @@ struct MobileIdentities: Codable {
     ///   - sharedStateProvider: a function that can resolve `SharedState` given an extension name
     /// - Returns: a list of all the Configuration extension identities in the form of a `CompanyContext`
     private func getCompanyContexts(event: Event, sharedStateProvider: SharedStateProvider) -> CompanyContext? {
-        guard let configurationSharedState = sharedStateProvider(ConfigurationConstants.EXTENSION_NAME, event) else { return nil }
+        guard let configurationSharedState = sharedStateProvider(IdentityConstants.SharedStateKeys.CONFIGURATION, event) else { return nil }
         guard configurationSharedState.status == .set else { return nil }
-        guard let marketingCloudOrgId = configurationSharedState.value?[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String, !marketingCloudOrgId.isEmpty else { return nil }
+        guard let marketingCloudOrgId = configurationSharedState.value?[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String, !marketingCloudOrgId.isEmpty else { return nil }
         
         return CompanyContext(marketingCloudId: marketingCloudOrgId)
     }
