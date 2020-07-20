@@ -139,7 +139,6 @@
 		3F03989024C001350019F095 /* CachedConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987824C001350019F095 /* CachedConfiguration.swift */; };
 		3F03989124C001350019F095 /* ConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987924C001350019F095 /* ConfigurationDownloader.swift */; };
 		3F03989324C001350019F095 /* PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987B24C001350019F095 /* PrivacyStatus.swift */; };
-		3F03989424C001350019F095 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987C24C001350019F095 /* Configuration.swift */; };
 		3FE6DD4424C546C00065EA05 /* EventHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3A24C546A90065EA05 /* EventHubTests.swift */; };
 		3FE6DD4524C546C30065EA05 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3924C546A90065EA05 /* SharedStateTest.swift */; };
 		3FE6DD4624C546CD0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3224C546A90065EA05 /* TestableExtensionRuntime.swift */; };
@@ -191,6 +190,7 @@
 		3FE6DE1724C631100065EA05 /* LifecycleSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1624C631100065EA05 /* LifecycleSession.swift */; };
 		3FE6DE1924C631B00065EA05 /* AEPCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */; };
 		3FE6DE1E24C632450065EA05 /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1D24C632450065EA05 /* Lifecycle.swift */; };
+		3FE6DE2924C63B520065EA05 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE2824C63B520065EA05 /* Configuration.swift */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
 		78DEFEF1244A183400D7E9FB /* TestImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEFEF0244A183400D7E9FB /* TestImage.png */; };
@@ -439,7 +439,6 @@
 		3F03987824C001350019F095 /* CachedConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedConfiguration.swift; sourceTree = "<group>"; };
 		3F03987924C001350019F095 /* ConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloader.swift; sourceTree = "<group>"; };
 		3F03987B24C001350019F095 /* PrivacyStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyStatus.swift; sourceTree = "<group>"; };
-		3F03987C24C001350019F095 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		3FE6DD3224C546A90065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3FE6DD3324C546A90065EA05 /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		3FE6DD3524C546A90065EA05 /* ConfigurationStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationStateTests.swift; sourceTree = "<group>"; };
@@ -493,6 +492,7 @@
 		3FE6DE1624C631100065EA05 /* LifecycleSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleSession.swift; sourceTree = "<group>"; };
 		3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AEPCore+Lifecycle.swift"; path = "Sources/AEPCore+Lifecycle.swift"; sourceTree = "<group>"; };
 		3FE6DE1D24C632450065EA05 /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Lifecycle.swift; path = Sources/Lifecycle.swift; sourceTree = "<group>"; };
+		3FE6DE2824C63B520065EA05 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Sources/Configuration.swift; sourceTree = "<group>"; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78D754F1244511D100DB9124 /* TestConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		78DEFEF0244A183400D7E9FB /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
@@ -685,6 +685,7 @@
 			isa = PBXGroup;
 			children = (
 				21315BB424575ED200D1B254 /* AEPCore.swift */,
+				3FE6DE2824C63B520065EA05 /* Configuration.swift */,
 				3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */,
 				3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */,
 				3FE6DE1D24C632450065EA05 /* Lifecycle.swift */,
@@ -958,7 +959,6 @@
 				3F03987824C001350019F095 /* CachedConfiguration.swift */,
 				3F03987924C001350019F095 /* ConfigurationDownloader.swift */,
 				3F03987B24C001350019F095 /* PrivacyStatus.swift */,
-				3F03987C24C001350019F095 /* Configuration.swift */,
 			);
 			path = configuration;
 			sourceTree = "<group>";
@@ -1452,6 +1452,7 @@
 				214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */,
 				21B0B61B24B3A7B7002A1B1A /* IdentityState.swift in Sources */,
 				213F63B224C15977006931EB /* IdentityHitProcessor.swift in Sources */,
+				3FE6DE2924C63B520065EA05 /* Configuration.swift in Sources */,
 				2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */,
 				213F66342492C06B000184DE /* IdentityProperties.swift in Sources */,
 				2182778D24B792F9005A468A /* URLAppender.swift in Sources */,
@@ -1574,7 +1575,6 @@
 				3F03988224C001350019F095 /* EventHub.swift in Sources */,
 				3F03988C24C001350019F095 /* LaunchIDManager.swift in Sources */,
 				3F03988824C001350019F095 /* Extension.swift in Sources */,
-				3F03989424C001350019F095 /* Configuration.swift in Sources */,
 				3F03988924C001350019F095 /* AEPConfiguration.swift in Sources */,
 				3F03988724C001350019F095 /* EventListenerContainer.swift in Sources */,
 				3F03987D24C001350019F095 /* EventHubConstants.swift in Sources */,

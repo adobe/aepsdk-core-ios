@@ -10,9 +10,10 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPEventHub
 
 /// Defines the public interface for the Configuration extension
-public protocol Configuration {
+protocol Configuration {
 
     /// Configure the SDK by downloading the remote configuration file hosted on Adobe servers
     /// specified by the given application ID. The configuration file is cached once downloaded
