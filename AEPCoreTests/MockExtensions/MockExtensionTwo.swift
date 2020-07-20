@@ -18,7 +18,7 @@ class MockExtensionTwo: TestableExtension {
     var name = "mockExtensionTwo"
     var friendlyName = "mockExtensionTwo"
     var version = "0.0.1"
-    var metadata: [String : String]? = nil
+    var metadata: [String : String]? = ["testMetaKey": "testMetaVal"]
     
     let runtime: ExtensionRuntime
     

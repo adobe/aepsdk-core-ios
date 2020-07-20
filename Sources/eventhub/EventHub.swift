@@ -217,14 +217,15 @@ extension EventHub: ExtensionContainerDelegate {
     
     /// Shares a shared state for the `EventHub` with data containing all the registered extensions
     private func shareEventHubSharedState() {
-        var extensionsInfo = [String: [String: String]]()
+        var extensionsInfo = [String: [String: Any]]()
         for (_, val) in registeredExtensions.shallowCopy
             where val.sharedStateName != EventHubConstants.NAME {
                 
             if let exten = val.exten {
                 extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: exten.version]
                 if let metadata = exten.metadata, !metadata.isEmpty {
-                    extensionsInfo[EventHubConstants.EventDataKeys.METADATA] = metadata
+                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: exten.version,
+                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
                 }
             }
         }
