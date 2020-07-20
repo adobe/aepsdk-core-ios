@@ -12,25 +12,29 @@ governing permissions and limitations under the License.
 import Foundation
 @testable import AEPServices
 
-class MockDataQueue: DataQueue {
+public class MockDataQueue: DataQueue {
     let queue = ThreadSafeArray<DataEntity>()
     
-    func add(dataEntity: DataEntity) -> Bool {
+    public init(){
+        
+    }
+    
+    public func add(dataEntity: DataEntity) -> Bool {
         queue.append(dataEntity)
         return true
     }
     
-    func peek() -> DataEntity? {
+    public func peek() -> DataEntity? {
         return queue.shallowCopy.first
     }
     
-    func remove() -> Bool {
+    public func remove() -> Bool {
         guard let first = peek() else { return true }
         let _ = queue.filterRemove({$0.uniqueIdentifier == first.uniqueIdentifier})
         return true
     }
     
-    func clear() -> Bool {
+    public func clear() -> Bool {
         queue.clear()
         return true
     }
