@@ -7,46 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		211728912491680000BB7BD3 /* NetworkService+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 211728902491680000BB7BD3 /* NetworkService+IdentityTests.swift */; };
-		21172895249177FC00BB7BD3 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21172894249177FC00BB7BD3 /* Identifiable.swift */; };
-		212760FB24B4E1C5003AAC41 /* IdentityStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212760FA24B4E1C5003AAC41 /* IdentityStateTests.swift */; };
 		21315BB524575ED200D1B254 /* AEPCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21315BB424575ED200D1B254 /* AEPCore.swift */; };
 		2131A1B42465D81E00F1392D /* EventHub+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131A1B32465D81E00F1392D /* EventHub+Testable.swift */; };
-		2137BA112498311600F01D04 /* URLQueryItem+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137BA102498311600F01D04 /* URLQueryItem+Identity.swift */; };
-		2137BA132498314000F01D04 /* URL+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137BA122498314000F01D04 /* URL+Identity.swift */; };
-		2137BA152498317500F01D04 /* URL+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137BA142498317500F01D04 /* URL+IdentityTests.swift */; };
-		2137BA172498318300F01D04 /* URLQueryItem+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2137BA162498318300F01D04 /* URLQueryItem+IdentityTests.swift */; };
 		213C8BD524252302009F780A /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213C8BD424252302009F780A /* MockExtension.swift */; };
 		213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */; };
-		213F63AC24C1590C006931EB /* IdentityHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F63AB24C1590C006931EB /* IdentityHitProcessorTests.swift */; };
-		213F63AE24C1591D006931EB /* IdentityHitResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F63AD24C1591D006931EB /* IdentityHitResponseTests.swift */; };
-		213F63B024C15962006931EB /* IdentityHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F63AF24C15962006931EB /* IdentityHit.swift */; };
-		213F63B224C15977006931EB /* IdentityHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F63B124C15977006931EB /* IdentityHitProcessor.swift */; };
-		213F63B424C1598D006931EB /* IdentityHitResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F63B324C1598D006931EB /* IdentityHitResponse.swift */; };
-		213F66302492A808000184DE /* MID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F662F2492A808000184DE /* MID.swift */; };
-		213F66322492A8B9000184DE /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66312492A8B9000184DE /* MIDTests.swift */; };
-		213F66342492C06B000184DE /* IdentityProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66332492C06B000184DE /* IdentityProperties.swift */; };
 		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
-		214B5223248ABC710034BF22 /* AEPIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5222248ABC710034BF22 /* AEPIdentity.swift */; };
-		214B5225248ABCEB0034BF22 /* AEPIdentity+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */; };
-		214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5226248ABD5D0034BF22 /* IdentityConstants.swift */; };
-		214B522A248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */; };
-		2159F4282493FF3C0008851C /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */; };
 		215AA6232465E06600CEB4F4 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */; };
-		215AE3AB24BF740F00FC931F /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215AE3AA24BF740F00FC931F /* AEPIdentityTests.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
-		2181948B2489F66D004F869A /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181948A2489F66D004F869A /* Identity.swift */; };
-		2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */; };
-		2181948F2489FC97004F869A /* CustomIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2181948E2489FC97004F869A /* CustomIdentity.swift */; };
-		2182778D24B792F9005A468A /* URLAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2182778C24B792F9005A468A /* URLAppender.swift */; };
-		2182778F24B79320005A468A /* URLAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2182778E24B79320005A468A /* URLAppenderTests.swift */; };
-		21B0B61924B3A6C8002A1B1A /* Event+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B0B61824B3A6C8002A1B1A /* Event+Identity.swift */; };
-		21B0B61B24B3A7B7002A1B1A /* IdentityState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B0B61A24B3A7B7002A1B1A /* IdentityState.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E52422917600C11388 /* AEPCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CAC0E42422917600C11388 /* AEPCoreTests.swift */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21F9174C2433E429000743E3 /* MockExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F9174B2433E429000743E3 /* MockExtensionTwo.swift */; };
-		21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FBBB242491553100C66506 /* NetworkService+Identity.swift */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C224BE5FF30019F095 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F03979E24BE5FF30019F095 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F0397C324BE5FF30019F095 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* CacheService.swift */; };
@@ -160,8 +131,6 @@
 		3FE6DD7F24C54E260065EA05 /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */; };
 		3FE6DD8024C54F1D0065EA05 /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3824C546A90065EA05 /* LaunchIDManagerTests.swift */; };
 		3FE6DD8224C5EA330065EA05 /* AEPCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */; };
-		3FE6DD8424C5ED400065EA05 /* MobileIdentities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */; };
-		3FE6DD8624C5EDC40065EA05 /* MobileIdentitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8524C5EDC40065EA05 /* MobileIdentitiesTests.swift */; };
 		3FE6DDB724C62C4A0065EA05 /* AEPServicesMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMock.framework */; };
 		3FE6DDBA24C62CAF0065EA05 /* AEPServicesMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMock.framework */; };
 		3FE6DDBC24C62DA80065EA05 /* AEPServicesMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMock.framework */; };
@@ -191,6 +160,40 @@
 		3FE6DE1924C631B00065EA05 /* AEPCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */; };
 		3FE6DE1E24C632450065EA05 /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1D24C632450065EA05 /* Lifecycle.swift */; };
 		3FE6DE2924C63B520065EA05 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE2824C63B520065EA05 /* Configuration.swift */; };
+		3FE6DE3824C642330065EA05 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */; };
+		3FE6DE3F24C642330065EA05 /* AEPIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE6DE3124C642330065EA05 /* AEPIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3FE6DE5924C643060065EA05 /* MobileVisitorAuthenticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */; };
+		3FE6DE5A24C643060065EA05 /* URLQueryItem+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */; };
+		3FE6DE5B24C643060065EA05 /* IdentityProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4824C643050065EA05 /* IdentityProperties.swift */; };
+		3FE6DE5C24C643060065EA05 /* AEPIdentity+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4924C643050065EA05 /* AEPIdentity+Identity.swift */; };
+		3FE6DE5D24C643060065EA05 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */; };
+		3FE6DE5E24C643060065EA05 /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4B24C643050065EA05 /* Identity.swift */; };
+		3FE6DE5F24C643060065EA05 /* NetworkService+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4C24C643050065EA05 /* NetworkService+Identity.swift */; };
+		3FE6DE6024C643060065EA05 /* IdentityState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4D24C643050065EA05 /* IdentityState.swift */; };
+		3FE6DE6124C643060065EA05 /* MID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4E24C643060065EA05 /* MID.swift */; };
+		3FE6DE6224C643060065EA05 /* Event+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4F24C643060065EA05 /* Event+Identity.swift */; };
+		3FE6DE6324C643060065EA05 /* CustomIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5024C643060065EA05 /* CustomIdentity.swift */; };
+		3FE6DE6424C643060065EA05 /* IdentityHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5124C643060065EA05 /* IdentityHit.swift */; };
+		3FE6DE6524C643060065EA05 /* URLAppender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5224C643060065EA05 /* URLAppender.swift */; };
+		3FE6DE6624C643060065EA05 /* MobileIdentities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5324C643060065EA05 /* MobileIdentities.swift */; };
+		3FE6DE6724C643060065EA05 /* IdentityHitResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */; };
+		3FE6DE6824C643060065EA05 /* IdentityHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */; };
+		3FE6DE6924C643060065EA05 /* AEPIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5624C643060065EA05 /* AEPIdentity.swift */; };
+		3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5724C643060065EA05 /* Identifiable.swift */; };
+		3FE6DE6B24C643060065EA05 /* URL+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5824C643060065EA05 /* URL+Identity.swift */; };
+		3FE6DE7824C643620065EA05 /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6C24C643610065EA05 /* MIDTests.swift */; };
+		3FE6DE7924C643620065EA05 /* MobileIdentitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */; };
+		3FE6DE7A24C643620065EA05 /* URL+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */; };
+		3FE6DE7B24C643620065EA05 /* URLQueryItem+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */; };
+		3FE6DE7C24C643620065EA05 /* IdentityStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */; };
+		3FE6DE7D24C643620065EA05 /* AEPIdentity+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7124C643620065EA05 /* AEPIdentity+IdentityTests.swift */; };
+		3FE6DE7E24C643620065EA05 /* URLAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */; };
+		3FE6DE7F24C643620065EA05 /* IdentityHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */; };
+		3FE6DE8024C643620065EA05 /* IdentityHitResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */; };
+		3FE6DE8124C643620065EA05 /* NetworkService+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */; };
+		3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */; };
+		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
+		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
 		78DEFEF1244A183400D7E9FB /* TestImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEFEF0244A183400D7E9FB /* TestImage.png */; };
@@ -295,45 +298,45 @@
 			remoteGlobalIDString = 3FE6DDA824C62C090065EA05;
 			remoteInfo = AEPServicesMock;
 		};
+		3FE6DE3924C642330065EA05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DE2E24C642330065EA05;
+			remoteInfo = AEPIdentity;
+		};
+		3FE6DE8424C6437F0065EA05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DDA824C62C090065EA05;
+			remoteInfo = AEPServicesMock;
+		};
+		3FE6DE8924C646360065EA05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03978624BE5DD30019F095;
+			remoteInfo = AEPServices;
+		};
+		3FE6DE8B24C6463B0065EA05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03984B24C0008C0019F095;
+			remoteInfo = AEPEventHub;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		211728902491680000BB7BD3 /* NetworkService+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+IdentityTests.swift"; sourceTree = "<group>"; };
-		21172894249177FC00BB7BD3 /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
-		212760FA24B4E1C5003AAC41 /* IdentityStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityStateTests.swift; sourceTree = "<group>"; };
 		21315BB424575ED200D1B254 /* AEPCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AEPCore.swift; path = Sources/AEPCore.swift; sourceTree = "<group>"; };
 		2131A1B32465D81E00F1392D /* EventHub+Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventHub+Testable.swift"; sourceTree = "<group>"; };
-		2137BA102498311600F01D04 /* URLQueryItem+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+Identity.swift"; sourceTree = "<group>"; };
-		2137BA122498314000F01D04 /* URL+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Identity.swift"; sourceTree = "<group>"; };
-		2137BA142498317500F01D04 /* URL+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+IdentityTests.swift"; sourceTree = "<group>"; };
-		2137BA162498318300F01D04 /* URLQueryItem+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+IdentityTests.swift"; sourceTree = "<group>"; };
 		213C8BD424252302009F780A /* MockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
 		213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
-		213F63AB24C1590C006931EB /* IdentityHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityHitProcessorTests.swift; sourceTree = "<group>"; };
-		213F63AD24C1591D006931EB /* IdentityHitResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityHitResponseTests.swift; sourceTree = "<group>"; };
-		213F63AF24C15962006931EB /* IdentityHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityHit.swift; sourceTree = "<group>"; };
-		213F63B124C15977006931EB /* IdentityHitProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityHitProcessor.swift; sourceTree = "<group>"; };
-		213F63B324C1598D006931EB /* IdentityHitResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityHitResponse.swift; sourceTree = "<group>"; };
-		213F662F2492A808000184DE /* MID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MID.swift; sourceTree = "<group>"; };
-		213F66312492A8B9000184DE /* MIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
-		213F66332492C06B000184DE /* IdentityProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityProperties.swift; sourceTree = "<group>"; };
 		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
-		214B5222248ABC710034BF22 /* AEPIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPIdentity.swift; sourceTree = "<group>"; };
-		214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+Identity.swift"; sourceTree = "<group>"; };
-		214B5226248ABD5D0034BF22 /* IdentityConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
-		214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+IdentityTests.swift"; sourceTree = "<group>"; };
-		2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
-		215AE3AA24BF740F00FC931F /* AEPIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		218194842489D3D7004F869A /* MockDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataStore.swift; sourceTree = "<group>"; };
-		2181948A2489F66D004F869A /* Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
-		2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileVisitorAuthenticationState.swift; sourceTree = "<group>"; };
-		2181948E2489FC97004F869A /* CustomIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIdentity.swift; sourceTree = "<group>"; };
-		2182778C24B792F9005A468A /* URLAppender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAppender.swift; sourceTree = "<group>"; };
-		2182778E24B79320005A468A /* URLAppenderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLAppenderTests.swift; sourceTree = "<group>"; };
-		21B0B61824B3A6C8002A1B1A /* Event+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Identity.swift"; sourceTree = "<group>"; };
-		21B0B61A24B3A7B7002A1B1A /* IdentityState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityState.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -341,7 +344,6 @@
 		21CAC0E42422917600C11388 /* AEPCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPCoreTests.swift; sourceTree = "<group>"; };
 		21CAC0E62422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21F9174B2433E429000743E3 /* MockExtensionTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtensionTwo.swift; sourceTree = "<group>"; };
-		21FBBB242491553100C66506 /* NetworkService+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NetworkService+Identity.swift"; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -460,8 +462,6 @@
 		3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AEPCore+Configuration.swift"; path = "Sources/AEPCore+Configuration.swift"; sourceTree = "<group>"; };
 		3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreConstants.swift; path = Sources/CoreConstants.swift; sourceTree = "<group>"; };
 		3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
-		3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentities.swift; sourceTree = "<group>"; };
-		3FE6DD8524C5EDC40065EA05 /* MobileIdentitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentitiesTests.swift; sourceTree = "<group>"; };
 		3FE6DDA924C62C090065EA05 /* AEPServicesMock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServicesMock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPLifecycle.h; sourceTree = "<group>"; };
@@ -493,6 +493,43 @@
 		3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AEPCore+Lifecycle.swift"; path = "Sources/AEPCore+Lifecycle.swift"; sourceTree = "<group>"; };
 		3FE6DE1D24C632450065EA05 /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Lifecycle.swift; path = Sources/Lifecycle.swift; sourceTree = "<group>"; };
 		3FE6DE2824C63B520065EA05 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Sources/Configuration.swift; sourceTree = "<group>"; };
+		3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPIdentity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FE6DE3124C642330065EA05 /* AEPIdentity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPIdentity.h; sourceTree = "<group>"; };
+		3FE6DE3224C642330065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FE6DE3724C642330065EA05 /* AEPIdentityTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPIdentityTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FE6DE3E24C642330065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileVisitorAuthenticationState.swift; sourceTree = "<group>"; };
+		3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+Identity.swift"; sourceTree = "<group>"; };
+		3FE6DE4824C643050065EA05 /* IdentityProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityProperties.swift; sourceTree = "<group>"; };
+		3FE6DE4924C643050065EA05 /* AEPIdentity+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+Identity.swift"; sourceTree = "<group>"; };
+		3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
+		3FE6DE4B24C643050065EA05 /* Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
+		3FE6DE4C24C643050065EA05 /* NetworkService+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkService+Identity.swift"; sourceTree = "<group>"; };
+		3FE6DE4D24C643050065EA05 /* IdentityState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityState.swift; sourceTree = "<group>"; };
+		3FE6DE4E24C643060065EA05 /* MID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MID.swift; sourceTree = "<group>"; };
+		3FE6DE4F24C643060065EA05 /* Event+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+Identity.swift"; sourceTree = "<group>"; };
+		3FE6DE5024C643060065EA05 /* CustomIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomIdentity.swift; sourceTree = "<group>"; };
+		3FE6DE5124C643060065EA05 /* IdentityHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHit.swift; sourceTree = "<group>"; };
+		3FE6DE5224C643060065EA05 /* URLAppender.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLAppender.swift; sourceTree = "<group>"; };
+		3FE6DE5324C643060065EA05 /* MobileIdentities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentities.swift; sourceTree = "<group>"; };
+		3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitResponse.swift; sourceTree = "<group>"; };
+		3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitProcessor.swift; sourceTree = "<group>"; };
+		3FE6DE5624C643060065EA05 /* AEPIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentity.swift; sourceTree = "<group>"; };
+		3FE6DE5724C643060065EA05 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
+		3FE6DE5824C643060065EA05 /* URL+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Identity.swift"; sourceTree = "<group>"; };
+		3FE6DE6C24C643610065EA05 /* MIDTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
+		3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentitiesTests.swift; sourceTree = "<group>"; };
+		3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+IdentityTests.swift"; sourceTree = "<group>"; };
+		3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+IdentityTests.swift"; sourceTree = "<group>"; };
+		3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityStateTests.swift; sourceTree = "<group>"; };
+		3FE6DE7124C643620065EA05 /* AEPIdentity+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+IdentityTests.swift"; sourceTree = "<group>"; };
+		3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLAppenderTests.swift; sourceTree = "<group>"; };
+		3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitProcessorTests.swift; sourceTree = "<group>"; };
+		3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitResponseTests.swift; sourceTree = "<group>"; };
+		3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkService+IdentityTests.swift"; sourceTree = "<group>"; };
+		3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
+		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
+		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78D754F1244511D100DB9124 /* TestConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		78DEFEF0244A183400D7E9FB /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
@@ -570,6 +607,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3FE6DE2C24C642330065EA05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FE6DE3424C642330065EA05 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FE6DE3824C642330065EA05 /* AEPIdentity.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -593,52 +645,6 @@
 			path = MockExtensions;
 			sourceTree = "<group>";
 		};
-		214B5228248AE6460034BF22 /* IdentityTests */ = {
-			isa = PBXGroup;
-			children = (
-				3FE6DD8524C5EDC40065EA05 /* MobileIdentitiesTests.swift */,
-				215AE3AA24BF740F00FC931F /* AEPIdentityTests.swift */,
-				214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */,
-				213F66312492A8B9000184DE /* MIDTests.swift */,
-				2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */,
-				211728902491680000BB7BD3 /* NetworkService+IdentityTests.swift */,
-				2137BA142498317500F01D04 /* URL+IdentityTests.swift */,
-				2137BA162498318300F01D04 /* URLQueryItem+IdentityTests.swift */,
-				2182778E24B79320005A468A /* URLAppenderTests.swift */,
-				212760FA24B4E1C5003AAC41 /* IdentityStateTests.swift */,
-				213F63AB24C1590C006931EB /* IdentityHitProcessorTests.swift */,
-				213F63AD24C1591D006931EB /* IdentityHitResponseTests.swift */,
-			);
-			path = IdentityTests;
-			sourceTree = "<group>";
-		};
-		218194892489F65D004F869A /* identity */ = {
-			isa = PBXGroup;
-			children = (
-				3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */,
-				2181948A2489F66D004F869A /* Identity.swift */,
-				214B5222248ABC710034BF22 /* AEPIdentity.swift */,
-				214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */,
-				21B0B61824B3A6C8002A1B1A /* Event+Identity.swift */,
-				21B0B61A24B3A7B7002A1B1A /* IdentityState.swift */,
-				214B5226248ABD5D0034BF22 /* IdentityConstants.swift */,
-				2181948C2489FA40004F869A /* MobileVisitorAuthenticationState.swift */,
-				2181948E2489FC97004F869A /* CustomIdentity.swift */,
-				21172894249177FC00BB7BD3 /* Identifiable.swift */,
-				213F662F2492A808000184DE /* MID.swift */,
-				213F66332492C06B000184DE /* IdentityProperties.swift */,
-				21FBBB242491553100C66506 /* NetworkService+Identity.swift */,
-				2137BA122498314000F01D04 /* URL+Identity.swift */,
-				2137BA102498311600F01D04 /* URLQueryItem+Identity.swift */,
-				2182778C24B792F9005A468A /* URLAppender.swift */,
-				213F63AF24C15962006931EB /* IdentityHit.swift */,
-				213F63B324C1598D006931EB /* IdentityHitResponse.swift */,
-				213F63B124C15977006931EB /* IdentityHitProcessor.swift */,
-			);
-			name = identity;
-			path = Sources/identity;
-			sourceTree = "<group>";
-		};
 		21ABCAF224B38EEB008C4EDF /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -659,6 +665,8 @@
 				3FE6DDAA24C62C090065EA05 /* AEPServicesMock */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3FE6DDDD24C62EE60065EA05 /* AEPLifecycleTests */,
+				3FE6DE3024C642330065EA05 /* AEPIdentity */,
+				3FE6DE3B24C642330065EA05 /* AEPIdentityTests */,
 				21CAC0D72422917600C11388 /* Products */,
 				21ABCAF224B38EEB008C4EDF /* Recovered References */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
@@ -677,6 +685,8 @@
 				3FE6DDA924C62C090065EA05 /* AEPServicesMock.framework */,
 				3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */,
 				3FE6DDD924C62EE60065EA05 /* AEPLifecycleTests.xctest */,
+				3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */,
+				3FE6DE3724C642330065EA05 /* AEPIdentityTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -691,7 +701,6 @@
 				3FE6DE1D24C632450065EA05 /* Lifecycle.swift */,
 				3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */,
 				3FE6DD7724C54C230065EA05 /* Extension+Register.swift */,
-				218194892489F65D004F869A /* identity */,
 				21CAC0D92422917600C11388 /* AEPCore.h */,
 				21CAC0DA2422917600C11388 /* Info.plist */,
 			);
@@ -701,7 +710,6 @@
 		21CAC0E32422917600C11388 /* AEPCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				214B5228248AE6460034BF22 /* IdentityTests */,
 				21D4A658246D991200DFCD02 /* LifecycleTests */,
 				78D754F02445115200DB9124 /* TestResources */,
 				21CAC0E42422917600C11388 /* AEPCoreTests.swift */,
@@ -1053,6 +1061,65 @@
 			path = AEPLifecycle/Tests;
 			sourceTree = "<group>";
 		};
+		3FE6DE3024C642330065EA05 /* AEPIdentity */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6DE5624C643060065EA05 /* AEPIdentity.swift */,
+				3FE6DE4924C643050065EA05 /* AEPIdentity+Identity.swift */,
+				3FE6DE5024C643060065EA05 /* CustomIdentity.swift */,
+				3FE6DE4F24C643060065EA05 /* Event+Identity.swift */,
+				3FE6DE5724C643060065EA05 /* Identifiable.swift */,
+				3FE6DE4B24C643050065EA05 /* Identity.swift */,
+				3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */,
+				3FE6DE5124C643060065EA05 /* IdentityHit.swift */,
+				3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */,
+				3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */,
+				3FE6DE4824C643050065EA05 /* IdentityProperties.swift */,
+				3FE6DE4D24C643050065EA05 /* IdentityState.swift */,
+				3FE6DE4E24C643060065EA05 /* MID.swift */,
+				3FE6DE5324C643060065EA05 /* MobileIdentities.swift */,
+				3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */,
+				3FE6DE4C24C643050065EA05 /* NetworkService+Identity.swift */,
+				3FE6DE5824C643060065EA05 /* URL+Identity.swift */,
+				3FE6DE5224C643060065EA05 /* URLAppender.swift */,
+				3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */,
+				3FE6DE3124C642330065EA05 /* AEPIdentity.h */,
+				3FE6DE3224C642330065EA05 /* Info.plist */,
+			);
+			name = AEPIdentity;
+			path = AEPIdentity/Sources;
+			sourceTree = "<group>";
+		};
+		3FE6DE3B24C642330065EA05 /* AEPIdentityTests */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6DE8624C643EA0065EA05 /* TestHelpers */,
+				3FE6DE7124C643620065EA05 /* AEPIdentity+IdentityTests.swift */,
+				3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */,
+				3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */,
+				3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */,
+				3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */,
+				3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */,
+				3FE6DE6C24C643610065EA05 /* MIDTests.swift */,
+				3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */,
+				3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */,
+				3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */,
+				3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */,
+				3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */,
+				3FE6DE3E24C642330065EA05 /* Info.plist */,
+			);
+			name = AEPIdentityTests;
+			path = AEPIdentity/Tests;
+			sourceTree = "<group>";
+		};
+		3FE6DE8624C643EA0065EA05 /* TestHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */,
+			);
+			path = TestHelpers;
+			sourceTree = "<group>";
+		};
 		78D754F02445115200DB9124 /* TestResources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1104,6 +1171,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE6DDE124C62EE60065EA05 /* AEPLifecycle.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FE6DE2A24C642330065EA05 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FE6DE3F24C642330065EA05 /* AEPIdentity.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1282,6 +1357,45 @@
 			productReference = 3FE6DDD924C62EE60065EA05 /* AEPLifecycleTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		3FE6DE2E24C642330065EA05 /* AEPIdentity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3FE6DE4024C642330065EA05 /* Build configuration list for PBXNativeTarget "AEPIdentity" */;
+			buildPhases = (
+				3FE6DE2A24C642330065EA05 /* Headers */,
+				3FE6DE2B24C642330065EA05 /* Sources */,
+				3FE6DE2C24C642330065EA05 /* Frameworks */,
+				3FE6DE2D24C642330065EA05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3FE6DE8C24C6463B0065EA05 /* PBXTargetDependency */,
+				3FE6DE8A24C646360065EA05 /* PBXTargetDependency */,
+			);
+			name = AEPIdentity;
+			productName = AEPIdentity;
+			productReference = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3FE6DE3624C642330065EA05 /* AEPIdentityTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3FE6DE4324C642330065EA05 /* Build configuration list for PBXNativeTarget "AEPIdentityTests" */;
+			buildPhases = (
+				3FE6DE3324C642330065EA05 /* Sources */,
+				3FE6DE3424C642330065EA05 /* Frameworks */,
+				3FE6DE3524C642330065EA05 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3FE6DE8524C6437F0065EA05 /* PBXTargetDependency */,
+				3FE6DE3A24C642330065EA05 /* PBXTargetDependency */,
+			);
+			name = AEPIdentityTests;
+			productName = AEPIdentityTests;
+			productReference = 3FE6DE3724C642330065EA05 /* AEPIdentityTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1324,6 +1438,14 @@
 						CreatedOnToolsVersion = 11.5;
 						LastSwiftMigration = 1150;
 					};
+					3FE6DE2E24C642330065EA05 = {
+						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
+					};
+					3FE6DE3624C642330065EA05 = {
+						CreatedOnToolsVersion = 11.5;
+						LastSwiftMigration = 1150;
+					};
 				};
 			};
 			buildConfigurationList = 21CAC0D02422917600C11388 /* Build configuration list for PBXProject "AEPCore" */;
@@ -1348,6 +1470,8 @@
 				3F03985324C0008D0019F095 /* AEPEventHubTests */,
 				3FE6DDD024C62EE60065EA05 /* AEPLifecycle */,
 				3FE6DDD824C62EE60065EA05 /* AEPLifecycleTests */,
+				3FE6DE2E24C642330065EA05 /* AEPIdentity */,
+				3FE6DE3624C642330065EA05 /* AEPIdentityTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1425,6 +1549,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3FE6DE2D24C642330065EA05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FE6DE3524C642330065EA05 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1432,30 +1570,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2181948F2489FC97004F869A /* CustomIdentity.swift in Sources */,
 				3FE6DD7B24C54D0B0065EA05 /* Extension+Register.swift in Sources */,
 				3FE6DD7D24C54DF10065EA05 /* AEPCore+Configuration.swift in Sources */,
-				21B0B61924B3A6C8002A1B1A /* Event+Identity.swift in Sources */,
-				2137BA112498311600F01D04 /* URLQueryItem+Identity.swift in Sources */,
-				214B5225248ABCEB0034BF22 /* AEPIdentity+Identity.swift in Sources */,
-				21172895249177FC00BB7BD3 /* Identifiable.swift in Sources */,
-				213F63B024C15962006931EB /* IdentityHit.swift in Sources */,
-				21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */,
-				3FE6DD8424C5ED400065EA05 /* MobileIdentities.swift in Sources */,
-				213F66302492A808000184DE /* MID.swift in Sources */,
-				2181948B2489F66D004F869A /* Identity.swift in Sources */,
 				3FE6DE1924C631B00065EA05 /* AEPCore+Lifecycle.swift in Sources */,
-				214B5223248ABC710034BF22 /* AEPIdentity.swift in Sources */,
-				213F63B424C1598D006931EB /* IdentityHitResponse.swift in Sources */,
-				2137BA132498314000F01D04 /* URL+Identity.swift in Sources */,
 				3FE6DD7F24C54E260065EA05 /* CoreConstants.swift in Sources */,
-				214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */,
-				21B0B61B24B3A7B7002A1B1A /* IdentityState.swift in Sources */,
-				213F63B224C15977006931EB /* IdentityHitProcessor.swift in Sources */,
 				3FE6DE2924C63B520065EA05 /* Configuration.swift in Sources */,
-				2181948D2489FA40004F869A /* MobileVisitorAuthenticationState.swift in Sources */,
-				213F66342492C06B000184DE /* IdentityProperties.swift in Sources */,
-				2182778D24B792F9005A468A /* URLAppender.swift in Sources */,
 				3FE6DE1E24C632450065EA05 /* Lifecycle.swift in Sources */,
 				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
 			);
@@ -1465,26 +1584,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				213F63AE24C1591D006931EB /* IdentityHitResponseTests.swift in Sources */,
-				213F63AC24C1590C006931EB /* IdentityHitProcessorTests.swift in Sources */,
-				214B522A248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift in Sources */,
 				2131A1B42465D81E00F1392D /* EventHub+Testable.swift in Sources */,
-				2137BA152498317500F01D04 /* URL+IdentityTests.swift in Sources */,
 				21CAC0E52422917600C11388 /* AEPCoreTests.swift in Sources */,
-				2159F4282493FF3C0008851C /* IdentityPropertiesTests.swift in Sources */,
 				21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */,
-				2137BA172498318300F01D04 /* URLQueryItem+IdentityTests.swift in Sources */,
 				3FE6DD7A24C54CDC0065EA05 /* TestableExtensionRuntime.swift in Sources */,
-				2182778F24B79320005A468A /* URLAppenderTests.swift in Sources */,
 				21F9174C2433E429000743E3 /* MockExtensionTwo.swift in Sources */,
-				213F66322492A8B9000184DE /* MIDTests.swift in Sources */,
-				211728912491680000BB7BD3 /* NetworkService+IdentityTests.swift in Sources */,
 				213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */,
 				213C8BD524252302009F780A /* MockExtension.swift in Sources */,
 				3FE6DD8224C5EA330065EA05 /* AEPCore+ConfigurationTests.swift in Sources */,
-				212760FB24B4E1C5003AAC41 /* IdentityStateTests.swift in Sources */,
-				215AE3AB24BF740F00FC931F /* AEPIdentityTests.swift in Sources */,
-				3FE6DD8624C5EDC40065EA05 /* MobileIdentitiesTests.swift in Sources */,
 				214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1656,6 +1763,52 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3FE6DE2B24C642330065EA05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FE6DE5F24C643060065EA05 /* NetworkService+Identity.swift in Sources */,
+				3FE6DE6024C643060065EA05 /* IdentityState.swift in Sources */,
+				3FE6DE5D24C643060065EA05 /* IdentityConstants.swift in Sources */,
+				3FE6DE6424C643060065EA05 /* IdentityHit.swift in Sources */,
+				3FE6DE6824C643060065EA05 /* IdentityHitProcessor.swift in Sources */,
+				3FE6DE5E24C643060065EA05 /* Identity.swift in Sources */,
+				3FE6DE5924C643060065EA05 /* MobileVisitorAuthenticationState.swift in Sources */,
+				3FE6DE5A24C643060065EA05 /* URLQueryItem+Identity.swift in Sources */,
+				3FE6DE6724C643060065EA05 /* IdentityHitResponse.swift in Sources */,
+				3FE6DE6224C643060065EA05 /* Event+Identity.swift in Sources */,
+				3FE6DE6324C643060065EA05 /* CustomIdentity.swift in Sources */,
+				3FE6DE5C24C643060065EA05 /* AEPIdentity+Identity.swift in Sources */,
+				3FE6DE6924C643060065EA05 /* AEPIdentity.swift in Sources */,
+				3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */,
+				3FE6DE6124C643060065EA05 /* MID.swift in Sources */,
+				3FE6DE6524C643060065EA05 /* URLAppender.swift in Sources */,
+				3FE6DE5B24C643060065EA05 /* IdentityProperties.swift in Sources */,
+				3FE6DE6624C643060065EA05 /* MobileIdentities.swift in Sources */,
+				3FE6DE6B24C643060065EA05 /* URL+Identity.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FE6DE3324C642330065EA05 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FE6DE8024C643620065EA05 /* IdentityHitResponseTests.swift in Sources */,
+				3FE6DE7824C643620065EA05 /* MIDTests.swift in Sources */,
+				3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */,
+				3FE6DE7C24C643620065EA05 /* IdentityStateTests.swift in Sources */,
+				3FE6DE7D24C643620065EA05 /* AEPIdentity+IdentityTests.swift in Sources */,
+				3FE6DE8124C643620065EA05 /* NetworkService+IdentityTests.swift in Sources */,
+				3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */,
+				3FE6DE7A24C643620065EA05 /* URL+IdentityTests.swift in Sources */,
+				3FE6DE7F24C643620065EA05 /* IdentityHitProcessorTests.swift in Sources */,
+				3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */,
+				3FE6DE7E24C643620065EA05 /* URLAppenderTests.swift in Sources */,
+				3FE6DE7B24C643620065EA05 /* URLQueryItem+IdentityTests.swift in Sources */,
+				3FE6DE7924C643620065EA05 /* MobileIdentitiesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1728,6 +1881,26 @@
 			isa = PBXTargetDependency;
 			target = 3FE6DDA824C62C090065EA05 /* AEPServicesMock */;
 			targetProxy = 3FE6DE2624C634B50065EA05 /* PBXContainerItemProxy */;
+		};
+		3FE6DE3A24C642330065EA05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FE6DE2E24C642330065EA05 /* AEPIdentity */;
+			targetProxy = 3FE6DE3924C642330065EA05 /* PBXContainerItemProxy */;
+		};
+		3FE6DE8524C6437F0065EA05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FE6DDA824C62C090065EA05 /* AEPServicesMock */;
+			targetProxy = 3FE6DE8424C6437F0065EA05 /* PBXContainerItemProxy */;
+		};
+		3FE6DE8A24C646360065EA05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03978624BE5DD30019F095 /* AEPServices */;
+			targetProxy = 3FE6DE8924C646360065EA05 /* PBXContainerItemProxy */;
+		};
+		3FE6DE8C24C6463B0065EA05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03984B24C0008C0019F095 /* AEPEventHub */;
+			targetProxy = 3FE6DE8B24C6463B0065EA05 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2265,6 +2438,98 @@
 			};
 			name = Release;
 		};
+		3FE6DE4124C642330065EA05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPIdentity;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3FE6DE4224C642330065EA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPIdentity;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3FE6DE4424C642330065EA05 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPIdentityTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3FE6DE4524C642330065EA05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPIdentityTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2354,6 +2619,24 @@
 			buildConfigurations = (
 				3FE6DDE624C62EE60065EA05 /* Debug */,
 				3FE6DDE724C62EE60065EA05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3FE6DE4024C642330065EA05 /* Build configuration list for PBXNativeTarget "AEPIdentity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FE6DE4124C642330065EA05 /* Debug */,
+				3FE6DE4224C642330065EA05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3FE6DE4324C642330065EA05 /* Build configuration list for PBXNativeTarget "AEPIdentityTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3FE6DE4424C642330065EA05 /* Debug */,
+				3FE6DE4524C642330065EA05 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
