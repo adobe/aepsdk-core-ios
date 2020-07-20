@@ -24,8 +24,6 @@ class EventHubSharedState: Extension {
         self.runtime = runtime
     }
     
-    
     func onRegistered() {}
-    
     func onUnregistered() {}
 }
