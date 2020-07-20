@@ -47,4 +47,15 @@ extension Event {
                               identifier: adId,
                               authenticationState: .authenticated)
     }
+    
+    /// Reads the base url from the event data if present
+    var baseUrl: String? {
+        return data?[IdentityConstants.EventDataKeys.BASE_URL] as? String
+    }
+
+    /// Reads the url variables flag from the event data, returns false if not present
+    var urlVariables: Bool {
+        return data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? Bool ?? false
+    }
+    
 }

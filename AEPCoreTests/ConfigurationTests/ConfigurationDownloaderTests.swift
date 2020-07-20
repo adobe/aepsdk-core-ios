@@ -90,7 +90,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: true)
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         let expectedConfigSize = 16
 
         var remoteConfig: [String: Any]? = nil
@@ -112,7 +112,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(shouldReturnValidResponse: false)
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
         
         var remoteConfig: [String: Any]? = nil
         
@@ -125,6 +125,43 @@ class ConfigurationDownloaderTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 0.5)
         XCTAssertNil(remoteConfig)
+    }
+    
+    /// Ensures that when the network service returns a 304 response that the cached config is used
+    func testLoadConfigFromUrlNotModified() {
+        // setup
+        let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
+        expectation.assertForOverFulfill = true
+        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .notModified)
+        
+        let appId = "test-app-id"
+        let expectedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
+                                                    "target.clientCode": "yourclientcode",
+                                                    "target.timeout": 5,
+                                                    "audience.server": "omniture.demdex.net",
+                                                    "audience.timeout": 5,
+                                                    "analytics.rsids": "mobilersidsample",
+                                                    "analytics.server": "obumobile1.sc.omtrdc.net",
+                                                    "analytics.aamForwardingEnabled": false,
+                                                    "analytics.offlineEnabled": true,
+                                                    "analytics.batchLimit": 0,
+                                                    "analytics.backdatePreviousSessionInfo": false,
+                                                    "global.privacy": "optedin",
+                                                    "lifecycle.sessionTimeout": 300,
+                                                    "rules.url": "https://link.to.rules/test.zip"]
+        dataStore.setObject(key: "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(config: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
+
+        var remoteConfig: [String: Any]? = nil
+        
+        // test
+        ConfigurationDownloader().loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { (loadedConfig) in
+            remoteConfig = loadedConfig
+            expectation.fulfill()
+        })
+
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertEqual(expectedConfig.count, remoteConfig?.count)
     }
     
     /// Tests that a nil configuration is returned when an empty appId is passed

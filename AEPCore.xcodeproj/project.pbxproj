@@ -39,6 +39,7 @@
 		215AA61F2465DFF900CEB4F4 /* ConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215AA61E2465DFF900CEB4F4 /* ConfigurationDownloader.swift */; };
 		215AA6212465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215AA6202465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift */; };
 		215AA6232465E06600CEB4F4 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */; };
+		215AE3AB24BF740F00FC931F /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215AE3AA24BF740F00FC931F /* AEPIdentityTests.swift */; };
 		215CA8152481C9430078D778 /* LifecycleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215CA8142481C9430078D778 /* LifecycleState.swift */; };
 		215CA8172481C9610078D778 /* LifecycleContextData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215CA8162481C9610078D778 /* LifecycleContextData.swift */; };
 		215CA8192481CA780078D778 /* LifecycleStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215CA8182481CA780078D778 /* LifecycleStateTests.swift */; };
@@ -282,6 +283,7 @@
 		215AA61E2465DFF900CEB4F4 /* ConfigurationDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ConfigurationDownloader.swift; path = Sources/configuration/ConfigurationDownloader.swift; sourceTree = SOURCE_ROOT; };
 		215AA6202465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloaderTests.swift; sourceTree = "<group>"; };
 		215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
+		215AE3AA24BF740F00FC931F /* AEPIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
 		215CA8142481C9430078D778 /* LifecycleState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LifecycleState.swift; path = Sources/Lifecycle/LifecycleState.swift; sourceTree = SOURCE_ROOT; };
 		215CA8162481C9610078D778 /* LifecycleContextData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LifecycleContextData.swift; path = Sources/Lifecycle/LifecycleContextData.swift; sourceTree = SOURCE_ROOT; };
 		215CA8182481CA780078D778 /* LifecycleStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleStateTests.swift; sourceTree = "<group>"; };
@@ -553,6 +555,7 @@
 		214B5228248AE6460034BF22 /* IdentityTests */ = {
 			isa = PBXGroup;
 			children = (
+				215AE3AA24BF740F00FC931F /* AEPIdentityTests.swift */,
 				214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */,
 				213F66312492A8B9000184DE /* MIDTests.swift */,
 				2159F4272493FF3C0008851C /* IdentityPropertiesTests.swift */,
@@ -1333,6 +1336,7 @@
 				213C8BD524252302009F780A /* MockExtension.swift in Sources */,
 				212760FB24B4E1C5003AAC41 /* IdentityStateTests.swift in Sources */,
 				213C8BCA242521BC009F780A /* EventHubTests.swift in Sources */,
+				215AE3AB24BF740F00FC931F /* AEPIdentityTests.swift in Sources */,
 				21F02C382477077600D25528 /* ConfigurationStateTests.swift in Sources */,
 				215CA8192481CA780078D778 /* LifecycleStateTests.swift in Sources */,
 				214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */,
