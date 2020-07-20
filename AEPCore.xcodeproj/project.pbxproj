@@ -164,6 +164,32 @@
 		3F03983F24BE635D0019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F03984424BE65A80019F095 /* MockSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03984324BE65A80019F095 /* MockSystemInfoService.swift */; };
+		3F03985524C0008D0019F095 /* AEPEventHub.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03984C24C0008D0019F095 /* AEPEventHub.framework */; };
+		3F03985A24C0008D0019F095 /* AEPEventHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03985924C0008D0019F095 /* AEPEventHubTests.swift */; };
+		3F03985C24C0008D0019F095 /* AEPEventHub.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F03984E24C0008D0019F095 /* AEPEventHub.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3F03987D24C001350019F095 /* EventHubConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986424C001350019F095 /* EventHubConstants.swift */; };
+		3F03987E24C001350019F095 /* ExtensionContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986524C001350019F095 /* ExtensionContainer.swift */; };
+		3F03987F24C001350019F095 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986624C001350019F095 /* Event.swift */; };
+		3F03988024C001350019F095 /* AEPError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986724C001350019F095 /* AEPError.swift */; };
+		3F03988124C001350019F095 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986824C001350019F095 /* SharedState.swift */; };
+		3F03988224C001350019F095 /* EventHub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986924C001350019F095 /* EventHub.swift */; };
+		3F03988324C001350019F095 /* ExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986A24C001350019F095 /* ExtensionRuntime.swift */; };
+		3F03988424C001350019F095 /* EventType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986B24C001350019F095 /* EventType.swift */; };
+		3F03988524C001350019F095 /* EventHubError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986C24C001350019F095 /* EventHubError.swift */; };
+		3F03988624C001350019F095 /* EventSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986D24C001350019F095 /* EventSource.swift */; };
+		3F03988724C001350019F095 /* EventListenerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986E24C001350019F095 /* EventListenerContainer.swift */; };
+		3F03988824C001350019F095 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03986F24C001350019F095 /* Extension.swift */; };
+		3F03988924C001350019F095 /* AEPConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987124C001350019F095 /* AEPConfiguration.swift */; };
+		3F03988A24C001350019F095 /* ConfigurationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987224C001350019F095 /* ConfigurationConstants.swift */; };
+		3F03988B24C001350019F095 /* ConfigurationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987324C001350019F095 /* ConfigurationState.swift */; };
+		3F03988C24C001350019F095 /* LaunchIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987424C001350019F095 /* LaunchIDManager.swift */; };
+		3F03988D24C001350019F095 /* Event+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987524C001350019F095 /* Event+Configuration.swift */; };
+		3F03988E24C001350019F095 /* MobileIdentities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987624C001350019F095 /* MobileIdentities.swift */; };
+		3F03988F24C001350019F095 /* ConfigurationDownloadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987724C001350019F095 /* ConfigurationDownloadable.swift */; };
+		3F03989024C001350019F095 /* CachedConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987824C001350019F095 /* CachedConfiguration.swift */; };
+		3F03989124C001350019F095 /* ConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987924C001350019F095 /* ConfigurationDownloader.swift */; };
+		3F03989324C001350019F095 /* PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987B24C001350019F095 /* PrivacyStatus.swift */; };
+		3F03989424C001350019F095 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987C24C001350019F095 /* Configuration.swift */; };
 		3FC9665324B3E4EE0096F572 /* ExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */; };
 		7629742F24294249005CCC73 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7629742E24294249005CCC73 /* SharedStateTest.swift */; };
 		7861450024BCD5C2004CB317 /* SharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786144FF24BCD5C1004CB317 /* SharedState.swift */; };
@@ -201,6 +227,20 @@
 			remoteInfo = AEPServices;
 		};
 		3F03984024BE65120019F095 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03978624BE5DD30019F095;
+			remoteInfo = AEPServices;
+		};
+		3F03985624C0008D0019F095 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03984B24C0008C0019F095;
+			remoteInfo = AEPEventHub;
+		};
+		3F03989524C001400019F095 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
 			proxyType = 1;
@@ -373,6 +413,35 @@
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		3F03984324BE65A80019F095 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSystemInfoService.swift; sourceTree = "<group>"; };
 		3F03984524BE65B10019F095 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockSystemInfoService.swift; sourceTree = "<group>"; };
+		3F03984C24C0008D0019F095 /* AEPEventHub.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPEventHub.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F03984E24C0008D0019F095 /* AEPEventHub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPEventHub.h; sourceTree = "<group>"; };
+		3F03984F24C0008D0019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F03985424C0008D0019F095 /* AEPEventHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPEventHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F03985924C0008D0019F095 /* AEPEventHubTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPEventHubTests.swift; sourceTree = "<group>"; };
+		3F03985B24C0008D0019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F03986424C001350019F095 /* EventHubConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubConstants.swift; sourceTree = "<group>"; };
+		3F03986524C001350019F095 /* ExtensionContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionContainer.swift; sourceTree = "<group>"; };
+		3F03986624C001350019F095 /* Event.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		3F03986724C001350019F095 /* AEPError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPError.swift; sourceTree = "<group>"; };
+		3F03986824C001350019F095 /* SharedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedState.swift; sourceTree = "<group>"; };
+		3F03986924C001350019F095 /* EventHub.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHub.swift; sourceTree = "<group>"; };
+		3F03986A24C001350019F095 /* ExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionRuntime.swift; sourceTree = "<group>"; };
+		3F03986B24C001350019F095 /* EventType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventType.swift; sourceTree = "<group>"; };
+		3F03986C24C001350019F095 /* EventHubError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubError.swift; sourceTree = "<group>"; };
+		3F03986D24C001350019F095 /* EventSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventSource.swift; sourceTree = "<group>"; };
+		3F03986E24C001350019F095 /* EventListenerContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListenerContainer.swift; sourceTree = "<group>"; };
+		3F03986F24C001350019F095 /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		3F03987124C001350019F095 /* AEPConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPConfiguration.swift; sourceTree = "<group>"; };
+		3F03987224C001350019F095 /* ConfigurationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationConstants.swift; sourceTree = "<group>"; };
+		3F03987324C001350019F095 /* ConfigurationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationState.swift; sourceTree = "<group>"; };
+		3F03987424C001350019F095 /* LaunchIDManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchIDManager.swift; sourceTree = "<group>"; };
+		3F03987524C001350019F095 /* Event+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+Configuration.swift"; sourceTree = "<group>"; };
+		3F03987624C001350019F095 /* MobileIdentities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentities.swift; sourceTree = "<group>"; };
+		3F03987724C001350019F095 /* ConfigurationDownloadable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloadable.swift; sourceTree = "<group>"; };
+		3F03987824C001350019F095 /* CachedConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedConfiguration.swift; sourceTree = "<group>"; };
+		3F03987924C001350019F095 /* ConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloader.swift; sourceTree = "<group>"; };
+		3F03987B24C001350019F095 /* PrivacyStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyStatus.swift; sourceTree = "<group>"; };
+		3F03987C24C001350019F095 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		3FC9665224B3E4EE0096F572 /* ExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionRuntime.swift; sourceTree = "<group>"; };
 		3FC9665424B4D7620096F572 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		7629742E24294249005CCC73 /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
@@ -418,6 +487,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F03984924C0008C0019F095 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F03985124C0008D0019F095 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F03985524C0008D0019F095 /* AEPEventHub.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -537,6 +621,8 @@
 				21CAC0E32422917600C11388 /* AEPCoreTests */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
 				3F03979324BE5DD30019F095 /* AEPServicesTests */,
+				3F03984D24C0008D0019F095 /* AEPEventHub */,
+				3F03985824C0008D0019F095 /* AEPEventHubTests */,
 				21CAC0D72422917600C11388 /* Products */,
 				21ABCAF224B38EEB008C4EDF /* Recovered References */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
@@ -550,6 +636,8 @@
 				21CAC0DF2422917600C11388 /* AEPCoreTests.xctest */,
 				3F03978724BE5DD30019F095 /* AEPServices.framework */,
 				3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */,
+				3F03984C24C0008D0019F095 /* AEPEventHub.framework */,
+				3F03985424C0008D0019F095 /* AEPEventHubTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -641,14 +729,14 @@
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
 			isa = PBXGroup;
 			children = (
+				3F03979E24BE5FF30019F095 /* AEPServices.h */,
+				3F0397B924BE5FF30019F095 /* Info.plist */,
 				3F0397E124BE60910019F095 /* utility */,
 				3F0397A524BE5FF30019F095 /* AEPServiceProvider.swift */,
-				3F03979E24BE5FF30019F095 /* AEPServices.h */,
 				3F0397C124BE5FF30019F095 /* AEPURLService.swift */,
 				3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */,
 				3F03979F24BE5FF30019F095 /* cache */,
 				3F0397B224BE5FF30019F095 /* dataqueue */,
-				3F0397B924BE5FF30019F095 /* Info.plist */,
 				3F0397A624BE5FF30019F095 /* log */,
 				3F0397AA24BE5FF30019F095 /* network */,
 				3F0397BA24BE5FF30019F095 /* storage */,
@@ -831,6 +919,65 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3F03984D24C0008D0019F095 /* AEPEventHub */ = {
+			isa = PBXGroup;
+			children = (
+				3F03984E24C0008D0019F095 /* AEPEventHub.h */,
+				3F03984F24C0008D0019F095 /* Info.plist */,
+				3F03987024C001350019F095 /* configuration */,
+				3F03986324C001350019F095 /* eventhub */,
+			);
+			name = AEPEventHub;
+			path = AEPEventHub/Sources;
+			sourceTree = "<group>";
+		};
+		3F03985824C0008D0019F095 /* AEPEventHubTests */ = {
+			isa = PBXGroup;
+			children = (
+				3F03985924C0008D0019F095 /* AEPEventHubTests.swift */,
+				3F03985B24C0008D0019F095 /* Info.plist */,
+			);
+			name = AEPEventHubTests;
+			path = AEPEventHub/Tests;
+			sourceTree = "<group>";
+		};
+		3F03986324C001350019F095 /* eventhub */ = {
+			isa = PBXGroup;
+			children = (
+				3F03986424C001350019F095 /* EventHubConstants.swift */,
+				3F03986524C001350019F095 /* ExtensionContainer.swift */,
+				3F03986624C001350019F095 /* Event.swift */,
+				3F03986724C001350019F095 /* AEPError.swift */,
+				3F03986824C001350019F095 /* SharedState.swift */,
+				3F03986924C001350019F095 /* EventHub.swift */,
+				3F03986A24C001350019F095 /* ExtensionRuntime.swift */,
+				3F03986B24C001350019F095 /* EventType.swift */,
+				3F03986C24C001350019F095 /* EventHubError.swift */,
+				3F03986D24C001350019F095 /* EventSource.swift */,
+				3F03986E24C001350019F095 /* EventListenerContainer.swift */,
+				3F03986F24C001350019F095 /* Extension.swift */,
+			);
+			path = eventhub;
+			sourceTree = "<group>";
+		};
+		3F03987024C001350019F095 /* configuration */ = {
+			isa = PBXGroup;
+			children = (
+				3F03987124C001350019F095 /* AEPConfiguration.swift */,
+				3F03987224C001350019F095 /* ConfigurationConstants.swift */,
+				3F03987324C001350019F095 /* ConfigurationState.swift */,
+				3F03987424C001350019F095 /* LaunchIDManager.swift */,
+				3F03987524C001350019F095 /* Event+Configuration.swift */,
+				3F03987624C001350019F095 /* MobileIdentities.swift */,
+				3F03987724C001350019F095 /* ConfigurationDownloadable.swift */,
+				3F03987824C001350019F095 /* CachedConfiguration.swift */,
+				3F03987924C001350019F095 /* ConfigurationDownloader.swift */,
+				3F03987B24C001350019F095 /* PrivacyStatus.swift */,
+				3F03987C24C001350019F095 /* Configuration.swift */,
+			);
+			path = configuration;
+			sourceTree = "<group>";
+		};
 		78D754F02445115200DB9124 /* TestResources */ = {
 			isa = PBXGroup;
 			children = (
@@ -858,6 +1005,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F0397C224BE5FF30019F095 /* AEPServices.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F03984724C0008C0019F095 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F03985C24C0008D0019F095 /* AEPEventHub.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -938,6 +1093,43 @@
 			productReference = 3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		3F03984B24C0008C0019F095 /* AEPEventHub */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3F03985D24C0008D0019F095 /* Build configuration list for PBXNativeTarget "AEPEventHub" */;
+			buildPhases = (
+				3F03984724C0008C0019F095 /* Headers */,
+				3F03984824C0008C0019F095 /* Sources */,
+				3F03984924C0008C0019F095 /* Frameworks */,
+				3F03984A24C0008C0019F095 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3F03989624C001400019F095 /* PBXTargetDependency */,
+			);
+			name = AEPEventHub;
+			productName = AEPEventHub;
+			productReference = 3F03984C24C0008D0019F095 /* AEPEventHub.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3F03985324C0008D0019F095 /* AEPEventHubTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3F03986024C0008D0019F095 /* Build configuration list for PBXNativeTarget "AEPEventHubTests" */;
+			buildPhases = (
+				3F03985024C0008D0019F095 /* Sources */,
+				3F03985124C0008D0019F095 /* Frameworks */,
+				3F03985224C0008D0019F095 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3F03985724C0008D0019F095 /* PBXTargetDependency */,
+			);
+			name = AEPEventHubTests;
+			productName = AEPEventHubTests;
+			productReference = 3F03985424C0008D0019F095 /* AEPEventHubTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -962,6 +1154,12 @@
 					3F03978E24BE5DD30019F095 = {
 						CreatedOnToolsVersion = 11.5;
 					};
+					3F03984B24C0008C0019F095 = {
+						CreatedOnToolsVersion = 11.5;
+					};
+					3F03985324C0008D0019F095 = {
+						CreatedOnToolsVersion = 11.5;
+					};
 				};
 			};
 			buildConfigurationList = 21CAC0D02422917600C11388 /* Build configuration list for PBXProject "AEPCore" */;
@@ -981,6 +1179,8 @@
 				21CAC0DE2422917600C11388 /* AEPCoreTests */,
 				3F03978624BE5DD30019F095 /* AEPServices */,
 				3F03978E24BE5DD30019F095 /* AEPServicesTests */,
+				3F03984B24C0008C0019F095 /* AEPEventHub */,
+				3F03985324C0008D0019F095 /* AEPEventHubTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1019,6 +1219,20 @@
 				3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */,
 				3F03983A24BE62AA0019F095 /* ADBMobileConfig.json in Resources */,
 				3F03983924BE62AA0019F095 /* TestImage.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F03984A24C0008C0019F095 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F03985224C0008D0019F095 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1208,6 +1422,44 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3F03984824C0008C0019F095 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F03988524C001350019F095 /* EventHubError.swift in Sources */,
+				3F03989324C001350019F095 /* PrivacyStatus.swift in Sources */,
+				3F03988324C001350019F095 /* ExtensionRuntime.swift in Sources */,
+				3F03988224C001350019F095 /* EventHub.swift in Sources */,
+				3F03988C24C001350019F095 /* LaunchIDManager.swift in Sources */,
+				3F03988824C001350019F095 /* Extension.swift in Sources */,
+				3F03989424C001350019F095 /* Configuration.swift in Sources */,
+				3F03988924C001350019F095 /* AEPConfiguration.swift in Sources */,
+				3F03988724C001350019F095 /* EventListenerContainer.swift in Sources */,
+				3F03987D24C001350019F095 /* EventHubConstants.swift in Sources */,
+				3F03988024C001350019F095 /* AEPError.swift in Sources */,
+				3F03988D24C001350019F095 /* Event+Configuration.swift in Sources */,
+				3F03988624C001350019F095 /* EventSource.swift in Sources */,
+				3F03987F24C001350019F095 /* Event.swift in Sources */,
+				3F03989024C001350019F095 /* CachedConfiguration.swift in Sources */,
+				3F03988124C001350019F095 /* SharedState.swift in Sources */,
+				3F03988E24C001350019F095 /* MobileIdentities.swift in Sources */,
+				3F03988424C001350019F095 /* EventType.swift in Sources */,
+				3F03988B24C001350019F095 /* ConfigurationState.swift in Sources */,
+				3F03989124C001350019F095 /* ConfigurationDownloader.swift in Sources */,
+				3F03988A24C001350019F095 /* ConfigurationConstants.swift in Sources */,
+				3F03987E24C001350019F095 /* ExtensionContainer.swift in Sources */,
+				3F03988F24C001350019F095 /* ConfigurationDownloadable.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3F03985024C0008D0019F095 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3F03985A24C0008D0019F095 /* AEPEventHubTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -1230,6 +1482,16 @@
 			isa = PBXTargetDependency;
 			target = 3F03978624BE5DD30019F095 /* AEPServices */;
 			targetProxy = 3F03984024BE65120019F095 /* PBXContainerItemProxy */;
+		};
+		3F03985724C0008D0019F095 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03984B24C0008C0019F095 /* AEPEventHub */;
+			targetProxy = 3F03985624C0008D0019F095 /* PBXContainerItemProxy */;
+		};
+		3F03989624C001400019F095 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03978624BE5DD30019F095 /* AEPServices */;
+			targetProxy = 3F03989524C001400019F095 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1538,6 +1800,92 @@
 			};
 			name = Release;
 		};
+		3F03985E24C0008D0019F095 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPEventHub/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPEventHub;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3F03985F24C0008D0019F095 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPEventHub/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPEventHub;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3F03986124C0008D0019F095 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPEventHub/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPEventHubTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3F03986224C0008D0019F095 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPEventHub/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPEventHubTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1582,6 +1930,24 @@
 			buildConfigurations = (
 				3F03979A24BE5DD30019F095 /* Debug */,
 				3F03979B24BE5DD30019F095 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3F03985D24C0008D0019F095 /* Build configuration list for PBXNativeTarget "AEPEventHub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F03985E24C0008D0019F095 /* Debug */,
+				3F03985F24C0008D0019F095 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3F03986024C0008D0019F095 /* Build configuration list for PBXNativeTarget "AEPEventHubTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F03986124C0008D0019F095 /* Debug */,
+				3F03986224C0008D0019F095 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
