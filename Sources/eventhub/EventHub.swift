@@ -37,6 +37,9 @@ final public class EventHub {
     // MARK: Public API
 
     init() {
+        // setup a fake extension container for `EventHub` so we can shared and retrieve state
+        registeredExtensions[EventHubConstants.NAME] = ExtensionContainer(EventHubSharedState.self, eventHubQueue)
+        
         // Setup eventQueue handler for the main OperationOrderer
         eventQueue.setHandler { (event) -> Bool in
             // Handle response event listeners first
@@ -208,7 +211,9 @@ final public class EventHub {
     /// Shares a shared state for the `EventHub` with data containing all the registered extensions
     private func shareEventHubSharedState() {
         var extensionsInfo = [String: [String: String]]()
-        for (_, val) in registeredExtensions.shallowCopy {
+        for (_, val) in registeredExtensions.shallowCopy
+            where val.sharedStateName != EventHubConstants.NAME {
+                
             if let exten = val.exten {
                 extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: exten.version]
                 if let metadata = exten.metadata, !metadata.isEmpty {
@@ -219,7 +224,7 @@ final public class EventHub {
         
         let coreVersion = registeredExtensions.shallowCopy[ConfigurationConstants.EXTENSION_NAME]?.exten?.version ?? "unknown" // use configuration version for "core" version
         let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: coreVersion, EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
-        createSharedState(extensionName: "Event Hub", data: data, event: nil)
+        createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
     }
 
 }

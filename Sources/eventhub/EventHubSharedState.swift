@@ -12,21 +12,20 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-@testable import AEPCore
-
-class MockExtensionTwo: TestableExtension {
-    var name = "mockExtensionTwo"
-    var friendlyName = "mockExtensionTwo"
+/// A "dummy" extension for `EventHub` so it can share state
+class EventHubSharedState: Extension {
+    var name = EventHubConstants.NAME
+    var friendlyName = EventHubConstants.FRIENDLY_NAME
     var version = "0.0.1"
     var metadata: [String : String]? = nil
-    
-    let runtime: ExtensionRuntime
-    
-    static var unregistrationClosure: (() -> Void)? = nil
-    static var registrationClosure: (() -> Void)? = nil
-    static var eventReceivedClosure: ((Event) -> Void)? = nil
-    
+    var runtime: ExtensionRuntime
+
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
     }
+    
+    
+    func onRegistered() {}
+    
+    func onUnregistered() {}
 }

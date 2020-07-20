@@ -52,7 +52,8 @@ class MockExtension: TestableExtension {
     var name = "mockExtension"
     var friendlyName = "mockExtension"
     var version = "0.0.1"
-
+    var metadata: [String : String]? = nil
+    
     static var registrationClosure: (() -> Void)? = nil
     static var unregistrationClosure: (() -> Void)? = nil
     static var eventReceivedClosure: ((Event) -> Void)? = nil
