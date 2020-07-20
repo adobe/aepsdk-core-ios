@@ -11,16 +11,13 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPEventHub
 
-/// Represents a entry in the cache
-public struct CacheEntry: Equatable {
+public extension Extension {
     
-    /// Data of the file for this entry
-    public let data: Data
-    
-    /// Expiry date of this cache entry
-    public let expiry: CacheExpiry
-    
-    /// Optional metadata associated with the cache entry
-    public let metadata: [String: String]?
+    /// Registers the `Extension` with the `EventHub`
+    //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
+    static func registerExtension() {
+        AEPCore.pendingExtensions.append(Self.self)
+    }
 }

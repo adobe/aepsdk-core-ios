@@ -12,15 +12,20 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// Represents a entry in the cache
-public struct CacheEntry: Equatable {
+class MockTask: URLSessionDataTask {
+    private let data: Data?
+    private let urlResponse: URLResponse?
+    private let _error: Error?
+    var completionHandler: ((Data?, URLResponse?, Error?) -> Void)? // set by MockURLSession
+
+    init(data: Data?, urlResponse: URLResponse?, error: Error?) {
+        self.data = data
+        self.urlResponse = urlResponse
+        self._error = error
+    }
     
-    /// Data of the file for this entry
-    public let data: Data
-    
-    /// Expiry date of this cache entry
-    public let expiry: CacheExpiry
-    
-    /// Optional metadata associated with the cache entry
-    public let metadata: [String: String]?
+    override func resume() {
+        guard let unwrappedCompletionHandler = completionHandler else { return }
+        unwrappedCompletionHandler(self.data, self.urlResponse, self._error)
+    }
 }

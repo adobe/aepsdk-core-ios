@@ -12,15 +12,13 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// Represents a entry in the cache
-public struct CacheEntry: Equatable {
-    
-    /// Data of the file for this entry
-    public let data: Data
-    
-    /// Expiry date of this cache entry
-    public let expiry: CacheExpiry
-    
-    /// Optional metadata associated with the cache entry
-    public let metadata: [String: String]?
+struct SharedStateTestHelper {
+    public static let DICT_KEY: String = "dictionary"
+    public static let ZERO: [String: Any] = [DICT_KEY: "zero"]
+    public static let ONE: [String: Any] = [DICT_KEY: "one"]
+    public static let TWO: [String: Any] = [DICT_KEY: "two"]
+    public static let THREE: [String: Any] = [DICT_KEY: "three"]
+    public static let FOUR: [String:Any] = [DICT_KEY:"four"]
+    public static let FIVE: [String:Any] = [DICT_KEY:"five"]
+    public static let TEN: [String:Any] = [DICT_KEY:"ten"]
 }

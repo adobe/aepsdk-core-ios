@@ -11,16 +11,10 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+@testable import AEPEventHub
 
-/// Represents a entry in the cache
-public struct CacheEntry: Equatable {
-    
-    /// Data of the file for this entry
-    public let data: Data
-    
-    /// Expiry date of this cache entry
-    public let expiry: CacheExpiry
-    
-    /// Optional metadata associated with the cache entry
-    public let metadata: [String: String]?
+extension EventHub {
+    static func reset() {
+        shared = EventHub()
+    }
 }

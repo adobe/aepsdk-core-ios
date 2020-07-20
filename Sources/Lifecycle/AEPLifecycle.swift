@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPServices
+import AEPEventHub
 
 class AEPLifecycle: Extension {
     let name = LifecycleConstants.EXTENSION_NAME
@@ -42,7 +43,7 @@ class AEPLifecycle: Extension {
     
     func readyForEvent(_ event: Event) -> Bool {
         if event.type == .genericLifecycle && event.source == .requestContent {
-            let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event)
+            let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event)
             return configurationSharedState?.status == .set
         }
         
@@ -54,7 +55,7 @@ class AEPLifecycle: Extension {
     /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`
     /// - Parameter event: the generic lifecycle event
     private func receiveLifecycleRequest(event: Event) {
-        guard let configurationSharedState = getSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: event) else { return }
+        guard let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event) else { return }
         
         if event.isLifecycleStartEvent {
             start(event: event, configurationSharedState: configurationSharedState)

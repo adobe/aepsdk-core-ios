@@ -12,15 +12,18 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// Represents a entry in the cache
-public struct CacheEntry: Equatable {
+@testable import AEPEventHub
+
+class MockExtensionTwo: TestableExtension {
+    var name = "mockExtensionTwo"
+    var version = "0.0.1"
+    let runtime: ExtensionRuntime
     
-    /// Data of the file for this entry
-    public let data: Data
+    static var unregistrationClosure: (() -> Void)? = nil
+    static var registrationClosure: (() -> Void)? = nil
+    static var eventReceivedClosure: ((Event) -> Void)? = nil
     
-    /// Expiry date of this cache entry
-    public let expiry: CacheExpiry
-    
-    /// Optional metadata associated with the cache entry
-    public let metadata: [String: String]?
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
+    }
 }

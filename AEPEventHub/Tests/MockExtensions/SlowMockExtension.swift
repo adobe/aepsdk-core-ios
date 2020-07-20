@@ -12,15 +12,19 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// Represents a entry in the cache
-public struct CacheEntry: Equatable {
+@testable import AEPEventHub
+
+class SlowMockExtension: Extension {
+    var name = "slowMockExtension"
+    var version = "0.0.1"
+    let runtime: ExtensionRuntime
     
-    /// Data of the file for this entry
-    public let data: Data
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
+         sleep(20) // simulate an extension doing heavy work in constructor
+    }
     
-    /// Expiry date of this cache entry
-    public let expiry: CacheExpiry
+    func onRegistered() {}
+    func onUnregistered() {}
     
-    /// Optional metadata associated with the cache entry
-    public let metadata: [String: String]?
 }

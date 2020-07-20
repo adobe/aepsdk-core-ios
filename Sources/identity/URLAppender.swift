@@ -81,7 +81,7 @@ struct URLAppender {
         }
 
         // append org id
-        if let orgId = configSharedState[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String {
+        if let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String {
             theIdString = appendParameterToVisitorIdString(original: theIdString, key: IdentityConstants.URLKeys.VISITOR_PAYLOAD_MARKETING_CLOUD_ORG_ID, value: orgId)
         }
 
