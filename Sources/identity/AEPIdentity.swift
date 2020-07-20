@@ -26,6 +26,7 @@ class AEPIdentity: Extension {
     
     func onRegistered() {
         registerListener(type: .identity, source: .requestIdentity, listener: handleIdentityRequest)
+        registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
     }
     
     func onUnregistered() {}
@@ -34,6 +35,8 @@ class AEPIdentity: Extension {
         if event.isSyncEvent || event.type == .genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
+        } else if event.type == .configuration && event.source == .requestIdentity {
+            return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         }
         
         return getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
@@ -53,6 +56,23 @@ class AEPIdentity: Extension {
         } else {
             processIdentifiersRequest(event: event)
         }
+    }
+    
+    /// Handles the getSdkIdentities API by collecting all the identities then dispatching a response event with the given identities
+    /// - Parameter event: The event coming from the getSdkIdentities API
+    private func receiveConfigurationIdentity(event: Event) {
+        var mobileIdentities = MobileIdentities()
+        mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+
+        guard let encodedIdentities = try? JSONEncoder().encode(mobileIdentities) else {
+            // TODO: Error log
+            return
+        }
+
+        let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
+        let eventData = [IdentityConstants.Configuration.ALL_IDENTIFIERS: identitiesStr]
+        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: .configuration, source: .responseIdentity, data: eventData as [String : Any])
+        dispatch(event: responseEvent)
     }
     
     // MARK: Event Handlers
