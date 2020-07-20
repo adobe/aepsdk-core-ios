@@ -370,6 +370,52 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
+    
+    /// Tests that when we share state that we use configuration's version as the top level version and include all the extensions
+    /*
+     Expected format:
+     {
+       "version" : "0.0.1",
+       "extensions" : {
+         "mockExtension" : {
+           "version" : "0.0.1"
+         },
+         "mockExtensionTwo" : {
+           "version" : "0.0.1"
+         }
+       }
+     }
+     */
+    func testEventHubRegisterExtensionSharesState() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub two times")
+        sharedStateExpectation.expectedFulfillmentCount = 2
+        sharedStateExpectation.assertForOverFulfill = true
+        eventHub.start()
+        
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME { sharedStateExpectation.fulfill() }
+        }
+        
+        // test
+        registerMockExtension(MockExtensionTwo.self)
+        
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 0.5)
+        let sharedState = eventHub.getSharedState(extensionName: EventHubConstants.NAME, event: nil)!.value
+        
+        let mockExtension = MockExtension(runtime: TestableExtensionRuntime())
+        let mockExtensionTwo = MockExtensionTwo(runtime: TestableExtensionRuntime())
+        
+        let coreVersion = sharedState?[EventHubConstants.EventDataKeys.VERSION] as! String
+        let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
+        let mockDetails = registeredExtensions?[mockExtension.friendlyName] as? [String: String]
+        let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.friendlyName] as? [String: String]
+        
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
+        XCTAssertEqual(mockExtension.version, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
+        XCTAssertEqual(mockExtensionTwo.version, mockDetailsTwo?[EventHubConstants.EventDataKeys.VERSION])
+    }
 
     func testEventHubRegisterExtensionSuccessQueuedBeforeStart() {
         // setup
