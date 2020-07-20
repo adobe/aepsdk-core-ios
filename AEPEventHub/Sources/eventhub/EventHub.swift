@@ -38,7 +38,7 @@ final public class EventHub {
 
     init() {
         // setup a fake extension container for `EventHub` so we can shared and retrieve state
-        registeredExtensions[EventHubConstants.NAME] = ExtensionContainer(EventHubPlaceholderExtension.self, eventHubQueue)
+        registerExtension(EventHubPlaceholderExtension.self, completion: {_ in })
         
         // Setup eventQueue handler for the main OperationOrderer
         eventQueue.setHandler { (event) -> Bool in
