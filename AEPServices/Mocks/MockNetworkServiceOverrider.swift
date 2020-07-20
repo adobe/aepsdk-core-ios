@@ -11,17 +11,20 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-@testable import AEPCore
 import AEPServices
 
-class MockNetworkServiceOverrider : NetworkService {
+public class MockNetworkServiceOverrider : NetworkService {
     
-    var connectAsyncCalled:Bool = false
-    var connectAsyncCalledWithNetworkRequest:NetworkRequest?
-    var connectAsyncCalledWithCompletionHandler: ((HttpConnection) -> Void)?
-    var expectedResponse: HttpConnection?
+    public var connectAsyncCalled:Bool = false
+    public var connectAsyncCalledWithNetworkRequest:NetworkRequest?
+    public var connectAsyncCalledWithCompletionHandler: ((HttpConnection) -> Void)?
+    public var expectedResponse: HttpConnection?
     
-    func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
+    public init(){
+        
+    }
+    
+    public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
         print("Do nothing \(networkRequest)")
         connectAsyncCalled = true
         connectAsyncCalledWithNetworkRequest = networkRequest
@@ -31,7 +34,7 @@ class MockNetworkServiceOverrider : NetworkService {
         }
     }
     
-    func reset() {
+    public func reset() {
         connectAsyncCalled = false
         connectAsyncCalledWithNetworkRequest = nil
         connectAsyncCalledWithCompletionHandler = nil

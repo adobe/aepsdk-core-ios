@@ -11,17 +11,18 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPEventHub
+import AEPLifecycle
 
 extension AEPCore: Lifecycle {
     public static func lifecycleStart(additionalContextData: [String: String]?) {
-        let data: [String: Any] = [LifecycleConstants.EventDataKeys.ACTION_KEY: LifecycleConstants.START,
-                                   LifecycleConstants.EventDataKeys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
+        let data: [String: Any] = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.START,
+                                   CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
         let event = Event(name: "Lifecycle Start", type: .genericLifecycle, source: .requestContent, data: data)
         AEPCore.dispatch(event: event)
     }
     
     public static func lifecyclePause() {
-        let data = [LifecycleConstants.EventDataKeys.ACTION_KEY: LifecycleConstants.PAUSE]
+        let data = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.PAUSE]
         let event = Event(name: "Lifecycle Pause", type: .genericLifecycle, source: .requestContent, data: data)
         AEPCore.dispatch(event: event)
     }

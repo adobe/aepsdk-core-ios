@@ -12,25 +12,25 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-class MockURLSession: URLSession {
-    typealias CompletionHandler = (Data?, URLResponse?, Error?) -> Void
+public class MockURLSession: URLSession {
+    public typealias CompletionHandler = (Data?, URLResponse?, Error?) -> Void
 
     // Properties that enable us to set exactly what data or error
     // we want our mocked URLSession to return for any request.
-    var data: Data?
-    var error: Error?
-    var dataTaskWithCompletionHandlerCalled:Bool
-    var calledWithUrlRequest: URLRequest?
+    public var data: Data?
+    public var error: Error?
+    public var dataTaskWithCompletionHandlerCalled:Bool
+    public var calledWithUrlRequest: URLRequest?
     
     private let mockTask: MockTask
     
-    init(data: Data? = nil, urlResponse: URLResponse? = nil, error: Error? = nil) {
+    public init(data: Data? = nil, urlResponse: URLResponse? = nil, error: Error? = nil) {
         mockTask = MockTask(data: data, urlResponse: urlResponse, error:
             error)
         dataTaskWithCompletionHandlerCalled = false
     }
 
-    override func dataTask(with: URLRequest, completionHandler: @escaping CompletionHandler) -> URLSessionDataTask {
+    override public func dataTask(with: URLRequest, completionHandler: @escaping CompletionHandler) -> URLSessionDataTask {
         mockTask.completionHandler = completionHandler
         calledWithUrlRequest = with
         dataTaskWithCompletionHandlerCalled = true

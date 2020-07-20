@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1130"
+   LastUpgradeVersion = "1150"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3FE6DDD024C62EE60065EA05"
+               BuildableName = "AEPLifecycle.framework"
+               BlueprintName = "AEPLifecycle"
+               ReferencedContainer = "container:AEPCore.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
    </BuildAction>
    <TestAction
       buildConfiguration = "Debug"
@@ -16,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "21CAC0DE2422917600C11388"
-               BuildableName = "AEPCoreTests.xctest"
-               BlueprintName = "AEPCoreTests"
+               BlueprintIdentifier = "3FE6DDD824C62EE60065EA05"
+               BuildableName = "AEPLifecycleTests.xctest"
+               BlueprintName = "AEPLifecycleTests"
                ReferencedContainer = "container:AEPCore.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -41,6 +57,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "3FE6DDD024C62EE60065EA05"
+            BuildableName = "AEPLifecycle.framework"
+            BlueprintName = "AEPLifecycle"
+            ReferencedContainer = "container:AEPCore.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
