@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPServices
+import AEPServicesMock
 
 /// Test type to ensure we can cache codable types
 private struct Person: Codable, Equatable {

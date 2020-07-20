@@ -12,19 +12,20 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-public struct NetworkServiceConstants {
-    public static let RECOVERABLE_ERROR_CODES = [408, 504, 503]
-    
-    public struct Headers {
-        public static let IF_MODIFIED_SINCE_HEADER = "If-Modified-Since"
-        public static let IF_NONE_MATCH = "If-None-Match"
-        public static let LAST_MODIFIED = "Last-Modified"
-        public static let ETAG = "Etag"
-        public static let CONTENT_TYPE = "Content-Type"
+public class MockTask: URLSessionDataTask {
+    private let data: Data?
+    private let urlResponse: URLResponse?
+    private let _error: Error?
+    var completionHandler: ((Data?, URLResponse?, Error?) -> Void)? // set by MockURLSession
+
+    public init(data: Data?, urlResponse: URLResponse?, error: Error?) {
+        self.data = data
+        self.urlResponse = urlResponse
+        self._error = error
     }
     
-    public struct HeaderValues {
-        public static let CONTENT_TYPE_URL_ENCODED = "application/x-www-form-urlencoded"
+    override public func resume() {
+        guard let unwrappedCompletionHandler = completionHandler else { return }
+        unwrappedCompletionHandler(self.data, self.urlResponse, self._error)
     }
-    
 }

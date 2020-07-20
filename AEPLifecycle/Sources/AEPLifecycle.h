@@ -10,21 +10,14 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-import Foundation
+#import <Foundation/Foundation.h>
 
-public struct NetworkServiceConstants {
-    public static let RECOVERABLE_ERROR_CODES = [408, 504, 503]
-    
-    public struct Headers {
-        public static let IF_MODIFIED_SINCE_HEADER = "If-Modified-Since"
-        public static let IF_NONE_MATCH = "If-None-Match"
-        public static let LAST_MODIFIED = "Last-Modified"
-        public static let ETAG = "Etag"
-        public static let CONTENT_TYPE = "Content-Type"
-    }
-    
-    public struct HeaderValues {
-        public static let CONTENT_TYPE_URL_ENCODED = "application/x-www-form-urlencoded"
-    }
-    
-}
+//! Project version number for AEPLifecycle.
+FOUNDATION_EXPORT double AEPLifecycleVersionNumber;
+
+//! Project version string for AEPLifecycle.
+FOUNDATION_EXPORT const unsigned char AEPLifecycleVersionString[];
+
+// In this header, you should import all the public headers of your framework using statements like #import <AEPLifecycle/PublicHeader.h>
+
+
