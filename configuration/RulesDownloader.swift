@@ -17,9 +17,19 @@ import AEPServices
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
 ///
 struct RulesDownloader: RulesLoader {
-    private let cacheService = AEPServiceProvider.shared.cacheService
     private let loggingService = AEPServiceProvider.shared.loggingService
+    private let fileUnzipper: Unzipper
     
+    private var cacheService: CacheService {
+        get {
+            return AEPServiceProvider.shared.cacheService
+        }
+    }
+    
+    init(fileUnzipper: Unzipper) {
+        self.fileUnzipper = fileUnzipper
+    }
+
     enum RulesDownloaderError: Error {
         case unableToCreateTempDirectory
         case unableToStoreDataInTempDirectory
@@ -53,6 +63,8 @@ struct RulesDownloader: RulesLoader {
                             self.loggingService.log(level: .warning, label: "rules downloader", message: "Unable to cache rules")
                             completion(nil)
                         }
+                    } else {
+                        completion(nil)
                     }
                 case .failure(let error):
                     self.loggingService.log(level: .warning, label: "rules downloader", message: error.localizedDescription)
@@ -70,10 +82,8 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter data: The rules.zip as data to be stored in the temp directory
     /// - Returns a `Result<URL, RulesDownloaderError>` with a `URL` to the zip file if successful or a `RulesDownloaderError` if a failure occurs
     private func storeDataInTempDirectory(data: Data) -> Result<URL, RulesDownloaderError> {
-        guard let temporaryDirectory = try? FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: nil, create: true) else {
-            return .failure(.unableToCreateTempDirectory)
-        }
-        guard let _ = try? data.write(to: temporaryDirectory.appendingPathComponent(RulesDownloaderConstants.RULES_ZIP_FILE_NAME.rawValue)) else {
+        let temporaryDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(RulesDownloaderConstants.RULES_ZIP_FILE_NAME.rawValue)
+        guard let _ = try? data.write(to: temporaryDirectory) else {
             return .failure(.unableToStoreDataInTempDirectory)
         }
         
@@ -86,10 +96,13 @@ struct RulesDownloader: RulesLoader {
     /// - Returns: The unzipped rules as a dictionary
     private func unzipRules(at source: URL) -> [String: AnyCodable]? {
         let destination = source.deletingLastPathComponent()
-        if FileUnzipper.unzipItem(at: source, to: destination) {
+        if fileUnzipper.unzipItem(at: source, to: destination) {
             do {
-                let data = try Data(contentsOf: destination, options: .mappedIfSafe)
-                return try JSONDecoder().decode([String: AnyCodable].self, from: data)
+                if destination.startAccessingSecurityScopedResource() {
+                    let data = try Data(contentsOf: destination, options: .mappedIfSafe)
+                    destination.stopAccessingSecurityScopedResource()
+                    return try JSONDecoder().decode([String: AnyCodable].self, from: data)
+                }
             } catch {
                 return nil
             }

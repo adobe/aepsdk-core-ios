@@ -14,22 +14,23 @@ import Foundation
 ///
 /// File Unzipper protocol
 ///
-protocol Unzipper {
+public protocol Unzipper {
     ///
     /// Unzips a file at a given source url to a destination url
     /// - Paramaters:
     ///     - sourceURL: The URL pointing to the file to be unzipped
     ///     - destinationURL: The URL pointing to the destination where the unzipped contents will go
     /// - Returns: Boolean indicating if unzipping succeeded or failed
-    static func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool
+    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool
 }
 
 public class FileUnzipper: Unzipper {
 
-    public static func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool {
+    public func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool {
         let fileManager = FileManager()
         // Create directory at destination path
-        guard let _ = try? fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil) else { return false }
+        guard let _ = try? fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil) else { return false
+        }
         guard fileManager.itemExists(at: sourceURL) else {
             return false
         }

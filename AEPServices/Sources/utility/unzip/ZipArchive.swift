@@ -116,6 +116,7 @@ final class ZipArchive: Sequence {
         var checksum = CRC32(0)
         switch entry.type {
         case .file:
+            // TODO: - Should this remove the existing file and replace it instead?
             guard !fileManager.itemExists(at: url) else {
                 throw CocoaError(.fileWriteFileExists, userInfo: [NSFilePathErrorKey: url.path])
             }

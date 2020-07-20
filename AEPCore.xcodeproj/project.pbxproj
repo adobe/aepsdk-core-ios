@@ -173,6 +173,7 @@
 		7861451224C23432004CB317 /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451124C23432004CB317 /* RulesLoader.swift */; };
 		7861451324C25726004CB317 /* CachedRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861450F24C233D0004CB317 /* CachedRules.swift */; };
 		7861451524C259DE004CB317 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451424C259DE004CB317 /* RulesDownloaderTests.swift */; };
+		7861451724C5E8D9004CB317 /* testRulesDownloader.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7861451624C5E8D9004CB317 /* testRulesDownloader.zip */; };
 		7869CDFB24BCC13F00128625 /* LifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
@@ -388,6 +389,7 @@
 		7861450F24C233D0004CB317 /* CachedRules.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedRules.swift; sourceTree = "<group>"; };
 		7861451124C23432004CB317 /* RulesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
 		7861451424C259DE004CB317 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
+		7861451624C5E8D9004CB317 /* testRulesDownloader.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = testRulesDownloader.zip; sourceTree = "<group>"; };
 		7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifecycleMetricsBuilder.swift; path = Sources/Lifecycle/LifecycleMetricsBuilder.swift; sourceTree = SOURCE_ROOT; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78D754F1244511D100DB9124 /* TestConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
@@ -849,6 +851,7 @@
 		78D754F02445115200DB9124 /* TestResources */ = {
 			isa = PBXGroup;
 			children = (
+				7861451624C5E8D9004CB317 /* testRulesDownloader.zip */,
 				78A6425C2489817A004B4E46 /* TestRules.zip */,
 				78DEFEF0244A183400D7E9FB /* TestImage.png */,
 				78D754F1244511D100DB9124 /* TestConfig.json */,
@@ -1012,6 +1015,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7861451724C5E8D9004CB317 /* testRulesDownloader.zip in Resources */,
 				78D754F2244511D100DB9124 /* TestConfig.json in Resources */,
 				215AA6232465E06600CEB4F4 /* ADBMobileConfig.json in Resources */,
 				78DEFEF1244A183400D7E9FB /* TestImage.png in Resources */,
