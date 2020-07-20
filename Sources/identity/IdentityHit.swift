@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPEventHub
 
 /// Struct which represents an Identity hit
 struct IdentityHit: Codable {
