@@ -15,6 +15,7 @@
 //import AEPServices
 //
 // TODO: rewrite
+// TODO: Move getSdkIdentities functional tests to Identity functional tests
 ///// Functional tests for the Configuration extension
 //class ConfigurationFunctionalTests: XCTestCase {
 //
