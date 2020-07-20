@@ -12,19 +12,19 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-class MockTask: URLSessionDataTask {
+public class MockTask: URLSessionDataTask {
     private let data: Data?
     private let urlResponse: URLResponse?
     private let _error: Error?
     var completionHandler: ((Data?, URLResponse?, Error?) -> Void)? // set by MockURLSession
 
-    init(data: Data?, urlResponse: URLResponse?, error: Error?) {
+    public init(data: Data?, urlResponse: URLResponse?, error: Error?) {
         self.data = data
         self.urlResponse = urlResponse
         self._error = error
     }
     
-    override func resume() {
+    override public func resume() {
         guard let unwrappedCompletionHandler = completionHandler else { return }
         unwrappedCompletionHandler(self.data, self.urlResponse, self._error)
     }

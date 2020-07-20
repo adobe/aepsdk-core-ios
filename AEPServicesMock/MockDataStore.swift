@@ -10,31 +10,28 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-@testable import AEPCore
-@testable import AEPServices
+import AEPServices
 
-class MockDataQueue: DataQueue {
-    let queue = ThreadSafeArray<DataEntity>()
+public class MockDataStore: NamedKeyValueService {
+    private var dict = [String: Any?]()
     
-    func add(dataEntity: DataEntity) -> Bool {
-        queue.append(dataEntity)
-        return true
+    public init(){
+        
     }
     
-    func peek() -> DataEntity? {
-        return queue.shallowCopy.first
+    public func set(collectionName: String, key: String, value: Any?) {
+        dict[key] = value
     }
     
-    func remove() -> Bool {
-        guard let first = peek() else { return true }
-        let _ = queue.filterRemove({$0.uniqueIdentifier == first.uniqueIdentifier})
-        return true
+    public func get(collectionName: String, key: String) -> Any? {
+        return dict[key] as Any?
     }
     
-    func clear() -> Bool {
-        queue.clear()
-        return true
+    public func remove(collectionName: String, key: String) {
+        dict.removeValue(forKey: key)
     }
     
-    
+    public func removeAll(collectionName: String) {
+        dict.removeAll()
+    }
 }
