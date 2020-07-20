@@ -33,7 +33,7 @@ class ExtensionContainer {
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
         
-    init(_ type: Extension.Type, _ queue: DispatchQueue) {
+    init(_ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> ()) {
         extensionQueue = queue
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
@@ -47,6 +47,7 @@ class ExtensionContainer {
             self.sharedStateName = unwrappedExtension.name
             unwrappedExtension.onRegistered()
             self.eventOrderer.start()
+            completion(nil)
         }
     }
 }
