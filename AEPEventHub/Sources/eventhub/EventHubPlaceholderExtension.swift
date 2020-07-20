@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// A "dummy" extension for `EventHub` so it can share state
-class EventHubSharedState: Extension {
+class EventHubPlaceholderExtension: Extension {
     var name = EventHubConstants.NAME
     var friendlyName = EventHubConstants.FRIENDLY_NAME
     var version = "0.0.1"

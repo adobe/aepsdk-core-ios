@@ -22,7 +22,7 @@
 		213F66322492A8B9000184DE /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66312492A8B9000184DE /* MIDTests.swift */; };
 		213F66342492C06B000184DE /* IdentityProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F66332492C06B000184DE /* IdentityProperties.swift */; };
 		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
-		2142735224C608CE002DB440 /* EventHubSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142735124C608CE002DB440 /* EventHubSharedState.swift */; };
+		2142735224C608CE002DB440 /* EventHubPlaceholderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2142735124C608CE002DB440 /* EventHubPlaceholderExtension.swift */; };
 		214B5223248ABC710034BF22 /* AEPIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5222248ABC710034BF22 /* AEPIdentity.swift */; };
 		214B5225248ABCEB0034BF22 /* AEPIdentity+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */; };
 		214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214B5226248ABD5D0034BF22 /* IdentityConstants.swift */; };
@@ -265,7 +265,7 @@
 		213F66312492A8B9000184DE /* MIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
 		213F66332492C06B000184DE /* IdentityProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityProperties.swift; sourceTree = "<group>"; };
 		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
-		2142735124C608CE002DB440 /* EventHubSharedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubSharedState.swift; sourceTree = "<group>"; };
+		2142735124C608CE002DB440 /* EventHubPlaceholderExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubPlaceholderExtension.swift; sourceTree = "<group>"; };
 		214B5222248ABC710034BF22 /* AEPIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPIdentity.swift; sourceTree = "<group>"; };
 		214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+Identity.swift"; sourceTree = "<group>"; };
 		214B5226248ABD5D0034BF22 /* IdentityConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
@@ -890,7 +890,7 @@
 		3F03986324C001350019F095 /* eventhub */ = {
 			isa = PBXGroup;
 			children = (
-				2142735124C608CE002DB440 /* EventHubSharedState.swift */,
+				2142735124C608CE002DB440 /* EventHubPlaceholderExtension.swift */,
 				3F03986424C001350019F095 /* EventHubConstants.swift */,
 				3F03986524C001350019F095 /* ExtensionContainer.swift */,
 				3F03986624C001350019F095 /* Event.swift */,
@@ -1412,7 +1412,7 @@
 				3F03988124C001350019F095 /* SharedState.swift in Sources */,
 				3F03988424C001350019F095 /* EventType.swift in Sources */,
 				3F03988B24C001350019F095 /* ConfigurationState.swift in Sources */,
-				2142735224C608CE002DB440 /* EventHubSharedState.swift in Sources */,
+				2142735224C608CE002DB440 /* EventHubPlaceholderExtension.swift in Sources */,
 				3F03989124C001350019F095 /* ConfigurationDownloader.swift in Sources */,
 				3F03988A24C001350019F095 /* ConfigurationConstants.swift in Sources */,
 				3F03987E24C001350019F095 /* ExtensionContainer.swift in Sources */,
