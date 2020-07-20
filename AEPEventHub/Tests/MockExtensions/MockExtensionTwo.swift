@@ -16,6 +16,8 @@ import Foundation
 
 class MockExtensionTwo: TestableExtension {
     var name = "mockExtensionTwo"
+    var friendlyName = "mockExtensionTwo"
+    var metadata: [String : String]? = ["testMetaKey": "testMetaVal"]
     var version = "0.0.1"
     let runtime: ExtensionRuntime
     
