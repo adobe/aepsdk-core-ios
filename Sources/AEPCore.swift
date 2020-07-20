@@ -28,6 +28,7 @@ public final class AEPCore {
     /// - Parameter completion: Closure to run when extensions have been registered
     static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
+        
         // TODO: Add configuration as a default extension to be registered
         extensions.forEach {
             EventHub.shared.registerExtension($0) { (_) in
@@ -71,7 +72,7 @@ public final class AEPCore {
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
     static func setAdvertisingIdentifier(adId: String?) {
-        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: adId ?? ""]
+        let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
         let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
         AEPCore.dispatch(event: event)
     }

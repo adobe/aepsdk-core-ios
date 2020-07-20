@@ -22,8 +22,10 @@ struct CoreConstants {
     static let DOWNLOAD_RETRY_INTERVAL = TimeInterval(5) // 5 seconds
     static let API_TIMEOUT = TimeInterval(1) // 1 second
     static let ENVIRONMENT_PREFIX_DELIMITER = "__"
-
+    
     struct Keys {
+        static let ACTION_KEY = "action"
+        static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
         static let UPDATE_CONFIG = "config.update"
         static let RETRIEVE_CONFIG = "config.getData"
@@ -37,11 +39,17 @@ struct CoreConstants {
         static let BUILD_ENVIRONMENT = "build.environment"
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
+        static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
     }
 
     struct Privacy {
         static let UNKNOWN = "optunknown"
         static let OPT_OUT = "optedout"
         static let OPT_IN = "optedin"
+    }
+    
+    struct Lifecycle {
+        static let START = "start"
+        static let PAUSE = "pause"
     }
 }

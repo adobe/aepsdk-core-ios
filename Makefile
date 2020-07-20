@@ -2,6 +2,8 @@
 PROJECT_NAME = AEPCore
 AEPSERVIES_TARGET_NAME = AEPServices
 AEPEVENTHUB_TARGET_NAME = AEPEventHub
+AEPLIFECYCLE_TARGET_NAME = AEPLifecycle
+AEPIDENTITY_TARGET_NAME = AEPIdentity
 
 # targets
 unit-test:
@@ -11,3 +13,5 @@ unit-test:
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(PROJECT_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSERVIES_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPEVENTHUB_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPIDENTITY_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
