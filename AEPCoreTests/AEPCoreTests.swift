@@ -83,13 +83,12 @@ class AEPCoreTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         let eventName = "test-event"
         MockExtension.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
         MockExtensionTwo.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
+        
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         AEPCore.start { }
@@ -104,12 +103,10 @@ class AEPCoreTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
 
         MockExtension.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
         MockExtensionTwo.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
