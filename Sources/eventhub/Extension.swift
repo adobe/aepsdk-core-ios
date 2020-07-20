@@ -24,6 +24,9 @@ public protocol Extension {
     /// Version of the extension
     var version: String { get }
     
+    /// Optional metadata to be provided to the `EventHub`
+    var metadata: [String: String]? { get }
+    
     /// Provides the methods can be used by extension
     var runtime: ExtensionRuntime {  get}
 

@@ -16,7 +16,8 @@ class AEPLifecycle: Extension {
     let name = LifecycleConstants.EXTENSION_NAME
     let friendlyName = LifecycleConstants.FRIENDLY_NAME
     let version = LifecycleConstants.EXTENSION_VERSION
-
+    let metadata: [String: String]? = nil
+    
     let runtime: ExtensionRuntime
 
     private var lifecycleState: LifecycleState

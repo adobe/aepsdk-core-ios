@@ -211,6 +211,9 @@ final public class EventHub {
         for (_, val) in registeredExtensions.shallowCopy {
             if let exten = val.exten {
                 extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: exten.version]
+                if let metadata = exten.metadata, !metadata.isEmpty {
+                    extensionsInfo[EventHubConstants.EventDataKeys.METADATA] = metadata
+                }
             }
         }
         
