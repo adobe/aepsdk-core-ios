@@ -12,29 +12,29 @@ governing permissions and limitations under the License.
 import Foundation
 @testable import AEPServices
 
-class MockHitQueue: HitQueuing {
-    var processor: HitProcessable
+public class MockHitQueue: HitQueuing {
+    public var processor: HitProcessable
 
-    var queuedHits = [DataEntity]()
+    public var queuedHits = [DataEntity]()
 
-    init(processor: HitProcessable) {
+    public init(processor: HitProcessable) {
         self.processor = processor
     }
 
-    func queue(entity: DataEntity) -> Bool {
+    public func queue(entity: DataEntity) -> Bool {
         queuedHits.append(entity)
         return true
     }
 
-    func beginProcessing() {
+    public func beginProcessing() {
         // no-op
     }
 
-    func suspend() {
+    public func suspend() {
         // no-op
     }
 
-    func clear() {
+    public func clear() {
         queuedHits.removeAll()
     }
 

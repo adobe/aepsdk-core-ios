@@ -10,15 +10,14 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-@testable import AEPCore
 @testable import AEPServices
 
-class MockHitProcessor: HitProcessable {
-    var retryInterval: TimeInterval = 30
+public class MockHitProcessor: HitProcessable {
+    public var retryInterval: TimeInterval = 30
 
-    init() {}
+    public init() {}
 
-    func processHit(entity: DataEntity, completion: @escaping (Bool) -> ()) {
+    public func processHit(entity: DataEntity, completion: @escaping (Bool) -> ()) {
         completion(true)
     }
 }
