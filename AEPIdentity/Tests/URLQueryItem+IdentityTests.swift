@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import XCTest
-@testable import AEPCore
+@testable import AEPIdentity
 
 class URLQueryItem_IdentityTests: XCTestCase {
     // MARK: URLQueryItem(identifiable) tests

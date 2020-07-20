@@ -312,6 +312,20 @@
 			remoteGlobalIDString = 3FE6DDA824C62C090065EA05;
 			remoteInfo = AEPServicesMock;
 		};
+		3FE6DE8924C646360065EA05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03978624BE5DD30019F095;
+			remoteInfo = AEPServices;
+		};
+		3FE6DE8B24C6463B0065EA05 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03984B24C0008C0019F095;
+			remoteInfo = AEPEventHub;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -1355,6 +1369,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				3FE6DE8C24C6463B0065EA05 /* PBXTargetDependency */,
+				3FE6DE8A24C646360065EA05 /* PBXTargetDependency */,
 			);
 			name = AEPIdentity;
 			productName = AEPIdentity;
@@ -1875,6 +1891,16 @@
 			isa = PBXTargetDependency;
 			target = 3FE6DDA824C62C090065EA05 /* AEPServicesMock */;
 			targetProxy = 3FE6DE8424C6437F0065EA05 /* PBXContainerItemProxy */;
+		};
+		3FE6DE8A24C646360065EA05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03978624BE5DD30019F095 /* AEPServices */;
+			targetProxy = 3FE6DE8924C646360065EA05 /* PBXContainerItemProxy */;
+		};
+		3FE6DE8C24C6463B0065EA05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03984B24C0008C0019F095 /* AEPEventHub */;
+			targetProxy = 3FE6DE8B24C6463B0065EA05 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
