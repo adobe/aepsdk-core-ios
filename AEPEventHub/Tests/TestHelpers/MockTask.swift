@@ -12,19 +12,20 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-@testable import AEPCore
-import AEPEventHub
+class MockTask: URLSessionDataTask {
+    private let data: Data?
+    private let urlResponse: URLResponse?
+    private let _error: Error?
+    var completionHandler: ((Data?, URLResponse?, Error?) -> Void)? // set by MockURLSession
 
-class MockExtensionTwo: TestableExtension {
-    var name = "mockExtensionTwo"
-    var version = "0.0.1"
-    let runtime: ExtensionRuntime
+    init(data: Data?, urlResponse: URLResponse?, error: Error?) {
+        self.data = data
+        self.urlResponse = urlResponse
+        self._error = error
+    }
     
-    static var unregistrationClosure: (() -> Void)? = nil
-    static var registrationClosure: (() -> Void)? = nil
-    static var eventReceivedClosure: ((Event) -> Void)? = nil
-    
-    required init(runtime: ExtensionRuntime) {
-        self.runtime = runtime
+    override func resume() {
+        guard let unwrappedCompletionHandler = completionHandler else { return }
+        unwrappedCompletionHandler(self.data, self.urlResponse, self._error)
     }
 }

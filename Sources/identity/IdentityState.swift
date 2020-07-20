@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPEventHub
 
 /// Manages the business logic of the Identity extension
 struct IdentityState {
@@ -36,7 +37,7 @@ struct IdentityState {
         // org id is a requirement.
         // Use what's in current config shared state. if that's missing, check latest config.
         // if latest config doesn't have org id either, Identity can't proceed.
-        if let orgId = configurationSharedState[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
+        if let orgId = configurationSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
             lastValidConfig = configurationSharedState
         } else if lastValidConfig.isEmpty {
             // can't process this event, wait for a valid config and retry later
@@ -60,7 +61,7 @@ struct IdentityState {
         }
         
         // Early exit if privacy is opt-out
-        if lastValidConfig[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
+        if lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
             // TODO: Add log
             return nil
         }
@@ -135,8 +136,8 @@ struct IdentityState {
     /// - Parameter config: The current configuration
     /// - Returns: True if a sync can be made with the current configuration, false otherwise
     private func canSyncForCurrentConfiguration(config: [String: Any]) -> Bool {
-        let orgId = config[ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID] as? String ?? ""
-        let privacyStatus = config[ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
+        let orgId = config[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String ?? ""
+        let privacyStatus = config[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
         return !orgId.isEmpty && privacyStatus != .optedOut
     }
     

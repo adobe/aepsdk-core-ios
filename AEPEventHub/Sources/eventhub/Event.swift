@@ -17,25 +17,25 @@ import AEPServices
 public struct Event {
     
     /// Name of the event
-    let name: String
+    public let name: String
     
     /// unique identifier for the event
-    private(set) var id = UUID()
+    public private(set) var id = UUID()
     
     /// The `EventType` for the event
-    let type: EventType
+    public let type: EventType
     
     /// The `EventSource` for the event
-    let source: EventSource
+    public let source: EventSource
     
     /// Optional data associated with this event
-    let data: [String: Any]?
+    public let data: [String: Any]?
     
     /// Date this event was created
-    private(set) var timestamp = Date()
+    public private(set) var timestamp = Date()
     
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
-    let responseID: UUID?
+    public let responseID: UUID?
     
     /// Creates a new `Event` with the given parameters
     /// - Parameters:
@@ -61,7 +61,7 @@ public struct Event {
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    func createResponseEvent(name: String, type: EventType, source: EventSource, data: [String: Any]?) -> Event {
+    public func createResponseEvent(name: String, type: EventType, source: EventSource, data: [String: Any]?) -> Event {
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
     

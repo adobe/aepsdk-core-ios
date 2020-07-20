@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+import AEPEventHub
 
 private extension String {
 
@@ -34,7 +35,7 @@ class URLAppenderTests: XCTestCase {
     /// When base url is empty the result should be empty
     func testAppendVisitorInfoEmptyBaseUrl() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "testOrg@AdobeOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "testOrg@AdobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"]
 
         // test
@@ -47,7 +48,7 @@ class URLAppenderTests: XCTestCase {
     func testAppendVisitorInfoForUrlShouldFormatUrlCorrectly() {
         // setup
         let mockUserIdentifier = "test-vid"
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: mockUserIdentifier]
         var props = IdentityProperties()
         props.mid = MID()
@@ -77,7 +78,7 @@ class URLAppenderTests: XCTestCase {
     /// Tests that when the vid is not provided that we do not append the url parameter for the vid
     func testGenerateVisitorIdPayloadNoVid() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"] as [String : Any]
         var props = IdentityProperties()
         props.mid = MID()
@@ -103,7 +104,7 @@ class URLAppenderTests: XCTestCase {
     /// Tests that when the vid is empty that we do not append the url parameter for the vid
     func testGenerateVisitorIdPayloadEmptyVid() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: ""] as [String : Any]
         var props = IdentityProperties()
         props.mid = MID()
@@ -130,7 +131,7 @@ class URLAppenderTests: XCTestCase {
     func testGenerateVisitorIdPayloadEncodedVID() {
         // setup
         let mockUserIdentifier = "?&#&#&#&#?"
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: mockUserIdentifier] as [String : Any]
         var props = IdentityProperties()
         props.mid = MID()

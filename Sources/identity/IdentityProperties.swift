@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPServices
+import AEPEventHub
 
 /// Represents a type which contains instances variables for the Identity extension
 struct IdentityProperties: Codable {

@@ -16,11 +16,11 @@ import Foundation
 public struct CacheEntry: Equatable {
     
     /// Data of the file for this entry
-    let data: Data
+    public let data: Data
     
     /// Expiry date of this cache entry
-    let expiry: CacheExpiry
+    public let expiry: CacheExpiry
     
     /// Optional metadata associated with the cache entry
-    let metadata: [String: String]?
+    public let metadata: [String: String]?
 }
