@@ -39,6 +39,7 @@ struct CoreConstants {
         static let BUILD_ENVIRONMENT = "build.environment"
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
+        static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
     }
 
     struct Privacy {

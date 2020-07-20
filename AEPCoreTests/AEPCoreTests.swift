@@ -325,7 +325,7 @@ class AEPCoreTests: XCTestCase {
         EventHub.shared.start()
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
-            XCTAssertEqual("test-ad-id", event.data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+            XCTAssertEqual("test-ad-id", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
         
@@ -348,7 +348,7 @@ class AEPCoreTests: XCTestCase {
         EventHub.shared.start()
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
-            XCTAssertEqual("", event.data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+            XCTAssertEqual("", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
         
