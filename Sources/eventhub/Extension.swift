@@ -17,6 +17,9 @@ public protocol Extension {
 
     /// Name of the extension
     var name: String { get }
+    
+    /// A friendly human readable name of the extension
+    var friendlyName: String { get }
 
     /// Version of the extension
     var version: String { get }

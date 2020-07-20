@@ -14,6 +14,7 @@ import AEPServices
 
 class AEPLifecycle: Extension {
     let name = LifecycleConstants.EXTENSION_NAME
+    let friendlyName = LifecycleConstants.FRIENDLY_NAME
     let version = LifecycleConstants.EXTENSION_VERSION
 
     let runtime: ExtensionRuntime

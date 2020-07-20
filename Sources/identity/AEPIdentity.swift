@@ -15,6 +15,7 @@ class AEPIdentity: Extension {
     let runtime: ExtensionRuntime
     
     let name = IdentityConstants.EXTENSION_NAME
+    let friendlyName = IdentityConstants.FRIENDLY_NAME
     let version = IdentityConstants.EXTENSION_VERSION
     var state = IdentityState(identityProperties: IdentityProperties())
     

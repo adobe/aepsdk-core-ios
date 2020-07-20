@@ -94,6 +94,7 @@ final public class EventHub {
             let extensionQueue = DispatchQueue(label: "com.adobe.eventhub.extension.\(type.typeName)")
             let extensionContainer = ExtensionContainer(type, extensionQueue)
             self.registeredExtensions[type.typeName] = extensionContainer
+            self.shareEventHubSharedState() // each time we register an extension update shared state with the latest extensions
             completion(nil)
         }
     }
@@ -202,6 +203,20 @@ final public class EventHub {
     private func createSharedStateEvent(extensionName: String) -> Event {
         return Event(name: EventHubConstants.STATE_CHANGE, type: .hub, source: .sharedState,
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
+    }
+    
+    /// Shares a shared state for the `EventHub` with data containing all the registered extensions
+    private func shareEventHubSharedState() {
+        var extensionsInfo = [String: [String: String]]()
+        for (_, val) in registeredExtensions.shallowCopy {
+            if let exten = val.exten {
+                extensionsInfo[exten.friendlyName] = ["version": exten.version]
+            }
+        }
+        
+        let coreVersion = registeredExtensions.shallowCopy[ConfigurationConstants.EXTENSION_NAME]?.exten?.version ?? "unknown" // use configuration version for "core" version
+        let data: [String: Any] = ["version": coreVersion, "extensions": extensionsInfo]
+        createSharedState(extensionName: "Event Hub", data: data, event: nil)
     }
 
 }
