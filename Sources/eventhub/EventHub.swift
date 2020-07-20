@@ -210,12 +210,12 @@ final public class EventHub {
         var extensionsInfo = [String: [String: String]]()
         for (_, val) in registeredExtensions.shallowCopy {
             if let exten = val.exten {
-                extensionsInfo[exten.friendlyName] = ["version": exten.version]
+                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: exten.version]
             }
         }
         
         let coreVersion = registeredExtensions.shallowCopy[ConfigurationConstants.EXTENSION_NAME]?.exten?.version ?? "unknown" // use configuration version for "core" version
-        let data: [String: Any] = ["version": coreVersion, "extensions": extensionsInfo]
+        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: coreVersion, EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
         createSharedState(extensionName: "Event Hub", data: data, event: nil)
     }
 

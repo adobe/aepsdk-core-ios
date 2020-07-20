@@ -15,6 +15,8 @@ struct EventHubConstants {
     static let STATE_CHANGE = "STATE_CHANGE_EVENT"
     
     struct EventDataKeys {
+        static let VERSION = "version"
+        static let EXTENSIONS = "extensions"
         struct Configuration {
             static let EVENT_STATE_OWNER = "stateowner"
         }
