@@ -36,6 +36,7 @@ struct IdentityConstants {
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
+        static let ALL_IDENTIFIERS = "config.allidentifiers"
     }
     
     struct EventDataKeys {
