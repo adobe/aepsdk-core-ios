@@ -13,6 +13,8 @@
 		213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */; };
 		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
 		215AA6232465E06600CEB4F4 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */; };
+		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
+		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E52422917600C11388 /* AEPCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CAC0E42422917600C11388 /* AEPCoreTests.swift */; };
@@ -335,6 +337,8 @@
 		213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
 		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
 		215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
+		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
+		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		218194842489D3D7004F869A /* MockDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataStore.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1019,13 +1023,13 @@
 				3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */,
 				3FE6DDEC24C62F610065EA05 /* Info.plist */,
 				3FE6DDEF24C62F610065EA05 /* MockDataQueue.swift */,
-				21B1115F24C63F1E00F68392 /* MockHitProcessor.swift */,
-				21B1116124C63F4200F68392 /* MockHitQueue.swift */,
 				3FE6DDEB24C62F610065EA05 /* MockDataStore.swift */,
 				3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */,
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
 				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
 				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
+				215C859C24C6492800CCCD26 /* MockHitProcessor.swift */,
+				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
 			);
 			path = AEPServicesMock;
 			sourceTree = "<group>";
@@ -1728,10 +1732,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */,
 				3FE6DDF524C62F620065EA05 /* MockURLSession.swift in Sources */,
-				21B1116224C63F4200F68392 /* MockHitQueue.swift in Sources */,
 				3FE6DDF724C62F620065EA05 /* MockDataQueue.swift in Sources */,
-				21B1116024C63F1E00F68392 /* MockHitProcessor.swift in Sources */,
+				215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */,
 				3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */,
 				3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */,
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
