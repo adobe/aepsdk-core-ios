@@ -184,6 +184,8 @@
 		3FE6DD7F24C54E260065EA05 /* ConfigurationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7E24C54E260065EA05 /* ConfigurationConstants.swift */; };
 		3FE6DD8024C54F1D0065EA05 /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3824C546A90065EA05 /* LaunchIDManagerTests.swift */; };
 		3FE6DD8224C5EA330065EA05 /* AEPCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */; };
+		3FE6DD8424C5ED400065EA05 /* MobileIdentities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */; };
+		3FE6DD8624C5EDC40065EA05 /* MobileIdentitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8524C5EDC40065EA05 /* MobileIdentitiesTests.swift */; };
 		7869CDFB24BCC13F00128625 /* LifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
@@ -434,6 +436,8 @@
 		3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AEPCore+Configuration.swift"; path = "Sources/AEPCore+Configuration.swift"; sourceTree = "<group>"; };
 		3FE6DD7E24C54E260065EA05 /* ConfigurationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfigurationConstants.swift; path = Sources/ConfigurationConstants.swift; sourceTree = "<group>"; };
 		3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
+		3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentities.swift; sourceTree = "<group>"; };
+		3FE6DD8524C5EDC40065EA05 /* MobileIdentitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentitiesTests.swift; sourceTree = "<group>"; };
 		7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifecycleMetricsBuilder.swift; path = Sources/Lifecycle/LifecycleMetricsBuilder.swift; sourceTree = SOURCE_ROOT; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78D754F1244511D100DB9124 /* TestConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
@@ -525,6 +529,7 @@
 		214B5228248AE6460034BF22 /* IdentityTests */ = {
 			isa = PBXGroup;
 			children = (
+				3FE6DD8524C5EDC40065EA05 /* MobileIdentitiesTests.swift */,
 				215AE3AA24BF740F00FC931F /* AEPIdentityTests.swift */,
 				214B5229248AE66C0034BF22 /* AEPIdentity+IdentityTests.swift */,
 				213F66312492A8B9000184DE /* MIDTests.swift */,
@@ -559,6 +564,7 @@
 		218194892489F65D004F869A /* identity */ = {
 			isa = PBXGroup;
 			children = (
+				3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */,
 				2181948A2489F66D004F869A /* Identity.swift */,
 				214B5222248ABC710034BF22 /* AEPIdentity.swift */,
 				214B5224248ABCEB0034BF22 /* AEPIdentity+Identity.swift */,
@@ -1242,6 +1248,7 @@
 				21629DAC2461CA88009D05BF /* LifecycleConstants.swift in Sources */,
 				21629DB02461CAD0009D05BF /* AEPCore+Lifecycle.swift in Sources */,
 				21FBBB252491553100C66506 /* NetworkService+Identity.swift in Sources */,
+				3FE6DD8424C5ED400065EA05 /* MobileIdentities.swift in Sources */,
 				7869CDFB24BCC13F00128625 /* LifecycleMetricsBuilder.swift in Sources */,
 				213F66302492A808000184DE /* MID.swift in Sources */,
 				2181948B2489F66D004F869A /* Identity.swift in Sources */,
@@ -1293,6 +1300,7 @@
 				212760FB24B4E1C5003AAC41 /* IdentityStateTests.swift in Sources */,
 				215AE3AB24BF740F00FC931F /* AEPIdentityTests.swift in Sources */,
 				215CA8192481CA780078D778 /* LifecycleStateTests.swift in Sources */,
+				3FE6DD8624C5EDC40065EA05 /* MobileIdentitiesTests.swift in Sources */,
 				214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */,
 				3F03984424BE65A80019F095 /* MockSystemInfoService.swift in Sources */,
 			);
