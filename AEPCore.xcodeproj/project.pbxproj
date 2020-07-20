@@ -181,7 +181,7 @@
 		3FE6DD7A24C54CDC0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7924C54CDC0065EA05 /* TestableExtensionRuntime.swift */; };
 		3FE6DD7B24C54D0B0065EA05 /* Extension+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7724C54C230065EA05 /* Extension+Register.swift */; };
 		3FE6DD7D24C54DF10065EA05 /* AEPCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */; };
-		3FE6DD7F24C54E260065EA05 /* ConfigurationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7E24C54E260065EA05 /* ConfigurationConstants.swift */; };
+		3FE6DD7F24C54E260065EA05 /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */; };
 		3FE6DD8024C54F1D0065EA05 /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3824C546A90065EA05 /* LaunchIDManagerTests.swift */; };
 		3FE6DD8224C5EA330065EA05 /* AEPCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */; };
 		3FE6DD8424C5ED400065EA05 /* MobileIdentities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */; };
@@ -434,7 +434,7 @@
 		3FE6DD7724C54C230065EA05 /* Extension+Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Extension+Register.swift"; path = "Sources/Extension+Register.swift"; sourceTree = "<group>"; };
 		3FE6DD7924C54CDC0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AEPCore+Configuration.swift"; path = "Sources/AEPCore+Configuration.swift"; sourceTree = "<group>"; };
-		3FE6DD7E24C54E260065EA05 /* ConfigurationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConfigurationConstants.swift; path = Sources/ConfigurationConstants.swift; sourceTree = "<group>"; };
+		3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreConstants.swift; path = Sources/CoreConstants.swift; sourceTree = "<group>"; };
 		3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
 		3FE6DD8324C5ED3F0065EA05 /* MobileIdentities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentities.swift; sourceTree = "<group>"; };
 		3FE6DD8524C5EDC40065EA05 /* MobileIdentitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentitiesTests.swift; sourceTree = "<group>"; };
@@ -626,7 +626,7 @@
 			children = (
 				21315BB424575ED200D1B254 /* AEPCore.swift */,
 				3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */,
-				3FE6DD7E24C54E260065EA05 /* ConfigurationConstants.swift */,
+				3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */,
 				218194892489F65D004F869A /* identity */,
 				21629DA82461C8EC009D05BF /* Lifecycle */,
 				21CAC0D92422917600C11388 /* AEPCore.h */,
@@ -1256,7 +1256,7 @@
 				218194882489D419004F869A /* AEPLifecycle.swift in Sources */,
 				215CA8172481C9610078D778 /* LifecycleContextData.swift in Sources */,
 				2137BA132498314000F01D04 /* URL+Identity.swift in Sources */,
-				3FE6DD7F24C54E260065EA05 /* ConfigurationConstants.swift in Sources */,
+				3FE6DD7F24C54E260065EA05 /* CoreConstants.swift in Sources */,
 				21F361A0246DE4B5009AB88B /* LifecycleMetrics.swift in Sources */,
 				214B5227248ABD5D0034BF22 /* IdentityConstants.swift in Sources */,
 				21B0B61B24B3A7B7002A1B1A /* IdentityState.swift in Sources */,
