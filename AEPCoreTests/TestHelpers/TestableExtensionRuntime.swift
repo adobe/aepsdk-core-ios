@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-@testable import AEPCore
+@testable import AEPEventHub
 
 class TestableExtensionRuntime:ExtensionRuntime{
     var listeners:[String:EventListener] = [:]

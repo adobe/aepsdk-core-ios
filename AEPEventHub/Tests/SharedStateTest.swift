@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 
-@testable import AEPCore
+@testable import AEPEventHub
 
 class SharedStateTest: XCTestCase {
 

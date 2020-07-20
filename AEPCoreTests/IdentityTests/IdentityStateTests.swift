@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPCore
 import AEPServices
+import AEPEventHub
 
 class IdentityStateTests: XCTestCase {
 
@@ -27,7 +28,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that syncIdentifiers appends the MID and the two custom IDs to the visitor ID list
     func testSyncIdentifiersHappyIDs() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         state.lastValidConfig = configSharedState
         // test
         let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
@@ -44,7 +45,7 @@ class IdentityStateTests: XCTestCase {
     // TODO enable after AMSDK-10262
     func testSyncIdentifiersHappyPushID() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         state.lastValidConfig = configSharedState
         
         // test
@@ -61,7 +62,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the mid is appended and the ad id is appended to the visitor id list
     func testSyncIdentifiersHappyAdID() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         state.lastValidConfig = configSharedState
         
         // test
@@ -84,7 +85,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the ad is is correctly preserved when the same ad id is sync'd
     func testSyncIdentifiersAdIDIsSame() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = "test-ad-id"
         state = IdentityState(identityProperties: props)
@@ -106,7 +107,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the location hint and blob are present int he event data
     func testSyncIdentifiersAppendsBlobAndLocationHint() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         var props = IdentityProperties()
         props.locationHint = "locHinty"
         props.blob = "blobby"
@@ -128,7 +129,7 @@ class IdentityStateTests: XCTestCase {
     // Disabled, TODO: AMSDK-10261
     func testSyncIdentifiersDoesNotQueue() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         var props = IdentityProperties()
         props.mid = MID() // visitor ID is null initially and set for the first time in
         // shouldSync(). Mimic a second call to shouldSync by setting the mid
@@ -145,7 +146,7 @@ class IdentityStateTests: XCTestCase {
     
     func testSyncIdentifiersWhenPrivacyIsOptIn() {
         // setup
-        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         
         // test
         let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
@@ -157,7 +158,7 @@ class IdentityStateTests: XCTestCase {
     /// We are ready to process the event when the config shared state has an opt-in privacy status but our previous config has an opt-out
     func testSyncIdentifiersReturnTrueWhenLatestPrivacyIsOptOut() {
         // setup
-        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
+        state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
         
         // test
         let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
@@ -179,7 +180,7 @@ class IdentityStateTests: XCTestCase {
     
     func testReadyForSyncIdentifiersShouldSyncWithEmptyCurrentConfigButValidLatestConfig() {
         // setup
-        state.lastValidConfig = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "latestOrg", ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
+        state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         
         // test
         let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: [:])
@@ -190,7 +191,7 @@ class IdentityStateTests: XCTestCase {
     
     func testReadyForSyncIdentifiersShouldNotSyncWithEmptyCurrentConfigAndNilLatestConfig() {
         // setup
-        let configSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: ""] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: ""] as [String : Any]
         
         // test
         let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: configSharedState)
