@@ -230,6 +230,7 @@ extension EventHub: ExtensionContainerDelegate {
             }
         }
         
+        // TODO: Determine which version of Core to use in the top level version field
         let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
                                    EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
         createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
