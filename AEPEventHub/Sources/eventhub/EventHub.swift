@@ -27,7 +27,7 @@ final public class EventHub {
     private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventhub.response.queue")
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
-    private var preprocessors:[EventPreprocessor] = []
+    private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventhub.preprocessors.queue")
 
     #if DEBUG
     public internal(set) static var shared = EventHub()
@@ -45,7 +45,7 @@ final public class EventHub {
         // Setup eventQueue handler for the main OperationOrderer
         eventQueue.setHandler { (event) -> Bool in
             
-            let processedEvent = self.preprocessors.reduce(event) { event,  preprocessor in
+            let processedEvent = self.preprocessors.shallowCopy.reduce(event) { event,  preprocessor in
                 preprocessor(event)
             }            
             

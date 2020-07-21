@@ -22,8 +22,8 @@ class AEPConfiguration: Extension {
     
     private let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private var appIdManager: LaunchIDManager
-    private var rulesEngine: LaunchRulesEngine
     private var configState: ConfigurationState // should only be modified/used within the event queue
+    private let rulesEngine = LaunchRulesEngine()
     private let retryQueue = DispatchQueue(label: "com.adobe.configuration.retry")
 
     // MARK: Extension
@@ -31,7 +31,6 @@ class AEPConfiguration: Extension {
     /// Initializes the Configuration extension and it's dependencies
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        rulesEngine = LaunchRulesEngine()
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
     }
