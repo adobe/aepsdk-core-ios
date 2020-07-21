@@ -165,6 +165,51 @@ class IdentityState {
         return syncForIds && syncForProps
     }
     
+    /// Updates and makes any required actions when the privacy status has updated
+    /// - Parameters:
+    ///   - event: the event triggering the privacy change
+    ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
+    ///   - createSharedState: a function which can create Identity shared state
+    func processPrivacyChange(event: Event, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event) -> ()) {
+        let newPrivacyStatus = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+
+        if newPrivacyStatus == identityProperties.privacyStatus {
+            return
+        }
+
+        identityProperties.privacyStatus = newPrivacyStatus
+
+        if newPrivacyStatus == .optedOut {
+            identityProperties.mid = nil
+            identityProperties.advertisingIdentifier = nil
+            identityProperties.blob = nil
+            identityProperties.locationHint = nil
+            identityProperties.customerIds?.removeAll()
+
+            // TODO: Clear AID from analytics
+            
+            // TODO: Update push ID AMSDK-10262
+            identityProperties.saveToPersistence()
+            createSharedState(identityProperties.toEventData(), event)
+            // make sure we ignore events if we are opted out
+            
+        } else if identityProperties.mid == nil {
+            // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
+            // Queue up a request to sync the new ID with the Identity Service
+            let forceSyncEvent = event.forceSyncEvent()
+            eventDispatcher(forceSyncEvent)
+        }
+
+        // update hit queue with privacy status
+        hitQueue.handlePrivacyChange(status: newPrivacyStatus)
+    }
+    
+    /// Updates the last valid config to `newConfig`
+    /// - Parameter newConfig: The new configuration to replace the current last valid config
+    func updateLastValidConfig(newConfig: [String: Any]) {
+        lastValidConfig = newConfig
+    }
+    
     // MARK: Private APIs
     
     /// Inspects the current configuration to determine if a sync can be made, this is determined by if a valid org id is present and if the privacy is not set to opted-out
