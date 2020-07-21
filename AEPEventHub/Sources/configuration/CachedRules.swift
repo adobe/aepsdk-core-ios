@@ -18,7 +18,7 @@ import AEPServices
 ///
 struct CachedRules: Cachable, Codable {
     
-    /// The rules dictionary
+    /// The Rules Dictionary which holds the launch rules. E.g: ["global.privacy":"optedIn", ...]
     let cachableDict: [String: AnyCodable]
     
     let lastModified: String?
