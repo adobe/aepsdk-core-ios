@@ -16,7 +16,10 @@ class AEPIdentity: Extension {
     let runtime: ExtensionRuntime
     
     let name = IdentityConstants.EXTENSION_NAME
+    let friendlyName = IdentityConstants.FRIENDLY_NAME
     let version = IdentityConstants.EXTENSION_VERSION
+    let metadata: [String: String]? = nil
+    
     var state = IdentityState(identityProperties: IdentityProperties())
     
     // MARK: Extension

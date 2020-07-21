@@ -15,9 +15,11 @@ import AEPServices
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
 class AEPConfiguration: Extension {
     let runtime: ExtensionRuntime
-    var name = ConfigurationConstants.EXTENSION_NAME
-    var version = ConfigurationConstants.EXTENSION_VERSION
-
+    let name = ConfigurationConstants.EXTENSION_NAME
+    let friendlyName = ConfigurationConstants.FRIENDLY_NAME
+    let version = ConfigurationConstants.EXTENSION_VERSION
+    let metadata: [String: String]? = nil
+    
     private let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private var appIdManager: LaunchIDManager
     private var rulesEngine: AEPRulesEngine
