@@ -116,7 +116,6 @@ final class ZipArchive: Sequence {
         var checksum = CRC32(0)
         switch entry.type {
         case .file:
-            // TODO: - Should this remove the existing file and replace it instead?
             if fileManager.itemExists(at: url) {
                 do {
                     try fileManager.removeItem(at: url)
