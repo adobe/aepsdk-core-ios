@@ -51,7 +51,7 @@ class RulesDownloaderTests: XCTestCase {
         let testKey = "testKey"
         let testValue: AnyCodable = "testValue"
         let testRulesDict = [testKey: testValue]
-        let testRules: CachedRules = CachedRules(cachableDict: testRulesDict, lastModified: nil, eTag: nil)
+        let testRules: CachedRules = CachedRules(cacheableDict: testRulesDict, lastModified: nil, eTag: nil)
         let data = try! JSONEncoder().encode(testRules)
         let testEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
         cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
@@ -59,7 +59,7 @@ class RulesDownloaderTests: XCTestCase {
             XCTFail("Rules not loaded from cache")
             return
         }
-        XCTAssertEqual(testRules.cachableDict[testKey]?.stringValue, rules[testKey] as? String)
+        XCTAssertEqual(testRules.cacheableDict[testKey]?.stringValue, rules[testKey] as? String)
         XCTAssertTrue(cache.getCalled)
     }
     
@@ -74,7 +74,7 @@ class RulesDownloaderTests: XCTestCase {
         let testKey = "testKey"
         let testValue: AnyCodable = "testValue"
         let testRulesDict = [testKey: testValue]
-        let testRules: CachedRules = CachedRules(cachableDict: testRulesDict, lastModified: nil, eTag: nil)
+        let testRules: CachedRules = CachedRules(cacheableDict: testRulesDict, lastModified: nil, eTag: nil)
         let data = try! JSONEncoder().encode(testRules)
         let testEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
         cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
@@ -87,7 +87,7 @@ class RulesDownloaderTests: XCTestCase {
         })
         
         wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(testRules.cachableDict[testKey]?.stringValue, rulesResult![testKey] as? String)
+        XCTAssertEqual(testRules.cacheableDict[testKey]?.stringValue, rulesResult![testKey] as? String)
         XCTAssertFalse(mockUnzipper.unzipCalled)
         XCTAssertTrue(cache.getCalled)
         XCTAssertFalse(cache.setCalled)

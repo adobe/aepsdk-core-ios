@@ -13,9 +13,9 @@ import Foundation
 import AEPServices
 
 /// Used to store a configuration to cache with some metadata
-struct CachedConfiguration: Cachable, Codable {
+struct CachedConfiguration: Cacheable, Codable {
     
-    let cachableDict: [String : AnyCodable]
+    let cacheableDict: [String : AnyCodable]
     
     let lastModified: String?
     

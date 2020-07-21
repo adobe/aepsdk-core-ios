@@ -29,7 +29,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     }
 
     func loadConfigFromCache(appId: String, dataStore: NamedKeyValueStore) -> [String: Any]? {
-        return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.cachableDict)
+        return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.cacheableDict)
     }
 
     func loadConfigFromUrl(appId: String, dataStore: NamedKeyValueStore, completion: @escaping ([String: Any]?) -> ()) {
@@ -42,8 +42,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         // 304, not modified support
         var headers = [String: String]()
         if let cachedConfig = getCachedConfig(appId: appId, dataStore: dataStore) {
-            headers[NetworkServiceConstants.Headers.IF_MODIFIED_SINCE_HEADER] = cachedConfig.lastModified
-            headers[NetworkServiceConstants.Headers.IF_NONE_MATCH] = cachedConfig.eTag
+            headers = cachedConfig.notModifiedHeaders()
         }
 
         let networkRequest = NetworkRequest(url: url, httpMethod: .get, httpHeaders: headers)
@@ -51,17 +50,17 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         AEPServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             // If we get a 304 back, we can use the config in cache and exit early
             if httpConnection.responseCode == 304 {
-                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cachableDict))
+                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cacheableDict))
                 return
             }
             
             if let data = httpConnection.data, let configDict = try? JSONDecoder().decode([String: AnyCodable].self, from: data) {
-                let config = CachedConfiguration(cachableDict: configDict,
+                let config = CachedConfiguration(cacheableDict: configDict,
                                              lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
                                       eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
                 
                 dataStore.setObject(key: self.buildCacheKey(appId: appId), value: config) // cache config
-                completion(AnyCodable.toAnyDictionary(dictionary: config.cachableDict))
+                completion(AnyCodable.toAnyDictionary(dictionary: config.cacheableDict))
             } else {
                 completion(nil)
             }

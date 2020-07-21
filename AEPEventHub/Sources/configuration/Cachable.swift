@@ -13,10 +13,10 @@ import Foundation
 import AEPServices
 
 /// Represents an Object which is Cachable via the CacheService
-protocol Cachable {
+protocol Cacheable {
     
     /// The cachable Dictionary
-    var cachableDict: [String: AnyCodable] { get }
+    var cacheableDict: [String: AnyCodable] { get }
     
     /// Date this cachable was last modified on the server, read from the Last-Modified HTTP header
     /// Format: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
@@ -24,4 +24,11 @@ protocol Cachable {
     
     /// ETag of the cachable on the server
     var eTag: String? { get }
+}
+
+extension Cacheable {
+    func notModifiedHeaders() -> [String: String] {
+        return [NetworkServiceConstants.Headers.IF_MODIFIED_SINCE_HEADER: lastModified ?? "",
+                NetworkServiceConstants.Headers.IF_NONE_MATCH: eTag ?? ""]
+    }
 }

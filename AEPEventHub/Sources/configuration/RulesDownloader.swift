@@ -37,7 +37,7 @@ struct RulesDownloader: RulesLoader {
     }
     
     func loadRulesFromCache(rulesUrl: URL) -> [String : Any]? {
-        return AnyCodable.toAnyDictionary(dictionary: getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cachableDict)
+        return AnyCodable.toAnyDictionary(dictionary: getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheableDict)
     }
     
     func loadRulesFromUrl(rulesUrl: URL, completion: @escaping ([String: Any]?) -> Void) {
@@ -45,10 +45,9 @@ struct RulesDownloader: RulesLoader {
         /// 304 - Not Modified support
         var headers = [String: String]()
         if let cachedRules = getCachedRules(rulesUrl: rulesUrl.absoluteString) {
-            headers[NetworkServiceConstants.Headers.IF_MODIFIED_SINCE_HEADER] = cachedRules.lastModified
-            headers[NetworkServiceConstants.Headers.IF_NONE_MATCH] = cachedRules.eTag
+            headers = cachedRules.notModifiedHeaders()
         }
-        
+
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
         AEPServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             if let data = httpConnection.data {
@@ -60,7 +59,7 @@ struct RulesDownloader: RulesLoader {
                         completion(nil)
                         return
                     }
-                    let cachedRules = CachedRules(cachableDict: rulesDict,
+                    let cachedRules = CachedRules(cacheableDict: rulesDict,
                                                   lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
                                                   eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
                     // Cache the rules, if fails, log message
@@ -75,7 +74,7 @@ struct RulesDownloader: RulesLoader {
                     return
                 }
             } else if httpConnection.responseCode == 304 {
-                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cachableDict))
+                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheableDict))
                 return
             }
             

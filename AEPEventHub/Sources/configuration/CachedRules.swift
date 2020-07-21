@@ -16,10 +16,10 @@ import AEPServices
 ///
 /// Represents a Cached rules type which has some additional metadata on top of the rules
 ///
-struct CachedRules: Cachable, Codable {
+struct CachedRules: Cacheable, Codable {
     
     /// The Rules Dictionary which holds the launch rules. E.g: ["global.privacy":"optedIn", ...]
-    let cachableDict: [String: AnyCodable]
+    let cacheableDict: [String: AnyCodable]
     
     let lastModified: String?
     
