@@ -60,10 +60,12 @@ class RulesDownloaderTests: XCTestCase {
             return
         }
         XCTAssertEqual(testRules.cachableDict[testKey]?.stringValue, rules[testKey] as? String)
+        XCTAssertTrue(cache.getCalled)
     }
     
     func testLoadRulesFromCacheNotInCache() {
         XCTAssertNil(rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!))
+        XCTAssertTrue(cache.getCalled)
     }
     
 
@@ -86,22 +88,36 @@ class RulesDownloaderTests: XCTestCase {
         
         wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(testRules.cachableDict[testKey]?.stringValue, rulesResult![testKey] as? String)
+        XCTAssertFalse(mockUnzipper.unzipCalled)
+        XCTAssertTrue(cache.getCalled)
+        XCTAssertFalse(cache.setCalled)
+    }
+    
+    func testLoadRulesFromUrlWithError() {
+        AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .error)
+        let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
+        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
+            XCTAssertNil(loadedRules)
+            expectation.fulfill()
+        })
+        
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertFalse(mockUnzipper.unzipCalled)
+        XCTAssertTrue(cache.getCalled)
+        XCTAssertFalse(cache.setCalled)
     }
     
     func testLoadRulesFromUrlUnzipFail() {
         AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
+        let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
         rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
             XCTAssertNil(loadedRules)
+            expectation.fulfill()
         })
-    }
-    
-    func testLoadRulesFromUrlSetCacheFail() {
-        cache.shouldThrow = true
-        mockUnzipper.unzippedResults = ["testResult"]
-        AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
-        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
-            
-        })
+        wait(for: [expectation], timeout: 0.5)
+        XCTAssertTrue(mockUnzipper.unzipCalled)
+        XCTAssertTrue(cache.getCalled)
+        XCTAssertFalse(cache.setCalled)
     }
     
     // This serves as a functional test right now which uses the actual unzipping and temporary directory work

@@ -15,7 +15,9 @@ import AEPServices
 class MockUnzipper: Unzipper {
     
     var unzippedResults: [String] = []
+    var unzipCalled = false
     func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
+        unzipCalled = true
         return unzippedResults
     }
 }
