@@ -15,15 +15,17 @@ import AEPServices
 
 class AEPIdentity: Extension {
     let runtime: ExtensionRuntime
-    
+
     let name = IdentityConstants.EXTENSION_NAME
+    let friendlyName = IdentityConstants.FRIENDLY_NAME
     let version = IdentityConstants.EXTENSION_VERSION
+    let metadata: [String: String]? = nil
     var state: IdentityState?
     
     // MARK: Extension
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        
+
         guard let dataQueue = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
             return
@@ -32,14 +34,14 @@ class AEPIdentity: Extension {
         let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(entity:responseData:)))
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue)
     }
-    
+
     func onRegistered() {
         registerListener(type: .identity, source: .requestIdentity, listener: handleIdentityRequest)
         registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
     }
-    
+
     func onUnregistered() {}
-    
+
     func readyForEvent(_ event: Event) -> Bool {
         if event.isSyncEvent || event.type == .genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
@@ -47,12 +49,12 @@ class AEPIdentity: Extension {
         } else if event.type == .configuration && event.source == .requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         }
-        
+
         return getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
     }
-    
+
     // MARK: Event Listeners
-    
+
     private func handleIdentityRequest(event: Event) {
         if event.isSyncEvent || event.type == .genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
@@ -66,7 +68,7 @@ class AEPIdentity: Extension {
             processIdentifiersRequest(event: event)
         }
     }
-    
+
     /// Handles the getSdkIdentities API by collecting all the identities then dispatching a response event with the given identities
     /// - Parameter event: The event coming from the getSdkIdentities API
     private func receiveConfigurationIdentity(event: Event) {
@@ -83,7 +85,7 @@ class AEPIdentity: Extension {
         let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: .configuration, source: .responseIdentity, data: eventData as [String : Any])
         dispatch(event: responseEvent)
     }
-    
+
     // MARK: Event Handlers
     private func processAppendToUrl(baseUrl: String, event: Event) {
         guard let properties = state?.identityProperties else { return }
@@ -114,7 +116,7 @@ class AEPIdentity: Extension {
         // dispatch identity response event with shared state data
         dispatch(event: responseEvent)
     }
-    
+
     // MARK: Network Response Handler
     /// Invoked by the `IdentityHitProcessor` each time we receive a network response
     /// - Parameters:
