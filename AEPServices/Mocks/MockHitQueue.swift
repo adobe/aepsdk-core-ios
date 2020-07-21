@@ -8,21 +8,34 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-import Foundation
 
-/// Constant values used throughout `EventHub`
-struct EventHubConstants {
-    static let STATE_CHANGE = "STATE_CHANGE_EVENT"
-    static let NAME = "com.adobe.module.eventhub"
-    static let FRIENDLY_NAME = "EventHub"
-    
-    struct EventDataKeys {
-        static let VERSION = "version"
-        static let EXTENSIONS = "extensions"
-        static let METADATA = "metadata"
-        
-        struct Configuration {
-            static let EVENT_STATE_OWNER = "stateowner"
-        }
+import Foundation
+@testable import AEPServices
+
+public class MockHitQueue: HitQueuing {
+    public var processor: HitProcessable
+
+    public var queuedHits = [DataEntity]()
+
+    public init(processor: HitProcessable) {
+        self.processor = processor
     }
+
+    public func queue(entity: DataEntity) -> Bool {
+        queuedHits.append(entity)
+        return true
+    }
+
+    public func beginProcessing() {
+        // no-op
+    }
+
+    public func suspend() {
+        // no-op
+    }
+
+    public func clear() {
+        queuedHits.removeAll()
+    }
+
 }

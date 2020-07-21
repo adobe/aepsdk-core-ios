@@ -16,6 +16,8 @@ import Foundation
 
 class SlowMockExtension: Extension {
     var name = "slowMockExtension"
+    var friendlyName = "slowMockExtension"
+    var metadata: [String : String]? = nil
     var version = "0.0.1"
     let runtime: ExtensionRuntime
     

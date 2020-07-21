@@ -13,6 +13,7 @@ import Foundation
 
 struct IdentityConstants {
     static let EXTENSION_NAME = "com.adobe.module.identity"
+    static let FRIENDLY_NAME = "Identity"
     static let EXTENSION_VERSION = "0.0.1"
     static let DATASTORE_NAME = EXTENSION_NAME
     
@@ -38,6 +39,7 @@ struct IdentityConstants {
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
         static let ALL_IDENTIFIERS = "config.allidentifiers"
+        static let UPDATE_CONFIG = "config.update"
     }
     
     struct EventDataKeys {
@@ -69,6 +71,12 @@ struct IdentityConstants {
         static let VISITOR_PAYLOAD_MARKETING_CLOUD_ORG_ID = "MCORGID"
         static let VISITOR_PAYLOAD_ANALYTICS_ID_KEY = "MCAID"
         static let ANALYTICS_PAYLOAD_KEY = "adobe_aa_vid"
+    }
+    
+    struct Default {
+        static let TTL = TimeInterval(600)
+        static let TIMEOUT = TimeInterval(2000)
+        static let SERVER = "dpm.demdex.net"
     }
     
     struct Analytics {

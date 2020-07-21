@@ -13,6 +13,7 @@ import Foundation
 
 struct ConfigurationConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
+    static let FRIENDLY_NAME = "Configuration"
     static let EXTENSION_VERSION = "0.0.1"
     static let DATA_STORE_NAME = EXTENSION_NAME
 
