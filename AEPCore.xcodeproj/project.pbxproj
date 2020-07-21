@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		21315BB524575ED200D1B254 /* AEPCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21315BB424575ED200D1B254 /* AEPCore.swift */; };
 		2131A1B42465D81E00F1392D /* EventHub+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131A1B32465D81E00F1392D /* EventHub+Testable.swift */; };
 		213C8BD524252302009F780A /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213C8BD424252302009F780A /* MockExtension.swift */; };
 		213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */; };
@@ -113,6 +112,13 @@
 		3F03989024C001350019F095 /* CachedConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987824C001350019F095 /* CachedConfiguration.swift */; };
 		3F03989124C001350019F095 /* ConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987924C001350019F095 /* ConfigurationDownloader.swift */; };
 		3F03989324C001350019F095 /* PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987B24C001350019F095 /* PrivacyStatus.swift */; };
+		3FB66A4E24C783B900502CAF /* AEPCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4724C783B900502CAF /* AEPCore+Configuration.swift */; };
+		3FB66A4F24C783B900502CAF /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4824C783B900502CAF /* Lifecycle.swift */; };
+		3FB66A5024C783B900502CAF /* AEPCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4924C783B900502CAF /* AEPCore.swift */; };
+		3FB66A5124C783B900502CAF /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4A24C783B900502CAF /* CoreConstants.swift */; };
+		3FB66A5224C783B900502CAF /* Extension+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4B24C783B900502CAF /* Extension+Register.swift */; };
+		3FB66A5324C783B900502CAF /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4C24C783B900502CAF /* Configuration.swift */; };
+		3FB66A5424C783B900502CAF /* AEPCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4D24C783B900502CAF /* AEPCore+Lifecycle.swift */; };
 		3FE6DD4424C546C00065EA05 /* EventHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3A24C546A90065EA05 /* EventHubTests.swift */; };
 		3FE6DD4524C546C30065EA05 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3924C546A90065EA05 /* SharedStateTest.swift */; };
 		3FE6DD4624C546CD0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3224C546A90065EA05 /* TestableExtensionRuntime.swift */; };
@@ -129,9 +135,6 @@
 		3FE6DD7124C547F50065EA05 /* MockExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD6E24C547F50065EA05 /* MockExtensionTwo.swift */; };
 		3FE6DD7424C548220065EA05 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7324C548220065EA05 /* ADBMobileConfig.json */; };
 		3FE6DD7A24C54CDC0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7924C54CDC0065EA05 /* TestableExtensionRuntime.swift */; };
-		3FE6DD7B24C54D0B0065EA05 /* Extension+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7724C54C230065EA05 /* Extension+Register.swift */; };
-		3FE6DD7D24C54DF10065EA05 /* AEPCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */; };
-		3FE6DD7F24C54E260065EA05 /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */; };
 		3FE6DD8024C54F1D0065EA05 /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3824C546A90065EA05 /* LaunchIDManagerTests.swift */; };
 		3FE6DD8224C5EA330065EA05 /* AEPCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */; };
 		3FE6DDB724C62C4A0065EA05 /* AEPServicesMock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMock.framework */; };
@@ -160,9 +163,6 @@
 		3FE6DE1424C630EB0065EA05 /* LifecycleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0C24C630EB0065EA05 /* LifecycleConstants.swift */; };
 		3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */; };
 		3FE6DE1724C631100065EA05 /* LifecycleSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1624C631100065EA05 /* LifecycleSession.swift */; };
-		3FE6DE1924C631B00065EA05 /* AEPCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */; };
-		3FE6DE1E24C632450065EA05 /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE1D24C632450065EA05 /* Lifecycle.swift */; };
-		3FE6DE2924C63B520065EA05 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE2824C63B520065EA05 /* Configuration.swift */; };
 		3FE6DE3824C642330065EA05 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */; };
 		3FE6DE3F24C642330065EA05 /* AEPIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE6DE3124C642330065EA05 /* AEPIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3FE6DE5924C643060065EA05 /* MobileVisitorAuthenticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */; };
@@ -332,7 +332,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		21315BB424575ED200D1B254 /* AEPCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AEPCore.swift; path = Sources/AEPCore.swift; sourceTree = "<group>"; };
 		2131A1B32465D81E00F1392D /* EventHub+Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventHub+Testable.swift"; sourceTree = "<group>"; };
 		213C8BD424252302009F780A /* MockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
 		213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
@@ -447,6 +446,13 @@
 		3F03987824C001350019F095 /* CachedConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedConfiguration.swift; sourceTree = "<group>"; };
 		3F03987924C001350019F095 /* ConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloader.swift; sourceTree = "<group>"; };
 		3F03987B24C001350019F095 /* PrivacyStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyStatus.swift; sourceTree = "<group>"; };
+		3FB66A4724C783B900502CAF /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+Configuration.swift"; sourceTree = "<group>"; };
+		3FB66A4824C783B900502CAF /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lifecycle.swift; sourceTree = "<group>"; };
+		3FB66A4924C783B900502CAF /* AEPCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPCore.swift; sourceTree = "<group>"; };
+		3FB66A4A24C783B900502CAF /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreConstants.swift; sourceTree = "<group>"; };
+		3FB66A4B24C783B900502CAF /* Extension+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+Register.swift"; sourceTree = "<group>"; };
+		3FB66A4C24C783B900502CAF /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		3FB66A4D24C783B900502CAF /* AEPCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+Lifecycle.swift"; sourceTree = "<group>"; };
 		3FE6DD3224C546A90065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3FE6DD3324C546A90065EA05 /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		3FE6DD3524C546A90065EA05 /* ConfigurationStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationStateTests.swift; sourceTree = "<group>"; };
@@ -463,10 +469,7 @@
 		3FE6DD6D24C547F50065EA05 /* MockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
 		3FE6DD6E24C547F50065EA05 /* MockExtensionTwo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtensionTwo.swift; sourceTree = "<group>"; };
 		3FE6DD7324C548220065EA05 /* ADBMobileConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
-		3FE6DD7724C54C230065EA05 /* Extension+Register.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Extension+Register.swift"; path = "Sources/Extension+Register.swift"; sourceTree = "<group>"; };
 		3FE6DD7924C54CDC0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
-		3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AEPCore+Configuration.swift"; path = "Sources/AEPCore+Configuration.swift"; sourceTree = "<group>"; };
-		3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreConstants.swift; path = Sources/CoreConstants.swift; sourceTree = "<group>"; };
 		3FE6DD8124C5EA330065EA05 /* AEPCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
 		3FE6DDA924C62C090065EA05 /* AEPServicesMock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServicesMock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -496,9 +499,6 @@
 		3FE6DE0C24C630EB0065EA05 /* LifecycleConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleConstants.swift; sourceTree = "<group>"; };
 		3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsBuilder.swift; sourceTree = "<group>"; };
 		3FE6DE1624C631100065EA05 /* LifecycleSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleSession.swift; sourceTree = "<group>"; };
-		3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AEPCore+Lifecycle.swift"; path = "Sources/AEPCore+Lifecycle.swift"; sourceTree = "<group>"; };
-		3FE6DE1D24C632450065EA05 /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Lifecycle.swift; path = Sources/Lifecycle.swift; sourceTree = "<group>"; };
-		3FE6DE2824C63B520065EA05 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Configuration.swift; path = Sources/Configuration.swift; sourceTree = "<group>"; };
 		3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPIdentity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE6DE3124C642330065EA05 /* AEPIdentity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPIdentity.h; sourceTree = "<group>"; };
 		3FE6DE3224C642330065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -700,17 +700,18 @@
 		21CAC0D82422917600C11388 /* AEPCore */ = {
 			isa = PBXGroup;
 			children = (
-				21315BB424575ED200D1B254 /* AEPCore.swift */,
-				3FE6DE2824C63B520065EA05 /* Configuration.swift */,
-				3FE6DD7C24C54DF10065EA05 /* AEPCore+Configuration.swift */,
-				3FE6DD7E24C54E260065EA05 /* CoreConstants.swift */,
-				3FE6DE1D24C632450065EA05 /* Lifecycle.swift */,
-				3FE6DE1824C631B00065EA05 /* AEPCore+Lifecycle.swift */,
-				3FE6DD7724C54C230065EA05 /* Extension+Register.swift */,
+				3FB66A4924C783B900502CAF /* AEPCore.swift */,
+				3FB66A4724C783B900502CAF /* AEPCore+Configuration.swift */,
+				3FB66A4D24C783B900502CAF /* AEPCore+Lifecycle.swift */,
+				3FB66A4C24C783B900502CAF /* Configuration.swift */,
+				3FB66A4A24C783B900502CAF /* CoreConstants.swift */,
+				3FB66A4B24C783B900502CAF /* Extension+Register.swift */,
+				3FB66A4824C783B900502CAF /* Lifecycle.swift */,
 				21CAC0D92422917600C11388 /* AEPCore.h */,
 				21CAC0DA2422917600C11388 /* Info.plist */,
 			);
 			name = AEPCore;
+			path = AEPCore/Sources;
 			sourceTree = "<group>";
 		};
 		21CAC0E32422917600C11388 /* AEPCoreTests */ = {
@@ -724,7 +725,8 @@
 				21CAC0E62422917600C11388 /* Info.plist */,
 				213E87B72433E9B000033447 /* TestHelpers */,
 			);
-			path = AEPCoreTests;
+			name = AEPCoreTests;
+			path = AEPCore/Tests;
 			sourceTree = "<group>";
 		};
 		21D4A658246D991200DFCD02 /* LifecycleTests */ = {
@@ -1579,13 +1581,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FE6DD7B24C54D0B0065EA05 /* Extension+Register.swift in Sources */,
-				3FE6DD7D24C54DF10065EA05 /* AEPCore+Configuration.swift in Sources */,
-				3FE6DE1924C631B00065EA05 /* AEPCore+Lifecycle.swift in Sources */,
-				3FE6DD7F24C54E260065EA05 /* CoreConstants.swift in Sources */,
-				3FE6DE2924C63B520065EA05 /* Configuration.swift in Sources */,
-				3FE6DE1E24C632450065EA05 /* Lifecycle.swift in Sources */,
-				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
+				3FB66A5324C783B900502CAF /* Configuration.swift in Sources */,
+				3FB66A5124C783B900502CAF /* CoreConstants.swift in Sources */,
+				3FB66A5024C783B900502CAF /* AEPCore.swift in Sources */,
+				3FB66A4F24C783B900502CAF /* Lifecycle.swift in Sources */,
+				3FB66A5424C783B900502CAF /* AEPCore+Lifecycle.swift in Sources */,
+				3FB66A5224C783B900502CAF /* Extension+Register.swift in Sources */,
+				3FB66A4E24C783B900502CAF /* AEPCore+Configuration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2043,11 +2045,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 66USX5VV9D;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2071,11 +2073,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 66USX5VV9D;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
+				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2098,7 +2100,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GP6Z9HB7H4;
-				INFOPLIST_FILE = AEPCoreTests/Info.plist;
+				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2118,7 +2120,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GP6Z9HB7H4;
-				INFOPLIST_FILE = AEPCoreTests/Info.plist;
+				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
