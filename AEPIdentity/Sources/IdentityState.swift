@@ -187,12 +187,11 @@ class IdentityState {
             identityProperties.customerIds?.removeAll()
 
             // TODO: Clear AID from analytics
-            
             // TODO: Update push ID AMSDK-10262
+            
             identityProperties.saveToPersistence()
             createSharedState(identityProperties.toEventData(), event)
-            // make sure we ignore events if we are opted out
-            
+            //TODO: make sure we ignore events if we are opted out
         } else if identityProperties.mid == nil {
             // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
             // Queue up a request to sync the new ID with the Identity Service
