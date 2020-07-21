@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -197,6 +197,9 @@
 		3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */; };
 		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
 		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
+		3FE6DE9A24C64BC00065EA05 /* AEPRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */; };
+		3FE6DE9C24C64C590065EA05 /* LaunchRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */; };
+		3FE6DEA224C65C7D0065EA05 /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE6DEA124C65C7D0065EA05 /* SwiftRulesEngine */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
 		78DEFEF1244A183400D7E9FB /* TestImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEFEF0244A183400D7E9FB /* TestImage.png */; };
@@ -536,6 +539,8 @@
 		3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
 		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
+		3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngine.swift; sourceTree = "<group>"; };
+		3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRule.swift; sourceTree = "<group>"; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78D754F1244511D100DB9124 /* TestConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		78DEFEF0244A183400D7E9FB /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
@@ -579,6 +584,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FE6DEA224C65C7D0065EA05 /* SwiftRulesEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,14 +657,6 @@
 			path = MockExtensions;
 			sourceTree = "<group>";
 		};
-		21ABCAF224B38EEB008C4EDF /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				218194842489D3D7004F869A /* MockDataStore.swift */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
@@ -674,7 +672,6 @@
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DE3B24C642330065EA05 /* AEPIdentityTests */,
 				21CAC0D72422917600C11388 /* Products */,
-				21ABCAF224B38EEB008C4EDF /* Recovered References */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -918,6 +915,7 @@
 		3F03984D24C0008D0019F095 /* AEPEventHub */ = {
 			isa = PBXGroup;
 			children = (
+				3FE6DE9824C64BA50065EA05 /* rules */,
 				3F03984E24C0008D0019F095 /* AEPEventHub.h */,
 				3F03984F24C0008D0019F095 /* Info.plist */,
 				3F03987024C001350019F095 /* configuration */,
@@ -1129,6 +1127,15 @@
 			path = TestHelpers;
 			sourceTree = "<group>";
 		};
+		3FE6DE9824C64BA50065EA05 /* rules */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */,
+				3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */,
+			);
+			path = rules;
+			sourceTree = "<group>";
+		};
 		78D754F02445115200DB9124 /* TestResources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1211,6 +1218,8 @@
 				3F03983D24BE63570019F095 /* PBXTargetDependency */,
 			);
 			name = AEPCore;
+			packageProductDependencies = (
+			);
 			productName = AEPCore;
 			productReference = 21CAC0D62422917600C11388 /* AEPCore.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1283,9 +1292,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				3FE6DEA024C659910065EA05 /* PBXTargetDependency */,
 				3F03989624C001400019F095 /* PBXTargetDependency */,
 			);
 			name = AEPEventHub;
+			packageProductDependencies = (
+				3FE6DEA124C65C7D0065EA05 /* SwiftRulesEngine */,
+			);
 			productName = AEPEventHub;
 			productReference = 3F03984C24C0008D0019F095 /* AEPEventHub.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1466,6 +1479,9 @@
 				Base,
 			);
 			mainGroup = 21CAC0CC2422917600C11388;
+			packageReferences = (
+				3FE6DE9324C64B8D0065EA05 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
+			);
 			productRefGroup = 21CAC0D72422917600C11388 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1685,10 +1701,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FE6DE9C24C64C590065EA05 /* LaunchRule.swift in Sources */,
 				3F03988524C001350019F095 /* EventHubError.swift in Sources */,
 				3F03989324C001350019F095 /* PrivacyStatus.swift in Sources */,
 				3F03988324C001350019F095 /* ExtensionRuntime.swift in Sources */,
 				3F03988224C001350019F095 /* EventHub.swift in Sources */,
+				3FE6DE9A24C64BC00065EA05 /* AEPRulesEngine.swift in Sources */,
 				3F03988C24C001350019F095 /* LaunchIDManager.swift in Sources */,
 				3F03988824C001350019F095 /* Extension.swift in Sources */,
 				3F03988924C001350019F095 /* AEPConfiguration.swift in Sources */,
@@ -1913,6 +1931,10 @@
 			isa = PBXTargetDependency;
 			target = 3F03984B24C0008C0019F095 /* AEPEventHub */;
 			targetProxy = 3FE6DE8B24C6463B0065EA05 /* PBXContainerItemProxy */;
+		};
+		3FE6DEA024C659910065EA05 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 3FE6DE9F24C659910065EA05 /* SwiftRulesEngine */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2654,6 +2676,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3FE6DE9324C64B8D0065EA05 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
+			requirement = {
+				branch = dev;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3FE6DE9F24C659910065EA05 /* SwiftRulesEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FE6DE9324C64B8D0065EA05 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
+			productName = SwiftRulesEngine;
+		};
+		3FE6DEA124C65C7D0065EA05 /* SwiftRulesEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3FE6DE9324C64B8D0065EA05 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
+			productName = SwiftRulesEngine;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 21CAC0CD2422917600C11388 /* Project object */;
 }

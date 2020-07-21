@@ -17,6 +17,7 @@ public typealias EventListener = (Event) -> Void
 public typealias EventResponseListener = (Event?) -> Void
 public typealias SharedStateResolver = ([String: Any]?) -> Void
 public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
+public typealias EventPreprocessor = (Event) -> Event
 
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
 final public class EventHub {
@@ -26,6 +27,7 @@ final public class EventHub {
     private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventhub.response.queue")
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
+    private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventhub.preprocessors.queue")
 
     #if DEBUG
     public internal(set) static var shared = EventHub()
@@ -42,19 +44,24 @@ final public class EventHub {
 
         // Setup eventQueue handler for the main OperationOrderer
         eventQueue.setHandler { (event) -> Bool in
+            
+            let processedEvent = self.preprocessors.shallowCopy.reduce(event) { event,  preprocessor in
+                preprocessor(event)
+            }            
+            
             // Handle response event listeners first
-            if let responseID = event.responseID {
+            if let responseID = processedEvent.responseID {
                 _ = self.responseEventListeners.filterRemove { (eventListenerContainer: EventListenerContainer) -> Bool in
                     guard eventListenerContainer.triggerEventId == responseID else { return false }
                     eventListenerContainer.timeoutTask?.cancel()
-                    eventListenerContainer.listener(event)
+                    eventListenerContainer.listener(processedEvent)
                     return true
                 }
             }
 
             // Send event to each ExtensionContainer
             self.registeredExtensions.shallowCopy.values.forEach {
-                $0.eventOrderer.add(event)
+                $0.eventOrderer.add(processedEvent)
             }
 
             return true
@@ -173,6 +180,12 @@ final public class EventHub {
     /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
     internal func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
         return registeredExtensions[type.typeName]
+    }
+    
+    /// Register a event preprocessor
+    /// - Parameter preprocessor: The `EventPreprocessor`
+    internal func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor){
+        preprocessors.append(preprocessor)
     }
 
     // MARK: Private
