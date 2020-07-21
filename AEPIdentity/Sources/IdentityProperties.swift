@@ -42,7 +42,7 @@ struct IdentityProperties: Codable {
     var lastSync: Date?
     
     /// Time to live value
-    var ttl = IdentityConstants.DEFAULT_TTL
+    var ttl = IdentityConstants.Default.TTL
     
     /// The current privacy status provided by the Configuration extension, defaults to `unknown`
     var privacyStatus = PrivacyStatus.unknown
