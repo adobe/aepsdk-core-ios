@@ -20,6 +20,7 @@ class AEPConfiguration: Extension {
 
     private let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private var appIdManager: LaunchIDManager
+    private var rulesEngine: AEPRulesEngine
     private var configState: ConfigurationState // should only be modified/used within the event queue
     private let retryQueue = DispatchQueue(label: "com.adobe.configuration.retry")
 
@@ -28,12 +29,15 @@ class AEPConfiguration: Extension {
     /// Initializes the Configuration extension and it's dependencies
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+        rulesEngine = AEPRulesEngine()
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
     }
 
     /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
     func onRegistered() {
+        registerPreprocessor(rulesEngine.process(event:))
+        
         registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
         registerListener(type: .lifecycle, source: .responseContent, listener: receiveLifecycleResponse(event:))
 

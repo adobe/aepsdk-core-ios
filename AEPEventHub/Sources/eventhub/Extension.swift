@@ -102,4 +102,9 @@ public extension Extension {
     func stopEvents() {
         runtime.stopEvents()
     }
+    
+    internal func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor){
+        EventHub.shared.registerPreprocessor(preprocessor)
+    }
+    
 }
