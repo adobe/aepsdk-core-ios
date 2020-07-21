@@ -389,7 +389,7 @@ class EventHubTests: XCTestCase {
     func testEventHubRegisterExtensionSharesState() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub two times")
-        sharedStateExpectation.expectedFulfillmentCount = 2
+        sharedStateExpectation.expectedFulfillmentCount = 3
         sharedStateExpectation.assertForOverFulfill = true
         eventHub.start()
         
