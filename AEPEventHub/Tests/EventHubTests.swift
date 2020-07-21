@@ -850,4 +850,36 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
+    
+    // use event preprocessor to return a new event
+    func testRegisterPreprocessor() {
+        // setup
+        let targetRequestContentExpectation = XCTestExpectation(description: "Received hub shared state event")
+        targetRequestContentExpectation.isInverted = true
+        
+        let analyticsRequestContentExpectation = XCTestExpectation(description: "Received hub shared state event")
+        analyticsRequestContentExpectation.assertForOverFulfill = true
+        
+        eventHub.registerPreprocessor { event in
+            if event.type == .target && event.source == .requestContent {
+                return Event(name: "event", type: .analytics, source: .requestContent, data: nil)
+            }
+            return event
+        }
+        eventHub.start()
+
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .target, source: .requestContent) { (event) in
+            targetRequestContentExpectation.fulfill()
+        }
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .analytics, source: .requestContent) { (event) in
+            analyticsRequestContentExpectation.fulfill()
+        }
+
+        // test
+        eventHub.dispatch(event: Event(name: "event", type: .target, source: .requestContent, data: nil))
+
+
+        // verify
+        wait(for: [targetRequestContentExpectation,analyticsRequestContentExpectation], timeout: 0.5)
+    }
 }

@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 import SwiftRulesEngine
 
+/// A rules engine for Launch rules
 struct LaunchRulesEngine{
     let rulesEngine: RulesEngine<LaunchRule>
     
@@ -20,10 +21,21 @@ struct LaunchRulesEngine{
         rulesEngine = RulesEngine(evaluator: evaluator)
     }
     
-    func loadRules(from url:URL){
+    /// Downloads the rules from the remote server
+    /// - Parameter url: the `URL` of the remote urls
+    func loadRemoteRules(from url:URL){
         
     }
     
+    /// Reads the cached rules
+    /// - Parameter url: the `URL` of the remote urls
+    func loadCachedRules(for url:URL){
+        
+    }
+    
+    /// Evaluates all the current rules against the supplied `Event`.
+    /// - Parameter event: the `Event` against which to evaluate the rules
+    /// - Returns: the  processed`Event`
     func process(event: Event) -> Event{
         return event
     }

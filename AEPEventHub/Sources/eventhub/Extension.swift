@@ -109,6 +109,8 @@ public extension Extension {
         runtime.stopEvents()
     }
     
+    /// Register a event preprocessor
+    /// - Parameter preprocessor: The `EventPreprocessor`
     internal func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor){
         EventHub.shared.registerPreprocessor(preprocessor)
     }

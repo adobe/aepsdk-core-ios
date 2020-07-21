@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 import SwiftRulesEngine
 
+/// A `Rule`type represents the funtions defined by Launch
 struct LaunchRule : Rule{
     var condition: Evaluable{
         ComparisonExpression(lhs: "abc", operationName: "equals", rhs: "abc")
