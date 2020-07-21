@@ -26,6 +26,7 @@ final public class EventHub {
     private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventhub.response.queue")
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
+    private lazy var loggingService =  AEPServiceProvider.shared.loggingService;
 
     #if DEBUG
     public internal(set) static var shared = EventHub()
@@ -81,11 +82,13 @@ final public class EventHub {
         eventHubQueue.async {
             guard !type.typeName.isEmpty else {
                 // TODO: print error, extension name must not be empty
+                self.loggingService.log(level: .warning, label: EventHubConstants.LOG_LABEL, message: "registerExtension:: Extension name must not be empty.")
                 completion(.invalidExtensionName)
                 return
             }
             guard self.registeredExtensions[type.typeName] == nil else {
                 // TODO: print error, cannot register an extension multiple times
+                self.loggingService.log(level: .debug, label: EventHubConstants.LOG_LABEL, message: "Cannot register an extension multiple times.")
                 completion(.duplicateExtensionName)
                 return
             }
@@ -121,6 +124,8 @@ final public class EventHub {
     ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil, it will be versioned at the latest
     public func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
         guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) else {
+            // print error - extension not registered with event hub
+            loggingService.log(level: .error, label: EventHubConstants.LOG_LABEL, message: "createSharedState:: Error in creating shared state.")
             return
         }
 
@@ -154,6 +159,7 @@ final public class EventHub {
     public func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
         guard let sharedState = registeredExtensions.first(where: {$1.sharedStateName == extensionName})?.value.sharedState else {
             // print error - extension not registered
+            loggingService.log(level: .warning, label: EventHubConstants.LOG_LABEL, message: "getSharedState:: Extension not registered.")
             return nil
         }
 
@@ -176,7 +182,7 @@ final public class EventHub {
     
     private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
         guard let extensionContainer = registeredExtensions.first(where: {$1.sharedStateName == extensionName})?.value else {
-            // print error - extension not registered with event hub
+            loggingService.log(level: .warning, label: EventHubConstants.LOG_LABEL, message: "versionSharedState:: Extension not registered with EventHub.")
             return nil
         }
 
