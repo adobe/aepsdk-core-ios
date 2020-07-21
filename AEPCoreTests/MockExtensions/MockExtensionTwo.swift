@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 @testable import AEPCore
+import AEPEventHub
 
 class MockExtensionTwo: TestableExtension {
     var name = "mockExtensionTwo"

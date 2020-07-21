@@ -14,9 +14,9 @@ import Foundation
 
 /// Represents an entity type which can be stored in `DataQueue`
 public class DataEntity: NSObject {
-    let uniqueIdentifier: String
-    let timestamp: Date
-    let data: Data?
+    public let uniqueIdentifier: String
+    public let timestamp: Date
+    public let data: Data?
 
     /// Generates a new `DataEntity`
     /// - Parameters:
