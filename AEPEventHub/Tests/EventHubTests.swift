@@ -388,10 +388,8 @@ class EventHubTests: XCTestCase {
      */
     func testEventHubRegisterExtensionSharesState() {
         // setup
-        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub two times")
-        sharedStateExpectation.expectedFulfillmentCount = 3
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub once")
         sharedStateExpectation.assertForOverFulfill = true
-        eventHub.start()
         
         eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { (event) in
             if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME { sharedStateExpectation.fulfill() }
@@ -399,6 +397,7 @@ class EventHubTests: XCTestCase {
         
         // test
         registerMockExtension(MockExtensionTwo.self)
+        eventHub.start()
         
         // verify
         wait(for: [sharedStateExpectation], timeout: 0.5)

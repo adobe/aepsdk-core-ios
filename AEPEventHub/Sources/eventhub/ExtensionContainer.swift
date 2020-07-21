@@ -13,14 +13,6 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPServices
 
-/// Used to notify the owner of the container that registration of an extension has completed
-protocol ExtensionContainerDelegate: class {
-
-    /// Invoked when the `ExtensionContainer` finishes registering the contained extension
-    /// - Parameter container: the container of the extension
-    func didRegisterExtension(container: ExtensionContainer)
-}
-
 /// Contains an `Extension` and additional information related to the extension
 class ExtensionContainer {
 
@@ -41,8 +33,6 @@ class ExtensionContainer {
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
 
-    weak var delegate: ExtensionContainerDelegate?
-
     init(_ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> ()) {
         extensionQueue = queue
         eventOrderer = OperationOrderer<Event>()
@@ -57,7 +47,6 @@ class ExtensionContainer {
             self.sharedStateName = unwrappedExtension.name
             unwrappedExtension.onRegistered()
             self.eventOrderer.start()
-            self.delegate?.didRegisterExtension(container: self)
             completion(nil)
         }
     }
