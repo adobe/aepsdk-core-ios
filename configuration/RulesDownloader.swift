@@ -12,6 +12,7 @@
 
 import Foundation
 import AEPServices
+import AdSupport
 
 ///
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
@@ -82,12 +83,19 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter data: The rules.zip as data to be stored in the temp directory
     /// - Returns a `Result<URL, RulesDownloaderError>` with a `URL` to the zip file if successful or a `RulesDownloaderError` if a failure occurs
     private func storeDataInTempDirectory(data: Data) -> Result<URL, RulesDownloaderError> {
-        let temporaryDirectory = FileManager.default.temporaryDirectory.appendingPathComponent(RulesDownloaderConstants.RULES_ZIP_FILE_NAME.rawValue)
-        guard let _ = try? data.write(to: temporaryDirectory) else {
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent(RulesDownloaderConstants.RULES_TEMP_DIR.rawValue)
+        do {
+            try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            return .failure(.unableToCreateTempDirectory)
+        }
+        let temporaryDirectoryWithZip = temporaryDirectory.appendingPathComponent(RulesDownloaderConstants.RULES_ZIP_FILE_NAME.rawValue)
+        guard let _ = try? data.write(to: temporaryDirectoryWithZip) else {
             return .failure(.unableToStoreDataInTempDirectory)
         }
         
-        return .success(temporaryDirectory)
+        return .success(temporaryDirectoryWithZip)
     }
     
     ///
@@ -96,19 +104,15 @@ struct RulesDownloader: RulesLoader {
     /// - Returns: The unzipped rules as a dictionary
     private func unzipRules(at source: URL) -> [String: AnyCodable]? {
         let destination = source.deletingLastPathComponent()
-        if fileUnzipper.unzipItem(at: source, to: destination) {
-            do {
-                if destination.startAccessingSecurityScopedResource() {
-                    let data = try Data(contentsOf: destination, options: .mappedIfSafe)
-                    destination.stopAccessingSecurityScopedResource()
-                    return try JSONDecoder().decode([String: AnyCodable].self, from: data)
-                }
-            } catch {
-                return nil
-            }
+        let unzippedItems = fileUnzipper.unzipItem(at: source, to: destination)
+        // Should only be one item in the rules zip
+        guard let unzippedItemName = unzippedItems.first else { return nil }
+        do {
+            let data = try Data(contentsOf: destination.appendingPathComponent(unzippedItemName), options: .mappedIfSafe)
+            return try JSONDecoder().decode([String: AnyCodable].self, from: data)
+        } catch {
+            return nil
         }
-        
-        return nil
     }
     
     ///

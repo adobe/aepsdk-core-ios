@@ -174,6 +174,9 @@
 		7861451324C25726004CB317 /* CachedRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861450F24C233D0004CB317 /* CachedRules.swift */; };
 		7861451524C259DE004CB317 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451424C259DE004CB317 /* RulesDownloaderTests.swift */; };
 		7861451724C5E8D9004CB317 /* testRulesDownloader.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7861451624C5E8D9004CB317 /* testRulesDownloader.zip */; };
+		7861451924C67564004CB317 /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451824C67564004CB317 /* MockUnzipper.swift */; };
+		7861451B24C675A5004CB317 /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451A24C675A5004CB317 /* MockDiskCache.swift */; };
+		7861451D24C675D7004CB317 /* MockRulesDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861451C24C675D7004CB317 /* MockRulesDownloaderNetworkService.swift */; };
 		7869CDFB24BCC13F00128625 /* LifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */; };
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
@@ -390,6 +393,9 @@
 		7861451124C23432004CB317 /* RulesLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
 		7861451424C259DE004CB317 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
 		7861451624C5E8D9004CB317 /* testRulesDownloader.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = testRulesDownloader.zip; sourceTree = "<group>"; };
+		7861451824C67564004CB317 /* MockUnzipper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUnzipper.swift; sourceTree = "<group>"; };
+		7861451A24C675A5004CB317 /* MockDiskCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDiskCache.swift; sourceTree = "<group>"; };
+		7861451C24C675D7004CB317 /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
 		7869CDFA24BCC13F00128625 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LifecycleMetricsBuilder.swift; path = Sources/Lifecycle/LifecycleMetricsBuilder.swift; sourceTree = SOURCE_ROOT; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
 		78D754F1244511D100DB9124 /* TestConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
@@ -826,6 +832,9 @@
 				3F03982A24BE62480019F095 /* MockURLSession.swift */,
 				3F03982B24BE62480019F095 /* MockDataStore.swift */,
 				3F03982C24BE62490019F095 /* MockDataQueue.swift */,
+				7861451824C67564004CB317 /* MockUnzipper.swift */,
+				7861451A24C675A5004CB317 /* MockDiskCache.swift */,
+				7861451C24C675D7004CB317 /* MockRulesDownloaderNetworkService.swift */,
 			);
 			path = mocks;
 			sourceTree = "<group>";
@@ -1111,8 +1120,11 @@
 				218194832489D3B7004F869A /* LifecycleFunctionalTests.swift in Sources */,
 				21F02C3A247707D800D25528 /* LaunchIDManagerTests.swift in Sources */,
 				215AA6212465E02C00CEB4F4 /* ConfigurationDownloaderTests.swift in Sources */,
+				7861451B24C675A5004CB317 /* MockDiskCache.swift in Sources */,
+				7861451D24C675D7004CB317 /* MockRulesDownloaderNetworkService.swift in Sources */,
 				D4000F2C2458E8350052C536 /* MockNetworkServiceOverrider.swift in Sources */,
 				3F03976524BE43650019F095 /* TestableExtensionRuntime.swift in Sources */,
+				7861451924C67564004CB317 /* MockUnzipper.swift in Sources */,
 				2157EDC124BCED63008F6A8B /* MockDataQueue.swift in Sources */,
 				D4000F272458E1240052C536 /* MockTask.swift in Sources */,
 				D4000F252458E10D0052C536 /* MockURLSession.swift in Sources */,

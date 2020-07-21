@@ -52,6 +52,8 @@ enum RulesDownloaderConstants: String {
     
     case RULES_ZIP_FILE_NAME = "rules.zip"
     
+    case RULES_TEMP_DIR = "com.adobe.rules"
+    
     enum Keys: String {
         case RULES_CACHE_PREFIX = "cached.rules"
     }
