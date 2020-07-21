@@ -3,7 +3,6 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -13,15 +12,16 @@
 import Foundation
 import AEPServices
 
-///
-/// Represents a Cached rules type which has some additional metadata on top of the rules
-///
-struct CachedRules: Cachable, Codable {
+/// Represents an Object which is Cachable via the CacheService
+protocol Cachable {
     
-    /// The rules dictionary
-    let cachableDict: [String: AnyCodable]
+    /// The cachable Dictionary
+    var cachableDict: [String: AnyCodable] { get }
     
-    let lastModified: String?
+    /// Date this cachable was last modified on the server, read from the Last-Modified HTTP header
+    /// Format: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
+    var lastModified: String? { get }
     
-    let eTag: String?
+    /// ETag of the cachable on the server
+    var eTag: String? { get }
 }

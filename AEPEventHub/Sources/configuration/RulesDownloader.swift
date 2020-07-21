@@ -36,8 +36,8 @@ struct RulesDownloader: RulesLoader {
         case unableToStoreDataInTempDirectory
     }
     
-    func loadRulesFromCache(rulesUrl: String) -> [String : Any]? {
-        return AnyCodable.toAnyDictionary(dictionary: getCachedRules(rulesUrl: rulesUrl)?.rules)
+    func loadRulesFromCache(rulesUrl: URL) -> [String : Any]? {
+        return AnyCodable.toAnyDictionary(dictionary: getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cachableDict)
     }
     
     func loadRulesFromUrl(rulesUrl: URL, completion: @escaping ([String: Any]?) -> Void) {
@@ -52,28 +52,34 @@ struct RulesDownloader: RulesLoader {
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
         AEPServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             if let data = httpConnection.data {
+                // Store Zip file in temp directory for unzipping
                 switch self.storeDataInTempDirectory(data: data) {
                 case .success(let url):
-                    if let rulesDict = self.unzipRules(at: url) {
-                        let cachedRules = CachedRules(rules: rulesDict,
-                                                      lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
-                                                      eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
-                        if self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
-                            completion(AnyCodable.toAnyDictionary(dictionary: rulesDict))
-                        } else {
-                            self.loggingService.log(level: .warning, label: "rules downloader", message: "Unable to cache rules")
-                            completion(nil)
-                        }
-                    } else {
+                    // Unzip the rules.json from the zip file in the temp directory and get the rules dict from the json file
+                    guard let rulesDict = self.unzipRules(at: url) else {
                         completion(nil)
+                        return
                     }
+                    let cachedRules = CachedRules(cachableDict: rulesDict,
+                                                  lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
+                                                  eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
+                    // Cache the rules, if fails, log message
+                    if !self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
+                        self.loggingService.log(level: .warning, label: "rules downloader", message: "Unable to cache rules")
+                    }
+                    completion(AnyCodable.toAnyDictionary(dictionary: rulesDict))
+                    return
                 case .failure(let error):
-                    self.loggingService.log(level: .warning, label: "rules downloader", message: error.localizedDescription)
+                    Log.warning(label: "rules downloader", error.localizedDescription)
                     completion(nil)
+                    return
                 }
             } else if httpConnection.responseCode == 304 {
-                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.rules))
+                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cachableDict))
+                return
             }
+            
+            completion(nil)
         }
         
     }
@@ -84,13 +90,13 @@ struct RulesDownloader: RulesLoader {
     /// - Returns a `Result<URL, RulesDownloaderError>` with a `URL` to the zip file if successful or a `RulesDownloaderError` if a failure occurs
     private func storeDataInTempDirectory(data: Data) -> Result<URL, RulesDownloaderError> {
         let temporaryDirectory = FileManager.default.temporaryDirectory
-            .appendingPathComponent(RulesDownloaderConstants.RULES_TEMP_DIR.rawValue)
+            .appendingPathComponent(RulesDownloaderConstants.RULES_TEMP_DIR)
         do {
             try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true, attributes: nil)
         } catch {
             return .failure(.unableToCreateTempDirectory)
         }
-        let temporaryDirectoryWithZip = temporaryDirectory.appendingPathComponent(RulesDownloaderConstants.RULES_ZIP_FILE_NAME.rawValue)
+        let temporaryDirectoryWithZip = temporaryDirectory.appendingPathComponent(RulesDownloaderConstants.RULES_ZIP_FILE_NAME)
         guard let _ = try? data.write(to: temporaryDirectoryWithZip) else {
             return .failure(.unableToStoreDataInTempDirectory)
         }
@@ -108,7 +114,7 @@ struct RulesDownloader: RulesLoader {
         // Should only be one item in the rules zip
         guard let unzippedItemName = unzippedItems.first else { return nil }
         do {
-            let data = try Data(contentsOf: destination.appendingPathComponent(unzippedItemName), options: .mappedIfSafe)
+            let data = try Data(contentsOf: destination.appendingPathComponent(unzippedItemName))
             return try JSONDecoder().decode([String: AnyCodable].self, from: data)
         } catch {
             return nil
@@ -120,7 +126,12 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter rulesUrl: The rules url
     /// - Returns: The built cache key for the rules
     private func buildCacheKey(rulesUrl: String) -> String {
-        return RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX.rawValue + rulesUrl
+        let utf8RulesUrl = rulesUrl.data(using: .utf8)
+        guard let base64RulesUrl = utf8RulesUrl?.base64EncodedString() else {
+            return RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + rulesUrl
+        }
+        
+        return RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + base64RulesUrl
     }
    
     ///
@@ -133,7 +144,7 @@ struct RulesDownloader: RulesLoader {
         do {
             let data = try JSONEncoder().encode(cachedRules)
             let cacheEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
-            try self.cacheService.set(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME.rawValue, key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
+            try self.cacheService.set(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME, key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
             return true
         } catch {
             // Handle Error
@@ -146,7 +157,7 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter rulesUrl: The rules url as a string to be used to get the right cached rules
     /// - Returns: The `CachedRules` for the given rulesUrl
     private func getCachedRules(rulesUrl: String) -> CachedRules? {
-        guard let cachedEntry = cacheService.get(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME.rawValue, key: buildCacheKey(rulesUrl: rulesUrl)) else {
+        guard let cachedEntry = cacheService.get(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME, key: buildCacheKey(rulesUrl: rulesUrl)) else {
             return nil
         }
         return try? JSONDecoder().decode(CachedRules.self, from: cachedEntry.data)

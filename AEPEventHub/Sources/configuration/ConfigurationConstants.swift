@@ -46,16 +46,16 @@ struct ConfigurationConstants {
     }
 }
 
-enum RulesDownloaderConstants: String {
+enum RulesDownloaderConstants {
     
-    case RULES_CACHE_NAME = "rules.cache"
+    static let RULES_CACHE_NAME = "rules.cache"
     
-    case RULES_ZIP_FILE_NAME = "rules.zip"
+    static let RULES_ZIP_FILE_NAME = "rules.zip"
     
-    case RULES_TEMP_DIR = "com.adobe.rules"
+    static let RULES_TEMP_DIR = "com.adobe.rules"
     
-    enum Keys: String {
-        case RULES_CACHE_PREFIX = "cached.rules"
+    enum Keys {
+        static let RULES_CACHE_PREFIX = "cached.rules"
     }
 }
 

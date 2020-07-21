@@ -62,7 +62,7 @@ class ConfigurationDownloaderTests: XCTestCase {
                                                     "global.privacy": "optedin",
                                                     "lifecycle.sessionTimeout": 300,
                                                     "rules.url": "https://link.to.rules/test.zip"]
-        dataStore.setObject(key: "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(config: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
+        dataStore.setObject(key: "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(cachableDict: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
 
         // test
         let cachedConfig = ConfigurationDownloader().loadConfigFromCache(appId: appId, dataStore: dataStore)
@@ -149,7 +149,7 @@ class ConfigurationDownloaderTests: XCTestCase {
                                                     "global.privacy": "optedin",
                                                     "lifecycle.sessionTimeout": 300,
                                                     "rules.url": "https://link.to.rules/test.zip"]
-        dataStore.setObject(key: "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(config: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
+        dataStore.setObject(key: "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(cachableDict: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
 
         var remoteConfig: [String: Any]? = nil
         

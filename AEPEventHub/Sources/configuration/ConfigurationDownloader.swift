@@ -29,7 +29,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     }
 
     func loadConfigFromCache(appId: String, dataStore: NamedKeyValueStore) -> [String: Any]? {
-        return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.config)
+        return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.cachableDict)
     }
 
     func loadConfigFromUrl(appId: String, dataStore: NamedKeyValueStore, completion: @escaping ([String: Any]?) -> ()) {
@@ -51,17 +51,17 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         AEPServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             // If we get a 304 back, we can use the config in cache and exit early
             if httpConnection.responseCode == 304 {
-                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.config))
+                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cachableDict))
                 return
             }
             
             if let data = httpConnection.data, let configDict = try? JSONDecoder().decode([String: AnyCodable].self, from: data) {
-                let config = CachedConfiguration(config: configDict,
+                let config = CachedConfiguration(cachableDict: configDict,
                                              lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
                                       eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
                 
                 dataStore.setObject(key: self.buildCacheKey(appId: appId), value: config) // cache config
-                completion(AnyCodable.toAnyDictionary(dictionary: config.config))
+                completion(AnyCodable.toAnyDictionary(dictionary: config.cachableDict))
             } else {
                 completion(nil)
             }

@@ -17,9 +17,9 @@ import Foundation
 ///
 protocol RulesLoader {
     /// Loads the cached rules for `appId`.
-    /// - Parameter rulesUrl: rulesUrl string, if provided the `RulesDownloader` will attempt to load a rules with `appId`
+    /// - Parameter rulesUrl: rulesUrl, if provided the `RulesDownloader` will attempt to load a rules with `appId`
     /// - Returns: The cached rules for `appId` in `DiskCache`, nil if not found
-    func loadRulesFromCache(rulesUrl: String) -> [String : Any]?
+    func loadRulesFromCache(rulesUrl: URL) -> [String : Any]?
     
     /// Loads the remote rules for `appId` and caches the result.
     /// - Parameters:

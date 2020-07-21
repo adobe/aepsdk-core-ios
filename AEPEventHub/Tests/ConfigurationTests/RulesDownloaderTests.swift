@@ -35,6 +35,14 @@ class RulesDownloaderTests: XCTestCase {
         return RulesDownloaderTests.bundle.url(forResource: RulesDownloaderTests.zipTestFileName, withExtension: ".zip")
     }
     
+    private var encodedUrl: String {
+        get {
+            let rulesUrl = RulesDownloaderTests.rulesUrl!.absoluteString
+            let utf8RulesUrl = rulesUrl.data(using: .utf8)
+            return utf8RulesUrl!.base64EncodedString()
+        }
+    }
+    
     override func setUp() {
         AEPServiceProvider.shared.cacheService = cache
     }
@@ -43,30 +51,31 @@ class RulesDownloaderTests: XCTestCase {
         let testKey = "testKey"
         let testValue: AnyCodable = "testValue"
         let testRulesDict = [testKey: testValue]
-        let testRules: CachedRules = CachedRules(rules: testRulesDict, lastModified: nil, eTag: nil)
+        let testRules: CachedRules = CachedRules(cachableDict: testRulesDict, lastModified: nil, eTag: nil)
         let data = try! JSONEncoder().encode(testRules)
         let testEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
-        cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX.rawValue + RulesDownloaderTests.rulesUrl!.absoluteString] = testEntry
-        guard let rules = rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!.absoluteString) else {
+        cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
+        guard let rules = rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!) else {
             XCTFail("Rules not loaded from cache")
             return
         }
-        XCTAssertEqual(testRules.rules[testKey]?.stringValue, rules[testKey] as? String)
+        XCTAssertEqual(testRules.cachableDict[testKey]?.stringValue, rules[testKey] as? String)
     }
     
     func testLoadRulesFromCacheNotInCache() {
-        XCTAssertNil(rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!.absoluteString))
+        XCTAssertNil(rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!))
     }
+    
 
     func testLoadRulesFromUrlWithCacheNotModified() {
         AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .notModified)
         let testKey = "testKey"
         let testValue: AnyCodable = "testValue"
         let testRulesDict = [testKey: testValue]
-        let testRules: CachedRules = CachedRules(rules: testRulesDict, lastModified: nil, eTag: nil)
+        let testRules: CachedRules = CachedRules(cachableDict: testRulesDict, lastModified: nil, eTag: nil)
         let data = try! JSONEncoder().encode(testRules)
         let testEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
-        cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX.rawValue + RulesDownloaderTests.rulesUrl!.absoluteString] = testEntry
+        cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with cached rules")
         var rulesResult: [String: Any]? = nil
         
@@ -76,7 +85,7 @@ class RulesDownloaderTests: XCTestCase {
         })
         
         wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(testRules.rules[testKey]?.stringValue, rulesResult![testKey] as? String)
+        XCTAssertEqual(testRules.cachableDict[testKey]?.stringValue, rulesResult![testKey] as? String)
     }
     
     func testLoadRulesFromUrlUnzipFail() {
