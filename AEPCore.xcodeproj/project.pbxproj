@@ -778,6 +778,7 @@
 			isa = PBXGroup;
 			children = (
 				3F0397A724BE5FF30019F095 /* LoggingService.swift */,
+				3F0397AD24BE5FF30019F095 /* AEPLoggingService.swift */,
 				3F0397A824BE5FF30019F095 /* Log.swift */,
 				3F0397A924BE5FF30019F095 /* LogLevel.swift */,
 			);
@@ -789,7 +790,6 @@
 			children = (
 				3F0397AB24BE5FF30019F095 /* AEPNetworkService.swift */,
 				3F0397AC24BE5FF30019F095 /* NetworkServiceConstants.swift */,
-				3F0397AD24BE5FF30019F095 /* AEPLoggingService.swift */,
 				3F0397AE24BE5FF30019F095 /* NetworkService.swift */,
 				3F0397AF24BE5FF30019F095 /* HttpMethod.swift */,
 				3F0397B024BE5FF30019F095 /* HttpConnection.swift */,

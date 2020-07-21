@@ -30,6 +30,7 @@ public class AEPServiceProvider {
     private var overrideURLService: URLService?
     private var defaultURLService = AEPURLService()
     private var defaultLoggingService = AEPLoggingService()
+    private var overrideLoggingService: LoggingService?
 
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
@@ -103,9 +104,16 @@ public class AEPServiceProvider {
         }
     }
 
-    public var loggingService: LoggingService {
-        return queue.sync {
-            return defaultLoggingService
+    public internal(set) var loggingService: LoggingService {
+        get {
+            return queue.sync {
+                return overrideLoggingService ?? defaultLoggingService
+            }
+        }
+        set {
+            queue.async {
+                self.overrideLoggingService = newValue
+            }
         }
     }
 }

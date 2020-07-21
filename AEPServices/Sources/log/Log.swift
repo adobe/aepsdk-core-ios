@@ -59,4 +59,24 @@ public class Log {
             loggingService.log(level: .error, label: label, message: message)
         }
     }
+
+    public static func showSensitiveData() -> Bool {
+        /// TBD:  1) show sensitive data in debug/trace mode;  2) provide a public API to set the flag ???
+        return logFilter <= .debug
+    }
+}
+
+public protocol Describable {
+    func description(withSensitiveData: Bool) -> String
+}
+
+public enum LogPrivacy {
+    case Public
+    case Private
+}
+
+extension String.StringInterpolation {
+    mutating func appendInterpolation(describing item: Describable, privacy: LogPrivacy = .Public) {
+        appendLiteral(item.description(withSensitiveData: privacy == .Public || Log.showSensitiveData()))
+    }
 }
