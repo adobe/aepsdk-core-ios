@@ -191,7 +191,6 @@ class IdentityState {
             
             identityProperties.saveToPersistence()
             createSharedState(identityProperties.toEventData(), event)
-            //TODO: make sure we ignore events if we are opted out
         } else if identityProperties.mid == nil {
             // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
             // Queue up a request to sync the new ID with the Identity Service
