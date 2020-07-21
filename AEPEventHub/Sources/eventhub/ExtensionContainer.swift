@@ -15,7 +15,7 @@ import AEPServices
 
 /// Used to notify the owner of the container that registration of an extension has completed
 protocol ExtensionContainerDelegate: class {
-    
+
     /// Invoked when the `ExtensionContainer` finishes registering the contained extension
     /// - Parameter container: the container of the extension
     func didRegisterExtension(container: ExtensionContainer)
@@ -23,32 +23,32 @@ protocol ExtensionContainerDelegate: class {
 
 /// Contains an `Extension` and additional information related to the extension
 class ExtensionContainer {
-    
+
     /// The extension held in this container
     var exten: Extension? = nil
-    
+
     /// The `SharedState` associated with the extension
     var sharedState: SharedState? = nil
-    
+
     var sharedStateName: String = "invalidSharedStateName"
-    
+
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
-    
+
     /// Operation Orderer queue of `Event` objects for this extension
     let eventOrderer: OperationOrderer<Event>
-    
+
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
-    
+
     weak var delegate: ExtensionContainerDelegate?
-        
-    init(_ type: Extension.Type, _ queue: DispatchQueue) {
+
+    init(_ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> ()) {
         extensionQueue = queue
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
-        
+
         // initialize the backing extension on the extension queue
         extensionQueue.async {
             self.exten = type.init(runtime: self)
@@ -58,12 +58,13 @@ class ExtensionContainer {
             unwrappedExtension.onRegistered()
             self.eventOrderer.start()
             self.delegate?.didRegisterExtension(container: self)
+            completion(nil)
         }
     }
 }
 
 extension ExtensionContainer:ExtensionRuntime {
-    
+
     public func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
         let listenerContainer = EventListenerContainer(listener: listener, type: type, source: source, triggerEventId: nil, timeoutTask: nil)
         eventListeners.append(listenerContainer)
@@ -72,7 +73,7 @@ extension ExtensionContainer:ExtensionRuntime {
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         EventHub.shared.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
     }
-    
+
     func dispatch(event: Event) {
         EventHub.shared.dispatch(event: event)
     }
@@ -88,11 +89,11 @@ extension ExtensionContainer:ExtensionRuntime {
     func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event)
     }
-    
+
     func startEvents() {
         eventOrderer.start()
     }
-    
+
     func stopEvents() {
         eventOrderer.stop()
     }
@@ -111,7 +112,7 @@ private extension ExtensionContainer {
                 listenerContainer.listener(event)
             }
         }
-                
+
         return true
     }
 }
