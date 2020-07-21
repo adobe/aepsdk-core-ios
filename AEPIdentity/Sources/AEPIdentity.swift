@@ -57,6 +57,11 @@ class AEPIdentity: Extension {
     // MARK: Event Listeners
 
     private func handleIdentityRequest(event: Event) {
+        if shouldIgnore(event: event) {
+            Log.debug(label: "\(name):\(#function)", "Ignore Identity Request event, user is currently opted-out")
+            return
+        }
+        
         if event.isSyncEvent || event.type == .genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)
@@ -92,6 +97,11 @@ class AEPIdentity: Extension {
     /// Handles the getSdkIdentities API by collecting all the identities then dispatching a response event with the given identities
     /// - Parameter event: The event coming from the getSdkIdentities API
     private func receiveConfigurationIdentity(event: Event) {
+        if shouldIgnore(event: event) {
+            Log.debug(label: "\(name):\(#function)", "Ignore Configuration Identity event, user is currently opted-out")
+            return
+        }
+        
         var mobileIdentities = MobileIdentities()
         mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
 
@@ -159,6 +169,14 @@ class AEPIdentity: Extension {
             let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.DEFAULT_SERVER
             AEPServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
         }
+    }
+    
+    /// Determines if we should ignore an event
+    /// - Parameter event: the event
+    /// - Returns: Returns true if we should ignore this event (if user is opted-out)
+    private func shouldIgnore(event: Event) -> Bool {
+        let privacyStatus = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
+        return privacyStatus == .optedOut
     }
     
 }
