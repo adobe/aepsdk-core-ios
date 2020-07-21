@@ -13,10 +13,14 @@ governing permissions and limitations under the License.
 import Foundation
 
 @testable import AEPCore
+import AEPEventHub
 
 class MockExtensionTwo: TestableExtension {
     var name = "mockExtensionTwo"
+    var friendlyName = "mockExtensionTwo"
     var version = "0.0.1"
+    var metadata: [String : String]? = ["testMetaKey": "testMetaVal"]
+    
     let runtime: ExtensionRuntime
     
     static var unregistrationClosure: (() -> Void)? = nil

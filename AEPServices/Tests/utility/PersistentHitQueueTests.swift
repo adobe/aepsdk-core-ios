@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPServices
+import AEPServicesMock
 
 class PersistentHitQueueTests: XCTestCase {
 
@@ -23,9 +24,8 @@ class PersistentHitQueueTests: XCTestCase {
     }
     
     override func setUp() {
-        hitQueue = PersistentHitQueue(dataQueue: MockDataQueue())
         hitProcessor = MockHitProcessor()
-        hitQueue.delegate = hitProcessor
+        hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
     }
     
     /// Tests that when the queue is in a suspended state that we store the hit in the data queue and do not invoke the processor
@@ -152,7 +152,7 @@ class PersistentHitQueueTests: XCTestCase {
     /// Tests that hits are retried properly and do not block the queue
     func testProcessesHitsManyWithIntermittentProcessor() {
         hitProcessor = MockHitIntermittentProcessor()
-        hitQueue.delegate = hitProcessor
+        hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
         
         // test
         for _ in 0..<100 {
@@ -164,7 +164,7 @@ class PersistentHitQueueTests: XCTestCase {
         
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hits should no longer be in the queue as its been processed
-        let intermittentProcessor = hitQueue.delegate as? MockHitIntermittentProcessor
+        let intermittentProcessor = hitQueue.processor as? MockHitIntermittentProcessor
         XCTAssertEqual(100, intermittentProcessor?.processedHits.count) // all hits should be eventually processed
         XCTAssertFalse(intermittentProcessor?.failedHits.isEmpty ?? true) // some of the hits should have failed
     }

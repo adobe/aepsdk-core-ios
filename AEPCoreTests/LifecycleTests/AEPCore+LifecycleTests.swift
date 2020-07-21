@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
+@testable import AEPEventHub
 
 class AEPCoreLifecycleTests: XCTestCase {
     override func setUp() {
@@ -35,8 +36,8 @@ class AEPCoreLifecycleTests: XCTestCase {
         let expectedContextData = ["testKey": "testVal"]
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericLifecycle, source: .requestContent) { (event) in
-            XCTAssertEqual(LifecycleConstants.START, event.data?[LifecycleConstants.EventDataKeys.ACTION_KEY] as! String)
-            XCTAssertEqual(expectedContextData, event.data?[LifecycleConstants.EventDataKeys.ADDITIONAL_CONTEXT_DATA] as! [String: String])
+            XCTAssertEqual(CoreConstants.Lifecycle.START, event.data?[CoreConstants.Keys.ACTION_KEY] as! String)
+            XCTAssertEqual(expectedContextData, event.data?[CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA] as! [String: String])
             expectation.fulfill()
         }
 
@@ -55,7 +56,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         expectation.assertForOverFulfill = true
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericLifecycle, source: .requestContent) { (event) in
-            XCTAssertEqual(LifecycleConstants.PAUSE, event.data?[LifecycleConstants.EventDataKeys.ACTION_KEY] as! String)
+            XCTAssertEqual(CoreConstants.Lifecycle.PAUSE, event.data?[CoreConstants.Keys.ACTION_KEY] as! String)
             expectation.fulfill()
         }
 

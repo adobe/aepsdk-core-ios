@@ -12,6 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
+@testable import AEPEventHub
 
 class AEPCoreTests: XCTestCase {
     override func setUp() {
@@ -83,13 +84,12 @@ class AEPCoreTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         let eventName = "test-event"
         MockExtension.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
         MockExtensionTwo.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
+        
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         AEPCore.start { }
@@ -104,12 +104,10 @@ class AEPCoreTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
 
         MockExtension.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
         MockExtensionTwo.eventReceivedClosure = {
-            XCTAssertEqual($0.name, eventName)
-            expectation.fulfill()
+            if $0.name == eventName { expectation.fulfill() }
         }
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
@@ -324,7 +322,7 @@ class AEPCoreTests: XCTestCase {
         EventHub.shared.start()
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
-            XCTAssertEqual("test-ad-id", event.data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+            XCTAssertEqual("test-ad-id", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
         
@@ -347,7 +345,7 @@ class AEPCoreTests: XCTestCase {
         EventHub.shared.start()
         
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
-            XCTAssertEqual("", event.data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+            XCTAssertEqual("", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
         
