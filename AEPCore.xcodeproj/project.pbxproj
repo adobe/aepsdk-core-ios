@@ -204,11 +204,9 @@
 		78A6425D2489817A004B4E46 /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78A6425C2489817A004B4E46 /* TestRules.zip */; };
 		78D754F2244511D100DB9124 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 78D754F1244511D100DB9124 /* TestConfig.json */; };
 		78DEFEF1244A183400D7E9FB /* TestImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 78DEFEF0244A183400D7E9FB /* TestImage.png */; };
-		BB3D7E5D24C7D7A90084369C /* JSONRulesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D7E5C24C7D7A90084369C /* JSONRulesParser.swift */; };
 		BB3D7E5E24C7D7DF0084369C /* JSONRulesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D7E5C24C7D7A90084369C /* JSONRulesParser.swift */; };
 		BB3D7E6024C7DCCB0084369C /* rules_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3D7E5F24C7DCCB0084369C /* rules_1.json */; };
 		BB3D7E6124C7FBBA0084369C /* rules_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3D7E5F24C7DCCB0084369C /* rules_1.json */; };
-		BB3D7E6324C7FC3D0084369C /* LaunchRuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D7E6224C7FC3D0084369C /* LaunchRuleTests.swift */; };
 		BB3D7E6424C7FC5B0084369C /* LaunchRuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D7E6224C7FC3D0084369C /* LaunchRuleTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -1625,8 +1623,6 @@
 				3FE6DE2924C63B520065EA05 /* Configuration.swift in Sources */,
 				3FE6DE1E24C632450065EA05 /* Lifecycle.swift in Sources */,
 				21315BB524575ED200D1B254 /* AEPCore.swift in Sources */,
-				BB3D7E6324C7FC3D0084369C /* LaunchRuleTests.swift in Sources */,
-				BB3D7E5D24C7D7A90084369C /* JSONRulesParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
