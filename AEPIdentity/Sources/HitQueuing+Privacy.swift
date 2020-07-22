@@ -10,28 +10,22 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPEventHub
 import AEPServices
 
-public class MockDataStore: NamedKeyValueService {
-    public var dict = [String: Any?]()
-    
-    public init(){
-        
-    }
-    
-    public func set(collectionName: String, key: String, value: Any?) {
-        dict[key] = value
-    }
-    
-    public func get(collectionName: String, key: String) -> Any? {
-        return dict[key] as Any?
-    }
-    
-    public func remove(collectionName: String, key: String) {
-        dict.removeValue(forKey: key)
-    }
-    
-    public func removeAll(collectionName: String) {
-        dict.removeAll()
+extension HitQueuing {
+
+    /// Based on `status` determines if we should continue processing hits or if we should suspend processing and clear hits
+    /// - Parameter status: the current privacy status
+    func handlePrivacyChange(status: PrivacyStatus) {
+        switch status {
+        case .optedIn:
+            beginProcessing()
+        case .optedOut:
+            suspend()
+            clear()
+        case .unknown:
+            suspend()
+        }
     }
 }
