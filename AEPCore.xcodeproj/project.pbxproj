@@ -744,16 +744,6 @@
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
 			isa = PBXGroup;
 			children = (
-<<<<<<< HEAD
-				3F03979E24BE5FF30019F095 /* AEPServices.h */,
-				3F0397B924BE5FF30019F095 /* Info.plist */,
-				3F0397E124BE60910019F095 /* utility */,
-				3F0397A524BE5FF30019F095 /* AEPServiceProvider.swift */,
-				3F0397C124BE5FF30019F095 /* AEPURLService.swift */,
-				3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */,
-=======
-				3F03979F24BE5FF30019F095 /* cache */,
->>>>>>> ebf3bb8d1f6894eff9ed0a78383aa953881ed35d
 				3F0397B224BE5FF30019F095 /* dataqueue */,
 				3F03979F24BE5FF30019F095 /* cache */,
 				3F0397A624BE5FF30019F095 /* log */,
