@@ -10,16 +10,22 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPServices
+import SwiftRulesEngine
 
-/// Used to store a configuration to cache with some metadata
-struct CachedConfiguration: Cacheable, Codable {
+struct LaunchRulesEngine{
+    let rulesEngine: RulesEngine<LaunchRule>
     
-    let cacheableDict: [String : AnyCodable]
+    init(){
+        let evaluator = ConditionEvaluator.init(options: .defaultOptions)
+        rulesEngine = RulesEngine(evaluator: evaluator)
+    }
     
-    let lastModified: String?
+    func loadRules(from url:URL){
+        
+    }
     
-    let eTag: String?
-    
+    func process(event: Event) -> Event{
+        return event
+    }
     
 }

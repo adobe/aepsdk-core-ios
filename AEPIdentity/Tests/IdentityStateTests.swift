@@ -51,6 +51,21 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
     
+    /// Tests that syncIdentifiers returns nil and does not queue a hit when the user is opted-out
+    func testSyncIdentifiersHappyIDsOptedOut() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
+        state.lastValidConfig = configSharedState
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        
+        // verify
+        XCTAssertNil(eventData)
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+    }
+    
     // TODO enable after AMSDK-10262
     func testSyncIdentifiersHappyPushID() {
         // setup
@@ -173,7 +188,7 @@ class IdentityStateTests: XCTestCase {
     }
     
     /// We are ready to process the event when the config shared state has an opt-in privacy status but our previous config has an opt-out
-    func testSyncIdentifiersReturnTrueWhenLatestPrivacyIsOptOut() {
+    func testSyncIdentifiersReturnNilWhenLatestPrivacyIsOptOut() {
         // setup
         state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
         

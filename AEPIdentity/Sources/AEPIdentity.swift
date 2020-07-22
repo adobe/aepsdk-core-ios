@@ -37,6 +37,7 @@ class AEPIdentity: Extension {
 
     func onRegistered() {
         registerListener(type: .identity, source: .requestIdentity, listener: handleIdentityRequest)
+        registerListener(type: .genericIdentity, source: .requestContent, listener: handleIdentityRequest)
         registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: .configuration, source: .responseContent, listener: handleConfigurationResponse)
     }
