@@ -10,13 +10,14 @@
  */
 
 import Foundation
-import SwiftRulesEngine
+import AEPServices
 
-/// A `Rule` type represents the functions defined by Launch UI
-class LaunchRule: Rule {
-    public let condition: Evaluable
-
-    init(condition: Evaluable) {
-        self.condition = condition
+class MockUnzipper: Unzipper {
+    
+    var unzippedResults: [String] = []
+    var unzipCalled = false
+    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
+        unzipCalled = true
+        return unzippedResults
     }
 }

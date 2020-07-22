@@ -10,16 +10,22 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPEventHub
 import AEPServices
 
-/// Used to store a configuration to cache with some metadata
-struct CachedConfiguration: Cacheable, Codable {
-    
-    let cacheableDict: [String : AnyCodable]
-    
-    let lastModified: String?
-    
-    let eTag: String?
-    
-    
+extension HitQueuing {
+
+    /// Based on `status` determines if we should continue processing hits or if we should suspend processing and clear hits
+    /// - Parameter status: the current privacy status
+    func handlePrivacyChange(status: PrivacyStatus) {
+        switch status {
+        case .optedIn:
+            beginProcessing()
+        case .optedOut:
+            suspend()
+            clear()
+        case .unknown:
+            suspend()
+        }
+    }
 }
