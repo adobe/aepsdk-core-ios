@@ -26,7 +26,7 @@ public final class AEPCore {
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
-    static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
+    public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
         
         // TODO: Add configuration as a default extension to be registered
@@ -42,7 +42,7 @@ public final class AEPCore {
     
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
-    static func dispatch(event: Event) {
+    public static func dispatch(event: Event) {
         EventHub.shared.dispatch(event: event)
     }
     
@@ -50,7 +50,7 @@ public final class AEPCore {
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
-    static func dispatch(event: Event, responseCallback: @escaping (Event) -> ()) {
+    public static func dispatch(event: Event, responseCallback: @escaping (Event) -> ()) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
             if let event = event {
                 responseCallback(event)
@@ -62,7 +62,7 @@ public final class AEPCore {
     
     /// Start event processing
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
-    static func start(completion: @escaping (()-> Void)) {
+    public static func start(completion: @escaping (()-> Void)) {
         // Start the event hub processing
         let pending = AEPCore.pendingExtensions.shallowCopy
         AEPCore.pendingExtensions.clear()
@@ -71,7 +71,7 @@ public final class AEPCore {
     
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
-    static func setAdvertisingIdentifier(adId: String?) {
+    public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
         let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
         AEPCore.dispatch(event: event)

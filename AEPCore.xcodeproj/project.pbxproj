@@ -198,6 +198,15 @@
 		3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */; };
 		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
 		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
+		7861452624C74D8F004CB317 /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452424C74D8F004CB317 /* RulesDownloader.swift */; };
+		7861452724C74D8F004CB317 /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452524C74D8F004CB317 /* RulesLoader.swift */; };
+		7861452924C74D9B004CB317 /* CachedRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452824C74D9A004CB317 /* CachedRules.swift */; };
+		7861452B24C74F56004CB317 /* testRulesDownloader.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7861452A24C74F56004CB317 /* testRulesDownloader.zip */; };
+		7861452D24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452C24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift */; };
+		7861452F24C7502B004CB317 /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452E24C7502B004CB317 /* MockUnzipper.swift */; };
+		7861453124C75057004CB317 /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861453024C75056004CB317 /* MockDiskCache.swift */; };
+		7861453324C7512A004CB317 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861453224C7512A004CB317 /* RulesDownloaderTests.swift */; };
+		7861453524C763B1004CB317 /* Cacheable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861453424C763B1004CB317 /* Cacheable.swift */; };
 		3FE6DE9A24C64BC00065EA05 /* AEPRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */; };
 		3FE6DE9C24C64C590065EA05 /* LaunchRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */; };
 		3FE6DEA224C65C7D0065EA05 /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE6DEA124C65C7D0065EA05 /* SwiftRulesEngine */; };
@@ -539,6 +548,15 @@
 		3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
 		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
+		7861452424C74D8F004CB317 /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
+		7861452524C74D8F004CB317 /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
+		7861452824C74D9A004CB317 /* CachedRules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRules.swift; sourceTree = "<group>"; };
+		7861452A24C74F56004CB317 /* testRulesDownloader.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = testRulesDownloader.zip; sourceTree = "<group>"; };
+		7861452C24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
+		7861452E24C7502B004CB317 /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
+		7861453024C75056004CB317 /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
+		7861453224C7512A004CB317 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
+		7861453424C763B1004CB317 /* Cacheable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cacheable.swift; sourceTree = "<group>"; };
 		3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngine.swift; sourceTree = "<group>"; };
 		3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRule.swift; sourceTree = "<group>"; };
 		78A6425C2489817A004B4E46 /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
@@ -967,11 +985,15 @@
 				3F03987224C001350019F095 /* ConfigurationConstants.swift */,
 				3F03987324C001350019F095 /* ConfigurationState.swift */,
 				3F03987424C001350019F095 /* LaunchIDManager.swift */,
+				3F03987824C001350019F095 /* CachedConfiguration.swift */,
+				7861452824C74D9A004CB317 /* CachedRules.swift */,
+				7861453424C763B1004CB317 /* Cacheable.swift */,
 				3F03987524C001350019F095 /* Event+Configuration.swift */,
 				3F03987724C001350019F095 /* ConfigurationDownloadable.swift */,
-				3F03987824C001350019F095 /* CachedConfiguration.swift */,
 				3F03987924C001350019F095 /* ConfigurationDownloader.swift */,
 				3F03987B24C001350019F095 /* PrivacyStatus.swift */,
+				7861452424C74D8F004CB317 /* RulesDownloader.swift */,
+				7861452524C74D8F004CB317 /* RulesLoader.swift */,
 			);
 			path = configuration;
 			sourceTree = "<group>";
@@ -984,6 +1006,7 @@
 				3FE6DD3524C546A90065EA05 /* ConfigurationStateTests.swift */,
 				3FE6DD3624C546A90065EA05 /* ConfigurationDownloaderTests.swift */,
 				3FE6DD3824C546A90065EA05 /* LaunchIDManagerTests.swift */,
+				7861453224C7512A004CB317 /* RulesDownloaderTests.swift */,
 			);
 			path = ConfigurationTests;
 			sourceTree = "<group>";
@@ -994,6 +1017,7 @@
 				3FE6DD4D24C5475B0065EA05 /* MockConfigurationDownloader.swift */,
 				3FE6DD4E24C5475B0065EA05 /* MockNetworkServiceOverrider.swift */,
 				3FE6DD5024C5475B0065EA05 /* EventHub+Testable.swift */,
+				7861452C24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift */,
 				3FE6DD5524C5475B0065EA05 /* SharedStateTestHelper.swift */,
 				3FE6DD5624C5475B0065EA05 /* MockConfigurationDownloaderNetworkService.swift */,
 			);
@@ -1014,6 +1038,7 @@
 			isa = PBXGroup;
 			children = (
 				3FE6DD7324C548220065EA05 /* ADBMobileConfig.json */,
+				7861452A24C74F56004CB317 /* testRulesDownloader.zip */,
 			);
 			path = TestResources;
 			sourceTree = "<group>";
@@ -1022,6 +1047,7 @@
 			isa = PBXGroup;
 			children = (
 				3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */,
+				7861453024C75056004CB317 /* MockDiskCache.swift */,
 				3FE6DDEC24C62F610065EA05 /* Info.plist */,
 				3FE6DDEF24C62F610065EA05 /* MockDataQueue.swift */,
 				3FE6DDEB24C62F610065EA05 /* MockDataStore.swift */,
@@ -1029,6 +1055,7 @@
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
 				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
 				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
+				7861452E24C7502B004CB317 /* MockUnzipper.swift */,
 				215C859C24C6492800CCCD26 /* MockHitProcessor.swift */,
 				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
 			);
@@ -1550,6 +1577,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7861452B24C74F56004CB317 /* testRulesDownloader.zip in Resources */,
 				3FE6DD7424C548220065EA05 /* ADBMobileConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1712,6 +1740,7 @@
 				3F03988824C001350019F095 /* Extension.swift in Sources */,
 				3F03988924C001350019F095 /* AEPConfiguration.swift in Sources */,
 				3F03988724C001350019F095 /* EventListenerContainer.swift in Sources */,
+				7861452624C74D8F004CB317 /* RulesDownloader.swift in Sources */,
 				3F03987D24C001350019F095 /* EventHubConstants.swift in Sources */,
 				3F03988024C001350019F095 /* AEPError.swift in Sources */,
 				2198671824C6557700FD2D84 /* EventHubPlaceholderExtension.swift in Sources */,
@@ -1719,9 +1748,12 @@
 				3F03988624C001350019F095 /* EventSource.swift in Sources */,
 				3F03987F24C001350019F095 /* Event.swift in Sources */,
 				3F03989024C001350019F095 /* CachedConfiguration.swift in Sources */,
+				7861452924C74D9B004CB317 /* CachedRules.swift in Sources */,
 				3F03988124C001350019F095 /* SharedState.swift in Sources */,
+				7861453524C763B1004CB317 /* Cacheable.swift in Sources */,
 				3F03988424C001350019F095 /* EventType.swift in Sources */,
 				3F03988B24C001350019F095 /* ConfigurationState.swift in Sources */,
+				7861452724C74D8F004CB317 /* RulesLoader.swift in Sources */,
 				3F03989124C001350019F095 /* ConfigurationDownloader.swift in Sources */,
 				3F03988A24C001350019F095 /* ConfigurationConstants.swift in Sources */,
 				3F03987E24C001350019F095 /* ExtensionContainer.swift in Sources */,
@@ -1734,6 +1766,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE6DD4924C546CD0065EA05 /* ConfigurationStateTests.swift in Sources */,
+				7861452D24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3FE6DD6924C547670065EA05 /* SharedStateTestHelper.swift in Sources */,
 				3FE6DD4424C546C00065EA05 /* EventHubTests.swift in Sources */,
 				3FE6DD6424C547670065EA05 /* EventHub+Testable.swift in Sources */,
@@ -1741,6 +1774,7 @@
 				3FE6DD4A24C546CD0065EA05 /* ConfigurationDownloaderTests.swift in Sources */,
 				3FE6DD8024C54F1D0065EA05 /* LaunchIDManagerTests.swift in Sources */,
 				3FE6DD6224C547670065EA05 /* MockNetworkServiceOverrider.swift in Sources */,
+				7861453324C7512A004CB317 /* RulesDownloaderTests.swift in Sources */,
 				3FE6DD4524C546C30065EA05 /* SharedStateTest.swift in Sources */,
 				3FE6DD7024C547F50065EA05 /* MockExtension.swift in Sources */,
 				3FE6DD4624C546CD0065EA05 /* TestableExtensionRuntime.swift in Sources */,
@@ -1762,7 +1796,9 @@
 				3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */,
 				3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */,
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
+				7861452F24C7502B004CB317 /* MockUnzipper.swift in Sources */,
 				3FE6DDF124C62F610065EA05 /* MockNetworkServiceOverrider.swift in Sources */,
+				7861453124C75057004CB317 /* MockDiskCache.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2066,7 +2102,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 66USX5VV9D;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2094,7 +2130,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 66USX5VV9D;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -2120,7 +2156,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GP6Z9HB7H4;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCoreTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2140,7 +2176,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = GP6Z9HB7H4;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCoreTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2211,6 +2247,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2230,6 +2267,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2297,6 +2335,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPEventHub/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2316,6 +2355,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPEventHub/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2438,6 +2478,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2459,6 +2500,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2530,6 +2572,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2551,6 +2594,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -12,6 +12,7 @@
 import XCTest
 @testable import AEPServices
 
+/// TODO: - Add more robust testing. Also make sure to make use of the new return type for the unzip api in the tests
 class FileUnzipperTest: XCTestCase {
     let unzipper = FileUnzipper()
     let testDataFileName = "TestRules"
@@ -45,8 +46,8 @@ class FileUnzipperTest: XCTestCase {
             return
         }
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testDataFileName)
-        let success = unzipper.unzipItem(at: sourceURL, to: destinationURL)
-        XCTAssertTrue(success)
+        let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
+        XCTAssertFalse(unzippedItems.isEmpty)
     }
 
     func testUnzippingRulesSuccessFilesExist() {
@@ -61,7 +62,7 @@ class FileUnzipperTest: XCTestCase {
         }
         
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testDataFileName)
-        guard unzipper.unzipItem(at: sourceURL, to: destinationURL) else {
+        guard !unzipper.unzipItem(at: sourceURL, to: destinationURL).isEmpty else {
             XCTFail("Unzipping failed")
             return
         }
@@ -102,7 +103,7 @@ class FileUnzipperTest: XCTestCase {
         let testFileExt = ".zip"
         let sourceURL = FileUnzipperTest.bundle.bundleURL.appendingPathComponent(testFileName+testFileExt)
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testFileName)
-        let success = unzipper.unzipItem(at: sourceURL, to: destinationURL)
-        XCTAssertFalse(success)
+        let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
+        XCTAssertTrue(unzippedItems.isEmpty)
     }
 }
