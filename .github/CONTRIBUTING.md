@@ -33,6 +33,11 @@ for more information on sending pull requests.
 Lastly, please follow the [pull request template](PULL_REQUEST_TEMPLATE.md) when
 submitting a pull request!
 
+## Style Guide
+
+Code cleanliness and consistency is important. Please review and follow our code 
+[Style Guide](../Documentation/StyleGuide.md) when contributing.
+
 ## From Contributor To Committer
 
 We love contributions from our community! If you'd like to go a step beyond contributor
