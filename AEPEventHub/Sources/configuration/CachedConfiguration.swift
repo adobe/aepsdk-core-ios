@@ -13,15 +13,13 @@ import Foundation
 import AEPServices
 
 /// Used to store a configuration to cache with some metadata
-struct CachedConfiguration: Codable {
-
-    /// The configuration
-    let config: [String: AnyCodable]
-
-    /// Date this configuration was last modified on the server, read from the Last-Modified HTTP header
-    /// Format: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
+struct CachedConfiguration: Cacheable, Codable {
+    
+    let cacheableDict: [String : AnyCodable]
+    
     let lastModified: String?
-
-    /// ETag of the configuration resource on the server
+    
     let eTag: String?
+    
+    
 }

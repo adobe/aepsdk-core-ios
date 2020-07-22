@@ -116,8 +116,12 @@ final class ZipArchive: Sequence {
         var checksum = CRC32(0)
         switch entry.type {
         case .file:
-            guard !fileManager.itemExists(at: url) else {
-                throw CocoaError(.fileWriteFileExists, userInfo: [NSFilePathErrorKey: url.path])
+            if fileManager.itemExists(at: url) {
+                do {
+                    try fileManager.removeItem(at: url)
+                } catch {
+                    throw CocoaError(.fileWriteFileExists, userInfo: [NSFilePathErrorKey: url.path])
+                }
             }
             try fileManager.createParentDirectoryStructure(for: url)
             // Get file system representation for C operations
