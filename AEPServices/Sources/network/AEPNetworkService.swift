@@ -17,7 +17,7 @@ public enum NetworkServiceError: Error {
     case invalidUrl
 }
 
-class AEPNetworkService: NetworkService {
+class AEPNetworkService: Networking {
   
     private var sessions = ThreadSafeDictionary<String, URLSession>(identifier: "com.adobe.networkservice.sessions")
     

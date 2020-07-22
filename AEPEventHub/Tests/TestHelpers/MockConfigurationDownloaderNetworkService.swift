@@ -20,7 +20,7 @@ enum MockConfigurationDownloaderResponses {
     case notModified
 }
 
-struct MockConfigurationDownloaderNetworkService: NetworkService {
+struct MockConfigurationDownloaderNetworkService: Networking {
     let validResponseDictSize = 16
     let responseType: MockConfigurationDownloaderResponses!
     let expectedData = """

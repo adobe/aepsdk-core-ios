@@ -22,9 +22,9 @@ public class AEPServiceProvider {
     private var defaultSystemInfoService = ApplicationSystemInfoService()
     private var overrideKeyValueService: NamedKeyValueService?
     private var defaultKeyValueService = NamedUserDefaultKeyValueService()
-    private var overrideNetworkService: NetworkService?
+    private var overrideNetworkService: Networking?
     private var defaultNetworkService = AEPNetworkService()
-    private var defaultDataQueueService = AEPDataQueueService.shared
+    private var defaultDataQueueService = DataQueueService.shared
     private var overrideCacheService: Caching?
     private var defaultCacheService = DiskCacheService()
     private var overrideURLService: URLService?
@@ -58,7 +58,7 @@ public class AEPServiceProvider {
         }
     }
 
-    public var networkService: NetworkService {
+    public var networkService: Networking {
         get {
             return queue.sync {
                 return overrideNetworkService ?? defaultNetworkService
@@ -71,7 +71,7 @@ public class AEPServiceProvider {
         }
     }
 
-    public var dataQueueService: DataQueueService {
+    public var dataQueueService: DataQueuing {
         return queue.sync {
             return defaultDataQueueService
         }

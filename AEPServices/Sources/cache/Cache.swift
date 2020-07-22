@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Concrete class that provides disk caching capabilities
-public class Cache {
+@objc public class Cache: NSObject {
     private var cacheService: Caching {
         return AEPServiceProvider.shared.cacheService
     }

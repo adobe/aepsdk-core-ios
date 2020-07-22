@@ -13,7 +13,7 @@
 import Foundation
 
 /// Represents an entity type which can be stored in `DataQueue`
-public class DataEntity: NSObject {
+@objc public class DataEntity: NSObject {
     public let uniqueIdentifier: String
     public let timestamp: Date
     public let data: Data?

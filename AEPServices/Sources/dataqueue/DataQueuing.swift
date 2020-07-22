@@ -12,12 +12,12 @@
 
 import Foundation
 
-/// Represents the interface of the logging service
-@objc public protocol Logging {
-    /// Logs a message
-    /// - Parameters:
-    ///   - level: One of the message level identifiers, e.g., DEBUG
-    ///   - label: Name of a label to localize message
-    ///   - message: The string message
-    func log(level: LogLevel, label: String, message: String)
+/// Defines a platform service to be used to initialize `DataQueue` objects
+@objc public protocol DataQueuing {
+    static var shared: DataQueuing { get }
+
+    /// Initialize a `DataQueue` object
+    /// - Parameter name: the label you assigned to the `DataQueue` at creation time.
+    /// - Returns: the object of `DataQueue`, return false if failed to create an object
+    func getDataQueue(label: String) -> DataQueue?
 }
