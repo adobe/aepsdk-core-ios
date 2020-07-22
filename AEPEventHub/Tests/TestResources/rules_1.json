@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.lifecycle"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.responseContent"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.launchevent",
+                            "matcher": "ex",
+                            "values": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername",
+                      "matcher": "eq",
+                      "values": [
+                        "AT&T"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RCd6959d7b48da42709b442c52b74b0e3c",
+          "type": "url",
+          "detail": {
+            "url": "http://adobe.com/device={%~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename%}"
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.lifecycle"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.responseContent"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.launchevent",
+                            "matcher": "ex",
+                            "values": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~state.com.adobe.module.lifecycle/lifecyclecontextdata.installevent",
+                      "matcher": "ex",
+                      "values": []
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+            "id"        : "48181acd22b3edaebc8a447868a7df7ce629920a",
+            "type"      : "add",
+            "detail"    : {
+                "eventdata" : {
+                    "key" : "value",
+                    "key.subkey" : "subvalue",
+                    "ecid" : "{%%ECID DATA ELEMENT%%}",
+                    "mySharedKey" : "{%~state.com.myExtension/sharedKey%}",
+                    "myObject" : {
+                        "objKey" : "objValue"
+                    }
+                }
+            }
+        }
+      ]
+    }
+  ]
+}
