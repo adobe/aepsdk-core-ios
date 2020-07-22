@@ -11,26 +11,27 @@ governing permissions and limitations under the License.
 
 import Foundation
 import SwiftRulesEngine
+import AEPServices
 
 /// A rules engine for Launch rules
 struct LaunchRulesEngine{
     let rulesEngine: RulesEngine<LaunchRule>
+    let rulesDownloader: RulesDownloader
     
     init(){
         let evaluator = ConditionEvaluator.init(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
+        rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
     }
     
     /// Downloads the rules from the remote server
     /// - Parameter url: the `URL` of the remote urls
     func loadRemoteRules(from url:URL){
-        
     }
     
     /// Reads the cached rules
     /// - Parameter url: the `URL` of the remote urls
     func loadCachedRules(for url:URL){
-        
     }
     
     /// Evaluates all the current rules against the supplied `Event`.
