@@ -21,6 +21,10 @@ class IdentityStateTests: XCTestCase {
     var mockHitQueue: MockHitQueue {
         return state.hitQueue as! MockHitQueue
     }
+    var mockDataStore: MockDataStore {
+        return AEPServiceProvider.shared.namedKeyValueService as! MockDataStore
+    }
+
     
     override func setUp() {
         AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
@@ -45,6 +49,21 @@ class IdentityStateTests: XCTestCase {
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(2, idList?.count)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+    }
+    
+    /// Tests that syncIdentifiers returns nil and does not queue a hit when the user is opted-out
+    func testSyncIdentifiersHappyIDsOptedOut() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
+        state.lastValidConfig = configSharedState
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        
+        // verify
+        XCTAssertNil(eventData)
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
     
     // TODO enable after AMSDK-10262
@@ -169,7 +188,7 @@ class IdentityStateTests: XCTestCase {
     }
     
     /// We are ready to process the event when the config shared state has an opt-in privacy status but our previous config has an opt-out
-    func testSyncIdentifiersReturnTrueWhenLatestPrivacyIsOptOut() {
+    func testSyncIdentifiersReturnNilWhenLatestPrivacyIsOptOut() {
         // setup
         state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
         
@@ -348,6 +367,136 @@ class IdentityStateTests: XCTestCase {
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 0.5)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
+    }
+    
+    // MARK: processPrivacyChange(...)
+    
+    /// Tests that when the event data is empty that we do not update shared state or the push identifier
+    func testProcessPrivacyChangeNoPrivacyInEventData() {
+        // setup
+        var props = IdentityProperties()
+        props.privacyStatus = .unknown
+        props.mid = MID()
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: nil)
+
+        // test
+        state.processPrivacyChange(event: event, eventDispatcher: { (event) in
+            XCTFail("No events should be dispatched")
+        }) { (sharedStateData, event) in
+            XCTFail("Shared state should not be updated")
+        }
+
+        // verify
+        XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
+        // TODO: Assert we do not update push ID
+        XCTAssertTrue(!mockHitQueue.calledBeginProcessing && !mockHitQueue.calledSuspend && !mockHitQueue.calledClear) // should not notify the hit queue of the privacy change
+        XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should not change
+    }
+
+    /// Tests that when we get an opt-in privacy status that we update the privacy status and start the hit queue
+    func testProcessPrivacyChangeToOptIn() {
+        // setup
+        var props = IdentityProperties()
+        props.privacyStatus = .unknown
+        props.mid = MID()
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn])
+
+        // test
+        state.processPrivacyChange(event: event, eventDispatcher: { (event) in
+            XCTFail("No events should be dispatched")
+        }) { (sharedStateData, event) in
+            XCTFail("Shared state should not be updated")
+        }
+
+        // verify
+        // TODO: Assert we do not update push ID
+        XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
+        XCTAssertTrue(mockHitQueue.calledBeginProcessing) // we should start the hit queue
+        XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should change to opt in
+    }
+
+    /// Tests that when we update privacy to opt-out that we suspend the hit queue and share state
+    func testProcessPrivacyChangeToOptOut() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        var props = IdentityProperties()
+        props.privacyStatus = .unknown
+        props.mid = MID()
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut])
+
+        // test
+        state.processPrivacyChange(event: event, eventDispatcher: { (event) in
+            XCTFail("No events should be dispatched")
+        }) { (sharedStateData, event) in
+            sharedStateExpectation.fulfill()
+        }
+
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 0.5)
+        XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
+        // TODO: Assert we update the push ID
+        XCTAssertTrue(mockHitQueue.calledSuspend && mockHitQueue.calledClear) // we should suspend the queue and clear it
+        XCTAssertEqual(PrivacyStatus.optedOut, state.identityProperties.privacyStatus) // privacy status should change to opt out
+    }
+
+    /// Tests that when we got from opt out to opt in that we dispatch a force sync event
+    func testProcessPrivacyChangeFromOptOutToOptIn() {
+        // setup
+        let dispatchEventExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
+        var props = IdentityProperties()
+        props.privacyStatus = .optedOut
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn])
+
+        // test
+        state.processPrivacyChange(event: event, eventDispatcher: { (event) in
+            let forceSync = event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
+            let isSync = event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
+            XCTAssertTrue(forceSync && isSync)
+            dispatchEventExpectation.fulfill()
+        }) { (sharedStateData, event) in
+            XCTFail("No shared state should be shared")
+        }
+
+        // verify
+        wait(for: [dispatchEventExpectation], timeout: 0.5)
+        XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
+        XCTAssertTrue(mockHitQueue.calledBeginProcessing) // we should start the hit queue
+        XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should change to opt in
+    }
+
+    /// When we go from opt-out to unknown we should suspend the queue and update the privacy status
+    func testProcessPrivacyChangeFromOptOutToUnknown() {
+        // setup
+        let dispatchEventExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
+        var props = IdentityProperties()
+        props.privacyStatus = .optedOut
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown])
+
+        // test
+        state.processPrivacyChange(event: event, eventDispatcher: { (event) in
+            let forceSync = event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
+            let isSync = event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
+            XCTAssertTrue(forceSync && isSync)
+            dispatchEventExpectation.fulfill()
+        }) { (sharedStateData, event) in
+            XCTFail("No shared state should be shared")
+        }
+
+        // verify
+        wait(for: [dispatchEventExpectation], timeout: 0.5)
+        XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
+        XCTAssertTrue(mockHitQueue.calledSuspend) // we should have suspended the hit queue
+        XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should change to opt in
     }
 
 }
