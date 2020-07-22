@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Describes the interface for a data cache
-public protocol CacheService {
+public protocol Caching {
     
     /// Sets a key value pair in the cache
     /// - Parameters:

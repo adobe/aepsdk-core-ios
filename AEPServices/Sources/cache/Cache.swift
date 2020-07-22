@@ -14,7 +14,7 @@ import Foundation
 
 /// Concrete class that provides disk caching capabilities
 public class Cache {
-    private var cacheService: CacheService {
+    private var cacheService: Caching {
         return AEPServiceProvider.shared.cacheService
     }
     private var name: String

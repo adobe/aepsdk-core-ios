@@ -16,7 +16,7 @@ import Foundation
 public class Log {
     /// Sets and gets the logging level of the SDK, default value is LogLevel.error
     public static var logFilter: LogLevel = LogLevel.error
-    private static var loggingService: LoggingService {
+    private static var loggingService: Logging {
         return AEPServiceProvider.shared.loggingService
     }
 
