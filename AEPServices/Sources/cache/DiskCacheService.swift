@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Implements a cache which saves and retrieves data from the disk
-public class DiskCacheService: CacheService {
+class DiskCacheService: CacheService {
     lazy var dataStore = NamedKeyValueStore(name: "DiskCacheService")
     let cachePrefix = "com.adobe.mobile.diskcache/"
     let fileManager = FileManager.default

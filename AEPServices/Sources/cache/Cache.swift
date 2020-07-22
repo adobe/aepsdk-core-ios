@@ -21,7 +21,7 @@ public class Cache {
     
     /// Creates a new cache with a specified name
     /// - Parameter name: name of the cache
-    init(name: String) {
+    public init(name: String) {
         self.name = name
     }
     
