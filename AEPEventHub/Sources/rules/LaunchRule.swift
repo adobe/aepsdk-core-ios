@@ -19,16 +19,4 @@ class LaunchRule: Rule {
     init(condition: Evaluable) {
         self.condition = condition
     }
-
-    /// A Helper function, that parse json rules to `LaunchRule`s
-    /// - Parameter data: data of the json rules
-    /// - Returns: an array of `LaunchRule`
-    /// - Returns: empty array if json data are invalid or empty
-    static func generateRules(data: Data) -> [LaunchRule] {
-        if let launchRulesRoot = JSONRulesParser.parse(data) {
-            return launchRulesRoot.convert()
-        } else {
-            return []
-        }
-    }
 }

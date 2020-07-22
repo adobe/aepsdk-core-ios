@@ -207,7 +207,7 @@
 		BB3D7E5E24C7D7DF0084369C /* JSONRulesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D7E5C24C7D7A90084369C /* JSONRulesParser.swift */; };
 		BB3D7E6024C7DCCB0084369C /* rules_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3D7E5F24C7DCCB0084369C /* rules_1.json */; };
 		BB3D7E6124C7FBBA0084369C /* rules_1.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3D7E5F24C7DCCB0084369C /* rules_1.json */; };
-		BB3D7E6424C7FC5B0084369C /* LaunchRuleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D7E6224C7FC3D0084369C /* LaunchRuleTests.swift */; };
+		BB3D7E6424C7FC5B0084369C /* JSONRulesParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3D7E6224C7FC3D0084369C /* JSONRulesParserTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -550,7 +550,7 @@
 		78DEFEF0244A183400D7E9FB /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
 		BB3D7E5C24C7D7A90084369C /* JSONRulesParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRulesParser.swift; sourceTree = "<group>"; };
 		BB3D7E5F24C7DCCB0084369C /* rules_1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_1.json; sourceTree = "<group>"; };
-		BB3D7E6224C7FC3D0084369C /* LaunchRuleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRuleTests.swift; sourceTree = "<group>"; };
+		BB3D7E6224C7FC3D0084369C /* JSONRulesParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONRulesParserTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1160,7 +1160,7 @@
 		BB3D7E5724C7D55B0084369C /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				BB3D7E6224C7FC3D0084369C /* LaunchRuleTests.swift */,
+				BB3D7E6224C7FC3D0084369C /* JSONRulesParserTests.swift */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -1769,7 +1769,7 @@
 				3FE6DD7124C547F50065EA05 /* MockExtensionTwo.swift in Sources */,
 				3FE6DD6A24C547670065EA05 /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				3FE6DD6124C547670065EA05 /* MockConfigurationDownloader.swift in Sources */,
-				BB3D7E6424C7FC5B0084369C /* LaunchRuleTests.swift in Sources */,
+				BB3D7E6424C7FC5B0084369C /* JSONRulesParserTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

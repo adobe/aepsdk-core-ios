@@ -16,7 +16,7 @@ import XCTest
 @testable import AEPEventHub
 @testable import SwiftRulesEngine
 
-class LaunchRuleTests: XCTestCase {
+class JSONRulesParserTests: XCTestCase {
     private let EMPTY_JSON_RULE = """
     {
         "version": 1,
@@ -41,7 +41,7 @@ class LaunchRuleTests: XCTestCase {
             return
         }
         /// Then: this json rules should be parsed to `LaunchRule` objects
-        let rules = LaunchRule.generateRules(data: data)
+        let rules = JSONRulesParser.parse(data)
         XCTAssertEqual(2, rules.count)
         XCTAssertTrue(rules[0].condition is LogicalExpression)
 
@@ -66,12 +66,12 @@ class LaunchRuleTests: XCTestCase {
     }
 
     func testGenerateLaunchRulesEmpty() {
-        let rules = LaunchRule.generateRules(data: EMPTY_JSON_RULE.data(using: .utf8)!)
+        let rules = JSONRulesParser.parse(EMPTY_JSON_RULE.data(using: .utf8)!)
         XCTAssertEqual(0, rules.count)
     }
 
     func testGenerateLaunchRulesInvalid() {
-        let rules = LaunchRule.generateRules(data: INVALID_JSON_RULE.data(using: .utf8)!)
+        let rules = JSONRulesParser.parse(INVALID_JSON_RULE.data(using: .utf8)!)
         XCTAssertEqual(0, rules.count)
     }
 }

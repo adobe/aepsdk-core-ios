@@ -18,15 +18,16 @@ class JSONRulesParser {
 
     /// Parses the json rules to objects
     /// - Parameter data: data of json rules
-    /// - Returns: `JSONRuleRoot` object
-    /// - Returns: nil, if failed to parse the provided json rules
-    static func parse(_ data: Data) -> JSONRuleRoot? {
+    /// - Returns: an array of `LaunchRule`
+    /// - Returns: empty array if json data are invalid or empty
+    static func parse(_ data: Data) -> [LaunchRule] {
         let jsonDecoder = JSONDecoder()
         do {
-            return try jsonDecoder.decode(JSONRuleRoot.self, from: data)
+            let root = try jsonDecoder.decode(JSONRuleRoot.self, from: data)
+            return root.convert()
         } catch {
             Log.error(label: JSONRulesParser.LOG_LABEL, "Failed to encode json rules, the error is: \(error)")
-            return nil
+            return []
         }
     }
 }
@@ -96,19 +97,16 @@ class JSONCondition: Codable {
     }
 
     func convert(key: String, matcher: String, anyCodable: AnyCodable) -> Evaluable? {
-        // TODO:
         if let value = anyCodable.value {
             switch value {
             case is String:
                 if let stringValue = anyCodable.value as? String {
                     return ComparisonExpression<MustacheToken, String>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(stringLiteral: stringValue))
                 }
-                return nil
             case is Int:
                 if let intValue = anyCodable.value as? Int {
                     return ComparisonExpression<MustacheToken, Int>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(integerLiteral: intValue))
                 }
-                return nil
             case is Double:
                 if let doubleValue = anyCodable.value as? Double {
                     return ComparisonExpression<MustacheToken, Double>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: doubleValue))
@@ -118,7 +116,6 @@ class JSONCondition: Codable {
                 if let floadValue = anyCodable.value as? Float {
                     return ComparisonExpression<MustacheToken, Double>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: Double(floadValue)))
                 }
-                return nil
             default:
                 return nil
             }
