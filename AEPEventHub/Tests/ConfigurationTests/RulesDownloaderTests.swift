@@ -87,7 +87,7 @@ class RulesDownloaderTests: XCTestCase {
         })
         
         wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(testRules.cacheableDict[testKey]?.stringValue, rulesResult![testKey] as? String)
+        XCTAssertEqual(testRules.cachefranklinzgma@gmail.comableDict[testKey]?.stringValue, rulesResult![testKey] as? String)
         XCTAssertFalse(mockUnzipper.unzipCalled)
         XCTAssertTrue(cache.getCalled)
         XCTAssertFalse(cache.setCalled)

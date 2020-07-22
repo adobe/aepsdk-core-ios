@@ -20,15 +20,11 @@ import AdSupport
 struct RulesDownloader: RulesLoader {
     private let loggingService = AEPServiceProvider.shared.loggingService
     private let fileUnzipper: Unzipper
-    
-    private var cacheService: CacheService {
-        get {
-            return AEPServiceProvider.shared.cacheService
-        }
-    }
-    
+    private let cache: Cache
+
     init(fileUnzipper: Unzipper) {
         self.fileUnzipper = fileUnzipper
+        self.cache = Cache(name: RulesDownloaderConstants.RULES_CACHE_NAME)
     }
 
     enum RulesDownloaderError: Error {
@@ -143,7 +139,7 @@ struct RulesDownloader: RulesLoader {
         do {
             let data = try JSONEncoder().encode(cachedRules)
             let cacheEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
-            try self.cacheService.set(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME, key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
+            try self.cache.set(key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
             return true
         } catch {
             // Handle Error
@@ -156,7 +152,7 @@ struct RulesDownloader: RulesLoader {
     /// - Parameter rulesUrl: The rules url as a string to be used to get the right cached rules
     /// - Returns: The `CachedRules` for the given rulesUrl
     private func getCachedRules(rulesUrl: String) -> CachedRules? {
-        guard let cachedEntry = cacheService.get(cacheName: RulesDownloaderConstants.RULES_CACHE_NAME, key: buildCacheKey(rulesUrl: rulesUrl)) else {
+        guard let cachedEntry = cache.get(key: buildCacheKey(rulesUrl: rulesUrl)) else {
             return nil
         }
         return try? JSONDecoder().decode(CachedRules.self, from: cachedEntry.data)
