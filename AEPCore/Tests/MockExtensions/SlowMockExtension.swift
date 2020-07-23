@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 @testable import AEPCore
-import AEPEventHub
+import AEPCore
 
 class SlowMockExtension: Extension {
     var name = "slowMockExtension"

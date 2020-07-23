@@ -11,7 +11,7 @@
 //
 //import XCTest
 //@testable import AEPCore
-//@testable import AEPEventHub
+//@testable import AEPCore
 // TODO: rewrite
 //class AEPIdentityAPITests: XCTestCase {
 //

@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPIdentity
 @testable import AEPServices
-@testable import AEPEventHub
+@testable import AEPCore
 import AEPServicesMock
 
 class IdentityHitProcessorTests: XCTestCase {

@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPServices
-import AEPEventHub
+import AEPCore
 
 /// Defines instances that can manage a push identifier
 protocol PushIDManageable {

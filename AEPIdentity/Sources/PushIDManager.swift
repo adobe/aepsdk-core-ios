@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
+import AEPCore
 import AEPServices
 
 /// A type which manages dispatching events based on Push ID changes

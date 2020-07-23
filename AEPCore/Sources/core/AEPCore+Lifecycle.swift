@@ -10,8 +10,6 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
-import AEPLifecycle
 
 extension AEPCore: Lifecycle {
     public static func lifecycleStart(additionalContextData: [String: String]?) {
