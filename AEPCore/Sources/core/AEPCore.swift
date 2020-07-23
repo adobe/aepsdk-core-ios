@@ -74,4 +74,13 @@ public final class AEPCore {
         AEPCore.dispatch(event: event)
     }
     
+    /// Submits a generic event containing the provided push token with event type `generic.identity`.
+    /// - Parameter deviceToken: the device token for push notifications
+    public static func setPushIdentifier(deviceToken: Data?) {
+        let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
+        let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
+        let event = Event(name: "SetPushIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        AEPCore.dispatch(event: event)
+    }
+    
 }
