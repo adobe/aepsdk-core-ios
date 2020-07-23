@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
+import AEPCore
 
 extension AEPIdentity: Identity {
     
@@ -18,7 +18,7 @@ extension AEPIdentity: Identity {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
         
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
+        AEPCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
@@ -31,14 +31,12 @@ extension AEPIdentity: Identity {
             
             completion(URL(string: updatedUrlStr), nil)
         }
-        
-        EventHub.shared.dispatch(event: event)
     }
     
     static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError?) -> ()) {
         let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
         
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
+        AEPCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
@@ -51,19 +49,15 @@ extension AEPIdentity: Identity {
             
             completion(identifiers, nil)
         }
-        
-        EventHub.shared.dispatch(event: event)
     }
     
     static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
         let event = Event(name: "Get experience cloud ID", type: .identity, source: .requestIdentity, data: nil)
         
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
+        AEPCore.dispatch(event: event) { (responseEvent) in
             let experienceCloudId = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String
             completion(experienceCloudId)
         }
-        
-        EventHub.shared.dispatch(event: event)
     }
     
     static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState) {
@@ -82,13 +76,13 @@ extension AEPIdentity: Identity {
         eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
         
         let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
-        EventHub.shared.dispatch(event: event)
+        AEPCore.dispatch(event: event)
     }
     
     static func getUrlVariables(completion: @escaping (String?, AEPError?) -> ()) {
         let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: IdentityConstants.API_TIMEOUT) { (responseEvent) in
+         AEPCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
@@ -97,8 +91,6 @@ extension AEPIdentity: Identity {
             let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
             completion(urlVariables, nil)
         }
-        
-        EventHub.shared.dispatch(event: event)
     }
     
 }

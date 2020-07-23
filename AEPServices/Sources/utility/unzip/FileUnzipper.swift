@@ -25,6 +25,9 @@ public protocol Unzipper {
 }
 
 public class FileUnzipper: Unzipper {
+    
+    /// Creates a new FileUnzipper
+    public init(){ }
 
     public func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
         let fileManager = FileManager()

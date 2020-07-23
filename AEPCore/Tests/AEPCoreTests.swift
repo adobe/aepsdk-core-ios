@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
-@testable import AEPEventHub
+@testable import AEPCore
 
 class AEPCoreTests: XCTestCase {
     override func setUp() {
@@ -301,7 +301,7 @@ class AEPCoreTests: XCTestCase {
         
         // test
         AEPCore.dispatch(event: expectedEvent) { (responseEvent) in
-            XCTAssertEqual(responseEvent.id, expectedResponseEvent.id)
+            XCTAssertEqual(responseEvent?.id, expectedResponseEvent.id)
             responseExpectation.fulfill()
         }
         // dispatch the response event which should trigger the callback above

@@ -13,7 +13,7 @@
 //import XCTest
 //@testable import AEPCore
 //import AEPServices
-//@testable import AEPEventHub
+//@testable import AEPCore
 //import AEPServicesMock
 //
 //TODO: Rewrite

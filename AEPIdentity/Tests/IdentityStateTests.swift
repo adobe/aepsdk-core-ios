@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPIdentity
 import AEPServices
-import AEPEventHub
+import AEPCore
 import AEPServicesMock
 
 class IdentityStateTests: XCTestCase {
@@ -25,10 +25,13 @@ class IdentityStateTests: XCTestCase {
         return AEPServiceProvider.shared.namedKeyValueService as! MockDataStore
     }
 
+    var mockPushIdManager: MockPushIDManager!
     
     override func setUp() {
         AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
-        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        mockPushIdManager = MockPushIDManager()
+        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+
     }
     
     // MARK: syncIdentifiers(...) tests
@@ -66,7 +69,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
     
-    // TODO enable after AMSDK-10262
+    /// Tests that the push identifier is attached to the event data
     func testSyncIdentifiersHappyPushID() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
@@ -80,7 +83,7 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertEqual(2, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
-        XCTAssertEqual("test-push-id", eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
+        XCTAssertEqual(SHA256.hash("test-push-id"), eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
     
@@ -116,18 +119,16 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn] as [String : Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = "test-ad-id"
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         state.lastValidConfig = configSharedState
         
         // test
         let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent())
         
         // verify
-        XCTAssertEqual(3, eventData!.count)
+        XCTAssertEqual(2, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual(props.advertisingIdentifier, eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
-        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
-        XCTAssertTrue(idList?.isEmpty ?? false)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
     
@@ -140,7 +141,7 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.locationHint = "locHinty"
         props.blob = "blobby"
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         state.lastValidConfig = configSharedState
         
         // test
@@ -151,11 +152,11 @@ class IdentityStateTests: XCTestCase {
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual(props.locationHint, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] as? String)
         XCTAssertEqual(props.blob, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] as? String)
-        // TODO AMSDK-10262: Assert push identifier
+        XCTAssertEqual(SHA256.hash("test-push-id"), eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
     
-    // Disabled, TODO: AMSDK-10261
+    /// Tests that a hit is not queued for is sync event
     func testSyncIdentifiersDoesNotQueue() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
@@ -165,7 +166,7 @@ class IdentityStateTests: XCTestCase {
         props.mid = MID() // visitor ID is null initially and set for the first time in
         // shouldSync(). Mimic a second call to shouldSync by setting the mid
         props.lastSync = Date() // set last sync to now
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         state.lastValidConfig = configSharedState
         
         // test
@@ -247,7 +248,7 @@ class IdentityStateTests: XCTestCase {
         let entity = DataEntity.fakeDataEntity()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: nil)
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
         state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
@@ -276,7 +277,7 @@ class IdentityStateTests: XCTestCase {
         let entity = DataEntity.fakeDataEntity()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
         state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
@@ -304,7 +305,7 @@ class IdentityStateTests: XCTestCase {
         let entity = DataEntity.fakeDataEntity()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: "err message", optOutList: nil)
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
         state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
@@ -332,7 +333,7 @@ class IdentityStateTests: XCTestCase {
         let entity = DataEntity.fakeDataEntity()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
         state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
@@ -357,7 +358,7 @@ class IdentityStateTests: XCTestCase {
         props.lastSync = Date()
         props.privacyStatus = .optedOut
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
         state.handleHitResponse(hit: DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: nil), response: nil) { (event) in
@@ -378,7 +379,7 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .unknown
         props.mid = MID()
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: nil)
 
         // test
@@ -402,7 +403,7 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .unknown
         props.mid = MID()
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn])
 
         // test
@@ -427,7 +428,7 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .unknown
         props.mid = MID()
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut])
 
         // test
@@ -452,7 +453,7 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn])
 
         // test
@@ -479,7 +480,7 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown])
 
         // test

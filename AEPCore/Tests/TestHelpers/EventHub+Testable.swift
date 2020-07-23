@@ -12,7 +12,6 @@ governing permissions and limitations under the License.
 
 import Foundation
 @testable import AEPCore
-@testable import AEPEventHub
 
 extension EventHub {
     static func reset() {

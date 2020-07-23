@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
+import AEPCore
 import AEPServices
 
 class AEPIdentity: Extension {
@@ -32,7 +32,9 @@ class AEPIdentity: Extension {
         }
 
         let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(entity:responseData:)))
-        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue)
+        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        let pushIdManager = PushIDManager(dataStore: dataStore, eventDispatcher: dispatch(event:))
+        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager)
     }
 
     func onRegistered() {

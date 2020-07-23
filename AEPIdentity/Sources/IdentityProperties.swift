@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPServices
-import AEPEventHub
+import AEPCore
 
 /// Represents a type which contains instances variables for the Identity extension
 struct IdentityProperties: Codable {
@@ -56,7 +56,9 @@ struct IdentityProperties: Codable {
         eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = pushIdentifier
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] = locationHint
-        eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds
+        if let customerIds = customerIds, !customerIds.isEmpty {
+            eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds
+        }
         eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync?.timeIntervalSince1970
         
         return eventData
