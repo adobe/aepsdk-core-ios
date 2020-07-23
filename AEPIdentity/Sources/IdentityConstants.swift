@@ -56,10 +56,14 @@ struct IdentityConstants {
         static let VISITOR_ID_LOCATION_HINT = "locationhint"
         static let VISITOR_IDS_LAST_SYNC = "lastsync"
         static let MCPNS_DPID = "20920"
+        static let EVENT_PUSH_STATUS = "a.push.optin"
+        static let PUSH_ID_ENABLED_ACTION_NAME = "Push"
     }
     
     struct DataStoreKeys {
         static let IDENTITY_PROPERTIES = "identitiesproperties"
+        static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
+        static let ANALYTICS_PUSH_SYNC = "ADOBEMOBILE_ANALYTICS_PUSH_SYNC"
     }
     
     struct URLKeys {
@@ -80,5 +84,7 @@ struct IdentityConstants {
     struct Analytics {
         static let ANALYTICS_ID = "aid"
         static let VISITOR_IDENTIFIER  = "vid"
+        static let TRACK_ACTION = "action"
+        static let CONTEXT_DATA = "contextdata"
     }
 }
