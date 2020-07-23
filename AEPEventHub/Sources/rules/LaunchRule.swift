@@ -12,7 +12,7 @@
 import Foundation
 import SwiftRulesEngine
 
-/// Conforms to the protocol`Rule`
+/// A `Rule` type represents the functions defined by Launch UI
 class LaunchRule: Rule {
     public let condition: Evaluable
 
