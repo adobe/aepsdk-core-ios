@@ -98,8 +98,8 @@ struct PushIDManager: PushIDManageable {
     private mutating func updatePushStatusAndSendAnalyticsEvent(enabled: Bool) {
         pushEnabled = enabled
         let pushStatusStr = enabled ? "True": "False"
-        let contextData = [IdentityConstants.EventDataKeys.EVENT_PUSH_STATUS: pushStatusStr]
-        let eventData = [IdentityConstants.Analytics.TRACK_ACTION: IdentityConstants.EventDataKeys.PUSH_ID_ENABLED_ACTION_NAME,
+        let contextData = [IdentityConstants.Analytics.EVENT_PUSH_STATUS: pushStatusStr]
+        let eventData = [IdentityConstants.Analytics.TRACK_ACTION: IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME,
                          IdentityConstants.Analytics.CONTEXT_DATA: contextData] as [String : Any]
 
         let event = Event(name: "AnalyticsForIdentityRequest", type: .analytics, source: .requestContent, data: eventData)

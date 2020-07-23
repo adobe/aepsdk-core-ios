@@ -39,8 +39,8 @@ class PushIDManagerTests: XCTestCase {
 
         pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
-            XCTAssertEqual(contextData?[IdentityConstants.EventDataKeys.EVENT_PUSH_STATUS], "False") // push status should be set to true
-            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.EventDataKeys.PUSH_ID_ENABLED_ACTION_NAME)
+            XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "False") // push status should be set to true
+            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
             expectation.fulfill()
         })
 
@@ -110,8 +110,8 @@ class PushIDManagerTests: XCTestCase {
 
         pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
-            XCTAssertEqual(contextData?[IdentityConstants.EventDataKeys.EVENT_PUSH_STATUS], "True") // push status should be set to true
-            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.EventDataKeys.PUSH_ID_ENABLED_ACTION_NAME)
+            XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "True") // push status should be set to true
+            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
             expectation.fulfill()
         })
 
@@ -162,8 +162,8 @@ class PushIDManagerTests: XCTestCase {
 
         pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
-            XCTAssertEqual(contextData?[IdentityConstants.EventDataKeys.EVENT_PUSH_STATUS], "True") // push status should be set to true
-            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.EventDataKeys.PUSH_ID_ENABLED_ACTION_NAME)
+            XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "True") // push status should be set to true
+            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
             expectation.fulfill()
         })
 
@@ -191,8 +191,8 @@ class PushIDManagerTests: XCTestCase {
 
         pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
-            XCTAssertEqual(contextData?[IdentityConstants.EventDataKeys.EVENT_PUSH_STATUS], "False") // push status should be set to true
-            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.EventDataKeys.PUSH_ID_ENABLED_ACTION_NAME)
+            XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "False") // push status should be set to true
+            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
             expectation.fulfill()
         })
 
@@ -220,8 +220,8 @@ class PushIDManagerTests: XCTestCase {
 
         pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
-            XCTAssertEqual(contextData?[IdentityConstants.EventDataKeys.EVENT_PUSH_STATUS], "False") // push status should be set to true
-            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.EventDataKeys.PUSH_ID_ENABLED_ACTION_NAME)
+            XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "False") // push status should be set to true
+            XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
             expectation.fulfill()
         })
 

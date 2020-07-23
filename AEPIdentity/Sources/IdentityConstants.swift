@@ -56,8 +56,6 @@ struct IdentityConstants {
         static let VISITOR_ID_LOCATION_HINT = "locationhint"
         static let VISITOR_IDS_LAST_SYNC = "lastsync"
         static let MCPNS_DPID = "20920"
-        static let EVENT_PUSH_STATUS = "a.push.optin"
-        static let PUSH_ID_ENABLED_ACTION_NAME = "Push"
     }
     
     struct DataStoreKeys {
@@ -86,5 +84,7 @@ struct IdentityConstants {
         static let VISITOR_IDENTIFIER  = "vid"
         static let TRACK_ACTION = "action"
         static let CONTEXT_DATA = "contextdata"
+        static let EVENT_PUSH_STATUS = "a.push.optin"
+        static let PUSH_ID_ENABLED_ACTION_NAME = "Push"
     }
 }
