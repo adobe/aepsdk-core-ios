@@ -16,6 +16,7 @@ AEPCore
 
   s.swift_version = '5.0'
 
+  s.dependency 'SwiftRulesEngine'
   s.dependency 'AEPServices'
 
   s.source_files          = 'AEPCore/Sources/**/*.swift'
