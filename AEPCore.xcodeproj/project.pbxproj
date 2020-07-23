@@ -6,6 +6,23 @@
 	objectVersion = 52;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		3F39152124CA34BA00B58C3E /* AEP-All */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 3F39152224CA34BA00B58C3E /* Build configuration list for PBXAggregateTarget "AEP-All" */;
+			buildPhases = (
+			);
+			dependencies = (
+				3F39152624CA34CA00B58C3E /* PBXTargetDependency */,
+				3F39152824CA34CA00B58C3E /* PBXTargetDependency */,
+				3F39152A24CA34CA00B58C3E /* PBXTargetDependency */,
+				3F39152C24CA34CA00B58C3E /* PBXTargetDependency */,
+			);
+			name = "AEP-All";
+			productName = "AEP-All";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		2107F02624C9FDFE002935CF /* PushIDManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02524C9FDFE002935CF /* PushIDManageable.swift */; };
 		2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02724C9FE1B002935CF /* PushIDManager.swift */; };
@@ -13,11 +30,6 @@
 		2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02B24C9FF62002935CF /* MockPushIDManager.swift */; };
 		2107F02E24C9FF88002935CF /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02D24C9FF88002935CF /* SHA256.swift */; };
 		2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02F24C9FFB2002935CF /* SHA256Tests.swift */; };
-		2131A1B42465D81E00F1392D /* EventHub+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131A1B32465D81E00F1392D /* EventHub+Testable.swift */; };
-		213C8BD524252302009F780A /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213C8BD424252302009F780A /* MockExtension.swift */; };
-		213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */; };
-		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
-		215AA6232465E06600CEB4F4 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
@@ -122,7 +134,7 @@
 		3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */; };
 		3FB66A9C24CA003700502CAF /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FB66A9B24CA003700502CAF /* SwiftRulesEngine */; };
 		3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9E24CA004400502CAF /* CoreConstants.swift */; };
-		3FB66AC624CA004400502CAF /* AEPCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9F24CA004400502CAF /* AEPCore.swift */; };
+		3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9F24CA004400502CAF /* MobileCore.swift */; };
 		3FB66AC724CA004400502CAF /* Extension+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA024CA004400502CAF /* Extension+Register.swift */; };
 		3FB66AC824CA004400502CAF /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA124CA004400502CAF /* Lifecycle.swift */; };
 		3FB66AC924CA004400502CAF /* AEPCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA224CA004400502CAF /* AEPCore+Configuration.swift */; };
@@ -217,14 +229,6 @@
 		3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */; };
 		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
 		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
-		3FE6DE9A24C64BC00065EA05 /* AEPRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */; };
-		3FE6DE9C24C64C590065EA05 /* LaunchRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */; };
-		3FE6DEA224C65C7D0065EA05 /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE6DEA124C65C7D0065EA05 /* SwiftRulesEngine */; };
-		7861452624C74D8F004CB317 /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452424C74D8F004CB317 /* RulesDownloader.swift */; };
-		7861452724C74D8F004CB317 /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452524C74D8F004CB317 /* RulesLoader.swift */; };
-		7861452924C74D9B004CB317 /* CachedRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452824C74D9A004CB317 /* CachedRules.swift */; };
-		7861452B24C74F56004CB317 /* testRulesDownloader.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7861452A24C74F56004CB317 /* testRulesDownloader.zip */; };
-		7861452D24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452C24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift */; };
 		7861452F24C7502B004CB317 /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452E24C7502B004CB317 /* MockUnzipper.swift */; };
 		7861453124C75057004CB317 /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861453024C75056004CB317 /* MockDiskCache.swift */; };
 /* End PBXBuildFile section */
@@ -252,6 +256,34 @@
 			remoteInfo = AEPServices;
 		};
 		3F03984024BE65120019F095 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03978624BE5DD30019F095;
+			remoteInfo = AEPServices;
+		};
+		3F39152524CA34CA00B58C3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 21CAC0D52422917600C11388;
+			remoteInfo = AEPCore;
+		};
+		3F39152724CA34CA00B58C3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DE2E24C642330065EA05;
+			remoteInfo = AEPIdentity;
+		};
+		3F39152924CA34CA00B58C3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DDD024C62EE60065EA05;
+			remoteInfo = AEPLifecycle;
+		};
+		3F39152B24CA34CA00B58C3E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
 			proxyType = 1;
@@ -337,11 +369,6 @@
 		2107F02B24C9FF62002935CF /* MockPushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPushIDManager.swift; sourceTree = "<group>"; };
 		2107F02D24C9FF88002935CF /* SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
 		2107F02F24C9FFB2002935CF /* SHA256Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256Tests.swift; sourceTree = "<group>"; };
-		2131A1B32465D81E00F1392D /* EventHub+Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventHub+Testable.swift"; sourceTree = "<group>"; };
-		213C8BD424252302009F780A /* MockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
-		213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
-		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
-		215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
@@ -451,7 +478,7 @@
 		3F39520524CA096100F7325B /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
 		3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchIDManagerTests.swift; sourceTree = "<group>"; };
 		3FB66A9E24CA004400502CAF /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreConstants.swift; sourceTree = "<group>"; };
-		3FB66A9F24CA004400502CAF /* AEPCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPCore.swift; sourceTree = "<group>"; };
+		3FB66A9F24CA004400502CAF /* MobileCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCore.swift; sourceTree = "<group>"; };
 		3FB66AA024CA004400502CAF /* Extension+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+Register.swift"; sourceTree = "<group>"; };
 		3FB66AA124CA004400502CAF /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lifecycle.swift; sourceTree = "<group>"; };
 		3FB66AA224CA004400502CAF /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+Configuration.swift"; sourceTree = "<group>"; };
@@ -551,13 +578,6 @@
 		3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
 		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
-		3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngine.swift; sourceTree = "<group>"; };
-		3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRule.swift; sourceTree = "<group>"; };
-		7861452424C74D8F004CB317 /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
-		7861452524C74D8F004CB317 /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
-		7861452824C74D9A004CB317 /* CachedRules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRules.swift; sourceTree = "<group>"; };
-		7861452A24C74F56004CB317 /* testRulesDownloader.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = testRulesDownloader.zip; sourceTree = "<group>"; };
-		7861452C24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
 		7861452E24C7502B004CB317 /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
 		7861453024C75056004CB317 /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -963,7 +983,7 @@
 			isa = PBXGroup;
 			children = (
 				3FB66A9E24CA004400502CAF /* CoreConstants.swift */,
-				3FB66A9F24CA004400502CAF /* AEPCore.swift */,
+				3FB66A9F24CA004400502CAF /* MobileCore.swift */,
 				3FB66AA024CA004400502CAF /* Extension+Register.swift */,
 				3FB66AA124CA004400502CAF /* Lifecycle.swift */,
 				3FB66AA224CA004400502CAF /* AEPCore+Configuration.swift */,
@@ -1406,6 +1426,9 @@
 					3F03985324C0008D0019F095 = {
 						CreatedOnToolsVersion = 11.5;
 					};
+					3F39152124CA34BA00B58C3E = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
 					3FE6DDA824C62C090065EA05 = {
 						CreatedOnToolsVersion = 11.5;
 						LastSwiftMigration = 1150;
@@ -1454,6 +1477,7 @@
 				3FE6DDD824C62EE60065EA05 /* AEPLifecycleTests */,
 				3FE6DE2E24C642330065EA05 /* AEPIdentity */,
 				3FE6DE3624C642330065EA05 /* AEPIdentityTests */,
+				3F39152124CA34BA00B58C3E /* AEP-All */,
 			);
 		};
 /* End PBXProject section */
@@ -1570,7 +1594,7 @@
 				3FB66AC824CA004400502CAF /* Lifecycle.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
-				3FB66AC624CA004400502CAF /* AEPCore.swift in Sources */,
+				3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */,
 				3FB66AD824CA004400502CAF /* Extension.swift in Sources */,
 				3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */,
 				3FB66AD224CA004400502CAF /* EventHub.swift in Sources */,
@@ -1817,6 +1841,26 @@
 			target = 3F03978624BE5DD30019F095 /* AEPServices */;
 			targetProxy = 3F03984024BE65120019F095 /* PBXContainerItemProxy */;
 		};
+		3F39152624CA34CA00B58C3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 21CAC0D52422917600C11388 /* AEPCore */;
+			targetProxy = 3F39152524CA34CA00B58C3E /* PBXContainerItemProxy */;
+		};
+		3F39152824CA34CA00B58C3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FE6DE2E24C642330065EA05 /* AEPIdentity */;
+			targetProxy = 3F39152724CA34CA00B58C3E /* PBXContainerItemProxy */;
+		};
+		3F39152A24CA34CA00B58C3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FE6DDD024C62EE60065EA05 /* AEPLifecycle */;
+			targetProxy = 3F39152924CA34CA00B58C3E /* PBXContainerItemProxy */;
+		};
+		3F39152C24CA34CA00B58C3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03978624BE5DD30019F095 /* AEPServices */;
+			targetProxy = 3F39152B24CA34CA00B58C3E /* PBXContainerItemProxy */;
+		};
 		3F39522224CA1CBF00F7325B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 21CAC0D52422917600C11388 /* AEPCore */;
@@ -1874,6 +1918,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1937,6 +1982,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -2211,6 +2257,22 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3F39152324CA34BA00B58C3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		3F39152424CA34BA00B58C3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -2506,6 +2568,15 @@
 			buildConfigurations = (
 				3F03986124C0008D0019F095 /* Debug */,
 				3F03986224C0008D0019F095 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3F39152224CA34BA00B58C3E /* Build configuration list for PBXAggregateTarget "AEP-All" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3F39152324CA34BA00B58C3E /* Debug */,
+				3F39152424CA34BA00B58C3E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

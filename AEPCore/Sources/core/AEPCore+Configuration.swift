@@ -12,23 +12,23 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Implements the `Configuration` public APIs
-extension AEPCore: Configuration {
+extension MobileCore: Configuration {
     public static func configureWith(appId: String) {
         let event = Event(name: "Configure with AppId", type: .configuration, source: .requestContent,
                           data: [CoreConstants.Keys.JSON_APP_ID: appId])
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
 
     public static func configureWith(filePath: String) {
         let event = Event(name: "Configure with file path", type: .configuration, source: .requestContent,
                           data: [CoreConstants.Keys.JSON_FILE_PATH: filePath])
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
 
     public static func updateConfigurationWith(configDict: [String: Any]) {
         let event = Event(name: "Configuration Update", type: .configuration, source: .requestContent,
                           data: [CoreConstants.Keys.UPDATE_CONFIG: configDict])
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
 
     public static func setPrivacy(status: PrivacyStatus) {
@@ -42,7 +42,7 @@ extension AEPCore: Configuration {
             self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
         }
 
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
     
     public static func getSdkIdentities(completion: @escaping (String?, AEPError?) -> ()) {
@@ -62,7 +62,7 @@ extension AEPCore: Configuration {
             completion(identities, nil)
         }
         
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
     
     // MARK: Helper

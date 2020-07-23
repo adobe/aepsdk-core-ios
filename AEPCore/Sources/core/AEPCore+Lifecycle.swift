@@ -11,17 +11,17 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-extension AEPCore: Lifecycle {
+extension MobileCore: Lifecycle {
     public static func lifecycleStart(additionalContextData: [String: String]?) {
         let data: [String: Any] = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.START,
                                    CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
         let event = Event(name: "Lifecycle Start", type: .genericLifecycle, source: .requestContent, data: data)
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
     
     public static func lifecyclePause() {
         let data = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.PAUSE]
         let event = Event(name: "Lifecycle Pause", type: .genericLifecycle, source: .requestContent, data: data)
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
 }

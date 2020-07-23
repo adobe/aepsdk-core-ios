@@ -12,7 +12,6 @@
 
 import Foundation
 import AEPServices
-import AdSupport
 
 ///
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely

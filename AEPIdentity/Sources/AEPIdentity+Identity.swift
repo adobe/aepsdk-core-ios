@@ -18,7 +18,7 @@ extension AEPIdentity: Identity {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
         
-        AEPCore.dispatch(event: event) { (responseEvent) in
+        MobileCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
@@ -36,7 +36,7 @@ extension AEPIdentity: Identity {
     static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError?) -> ()) {
         let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
         
-        AEPCore.dispatch(event: event) { (responseEvent) in
+        MobileCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
@@ -54,7 +54,7 @@ extension AEPIdentity: Identity {
     static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
         let event = Event(name: "Get experience cloud ID", type: .identity, source: .requestIdentity, data: nil)
         
-        AEPCore.dispatch(event: event) { (responseEvent) in
+        MobileCore.dispatch(event: event) { (responseEvent) in
             let experienceCloudId = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String
             completion(experienceCloudId)
         }
@@ -76,13 +76,13 @@ extension AEPIdentity: Identity {
         eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
         
         let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
     
     static func getUrlVariables(completion: @escaping (String?, AEPError?) -> ()) {
         let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
-         AEPCore.dispatch(event: event) { (responseEvent) in
+         MobileCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
