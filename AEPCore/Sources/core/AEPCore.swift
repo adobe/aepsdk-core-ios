@@ -49,11 +49,9 @@ public final class AEPCore {
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
-    public static func dispatch(event: Event, responseCallback: @escaping (Event) -> ()) {
+    public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> ()) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
-            if let event = event {
-                responseCallback(event)
-            }
+            responseCallback(event)
         }
         
         EventHub.shared.dispatch(event: event)

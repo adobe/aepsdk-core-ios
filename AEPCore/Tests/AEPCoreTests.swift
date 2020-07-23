@@ -301,7 +301,7 @@ class AEPCoreTests: XCTestCase {
         
         // test
         AEPCore.dispatch(event: expectedEvent) { (responseEvent) in
-            XCTAssertEqual(responseEvent.id, expectedResponseEvent.id)
+            XCTAssertEqual(responseEvent?.id, expectedResponseEvent.id)
             responseExpectation.fulfill()
         }
         // dispatch the response event which should trigger the callback above
