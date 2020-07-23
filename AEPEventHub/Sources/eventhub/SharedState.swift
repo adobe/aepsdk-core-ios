@@ -21,7 +21,7 @@ class SharedState {
 
     private let queue: DispatchQueue /// Allows multi-threaded access to shared state.  Reads are concurrent, Add/Updates act as barriers.
     private var head: Node?
-    private lazy var loggingService = AEPServiceProvider.shared.loggingService
+    private let LOG_TAG = "SharedState"
 
     // MARK: Internal API
     init(_ name: String = "anonymous") {
@@ -57,8 +57,7 @@ class SharedState {
                         unwrapped.data = data
                         unwrapped.nodeStatus = .set
                     } else {
-                        // log error, attempting to update a non-pending entry
-                        self.loggingService.log(level: .warning, label: EventHubConstants.LOG_LABEL, message: "Attempting to update a non-pending entry.")
+                        Log.error(label: "\(LOG_TAG):\(#function)", message: "Attempting to update a non-pending entry.")
                     }
                     break
                 }
@@ -97,8 +96,7 @@ class SharedState {
                 if unwrapped.version < version {
                     self.head = unwrapped.append(version: version, data: data, status: status)
                 } else {
-                    // log error, trying to add an already existing version
-                    self.loggingService.log(level: .debug, label: EventHubConstants.LOG_LABEL, message: "Trying to add an already existing version.")
+                    Log.error(label: "\(LOG_TAG):\(#function)", message: "Trying to add an already existing version.")
                 }
             } else {
                 self.head = Node(version: version, data: data, status: status)

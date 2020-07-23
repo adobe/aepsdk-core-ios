@@ -13,7 +13,6 @@ import Foundation
 /// Constant values used throughout `EventHub`
 struct EventHubConstants {
     static let STATE_CHANGE = "STATE_CHANGE_EVENT"
-    static let LOG_LABEL = "EventHub"     
 
     static let NAME = "com.adobe.module.eventhub"
     static let FRIENDLY_NAME = "EventHub"
