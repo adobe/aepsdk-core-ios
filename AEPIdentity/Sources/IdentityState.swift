@@ -76,7 +76,7 @@ class IdentityState {
         // Update push identifier if present
         if let pushId = event.dpids?.values.first {
             // update push identifiers
-            identityProperties.pushIdentifier = pushId.sha256()
+            identityProperties.pushIdentifier = SHA256.hash(pushId)
             pushIdManager.updatePushId(pushId: pushId)
         }
         

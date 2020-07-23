@@ -27,7 +27,7 @@ class SHA256Tests: XCTestCase {
     /// Tests that the values are hashed correctly
     func testSha256() {
         for (unhashed, hashed) in sha256Test {
-            XCTAssertEqual(unhashed.sha256(), hashed)
+            XCTAssertEqual(SHA256.hash(unhashed), hashed)
         }
     }
 

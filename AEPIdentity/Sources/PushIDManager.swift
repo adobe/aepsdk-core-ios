@@ -57,7 +57,7 @@ struct PushIDManager: PushIDManageable {
         //push ID has changed, update it in local storage
         var properties = IdentityProperties()
         properties.loadFromPersistence()
-        properties.pushIdentifier = pushId?.sha256()
+        properties.pushIdentifier = SHA256.hash(pushId)
         properties.saveToPersistence()
 
         if pushId?.isEmpty ?? true && !pushEnabled {
@@ -80,7 +80,7 @@ struct PushIDManager: PushIDManageable {
         properties.loadFromPersistence()
 
         let existingPushId = properties.pushIdentifier ?? ""
-        let newHashedId = newPushId?.sha256() ?? ""
+        let newHashedId = SHA256.hash(newPushId) ?? ""
         let pushIdsMatch = existingPushId == newHashedId
 
         // AMSDK-10074 process the update only if the value changed or if this is not the first time setting the push token to null
