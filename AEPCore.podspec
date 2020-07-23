@@ -16,26 +16,9 @@ AEPCore
 
   s.swift_version = '5.0'
 
-  s.dependency 'AEPCore/AEPServices'
-  s.dependency 'AEPCore/AEPLifecycle'
-  s.dependency 'AEPCore/AEPIdentity'
+  s.dependency 'AEPServices'
 
   s.source_files          = 'AEPCore/Sources/**/*.swift'
-
-  s.subspec 'AEPServices' do |sp|    
-    sp.dependency 'AEPServices'
-  end
-
-
-  s.subspec 'AEPLifecycle' do |sp|
-    sp.dependency 'AEPLifecycle'
-
-  end
-
-  s.subspec 'AEPIdentity' do |sp|
-    sp.dependency 'AEPIdentity'
-
-  end
 
 
 end
