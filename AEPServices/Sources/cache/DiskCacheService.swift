@@ -14,7 +14,7 @@ import Foundation
 
 /// Implements a cache which saves and retrieves data from the disk
 class DiskCacheService: Caching {
-    lazy var dataStore = NamedKeyValueStore(name: "DiskCacheService")
+    lazy var dataStore = NamedCollectionDataStore(name: "DiskCacheService")
     let cachePrefix = "com.adobe.mobile.diskcache/"
     let fileManager = FileManager.default
     

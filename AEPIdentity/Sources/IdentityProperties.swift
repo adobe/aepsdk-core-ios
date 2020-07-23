@@ -64,7 +64,7 @@ struct IdentityProperties: Codable {
     
     /// Populates the fields with values stored in the Identity data store
     mutating func loadFromPersistence() {
-        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let savedProperties: IdentityProperties? = dataStore.getObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES)
             
         if let savedProperties = savedProperties {
@@ -74,7 +74,7 @@ struct IdentityProperties: Codable {
     
     /// Saves this instance of `IdentityProperties` to the Identity data store
     func saveToPersistence() {
-        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         dataStore.setObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES, value: self)
     }
     

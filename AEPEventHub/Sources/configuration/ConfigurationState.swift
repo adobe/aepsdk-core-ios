@@ -14,7 +14,7 @@ import AEPServices
 
 /// Manages the internal state for the `Configuration` extension
 class ConfigurationState {
-    let dataStore: NamedKeyValueStore
+    let dataStore: NamedCollectionDataStore
     let appIdManager: LaunchIDManager
     let configDownloader: ConfigurationDownloadable
     private var downloadedAppIds = Set<String>() // a set of appIds, if an appId is present then we have downloaded and applied the config
@@ -38,7 +38,7 @@ class ConfigurationState {
     /// - Parameters:
     ///   - dataStore: The datastore in which configurations are cached
     ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration from various locations
-    init(dataStore: NamedKeyValueStore, configDownloader: ConfigurationDownloadable) {
+    init(dataStore: NamedCollectionDataStore, configDownloader: ConfigurationDownloadable) {
         self.dataStore = dataStore
         self.configDownloader = configDownloader
         self.appIdManager = LaunchIDManager(dataStore: dataStore)

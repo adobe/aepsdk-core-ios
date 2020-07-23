@@ -13,8 +13,8 @@
 import Foundation
 import UIKit
 
-/// A concrete implementation of protocol `URLService`
-class AEPURLService: URLService {
+/// A concrete implementation of protocol `URLOpening`
+class AEPURLService: URLOpening {
     ///  Open the resource at the specified URL asynchronously.
     /// - Parameter url: the url to open
     /// - Returns: true if have processed the open url action; otherwise you can override the `URLService` and return false for specific urls which not allowed to open

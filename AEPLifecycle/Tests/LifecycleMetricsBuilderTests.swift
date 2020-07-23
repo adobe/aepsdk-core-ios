@@ -245,7 +245,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     
 }
 
-fileprivate class FakeDataStore: NamedKeyValueStore {
+fileprivate class FakeDataStore: NamedCollectionDataStore {
     
     var setIntCalled = false
     var setIntValues: [Int?] = []

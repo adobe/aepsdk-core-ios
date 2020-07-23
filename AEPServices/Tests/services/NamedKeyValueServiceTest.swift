@@ -16,7 +16,7 @@ import XCTest
 
 class NamedKeyValueServiceTest: XCTestCase {
     
-    let service = NamedUserDefaultKeyValueService()
+    let service = UserDefaultsNamedCollection()
     
     func testSimpleStore() {
         let collectionName = "testName"

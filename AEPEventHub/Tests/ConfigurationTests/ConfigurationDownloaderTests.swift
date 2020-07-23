@@ -15,7 +15,7 @@ import XCTest
 
 class ConfigurationDownloaderTests: XCTestCase {
 
-    let dataStore = NamedKeyValueStore(name: ConfigurationConstants.DATA_STORE_NAME)
+    let dataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
     let validAppId = "valid-app-id"
     let invalidAppId = "invalid-app-id"
     

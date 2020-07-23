@@ -16,7 +16,7 @@ import AEPServicesMock
 
 class LaunchIDManagerTests: XCTestCase {
 
-    let dataStore = NamedKeyValueStore(name: "AppIDManagerTests")
+    let dataStore = NamedCollectionDataStore(name: "AppIDManagerTests")
     var appIdManager: LaunchIDManager!
     
     override func setUp() {

@@ -20,13 +20,13 @@ class AEPURLServiceTest: XCTestCase {
         AEPServiceProvider.shared.urlService = AEPURLService()
     }
 
-    public class URLServiceReturnFalse: URLService {
+    public class URLServiceReturnFalse: URLOpening {
         public func openUrl(_ url: URL) -> Bool {
             return false
         }
     }
 
-    public class URLServiceReturnTrue: URLService {
+    public class URLServiceReturnTrue: URLOpening {
         public func openUrl(_ url: URL) -> Bool {
             return true
         }

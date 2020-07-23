@@ -14,7 +14,7 @@ import AEPServices
 
 /// Handles loading and saving the launch appId to the data store and manifest
 struct LaunchIDManager {
-    let dataStore: NamedKeyValueStore
+    let dataStore: NamedCollectionDataStore
     
     /// Loads the appId from the data store, if not present in the data store loads from the manifest
     /// - Returns: appId loaded from persistence or manifest, nil if not present in either
