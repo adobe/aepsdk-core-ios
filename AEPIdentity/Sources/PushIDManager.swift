@@ -92,6 +92,7 @@ struct PushIDManager: PushIDManageable {
         return true
     }
 
+    // TODO: Investigate if this can be moved to the analytics code base
     /// Updates the push enabled flag in the data store and dispatches an analytics request content event with the push enabled flag
     /// - Parameter enabled: a boolean flag indicating if push is enabled or disabled
     private mutating func updatePushStatusAndSendAnalyticsEvent(enabled: Bool) {
