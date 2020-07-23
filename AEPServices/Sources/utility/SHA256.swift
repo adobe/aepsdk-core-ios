@@ -31,14 +31,11 @@ public struct SHA256 {
         return nil
     }
     
-    private static func digest(input : NSData) -> NSData {
-        let digestLength = Int(CC_SHA256_DIGEST_LENGTH)
-        var hash = [UInt8](repeating: 0, count: digestLength)
-        CC_SHA256(input.bytes, UInt32(input.length), &hash)
-        return NSData(bytes: hash, length: digestLength)
-    }
-
-    private static func hexStringFromData(input: NSData) -> String {
+    /// Converts data into a string hex representation
+    /// - Parameter input: the input data
+    /// - Returns: the data represented as a hex string, returns an empty string if `input` is nil or empty
+    public static func hexStringFromData(input: NSData?) -> String {
+        guard let input = input else { return "" }
         var bytes = [UInt8](repeating: 0, count: input.length)
         input.getBytes(&bytes, length: input.length)
 
@@ -48,5 +45,12 @@ public struct SHA256 {
         }
 
         return hexString
+    }
+    
+    private static func digest(input : NSData) -> NSData {
+        let digestLength = Int(CC_SHA256_DIGEST_LENGTH)
+        var hash = [UInt8](repeating: 0, count: digestLength)
+        CC_SHA256(input.bytes, UInt32(input.length), &hash)
+        return NSData(bytes: hash, length: digestLength)
     }
 }
