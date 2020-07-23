@@ -14,6 +14,7 @@ This style guide highlights common patterns from the above linked style guide, w
   - [AEP 'Services'](#aep-services)
 - [General](#general)
   - [Use of `self`](#use-of-self)
+  - [Extensions](#extensions)
   - [Type Inference](#type-inference)
   - [Shortcut Declarations](#shortcut-declarations)
   - [Optional Binding](#optional-binding)
@@ -103,6 +104,10 @@ extension AEPCore: Lifecycle {
 ### Use of Self
 
 Avoid using `self` since Swift does not require it to access an object’s properties or invoke its methods. Use self only when required by the compiler (in @escaping closures, or in initializers to disambiguate properties from arguments).
+
+### Extensions
+
+Avoid defining public extensions on a class/struct/protocol you don't own, otherwise it may lead to name conflict if the app or another 3rd party lib the app depends on also extends a same method. But you can define internal or private extensions on any type.
 
 ### Type Inference
 
