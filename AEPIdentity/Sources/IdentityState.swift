@@ -19,6 +19,7 @@ class IdentityState {
     private let LOG_TAG = "IdentityState"
     private(set) var identityProperties: IdentityProperties
     private(set) var hitQueue: HitQueuing
+    private var pushIdManager: PushIDManageable
     #if DEBUG
     var lastValidConfig: [String: Any] = [:]
     #else
@@ -26,11 +27,13 @@ class IdentityState {
     #endif
     
     /// Creates a new `IdentityState` with the given identity properties
-    /// - Parameter identityProperties: identity
-    init(identityProperties: IdentityProperties, hitQueue: HitQueuing) {
+    /// - Parameter identityProperties: identity properties
+    /// - Parameter pushIdManager: a push id manager
+    init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable) {
         self.identityProperties = identityProperties
         self.identityProperties.loadFromPersistence()
         self.hitQueue = hitQueue
+        self.pushIdManager = pushIdManager
     }
     
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
@@ -70,7 +73,12 @@ class IdentityState {
             return nil
         }
         
-        // TODO: Save push ID AMSDK-10262
+        // Update push identifier if present
+        if let pushId = event.dpids?.values.first {
+            // update push identifiers
+            identityProperties.pushIdentifier = SHA256.hash(pushId)
+            pushIdManager.updatePushId(pushId: pushId)
+        }
         
         // generate customer ids
         let authState = event.authenticationState
@@ -186,9 +194,9 @@ class IdentityState {
             identityProperties.locationHint = nil
             identityProperties.customerIds?.removeAll()
 
-            // TODO: Clear AID from analytics
-            // TODO: Update push ID AMSDK-10262
-            
+            // TODO: AMSDK-10268 Clear AID from analytics
+            identityProperties.pushIdentifier = nil
+            pushIdManager.updatePushId(pushId: nil)
             identityProperties.saveToPersistence()
             createSharedState(identityProperties.toEventData(), event)
         } else if identityProperties.mid == nil {
