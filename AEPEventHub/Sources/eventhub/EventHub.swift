@@ -94,12 +94,12 @@ final public class EventHub {
     public func registerExtension(_ type: Extension.Type, completion: @escaping (_ error: EventHubError?) -> Void) {
         eventHubQueue.async {
             guard !type.typeName.isEmpty else {
-                Log.error(label: "\(LOG_TAG):\(#function)", message:"Extension name must not be empty.")
+                Log.error(label: "\(self.LOG_TAG):\(#function)", "Extension name must not be empty.")
                 completion(.invalidExtensionName)
                 return
             }
             guard self.registeredExtensions[type.typeName] == nil else {
-                Log.error(label: "\(LOG_TAG):\(#function)", message:"Cannot register an extension multiple times.")
+                Log.error(label: "\(self.LOG_TAG):\(#function)", "Cannot register an extension multiple times.")
                 completion(.duplicateExtensionName)
                 return
             }
@@ -134,7 +134,7 @@ final public class EventHub {
     ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil, it will be versioned at the latest
     public func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
         guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) else {
-            Log.error(label: "\(LOG_TAG):\(#function)", "Error in creating shared state.")
+            Log.error(label: "\(self.LOG_TAG):\(#function)", "Error in creating shared state.")
             return
         }
 
@@ -167,7 +167,7 @@ final public class EventHub {
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
     public func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
         guard let sharedState = registeredExtensions.first(where: {$1.sharedStateName == extensionName})?.value.sharedState else {
-            Log.error(label: "\(LOG_TAG):\(#function)", message: "Extension not registered")            
+            Log.error(label: "\(self.LOG_TAG):\(#function)", "Extension not registered")
             return nil
         }
 
@@ -196,7 +196,7 @@ final public class EventHub {
 
     private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
         guard let extensionContainer = registeredExtensions.first(where: {$1.sharedStateName == extensionName})?.value else {
-            Log.error(label: "\(LOG_TAG):\(#function)", message: "Extension not registered with EventHub")
+            Log.error(label: "\(self.LOG_TAG):\(#function)", "Extension not registered with EventHub")
             return nil
         }
 

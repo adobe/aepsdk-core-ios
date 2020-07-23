@@ -11,6 +11,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+import AEPServices
 
 /// Type representing the state of an extension's `SharedState`
 public enum SharedStateStatus {
@@ -57,7 +58,7 @@ class SharedState {
                         unwrapped.data = data
                         unwrapped.nodeStatus = .set
                     } else {
-                        Log.error(label: "\(LOG_TAG):\(#function)", message: "Attempting to update a non-pending entry.")
+                        Log.error(label: "\(self.LOG_TAG):\(#function)", "Attempting to update a non-pending entry.")
                     }
                     break
                 }
@@ -96,7 +97,7 @@ class SharedState {
                 if unwrapped.version < version {
                     self.head = unwrapped.append(version: version, data: data, status: status)
                 } else {
-                    Log.error(label: "\(LOG_TAG):\(#function)", message: "Trying to add an already existing version.")
+                    Log.error(label: "\(self.LOG_TAG):\(#function)", "Trying to add an already existing version.")
                 }
             } else {
                 self.head = Node(version: version, data: data, status: status)
