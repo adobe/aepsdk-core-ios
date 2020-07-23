@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2107F02624C9FDFE002935CF /* PushIDManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02524C9FDFE002935CF /* PushIDManageable.swift */; };
+		2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02724C9FE1B002935CF /* PushIDManager.swift */; };
+		2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02924C9FF46002935CF /* PushIDManagerTests.swift */; };
+		2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02B24C9FF62002935CF /* MockPushIDManager.swift */; };
+		2107F02E24C9FF88002935CF /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02D24C9FF88002935CF /* SHA256.swift */; };
+		2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02F24C9FFB2002935CF /* SHA256Tests.swift */; };
+		2131A1B42465D81E00F1392D /* EventHub+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2131A1B32465D81E00F1392D /* EventHub+Testable.swift */; };
+		213C8BD524252302009F780A /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213C8BD424252302009F780A /* MockExtension.swift */; };
+		213E87B92433E9BD00033447 /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */; };
+		214149C72429A39B00FCE512 /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214149C52429A39B00FCE512 /* SlowMockExtension.swift */; };
+		215AA6232465E06600CEB4F4 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
@@ -206,6 +217,14 @@
 		3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */; };
 		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
 		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
+		3FE6DE9A24C64BC00065EA05 /* AEPRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */; };
+		3FE6DE9C24C64C590065EA05 /* LaunchRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */; };
+		3FE6DEA224C65C7D0065EA05 /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FE6DEA124C65C7D0065EA05 /* SwiftRulesEngine */; };
+		7861452624C74D8F004CB317 /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452424C74D8F004CB317 /* RulesDownloader.swift */; };
+		7861452724C74D8F004CB317 /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452524C74D8F004CB317 /* RulesLoader.swift */; };
+		7861452924C74D9B004CB317 /* CachedRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452824C74D9A004CB317 /* CachedRules.swift */; };
+		7861452B24C74F56004CB317 /* testRulesDownloader.zip in Resources */ = {isa = PBXBuildFile; fileRef = 7861452A24C74F56004CB317 /* testRulesDownloader.zip */; };
+		7861452D24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452C24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift */; };
 		7861452F24C7502B004CB317 /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452E24C7502B004CB317 /* MockUnzipper.swift */; };
 		7861453124C75057004CB317 /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861453024C75056004CB317 /* MockDiskCache.swift */; };
 /* End PBXBuildFile section */
@@ -312,6 +331,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2107F02524C9FDFE002935CF /* PushIDManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManageable.swift; sourceTree = "<group>"; };
+		2107F02724C9FE1B002935CF /* PushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManager.swift; sourceTree = "<group>"; };
+		2107F02924C9FF46002935CF /* PushIDManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManagerTests.swift; sourceTree = "<group>"; };
+		2107F02B24C9FF62002935CF /* MockPushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPushIDManager.swift; sourceTree = "<group>"; };
+		2107F02D24C9FF88002935CF /* SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
+		2107F02F24C9FFB2002935CF /* SHA256Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256Tests.swift; sourceTree = "<group>"; };
+		2131A1B32465D81E00F1392D /* EventHub+Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventHub+Testable.swift"; sourceTree = "<group>"; };
+		213C8BD424252302009F780A /* MockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
+		213E87B82433E9BD00033447 /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
+		214149C52429A39B00FCE512 /* SlowMockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
+		215AA6222465E06600CEB4F4 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
@@ -521,6 +551,13 @@
 		3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
 		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
+		3FE6DE9924C64BC00065EA05 /* AEPRulesEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngine.swift; sourceTree = "<group>"; };
+		3FE6DE9B24C64C590065EA05 /* LaunchRule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRule.swift; sourceTree = "<group>"; };
+		7861452424C74D8F004CB317 /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
+		7861452524C74D8F004CB317 /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
+		7861452824C74D9A004CB317 /* CachedRules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRules.swift; sourceTree = "<group>"; };
+		7861452A24C74F56004CB317 /* testRulesDownloader.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = testRulesDownloader.zip; sourceTree = "<group>"; };
+		7861452C24C74F75004CB317 /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
 		7861452E24C7502B004CB317 /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
 		7861453024C75056004CB317 /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -784,6 +821,7 @@
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
 				3F0397F124BE60910019F095 /* AnyCodable.swift */,
+				2107F02D24C9FF88002935CF /* SHA256.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -839,6 +877,7 @@
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
+				2107F02F24C9FFB2002935CF /* SHA256Tests.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1059,6 +1098,8 @@
 				3FE6DE5224C643060065EA05 /* URLAppender.swift */,
 				3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */,
 				218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */,
+				2107F02524C9FDFE002935CF /* PushIDManageable.swift */,
+				2107F02724C9FE1B002935CF /* PushIDManager.swift */,
 				3FE6DE3124C642330065EA05 /* AEPIdentity.h */,
 				3FE6DE3224C642330065EA05 /* Info.plist */,
 			);
@@ -1083,6 +1124,7 @@
 				3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */,
 				3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */,
 				218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */,
+				2107F02924C9FF46002935CF /* PushIDManagerTests.swift */,
 				3FE6DE3E24C642330065EA05 /* Info.plist */,
 			);
 			name = AEPIdentityTests;
@@ -1093,6 +1135,7 @@
 			isa = PBXGroup;
 			children = (
 				3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */,
+				2107F02B24C9FF62002935CF /* MockPushIDManager.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
@@ -1593,6 +1636,7 @@
 				3F0397FD24BE60910019F095 /* ThreadSafeDictionary.swift in Sources */,
 				3F0397F824BE60910019F095 /* ZipEntry.swift in Sources */,
 				3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */,
+				2107F02E24C9FF88002935CF /* SHA256.swift in Sources */,
 				3F0397DB24BE5FF30019F095 /* NamedKeyValueStore.swift in Sources */,
 				3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */,
 				3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */,
@@ -1631,6 +1675,7 @@
 				3F03982124BE61520019F095 /* NamedKeyValueStoreTest.swift in Sources */,
 				3F03982724BE61520019F095 /* ThreadSafeDictionaryTests.swift in Sources */,
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
+				2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */,
 				3F03981924BE61520019F095 /* AEPURLServiceTest.swift in Sources */,
 				3F03982324BE61520019F095 /* PersistentHitQueueTests.swift in Sources */,
 				3F03981724BE61520019F095 /* AEPDataQueueService+Testable.swift in Sources */,
@@ -1702,6 +1747,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE6DE5F24C643060065EA05 /* NetworkService+Identity.swift in Sources */,
+				2107F02624C9FDFE002935CF /* PushIDManageable.swift in Sources */,
 				3FE6DE6024C643060065EA05 /* IdentityState.swift in Sources */,
 				3FE6DE5D24C643060065EA05 /* IdentityConstants.swift in Sources */,
 				218E01C224C75C1500BEC470 /* HitQueuing+Privacy.swift in Sources */,
@@ -1718,6 +1764,7 @@
 				3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */,
 				3FE6DE6124C643060065EA05 /* MID.swift in Sources */,
 				3FE6DE6524C643060065EA05 /* URLAppender.swift in Sources */,
+				2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */,
 				3FE6DE5B24C643060065EA05 /* IdentityProperties.swift in Sources */,
 				3FE6DE6624C643060065EA05 /* MobileIdentities.swift in Sources */,
 				3FE6DE6B24C643060065EA05 /* URL+Identity.swift in Sources */,
@@ -1732,7 +1779,9 @@
 				3FE6DE7824C643620065EA05 /* MIDTests.swift in Sources */,
 				3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */,
 				3FE6DE7C24C643620065EA05 /* IdentityStateTests.swift in Sources */,
+				2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */,
 				3FE6DE7D24C643620065EA05 /* AEPIdentity+IdentityTests.swift in Sources */,
+				2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */,
 				3FE6DE8124C643620065EA05 /* NetworkService+IdentityTests.swift in Sources */,
 				3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */,
 				3FE6DE7A24C643620065EA05 /* URL+IdentityTests.swift in Sources */,
