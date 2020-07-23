@@ -83,7 +83,7 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertEqual(2, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
-        XCTAssertEqual("test-push-id".sha256(), eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
+        XCTAssertEqual(SHA256.hash("test-push-id"), eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
     
