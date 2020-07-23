@@ -14,7 +14,7 @@ import Foundation
 import SwiftRulesEngine
 
 class JSONRulesParser {
-    private static let LOG_LABEL = "JSONRulesParser"
+    fileprivate static let LOG_LABEL = "JSONRulesParser"
 
     /// Parses the json rules to objects
     /// - Parameter data: data of json rules
@@ -143,8 +143,26 @@ struct JSONDetail: Codable {
 }
 
 struct JSONConsequence: Codable {
-    let id: String
-    let type: ConsequenceType
+    let id: String?
+    let type: ConsequenceType?
     // TODO: make the detail property an `AnyCodable` for now, the rules engine hasn't decided how to handle consequence yet, we will change it later.
-    let detail: AnyCodable
+    let detail: AnyCodable?
+    let detailJson: String?
+    enum CodingKeys: CodingKey {
+        case id
+        case type
+        case detail
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try? container.decode(String.self, forKey: .id)
+        type = try? container.decode(ConsequenceType.self, forKey: .type)
+        detail = try? container.decode(AnyCodable.self, forKey: .detail)
+
+        let jsonEncoder = JSONEncoder()
+        let jsonData = try jsonEncoder.encode(detail)
+        detailJson = String(decoding: jsonData, as: UTF8.self)
+        Log.debug(label: JSONRulesParser.LOG_LABEL, "Encoding consequence detail(AnyCodable) to json string: \(String(describing: detailJson))")
+    }
 }
