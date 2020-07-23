@@ -115,9 +115,6 @@
 		3F03989024C001350019F095 /* CachedConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987824C001350019F095 /* CachedConfiguration.swift */; };
 		3F03989124C001350019F095 /* ConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987924C001350019F095 /* ConfigurationDownloader.swift */; };
 		3F03989324C001350019F095 /* PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03987B24C001350019F095 /* PrivacyStatus.swift */; };
-		3FB66A5824C8E18500502CAF /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A5624C8E18500502CAF /* RulesDownloader.swift */; };
-		3FB66A5924C8E18500502CAF /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A5724C8E18500502CAF /* RulesLoader.swift */; };
-		3FB66A5B24C8E69500502CAF /* JSONRulesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A5A24C8E69500502CAF /* JSONRulesParser.swift */; };
 		3FB66A4E24C783B900502CAF /* AEPCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4724C783B900502CAF /* AEPCore+Configuration.swift */; };
 		3FB66A4F24C783B900502CAF /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4824C783B900502CAF /* Lifecycle.swift */; };
 		3FB66A5024C783B900502CAF /* AEPCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4924C783B900502CAF /* AEPCore.swift */; };
@@ -125,6 +122,9 @@
 		3FB66A5224C783B900502CAF /* Extension+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4B24C783B900502CAF /* Extension+Register.swift */; };
 		3FB66A5324C783B900502CAF /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4C24C783B900502CAF /* Configuration.swift */; };
 		3FB66A5424C783B900502CAF /* AEPCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A4D24C783B900502CAF /* AEPCore+Lifecycle.swift */; };
+		3FB66A5824C8E18500502CAF /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A5624C8E18500502CAF /* RulesDownloader.swift */; };
+		3FB66A5924C8E18500502CAF /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A5724C8E18500502CAF /* RulesLoader.swift */; };
+		3FB66A5B24C8E69500502CAF /* JSONRulesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A5A24C8E69500502CAF /* JSONRulesParser.swift */; };
 		3FE6DD4424C546C00065EA05 /* EventHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3A24C546A90065EA05 /* EventHubTests.swift */; };
 		3FE6DD4524C546C30065EA05 /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3924C546A90065EA05 /* SharedStateTest.swift */; };
 		3FE6DD4624C546CD0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DD3224C546A90065EA05 /* TestableExtensionRuntime.swift */; };
@@ -463,9 +463,6 @@
 		3F03987824C001350019F095 /* CachedConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedConfiguration.swift; sourceTree = "<group>"; };
 		3F03987924C001350019F095 /* ConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloader.swift; sourceTree = "<group>"; };
 		3F03987B24C001350019F095 /* PrivacyStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivacyStatus.swift; sourceTree = "<group>"; };
-		3FB66A5624C8E18500502CAF /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
-		3FB66A5724C8E18500502CAF /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
-		3FB66A5A24C8E69500502CAF /* JSONRulesParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParser.swift; sourceTree = "<group>"; };
 		3FB66A4724C783B900502CAF /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+Configuration.swift"; sourceTree = "<group>"; };
 		3FB66A4824C783B900502CAF /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lifecycle.swift; sourceTree = "<group>"; };
 		3FB66A4924C783B900502CAF /* AEPCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPCore.swift; sourceTree = "<group>"; };
@@ -473,6 +470,9 @@
 		3FB66A4B24C783B900502CAF /* Extension+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+Register.swift"; sourceTree = "<group>"; };
 		3FB66A4C24C783B900502CAF /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		3FB66A4D24C783B900502CAF /* AEPCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+Lifecycle.swift"; sourceTree = "<group>"; };
+		3FB66A5624C8E18500502CAF /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
+		3FB66A5724C8E18500502CAF /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
+		3FB66A5A24C8E69500502CAF /* JSONRulesParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParser.swift; sourceTree = "<group>"; };
 		3FE6DD3224C546A90065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3FE6DD3324C546A90065EA05 /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		3FE6DD3524C546A90065EA05 /* ConfigurationStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationStateTests.swift; sourceTree = "<group>"; };
@@ -688,9 +688,9 @@
 				21CAC0E32422917600C11388 /* AEPCoreTests */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
 				3F03979324BE5DD30019F095 /* AEPServicesTests */,
+				3FE6DDAA24C62C090065EA05 /* AEPServicesMock */,
 				3F03984D24C0008D0019F095 /* AEPEventHub */,
 				3F03985824C0008D0019F095 /* AEPEventHubTests */,
-				3FE6DDAA24C62C090065EA05 /* AEPServicesMock */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3FE6DDDD24C62EE60065EA05 /* AEPLifecycleTests */,
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
