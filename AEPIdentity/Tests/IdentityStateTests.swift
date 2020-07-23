@@ -358,7 +358,7 @@ class IdentityStateTests: XCTestCase {
         props.lastSync = Date()
         props.privacyStatus = .optedOut
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()))
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
         state.handleHitResponse(hit: DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: nil), response: nil) { (event) in

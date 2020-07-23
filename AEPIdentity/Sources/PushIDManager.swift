@@ -50,7 +50,7 @@ struct PushIDManager: PushIDManageable {
     mutating func updatePushId(pushId: String?) {
         if !pushIdHasChanged(newPushId: pushId) {
             // Provided push token matches existing push token. Push settings will not be re-sent to Analytics
-            Log.debug(label: "\(LOG_TAG):\(#function)", "Ignored push token \(pushId) as it matches the existing token, the push notification status will not be re-sent to Analytics.")
+            Log.debug(label: "\(LOG_TAG):\(#function)", "Ignored push token \(pushId ?? "") as it matches the existing token, the push notification status will not be re-sent to Analytics.")
             return
         }
 
