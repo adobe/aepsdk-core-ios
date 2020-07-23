@@ -20,7 +20,7 @@ public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool)
 public typealias EventPreprocessor = (Event) -> Event
 
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
-final public class EventHub {
+final class EventHub {
     private let eventHubQueue = DispatchQueue(label: "com.adobe.eventhub.queue")
     private var registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventhub.registeredExtensions.queue")
     private let eventNumberMap = ThreadSafeDictionary<UUID, Int>(identifier: "com.adobe.eventhub.eventNumber.queue")
@@ -36,7 +36,7 @@ final public class EventHub {
     #endif
 
 
-    // MARK: Public API
+    // MARK: Internal API
 
     init() {
         // setup a fake extension container for `EventHub` so we can shared and retrieve state
@@ -69,7 +69,7 @@ final public class EventHub {
     }
 
     /// When this API is invoked the `EventHub` will begin processing `Event`s
-    public func start() {
+    func start() {
         eventHubQueue.async {
             self.eventQueue.start()
             self.shareEventHubSharedState() // share state of all registered extensions
@@ -78,7 +78,7 @@ final public class EventHub {
 
     /// Dispatches a new `Event` to the `EventHub`. This `Event` is sent to all listeners who have registered for the `EventType`and `EventSource`
     /// - Parameter event: An `Event` to be dispatched to listeners
-    public func dispatch(event: Event) {
+    func dispatch(event: Event) {
         // Set an event number for the event
         self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
         self.eventQueue.add(event)
@@ -88,7 +88,7 @@ final public class EventHub {
     /// - Parameters:
     ///   - type: The type of extension to register
     ///   - completion: Invoked when the extension has been registered or failed to register
-    public func registerExtension(_ type: Extension.Type, completion: @escaping (_ error: EventHubError?) -> Void) {
+    func registerExtension(_ type: Extension.Type, completion: @escaping (_ error: EventHubError?) -> Void) {
         eventHubQueue.async {
             guard !type.typeName.isEmpty else {
                 // TODO: print error, extension name must not be empty
@@ -113,7 +113,7 @@ final public class EventHub {
     ///   - triggerEvent: An `Event` which will trigger a response `Event`
     ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
-    public func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
+    func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         var responseListenerContainer: EventListenerContainer? = nil // initialized here so we can use in timeout block
         responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEvent.id, timeout: DispatchWorkItem {
             listener(nil)
@@ -129,7 +129,7 @@ final public class EventHub {
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
     ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil, it will be versioned at the latest
-    public func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
+    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
         guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) else {
             return
         }
@@ -143,7 +143,7 @@ final public class EventHub {
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - event: Event which has the `SharedState` should be versioned for
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
-    public func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
+    func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
         var pendingVersion: Int? = nil
 
         if let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) {
@@ -161,7 +161,7 @@ final public class EventHub {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the latest `SharedState`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    public func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
         guard let sharedState = registeredExtensions.first(where: {$1.sharedStateName == extensionName})?.value.sharedState else {
             // print error - extension not registered
             return nil
@@ -178,13 +178,13 @@ final public class EventHub {
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type
     /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
     /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
-    internal func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
+    func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
         return registeredExtensions[type.typeName]
     }
     
     /// Register a event preprocessor
     /// - Parameter preprocessor: The `EventPreprocessor`
-    internal func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor){
+    func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor){
         preprocessors.append(preprocessor)
     }
 

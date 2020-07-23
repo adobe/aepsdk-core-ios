@@ -10,7 +10,7 @@
  */
 
 import XCTest
-@testable import AEPEventHub
+@testable import AEPCore
 @testable import AEPServices
 @testable import AEPServicesMock
 

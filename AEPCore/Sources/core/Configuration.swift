@@ -10,7 +10,6 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
 
 /// Defines the public interface for the Configuration extension
 protocol Configuration {

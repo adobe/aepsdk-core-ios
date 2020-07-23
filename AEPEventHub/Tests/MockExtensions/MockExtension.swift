@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-@testable import AEPEventHub
+@testable import AEPCore
 
 /// Protocol  defines consistent interface for testable extensions.
 protocol TestableExtension: Extension {

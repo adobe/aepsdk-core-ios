@@ -12,13 +12,11 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-struct SharedStateTestHelper {
-    public static let DICT_KEY: String = "dictionary"
-    public static let ZERO: [String: Any] = [DICT_KEY: "zero"]
-    public static let ONE: [String: Any] = [DICT_KEY: "one"]
-    public static let TWO: [String: Any] = [DICT_KEY: "two"]
-    public static let THREE: [String: Any] = [DICT_KEY: "three"]
-    public static let FOUR: [String:Any] = [DICT_KEY:"four"]
-    public static let FIVE: [String:Any] = [DICT_KEY:"five"]
-    public static let TEN: [String:Any] = [DICT_KEY:"ten"]
+public extension Extension {
+    
+    /// Registers the `Extension` with the `EventHub`
+    //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
+    static func registerExtension() {
+        AEPCore.pendingExtensions.append(Self.self)
+    }
 }

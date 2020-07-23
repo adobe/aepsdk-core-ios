@@ -11,7 +11,7 @@
 //*/
 //
 //import XCTest
-//@testable import AEPEventHub
+//@testable import AEPCore
 //import AEPServices
 //
 // TODO: rewrite
