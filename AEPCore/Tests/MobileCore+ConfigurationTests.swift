@@ -14,13 +14,13 @@ import XCTest
 @testable import AEPCore
 
 
-class AEPCore_ConfigurationTests: XCTestCase {
+class MobileCore_ConfigurationTests: XCTestCase {
 
     override func setUp() {
         EventHub.reset()
         MockExtension.reset()
         EventHub.shared.start()
-        registerMockExtension(AEPConfiguration.self)
+        registerMockExtension(Configuration.self)
         registerMockExtension(MockExtension.self)
     }
 
@@ -53,7 +53,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        AEPCore.configureWith(appId: expectedAppId)
+        MobileCore.configureWith(appId: expectedAppId)
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -73,7 +73,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        AEPCore.configureWith(filePath: expectedFilePath)
+        MobileCore.configureWith(filePath: expectedFilePath)
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -94,7 +94,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        AEPCore.updateConfigurationWith(configDict: updateDict)
+        MobileCore.updateConfigurationWith(configDict: updateDict)
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -115,7 +115,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        AEPCore.setPrivacy(status: PrivacyStatus.optedIn)
+        MobileCore.setPrivacy(status: PrivacyStatus.optedIn)
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -134,7 +134,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        AEPCore.getPrivacyStatus { (status) in}
+        MobileCore.getPrivacyStatus { (status) in}
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -150,7 +150,7 @@ class AEPCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        AEPCore.getSdkIdentities { (_, _) in }
+        MobileCore.getSdkIdentities { (_, _) in }
 
         // verify
         wait(for: [expectation], timeout: 0.5)

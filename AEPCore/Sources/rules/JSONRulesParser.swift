@@ -11,7 +11,7 @@
 
 import AEPServices
 import Foundation
-import SwiftRulesEngine
+@_implementationOnly import SwiftRulesEngine
 
 class JSONRulesParser {
     private static let LOG_LABEL = "JSONRulesParser"

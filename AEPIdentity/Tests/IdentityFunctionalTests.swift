@@ -13,7 +13,7 @@
 //@testable import AEPCore
 //@testable import AEPCore
 // TODO: rewrite
-//class AEPIdentityAPITests: XCTestCase {
+//class IdentityAPITests: XCTestCase {
 //
 //    override func setUp() {
 //        EventHub.reset()
@@ -50,7 +50,7 @@
 //        }
 //
 //        // test
-//        AEPIdentity.appendTo(url: expectedUrl) { (url, error) in }
+//        Identity.appendTo(url: expectedUrl) { (url, error) in }
 //
 //        // verify
 //        wait(for: [expectation], timeout: 0.5)
@@ -67,7 +67,7 @@
 //        }
 //
 //        // test
-//        AEPIdentity.getIdentifiers { (identifiers, error) in }
+//        Identity.getIdentifiers { (identifiers, error) in }
 //
 //        // verify
 //        wait(for: [expectation], timeout: 0.5)
@@ -83,7 +83,7 @@
 //        }
 //
 //        // test
-//        AEPIdentity.getExperienceCloudId { (id) in }
+//        Identity.getExperienceCloudId { (id) in }
 //
 //        // verify
 //        wait(for: [expectation], timeout: 0.5)
@@ -106,7 +106,7 @@
 //        }
 //
 //        // test
-//        AEPIdentity.syncIdentifier(identifierType: expectedType, identifier: expectedId, authenticationState: expectedAuthState)
+//        Identity.syncIdentifier(identifierType: expectedType, identifier: expectedId, authenticationState: expectedAuthState)
 //
 //        // verify
 //        wait(for: [expectation], timeout: 0.5)
@@ -126,7 +126,7 @@
 //        }
 //
 //        // test
-//        AEPIdentity.syncIdentifiers(identifiers: expectedIds)
+//        Identity.syncIdentifiers(identifiers: expectedIds)
 //
 //        // verify
 //        wait(for: [expectation], timeout: 0.5)
@@ -147,7 +147,7 @@
 //        }
 //
 //        // test
-//        AEPIdentity.syncIdentifiers(identifiers: expectedIds, authenticationState: expectedAuthState)
+//        Identity.syncIdentifiers(identifiers: expectedIds, authenticationState: expectedAuthState)
 //
 //        // verify
 //        wait(for: [expectation], timeout: 0.5)
@@ -165,7 +165,7 @@
 //        }
 //
 //        // test
-//        AEPIdentity.getUrlVariables { (variables, error) in }
+//        Identity.getUrlVariables { (variables, error) in }
 //
 //        // verify
 //        wait(for: [expectation], timeout: 0.5)

@@ -44,7 +44,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        AEPCore.lifecycleStart(additionalContextData: expectedContextData)
+        MobileCore.lifecycleStart(additionalContextData: expectedContextData)
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -63,7 +63,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        AEPCore.lifecyclePause()
+        MobileCore.lifecyclePause()
 
         // verify
         wait(for: [expectation], timeout: 0.5)

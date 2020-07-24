@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-/// Constants for `AEPLifecycle`
+/// Constants for `Lifecycle`
 struct LifecycleConstants {
     static let EXTENSION_NAME = "com.adobe.module.lifecycle"
     static let FRIENDLY_NAME = "Lifecycle"

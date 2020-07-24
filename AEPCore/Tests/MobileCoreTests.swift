@@ -13,7 +13,7 @@ import XCTest
 
 @testable import AEPCore
 
-class AEPCoreTests: XCTestCase {
+class MobileCoreTests: XCTestCase {
     override func setUp() {
         EventHub.reset()
         MockExtension.reset()
@@ -35,7 +35,7 @@ class AEPCoreTests: XCTestCase {
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
         MockExtension.registerExtension()
-        AEPCore.start { }
+        MobileCore.start { }
         wait(for: [expectation], timeout: 0.5)
     }
     
@@ -48,7 +48,7 @@ class AEPCoreTests: XCTestCase {
         MockExtension.registerExtension()
         MockExtensionTwo.registrationClosure = { expectation2.fulfill() }
         MockExtensionTwo.registerExtension()
-        AEPCore.start { }
+        MobileCore.start { }
         wait(for: [expectation, expectation2], timeout: 0.5)
     }
     
@@ -60,7 +60,7 @@ class AEPCoreTests: XCTestCase {
             if $0.name == eventName { expectation.fulfill() }
         }
         MockExtension.registerExtension()
-        AEPCore.start { }
+        MobileCore.start { }
         EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
@@ -73,7 +73,7 @@ class AEPCoreTests: XCTestCase {
         MockExtension.eventReceivedClosure = { if $0.name == eventName { expectation.fulfill() } }
         MockExtension.registerExtension()
         
-        AEPCore.start { }
+        MobileCore.start { }
         wait(for: [expectation], timeout: 1.0)
     }
     
@@ -91,7 +91,7 @@ class AEPCoreTests: XCTestCase {
         
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
-        AEPCore.start { }
+        MobileCore.start { }
         EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
@@ -111,7 +111,7 @@ class AEPCoreTests: XCTestCase {
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
-        AEPCore.start { }
+        MobileCore.start { }
         
         wait(for: [expectation], timeout: 1.0)
     }
@@ -122,7 +122,7 @@ class AEPCoreTests: XCTestCase {
         expectation.assertForOverFulfill = true
         
         MockExtension.registrationClosure = { expectation.fulfill() }
-        AEPCore.start {
+        MobileCore.start {
         }
         wait(for: [expectation], timeout: 0.5)
 
@@ -132,7 +132,7 @@ class AEPCoreTests: XCTestCase {
         
         MockExtension.registrationClosure = { expectation2.fulfill() }
         MockExtension.registerExtension()
-        AEPCore.start {
+        MobileCore.start {
         }
         
         wait(for: [expectation2], timeout: 0.5)
@@ -144,7 +144,7 @@ class AEPCoreTests: XCTestCase {
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
         // test
-        AEPCore.registerExtensions([MockExtension.self])
+        MobileCore.registerExtensions([MockExtension.self])
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -158,7 +158,7 @@ class AEPCoreTests: XCTestCase {
         MockExtensionTwo.registrationClosure = { expectation.fulfill() }
         
         // test
-        AEPCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
+        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
             
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -172,7 +172,7 @@ class AEPCoreTests: XCTestCase {
         MockExtensionTwo.registrationClosure = { expectation.fulfill() }
 
         // test
-        AEPCore.registerExtensions([MockExtension.self, MockExtensionTwo.self, SlowMockExtension.self])
+        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self, SlowMockExtension.self])
             
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -186,7 +186,7 @@ class AEPCoreTests: XCTestCase {
         MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
         
         // test
-        AEPCore.registerExtensions([MockExtension.self])
+        MobileCore.registerExtensions([MockExtension.self])
         EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
         
         // verify
@@ -203,7 +203,7 @@ class AEPCoreTests: XCTestCase {
 
         // test
         EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
-        AEPCore.registerExtensions([MockExtension.self])
+        MobileCore.registerExtensions([MockExtension.self])
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -218,7 +218,7 @@ class AEPCoreTests: XCTestCase {
         MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
 
         // test
-        AEPCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
+        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
         EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
         
         // verify
@@ -236,7 +236,7 @@ class AEPCoreTests: XCTestCase {
 
         // test
         EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
-        AEPCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
+        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
         
         // verify
         wait(for: [expectation], timeout: 1.0)
@@ -250,8 +250,8 @@ class AEPCoreTests: XCTestCase {
         MockExtension.registrationClosure = { expectation.fulfill() }
         
         // test
-        AEPCore.registerExtensions([MockExtension.self, MockExtension.self])
-        AEPCore.start {
+        MobileCore.registerExtensions([MockExtension.self, MockExtension.self])
+        MobileCore.start {
             
         }
             
@@ -283,7 +283,7 @@ class AEPCoreTests: XCTestCase {
         EventHub.shared.start()
         
         // test
-        AEPCore.dispatch(event: expectedEvent)
+        MobileCore.dispatch(event: expectedEvent)
         
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
@@ -299,12 +299,12 @@ class AEPCoreTests: XCTestCase {
         EventHub.shared.start()
         
         // test
-        AEPCore.dispatch(event: expectedEvent) { (responseEvent) in
+        MobileCore.dispatch(event: expectedEvent) { (responseEvent) in
             XCTAssertEqual(responseEvent?.id, expectedResponseEvent.id)
             responseExpectation.fulfill()
         }
         // dispatch the response event which should trigger the callback above
-        AEPCore.dispatch(event: expectedResponseEvent)
+        MobileCore.dispatch(event: expectedResponseEvent)
         
         // verify
         wait(for: [responseExpectation], timeout: 1.0)
@@ -328,7 +328,7 @@ class AEPCoreTests: XCTestCase {
         })
         
         // test
-        AEPCore.setAdvertisingIdentifier(adId: "test-ad-id")
+        MobileCore.setAdvertisingIdentifier(adId: "test-ad-id")
 
         
         // verify
@@ -351,7 +351,7 @@ class AEPCoreTests: XCTestCase {
         })
         
         // test
-        AEPCore.setAdvertisingIdentifier(adId: nil)
+        MobileCore.setAdvertisingIdentifier(adId: nil)
 
         
         // verify
@@ -377,7 +377,7 @@ class AEPCoreTests: XCTestCase {
         })
         
         // test
-        AEPCore.setPushIdentifier(deviceToken: pushIdData)
+        MobileCore.setPushIdentifier(deviceToken: pushIdData)
 
         
         // verify
@@ -401,7 +401,7 @@ class AEPCoreTests: XCTestCase {
         })
         
         // test
-        AEPCore.setPushIdentifier(deviceToken: pushIdData)
+        MobileCore.setPushIdentifier(deviceToken: pushIdData)
 
         
         // verify
@@ -424,7 +424,7 @@ class AEPCoreTests: XCTestCase {
         })
         
         // test
-        AEPCore.setPushIdentifier(deviceToken: nil)
+        MobileCore.setPushIdentifier(deviceToken: nil)
 
         
         // verify

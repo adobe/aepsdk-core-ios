@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import SwiftRulesEngine
+@_implementationOnly import SwiftRulesEngine
 import AEPServices
 
 /// A rules engine for Launch rules

@@ -13,35 +13,35 @@ import Foundation
 import AEPServices
 import AEPCore
 
-class AEPLifecycle: Extension {
-    let name = LifecycleConstants.EXTENSION_NAME
-    let friendlyName = LifecycleConstants.FRIENDLY_NAME
-    let version = LifecycleConstants.EXTENSION_VERSION
-    let metadata: [String: String]? = nil
+public class Lifecycle: Extension {
+    public let name = LifecycleConstants.EXTENSION_NAME
+    public let friendlyName = LifecycleConstants.FRIENDLY_NAME
+    public let version = LifecycleConstants.EXTENSION_VERSION
+    public let metadata: [String: String]? = nil
     
-    let runtime: ExtensionRuntime
+    public let runtime: ExtensionRuntime
 
     private var lifecycleState: LifecycleState
     
     // MARK: Extension
     
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
-    required init(runtime: ExtensionRuntime) {
+    public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
     }
     
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
-    func onRegistered() {
+    public func onRegistered() {
         registerListener(type: .genericLifecycle, source: .requestContent, listener: receiveLifecycleRequest(event:))
         
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String : Any], event: nil)
     }
     
-    func onUnregistered() {}
+    public func onUnregistered() {}
     
-    func readyForEvent(_ event: Event) -> Bool {
+    public func readyForEvent(_ event: Event) -> Bool {
         if event.type == .genericLifecycle && event.source == .requestContent {
             let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event)
             return configurationSharedState?.status == .set

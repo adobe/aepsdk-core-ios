@@ -13,7 +13,7 @@
 import Foundation
 import XCTest
 
-@testable import AEPEventHub
+@testable import AEPCore
 @testable import SwiftRulesEngine
 
 class JSONRulesParserTests: XCTestCase {

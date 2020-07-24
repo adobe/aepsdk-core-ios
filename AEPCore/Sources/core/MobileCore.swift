@@ -14,7 +14,7 @@ import Foundation
 import AEPServices
 
 /// Core extension for the Adobe Experience Platform SDK
-public final class AEPCore {
+public final class MobileCore {
     
     /// Current version of the Core extension
     let version = "0.0.1"
@@ -61,8 +61,8 @@ public final class AEPCore {
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
     public static func start(completion: @escaping (()-> Void)) {
         // Start the event hub processing
-        let pending = AEPCore.pendingExtensions.shallowCopy
-        AEPCore.pendingExtensions.clear()
+        let pending = MobileCore.pendingExtensions.shallowCopy
+        MobileCore.pendingExtensions.clear()
         registerExtensions(pending, { completion() })
     }
     
@@ -71,7 +71,7 @@ public final class AEPCore {
     public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
         let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
     
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
@@ -80,7 +80,7 @@ public final class AEPCore {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
         let event = Event(name: "SetPushIdentifier", type: .genericIdentity, source: .requestContent, data: data)
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
     
 }
