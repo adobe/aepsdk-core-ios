@@ -12,6 +12,9 @@
 import Foundation
 
 public class FileUnzipper: Unzipping {
+    
+    /// Creates a new FileUnzipper
+    public init(){ }
 
     public func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
         let fileManager = FileManager()

@@ -18,8 +18,6 @@ struct IdentityConstants {
     static let DATASTORE_NAME = EXTENSION_NAME
     
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
-    static let DEFAULT_TTL = TimeInterval(600)
-    static let DEFAULT_TIMEOUT = TimeInterval(2000)
     static let RESPONSE_KEY_ORGID = "d_orgid"
     static let RESPONSE_KEY_MID = "d_mid"
     static let RESPONSE_KEY_BLOB = "d_blob"
@@ -62,6 +60,8 @@ struct IdentityConstants {
     
     struct DataStoreKeys {
         static let IDENTITY_PROPERTIES = "identitiesproperties"
+        static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
+        static let ANALYTICS_PUSH_SYNC = "ADOBEMOBILE_ANALYTICS_PUSH_SYNC"
     }
     
     struct URLKeys {
@@ -82,5 +82,9 @@ struct IdentityConstants {
     struct Analytics {
         static let ANALYTICS_ID = "aid"
         static let VISITOR_IDENTIFIER  = "vid"
+        static let TRACK_ACTION = "action"
+        static let CONTEXT_DATA = "contextdata"
+        static let EVENT_PUSH_STATUS = "a.push.optin"
+        static let PUSH_ID_ENABLED_ACTION_NAME = "Push"
     }
 }

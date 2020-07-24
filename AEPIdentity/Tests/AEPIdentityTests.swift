@@ -11,14 +11,18 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPIdentity
-@testable import AEPEventHub
+@testable import AEPCore
+import AEPServices
+import AEPServicesMock
 
 class AEPIdentityTests: XCTestCase {
-
+    
     var identity: AEPIdentity!
     var mockRuntime: TestableExtensionRuntime!
     
     override func setUp() {
+        AEPServiceProvider.shared.networkService = MockNetworkServiceOverrider()
+        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         identity = AEPIdentity(runtime: mockRuntime)
         identity.onRegistered()
@@ -107,6 +111,148 @@ class AEPIdentityTests: XCTestCase {
         let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
         XCTAssertNotNil(responseEvent)
         XCTAssertNotNil(responseEvent?.data)
+    }
+    
+    /// Tests that when a configuration request content event contains opt-out that we send the opt out hit and update privacy status
+    func testConfigurationResponseEventOptOut() {
+        // setup
+        var props = IdentityProperties()
+        props.mid = MID()
+        props.saveToPersistence()
+        identity = AEPIdentity(runtime: mockRuntime)
+        identity.onRegistered()
+        
+        let testOrgId = "testOrgId"
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+        
+        // verify
+        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertTrue(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have been sent
+        XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
+        XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
+    }
+    
+    /// Tests that when a configuration request content event contains opt-out but missing orgId that we do not send a network request
+    func testConfigurationResponseEventOptOutMissingOrgId() {
+        // setup
+        var props = IdentityProperties()
+        props.mid = MID()
+        props.saveToPersistence()
+        identity = AEPIdentity(runtime: mockRuntime)
+        identity.onRegistered()
+
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
+        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+        
+        // verify
+        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
+        XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
+    }
+    
+    /// Tests that when a configuration request content event contains opt-in that we do not send the opt out hit
+    func testConfigurationResponseEventOptIn() {
+        // setup
+        var props = IdentityProperties()
+        props.mid = MID()
+        props.saveToPersistence()
+        identity = AEPIdentity(runtime: mockRuntime)
+        identity.onRegistered()
+        
+        let testOrgId = "testOrgId"
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+        
+        // verify
+        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
+        XCTAssertEqual(PrivacyStatus.optedIn, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-in
+        XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
+    }
+    
+    /// Tests that when a configuration request content event contains unknown privacy status that we do not send the opt out hit
+    func testConfigurationResponseEventUnknown() {
+        // setup
+        var props = IdentityProperties()
+        props.mid = MID()
+        props.saveToPersistence()
+        identity = AEPIdentity(runtime: mockRuntime)
+        identity.onRegistered()
+        
+        let testOrgId = "testOrgId"
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+        
+        // verify
+        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
+        XCTAssertEqual(PrivacyStatus.unknown, identity.state?.identityProperties.privacyStatus) // identity state should have remained unknown
+        XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
+    }
+    
+    /// Tests that when no privacy status is in the configuration event that we do not update the privacy status
+    func testConfigurationResponseEventNoPrivacyStatus() {
+        // setup
+        var props = IdentityProperties()
+        props.mid = MID()
+        props.privacyStatus = .optedIn
+        props.saveToPersistence()
+        identity = AEPIdentity(runtime: mockRuntime)
+        identity.onRegistered()
+        
+        let testOrgId = "testOrgId"
+        let data = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+        
+        // verify
+        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
+        XCTAssertEqual(props.privacyStatus, identity.state?.identityProperties.privacyStatus) // identity state should have remained opt-in
+        XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
+    }
+    
+    /// Tests that when the the event does not contain an org id that we do not update the last valid config
+    func testConfigurationResponseEventNoOrgId() {
+        // setup
+        var props = IdentityProperties()
+        props.mid = MID()
+        props.saveToPersistence()
+        identity = AEPIdentity(runtime: mockRuntime)
+        identity.onRegistered()
+        
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown] as [String : Any]
+        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+        
+        // verify
+        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
+        XCTAssertEqual(PrivacyStatus.unknown, identity.state?.identityProperties.privacyStatus) // identity state should have remained unknown
+        XCTAssertNil(identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have NOT been updated with the org id
     }
 
 }
