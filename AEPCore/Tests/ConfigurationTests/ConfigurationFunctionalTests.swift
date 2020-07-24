@@ -47,7 +47,7 @@
 //        let expectation = XCTestExpectation(description: "Configuration should share first shared state")
 //
 //        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .hub, source: .sharedState) { _ in expectation.fulfill() }
-//        registerExtension(AEPConfiguration.self)
+//        registerExtension(Configuration.self)
 //
 //        wait(for: [expectation], timeout: 0.5)
 //    }
@@ -90,7 +90,7 @@
 //    func testUpdateConfigurationWithDict_New() {
 //        // setup
 //        let runtime = TestableExtensionRuntime()
-//        let configuration = AEPConfiguration.init(runtime: runtime)
+//        let configuration = Configuration.init(runtime: runtime)
 //        configuration.onRegistered()
 //        XCTAssertEqual(1, runtime.createdSharedStates.count)
 //

@@ -14,7 +14,7 @@ import XCTest
 @testable import AEPCore
 @testable import AEPCore
 
-class AEPCoreTests: XCTestCase {
+class MobileCoreTests: XCTestCase {
     override func setUp() {
         EventHub.reset()
         MockExtension.reset()

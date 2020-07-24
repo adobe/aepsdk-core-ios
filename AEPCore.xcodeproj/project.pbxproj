@@ -108,7 +108,7 @@
 		3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983724BE62AA0019F095 /* TestConfig.json */; };
 		3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */; };
-		3F39520724CA096100F7325B /* AEPCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951E824CA096100F7325B /* AEPCoreTests.swift */; };
+		3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951E824CA096100F7325B /* MobileCoreTests.swift */; };
 		3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951EA24CA096100F7325B /* SharedStateTest.swift */; };
 		3F39520924CA096100F7325B /* EventHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951EB24CA096100F7325B /* EventHubTests.swift */; };
 		3F39520A24CA096100F7325B /* TestRules.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3F3951ED24CA096100F7325B /* TestRules.zip */; };
@@ -120,7 +120,7 @@
 		3F39521024CA096100F7325B /* SlowMockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F424CA096100F7325B /* SlowMockExtension.swift */; };
 		3F39521124CA096100F7325B /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F524CA096100F7325B /* MockExtension.swift */; };
 		3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F624CA096100F7325B /* MockExtensionTwo.swift */; };
-		3F39521324CA096100F7325B /* AEPCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F724CA096100F7325B /* AEPCore+ConfigurationTests.swift */; };
+		3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */; };
 		3F39521424CA096200F7325B /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F924CA096100F7325B /* TestableExtensionRuntime.swift */; };
 		3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */; };
 		3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */; };
@@ -138,9 +138,8 @@
 		3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9F24CA004400502CAF /* MobileCore.swift */; };
 		3FB66AC724CA004400502CAF /* Extension+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA024CA004400502CAF /* Extension+Register.swift */; };
 		3FB66AC824CA004400502CAF /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA124CA004400502CAF /* Lifecycle.swift */; };
-		3FB66AC924CA004400502CAF /* AEPCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA224CA004400502CAF /* AEPCore+Configuration.swift */; };
-		3FB66ACA24CA004400502CAF /* AEPCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA324CA004400502CAF /* AEPCore+Lifecycle.swift */; };
-		3FB66ACB24CA004400502CAF /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA424CA004400502CAF /* Configuration.swift */; };
+		3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */; };
+		3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */; };
 		3FB66ACC24CA004400502CAF /* EventHubPlaceholderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA624CA004400502CAF /* EventHubPlaceholderExtension.swift */; };
 		3FB66ACD24CA004400502CAF /* EventHubConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA724CA004400502CAF /* EventHubConstants.swift */; };
 		3FB66ACE24CA004400502CAF /* ExtensionContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA824CA004400502CAF /* ExtensionContainer.swift */; };
@@ -159,7 +158,7 @@
 		3FB66ADB24CA004400502CAF /* AEPRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */; };
 		3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB724CA004400502CAF /* RulesLoader.swift */; };
 		3FB66ADD24CA004400502CAF /* JSONRulesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB824CA004400502CAF /* JSONRulesParser.swift */; };
-		3FB66ADE24CA004400502CAF /* AEPConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66ABA24CA004400502CAF /* AEPConfiguration.swift */; };
+		3FB66ADE24CA004400502CAF /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66ABA24CA004400502CAF /* Configuration.swift */; };
 		3FB66ADF24CA004400502CAF /* ConfigurationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66ABB24CA004400502CAF /* ConfigurationConstants.swift */; };
 		3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66ABC24CA004400502CAF /* ConfigurationState.swift */; };
 		3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66ABD24CA004400502CAF /* LaunchIDManager.swift */; };
@@ -201,7 +200,7 @@
 		3FE6DE5924C643060065EA05 /* MobileVisitorAuthenticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */; };
 		3FE6DE5A24C643060065EA05 /* URLQueryItem+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */; };
 		3FE6DE5B24C643060065EA05 /* IdentityProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4824C643050065EA05 /* IdentityProperties.swift */; };
-		3FE6DE5C24C643060065EA05 /* Identity+IdentityAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4924C643050065EA05 /* Identity+IdentityAPI.swift */; };
+		3FE6DE5C24C643060065EA05 /* Identity+PublicAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4924C643050065EA05 /* Identity+PublicAPI.swift */; };
 		3FE6DE5D24C643060065EA05 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */; };
 		3FE6DE5E24C643060065EA05 /* IdentityAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4B24C643050065EA05 /* IdentityAPI.swift */; };
 		3FE6DE5F24C643060065EA05 /* NetworkService+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4C24C643050065EA05 /* NetworkService+Identity.swift */; };
@@ -222,12 +221,12 @@
 		3FE6DE7A24C643620065EA05 /* URL+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */; };
 		3FE6DE7B24C643620065EA05 /* URLQueryItem+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */; };
 		3FE6DE7C24C643620065EA05 /* IdentityStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */; };
-		3FE6DE7D24C643620065EA05 /* AEPIdentity+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7124C643620065EA05 /* AEPIdentity+IdentityTests.swift */; };
+		3FE6DE7D24C643620065EA05 /* IdentityFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7124C643620065EA05 /* IdentityFunctionalTests.swift */; };
 		3FE6DE7E24C643620065EA05 /* URLAppenderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */; };
 		3FE6DE7F24C643620065EA05 /* IdentityHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */; };
 		3FE6DE8024C643620065EA05 /* IdentityHitResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */; };
 		3FE6DE8124C643620065EA05 /* NetworkService+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */; };
-		3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */; };
+		3FE6DE8224C643620065EA05 /* IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* IdentityTests.swift */; };
 		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
 		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
 		7861452F24C7502B004CB317 /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7861452E24C7502B004CB317 /* MockUnzipper.swift */; };
@@ -453,7 +452,7 @@
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		3F03985424C0008D0019F095 /* AEPEventHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPEventHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParserTests.swift; sourceTree = "<group>"; };
-		3F3951E824CA096100F7325B /* AEPCoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPCoreTests.swift; sourceTree = "<group>"; };
+		3F3951E824CA096100F7325B /* MobileCoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCoreTests.swift; sourceTree = "<group>"; };
 		3F3951EA24CA096100F7325B /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
 		3F3951EB24CA096100F7325B /* EventHubTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubTests.swift; sourceTree = "<group>"; };
 		3F3951ED24CA096100F7325B /* TestRules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestRules.zip; sourceTree = "<group>"; };
@@ -465,7 +464,7 @@
 		3F3951F424CA096100F7325B /* SlowMockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
 		3F3951F524CA096100F7325B /* MockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
 		3F3951F624CA096100F7325B /* MockExtensionTwo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtensionTwo.swift; sourceTree = "<group>"; };
-		3F3951F724CA096100F7325B /* AEPCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
+		3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
 		3F3951F924CA096100F7325B /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloader.swift; sourceTree = "<group>"; };
 		3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNetworkServiceOverrider.swift; sourceTree = "<group>"; };
@@ -483,9 +482,8 @@
 		3FB66A9F24CA004400502CAF /* MobileCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCore.swift; sourceTree = "<group>"; };
 		3FB66AA024CA004400502CAF /* Extension+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+Register.swift"; sourceTree = "<group>"; };
 		3FB66AA124CA004400502CAF /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lifecycle.swift; sourceTree = "<group>"; };
-		3FB66AA224CA004400502CAF /* AEPCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+Configuration.swift"; sourceTree = "<group>"; };
-		3FB66AA324CA004400502CAF /* AEPCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPCore+Lifecycle.swift"; sourceTree = "<group>"; };
-		3FB66AA424CA004400502CAF /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+Configuration.swift"; sourceTree = "<group>"; };
+		3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+Lifecycle.swift"; sourceTree = "<group>"; };
 		3FB66AA624CA004400502CAF /* EventHubPlaceholderExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubPlaceholderExtension.swift; sourceTree = "<group>"; };
 		3FB66AA724CA004400502CAF /* EventHubConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubConstants.swift; sourceTree = "<group>"; };
 		3FB66AA824CA004400502CAF /* ExtensionContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionContainer.swift; sourceTree = "<group>"; };
@@ -504,7 +502,7 @@
 		3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPRulesEngine.swift; sourceTree = "<group>"; };
 		3FB66AB724CA004400502CAF /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
 		3FB66AB824CA004400502CAF /* JSONRulesParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParser.swift; sourceTree = "<group>"; };
-		3FB66ABA24CA004400502CAF /* AEPConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPConfiguration.swift; sourceTree = "<group>"; };
+		3FB66ABA24CA004400502CAF /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		3FB66ABB24CA004400502CAF /* ConfigurationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationConstants.swift; sourceTree = "<group>"; };
 		3FB66ABC24CA004400502CAF /* ConfigurationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationState.swift; sourceTree = "<group>"; };
 		3FB66ABD24CA004400502CAF /* LaunchIDManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchIDManager.swift; sourceTree = "<group>"; };
@@ -551,7 +549,7 @@
 		3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileVisitorAuthenticationState.swift; sourceTree = "<group>"; };
 		3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+Identity.swift"; sourceTree = "<group>"; };
 		3FE6DE4824C643050065EA05 /* IdentityProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityProperties.swift; sourceTree = "<group>"; };
-		3FE6DE4924C643050065EA05 /* Identity+IdentityAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Identity+IdentityAPI.swift"; sourceTree = "<group>"; };
+		3FE6DE4924C643050065EA05 /* Identity+PublicAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Identity+PublicAPI.swift"; sourceTree = "<group>"; };
 		3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
 		3FE6DE4B24C643050065EA05 /* IdentityAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityAPI.swift; sourceTree = "<group>"; };
 		3FE6DE4C24C643050065EA05 /* NetworkService+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkService+Identity.swift"; sourceTree = "<group>"; };
@@ -572,12 +570,12 @@
 		3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+IdentityTests.swift"; sourceTree = "<group>"; };
 		3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+IdentityTests.swift"; sourceTree = "<group>"; };
 		3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityStateTests.swift; sourceTree = "<group>"; };
-		3FE6DE7124C643620065EA05 /* AEPIdentity+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+IdentityTests.swift"; sourceTree = "<group>"; };
+		3FE6DE7124C643620065EA05 /* IdentityFunctionalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityFunctionalTests.swift; sourceTree = "<group>"; };
 		3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLAppenderTests.swift; sourceTree = "<group>"; };
 		3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitProcessorTests.swift; sourceTree = "<group>"; };
 		3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitResponseTests.swift; sourceTree = "<group>"; };
 		3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkService+IdentityTests.swift"; sourceTree = "<group>"; };
-		3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentityTests.swift; sourceTree = "<group>"; };
+		3FE6DE7624C643620065EA05 /* IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityTests.swift; sourceTree = "<group>"; };
 		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		7861452E24C7502B004CB317 /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
@@ -718,8 +716,8 @@
 		21CAC0E32422917600C11388 /* AEPCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				3F3951F724CA096100F7325B /* AEPCore+ConfigurationTests.swift */,
-				3F3951E824CA096100F7325B /* AEPCoreTests.swift */,
+				3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */,
+				3F3951E824CA096100F7325B /* MobileCoreTests.swift */,
 				3F39152E24CA47B600B58C3E /* RulesTests */,
 				3F39520024CA096100F7325B /* ConfigurationTests */,
 				3F3951E924CA096100F7325B /* EventHubTests */,
@@ -997,9 +995,8 @@
 				3FB66A9F24CA004400502CAF /* MobileCore.swift */,
 				3FB66AA024CA004400502CAF /* Extension+Register.swift */,
 				3FB66AA124CA004400502CAF /* Lifecycle.swift */,
-				3FB66AA224CA004400502CAF /* AEPCore+Configuration.swift */,
-				3FB66AA324CA004400502CAF /* AEPCore+Lifecycle.swift */,
-				3FB66AA424CA004400502CAF /* Configuration.swift */,
+				3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */,
+				3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1039,7 +1036,7 @@
 		3FB66AB924CA004400502CAF /* configuration */ = {
 			isa = PBXGroup;
 			children = (
-				3FB66ABA24CA004400502CAF /* AEPConfiguration.swift */,
+				3FB66ABA24CA004400502CAF /* Configuration.swift */,
 				3FB66ABB24CA004400502CAF /* ConfigurationConstants.swift */,
 				3FB66ABC24CA004400502CAF /* ConfigurationState.swift */,
 				3FB66ABD24CA004400502CAF /* LaunchIDManager.swift */,
@@ -1110,7 +1107,7 @@
 			isa = PBXGroup;
 			children = (
 				3FE6DE5624C643060065EA05 /* Identity.swift */,
-				3FE6DE4924C643050065EA05 /* Identity+IdentityAPI.swift */,
+				3FE6DE4924C643050065EA05 /* Identity+PublicAPI.swift */,
 				3FE6DE5024C643060065EA05 /* CustomIdentity.swift */,
 				3FE6DE4F24C643060065EA05 /* Event+Identity.swift */,
 				3FE6DE5724C643060065EA05 /* Identifiable.swift */,
@@ -1142,8 +1139,8 @@
 			isa = PBXGroup;
 			children = (
 				3FE6DE8624C643EA0065EA05 /* TestHelpers */,
-				3FE6DE7124C643620065EA05 /* AEPIdentity+IdentityTests.swift */,
-				3FE6DE7624C643620065EA05 /* AEPIdentityTests.swift */,
+				3FE6DE7124C643620065EA05 /* IdentityFunctionalTests.swift */,
+				3FE6DE7624C643620065EA05 /* IdentityTests.swift */,
 				3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */,
 				3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */,
 				3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */,
@@ -1583,14 +1580,13 @@
 			files = (
 				3FB66ACD24CA004400502CAF /* EventHubConstants.swift in Sources */,
 				3FB66ADF24CA004400502CAF /* ConfigurationConstants.swift in Sources */,
-				3FB66ADE24CA004400502CAF /* AEPConfiguration.swift in Sources */,
+				3FB66ADE24CA004400502CAF /* Configuration.swift in Sources */,
 				3FB66ADD24CA004400502CAF /* JSONRulesParser.swift in Sources */,
 				3FB66AE424CA004400502CAF /* CachedRules.swift in Sources */,
-				3FB66ACB24CA004400502CAF /* Configuration.swift in Sources */,
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
-				3FB66AC924CA004400502CAF /* AEPCore+Configuration.swift in Sources */,
+				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
 				3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */,
 				3FB66AE224CA004400502CAF /* Event+Configuration.swift in Sources */,
 				3FB66AD124CA004400502CAF /* SharedState.swift in Sources */,
@@ -1598,7 +1594,7 @@
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
 				3FB66ADB24CA004400502CAF /* AEPRulesEngine.swift in Sources */,
-				3FB66ACA24CA004400502CAF /* AEPCore+Lifecycle.swift in Sources */,
+				3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */,
 				3FB66AE624CA004400502CAF /* ConfigurationDownloader.swift in Sources */,
 				3FB66ACF24CA004400502CAF /* Event.swift in Sources */,
 				3FB66ACE24CA004400502CAF /* ExtensionContainer.swift in Sources */,
@@ -1624,7 +1620,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F39521324CA096100F7325B /* AEPCore+ConfigurationTests.swift in Sources */,
+				3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */,
 				21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */,
 				3F39521C24CA096200F7325B /* ConfigurationFunctionalTests.swift in Sources */,
 				3F39521724CA096200F7325B /* EventHub+Testable.swift in Sources */,
@@ -1639,7 +1635,7 @@
 				3F39521E24CA096200F7325B /* ConfigurationDownloaderTests.swift in Sources */,
 				3F39521424CA096200F7325B /* TestableExtensionRuntime.swift in Sources */,
 				3F39521024CA096100F7325B /* SlowMockExtension.swift in Sources */,
-				3F39520724CA096100F7325B /* AEPCoreTests.swift in Sources */,
+				3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */,
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
@@ -1795,7 +1791,7 @@
 				3FE6DE6724C643060065EA05 /* IdentityHitResponse.swift in Sources */,
 				3FE6DE6224C643060065EA05 /* Event+Identity.swift in Sources */,
 				3FE6DE6324C643060065EA05 /* CustomIdentity.swift in Sources */,
-				3FE6DE5C24C643060065EA05 /* Identity+IdentityAPI.swift in Sources */,
+				3FE6DE5C24C643060065EA05 /* Identity+PublicAPI.swift in Sources */,
 				3FE6DE6924C643060065EA05 /* Identity.swift in Sources */,
 				3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */,
 				3FE6DE6124C643060065EA05 /* MID.swift in Sources */,
@@ -1816,10 +1812,10 @@
 				3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */,
 				3FE6DE7C24C643620065EA05 /* IdentityStateTests.swift in Sources */,
 				2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */,
-				3FE6DE7D24C643620065EA05 /* AEPIdentity+IdentityTests.swift in Sources */,
+				3FE6DE7D24C643620065EA05 /* IdentityFunctionalTests.swift in Sources */,
 				2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */,
 				3FE6DE8124C643620065EA05 /* NetworkService+IdentityTests.swift in Sources */,
-				3FE6DE8224C643620065EA05 /* AEPIdentityTests.swift in Sources */,
+				3FE6DE8224C643620065EA05 /* IdentityTests.swift in Sources */,
 				3FE6DE7A24C643620065EA05 /* URL+IdentityTests.swift in Sources */,
 				3FE6DE7F24C643620065EA05 /* IdentityHitProcessorTests.swift in Sources */,
 				3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */,

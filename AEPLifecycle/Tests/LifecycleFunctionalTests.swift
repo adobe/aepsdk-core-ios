@@ -28,7 +28,7 @@
 //        setupMockSystemInfoService()
 //        EventHub.shared.start()
 //        registerExtension(MockExtension.self)
-//        registerExtension(AEPConfiguration.self)
+//        registerExtension(Configuration.self)
 //        registerExtension(AEPLifecycle.self)
 //        MobileCore.updateConfigurationWith(configDict: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1])
 //    }

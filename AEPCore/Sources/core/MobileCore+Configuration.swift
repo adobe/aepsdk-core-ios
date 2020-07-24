@@ -12,30 +12,51 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Implements the `Configuration` public APIs
-extension MobileCore: Configuration {
-    public static func configureWith(appId: String) {
+public extension MobileCore{
+    
+    /// Configure the SDK by downloading the remote configuration file hosted on Adobe servers
+    /// specified by the given application ID. The configuration file is cached once downloaded
+    /// and used in subsequent calls to this API. If the remote file is updated after the first
+    /// download, the updated file is downloaded and replaces the cached file.
+    /// - Parameter appId: A unique identifier assigned to the app instance by Adobe Launch
+    static func configureWith(appId: String) {
         let event = Event(name: "Configure with AppId", type: .configuration, source: .requestContent,
                           data: [CoreConstants.Keys.JSON_APP_ID: appId])
         MobileCore.dispatch(event: event)
     }
-
-    public static func configureWith(filePath: String) {
+    
+    /// Configure the SDK by reading a local file containing the JSON configuration. On application relaunch,
+    /// the configuration from the file at `filePath` is not preserved and this method must be called again if desired.
+    /// - Parameter filePath: Absolute path to a local configuration file.
+    static func configureWith(filePath: String) {
         let event = Event(name: "Configure with file path", type: .configuration, source: .requestContent,
                           data: [CoreConstants.Keys.JSON_FILE_PATH: filePath])
         MobileCore.dispatch(event: event)
     }
-
-    public static func updateConfigurationWith(configDict: [String: Any]) {
+    
+    /// Update the current SDK configuration with specific key/value pairs. Keys not found in the current
+    /// configuration are added. Configuration updates are preserved and applied over existing or new
+    /// configuration even across application restarts.
+    ///
+    /// Using `nil` values is allowed and effectively removes the configuration parameter from the current configuration.
+    /// - Parameter configDict: configuration key/value pairs to be updated or added.
+    static func updateConfigurationWith(configDict: [String: Any]) {
         let event = Event(name: "Configuration Update", type: .configuration, source: .requestContent,
                           data: [CoreConstants.Keys.UPDATE_CONFIG: configDict])
         MobileCore.dispatch(event: event)
     }
-
-    public static func setPrivacy(status: PrivacyStatus) {
+    
+    /// Sets the `PrivacyStatus` for this SDK. The set privacy status is preserved and applied over any new
+    /// configuration changes from calls to configureWithAppId or configureWithFileInPath,
+    /// even across application restarts.
+    /// - Parameter status: `PrivacyStatus` to be set for the SDK
+    static func setPrivacy(status: PrivacyStatus) {
         updateConfigurationWith(configDict: [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: status.rawValue])
     }
-
-    public static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
+    
+    /// Gets the currently configured `PrivacyStatus` and returns it via `completion`
+    /// - Parameter completion: Invoked with the current `PrivacyStatus`
+    static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
         let event = Event(name: "Privacy Status Request", type: .configuration, source: .requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { (responseEvent) in
@@ -45,7 +66,9 @@ extension MobileCore: Configuration {
         MobileCore.dispatch(event: event)
     }
     
-    public static func getSdkIdentities(completion: @escaping (String?, AEPError?) -> ()) {
+    /// Get a JSON string containing all of the user's identities known by the SDK  and calls a handler upon completion.
+    /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format a and `AEPError` if the request failed
+    static func getSdkIdentities(completion: @escaping (String?, AEPError?) -> ()) {
         let event = Event(name: "GetSdkIdentities", type: .configuration, source: .requestIdentity, data: nil)
         
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (responseEvent) in

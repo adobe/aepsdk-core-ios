@@ -14,13 +14,13 @@ import XCTest
 @testable import AEPCore
 
 
-class AEPCore_ConfigurationTests: XCTestCase {
+class MobileCore_ConfigurationTests: XCTestCase {
 
     override func setUp() {
         EventHub.reset()
         MockExtension.reset()
         EventHub.shared.start()
-        registerMockExtension(AEPConfiguration.self)
+        registerMockExtension(Configuration.self)
         registerMockExtension(MockExtension.self)
     }
 

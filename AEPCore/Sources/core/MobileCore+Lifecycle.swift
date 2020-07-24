@@ -11,15 +11,22 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-extension MobileCore: Lifecycle {
-    public static func lifecycleStart(additionalContextData: [String: String]?) {
+/// Defines the public interface for the Lifecycle extension
+public extension MobileCore{
+    
+    /// Start a new lifecycle session or resume a previously paused lifecycle session. If a previously paused session timed out, then a new session is created.
+    /// If a current session is running, then calling this method does nothing.
+    /// - Parameter additionalContextData: Optional additional context for this session.
+    static func lifecycleStart(additionalContextData: [String: String]?) {
         let data: [String: Any] = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.START,
                                    CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
         let event = Event(name: "Lifecycle Start", type: .genericLifecycle, source: .requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
     
-    public static func lifecyclePause() {
+    /// Pauses the current lifecycle session. Calling pause on an already paused session updates the paused timestamp, having the effect of resetting the session
+    /// timeout timer. If no lifecycle session is running, then calling this method does nothing.
+    static func lifecyclePause() {
         let data = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.PAUSE]
         let event = Event(name: "Lifecycle Pause", type: .genericLifecycle, source: .requestContent, data: data)
         MobileCore.dispatch(event: event)
