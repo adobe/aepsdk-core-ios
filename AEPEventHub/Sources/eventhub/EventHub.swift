@@ -145,7 +145,7 @@ final public class EventHub {
 
         sharedState.set(version: version, data: data)
         self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName))
-        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Shared state is created for \(extensionName) with data \(data.description)")
+        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Shared state is created for \(extensionName) with data \(data?.description ?? "[]")")
     }
 
     /// Sets the `SharedState` for the extension to pending at `event`'s version and returns a `SharedStateResolver` which is to be invoked with data for the `SharedState` once available.
