@@ -191,7 +191,7 @@
 		3FE6DE0E24C630EB0065EA05 /* LifecycleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0624C630EA0065EA05 /* LifecycleState.swift */; };
 		3FE6DE0F24C630EB0065EA05 /* LifecycleMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0724C630EB0065EA05 /* LifecycleMetrics.swift */; };
 		3FE6DE1024C630EB0065EA05 /* Event+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0824C630EB0065EA05 /* Event+Lifecycle.swift */; };
-		3FE6DE1224C630EB0065EA05 /* AEPLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0A24C630EB0065EA05 /* AEPLifecycle.swift */; };
+		3FE6DE1224C630EB0065EA05 /* Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0A24C630EB0065EA05 /* Lifecycle.swift */; };
 		3FE6DE1324C630EB0065EA05 /* LifecycleContextData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0B24C630EB0065EA05 /* LifecycleContextData.swift */; };
 		3FE6DE1424C630EB0065EA05 /* LifecycleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0C24C630EB0065EA05 /* LifecycleConstants.swift */; };
 		3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */; };
@@ -201,9 +201,9 @@
 		3FE6DE5924C643060065EA05 /* MobileVisitorAuthenticationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */; };
 		3FE6DE5A24C643060065EA05 /* URLQueryItem+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */; };
 		3FE6DE5B24C643060065EA05 /* IdentityProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4824C643050065EA05 /* IdentityProperties.swift */; };
-		3FE6DE5C24C643060065EA05 /* AEPIdentity+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4924C643050065EA05 /* AEPIdentity+Identity.swift */; };
+		3FE6DE5C24C643060065EA05 /* Identity+IdentityAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4924C643050065EA05 /* Identity+IdentityAPI.swift */; };
 		3FE6DE5D24C643060065EA05 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */; };
-		3FE6DE5E24C643060065EA05 /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4B24C643050065EA05 /* Identity.swift */; };
+		3FE6DE5E24C643060065EA05 /* IdentityAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4B24C643050065EA05 /* IdentityAPI.swift */; };
 		3FE6DE5F24C643060065EA05 /* NetworkService+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4C24C643050065EA05 /* NetworkService+Identity.swift */; };
 		3FE6DE6024C643060065EA05 /* IdentityState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4D24C643050065EA05 /* IdentityState.swift */; };
 		3FE6DE6124C643060065EA05 /* MID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4E24C643060065EA05 /* MID.swift */; };
@@ -214,7 +214,7 @@
 		3FE6DE6624C643060065EA05 /* MobileIdentities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5324C643060065EA05 /* MobileIdentities.swift */; };
 		3FE6DE6724C643060065EA05 /* IdentityHitResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */; };
 		3FE6DE6824C643060065EA05 /* IdentityHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */; };
-		3FE6DE6924C643060065EA05 /* AEPIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5624C643060065EA05 /* AEPIdentity.swift */; };
+		3FE6DE6924C643060065EA05 /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5624C643060065EA05 /* Identity.swift */; };
 		3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5724C643060065EA05 /* Identifiable.swift */; };
 		3FE6DE6B24C643060065EA05 /* URL+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5824C643060065EA05 /* URL+Identity.swift */; };
 		3FE6DE7824C643620065EA05 /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6C24C643610065EA05 /* MIDTests.swift */; };
@@ -538,7 +538,7 @@
 		3FE6DE0624C630EA0065EA05 /* LifecycleState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleState.swift; sourceTree = "<group>"; };
 		3FE6DE0724C630EB0065EA05 /* LifecycleMetrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetrics.swift; sourceTree = "<group>"; };
 		3FE6DE0824C630EB0065EA05 /* Event+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+Lifecycle.swift"; sourceTree = "<group>"; };
-		3FE6DE0A24C630EB0065EA05 /* AEPLifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPLifecycle.swift; sourceTree = "<group>"; };
+		3FE6DE0A24C630EB0065EA05 /* Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lifecycle.swift; sourceTree = "<group>"; };
 		3FE6DE0B24C630EB0065EA05 /* LifecycleContextData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleContextData.swift; sourceTree = "<group>"; };
 		3FE6DE0C24C630EB0065EA05 /* LifecycleConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleConstants.swift; sourceTree = "<group>"; };
 		3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsBuilder.swift; sourceTree = "<group>"; };
@@ -551,9 +551,9 @@
 		3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileVisitorAuthenticationState.swift; sourceTree = "<group>"; };
 		3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+Identity.swift"; sourceTree = "<group>"; };
 		3FE6DE4824C643050065EA05 /* IdentityProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityProperties.swift; sourceTree = "<group>"; };
-		3FE6DE4924C643050065EA05 /* AEPIdentity+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AEPIdentity+Identity.swift"; sourceTree = "<group>"; };
+		3FE6DE4924C643050065EA05 /* Identity+IdentityAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Identity+IdentityAPI.swift"; sourceTree = "<group>"; };
 		3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
-		3FE6DE4B24C643050065EA05 /* Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
+		3FE6DE4B24C643050065EA05 /* IdentityAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityAPI.swift; sourceTree = "<group>"; };
 		3FE6DE4C24C643050065EA05 /* NetworkService+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworkService+Identity.swift"; sourceTree = "<group>"; };
 		3FE6DE4D24C643050065EA05 /* IdentityState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityState.swift; sourceTree = "<group>"; };
 		3FE6DE4E24C643060065EA05 /* MID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MID.swift; sourceTree = "<group>"; };
@@ -564,7 +564,7 @@
 		3FE6DE5324C643060065EA05 /* MobileIdentities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentities.swift; sourceTree = "<group>"; };
 		3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitResponse.swift; sourceTree = "<group>"; };
 		3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHitProcessor.swift; sourceTree = "<group>"; };
-		3FE6DE5624C643060065EA05 /* AEPIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPIdentity.swift; sourceTree = "<group>"; };
+		3FE6DE5624C643060065EA05 /* Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
 		3FE6DE5724C643060065EA05 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		3FE6DE5824C643060065EA05 /* URL+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Identity.swift"; sourceTree = "<group>"; };
 		3FE6DE6C24C643610065EA05 /* MIDTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
@@ -1076,7 +1076,7 @@
 		3FE6DDD224C62EE60065EA05 /* AEPLifecycle */ = {
 			isa = PBXGroup;
 			children = (
-				3FE6DE0A24C630EB0065EA05 /* AEPLifecycle.swift */,
+				3FE6DE0A24C630EB0065EA05 /* Lifecycle.swift */,
 				3FE6DE0824C630EB0065EA05 /* Event+Lifecycle.swift */,
 				3FE6DE0C24C630EB0065EA05 /* LifecycleConstants.swift */,
 				3FE6DE0B24C630EB0065EA05 /* LifecycleContextData.swift */,
@@ -1109,12 +1109,12 @@
 		3FE6DE3024C642330065EA05 /* AEPIdentity */ = {
 			isa = PBXGroup;
 			children = (
-				3FE6DE5624C643060065EA05 /* AEPIdentity.swift */,
-				3FE6DE4924C643050065EA05 /* AEPIdentity+Identity.swift */,
+				3FE6DE5624C643060065EA05 /* Identity.swift */,
+				3FE6DE4924C643050065EA05 /* Identity+IdentityAPI.swift */,
 				3FE6DE5024C643060065EA05 /* CustomIdentity.swift */,
 				3FE6DE4F24C643060065EA05 /* Event+Identity.swift */,
 				3FE6DE5724C643060065EA05 /* Identifiable.swift */,
-				3FE6DE4B24C643050065EA05 /* Identity.swift */,
+				3FE6DE4B24C643050065EA05 /* IdentityAPI.swift */,
 				3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */,
 				3FE6DE5124C643060065EA05 /* IdentityHit.swift */,
 				3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */,
@@ -1758,7 +1758,7 @@
 				3FE6DE1424C630EB0065EA05 /* LifecycleConstants.swift in Sources */,
 				3FE6DE1724C631100065EA05 /* LifecycleSession.swift in Sources */,
 				3FE6DE1024C630EB0065EA05 /* Event+Lifecycle.swift in Sources */,
-				3FE6DE1224C630EB0065EA05 /* AEPLifecycle.swift in Sources */,
+				3FE6DE1224C630EB0065EA05 /* Lifecycle.swift in Sources */,
 				3FE6DE1324C630EB0065EA05 /* LifecycleContextData.swift in Sources */,
 				3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */,
 				3FE6DE0E24C630EB0065EA05 /* LifecycleState.swift in Sources */,
@@ -1789,14 +1789,14 @@
 				218E01C224C75C1500BEC470 /* HitQueuing+Privacy.swift in Sources */,
 				3FE6DE6424C643060065EA05 /* IdentityHit.swift in Sources */,
 				3FE6DE6824C643060065EA05 /* IdentityHitProcessor.swift in Sources */,
-				3FE6DE5E24C643060065EA05 /* Identity.swift in Sources */,
+				3FE6DE5E24C643060065EA05 /* IdentityAPI.swift in Sources */,
 				3FE6DE5924C643060065EA05 /* MobileVisitorAuthenticationState.swift in Sources */,
 				3FE6DE5A24C643060065EA05 /* URLQueryItem+Identity.swift in Sources */,
 				3FE6DE6724C643060065EA05 /* IdentityHitResponse.swift in Sources */,
 				3FE6DE6224C643060065EA05 /* Event+Identity.swift in Sources */,
 				3FE6DE6324C643060065EA05 /* CustomIdentity.swift in Sources */,
-				3FE6DE5C24C643060065EA05 /* AEPIdentity+Identity.swift in Sources */,
-				3FE6DE6924C643060065EA05 /* AEPIdentity.swift in Sources */,
+				3FE6DE5C24C643060065EA05 /* Identity+IdentityAPI.swift in Sources */,
+				3FE6DE6924C643060065EA05 /* Identity.swift in Sources */,
 				3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */,
 				3FE6DE6124C643060065EA05 /* MID.swift in Sources */,
 				3FE6DE6524C643060065EA05 /* URLAppender.swift in Sources */,

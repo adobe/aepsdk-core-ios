@@ -483,7 +483,7 @@
 //        // setup
 //        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
 //        expectation.assertForOverFulfill = true
-//        registerExtension(AEPIdentity.self)
+//        registerExtension(Identity.self)
 //        EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org-id"], event: nil)
 //        let identityData = [IdentityConstants.EventDataKeys.VISITOR_ID_MID: "test-mid", IdentityConstants.EventDataKeys.PUSH_IDENTIFIER: "test-push-id"]
 //        EventHub.shared.createSharedState(extensionName: IdentityConstants.EXTENSION_NAME, data: identityData, event: nil)
@@ -506,7 +506,7 @@
 //        // setup
 //        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
 //        expectation.assertForOverFulfill = true
-//        registerExtension(AEPIdentity.self)
+//        registerExtension(Identity.self)
 //        EventHub.shared.createSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, data: [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-org-id"], event: nil)
 //
 //        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
@@ -527,7 +527,7 @@
 //        // setup
 //        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
 //        expectation.assertForOverFulfill = true
-//        registerExtension(AEPIdentity.self)
+//        registerExtension(Identity.self)
 //        let identityData = [IdentityConstants.EventDataKeys.VISITOR_ID_MID: "test-mid", IdentityConstants.EventDataKeys.PUSH_IDENTIFIER: "test-push-id"]
 //        EventHub.shared.createSharedState(extensionName: IdentityConstants.EXTENSION_NAME, data: identityData, event: nil)
 //
@@ -566,7 +566,7 @@
 //        // setup
 //        let expectation = XCTestExpectation(description: "Get SDK Identities callback is invoked")
 //        expectation.assertForOverFulfill = true
-//        registerExtension(AEPIdentity.self)
+//        registerExtension(Identity.self)
 //        let resolver = EventHub.shared.createPendingSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: nil)
 //
 //        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"

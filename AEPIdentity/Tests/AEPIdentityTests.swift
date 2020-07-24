@@ -15,16 +15,16 @@ import XCTest
 import AEPServices
 import AEPServicesMock
 
-class AEPIdentityTests: XCTestCase {
+class IdentityTests: XCTestCase {
     
-    var identity: AEPIdentity!
+    var identity: Identity!
     var mockRuntime: TestableExtensionRuntime!
     
     override func setUp() {
         AEPServiceProvider.shared.networkService = MockNetworkServiceOverrider()
         AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
-        identity = AEPIdentity(runtime: mockRuntime)
+        identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
     }
     
@@ -119,7 +119,7 @@ class AEPIdentityTests: XCTestCase {
         var props = IdentityProperties()
         props.mid = MID()
         props.saveToPersistence()
-        identity = AEPIdentity(runtime: mockRuntime)
+        identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
@@ -143,7 +143,7 @@ class AEPIdentityTests: XCTestCase {
         var props = IdentityProperties()
         props.mid = MID()
         props.saveToPersistence()
-        identity = AEPIdentity(runtime: mockRuntime)
+        identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
 
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
@@ -165,7 +165,7 @@ class AEPIdentityTests: XCTestCase {
         var props = IdentityProperties()
         props.mid = MID()
         props.saveToPersistence()
-        identity = AEPIdentity(runtime: mockRuntime)
+        identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
@@ -189,7 +189,7 @@ class AEPIdentityTests: XCTestCase {
         var props = IdentityProperties()
         props.mid = MID()
         props.saveToPersistence()
-        identity = AEPIdentity(runtime: mockRuntime)
+        identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
@@ -214,7 +214,7 @@ class AEPIdentityTests: XCTestCase {
         props.mid = MID()
         props.privacyStatus = .optedIn
         props.saveToPersistence()
-        identity = AEPIdentity(runtime: mockRuntime)
+        identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
@@ -238,7 +238,7 @@ class AEPIdentityTests: XCTestCase {
         var props = IdentityProperties()
         props.mid = MID()
         props.saveToPersistence()
-        identity = AEPIdentity(runtime: mockRuntime)
+        identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown] as [String : Any]

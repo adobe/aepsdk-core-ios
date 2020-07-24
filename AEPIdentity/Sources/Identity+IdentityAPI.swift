@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPCore
 
-extension AEPIdentity: Identity {
+extension Identity: IdentityAPI {
     
     static func appendTo(url: URL?, completion: @escaping (URL?, AEPError?) -> ()) {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
