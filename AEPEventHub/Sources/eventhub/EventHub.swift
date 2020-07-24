@@ -86,7 +86,7 @@ final public class EventHub {
         // Set an event number for the event
         self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
         self.eventQueue.add(event)
-        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Event \(event.name) is dispatched.")
+        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Event \(event) is dispatched.")
     }
 
     /// Registers a new `Extension` to the `EventHub`. This `Extension` must implement `Extension`
@@ -145,7 +145,7 @@ final public class EventHub {
 
         sharedState.set(version: version, data: data)
         self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName))
-        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Shared state is created for \(extensionName) with data \(data?.description ?? "[]")")
+        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Shared state is created for \(extensionName) with data \(data?.description ?? "[]") and version \(version)")
     }
 
     /// Sets the `SharedState` for the extension to pending at `event`'s version and returns a `SharedStateResolver` which is to be invoked with data for the `SharedState` once available.
@@ -159,12 +159,12 @@ final public class EventHub {
         if let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) {
             pendingVersion = version
             sharedState.addPending(version: version)
-            Log.debug(label: "\(self.LOG_TAG):\(#function)", "Pending shared state is created for \(extensionName)")
+            Log.debug(label: "\(self.LOG_TAG):\(#function)", "Pending shared state is created for \(extensionName) with version \(version)")
         }
 
         return { [weak self] data in
             self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data)
-            Log.debug(label: "\(self?.LOG_TAG ?? "EventHub"):\(#function)", "Pending shared state is resolved for \(extensionName) with data \(data?.description ?? "[]")")
+            Log.debug(label: "\(self?.LOG_TAG ?? "EventHub"):\(#function)", "Pending shared state is resolved for \(extensionName) with data \(String(describing: data)) and version \(String(describing: pendingVersion))")
         }
     }
 
