@@ -13,11 +13,11 @@
 @testable import AEPServices
 import XCTest
 
-class AEPDataQueueTests: XCTestCase {
+class DataQueueTests: XCTestCase {
     private let fileName = "db-aep-test-01"
 
     override func setUp() {
-        AEPDataQueueServiceTests.removeDbFileIfExists(fileName)
+        DataQueueServiceTests.removeDbFileIfExists(fileName)
         if let service = DataQueueService.shared as? DataQueueService {
             service.cleanCache()
         }

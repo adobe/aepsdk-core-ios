@@ -17,7 +17,7 @@ class SQLiteWrapperTests: XCTestCase {
     let databaseName = "db-test-for-sqlite-wrapper"
 
     override func setUp() {
-        AEPDataQueueServiceTests.removeDbFileIfExists(databaseName)
+        DataQueueServiceTests.removeDbFileIfExists(databaseName)
         if let service = DataQueueService.shared as? DataQueueService {
             service.cleanCache()
         }

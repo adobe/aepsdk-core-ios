@@ -14,7 +14,7 @@ import XCTest
 
 @testable import AEPServices
 
-class NamedKeyValueStoreTest: XCTestCase {
+class NamedCollectionDataStoreTest: XCTestCase {
     
     var store: NamedCollectionDataStore?
 

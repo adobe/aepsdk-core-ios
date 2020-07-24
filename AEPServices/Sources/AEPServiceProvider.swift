@@ -28,7 +28,7 @@ public class AEPServiceProvider {
     private var overrideCacheService: Caching?
     private var defaultCacheService = DiskCacheService()
     private var overrideURLService: URLOpening?
-    private var defaultURLService = AEPURLService()
+    private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
 
     /// The SystemInfoService, either set externally (override) or the default implementation
