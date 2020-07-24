@@ -141,8 +141,8 @@ class NetworkServiceTests: XCTestCase {
         let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
 
-        let testUrl = URL(string: "https://example.com:81")!
-        let networkRequest = NetworkRequest(url: testUrl, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.25, readTimeout: 0.25)
+        let testUrl = URL(string: "https://www.adobe.com")!
+        let networkRequest = NetworkRequest(url: testUrl, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.01, readTimeout: 0.01)
         defaultNetworkService.connectAsync(networkRequest: networkRequest, completionHandler: {connection in
             XCTAssertNil(connection.data)
             XCTAssertNil(connection.response)
