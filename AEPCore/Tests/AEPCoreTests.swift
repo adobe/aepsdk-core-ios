@@ -12,7 +12,6 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
-@testable import AEPCore
 
 class AEPCoreTests: XCTestCase {
     override func setUp() {
@@ -311,6 +310,8 @@ class AEPCoreTests: XCTestCase {
         wait(for: [responseExpectation], timeout: 1.0)
     }
     
+    // MARK: setAdvertisingIdentifier(...) tests
+    
     /// Tests that when setAdvertisingIdentifier is called that we dispatch an event with the advertising identifier in the event data
     func testSetAdvertisingIdentifierHappy() {
         // setup
@@ -351,6 +352,79 @@ class AEPCoreTests: XCTestCase {
         
         // test
         AEPCore.setAdvertisingIdentifier(adId: nil)
+
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    // MARK: setPushIdentifier(...) tests
+    
+    /// Tests that when setPushIdentifier is called that we dispatch an event with the push identifier in the event data
+    func testSetPushIdentifierHappy() {
+        // setup
+        let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the push id")
+        expectation.assertForOverFulfill = true
+        
+        registerMockExtension(MockExtension.self)
+        EventHub.shared.start()
+        let pushIdData = "test-push-id".data(using: .utf8)!
+        let encodedPushId = "746573742d707573682d6964"
+        
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+            XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
+            expectation.fulfill()
+        })
+        
+        // test
+        AEPCore.setPushIdentifier(deviceToken: pushIdData)
+
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    /// Tests that when setPushIdentifier is called that we dispatch an event with the push identifier in the event data and that an empty push id is handled properly
+    func testSetPushIdentifierEmptyPushId() {
+        // setup
+        let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the push id")
+        expectation.assertForOverFulfill = true
+        
+        registerMockExtension(MockExtension.self)
+        EventHub.shared.start()
+        let pushIdData = "".data(using: .utf8)!
+        let encodedPushId = ""
+        
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+            XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
+            expectation.fulfill()
+        })
+        
+        // test
+        AEPCore.setPushIdentifier(deviceToken: pushIdData)
+
+        
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+    }
+    
+    /// Tests that when setPushIdentifier is called that we dispatch an event with the push identifier in the event data and that an nil push id is handled properly
+    func testSetPushIdentifierNilPushId() {
+        // setup
+        let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the push id")
+        expectation.assertForOverFulfill = true
+        
+        registerMockExtension(MockExtension.self)
+        EventHub.shared.start()
+        let encodedPushId = ""
+        
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+            XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
+            expectation.fulfill()
+        })
+        
+        // test
+        AEPCore.setPushIdentifier(deviceToken: nil)
 
         
         // verify
