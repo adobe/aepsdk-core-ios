@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 
 import Foundation
-import AEPEventHub
+import AEPCore
 
 /// Represents the JSON structure for the company context
 private struct CompanyContext: Codable {

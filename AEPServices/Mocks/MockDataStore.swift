@@ -12,8 +12,8 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPServices
 
-public class MockDataStore: NamedKeyValueService {
-    private var dict = [String: Any?]()
+public class MockDataStore: NamedCollectionProcessing {
+    public var dict = [String: Any?]()
     
     public init(){
         

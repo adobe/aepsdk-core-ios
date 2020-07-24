@@ -37,11 +37,6 @@
                BlueprintName = "AEPIdentityTests"
                ReferencedContainer = "container:AEPCore.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "IdentityStateTests/testSyncIdentifiersHappyPushID()">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

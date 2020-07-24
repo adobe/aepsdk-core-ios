@@ -20,16 +20,16 @@ public class AEPServiceProvider {
 
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()
-    private var overrideKeyValueService: NamedKeyValueService?
-    private var defaultKeyValueService = NamedUserDefaultKeyValueService()
-    private var overrideNetworkService: NetworkService?
-    private var defaultNetworkService = AEPNetworkService()
-    private var defaultDataQueueService = AEPDataQueueService.shared
-    private var overrideCacheService: CacheService?
+    private var overrideKeyValueService: NamedCollectionProcessing?
+    private var defaultKeyValueService = UserDefaultsNamedCollection()
+    private var overrideNetworkService: Networking?
+    private var defaultNetworkService = NetworkService()
+    private var defaultDataQueueService = DataQueueService.shared
+    private var overrideCacheService: Caching?
     private var defaultCacheService = DiskCacheService()
-    private var overrideURLService: URLService?
-    private var defaultURLService = AEPURLService()
-    private var defaultLoggingService = AEPLoggingService()
+    private var overrideURLService: URLOpening?
+    private var defaultURLService = URLService()
+    private var defaultLoggingService = LoggingService()
 
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
@@ -45,7 +45,7 @@ public class AEPServiceProvider {
         }
     }
 
-    public var namedKeyValueService: NamedKeyValueService {
+    public var namedKeyValueService: NamedCollectionProcessing {
         get {
             return queue.sync {
                 return overrideKeyValueService ?? defaultKeyValueService
@@ -58,7 +58,7 @@ public class AEPServiceProvider {
         }
     }
 
-    public var networkService: NetworkService {
+    public var networkService: Networking {
         get {
             return queue.sync {
                 return overrideNetworkService ?? defaultNetworkService
@@ -71,13 +71,13 @@ public class AEPServiceProvider {
         }
     }
 
-    public var dataQueueService: DataQueueService {
+    public var dataQueueService: DataQueuing {
         return queue.sync {
             return defaultDataQueueService
         }
     }
 
-    public var cacheService: CacheService {
+    public var cacheService: Caching {
         get {
             return queue.sync {
                 return overrideCacheService ?? defaultCacheService
@@ -90,7 +90,7 @@ public class AEPServiceProvider {
         }
     }
 
-    public var urlService: URLService {
+    public var urlService: URLOpening {
         get {
             return queue.sync {
                 return overrideURLService ?? defaultURLService
@@ -103,7 +103,7 @@ public class AEPServiceProvider {
         }
     }
 
-    public var loggingService: LoggingService {
+    public var loggingService: Logging {
         return queue.sync {
             return defaultLoggingService
         }

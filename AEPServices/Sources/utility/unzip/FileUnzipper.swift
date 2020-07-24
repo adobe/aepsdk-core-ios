@@ -11,44 +11,38 @@
 
 import Foundation
 
-///
-/// File Unzipper protocol
-///
-protocol Unzipper {
-    ///
-    /// Unzips a file at a given source url to a destination url
-    /// - Paramaters:
-    ///     - sourceURL: The URL pointing to the file to be unzipped
-    ///     - destinationURL: The URL pointing to the destination where the unzipped contents will go
-    /// - Returns: Boolean indicating if unzipping succeeded or failed
-    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool
-}
-
-public class FileUnzipper: Unzipper {
+public class FileUnzipper: Unzipping {
     
-    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> Bool {
+    /// Creates a new FileUnzipper
+    public init(){ }
+
+    public func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
         let fileManager = FileManager()
+        var entryNames: [String] = []
         // Create directory at destination path
-        guard let _ = try? fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil) else { return false }
+        guard let _ = try? fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil) else { return entryNames
+        }
         guard fileManager.itemExists(at: sourceURL) else {
-            return false
+            return entryNames
         }
         // Create the ZipArchive structure to iterate through the zip entries and extract them
         guard let archive = ZipArchive(url: sourceURL) else {
-            return false
+            return entryNames
         }
         
         // Iterate through the archive entries and extract them individually
         for entry in archive {
             let path = entry.path
+            entryNames.append(path)
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
             guard destinationEntryURL.isContained(in: destinationURL) else {
-                return false
+                return []
             }
             
-            guard let _  = try? archive.extract(entry, to: destinationEntryURL) else { return false }
+            guard let _  = try? archive.extract(entry, to: destinationEntryURL) else { return [] }
+            
         }
         
-        return true
+        return entryNames
     }
 }
