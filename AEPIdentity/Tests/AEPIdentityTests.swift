@@ -228,7 +228,6 @@ class AEPIdentityTests: XCTestCase {
         // verify
         let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
-        XCTAssertEqual(props.privacyStatus, identity.state?.identityProperties.privacyStatus) // identity state should have remained opt-in
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
     }
     

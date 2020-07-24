@@ -31,7 +31,6 @@ class IdentityState {
     /// - Parameter pushIdManager: a push id manager
     init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable) {
         self.identityProperties = identityProperties
-        self.identityProperties.loadFromPersistence()
         self.hitQueue = hitQueue
         self.pushIdManager = pushIdManager
     }
@@ -42,11 +41,12 @@ class IdentityState {
     ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
     /// - Returns: True if we should share state after bootup, false otherwise
     func bootup(configSharedState: [String: Any]?, eventDispatcher: (Event) -> ()) -> Bool {
+        // load data from local storage
+        identityProperties.loadFromPersistence()
+        
         // Load privacy status
-        if let privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus {
-            identityProperties.privacyStatus = privacyStatus
-        }
-
+        identityProperties.privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
