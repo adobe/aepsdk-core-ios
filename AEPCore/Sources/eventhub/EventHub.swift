@@ -28,9 +28,7 @@ final class EventHub {
     private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventhub.response.queue")
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
-    
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventhub.preprocessors.queue")
-
 
     #if DEBUG
     public internal(set) static var shared = EventHub()
@@ -110,9 +108,7 @@ final class EventHub {
             let extensionQueue = DispatchQueue(label: "com.adobe.eventhub.extension.\(type.typeName)")
             let extensionContainer = ExtensionContainer(type, extensionQueue, completion: completion)
             self.registeredExtensions[type.typeName] = extensionContainer
-            
             Log.debug(label: "\(self.LOG_TAG):\(#function)", "\(type.typeName) successfully registered.")
-            
         }
     }
 
@@ -145,7 +141,7 @@ final class EventHub {
 
         sharedState.set(version: version, data: data)
         self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName))
-        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Shared state is created for \(extensionName) with data \(data?.description ?? "[]") and version \(version)")
+        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Shared state is created for \(extensionName) with data \(String(describing: data)) and version \(version)")
     }
 
     /// Sets the `SharedState` for the extension to pending at `event`'s version and returns a `SharedStateResolver` which is to be invoked with data for the `SharedState` once available.
