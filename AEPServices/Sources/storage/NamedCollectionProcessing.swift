@@ -13,7 +13,7 @@
 import Foundation
 
 /// Represents the service for performing namespaced read/writes of AnyCodable values
-public protocol NamedKeyValueService {
+public protocol NamedCollectionProcessing {
     
     /// Sets the value for key in the collection with the given name
     /// - Parameter collectionName: The collection name used for namespacing

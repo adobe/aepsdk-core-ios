@@ -10,12 +10,14 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPServices
+import Foundation
 
-extension AEPDataQueueService {
-    /// clear cached `DataQueue` objects
-    /// this function is for testing purpose
-    internal func cleanCache() {
-        threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
-    }
+/// Represents the interface of the logging service
+@objc public protocol Logging {
+    /// Logs a message
+    /// - Parameters:
+    ///   - level: One of the message level identifiers, e.g., DEBUG
+    ///   - label: Name of a label to localize message
+    ///   - message: The string message
+    func log(level: LogLevel, label: String, message: String)
 }

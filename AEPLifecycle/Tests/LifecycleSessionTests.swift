@@ -16,7 +16,7 @@ import AEPServices
 class LifecycleSessionTests: XCTestCase {
     let sessionTimeoutInSeconds = TimeInterval(60 * 5) // 5 min
     
-    let dataStore = NamedKeyValueStore(name: "LifecycleTests")
+    let dataStore = NamedCollectionDataStore(name: "LifecycleTests")
     var session: LifecycleSession!
     
     var currentDate: Date!

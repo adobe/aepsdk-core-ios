@@ -13,9 +13,9 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// The named key value storage object to be used to store and retrieve values
-public class NamedKeyValueStore {
+public class NamedCollectionDataStore {
 
-    private var storageService: NamedKeyValueService
+    private var storageService: NamedCollectionProcessing
     private var name: String
     
     public init(name: String) {

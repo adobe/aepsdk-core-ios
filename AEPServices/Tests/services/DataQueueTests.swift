@@ -13,12 +13,12 @@
 @testable import AEPServices
 import XCTest
 
-class AEPDataQueueTests: XCTestCase {
+class DataQueueTests: XCTestCase {
     private let fileName = "db-aep-test-01"
 
     override func setUp() {
-        AEPDataQueueServiceTests.removeDbFileIfExists(fileName)
-        if let service = AEPDataQueueService.shared as? AEPDataQueueService {
+        DataQueueServiceTests.removeDbFileIfExists(fileName)
+        if let service = DataQueueService.shared as? DataQueueService {
             service.cleanCache()
         }
     }
@@ -34,7 +34,7 @@ class AEPDataQueueTests: XCTestCase {
     /// add()
     func testAddDataEntityToDataQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
         let data = try JSONEncoder().encode(event)
         let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
@@ -46,7 +46,7 @@ class AEPDataQueueTests: XCTestCase {
         XCTAssertTrue(result)
 
         let sql = """
-        SELECT * from \(AEPDataQueue.TABLE_NAME)
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -66,7 +66,7 @@ class AEPDataQueueTests: XCTestCase {
     /// add()
     func testAddDataEntityWithoutData() throws {
         // Given
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
         let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
 
@@ -77,7 +77,7 @@ class AEPDataQueueTests: XCTestCase {
         XCTAssertTrue(result)
 
         let sql = """
-        SELECT * from \(AEPDataQueue.TABLE_NAME)
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -96,7 +96,7 @@ class AEPDataQueueTests: XCTestCase {
     /// peek()
     func testPeekDataEntityFromQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
         var events: [EventEntity] = []
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
@@ -111,7 +111,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // Then
         let sql = """
-        SELECT * from \(AEPDataQueue.TABLE_NAME)
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -133,7 +133,7 @@ class AEPDataQueueTests: XCTestCase {
     func testPeekDataEntityWithoutData() throws {
         // Given
 
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
         let event = EventEntity(id: UUID(), timestamp: Date(), name: "event001")
         let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
 
@@ -144,7 +144,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // Then
         let sql = """
-        SELECT * from \(AEPDataQueue.TABLE_NAME)
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -161,7 +161,7 @@ class AEPDataQueueTests: XCTestCase {
     func testPeekDataEntityFromEmptyQueue() throws {
         // Given
 
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
 
         // When
         // Then
@@ -171,7 +171,7 @@ class AEPDataQueueTests: XCTestCase {
     /// pop()
     func testPopDataEntityFromQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
         var events: [EventEntity] = []
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
@@ -186,7 +186,7 @@ class AEPDataQueueTests: XCTestCase {
 
         // Then
         let sql = """
-        SELECT * from \(AEPDataQueue.TABLE_NAME)
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
         """
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let row = SQLiteWrapper.query(database: connection, sql: sql)!
@@ -204,7 +204,7 @@ class AEPDataQueueTests: XCTestCase {
     func testPopDataEntityFromEmptyQueue() throws {
         // Given
 
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
 
         // When
         // Then
@@ -214,7 +214,7 @@ class AEPDataQueueTests: XCTestCase {
     /// clear()
     func testClearQueue() throws {
         // Given
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
 
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
@@ -228,7 +228,7 @@ class AEPDataQueueTests: XCTestCase {
         // Then
         XCTAssertTrue(result)
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
-        let tableExist = SQLiteWrapper.tableExist(database: connection, tableName: AEPDataQueue.TABLE_NAME)
+        let tableExist = SQLiteWrapper.tableExist(database: connection, tableName: SQLiteDataQueue.TABLE_NAME)
 
         defer {
             _ = SQLiteWrapper.disconnect(database: connection)
@@ -244,7 +244,7 @@ class AEPDataQueueTests: XCTestCase {
         let dispatchQueue2 = DispatchQueue(label: "ThreadSafeDataQueueOperations.queue2", attributes: .concurrent)
         let dispatchQueue3 = DispatchQueue(label: "ThreadSafeDataQueueOperations.queue3", attributes: .concurrent)
 
-        let queue = AEPDataQueueService.shared.getDataQueue(label: fileName)!
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
 
         let loop = 10
         let expectation = self.expectation(description: "Test sync")

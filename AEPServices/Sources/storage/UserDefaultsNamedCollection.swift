@@ -12,7 +12,7 @@
 
 import Foundation
 
-class NamedUserDefaultKeyValueService: NamedKeyValueService {
+class UserDefaultsNamedCollection: NamedCollectionProcessing {
     
     let keyPrefix = "com.adobe.mobile.datastore"
     

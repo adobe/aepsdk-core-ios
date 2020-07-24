@@ -14,9 +14,9 @@ import XCTest
 
 @testable import AEPServices
 
-class NamedKeyValueStoreTest: XCTestCase {
+class NamedCollectionDataStoreTest: XCTestCase {
     
-    var store: NamedKeyValueStore?
+    var store: NamedCollectionDataStore?
 
     let mockKeyValueService = MockKeyValueService()
     
@@ -34,7 +34,7 @@ class NamedKeyValueStoreTest: XCTestCase {
     override func setUp() {
         // Override the KeyValueStoreService with mock
         AEPServiceProvider.shared.namedKeyValueService = self.mockKeyValueService
-        self.store = NamedKeyValueStore(name: "testStore.")
+        self.store = NamedCollectionDataStore(name: "testStore.")
     }
     
     func testGetIntFallback() {
@@ -405,7 +405,7 @@ class NamedKeyValueStoreTest: XCTestCase {
     }
 }
 
-class MockKeyValueService: NamedKeyValueService {
+class MockKeyValueService: NamedCollectionProcessing {
     
     var getResult: Any?
     var getCalled: Bool = false

@@ -18,7 +18,7 @@ class LifecycleMetricsBuilder {
     
     private typealias KEYS = LifecycleConstants.DataStoreKeys
 
-    private let dataStore: NamedKeyValueStore
+    private let dataStore: NamedCollectionDataStore
     private let date: Date
  
     private var systemInfoService: SystemInfoService {
@@ -27,7 +27,7 @@ class LifecycleMetricsBuilder {
         }
     }
     
-    init(dataStore: NamedKeyValueStore, date: Date) {
+    init(dataStore: NamedCollectionDataStore, date: Date) {
         self.dataStore = dataStore
         self.date = date
     }

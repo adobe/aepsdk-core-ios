@@ -11,20 +11,7 @@
 
 import Foundation
 
-///
-/// File Unzipper protocol
-///
-public protocol Unzipper {
-    ///
-    /// Unzips a file at a given source url to a destination url
-    /// - Paramaters:
-    ///     - sourceURL: The URL pointing to the file to be unzipped
-    ///     - destinationURL: The URL pointing to the destination where the unzipped contents will go
-    /// - Returns: A list of names of each of the unzipped files
-    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String]
-}
-
-public class FileUnzipper: Unzipper {
+public class FileUnzipper: Unzipping {
     
     /// Creates a new FileUnzipper
     public init(){ }

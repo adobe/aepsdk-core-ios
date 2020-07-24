@@ -28,11 +28,11 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         return AnyCodable.toAnyDictionary(dictionary: decoded)
     }
 
-    func loadConfigFromCache(appId: String, dataStore: NamedKeyValueStore) -> [String: Any]? {
+    func loadConfigFromCache(appId: String, dataStore: NamedCollectionDataStore) -> [String: Any]? {
         return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.cacheableDict)
     }
 
-    func loadConfigFromUrl(appId: String, dataStore: NamedKeyValueStore, completion: @escaping ([String: Any]?) -> ()) {
+    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> ()) {
         guard !appId.isEmpty, let url = URL(string: ConfigurationConstants.CONFIG_URL_BASE + appId + ".json") else {
             // error - bad url
             completion(nil)
@@ -79,7 +79,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     ///   - appId: The appId of the cached configuration
     ///   - dataStore: The datastore used to cache configurations
     /// Returns: A `CachedConfiguration` for `appId`, nil if not found
-    private func getCachedConfig(appId: String, dataStore: NamedKeyValueStore) -> CachedConfiguration? {
+    private func getCachedConfig(appId: String, dataStore: NamedCollectionDataStore) -> CachedConfiguration? {
         let config: CachedConfiguration? = dataStore.getObject(key: buildCacheKey(appId: appId))
         return config
     }

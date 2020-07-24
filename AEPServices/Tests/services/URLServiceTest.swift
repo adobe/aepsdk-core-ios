@@ -13,20 +13,20 @@
 @testable import AEPServices
 import XCTest
 
-class AEPURLServiceTest: XCTestCase {
+class URLServiceTest: XCTestCase {
     private let urlService = AEPServiceProvider.shared.urlService
 
     override func setUp() {
-        AEPServiceProvider.shared.urlService = AEPURLService()
+        AEPServiceProvider.shared.urlService = URLService()
     }
 
-    public class URLServiceReturnFalse: URLService {
+    public class URLServiceReturnFalse: URLOpening {
         public func openUrl(_ url: URL) -> Bool {
             return false
         }
     }
 
-    public class URLServiceReturnTrue: URLService {
+    public class URLServiceReturnTrue: URLOpening {
         public func openUrl(_ url: URL) -> Bool {
             return true
         }

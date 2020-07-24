@@ -28,12 +28,12 @@ class MockConfigurationDownloader: ConfigurationDownloadable {
     }
     
     var configFromCache: [String: Any]?
-    func loadConfigFromCache(appId: String, dataStore: NamedKeyValueStore) -> [String : Any]? {
+    func loadConfigFromCache(appId: String, dataStore: NamedCollectionDataStore) -> [String : Any]? {
         configFromCache
     }
     
     var configFromUrl: [String: Any]?
-    func loadConfigFromUrl(appId: String, dataStore: NamedKeyValueStore, completion: @escaping ([String : Any]?) -> ()) {
+    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String : Any]?) -> ()) {
         completion(configFromUrl)
     }
     
