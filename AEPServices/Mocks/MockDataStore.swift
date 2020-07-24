@@ -13,7 +13,7 @@ import Foundation
 import AEPServices
 
 public class MockDataStore: NamedCollectionProcessing {
-    private var dict = [String: Any?]()
+    public var dict = [String: Any?]()
     
     public init(){
         

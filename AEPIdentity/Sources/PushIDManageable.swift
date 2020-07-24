@@ -20,7 +20,7 @@ protocol PushIDManageable {
     /// - Parameters:
     ///   - dataStore: the datastore to store push data in
     ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
-    init(dataStore: NamedKeyValueStore, eventDispatcher: @escaping (Event) -> ())
+    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> ())
 
     /// Updates the push identifier
     /// - Parameter pushId: the new push identifier

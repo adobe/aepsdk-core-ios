@@ -28,7 +28,7 @@ protocol Cacheable {
 
 extension Cacheable {
     func notModifiedHeaders() -> [String: String] {
-        return [NetworkServiceConstants.Headers.IF_MODIFIED_SINCE_HEADER: lastModified ?? "",
+        return [NetworkServiceConstants.Headers.IF_MODIFIED_SINCE: lastModified ?? "",
                 NetworkServiceConstants.Headers.IF_NONE_MATCH: eTag ?? ""]
     }
 }
