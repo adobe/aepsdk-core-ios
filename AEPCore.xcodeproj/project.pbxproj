@@ -107,6 +107,7 @@
 		3F03983A24BE62AA0019F095 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983624BE62AA0019F095 /* ADBMobileConfig.json */; };
 		3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983724BE62AA0019F095 /* TestConfig.json */; };
 		3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
+		3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */; };
 		3F39520724CA096100F7325B /* AEPCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951E824CA096100F7325B /* AEPCoreTests.swift */; };
 		3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951EA24CA096100F7325B /* SharedStateTest.swift */; };
 		3F39520924CA096100F7325B /* EventHubTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951EB24CA096100F7325B /* EventHubTests.swift */; };
@@ -451,6 +452,7 @@
 		3F03983624BE62AA0019F095 /* ADBMobileConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		3F03985424C0008D0019F095 /* AEPEventHubTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPEventHubTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParserTests.swift; sourceTree = "<group>"; };
 		3F3951E824CA096100F7325B /* AEPCoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPCoreTests.swift; sourceTree = "<group>"; };
 		3F3951EA24CA096100F7325B /* SharedStateTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTest.swift; sourceTree = "<group>"; };
 		3F3951EB24CA096100F7325B /* EventHubTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubTests.swift; sourceTree = "<group>"; };
@@ -718,6 +720,7 @@
 			children = (
 				3F3951F724CA096100F7325B /* AEPCore+ConfigurationTests.swift */,
 				3F3951E824CA096100F7325B /* AEPCoreTests.swift */,
+				3F39152E24CA47B600B58C3E /* RulesTests */,
 				3F39520024CA096100F7325B /* ConfigurationTests */,
 				3F3951E924CA096100F7325B /* EventHubTests */,
 				3F3951F324CA096100F7325B /* MockExtensions */,
@@ -918,6 +921,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3F39152E24CA47B600B58C3E /* RulesTests */ = {
+			isa = PBXGroup;
+			children = (
+				3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */,
+			);
+			path = RulesTests;
 			sourceTree = "<group>";
 		};
 		3F3951E924CA096100F7325B /* EventHubTests */ = {
@@ -1631,6 +1642,7 @@
 				3F39520724CA096100F7325B /* AEPCoreTests.swift in Sources */,
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
+				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
 				3F39521F24CA096200F7325B /* RulesDownloaderTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 			);

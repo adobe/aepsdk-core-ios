@@ -79,7 +79,7 @@
 //        }
 //
 //        // test
-//        AEPCore.updateConfigurationWith(configDict: configUpdate)
+//        MobileCore.updateConfigurationWith(configDict: configUpdate)
 //
 //        // verify
 //        wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
@@ -143,8 +143,8 @@
 //        }
 //
 //        // test
-//        AEPCore.updateConfigurationWith(configDict: configUpdate)
-//        AEPCore.updateConfigurationWith(configDict: configUpdate)
+//        MobileCore.updateConfigurationWith(configDict: configUpdate)
+//        MobileCore.updateConfigurationWith(configDict: configUpdate)
 //
 //        // verify
 //        wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
@@ -166,7 +166,7 @@
 //        }
 //
 //        // test
-//        AEPCore.updateConfigurationWith(configDict: [:])
+//        MobileCore.updateConfigurationWith(configDict: [:])
 //
 //        // verify
 //        wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 0.25)
@@ -199,7 +199,7 @@
 //        }
 //
 //        // test
-//        AEPCore.setPrivacy(status: .optedIn)
+//        MobileCore.setPrivacy(status: .optedIn)
 //
 //        // verify
 //        wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
@@ -232,8 +232,8 @@
 //        }
 //
 //        // test
-//        AEPCore.setPrivacy(status: .optedIn)
-//        AEPCore.setPrivacy(status: .optedIn)
+//        MobileCore.setPrivacy(status: .optedIn)
+//        MobileCore.setPrivacy(status: .optedIn)
 //
 //        // verify
 //        wait(for: [configResponseExpectation, sharedStateResponseExpectation], timeout: 1.0)
@@ -247,7 +247,7 @@
 //        let privacyExpectation = XCTestExpectation(description: "Get privacy status defaults to unknown")
 //
 //        // test
-//        AEPCore.getPrivacyStatus { (privacyStatus) in
+//        MobileCore.getPrivacyStatus { (privacyStatus) in
 //            XCTAssertEqual(privacyStatus, PrivacyStatus.unknown)
 //            privacyExpectation.fulfill()
 //        }
@@ -262,8 +262,8 @@
 //        let privacyExpectation = XCTestExpectation(description: "Get privacy status returns opt-in")
 //
 //        // test
-//        AEPCore.setPrivacy(status: .optedIn)
-//        AEPCore.getPrivacyStatus { (privacyStatus) in
+//        MobileCore.setPrivacy(status: .optedIn)
+//        MobileCore.getPrivacyStatus { (privacyStatus) in
 //            XCTAssertEqual(privacyStatus.rawValue, PrivacyStatus.optedIn.rawValue)
 //            privacyExpectation.fulfill()
 //        }
@@ -277,8 +277,8 @@
 //        let privacyExpectation = XCTestExpectation(description: "Get privacy status returns opt-out")
 //
 //        // test
-//        AEPCore.setPrivacy(status: .optedOut)
-//        AEPCore.getPrivacyStatus { (privacyStatus) in
+//        MobileCore.setPrivacy(status: .optedOut)
+//        MobileCore.getPrivacyStatus { (privacyStatus) in
 //            XCTAssertEqual(privacyStatus, PrivacyStatus.optedOut)
 //            privacyExpectation.fulfill()
 //        }
@@ -294,13 +294,13 @@
 //        let optOutExpectation = XCTestExpectation(description: "Get privacy status returns opt-out")
 //
 //        // test
-//        AEPCore.setPrivacy(status: .optedIn)
-//        AEPCore.getPrivacyStatus { (privacyStatus) in
+//        MobileCore.setPrivacy(status: .optedIn)
+//        MobileCore.getPrivacyStatus { (privacyStatus) in
 //            XCTAssertEqual(privacyStatus, PrivacyStatus.optedIn)
 //            optInExpectation.fulfill()
 //
-//            AEPCore.setPrivacy(status: .optedOut)
-//            AEPCore.getPrivacyStatus { (updatedPrivacyStatus) in
+//            MobileCore.setPrivacy(status: .optedOut)
+//            MobileCore.getPrivacyStatus { (updatedPrivacyStatus) in
 //                XCTAssertEqual(updatedPrivacyStatus, PrivacyStatus.optedOut)
 //                optOutExpectation.fulfill()
 //            }
@@ -354,7 +354,7 @@
 //
 //        // test
 //        let path = Bundle(for: type(of: self)).path(forResource: "ADBMobileConfig", ofType: "json")!
-//        AEPCore.configureWith(filePath: path)
+//        MobileCore.configureWith(filePath: path)
 //
 //        // verify
 //        wait(for: [configResponseExpectation, sharedStateExpectation], timeout: 2)
@@ -378,7 +378,7 @@
 //        }
 //
 //        // test
-//        AEPCore.configureWith(filePath: "Invalid/Path/ADBMobileConfig.json")
+//        MobileCore.configureWith(filePath: "Invalid/Path/ADBMobileConfig.json")
 //
 //        // verify
 //        wait(for: [sharedStateExpectation], timeout: 2)
@@ -406,11 +406,11 @@
 //        }
 //
 //        // test
-//        AEPCore.setPrivacy(status: .optedOut)
-//        AEPCore.configureWith(filePath: "Invalid/Path/ADBMobileConfig.json")
+//        MobileCore.setPrivacy(status: .optedOut)
+//        MobileCore.configureWith(filePath: "Invalid/Path/ADBMobileConfig.json")
 //
 //        // verify
-//        AEPCore.getPrivacyStatus { (status) in
+//        MobileCore.getPrivacyStatus { (status) in
 //            XCTAssertEqual(PrivacyStatus.optedOut, status)
 //            getPrivacyStatusExpectation.fulfill()
 //        }
@@ -444,7 +444,7 @@
 //        }
 //
 //        // test
-//        AEPCore.configureWith(appId: "valid-app-id")
+//        MobileCore.configureWith(appId: "valid-app-id")
 //
 //        // verify
 //        wait(for: [configResponseEvent, sharedStateExpectation], timeout: 2.0)
@@ -467,10 +467,10 @@
 //        }
 //
 //        // test
-//        AEPCore.configureWith(appId: "invalid-app-id")
+//        MobileCore.configureWith(appId: "invalid-app-id")
 //        sleep(5) // give some time for the first network request to fail
 //        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success) // setup a valid network response
-//        AEPCore.configureWith(appId: "valid-app-id")
+//        MobileCore.configureWith(appId: "valid-app-id")
 //
 //        // verify
 //        wait(for: [configResponseEvent], timeout: 2.0)
@@ -491,7 +491,7 @@
 //        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"20920\",\"value\":\"test-push-id\",\"type\":\"integrationCode\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
 //
 //        // test
-//        AEPCore.getSdkIdentities { (identities, error) in
+//        MobileCore.getSdkIdentities { (identities, error) in
 //            XCTAssertEqual(expected, identities)
 //            XCTAssertNil(error)
 //            expectation.fulfill()
@@ -512,7 +512,7 @@
 //        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
 //
 //        // test
-//        AEPCore.getSdkIdentities { (identities, error) in
+//        MobileCore.getSdkIdentities { (identities, error) in
 //            XCTAssertEqual(expected, identities)
 //            XCTAssertNil(error)
 //            expectation.fulfill()
@@ -534,7 +534,7 @@
 //        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"20920\",\"value\":\"test-push-id\",\"type\":\"integrationCode\"}]}]}"
 //
 //        // test
-//        AEPCore.getSdkIdentities { (identities, error) in
+//        MobileCore.getSdkIdentities { (identities, error) in
 //            XCTAssertEqual(expected, identities)
 //            XCTAssertNil(error)
 //            expectation.fulfill()
@@ -552,7 +552,7 @@
 //        let expected = "{}"
 //
 //        // test
-//        AEPCore.getSdkIdentities { (identities, error) in
+//        MobileCore.getSdkIdentities { (identities, error) in
 //            XCTAssertEqual(expected, identities)
 //            XCTAssertNil(error)
 //            expectation.fulfill()
@@ -572,7 +572,7 @@
 //        let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-org-id\"}]}"
 //
 //        // test
-//        AEPCore.getSdkIdentities { (identities, error) in
+//        MobileCore.getSdkIdentities { (identities, error) in
 //            XCTAssertEqual(expected, identities)
 //            XCTAssertNil(error)
 //            expectation.fulfill()
