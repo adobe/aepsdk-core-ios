@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// NetworkRequest struct to be used by the NetworkService and the HttpConnectionPerformer when initiating network calls
-public struct NetworkRequest {
+@objc public class NetworkRequest: NSObject {
     private static let REQUEST_HEADER_KEY_USER_AGENT = "User-Agent"
     private static let REQUEST_HEADER_KEY_LANGUAGE = "Accept-Language"
     

@@ -13,12 +13,12 @@
 @testable import AEPServices
 import XCTest
 
-class AEPDataQueueServiceTests: XCTestCase {
+class DataQueueServiceTests: XCTestCase {
     let fileName = "db_aep_test_01"
 
     override func setUp() {
-        AEPDataQueueServiceTests.removeDbFileIfExists(fileName)
-        if let service = AEPDataQueueService.shared as? AEPDataQueueService {
+        DataQueueServiceTests.removeDbFileIfExists(fileName)
+        if let service = DataQueueService.shared as? DataQueueService {
             service.cleanCache()
         }
     }
@@ -42,12 +42,12 @@ class AEPDataQueueServiceTests: XCTestCase {
         // Given
 
         // When
-        _ = AEPDataQueueService.shared.getDataQueue(label: fileName)
+        _ = DataQueueService.shared.getDataQueue(label: fileName)
 
         // Then
-        XCTAssertTrue(AEPDataQueueServiceTests.dbFileExists(fileName))
+        XCTAssertTrue(DataQueueServiceTests.dbFileExists(fileName))
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)
-        XCTAssertTrue(SQLiteWrapper.tableExist(database: connection!, tableName: AEPDataQueue.TABLE_NAME))
+        XCTAssertTrue(SQLiteWrapper.tableExist(database: connection!, tableName: SQLiteDataQueue.TABLE_NAME))
     }
 
     /// initDataQueue()
@@ -55,7 +55,7 @@ class AEPDataQueueServiceTests: XCTestCase {
         // Given
 
         // When
-        let result = AEPDataQueueService.shared.getDataQueue(label: "")
+        let result = DataQueueService.shared.getDataQueue(label: "")
 
         // Then
         XCTAssertNil(result)
@@ -64,10 +64,10 @@ class AEPDataQueueServiceTests: XCTestCase {
     /// initDataQueue()
     func testDataQueueInstanceShouldBeCached() throws {
         // Given
-        let dataQueueFirst = AEPDataQueueService.shared.getDataQueue(label: fileName)
+        let dataQueueFirst = DataQueueService.shared.getDataQueue(label: fileName)
 
         // When
-        let dataQueueSecond = AEPDataQueueService.shared.getDataQueue(label: fileName)
+        let dataQueueSecond = DataQueueService.shared.getDataQueue(label: fileName)
 
         // Then
         XCTAssertTrue(dataQueueFirst as AnyObject? === dataQueueSecond as AnyObject?)

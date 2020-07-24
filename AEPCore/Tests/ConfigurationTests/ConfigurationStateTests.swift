@@ -16,7 +16,7 @@ import AEPServices
 
 class ConfigurationStateTests: XCTestCase {
     var configState: ConfigurationState!
-    let dataStore = NamedKeyValueStore(name: "ConfigurationStateTests")
+    let dataStore = NamedCollectionDataStore(name: "ConfigurationStateTests")
     var configDownloader: MockConfigurationDownloader!
     
 

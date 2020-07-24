@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPServices
 
-extension NetworkService {
+extension Networking {
 
     /// Sends the `NetworkRequest` responsible for sending an opt-out hit
     /// - Parameters:

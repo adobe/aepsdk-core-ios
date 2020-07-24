@@ -14,9 +14,9 @@ import XCTest
 
 @testable import AEPServices
 
-class NamedKeyValueServiceTest: XCTestCase {
+class UserDefaultsNamedCollectionTest: XCTestCase {
     
-    let service = NamedUserDefaultKeyValueService()
+    let service = UserDefaultsNamedCollection()
     
     func testSimpleStore() {
         let collectionName = "testName"

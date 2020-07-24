@@ -26,7 +26,7 @@ extension Date {
 ///    - implements a FIFO container (queue) for `DataEntity` objects
 ///    - `DataEntity` objects inside this queue will be persisted in SQLite database automatically
 ///    - the database operations is performed in series
-class AEPDataQueue: DataQueue {
+class SQLiteDataQueue: DataQueue {
     public let databaseName: String
     public let databaseFilePath: FileManager.SearchPathDirectory
     public static let TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
@@ -46,7 +46,7 @@ class AEPDataQueue: DataQueue {
         self.databaseName = databaseName
         self.databaseFilePath = databaseFilePath
         self.serialQueue = serialQueue
-        guard createTableIfNotExists(tableName: AEPDataQueue.TABLE_NAME) else {
+        guard createTableIfNotExists(tableName: SQLiteDataQueue.TABLE_NAME) else {
             print("failed to initialize AEPDataQueue with provided database name: \(databaseName)")
             return nil
         }
@@ -60,7 +60,7 @@ class AEPDataQueue: DataQueue {
             }
             
             let insertRowStatement = """
-            INSERT INTO \(AEPDataQueue.TABLE_NAME) (uniqueIdentifier, timestamp, data)
+            INSERT INTO \(SQLiteDataQueue.TABLE_NAME) (uniqueIdentifier, timestamp, data)
             VALUES ("\(dataEntity.uniqueIdentifier)", \(dataEntity.timestamp.millisecondsSince1970), '\(dataString)');
             """
             
@@ -80,7 +80,7 @@ class AEPDataQueue: DataQueue {
     func peek() -> DataEntity? {
         return serialQueue.sync {
             let queryRowStatement = """
-            SELECT min(id),uniqueIdentifier,timestamp,data FROM \(AEPDataQueue.TABLE_NAME);
+            SELECT min(id),uniqueIdentifier,timestamp,data FROM \(SQLiteDataQueue.TABLE_NAME);
             """
             guard let connection = connect() else {
                 return nil
@@ -116,7 +116,7 @@ class AEPDataQueue: DataQueue {
                 _ = disconnect(database: connection)
             }
             let deleteRowStatement = """
-            DELETE FROM \(AEPDataQueue.TABLE_NAME) order by id limit 1;
+            DELETE FROM \(SQLiteDataQueue.TABLE_NAME) order by id limit 1;
             """
             guard SQLiteWrapper.execute(database: connection, sql: deleteRowStatement) else {
                 return false
@@ -128,7 +128,7 @@ class AEPDataQueue: DataQueue {
     func clear() -> Bool {
         return serialQueue.sync {
             let dropTableStatement = """
-            DROP TABLE IF EXISTS \(AEPDataQueue.TABLE_NAME);
+            DROP TABLE IF EXISTS \(SQLiteDataQueue.TABLE_NAME);
             """
             guard let connection = connect() else {
                 return false
@@ -163,7 +163,7 @@ class AEPDataQueue: DataQueue {
         defer {
             _ = disconnect(database: connection)
         }
-        if SQLiteWrapper.tableExist(database: connection, tableName: AEPDataQueue.TABLE_NAME) {
+        if SQLiteWrapper.tableExist(database: connection, tableName: SQLiteDataQueue.TABLE_NAME) {
             return true
         } else {
             let createTableStatement = """

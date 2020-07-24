@@ -18,7 +18,7 @@ enum MockRulesDownloaderResponses {
     case notModified
 }
 
-struct MockRulesDownloaderNetworkService: NetworkService {
+struct MockRulesDownloaderNetworkService: Networking {
     var response: MockRulesDownloaderResponses!
     
     let expectedData = try? Data(contentsOf: RulesDownloaderTests.rulesUrl!)

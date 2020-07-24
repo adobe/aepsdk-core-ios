@@ -12,7 +12,7 @@
 import Foundation
 import AEPServices
 
-class MockDiskCache: CacheService {
+class MockDiskCache: Caching {
     
     var mockCache: [String: CacheEntry] = [:]
     

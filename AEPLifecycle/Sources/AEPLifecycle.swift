@@ -28,7 +28,7 @@ class AEPLifecycle: Extension {
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        lifecycleState = LifecycleState(dataStore: NamedKeyValueStore(name: name))
+        lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
     }
     
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
