@@ -1,31 +1,20 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
-
-import Foundation
 import AEPServices
+import Foundation
 
 /// An Event to be dispatched by the Event Hub
 public struct Event {
-    internal init(name: String, id: UUID = UUID(), type: EventType, source: EventSource, data: [String : Any]?, timestamp: Date = Date(), responseID: UUID?) {
-        self.name = name
-        self.id = id
-        self.type = type
-        self.source = source
-        self.data = data
-        self.timestamp = timestamp
-        self.responseID = responseID
-    }
-    
-    
     /// Name of the event
     public let name: String
     
@@ -62,9 +51,9 @@ public struct Event {
         self.type = type
         self.source = source
         self.data = data
-        self.responseID = requestEvent?.id
+        responseID = requestEvent?.id
     }
-
+    
     /// Creates a new `Event` where the `responseID` is equal to the `id` of this `Event`
     /// - Parameters:
     ///   - name: Name for the `Event`
@@ -74,7 +63,6 @@ public struct Event {
     public func createResponseEvent(name: String, type: EventType, source: EventSource, data: [String: Any]?) -> Event {
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
-    
 }
 
 extension Event: Decodable, Encodable {
