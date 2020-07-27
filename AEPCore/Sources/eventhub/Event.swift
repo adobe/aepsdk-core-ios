@@ -51,7 +51,7 @@ public struct Event {
         self.type = type
         self.source = source
         self.data = data
-        responseID = requestEvent?.id
+        self.responseID = requestEvent?.id
     }
     
     /// Creates a new `Event` where the `responseID` is equal to the `id` of this `Event`
