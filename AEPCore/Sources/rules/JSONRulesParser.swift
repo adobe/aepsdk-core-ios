@@ -43,7 +43,13 @@ struct JSONRuleRoot: Codable {
         var result = [LaunchRule]()
         for launchRule in rules {
             if let conditionExpression = launchRule.condition.convert() {
-                let rule = LaunchRule(condition: conditionExpression)
+                var consequencesJson = [RuleConsequence]()
+                for consequence in launchRule.consequences {
+                    if let id = consequence.id, let type = consequence.type, let json = consequence.detailJson {
+                        consequencesJson.append(RuleConsequence(id: id, type: type, detailJson: json))
+                    }
+                }
+                let rule = LaunchRule(condition: conditionExpression, consequences: consequencesJson)
                 result.append(rule)
             }
         }
@@ -130,12 +136,6 @@ struct JSONDefinition: Codable {
     let key: String?
     let matcher: String?
     let values: [AnyCodable]?
-}
-
-enum ConsequenceType: String, Codable {
-    case url
-    case add
-    case mod
 }
 
 struct JSONDetail: Codable {
