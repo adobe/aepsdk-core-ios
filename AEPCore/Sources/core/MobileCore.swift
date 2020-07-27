@@ -27,7 +27,7 @@ public final class MobileCore {
     /// - Parameter completion: Closure to run when extensions have been registered
     public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
-        let allExtensions = extensions + [Configuration.self]
+        let allExtensions = [Configuration.self] + extensions
         
         allExtensions.forEach {
             EventHub.shared.registerExtension($0) { (_) in
