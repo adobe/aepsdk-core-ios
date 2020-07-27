@@ -27,11 +27,11 @@ public final class MobileCore {
     /// - Parameter completion: Closure to run when extensions have been registered
     public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
+        let allExtensions = extensions + [Configuration.self]
         
-        // TODO: Add configuration as a default extension to be registered
-        extensions.forEach {
+        allExtensions.forEach {
             EventHub.shared.registerExtension($0) { (_) in
-                if registeredCounter.incrementAndGet() == extensions.count {
+                if registeredCounter.incrementAndGet() == allExtensions.count {
                     EventHub.shared.start()
                     completion?()
                 }
