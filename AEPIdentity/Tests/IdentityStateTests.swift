@@ -241,7 +241,9 @@ class IdentityStateTests: XCTestCase {
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
         dispatchedEventExpectation.assertForOverFulfill = true
-
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated since the blob/hint are updated.")
+        sharedStateExpectation.assertForOverFulfill = true
+        
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
@@ -251,9 +253,11 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (event) in
             XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
             dispatchedEventExpectation.fulfill()
+        }) { (data, event) in
+            sharedStateExpectation.fulfill()
         }
 
         // verify
@@ -270,7 +274,9 @@ class IdentityStateTests: XCTestCase {
         let dispatchedEventExpectation = XCTestExpectation(description: "Three events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 3 // 2 identity events, 1 configuration
         dispatchedEventExpectation.assertForOverFulfill = true
-
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated")
+        sharedStateExpectation.isInverted = true
+        
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
@@ -280,8 +286,10 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (event) in
             dispatchedEventExpectation.fulfill()
+        }) { (data, event) in
+            sharedStateExpectation.fulfill()
         }
 
         // verify
@@ -298,7 +306,9 @@ class IdentityStateTests: XCTestCase {
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
         dispatchedEventExpectation.assertForOverFulfill = true
-
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated")
+        sharedStateExpectation.isInverted = true
+        
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
@@ -308,8 +318,10 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (event) in
             dispatchedEventExpectation.fulfill()
+        }) { (data, event) in
+            sharedStateExpectation.fulfill()
         }
 
         // verify
@@ -326,7 +338,9 @@ class IdentityStateTests: XCTestCase {
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
         dispatchedEventExpectation.assertForOverFulfill = true
-
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated as we are opted-out")
+        sharedStateExpectation.isInverted = true
+        
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedOut
@@ -336,8 +350,10 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse)) { (event) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (event) in
             dispatchedEventExpectation.fulfill()
+        }) { (data, event) in
+            sharedStateExpectation.fulfill()
         }
 
         // verify
@@ -353,7 +369,9 @@ class IdentityStateTests: XCTestCase {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "One event should be dispatched")
         dispatchedEventExpectation.assertForOverFulfill = true
-
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated as the response was empty")
+        sharedStateExpectation.isInverted = true
+        
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedOut
@@ -361,8 +379,10 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: nil), response: nil) { (event) in
+        state.handleHitResponse(hit: DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: nil), response: nil, eventDispatcher: { (event) in
             dispatchedEventExpectation.fulfill()
+        }) { (data, event) in
+            sharedStateExpectation.fulfill()
         }
 
         // verify
