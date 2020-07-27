@@ -156,7 +156,7 @@ public class Identity: Extension {
     ///   - entity: The `DataEntity` that was processed by the hit processor
     ///   - responseData: the network response data if any
     private func handleNetworkResponse(entity: DataEntity, responseData: Data?) {
-        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:))
+        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
     }
     
     /// Sends an opt-out network request if the current privacy status is opt-out
