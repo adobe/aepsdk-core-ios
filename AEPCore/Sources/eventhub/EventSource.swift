@@ -14,6 +14,10 @@ import Foundation
 
 /// Represents the source of which an event originates from
 @objc public enum EventSource: Int, RawRepresentable, Codable, CustomStringConvertible {
+    
+    public var description: String {
+        return self.rawValue
+    }
     public typealias RawValue = String
     
     case none
@@ -28,6 +32,62 @@ import Foundation
     case sharedState
     case wildcard
     
+    public var rawValue: RawValue {
+        switch self {
+        case .none:
+            return Constants.none
+        case .os:
+            return Constants.os
+        case .requestContent:
+            return Constants.requestContent
+        case .requestIdentity:
+            return Constants.requestIdentity
+        case .requestProfile:
+            return Constants.requestProfile
+        case .requestReset:
+            return Constants.requestReset
+        case .responseContent:
+            return Constants.responseContent
+        case .responseIdentity:
+            return Constants.responseIdentity
+        case .responseProfile:
+            return Constants.responseProfile
+        case .sharedState:
+            return Constants.sharedState
+        case .wildcard:
+            return Constants.wildcard
+        }
+    }
+    
+    public init?(rawValue: RawValue) {
+        switch rawValue {
+        case Constants.none:
+            self = .none
+        case Constants.os:
+            self = .os
+        case Constants.requestContent:
+            self = .requestContent
+        case Constants.requestIdentity:
+            self = .requestIdentity
+        case Constants.requestProfile:
+            self = .requestProfile
+        case Constants.requestReset:
+            self = .requestReset
+        case Constants.responseContent:
+            self = .responseContent
+        case Constants.responseIdentity:
+            self = .responseIdentity
+        case Constants.responseProfile:
+            self = .responseProfile
+        case Constants.sharedState:
+            self = .sharedState
+        case Constants.wildcard:
+            self = .wildcard
+        default:
+            self = .none
+        }
+    }
+
     private struct Constants {
         static let none = "com.adobe.eventSource.none"
         static let os = "com.adobe.eventSource.os"
@@ -40,35 +100,5 @@ import Foundation
         static let responseProfile = "com.adobe.eventSource.responseProfile"
         static let sharedState = "com.adobe.eventSource.sharedState"
         static let wildcard = "com.adobe.eventSource._wildcard_"
-    }
-    
-    private static let stringMapping: [RawValue: EventSource] = [
-        Constants.none: .none,
-        Constants.os: .os,
-        Constants.requestContent: .requestContent,
-        Constants.requestIdentity: .requestIdentity,
-        Constants.requestProfile: .requestProfile,
-        Constants.requestReset: .requestReset,
-        Constants.responseContent: .responseContent,
-        Constants.responseIdentity: .responseIdentity,
-        Constants.responseProfile: .responseProfile,
-        Constants.sharedState: .sharedState,
-        Constants.wildcard: .wildcard,
-    ]
-    
-    public var description: String {
-        return self.rawValue
-    }
-    
-    public var rawValue: RawValue {
-        return EventSource.stringMapping.first(where: {$0.value == self})?.key ?? Constants.none
-    }
-    
-    public init?(rawValue: RawValue) {
-        if let value = EventSource.stringMapping[rawValue] {
-            self = value
-        }
-        
-        return nil
     }
 }

@@ -14,6 +14,10 @@ import Foundation
 
 /// Represents the type of an event
 @objc public enum EventType: Int, RawRepresentable, Codable, CustomStringConvertible {
+    public var description: String {
+        return self.rawValue
+    }
+    
     public typealias RawValue = String
     
     case acquisition
@@ -40,6 +44,110 @@ import Foundation
     case genericData
     case wildcard
     
+    public var rawValue: RawValue {
+        switch self {
+        case .acquisition:
+            return Constants.acquisition
+        case .analytics:
+            return Constants.analytics
+        case .audienceManager:
+            return Constants.audienceManager
+        case .campaign:
+            return Constants.campaign
+        case .configuration:
+            return Constants.configuration
+        case .custom:
+            return Constants.custom
+        case .hub:
+            return Constants.hub
+        case .identity:
+            return Constants.identity
+        case .lifecycle:
+            return Constants.lifecycle
+        case .location:
+            return Constants.location
+        case .pii:
+            return Constants.pii
+        case .rulesEngine:
+            return Constants.rulesEngine
+        case .signal:
+            return Constants.signal
+        case .system:
+            return Constants.system
+        case .target:
+            return Constants.target
+        case .userProfile:
+            return Constants.userProfile
+        case .places:
+            return Constants.places
+        case .genericTrack:
+            return Constants.genericTrack
+        case .genericLifecycle:
+            return Constants.genericLifecycle
+        case .genericIdentity:
+            return Constants.genericIdentity
+        case .genericPii:
+            return Constants.genericPii
+        case .genericData:
+            return Constants.genericData
+        case .wildcard:
+            return Constants.wildcard
+        }
+    }
+    
+    public init?(rawValue: RawValue) {
+        switch rawValue {
+            case Constants.acquisition:
+                self = .acquisition
+            case Constants.analytics:
+                self = .analytics
+            case Constants.audienceManager:
+                self = .audienceManager
+            case Constants.campaign:
+                self = .campaign
+            case Constants.configuration:
+                self = .configuration
+            case Constants.custom:
+                self = .custom
+            case Constants.hub:
+                self = .hub
+            case Constants.identity:
+                self = .identity
+            case Constants.lifecycle:
+                self = .lifecycle
+            case Constants.location:
+                self = .location
+            case Constants.pii:
+                self = .pii
+            case Constants.rulesEngine:
+                self = .rulesEngine
+            case Constants.signal:
+                self = .signal
+            case Constants.system:
+                self = .system
+            case Constants.target:
+                self = .target
+            case Constants.userProfile:
+                self = .userProfile
+            case Constants.places:
+                self = .places
+            case Constants.genericTrack:
+                self = .genericTrack
+            case Constants.genericLifecycle:
+                self = .genericLifecycle
+            case Constants.genericIdentity:
+                self = .genericIdentity
+            case Constants.genericPii:
+                self = .genericPii
+            case Constants.genericData:
+                self = .genericData
+            case Constants.wildcard:
+                self = .wildcard
+        default:
+            self = .custom
+        }
+    }
+    
     private struct Constants {
         static let acquisition = "com.adobe.eventType.acquisition"
         static let analytics = "com.adobe.eventType.analytics"
@@ -64,47 +172,5 @@ import Foundation
         static let genericPii = "com.adobe.eventType.generic.pii"
         static let genericData = "com.adobe.eventType.generic.data"
         static let wildcard = "com.adobe.eventType._wildcard_"
-    }
-    
-    private static let stringMapping: [RawValue: EventType] = [
-        Constants.acquisition: .acquisition,
-        Constants.analytics: .analytics,
-        Constants.audienceManager: .audienceManager,
-        Constants.campaign: .campaign,
-        Constants.configuration: .configuration,
-        Constants.custom: .custom,
-        Constants.hub: .hub,
-        Constants.identity: .identity,
-        Constants.lifecycle: .lifecycle,
-        Constants.location: .location,
-        Constants.pii: .pii,
-        Constants.rulesEngine: .rulesEngine,
-        Constants.signal: .signal,
-        Constants.system: .system,
-        Constants.target: .target,
-        Constants.userProfile: .userProfile,
-        Constants.places: .places,
-        Constants.genericTrack: .genericTrack,
-        Constants.genericLifecycle: .genericLifecycle,
-        Constants.genericIdentity: .genericIdentity,
-        Constants.genericPii: .genericPii,
-        Constants.genericData: .genericData,
-        Constants.wildcard: .wildcard,
-    ]
-    
-    public var description: String {
-        return self.rawValue
-    }
-    
-    public var rawValue: RawValue {
-        return EventType.stringMapping.first(where: {$0.value == self})?.key ?? Constants.custom
-    }
-    
-    public init?(rawValue: RawValue) {
-        if let value = EventType.stringMapping[rawValue] {
-            self = value
-        }
-        
-        return nil
     }
 }
