@@ -13,7 +13,11 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Represents the type of an event
-@objc public enum EventType: Int, RawRepresentable, Codable {
+@objc public enum EventType: Int, RawRepresentable, Codable, CustomStringConvertible {
+    public var description: String {
+        return self.rawValue
+    }
+    
     public typealias RawValue = String
     
     case acquisition

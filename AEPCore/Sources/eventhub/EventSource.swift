@@ -13,7 +13,11 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Represents the source of which an event originates from
-@objc public enum EventSource: Int, RawRepresentable, Codable {
+@objc public enum EventSource: Int, RawRepresentable, Codable, CustomStringConvertible {
+    
+    public var description: String {
+        return self.rawValue
+    }
     public typealias RawValue = String
     
     case none
