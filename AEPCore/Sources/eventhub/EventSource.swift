@@ -13,16 +13,88 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Represents the source of which an event originates from
-public enum EventSource: String, Codable {
-    case none = "com.adobe.eventSource.none"
-    case os = "com.adobe.eventSource.os"
-    case requestContent = "com.adobe.eventSource.requestContent"
-    case requestIdentity = "com.adobe.eventSource.requestIdentity"
-    case requestProfile = "com.adobe.eventSource.requestProfile"
-    case requestReset = "com.adobe.eventSource.requestReset"
-    case responseContent = "com.adobe.eventSource.responseContent"
-    case responseIdentity = "com.adobe.eventSource.responseIdentity"
-    case responseProfile = "com.adobe.eventSource.responseProfile"
-    case sharedState = "com.adobe.eventSource.sharedState"
-    case wildcard = "com.adobe.eventSource._wildcard_"
+@objc public enum EventSource: Int, RawRepresentable, Codable {
+    public typealias RawValue = String
+    
+    case none
+    case os
+    case requestContent
+    case requestIdentity
+    case requestProfile
+    case requestReset
+    case responseContent
+    case responseIdentity
+    case responseProfile
+    case sharedState
+    case wildcard
+    
+    public var rawValue: RawValue {
+        switch self {
+        case .none:
+            return Constants.none
+        case .os:
+            return Constants.os
+        case .requestContent:
+            return Constants.requestContent
+        case .requestIdentity:
+            return Constants.requestIdentity
+        case .requestProfile:
+            return Constants.requestProfile
+        case .requestReset:
+            return Constants.requestReset
+        case .responseContent:
+            return Constants.responseContent
+        case .responseIdentity:
+            return Constants.responseIdentity
+        case .responseProfile:
+            return Constants.responseProfile
+        case .sharedState:
+            return Constants.sharedState
+        case .wildcard:
+            return Constants.wildcard
+        }
+    }
+    
+    public init?(rawValue: RawValue) {
+        switch rawValue {
+        case Constants.none:
+            self = .none
+        case Constants.os:
+            self = .os
+        case Constants.requestContent:
+            self = .requestContent
+        case Constants.requestIdentity:
+            self = .requestIdentity
+        case Constants.requestProfile:
+            self = .requestProfile
+        case Constants.requestReset:
+            self = .requestReset
+        case Constants.responseContent:
+            self = .responseContent
+        case Constants.responseIdentity:
+            self = .responseIdentity
+        case Constants.responseProfile:
+            self = .responseProfile
+        case Constants.sharedState:
+            self = .sharedState
+        case Constants.wildcard:
+            self = .wildcard
+        default:
+            self = .none
+        }
+    }
+
+    private struct Constants {
+        static let none = "com.adobe.eventSource.none"
+        static let os = "com.adobe.eventSource.os"
+        static let requestContent = "com.adobe.eventSource.requestContent"
+        static let requestIdentity = "com.adobe.eventSource.requestIdentity"
+        static let requestProfile = "com.adobe.eventSource.requestProfile"
+        static let requestReset = "com.adobe.eventSource.requestReset"
+        static let responseContent = "com.adobe.eventSource.responseContent"
+        static let responseIdentity = "com.adobe.eventSource.responseIdentity"
+        static let responseProfile = "com.adobe.eventSource.responseProfile"
+        static let sharedState = "com.adobe.eventSource.sharedState"
+        static let wildcard = "com.adobe.eventSource._wildcard_"
+    }
 }

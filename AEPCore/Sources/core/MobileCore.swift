@@ -14,7 +14,7 @@ import Foundation
 import AEPServices
 
 /// Core extension for the Adobe Experience Platform SDK
-public final class MobileCore {
+@objc public final class MobileCore: NSObject {
     
     /// Current version of the Core extension
     let version = "0.0.1"
@@ -41,7 +41,7 @@ public final class MobileCore {
     
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
-    public static func dispatch(event: Event) {
+    @objc public static func dispatch(event: Event) {
         EventHub.shared.dispatch(event: event)
     }
     
@@ -49,7 +49,7 @@ public final class MobileCore {
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
-    public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> ()) {
+    @objc public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> ()) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
             responseCallback(event)
         }
@@ -59,7 +59,7 @@ public final class MobileCore {
     
     /// Start event processing
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
-    public static func start(completion: @escaping (()-> Void)) {
+    @objc public static func start(_ completion: @escaping (()-> Void)) {
         // Start the event hub processing
         let pending = MobileCore.pendingExtensions.shallowCopy
         MobileCore.pendingExtensions.clear()
@@ -68,7 +68,7 @@ public final class MobileCore {
     
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
-    public static func setAdvertisingIdentifier(adId: String?) {
+    @objc public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
         let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
         MobileCore.dispatch(event: event)
@@ -76,7 +76,7 @@ public final class MobileCore {
     
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
     /// - Parameter deviceToken: the device token for push notifications
-    public static func setPushIdentifier(deviceToken: Data?) {
+    @objc public static func setPushIdentifier(deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
         let event = Event(name: "SetPushIdentifier", type: .genericIdentity, source: .requestContent, data: data)

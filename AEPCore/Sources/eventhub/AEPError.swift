@@ -16,6 +16,7 @@ import Foundation
 @objc public enum AEPError: Int, Error {
     public typealias RawValue = Int
     
+    case none
     case unexpected
     case callbackTimeout
 }
