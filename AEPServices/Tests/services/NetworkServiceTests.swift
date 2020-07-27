@@ -18,7 +18,7 @@ let testBody = "{\"test\": \"json\"\"}"
 let jsonData = testBody.data(using: .utf8)
 var mockSession : MockURLSession = MockURLSession(data: jsonData, urlResponse: nil, error: nil)
 
-class StubACPNetworkService : AEPNetworkService {
+class StubNetworkService : NetworkService {
     
     override func createURLSession(networkRequest: NetworkRequest) -> URLSession {
         return mockSession
@@ -26,7 +26,7 @@ class StubACPNetworkService : AEPNetworkService {
 }
 
 class NetworkServiceTests: XCTestCase {
-    private var networkStub = StubACPNetworkService()
+    private var networkStub = StubNetworkService()
     private var systemInfoService: MockSystemInfoService?
     override func setUp() {
         self.systemInfoService = MockSystemInfoService()
@@ -41,7 +41,7 @@ class NetworkServiceTests: XCTestCase {
     // MARK: NetworkService tests
 
     func testConnectAsync_returnsError_whenIncompleteUrl() {
-        let defaultNetworkService = AEPNetworkService()
+        let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
 
         let testUrl = URL(string: "https://")!
@@ -59,7 +59,7 @@ class NetworkServiceTests: XCTestCase {
     }
     
     func testConnectAsync_returnsError_whenInsecureUrl() {
-        let defaultNetworkService = AEPNetworkService()
+        let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
         let testUrl = URL(string: "http://www.adobe.com")!
         let networkRequest = NetworkRequest(url: testUrl)
@@ -85,7 +85,7 @@ class NetworkServiceTests: XCTestCase {
     }
     
     func testConnectAsync_returnsError_whenInvalidUrl() {
-        let defaultNetworkService = AEPNetworkService()
+        let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
         let testUrl = URL(string: "invalid.url")!
         let networkRequest = NetworkRequest(url: testUrl)
@@ -138,11 +138,11 @@ class NetworkServiceTests: XCTestCase {
     }
     
     func testConnectAsync_returnsTimeoutError_whenConnectionTimesOut() {
-        let defaultNetworkService = AEPNetworkService()
+        let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
 
-        let testUrl = URL(string: "https://example.com:81")!
-        let networkRequest = NetworkRequest(url: testUrl, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.25, readTimeout: 0.25)
+        let testUrl = URL(string: "https://www.adobe.com")!
+        let networkRequest = NetworkRequest(url: testUrl, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.01, readTimeout: 0.01)
         defaultNetworkService.connectAsync(networkRequest: networkRequest, completionHandler: {connection in
             XCTAssertNil(connection.data)
             XCTAssertNil(connection.response)

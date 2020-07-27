@@ -37,7 +37,7 @@ class PushIDManagerTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Analytics events should be dispatched with the push status")
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
             XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "False") // push status should be set to true
             XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
@@ -61,7 +61,7 @@ class PushIDManagerTests: XCTestCase {
         expectation.isInverted = true
         AEPServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.ANALYTICS_PUSH_SYNC, value: true)
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             expectation.fulfill()
         })
 
@@ -87,7 +87,7 @@ class PushIDManagerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Analytics events should be NOT dispatched with the push status")
         expectation.isInverted = true
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             expectation.fulfill()
         })
 
@@ -108,7 +108,7 @@ class PushIDManagerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Analytics events should be dispatched with the push status")
         let testPushId = "newPushId"
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
             XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "True") // push status should be set to true
             XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
@@ -135,7 +135,7 @@ class PushIDManagerTests: XCTestCase {
         let testPushId = "newPushId"
         pushEnabled = true
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             expectation.fulfill() // should not dispatch an analytics request as we already have push enabled set to true
         })
 
@@ -160,7 +160,7 @@ class PushIDManagerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Analytics events should be dispatched with the push status")
         let testPushId = "newPushId"
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
             XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "True") // push status should be set to true
             XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
@@ -189,7 +189,7 @@ class PushIDManagerTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Analytics events should be dispatched with the push status")
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
             XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "False") // push status should be set to true
             XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)
@@ -218,7 +218,7 @@ class PushIDManagerTests: XCTestCase {
 
         let expectation = XCTestExpectation(description: "Analytics events should be dispatched with the push status")
 
-        pushIdManager = PushIDManager(dataStore: NamedKeyValueStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             let contextData = event.data?[IdentityConstants.Analytics.CONTEXT_DATA] as? [String: String]
             XCTAssertEqual(contextData?[IdentityConstants.Analytics.EVENT_PUSH_STATUS], "False") // push status should be set to true
             XCTAssertEqual(event.data?[IdentityConstants.Analytics.TRACK_ACTION] as? String, IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME)

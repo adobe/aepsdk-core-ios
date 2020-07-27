@@ -37,12 +37,12 @@ struct PushIDManager: PushIDManageable {
         }
     }
 
-    private var dataStore: NamedKeyValueStore
+    private var dataStore: NamedCollectionDataStore
     private var eventDispatcher: (Event) -> ()
 
     // MARK: PushIDManageable
     
-    init(dataStore: NamedKeyValueStore, eventDispatcher: @escaping (Event) -> ()) {
+    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> ()) {
         self.dataStore = dataStore
         self.eventDispatcher = eventDispatcher
     }

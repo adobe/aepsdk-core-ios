@@ -12,7 +12,7 @@
 import Foundation
 import AEPServices
 
-class MockUnzipper: Unzipper {
+class MockUnzipper: Unzipping {
     
     var unzippedResults: [String] = []
     var unzipCalled = false

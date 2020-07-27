@@ -14,7 +14,7 @@ import AEPServices
 
 /// Manages the business logic of the Lifecycle extension
 struct LifecycleState {
-    let dataStore: NamedKeyValueStore
+    let dataStore: NamedCollectionDataStore
     
     // Access level modified for tests
     #if DEBUG
@@ -31,9 +31,9 @@ struct LifecycleState {
     
     private var lifecycleSession: LifecycleSession
     
-    /// Creates a new `LifecycleState` with the given `NamedKeyValueStore`
+    /// Creates a new `LifecycleState` with the given `NamedCollectionDataStore`
     /// - Parameter dataStore: The Lifecycle extension's data store
-    init(dataStore: NamedKeyValueStore) {
+    init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
         self.lifecycleSession = LifecycleSession(dataStore: dataStore)
     }

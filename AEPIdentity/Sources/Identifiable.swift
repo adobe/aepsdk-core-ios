@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Defines  a visitor identifier
-@objc protocol Identifiable {
+@objc public protocol Identifiable {
     
     /// Origin of the identifier
     var origin: String? { get }

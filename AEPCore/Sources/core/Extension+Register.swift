@@ -15,8 +15,8 @@ import Foundation
 public extension Extension {
     
     /// Registers the `Extension` with the `EventHub`
-    //@available(*, deprecated, message: "Use AEPCore.registerExtensions(extensions:) instead")
+    //@available(*, deprecated, message: "Use MobileCore.registerExtensions(extensions:) instead")
     static func registerExtension() {
-        AEPCore.pendingExtensions.append(Self.self)
+        MobileCore.pendingExtensions.append(Self.self)
     }
 }

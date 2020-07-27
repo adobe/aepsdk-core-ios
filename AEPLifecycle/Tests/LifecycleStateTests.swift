@@ -17,7 +17,7 @@ import AEPServicesMock
 class LifecycleStateTests: XCTestCase {
     
     var lifecycleState: LifecycleState!
-    var dataStore = NamedKeyValueStore(name: "LifecycleStateTests")
+    var dataStore = NamedCollectionDataStore(name: "LifecycleStateTests")
     var mockSystemInfoService: MockSystemInfoService!
     
     var currentDate: Date!
