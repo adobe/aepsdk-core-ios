@@ -15,6 +15,16 @@ import AEPServices
 
 /// An Event to be dispatched by the Event Hub
 public struct Event {
+    internal init(name: String, id: UUID = UUID(), type: EventType, source: EventSource, data: [String : Any]?, timestamp: Date = Date(), responseID: UUID?) {
+        self.name = name
+        self.id = id
+        self.type = type
+        self.source = source
+        self.data = data
+        self.timestamp = timestamp
+        self.responseID = responseID
+    }
+    
     
     /// Name of the event
     public let name: String

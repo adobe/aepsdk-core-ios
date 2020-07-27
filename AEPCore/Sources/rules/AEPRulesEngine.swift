@@ -36,24 +36,41 @@ struct LaunchRulesEngine {
     /// - Parameter event: the `Event` against which to evaluate the rules
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
-        
-       
         // evaluate => consequences
-         // replace token
+        // replace token
         // modify/add data
         // dispatch pb/url/pii
         return event
     }
     
-    private func replaceToken(consequence: inout RuleConsequence, data: Traversable) -> RuleConsequence {
-        let template = Template(templateString: consequence.detailJson, tagDelimiterPair: ("{%", "%}"))
-        let tranform = Transform()
-        let json = template.render(data: data, transformers: tranform)
-        consequence.detailJson = json
-        return consequence
+    func replaceToken(consequence: Consequence, data: Traversable) -> Consequence { 
+        var dict = consequence.detailDict
+        replaceToken(in: &dict, data: data)
+        return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }
     
-    private func generateConsequenceEvents(consequences: [RuleConsequence]) -> [Event] {
+    private func replaceToken(in dict: inout [String: Any], data: Traversable) {
+        for (key, value) in dict {
+            switch value {
+            case is String:
+                dict[key] = replaceToken(for: value as! String, data: data)
+            case is [String: Any]:
+                var valueDict = dict[key] as! [String: Any]
+                replaceToken(in: &valueDict, data: data)
+                dict[key] = valueDict
+            default:
+                break
+            }
+        }
+    }
+    
+    private func replaceToken(for value: String, data: Traversable) -> String {
+        let template = Template(templateString: value, tagDelimiterPair: ("{%", "%}"))
+        let transform = Transform()
+        return template.render(data: data, transformers: transform)
+    }
+    
+    private func generateConsequenceEvents(consequences: [Consequence]) -> [Event] {
         var events = [Event]()
         for consequence in consequences {
             if let event = consequence.generateConsequenceEvent() {
@@ -62,4 +79,6 @@ struct LaunchRulesEngine {
         }
         return events
     }
+    
+    private func attachDataEvent() {}
 }

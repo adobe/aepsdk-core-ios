@@ -14,7 +14,8 @@ import Foundation
 import XCTest
 
 @testable import AEPCore
-@testable import SwiftRulesEngine
+import AEPServices
+@testable @_implementationOnly import SwiftRulesEngine
 
 class JSONRulesParserTests: XCTestCase {
     private let EMPTY_JSON_RULE = """
@@ -35,6 +36,7 @@ class JSONRulesParserTests: XCTestCase {
 
     func testGenerateLaunchRules() {
         // When: load rules from a json file
+        Log.logFilter = .debug
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"), let data = try? Data(contentsOf: url) else {
             XCTAssertTrue(false)

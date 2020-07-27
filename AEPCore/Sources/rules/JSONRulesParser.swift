@@ -43,13 +43,13 @@ struct JSONRuleRoot: Codable {
         var result = [LaunchRule]()
         for launchRule in rules {
             if let conditionExpression = launchRule.condition.convert() {
-                var consequencesJson = [RuleConsequence]()
+                var consequences = [Consequence]()
                 for consequence in launchRule.consequences {
-                    if let id = consequence.id, let type = consequence.type, let json = consequence.detailJson {
-                        consequencesJson.append(RuleConsequence(id: id, type: type, detailJson: json))
+                    if let id = consequence.id, let type = consequence.type, let dict = consequence.detailDict {
+                        consequences.append(Consequence(id: id, type: type, detailDict: dict))
                     }
                 }
-                let rule = LaunchRule(condition: conditionExpression, consequences: consequencesJson)
+                let rule = LaunchRule(condition: conditionExpression, consequences: consequences)
                 result.append(rule)
             }
         }
@@ -145,9 +145,8 @@ struct JSONDetail: Codable {
 struct JSONConsequence: Codable {
     let id: String?
     let type: ConsequenceType?
-    // TODO: make the detail property an `AnyCodable` for now, the rules engine hasn't decided how to handle consequence yet, we will change it later.
     let detail: AnyCodable?
-    let detailJson: String?
+    let detailDict: [String: Any]?
     enum CodingKeys: CodingKey {
         case id
         case type
@@ -159,10 +158,10 @@ struct JSONConsequence: Codable {
         id = try? container.decode(String.self, forKey: .id)
         type = try? container.decode(ConsequenceType.self, forKey: .type)
         detail = try? container.decode(AnyCodable.self, forKey: .detail)
-
-        let jsonEncoder = JSONEncoder()
-        let jsonData = try jsonEncoder.encode(detail)
-        detailJson = String(decoding: jsonData, as: UTF8.self)
-        Log.debug(label: JSONRulesParser.LOG_LABEL, "Encoding consequence detail(AnyCodable) to json string: \(String(describing: detailJson))")
+        if let value = detail {
+            detailDict = AnyCodable.toAnyDictionary(dictionary: ["detail": value])
+        } else {
+            detailDict = nil
+        }
     }
 }

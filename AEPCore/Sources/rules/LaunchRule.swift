@@ -15,9 +15,9 @@ import Foundation
 /// A `Rule` type represents the functions defined by Launch UI
 struct LaunchRule: Rule {
     public let condition: Evaluable
-    public let consequences: [RuleConsequence]
+    public let consequences: [Consequence]
 
-    init(condition: Evaluable, consequences: [RuleConsequence]) {
+    init(condition: Evaluable, consequences: [Consequence]) {
         self.condition = condition
         self.consequences = consequences
     }
@@ -29,10 +29,10 @@ enum ConsequenceType: String, Codable {
     case mod
 }
 
-struct RuleConsequence {
+struct Consequence {
     let id: String
-    let type: ConsequenceType
-    var detailJson: String
+    let type: ConsequenceType 
+    var detailDict: [String: Any]
 
     func generateConsequenceEvent() -> Event? {
         return nil
