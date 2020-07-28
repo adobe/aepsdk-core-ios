@@ -76,7 +76,7 @@ public struct AnyCodable: Codable {
         return unwrappedDict.filter({$0.value != nil}).mapValues({$0.value!})
     }
     
-    // MARK: Decodable
+    // MARK: - Decodable
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         
@@ -103,7 +103,7 @@ public struct AnyCodable: Codable {
         }
     }
     
-    // MARK: Codable
+    // MARK: - Codable
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         
@@ -168,7 +168,7 @@ public struct AnyCodable: Codable {
     }
 }
 
-// MARK: Literal extensions
+// MARK: - Literal extensions
 extension AnyCodable: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(value)
@@ -218,7 +218,7 @@ extension AnyCodable: ExpressibleByNilLiteral {
     }
 }
 
-// MARK: Equatable
+// MARK: - Equatable
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
         if lhs.value == nil && rhs.value == nil {

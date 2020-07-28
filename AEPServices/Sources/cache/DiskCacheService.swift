@@ -17,6 +17,7 @@ class DiskCacheService: Caching {
     lazy var dataStore = NamedCollectionDataStore(name: "DiskCacheService")
     let cachePrefix = "com.adobe.mobile.diskcache/"
     let fileManager = FileManager.default
+    private let LOG_PREFIX = "DiskCacheService"
     
     // MARK: Caching
     
@@ -25,6 +26,7 @@ class DiskCacheService: Caching {
         let path = filePath(for: cacheName, with: key)
         _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
         try fileManager.setAttributes([.modificationDate: entry.expiry.date], ofItemAtPath: path)
+        Log.trace(label: LOG_PREFIX, "Setting key '\(key)' to value '\(String(describing: entry.metadata))' for cache '\(cacheName)'.")
         dataStore.set(key: dataStoreKey(for: cacheName, with: key), value: entry.metadata)
     }
     
@@ -52,6 +54,7 @@ class DiskCacheService: Caching {
     public func remove(cacheName: String, key: String) throws {
         let path = filePath(for: cacheName, with: key)
         try fileManager.removeItem(atPath: path)
+        Log.trace(label: LOG_PREFIX, "Removing value for key '\(key)' in cache '\(cacheName)'.")
         dataStore.remove(key: path)
     }
     
@@ -65,7 +68,8 @@ class DiskCacheService: Caching {
         return
       }
 
-      try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true,
+        Log.trace(label: LOG_PREFIX, "Attempting to create directory at path '\(path)'")
+        try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true,
                                       attributes: nil)
     }
     

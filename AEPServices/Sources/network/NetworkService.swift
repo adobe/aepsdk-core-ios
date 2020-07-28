@@ -18,13 +18,14 @@ public enum NetworkServiceError: Error {
 }
 
 class NetworkService: Networking {
+    private let LOG_PREFIX = "NetworkService"
   
     private var sessions = ThreadSafeDictionary<String, URLSession>(identifier: "com.adobe.networkservice.sessions")
     
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
         
         if !networkRequest.url.absoluteString.starts(with: "https") {
-            print("NetworkService - Network request for (\( networkRequest.url.absoluteString)) could not be created, only https requests are accepted.")
+            Log.warning(label:LOG_PREFIX, "Network request for (\( networkRequest.url.absoluteString)) could not be created, only https requests are accepted.")
             if let closure = completionHandler {
                 closure(HttpConnection(data: nil, response: nil, error: NetworkServiceError.invalidUrl))
             }
@@ -35,7 +36,7 @@ class NetworkService: Networking {
         let urlSession = createURLSession(networkRequest: networkRequest)
         
         // initiate the network request
-        print("NetworkService - Initiated (\(networkRequest.httpMethod.toString())) network request to (\(networkRequest.url.absoluteString)).")
+        Log.debug(label: LOG_PREFIX, "Initiated (\(networkRequest.httpMethod.toString())) network request to (\(networkRequest.url.absoluteString)).")
         let task = urlSession.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
             if let closure = completionHandler {
                 let httpConnection = HttpConnection(data: data, response: response as? HTTPURLResponse , error: error)
