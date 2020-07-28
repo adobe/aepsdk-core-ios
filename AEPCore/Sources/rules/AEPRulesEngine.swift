@@ -40,10 +40,34 @@ struct LaunchRulesEngine {
         // replace token
         // modify/add data
         // dispatch pb/url/pii
-        return event
+        var eventCopy = event
+        if let data = generateTraversableData() {
+            let rules = rulesEngine.evaluate(data: data)
+            for rule in rules {
+                for consequence in rule.consequences {
+                    let consequenceWithConcreteValue = replaceToken(for: consequence, data: data)
+                    switch consequenceWithConcreteValue.type {
+                    case .url, .pii, .pb:
+                        if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
+                            EventHub.shared.dispatch(event: event)
+                        }
+                    case .add:
+                        attachDataEvent(event: &eventCopy, consequenceWithConcreteValue: consequenceWithConcreteValue)
+                    case .mod:
+                        modifyDataEvent(event: &eventCopy, consequenceWithConcreteValue: consequenceWithConcreteValue)
+                    }
+                }
+            }
+        }
+        return eventCopy
     }
     
-    func replaceToken(consequence: Consequence, data: Traversable) -> Consequence { 
+    private func generateTraversableData() -> Traversable? {
+        // TODO: generate traversable data from current event and shared events
+        return nil
+    }
+    
+    func replaceToken(for consequence: Consequence, data: Traversable) -> Consequence {
         var dict = consequence.detailDict
         replaceToken(in: &dict, data: data)
         return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
@@ -70,15 +94,14 @@ struct LaunchRulesEngine {
         return template.render(data: data, transformers: transform)
     }
     
-    private func generateConsequenceEvents(consequences: [Consequence]) -> [Event] {
-        var events = [Event]()
-        for consequence in consequences {
-            if let event = consequence.generateConsequenceEvent() {
-                events.append(event)
-            }
-        }
-        return events
+    private func generateConsequenceEvent(consequence: Consequence) -> Event? {
+        let name = "Rules Event"
+        var dict: [String: Any] = consequence.detailDict
+        dict["id"] = consequence.id
+        dict["type"] = consequence.type.rawValue
+        return Event(name: name, type: .rulesEngine, source: .responseContent, data: dict)
     }
     
-    private func attachDataEvent() {}
+    private func attachDataEvent(event: inout Event, consequenceWithConcreteValue: Consequence) {}
+    private func modifyDataEvent(event: inout Event, consequenceWithConcreteValue: Consequence) {}
 }

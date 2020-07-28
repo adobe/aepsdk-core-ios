@@ -25,16 +25,14 @@ struct LaunchRule: Rule {
 
 enum ConsequenceType: String, Codable {
     case url
+    case pii
+    case pb
     case add
     case mod
 }
 
 struct Consequence {
     let id: String
-    let type: ConsequenceType 
+    let type: ConsequenceType
     var detailDict: [String: Any]
-
-    func generateConsequenceEvent() -> Event? {
-        return nil
-    }
 }
