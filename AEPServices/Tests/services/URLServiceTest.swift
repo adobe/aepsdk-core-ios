@@ -14,10 +14,10 @@
 import XCTest
 
 class URLServiceTest: XCTestCase {
-    private let urlService = AEPServiceProvider.shared.urlService
+    private let urlService = ServiceProvider.shared.urlService
 
     override func setUp() {
-        AEPServiceProvider.shared.urlService = URLService()
+        ServiceProvider.shared.urlService = URLService()
     }
 
     public class URLServiceReturnFalse: URLOpening {
@@ -39,16 +39,16 @@ class URLServiceTest: XCTestCase {
     }
 
     func testOverrideUrlHandlerReturnFalse() throws {
-        AEPServiceProvider.shared.urlService = URLServiceReturnFalse()
+        ServiceProvider.shared.urlService = URLServiceReturnFalse()
         if let url = URL(string: "adobe.com") {
-            XCTAssertFalse(AEPServiceProvider.shared.urlService.openUrl(url))
+            XCTAssertFalse(ServiceProvider.shared.urlService.openUrl(url))
         }
     }
 
     func testOverrideUrlHandlerReturnTrue() throws {
-        AEPServiceProvider.shared.urlService = URLServiceReturnTrue()
+        ServiceProvider.shared.urlService = URLServiceReturnTrue()
         if let url = URL(string: "adobe.com") {
-            XCTAssertTrue(AEPServiceProvider.shared.urlService.openUrl(url))
+            XCTAssertTrue(ServiceProvider.shared.urlService.openUrl(url))
         }
     }
 }

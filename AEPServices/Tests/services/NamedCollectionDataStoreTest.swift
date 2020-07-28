@@ -33,7 +33,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
     
     override func setUp() {
         // Override the KeyValueStoreService with mock
-        AEPServiceProvider.shared.namedKeyValueService = self.mockKeyValueService
+        ServiceProvider.shared.namedKeyValueService = self.mockKeyValueService
         self.store = NamedCollectionDataStore(name: "testStore.")
     }
     

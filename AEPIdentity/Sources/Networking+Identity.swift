@@ -21,6 +21,6 @@ extension Networking {
     ///   - experienceCloudServer: the experience cloud server
     func sendOptOutRequest(orgId: String, mid: MID, experienceCloudServer: String) {
         guard let url = URL.buildOptOutURL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else { return }
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: url), completionHandler: nil) // fire and forget
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: url), completionHandler: nil) // fire and forget
     }
 }

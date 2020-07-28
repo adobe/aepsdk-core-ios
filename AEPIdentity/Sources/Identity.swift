@@ -26,7 +26,7 @@ public class Identity: Extension {
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
 
-        guard let dataQueue = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
+        guard let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
             return
         }
@@ -176,7 +176,7 @@ public class Identity: Extension {
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
             guard let mid = state?.identityProperties.mid else { return }
             let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.DEFAULT_SERVER
-            AEPServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
+            ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
         }
     }
     

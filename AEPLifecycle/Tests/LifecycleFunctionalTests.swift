@@ -24,7 +24,7 @@
 //    override func setUp() {
 //        MockExtension.reset()
 //        EventHub.reset()
-//        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+//        ServiceProvider.shared.namedKeyValueService = MockDataStore()
 //        setupMockSystemInfoService()
 //        EventHub.shared.start()
 //        registerExtension(MockExtension.self)
@@ -60,7 +60,7 @@
 //        mockSystemInfoService.activeLocaleName = "en-US"
 //        mockSystemInfoService.displayInformation = (100, 100)
 //
-//        AEPServiceProvider.shared.systemInfoService = mockSystemInfoService
+//        ServiceProvider.shared.systemInfoService = mockSystemInfoService
 //    }
 //
 //    private func assertContextData(contextData: [String: Any], launches: Int, additionalContextData: [String: Any]?) {

@@ -22,13 +22,13 @@ class IdentityStateTests: XCTestCase {
         return state.hitQueue as! MockHitQueue
     }
     var mockDataStore: MockDataStore {
-        return AEPServiceProvider.shared.namedKeyValueService as! MockDataStore
+        return ServiceProvider.shared.namedKeyValueService as! MockDataStore
     }
 
     var mockPushIdManager: MockPushIDManager!
     
     override func setUp() {
-        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockPushIdManager = MockPushIDManager()
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 

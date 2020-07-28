@@ -65,38 +65,45 @@ extension AEPCore: Lifecycle {
 
 ### AEP Extensions
 
-* The files for the AEP extension should be prefixed with `AEP` followed by the extension name.
+* The module name of AEP extension should be prefixed with `AEP`.
 
   Preferred:
   ```
-  AEPLifecycle.swift
+  AEPCore
+  AEPLifecycle
   ```
-  Not Preferred:
-  ```
+
+* The class name of AEP extension should NOT use prefix `AEP`.
+
+  Preferred:
+  ```  
+  MobileCore.swift
   Lifecycle.swift
   ```
-* The `AEPCore` extension for a given AEP extension should be named “AEPCore” and the extension's name separated by a “+”.
+* The class defining `MobileCore` public API for each Core extension should be named “MobileCore” and the extension's name separated by a “+”.
 
   Preferred:
   ```
-  AEPCore+Lifecycle.swift
+  MobileCore+Lifecycle.swift
   ```
   Not Preferred:
   ```
-  AEPCoreLifecycle.swift
+  MobileCoreLifecycle.swift
   ```
 
 ### AEP Services
 
-* Services should be prefixed by a name which indicates the service being provided, followed by `Service`.
+* The name of the services protocol should end with `-ing` or any other suffix recommanded by [Apple's API design guidelines](https://swift.org/documentation/api-design-guidelines/).
 
-  Preferred:
+* The implemetation classes of the services should be prefixed by a name which indicates the service being provided, followed by `Service`.
+
+  Protocol:
   ```
-  SystemInfoService
+  Networking.swfit
   ```
-  Not Preferred:
+  Implementation:
   ```
-  SystemInfo
+  NetworkService.swift
   ```
 
 ## General

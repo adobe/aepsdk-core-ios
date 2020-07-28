@@ -20,7 +20,7 @@ class NetworkService_IdentityTests: XCTestCase {
     
     override func setUp() {
         mockNetworkService = MockNetworkServiceOverrider()
-        AEPServiceProvider.shared.networkService = mockNetworkService
+        ServiceProvider.shared.networkService = mockNetworkService
     }
     
     // MARK: NetworkService.sendOptOutRequest(...) tests
@@ -38,7 +38,7 @@ class NetworkService_IdentityTests: XCTestCase {
         }
         
         // test
-        AEPServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer)
+        ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer)
         
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
