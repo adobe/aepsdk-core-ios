@@ -51,7 +51,7 @@ public extension MobileCore{
     /// even across application restarts.
     /// - Parameter status: `PrivacyStatus` to be set for the SDK
     static func setPrivacy(status: PrivacyStatus) {
-        updateConfigurationWith(configDict: [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: status.rawValue])
+        updateConfigurationWith(configDict: [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: status])
     }
     
     /// Gets the currently configured `PrivacyStatus` and returns it via `completion`
