@@ -26,7 +26,7 @@ public class Identity: Extension {
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
 
-        guard let dataQueue = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
+        guard let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
             return
         }
@@ -42,6 +42,12 @@ public class Identity: Extension {
         registerListener(type: .genericIdentity, source: .requestContent, listener: handleIdentityRequest)
         registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: .configuration, source: .responseContent, listener: handleConfigurationResponse)
+        
+        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value
+        if state?.bootup(configSharedState: configSharedState, eventDispatcher: dispatch(event:)) ?? false, let props = state?.identityProperties {
+            // privacy was opt-out, share state
+            createSharedState(data: props.toEventData(), event: nil)
+        }
     }
 
     public func onUnregistered() {}
@@ -156,7 +162,7 @@ public class Identity: Extension {
     ///   - entity: The `DataEntity` that was processed by the hit processor
     ///   - responseData: the network response data if any
     private func handleNetworkResponse(entity: DataEntity, responseData: Data?) {
-        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:))
+        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
     }
     
     /// Sends an opt-out network request if the current privacy status is opt-out
@@ -170,7 +176,7 @@ public class Identity: Extension {
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
             guard let mid = state?.identityProperties.mid else { return }
             let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.DEFAULT_SERVER
-            AEPServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
+            ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
         }
     }
     

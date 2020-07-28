@@ -90,7 +90,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success)
+        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         let expectedConfigSize = 16
 
         var remoteConfig: [String: Any]? = nil
@@ -112,7 +112,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
+        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
         
         var remoteConfig: [String: Any]? = nil
         
@@ -132,7 +132,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .notModified)
+        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .notModified)
         
         let appId = "test-app-id"
         let expectedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
@@ -187,7 +187,7 @@ class ConfigurationDownloaderTests: XCTestCase {
     /// Ensures that when a config is present in the manifest it can be loaded.
     func testLoadDefaultBundledConfig() {
         // setup
-        AEPServiceProvider.shared.systemInfoService = ApplicationSystemInfoService(bundle: Bundle(for: type(of: self)))
+        ServiceProvider.shared.systemInfoService = ApplicationSystemInfoService(bundle: Bundle(for: type(of: self)))
 
         // test
         let config = ConfigurationDownloader().loadDefaultConfigFromManifest()

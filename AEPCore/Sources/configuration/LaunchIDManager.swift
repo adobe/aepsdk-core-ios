@@ -38,7 +38,7 @@ struct LaunchIDManager {
     /// Loads the appId from the manifest
     /// - Returns: appId loaded from the manifest, nil if not present
     func loadAppIdFromManifest() -> String? {
-        if let appId = AEPServiceProvider.shared.systemInfoService.getProperty(for: ConfigurationConstants.CONFIG_MANIFEST_APPID_KEY) {
+        if let appId = ServiceProvider.shared.systemInfoService.getProperty(for: ConfigurationConstants.CONFIG_MANIFEST_APPID_KEY) {
             saveAppIdToPersistence(appId: appId)
             return appId
         }

@@ -38,7 +38,7 @@ import Foundation
         self.httpMethod = httpMethod
         self.connectPayload = connectPayload
         
-        let systemInfoService = AEPServiceProvider.shared.systemInfoService
+        let systemInfoService = ServiceProvider.shared.systemInfoService
         let defaultHeaders = [NetworkRequest.REQUEST_HEADER_KEY_USER_AGENT: systemInfoService.getDefaultUserAgent(),
                               NetworkRequest.REQUEST_HEADER_KEY_LANGUAGE: systemInfoService.getActiveLocaleName()]
         self.httpHeaders = defaultHeaders.merging(httpHeaders) { (_, new) in new } // add in default headers and apply `httpHeaders` on top

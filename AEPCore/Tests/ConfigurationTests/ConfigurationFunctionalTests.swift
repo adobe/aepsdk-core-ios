@@ -20,9 +20,9 @@
 //class ConfigurationFunctionalTests: XCTestCase {
 //
 //    override func setUp() {
-//        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
-//        AEPServiceProvider.shared.systemInfoService = MockSystemInfoService()
-//        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+//        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
+//        ServiceProvider.shared.systemInfoService = MockSystemInfoService()
+//        ServiceProvider.shared.namedKeyValueService = MockDataStore()
 //        MockExtension.reset()
 //        EventHub.reset()
 //        registerExtension(MockExtension.self)
@@ -424,7 +424,7 @@
 //    func testConfigureWithAppId() {
 //        // setup
 //        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-//        AEPServiceProvider.shared.networkService = mockNetworkService
+//        ServiceProvider.shared.networkService = mockNetworkService
 //
 //        let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
 //        let sharedStateExpectation = XCTestExpectation(description: "Downloading config should update shared state")
@@ -454,7 +454,7 @@
 //    func testConfigureWithAppIdNetworkDownThenComesOnline() {
 //        // setup
 //        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .error)
-//        AEPServiceProvider.shared.networkService = mockNetworkService
+//        ServiceProvider.shared.networkService = mockNetworkService
 //
 //        let configResponseEvent = XCTestExpectation(description: "Downloading config should dispatch response content event with new config")
 //        configResponseEvent.expectedFulfillmentCount = 2
@@ -469,7 +469,7 @@
 //        // test
 //        MobileCore.configureWith(appId: "invalid-app-id")
 //        sleep(5) // give some time for the first network request to fail
-//        AEPServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success) // setup a valid network response
+//        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success) // setup a valid network response
 //        MobileCore.configureWith(appId: "valid-app-id")
 //
 //        // verify

@@ -20,16 +20,16 @@ class PushIDManagerTests: XCTestCase {
 
     private var pushEnabled: Bool {
         get {
-            return AEPServiceProvider.shared.namedKeyValueService.get(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED) as? Bool ?? false
+            return ServiceProvider.shared.namedKeyValueService.get(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED) as? Bool ?? false
         }
 
         set {
-            AEPServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED, value: newValue)
+            ServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED, value: newValue)
         }
     }
 
     override func setUp() {
-        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
     }
 
     /// Tests that when we set the first push id to nil and the existing push id is nil that we dispatch a analytics event
@@ -59,7 +59,7 @@ class PushIDManagerTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Analytics events should not be dispatched with the push status")
         expectation.isInverted = true
-        AEPServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.ANALYTICS_PUSH_SYNC, value: true)
+        ServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.ANALYTICS_PUSH_SYNC, value: true)
 
         pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
             expectation.fulfill()
@@ -181,7 +181,7 @@ class PushIDManagerTests: XCTestCase {
     /// Tests that when we have a push id saved that we update to a new nil id that we set push to disabled
     func testUpdatePushIdNotNilExistingIdUpdatesToNil() {
         // setup
-        AEPServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED, value: true)
+        ServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED, value: true)
         var existingProps = IdentityProperties()
         existingProps.pushIdentifier = "existingPushID"
         existingProps.saveToPersistence()
@@ -210,7 +210,7 @@ class PushIDManagerTests: XCTestCase {
     /// Tests that when we have a push id saved that we update to a new empty id that we set push to disabled
     func testUpdatePushIdNotNilExistingIdUpdatesToEmpty() {
         // setup
-        AEPServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED, value: true)
+        ServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED, value: true)
         var existingProps = IdentityProperties()
         existingProps.pushIdentifier = "existingPushID"
         existingProps.saveToPersistence()

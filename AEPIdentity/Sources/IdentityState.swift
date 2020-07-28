@@ -31,9 +31,32 @@ class IdentityState {
     /// - Parameter pushIdManager: a push id manager
     init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable) {
         self.identityProperties = identityProperties
-        self.identityProperties.loadFromPersistence()
         self.hitQueue = hitQueue
         self.pushIdManager = pushIdManager
+    }
+    
+    /// Completes init for the Identity extension and determines if we need to share state
+    /// - Parameters:
+    ///   - configSharedState: the current configuration shared state available at registration time
+    ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
+    /// - Returns: True if we should share state after bootup, false otherwise
+    func bootup(configSharedState: [String: Any]?, eventDispatcher: (Event) -> ()) -> Bool {
+        // load data from local storage
+        identityProperties.loadFromPersistence()
+        
+        // Load privacy status
+        identityProperties.privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        
+        // Update hit queue with privacy status
+        hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
+
+        // Create and dispatch a forced sync event
+        eventDispatcher(Event.forceSyncEvent())
+
+        // Identity should always share its state
+        // However, don't create a shared state twice, which will log an error
+        // The force sync event processed above will create a shared state if the privacy is not opt-out
+        return identityProperties.privacyStatus == .optedOut
     }
     
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
@@ -115,14 +138,15 @@ class IdentityState {
     ///   - hit: the hit that was processed
     ///   - response: the response data if any
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
-    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> ()) {
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
+    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
         // regardless of response, update last sync time
         identityProperties.lastSync = Date()
 
         // check privacy here in case the status changed while response was in-flight
         if identityProperties.privacyStatus != .optedOut {
             // update properties
-            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher)
+            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState)
 
             // save
             identityProperties.saveToPersistence()
@@ -264,7 +288,8 @@ class IdentityState {
     /// - Parameters:
     ///   - response: the network response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> ()) {
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return
@@ -283,13 +308,18 @@ class IdentityState {
             // Still, generate mid locally if there's none yet.
             identityProperties.mid = identityProperties.mid ?? MID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
+            createSharedState(identityProperties.toEventData(), nil)
             return
         }
 
         if let mid = identityResponse.mid, !mid.isEmpty {
+            let shouldShareState = identityResponse.blob != identityProperties.blob || identityResponse.hint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
             identityProperties.locationHint = identityResponse.hint
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
+            if shouldShareState {
+                createSharedState(identityProperties.toEventData(), nil)
+            }
         }
 
     }
