@@ -105,10 +105,10 @@ class MobileCore_ConfigurationTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Set privacy dispatches configuration request content with the privacy status")
         expectation.assertForOverFulfill = true
-        let updateDict = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn]
+        let updateDict = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
-            if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: PrivacyStatus] {
+            if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
                 XCTAssertEqual(updateDict, updateEventData)
                 expectation.fulfill()
             }
