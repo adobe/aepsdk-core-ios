@@ -31,9 +31,32 @@ class IdentityState {
     /// - Parameter pushIdManager: a push id manager
     init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable) {
         self.identityProperties = identityProperties
-        self.identityProperties.loadFromPersistence()
         self.hitQueue = hitQueue
         self.pushIdManager = pushIdManager
+    }
+    
+    /// Completes init for the Identity extension and determines if we need to share state
+    /// - Parameters:
+    ///   - configSharedState: the current configuration shared state available at registration time
+    ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
+    /// - Returns: True if we should share state after bootup, false otherwise
+    func bootup(configSharedState: [String: Any]?, eventDispatcher: (Event) -> ()) -> Bool {
+        // load data from local storage
+        identityProperties.loadFromPersistence()
+        
+        // Load privacy status
+        identityProperties.privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        
+        // Update hit queue with privacy status
+        hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
+
+        // Create and dispatch a forced sync event
+        eventDispatcher(Event.forceSyncEvent())
+
+        // Identity should always share its state
+        // However, don't create a shared state twice, which will log an error
+        // The force sync event processed above will create a shared state if the privacy is not opt-out
+        return identityProperties.privacyStatus == .optedOut
     }
     
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
