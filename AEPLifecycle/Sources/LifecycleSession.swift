@@ -14,13 +14,13 @@ import AEPServices
 
 /// A type for managing Lifecycle sessions
 struct LifecycleSession {
-    let dataStore: NamedKeyValueStore
+    let dataStore: NamedCollectionDataStore
     
     private var lifecycleHasRun = false
     
-    /// Creates a new `LifecycleSession` with the given `NamedKeyValueStore`
-    /// - Parameter dataStore: The `NamedKeyValueStore` in which Lifecycle session data will be cached
-    init(dataStore: NamedKeyValueStore) {
+    /// Creates a new `LifecycleSession` with the given `NamedCollectionDataStore`
+    /// - Parameter dataStore: The `NamedCollectionDataStore` in which Lifecycle session data will be cached
+    init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
     }
     

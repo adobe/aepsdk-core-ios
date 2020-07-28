@@ -12,17 +12,16 @@
 
 import Foundation
 import AEPServices
-import AdSupport
 
 ///
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
 ///
 struct RulesDownloader: RulesLoader {
     private let loggingService = AEPServiceProvider.shared.loggingService
-    private let fileUnzipper: Unzipper
+    private let fileUnzipper: Unzipping
     private let cache: Cache
 
-    init(fileUnzipper: Unzipper) {
+    init(fileUnzipper: Unzipping) {
         self.fileUnzipper = fileUnzipper
         self.cache = Cache(name: RulesDownloaderConstants.RULES_CACHE_NAME)
     }

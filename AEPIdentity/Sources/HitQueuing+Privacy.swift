@@ -26,6 +26,8 @@ extension HitQueuing {
             clear()
         case .unknown:
             suspend()
+        @unknown default:
+            suspend()
         }
     }
 }

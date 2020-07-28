@@ -28,9 +28,9 @@
 //        setupMockSystemInfoService()
 //        EventHub.shared.start()
 //        registerExtension(MockExtension.self)
-//        registerExtension(AEPConfiguration.self)
+//        registerExtension(Configuration.self)
 //        registerExtension(AEPLifecycle.self)
-//        AEPCore.updateConfigurationWith(configDict: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1])
+//        MobileCore.updateConfigurationWith(configDict: [LifecycleConstants.EventDataKeys.CONFIG_SESSION_TIMEOUT: 1])
 //    }
 //
 //    override func tearDown() {
@@ -115,7 +115,7 @@
 //        }
 //
 //        // test
-//        AEPCore.lifecycleStart(additionalContextData: additionalContextData)
+//        MobileCore.lifecycleStart(additionalContextData: additionalContextData)
 //
 //        // verify
 //        wait(for: [lifecycleResponseExpectation, sharedStateExpectation], timeout: 2)
@@ -148,9 +148,9 @@
 //        }
 //
 //        // test
-//        AEPCore.lifecycleStart(additionalContextData: additionalContextData)
-//        AEPCore.lifecyclePause()
-//        AEPCore.lifecycleStart(additionalContextData: additionalContextData)
+//        MobileCore.lifecycleStart(additionalContextData: additionalContextData)
+//        MobileCore.lifecyclePause()
+//        MobileCore.lifecycleStart(additionalContextData: additionalContextData)
 //
 //        // verify
 //        wait(for: [lifecycleResponseExpectation, sharedStateExpectation], timeout: 2)
@@ -181,10 +181,10 @@
 //        }
 //
 //        // test
-//        AEPCore.lifecycleStart(additionalContextData: additionalContextData)
-//        AEPCore.lifecyclePause()
+//        MobileCore.lifecycleStart(additionalContextData: additionalContextData)
+//        MobileCore.lifecyclePause()
 //        sleep(3) // allow session timeout to expire
-//        AEPCore.lifecycleStart(additionalContextData: additionalContextData)
+//        MobileCore.lifecycleStart(additionalContextData: additionalContextData)
 //
 //        // verify
 //        wait(for: [lifecycleResponseExpectation, sharedStateExpectation], timeout: 2)

@@ -138,14 +138,15 @@ class IdentityState {
     ///   - hit: the hit that was processed
     ///   - response: the response data if any
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
-    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> ()) {
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
+    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
         // regardless of response, update last sync time
         identityProperties.lastSync = Date()
 
         // check privacy here in case the status changed while response was in-flight
         if identityProperties.privacyStatus != .optedOut {
             // update properties
-            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher)
+            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState)
 
             // save
             identityProperties.saveToPersistence()
@@ -287,7 +288,8 @@ class IdentityState {
     /// - Parameters:
     ///   - response: the network response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> ()) {
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return
@@ -306,13 +308,18 @@ class IdentityState {
             // Still, generate mid locally if there's none yet.
             identityProperties.mid = identityProperties.mid ?? MID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
+            createSharedState(identityProperties.toEventData(), nil)
             return
         }
 
         if let mid = identityResponse.mid, !mid.isEmpty {
+            let shouldShareState = identityResponse.blob != identityProperties.blob || identityResponse.hint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
             identityProperties.locationHint = identityResponse.hint
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
+            if shouldShareState {
+                createSharedState(identityProperties.toEventData(), nil)
+            }
         }
 
     }

@@ -23,6 +23,8 @@ class SHA256Tests: XCTestCase {
         "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu": "cf5b16a778af8380036ce59e7b0492370b249b11e8f07a51afac45037afee9d1",
         "": ""
     ]
+    
+    // MARK: hash(...) tests
 
     /// Tests that the values are hashed correctly
     func testSha256() {
@@ -30,5 +32,30 @@ class SHA256Tests: XCTestCase {
             XCTAssertEqual(SHA256.hash(unhashed), hashed)
         }
     }
-
+    
+    // MARK: hexStringFromData(...) tests
+    
+    /// Tests that the string is properly encoded
+    func testHexStringFromDataHappy() {
+        // setup
+        let data = "testHexString".data(using: .utf8)!
+        let expected = "74657374486578537472696e67"
+        
+        // test
+        let converted = SHA256.hexStringFromData(input: data as NSData)
+        
+        // verify
+        XCTAssertEqual(expected, converted)
+    }
+    
+    /// Tests that when an empty string is passed that we return an empty string
+    func testHexStringFromDataEmpty() {
+        let data = "".data(using: .utf8)!
+        XCTAssertTrue(SHA256.hexStringFromData(input: data as NSData).isEmpty)
+    }
+    
+    /// Tests that when empty nil is passed we return an empty string
+    func testHexStringFromDataNil() {
+        XCTAssertTrue(SHA256.hexStringFromData(input: nil).isEmpty)
+    }
 }

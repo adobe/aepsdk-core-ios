@@ -27,14 +27,14 @@ protocol ConfigurationDownloadable {
     /// Loads the cached configuration for `appId`.
     /// - Parameters:
     ///   - appId: Optional app id, if provided the `ConfigurationDownloader` will attempt to download a configuration with `appId`
-    ///   - dataStore: Optional `NamedKeyValueStore`, if provided this will be used as the cache for retrieving and storing configurations.
+    ///   - dataStore: Optional `NamedCollectionDataStore`, if provided this will be used as the cache for retrieving and storing configurations.
     /// - Returns: The cached configuration for `appId` in `dataStore`, nil if not found
-    func loadConfigFromCache(appId: String, dataStore: NamedKeyValueStore) -> [String: Any]?
+    func loadConfigFromCache(appId: String, dataStore: NamedCollectionDataStore) -> [String: Any]?
     
     /// Loads the remote configuration for `appId` and caches the result.
     /// - Parameters:
     ///   - appId: Optional app id, if provided the `ConfigurationDownloader` will attempt to download a configuration with `appId`
-    ///   - dataStore: Optional `NamedKeyValueStore`, if provided this will be used as the cache for retrieving and storing configurations.
+    ///   - dataStore: Optional `NamedCollectionDataStore`, if provided this will be used as the cache for retrieving and storing configurations.
     ///   - completion: Invoked with the loaded configuration, nil if loading the configuration failed.
-    func loadConfigFromUrl(appId: String, dataStore: NamedKeyValueStore, completion: @escaping ([String: Any]?) -> ())
+    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> ())
 }

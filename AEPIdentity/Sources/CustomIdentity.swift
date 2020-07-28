@@ -13,10 +13,10 @@ import Foundation
 
 /// CustomIdentity contains identifier origin, identifier type, identifier value and authentication state.
 public class CustomIdentity: Identifiable, Codable {
-    var origin: String?
-    var type: String?
-    var identifier: String?
-    var authenticationState: MobileVisitorAuthenticationState
+    public var origin: String?
+    public var type: String?
+    public var identifier: String?
+    public var authenticationState: MobileVisitorAuthenticationState
     
     /// Creates a new `CustomIdentity` with the given parameters
     /// - Parameters:
