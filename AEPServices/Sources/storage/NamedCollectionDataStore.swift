@@ -194,10 +194,6 @@ public class NamedCollectionDataStore {
         
         storageService.remove(collectionName: self.name, key: key)
     }
-    
-    public func removeAll() {
-        storageService.removeAll(collectionName: self.name)
-    }
 
     func set(key: String, value: Any?) {
         if key.isEmpty {

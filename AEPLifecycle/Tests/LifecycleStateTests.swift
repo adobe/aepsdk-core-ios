@@ -29,7 +29,6 @@ class LifecycleStateTests: XCTestCase {
     override func setUp() {
         setupDates()
         setupMockSystemInfoService()
-        dataStore.removeAll()
         lifecycleState = LifecycleState(dataStore: dataStore)
     }
     

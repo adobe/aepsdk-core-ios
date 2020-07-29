@@ -11,7 +11,6 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPCore
-@testable import AEPCore
 
 
 class MobileCore_ConfigurationTests: XCTestCase {
