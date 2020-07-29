@@ -40,7 +40,8 @@ import Foundation
     ///
     /// Using `nil` values is allowed and effectively removes the configuration parameter from the current configuration.
     /// - Parameter configDict: configuration key/value pairs to be updated or added.
-    @objc static func updateConfigurationWith(configDict: [String: Any]) {
+    @objc(updateConfiguration:)
+    static func updateConfigurationWith(configDict: [String: Any]) {
         let event = Event(name: "Configuration Update", type: .configuration, source: .requestContent,
                           data: [CoreConstants.Keys.UPDATE_CONFIG: configDict])
         MobileCore.dispatch(event: event)
@@ -50,13 +51,15 @@ import Foundation
     /// configuration changes from calls to configureWithAppId or configureWithFileInPath,
     /// even across application restarts.
     /// - Parameter status: `PrivacyStatus` to be set for the SDK
-    @objc static func setPrivacy(status: PrivacyStatus) {
+    @objc(setPrivacy:)
+    static func setPrivacy(status: PrivacyStatus) {
         updateConfigurationWith(configDict: [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: status.rawValue])
     }
     
     /// Gets the currently configured `PrivacyStatus` and returns it via `completion`
     /// - Parameter completion: Invoked with the current `PrivacyStatus`
-    @objc static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
+    @objc(getPrivacyStatus:)
+    static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
         let event = Event(name: "Privacy Status Request", type: .configuration, source: .requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { (responseEvent) in
@@ -68,7 +71,8 @@ import Foundation
     
     /// Get a JSON string containing all of the user's identities known by the SDK  and calls a handler upon completion.
     /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format a and `AEPError` if the request failed
-    @objc static func getSdkIdentities(completion: @escaping (String?, AEPError) -> ()) {
+    @objc(getSdkIdentities:)
+    static func getSdkIdentities(completion: @escaping (String?, AEPError) -> ()) {
         let event = Event(name: "GetSdkIdentities", type: .configuration, source: .requestIdentity, data: nil)
         
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (responseEvent) in

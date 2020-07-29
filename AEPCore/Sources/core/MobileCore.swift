@@ -41,7 +41,8 @@ import AEPServices
     
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
-    @objc public static func dispatch(event: Event) {
+    @objc(dispatch:)
+    public static func dispatch(event: Event) {
         EventHub.shared.dispatch(event: event)
     }
     
@@ -49,7 +50,8 @@ import AEPServices
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
-    @objc public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> ()) {
+    @objc(dispatch:responseCallback:)
+    public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> ()) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
             responseCallback(event)
         }
@@ -68,7 +70,8 @@ import AEPServices
     
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
-    @objc public static func setAdvertisingIdentifier(adId: String?) {
+    @objc(setAdvertisingIdentifier:)
+    public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
         let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
         MobileCore.dispatch(event: event)
@@ -76,7 +79,8 @@ import AEPServices
     
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
     /// - Parameter deviceToken: the device token for push notifications
-    @objc public static func setPushIdentifier(deviceToken: Data?) {
+    @objc(setPushIdentifier:)
+    public static func setPushIdentifier(deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
         let event = Event(name: "SetPushIdentifier", type: .genericIdentity, source: .requestContent, data: data)
