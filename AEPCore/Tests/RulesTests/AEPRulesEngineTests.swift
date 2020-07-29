@@ -37,7 +37,7 @@ class AEPRulesEngineTests: XCTestCase {
         let rules = JSONRulesParser.parse(data)
         let rulesEngine = LaunchRulesEngine()
         // ~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename
-        let result = rulesEngine.replaceToken(consequence: rules[0].consequences[0], data: ["~state": ["com": ["adobe": ["module": ["lifecycle/lifecyclecontextdata": ["devicename": "abc"]]]]]])
+        let result = rulesEngine.replaceToken(for: rules[0].consequences[0], data: ["~state": ["com": ["adobe": ["module": ["lifecycle/lifecyclecontextdata": ["devicename": "abc"]]]]]])
         // http://adobe.com/device=abc
         if let detail = result.detailDict["detail"], detail is [String: Any] {
             let url = (detail as! [String: Any])["url"] as! String

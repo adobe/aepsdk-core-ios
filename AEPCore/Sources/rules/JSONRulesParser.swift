@@ -158,8 +158,8 @@ struct JSONConsequence: Codable {
         id = try? container.decode(String.self, forKey: .id)
         type = try? container.decode(ConsequenceType.self, forKey: .type)
         detail = try? container.decode(AnyCodable.self, forKey: .detail)
-        if let value = detail {
-            detailDict = AnyCodable.toAnyDictionary(dictionary: ["detail": value])
+        if let detail = detail {
+            detailDict = AnyCodable.toAnyDictionary(dictionary: ["detail": detail])
         } else {
             detailDict = nil
         }
