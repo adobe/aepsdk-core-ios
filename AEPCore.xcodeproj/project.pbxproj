@@ -34,6 +34,7 @@
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
 		217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217E220424D1FD7900B70B3E /* SharedStateResult.swift */; };
+		217E220824D208C300B70B3E /* MockObjcExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 217E220724D208C300B70B3E /* MockObjcExtension.m */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		218E01C224C75C1500BEC470 /* HitQueuing+Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
@@ -376,6 +377,8 @@
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		217E220424D1FD7900B70B3E /* SharedStateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateResult.swift; sourceTree = "<group>"; };
+		217E220624D208C300B70B3E /* MockObjcExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockObjcExtension.h; sourceTree = "<group>"; };
+		217E220724D208C300B70B3E /* MockObjcExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MockObjcExtension.m; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+Privacy.swift"; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -975,6 +978,8 @@
 				3F3951F424CA096100F7325B /* SlowMockExtension.swift */,
 				3F3951F524CA096100F7325B /* MockExtension.swift */,
 				3F3951F624CA096100F7325B /* MockExtensionTwo.swift */,
+				217E220624D208C300B70B3E /* MockObjcExtension.h */,
+				217E220724D208C300B70B3E /* MockObjcExtension.m */,
 			);
 			path = MockExtensions;
 			sourceTree = "<group>";
@@ -1440,6 +1445,7 @@
 					};
 					21CAC0DE2422917600C11388 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1160;
 					};
 					3F03978624BE5DD30019F095 = {
 						CreatedOnToolsVersion = 11.5;
@@ -1649,6 +1655,7 @@
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
+				217E220824D208C300B70B3E /* MockObjcExtension.m in Sources */,
 				3F39520924CA096100F7325B /* EventHubTests.swift in Sources */,
 				3F39521124CA096100F7325B /* MockExtension.swift in Sources */,
 				3F39521E24CA096200F7325B /* ConfigurationDownloaderTests.swift in Sources */,
@@ -2123,6 +2130,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
@@ -2134,6 +2142,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2143,6 +2152,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
