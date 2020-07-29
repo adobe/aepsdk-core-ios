@@ -32,9 +32,6 @@ class LifecycleFunctionalTests: XCTestCase {
             UserDefaults.standard.removeObject(forKey: key)
         }
     }
-
-    override func tearDown() {
-    }
     
     private func setupMockSystemInfoService() {
         mockSystemInfoService = MockSystemInfoService()
