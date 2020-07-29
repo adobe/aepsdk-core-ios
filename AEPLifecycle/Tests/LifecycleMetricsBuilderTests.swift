@@ -28,7 +28,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let someDateTime = formatter.date(from: "2020/05/02 22:31")
         self.date = someDateTime!
         self.systemInfoService = MockSystemInfoService()
-        AEPServiceProvider.shared.systemInfoService = self.systemInfoService!
+        ServiceProvider.shared.systemInfoService = self.systemInfoService!
         self.dataStore = FakeDataStore(name: "testStore")
         self.metricsBuilder = LifecycleMetricsBuilder(dataStore: self.dataStore!, date: self.date)
     }

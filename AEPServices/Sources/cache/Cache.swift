@@ -15,7 +15,7 @@ import Foundation
 /// Concrete class that provides disk caching capabilities
 @objc public class Cache: NSObject {
     private var cacheService: Caching {
-        return AEPServiceProvider.shared.cacheService
+        return ServiceProvider.shared.cacheService
     }
     private var name: String
     

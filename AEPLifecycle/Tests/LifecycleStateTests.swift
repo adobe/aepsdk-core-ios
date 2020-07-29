@@ -54,7 +54,7 @@ class LifecycleStateTests: XCTestCase {
         mockSystemInfoService.displayInformation = (100, 100)
        
         
-        AEPServiceProvider.shared.systemInfoService = mockSystemInfoService
+        ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
     
     /// Happy path testing start

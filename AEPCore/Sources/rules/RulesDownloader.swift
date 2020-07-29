@@ -17,7 +17,7 @@ import AEPServices
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
 ///
 struct RulesDownloader: RulesLoader {
-    private let loggingService = AEPServiceProvider.shared.loggingService
+    private let loggingService = ServiceProvider.shared.loggingService
     private let fileUnzipper: Unzipping
     private let cache: Cache
 
@@ -44,7 +44,7 @@ struct RulesDownloader: RulesLoader {
         }
 
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             if let data = httpConnection.data {
                 // Store Zip file in temp directory for unzipping
                 switch self.storeDataInTempDirectory(data: data) {

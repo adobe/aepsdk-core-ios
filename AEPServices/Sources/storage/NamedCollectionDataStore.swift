@@ -19,7 +19,7 @@ public class NamedCollectionDataStore {
     private var name: String
     
     public init(name: String) {
-        self.storageService = AEPServiceProvider.shared.namedKeyValueService
+        self.storageService = ServiceProvider.shared.namedKeyValueService
         self.name = name
     }
 

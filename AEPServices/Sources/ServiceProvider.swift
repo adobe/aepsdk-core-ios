@@ -12,11 +12,11 @@
 
 import Foundation
 
-public class AEPServiceProvider {
-    public static let shared = AEPServiceProvider()
+public class ServiceProvider {
+    public static let shared = ServiceProvider()
 
     // Provide thread safety on the getters and setters
-    private let queue = DispatchQueue(label: "AEPServiceProvider.barrierQueue")
+    private let queue = DispatchQueue(label: "ServiceProvider.barrierQueue")
 
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()

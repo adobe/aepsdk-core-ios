@@ -48,7 +48,7 @@
 		3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A224BE5FF30019F095 /* CacheEntry.swift */; };
 		3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A324BE5FF30019F095 /* DiskCacheService.swift */; };
 		3F0397C724BE5FF30019F095 /* CacheExpiry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A424BE5FF30019F095 /* CacheExpiry.swift */; };
-		3F0397C824BE5FF30019F095 /* AEPServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A524BE5FF30019F095 /* AEPServiceProvider.swift */; };
+		3F0397C824BE5FF30019F095 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A524BE5FF30019F095 /* ServiceProvider.swift */; };
 		3F0397C924BE5FF30019F095 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A724BE5FF30019F095 /* Logging.swift */; };
 		3F0397CA24BE5FF30019F095 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A824BE5FF30019F095 /* Log.swift */; };
 		3F0397CB24BE5FF30019F095 /* LogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A924BE5FF30019F095 /* LogLevel.swift */; };
@@ -392,7 +392,7 @@
 		3F0397A224BE5FF30019F095 /* CacheEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheEntry.swift; sourceTree = "<group>"; };
 		3F0397A324BE5FF30019F095 /* DiskCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskCacheService.swift; sourceTree = "<group>"; };
 		3F0397A424BE5FF30019F095 /* CacheExpiry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CacheExpiry.swift; sourceTree = "<group>"; };
-		3F0397A524BE5FF30019F095 /* AEPServiceProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPServiceProvider.swift; sourceTree = "<group>"; };
+		3F0397A524BE5FF30019F095 /* ServiceProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
 		3F0397A724BE5FF30019F095 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		3F0397A824BE5FF30019F095 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		3F0397A924BE5FF30019F095 /* LogLevel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogLevel.swift; sourceTree = "<group>"; };
@@ -751,7 +751,7 @@
 				3F0397AA24BE5FF30019F095 /* network */,
 				3F0397BA24BE5FF30019F095 /* storage */,
 				3F0397E124BE60910019F095 /* utility */,
-				3F0397A524BE5FF30019F095 /* AEPServiceProvider.swift */,
+				3F0397A524BE5FF30019F095 /* ServiceProvider.swift */,
 				243DCE4624C7AA2800E99AD9 /* AEPServices.h */,
 				3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */,
 				3F0397B924BE5FF30019F095 /* Info.plist */,
@@ -1703,7 +1703,7 @@
 				3F0397CF24BE5FF30019F095 /* Networking.swift in Sources */,
 				3F0397DD24BE5FF30019F095 /* ApplicationSystemInfoService.swift in Sources */,
 				3F0397D624BE5FF30019F095 /* DataEntity.swift in Sources */,
-				3F0397C824BE5FF30019F095 /* AEPServiceProvider.swift in Sources */,
+				3F0397C824BE5FF30019F095 /* ServiceProvider.swift in Sources */,
 				2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */,
 				3F0397F724BE60910019F095 /* ZipArchive.swift in Sources */,
 			);

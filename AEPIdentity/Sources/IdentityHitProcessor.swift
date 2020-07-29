@@ -18,7 +18,7 @@ class IdentityHitProcessor: HitProcessable {
     let retryInterval = TimeInterval(30)
     private let responseHandler: (DataEntity, Data?) -> ()
     private var networkService: Networking {
-        return AEPServiceProvider.shared.networkService
+        return ServiceProvider.shared.networkService
     }
 
     /// Creates a new `IdentityHitProcessor` where the `responseHandler` will be invoked after each successful processing of a hit
