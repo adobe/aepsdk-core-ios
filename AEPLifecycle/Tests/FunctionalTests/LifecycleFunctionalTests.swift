@@ -109,9 +109,10 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
         
         let dispatchedEvent = mockRuntime.dispatchedEvents[0]
-        XCTAssertEqual(0, dispatchedEvent.data?["previoussessionstarttimestampmillis"] as? Int)
-        XCTAssertEqual(0, dispatchedEvent.data?["previoussessionpausetimestampmillis"] as? Int)
+        XCTAssertEqual(0, dispatchedEvent.data?["previoussessionstarttimestampmillis"] as? Double)
+        XCTAssertEqual(0, dispatchedEvent.data?["previoussessionpausetimestampmillis"] as? Double)
         XCTAssertEqual(86400.0 * 7.0 , dispatchedEvent.data?["maxsessionlength"] as? Double)
+        // the value of starttimestampmillis changes based on the time zone
         XCTAssertNotNil(dispatchedEvent.data?["starttimestampmillis"] as? Double)
         XCTAssertEqual("start", dispatchedEvent.data?["sessionevent"] as? String)
         
@@ -172,7 +173,6 @@ class LifecycleFunctionalTests: XCTestCase {
 
         // verify
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-        //TODO: is this expected?
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
         
         XCTAssertEqual(mockRuntime.createdSharedStates[0]?.count, mockRuntime.createdSharedStates[1]?.count)
@@ -196,7 +196,13 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
         XCTAssertEqual("1", (mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
         XCTAssertEqual("2", (mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
-      
+        
+        XCTAssertEqual(1595909459, mockRuntime.dispatchedEvents[1].data?["previoussessionstarttimestampmillis"] as? Double)
+        XCTAssertEqual(1595909469, mockRuntime.dispatchedEvents[1].data?["previoussessionpausetimestampmillis"] as? Double)
+        XCTAssertEqual(86400.0 * 7.0 , mockRuntime.dispatchedEvents[1].data?["maxsessionlength"] as? Double)
+        XCTAssertEqual(1595909499, mockRuntime.dispatchedEvents[1].data?["starttimestampmillis"] as? Double)
+        XCTAssertEqual("start", mockRuntime.dispatchedEvents[1].data?["sessionevent"] as? String)
+ 
     }
     
     /// Tests crash event when the last session was not gracefully closed
