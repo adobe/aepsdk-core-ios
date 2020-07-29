@@ -28,8 +28,8 @@ import AEPCore
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        super.init()
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
+        super.init()
     }
     
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
