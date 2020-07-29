@@ -91,7 +91,9 @@ class IdentityState {
         }
         
         // Early exit if privacy is opt-out
-        if lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
+        let privacyStatusStr = lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
+        if privacyStatus == .optedOut {
             // TODO: Add log
             return nil
         }
@@ -203,8 +205,9 @@ class IdentityState {
     ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
     ///   - createSharedState: a function which can create Identity shared state
     func processPrivacyChange(event: Event, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event) -> ()) {
-        let newPrivacyStatus = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
-
+        let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let newPrivacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
+        
         if newPrivacyStatus == identityProperties.privacyStatus {
             return
         }
@@ -246,7 +249,8 @@ class IdentityState {
     /// - Returns: True if a sync can be made with the current configuration, false otherwise
     private func canSyncForCurrentConfiguration(config: [String: Any]) -> Bool {
         let orgId = config[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String ?? ""
-        let privacyStatus = config[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
+        let privacyStatusStr = config[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
         return !orgId.isEmpty && privacyStatus != .optedOut
     }
     
@@ -297,7 +301,7 @@ class IdentityState {
 
         if let optOutList = identityResponse.optOutList, !optOutList.isEmpty {
             // Received opt-out response from ECID Service, so updating the privacy status in the configuration to opt-out.
-            let updateConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut]
+            let updateConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
             let event = Event(name: "Configuration Update From IdentityExtension", type: .configuration, source: .requestContent, data: [IdentityConstants.Configuration.UPDATE_CONFIG: updateConfig])
             eventDispatcher(event)
         }

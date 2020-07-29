@@ -123,7 +123,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -146,7 +146,7 @@ class IdentityTests: XCTestCase {
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
 
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -169,7 +169,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -193,7 +193,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -240,7 +240,7 @@ class IdentityTests: XCTestCase {
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
