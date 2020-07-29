@@ -77,24 +77,24 @@ struct LaunchRulesEngine {
     ///   - data: a `Traversable` collection with tokens and related values
     /// - Returns: a new instance of `Consequence`
     func replaceToken(for consequence: Consequence, data: Traversable) -> Consequence {
-        var dict = consequence.detailDict
-        replaceToken(in: &dict, data: data)
+        let dict = replaceToken(in: consequence.detailDict, data: data)
         return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }
     
-    private func replaceToken(in dict: inout [String: Any], data: Traversable) {
-        for (key, value) in dict {
+    private func replaceToken(in dict: [String: Any], data: Traversable) -> [String: Any] {
+        var mutableDict = dict
+        for (key, value) in mutableDict {
             switch value {
             case is String:
-                dict[key] = replaceToken(for: value as! String, data: data)
+                mutableDict[key] = replaceToken(for: value as! String, data: data)
             case is [String: Any]:
-                var valueDict = dict[key] as! [String: Any]
-                replaceToken(in: &valueDict, data: data)
-                dict[key] = valueDict
+                let valueDict = mutableDict[key] as! [String: Any]
+                mutableDict[key] = replaceToken(in: valueDict, data: data)
             default:
-                return
+                break
             }
         }
+        return mutableDict
     }
     
     private func replaceToken(for value: String, data: Traversable) -> String {
