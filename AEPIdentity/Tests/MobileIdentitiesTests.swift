@@ -44,8 +44,8 @@ class MobileIdentitiesTests: XCTestCase {
         let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
         
         // test
-        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
-            return (nil, .pending)
+        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
+            return SharedStateResult(status: .pending, value: nil)
         }
         
         // verify
@@ -58,8 +58,8 @@ class MobileIdentitiesTests: XCTestCase {
         let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
         
         // test
-        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
-            return (nil, .none)
+        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
+            return SharedStateResult(status: .none, value: nil)
         }
         
         // verify
@@ -72,8 +72,8 @@ class MobileIdentitiesTests: XCTestCase {
         let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
         
         // test
-        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
-            return (nil, .set)
+        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
+            return SharedStateResult(status: .set, value: nil)
         }
         
         // verify
@@ -89,14 +89,14 @@ class MobileIdentitiesTests: XCTestCase {
         
         // test
         var mobileIdentities = MobileIdentities()
-        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
             if extensionName == ConfigurationConstants.EXTENSION_NAME {
-                return (configurationSharedState, .set)
+                return SharedStateResult(status: .set, value: configurationSharedState)
             } else if extensionName == IdentityConstants.EXTENSION_NAME {
-                return (identitySharedState, .set)
+                return SharedStateResult(status: .set, value: identitySharedState)
             }
             
-            return (nil, .set)
+            return SharedStateResult(status: .set, value: nil)
         }
         
         let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
@@ -114,12 +114,12 @@ class MobileIdentitiesTests: XCTestCase {
         
         // test
         var mobileIdentities = MobileIdentities()
-        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
             if extensionName == ConfigurationConstants.EXTENSION_NAME {
-                return (configurationSharedState, .set)
+                return SharedStateResult(status: .set, value: configurationSharedState)
             }
             
-            return (nil, .set)
+            return SharedStateResult(status: .set, value: nil)
         }
         
         let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
@@ -137,12 +137,12 @@ class MobileIdentitiesTests: XCTestCase {
         
         // test
         var mobileIdentities = MobileIdentities()
-        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
              if extensionName == IdentityConstants.EXTENSION_NAME {
-                return (identitySharedState, .set)
+                return SharedStateResult(status: .set, value: identitySharedState)
             }
             
-            return (nil, .set)
+            return SharedStateResult(status: .set, value: nil)
         }
         
         let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
