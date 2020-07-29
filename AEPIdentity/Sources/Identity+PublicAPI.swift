@@ -13,13 +13,13 @@ import Foundation
 import AEPCore
 
 /// Defines the public interface for the Identity extension
-@objc public extension Identity {
+public extension Identity {
     
     /// Appends visitor information to the given URL.
     /// - Parameters:
     ///   - url: URL to which the visitor info needs to be appended. Returned as is if it is nil or empty.
     ///   - completion: closure which will be invoked once the updated url is available, along with an error if any occurred
-    @objc static func appendTo(url: URL?, completion: @escaping (URL?, AEPError) -> ()) {
+    static func appendTo(url: URL?, completion: @escaping (URL?, AEPError?) -> ()) {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
         let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
         
@@ -34,13 +34,13 @@ import AEPCore
                 return
             }
             
-            completion(URL(string: updatedUrlStr), .none)
+            completion(URL(string: updatedUrlStr), nil)
         }
     }
     
     /// Returns all customer identifiers which were previously synced with the Adobe Experience Cloud.
     /// - Parameter completion: closure which will be invoked once the customer identifiers are available.
-    @objc static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError) -> ()) {
+    static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError?) -> ()) {
         let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
         
         MobileCore.dispatch(event: event) { (responseEvent) in
@@ -54,13 +54,13 @@ import AEPCore
                 return
             }
             
-            completion(identifiers, .none)
+            completion(identifiers, nil)
         }
     }
     
     /// Returns the Experience Cloud ID.
     /// - Parameter completion: closure which will be invoked once Experience Cloud ID is available.
-    @objc static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
+    static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
         let event = Event(name: "Get experience cloud ID", type: .identity, source: .requestIdentity, data: nil)
         
         MobileCore.dispatch(event: event) { (responseEvent) in
@@ -74,13 +74,13 @@ import AEPCore
     ///   - identifierType: a unique type to identify this customer ID, should be non empty and non nil value
     ///   - identifier: the customer ID to set, should be non empty and non nil value
     ///   - authenticationState: a `MobileVisitorAuthenticationState` value
-    @objc static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState) {
+    static func syncIdentifier(identifierType: String, identifier: String, authenticationState: MobileVisitorAuthenticationState) {
         syncIdentifiers(identifiers: [identifierType: identifier], authenticationState: authenticationState)
     }
     
     /// Updates the given customer IDs with the Adobe Experience Cloud ID Service with authentication value of `MobileVisitorAuthenticationState.unknown`
     /// - Parameter identifiers: a dictionary containing identifier type as the key and identifier as the value, both identifier type and identifier should be non empty and non nil values.
-    @objc static func syncIdentifiers(identifiers: [String : String]?) {
+    static func syncIdentifiers(identifiers: [String : String]?) {
         syncIdentifiers(identifiers: identifiers, authenticationState: .unknown)
     }
     
@@ -88,7 +88,7 @@ import AEPCore
     /// - Parameters:
     ///   - identifiers: a dictionary containing identifier type as the key and identifier as the value, both identifier type and identifier should be non empty and non nil values.
     ///   - authenticationState: a `MobileVisitorAuthenticationState` value
-    @objc static func syncIdentifiers(identifiers: [String : String]?, authenticationState: MobileVisitorAuthenticationState) {
+    static func syncIdentifiers(identifiers: [String : String]?, authenticationState: MobileVisitorAuthenticationState) {
         var eventData = [String: Any]()
         eventData[IdentityConstants.EventDataKeys.IDENTIFIERS] = identifiers
         eventData[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] = authenticationState
@@ -101,7 +101,7 @@ import AEPCore
     
     /// Gets Visitor ID Service identifiers in URL query string form for consumption in hybrid mobile apps.
     /// - Parameter completion: closure invoked with a value containing the visitor identifiers as a query string upon completion of the service request
-    @objc static func getUrlVariables(completion: @escaping (String?, AEPError) -> ()) {
+    static func getUrlVariables(completion: @escaping (String?, AEPError?) -> ()) {
         let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
          MobileCore.dispatch(event: event) { (responseEvent) in
@@ -111,7 +111,7 @@ import AEPCore
             }
             
             let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
-            completion(urlVariables, .none)
+            completion(urlVariables, nil)
         }
     }
     

@@ -13,7 +13,7 @@ import Foundation
 import AEPCore
 import AEPServices
 
-@objc public class Identity: NSObject, Extension {
+public class Identity: Extension {
     public let runtime: ExtensionRuntime
 
     public let name = IdentityConstants.EXTENSION_NAME
@@ -25,8 +25,7 @@ import AEPServices
     // MARK: Extension
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        super.init()
-        
+
         guard let dataQueue = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
             return
