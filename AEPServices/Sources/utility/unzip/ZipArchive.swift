@@ -55,6 +55,8 @@ final class ZipArchive: Sequence {
         case cancelledOperation
     }
     
+    private let LOG_PREFIX = "ZipArchive"
+    
     /// An error that occurs during decompression
     enum DecompressionError: Error {
         case invalidStream
@@ -86,14 +88,16 @@ final class ZipArchive: Sequence {
     /// used to create new archive files or to read existing ones.
     /// - Parameter: `url`: File URL to the receivers backing file.
     init?(url: URL) {
-        self.url = url
         guard let archiveFile = ZipArchive.getFilePtr(for: url) else {
+            Log.warning(label: LOG_PREFIX, "Unable to obtain a file pointer for url \(url)")
             return nil
         }
         guard let endOfCentralDirectoryRecord = ZipArchive.getEndOfCentralDirectoryRecord(for: archiveFile) else {
+            Log.warning(label: LOG_PREFIX, "Unable to obtain end of central directory record for archive file at \(archiveFile.debugDescription)")
             return nil
         }
         
+        self.url = url
         self.archiveFile = archiveFile
         self.endOfCentralDirectoryRecord = endOfCentralDirectoryRecord
     }

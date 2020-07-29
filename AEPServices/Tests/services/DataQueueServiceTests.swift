@@ -47,7 +47,7 @@ class DataQueueServiceTests: XCTestCase {
         // Then
         XCTAssertTrue(DataQueueServiceTests.dbFileExists(fileName))
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)
-        XCTAssertTrue(SQLiteWrapper.tableExist(database: connection!, tableName: SQLiteDataQueue.TABLE_NAME))
+        XCTAssertTrue(SQLiteWrapper.tableExists(database: connection!, tableName: SQLiteDataQueue.TABLE_NAME))
     }
 
     /// initDataQueue()

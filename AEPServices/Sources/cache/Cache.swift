@@ -22,6 +22,7 @@ import Foundation
     /// Creates a new cache with a specified name
     /// - Parameter name: name of the cache
     public init(name: String) {
+        Log.trace(label: "Cache", "Cache object created with name \(name).")
         self.name = name
     }
     

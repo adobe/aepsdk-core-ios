@@ -13,20 +13,30 @@ import Foundation
 
 public class FileUnzipper: Unzipping {
     
+    private let LOG_PREFIX = "FileUnzipper"
+    
     /// Creates a new FileUnzipper
     public init(){ }
 
     public func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
         let fileManager = FileManager()
         var entryNames: [String] = []
+        
         // Create directory at destination path
-        guard let _ = try? fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil) else { return entryNames
-        }
-        guard fileManager.itemExists(at: sourceURL) else {
+        guard let _ = try? fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil) else {
+            Log.warning(label: LOG_PREFIX, "Unable to create directory at destination path: \(destinationURL.absoluteString)")
             return entryNames
         }
+        
+        // make sure our source url has files to extract
+        guard fileManager.itemExists(at: sourceURL) else {
+            Log.warning(label: LOG_PREFIX, "Source URL contains no files to unzip: \(sourceURL.absoluteString)")
+            return entryNames
+        }
+        
         // Create the ZipArchive structure to iterate through the zip entries and extract them
         guard let archive = ZipArchive(url: sourceURL) else {
+            Log.warning(label: LOG_PREFIX, "Failed to create ZipArchive for \(sourceURL.absoluteString)")
             return entryNames
         }
         
@@ -35,12 +45,16 @@ public class FileUnzipper: Unzipping {
             let path = entry.path
             entryNames.append(path)
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
+            
             guard destinationEntryURL.isContained(in: destinationURL) else {
+                Log.warning(label: LOG_PREFIX, "Unable to extract files from a domain different than the source.")
                 return []
             }
             
-            guard let _  = try? archive.extract(entry, to: destinationEntryURL) else { return [] }
-            
+            guard let _  = try? archive.extract(entry, to: destinationEntryURL) else {
+                Log.warning(label: LOG_PREFIX, "Failed to extract entry \(entry) to destination \(destinationEntryURL)")
+                return []
+            }
         }
         
         return entryNames
