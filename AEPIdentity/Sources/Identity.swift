@@ -18,7 +18,7 @@ public class Identity: Extension {
 
     public let name = IdentityConstants.EXTENSION_NAME
     public let friendlyName = IdentityConstants.FRIENDLY_NAME
-    public let version = IdentityConstants.EXTENSION_VERSION
+    public let extensionVersion = IdentityConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     private(set) var state: IdentityState?
     

@@ -16,7 +16,7 @@ import Foundation
 class EventHubPlaceholderExtension: Extension {
     var name = EventHubConstants.NAME
     var friendlyName = EventHubConstants.FRIENDLY_NAME
-    var version = "0.0.1"
+    var extensionVersion = "0.0.1"
     var metadata: [String : String]? = nil
     var runtime: ExtensionRuntime
 

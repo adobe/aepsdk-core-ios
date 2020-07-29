@@ -16,7 +16,7 @@ import AEPCore
 public class Lifecycle: Extension {
     public let name = LifecycleConstants.EXTENSION_NAME
     public let friendlyName = LifecycleConstants.FRIENDLY_NAME
-    public let version = LifecycleConstants.EXTENSION_VERSION
+    public let extensionVersion = LifecycleConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     
     public let runtime: ExtensionRuntime

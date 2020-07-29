@@ -52,7 +52,7 @@ extension TestableExtension {
 class MockExtension: TestableExtension {
     var name = "mockExtension"
     var friendlyName = "mockExtension"
-    var version = "0.0.1"
+    var extensionVersion = "0.0.1"
     var metadata: [String : String]? = nil
     
     static var registrationClosure: (() -> Void)? = nil

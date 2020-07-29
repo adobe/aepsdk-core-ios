@@ -22,7 +22,7 @@ public protocol Extension {
     var friendlyName: String { get }
 
     /// Version of the extension
-    var version: String { get }
+    var extensionVersion: String { get }
     
     /// Optional metadata to be provided to the `EventHub`
     var metadata: [String: String]? { get }
