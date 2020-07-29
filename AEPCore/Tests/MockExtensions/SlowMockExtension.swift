@@ -30,5 +30,7 @@ class SlowMockExtension: Extension {
     
     func onRegistered() {}
     func onUnregistered() {}
-    
+    func readyForEvent(_ event: Event) -> Bool {
+        return true
+    }
 }

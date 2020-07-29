@@ -17,7 +17,7 @@ class TestableExtensionRuntime:ExtensionRuntime{
     var listeners:[String:EventListener] = [:]
     var dispatchedEvents: [Event] = []
     var createdSharedStates: [[String : Any]?] = []
-    var otherSharedStates: [String: (value: [String : Any]?, status: SharedStateStatus)] = [:]
+    var otherSharedStates: [String: SharedStateResult] = [:]
     
     func getListener(type: EventType, source: EventSource) -> EventListener?{
         return listeners["\(type)-\(source)"]
@@ -47,11 +47,11 @@ class TestableExtensionRuntime:ExtensionRuntime{
         }
     }
     
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String : Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
     
-    func simulateSharedState(extensionName: String, event: Event?, data: (value: [String : Any]?, status: SharedStateStatus)){
+    func simulateSharedState(extensionName: String, event: Event?, data: SharedStateResult) {
         otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = data
     }
     

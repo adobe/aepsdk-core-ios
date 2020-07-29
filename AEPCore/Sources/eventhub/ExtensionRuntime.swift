@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// provides all the methods needed by an `Extension`
-public protocol ExtensionRuntime {
+@objc public protocol ExtensionRuntime {
     /// Registers an `EventListener` for the specified `EventType` and `EventSource`
     /// - Parameters:
     ///   - type: `EventType` to listen for

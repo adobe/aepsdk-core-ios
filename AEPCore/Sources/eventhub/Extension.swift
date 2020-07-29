@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// An object which can be registered with the `EventHub`
-public protocol Extension {
+@objc public protocol Extension {
 
     /// Name of the extension
     var name: String { get }
