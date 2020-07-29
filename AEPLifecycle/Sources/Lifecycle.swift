@@ -13,7 +13,7 @@ import Foundation
 import AEPServices
 import AEPCore
 
-public class Lifecycle: Extension {
+@objc(AEPLifecycle) public class Lifecycle: NSObject, Extension {
     public let name = LifecycleConstants.EXTENSION_NAME
     public let friendlyName = LifecycleConstants.FRIENDLY_NAME
     public let version = LifecycleConstants.EXTENSION_VERSION
@@ -29,6 +29,7 @@ public class Lifecycle: Extension {
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
+        super.init()
     }
     
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
@@ -119,8 +120,8 @@ public class Lifecycle: Extension {
             LifecycleConstants.EventDataKeys.SESSION_EVENT: LifecycleConstants.START,
             LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: date.timeIntervalSince1970,
             LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS,
-            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP: previousStartDate?.timeIntervalSince1970 ?? 0,
-            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0
+            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP: previousStartDate?.timeIntervalSince1970 ?? 0.0,
+            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0.0
         ]
         
         dispatch(event: Event(name: "LifecycleStart", type: .lifecycle, source: .responseContent, data: eventData))

@@ -15,13 +15,14 @@ import Foundation
 /// Concrete class that provides disk caching capabilities
 @objc public class Cache: NSObject {
     private var cacheService: Caching {
-        return AEPServiceProvider.shared.cacheService
+        return ServiceProvider.shared.cacheService
     }
     private var name: String
     
     /// Creates a new cache with a specified name
     /// - Parameter name: name of the cache
     public init(name: String) {
+        Log.trace(label: "Cache", "Cache object created with name \(name).")
         self.name = name
     }
     

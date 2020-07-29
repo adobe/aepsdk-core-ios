@@ -35,20 +35,6 @@ class UserDefaultsNamedCollectionTest: XCTestCase {
         XCTAssertNil(service.get(collectionName: collectionName, key: testKey))
     }
     
-    func testRemovaAll() {
-        let collectionName = "testName"
-        let testKey1 = "testKey1"
-        let testValue1: String = "testValue1"
-        let testKey2 = "testKey2"
-        let testValue2 = "testValue2"
-        
-        service.set(collectionName: collectionName, key: testKey1, value: testValue1)
-        service.set(collectionName: collectionName, key: testKey2, value: testValue2)
-        
-        service.removeAll(collectionName: collectionName)
-        XCTAssertNil(service.get(collectionName: collectionName, key: testKey1))
-        XCTAssertNil(service.get(collectionName: collectionName, key: testKey2))
-    }
     
     func testNamespacing() {
         let collectionName = "testName"

@@ -21,8 +21,8 @@ class IdentityTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     
     override func setUp() {
-        AEPServiceProvider.shared.networkService = MockNetworkServiceOverrider()
-        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+        ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
@@ -123,7 +123,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -131,7 +131,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
         
         // verify
-        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertTrue(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have been sent
         XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
@@ -146,7 +146,7 @@ class IdentityTests: XCTestCase {
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
 
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -154,7 +154,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
         
         // verify
-        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
     }
@@ -169,7 +169,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -177,7 +177,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
         
         // verify
-        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.optedIn, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-in
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
@@ -193,7 +193,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
         
         let testOrgId = "testOrgId"
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -201,7 +201,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
         
         // verify
-        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.unknown, identity.state?.identityProperties.privacyStatus) // identity state should have remained unknown
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
@@ -226,9 +226,8 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
         
         // verify
-        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
-        XCTAssertEqual(props.privacyStatus, identity.state?.identityProperties.privacyStatus) // identity state should have remained opt-in
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
     }
     
@@ -241,7 +240,7 @@ class IdentityTests: XCTestCase {
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         
-        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown] as [String : Any]
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue] as [String : Any]
         let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
@@ -249,7 +248,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
         
         // verify
-        let mockNetworkService = AEPServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.unknown, identity.state?.identityProperties.privacyStatus) // identity state should have remained unknown
         XCTAssertNil(identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have NOT been updated with the org id

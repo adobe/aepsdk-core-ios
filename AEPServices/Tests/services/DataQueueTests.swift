@@ -228,7 +228,7 @@ class DataQueueTests: XCTestCase {
         // Then
         XCTAssertTrue(result)
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
-        let tableExist = SQLiteWrapper.tableExist(database: connection, tableName: SQLiteDataQueue.TABLE_NAME)
+        let tableExist = SQLiteWrapper.tableExists(database: connection, tableName: SQLiteDataQueue.TABLE_NAME)
 
         defer {
             _ = SQLiteWrapper.disconnect(database: connection)

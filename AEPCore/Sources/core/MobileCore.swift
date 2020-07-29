@@ -14,7 +14,7 @@ import Foundation
 import AEPServices
 
 /// Core extension for the Adobe Experience Platform SDK
-public final class MobileCore {
+@objc(AEPCore) public final class MobileCore: NSObject {
     
     /// Current version of the Core extension
     let version = "0.0.1"
@@ -27,11 +27,11 @@ public final class MobileCore {
     /// - Parameter completion: Closure to run when extensions have been registered
     public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
+        let allExtensions = [Configuration.self] + extensions
         
-        // TODO: Add configuration as a default extension to be registered
-        extensions.forEach {
+        allExtensions.forEach {
             EventHub.shared.registerExtension($0) { (_) in
-                if registeredCounter.incrementAndGet() == extensions.count {
+                if registeredCounter.incrementAndGet() == allExtensions.count {
                     EventHub.shared.start()
                     completion?()
                 }
@@ -41,6 +41,7 @@ public final class MobileCore {
     
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
+    @objc(dispatch:)
     public static func dispatch(event: Event) {
         EventHub.shared.dispatch(event: event)
     }
@@ -49,6 +50,7 @@ public final class MobileCore {
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
+    @objc(dispatch:responseCallback:)
     public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> ()) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
             responseCallback(event)
@@ -59,7 +61,7 @@ public final class MobileCore {
     
     /// Start event processing
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
-    public static func start(completion: @escaping (()-> Void)) {
+    @objc public static func start(_ completion: @escaping (()-> Void)) {
         // Start the event hub processing
         let pending = MobileCore.pendingExtensions.shallowCopy
         MobileCore.pendingExtensions.clear()
@@ -68,6 +70,7 @@ public final class MobileCore {
     
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
+    @objc(setAdvertisingIdentifier:)
     public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
         let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
@@ -76,6 +79,7 @@ public final class MobileCore {
     
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
     /// - Parameter deviceToken: the device token for push notifications
+    @objc(setPushIdentifier:)
     public static func setPushIdentifier(deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]

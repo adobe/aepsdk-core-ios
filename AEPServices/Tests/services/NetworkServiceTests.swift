@@ -30,7 +30,7 @@ class NetworkServiceTests: XCTestCase {
     private var systemInfoService: MockSystemInfoService?
     override func setUp() {
         self.systemInfoService = MockSystemInfoService()
-        AEPServiceProvider.shared.systemInfoService = self.systemInfoService!
+        ServiceProvider.shared.systemInfoService = self.systemInfoService!
     }
     
     override func tearDown() {
@@ -169,7 +169,7 @@ class NetworkServiceTests: XCTestCase {
     
     func testOverridenConnectAsync_called_whenMultipleRequests() {
         let testNetworkService = MockNetworkServiceOverrider();
-        AEPServiceProvider.shared.networkService = testNetworkService
+        ServiceProvider.shared.networkService = testNetworkService
         
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.post, connectPayload: "test body", httpHeaders: ["Accept": "text/html"], connectTimeout: 2.0, readTimeout: 3.0)
         let request2 = NetworkRequest(url: URL(string: "https://test2.com")!, httpMethod: HttpMethod.get, httpHeaders: ["Accept": "text/html"])
@@ -179,12 +179,12 @@ class NetworkServiceTests: XCTestCase {
         }
     
         // test&verify
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: completionHandler)
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: completionHandler)
         XCTAssertEqual(request1.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
         XCTAssertNotNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
         testNetworkService.reset()
         
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: request2, completionHandler: nil)
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: request2, completionHandler: nil)
         XCTAssertEqual(request2.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
         XCTAssertNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
         testNetworkService.reset()
@@ -221,12 +221,12 @@ class NetworkServiceTests: XCTestCase {
     
     func testOverridenConnectAsync_doesNotOverrideHeaders_whenCalledWithDefaultHeaders() {
         let testNetworkService = MockNetworkServiceOverrider()
-        AEPServiceProvider.shared.networkService = testNetworkService
+        ServiceProvider.shared.networkService = testNetworkService
         
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.get, httpHeaders: ["User-Agent": "test", "Accept-Language": "ro-RO"], connectTimeout: 2.0, readTimeout: 3.0)
         
         // test&verify
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: nil)
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: nil)
         XCTAssertTrue(testNetworkService.connectAsyncCalled)
         XCTAssertEqual(2, testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders.count)
         XCTAssertEqual("test", testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["User-Agent"])
@@ -240,22 +240,22 @@ class NetworkServiceTests: XCTestCase {
         
         // test&verify
         // set first overrider
-        AEPServiceProvider.shared.networkService = testNetworkServiceOverrider1
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test1.com")!), completionHandler: nil)
+        ServiceProvider.shared.networkService = testNetworkServiceOverrider1
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test1.com")!), completionHandler: nil)
         XCTAssertTrue(testNetworkServiceOverrider1.connectAsyncCalled)
         testNetworkServiceOverrider1.reset()
         
         // set second overrider, the first one should not be called anymore
-        AEPServiceProvider.shared.networkService = testNetworkServiceOverrider2
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test12.com")!), completionHandler: nil)
+        ServiceProvider.shared.networkService = testNetworkServiceOverrider2
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test12.com")!), completionHandler: nil)
         XCTAssertFalse(testNetworkServiceOverrider1.connectAsyncCalled)
         XCTAssertTrue(testNetworkServiceOverrider2.connectAsyncCalled)
         testNetworkServiceOverrider1.reset()
         testNetworkServiceOverrider2.reset()
         
         // set third overrider, the other two should not be called anymore
-        AEPServiceProvider.shared.networkService = testNetworkServiceOverrider3
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test123.com")!), completionHandler: nil)
+        ServiceProvider.shared.networkService = testNetworkServiceOverrider3
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test123.com")!), completionHandler: nil)
         XCTAssertFalse(testNetworkServiceOverrider1.connectAsyncCalled)
         XCTAssertFalse(testNetworkServiceOverrider2.connectAsyncCalled)
         XCTAssertTrue(testNetworkServiceOverrider3.connectAsyncCalled)

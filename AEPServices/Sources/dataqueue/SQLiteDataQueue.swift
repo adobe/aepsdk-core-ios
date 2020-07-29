@@ -12,16 +12,6 @@
 
 import Foundation
 
-extension Date {
-    var millisecondsSince1970: Int64 {
-        return Int64((timeIntervalSince1970 * 1000.0).rounded())
-    }
-    
-    init(milliseconds: Int64) {
-        self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
-    }
-}
-
 /// An implementation of protocol `DataQueue`
 ///    - implements a FIFO container (queue) for `DataEntity` objects
 ///    - `DataEntity` objects inside this queue will be persisted in SQLite database automatically
@@ -36,6 +26,8 @@ class SQLiteDataQueue: DataQueue {
     private let TB_KEY_TIMESTAMP = "timestamp"
     private let TB_KEY_DATA = "data"
     
+    private let LOG_PREFIX = "SQLiteDataQueue"
+    
     /// Creates a  new `DataQueue` with a database file path and a serial dispatch queue
     /// If it fails to create database or table, a `nil` will be returned.
     /// - Parameters:
@@ -47,7 +39,7 @@ class SQLiteDataQueue: DataQueue {
         self.databaseFilePath = databaseFilePath
         self.serialQueue = serialQueue
         guard createTableIfNotExists(tableName: SQLiteDataQueue.TABLE_NAME) else {
-            print("failed to initialize AEPDataQueue with provided database name: \(databaseName)")
+            Log.warning(label: LOG_PREFIX, "Failed to initialize SQLiteDataQueue with database name '\(databaseName)'.")
             return nil
         }
     }
@@ -69,7 +61,7 @@ class SQLiteDataQueue: DataQueue {
             }
             
             defer {
-                _ = disconnect(database: connection)
+                disconnect(database: connection)
             }
             
             let result = SQLiteWrapper.execute(database: connection, sql: insertRowStatement)
@@ -86,16 +78,19 @@ class SQLiteDataQueue: DataQueue {
                 return nil
             }
             defer {
-                _ = disconnect(database: connection)
+                disconnect(database: connection)
             }
-            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let firstColumn = result.first else {
+            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let firstRow = result.first else {
+                Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return nil
             }
             
-            guard let uniqueIdentifier = firstColumn[TB_KEY_UNIQUE_IDENTIFIER], let dateString = firstColumn[TB_KEY_TIMESTAMP], let dataString = firstColumn[TB_KEY_DATA] else {
+            guard let uniqueIdentifier = firstRow[TB_KEY_UNIQUE_IDENTIFIER], let dateString = firstRow[TB_KEY_TIMESTAMP], let dataString = firstRow[TB_KEY_DATA] else {
+                Log.trace(label: LOG_PREFIX, "Database record did not have valid data: \(queryRowStatement).")
                 return nil
             }
             guard let dateInt64 = Int64(dateString) else {
+                Log.trace(label: LOG_PREFIX, "Database record had an invalid dateString: \(dateString).")
                 return nil
             }
             let date = Date(milliseconds: dateInt64)
@@ -113,12 +108,13 @@ class SQLiteDataQueue: DataQueue {
                 return false
             }
             defer {
-                _ = disconnect(database: connection)
+                disconnect(database: connection)
             }
             let deleteRowStatement = """
             DELETE FROM \(SQLiteDataQueue.TABLE_NAME) order by id limit 1;
             """
             guard SQLiteWrapper.execute(database: connection, sql: deleteRowStatement) else {
+                Log.warning(label: LOG_PREFIX, "Failed to delete oldest record from database: \(self.databaseName).")
                 return false
             }
             return true
@@ -134,9 +130,10 @@ class SQLiteDataQueue: DataQueue {
                 return false
             }
             defer {
-                _ = disconnect(database: connection)
+                disconnect(database: connection)
             }
             guard SQLiteWrapper.execute(database: connection, sql: dropTableStatement) else {
+                Log.warning(label: LOG_PREFIX, "Failed to drop table '\(SQLiteDataQueue.TABLE_NAME)' in database: \(self.databaseName).")
                 return false
             }
             
@@ -148,12 +145,13 @@ class SQLiteDataQueue: DataQueue {
         if let database = SQLiteWrapper.connect(databaseFilePath: databaseFilePath, databaseName: databaseName) {
             return database
         } else {
+            Log.warning(label: LOG_PREFIX, "Failed to connect to database: \(databaseName).")
             return nil
         }
     }
     
     private func disconnect(database: OpaquePointer) {
-        _ = SQLiteWrapper.disconnect(database: database)
+        SQLiteWrapper.disconnect(database: database)
     }
     
     private func createTableIfNotExists(tableName: String) -> Bool {
@@ -161,9 +159,9 @@ class SQLiteDataQueue: DataQueue {
             return false
         }
         defer {
-            _ = disconnect(database: connection)
+            disconnect(database: connection)
         }
-        if SQLiteWrapper.tableExist(database: connection, tableName: SQLiteDataQueue.TABLE_NAME) {
+        if SQLiteWrapper.tableExists(database: connection, tableName: SQLiteDataQueue.TABLE_NAME) {
             return true
         } else {
             let createTableStatement = """
@@ -174,8 +172,25 @@ class SQLiteDataQueue: DataQueue {
                 "data"        TEXT
             );
             """
+            
             let result = SQLiteWrapper.execute(database: connection, sql: createTableStatement)
+            if result {
+                Log.trace(label: LOG_PREFIX, "Successfully created table '\(tableName)'.")
+            } else {
+                Log.warning(label: LOG_PREFIX, "Failed to create table '\(tableName)'.")
+            }
+            
             return result
         }
+    }
+}
+
+extension Date {
+    var millisecondsSince1970: Int64 {
+        return Int64((timeIntervalSince1970 * 1000.0).rounded())
+    }
+    
+    init(milliseconds: Int64) {
+        self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }
 }

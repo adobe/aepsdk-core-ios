@@ -23,7 +23,7 @@ class LifecycleMetricsBuilder {
  
     private var systemInfoService: SystemInfoService {
         get {
-            AEPServiceProvider.shared.systemInfoService
+            ServiceProvider.shared.systemInfoService
         }
     }
     

@@ -89,7 +89,7 @@ struct LifecycleState {
         lifecycleData.advertisingIdentifier = adId
 
         // Update lifecycle context data and persist lifecycle info into local storage
-        lifecycleContextData = lifecycleContextData?.merging(with: lifecycleData) ?? lifecycleData
+        lifecycleContextData = lifecycleData
         persistLifecycleContextData(startDate: date)
         
         return previousSessionInfo
@@ -137,7 +137,7 @@ struct LifecycleState {
     
     /// Returns true if the current app version does not equal the app version stored in the data store
     private func isUpgrade() -> Bool {
-        let appVersion = AEPServiceProvider.shared.systemInfoService.getApplicationVersionNumber()
+        let appVersion = ServiceProvider.shared.systemInfoService.getApplicationVersionNumber()
         return dataStore.getString(key: LifecycleConstants.DataStoreKeys.LAST_VERSION) != appVersion
     }
     
@@ -146,7 +146,7 @@ struct LifecycleState {
     private func persistLifecycleContextData(startDate: Date) {
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA, value: lifecycleContextData)
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LAST_LAUNCH_DATE, value: startDate)
-        let appVersion = AEPServiceProvider.shared.systemInfoService.getApplicationVersionNumber()
+        let appVersion = ServiceProvider.shared.systemInfoService.getApplicationVersionNumber()
         dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: appVersion)
     }
     

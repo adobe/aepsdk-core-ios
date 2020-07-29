@@ -13,7 +13,7 @@ import Foundation
 import AEPCore
 import AEPServices
 
-public class Identity: Extension {
+@objc(AEPIdentity) public class Identity: NSObject, Extension {
     public let runtime: ExtensionRuntime
 
     public let name = IdentityConstants.EXTENSION_NAME
@@ -25,8 +25,9 @@ public class Identity: Extension {
     // MARK: Extension
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-
-        guard let dataQueue = AEPServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
+        super.init()
+        
+        guard let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
             return
         }
@@ -42,6 +43,12 @@ public class Identity: Extension {
         registerListener(type: .genericIdentity, source: .requestContent, listener: handleIdentityRequest)
         registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: .configuration, source: .responseContent, listener: handleConfigurationResponse)
+        
+        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value
+        if state?.bootup(configSharedState: configSharedState, eventDispatcher: dispatch(event:)) ?? false, let props = state?.identityProperties {
+            // privacy was opt-out, share state
+            createSharedState(data: props.toEventData(), event: nil)
+        }
     }
 
     public func onUnregistered() {}
@@ -81,7 +88,8 @@ public class Identity: Extension {
     /// Handles the configuration response event
     /// - Parameter event: the configuration response event
     private func handleConfigurationResponse(event: Event) {
-        if let privacyStatus = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus {
+        if let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String {
+            let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
             if privacyStatus == .optedOut {
                 // send opt-out hit
                 handleOptOut(event: event)
@@ -156,7 +164,7 @@ public class Identity: Extension {
     ///   - entity: The `DataEntity` that was processed by the hit processor
     ///   - responseData: the network response data if any
     private func handleNetworkResponse(entity: DataEntity, responseData: Data?) {
-        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:))
+        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
     }
     
     /// Sends an opt-out network request if the current privacy status is opt-out
@@ -164,13 +172,14 @@ public class Identity: Extension {
     private func handleOptOut(event: Event) {
         // TODO: AMSDK-10267 Check if AAM will handle the opt-out hit
         guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
-        let privacyStatus = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
-
+        let privacyStatusStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
+        
         if privacyStatus == .optedOut {
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
             guard let mid = state?.identityProperties.mid else { return }
             let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.DEFAULT_SERVER
-            AEPServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
+            ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
         }
     }
     
@@ -178,7 +187,10 @@ public class Identity: Extension {
     /// - Parameter event: the event
     /// - Returns: Returns true if we should ignore this event (if user is opted-out)
     private func shouldIgnore(event: Event) -> Bool {
-        let privacyStatus = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
+        let configSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value
+        let privacyStatusStr = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
+        
         return privacyStatus == .optedOut
     }
     

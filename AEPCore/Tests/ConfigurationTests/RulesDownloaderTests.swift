@@ -44,7 +44,7 @@ class RulesDownloaderTests: XCTestCase {
     }
     
     override func setUp() {
-        AEPServiceProvider.shared.cacheService = cache
+        ServiceProvider.shared.cacheService = cache
     }
     
     func testLoadRulesFromCacheSimple() {
@@ -70,7 +70,7 @@ class RulesDownloaderTests: XCTestCase {
     
 
     func testLoadRulesFromUrlWithCacheNotModified() {
-        AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .notModified)
+        ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .notModified)
         let testKey = "testKey"
         let testValue: AnyCodable = "testValue"
         let testRulesDict = [testKey: testValue]
@@ -94,7 +94,7 @@ class RulesDownloaderTests: XCTestCase {
     }
     
     func testLoadRulesFromUrlWithError() {
-        AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .error)
+        ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .error)
         let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
         rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
             XCTAssertNil(loadedRules)
@@ -108,7 +108,7 @@ class RulesDownloaderTests: XCTestCase {
     }
     
     func testLoadRulesFromUrlUnzipFail() {
-        AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
+        ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
         let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
         rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
             XCTAssertNil(loadedRules)
@@ -124,7 +124,7 @@ class RulesDownloaderTests: XCTestCase {
     func testLoadRulesFromUrlNoCache() {
         // Use the actual rules unzipper for integration testing purposes
         let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper())
-        AEPServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
+        ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with rules")
         var rules: [String: Any]? = nil
         

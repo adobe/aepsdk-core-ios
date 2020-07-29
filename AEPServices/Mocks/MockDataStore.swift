@@ -13,6 +13,9 @@ import Foundation
 import AEPServices
 
 public class MockDataStore: NamedCollectionProcessing {
+    public func setAppGroup(_ appGroup: String) {
+    }
+    
     public var dict = [String: Any?]()
     
     public init(){
@@ -29,9 +32,5 @@ public class MockDataStore: NamedCollectionProcessing {
     
     public func remove(collectionName: String, key: String) {
         dict.removeValue(forKey: key)
-    }
-    
-    public func removeAll(collectionName: String) {
-        dict.removeAll()
     }
 }

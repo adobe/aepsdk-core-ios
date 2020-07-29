@@ -11,12 +11,19 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
+@testable import AEPCore
 
-/// An enum which describes different errors from the AEP SDK can return
-@objc public enum AEPError: Int, Error {
-    public typealias RawValue = Int
-    
-    case none
-    case unexpected
-    case callbackTimeout
+extension Event{
+    func copyWithNewTimeStamp(_ timestamp: Date) -> Event{
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        
+        let data = try! encoder.encode(self)
+        var json = try! JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
+        json?["timestamp"] = timestamp.timeIntervalSinceReferenceDate
+        let jsonData = try! JSONSerialization.data(withJSONObject: json as Any, options: .prettyPrinted)
+
+        let newEvent = try! decoder.decode(Event.self, from: jsonData)
+        return newEvent
+    }
 }

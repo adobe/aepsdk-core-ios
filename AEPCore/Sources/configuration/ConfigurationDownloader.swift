@@ -22,7 +22,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     }
 
     func loadDefaultConfigFromManifest() -> [String: Any]? {
-        let systemInfoService = AEPServiceProvider.shared.systemInfoService
+        let systemInfoService = ServiceProvider.shared.systemInfoService
         guard let data = systemInfoService.getAsset(fileName: ConfigurationConstants.CONFIG_BUNDLED_FILE_NAME, fileType: "json")?.data(using: .utf8) else { return nil }
         let decoded = try? JSONDecoder().decode([String: AnyCodable].self, from: data)
         return AnyCodable.toAnyDictionary(dictionary: decoded)
@@ -47,7 +47,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
 
         let networkRequest = NetworkRequest(url: url, httpMethod: .get, httpHeaders: headers)
         
-        AEPServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             // If we get a 304 back, we can use the config in cache and exit early
             if httpConnection.responseCode == 304 {
                 completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cacheableDict))

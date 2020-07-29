@@ -20,9 +20,11 @@ class LaunchIDManagerTests: XCTestCase {
     var appIdManager: LaunchIDManager!
     
     override func setUp() {
-        dataStore.removeAll()
-        AEPServiceProvider.shared.systemInfoService = MockSystemInfoService()
+        ServiceProvider.shared.systemInfoService = MockSystemInfoService()
         appIdManager = LaunchIDManager(dataStore: dataStore)
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
     
     /// When no appId is stored in persistence we should return nil when loading the appId
@@ -43,12 +45,12 @@ class LaunchIDManagerTests: XCTestCase {
     /// When an appId is saved to the manifest we can load it properly
     func testLoadAppIdWhenSavedToManifest() {
         // setup
-        if let mockSystemInfoService = AEPServiceProvider.shared.systemInfoService as? MockSystemInfoService {
+        if let mockSystemInfoService = ServiceProvider.shared.systemInfoService as? MockSystemInfoService {
             mockSystemInfoService.property = "test-app-id"
         }
         
         // test & verify
-        XCTAssertEqual(AEPServiceProvider.shared.systemInfoService.getProperty(for: ""), appIdManager.loadAppId())
+        XCTAssertEqual(ServiceProvider.shared.systemInfoService.getProperty(for: ""), appIdManager.loadAppId())
     }
     
     /// Loading from persistence returns nil when no appId is saved
@@ -74,12 +76,12 @@ class LaunchIDManagerTests: XCTestCase {
     /// When an appId is present in the manifest we should successfully load that appId
     func loadAppIdFromManifestSimple() {
         // setup
-        if let mockSystemInfoService = AEPServiceProvider.shared.systemInfoService as? MockSystemInfoService {
+        if let mockSystemInfoService = ServiceProvider.shared.systemInfoService as? MockSystemInfoService {
             mockSystemInfoService.property = "test-app-id"
         }
         
         // test & verify
-        XCTAssertEqual(AEPServiceProvider.shared.systemInfoService.getProperty(for: ""), appIdManager.loadAppIdFromManifest())
+        XCTAssertEqual(ServiceProvider.shared.systemInfoService.getProperty(for: ""), appIdManager.loadAppIdFromManifest())
     }
 
 }

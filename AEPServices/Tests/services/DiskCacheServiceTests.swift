@@ -28,7 +28,7 @@ class DiskCacheServiceTests: XCTestCase {
     var dateOneMinInFuture: Date!
     
     override func setUp() {
-        AEPServiceProvider.shared.namedKeyValueService = MockDataStore()
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
         dateOneMinInFuture = Calendar.current.date(byAdding: .minute, value: 1, to: Date())
     }
 

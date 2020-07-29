@@ -19,7 +19,7 @@ public class NamedCollectionDataStore {
     private var name: String
     
     public init(name: String) {
-        self.storageService = AEPServiceProvider.shared.namedKeyValueService
+        self.storageService = ServiceProvider.shared.namedKeyValueService
         self.name = name
     }
 
@@ -193,10 +193,6 @@ public class NamedCollectionDataStore {
         }
         
         storageService.remove(collectionName: self.name, key: key)
-    }
-    
-    public func removeAll() {
-        storageService.removeAll(collectionName: self.name)
     }
 
     func set(key: String, value: Any?) {
