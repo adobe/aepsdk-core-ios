@@ -378,7 +378,7 @@
 		218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+Privacy.swift"; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
-		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21CAC0DF2422917600C11388 /* AEPCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0E62422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
@@ -673,7 +673,6 @@
 			isa = PBXGroup;
 			children = (
 				21CAC0D82422917600C11388 /* AEPCore */,
-				21CAC0E32422917600C11388 /* AEPCoreTests */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
 				3F03979324BE5DD30019F095 /* AEPServicesTests */,
 				3FE6DDAA24C62C090065EA05 /* AEPServicesMock */,
@@ -707,27 +706,9 @@
 			isa = PBXGroup;
 			children = (
 				24B4934124D2310700AA38D9 /* src */,
+				24B4934224D231D800AA38D9 /* tests */,
 			);
 			name = AEPCore;
-			sourceTree = "<group>";
-		};
-		21CAC0E32422917600C11388 /* AEPCoreTests */ = {
-			isa = PBXGroup;
-			children = (
-				3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */,
-				3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */,
-				3F3951E824CA096100F7325B /* MobileCoreTests.swift */,
-				3F39152E24CA47B600B58C3E /* RulesTests */,
-				3F39520024CA096100F7325B /* ConfigurationTests */,
-				3F3951E924CA096100F7325B /* EventHubTests */,
-				3F3951F324CA096100F7325B /* MockExtensions */,
-				3F3951F824CA096100F7325B /* TestHelpers */,
-				3F3951EC24CA096100F7325B /* TestResources */,
-				21D4A658246D991200DFCD02 /* LifecycleTests */,
-				21CAC0E62422917600C11388 /* Info.plist */,
-			);
-			name = AEPCoreTests;
-			path = AEPCore/Tests;
 			sourceTree = "<group>";
 		};
 		21D4A658246D991200DFCD02 /* LifecycleTests */ = {
@@ -749,6 +730,26 @@
 				21CAC0DA2422917600C11388 /* Info.plist */,
 			);
 			name = src;
+			path = AEPCore/Sources;
+			sourceTree = "<group>";
+		};
+		24B4934224D231D800AA38D9 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				3F39520024CA096100F7325B /* ConfigurationTests */,
+				3F3951E924CA096100F7325B /* EventHubTests */,
+				21D4A658246D991200DFCD02 /* LifecycleTests */,
+				3F3951F324CA096100F7325B /* MockExtensions */,
+				3F39152E24CA47B600B58C3E /* RulesTests */,
+				3F3951F824CA096100F7325B /* TestHelpers */,
+				3F3951EC24CA096100F7325B /* TestResources */,
+				3F3951E824CA096100F7325B /* MobileCoreTests.swift */,
+				3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */,
+				3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */,
+				21CAC0E62422917600C11388 /* Info.plist */,
+			);
+			name = tests;
+			path = AEPCore/Tests;
 			sourceTree = "<group>";
 		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
@@ -955,8 +956,8 @@
 		3F3951E924CA096100F7325B /* EventHubTests */ = {
 			isa = PBXGroup;
 			children = (
-				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
 				3F3951EB24CA096100F7325B /* EventHubTests.swift */,
+				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
 			);
 			path = EventHubTests;
 			sourceTree = "<group>";
@@ -1001,12 +1002,12 @@
 		3F39520024CA096100F7325B /* ConfigurationTests */ = {
 			isa = PBXGroup;
 			children = (
-				3F39520124CA096100F7325B /* TestableExtensionRuntime.swift */,
+				3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */,
 				3F39520224CA096100F7325B /* ConfigurationFunctionalTests.swift */,
 				3F39520324CA096100F7325B /* ConfigurationStateTests.swift */,
-				3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */,
-				3F39520524CA096100F7325B /* RulesDownloaderTests.swift */,
 				3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */,
+				3F39520524CA096100F7325B /* RulesDownloaderTests.swift */,
+				3F39520124CA096100F7325B /* TestableExtensionRuntime.swift */,
 			);
 			path = ConfigurationTests;
 			sourceTree = "<group>";
@@ -1015,8 +1016,8 @@
 			isa = PBXGroup;
 			children = (
 				3FB66A9E24CA004400502CAF /* CoreConstants.swift */,
-				3FB66A9F24CA004400502CAF /* MobileCore.swift */,
 				3FB66AA024CA004400502CAF /* Extension+Register.swift */,
+				3FB66A9F24CA004400502CAF /* MobileCore.swift */,
 				3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */,
 				3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */,
 			);
@@ -1026,19 +1027,19 @@
 		3FB66AA524CA004400502CAF /* eventhub */ = {
 			isa = PBXGroup;
 			children = (
-				3FB66AA624CA004400502CAF /* EventHubPlaceholderExtension.swift */,
-				3FB66AA724CA004400502CAF /* EventHubConstants.swift */,
-				3FB66AA824CA004400502CAF /* ExtensionContainer.swift */,
-				3FB66AA924CA004400502CAF /* Event.swift */,
 				3FB66AAA24CA004400502CAF /* AEPError.swift */,
-				3FB66AAB24CA004400502CAF /* SharedState.swift */,
+				3FB66AA924CA004400502CAF /* Event.swift */,
 				3FB66AAC24CA004400502CAF /* EventHub.swift */,
-				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
-				3FB66AAE24CA004400502CAF /* EventType.swift */,
+				3FB66AA724CA004400502CAF /* EventHubConstants.swift */,
 				3FB66AAF24CA004400502CAF /* EventHubError.swift */,
-				3FB66AB024CA004400502CAF /* EventSource.swift */,
+				3FB66AA624CA004400502CAF /* EventHubPlaceholderExtension.swift */,
 				3FB66AB124CA004400502CAF /* EventListenerContainer.swift */,
+				3FB66AB024CA004400502CAF /* EventSource.swift */,
+				3FB66AAE24CA004400502CAF /* EventType.swift */,
 				3FB66AB224CA004400502CAF /* Extension.swift */,
+				3FB66AA824CA004400502CAF /* ExtensionContainer.swift */,
+				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
+				3FB66AAB24CA004400502CAF /* SharedState.swift */,
 			);
 			path = eventhub;
 			sourceTree = "<group>";
@@ -1046,11 +1047,11 @@
 		3FB66AB324CA004400502CAF /* rules */ = {
 			isa = PBXGroup;
 			children = (
+				3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */,
+				3FB66AB824CA004400502CAF /* JSONRulesParser.swift */,
 				3FB66AB424CA004400502CAF /* LaunchRule.swift */,
 				3FB66AB524CA004400502CAF /* RulesDownloader.swift */,
-				3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */,
 				3FB66AB724CA004400502CAF /* RulesLoader.swift */,
-				3FB66AB824CA004400502CAF /* JSONRulesParser.swift */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -1058,17 +1059,17 @@
 		3FB66AB924CA004400502CAF /* configuration */ = {
 			isa = PBXGroup;
 			children = (
+				3FB66AC424CA004400502CAF /* Cacheable.swift */,
+				3FB66AC124CA004400502CAF /* CachedConfiguration.swift */,
+				3FB66AC024CA004400502CAF /* CachedRules.swift */,
 				3FB66ABA24CA004400502CAF /* Configuration.swift */,
 				3FB66ABB24CA004400502CAF /* ConfigurationConstants.swift */,
-				3FB66ABC24CA004400502CAF /* ConfigurationState.swift */,
-				3FB66ABD24CA004400502CAF /* LaunchIDManager.swift */,
-				3FB66ABE24CA004400502CAF /* Event+Configuration.swift */,
 				3FB66ABF24CA004400502CAF /* ConfigurationDownloadable.swift */,
-				3FB66AC024CA004400502CAF /* CachedRules.swift */,
-				3FB66AC124CA004400502CAF /* CachedConfiguration.swift */,
 				3FB66AC224CA004400502CAF /* ConfigurationDownloader.swift */,
+				3FB66ABC24CA004400502CAF /* ConfigurationState.swift */,
+				3FB66ABE24CA004400502CAF /* Event+Configuration.swift */,
+				3FB66ABD24CA004400502CAF /* LaunchIDManager.swift */,
 				3FB66AC324CA004400502CAF /* PrivacyStatus.swift */,
-				3FB66AC424CA004400502CAF /* Cacheable.swift */,
 			);
 			path = configuration;
 			sourceTree = "<group>";
