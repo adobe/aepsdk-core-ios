@@ -13,7 +13,7 @@ import Foundation
 import AEPServices
 import AEPCore
 
-public class Lifecycle: Extension {
+@objc(AEPLifecycle) public class Lifecycle: NSObject, Extension {
     public let name = LifecycleConstants.EXTENSION_NAME
     public let friendlyName = LifecycleConstants.FRIENDLY_NAME
     public let version = LifecycleConstants.EXTENSION_VERSION
@@ -28,6 +28,7 @@ public class Lifecycle: Extension {
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+        super.init()
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
     }
     
