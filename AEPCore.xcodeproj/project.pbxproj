@@ -673,13 +673,12 @@
 			isa = PBXGroup;
 			children = (
 				21CAC0D82422917600C11388 /* AEPCore */,
+				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
 				3F03979324BE5DD30019F095 /* AEPServicesTests */,
 				3FE6DDAA24C62C090065EA05 /* AEPServicesMock */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3FE6DDDD24C62EE60065EA05 /* AEPLifecycleTests */,
-				3FE6DE3024C642330065EA05 /* AEPIdentity */,
-				3FE6DE3B24C642330065EA05 /* AEPIdentityTests */,
 				21CAC0D72422917600C11388 /* Products */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
 			);
@@ -750,6 +749,61 @@
 			);
 			name = tests;
 			path = AEPCore/Tests;
+			sourceTree = "<group>";
+		};
+		24B4934324D2360700AA38D9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6DE3124C642330065EA05 /* AEPIdentity.h */,
+				3FE6DE5024C643060065EA05 /* CustomIdentity.swift */,
+				3FE6DE4F24C643060065EA05 /* Event+Identity.swift */,
+				218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */,
+				3FE6DE5724C643060065EA05 /* Identifiable.swift */,
+				3FE6DE5624C643060065EA05 /* Identity.swift */,
+				3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */,
+				3FE6DE5124C643060065EA05 /* IdentityHit.swift */,
+				3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */,
+				3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */,
+				3FE6DE4824C643050065EA05 /* IdentityProperties.swift */,
+				3FE6DE4D24C643050065EA05 /* IdentityState.swift */,
+				3FE6DE4924C643050065EA05 /* Identity+PublicAPI.swift */,
+				3FE6DE3224C642330065EA05 /* Info.plist */,
+				3FE6DE4E24C643060065EA05 /* MID.swift */,
+				3FE6DE5324C643060065EA05 /* MobileIdentities.swift */,
+				3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */,
+				3FE6DE4C24C643050065EA05 /* Networking+Identity.swift */,
+				2107F02524C9FDFE002935CF /* PushIDManageable.swift */,
+				2107F02724C9FE1B002935CF /* PushIDManager.swift */,
+				3FE6DE5224C643060065EA05 /* URLAppender.swift */,
+				3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */,
+				3FE6DE5824C643060065EA05 /* URL+Identity.swift */,
+			);
+			name = src;
+			path = AEPIdentity/Sources;
+			sourceTree = "<group>";
+		};
+		24B4934424D2361000AA38D9 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6DE8624C643EA0065EA05 /* TestHelpers */,
+				218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */,
+				3FE6DE7124C643620065EA05 /* IdentityFunctionalTests.swift */,
+				3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */,
+				3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */,
+				3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */,
+				3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */,
+				3FE6DE7624C643620065EA05 /* IdentityTests.swift */,
+				3FE6DE3E24C642330065EA05 /* Info.plist */,
+				3FE6DE6C24C643610065EA05 /* MIDTests.swift */,
+				3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */,
+				3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */,
+				3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */,
+				3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */,
+				3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */,
+				2107F02924C9FF46002935CF /* PushIDManagerTests.swift */,
+			);
+			name = tests;
+			path = AEPIdentity/Tests;
 			sourceTree = "<group>";
 		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
@@ -1129,63 +1183,17 @@
 		3FE6DE3024C642330065EA05 /* AEPIdentity */ = {
 			isa = PBXGroup;
 			children = (
-				3FE6DE5624C643060065EA05 /* Identity.swift */,
-				3FE6DE4924C643050065EA05 /* Identity+PublicAPI.swift */,
-				3FE6DE5024C643060065EA05 /* CustomIdentity.swift */,
-				3FE6DE4F24C643060065EA05 /* Event+Identity.swift */,
-				3FE6DE5724C643060065EA05 /* Identifiable.swift */,
-				3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */,
-				3FE6DE5124C643060065EA05 /* IdentityHit.swift */,
-				3FE6DE5524C643060065EA05 /* IdentityHitProcessor.swift */,
-				3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */,
-				3FE6DE4824C643050065EA05 /* IdentityProperties.swift */,
-				3FE6DE4D24C643050065EA05 /* IdentityState.swift */,
-				3FE6DE4E24C643060065EA05 /* MID.swift */,
-				3FE6DE5324C643060065EA05 /* MobileIdentities.swift */,
-				3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */,
-				3FE6DE4C24C643050065EA05 /* Networking+Identity.swift */,
-				3FE6DE5824C643060065EA05 /* URL+Identity.swift */,
-				3FE6DE5224C643060065EA05 /* URLAppender.swift */,
-				3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */,
-				218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */,
-				2107F02524C9FDFE002935CF /* PushIDManageable.swift */,
-				2107F02724C9FE1B002935CF /* PushIDManager.swift */,
-				3FE6DE3124C642330065EA05 /* AEPIdentity.h */,
-				3FE6DE3224C642330065EA05 /* Info.plist */,
+				24B4934324D2360700AA38D9 /* src */,
+				24B4934424D2361000AA38D9 /* tests */,
 			);
 			name = AEPIdentity;
-			path = AEPIdentity/Sources;
-			sourceTree = "<group>";
-		};
-		3FE6DE3B24C642330065EA05 /* AEPIdentityTests */ = {
-			isa = PBXGroup;
-			children = (
-				3FE6DE8624C643EA0065EA05 /* TestHelpers */,
-				3FE6DE7124C643620065EA05 /* IdentityFunctionalTests.swift */,
-				3FE6DE7624C643620065EA05 /* IdentityTests.swift */,
-				3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */,
-				3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */,
-				3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */,
-				3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */,
-				3FE6DE6C24C643610065EA05 /* MIDTests.swift */,
-				3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */,
-				3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */,
-				3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */,
-				3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */,
-				3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */,
-				218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */,
-				2107F02924C9FF46002935CF /* PushIDManagerTests.swift */,
-				3FE6DE3E24C642330065EA05 /* Info.plist */,
-			);
-			name = AEPIdentityTests;
-			path = AEPIdentity/Tests;
 			sourceTree = "<group>";
 		};
 		3FE6DE8624C643EA0065EA05 /* TestHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */,
 				2107F02B24C9FF62002935CF /* MockPushIDManager.swift */,
+				3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
