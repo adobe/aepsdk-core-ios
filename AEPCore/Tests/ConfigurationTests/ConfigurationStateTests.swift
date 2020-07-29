@@ -21,9 +21,11 @@ class ConfigurationStateTests: XCTestCase {
     
 
     override func setUp() {
-        dataStore.removeAll()
         configDownloader = MockConfigurationDownloader()
         configState = ConfigurationState(dataStore: dataStore, configDownloader: configDownloader)
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     private func putAppIdInPersistence(appId: String) {

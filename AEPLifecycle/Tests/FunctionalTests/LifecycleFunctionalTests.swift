@@ -90,7 +90,15 @@ class LifecycleFunctionalTests: XCTestCase {
     /// Tests first launch
     func testLifecycleFirstLaunch() {
         // setup
-        let event = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970:1595909459.075134))
+        let calendar = Calendar.current
+        var dateComponents: DateComponents? = calendar.dateComponents([.hour, .minute, .second], from: Date())
+        dateComponents?.day = 27
+        dateComponents?.month = 7
+        dateComponents?.year = 2020
+        dateComponents?.hour = 22
+        let date: Date = calendar.date(from: dateComponents!)!
+        
+        let event = createStartEvent().copyWithNewTimeStamp(date)
         mockRuntime.simulateSharedState(for: (extensionName: "com.adobe.module.configuration", event: event), data: ([:],.set))
         
         // test
@@ -104,7 +112,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(0, dispatchedEvent.data?["previoussessionstarttimestampmillis"] as? Int)
         XCTAssertEqual(0, dispatchedEvent.data?["previoussessionpausetimestampmillis"] as? Int)
         XCTAssertEqual(86400.0 * 7.0 , dispatchedEvent.data?["maxsessionlength"] as? Double)
-        XCTAssertEqual(1595909459.075134, dispatchedEvent.data?["starttimestampmillis"] as? Double)
+        XCTAssertNotNil(dispatchedEvent.data?["starttimestampmillis"] as? Double)
         XCTAssertEqual("start", dispatchedEvent.data?["sessionevent"] as? String)
         
         XCTAssertEqual("2", dispatchedEvent.lifecycleContextData["dayofweek"] as? String)
