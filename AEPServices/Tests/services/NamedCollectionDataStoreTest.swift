@@ -399,13 +399,14 @@ class NamedCollectionDataStoreTest: XCTestCase {
         XCTAssertTrue(mockKeyValueService.removeCalled)
     }
     
-    func testRemoveAll() {
-        store?.removeAll()
-        XCTAssertTrue(mockKeyValueService.removeAllCalled)
-    }
 }
 
 class MockKeyValueService: NamedCollectionProcessing {
+    var appGroup:String?
+    func setAppGroup(_ appGroup: String) {
+        self.appGroup = appGroup
+    }
+    
     
     var getResult: Any?
     var getCalled: Bool = false

@@ -34,7 +34,6 @@ class LifecycleMetricsBuilderTests: XCTestCase {
     }
     
     override func tearDown() {
-        dataStore?.removeAll()
         metricsBuilder = nil
     }
     

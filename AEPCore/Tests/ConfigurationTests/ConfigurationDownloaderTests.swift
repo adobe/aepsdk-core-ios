@@ -20,7 +20,9 @@ class ConfigurationDownloaderTests: XCTestCase {
     let invalidAppId = "invalid-app-id"
     
     override func setUp() {
-        dataStore.removeAll()
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
     
     /// Tests that we can load a bundled config from the bundle

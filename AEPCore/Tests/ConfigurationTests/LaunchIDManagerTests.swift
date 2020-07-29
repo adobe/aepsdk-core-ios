@@ -20,9 +20,11 @@ class LaunchIDManagerTests: XCTestCase {
     var appIdManager: LaunchIDManager!
     
     override func setUp() {
-        dataStore.removeAll()
         ServiceProvider.shared.systemInfoService = MockSystemInfoService()
         appIdManager = LaunchIDManager(dataStore: dataStore)
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
     
     /// When no appId is stored in persistence we should return nil when loading the appId
