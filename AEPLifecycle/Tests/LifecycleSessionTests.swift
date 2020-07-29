@@ -26,6 +26,9 @@ class LifecycleSessionTests: XCTestCase {
     override func setUp() {
         session = LifecycleSession(dataStore: dataStore)
         computeDates()
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     private func computeDates() {

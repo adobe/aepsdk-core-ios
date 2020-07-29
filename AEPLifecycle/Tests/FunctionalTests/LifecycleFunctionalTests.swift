@@ -48,7 +48,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockSystemInfoService.activeLocaleName = "en-US"
         mockSystemInfoService.displayInformation = (100, 100)
 
-        AEPServiceProvider.shared.systemInfoService = mockSystemInfoService
+        ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
     
     // MARK: lifecycleStart(...) tests

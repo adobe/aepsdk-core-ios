@@ -138,6 +138,7 @@
 		3F39521E24CA096200F7325B /* ConfigurationDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */; };
 		3F39521F24CA096200F7325B /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520524CA096100F7325B /* RulesDownloaderTests.swift */; };
 		3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */; };
+		3FB5F7CB24D1247600F0F6DF /* Event+Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB5F7C824D1241D00F0F6DF /* Event+Timestamp.swift */; };
 		3FB66A9C24CA003700502CAF /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FB66A9B24CA003700502CAF /* SwiftRulesEngine */; };
 		3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9E24CA004400502CAF /* CoreConstants.swift */; };
 		3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9F24CA004400502CAF /* MobileCore.swift */; };
@@ -484,6 +485,7 @@
 		3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloaderTests.swift; sourceTree = "<group>"; };
 		3F39520524CA096100F7325B /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
 		3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchIDManagerTests.swift; sourceTree = "<group>"; };
+		3FB5F7C824D1241D00F0F6DF /* Event+Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Timestamp.swift"; sourceTree = "<group>"; };
 		3FB66A9E24CA004400502CAF /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreConstants.swift; sourceTree = "<group>"; };
 		3FB66A9F24CA004400502CAF /* MobileCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCore.swift; sourceTree = "<group>"; };
 		3FB66AA024CA004400502CAF /* Extension+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+Register.swift"; sourceTree = "<group>"; };
@@ -938,6 +940,7 @@
 			children = (
 				3F39153424CB818500B58C3E /* TestableExtensionRuntime.swift */,
 				3FE6DDFC24C630DE0065EA05 /* LifecycleFunctionalTests.swift */,
+				3FB5F7C824D1241D00F0F6DF /* Event+Timestamp.swift */,
 			);
 			path = FunctionalTests;
 			sourceTree = "<group>";
@@ -1778,6 +1781,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE6DE0324C630DF0065EA05 /* LifecycleFunctionalTests.swift in Sources */,
+				3FB5F7CB24D1247600F0F6DF /* Event+Timestamp.swift in Sources */,
 				3F39153524CB818500B58C3E /* TestableExtensionRuntime.swift in Sources */,
 				3FE6DE0224C630DF0065EA05 /* LifecycleMetricsTests.swift in Sources */,
 				3FE6DE0424C630DF0065EA05 /* LifecycleStateTests.swift in Sources */,

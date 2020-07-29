@@ -30,6 +30,9 @@ class LifecycleStateTests: XCTestCase {
         setupDates()
         setupMockSystemInfoService()
         lifecycleState = LifecycleState(dataStore: dataStore)
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
     
     private func setupDates() {
