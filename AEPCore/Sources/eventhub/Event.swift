@@ -14,28 +14,28 @@ import Foundation
 import AEPServices
 
 /// An Event to be dispatched by the Event Hub
-public struct Event {
+@objc public class Event: NSObject, Codable {
     
     /// Name of the event
-    public let name: String
+    @objc public let name: String
     
     /// unique identifier for the event
-    public private(set) var id = UUID()
+    @objc public private(set) var id = UUID()
     
     /// The `EventType` for the event
-    public let type: EventType
+    @objc public let type: EventType
     
     /// The `EventSource` for the event
-    public let source: EventSource
+    @objc public let source: EventSource
     
     /// Optional data associated with this event
-    public let data: [String: Any]?
+    @objc public let data: [String: Any]?
     
     /// Date this event was created
-    public private(set) var timestamp = Date()
+    @objc public private(set) var timestamp = Date()
     
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
-    public let responseID: UUID?
+    @objc public let responseID: UUID?
     
     /// Creates a new `Event` with the given parameters
     /// - Parameters:
@@ -43,7 +43,7 @@ public struct Event {
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    public init(name: String, type: EventType, source: EventSource, data: [String: Any]?) {
+    @objc public convenience init(name: String, type: EventType, source: EventSource, data: [String: Any]?) {
         self.init(name: name, type: type, source: source, data: data, requestEvent: nil)
     }
     
@@ -65,9 +65,7 @@ public struct Event {
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
     
-}
-
-extension Event: Decodable, Encodable {
+    // MARK: Codable
     enum CodingKeys: String, CodingKey {
         case name
         case id
@@ -78,7 +76,7 @@ extension Event: Decodable, Encodable {
         case responseID
     }
     
-    public init(from decoder: Decoder) throws {
+    required public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         
         name = try values.decode(String.self, forKey: .name)
@@ -102,4 +100,5 @@ extension Event: Decodable, Encodable {
         try container.encode(timestamp, forKey: .timestamp)
         try container.encode(responseID, forKey: .responseID)
     }
+    
 }
