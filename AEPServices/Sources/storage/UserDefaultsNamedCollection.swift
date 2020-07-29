@@ -15,29 +15,37 @@ import Foundation
 class UserDefaultsNamedCollection: NamedCollectionProcessing {
     
     let keyPrefix = "com.adobe.mobile.datastore"
+    var appGroup: String?
+    
+    func setAppGroup(_ appGroup: String){
+        self.appGroup = appGroup
+    }
     
     func set(collectionName: String, key: String, value: Any?) {
-        userDefaultsFor(name: collectionName).set(value, forKey: keyPrefix + key)
+        userDefault.set(value, forKey: keyNameFor(collectionName: collectionName, key: key))
     }
     
     func get(collectionName: String, key: String) -> Any? {
-        guard let value = userDefaultsFor(name: collectionName).object(forKey: keyPrefix + key) else {
+        guard let value = userDefault.object(forKey: keyNameFor(collectionName: collectionName, key: key)) else {
             return nil
         }
         return value
     }
     
     func remove(collectionName: String, key: String) {
-        userDefaultsFor(name: collectionName).removeObject(forKey: keyPrefix + key)
+        userDefault.removeObject(forKey: keyNameFor(collectionName: collectionName, key: key))
     }
     
-    func removeAll(collectionName: String) {
-        for item in userDefaultsFor(name: collectionName).dictionaryRepresentation() {
-            userDefaultsFor(name: collectionName).removeObject(forKey: item.key)
+    var userDefault: UserDefaults{
+        if let appGroup = self.appGroup {
+            return UserDefaults.init(suiteName: appGroup) ?? UserDefaults.standard
         }
+        return UserDefaults.standard
     }
     
-    private func userDefaultsFor(name: String) -> UserDefaults {
-        return UserDefaults(suiteName: "\(keyPrefix).\(name)") ?? UserDefaults.standard
+    private func keyNameFor(collectionName: String, key: String) -> String {
+        return "Adobe.\(collectionName).\(key)"
     }
+    
+    
 }

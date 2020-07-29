@@ -89,7 +89,7 @@ struct LifecycleState {
         lifecycleData.advertisingIdentifier = adId
 
         // Update lifecycle context data and persist lifecycle info into local storage
-        lifecycleContextData = lifecycleContextData?.merging(with: lifecycleData) ?? lifecycleData
+        lifecycleContextData = lifecycleData
         persistLifecycleContextData(startDate: date)
         
         return previousSessionInfo
