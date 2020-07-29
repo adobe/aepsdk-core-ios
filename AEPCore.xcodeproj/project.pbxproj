@@ -674,10 +674,10 @@
 			children = (
 				21CAC0D82422917600C11388 /* AEPCore */,
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
+				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
 				3F03979324BE5DD30019F095 /* AEPServicesTests */,
 				3FE6DDAA24C62C090065EA05 /* AEPServicesMock */,
-				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3FE6DDDD24C62EE60065EA05 /* AEPLifecycleTests */,
 				21CAC0D72422917600C11388 /* Products */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
@@ -804,6 +804,39 @@
 			);
 			name = tests;
 			path = AEPIdentity/Tests;
+			sourceTree = "<group>";
+		};
+		24B4934524D23AAB00AA38D9 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				3F39153624CB823100B58C3E /* FunctionalTests */,
+				3FE6DDE024C62EE60065EA05 /* Info.plist */,
+				3FE6DDF924C630DE0065EA05 /* LifecycleContextDataTests.swift */,
+				3FE6DDF824C630DE0065EA05 /* LifecycleMetricsBuilderTests.swift */,
+				3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */,
+				3FE6DDFE24C630DE0065EA05 /* LifecycleSessionTests.swift */,
+				3FE6DDFD24C630DE0065EA05 /* LifecycleStateTests.swift */,
+			);
+			name = tests;
+			path = AEPLifecycle/Tests;
+			sourceTree = "<group>";
+		};
+		24B4934624D23AB200AA38D9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */,
+				3FE6DE0824C630EB0065EA05 /* Event+Lifecycle.swift */,
+				3FE6DDD424C62EE60065EA05 /* Info.plist */,
+				3FE6DE0A24C630EB0065EA05 /* Lifecycle.swift */,
+				3FE6DE0C24C630EB0065EA05 /* LifecycleConstants.swift */,
+				3FE6DE0B24C630EB0065EA05 /* LifecycleContextData.swift */,
+				3FE6DE0724C630EB0065EA05 /* LifecycleMetrics.swift */,
+				3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */,
+				3FE6DE1624C631100065EA05 /* LifecycleSession.swift */,
+				3FE6DE0624C630EA0065EA05 /* LifecycleState.swift */,
+			);
+			name = src;
+			path = AEPLifecycle/Sources;
 			sourceTree = "<group>";
 		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
@@ -1000,9 +1033,9 @@
 		3F39153624CB823100B58C3E /* FunctionalTests */ = {
 			isa = PBXGroup;
 			children = (
-				3F39153424CB818500B58C3E /* TestableExtensionRuntime.swift */,
-				3FE6DDFC24C630DE0065EA05 /* LifecycleFunctionalTests.swift */,
 				3FB5F7C824D1241D00F0F6DF /* Event+Timestamp.swift */,
+				3FE6DDFC24C630DE0065EA05 /* LifecycleFunctionalTests.swift */,
+				3F39153424CB818500B58C3E /* TestableExtensionRuntime.swift */,
 			);
 			path = FunctionalTests;
 			sourceTree = "<group>";
@@ -1150,34 +1183,17 @@
 		3FE6DDD224C62EE60065EA05 /* AEPLifecycle */ = {
 			isa = PBXGroup;
 			children = (
-				3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */,
-				3FE6DE0A24C630EB0065EA05 /* Lifecycle.swift */,
-				3FE6DE0824C630EB0065EA05 /* Event+Lifecycle.swift */,
-				3FE6DE0C24C630EB0065EA05 /* LifecycleConstants.swift */,
-				3FE6DE0B24C630EB0065EA05 /* LifecycleContextData.swift */,
-				3FE6DE0724C630EB0065EA05 /* LifecycleMetrics.swift */,
-				3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */,
-				3FE6DE0624C630EA0065EA05 /* LifecycleState.swift */,
-				3FE6DE1624C631100065EA05 /* LifecycleSession.swift */,
-				3FE6DDD424C62EE60065EA05 /* Info.plist */,
+				24B4934624D23AB200AA38D9 /* src */,
+				24B4934524D23AAB00AA38D9 /* tests */,
 			);
 			name = AEPLifecycle;
-			path = AEPLifecycle/Sources;
 			sourceTree = "<group>";
 		};
 		3FE6DDDD24C62EE60065EA05 /* AEPLifecycleTests */ = {
 			isa = PBXGroup;
 			children = (
-				3F39153624CB823100B58C3E /* FunctionalTests */,
-				3FE6DDF924C630DE0065EA05 /* LifecycleContextDataTests.swift */,
-				3FE6DDF824C630DE0065EA05 /* LifecycleMetricsBuilderTests.swift */,
-				3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */,
-				3FE6DDFE24C630DE0065EA05 /* LifecycleSessionTests.swift */,
-				3FE6DDFD24C630DE0065EA05 /* LifecycleStateTests.swift */,
-				3FE6DDE024C62EE60065EA05 /* Info.plist */,
 			);
 			name = AEPLifecycleTests;
-			path = AEPLifecycle/Tests;
 			sourceTree = "<group>";
 		};
 		3FE6DE3024C642330065EA05 /* AEPIdentity */ = {
