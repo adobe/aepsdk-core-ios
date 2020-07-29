@@ -706,15 +706,9 @@
 		21CAC0D82422917600C11388 /* AEPCore */ = {
 			isa = PBXGroup;
 			children = (
-				3FB66AB924CA004400502CAF /* configuration */,
-				3FB66A9D24CA004400502CAF /* core */,
-				3FB66AA524CA004400502CAF /* eventhub */,
-				3FB66AB324CA004400502CAF /* rules */,
-				21CAC0D92422917600C11388 /* AEPCore.h */,
-				21CAC0DA2422917600C11388 /* Info.plist */,
+				24B4934124D2310700AA38D9 /* src */,
 			);
 			name = AEPCore;
-			path = AEPCore/Sources;
 			sourceTree = "<group>";
 		};
 		21CAC0E32422917600C11388 /* AEPCoreTests */ = {
@@ -742,6 +736,19 @@
 				21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */,
 			);
 			path = LifecycleTests;
+			sourceTree = "<group>";
+		};
+		24B4934124D2310700AA38D9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				3FB66AB924CA004400502CAF /* configuration */,
+				3FB66A9D24CA004400502CAF /* core */,
+				3FB66AA524CA004400502CAF /* eventhub */,
+				3FB66AB324CA004400502CAF /* rules */,
+				21CAC0D92422917600C11388 /* AEPCore.h */,
+				21CAC0DA2422917600C11388 /* Info.plist */,
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
