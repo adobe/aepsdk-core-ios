@@ -169,7 +169,7 @@ final class EventHub {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the latest `SharedState`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         guard let sharedState = registeredExtensions.first(where: {$1.sharedStateName == extensionName})?.value.sharedState else {
             Log.error(label: "\(self.LOG_TAG):\(#function)", "Extension not registered")
             return nil
@@ -180,7 +180,8 @@ final class EventHub {
             version = self.eventNumberMap[unwrappedEvent.id] ?? Int.max
         }
 
-        return sharedState.resolve(version: version)
+        let result = sharedState.resolve(version: version)
+        return SharedStateResult(status: result.status, value: result.value)
     }
 
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type

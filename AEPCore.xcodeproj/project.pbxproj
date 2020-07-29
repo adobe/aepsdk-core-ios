@@ -33,6 +33,7 @@
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
+		217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217E220424D1FD7900B70B3E /* SharedStateResult.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		218E01C224C75C1500BEC470 /* HitQueuing+Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
@@ -372,6 +373,7 @@
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
+		217E220424D1FD7900B70B3E /* SharedStateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateResult.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+Privacy.swift"; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1018,6 +1020,7 @@
 				3FB66AB024CA004400502CAF /* EventSource.swift */,
 				3FB66AB124CA004400502CAF /* EventListenerContainer.swift */,
 				3FB66AB224CA004400502CAF /* Extension.swift */,
+				217E220424D1FD7900B70B3E /* SharedStateResult.swift */,
 			);
 			path = eventhub;
 			sourceTree = "<group>";
@@ -1591,6 +1594,7 @@
 				3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */,
 				3FB66AE224CA004400502CAF /* Event+Configuration.swift in Sources */,
 				3FB66AD124CA004400502CAF /* SharedState.swift in Sources */,
+				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				2467E43E24CB54B70022F6BE /* MockUnzipper.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,

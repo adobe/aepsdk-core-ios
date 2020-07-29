@@ -70,7 +70,7 @@ public class Lifecycle: Extension {
     /// - Parameters:
     ///   - event: the lifecycle start event
     ///   - configurationSharedState: the current configuration shared state
-    private func start(event: Event, configurationSharedState: (value: [String : Any]?, status: SharedStateStatus)) {
+    private func start(event: Event, configurationSharedState: SharedStateResult) {
         let prevSessionInfo = lifecycleState.start(date: event.timestamp,
                                                    additionalContextData: event.additionalData,
                                                    adId: getAdvertisingIdentifier(event: event),

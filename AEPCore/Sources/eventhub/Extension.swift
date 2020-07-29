@@ -28,7 +28,7 @@ public protocol Extension {
     var metadata: [String: String]? { get }
     
     /// Provides the methods can be used by extension
-    var runtime: ExtensionRuntime {  get}
+    var runtime: ExtensionRuntime { get }
 
     /// Invoked when the extension has been registered by the `EventHub`
     func onRegistered()
@@ -44,7 +44,7 @@ public protocol Extension {
     func readyForEvent(_ event: Event) -> Bool
 
     // An `Extension` must support parameterless initializer
-    init(runtime:ExtensionRuntime)
+    init(runtime: ExtensionRuntime)
 }
 
 /// Contains methods for developers to interact with in their own extensions
@@ -86,7 +86,7 @@ public extension Extension {
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return runtime.getSharedState(extensionName: extensionName, event: event)
     }
     
