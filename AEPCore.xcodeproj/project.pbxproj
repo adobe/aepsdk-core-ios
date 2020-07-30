@@ -678,8 +678,8 @@
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
-				21CAC0D72422917600C11388 /* Products */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
+				21CAC0D72422917600C11388 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
