@@ -13,10 +13,26 @@ import Foundation
 @_implementationOnly import SwiftRulesEngine
 
 /// A `Rule` type represents the functions defined by Launch UI
-class LaunchRule: Rule {
+struct LaunchRule: Rule {
     public let condition: Evaluable
+    public let consequences: [Consequence]
 
-    init(condition: Evaluable) {
+    init(condition: Evaluable, consequences: [Consequence]) {
         self.condition = condition
+        self.consequences = consequences
     }
+}
+
+enum ConsequenceType: String, Codable {
+    case url
+    case pii
+    case pb
+    case add
+    case mod
+}
+
+struct Consequence {
+    let id: String
+    let type: ConsequenceType
+    var detailDict: [String: Any]
 }
