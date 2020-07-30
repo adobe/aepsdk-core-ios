@@ -42,6 +42,11 @@
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		2467E43D24CB54B70022F6BE /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		2467E43E24CB54B70022F6BE /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
+		3D6AE12F24D1EACA0026448A /* UIServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6AE11D24CF75360026448A /* UIServiceImpl.swift */; };
+		3D6AE13024D1EACA0026448A /* AlertHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6AE11F24CF755A0026448A /* AlertHandler.swift */; };
+		3D6AE13124D1EACA0026448A /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6AE12124CF9A510026448A /* UIService.swift */; };
+		3D6AE13224D1EACA0026448A /* UIAlertListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6AE12324CF9B890026448A /* UIAlertListener.swift */; };
+		3D6AE13D24D1EE1C0026448A /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D6AE13C24D1EE1C0026448A /* MessageMonitor.swift */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
 		3F0397C424BE5FF30019F095 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A124BE5FF30019F095 /* Cache.swift */; };
@@ -383,6 +388,11 @@
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
 		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
+		3D6AE11D24CF75360026448A /* UIServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServiceImpl.swift; sourceTree = "<group>"; };
+		3D6AE11F24CF755A0026448A /* AlertHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertHandler.swift; sourceTree = "<group>"; };
+		3D6AE12124CF9A510026448A /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
+		3D6AE12324CF9B890026448A /* UIAlertListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertListener.swift; sourceTree = "<group>"; };
+		3D6AE13C24D1EE1C0026448A /* MessageMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitor.swift; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -739,9 +749,22 @@
 			path = LifecycleTests;
 			sourceTree = "<group>";
 		};
+		3D6AE11C24CF73690026448A /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				3D6AE11D24CF75360026448A /* UIServiceImpl.swift */,
+				3D6AE11F24CF755A0026448A /* AlertHandler.swift */,
+				3D6AE12124CF9A510026448A /* UIService.swift */,
+				3D6AE12324CF9B890026448A /* UIAlertListener.swift */,
+				3D6AE13C24D1EE1C0026448A /* MessageMonitor.swift */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
 			isa = PBXGroup;
 			children = (
+				3D6AE11C24CF73690026448A /* ui */,
 				3F03979F24BE5FF30019F095 /* cache */,
 				3F0397B224BE5FF30019F095 /* dataqueue */,
 				3F0397A624BE5FF30019F095 /* log */,
@@ -1650,6 +1673,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D6AE12F24D1EACA0026448A /* UIServiceImpl.swift in Sources */,
+				3D6AE13024D1EACA0026448A /* AlertHandler.swift in Sources */,
+				3D6AE13124D1EACA0026448A /* UIService.swift in Sources */,
+				3D6AE13224D1EACA0026448A /* UIAlertListener.swift in Sources */,
 				3F0397CE24BE5FF30019F095 /* LoggingService.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
@@ -1682,6 +1709,7 @@
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
+				3D6AE13D24D1EE1C0026448A /* MessageMonitor.swift in Sources */,
 				3F0397D524BE5FF30019F095 /* DataQueue.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
