@@ -18,16 +18,16 @@ class LifecycleMetricsBuilder {
     
     private typealias KEYS = LifecycleConstants.DataStoreKeys
 
-    private let dataStore: NamedKeyValueStore
+    private let dataStore: NamedCollectionDataStore
     private let date: Date
  
     private var systemInfoService: SystemInfoService {
         get {
-            AEPServiceProvider.shared.systemInfoService
+            ServiceProvider.shared.systemInfoService
         }
     }
     
-    init(dataStore: NamedKeyValueStore, date: Date) {
+    init(dataStore: NamedCollectionDataStore, date: Date) {
         self.dataStore = dataStore
         self.date = date
     }

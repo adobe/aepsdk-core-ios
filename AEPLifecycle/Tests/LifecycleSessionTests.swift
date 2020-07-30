@@ -16,7 +16,7 @@ import AEPServices
 class LifecycleSessionTests: XCTestCase {
     let sessionTimeoutInSeconds = TimeInterval(60 * 5) // 5 min
     
-    let dataStore = NamedKeyValueStore(name: "LifecycleTests")
+    let dataStore = NamedCollectionDataStore(name: "LifecycleTests")
     var session: LifecycleSession!
     
     var currentDate: Date!
@@ -24,9 +24,11 @@ class LifecycleSessionTests: XCTestCase {
     var currentDateMinusTenMin: Date!
     
     override func setUp() {
-        dataStore.removeAll()
         session = LifecycleSession(dataStore: dataStore)
         computeDates()
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     private func computeDates() {

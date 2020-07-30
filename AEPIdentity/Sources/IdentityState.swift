@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
+import AEPCore
 import AEPServices
 
 /// Manages the business logic of the Identity extension
@@ -19,6 +19,7 @@ class IdentityState {
     private let LOG_TAG = "IdentityState"
     private(set) var identityProperties: IdentityProperties
     private(set) var hitQueue: HitQueuing
+    private var pushIdManager: PushIDManageable
     #if DEBUG
     var lastValidConfig: [String: Any] = [:]
     #else
@@ -26,11 +27,36 @@ class IdentityState {
     #endif
     
     /// Creates a new `IdentityState` with the given identity properties
-    /// - Parameter identityProperties: identity
-    init(identityProperties: IdentityProperties, hitQueue: HitQueuing) {
+    /// - Parameter identityProperties: identity properties
+    /// - Parameter pushIdManager: a push id manager
+    init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable) {
         self.identityProperties = identityProperties
-        self.identityProperties.loadFromPersistence()
         self.hitQueue = hitQueue
+        self.pushIdManager = pushIdManager
+    }
+    
+    /// Completes init for the Identity extension and determines if we need to share state
+    /// - Parameters:
+    ///   - configSharedState: the current configuration shared state available at registration time
+    ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
+    /// - Returns: True if we should share state after bootup, false otherwise
+    func bootup(configSharedState: [String: Any]?, eventDispatcher: (Event) -> ()) -> Bool {
+        // load data from local storage
+        identityProperties.loadFromPersistence()
+        
+        // Load privacy status
+        identityProperties.privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        
+        // Update hit queue with privacy status
+        hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
+
+        // Create and dispatch a forced sync event
+        eventDispatcher(Event.forceSyncEvent())
+
+        // Identity should always share its state
+        // However, don't create a shared state twice, which will log an error
+        // The force sync event processed above will create a shared state if the privacy is not opt-out
+        return identityProperties.privacyStatus == .optedOut
     }
     
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
@@ -65,12 +91,19 @@ class IdentityState {
         }
         
         // Early exit if privacy is opt-out
-        if lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown == .optedOut {
+        let privacyStatusStr = lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
+        if privacyStatus == .optedOut {
             // TODO: Add log
             return nil
         }
         
-        // TODO: Save push ID AMSDK-10262
+        // Update push identifier if present
+        if let pushId = event.dpids?.values.first {
+            // update push identifiers
+            identityProperties.pushIdentifier = SHA256.hash(pushId)
+            pushIdManager.updatePushId(pushId: pushId)
+        }
         
         // generate customer ids
         let authState = event.authenticationState
@@ -107,14 +140,15 @@ class IdentityState {
     ///   - hit: the hit that was processed
     ///   - response: the response data if any
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
-    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> ()) {
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
+    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
         // regardless of response, update last sync time
         identityProperties.lastSync = Date()
 
         // check privacy here in case the status changed while response was in-flight
         if identityProperties.privacyStatus != .optedOut {
             // update properties
-            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher)
+            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState)
 
             // save
             identityProperties.saveToPersistence()
@@ -171,8 +205,9 @@ class IdentityState {
     ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
     ///   - createSharedState: a function which can create Identity shared state
     func processPrivacyChange(event: Event, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event) -> ()) {
-        let newPrivacyStatus = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
-
+        let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let newPrivacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
+        
         if newPrivacyStatus == identityProperties.privacyStatus {
             return
         }
@@ -186,9 +221,9 @@ class IdentityState {
             identityProperties.locationHint = nil
             identityProperties.customerIds?.removeAll()
 
-            // TODO: Clear AID from analytics
-            // TODO: Update push ID AMSDK-10262
-            
+            // TODO: AMSDK-10268 Clear AID from analytics
+            identityProperties.pushIdentifier = nil
+            pushIdManager.updatePushId(pushId: nil)
             identityProperties.saveToPersistence()
             createSharedState(identityProperties.toEventData(), event)
         } else if identityProperties.mid == nil {
@@ -214,7 +249,8 @@ class IdentityState {
     /// - Returns: True if a sync can be made with the current configuration, false otherwise
     private func canSyncForCurrentConfiguration(config: [String: Any]) -> Bool {
         let orgId = config[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String ?? ""
-        let privacyStatus = config[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? .unknown
+        let privacyStatusStr = config[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
+        let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
         return !orgId.isEmpty && privacyStatus != .optedOut
     }
     
@@ -256,7 +292,8 @@ class IdentityState {
     /// - Parameters:
     ///   - response: the network response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> ()) {
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return
@@ -264,7 +301,7 @@ class IdentityState {
 
         if let optOutList = identityResponse.optOutList, !optOutList.isEmpty {
             // Received opt-out response from ECID Service, so updating the privacy status in the configuration to opt-out.
-            let updateConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut]
+            let updateConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
             let event = Event(name: "Configuration Update From IdentityExtension", type: .configuration, source: .requestContent, data: [IdentityConstants.Configuration.UPDATE_CONFIG: updateConfig])
             eventDispatcher(event)
         }
@@ -275,13 +312,18 @@ class IdentityState {
             // Still, generate mid locally if there's none yet.
             identityProperties.mid = identityProperties.mid ?? MID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
+            createSharedState(identityProperties.toEventData(), nil)
             return
         }
 
         if let mid = identityResponse.mid, !mid.isEmpty {
+            let shouldShareState = identityResponse.blob != identityProperties.blob || identityResponse.hint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
             identityProperties.locationHint = identityResponse.hint
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
+            if shouldShareState {
+                createSharedState(identityProperties.toEventData(), nil)
+            }
         }
 
     }

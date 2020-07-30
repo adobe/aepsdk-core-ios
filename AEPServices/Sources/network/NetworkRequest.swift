@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// NetworkRequest struct to be used by the NetworkService and the HttpConnectionPerformer when initiating network calls
-public struct NetworkRequest {
+@objc public class NetworkRequest: NSObject {
     private static let REQUEST_HEADER_KEY_USER_AGENT = "User-Agent"
     private static let REQUEST_HEADER_KEY_LANGUAGE = "Accept-Language"
     
@@ -38,7 +38,7 @@ public struct NetworkRequest {
         self.httpMethod = httpMethod
         self.connectPayload = connectPayload
         
-        let systemInfoService = AEPServiceProvider.shared.systemInfoService
+        let systemInfoService = ServiceProvider.shared.systemInfoService
         let defaultHeaders = [NetworkRequest.REQUEST_HEADER_KEY_USER_AGENT: systemInfoService.getDefaultUserAgent(),
                               NetworkRequest.REQUEST_HEADER_KEY_LANGUAGE: systemInfoService.getActiveLocaleName()]
         self.httpHeaders = defaultHeaders.merging(httpHeaders) { (_, new) in new } // add in default headers and apply `httpHeaders` on top

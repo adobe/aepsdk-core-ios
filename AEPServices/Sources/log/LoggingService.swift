@@ -11,13 +11,45 @@
  */
 
 import Foundation
+import os.log
 
-/// Represents the interface of the logging service
-public protocol LoggingService {
-    /// Logs a message
-    /// - Parameters:
-    ///   - level: One of the message level identifiers, e.g., DEBUG
-    ///   - label: Name of a label to localize message
-    ///   - message: The string message
-    func log(level: LogLevel, label: String, message: String)
+/// Implements a `Logging` which will send log message to Apple's unified logging system
+class LoggingService: Logging {
+    private let LOG_SUB_SYSTEM_NAME = "com.adobe.mobile.marketing.aep"
+    private let cachedOSLogs = ThreadSafeDictionary<String, OSLog>()
+
+    /// Generates or Retrieves an `OSLog` object by a label name
+    /// - Parameter label: a name of label, which can be used to identify the consumer of this logging service
+    /// - Returns: an `OSLog` object
+    private func osLog(_ label: String) -> OSLog {
+        if let osLog = cachedOSLogs[label] {
+            return osLog
+        } else {
+            let osLog = OSLog(subsystem: LOG_SUB_SYSTEM_NAME, category: label)
+            cachedOSLogs[label] = osLog
+            return osLog
+        }
+    }
+
+    /// Converts `LogLevel` to Apple's `OSLogType`
+    /// - Parameter logLevel: a `LogLevel` object
+    /// - Returns: a `OSLogType` object
+    private func osLogType(_ logLevel: LogLevel) -> OSLogType {
+        switch logLevel {
+        case .error:
+            return .fault
+        case .warning:
+            return .error
+        case .debug:
+            return .debug
+        case .trace:
+            return .info
+        }
+    }
+
+    // MARK: Logging
+
+    func log(level: LogLevel, label: String, message: String) {
+        os_log("%@", log: osLog(label), type: osLogType(level), message)
+    }
 }

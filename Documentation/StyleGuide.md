@@ -14,6 +14,7 @@ This style guide highlights common patterns from the above linked style guide, w
   - [AEP 'Services'](#aep-services)
 - [General](#general)
   - [Use of `self`](#use-of-self)
+  - [Extensions](#extensions)
   - [Type Inference](#type-inference)
   - [Shortcut Declarations](#shortcut-declarations)
   - [Optional Binding](#optional-binding)
@@ -64,38 +65,45 @@ extension AEPCore: Lifecycle {
 
 ### AEP Extensions
 
-* The files for the AEP extension should be prefixed with `AEP` followed by the extension name.
+* The module name of AEP extension should be prefixed with `AEP`.
 
   Preferred:
   ```
-  AEPLifecycle.swift
+  AEPCore
+  AEPLifecycle
   ```
-  Not Preferred:
-  ```
+
+* The class name of AEP extension should NOT use prefix `AEP`.
+
+  Preferred:
+  ```  
+  MobileCore.swift
   Lifecycle.swift
   ```
-* The `AEPCore` extension for a given AEP extension should be named “AEPCore” and the extension's name separated by a “+”.
+* The class defining `MobileCore` public API for each Core extension should be named “MobileCore” and the extension's name separated by a “+”.
 
   Preferred:
   ```
-  AEPCore+Lifecycle.swift
+  MobileCore+Lifecycle.swift
   ```
   Not Preferred:
   ```
-  AEPCoreLifecycle.swift
+  MobileCoreLifecycle.swift
   ```
 
 ### AEP Services
 
-* Services should be prefixed by a name which indicates the service being provided, followed by `Service`.
+* The name of the services protocol should end with `-ing` or any other suffix recommanded by [Apple's API design guidelines](https://swift.org/documentation/api-design-guidelines/).
 
-  Preferred:
+* The implemetation classes of the services should be prefixed by a name which indicates the service being provided, followed by `Service`.
+
+  Protocol:
   ```
-  SystemInfoService
+  Networking.swfit
   ```
-  Not Preferred:
+  Implementation:
   ```
-  SystemInfo
+  NetworkService.swift
   ```
 
 ## General
@@ -103,6 +111,10 @@ extension AEPCore: Lifecycle {
 ### Use of Self
 
 Avoid using `self` since Swift does not require it to access an object’s properties or invoke its methods. Use self only when required by the compiler (in @escaping closures, or in initializers to disambiguate properties from arguments).
+
+### Extensions
+
+Avoid defining public extensions on a class/struct/protocol you don't own, otherwise it may lead to name conflict if the app or another 3rd party lib the app depends on also extends a same method. But you can define internal or private extensions on any type.
 
 ### Type Inference
 

@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
+import AEPCore
 import AEPServices
 
 extension HitQueuing {
@@ -25,6 +25,8 @@ extension HitQueuing {
             suspend()
             clear()
         case .unknown:
+            suspend()
+        @unknown default:
             suspend()
         }
     }

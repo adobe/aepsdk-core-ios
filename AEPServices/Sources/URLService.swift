@@ -11,10 +11,24 @@
  */
 
 import Foundation
+import UIKit
 
-/// Interface for open url actions
-public protocol URLService {
-    /// Open url with provided url string
+/// A concrete implementation of protocol `URLOpening`
+class URLService: URLOpening {
+    private let LOG_PREFIX = "URLService"
+    
+    ///  Open the resource at the specified URL asynchronously.
     /// - Parameter url: the url to open
-    @discardableResult func openUrl(_ url: URL) -> Bool
+    /// - Returns: true if have processed the open url action; otherwise you can override the `URLService` and return false for specific urls which not allowed to open
+    @discardableResult func openUrl(_ url: URL) -> Bool {
+        DispatchQueue.main.async {
+            Log.trace(label: self.LOG_PREFIX, "Attempting to open URL: \(url)")
+            UIApplication.shared.open(url) { success in
+                if !success {
+                    Log.warning(label: self.LOG_PREFIX, "Unable to open URL: \(url)")
+                }
+            }
+        }
+        return true
+    }
 }

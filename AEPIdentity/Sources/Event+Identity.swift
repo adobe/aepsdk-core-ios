@@ -10,7 +10,7 @@ governing permissions and limitations under the License.
 */
 
 import Foundation
-import AEPEventHub
+import AEPCore
 
 extension Event {
     
@@ -64,6 +64,13 @@ extension Event {
     func forceSyncEvent() -> Event {
         let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String : Any]
         return createResponseEvent(name: "Forced Sync Event", type: .identity, source: .requestIdentity, data: data)
+    }
+    
+    /// Creates a force sync event
+    /// - Returns: an event with the force sync event data
+    static func forceSyncEvent() -> Event {
+        let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String : Any]
+        return Event(name: "Forced Sync Event", type: .identity, source: .requestIdentity, data: data)
     }
     
 }

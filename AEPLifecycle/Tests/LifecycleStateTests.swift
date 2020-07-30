@@ -17,7 +17,7 @@ import AEPServicesMock
 class LifecycleStateTests: XCTestCase {
     
     var lifecycleState: LifecycleState!
-    var dataStore = NamedKeyValueStore(name: "LifecycleStateTests")
+    var dataStore = NamedCollectionDataStore(name: "LifecycleStateTests")
     var mockSystemInfoService: MockSystemInfoService!
     
     var currentDate: Date!
@@ -29,8 +29,10 @@ class LifecycleStateTests: XCTestCase {
     override func setUp() {
         setupDates()
         setupMockSystemInfoService()
-        dataStore.removeAll()
         lifecycleState = LifecycleState(dataStore: dataStore)
+        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
     
     private func setupDates() {
@@ -55,7 +57,7 @@ class LifecycleStateTests: XCTestCase {
         mockSystemInfoService.displayInformation = (100, 100)
        
         
-        AEPServiceProvider.shared.systemInfoService = mockSystemInfoService
+        ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
     
     /// Happy path testing start

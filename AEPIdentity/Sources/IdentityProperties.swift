@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 import Foundation
 import AEPServices
-import AEPEventHub
+import AEPCore
 
 /// Represents a type which contains instances variables for the Identity extension
 struct IdentityProperties: Codable {
@@ -56,7 +56,9 @@ struct IdentityProperties: Codable {
         eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = pushIdentifier
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] = locationHint
-        eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds
+        if let customerIds = customerIds, !customerIds.isEmpty {
+            eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds
+        }
         eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync?.timeIntervalSince1970
         
         return eventData
@@ -64,7 +66,7 @@ struct IdentityProperties: Codable {
     
     /// Populates the fields with values stored in the Identity data store
     mutating func loadFromPersistence() {
-        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let savedProperties: IdentityProperties? = dataStore.getObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES)
             
         if let savedProperties = savedProperties {
@@ -74,7 +76,7 @@ struct IdentityProperties: Codable {
     
     /// Saves this instance of `IdentityProperties` to the Identity data store
     func saveToPersistence() {
-        let dataStore = NamedKeyValueStore(name: IdentityConstants.DATASTORE_NAME)
+        let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         dataStore.setObject(key: IdentityConstants.DataStoreKeys.IDENTITY_PROPERTIES, value: self)
     }
     

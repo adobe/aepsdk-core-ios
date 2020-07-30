@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPServices
 
-public class MockNetworkServiceOverrider : NetworkService {
+public class MockNetworkServiceOverrider : Networking {
     
     public var connectAsyncCalled:Bool = false
     public var connectAsyncCalledWithNetworkRequest:NetworkRequest?

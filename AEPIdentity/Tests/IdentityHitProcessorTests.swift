@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPIdentity
 @testable import AEPServices
-@testable import AEPEventHub
+@testable import AEPCore
 import AEPServicesMock
 
 class IdentityHitProcessorTests: XCTestCase {
@@ -20,11 +20,11 @@ class IdentityHitProcessorTests: XCTestCase {
     var hitProcessor: IdentityHitProcessor!
     var responseCallbackArgs = [(DataEntity, Data?)]()
     var mockNetworkService: MockNetworkServiceOverrider? {
-        return AEPServiceProvider.shared.networkService as? MockNetworkServiceOverrider
+        return ServiceProvider.shared.networkService as? MockNetworkServiceOverrider
     }
 
     override func setUp() {
-        AEPServiceProvider.shared.networkService = MockNetworkServiceOverrider()
+        ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
         hitProcessor = IdentityHitProcessor(responseHandler: { [weak self] (entity, data) in
             self?.responseCallbackArgs.append((entity, data))
         })

@@ -12,12 +12,27 @@
 
 import Foundation
 
-/// Defines a platform service to be used to initialize `DataQueue` objects
-public protocol DataQueueService {
-    static var shared: DataQueueService { get }
+/// An implementation of protocol `DataQueuing`
+///      - initializes `DataQueue` objects by label name
+///      - caches `DataQueue` objects, then it can be retrieved later by the same label name
+public class DataQueueService: DataQueuing {
+    public static let shared: DataQueuing = DataQueueService()
+    private let serialQueue = DispatchQueue(label: "com.adobe.marketing.mobile.dataqueueservice")
+    #if DEBUG
+    internal var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
+    #else
+    private var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
+    #endif
 
-    /// Initialize a `DataQueue` object
-    /// - Parameter name: the label you assigned to the `DataQueue` at creation time.
-    /// - Returns: the object of `DataQueue`, return false if failed to create an object
-    func getDataQueue(label: String) -> DataQueue?
+    private init() {}
+
+    public func getDataQueue(label databaseName: String) -> DataQueue? {
+        if let queue = threadSafeDictionary[databaseName] {
+            return queue
+        } else {
+            let dataQueue = SQLiteDataQueue(databaseName: databaseName, serialQueue: serialQueue)
+            threadSafeDictionary[databaseName] = dataQueue
+            return dataQueue
+        }
+    }
 }
