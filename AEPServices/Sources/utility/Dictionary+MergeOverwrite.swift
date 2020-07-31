@@ -14,7 +14,7 @@ import Foundation
 
 // TODO: - Confirm optional Any as the expected value type for this
 extension Dictionary where Key == String, Value == Any? {
-    private static var SUFFIX_FOR_OBJECT = "[*]"
+    private static let SUFFIX_FOR_OBJECT = "[*]"
     ///
     /// Merges the new dictionary into this Dictionary, overwriting matching key value pairs from the new dictionary
     /// - Parameters
@@ -22,7 +22,11 @@ extension Dictionary where Key == String, Value == Any? {
     ///     - deleteIfEmpty: A bool indicating whether a key should be removed if the value is nil
     mutating func mergeOverwrite(new: [String: Any?], deleteIfEmpty: Bool) {
        // First, overwrite all matching key value pairs with new values
-       self.merge(new, uniquingKeysWith: { (_, new) in new })
+       self.merge(new, uniquingKeysWith: { (_ , new) in
+        guard var newDict = new as? [String: Any?] else { return new }
+        newDict.mergeOverwrite(new: [:], deleteIfEmpty: deleteIfEmpty)
+        return newDict
+       })
         
         for (k, v) in self {
             // Secondly, now we must check for the unique SUFFIX_FOR_OBJECT in the key to attach the data in the internal dict
