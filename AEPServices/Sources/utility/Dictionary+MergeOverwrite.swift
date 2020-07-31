@@ -69,8 +69,16 @@ extension Dictionary where Key == String, Value == Any? {
         }
         
         if deleteIfEmpty {
+            // Remove top level nils
             let nonilDict = self.compactMapValues { $0 }
             self = nonilDict
+            
+            // Remove nested nils
+            let removedNestedNil = self.map { item in
+                if let innerDict = item as? [String: Any?] {
+                    
+                }
+            }
         }
     }
 }

@@ -23,6 +23,9 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         "anInt": 552,
         "innerDict": {
             "embeddedString": "embeddedStringValue"
+            "embeddedDict": {
+                "embeddedDictKey": "embeddedDictValue"
+            }
         },
         "aList": [
             "stringInList"
@@ -49,6 +52,8 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         dict["anInt"] = 552
         var innerDict: [String: Any?] = [:]
         innerDict["embeddedString"] = "embeddedStringValue"
+        let embeddedDict: [String: Any?] = ["embeddedDictKey": "embeddedDictValue"]
+        innerDict["embeddedDict"] = embeddedDict
         dict["innerDict"] = innerDict
         let aList: [Any?] = ["stringInlist"]
         dict["aList"] = aList
@@ -76,9 +81,12 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         "newDouble": 32.23,
         "newBool": false,
         "newNil": nil,
-        "aDict": {
+        "innerDict": {
             "embeddedString": "changedEmbeddedStringValue",
-            "newEmbeddedString": "newEmbeddedStringValue"
+            "newEmbeddedString": "newEmbeddedStringValue",
+            "embeddedDict": {
+                "embeddedDictKey": "newEmbeddedDictValue"
+            }
         },
         "newDict": {
             "newDictKey": "newDictValue"
@@ -106,11 +114,13 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         fromDict["newInt"] = Int(123)
         fromDict["newDouble"] = Double(32.23)
         fromDict["newBool"] = false
-        fromDict["newNil"] = nil
-        var aDict: [String: Any?] = [:]
-        aDict["embeddedString"] = "changedEmbeddedStringValue"
-        aDict["newEmbeddedString"] = "newEmbeddedStringValue"
-        fromDict["aDict"] = aDict
+        fromDict.updateValue(nil, forKey: "newNil")
+        var innerDict: [String: Any?] = [:]
+        innerDict["embeddedString"] = "changedEmbeddedStringValue"
+        innerDict["newEmbeddedString"] = "newEmbeddedStringValue"
+        let embeddedDict: [String: Any?] = ["embeddedDictKey": "newEmbeddedDictValue"]
+        innerDict["embeddedDict"] = embeddedDict
+        fromDict["innerDict"] = innerDict
         let newDict: [String: Any?] = ["newDictKey":"newDictValue"]
         fromDict["newDict"] = newDict
         let aList: [Any?] = ["stringInList", "newStringInList"]
@@ -126,17 +136,18 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         return fromDict
     }
     
+    ///
+    /// Sets values to nil and makes sure they have been properly removed when `deleteIfEmpty` is true
+    ///
     func testAddDataToDictWithDelete() {
         var fromDict = getFromDict()
         fromDict.updateValue(nil, forKey: "key2")
-        fromDict.updateValue(nil, forKey: "aDict")
+        fromDict.updateValue(nil, forKey: "innerDict")
         fromDict.updateValue(nil, forKey: "aList")
         fromDict.updateValue(nil, forKey: "listOfObjects[*]")
         var toDict = getToDict()
         toDict.mergeOverwrite(new: fromDict, deleteIfEmpty: true)
-        print("toDict: \(toDict)")
-        print("fromDict: \(fromDict)")
-        XCTAssertEqual(toDict.count, 9)
+        XCTAssertEqual(toDict.count, 8)
         XCTAssertEqual(toDict["key1"] as? String, "updatedValue1")
         XCTAssertFalse(toDict.keys.contains("key2"))
         XCTAssertEqual(toDict["anInt"] as? Int, 552)
@@ -144,7 +155,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         XCTAssertEqual(toDict["newDouble"] as? Double, 32.23)
         XCTAssertFalse(toDict["newBool"] as! Bool)
         XCTAssertFalse(toDict.keys.contains("newNil"))
-        XCTAssertFalse(toDict.keys.contains("aDict"))
+        XCTAssertFalse(toDict.keys.contains("innerDict"))
         
         let newDict = toDict["newDict"] as? [String: Any?]
         XCTAssertEqual(newDict?["newDictKey"] as? String, "newDictValue")
@@ -173,10 +184,13 @@ class DictionaryMergeOverwriteTests: XCTestCase {
          }
      ]
      */
+    ///
+    /// Tests attach data with modified nil values for the incoming data, at both the main level, and the inner dictionary level
+    ///
     func testAddDataToDictWithInnerDelete() {
         var fromDict = getFromDict()
         fromDict.updateValue(nil, forKey: "key2")
-        fromDict.updateValue(nil, forKey: "aDict")
+        fromDict.updateValue(nil, forKey: "innerDict")
         fromDict.updateValue(nil, forKey: "aList")
         var objectDict: [String: Any?] = [:]
         var innerDetails: [String: Any?] = [:]
@@ -188,7 +202,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         var toDict = getToDict()
         toDict.mergeOverwrite(new: fromDict, deleteIfEmpty: true)
         
-        XCTAssertEqual(toDict.count, 10)
+        XCTAssertEqual(toDict.count, 9)
         XCTAssertTrue(toDict.keys.contains("attachedKey"))
         XCTAssertEqual(toDict["attachedKey"] as? String, "attachedValue")
         XCTAssertEqual(toDict["key1"] as? String, "updatedValue1")
@@ -206,7 +220,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         
         // Deleted keys
         XCTAssertFalse(toDict.keys.contains("key2"))
-        XCTAssertFalse(toDict.keys.contains("aDict"))
+        XCTAssertFalse(toDict.keys.contains("innerDict"))
         XCTAssertFalse(toDict.keys.contains("aList"))
         XCTAssertFalse(toDict.keys.contains("newNil"))
         
@@ -232,10 +246,64 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         XCTAssertEqual(obj2Details["temp"] as? Double, 58.8)
     }
     
+    ///
+    /// Tests modifying a nested dict works as expected
+    ///
+    func testModifyNestedDict() {
+        var toDict = getToDict()
+        toDict.mergeOverwrite(new: getFromDict(), deleteIfEmpty: true)
+        
+        let innerDict = toDict["innerDict"] as? [String: Any?] ?? [:]
+        let nestedDict = innerDict["embeddedDict"] as? [String: Any?] ?? [:]
+        XCTAssertEqual(nestedDict["embeddedDictKey"] as? String, "newEmbeddedDictValue")
+    }
+    
+    ///
+    /// Tests modifying the inner dictionary with a nil value
+    ///
+    func testModifyInnerDictWithNil() {
+        var toDict = getToDict()
+        var fromDict = getFromDict()
+        
+        var innerDict = fromDict["innerDict"] as? [String: Any?] ?? [:]
+        innerDict.updateValue(nil, forKey: "newEmbeddedString")
+        fromDict["innerDict"] = innerDict
+        toDict.mergeOverwrite(new: fromDict, deleteIfEmpty: true)
+        let resultInnerDict = toDict["innerDict"] as? [String: Any?] ?? [:]
+        XCTAssertFalse(resultInnerDict.keys.contains("newEmbeddedString"))
+    }
+    
+    ///
+    /// Tests modifying a nested dict with a nil value properly removes it
+    ///
+    func testModifyNestedDictWithNil() {
+        var toDict = getToDict()
+        var fromDict = getFromDict()
+        
+        // Update the nested dictionary with a nil value
+        var innerDict = fromDict["innerDict"] as? [String: Any?] ?? [:]
+        var nestedDict = innerDict["embeddedDict"] as? [String: Any?] ?? [:]
+        nestedDict.updateValue(nil, forKey: "embeddedDictKey")
+        innerDict.updateValue(nestedDict, forKey: "embeddedDict")
+        fromDict.updateValue(innerDict, forKey: "innerDict")
+        
+        toDict.mergeOverwrite(new: fromDict, deleteIfEmpty: true)
+        
+        innerDict = toDict["innerDict"] as? [String: Any?] ?? [:]
+        nestedDict = innerDict["embeddedDict"] as? [String: Any?] ?? [:]
+        XCTAssertFalse(nestedDict.keys.contains("embeddedDictKey"))
+    }
+    
+    ///
+    /// Adds data without any nil values. Performs an attach data using the suffix for object
+    /// The receiver of the attach data `listOfObjects` has an internal dictionary value which has another dictionary who's key is "details"
+    /// while the incoming attach data also has a key named "details"
+    /// Makes sure that the incoming details object is properly added to the members of `listOfObjects`
+    ///
     func testAddDataToDictWithNoNilValues() {
         var toDict = getToDict()
         toDict.mergeOverwrite(new: getFromDict(), deleteIfEmpty: true)
-        XCTAssertEqual(toDict.count, 13)
+        XCTAssertEqual(toDict.count, 12)
         XCTAssertEqual(toDict["attachedKey"] as? String, "attachedValue")
         XCTAssertEqual(toDict["key1"] as? String, "updatedValue1")
         XCTAssertEqual(toDict["key2"] as? String, "value2")
@@ -244,9 +312,9 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         XCTAssertEqual(toDict["newDouble"] as? Double, 32.23)
         XCTAssertFalse(toDict["newBool"] as! Bool)
         
-        let aDict = toDict["aDict"] as? [String: Any?] ?? [:]
-        XCTAssertEqual(aDict["embeddedString"] as? String, "changedEmbeddedStringValue")
-        XCTAssertEqual(aDict["newEmbeddedString"] as? String, "newEmbeddedStringValue")
+        let innerDict = toDict["innerDict"] as? [String: Any?] ?? [:]
+        XCTAssertEqual(innerDict["embeddedString"] as? String, "changedEmbeddedStringValue")
+        XCTAssertEqual(innerDict["newEmbeddedString"] as? String, "newEmbeddedStringValue")
         
         let newDict = toDict["newDict"] as? [String: Any?] ?? [:]
         XCTAssertEqual(newDict["newDictKey"] as? String, "newDictValue")
@@ -278,5 +346,96 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         XCTAssertEqual(obj2Details.count, 2)
         XCTAssertEqual(obj2Details["color"] as? String, "orange")
         XCTAssertEqual(obj2Details["temp"] as? Double, 58.8)
+    }
+    
+    ///
+    /// Tests that multiple attach data items are properly attached
+    ///
+    func testMultipleAttachDataItemsWithOneDeletingInner() {
+        var toDict = getToDict()
+        var fromDict = getFromDict()
+        
+        var toObjectDict: [String: Any?] = [:]
+        var toInnerDetails: [String: Any?] = [:]
+        var toInnerArrayOfObjs: [Any?] = []
+        toInnerDetails["country"] = "USA"
+        toInnerDetails["state"] = "UT"
+        toObjectDict["localeDetails"] = toInnerDetails
+        toInnerArrayOfObjs.append(toObjectDict)
+        toDict["anotherListOfObjects"] = toInnerArrayOfObjs
+        
+        var fromObjectDict: [String: Any?] = [:]
+        var fromInnerDetails: [String: Any?] = [:]
+        fromInnerDetails["country"] = "USA"
+        fromInnerDetails.updateValue(nil, forKey: "state")
+        fromObjectDict["localeDetails"] = fromInnerDetails
+        fromDict["anotherListOfObjects[*]"] = fromObjectDict
+        
+        toDict.mergeOverwrite(new: fromDict, deleteIfEmpty: true)
+        
+        // Inner delete from listOfObjects
+        let listOfObjects: [Any?] = toDict["listOfObjects"] as? [Any?] ?? []
+        XCTAssertEqual(listOfObjects.count, 2)
+        
+        let obj1: [String: Any?] = listOfObjects[0] as? [String: Any?] ?? [:]
+        XCTAssertEqual(obj1.count, 2)
+        XCTAssertEqual(obj1["name"] as? String, "request1")
+        let obj1Details: [String: Any?] = obj1["details"] as? [String: Any?] ?? [:]
+        XCTAssertEqual(obj1Details.count, 3)
+        XCTAssertEqual(obj1Details["color"] as? String, "orange")
+        XCTAssertEqual(obj1Details["size"] as? String, "large")
+        XCTAssertEqual(obj1Details["temp"] as? Double, 58.8)
+        
+        let obj2: [String: Any?] = listOfObjects[1] as? [String: Any?] ?? [:]
+        XCTAssertEqual(obj2.count, 3)
+        XCTAssertEqual(obj2["name"] as? String, "request2")
+        XCTAssertEqual(obj2["location"] as? String, "central")
+        let obj2Details: [String: Any?] = obj2["details"] as? [String: Any?] ?? [:]
+        XCTAssertEqual(obj2Details.count, 2)
+        XCTAssertEqual(obj2Details["temp"] as? Double, 58.8)
+        XCTAssertEqual(obj2Details["color"] as? String, "orange")
+        
+        // Second attach data object
+        let anotherListOfObjects: [Any?] = toDict["anotherListOfObjects"] as? [Any?] ?? []
+        XCTAssertEqual(anotherListOfObjects.count, 1)
+        
+        let anotherObj1: [String: Any?] = anotherListOfObjects[0] as? [String: Any?] ?? [:]
+        XCTAssertEqual(anotherObj1.count, 1)
+        let anotherObj1Details: [String: Any?] = anotherObj1["localeDetails"] as? [String: Any?] ?? [:]
+        XCTAssertEqual(anotherObj1Details.count, 1)
+        XCTAssertEqual(anotherObj1Details["country"] as? String, "USA")
+        XCTAssertFalse(anotherObj1Details.keys.contains("state"))
+    }
+    
+    ///
+    /// Tests that nil values are not deleted when `deleteIfEmpty` is false
+    ///
+    func testNoNilDelete() {
+        var fromDict = getFromDict()
+        fromDict.updateValue(nil, forKey: "key2")
+        fromDict.updateValue(nil, forKey: "innerDict")
+        fromDict.updateValue(nil, forKey: "aList")
+        fromDict.updateValue(nil, forKey: "listOfObjects[*]")
+        var toDict = getToDict()
+        toDict.mergeOverwrite(new: fromDict, deleteIfEmpty: false)
+        print("toDict: \(toDict)")
+        print("fromDict: \(fromDict)")
+        XCTAssertEqual(toDict.count, 14)
+        XCTAssertEqual(toDict["key1"] as? String, "updatedValue1")
+        XCTAssertTrue(toDict.keys.contains("key2"))
+        XCTAssertEqual(toDict["anInt"] as? Int, 552)
+        XCTAssertEqual(toDict["newInt"] as? Int, 123)
+        XCTAssertEqual(toDict["newDouble"] as? Double, 32.23)
+        XCTAssertFalse(toDict["newBool"] as! Bool)
+        XCTAssertTrue(toDict.keys.contains("newNil"))
+        XCTAssertTrue(toDict.keys.contains("innerDict"))
+        
+        let newDict = toDict["newDict"] as? [String: Any?]
+        XCTAssertEqual(newDict?["newDictKey"] as? String, "newDictValue")
+        XCTAssertTrue(toDict.keys.contains("aList"))
+        
+        let newList = toDict["newList"] as? [Any?]
+        XCTAssertEqual(newList?.count, 1)
+        XCTAssertEqual(newList?[0] as? String, "newListString")
     }
 }
