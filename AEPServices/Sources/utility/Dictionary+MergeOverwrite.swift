@@ -23,48 +23,56 @@ extension Dictionary where Key == String, Value == Any? {
     mutating func mergeOverwrite(new: [String: Any?], deleteIfEmpty: Bool) {
        // First, overwrite all matching key value pairs with new values
        self.merge(new, uniquingKeysWith: { (_, new) in new })
-       // Secondly, now we must check for the unique SUFFIX_FOR_OBJECT in the key to attach the data in the internal dict
-        for k in self.keys where k.range(of: Dictionary.SUFFIX_FOR_OBJECT) != nil {
-            guard let range = k.range(of: Dictionary.SUFFIX_FOR_OBJECT) else { continue }
-            let keyWithoutSuffix: String = String(k[..<range.lowerBound])
-            // The KV exists without the suffix, so we must attach the data to each item in the Array
-            if self[keyWithoutSuffix] != nil {
-                // If the new attach data dict value is nil, set nil and continue
-                // Must do this because new[k] == nil checks if the key exists, not if the value is nil
-                if new.keys.contains(k), new[k]! == nil {
-                    self.updateValue(nil, forKey: keyWithoutSuffix)
-                    continue
-                }
-                // The array of items which will receive the attach data payload
-                guard let arrOfReceivers: [Any?] = self[keyWithoutSuffix] as? [Any?] else { continue }
-                let arrWithAttachedData = arrOfReceivers.map { item -> Any? in
-                    // check if the item is a dictionary, if so, attach data to it
-                    guard var itemDict = item as? [String: Any?] else { return item }
-                    guard let attachData = self[k] as? [String: Any?] else { return item }
-                    // Check if the values in attach data are dicts, if so, check if the dict key exists in the item dict, if so, perform mergeOverwrite on inner dicts
-                    for (k, v) in attachData {
-                        if let attachDataInnerDict = v as? [String: Any?] {
-                            // If itemDict contains the inner dict key, simply mergeOverwrite this inner dict
-                            if itemDict.keys.contains(k) {
-                                if var matchingInnerDict = itemDict[k] as? [String: Any?] {
-                                    matchingInnerDict.mergeOverwrite(new: attachDataInnerDict, deleteIfEmpty: deleteIfEmpty)
-                                    itemDict[k] = matchingInnerDict
-                                }
-                            } else {
-                                // If itemDict doesn't contain the inner dict key, simply add the inner dict to the item dict
-                                if deleteIfEmpty {
-                                   itemDict[k] = attachDataInnerDict.compactMapValues { $0 }
+        
+        for (k, v) in self {
+            // Secondly, now we must check for the unique SUFFIX_FOR_OBJECT in the key to attach the data in the internal dict
+            if k.range(of: Dictionary.SUFFIX_FOR_OBJECT) != nil {
+                guard let range = k.range(of: Dictionary.SUFFIX_FOR_OBJECT) else { continue }
+                let keyWithoutSuffix: String = String(k[..<range.lowerBound])
+                // The KV exists without the suffix, so we must attach the data to each item in the Array
+                if self[keyWithoutSuffix] != nil {
+                    // If the new attach data dict value is nil, set nil and continue
+                    // Must do this because new[k] == nil checks if the key exists, not if the value is nil
+                    if new.keys.contains(k), new[k]! == nil {
+                        self.updateValue(nil, forKey: keyWithoutSuffix)
+                        continue
+                    }
+                    // The array of items which will receive the attach data payload
+                    guard let arrOfReceivers: [Any?] = self[keyWithoutSuffix] as? [Any?] else { continue }
+                    let arrWithAttachedData = arrOfReceivers.map { item -> Any? in
+                        // check if the item is a dictionary, if so, attach data to it
+                        guard var itemDict = item as? [String: Any?] else { return item }
+                        guard let attachData = self[k] as? [String: Any?] else { return item }
+                        // Check if the values in attach data are dicts, if so, check if the dict key exists in the item dict, if so, perform mergeOverwrite on inner dicts
+                        for (k, v) in attachData {
+                            if let attachDataInnerDict = v as? [String: Any?] {
+                                // If itemDict contains the inner dict key, simply mergeOverwrite this inner dict
+                                if itemDict.keys.contains(k) {
+                                    if var matchingInnerDict = itemDict[k] as? [String: Any?] {
+                                        matchingInnerDict.mergeOverwrite(new: attachDataInnerDict, deleteIfEmpty: deleteIfEmpty)
+                                        itemDict[k] = matchingInnerDict
+                                    }
+                                } else {
+                                    // If itemDict doesn't contain the inner dict key, simply add the inner dict to the item dict
+                                    if deleteIfEmpty {
+                                        itemDict[k] = attachDataInnerDict.compactMapValues { $0 }
+                                    }
                                 }
                             }
                         }
+                        return itemDict
                     }
-
-                    return itemDict
+                    
+                    self[keyWithoutSuffix] = arrWithAttachedData
+                    // Remove the attach data from the merged dict
+                    self.removeValue(forKey: k)
                 }
-                
-                self[keyWithoutSuffix] = arrWithAttachedData
-                // Remove the attach data from the merged dict
-                self.removeValue(forKey: k)
+            } else if deleteIfEmpty {
+                // If it's a nested dictionary, handle internal nil values
+                if var innerDict = v as? [String: Any?] {
+                    innerDict.mergeOverwrite(new: [:], deleteIfEmpty: deleteIfEmpty)
+                    self[k] = innerDict
+                }
             }
         }
         
@@ -72,13 +80,6 @@ extension Dictionary where Key == String, Value == Any? {
             // Remove top level nils
             let nonilDict = self.compactMapValues { $0 }
             self = nonilDict
-            
-            // Remove nested nils
-            let removedNestedNil = self.map { item in
-                if let innerDict = item as? [String: Any?] {
-                    
-                }
-            }
         }
     }
 }
