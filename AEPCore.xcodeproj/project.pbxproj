@@ -42,6 +42,9 @@
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		2467E43D24CB54B70022F6BE /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		2467E43E24CB54B70022F6BE /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
+		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
+		24B4935D24D4C31100AA38D9 /* AEPSignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4935C24D4C31100AA38D9 /* AEPSignalTests.swift */; };
+		24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4935124D4C31100AA38D9 /* AEPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
 		3F0397C424BE5FF30019F095 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A124BE5FF30019F095 /* Cache.swift */; };
@@ -244,6 +247,27 @@
 			remoteGlobalIDString = 21CAC0D52422917600C11388;
 			remoteInfo = AEPCore;
 		};
+		24B4935924D4C31100AA38D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 24B4934E24D4C31100AA38D9;
+			remoteInfo = AEPSignal;
+		};
+		24B4936824D4C3C400AA38D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 21CAC0D52422917600C11388;
+			remoteInfo = AEPCore;
+		};
+		24B4936A24D4C3C400AA38D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03978624BE5DD30019F095;
+			remoteInfo = AEPServices;
+		};
 		3F03979124BE5DD30019F095 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
@@ -386,6 +410,12 @@
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
 		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
+		24B4934F24D4C31100AA38D9 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		24B4935124D4C31100AA38D9 /* AEPSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPSignal.h; sourceTree = "<group>"; };
+		24B4935224D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24B4935724D4C31100AA38D9 /* AEPSignalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPSignalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		24B4935C24D4C31100AA38D9 /* AEPSignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPSignalTests.swift; sourceTree = "<group>"; };
+		24B4935E24D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -607,6 +637,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		24B4934C24D4C31100AA38D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4935424D4C31100AA38D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3F03978424BE5DD30019F095 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -678,6 +723,7 @@
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
+				24B4935024D4C31100AA38D9 /* AEPSignal */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
 				21CAC0D72422917600C11388 /* Products */,
 			);
@@ -696,6 +742,8 @@
 				3FE6DDD924C62EE60065EA05 /* AEPLifecycleTests.xctest */,
 				3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */,
 				3FE6DE3724C642330065EA05 /* AEPIdentityTests.xctest */,
+				24B4934F24D4C31100AA38D9 /* AEPSignal.framework */,
+				24B4935724D4C31100AA38D9 /* AEPSignalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -889,6 +937,35 @@
 			);
 			name = mock;
 			path = AEPServices/Mocks;
+			sourceTree = "<group>";
+		};
+		24B4935024D4C31100AA38D9 /* AEPSignal */ = {
+			isa = PBXGroup;
+			children = (
+				24B4936724D4C36200AA38D9 /* src */,
+				24B4936624D4C35B00AA38D9 /* tests */,
+			);
+			name = AEPSignal;
+			sourceTree = "<group>";
+		};
+		24B4936624D4C35B00AA38D9 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				24B4935C24D4C31100AA38D9 /* AEPSignalTests.swift */,
+				24B4935E24D4C31100AA38D9 /* Info.plist */,
+			);
+			name = tests;
+			path = AEPSignal/Tests;
+			sourceTree = "<group>";
+		};
+		24B4936724D4C36200AA38D9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				24B4935124D4C31100AA38D9 /* AEPSignal.h */,
+				24B4935224D4C31100AA38D9 /* Info.plist */,
+			);
+			name = src;
+			path = AEPSignal/Sources;
 			sourceTree = "<group>";
 		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
@@ -1230,6 +1307,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		24B4934A24D4C31100AA38D9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3F03978224BE5DD30019F095 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1305,6 +1390,44 @@
 			name = AEPCoreTests;
 			productName = AEPCoreTests;
 			productReference = 21CAC0DF2422917600C11388 /* AEPCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		24B4934E24D4C31100AA38D9 /* AEPSignal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24B4936424D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignal" */;
+			buildPhases = (
+				24B4934A24D4C31100AA38D9 /* Headers */,
+				24B4934B24D4C31100AA38D9 /* Sources */,
+				24B4934C24D4C31100AA38D9 /* Frameworks */,
+				24B4934D24D4C31100AA38D9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				24B4936924D4C3C400AA38D9 /* PBXTargetDependency */,
+				24B4936B24D4C3C400AA38D9 /* PBXTargetDependency */,
+			);
+			name = AEPSignal;
+			productName = AEPSignal;
+			productReference = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		24B4935624D4C31100AA38D9 /* AEPSignalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24B4936524D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignalTests" */;
+			buildPhases = (
+				24B4935324D4C31100AA38D9 /* Sources */,
+				24B4935424D4C31100AA38D9 /* Frameworks */,
+				24B4935524D4C31100AA38D9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				24B4935A24D4C31100AA38D9 /* PBXTargetDependency */,
+			);
+			name = AEPSignalTests;
+			productName = AEPSignalTests;
+			productReference = 24B4935724D4C31100AA38D9 /* AEPSignalTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		3F03978624BE5DD30019F095 /* AEPServices */ = {
@@ -1463,7 +1586,7 @@
 		21CAC0CD2422917600C11388 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1160;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = Adobe;
 				TargetAttributes = {
@@ -1473,6 +1596,12 @@
 					};
 					21CAC0DE2422917600C11388 = {
 						CreatedOnToolsVersion = 11.3.1;
+					};
+					24B4934E24D4C31100AA38D9 = {
+						CreatedOnToolsVersion = 11.6;
+					};
+					24B4935624D4C31100AA38D9 = {
+						CreatedOnToolsVersion = 11.6;
 					};
 					3F03978624BE5DD30019F095 = {
 						CreatedOnToolsVersion = 11.5;
@@ -1535,6 +1664,8 @@
 				3F03978624BE5DD30019F095 /* AEPServices */,
 				3FE6DDA824C62C090065EA05 /* AEPServicesMock */,
 				3F03978E24BE5DD30019F095 /* AEPServicesTests */,
+				24B4934E24D4C31100AA38D9 /* AEPSignal */,
+				24B4935624D4C31100AA38D9 /* AEPSignalTests */,
 				3F39152124CA34BA00B58C3E /* AEP-All */,
 			);
 		};
@@ -1558,6 +1689,20 @@
 				3F39520A24CA096100F7325B /* TestRules.zip in Resources */,
 				3F39520E24CA096100F7325B /* TestConfig.json in Resources */,
 				3F39520B24CA096100F7325B /* TestImage.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4934D24D4C31100AA38D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4935524D4C31100AA38D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1694,6 +1839,21 @@
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
 				3F39521F24CA096200F7325B /* RulesDownloaderTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4934B24D4C31100AA38D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4935324D4C31100AA38D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B4935D24D4C31100AA38D9 /* AEPSignalTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1886,6 +2046,21 @@
 			isa = PBXTargetDependency;
 			target = 21CAC0D52422917600C11388 /* AEPCore */;
 			targetProxy = 21CAC0E12422917600C11388 /* PBXContainerItemProxy */;
+		};
+		24B4935A24D4C31100AA38D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 24B4934E24D4C31100AA38D9 /* AEPSignal */;
+			targetProxy = 24B4935924D4C31100AA38D9 /* PBXContainerItemProxy */;
+		};
+		24B4936924D4C3C400AA38D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 21CAC0D52422917600C11388 /* AEPCore */;
+			targetProxy = 24B4936824D4C3C400AA38D9 /* PBXContainerItemProxy */;
+		};
+		24B4936B24D4C3C400AA38D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03978624BE5DD30019F095 /* AEPServices */;
+			targetProxy = 24B4936A24D4C3C400AA38D9 /* PBXContainerItemProxy */;
 		};
 		3F03979224BE5DD30019F095 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2186,6 +2361,92 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		24B4936024D4C31100AA38D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPSignal;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		24B4936124D4C31100AA38D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPSignal;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		24B4936224D4C31100AA38D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPSignalTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AEPSignalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		24B4936324D4C31100AA38D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPSignalTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AEPSignalTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2594,6 +2855,24 @@
 			buildConfigurations = (
 				21CAC0EE2422917600C11388 /* Debug */,
 				21CAC0EF2422917600C11388 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		24B4936424D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24B4936024D4C31100AA38D9 /* Debug */,
+				24B4936124D4C31100AA38D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		24B4936524D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24B4936224D4C31100AA38D9 /* Debug */,
+				24B4936324D4C31100AA38D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
