@@ -72,9 +72,11 @@ class AlertHandler {
             }
             
             if bestViewController?.isViewLoaded ?? false {
-                bestViewController!.present(alert, animated: true, completion: nil)
+                bestViewController?.present(alert, animated: true, completion: nil)
                 alertListener?.onShow()
-                
+            }
+            else {
+                Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. View is not loaded.")
             }
         }
         else{
@@ -85,11 +87,15 @@ class AlertHandler {
 
 fileprivate extension AlertHandler {
     
+    /// Returns the topmost view controlller that will be used to present Alert View Controller.
+    /// - Parameter viewController: The root view controller of Window.
+    /// - Throws: throws any Error that occurs while iterating view hierarchy.
+    /// - Returns: returns the best view controller that will be used for presenting Alert View Controller.
     static func findBestViewController(viewController: UIViewController) throws -> UIViewController {
         
-        if let presentedViewController = viewController.presentedViewController  {
+        if let presentedViewController = viewController.presentedViewController {
             // Return presented view controller
-            return (try findBestViewController(viewController: presentedViewController));
+            return try findBestViewController(viewController: presentedViewController)
         } else if let svc = viewController as? UISplitViewController {
             // Return right hand side
             return svc.viewControllers.count > 0 ? try findBestViewController(viewController: svc.viewControllers.last!) : viewController
@@ -117,7 +123,7 @@ extension UIApplication {
 }
 
 // AMSDK-2101 - workaround apple alert crash
-fileprivate class AlertViewController : UIAlertController {
+private class AlertViewController : UIAlertController {
     
     override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
         .all

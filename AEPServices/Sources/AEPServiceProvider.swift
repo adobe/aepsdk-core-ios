@@ -30,8 +30,8 @@ public class AEPServiceProvider {
     private var overrideURLService: URLOpening?
     private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
-    private var overrideUIService: UIService?
-    private var defaultUIService = UIServiceImpl()
+    private var overrideUIService: UIHandling?
+    private var defaultUIService = UIService()
 
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
@@ -111,7 +111,7 @@ public class AEPServiceProvider {
         }
     }
     
-    public var uiService: UIService {
+    public var uiService: UIHandling {
         get {
             return queue.sync {
                 return overrideUIService ?? defaultUIService
