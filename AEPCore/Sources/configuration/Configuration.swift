@@ -118,7 +118,7 @@ class Configuration: Extension {
         configState.updateWith(programmaticConfig: updatedConfig)
         // Create shared state and dispatch configuration response content
         sharedStateResolver(configState.environmentAwareConfiguration)
-        dispatchConfigurationResponse(triggerEvent: event, data: event.data)
+        dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
     }
 
     /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
