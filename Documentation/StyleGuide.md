@@ -15,6 +15,7 @@ This style guide highlights common patterns from the above linked style guide, w
 - [General](#general)
   - [Use of `self`](#use-of-self)
   - [Extensions](#extensions)
+  - [Attributes](#attributes)
   - [Type Inference](#type-inference)
   - [Shortcut Declarations](#shortcut-declarations)
   - [Optional Binding](#optional-binding)
@@ -115,6 +116,43 @@ Avoid using `self` since Swift does not require it to access an object’s prope
 ### Extensions
 
 Avoid defining public extensions on a class/struct/protocol you don't own, otherwise it may lead to name conflict if the app or another 3rd party lib the app depends on also extends a same method. But you can define internal or private extensions on any type.
+
+### Attributes
+
+We will be implementing a linter to help maintain style for attributes. You can find the definition here: https://realm.github.io/SwiftLint/attributes.html
+
+##### Attributes should be on their own lines in functions and types.
+
+This includes but is not limited to:
+
+- classes
+- protocols
+- structs
+- extensions
+- enums
+- methods
+
+Example:
+```
+@objc(AEPMyClass)
+class MyClass {
+
+}
+
+@discardableResult
+func canHazCheezburger() -> Bool {
+
+}
+```
+
+##### Attributes should be on the same line as variables and imports.
+
+Example:
+```
+@testable import MyTestLib
+
+@nonobjc var onlyForSwift: String
+```
 
 ### Type Inference
 
