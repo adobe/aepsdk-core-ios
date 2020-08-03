@@ -883,21 +883,5 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [targetRequestContentExpectation,analyticsRequestContentExpectation], timeout: 0.5)
     }
-    
-    /// Tests that we can register an Objective-C extension
-    func testRegisterObjcExtension() {
-        // setup
-        let expectation = XCTestExpectation(description: "Objective-C Extension is registered successfully after eventHub.start()")
-        expectation.assertForOverFulfill = true
 
-        // test
-        eventHub.start()
-        eventHub.registerExtension(MockObjcExtension.self) { (error) in
-            expectation.fulfill()
-            XCTAssertNil(error)
-        }
-        
-        // verify
-        wait(for: [expectation], timeout: 0.5)
-    }
 }
