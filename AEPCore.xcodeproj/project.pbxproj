@@ -244,6 +244,9 @@
 		3FF8172324D8ABF80064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
 		78B73EBF24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */; };
 		78B73EC124CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */; };
+		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
+		BB00E26924D8C94600C578C1 /* EventDataFlattener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */; };
+		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
 		BB59402B24CF6E1D00EE0C6C /* AEPRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -658,6 +661,9 @@
 		3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Clear.swift"; sourceTree = "<group>"; };
 		78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+MergeOverwrite.swift"; sourceTree = "<group>"; };
 		78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryMergeOverwriteTests.swift; sourceTree = "<group>"; };
+		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
+		BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataFlattener.swift; sourceTree = "<group>"; };
+		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngineTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1098,6 +1104,7 @@
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
 				78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */,
+				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1296,6 +1303,8 @@
 		3FB66AB324CA004400502CAF /* rules */ = {
 			isa = PBXGroup;
 			children = (
+				BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */,
+				BB00E26624D8C94600C578C1 /* TokenFinder.swift */,
 				3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */,
 				3FB66AB824CA004400502CAF /* JSONRulesParser.swift */,
 				3FB66AB424CA004400502CAF /* LaunchRule.swift */,
@@ -1862,6 +1871,7 @@
 				3FB66AE424CA004400502CAF /* CachedRules.swift in Sources */,
 				2467E43D24CB54B70022F6BE /* MockDiskCache.swift in Sources */,
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
+				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
 				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
@@ -1870,6 +1880,7 @@
 				3FB66AD124CA004400502CAF /* SharedState.swift in Sources */,
 				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				2467E43E24CB54B70022F6BE /* MockUnzipper.swift in Sources */,
+				BB00E26924D8C94600C578C1 /* EventDataFlattener.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
@@ -1984,6 +1995,7 @@
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,
 				3F0397D024BE5FF30019F095 /* HttpMethod.swift in Sources */,
 				3F0397CB24BE5FF30019F095 /* LogLevel.swift in Sources */,
+				BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */,
 				3F0397FA24BE60910019F095 /* FileUnzipperConstants.swift in Sources */,
 				3F0397CF24BE5FF30019F095 /* Networking.swift in Sources */,
 				3F0397DD24BE5FF30019F095 /* ApplicationSystemInfoService.swift in Sources */,

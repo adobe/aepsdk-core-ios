@@ -144,7 +144,7 @@ struct JSONDetail: Codable {
 
 struct JSONConsequence: Codable {
     let id: String?
-    let type: ConsequenceType?
+    let type: String?
     let detail: AnyCodable?
     let detailDict: [String: Any]?
     enum CodingKeys: CodingKey {
@@ -156,7 +156,7 @@ struct JSONConsequence: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try? container.decode(String.self, forKey: .id)
-        type = try? container.decode(ConsequenceType.self, forKey: .type)
+        type = try? container.decode(String.self, forKey: .type)
         detail = try? container.decode(AnyCodable.self, forKey: .detail)
         if let detail = detail {
             detailDict = AnyCodable.toAnyDictionary(dictionary: ["detail": detail])

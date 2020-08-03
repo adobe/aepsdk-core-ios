@@ -15,19 +15,23 @@ import Foundation
 
 /// A rules engine for Launch rules
 struct LaunchRulesEngine {
-    let rulesEngine: RulesEngine<LaunchRule>
-    let rulesDownloader: RulesDownloader
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
     private static let CONSEQUENCE_EVENT_DATA_KEY_ID = "id"
     private static let CONSEQUENCE_EVENT_DATA_KEY_TYPE = "type"
-    private let transform = Transform()
     
-    init() {
+    private let transform = Transform()
+    private let extensionRuntime: ExtensionRuntime
+    
+    let rulesEngine: RulesEngine<LaunchRule>
+    let rulesDownloader: RulesDownloader
+    
+    init(extensionRuntime: ExtensionRuntime) {
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
+        self.extensionRuntime = extensionRuntime
     }
     
     /// Downloads the rules from the remote server
@@ -44,31 +48,24 @@ struct LaunchRulesEngine {
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
-        var eventCopy = event
-        if let data = generateTraversableData(event: event) {
-            let rules = rulesEngine.evaluate(data: data)
-            for rule in rules {
-                for consequence in rule.consequences {
-                    let consequenceWithConcreteValue = replaceToken(for: consequence, data: data)
-                    switch consequenceWithConcreteValue.type {
-                    case .url, .pii, .pb:
-                        if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
-                            EventHub.shared.dispatch(event: event)
-                        }
-                    case .add:
-                        attachDataEvent(event: &eventCopy, consequenceWithConcreteValue: consequenceWithConcreteValue)
-                    case .mod:
-                        modifyDataEvent(event: &eventCopy, consequenceWithConcreteValue: consequenceWithConcreteValue)
+        let TraversableData = TokenFinder(event: event, extensionRuntime: extensionRuntime)
+        let rules = rulesEngine.evaluate(data: TraversableData)
+        for rule in rules {
+            for consequence in rule.consequences {
+                let consequenceWithConcreteValue = replaceToken(for: consequence, data: TraversableData)
+                switch consequenceWithConcreteValue.type {
+                case "add":
+                    attachDataEvent(event: event, consequenceWithConcreteValue: consequenceWithConcreteValue)
+                case "mod":
+                    modifyDataEvent(event: event, consequenceWithConcreteValue: consequenceWithConcreteValue)
+                default:
+                    if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
+                        EventHub.shared.dispatch(event: event)
                     }
                 }
             }
         }
-        return eventCopy
-    }
-    
-    private func generateTraversableData(event: Event) -> Traversable? {
-        // TODO: generate traversable data from current event and shared events
-        return nil
+        return event
     }
     
     /// Replace tokens inside the provided consequence with the right value
@@ -108,15 +105,16 @@ struct LaunchRulesEngine {
     private func generateConsequenceEvent(consequence: Consequence) -> Event? {
         var dict: [String: Any] = consequence.detailDict
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
-        dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type.rawValue
+        dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
         return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: .rulesEngine, source: .responseContent, data: dict)
     }
     
-    private func attachDataEvent(event: inout Event, consequenceWithConcreteValue: Consequence) {
+    private func attachDataEvent(event: Event, consequenceWithConcreteValue: Consequence) {
         // TODO: attach data to the incoming event
     }
     
-    private func modifyDataEvent(event: inout Event, consequenceWithConcreteValue: Consequence) {
+    private func modifyDataEvent(event: Event, consequenceWithConcreteValue: Consequence) {
         // TODO: modify data of the incoming event
     }
 }
+
