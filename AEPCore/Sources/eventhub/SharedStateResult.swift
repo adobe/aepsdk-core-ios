@@ -3,7 +3,6 @@ Copyright 2020 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software distributed under
 the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
 OF ANY KIND, either express or implied. See the License for the specific language
@@ -12,25 +11,18 @@ governing permissions and limitations under the License.
 
 import Foundation
 
-@testable import AEPCore
-import AEPCore
+/// Contains the status and value for a given shared state
+@objc public class SharedStateResult: NSObject {
+    public let status: SharedStateStatus
+    public let value: [String: Any]?
 
-class SlowMockExtension: Extension {
-    var name = "slowMockExtension"
-    var friendlyName = "slowMockExtension"
-    var extensionVersion = "0.0.1"
-    var metadata: [String : String]? = nil
-    
-    let runtime: ExtensionRuntime
-    
-    required init(runtime: ExtensionRuntime) {
-        self.runtime = runtime
-         sleep(20) // simulate an extension doing heavy work in constructor
+    /// Creates a new shared state result with given status and value
+    /// - Parameters:
+    ///   - status: status of the shared state
+    ///   - value: value of the shared state
+    init(status: SharedStateStatus, value: [String: Any]?) {
+        self.status = status
+        self.value = value
     }
-    
-    func onRegistered() {}
-    func onUnregistered() {}
-    func readyForEvent(_ event: Event) -> Bool {
-        return true
-    }
+
 }

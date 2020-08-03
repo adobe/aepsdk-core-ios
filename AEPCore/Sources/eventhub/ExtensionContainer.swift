@@ -75,7 +75,7 @@ extension ExtensionContainer:ExtensionRuntime {
         return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event)
     }
 
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event)
     }
 

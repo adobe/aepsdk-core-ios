@@ -13,11 +13,11 @@ governing permissions and limitations under the License.
 import Foundation
 @testable import AEPCore
 
-class TestableExtensionRuntime:ExtensionRuntime{
+class TestableExtensionRuntime: ExtensionRuntime {
     var listeners:[String:EventListener] = [:]
     var dispatchedEvents: [Event] = []
     var createdSharedStates: [[String : Any]?] = []
-    var otherSharedStates: [String: (value: [String : Any]?, status: SharedStateStatus)] = [:]
+    var otherSharedStates: [String: SharedStateResult] = [:]
     
     func getListener(type: EventType, source: EventSource) -> EventListener?{
         return listeners["\(type)-\(source)"]
@@ -47,12 +47,12 @@ class TestableExtensionRuntime:ExtensionRuntime{
         }
     }
     
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String : Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
     
-    func simulateSharedState(extensionName: String, event: Event?, data: (value: [String : Any]?, status: SharedStateStatus)){
-        otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = data
+    func simulateSharedState(extensionName: String, event: Event?, data: (value: [String : Any]?, status: SharedStateStatus)) {
+        otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: data.value)
     }
     
     func startEvents() {

@@ -3,30 +3,17 @@ Copyright 2020 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software distributed under
 the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
 
-import Foundation
+#import <Foundation/Foundation.h>
+@import AEPCore;
 
-/// A "dummy" extension for `EventHub` so it can share state
-class EventHubPlaceholderExtension: Extension {
-    var name = EventHubConstants.NAME
-    var friendlyName = EventHubConstants.FRIENDLY_NAME
-    var extensionVersion = "0.0.1"
-    var metadata: [String : String]? = nil
-    var runtime: ExtensionRuntime
+@interface MockObjcExtension : NSObject <Extension>
 
-    required init(runtime: ExtensionRuntime) {
-        self.runtime = runtime
-    }
-    
-    func onRegistered() {}
-    func onUnregistered() {}
-    func readyForEvent(_ event: Event) -> Bool {
-        return true
-    }
-}
+@property (nonatomic)id<ExtensionRuntime> _Nonnull runtime;
+
+@end

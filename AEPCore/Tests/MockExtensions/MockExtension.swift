@@ -15,15 +15,23 @@ import Foundation
 @testable import AEPCore
 import AEPCore
 
-/// Protocol  defines consistent interface for testable extensions.
-protocol TestableExtension: Extension {
-    static var unregistrationClosure: (() -> Void)? { get set }
-    static var registrationClosure: (() -> Void)? { get set }
-    static var eventReceivedClosure: ((Event) -> Void)? { get set }
-}
 
-/// Provides implementaitons of common functions for a TestableExtension
-extension TestableExtension {
+class MockExtension: Extension {
+    var name = "mockExtension"
+    var friendlyName = "mockExtension"
+    var extensionVersion = "0.0.1"
+    var metadata: [String : String]? = nil
+    
+    static var registrationClosure: (() -> Void)? = nil
+    static var unregistrationClosure: (() -> Void)? = nil
+    static var eventReceivedClosure: ((Event) -> Void)? = nil
+    
+    let runtime: ExtensionRuntime
+    
+    required init(runtime: ExtensionRuntime) {
+        self.runtime = runtime
+    }
+    
     static func reset() {
         self.registrationClosure = nil
         self.unregistrationClosure = nil
@@ -47,21 +55,8 @@ extension TestableExtension {
             closure()
         }
     }
-}
-
-class MockExtension: TestableExtension {
-    var name = "mockExtension"
-    var friendlyName = "mockExtension"
-    var version = "0.0.1"
-    var metadata: [String : String]? = nil
     
-    static var registrationClosure: (() -> Void)? = nil
-    static var unregistrationClosure: (() -> Void)? = nil
-    static var eventReceivedClosure: ((Event) -> Void)? = nil
-    
-    let runtime: ExtensionRuntime
-    
-    required init(runtime: ExtensionRuntime) {
-        self.runtime = runtime
+    func readyForEvent(_ event: Event) -> Bool {
+        return true
     }
 }

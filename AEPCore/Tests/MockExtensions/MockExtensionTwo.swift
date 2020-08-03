@@ -15,10 +15,10 @@ import Foundation
 @testable import AEPCore
 import AEPCore
 
-class MockExtensionTwo: TestableExtension {
+class MockExtensionTwo: Extension {
     var name = "mockExtensionTwo"
     var friendlyName = "mockExtensionTwo"
-    var version = "0.0.1"
+    var extensionVersion = "0.0.1"
     var metadata: [String : String]? = ["testMetaKey": "testMetaVal"]
     
     let runtime: ExtensionRuntime
@@ -29,5 +29,33 @@ class MockExtensionTwo: TestableExtension {
     
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+    }
+    
+    static func reset() {
+        self.registrationClosure = nil
+        self.unregistrationClosure = nil
+        self.eventReceivedClosure = nil
+    }
+    
+    func onRegistered() {
+        registerListener(type: .wildcard, source: .wildcard) { (event) in
+            if let closure = type(of: self).eventReceivedClosure {
+                closure(event)
+            }
+        }
+        
+        if let closure = type(of: self).registrationClosure {
+            closure()
+        }
+    }
+    
+    func onUnregistered() {
+        if let closure = type(of: self).unregistrationClosure {
+            closure()
+        }
+    }
+    
+    func readyForEvent(_ event: Event) -> Bool {
+        return true
     }
 }
