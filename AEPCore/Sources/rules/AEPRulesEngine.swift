@@ -109,7 +109,7 @@ struct LaunchRulesEngine {
         var dict: [String: Any] = consequence.detailDict
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type.rawValue
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: .rulesEngine, source: .responseContent, data: dict)
+        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: dict)
     }
     
     private func attachDataEvent(event: inout Event, consequenceWithConcreteValue: Consequence) {

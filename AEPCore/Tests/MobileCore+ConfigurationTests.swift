@@ -44,7 +44,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let expectedAppId = "test-app-id"
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
             if let _ = event.data, let appid = event.data![ConfigurationConstants.Keys.JSON_APP_ID] as? String {
                 XCTAssertEqual(expectedAppId, appid)
                 expectation.fulfill()
@@ -64,7 +64,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let expectedFilePath = "test-file-path"
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
             if let _ = event.data, let path = event.data![ConfigurationConstants.Keys.JSON_FILE_PATH] as? String {
                 XCTAssertEqual(expectedFilePath, path)
                 expectation.fulfill()
@@ -85,7 +85,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let updateDict = ["testKey": "testVal"]
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
             if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
                 XCTAssertEqual(updateDict, updateEventData)
                 expectation.fulfill()
@@ -106,7 +106,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let updateDict = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
             if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
                 XCTAssertEqual(updateDict, updateEventData)
                 expectation.fulfill()
@@ -125,7 +125,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Get privacy status dispatches configuration request content with the correct data")
         expectation.assertForOverFulfill = true
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
             if let _ = event.data, let retrieveConfig = event.data![ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool {
                 XCTAssertTrue(retrieveConfig)
                 expectation.fulfill()
@@ -144,7 +144,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         let expectation = XCTestExpectation(description: "getSdkIdentities dispatches a configuration request identity event")
         expectation.assertForOverFulfill = true
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .configuration, source: .requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestIdentity) { (event) in
             expectation.fulfill()
         }
 

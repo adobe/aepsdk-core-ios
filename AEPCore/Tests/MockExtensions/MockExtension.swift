@@ -39,7 +39,7 @@ class MockExtension: Extension {
     }
     
     func onRegistered() {
-        registerListener(type: .wildcard, source: .wildcard) { (event) in
+        registerListener(type: EventType.wildcard, source: EventSource.wildcard) { (event) in
             if let closure = type(of: self).eventReceivedClosure {
                 closure(event)
             }

@@ -21,9 +21,9 @@ class TestableExtensionRuntime:ExtensionRuntime {
     var createdSharedStates: [[String : Any]?] = []
     var mockedSharedStates: [String: SharedStateResult] = [:]
     
-    // MARK: ExtensionRuntime methods implemenation
+    // MARK: ExtensionRuntime methods implementation
     
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+    func registerListener(type: String, source: String, listener: @escaping EventListener) {
         listeners["\(type)-\(source)"] = listener
     }
     

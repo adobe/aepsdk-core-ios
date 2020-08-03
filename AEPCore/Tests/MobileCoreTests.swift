@@ -61,7 +61,7 @@ class MobileCoreTests: XCTestCase {
         }
         MockExtension.registerExtension()
         MobileCore.start { }
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
     
@@ -69,7 +69,7 @@ class MobileCoreTests: XCTestCase {
         let expectation = XCTestExpectation(description: "callback invoked")
         expectation.assertForOverFulfill = true
         let eventName = "test-event"
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MockExtension.eventReceivedClosure = { if $0.name == eventName { expectation.fulfill() } }
         MockExtension.registerExtension()
         
@@ -92,7 +92,7 @@ class MobileCoreTests: XCTestCase {
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         MobileCore.start { }
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
     
@@ -110,7 +110,7 @@ class MobileCoreTests: XCTestCase {
         }
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MobileCore.start { }
         
         wait(for: [expectation], timeout: 1.0)
@@ -187,7 +187,7 @@ class MobileCoreTests: XCTestCase {
         
         // test
         MobileCore.registerExtensions([MockExtension.self])
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -202,7 +202,7 @@ class MobileCoreTests: XCTestCase {
         MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
 
         // test
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MobileCore.registerExtensions([MockExtension.self])
         
         // verify
@@ -219,7 +219,7 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -235,7 +235,7 @@ class MobileCoreTests: XCTestCase {
         MockExtensionTwo.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
 
         // test
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
         
         // verify
@@ -261,7 +261,7 @@ class MobileCoreTests: XCTestCase {
     
     func testDispatchEventSimple() {
         // setup
-        let expectedEvent = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
+        let expectedEvent = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
         
         let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
         registerExpectation.assertForOverFulfill = true
@@ -292,8 +292,8 @@ class MobileCoreTests: XCTestCase {
     /// Tests that the response callback is invoked when the trigger event is dispatched
     func testDispatchEventWithResponseCallbackSimple() {
         // setup
-        let expectedEvent = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
-        let expectedResponseEvent = expectedEvent.createResponseEvent(name: "test-response", type: .analytics, source: .responseContent, data: nil)
+        let expectedEvent = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let expectedResponseEvent = expectedEvent.createResponseEvent(name: "test-response", type: EventType.analytics, source: EventSource.responseContent, data: nil)
         let responseExpectation = XCTestExpectation(description: "Should receive the response event in the response callback")
         responseExpectation.assertForOverFulfill = true
         EventHub.shared.start()

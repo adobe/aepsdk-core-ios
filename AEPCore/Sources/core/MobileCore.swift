@@ -73,7 +73,7 @@ import AEPServices
     @objc(setAdvertisingIdentifier:)
     public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
-        let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        let event = Event(name: "SetAdvertisingIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
     
@@ -83,7 +83,7 @@ import AEPServices
     public static func setPushIdentifier(deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
-        let event = Event(name: "SetPushIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        let event = Event(name: "SetPushIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
     

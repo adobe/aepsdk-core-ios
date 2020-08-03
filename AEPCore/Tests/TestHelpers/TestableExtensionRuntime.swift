@@ -19,7 +19,7 @@ class TestableExtensionRuntime:ExtensionRuntime{
     var createdSharedStates: [[String : Any]?] = []
     var otherSharedStates: [String: SharedStateResult] = [:]
     
-    func getListener(type: EventType, source: EventSource) -> EventListener?{
+    func getListener(type: String, source: String) -> EventListener? {
         return listeners["\(type)-\(source)"]
     }
     
@@ -28,7 +28,7 @@ class TestableExtensionRuntime:ExtensionRuntime{
         listeners["\(EventType.wildcard)-\(EventSource.wildcard)"]?(event)
     }
     
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+    func registerListener(type: String, source: String, listener: @escaping EventListener) {
         listeners["\(type)-\(source)"] = listener
     }
     
