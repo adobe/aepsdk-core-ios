@@ -23,7 +23,7 @@ extension Dictionary where Key == String, Value == Any? {
     mutating func mergeOverwrite(new: [String: Any?], deleteIfEmpty: Bool) {
        // First, overwrite all matching key value pairs with new values
        self.merge(new, uniquingKeysWith: { (old, new) in
-        guard var newDict = new as? [String: Any?] else { return new }
+        guard let newDict = new as? [String: Any?] else { return new }
         guard var oldDict = old as? [String: Any?] else { return new }
         oldDict.mergeOverwrite(new: newDict, deleteIfEmpty: deleteIfEmpty)
         return oldDict
