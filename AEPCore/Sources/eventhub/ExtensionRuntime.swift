@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// provides all the methods needed by an `Extension`
-public protocol ExtensionRuntime {
+@objc public protocol ExtensionRuntime {
     /// Registers an `EventListener` for the specified `EventType` and `EventSource`
     /// - Parameters:
     ///   - type: `EventType` to listen for
@@ -42,7 +42,7 @@ public protocol ExtensionRuntime {
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)?
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult?
     
     /// Starts the `Event` queue for this extension
     func startEvents()

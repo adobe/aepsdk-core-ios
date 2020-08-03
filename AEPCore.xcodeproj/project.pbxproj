@@ -17,6 +17,7 @@
 				3F39152824CA34CA00B58C3E /* PBXTargetDependency */,
 				3F39152A24CA34CA00B58C3E /* PBXTargetDependency */,
 				3F39152C24CA34CA00B58C3E /* PBXTargetDependency */,
+				24B4936D24D4C6D200AA38D9 /* PBXTargetDependency */,
 			);
 			name = "AEP-All";
 			productName = "AEP-All";
@@ -33,15 +34,22 @@
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
+		217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217E220424D1FD7900B70B3E /* SharedStateResult.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		218E01C224C75C1500BEC470 /* HitQueuing+Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21D0632C24D2164B000C87AA /* MockObjcExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0632A24D2164B000C87AA /* MockObjcExtension.m */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
 		243DCE4824C7AA7C00E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		2467E43D24CB54B70022F6BE /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		2467E43E24CB54B70022F6BE /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
+		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
+		24B4935D24D4C31100AA38D9 /* AEPSignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4935C24D4C31100AA38D9 /* AEPSignalTests.swift */; };
+		24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4935124D4C31100AA38D9 /* AEPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		24B4936F24D4C6F900AA38D9 /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4936E24D4C6F900AA38D9 /* Signal.swift */; };
+		24B4937124D4C86C00AA38D9 /* SignalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937024D4C86C00AA38D9 /* SignalConstants.swift */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
 		3F0397C424BE5FF30019F095 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A124BE5FF30019F095 /* Cache.swift */; };
@@ -235,6 +243,8 @@
 		3FF8171C24D89B8F0064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
 		3FF8172024D89F450064DFA1 /* UserDefaults+Clear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */; };
 		3FF8172324D8ABF80064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
+		78B73EBF24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */; };
+		78B73EC124CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */; };
 		BB59402B24CF6E1D00EE0C6C /* AEPRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -245,6 +255,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 21CAC0D52422917600C11388;
 			remoteInfo = AEPCore;
+		};
+		24B4935924D4C31100AA38D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 24B4934E24D4C31100AA38D9;
+			remoteInfo = AEPSignal;
+		};
+		24B4936824D4C3C400AA38D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 21CAC0D52422917600C11388;
+			remoteInfo = AEPCore;
+		};
+		24B4936A24D4C3C400AA38D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03978624BE5DD30019F095;
+			remoteInfo = AEPServices;
+		};
+		24B4936C24D4C6D200AA38D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 24B4934E24D4C31100AA38D9;
+			remoteInfo = AEPSignal;
 		};
 		3F03979124BE5DD30019F095 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -398,6 +436,7 @@
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
+		217E220424D1FD7900B70B3E /* SharedStateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateResult.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+Privacy.swift"; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -405,10 +444,21 @@
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21CAC0DF2422917600C11388 /* AEPCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0E62422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21D0632924D2164B000C87AA /* AEPCoreTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AEPCoreTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		21D0632A24D2164B000C87AA /* MockObjcExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MockObjcExtension.m; sourceTree = "<group>"; };
+		21D0632B24D2164B000C87AA /* MockObjcExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MockObjcExtension.h; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
 		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
+		24B4934F24D4C31100AA38D9 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		24B4935124D4C31100AA38D9 /* AEPSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPSignal.h; sourceTree = "<group>"; };
+		24B4935224D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24B4935724D4C31100AA38D9 /* AEPSignalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPSignalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		24B4935C24D4C31100AA38D9 /* AEPSignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPSignalTests.swift; sourceTree = "<group>"; };
+		24B4935E24D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		24B4936E24D4C6F900AA38D9 /* Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
+		24B4937024D4C86C00AA38D9 /* SignalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalConstants.swift; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -610,6 +660,8 @@
 		3FF8171424D89B500064DFA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPCore/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
 		3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableExtensionRuntime.swift; path = AEPCore/Mocks/TestableExtensionRuntime.swift; sourceTree = SOURCE_ROOT; };
 		3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Clear.swift"; sourceTree = "<group>"; };
+		78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+MergeOverwrite.swift"; sourceTree = "<group>"; };
+		78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryMergeOverwriteTests.swift; sourceTree = "<group>"; };
 		BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngineTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -630,6 +682,21 @@
 				3FE6DDBC24C62DA80065EA05 /* AEPServicesMock.framework in Frameworks */,
 				3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */,
 				21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4934C24D4C31100AA38D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4935424D4C31100AA38D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -704,6 +771,7 @@
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
 				3F03978824BE5DD30019F095 /* AEPServices */,
+				24B4935024D4C31100AA38D9 /* AEPSignal */,
 				3F03983E24BE635D0019F095 /* Frameworks */,
 				21CAC0D72422917600C11388 /* Products */,
 			);
@@ -722,6 +790,8 @@
 				3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */,
 				3FE6DE3724C642330065EA05 /* AEPIdentityTests.xctest */,
 				3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */,
+				24B4934F24D4C31100AA38D9 /* AEPSignal.framework */,
+				24B4935724D4C31100AA38D9 /* AEPSignalTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -919,6 +989,37 @@
 			path = AEPServices/Mocks;
 			sourceTree = "<group>";
 		};
+		24B4935024D4C31100AA38D9 /* AEPSignal */ = {
+			isa = PBXGroup;
+			children = (
+				24B4936724D4C36200AA38D9 /* src */,
+				24B4936624D4C35B00AA38D9 /* tests */,
+			);
+			name = AEPSignal;
+			sourceTree = "<group>";
+		};
+		24B4936624D4C35B00AA38D9 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				24B4935C24D4C31100AA38D9 /* AEPSignalTests.swift */,
+				24B4935E24D4C31100AA38D9 /* Info.plist */,
+			);
+			name = tests;
+			path = AEPSignal/Tests;
+			sourceTree = "<group>";
+		};
+		24B4936724D4C36200AA38D9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				24B4935124D4C31100AA38D9 /* AEPSignal.h */,
+				24B4935224D4C31100AA38D9 /* Info.plist */,
+				24B4936E24D4C6F900AA38D9 /* Signal.swift */,
+				24B4937024D4C86C00AA38D9 /* SignalConstants.swift */,
+			);
+			name = src;
+			path = AEPSignal/Sources;
+			sourceTree = "<group>";
+		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
 			isa = PBXGroup;
 			children = (
@@ -1000,6 +1101,7 @@
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
+				78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1056,6 +1158,7 @@
 				2107F02F24C9FFB2002935CF /* SHA256Tests.swift */,
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
+				78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
 			);
 			path = utility;
@@ -1124,6 +1227,9 @@
 				3F3951F424CA096100F7325B /* SlowMockExtension.swift */,
 				3F3951F524CA096100F7325B /* MockExtension.swift */,
 				3F3951F624CA096100F7325B /* MockExtensionTwo.swift */,
+				21D0632B24D2164B000C87AA /* MockObjcExtension.h */,
+				21D0632A24D2164B000C87AA /* MockObjcExtension.m */,
+				21D0632924D2164B000C87AA /* AEPCoreTests-Bridging-Header.h */,
 			);
 			path = MockExtensions;
 			sourceTree = "<group>";
@@ -1189,6 +1295,7 @@
 				3FB66AA824CA004400502CAF /* ExtensionContainer.swift */,
 				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
 				3FB66AAB24CA004400502CAF /* SharedState.swift */,
+				217E220424D1FD7900B70B3E /* SharedStateResult.swift */,
 			);
 			path = eventhub;
 			sourceTree = "<group>";
@@ -1271,6 +1378,14 @@
 			files = (
 				21CAC0E72422917600C11388 /* AEPCore.h in Headers */,
 				243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4934A24D4C31100AA38D9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1358,6 +1473,44 @@
 			name = AEPCoreTests;
 			productName = AEPCoreTests;
 			productReference = 21CAC0DF2422917600C11388 /* AEPCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		24B4934E24D4C31100AA38D9 /* AEPSignal */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24B4936424D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignal" */;
+			buildPhases = (
+				24B4934A24D4C31100AA38D9 /* Headers */,
+				24B4934B24D4C31100AA38D9 /* Sources */,
+				24B4934C24D4C31100AA38D9 /* Frameworks */,
+				24B4934D24D4C31100AA38D9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				24B4936924D4C3C400AA38D9 /* PBXTargetDependency */,
+				24B4936B24D4C3C400AA38D9 /* PBXTargetDependency */,
+			);
+			name = AEPSignal;
+			productName = AEPSignal;
+			productReference = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		24B4935624D4C31100AA38D9 /* AEPSignalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24B4936524D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignalTests" */;
+			buildPhases = (
+				24B4935324D4C31100AA38D9 /* Sources */,
+				24B4935424D4C31100AA38D9 /* Frameworks */,
+				24B4935524D4C31100AA38D9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				24B4935A24D4C31100AA38D9 /* PBXTargetDependency */,
+			);
+			name = AEPSignalTests;
+			productName = AEPSignalTests;
+			productReference = 24B4935724D4C31100AA38D9 /* AEPSignalTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		3F03978624BE5DD30019F095 /* AEPServices */ = {
@@ -1519,7 +1672,7 @@
 		21CAC0CD2422917600C11388 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1150;
+				LastSwiftUpdateCheck = 1160;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = Adobe;
 				TargetAttributes = {
@@ -1529,6 +1682,14 @@
 					};
 					21CAC0DE2422917600C11388 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1160;
+					};
+					24B4934E24D4C31100AA38D9 = {
+						CreatedOnToolsVersion = 11.6;
+						LastSwiftMigration = 1160;
+					};
+					24B4935624D4C31100AA38D9 = {
+						CreatedOnToolsVersion = 11.6;
 					};
 					3F03978624BE5DD30019F095 = {
 						CreatedOnToolsVersion = 11.5;
@@ -1591,6 +1752,8 @@
 				3F03978624BE5DD30019F095 /* AEPServices */,
 				3FE6DDA824C62C090065EA05 /* AEPServicesMock */,
 				3F03978E24BE5DD30019F095 /* AEPServicesTests */,
+				24B4934E24D4C31100AA38D9 /* AEPSignal */,
+				24B4935624D4C31100AA38D9 /* AEPSignalTests */,
 				3F39152124CA34BA00B58C3E /* AEP-All */,
 				3FF8170924D89B160064DFA1 /* AEPCoreMocks */,
 			);
@@ -1615,6 +1778,20 @@
 				3F39520A24CA096100F7325B /* TestRules.zip in Resources */,
 				3F39520E24CA096100F7325B /* TestConfig.json in Resources */,
 				3F39520B24CA096100F7325B /* TestImage.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4934D24D4C31100AA38D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4935524D4C31100AA38D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1698,6 +1875,7 @@
 				3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */,
 				3FB66AE224CA004400502CAF /* Event+Configuration.swift in Sources */,
 				3FB66AD124CA004400502CAF /* SharedState.swift in Sources */,
+				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				2467E43E24CB54B70022F6BE /* MockUnzipper.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
@@ -1738,6 +1916,7 @@
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
+				21D0632C24D2164B000C87AA /* MockObjcExtension.m in Sources */,
 				3F39520924CA096100F7325B /* EventHubTests.swift in Sources */,
 				3F39521124CA096100F7325B /* MockExtension.swift in Sources */,
 				3F39521E24CA096200F7325B /* ConfigurationDownloaderTests.swift in Sources */,
@@ -1750,6 +1929,23 @@
 				3F39521F24CA096200F7325B /* RulesDownloaderTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				3FB5F7D024D2848900F0F6DF /* ConfigurationFunctionalTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4934B24D4C31100AA38D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B4936F24D4C6F900AA38D9 /* Signal.swift in Sources */,
+				24B4937124D4C86C00AA38D9 /* SignalConstants.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24B4935324D4C31100AA38D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24B4935D24D4C31100AA38D9 /* AEPSignalTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1784,6 +1980,7 @@
 				3F0397DA24BE5FF30019F095 /* NamedCollectionProcessing.swift in Sources */,
 				3F0397FE24BE60910019F095 /* URLEncoder.swift in Sources */,
 				3F0397FF24BE60910019F095 /* AnyCodable.swift in Sources */,
+				78B73EBF24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift in Sources */,
 				3F0397D124BE5FF30019F095 /* HttpConnection.swift in Sources */,
 				3F0397D824BE5FF30019F095 /* DataQueuing.swift in Sources */,
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
@@ -1824,6 +2021,7 @@
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */,
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
+				78B73EC124CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift in Sources */,
 				3F03981D24BE61520019F095 /* MockSystemInfoService.swift in Sources */,
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
@@ -1943,6 +2141,26 @@
 			isa = PBXTargetDependency;
 			target = 21CAC0D52422917600C11388 /* AEPCore */;
 			targetProxy = 21CAC0E12422917600C11388 /* PBXContainerItemProxy */;
+		};
+		24B4935A24D4C31100AA38D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 24B4934E24D4C31100AA38D9 /* AEPSignal */;
+			targetProxy = 24B4935924D4C31100AA38D9 /* PBXContainerItemProxy */;
+		};
+		24B4936924D4C3C400AA38D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 21CAC0D52422917600C11388 /* AEPCore */;
+			targetProxy = 24B4936824D4C3C400AA38D9 /* PBXContainerItemProxy */;
+		};
+		24B4936B24D4C3C400AA38D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3F03978624BE5DD30019F095 /* AEPServices */;
+			targetProxy = 24B4936A24D4C3C400AA38D9 /* PBXContainerItemProxy */;
+		};
+		24B4936D24D4C6D200AA38D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 24B4934E24D4C31100AA38D9 /* AEPSignal */;
+			targetProxy = 24B4936C24D4C6D200AA38D9 /* PBXContainerItemProxy */;
 		};
 		3F03979224BE5DD30019F095 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2228,6 +2446,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
@@ -2239,6 +2459,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPCoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AEPCore/Tests/MockExtensions/AEPCoreTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2248,6 +2470,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
@@ -2258,6 +2482,98 @@
 					"@loader_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPCoreTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AEPCore/Tests/MockExtensions/AEPCoreTests-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		24B4936024D4C31100AA38D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPSignal;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		24B4936124D4C31100AA38D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = Adobe.AEPSignal;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		24B4936224D4C31100AA38D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPSignalTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AEPSignalTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		24B4936324D4C31100AA38D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPSignalTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AEPSignalTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2320,6 +2636,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2335,6 +2652,44 @@
 			name = Debug;
 		};
 		3F03979B24BE5DD30019F095 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
+				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPServicesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3F03986124C0008D0019F095 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = AEPEventHub/Tests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.AEPEventHubTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3F03986224C0008D0019F095 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -2681,6 +3036,24 @@
 			buildConfigurations = (
 				21CAC0EE2422917600C11388 /* Debug */,
 				21CAC0EF2422917600C11388 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		24B4936424D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24B4936024D4C31100AA38D9 /* Debug */,
+				24B4936124D4C31100AA38D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		24B4936524D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24B4936224D4C31100AA38D9 /* Debug */,
+				24B4936324D4C31100AA38D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

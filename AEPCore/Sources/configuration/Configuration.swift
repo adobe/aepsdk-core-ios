@@ -17,7 +17,7 @@ class Configuration: Extension {
     let runtime: ExtensionRuntime
     let name = ConfigurationConstants.EXTENSION_NAME
     let friendlyName = ConfigurationConstants.FRIENDLY_NAME
-    let version = ConfigurationConstants.EXTENSION_VERSION
+    let extensionVersion = ConfigurationConstants.EXTENSION_VERSION
     let metadata: [String: String]? = nil
     
     private let dataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)

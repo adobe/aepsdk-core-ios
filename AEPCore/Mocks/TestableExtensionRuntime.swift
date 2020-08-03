@@ -19,7 +19,7 @@ public class TestableExtensionRuntime:ExtensionRuntime{
     public var listeners:[String:EventListener] = [:]
     public var dispatchedEvents: [Event] = []
     public var createdSharedStates: [[String : Any]?] = []
-    public var mockedSharedStates: [String: (value: [String : Any]?, status: SharedStateStatus)] = [:]
+    public var mockedSharedStates: [String: SharedStateResult] = [:]
     
     public init(){
         
@@ -45,9 +45,9 @@ public class TestableExtensionRuntime:ExtensionRuntime{
         }
     }
     
-    public func getSharedState(extensionName: String, event: Event?) -> (value: [String : Any]?, status: SharedStateStatus)? {
+    public func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
-        if let id = event?.id{
+        if let id = event?.id {
             return mockedSharedStates["\(extensionName)-\(id)"] ?? mockedSharedStates["\(extensionName)"]
         }
         return mockedSharedStates["\(extensionName)"]
@@ -84,16 +84,16 @@ public class TestableExtensionRuntime:ExtensionRuntime{
     /// - Parameters:
     ///   - pair: the (extension, event) pair
     ///   - data: the shared state tuple (value, status)
-    public func simulateSharedState(for pair:(extensionName: String, event: Event), data: (value: [String : Any]?, status: SharedStateStatus)){
-        mockedSharedStates["\(pair.extensionName)-\(pair.event.id)"] = data
+    public func simulateSharedState(for pair:(extensionName: String, event: Event), data: (value: [String : Any]?, status: SharedStateStatus)) {
+        mockedSharedStates["\(pair.extensionName)-\(pair.event.id)"] = SharedStateResult(status: data.status, value: data.value)
     }
     
     /// Simulate the shared state of an certain extension ignoring the event id
     /// - Parameters:
     ///   - extensionName: extension name
     ///   - data: the shared state tuple (value, status)
-    public func simulateSharedState(for extensionName: String, data: (value: [String : Any]?, status: SharedStateStatus)){
-        mockedSharedStates["\(extensionName)"] = data
+    public func simulateSharedState(for extensionName: String, data: (value: [String : Any]?, status: SharedStateStatus)) {
+        mockedSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: data.value)
     }
     
     /// clear the events and shared states that have been created by the current extension
