@@ -22,10 +22,11 @@ extension Dictionary where Key == String, Value == Any? {
     ///     - deleteIfEmpty: A bool indicating whether a key should be removed if the value is nil
     mutating func mergeOverwrite(new: [String: Any?], deleteIfEmpty: Bool) {
        // First, overwrite all matching key value pairs with new values
-       self.merge(new, uniquingKeysWith: { (_ , new) in
+       self.merge(new, uniquingKeysWith: { (old, new) in
         guard var newDict = new as? [String: Any?] else { return new }
-        newDict.mergeOverwrite(new: [:], deleteIfEmpty: deleteIfEmpty)
-        return newDict
+        guard var oldDict = old as? [String: Any?] else { return new }
+        oldDict.mergeOverwrite(new: newDict, deleteIfEmpty: deleteIfEmpty)
+        return oldDict
        })
         
         for (k, v) in self {
@@ -47,23 +48,24 @@ extension Dictionary where Key == String, Value == Any? {
                         // check if the item is a dictionary, if so, attach data to it
                         guard var itemDict = item as? [String: Any?] else { return item }
                         guard let attachData = self[k] as? [String: Any?] else { return item }
+                        itemDict.mergeOverwrite(new: attachData, deleteIfEmpty: deleteIfEmpty)
                         // Check if the values in attach data are dicts, if so, check if the dict key exists in the item dict, if so, perform mergeOverwrite on inner dicts
-                        for (k, v) in attachData {
-                            if let attachDataInnerDict = v as? [String: Any?] {
-                                // If itemDict contains the inner dict key, simply mergeOverwrite this inner dict
-                                if itemDict.keys.contains(k) {
-                                    if var matchingInnerDict = itemDict[k] as? [String: Any?] {
-                                        matchingInnerDict.mergeOverwrite(new: attachDataInnerDict, deleteIfEmpty: deleteIfEmpty)
-                                        itemDict[k] = matchingInnerDict
-                                    }
-                                } else {
-                                    // If itemDict doesn't contain the inner dict key, simply add the inner dict to the item dict
-                                    if deleteIfEmpty {
-                                        itemDict[k] = attachDataInnerDict.compactMapValues { $0 }
-                                    }
-                                }
-                            }
-                        }
+//                        for (k, v) in attachData {
+//                            if let attachDataInnerDict = v as? [String: Any?] {
+//                                // If itemDict contains the inner dict key, simply mergeOverwrite this inner dict
+//                                if itemDict.keys.contains(k) {
+//                                    if var matchingInnerDict = itemDict[k] as? [String: Any?] {
+//                                        matchingInnerDict.mergeOverwrite(new: attachDataInnerDict, deleteIfEmpty: deleteIfEmpty)
+//                                        itemDict[k] = matchingInnerDict
+//                                    }
+//                                } else {
+//                                    // If itemDict doesn't contain the inner dict key, simply add the inner dict to the item dict
+//                                    if deleteIfEmpty {
+//                                        itemDict[k] = attachDataInnerDict.compactMapValues { $0 }
+//                                    }
+//                                }
+//                            }
+//                        }
                         return itemDict
                     }
                     
