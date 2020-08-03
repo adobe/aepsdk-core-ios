@@ -66,12 +66,12 @@ class AlertHandler {
                     }
                 }
                 else {
-                    Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. View is not loaded.")
+                    Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. ViewController is not loaded.")
                     messageMonitor.dismissed()
                 }
             }
             else{
-                Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. key window is null.")
+                Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. KeyWindow is null.")
                 messageMonitor.dismissed()
             }
         }
