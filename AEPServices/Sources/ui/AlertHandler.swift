@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import UIKit
 
@@ -29,85 +29,100 @@ class AlertHandler {
         
         DispatchQueue.main.async {
             // Check if the alert is already on screen then return.
-            if messageMonitor.isDisplayed(){
-            Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to show alert, another message is displayed at this time")
-            return
+            if messageMonitor.isDisplayed() {
+                Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to show alert, another message is displayed at this time")
+                return
             }
             
-        }
-        
-        messageMonitor.displayed()
-        
-        let alert = AlertViewController(title: title, message: message, preferredStyle: .alert)
-        
-        if !(positiveButtonText?.isEmpty ?? true) {
-            let confirmAction = UIAlertAction(title: positiveButtonText, style: .default) { alertAction in
-                alertListener?.onPositiveResponse()
-                alertListener?.onDismiss()
-                messageMonitor.dismissed()
-            }
-            alert.addAction(confirmAction)
+            messageMonitor.displayed()
             
-        }
-        
-        if !(negativeButtonText?.isEmpty ?? true) {
-            let cancelAction = UIAlertAction(title: negativeButtonText, style: .default) { alertAction in
-                alertListener?.onNegativeReposne()
-                alertListener?.onDismiss()
-                messageMonitor.dismissed()
-            }
-            alert.addAction(cancelAction)
-        }
-        
-        let keyWindow = UIApplication.shared.getKeyWindow()
-        if let rootViewController = keyWindow?.rootViewController {
-            var bestViewController : UIViewController?
-            do {
-                bestViewController = try findBestViewController(viewController: rootViewController)
-            }
-            catch {
-                // If there is any error in finding the Best view controller log the error and do nothing.
-                Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. Error in finding best view controller.")
-                messageMonitor.dismissed()
+            let alert = AlertViewController(title: title, message: message, preferredStyle: .alert)
+            
+            if let positiveButton = positiveButtonText, !positiveButton.isEmpty {
+                let confirmAction = UIAlertAction(title: positiveButton, style: .default) { alertAction in
+                    alertListener?.onPositiveResponse()
+                    alertListener?.onDismiss()
+                    messageMonitor.dismissed()
+                }
+                alert.addAction(confirmAction)
             }
             
-            if bestViewController?.isViewLoaded ?? false {
-                bestViewController?.present(alert, animated: true, completion: nil)
-                alertListener?.onShow()
+            if let negativeButton = negativeButtonText, !negativeButton.isEmpty {
+                let cancelAction = UIAlertAction(title: negativeButton, style: .default) { alertAction in
+                    alertListener?.onNegativeReposne()
+                    alertListener?.onDismiss()
+                    messageMonitor.dismissed()
+                }
+                alert.addAction(cancelAction)
             }
-            else {
-                Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. View is not loaded.")
+            
+            let keyWindow = UIApplication.shared.getKeyWindow()
+            if let rootViewController = keyWindow?.rootViewController {
+                let bestViewController = findBestViewController(viewController: rootViewController)
+                
+                if bestViewController.isViewLoaded {
+                    bestViewController.present(alert, animated: true) {
+                        alertListener?.onShow()
+                    }
+                }
+                else {
+                    Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. View is not loaded.")
+                    messageMonitor.dismissed()
+                }
             }
-        }
-        else{
-            Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. key window is null.")
+            else{
+                Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to show Alert. key window is null.")
+                messageMonitor.dismissed()
+            }
         }
     }
 }
 
-fileprivate extension AlertHandler {
+private extension AlertHandler {
     
     /// Returns the topmost view controlller that will be used to present Alert View Controller.
     /// - Parameter viewController: The root view controller of Window.
     /// - Throws: throws any Error that occurs while iterating view hierarchy.
     /// - Returns: returns the best view controller that will be used for presenting Alert View Controller.
-    static func findBestViewController(viewController: UIViewController) throws -> UIViewController {
+    static func findBestViewController(viewController: UIViewController) -> UIViewController {
         
         if let presentedViewController = viewController.presentedViewController {
             // Return presented view controller
-            return try findBestViewController(viewController: presentedViewController)
-        } else if let svc = viewController as? UISplitViewController {
+            return findBestViewController(viewController: presentedViewController)
+        } else if viewController.isKind(of: UISplitViewController.self), let svc = viewController as? UISplitViewController {
             // Return right hand side
-            return svc.viewControllers.count > 0 ? try findBestViewController(viewController: svc.viewControllers.last!) : viewController
-        } else if let nvc = viewController as? UINavigationController {
+            if svc.viewControllers.count > 0, let lastViewController = svc.viewControllers.last{
+                return findBestViewController(viewController: lastViewController)
+            }
+            else{
+                return viewController
+            }
+            
+        } else if viewController.isKind(of: UINavigationController.self), let nvc = viewController as? UINavigationController{
             // Return top view
-            return nvc.viewControllers.count > 0 ? try findBestViewController(viewController: nvc.topViewController!) : viewController
-        } else if let tbc = viewController as? UITabBarController {
+            if nvc.viewControllers.count > 0, let topViewController = nvc.topViewController {
+                return findBestViewController(viewController: topViewController)
+            }
+            else{
+                return viewController
+            }
+            
+        } else if viewController.isKind(of: UITabBarController.self), let tbc = viewController as? UITabBarController {
             // Return visible view
-            return tbc.viewControllers?.count ?? 0 > 0 ? try findBestViewController(viewController: tbc.selectedViewController!) : viewController
-        } else if let pvc = viewController as? UIPageViewController {
+            if let selectedViewController = tbc.selectedViewController {
+                return findBestViewController(viewController: selectedViewController)
+            }
+            else{
+                return viewController
+            }
+        } else if viewController.isKind(of: UIPageViewController.self), let pvc = viewController as? UIPageViewController {
             // Return visible view
-            return pvc.viewControllers?.count ?? 0 > 0 ? try findBestViewController(viewController: pvc.viewControllers![0]) : viewController
+            if let pageViewController = pvc.viewControllers?[0]{
+                return findBestViewController(viewController: pageViewController)
+            }
+            else{
+                return viewController
+            }
         } else {
             // Unknown view controller type, return last child view controller
             return viewController
