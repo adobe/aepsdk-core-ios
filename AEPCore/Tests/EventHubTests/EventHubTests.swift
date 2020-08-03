@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
+@testable import AEPCoreMocks
 
 class EventHubTests: XCTestCase {
     private static let MOCK_EXTENSION_NAME = "mockExtension"

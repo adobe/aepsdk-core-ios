@@ -14,34 +14,38 @@ import Foundation
 @testable import AEPCore
 
 // Testable implemetation for `ExtensionRuntime`, enable easy setup for the input and verification of the output of an extension
-class TestableExtensionRuntime:ExtensionRuntime {
+public class TestableExtensionRuntime:ExtensionRuntime{
     
-    var listeners:[String:EventListener] = [:]
-    var dispatchedEvents: [Event] = []
-    var createdSharedStates: [[String : Any]?] = []
-    var mockedSharedStates: [String: SharedStateResult] = [:]
+    public var listeners:[String:EventListener] = [:]
+    public var dispatchedEvents: [Event] = []
+    public var createdSharedStates: [[String : Any]?] = []
+    public var mockedSharedStates: [String: SharedStateResult] = [:]
+    
+    public init(){
+        
+    }
     
     // MARK: ExtensionRuntime methods implemenation
     
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+    public func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
         listeners["\(type)-\(source)"] = listener
     }
     
-    func dispatch(event: Event) {
+    public func dispatch(event: Event) {
         dispatchedEvents += [event]
     }
     
-    func createSharedState(data: [String : Any], event: Event?) {
+    public func createSharedState(data: [String : Any], event: Event?) {
         self.createdSharedStates += [data]
     }
     
-    func createPendingSharedState(event: Event?) -> SharedStateResolver {
+    public func createPendingSharedState(event: Event?) -> SharedStateResolver {
         return { data in
             self.createdSharedStates += [data]
         }
     }
     
-    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+    public func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
         if let id = event?.id {
             return mockedSharedStates["\(extensionName)-\(id)"] ?? mockedSharedStates["\(extensionName)"]
@@ -49,10 +53,10 @@ class TestableExtensionRuntime:ExtensionRuntime {
         return mockedSharedStates["\(extensionName)"]
     }
     
-    func startEvents() {
+    public func startEvents() {
     }
     
-    func stopEvents() {
+    public func stopEvents() {
     }
     
     // MARK: Helper methods
@@ -60,7 +64,7 @@ class TestableExtensionRuntime:ExtensionRuntime {
     /// Simulate the events that are being sent to event hub, if there is a listener registered for that type of event, that listener will receive the event
     /// - Parameters:
     ///   - events: the sequence of the events
-    func simulateComingEvents(_ events:Event...){        
+    public func simulateComingEvents(_ events:Event...){
         for event in events {
             listeners["\(event.type)-\(event.source)"]?(event)
             listeners["\(EventType.wildcard)-\(EventSource.wildcard)"]?(event)
@@ -71,16 +75,16 @@ class TestableExtensionRuntime:ExtensionRuntime {
     /// - Parameters:
     ///   - type: event type
     ///   - source: event source
-    func getListener(type: EventType, source: EventSource) -> EventListener?{
+    public func getListener(type: EventType, source: EventSource) -> EventListener?{
         return listeners["\(type)-\(source)"]
     }
     
     
-    /// Simulate the shared state of an extension for a matching event 
+    /// Simulate the shared state of an extension for a matching event
     /// - Parameters:
     ///   - pair: the (extension, event) pair
     ///   - data: the shared state tuple (value, status)
-    func simulateSharedState(for pair:(extensionName: String, event: Event), data: (value: [String : Any]?, status: SharedStateStatus)) {
+    public func simulateSharedState(for pair:(extensionName: String, event: Event), data: (value: [String : Any]?, status: SharedStateStatus)) {
         mockedSharedStates["\(pair.extensionName)-\(pair.event.id)"] = SharedStateResult(status: data.status, value: data.value)
     }
     
@@ -88,15 +92,41 @@ class TestableExtensionRuntime:ExtensionRuntime {
     /// - Parameters:
     ///   - extensionName: extension name
     ///   - data: the shared state tuple (value, status)
-    func simulateSharedState(for extensionName: String, data: (value: [String : Any]?, status: SharedStateStatus)) {
+    public func simulateSharedState(for extensionName: String, data: (value: [String : Any]?, status: SharedStateStatus)) {
         mockedSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: data.value)
     }
     
     /// clear the events and shared states that have been created by the current extension
-    func resetDispatchedEventAndCreatedSharedStates(){
+    public func resetDispatchedEventAndCreatedSharedStates(){
         dispatchedEvents = []
         createdSharedStates = []
     }
     
     
+}
+
+extension TestableExtensionRuntime{
+    public var firstEvent: Event?{
+        dispatchedEvents[0]
+    }
+    
+    public var secondEvent: Event?{
+        dispatchedEvents[1]
+    }
+    
+    public var thirdEvent: Event?{
+        dispatchedEvents[2]
+    }
+    
+    public var firstSharedState: [String : Any]?{
+        createdSharedStates[0]
+    }
+    
+    public var secondSharedState: [String : Any]?{
+        createdSharedStates[1]
+    }
+    
+    public var thirdSharedState: [String : Any]?{
+        createdSharedStates[2]
+    }
 }
