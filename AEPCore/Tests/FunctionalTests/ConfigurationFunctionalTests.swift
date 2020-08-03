@@ -14,6 +14,7 @@ import XCTest
 @testable import AEPCore
 import AEPServices
 import AEPServicesMock
+import AEPCoreMocks
 
 /// Functional tests for the Lifecycle extension
 class ConfigurationFunctionalTests: XCTestCase {
@@ -22,11 +23,7 @@ class ConfigurationFunctionalTests: XCTestCase {
     var configuration: Configuration!
 
     override func setUp() {
-        for _ in 0...5 {
-            for key in UserDefaults.standard.dictionaryRepresentation().keys{
-                UserDefaults.standard.removeObject(forKey: key)
-            }
-        }
+        UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
