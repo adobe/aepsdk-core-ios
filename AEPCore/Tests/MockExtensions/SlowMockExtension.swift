@@ -18,7 +18,7 @@ import AEPCore
 class SlowMockExtension: Extension {
     var name = "slowMockExtension"
     var friendlyName = "slowMockExtension"
-    var extensionVersion = "0.0.1"
+    static var extensionVersion = "0.0.1"
     var metadata: [String : String]? = nil
     
     let runtime: ExtensionRuntime
