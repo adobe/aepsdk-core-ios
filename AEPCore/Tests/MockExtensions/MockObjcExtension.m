@@ -15,7 +15,6 @@ governing permissions and limitations under the License.
 
 @synthesize name;
 @synthesize friendlyName;
-@synthesize extensionVersion;
 @synthesize metadata;
 @synthesize runtime;
 
@@ -24,7 +23,6 @@ governing permissions and limitations under the License.
 
     name = @"MockObjcExtension";
     friendlyName = name;
-    extensionVersion = @"0.0.1";
     metadata = @{};
     self.runtime = runtime;
 
@@ -38,5 +36,10 @@ governing permissions and limitations under the License.
 - (BOOL)readyForEvent:(Event * _Nonnull)event {
     return YES;
 }
+
++ (NSString * _Nonnull)extensionVersion {
+    return @"0.0.1";
+}
+
 
 @end

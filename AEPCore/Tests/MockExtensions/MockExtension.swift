@@ -19,7 +19,7 @@ import AEPCore
 class MockExtension: Extension {
     var name = "mockExtension"
     var friendlyName = "mockExtension"
-    var extensionVersion = "0.0.1"
+    static var extensionVersion = "0.0.1"
     var metadata: [String : String]? = nil
     
     static var registrationClosure: (() -> Void)? = nil

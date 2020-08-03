@@ -17,7 +17,7 @@ import AEPServices
 @objc(AEPCore) public final class MobileCore: NSObject {
     
     /// Current version of the Core extension
-    let version = "0.0.1"
+    public static let extensionVersion = ConfigurationConstants.EXTENSION_VERSION
     
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingextensions.queue")
