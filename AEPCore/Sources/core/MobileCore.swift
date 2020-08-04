@@ -17,7 +17,7 @@ import AEPServices
 @objc(AEPCore) public final class MobileCore: NSObject {
     
     /// Current version of the Core extension
-    public static var extensionVersion: String {
+    @objc public static var extensionVersion: String {
         if wrapperType == .none {
             return ConfigurationConstants.EXTENSION_VERSION
         }
