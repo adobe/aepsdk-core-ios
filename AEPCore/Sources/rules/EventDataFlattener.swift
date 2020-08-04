@@ -11,7 +11,16 @@
 
 import Foundation
 
+/// Provides functions to "flatten"  an`EventData` dictionary.
 class EventDataFlattener {
+    /// Returns a "flattened" `Dictionary` which will not contain any `Dictionary` as a value. For example:
+    ///  `[rootKey:[key1: value1, key2: value2]]`
+    ///  will be flattened to
+    ///  `[rootKey.key1: value1]`
+    ///  `[rootKey.key2: value2]`
+    ///
+    /// - Parameter eventData: the `EventData` to flatten
+    /// - Returns: flattened dictionary
     static func getFlattenedDataDict(eventData: [String: Any]) -> [String: Any] {
         var flattenedDict = [String: Any]()
         for (key, value) in eventData {
@@ -38,7 +47,10 @@ class EventDataFlattener {
     }
 }
 
+/// extend the `Dictionary` struct
 extension Dictionary {
+    /// Merge a new dictionary to the current dictionary
+    /// - Parameter dict: a new dictionary to be merged
     mutating func merge<K, V>(dict: [K: V]) {
         for (k, v) in dict {
             updateValue(v as! Value, forKey: k as! Key)

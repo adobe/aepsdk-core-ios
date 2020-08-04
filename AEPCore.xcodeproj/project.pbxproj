@@ -247,6 +247,12 @@
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* EventDataFlattener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */; };
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
+		BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
+		BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
+		BB00E27224D9C00F00C578C1 /* String+Equal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27124D9C00F00C578C1 /* String+Equal.swift */; };
+		BB00E27324D9C00F00C578C1 /* String+Equal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27124D9C00F00C578C1 /* String+Equal.swift */; };
+		BB00E27524D9C03800C578C1 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */; };
+		BB00E27624D9C03800C578C1 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */; };
 		BB59402B24CF6E1D00EE0C6C /* AEPRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -664,6 +670,9 @@
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataFlattener.swift; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
+		BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtility.swift; sourceTree = "<group>"; };
+		BB00E27124D9C00F00C578C1 /* String+Equal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Equal.swift"; sourceTree = "<group>"; };
+		BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeIndex.swift"; sourceTree = "<group>"; };
 		BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngineTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1310,6 +1319,9 @@
 				3FB66AB424CA004400502CAF /* LaunchRule.swift */,
 				3FB66AB524CA004400502CAF /* RulesDownloader.swift */,
 				3FB66AB724CA004400502CAF /* RulesLoader.swift */,
+				BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */,
+				BB00E27124D9C00F00C578C1 /* String+Equal.swift */,
+				BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -1871,6 +1883,7 @@
 				3FB66AE424CA004400502CAF /* CachedRules.swift in Sources */,
 				2467E43D24CB54B70022F6BE /* MockDiskCache.swift in Sources */,
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
+				BB00E27524D9C03800C578C1 /* Array+SafeIndex.swift in Sources */,
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
@@ -1893,8 +1906,10 @@
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
 				3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */,
 				3FB66AD824CA004400502CAF /* Extension.swift in Sources */,
+				BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */,
 				3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */,
 				3FB66AD224CA004400502CAF /* EventHub.swift in Sources */,
+				BB00E27224D9C00F00C578C1 /* String+Equal.swift in Sources */,
 				3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */,
 				3FB66ACC24CA004400502CAF /* EventHubPlaceholderExtension.swift in Sources */,
 				3FB66AE824CA004400502CAF /* Cacheable.swift in Sources */,
@@ -1961,7 +1976,9 @@
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessable.swift in Sources */,
 				3F0397FB24BE60910019F095 /* ThreadSafeArray.swift in Sources */,
+				BB00E27324D9C00F00C578C1 /* String+Equal.swift in Sources */,
 				3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */,
+				BB00E27624D9C03800C578C1 /* Array+SafeIndex.swift in Sources */,
 				3F0397CC24BE5FF30019F095 /* NetworkService.swift in Sources */,
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
 				3F0397D724BE5FF30019F095 /* DataQueueService.swift in Sources */,
@@ -1990,6 +2007,7 @@
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
 				3F0397D524BE5FF30019F095 /* DataQueue.swift in Sources */,
+				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,

@@ -13,6 +13,7 @@ import Foundation
 import XCTest
 
 @testable import AEPCore
+@testable import AEPCoreMocks
 import AEPServices
 @testable import SwiftRulesEngine
 

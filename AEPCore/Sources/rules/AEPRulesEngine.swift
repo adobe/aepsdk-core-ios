@@ -20,6 +20,8 @@ struct LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
     private static let CONSEQUENCE_EVENT_DATA_KEY_ID = "id"
     private static let CONSEQUENCE_EVENT_DATA_KEY_TYPE = "type"
+    private static let CONSEQUENCE_TYPE_ADD = "add"
+    private static let CONSEQUENCE_TYPE_MOD = "mod"
     
     private let transform = Transform()
     private let extensionRuntime: ExtensionRuntime
@@ -48,19 +50,19 @@ struct LaunchRulesEngine {
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
-        let TraversableData = TokenFinder(event: event, extensionRuntime: extensionRuntime)
-        let rules = rulesEngine.evaluate(data: TraversableData)
+        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
+        let rules = rulesEngine.evaluate(data: traversableTokenFinder)
         for rule in rules {
             for consequence in rule.consequences {
-                let consequenceWithConcreteValue = replaceToken(for: consequence, data: TraversableData)
+                let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
-                case "add":
+                case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
                     attachDataEvent(event: event, consequenceWithConcreteValue: consequenceWithConcreteValue)
-                case "mod":
+                case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     modifyDataEvent(event: event, consequenceWithConcreteValue: consequenceWithConcreteValue)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
-                        EventHub.shared.dispatch(event: event)
+                        extensionRuntime.dispatch(event: event)
                     }
                 }
             }
@@ -117,4 +119,3 @@ struct LaunchRulesEngine {
         // TODO: modify data of the incoming event
     }
 }
-
