@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
-import AEPServices
+@testable import AEPServices
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
@@ -380,6 +380,30 @@ class MobileCoreTests: XCTestCase {
     func testSetLogLevelError() {
         MobileCore.setLogLevel(level: .error)
         XCTAssertEqual(Log.logFilter, .error)
+    }
+    
+    // MARK: setAppGroup(...) tests
+    
+    /// Tests that the app group can be set to nil
+    func testSetAppGroupNil() {
+        MobileCore.setAppGroup(group: nil)
+        
+        // verify
+        let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
+        XCTAssertNil(keyValueService?.appGroup)
+    }
+    
+    /// Tests that the app group can be set
+    func testSetAppGroup() {
+        // setup
+        let appGroup = "test.app.group"
+        
+        // test
+        MobileCore.setAppGroup(group: appGroup)
+        
+        // verify
+        let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
+        XCTAssertEqual(appGroup, keyValueService?.appGroup)
     }
     
 }

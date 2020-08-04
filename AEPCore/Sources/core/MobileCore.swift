@@ -108,4 +108,12 @@ import AEPServices
         Log.logFilter = level
     }
     
+    /// Sets the app group used to sharing user defaults and files among containing app and extension apps.
+    /// This must be called in AppDidFinishLaunching and before any other interactions with the Adobe Mobile library have happened.
+    /// - Parameter group: the app group name
+    @objc(setAppGroup:)
+    public static func setAppGroup(group: String?) {
+        ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
+    }
+    
 }
