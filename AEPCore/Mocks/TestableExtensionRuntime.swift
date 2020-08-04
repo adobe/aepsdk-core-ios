@@ -75,7 +75,7 @@ public class TestableExtensionRuntime:ExtensionRuntime{
     /// - Parameters:
     ///   - type: event type
     ///   - source: event source
-    public func getListener(type: EventType, source: EventSource) -> EventListener?{
+    public func getListener(type: String, source: String) -> EventListener? {
         return listeners["\(type)-\(source)"]
     }
 
