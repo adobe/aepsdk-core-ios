@@ -18,8 +18,7 @@ import AEPServices
 public class Signal: NSObject, Extension {
     
     private var hitQueue: HitQueuing
-    
-    
+        
     // MARK: - Extension
     public let runtime: ExtensionRuntime
     
@@ -28,23 +27,21 @@ public class Signal: NSObject, Extension {
     public static let extensionVersion = SignalConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     
-    public required init(runtime: ExtensionRuntime) {
-        self.runtime = runtime
-        
-        
+    public required init?(runtime: ExtensionRuntime) {
         guard let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: SignalConstants.LOG_PREFIX, "Signal extension could not be initialized - unable to create a DataQueue.")
-            return
+            return nil
         }
         
         self.hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: SignalHitProcessor())
+        self.runtime = runtime
         
         super.init()
     }
     
     public func onRegistered() {
-        registerListener(type: .configuration, source: .responseContent, listener: handleConfigurationResponse)
-        registerListener(type: .rulesEngine, source: .responseContent, listener: handleRulesEngineResponse)
+        registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
+        registerListener(type: EventType.rulesEngine, source: EventSource.responseContent, listener: handleRulesEngineResponse)
     }
     
     public func onUnregistered() {}
@@ -82,7 +79,8 @@ public class Signal: NSObject, Extension {
     
     /// Clears the signal queue when a device has opted out of tracking
     private func handleOptOut() {
-        
+        Log.debug(label: SignalConstants.LOG_PREFIX, "Device has opted-out of tracking. Clearing the Signal queue.")
+        hitQueue.clear()
     }
     
     // MARK: - Rule Consequence Handling
