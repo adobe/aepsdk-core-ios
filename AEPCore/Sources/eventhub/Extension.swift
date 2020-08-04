@@ -55,7 +55,7 @@ public extension Extension {
     ///   - type: `EventType` to be listened for
     ///   - source: `EventSource` to be listened for
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches an `Event` with matching `type` and `source`
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+    func registerListener(type: String, source: String, listener: @escaping EventListener) {
         runtime.registerListener(type: type, source: source, listener: listener)
     }
     

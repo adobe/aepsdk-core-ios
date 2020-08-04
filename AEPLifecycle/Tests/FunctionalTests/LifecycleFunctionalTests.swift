@@ -414,12 +414,12 @@ class LifecycleFunctionalTests: XCTestCase {
     func createStartEvent(additionalData: [String:Any] = [:]) -> Event{
         let data: [String: Any] = ["action": "start",
                                    "additionalcontextdata": additionalData]
-        return Event(name: "Lifecycle Start", type: .genericLifecycle, source: .requestContent, data: data)
+        return Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
     }
     
     func createPauseEvent() -> Event{
         let data: [String: Any] = ["action": "pause"]
-        return Event(name: "Lifecycle Start", type: .genericLifecycle, source: .requestContent, data: data)
+        return Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
     }
 }
 

@@ -40,8 +40,8 @@ class Configuration: Extension {
     func onRegistered() {
         registerPreprocessor(rulesEngine.process(event:))
 
-        registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
-        registerListener(type: .lifecycle, source: .responseContent, listener: receiveLifecycleResponse(event:))
+        registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
+        registerListener(type: EventType.lifecycle, source: EventSource.responseContent, listener: receiveLifecycleResponse(event:))
 
         let pendingResolver = createPendingSharedState(event: nil)
 
@@ -52,7 +52,7 @@ class Configuration: Extension {
 
         configState.loadInitialConfig()
         if !configState.environmentAwareConfiguration.isEmpty {
-            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.environmentAwareConfiguration)
+            let responseEvent = Event(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: configState.environmentAwareConfiguration)
             dispatch(event: responseEvent)
         }
         pendingResolver(configState.environmentAwareConfiguration)
@@ -181,14 +181,14 @@ class Configuration: Extension {
     /// Dispatches a configuration response content event with corresponding data
     /// - Parameter data: Optional data to be attached to the event
     private func dispatchConfigurationResponse(triggerEvent: Event, data: [String: Any]?) {
-        let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: data)
+        let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: data)
         dispatch(event: responseEvent)
     }
 
     /// Dispatches a configuration request content event with corresponding data
     /// - Parameter data: Data to be attached to the event
     private func dispatchConfigurationRequest(data: [String: Any]) {
-        let event = Event(name: "Configuration Request Event", type: .configuration, source: .requestContent, data: data)
+        let event = Event(name: "Configuration Request Event", type: EventType.configuration, source: EventSource.requestContent, data: data)
         dispatch(event: event)
     }
 

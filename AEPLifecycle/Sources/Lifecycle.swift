@@ -34,7 +34,7 @@ import AEPCore
     
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
     public func onRegistered() {
-        registerListener(type: .genericLifecycle, source: .requestContent, listener: receiveLifecycleRequest(event:))
+        registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent, listener: receiveLifecycleRequest(event:))
         
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String : Any], event: nil)
@@ -43,7 +43,7 @@ import AEPCore
     public func onUnregistered() {}
     
     public func readyForEvent(_ event: Event) -> Bool {
-        if event.type == .genericLifecycle && event.source == .requestContent {
+        if event.type == EventType.genericLifecycle && event.source == EventSource.requestContent {
             let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event)
             return configurationSharedState?.status == .set
         }
@@ -124,7 +124,7 @@ import AEPCore
             LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0.0
         ]
         
-        dispatch(event: Event(name: "LifecycleStart", type: .lifecycle, source: .responseContent, data: eventData))
+        dispatch(event: Event(name: "LifecycleStart", type: EventType.lifecycle, source: EventSource.responseContent, data: eventData))
     }
     
     /// Reads the session timeout from the configuration shared state, if not found returns the default session timeout

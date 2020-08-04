@@ -35,7 +35,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let expectedContextData = ["testKey": "testVal"]
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericLifecycle, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { (event) in
             XCTAssertEqual(CoreConstants.Lifecycle.START, event.data?[CoreConstants.Keys.ACTION_KEY] as! String)
             XCTAssertEqual(expectedContextData, event.data?[CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA] as! [String: String])
             expectation.fulfill()
@@ -55,7 +55,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Lifecycle Pause dispatches generic lifecycle request content")
         expectation.assertForOverFulfill = true
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericLifecycle, source: .requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { (event) in
             XCTAssertEqual(CoreConstants.Lifecycle.PAUSE, event.data?[CoreConstants.Keys.ACTION_KEY] as! String)
             expectation.fulfill()
         }

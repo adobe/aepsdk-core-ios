@@ -51,8 +51,9 @@ class ExtensionContainer {
     }
 }
 
-extension ExtensionContainer: ExtensionRuntime {
-    public func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+extension ExtensionContainer:ExtensionRuntime {
+
+    public func registerListener(type: String, source: String, listener: @escaping EventListener) {
         let listenerContainer = EventListenerContainer(listener: listener, type: type, source: source, triggerEventId: nil, timeoutTask: nil)
         eventListeners.append(listenerContainer)
     }
