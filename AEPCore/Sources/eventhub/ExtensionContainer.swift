@@ -45,7 +45,7 @@ class ExtensionContainer {
             self.exten = type.init(runtime: self)
             guard let unwrappedExtension = self.exten else {
                 Log.error(label: "\(ExtensionContainer.LOG_TAG):\(#function)", "Failed to initialize extension of type: \(type)")
-                completion(.unknown)
+                completion(.extensionInitializationFailure)
                 return
             }
             
