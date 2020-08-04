@@ -44,7 +44,7 @@ import Foundation
     func readyForEvent(_ event: Event) -> Bool
 
     // An `Extension` must support parameterless initializer
-    init(runtime: ExtensionRuntime)
+    init?(runtime: ExtensionRuntime)
 }
 
 /// Contains methods for developers to interact with in their own extensions

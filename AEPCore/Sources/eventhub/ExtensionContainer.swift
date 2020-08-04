@@ -15,6 +15,7 @@ import AEPServices
 
 /// Contains an `Extension` and additional information related to the extension
 class ExtensionContainer {
+    private static let LOG_TAG = "ExtensionContainer"
 
     /// The extension held in this container
     var exten: Extension? = nil
@@ -42,7 +43,12 @@ class ExtensionContainer {
         // initialize the backing extension on the extension queue
         extensionQueue.async {
             self.exten = type.init(runtime: self)
-            guard let unwrappedExtension = self.exten else { return }
+            guard let unwrappedExtension = type.init(runtime: self) else {
+                Log.error(label: "\(ExtensionContainer.LOG_TAG):\(#function)", "Failed to initialize extension of type: \(type)")
+                completion(.unknown)
+                return
+            }
+            
             self.sharedState = SharedState(unwrappedExtension.name)
             self.sharedStateName = unwrappedExtension.name
             unwrappedExtension.onRegistered()

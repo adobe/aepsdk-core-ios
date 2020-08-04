@@ -23,13 +23,13 @@ import AEPServices
     private(set) var state: IdentityState?
     
     // MARK: Extension
-    public required init(runtime: ExtensionRuntime) {
+    public required init?(runtime: ExtensionRuntime) {
         self.runtime = runtime
         super.init()
         
         guard let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
-            return
+            return nil
         }
 
         let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(entity:responseData:)))
