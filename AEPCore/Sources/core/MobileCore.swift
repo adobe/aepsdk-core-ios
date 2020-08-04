@@ -101,4 +101,11 @@ import AEPServices
         MobileCore.wrapperType = type
     }
     
+    /// Sets the logging level for the SDK
+    /// - Parameter level: The desired log level
+    @objc(setLogLevel:)
+    public static func setLogLevel(level: LogLevel) {
+        Log.logFilter = level
+    }
+    
 }

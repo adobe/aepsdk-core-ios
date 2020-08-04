@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Contains the status and value for a given shared state
-@objc public class SharedStateResult: NSObject {
+@objc(AEPSharedStateResult) public class SharedStateResult: NSObject {
     public let status: SharedStateStatus
     public let value: [String: Any]?
 

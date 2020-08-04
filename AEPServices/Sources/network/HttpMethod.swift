@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// This enum is used for building `NetworkRequest` objects.
-@objc public enum HttpMethod: Int {
+@objc(AEPHttpMethod) public enum HttpMethod: Int {
     case get
     case post
     

@@ -13,7 +13,7 @@
 import Foundation
 
 /// A thread-safe FIFO (First-In-First-Out) queue used to store `DataEntity` objects
-@objc public protocol DataQueue {
+@objc(AEPDataQueue) public protocol DataQueue {
     /// Adds a new `DataEntity` object to `DataQueue`
     /// - Parameter dataEntity: a `DataEntity` object
     @discardableResult

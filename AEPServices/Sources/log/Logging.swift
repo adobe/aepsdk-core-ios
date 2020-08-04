@@ -13,7 +13,7 @@
 import Foundation
 
 /// Represents the interface of the logging service
-@objc public protocol Logging {
+@objc(AEPLogging) public protocol Logging {
     /// Logs a message
     /// - Parameters:
     ///   - level: One of the message level identifiers, e.g., DEBUG
