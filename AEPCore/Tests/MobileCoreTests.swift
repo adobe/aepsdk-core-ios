@@ -12,10 +12,12 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
+import AEPServices
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
         MobileCore.setWrapperType(type: .none) // reset wrapper type before each test
+        MobileCore.setLogLevel(level: .error) // reset log level to error before each test
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
@@ -352,6 +354,32 @@ class MobileCoreTests: XCTestCase {
     func testSetWrapperTypeXamarin() {
         MobileCore.setWrapperType(type: .xamarin)
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-X", MobileCore.extensionVersion)
+    }
+    
+    // MARK: setLogLevel(...) tests
+    
+    /// Tests that the log level in the Log class is updated to debug
+    func testSetLogLevelTrace() {
+        MobileCore.setLogLevel(level: .trace)
+        XCTAssertEqual(Log.logFilter, .trace)
+    }
+    
+    /// Tests that the log level in the Log class is updated to debug
+    func testSetLogLevelDebug() {
+        MobileCore.setLogLevel(level: .debug)
+        XCTAssertEqual(Log.logFilter, .debug)
+    }
+    
+    /// Tests that the log level in the Log class is updated to warning
+    func testSetLogLevelWarning() {
+        MobileCore.setLogLevel(level: .warning)
+        XCTAssertEqual(Log.logFilter, .warning)
+    }
+    
+    /// Tests that the log level in the Log class is updated to error
+    func testSetLogLevelError() {
+        MobileCore.setLogLevel(level: .error)
+        XCTAssertEqual(Log.logFilter, .error)
     }
     
 }

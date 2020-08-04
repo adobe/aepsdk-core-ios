@@ -19,7 +19,7 @@ import Foundation
 /// * _LogLevel.warning_ - This method should be used to indicate that a request has been made to the SDK, but the SDK will be unable to perform the requested task.  An example of when to use _warning_ is when catching an unexpected but recoverable exception and printing its message.  The intended audience for _warning_ logs is a developer integrating the SDK.  _warning_ logs will be printed to the console if the developer has set a LoggingMode of VERBOSE, DEBUG, or WARNING in the SDK.
 /// * _LogLevel.error_ - This method should be used when the SDK has determined that there is an unrecoverable error.  The intended audience for _error_ logs is a developer integrating the SDK.  _error_ logs are always enabled, and will be printed to the developer console regardless of the LoggingMode of the SDK.
 ///
-@objc public enum LogLevel: Int, Comparable {
+@objc(AEPLogLevel) public enum LogLevel: Int, Comparable {
     case trace = 1
     case debug
     case warning
