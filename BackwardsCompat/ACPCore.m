@@ -58,7 +58,7 @@ governing permissions and limitations under the License.
 }
 
 + (void) setAppGroup: (nullable NSString*) appGroup {
-    
+    [AEPCore setAppGroup:appGroup];
 }
 
 + (void) setLogLevel: (ACPMobileLogLevel) logLevel {
