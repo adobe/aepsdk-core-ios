@@ -403,7 +403,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
 
 class MockKeyValueService: NamedCollectionProcessing {
     var appGroup:String?
-    func setAppGroup(_ appGroup: String) {
+    func setAppGroup(_ appGroup: String?) {
         self.appGroup = appGroup
     }
     

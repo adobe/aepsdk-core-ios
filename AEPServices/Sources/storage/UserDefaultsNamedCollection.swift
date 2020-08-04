@@ -17,7 +17,7 @@ class UserDefaultsNamedCollection: NamedCollectionProcessing {
     let keyPrefix = "com.adobe.mobile.datastore"
     var appGroup: String?
     
-    func setAppGroup(_ appGroup: String){
+    func setAppGroup(_ appGroup: String?) {
         self.appGroup = appGroup
     }
     
