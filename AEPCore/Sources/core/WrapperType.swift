@@ -1,7 +1,7 @@
 import Foundation
 
 /// An enum type representing the possible wrapper types
-@objc(AEPWrapperType) public enum WrapperType: Int, RawRepresentable, Codable {
+@objc(AEPWrapperType) public enum WrapperType: Int, RawRepresentable {
     case reactNative
     case flutter
     case cordova
