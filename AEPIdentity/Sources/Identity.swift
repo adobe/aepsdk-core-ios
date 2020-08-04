@@ -23,7 +23,7 @@ import AEPServices
     private(set) var state: IdentityState?
     
     // MARK: Extension
-    public required init?(runtime: ExtensionRuntime) {
+    public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
         super.init()
         
