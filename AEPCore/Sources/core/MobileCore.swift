@@ -87,4 +87,9 @@ import AEPServices
         MobileCore.dispatch(event: event)
     }
     
+    @objc(setWrapperType:)
+    public static func setWrapperType(type: WrapperType) {
+        // TODO
+    }
+    
 }
