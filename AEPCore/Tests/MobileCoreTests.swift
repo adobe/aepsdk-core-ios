@@ -15,6 +15,7 @@ import XCTest
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
+        MobileCore.setWrapperType(type: .none) // reset wrapper type before each test
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
@@ -308,6 +309,49 @@ class MobileCoreTests: XCTestCase {
         
         // verify
         wait(for: [responseExpectation], timeout: 1.0)
+    }
+    
+    // MARK: setWrapperType(...) tests
+    
+    /// No wrapper tag should be appended when the setWrapperType API is never invoked
+    func testSetWrapperTypeNeverCalled() {
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, MobileCore.extensionVersion)
+    }
+    
+    // Tests that no wrapper tag is appended when the wrapper type is none
+    func testSetWrapperTypeNone() {
+        MobileCore.setWrapperType(type: .none)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the React Native wrapper tag is appended
+    func testSetWrapperTypeReactNative() {
+        MobileCore.setWrapperType(type: .reactNative)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-R", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Flutter wrapper tag is appended
+    func testSetWrapperTypeFlutter() {
+        MobileCore.setWrapperType(type: .flutter)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-F", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Cordova wrapper tag is appended
+    func testSetWrapperTypeCordova() {
+        MobileCore.setWrapperType(type: .cordova)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-C", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Unity wrapper tag is appended
+    func testSetWrapperTypeUnity() {
+        MobileCore.setWrapperType(type: .unity)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-U", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Xamarin wrapper tag is appended
+    func testSetWrapperTypeXamarin() {
+        MobileCore.setWrapperType(type: .xamarin)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-X", MobileCore.extensionVersion)
     }
     
 }

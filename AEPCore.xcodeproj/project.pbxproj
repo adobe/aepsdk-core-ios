@@ -31,6 +31,7 @@
 		2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02B24C9FF62002935CF /* MockPushIDManager.swift */; };
 		2107F02E24C9FF88002935CF /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02D24C9FF88002935CF /* SHA256.swift */; };
 		2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02F24C9FFB2002935CF /* SHA256Tests.swift */; };
+		213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F8A0324D8DC5A0003B8AF /* WrapperType.swift */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
@@ -432,6 +433,7 @@
 		2107F02B24C9FF62002935CF /* MockPushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPushIDManager.swift; sourceTree = "<group>"; };
 		2107F02D24C9FF88002935CF /* SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
 		2107F02F24C9FFB2002935CF /* SHA256Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256Tests.swift; sourceTree = "<group>"; };
+		213F8A0324D8DC5A0003B8AF /* WrapperType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperType.swift; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
@@ -1268,6 +1270,7 @@
 				3FB66A9F24CA004400502CAF /* MobileCore.swift */,
 				3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */,
 				3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */,
+				213F8A0324D8DC5A0003B8AF /* WrapperType.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1876,6 +1879,7 @@
 				3FB66ADB24CA004400502CAF /* AEPRulesEngine.swift in Sources */,
 				3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */,
 				3FB66AE624CA004400502CAF /* ConfigurationDownloader.swift in Sources */,
+				213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */,
 				3FB66ACF24CA004400502CAF /* Event.swift in Sources */,
 				3FB66ACE24CA004400502CAF /* ExtensionContainer.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
