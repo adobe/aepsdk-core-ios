@@ -17,6 +17,7 @@ import Foundation
 public enum EventHubError: Error {
     case invalidExtensionName
     case duplicateExtensionName
+    case extensionInitializationFailure
     case unknown
 }
 
@@ -27,6 +28,8 @@ extension EventHubError: LocalizedError {
             return "Extension names must be non-empty"
         case .duplicateExtensionName:
             return "An extension with this name has already been registered"
+        case .extensionInitializationFailure:
+            return "An extension has failed to initialize"
         case .unknown:
             return "An unknown error has occurred"
         }
