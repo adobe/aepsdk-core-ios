@@ -12,9 +12,12 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
+@testable import AEPServices
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
+        MobileCore.setWrapperType(type: .none) // reset wrapper type before each test
+        MobileCore.setLogLevel(level: .error) // reset log level to error before each test
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
@@ -61,7 +64,7 @@ class MobileCoreTests: XCTestCase {
         }
         MockExtension.registerExtension()
         MobileCore.start { }
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
     
@@ -69,7 +72,7 @@ class MobileCoreTests: XCTestCase {
         let expectation = XCTestExpectation(description: "callback invoked")
         expectation.assertForOverFulfill = true
         let eventName = "test-event"
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MockExtension.eventReceivedClosure = { if $0.name == eventName { expectation.fulfill() } }
         MockExtension.registerExtension()
         
@@ -92,7 +95,7 @@ class MobileCoreTests: XCTestCase {
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         MobileCore.start { }
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
     
@@ -110,7 +113,7 @@ class MobileCoreTests: XCTestCase {
         }
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
-        EventHub.shared.dispatch(event: Event(name: eventName, type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MobileCore.start { }
         
         wait(for: [expectation], timeout: 1.0)
@@ -187,7 +190,7 @@ class MobileCoreTests: XCTestCase {
         
         // test
         MobileCore.registerExtensions([MockExtension.self])
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -202,7 +205,7 @@ class MobileCoreTests: XCTestCase {
         MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
 
         // test
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MobileCore.registerExtensions([MockExtension.self])
         
         // verify
@@ -219,7 +222,7 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -235,7 +238,7 @@ class MobileCoreTests: XCTestCase {
         MockExtensionTwo.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
 
         // test
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: .analytics, source: .requestContent, data: nil))
+        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
         
         // verify
@@ -261,7 +264,7 @@ class MobileCoreTests: XCTestCase {
     
     func testDispatchEventSimple() {
         // setup
-        let expectedEvent = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
+        let expectedEvent = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
         
         let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
         registerExpectation.assertForOverFulfill = true
@@ -292,8 +295,8 @@ class MobileCoreTests: XCTestCase {
     /// Tests that the response callback is invoked when the trigger event is dispatched
     func testDispatchEventWithResponseCallbackSimple() {
         // setup
-        let expectedEvent = Event(name: "test", type: .analytics, source: .requestContent, data: nil)
-        let expectedResponseEvent = expectedEvent.createResponseEvent(name: "test-response", type: .analytics, source: .responseContent, data: nil)
+        let expectedEvent = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let expectedResponseEvent = expectedEvent.createResponseEvent(name: "test-response", type: EventType.analytics, source: EventSource.responseContent, data: nil)
         let responseExpectation = XCTestExpectation(description: "Should receive the response event in the response callback")
         responseExpectation.assertForOverFulfill = true
         EventHub.shared.start()
@@ -308,6 +311,99 @@ class MobileCoreTests: XCTestCase {
         
         // verify
         wait(for: [responseExpectation], timeout: 1.0)
+    }
+    
+    // MARK: setWrapperType(...) tests
+    
+    /// No wrapper tag should be appended when the setWrapperType API is never invoked
+    func testSetWrapperTypeNeverCalled() {
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, MobileCore.extensionVersion)
+    }
+    
+    // Tests that no wrapper tag is appended when the wrapper type is none
+    func testSetWrapperTypeNone() {
+        MobileCore.setWrapperType(type: .none)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the React Native wrapper tag is appended
+    func testSetWrapperTypeReactNative() {
+        MobileCore.setWrapperType(type: .reactNative)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-R", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Flutter wrapper tag is appended
+    func testSetWrapperTypeFlutter() {
+        MobileCore.setWrapperType(type: .flutter)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-F", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Cordova wrapper tag is appended
+    func testSetWrapperTypeCordova() {
+        MobileCore.setWrapperType(type: .cordova)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-C", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Unity wrapper tag is appended
+    func testSetWrapperTypeUnity() {
+        MobileCore.setWrapperType(type: .unity)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-U", MobileCore.extensionVersion)
+    }
+    
+    /// Tests that the Xamarin wrapper tag is appended
+    func testSetWrapperTypeXamarin() {
+        MobileCore.setWrapperType(type: .xamarin)
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-X", MobileCore.extensionVersion)
+    }
+    
+    // MARK: setLogLevel(...) tests
+    
+    /// Tests that the log level in the Log class is updated to debug
+    func testSetLogLevelTrace() {
+        MobileCore.setLogLevel(level: .trace)
+        XCTAssertEqual(Log.logFilter, .trace)
+    }
+    
+    /// Tests that the log level in the Log class is updated to debug
+    func testSetLogLevelDebug() {
+        MobileCore.setLogLevel(level: .debug)
+        XCTAssertEqual(Log.logFilter, .debug)
+    }
+    
+    /// Tests that the log level in the Log class is updated to warning
+    func testSetLogLevelWarning() {
+        MobileCore.setLogLevel(level: .warning)
+        XCTAssertEqual(Log.logFilter, .warning)
+    }
+    
+    /// Tests that the log level in the Log class is updated to error
+    func testSetLogLevelError() {
+        MobileCore.setLogLevel(level: .error)
+        XCTAssertEqual(Log.logFilter, .error)
+    }
+    
+    // MARK: setAppGroup(...) tests
+    
+    /// Tests that the app group can be set to nil
+    func testSetAppGroupNil() {
+        MobileCore.setAppGroup(group: nil)
+        
+        // verify
+        let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
+        XCTAssertNil(keyValueService?.appGroup)
+    }
+    
+    /// Tests that the app group can be set
+    func testSetAppGroup() {
+        // setup
+        let appGroup = "test.app.group"
+        
+        // test
+        MobileCore.setAppGroup(group: appGroup)
+        
+        // verify
+        let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
+        XCTAssertEqual(appGroup, keyValueService?.appGroup)
     }
     
 }

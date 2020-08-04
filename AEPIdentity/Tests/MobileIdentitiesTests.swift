@@ -41,11 +41,11 @@ class MobileIdentitiesTests: XCTestCase {
     /// Tests that when all shared states are pending that we return false
     func testAreSharedStatesReadyAllPending() {
         // setup
-        let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
+        let event = Event(name: "test event", type: EventType.hub, source: EventSource.sharedState, data: nil)
         
         // test
-        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
-            return (nil, .pending)
+        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
+            return SharedStateResult(status: .pending, value: nil)
         }
         
         // verify
@@ -55,11 +55,11 @@ class MobileIdentitiesTests: XCTestCase {
     /// Tests that when all shared states set to none that we return true
     func testAreSharedStatesReadyAllNone() {
         // setup
-        let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
+        let event = Event(name: "test event", type: EventType.hub, source: EventSource.sharedState, data: nil)
         
         // test
-        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
-            return (nil, .none)
+        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
+            return SharedStateResult(status: .none, value: nil)
         }
         
         // verify
@@ -69,11 +69,11 @@ class MobileIdentitiesTests: XCTestCase {
     /// Tests that when all shared states are set that we return true
     func testAreSharedStatesReadyAllSet() {
         // setup
-        let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
+        let event = Event(name: "test event", type: EventType.hub, source: EventSource.sharedState, data: nil)
         
         // test
-        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
-            return (nil, .set)
+        let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
+            return SharedStateResult(status: .set, value: nil)
         }
         
         // verify
@@ -85,18 +85,18 @@ class MobileIdentitiesTests: XCTestCase {
     /// Tests that when configuration and identity provide shared state that we include them in getAllIdentifiers
     func testGetAllIdentifiersHappy() {
         // setup
-        let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
+        let event = Event(name: "test event", type: EventType.hub, source: EventSource.sharedState, data: nil)
         
         // test
         var mobileIdentities = MobileIdentities()
-        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
             if extensionName == ConfigurationConstants.EXTENSION_NAME {
-                return (configurationSharedState, .set)
+                return SharedStateResult(status: .set, value: configurationSharedState)
             } else if extensionName == IdentityConstants.EXTENSION_NAME {
-                return (identitySharedState, .set)
+                return SharedStateResult(status: .set, value: identitySharedState)
             }
             
-            return (nil, .set)
+            return SharedStateResult(status: .set, value: nil)
         }
         
         let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
@@ -110,16 +110,16 @@ class MobileIdentitiesTests: XCTestCase {
     /// Tests that when configuration provides shared state that we include configuration identities in getAllIdentifiers
     func testGetAllIdentifiersOnlyConfiguration() {
         // setup
-        let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
+        let event = Event(name: "test event", type: EventType.hub, source: EventSource.sharedState, data: nil)
         
         // test
         var mobileIdentities = MobileIdentities()
-        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
             if extensionName == ConfigurationConstants.EXTENSION_NAME {
-                return (configurationSharedState, .set)
+                return SharedStateResult(status: .set, value: configurationSharedState)
             }
             
-            return (nil, .set)
+            return SharedStateResult(status: .set, value: nil)
         }
         
         let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
@@ -133,16 +133,16 @@ class MobileIdentitiesTests: XCTestCase {
     /// Tests that when identity provides shared state that we include identity identities in getAllIdentifiers
     func testGetAllIdentifiersOnlyIdentity() {
         // setup
-        let event = Event(name: "test event", type: .hub, source: .sharedState, data: nil)
+        let event = Event(name: "test event", type: EventType.hub, source: EventSource.sharedState, data: nil)
         
         // test
         var mobileIdentities = MobileIdentities()
-        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> ((value: [String : Any]?, status: SharedStateStatus)) in
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
              if extensionName == IdentityConstants.EXTENSION_NAME {
-                return (identitySharedState, .set)
+                return SharedStateResult(status: .set, value: identitySharedState)
             }
             
-            return (nil, .set)
+            return SharedStateResult(status: .set, value: nil)
         }
         
         let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)

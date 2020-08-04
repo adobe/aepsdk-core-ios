@@ -14,11 +14,11 @@ import Foundation
 
 /// A "dummy" extension for `EventHub` so it can share state
 class EventHubPlaceholderExtension: Extension {
-    var name = EventHubConstants.NAME
-    var friendlyName = EventHubConstants.FRIENDLY_NAME
-    var version = "0.0.1"
-    var metadata: [String : String]? = nil
-    var runtime: ExtensionRuntime
+    let name = EventHubConstants.NAME
+    let friendlyName = EventHubConstants.FRIENDLY_NAME
+    static let extensionVersion = "0.0.1"
+    let metadata: [String : String]? = nil
+    let runtime: ExtensionRuntime
 
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
@@ -26,4 +26,7 @@ class EventHubPlaceholderExtension: Extension {
     
     func onRegistered() {}
     func onUnregistered() {}
+    func readyForEvent(_ event: Event) -> Bool {
+        return true
+    }
 }

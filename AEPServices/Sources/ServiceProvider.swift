@@ -108,4 +108,12 @@ public class ServiceProvider {
             return defaultLoggingService
         }
     }
+    
+    internal func reset(){
+        overrideSystemInfoService = nil
+        overrideKeyValueService = nil
+        overrideNetworkService = nil
+        overrideCacheService = nil
+        overrideURLService = nil
+    }
 }

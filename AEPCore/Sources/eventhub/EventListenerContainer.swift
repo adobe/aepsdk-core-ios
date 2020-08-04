@@ -25,10 +25,10 @@ struct EventListenerContainer: Equatable {
     let listener: EventListener
         
     /// The `EventType` `listener` is listening for, nil if `listener` is a response listener
-    let type: EventType?
+    let type: String?
     
     /// The `EventSource` `listener` is listening for, nil if `listener` is a response listener
-    let source: EventSource?
+    let source: String?
     
     /// If `listener` was registered as a response listener, `triggerEventId` will equal the `Event.id` of the `Event` who will trigger the response `Event`
     let triggerEventId: UUID?
@@ -43,8 +43,8 @@ struct EventListenerContainer: Equatable {
             return listenerTriggerId == event.responseID
         }
         
-        return (event.type == type || type == .wildcard)
-               && (event.source == source || source == .wildcard)
+        return (event.type == type || type == EventType.wildcard)
+               && (event.source == source || source == EventSource.wildcard)
     }
 }
 

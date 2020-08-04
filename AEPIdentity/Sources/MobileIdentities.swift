@@ -34,7 +34,7 @@ private struct UserID: Codable {
 /// Responsible for reading the shared state of multiple extensions to read the identifiers
 struct MobileIdentities: Codable {
     
-    typealias SharedStateProvider = (String, Event?) -> (value: [String: Any]?, status: SharedStateStatus)?
+    typealias SharedStateProvider = (String, Event?) -> SharedStateResult?
     private var companyContexts: [CompanyContext]?
     private var users: [Users]?
     

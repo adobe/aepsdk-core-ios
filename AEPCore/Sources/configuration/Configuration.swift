@@ -1,29 +1,29 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPServices
+import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
 class Configuration: Extension {
     let runtime: ExtensionRuntime
     let name = ConfigurationConstants.EXTENSION_NAME
     let friendlyName = ConfigurationConstants.FRIENDLY_NAME
-    let version = ConfigurationConstants.EXTENSION_VERSION
+    public static let extensionVersion = ConfigurationConstants.EXTENSION_VERSION
     let metadata: [String: String]? = nil
-    
+
     private let dataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private var appIdManager: LaunchIDManager
     private var configState: ConfigurationState // should only be modified/used within the event queue
-    private let rulesEngine = LaunchRulesEngine()
+    private let rulesEngine: LaunchRulesEngine
     private let retryQueue = DispatchQueue(label: "com.adobe.configuration.retry")
 
     // MARK: Extension
@@ -31,17 +31,17 @@ class Configuration: Extension {
     /// Initializes the Configuration extension and it's dependencies
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+        rulesEngine = LaunchRulesEngine(extensionRuntime: runtime)
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
-        
     }
 
     /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
     func onRegistered() {
         registerPreprocessor(rulesEngine.process(event:))
-        
-        registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
-        registerListener(type: .lifecycle, source: .responseContent, listener: receiveLifecycleResponse(event:))
+
+        registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
+        registerListener(type: EventType.lifecycle, source: EventSource.responseContent, listener: receiveLifecycleResponse(event:))
 
         let pendingResolver = createPendingSharedState(event: nil)
 
@@ -49,10 +49,10 @@ class Configuration: Extension {
         if let appId = appIdManager.loadAppId(), !appId.isEmpty {
             dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
         }
-        
+
         configState.loadInitialConfig()
         if !configState.environmentAwareConfiguration.isEmpty {
-            let responseEvent = Event(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: configState.environmentAwareConfiguration)
+            let responseEvent = Event(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: configState.environmentAwareConfiguration)
             dispatch(event: responseEvent)
         }
         pendingResolver(configState.environmentAwareConfiguration)
@@ -81,7 +81,6 @@ class Configuration: Extension {
         } else if let filePath = event.filePath {
             processConfigureWith(filePath: filePath, event: event, sharedStateResolver: createPendingSharedState(event: event))
         }
-
     }
 
     /// Invoked by the `eventQueue` each time a new lifecycle response event is received
@@ -118,7 +117,7 @@ class Configuration: Extension {
         configState.updateWith(programmaticConfig: updatedConfig)
         // Create shared state and dispatch configuration response content
         sharedStateResolver(configState.environmentAwareConfiguration)
-        dispatchConfigurationResponse(triggerEvent: event, data: event.data)
+        dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
     }
 
     /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
@@ -144,14 +143,14 @@ class Configuration: Extension {
 
         // stop all other event processing while we are attempting to download the config
         stopEvents()
-        configState.updateWith(appId: appId) { [weak self] (config) in
+        configState.updateWith(appId: appId) { [weak self] config in
             if let _ = config {
                 self?.publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
                 self?.startEvents()
             } else {
                 // If downloading config failed try again later
                 self?.retryQueue.asyncAfter(deadline: .now() + 5) {
-                    let _ = self?.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
+                    _ = self?.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
                 }
             }
         }
@@ -182,14 +181,14 @@ class Configuration: Extension {
     /// Dispatches a configuration response content event with corresponding data
     /// - Parameter data: Optional data to be attached to the event
     private func dispatchConfigurationResponse(triggerEvent: Event, data: [String: Any]?) {
-        let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: data)
+        let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: data)
         dispatch(event: responseEvent)
     }
 
     /// Dispatches a configuration request content event with corresponding data
     /// - Parameter data: Data to be attached to the event
     private func dispatchConfigurationRequest(data: [String: Any]) {
-        let event = Event(name: "Configuration Request Event", type: .configuration, source: .requestContent, data: data)
+        let event = Event(name: "Configuration Request Event", type: EventType.configuration, source: EventSource.requestContent, data: data)
         dispatch(event: event)
     }
 
@@ -218,11 +217,10 @@ class Configuration: Extension {
     private func validateForInternalEventAppIdChange(event: Event, newAppId: String) -> Bool {
         let isInternalEvent = event.data?[ConfigurationConstants.Keys.IS_INTERNAL_EVENT] as? Bool ?? false
 
-        if isInternalEvent && newAppId != appIdManager.loadAppId() {
+        if isInternalEvent, newAppId != appIdManager.loadAppId() {
             return false
         }
 
         return true
     }
-
 }

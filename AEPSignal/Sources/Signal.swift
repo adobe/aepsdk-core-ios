@@ -25,7 +25,7 @@ public class Signal: NSObject, Extension {
     
     public let name = SignalConstants.EXTENSION_NAME
     public let friendlyName = SignalConstants.FRIENDLY_NAME
-    public let version = SignalConstants.EXTENSION_VERSION
+    public static let extensionVersion = SignalConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     
     public required init(runtime: ExtensionRuntime) {

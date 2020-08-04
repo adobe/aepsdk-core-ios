@@ -17,7 +17,7 @@ public protocol NamedCollectionProcessing {
     
     /// Set the name of the app group that will be used to store the data
     /// - Parameter appGroup: The app group name
-    func setAppGroup(_ appGroup: String)
+    func setAppGroup(_ appGroup: String?)
     
     /// Sets the value for key in the collection with the given name
     /// - Parameter collectionName: The collection name used for namespacing

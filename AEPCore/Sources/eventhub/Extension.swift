@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// An object which can be registered with the `EventHub`
-public protocol Extension {
+@objc(AEPExtension) public protocol Extension {
 
     /// Name of the extension
     var name: String { get }
@@ -22,13 +22,13 @@ public protocol Extension {
     var friendlyName: String { get }
 
     /// Version of the extension
-    var version: String { get }
+    static var extensionVersion: String { get }
     
     /// Optional metadata to be provided to the `EventHub`
     var metadata: [String: String]? { get }
     
     /// Provides the methods can be used by extension
-    var runtime: ExtensionRuntime {  get}
+    var runtime: ExtensionRuntime { get }
 
     /// Invoked when the extension has been registered by the `EventHub`
     func onRegistered()
@@ -44,7 +44,7 @@ public protocol Extension {
     func readyForEvent(_ event: Event) -> Bool
 
     // An `Extension` must support parameterless initializer
-    init(runtime:ExtensionRuntime)
+    init?(runtime: ExtensionRuntime)
 }
 
 /// Contains methods for developers to interact with in their own extensions
@@ -55,7 +55,7 @@ public extension Extension {
     ///   - type: `EventType` to be listened for
     ///   - source: `EventSource` to be listened for
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches an `Event` with matching `type` and `source`
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+    func registerListener(type: String, source: String, listener: @escaping EventListener) {
         runtime.registerListener(type: type, source: source, listener: listener)
     }
     
@@ -86,7 +86,7 @@ public extension Extension {
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return runtime.getSharedState(extensionName: extensionName, event: event)
     }
     

@@ -13,7 +13,7 @@
 import Foundation
 
 /// Defines a platform service to be used to initialize `DataQueue` objects
-@objc public protocol DataQueuing {
+@objc(AEPDataQueuing) public protocol DataQueuing {
     static var shared: DataQueuing { get }
 
     /// Initialize a `DataQueue` object

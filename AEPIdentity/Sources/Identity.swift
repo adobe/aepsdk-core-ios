@@ -18,7 +18,7 @@ import AEPServices
 
     public let name = IdentityConstants.EXTENSION_NAME
     public let friendlyName = IdentityConstants.FRIENDLY_NAME
-    public let version = IdentityConstants.EXTENSION_VERSION
+    public static let extensionVersion = IdentityConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     private(set) var state: IdentityState?
     
@@ -39,10 +39,10 @@ import AEPServices
     }
 
     public func onRegistered() {
-        registerListener(type: .identity, source: .requestIdentity, listener: handleIdentityRequest)
-        registerListener(type: .genericIdentity, source: .requestContent, listener: handleIdentityRequest)
-        registerListener(type: .configuration, source: .requestIdentity, listener: receiveConfigurationIdentity(event:))
-        registerListener(type: .configuration, source: .responseContent, listener: handleConfigurationResponse)
+        registerListener(type: EventType.identity, source: EventSource.requestIdentity, listener: handleIdentityRequest)
+        registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
+        registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
+        registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
         
         let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value
         if state?.bootup(configSharedState: configSharedState, eventDispatcher: dispatch(event:)) ?? false, let props = state?.identityProperties {
@@ -54,10 +54,10 @@ import AEPServices
     public func onUnregistered() {}
 
     public func readyForEvent(_ event: Event) -> Bool {
-        if event.isSyncEvent || event.type == .genericIdentity {
+        if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
-        } else if event.type == .configuration && event.source == .requestIdentity {
+        } else if event.type == EventType.configuration && event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         }
 
@@ -72,7 +72,7 @@ import AEPServices
             return
         }
         
-        if event.isSyncEvent || event.type == .genericIdentity {
+        if event.isSyncEvent || event.type == EventType.genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)
             }
@@ -123,7 +123,7 @@ import AEPServices
 
         let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
         let eventData = [IdentityConstants.Configuration.ALL_IDENTIFIERS: identitiesStr]
-        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: .configuration, source: .responseIdentity, data: eventData as [String : Any])
+        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: EventType.configuration, source: EventSource.responseIdentity, data: eventData as [String : Any])
         dispatch(event: responseEvent)
     }
 
@@ -135,7 +135,7 @@ import AEPServices
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with updated url
-        let responseEvent = event.createResponseEvent(name: "Identity Appended URL", type: .identity, source: .responseIdentity, data: [IdentityConstants.EventDataKeys.UPDATED_URL: updatedUrl])
+        let responseEvent = event.createResponseEvent(name: "Identity Appended URL", type: EventType.identity, source: EventSource.responseIdentity, data: [IdentityConstants.EventDataKeys.UPDATED_URL: updatedUrl])
         dispatch(event: responseEvent)
     }
 
@@ -146,13 +146,13 @@ import AEPServices
         let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with url variables
-        let responseEvent = event.createResponseEvent(name: "Identity URL Variables", type: .identity, source: .responseIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: urlVariables])
+        let responseEvent = event.createResponseEvent(name: "Identity URL Variables", type: EventType.identity, source: EventSource.responseIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: urlVariables])
         dispatch(event: responseEvent)
     }
 
     private func processIdentifiersRequest(event: Event) {
         let eventData = state?.identityProperties.toEventData()
-        let responseEvent = event.createResponseEvent(name: "Identity Response Content", type: .identity, source: .responseIdentity, data: eventData)
+        let responseEvent = event.createResponseEvent(name: "Identity Response Content", type: EventType.identity, source: EventSource.responseIdentity, data: eventData)
 
         // dispatch identity response event with shared state data
         dispatch(event: responseEvent)

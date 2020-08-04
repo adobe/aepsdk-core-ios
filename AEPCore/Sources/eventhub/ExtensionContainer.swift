@@ -1,26 +1,27 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPServices
+import Foundation
 
 /// Contains an `Extension` and additional information related to the extension
 class ExtensionContainer {
+    private static let LOG_TAG = "ExtensionContainer"
 
     /// The extension held in this container
-    var exten: Extension? = nil
+    var exten: Extension?
 
     /// The `SharedState` associated with the extension
-    var sharedState: SharedState? = nil
+    var sharedState: SharedState?
 
     var sharedStateName: String = "invalidSharedStateName"
 
@@ -42,7 +43,12 @@ class ExtensionContainer {
         // initialize the backing extension on the extension queue
         extensionQueue.async {
             self.exten = type.init(runtime: self)
-            guard let unwrappedExtension = self.exten else { return }
+            guard let unwrappedExtension = self.exten else {
+                Log.error(label: "\(ExtensionContainer.LOG_TAG):\(#function)", "Failed to initialize extension of type: \(type)")
+                completion(.extensionInitializationFailure)
+                return
+            }
+            
             self.sharedState = SharedState(unwrappedExtension.name)
             self.sharedStateName = unwrappedExtension.name
             unwrappedExtension.onRegistered()
@@ -54,7 +60,7 @@ class ExtensionContainer {
 
 extension ExtensionContainer:ExtensionRuntime {
 
-    public func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+    public func registerListener(type: String, source: String, listener: @escaping EventListener) {
         let listenerContainer = EventListenerContainer(listener: listener, type: type, source: source, triggerEventId: nil, timeoutTask: nil)
         eventListeners.append(listenerContainer)
     }
@@ -75,7 +81,7 @@ extension ExtensionContainer:ExtensionRuntime {
         return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event)
     }
 
-    func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)? {
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event)
     }
 

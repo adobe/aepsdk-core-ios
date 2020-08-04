@@ -17,7 +17,14 @@ import AEPServices
 @objc(AEPCore) public final class MobileCore: NSObject {
     
     /// Current version of the Core extension
-    let version = "0.0.1"
+    public static var extensionVersion: String {
+        if wrapperType == .none {
+            return ConfigurationConstants.EXTENSION_VERSION
+        }
+        
+        return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
+    }
+    private static var wrapperType = WrapperType.none
     
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingextensions.queue")
@@ -61,7 +68,7 @@ import AEPServices
     
     /// Start event processing
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
-    @objc public static func start(_ completion: @escaping (()-> Void)) {
+    public static func start(_ completion: @escaping (()-> Void)) {
         // Start the event hub processing
         let pending = MobileCore.pendingExtensions.shallowCopy
         MobileCore.pendingExtensions.clear()
@@ -73,7 +80,7 @@ import AEPServices
     @objc(setAdvertisingIdentifier:)
     public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
-        let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        let event = Event(name: "SetAdvertisingIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
     
@@ -83,8 +90,30 @@ import AEPServices
     public static func setPushIdentifier(deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
-        let event = Event(name: "SetPushIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        let event = Event(name: "SetPushIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
+    }
+    
+    /// Sets the wrapper type for the SDK. Only applicable when being used in a cross platform environment such as React Native
+    /// - Parameter type: the `WrapperType` corresponding to the current platform
+    @objc(setWrapperType:)
+    public static func setWrapperType(type: WrapperType) {
+        MobileCore.wrapperType = type
+    }
+    
+    /// Sets the logging level for the SDK
+    /// - Parameter level: The desired log level
+    @objc(setLogLevel:)
+    public static func setLogLevel(level: LogLevel) {
+        Log.logFilter = level
+    }
+    
+    /// Sets the app group used to sharing user defaults and files among containing app and extension apps.
+    /// This must be called in AppDidFinishLaunching and before any other interactions with the Adobe Mobile library have happened.
+    /// - Parameter group: the app group name
+    @objc(setAppGroup:)
+    public static func setAppGroup(group: String?) {
+        ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
     }
     
 }
