@@ -10,21 +10,15 @@
  */
 
 import Foundation
-@_implementationOnly import SwiftRulesEngine
 
-/// A `Rule` type represents the functions defined by Launch UI
-struct LaunchRule: Rule {
-    public let condition: Evaluable
-    public let consequences: [Consequence]
-
-    init(condition: Evaluable, consequences: [Consequence]) {
-        self.condition = condition
-        self.consequences = consequences
+extension String {
+    /// Compare itself to another string
+    /// - Parameter aString: The `String` to compare this `String` against
+    /// - Returns: `true` if the arguments is not `nil` and it represents an equivalent `String`; `false` otherwise
+    func isEqual(to aString: String?) -> Bool {
+        guard let newString = aString else {
+            return false
+        }
+        return self == newString
     }
-}
-
-struct Consequence {
-    let id: String
-    let type: String
-    var detailDict: [String: Any]
 }

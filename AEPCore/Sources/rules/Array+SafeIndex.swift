@@ -10,21 +10,13 @@
  */
 
 import Foundation
-@_implementationOnly import SwiftRulesEngine
 
-/// A `Rule` type represents the functions defined by Launch UI
-struct LaunchRule: Rule {
-    public let condition: Evaluable
-    public let consequences: [Consequence]
-
-    init(condition: Evaluable, consequences: [Consequence]) {
-        self.condition = condition
-        self.consequences = consequences
+extension Array {
+    /// Accesses the element at the specified position safely (return nil if provided index is invalid).
+    public subscript(safe index: Int) -> Element? {
+        guard count > index else {
+            return nil
+        }
+        return self[index]
     }
-}
-
-struct Consequence {
-    let id: String
-    let type: String
-    var detailDict: [String: Any]
 }
