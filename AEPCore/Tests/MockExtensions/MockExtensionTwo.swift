@@ -18,7 +18,7 @@ import AEPCore
 class MockExtensionTwo: Extension {
     var name = "mockExtensionTwo"
     var friendlyName = "mockExtensionTwo"
-    var extensionVersion = "0.0.1"
+    static var extensionVersion = "0.0.1"
     var metadata: [String : String]? = ["testMetaKey": "testMetaVal"]
     
     let runtime: ExtensionRuntime

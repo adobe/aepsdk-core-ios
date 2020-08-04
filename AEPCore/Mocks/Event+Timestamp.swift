@@ -14,7 +14,7 @@ import Foundation
 @testable import AEPCore
 
 extension Event{
-    func copyWithNewTimeStamp(_ timestamp: Date) -> Event{
+    public func copyWithNewTimeStamp(_ timestamp: Date) -> Event{
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
         

@@ -25,6 +25,10 @@ class ConfigurationDownloaderTests: XCTestCase {
         }
     }
     
+    override class func tearDown() {
+        ServiceProvider.shared.reset()
+    }
+    
     /// Tests that we can load a bundled config from the bundle
     func testLoadConfigFromFilePathSimple() {
         // setup
