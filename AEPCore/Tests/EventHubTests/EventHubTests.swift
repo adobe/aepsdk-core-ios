@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 import XCTest
 
 @testable import AEPCore
+@testable import AEPCoreMocks
 
 class EventHubTests: XCTestCase {
     private static let MOCK_EXTENSION_NAME = "mockExtension"
@@ -412,8 +413,8 @@ class EventHubTests: XCTestCase {
         let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.friendlyName] as? [String: Any]
         
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
-        XCTAssertEqual(mockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
-        XCTAssertEqual(mockExtensionTwo.extensionVersion, mockDetailsTwo?[EventHubConstants.EventDataKeys.VERSION] as? String)
+        XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
+        XCTAssertEqual(MockExtensionTwo.extensionVersion, mockDetailsTwo?[EventHubConstants.EventDataKeys.VERSION] as? String)
         XCTAssertEqual(mockExtensionTwo.metadata, mockDetailsTwo?[EventHubConstants.EventDataKeys.METADATA] as? [String: String])
     }
 
@@ -882,21 +883,5 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [targetRequestContentExpectation,analyticsRequestContentExpectation], timeout: 0.5)
     }
-    
-    /// Tests that we can register an Objective-C extension
-    func testRegisterObjcExtension() {
-        // setup
-        let expectation = XCTestExpectation(description: "Objective-C Extension is registered successfully after eventHub.start()")
-        expectation.assertForOverFulfill = true
 
-        // test
-        eventHub.start()
-        eventHub.registerExtension(MockObjcExtension.self) { (error) in
-            expectation.fulfill()
-            XCTAssertNil(error)
-        }
-        
-        // verify
-        wait(for: [expectation], timeout: 0.5)
-    }
 }

@@ -22,7 +22,7 @@ import Foundation
     var friendlyName: String { get }
 
     /// Version of the extension
-    var extensionVersion: String { get }
+    static var extensionVersion: String { get }
     
     /// Optional metadata to be provided to the `EventHub`
     var metadata: [String: String]? { get }

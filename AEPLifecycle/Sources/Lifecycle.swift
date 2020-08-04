@@ -16,7 +16,7 @@ import AEPCore
 @objc(AEPLifecycle) public class Lifecycle: NSObject, Extension {
     public let name = LifecycleConstants.EXTENSION_NAME
     public let friendlyName = LifecycleConstants.FRIENDLY_NAME
-    public let extensionVersion = LifecycleConstants.EXTENSION_VERSION
+    public static let extensionVersion = LifecycleConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     
     public let runtime: ExtensionRuntime

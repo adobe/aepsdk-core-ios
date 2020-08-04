@@ -17,7 +17,7 @@ class Configuration: Extension {
     let runtime: ExtensionRuntime
     let name = ConfigurationConstants.EXTENSION_NAME
     let friendlyName = ConfigurationConstants.FRIENDLY_NAME
-    let extensionVersion = ConfigurationConstants.EXTENSION_VERSION
+    public static let extensionVersion = ConfigurationConstants.EXTENSION_VERSION
     let metadata: [String: String]? = nil
     
     private let dataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
@@ -118,7 +118,7 @@ class Configuration: Extension {
         configState.updateWith(programmaticConfig: updatedConfig)
         // Create shared state and dispatch configuration response content
         sharedStateResolver(configState.environmentAwareConfiguration)
-        dispatchConfigurationResponse(triggerEvent: event, data: event.data)
+        dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
     }
 
     /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
