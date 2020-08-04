@@ -14,7 +14,7 @@ import Foundation
 import AEPServices
 
 /// An Event to be dispatched by the Event Hub
-@objc public class Event: NSObject, Codable {
+@objc(AEPEvent) public class Event: NSObject, Codable {
     
     /// Name of the event
     @objc public let name: String

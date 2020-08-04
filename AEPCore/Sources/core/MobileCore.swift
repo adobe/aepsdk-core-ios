@@ -17,7 +17,14 @@ import AEPServices
 @objc(AEPCore) public final class MobileCore: NSObject {
     
     /// Current version of the Core extension
-    public static let extensionVersion = ConfigurationConstants.EXTENSION_VERSION
+    public static var extensionVersion: String {
+        if wrapperType == .none {
+            return ConfigurationConstants.EXTENSION_VERSION
+        }
+        
+        return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
+    }
+    private static var wrapperType = WrapperType.none
     
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingextensions.queue")
@@ -85,6 +92,20 @@ import AEPServices
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
         let event = Event(name: "SetPushIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
+    }
+    
+    /// Sets the wrapper type for the SDK. Only applicable when being used in a cross platform environment such as React Native
+    /// - Parameter type: the `WrapperType` corresponding to the current platform
+    @objc(setWrapperType:)
+    public static func setWrapperType(type: WrapperType) {
+        MobileCore.wrapperType = type
+    }
+    
+    /// Sets the logging level for the SDK
+    /// - Parameter level: The desired log level
+    @objc(setLogLevel:)
+    public static func setLogLevel(level: LogLevel) {
+        Log.logFilter = level
     }
     
 }

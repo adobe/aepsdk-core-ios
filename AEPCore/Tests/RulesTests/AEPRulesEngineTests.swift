@@ -13,6 +13,7 @@ import Foundation
 import XCTest
 
 @testable import AEPCore
+@testable import AEPCoreMocks
 import AEPServices
 @testable import SwiftRulesEngine
 
@@ -35,7 +36,7 @@ class AEPRulesEngineTests: XCTestCase {
         }
         /// Then: this json rules should be parsed to `LaunchRule` objects
         let rules = JSONRulesParser.parse(data)
-        let rulesEngine = LaunchRulesEngine()
+        let rulesEngine = LaunchRulesEngine(extensionRuntime: TestableExtensionRuntime())
         // ~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename
         let result = rulesEngine.replaceToken(for: rules[0].consequences[0], data: ["~state": ["com": ["adobe": ["module": ["lifecycle/lifecyclecontextdata": ["devicename": "abc"]]]]]])
         // http://adobe.com/device=abc
