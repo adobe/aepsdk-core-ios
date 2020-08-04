@@ -43,7 +43,7 @@ class ExtensionContainer {
         // initialize the backing extension on the extension queue
         extensionQueue.async {
             self.exten = type.init(runtime: self)
-            guard let unwrappedExtension = type.init(runtime: self) else {
+            guard let unwrappedExtension = self.exten else {
                 Log.error(label: "\(ExtensionContainer.LOG_TAG):\(#function)", "Failed to initialize extension of type: \(type)")
                 completion(.unknown)
                 return
