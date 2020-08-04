@@ -50,12 +50,12 @@ struct CoreConstants {
     }
     
     struct WrapperType {
-        static let REACT_NATIVE = "-R"
-        static let FLUTTER = "-F"
-        static let CORDOVA = "-C"
-        static let UNITY = "-U"
-        static let XAMARIN = "-X"
-        static let NONE = ""
+        static let REACT_NATIVE = "R"
+        static let FLUTTER = "F"
+        static let CORDOVA = "C"
+        static let UNITY = "U"
+        static let XAMARIN = "X"
+        static let NONE = "N"
     }
     
     struct Lifecycle {

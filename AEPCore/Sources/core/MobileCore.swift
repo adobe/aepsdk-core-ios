@@ -18,7 +18,11 @@ import AEPServices
     
     /// Current version of the Core extension
     public static var extensionVersion: String {
-        return ConfigurationConstants.EXTENSION_VERSION + wrapperType.rawValue
+        if wrapperType == .none {
+            return ConfigurationConstants.EXTENSION_VERSION
+        }
+        
+        return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
     private static var wrapperType = WrapperType.none
     
