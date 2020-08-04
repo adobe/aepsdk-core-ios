@@ -249,7 +249,7 @@ class IdentityStateTests: XCTestCase {
         
         // test
         let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true] as [String : Any]
-        let _ = state.syncIdentifiers(event: Event(name: "ID Sync Test Event", type: .identity, source: .requestIdentity, data: data))
+        let _ = state.syncIdentifiers(event: Event(name: "ID Sync Test Event", type: EventType.identity, source: EventSource.requestIdentity, data: data))
         
         // verify
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
@@ -478,7 +478,7 @@ class IdentityStateTests: XCTestCase {
         props.mid = MID()
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
-        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: nil)
+        let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
         // test
         state.processPrivacyChange(event: event, eventDispatcher: { (event) in
@@ -502,7 +502,7 @@ class IdentityStateTests: XCTestCase {
         props.mid = MID()
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
-        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
+        let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
         state.processPrivacyChange(event: event, eventDispatcher: { (event) in
@@ -527,7 +527,7 @@ class IdentityStateTests: XCTestCase {
         props.mid = MID()
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
-        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
+        let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
 
         // test
         state.processPrivacyChange(event: event, eventDispatcher: { (event) in
@@ -552,7 +552,7 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .optedOut
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
-        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
+        let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
         state.processPrivacyChange(event: event, eventDispatcher: { (event) in
@@ -579,7 +579,7 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .optedOut
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
-        let event = Event(name: "Test event", type: .identity, source: .requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue])
+        let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue])
 
         // test
         state.processPrivacyChange(event: event, eventDispatcher: { (event) in
@@ -604,23 +604,23 @@ private extension Event {
     static func fakeSyncIDEvent() -> Event {
         let ids = ["k1": "v1", "k2": "v2"]
         let data = [IdentityConstants.EventDataKeys.IDENTIFIERS: ids, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true] as [String : Any]
-        return Event(name: "Fake Sync Event", type: .identity, source: .requestReset, data: data)
+        return Event(name: "Fake Sync Event", type: EventType.identity, source: EventSource.requestReset, data: data)
     }
     
     static func fakePushIDEvent() -> Event {
         let data = [IdentityConstants.EventDataKeys.PUSH_IDENTIFIER: "test-push-id"]
-        return Event(name: "Fake Sync Event", type: .genericIdentity, source: .requestReset, data: data)
+        return Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
     }
     
     static func fakeAdIDEvent() -> Event {
         let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: "test-ad-id"]
-        return Event(name: "Fake Sync Event", type: .genericIdentity, source: .requestReset, data: data)
+        return Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
     }
 }
 
 private extension DataEntity {
     static func fakeDataEntity() -> DataEntity {
-        let event = Event(name: "Hit Event", type: .identity, source: .requestIdentity, data: nil)
+        let event = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: URL(string: "adobe.com")!, event: event)
         let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
 
