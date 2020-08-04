@@ -23,16 +23,8 @@ struct LaunchRule: Rule {
     }
 }
 
-enum ConsequenceType: String, Codable {
-    case url
-    case pii
-    case pb
-    case add
-    case mod
-}
-
 struct Consequence {
     let id: String
-    let type: ConsequenceType
+    let type: String
     var detailDict: [String: Any]
 }
