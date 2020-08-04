@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// An enum type representing the possible opt-out and privacy settings.
-@objc public enum PrivacyStatus: Int, RawRepresentable, Codable {
+@objc(AEPPrivacyStatus) public enum PrivacyStatus: Int, RawRepresentable, Codable {
     case unknown
     case optedIn
     case optedOut
