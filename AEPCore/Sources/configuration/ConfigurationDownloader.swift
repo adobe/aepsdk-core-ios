@@ -29,7 +29,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     }
 
     func loadConfigFromCache(appId: String, dataStore: NamedCollectionDataStore) -> [String: Any]? {
-        return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.cacheableDict)
+        return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.cacheable)
     }
 
     func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> ()) {
@@ -50,17 +50,17 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             // If we get a 304 back, we can use the config in cache and exit early
             if httpConnection.responseCode == 304 {
-                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cacheableDict))
+                completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cacheable))
                 return
             }
             
             if let data = httpConnection.data, let configDict = try? JSONDecoder().decode([String: AnyCodable].self, from: data) {
-                let config = CachedConfiguration(cacheableDict: configDict,
+                let config = CachedConfiguration(cacheable: configDict,
                                              lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
                                       eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
                 
                 dataStore.setObject(key: self.buildCacheKey(appId: appId), value: config) // cache config
-                completion(AnyCodable.toAnyDictionary(dictionary: config.cacheableDict))
+                completion(AnyCodable.toAnyDictionary(dictionary: config.cacheable))
             } else {
                 completion(nil)
             }

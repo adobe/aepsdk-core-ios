@@ -118,6 +118,13 @@
 		3F03983A24BE62AA0019F095 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983624BE62AA0019F095 /* ADBMobileConfig.json */; };
 		3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983724BE62AA0019F095 /* TestConfig.json */; };
 		3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
+		3F08FF9324D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9224D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift */; };
+		3F08FF9524D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */; };
+		3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */; };
+		3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */; };
+		3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */; };
+		3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */; };
+		3F08FFA324DA179400D34DE3 /* TestableNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FFA224DA179400D34DE3 /* TestableNetworkService.swift */; };
 		3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */; };
 		3F39153324CB7E2400B58C3E /* MobileCore+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */; };
 		3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951E824CA096100F7325B /* MobileCoreTests.swift */; };
@@ -141,7 +148,6 @@
 		3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */; };
 		3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520324CA096100F7325B /* ConfigurationStateTests.swift */; };
 		3F39521E24CA096200F7325B /* ConfigurationDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */; };
-		3F39521F24CA096200F7325B /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520524CA096100F7325B /* RulesDownloaderTests.swift */; };
 		3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */; };
 		3FB5F7D024D2848900F0F6DF /* ConfigurationFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB5F7CF24D2848900F0F6DF /* ConfigurationFunctionalTests.swift */; };
 		3FB66A9C24CA003700502CAF /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FB66A9B24CA003700502CAF /* SwiftRulesEngine */; };
@@ -165,7 +171,7 @@
 		3FB66AD824CA004400502CAF /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB224CA004400502CAF /* Extension.swift */; };
 		3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB424CA004400502CAF /* LaunchRule.swift */; };
 		3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB524CA004400502CAF /* RulesDownloader.swift */; };
-		3FB66ADB24CA004400502CAF /* AEPRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */; };
+		3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */; };
 		3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB724CA004400502CAF /* RulesLoader.swift */; };
 		3FB66ADD24CA004400502CAF /* JSONRulesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB824CA004400502CAF /* JSONRulesParser.swift */; };
 		3FB66ADE24CA004400502CAF /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66ABA24CA004400502CAF /* Configuration.swift */; };
@@ -243,8 +249,6 @@
 		3FF8171C24D89B8F0064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
 		3FF8172024D89F450064DFA1 /* UserDefaults+Clear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */; };
 		3FF8172324D8ABF80064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
-		78B73EBF24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */; };
-		78B73EC124CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* EventDataFlattener.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */; };
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
@@ -536,6 +540,14 @@
 		3F03983524BE62AA0019F095 /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
 		3F03983624BE62AA0019F095 /* ADBMobileConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
+		3F08FF9224D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyCodable+ToDictionary.swift"; sourceTree = "<group>"; };
+		3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+MergeOverwrite.swift"; sourceTree = "<group>"; };
+		3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryMergeOverwriteTests.swift; sourceTree = "<group>"; };
+		3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineFunctionalTests.swift; sourceTree = "<group>"; };
+		3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_functional_1.zip; sourceTree = "<group>"; };
+		3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
+		3F08FFA224DA179400D34DE3 /* TestableNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableNetworkService.swift; sourceTree = "<group>"; };
+		3F08FFA624DA6D8600D34DE3 /* aepsdk-rulesengine-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "aepsdk-rulesengine-ios"; path = "../aepsdk-rulesengine-ios"; sourceTree = "<group>"; };
 		3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParserTests.swift; sourceTree = "<group>"; };
 		3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+IdentityTests.swift"; sourceTree = "<group>"; };
 		3F3951E824CA096100F7325B /* MobileCoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCoreTests.swift; sourceTree = "<group>"; };
@@ -560,7 +572,6 @@
 		3F39520124CA096100F7325B /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3F39520324CA096100F7325B /* ConfigurationStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationStateTests.swift; sourceTree = "<group>"; };
 		3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloaderTests.swift; sourceTree = "<group>"; };
-		3F39520524CA096100F7325B /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
 		3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchIDManagerTests.swift; sourceTree = "<group>"; };
 		3FB5F7CF24D2848900F0F6DF /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		3FB66A9E24CA004400502CAF /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreConstants.swift; sourceTree = "<group>"; };
@@ -583,7 +594,7 @@
 		3FB66AB224CA004400502CAF /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		3FB66AB424CA004400502CAF /* LaunchRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchRule.swift; sourceTree = "<group>"; };
 		3FB66AB524CA004400502CAF /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
-		3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AEPRulesEngine.swift; sourceTree = "<group>"; };
+		3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngine.swift; sourceTree = "<group>"; };
 		3FB66AB724CA004400502CAF /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
 		3FB66AB824CA004400502CAF /* JSONRulesParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParser.swift; sourceTree = "<group>"; };
 		3FB66ABA24CA004400502CAF /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -667,8 +678,6 @@
 		3FF8171424D89B500064DFA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPCore/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
 		3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableExtensionRuntime.swift; path = AEPCore/Mocks/TestableExtensionRuntime.swift; sourceTree = SOURCE_ROOT; };
 		3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Clear.swift"; sourceTree = "<group>"; };
-		78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+MergeOverwrite.swift"; sourceTree = "<group>"; };
-		78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryMergeOverwriteTests.swift; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataFlattener.swift; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -780,6 +789,7 @@
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
+				3F08FFA624DA6D8600D34DE3 /* aepsdk-rulesengine-ios */,
 				21CAC0D82422917600C11388 /* AEPCore */,
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
@@ -1114,7 +1124,6 @@
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
-				78B73EBE24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift */,
 				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
 			);
 			path = utility;
@@ -1172,7 +1181,6 @@
 				2107F02F24C9FFB2002935CF /* SHA256Tests.swift */,
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
-				78B73EC024CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
 			);
 			path = utility;
@@ -1199,6 +1207,8 @@
 		3F39152E24CA47B600B58C3E /* RulesTests */ = {
 			isa = PBXGroup;
 			children = (
+				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
+				3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */,
 				3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */,
 				BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */,
 			);
@@ -1225,6 +1235,7 @@
 		3F3951EC24CA096100F7325B /* TestResources */ = {
 			isa = PBXGroup;
 			children = (
+				3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */,
 				3F3951ED24CA096100F7325B /* TestRules.zip */,
 				3F3951EE24CA096100F7325B /* TestImage.png */,
 				3F3951EF24CA096100F7325B /* rules_1.json */,
@@ -1264,7 +1275,6 @@
 				3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */,
 				3F39520324CA096100F7325B /* ConfigurationStateTests.swift */,
 				3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */,
-				3F39520524CA096100F7325B /* RulesDownloaderTests.swift */,
 				3F39520124CA096100F7325B /* TestableExtensionRuntime.swift */,
 			);
 			path = ConfigurationTests;
@@ -1274,6 +1284,7 @@
 			isa = PBXGroup;
 			children = (
 				3FB5F7CF24D2848900F0F6DF /* ConfigurationFunctionalTests.swift */,
+				3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */,
 			);
 			path = FunctionalTests;
 			sourceTree = "<group>";
@@ -1315,9 +1326,10 @@
 		3FB66AB324CA004400502CAF /* rules */ = {
 			isa = PBXGroup;
 			children = (
+				3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */,
 				BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */,
 				BB00E26624D8C94600C578C1 /* TokenFinder.swift */,
-				3FB66AB624CA004400502CAF /* AEPRulesEngine.swift */,
+				3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */,
 				3FB66AB824CA004400502CAF /* JSONRulesParser.swift */,
 				3FB66AB424CA004400502CAF /* LaunchRule.swift */,
 				3FB66AB524CA004400502CAF /* RulesDownloader.swift */,
@@ -1325,6 +1337,7 @@
 				BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */,
 				BB00E27124D9C00F00C578C1 /* String+Equal.swift */,
 				BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */,
+				3F08FF9224D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -1382,6 +1395,7 @@
 				3FF8171424D89B500064DFA1 /* Info.plist */,
 				3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */,
 				3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */,
+				3F08FFA224DA179400D34DE3 /* TestableNetworkService.swift */,
 			);
 			path = mocks;
 			sourceTree = "<group>";
@@ -1789,6 +1803,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */,
 				3F39520C24CA096100F7325B /* rules_1.json in Resources */,
 				3F39520D24CA096100F7325B /* ADBMobileConfig.json in Resources */,
 				3F39520F24CA096100F7325B /* testRulesDownloader.zip in Resources */,
@@ -1900,7 +1915,8 @@
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
-				3FB66ADB24CA004400502CAF /* AEPRulesEngine.swift in Sources */,
+				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,
+				3F08FF9324D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift in Sources */,
 				3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */,
 				3FB66AE624CA004400502CAF /* ConfigurationDownloader.swift in Sources */,
 				213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */,
@@ -1920,6 +1936,7 @@
 				3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */,
 				3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
 				3FB66AC724CA004400502CAF /* Extension+Register.swift in Sources */,
+				3F08FF9524D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift in Sources */,
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
 			);
@@ -1932,11 +1949,15 @@
 				BB59402B24CF6E1D00EE0C6C /* AEPRulesEngineTests.swift in Sources */,
 				3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */,
 				21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */,
+				3F08FFA324DA179400D34DE3 /* TestableNetworkService.swift in Sources */,
 				3F39521724CA096200F7325B /* EventHub+Testable.swift in Sources */,
+				3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
+				3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
+				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
 				3F39520924CA096100F7325B /* EventHubTests.swift in Sources */,
@@ -1948,7 +1969,6 @@
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
-				3F39521F24CA096200F7325B /* RulesDownloaderTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				3FB5F7D024D2848900F0F6DF /* ConfigurationFunctionalTests.swift in Sources */,
 			);
@@ -2004,7 +2024,6 @@
 				3F0397DA24BE5FF30019F095 /* NamedCollectionProcessing.swift in Sources */,
 				3F0397FE24BE60910019F095 /* URLEncoder.swift in Sources */,
 				3F0397FF24BE60910019F095 /* AnyCodable.swift in Sources */,
-				78B73EBF24CA04D400893AA6 /* Dictionary+MergeOverwrite.swift in Sources */,
 				3F0397D124BE5FF30019F095 /* HttpConnection.swift in Sources */,
 				3F0397D824BE5FF30019F095 /* DataQueuing.swift in Sources */,
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
@@ -2047,7 +2066,6 @@
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */,
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
-				78B73EC124CF3FE500893AA6 /* DictionaryMergeOverwriteTests.swift in Sources */,
 				3F03981D24BE61520019F095 /* MockSystemInfoService.swift in Sources */,
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,

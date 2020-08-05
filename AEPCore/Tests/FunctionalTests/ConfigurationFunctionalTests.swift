@@ -16,9 +16,8 @@ import AEPServices
 import AEPServicesMock
 import AEPCoreMocks
 
-/// Functional tests for the Lifecycle extension
+/// Functional tests for the Configuration extension
 class ConfigurationFunctionalTests: XCTestCase {
-    var mockSystemInfoService: MockSystemInfoService!
     var mockRuntime: TestableExtensionRuntime!
     var configuration: Configuration!
 

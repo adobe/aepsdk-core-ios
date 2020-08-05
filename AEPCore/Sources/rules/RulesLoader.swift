@@ -19,12 +19,12 @@ protocol RulesLoader {
     /// Loads the cached rules for `appId`.
     /// - Parameter rulesUrl: rulesUrl, if provided the `RulesDownloader` will attempt to load a rules with `appId`
     /// - Returns: The cached rules for `appId` in `DiskCache`, nil if not found
-    func loadRulesFromCache(rulesUrl: URL) -> [String : Any]?
+    func loadRulesFromCache(rulesUrl: URL) -> Data?
     
     /// Loads the remote rules for `appId` and caches the result.
     /// - Parameters:
     ///   - appId: Optional app id, if provided the `RulesDownloader` will attempt to download rules with `appId`
     ///   - completion: Invoked with the loaded rules, nil if loading the rules failed. NOTE: Fails if 304 not-modified is returned from the server
-    func loadRulesFromUrl(rulesUrl: URL, completion: @escaping ([String: Any]?) -> Void)
+    func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Data?) -> Void)
 }
 

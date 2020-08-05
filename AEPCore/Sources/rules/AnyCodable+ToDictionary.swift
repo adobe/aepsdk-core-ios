@@ -12,14 +12,10 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPServices
 
-/// Used to store a configuration to cache with some metadata
-struct CachedConfiguration: Cacheable, Codable {
+
+extension AnyCodable{
     
-    let cacheable: [String : AnyCodable]
-    
-    let lastModified: String?
-    
-    let eTag: String?
-    
-    
+    public static func toAnyOptionalDictionary(dictionary: [String: AnyCodable]) -> [String: Any?] {
+        return dictionary.mapValues({$0.value})
+    }
 }

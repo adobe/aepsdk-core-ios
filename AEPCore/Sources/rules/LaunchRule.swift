@@ -26,5 +26,9 @@ struct LaunchRule: Rule {
 struct Consequence {
     let id: String
     let type: String
-    var detailDict: [String: Any]
+    var detailDict: [String: Any?]
+    
+    var eventData: [String: Any?]? {
+        return detailDict["eventdata"] as? [String: Any?]
+    }
 }

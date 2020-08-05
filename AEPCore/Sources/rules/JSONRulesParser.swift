@@ -68,6 +68,8 @@ enum ConditionType: String, Codable {
 }
 
 class JSONCondition: Codable {
+    static let matcherMapping = ["eq": "equals"]
+    
     var type: ConditionType
     var definition: JSONDefinition
     func convert() -> Evaluable? {
@@ -103,24 +105,32 @@ class JSONCondition: Codable {
     }
 
     func convert(key: String, matcher: String, anyCodable: AnyCodable) -> Evaluable? {
+        guard let matcher = JSONCondition.matcherMapping[matcher] else{
+            return nil
+        }
+        let key = "{{\(key)}}"
         if let value = anyCodable.value {
             switch value {
             case is String:
                 if let stringValue = anyCodable.value as? String {
-                    return ComparisonExpression<MustacheToken, String>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(stringLiteral: stringValue))
+                    return ComparisonExpression(lhs: Operand<String>(mustache: key), operationName: matcher, rhs: Operand(stringLiteral: stringValue))
                 }
             case is Int:
                 if let intValue = anyCodable.value as? Int {
-                    return ComparisonExpression<MustacheToken, Int>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(integerLiteral: intValue))
+                    return ComparisonExpression(lhs: Operand<Int>(mustache: key), operationName: matcher, rhs: Operand(integerLiteral: intValue))
                 }
             case is Double:
                 if let doubleValue = anyCodable.value as? Double {
-                    return ComparisonExpression<MustacheToken, Double>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: doubleValue))
+                    return ComparisonExpression(lhs: Operand<Double>(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: doubleValue))
+                }
+            case is Bool:
+                if let boolValue = anyCodable.value as? Bool {
+                    return ComparisonExpression(lhs: Operand<Bool>(mustache: key), operationName: matcher, rhs: Operand(booleanLiteral: boolValue))
                 }
             /// rules engine doesn't accept `Float` type, so convert it to `Double` object here.
             case is Float:
                 if let floadValue = anyCodable.value as? Float {
-                    return ComparisonExpression<MustacheToken, Double>(lhs: Operand(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: Double(floadValue)))
+                    return ComparisonExpression(lhs: Operand<Float>(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: Double(floadValue)))
                 }
             default:
                 return nil
@@ -129,6 +139,7 @@ class JSONCondition: Codable {
         return nil
     }
 }
+
 
 struct JSONDefinition: Codable {
     let logic: String?
@@ -158,8 +169,9 @@ struct JSONConsequence: Codable {
         id = try? container.decode(String.self, forKey: .id)
         type = try? container.decode(String.self, forKey: .type)
         detail = try? container.decode(AnyCodable.self, forKey: .detail)
-        if let detail = detail {
-            detailDict = AnyCodable.toAnyDictionary(dictionary: ["detail": detail])
+        
+        if let detailDictionaryValue = detail?.dictionaryValue {
+            detailDict = detailDictionaryValue
         } else {
             detailDict = nil
         }

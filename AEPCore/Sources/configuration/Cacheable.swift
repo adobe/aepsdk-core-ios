@@ -14,9 +14,9 @@ import AEPServices
 
 /// Represents an Object which is Cachable via the CacheService
 protocol Cacheable {
-    
+    associatedtype T
     /// The cachable Dictionary
-    var cacheableDict: [String: AnyCodable] { get }
+    var cacheable:T  { get }
     
     /// Date this cachable was last modified on the server, read from the Last-Modified HTTP header
     /// Format: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
