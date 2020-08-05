@@ -23,7 +23,7 @@ governing permissions and limitations under the License.
 }
 
 + (void) registerExtension {
-    [ACPCore registerExtension:[AEPLifecycle class]];
+    [ACPCore registerExtension:[AEPLifecycle class] error:nil];
 }
 
 @end
