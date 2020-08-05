@@ -11,8 +11,9 @@ governing permissions and limitations under the License.
 */
 
 #import <Foundation/Foundation.h>
-#import "ACPLifecycle.h"
 #import <AEPLifecycle/AEPLifecycle-Swift.h>
+#import "ACPLifecycle.h"
+#import "ACPCore.h"
 
 @implementation ACPLifecycle
 
@@ -23,7 +24,7 @@ governing permissions and limitations under the License.
 }
 
 + (void) registerExtension {
-    
+    [ACPCore registerExtension:[AEPLifecycle class]];
 }
 
 @end

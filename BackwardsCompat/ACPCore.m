@@ -9,16 +9,27 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-// #import obj-c classes/headers
 #import <AEPCore/AEPCore-Swift.h>
-#import "AEPEvent+ACPCore.h"
 #import "ACPCore.h"
+#import "AEPEvent+ACPCore.h"
 #import "ACPError.h"
 
+
 #pragma mark - ACPCore Implementation
+
+static NSMutableArray *_pendingExtensions;
+
 @implementation ACPCore
 
 #pragma mark - Configuration
+
++ (void)registerExtension:(id<AEPExtension> _Nonnull) extension {
+    if (!_pendingExtensions) {
+        _pendingExtensions = [NSMutableArray array];
+    }
+    
+    [_pendingExtensions addObject:extension];
+}
 
 + (void) configureWithAppId: (NSString* __nullable) appid {
     [AEPCore configureWithAppId:appid];
@@ -79,7 +90,9 @@ governing permissions and limitations under the License.
 }
 
 + (void) start: (nullable void (^) (void)) callback {
-    [AEPCore start:callback];
+    [AEPCore registerExtensions:_pendingExtensions completion:^{
+        [_pendingExtensions removeAllObjects];
+    }];
 }
 
 #pragma mark - Generic Methods

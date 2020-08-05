@@ -77,6 +77,12 @@ typedef NS_ENUM(NSUInteger, ACPMobileWrapperType) {
 #pragma mark - Configuration
 
 /**
+ * @brief Registers an extension with the EventHub.
+ * Note: This API is not intended to be used publicly and is for internal use only.
+ */
++ (void)registerExtension:(id<AEPExtension> _Nonnull) extension;
+
+/**
  * @brief Load remote configuration specified by the given application ID
  *
  * Configure the SDK by downloading the remote configuration file hosted on Adobe servers
