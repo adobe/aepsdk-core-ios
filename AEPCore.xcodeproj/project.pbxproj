@@ -34,7 +34,7 @@
 		212182DF24DA647500FC49A2 /* AEPEvent+ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182DD24DA647500FC49A2 /* AEPEvent+ACPCore.h */; };
 		212182E024DA647500FC49A2 /* AEPEvent+ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */; };
 		212182E324DB21D200FC49A2 /* ACPLifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182E224DB21D200FC49A2 /* ACPLifecycle.m */; };
-		212182E524DB21D800FC49A2 /* ACPLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182E424DB21D800FC49A2 /* ACPLifecycle.h */; };
+		212182E524DB21D800FC49A2 /* ACPLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182E424DB21D800FC49A2 /* ACPLifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		212182EA24DB2DE200FC49A2 /* NSError+AEPError.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182E824DB2DE200FC49A2 /* NSError+AEPError.h */; };
 		212182EB24DB2DE200FC49A2 /* NSError+AEPError.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182E924DB2DE200FC49A2 /* NSError+AEPError.m */; };
 		212182F324DB324C00FC49A2 /* ACPExtensionEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */; };
@@ -44,10 +44,10 @@
 		212182FC24DB379700FC49A2 /* AEPPrivacyStatusConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182FA24DB379700FC49A2 /* AEPPrivacyStatusConverter.m */; };
 		212182FF24DB393100FC49A2 /* AEPWrapperTypeConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182FD24DB393100FC49A2 /* AEPWrapperTypeConverter.h */; };
 		2121830024DB393100FC49A2 /* AEPWrapperTypeConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182FE24DB393100FC49A2 /* AEPWrapperTypeConverter.m */; };
-		213BC27424D9DDB200EBEC13 /* ACPMobileVisitorId.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */; };
-		213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26B24D9DDB200EBEC13 /* ACPCore.h */; };
+		213BC27424D9DDB200EBEC13 /* ACPMobileVisitorId.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26B24D9DDB200EBEC13 /* ACPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		213BC27B24D9DDB200EBEC13 /* ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 213BC27024D9DDB200EBEC13 /* ACPCore.m */; };
-		213BC27D24D9DDB200EBEC13 /* ACPExtensionEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */; };
+		213BC27D24D9DDB200EBEC13 /* ACPExtensionEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F8A0324D8DC5A0003B8AF /* WrapperType.swift */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
@@ -2517,6 +2517,7 @@
 		21CAC0EB2422917600C11388 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2545,6 +2546,7 @@
 		21CAC0EC2422917600C11388 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2617,6 +2619,7 @@
 		24B4936024D4C31100AA38D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2644,6 +2647,7 @@
 		24B4936124D4C31100AA38D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2708,6 +2712,7 @@
 		3F03979824BE5DD30019F095 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2734,6 +2739,7 @@
 		3F03979924BE5DD30019F095 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2866,6 +2872,7 @@
 		3FE6DDE324C62EE60065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2892,6 +2899,7 @@
 		3FE6DDE424C62EE60065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2958,6 +2966,7 @@
 		3FE6DE4124C642330065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -2984,6 +2993,7 @@
 		3FE6DE4224C642330065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

@@ -10,6 +10,7 @@ governing permissions and limitations under the License.
 */
 
 #import <Foundation/Foundation.h>
+#import <AEPCore/AEPCore-Swift.h>
 
 #if TARGET_OS_IOS || TARGET_OS_WATCH
 @class UNNotificationResponse;
@@ -80,7 +81,7 @@ typedef NS_ENUM(NSUInteger, ACPMobileWrapperType) {
  * @brief Registers an extension with the EventHub.
  * Note: This API is not intended to be used publicly and is for internal use only.
  */
-+ (void)registerExtension:(id<AEPExtension> _Nonnull) extension;
++ (void)registerExtension:(nonnull id<AEPExtension>) extension;
 
 /**
  * @brief Load remote configuration specified by the given application ID
