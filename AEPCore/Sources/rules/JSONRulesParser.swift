@@ -68,7 +68,19 @@ enum ConditionType: String, Codable {
 }
 
 class JSONCondition: Codable {
-    static let matcherMapping = ["eq": "equals"]
+    static let matcherMapping = ["eq": "equals",
+                                 "ne": "notEquals",
+                                 "gt": "greaterThan",
+                                 "ge": "greaterEqual",
+                                 "lt": "lessThan",
+                                 "le": "lessEqual",
+                                 "co": "contains",
+                                 "nc": "notContains",
+                                 "sw": "startsWith",
+                                 "ew": "endsWith",
+                                 "ex": "exists",
+                                 "nx": "notExists"
+    ]
     
     var type: ConditionType
     var definition: JSONDefinition
