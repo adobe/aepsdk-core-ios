@@ -852,7 +852,7 @@
 				212182F824DB377500FC49A2 /* type bridges */,
 			);
 			name = migration;
-			path = BackwardsCompat;
+			path = AEPCore/Sources/migration;
 			sourceTree = "<group>";
 		};
 		21CAC0CC2422917600C11388 = {
