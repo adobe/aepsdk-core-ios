@@ -141,8 +141,8 @@ class JSONCondition: Codable {
                 }
             /// rules engine doesn't accept `Float` type, so convert it to `Double` object here.
             case is Float:
-                if let floadValue = anyCodable.value as? Float {
-                    return ComparisonExpression(lhs: Operand<Float>(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: Double(floadValue)))
+                if let floatValue = anyCodable.value as? Float {
+                    return ComparisonExpression(lhs: Operand<Float>(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: Double(floatValue)))
                 }
             default:
                 return nil

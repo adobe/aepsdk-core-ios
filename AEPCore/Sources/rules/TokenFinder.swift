@@ -34,7 +34,6 @@ extension String {
 /// Implementation of the `Traversable` protocol which will be used by `SwiftRulesEngine`
 class TokenFinder: Traversable {
     
-    
     private let TOKEN_KEY_EVENT_TYPE = "~type"
     private let TOKEN_KEY_EVENT_SOURCE = "~source"
     private let TOKEN_KEY_TIMESTAMP_UNIX = "~timestampu"
@@ -68,6 +67,8 @@ class TokenFinder: Traversable {
     }
     
     
+    /// Implement the `Traversable` protocol. Retrieve the token value for the specific key.
+    /// - Parameter key: the token name
     func get(key: String) -> Any? {
         switch key {
         case TOKEN_KEY_EVENT_TYPE:
@@ -142,15 +143,4 @@ class TokenFinder: Traversable {
         return nil
     }
     
-    private func generateEventDataKey(path: [String]) -> String? {
-        guard path.count > 0 else {
-            return nil
-        }
-        var key = ""
-        for item in path {
-            key += "\(item)."
-        }
-        key.removeLast()
-        return key
-    }
 }

@@ -86,7 +86,7 @@ struct LaunchRulesEngine {
                     eventData = originData as [String : Any]
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     if var originData = eventData as? [String:Any?], let newData =  consequenceWithConcreteValue.eventData{
-                        originData.mergeOverwrite(new: newData, deleteIfEmpty: false)
+                        originData.mergeOverwrite(new: newData, deleteIfEmpty: true)
                         eventData = originData as [String : Any]
                     }
                     default:
