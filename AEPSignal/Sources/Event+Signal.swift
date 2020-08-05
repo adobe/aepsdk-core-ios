@@ -15,14 +15,46 @@ import AEPCore
 
 extension Event {
     var isPostback: Bool {
-        return false
+        return consequenceType == SignalConstants.ConsequenceTypes.POSTBACK
     }
     
     var isOpenUrl: Bool {
-        return false
+        return consequenceType == SignalConstants.ConsequenceTypes.OPEN_URL
     }
     
     var isCollectPii: Bool {
-        return false
+        return consequenceType == SignalConstants.ConsequenceTypes.PII
+    }
+    
+    var contentType: String? {
+        return details?[SignalConstants.EventDataKeys.CONTENT_TYPE] as? String
+    }
+    
+    var templateUrl: String? {
+        return details?[SignalConstants.EventDataKeys.TEMPLATE_URL] as? String
+    }
+    
+    var templateBody: String? {
+        return details?[SignalConstants.EventDataKeys.TEMPLATE_BODY] as? String
+    }
+    
+    var timeout: TimeInterval? {
+        return details?[SignalConstants.EventDataKeys.TIMEOUT] as? TimeInterval
+    }
+    
+    var consequence: [String : Any]? {
+        return data?[SignalConstants.EventDataKeys.TRIGGERED_CONSEQUENCE] as? [String : Any]
+    }
+    
+    var consequenceId: String? {
+        return consequence?[SignalConstants.EventDataKeys.ID] as? String
+    }
+    
+    var consequenceType: String? {
+        return consequence?[SignalConstants.EventDataKeys.TYPE] as? String
+    }
+    
+    var details: [String : Any]? {
+        return consequence?[SignalConstants.EventDataKeys.DETAIL] as? [String : Any]
     }
 }

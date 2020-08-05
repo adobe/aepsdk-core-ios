@@ -93,13 +93,13 @@ public class Signal: NSObject, Extension {
     ///
     /// - Parameter event: the event containing postback definition
     private func handlePostback(event: Event) {
-        
+//        hitQueue.queue(entity: <#T##DataEntity#>)
     }
         
     private func handleOpenURL(event: Event) {
         
     }
-    
+        
     // MARK: - Helpers
     
     /// Determines if the event should be ignored by the Signal extension

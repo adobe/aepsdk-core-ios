@@ -52,6 +52,7 @@
 		24B4937124D4C86C00AA38D9 /* SignalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937024D4C86C00AA38D9 /* SignalConstants.swift */; };
 		24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */; };
 		24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */; };
+		24B4937A24DA18BE00AA38D9 /* SignalHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937924DA18BE00AA38D9 /* SignalHit.swift */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
 		3F0397C424BE5FF30019F095 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A124BE5FF30019F095 /* Cache.swift */; };
@@ -470,6 +471,7 @@
 		24B4937024D4C86C00AA38D9 /* SignalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalConstants.swift; sourceTree = "<group>"; };
 		24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Signal.swift"; sourceTree = "<group>"; };
 		24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessor.swift; sourceTree = "<group>"; };
+		24B4937924DA18BE00AA38D9 /* SignalHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHit.swift; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1033,6 +1035,7 @@
 				24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */,
 				24B4936E24D4C6F900AA38D9 /* Signal.swift */,
 				24B4937024D4C86C00AA38D9 /* SignalConstants.swift */,
+				24B4937924DA18BE00AA38D9 /* SignalHit.swift */,
 				24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */,
 			);
 			name = src;
@@ -1968,6 +1971,7 @@
 				24B4937124D4C86C00AA38D9 /* SignalConstants.swift in Sources */,
 				24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */,
 				24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */,
+				24B4937A24DA18BE00AA38D9 /* SignalHit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

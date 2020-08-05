@@ -25,11 +25,11 @@ struct SignalConstants {
     }
     
     struct Defaults {
-        static let TIMEOUT = 2
+        static let TIMEOUT: TimeInterval = 2
     }
     
     struct ConsequenceTypes {
-        static let POSTBACKS = "pb"
+        static let POSTBACK = "pb"
         static let PII = "pii"
         static let OPEN_URL = "url"
     }
@@ -41,5 +41,8 @@ struct SignalConstants {
         static let TEMPLATE_URL = "templateurl"
         static let TIMEOUT = "timeout"
         static let TRIGGERED_CONSEQUENCE = "triggeredconsequence"
+        static let ID = "id"
+        static let DETAIL = "detail"
+        static let TYPE = "type"
     }    
 }
