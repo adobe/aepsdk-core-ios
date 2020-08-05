@@ -15,7 +15,7 @@ import Foundation
 public protocol HitQueuing {
     
     /// The processor responsible for implementing the logic for processing an individual hit
-    var processor: HitProcessable { get }
+    var processor: HitProcessing { get }
     
     /// Queues a `DataEntity` to be processed
     /// - Parameters:

@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 @testable import AEPServices
 
-public class MockHitProcessor: HitProcessable {
+public class MockHitProcessor: HitProcessing {
     public var retryInterval: TimeInterval = 30
 
     public init() {}

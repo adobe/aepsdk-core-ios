@@ -17,7 +17,7 @@ import AEPServicesMock
 class PersistentHitQueueTests: XCTestCase {
 
     var hitQueue: PersistentHitQueue!
-    var hitProcessor: HitProcessable!
+    var hitProcessor: HitProcessing!
     var processedHits: [DataEntity] {
         guard let mockProcessor = hitProcessor as? MockHitProcessor else { return [] }
         return mockProcessor.processedHits.shallowCopy
@@ -172,7 +172,7 @@ class PersistentHitQueueTests: XCTestCase {
 
 }
 
-class MockHitProcessor: HitProcessable {
+class MockHitProcessor: HitProcessing {
     var retryInterval: TimeInterval = 1
     
     let processedHits = ThreadSafeArray<DataEntity>()
@@ -183,7 +183,7 @@ class MockHitProcessor: HitProcessable {
     }
 }
 
-class MockHitIntermittentProcessor: HitProcessable {
+class MockHitIntermittentProcessor: HitProcessing {
     var retryInterval: TimeInterval = 0
     
     let processedHits = ThreadSafeArray<DataEntity>()

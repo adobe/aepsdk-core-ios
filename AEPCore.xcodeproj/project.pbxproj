@@ -50,6 +50,8 @@
 		24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4935124D4C31100AA38D9 /* AEPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24B4936F24D4C6F900AA38D9 /* Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4936E24D4C6F900AA38D9 /* Signal.swift */; };
 		24B4937124D4C86C00AA38D9 /* SignalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937024D4C86C00AA38D9 /* SignalConstants.swift */; };
+		24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */; };
+		24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
 		3F0397C424BE5FF30019F095 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A124BE5FF30019F095 /* Cache.swift */; };
@@ -80,7 +82,7 @@
 		3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */; };
 		3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C024BE5FF30019F095 /* URLOpening.swift */; };
 		3F0397E024BE5FF30019F095 /* URLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397C124BE5FF30019F095 /* URLService.swift */; };
-		3F0397F224BE60910019F095 /* HitProcessable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E324BE60910019F095 /* HitProcessable.swift */; };
+		3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E324BE60910019F095 /* HitProcessing.swift */; };
 		3F0397F324BE60910019F095 /* PersistentHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E424BE60910019F095 /* PersistentHitQueue.swift */; };
 		3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E524BE60910019F095 /* HitQueuing.swift */; };
 		3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397E624BE60910019F095 /* AtomicCounter.swift */; };
@@ -466,6 +468,8 @@
 		24B4935E24D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		24B4936E24D4C6F900AA38D9 /* Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signal.swift; sourceTree = "<group>"; };
 		24B4937024D4C86C00AA38D9 /* SignalConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalConstants.swift; sourceTree = "<group>"; };
+		24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Signal.swift"; sourceTree = "<group>"; };
+		24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessor.swift; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -499,7 +503,7 @@
 		3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemInfoService.swift; sourceTree = "<group>"; };
 		3F0397C024BE5FF30019F095 /* URLOpening.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLOpening.swift; sourceTree = "<group>"; };
 		3F0397C124BE5FF30019F095 /* URLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLService.swift; sourceTree = "<group>"; };
-		3F0397E324BE60910019F095 /* HitProcessable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitProcessable.swift; sourceTree = "<group>"; };
+		3F0397E324BE60910019F095 /* HitProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitProcessing.swift; sourceTree = "<group>"; };
 		3F0397E424BE60910019F095 /* PersistentHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentHitQueue.swift; sourceTree = "<group>"; };
 		3F0397E524BE60910019F095 /* HitQueuing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HitQueuing.swift; sourceTree = "<group>"; };
 		3F0397E624BE60910019F095 /* AtomicCounter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AtomicCounter.swift; sourceTree = "<group>"; };
@@ -1026,8 +1030,10 @@
 			children = (
 				24B4935124D4C31100AA38D9 /* AEPSignal.h */,
 				24B4935224D4C31100AA38D9 /* Info.plist */,
+				24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */,
 				24B4936E24D4C6F900AA38D9 /* Signal.swift */,
 				24B4937024D4C86C00AA38D9 /* SignalConstants.swift */,
+				24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */,
 			);
 			name = src;
 			path = AEPSignal/Sources;
@@ -1123,7 +1129,7 @@
 		3F0397E224BE60910019F095 /* hitprocessor */ = {
 			isa = PBXGroup;
 			children = (
-				3F0397E324BE60910019F095 /* HitProcessable.swift */,
+				3F0397E324BE60910019F095 /* HitProcessing.swift */,
 				3F0397E524BE60910019F095 /* HitQueuing.swift */,
 				3F0397E424BE60910019F095 /* PersistentHitQueue.swift */,
 			);
@@ -1960,6 +1966,8 @@
 			files = (
 				24B4936F24D4C6F900AA38D9 /* Signal.swift in Sources */,
 				24B4937124D4C86C00AA38D9 /* SignalConstants.swift in Sources */,
+				24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */,
+				24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1978,7 +1986,7 @@
 				3F0397CE24BE5FF30019F095 /* LoggingService.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
-				3F0397F224BE60910019F095 /* HitProcessable.swift in Sources */,
+				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
 				3F0397FB24BE60910019F095 /* ThreadSafeArray.swift in Sources */,
 				BB00E27324D9C00F00C578C1 /* String+Equal.swift in Sources */,
 				3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */,
