@@ -24,17 +24,17 @@ use_frameworks!
 
 # for app development, include all the following pods
 target 'YOUR_TARGET_NAME' do
-    pod 'AEPServices', :git => 'git@github.com:shalehaha/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPCore', :git => 'git@github.com:shalehaha/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPLifecycle', :git => 'git@github.com:shalehaha/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPIdentity', :git => 'git@github.com:shalehaha/aepsdk-core-ios.git', :branch => 'main'
+    pod 'AEPServices', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
+    pod 'AEPCore', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
+    pod 'AEPLifecycle', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
+    pod 'AEPIdentity', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'main'
     pod 'SwiftRulesEngine', :git => 'git@github.com:adobe/aepsdk-rulesengine-ios.git', :branch => 'dev'
 end
 
 # for extension development, include AEPCore and its dependencies
 target 'YOUR_TARGET_NAME' do
-    pod 'AEPCore', :git => 'git@github.com:shalehaha/aepsdk-core-ios.git', :branch => 'build'
-    pod 'AEPServices', :git => 'git@github.com:shalehaha/aepsdk-core-ios.git', :branch => 'build'
+    pod 'AEPCore', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'build'
+    pod 'AEPServices', :git => 'git@github.com:adobe/aepsdk-core-ios.git', :branch => 'build'
     pod 'SwiftRulesEngine', :git => 'git@github.com:adobe/aepsdk-rulesengine-ios.git', :branch => 'dev'
 end
 ```
