@@ -61,9 +61,9 @@ class JSONRulesParserTests: XCTestCase {
         let levelThreeGroupAnd = levelTwoGroupOr.operands[0] as! LogicalExpression
         XCTAssertEqual("and", levelThreeGroupAnd.operationName)
 
-        XCTAssertTrue(levelThreeGroupAnd.operands[0] is ComparisonExpression<MustacheToken, String>)
-        let levelFourMatcherEQ = levelThreeGroupAnd.operands[0] as! ComparisonExpression<MustacheToken, String>
-        XCTAssertEqual("eq", levelFourMatcherEQ.operationName)
+        XCTAssertTrue(levelThreeGroupAnd.operands[0] is ComparisonExpression<String, String>)
+        let levelFourMatcherEQ = levelThreeGroupAnd.operands[0] as! ComparisonExpression<String, String>
+        XCTAssertEqual("equals", levelFourMatcherEQ.operationName)
         XCTAssertEqual("<Value:com.adobe.eventType.lifecycle>", levelFourMatcherEQ.rhs.description)
     }
 
