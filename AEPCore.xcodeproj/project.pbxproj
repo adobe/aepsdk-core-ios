@@ -31,13 +31,15 @@
 		2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02B24C9FF62002935CF /* MockPushIDManager.swift */; };
 		2107F02E24C9FF88002935CF /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02D24C9FF88002935CF /* SHA256.swift */; };
 		2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02F24C9FFB2002935CF /* SHA256Tests.swift */; };
-		212182DF24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182DD24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.h */; };
-		212182E024DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182DE24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.m */; };
+		212182DF24DA647500FC49A2 /* AEPEvent+ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182DD24DA647500FC49A2 /* AEPEvent+ACPCore.h */; };
+		212182E024DA647500FC49A2 /* AEPEvent+ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */; };
+		212182E324DB21D200FC49A2 /* ACPLifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182E224DB21D200FC49A2 /* ACPLifecycle.m */; };
+		212182E524DB21D800FC49A2 /* ACPLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182E424DB21D800FC49A2 /* ACPLifecycle.h */; };
 		213BC27424D9DDB200EBEC13 /* ACPMobileVisitorId.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */; };
 		213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26B24D9DDB200EBEC13 /* ACPCore.h */; };
 		213BC27724D9DDB200EBEC13 /* ACPError.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26C24D9DDB200EBEC13 /* ACPError.h */; };
 		213BC27B24D9DDB200EBEC13 /* ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 213BC27024D9DDB200EBEC13 /* ACPCore.m */; };
-		213BC27C24D9DDB200EBEC13 /* ACPError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 213BC27124D9DDB200EBEC13 /* ACPError.mm */; };
+		213BC27C24D9DDB200EBEC13 /* ACPError.m in Sources */ = {isa = PBXBuildFile; fileRef = 213BC27124D9DDB200EBEC13 /* ACPError.m */; };
 		213BC27D24D9DDB200EBEC13 /* ACPExtensionEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */; };
 		213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F8A0324D8DC5A0003B8AF /* WrapperType.swift */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
@@ -450,13 +452,15 @@
 		2107F02B24C9FF62002935CF /* MockPushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPushIDManager.swift; sourceTree = "<group>"; };
 		2107F02D24C9FF88002935CF /* SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
 		2107F02F24C9FFB2002935CF /* SHA256Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256Tests.swift; sourceTree = "<group>"; };
-		212182DD24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AEPEvent+AEPEvent_ACPCore.h"; sourceTree = "<group>"; };
-		212182DE24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AEPEvent+AEPEvent_ACPCore.m"; sourceTree = "<group>"; };
+		212182DD24DA647500FC49A2 /* AEPEvent+ACPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AEPEvent+ACPCore.h"; sourceTree = "<group>"; };
+		212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AEPEvent+ACPCore.m"; sourceTree = "<group>"; };
+		212182E224DB21D200FC49A2 /* ACPLifecycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPLifecycle.m; sourceTree = "<group>"; };
+		212182E424DB21D800FC49A2 /* ACPLifecycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPLifecycle.h; sourceTree = "<group>"; };
 		213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPMobileVisitorId.h; sourceTree = "<group>"; };
 		213BC26B24D9DDB200EBEC13 /* ACPCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPCore.h; sourceTree = "<group>"; };
 		213BC26C24D9DDB200EBEC13 /* ACPError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPError.h; sourceTree = "<group>"; };
 		213BC27024D9DDB200EBEC13 /* ACPCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPCore.m; sourceTree = "<group>"; };
-		213BC27124D9DDB200EBEC13 /* ACPError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ACPError.mm; sourceTree = "<group>"; };
+		213BC27124D9DDB200EBEC13 /* ACPError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPError.m; sourceTree = "<group>"; };
 		213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPExtensionEvent.h; sourceTree = "<group>"; };
 		213F8A0324D8DC5A0003B8AF /* WrapperType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperType.swift; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
@@ -793,17 +797,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		212182E124DB21BC00FC49A2 /* migration */ = {
+			isa = PBXGroup;
+			children = (
+				212182E224DB21D200FC49A2 /* ACPLifecycle.m */,
+				212182E424DB21D800FC49A2 /* ACPLifecycle.h */,
+			);
+			path = migration;
+			sourceTree = "<group>";
+		};
 		213BC26724D9DD3600EBEC13 /* migration */ = {
 			isa = PBXGroup;
 			children = (
 				213BC26B24D9DDB200EBEC13 /* ACPCore.h */,
 				213BC27024D9DDB200EBEC13 /* ACPCore.m */,
 				213BC26C24D9DDB200EBEC13 /* ACPError.h */,
-				213BC27124D9DDB200EBEC13 /* ACPError.mm */,
+				213BC27124D9DDB200EBEC13 /* ACPError.m */,
 				213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */,
 				213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */,
-				212182DD24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.h */,
-				212182DE24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.m */,
+				212182DD24DA647500FC49A2 /* AEPEvent+ACPCore.h */,
+				212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */,
 			);
 			name = migration;
 			path = BackwardsCompat;
@@ -967,6 +980,7 @@
 		24B4934624D23AB200AA38D9 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				212182E124DB21BC00FC49A2 /* migration */,
 				3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */,
 				3FE6DE0824C630EB0065EA05 /* Event+Lifecycle.swift */,
 				3FE6DDD424C62EE60065EA05 /* Info.plist */,
@@ -1427,7 +1441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				213BC27724D9DDB200EBEC13 /* ACPError.h in Headers */,
-				212182DF24DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.h in Headers */,
+				212182DF24DA647500FC49A2 /* AEPEvent+ACPCore.h in Headers */,
 				21CAC0E72422917600C11388 /* AEPCore.h in Headers */,
 				243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */,
 				213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */,
@@ -1464,6 +1478,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				212182E524DB21D800FC49A2 /* ACPLifecycle.h in Headers */,
 				3FE6DDE124C62EE60065EA05 /* AEPLifecycle.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1762,7 +1777,7 @@
 					};
 					3FE6DDD024C62EE60065EA05 = {
 						CreatedOnToolsVersion = 11.5;
-						LastSwiftMigration = 1150;
+						LastSwiftMigration = 1160;
 					};
 					3FE6DDD824C62EE60065EA05 = {
 						CreatedOnToolsVersion = 11.5;
@@ -1934,7 +1949,7 @@
 				3FB66AD124CA004400502CAF /* SharedState.swift in Sources */,
 				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				2467E43E24CB54B70022F6BE /* MockUnzipper.swift in Sources */,
-				212182E024DA647500FC49A2 /* AEPEvent+AEPEvent_ACPCore.m in Sources */,
+				212182E024DA647500FC49A2 /* AEPEvent+ACPCore.m in Sources */,
 				BB00E26924D8C94600C578C1 /* EventDataFlattener.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
@@ -1948,7 +1963,7 @@
 				3FB66ACE24CA004400502CAF /* ExtensionContainer.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
-				213BC27C24D9DDB200EBEC13 /* ACPError.mm in Sources */,
+				213BC27C24D9DDB200EBEC13 /* ACPError.m in Sources */,
 				3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */,
 				3FB66AD824CA004400502CAF /* Extension.swift in Sources */,
 				BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */,
@@ -2121,6 +2136,7 @@
 				3FE6DE1724C631100065EA05 /* LifecycleSession.swift in Sources */,
 				3FE6DE1024C630EB0065EA05 /* Event+Lifecycle.swift in Sources */,
 				3FE6DE1224C630EB0065EA05 /* Lifecycle.swift in Sources */,
+				212182E324DB21D200FC49A2 /* ACPLifecycle.m in Sources */,
 				3FE6DE1324C630EB0065EA05 /* LifecycleContextData.swift in Sources */,
 				3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */,
 				3FE6DE0E24C630EB0065EA05 /* LifecycleState.swift in Sources */,

@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 // #import obj-c classes/headers
 #import <AEPCore/AEPCore-Swift.h>
-#import "AEPEvent+AEPEvent_ACPCore.h"
+#import "AEPEvent+ACPCore.h"
 #import "ACPCore.h"
 #import "ACPError.h"
 
@@ -35,7 +35,7 @@ governing permissions and limitations under the License.
 }
 
 + (void) getSdkIdentitiesWithCompletionHandler: (nullable void (^) (NSString* __nullable content, NSError* _Nullable error)) callback {
-
+    // TODO
 }
 
 + (void) getPrivacyStatus: (nonnull void (^) (ACPMobilePrivacyStatus status)) callback {
@@ -49,7 +49,6 @@ governing permissions and limitations under the License.
         callback([self convertToACPPrivacyStatus:status], nil);
     }];
 }
-
 
 + (nonnull NSString*) extensionVersion {
     return [AEPCore extensionVersion];

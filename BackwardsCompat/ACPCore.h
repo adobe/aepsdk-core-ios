@@ -443,7 +443,7 @@ typedef NS_ENUM(NSUInteger, ACPMobileWrapperType) {
 @end
 
 /**
- *  @class ACPMobileVisitorId contains Visitor Id origin, identitfier type, identifier value and authentication state.
+ *  @class ACPMobileVisitorId contains Visitor Id origin, identifier type, identifier value and authentication state.
  *  @see getIdentifiers:
  */
 @interface ACPMobileVisitorId : NSObject
