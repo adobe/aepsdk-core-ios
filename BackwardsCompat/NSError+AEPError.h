@@ -9,23 +9,13 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-#ifndef ADOBEMOBILE_ACPERROR_H
-#define ADOBEMOBILE_ACPERROR_H
-
 #import <Foundation/Foundation.h>
+#import <AEPCore/AEPCore-Swift.h>
 
-extern NSString* _Nonnull const ACPErrorDomain;
+@interface NSError (AEPError)
 
-/**
- * @brief Errors that can be returned by either any of the 3rd party extension APIs.
- */
-typedef NS_ENUM(NSUInteger, ACPError) {
-    ACPErrorUnexpected = 0,
-    ACPErrorCallbackTimeout = 1,
-    ACPErrorCallbackNil = 2,
-    ACPErrorExtensionNotInitialized = 11,
-};
++ (NSError *)errorFromAEPError:(AEPError) aepError;
 
+@end
 
-#endif /* ADOBEMOBILE_ACPERROR_H */
 

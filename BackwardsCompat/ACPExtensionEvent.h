@@ -16,6 +16,8 @@ governing permissions and limitations under the License.
 
 @interface ACPExtensionEvent : NSObject {}
 
+- (nonnull id)initWithAEPEvent: (nonnull AEPEvent *) event;
+
 /**
  * @brief Create a new broadcast event.
  *

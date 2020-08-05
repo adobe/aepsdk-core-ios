@@ -12,8 +12,7 @@ governing permissions and limitations under the License.
 #import <AEPCore/AEPCore-Swift.h>
 #import "ACPCore.h"
 #import "AEPEvent+ACPCore.h"
-#import "ACPError.h"
-
+#import "NSError+AEPError.h"
 
 #pragma mark - ACPCore Implementation
 
@@ -46,7 +45,9 @@ static NSMutableArray *_pendingExtensions;
 }
 
 + (void) getSdkIdentitiesWithCompletionHandler: (nullable void (^) (NSString* __nullable content, NSError* _Nullable error)) callback {
-    // TODO
+    [AEPCore getSdkIdentities:^(NSString * _Nullable content, enum AEPError error) {
+        callback(content, [NSError errorFromAEPError:error]);
+    }];
 }
 
 + (void) getPrivacyStatus: (nonnull void (^) (ACPMobilePrivacyStatus status)) callback {
@@ -134,19 +135,26 @@ static NSMutableArray *_pendingExtensions;
                  error: (NSError* _Nullable* _Nullable) error {
     AEPEvent *convertedEvent = [[AEPEvent alloc] initWithACPEvent:event];
     [AEPCore dispatch:convertedEvent];
-    return YES; // TODO: Should the swift APIs return a boolean?
+    return YES;
 }
 
 + (BOOL) dispatchEventWithResponseCallback: (nonnull ACPExtensionEvent*) requestEvent
                           responseCallback: (nonnull void (^) (ACPExtensionEvent* _Nonnull responseEvent)) responseCallback
                                      error: (NSError* _Nullable* _Nullable) error {
     
-    return NO;
+    AEPEvent *convertedEvent = [[AEPEvent alloc] initWithACPEvent:requestEvent];
+    [AEPCore dispatch:convertedEvent responseCallback:^(AEPEvent * _Nullable responseEvent) {
+        ACPExtensionEvent *convertedResponseEvent = [[ACPExtensionEvent alloc] initWithAEPEvent:responseEvent];
+        responseCallback(convertedResponseEvent);
+    }];
+    
+    return YES;
 }
 
 + (BOOL) dispatchResponseEvent: (nonnull ACPExtensionEvent*) responseEvent
                   requestEvent: (nonnull ACPExtensionEvent*) requestEvent
                          error: (NSError* _Nullable* _Nullable) error {
+    // TODO
     return NO;
 }
 
@@ -219,32 +227,6 @@ static NSMutableArray *_pendingExtensions;
             break;
         default:
             return AEPPrivacyStatusUnknown;
-            break;
-    }
-}
-
-+ (ACPMobileWrapperType)covertToACPWrapperType: (AEPWrapperType) wrapperType {
-    switch (wrapperType) {
-        case AEPWrapperTypeNone:
-            return ACPMobileWrapperTypeNone;
-            break;
-        case AEPWrapperTypeReactNative:
-            return ACPMobileWrapperTypeReactNative;
-            break;
-        case AEPWrapperTypeFlutter:
-            return ACPMobileWrapperTypeFlutter;
-            break;
-        case AEPWrapperTypeCordova:
-            return ACPMobileWrapperTypeCordova;
-            break;
-        case AEPWrapperTypeUnity:
-            return ACPMobileWrapperTypeUnity;
-            break;
-        case AEPWrapperTypeXamarin:
-            return ACPMobileWrapperTypeXamarin;
-            break;
-        default:
-            return ACPMobileWrapperTypeNone;
             break;
     }
 }

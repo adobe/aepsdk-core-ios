@@ -35,11 +35,12 @@
 		212182E024DA647500FC49A2 /* AEPEvent+ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */; };
 		212182E324DB21D200FC49A2 /* ACPLifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182E224DB21D200FC49A2 /* ACPLifecycle.m */; };
 		212182E524DB21D800FC49A2 /* ACPLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182E424DB21D800FC49A2 /* ACPLifecycle.h */; };
+		212182EA24DB2DE200FC49A2 /* NSError+AEPError.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182E824DB2DE200FC49A2 /* NSError+AEPError.h */; };
+		212182EB24DB2DE200FC49A2 /* NSError+AEPError.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182E924DB2DE200FC49A2 /* NSError+AEPError.m */; };
+		212182F324DB324C00FC49A2 /* ACPExtensionEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */; };
 		213BC27424D9DDB200EBEC13 /* ACPMobileVisitorId.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */; };
 		213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26B24D9DDB200EBEC13 /* ACPCore.h */; };
-		213BC27724D9DDB200EBEC13 /* ACPError.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26C24D9DDB200EBEC13 /* ACPError.h */; };
 		213BC27B24D9DDB200EBEC13 /* ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 213BC27024D9DDB200EBEC13 /* ACPCore.m */; };
-		213BC27C24D9DDB200EBEC13 /* ACPError.m in Sources */ = {isa = PBXBuildFile; fileRef = 213BC27124D9DDB200EBEC13 /* ACPError.m */; };
 		213BC27D24D9DDB200EBEC13 /* ACPExtensionEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */; };
 		213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F8A0324D8DC5A0003B8AF /* WrapperType.swift */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
@@ -458,11 +459,12 @@
 		212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AEPEvent+ACPCore.m"; sourceTree = "<group>"; };
 		212182E224DB21D200FC49A2 /* ACPLifecycle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPLifecycle.m; sourceTree = "<group>"; };
 		212182E424DB21D800FC49A2 /* ACPLifecycle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPLifecycle.h; sourceTree = "<group>"; };
+		212182E824DB2DE200FC49A2 /* NSError+AEPError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSError+AEPError.h"; sourceTree = "<group>"; };
+		212182E924DB2DE200FC49A2 /* NSError+AEPError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSError+AEPError.m"; sourceTree = "<group>"; };
+		212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPExtensionEvent.m; sourceTree = "<group>"; };
 		213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPMobileVisitorId.h; sourceTree = "<group>"; };
 		213BC26B24D9DDB200EBEC13 /* ACPCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPCore.h; sourceTree = "<group>"; };
-		213BC26C24D9DDB200EBEC13 /* ACPError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPError.h; sourceTree = "<group>"; };
 		213BC27024D9DDB200EBEC13 /* ACPCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPCore.m; sourceTree = "<group>"; };
-		213BC27124D9DDB200EBEC13 /* ACPError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPError.m; sourceTree = "<group>"; };
 		213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPExtensionEvent.h; sourceTree = "<group>"; };
 		213F8A0324D8DC5A0003B8AF /* WrapperType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperType.swift; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
@@ -815,12 +817,13 @@
 			children = (
 				213BC26B24D9DDB200EBEC13 /* ACPCore.h */,
 				213BC27024D9DDB200EBEC13 /* ACPCore.m */,
-				213BC26C24D9DDB200EBEC13 /* ACPError.h */,
-				213BC27124D9DDB200EBEC13 /* ACPError.m */,
 				213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */,
+				212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */,
 				213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */,
 				212182DD24DA647500FC49A2 /* AEPEvent+ACPCore.h */,
 				212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */,
+				212182E824DB2DE200FC49A2 /* NSError+AEPError.h */,
+				212182E924DB2DE200FC49A2 /* NSError+AEPError.m */,
 			);
 			name = migration;
 			path = BackwardsCompat;
@@ -1446,12 +1449,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				213BC27724D9DDB200EBEC13 /* ACPError.h in Headers */,
 				212182DF24DA647500FC49A2 /* AEPEvent+ACPCore.h in Headers */,
 				21CAC0E72422917600C11388 /* AEPCore.h in Headers */,
 				243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */,
 				213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */,
 				213BC27424D9DDB200EBEC13 /* ACPMobileVisitorId.h in Headers */,
+				212182EA24DB2DE200FC49A2 /* NSError+AEPError.h in Headers */,
 				213BC27D24D9DDB200EBEC13 /* ACPExtensionEvent.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1968,13 +1971,14 @@
 				3FB66ACF24CA004400502CAF /* Event.swift in Sources */,
 				3FB66ACE24CA004400502CAF /* ExtensionContainer.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
+				212182F324DB324C00FC49A2 /* ACPExtensionEvent.m in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
-				213BC27C24D9DDB200EBEC13 /* ACPError.m in Sources */,
 				3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */,
 				3FB66AD824CA004400502CAF /* Extension.swift in Sources */,
 				BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */,
 				3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */,
 				3FB66AD224CA004400502CAF /* EventHub.swift in Sources */,
+				212182EB24DB2DE200FC49A2 /* NSError+AEPError.m in Sources */,
 				BB00E27224D9C00F00C578C1 /* String+Equal.swift in Sources */,
 				3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */,
 				3FB66ACC24CA004400502CAF /* EventHubPlaceholderExtension.swift in Sources */,
