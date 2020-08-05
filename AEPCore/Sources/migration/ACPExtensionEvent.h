@@ -16,6 +16,8 @@ governing permissions and limitations under the License.
 
 @interface ACPExtensionEvent : NSObject {}
 
+/// Creates a new `ACPExtensionEvent` where the underlying event is the `AEPEvent`
+/// @param event the event to populate this event's data
 - (nonnull id)initWithAEPEvent: (nonnull AEPEvent *) event;
 
 /**

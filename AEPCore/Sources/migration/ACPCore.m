@@ -96,6 +96,7 @@ static NSMutableArray *_pendingExtensions;
 + (void) start: (nullable void (^) (void)) callback {
     [AEPCore registerExtensions:_pendingExtensions completion:^{
         [_pendingExtensions removeAllObjects];
+        callback();
     }];
 }
 
