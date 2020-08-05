@@ -46,7 +46,9 @@ class RulesEngineFunctionalTests: XCTestCase {
         let expectedData = try? Data(contentsOf: filePath!)
         
        let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
-        ServiceProvider.shared.networkService = TestableNetworkService(mockRespsonse: (data: expectedData, respsonse: httpResponse, error: nil))
+        let mockNetworkService = TestableNetworkService()
+        mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
+        ServiceProvider.shared.networkService = mockNetworkService
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata":["carriername":"AT&T"]], status: .set))
         
         // test

@@ -12,23 +12,16 @@
 import Foundation
 import AEPServices
 
-enum MockResponses {
-    case success
-    case error
-    case notModified
-}
-
-struct TestableNetworkService: Networking {
+public class TestableNetworkService: Networking {
     
-    var mockRespsonse: (data:Data?, respsonse: HTTPURLResponse?, error: Error?)
+    public var mockRespsonse: (data:Data?, respsonse: HTTPURLResponse?, error: Error?)?
+    public var requests:[NetworkRequest] = []
     
-//    var expectedData = try? Data(contentsOf: RulesDownloaderTests.rulesUrl!)
-//
-//    let validResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
-//    let invalidResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 500, httpVersion: nil, headerFields: nil)
-//    let notModifiedResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 304, httpVersion: nil, headerFields: nil)
-    func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
-        let httpConnection = HttpConnection(data: mockRespsonse.data, response: mockRespsonse.respsonse, error: mockRespsonse.error)
+    
+    public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
+        requests.append(networkRequest)
+        
+        let httpConnection = HttpConnection(data: mockRespsonse?.data, response: mockRespsonse?.respsonse, error: mockRespsonse?.error)
         completionHandler!(httpConnection)
     }
 }
