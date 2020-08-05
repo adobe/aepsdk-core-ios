@@ -26,6 +26,7 @@ struct SignalConstants {
     
     struct Defaults {
         static let TIMEOUT: TimeInterval = 2
+        static let CONTENT_TYPE = "application/json"
     }
     
     struct ConsequenceTypes {
@@ -35,14 +36,16 @@ struct SignalConstants {
     }
     
     struct EventDataKeys {
-        static let CONTENT_TYPE = "contenttype"
-        static let CONTEXT_DATA = "contextdata"
-        static let TEMPLATE_BODY = "templatebody"
-        static let TEMPLATE_URL = "templateurl"
-        static let TIMEOUT = "timeout"
         static let TRIGGERED_CONSEQUENCE = "triggeredconsequence"
         static let ID = "id"
         static let DETAIL = "detail"
         static let TYPE = "type"
+        
+        static let CONTENT_TYPE = "contenttype"        
+        static let TEMPLATE_BODY = "templatebody"
+        static let TEMPLATE_URL = "templateurl"
+        static let TIMEOUT = "timeout"
+        
+        static let URL = "url"
     }    
 }

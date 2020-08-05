@@ -57,15 +57,15 @@ class SignalHitProcessor: HitProcessing {
     private func handleNetworkResponse(entity: DataEntity, hit: SignalHit, connection: HttpConnection, completion: @escaping (Bool) -> ()) {
         if connection.responseCode == 200 {
             // hit sent successfully
-            Log.debug(label: "\(LOG_TAG):\(#function)", "Signal request successfully sent: \(hit.url.absoluteString) sent successfully")
+            Log.debug(label: LOG_TAG, "Signal request successfully sent: \(hit.url.absoluteString) sent successfully")
             completion(true)
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
-            Log.warning(label: "\(LOG_TAG):\(#function)", "Signal request failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1), will retry sending the request later:  \(hit.url.absoluteString)")
+            Log.warning(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later:  \(hit.url.absoluteString)")
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
-            Log.warning(label: "\(LOG_TAG):\(#function)", "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(hit.url.absoluteString)")
+            Log.warning(label: LOG_TAG, "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(hit.url.absoluteString)")
             completion(true)
         }
     }

@@ -52,7 +52,7 @@ public class PersistentHitQueue: HitQueuing {
     private func processNextHit() {
         queue.async {
             guard !self.suspended else { return }
-            guard let hit = self.dataQueue.peek() else { return } // nothing let in the queue, stop processing
+            guard let hit = self.dataQueue.peek() else { return } // nothing left in the queue, stop processing
             
             self.processor.processHit(entity: hit, completion: { [weak self] (success) in
                 if success {

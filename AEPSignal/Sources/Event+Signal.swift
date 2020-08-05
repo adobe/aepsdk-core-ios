@@ -14,6 +14,7 @@ import Foundation
 import AEPCore
 
 extension Event {
+    // MARK: - Consequence Types
     var isPostback: Bool {
         return consequenceType == SignalConstants.ConsequenceTypes.POSTBACK
     }
@@ -26,6 +27,7 @@ extension Event {
         return consequenceType == SignalConstants.ConsequenceTypes.PII
     }
     
+    // MARK: - Postback/PII Consequences
     var contentType: String? {
         return details?[SignalConstants.EventDataKeys.CONTENT_TYPE] as? String
     }
@@ -42,19 +44,25 @@ extension Event {
         return details?[SignalConstants.EventDataKeys.TIMEOUT] as? TimeInterval
     }
     
-    var consequence: [String : Any]? {
+    // MARK: - Open URL Consequences
+    var urlToOpen: String? {
+        return details?[SignalConstants.EventDataKeys.URL] as? String
+    }
+    
+    // MARK: - Consequence EventData Processing
+    private var consequence: [String : Any]? {
         return data?[SignalConstants.EventDataKeys.TRIGGERED_CONSEQUENCE] as? [String : Any]
     }
     
-    var consequenceId: String? {
+    private var consequenceId: String? {
         return consequence?[SignalConstants.EventDataKeys.ID] as? String
     }
     
-    var consequenceType: String? {
+    private var consequenceType: String? {
         return consequence?[SignalConstants.EventDataKeys.TYPE] as? String
     }
     
-    var details: [String : Any]? {
+    private var details: [String : Any]? {
         return consequence?[SignalConstants.EventDataKeys.DETAIL] as? [String : Any]
     }
 }
