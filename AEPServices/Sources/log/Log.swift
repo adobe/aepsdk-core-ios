@@ -24,6 +24,7 @@ import Foundation
     /// - Parameters:
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
+    @objc(traceWithLabel:message:)
     public static func trace(label: String, _ message: String) {
         if logFilter <= .trace {
             loggingService.log(level: .trace, label: label, message: message)
@@ -34,6 +35,7 @@ import Foundation
     /// - Parameters:
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
+    @objc(debugWithLabel:message:)
     public static func debug(label: String, _ message: String) {
         if logFilter <= .debug {
             loggingService.log(level: .debug, label: label, message: message)
@@ -44,6 +46,7 @@ import Foundation
     /// - Parameters:
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
+    @objc(warningWithLabel:message:)
     public static func warning(label: String, _ message: String) {
         if logFilter <= .warning {
             loggingService.log(level: .warning, label: label, message: message)
@@ -54,6 +57,7 @@ import Foundation
     /// - Parameters:
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
+    @objc(errorWithLabel:message:)
     public static func error(label: String, _ message: String) {
         if logFilter <= .error {
             loggingService.log(level: .error, label: label, message: message)

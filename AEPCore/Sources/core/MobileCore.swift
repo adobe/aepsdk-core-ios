@@ -68,6 +68,7 @@ import AEPServices
     
     /// Start event processing
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
+    @objc(start:)
     public static func start(_ completion: @escaping (()-> Void)) {
         // Start the event hub processing
         let pending = MobileCore.pendingExtensions.shallowCopy

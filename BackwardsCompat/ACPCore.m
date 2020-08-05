@@ -1,20 +1,18 @@
 /*
-Copyright 2017 Adobe. All rights reserved.
+Copyright 2020 Adobe. All rights reserved.
 This file is licensed to you under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License. You may obtain a copy
 of the License at http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software distributed under
 the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
 
-
 // #import obj-c classes/headers
 #import <AEPCore/AEPCore-Swift.h>
+#import "AEPEvent+AEPEvent_ACPCore.h"
 #import "ACPCore.h"
-#import "ACPExtension.h"
 #import "ACPError.h"
 
 #pragma mark - ACPCore Implementation
@@ -77,17 +75,17 @@ governing permissions and limitations under the License.
 
 + (BOOL) registerExtension: (nonnull Class) extensionClass
                      error: (NSError* _Nullable* _Nullable) error {
-
+    // TODO
     return false;
 }
 
 + (void) start: (nullable void (^) (void)) callback {
-    // TODO
+    [AEPCore start:callback];
 }
 
 #pragma mark - Generic Methods
 + (void) collectPii: (nonnull NSDictionary<NSString*, NSString*>*) data {
-
+    // TODO
 }
 
 + (void) lifecyclePause {
@@ -122,12 +120,15 @@ governing permissions and limitations under the License.
 
 + (BOOL) dispatchEvent: (nonnull ACPExtensionEvent*) event
                  error: (NSError* _Nullable* _Nullable) error {
-    return NO;
+    AEPEvent *convertedEvent = [[AEPEvent alloc] initWithACPEvent:event];
+    [AEPCore dispatch:convertedEvent];
+    return YES; // TODO: Should the swift APIs return a boolean?
 }
 
 + (BOOL) dispatchEventWithResponseCallback: (nonnull ACPExtensionEvent*) requestEvent
                           responseCallback: (nonnull void (^) (ACPExtensionEvent* _Nonnull responseEvent)) responseCallback
                                      error: (NSError* _Nullable* _Nullable) error {
+    
     return NO;
 }
 
@@ -152,7 +153,22 @@ governing permissions and limitations under the License.
 }
 
 + (void) log: (ACPMobileLogLevel) logLevel tag: (nonnull NSString*) tag message: (nonnull NSString*) message {
-    // TODO:
+    switch (logLevel) {
+        case ACPMobileLogLevelVerbose:
+            [AEPLog traceWithLabel:tag message:message];
+            break;
+        case ACPMobileLogLevelDebug:
+            [AEPLog debugWithLabel:tag message:message];
+            break;
+        case ACPMobileLogLevelWarning:
+            [AEPLog warningWithLabel:tag message:message];
+            break;
+        case ACPMobileLogLevelError:
+            [AEPLog errorWithLabel:tag message:message];
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - Rules Engine
@@ -249,6 +265,9 @@ governing permissions and limitations under the License.
 
 + (AEPLogLevel)convertToAEPLogLevel: (ACPMobileLogLevel) logLevel {
     switch (logLevel) {
+        case ACPMobileLogLevelVerbose:
+            return AEPLogLevelTrace;
+            break;
         case ACPMobileLogLevelDebug:
             return AEPLogLevelDebug;
             break;
@@ -266,6 +285,9 @@ governing permissions and limitations under the License.
 
 + (ACPMobileLogLevel)convertToACPLogLevel: (AEPLogLevel) logLevel {
     switch (logLevel) {
+        case AEPLogLevelTrace:
+            return ACPMobileLogLevelVerbose;
+            break;
         case AEPLogLevelDebug:
             return ACPMobileLogLevelDebug;
             break;
