@@ -38,6 +38,12 @@
 		212182EA24DB2DE200FC49A2 /* NSError+AEPError.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182E824DB2DE200FC49A2 /* NSError+AEPError.h */; };
 		212182EB24DB2DE200FC49A2 /* NSError+AEPError.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182E924DB2DE200FC49A2 /* NSError+AEPError.m */; };
 		212182F324DB324C00FC49A2 /* ACPExtensionEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */; };
+		212182F624DB371200FC49A2 /* AEPLogLevelConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182F424DB371200FC49A2 /* AEPLogLevelConverter.h */; };
+		212182F724DB371200FC49A2 /* AEPLogLevelConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182F524DB371200FC49A2 /* AEPLogLevelConverter.m */; };
+		212182FB24DB379700FC49A2 /* AEPPrivacyStatusConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182F924DB379700FC49A2 /* AEPPrivacyStatusConverter.h */; };
+		212182FC24DB379700FC49A2 /* AEPPrivacyStatusConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182FA24DB379700FC49A2 /* AEPPrivacyStatusConverter.m */; };
+		212182FF24DB393100FC49A2 /* AEPWrapperTypeConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 212182FD24DB393100FC49A2 /* AEPWrapperTypeConverter.h */; };
+		2121830024DB393100FC49A2 /* AEPWrapperTypeConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = 212182FE24DB393100FC49A2 /* AEPWrapperTypeConverter.m */; };
 		213BC27424D9DDB200EBEC13 /* ACPMobileVisitorId.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */; };
 		213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 213BC26B24D9DDB200EBEC13 /* ACPCore.h */; };
 		213BC27B24D9DDB200EBEC13 /* ACPCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 213BC27024D9DDB200EBEC13 /* ACPCore.m */; };
@@ -462,6 +468,12 @@
 		212182E824DB2DE200FC49A2 /* NSError+AEPError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSError+AEPError.h"; sourceTree = "<group>"; };
 		212182E924DB2DE200FC49A2 /* NSError+AEPError.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSError+AEPError.m"; sourceTree = "<group>"; };
 		212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPExtensionEvent.m; sourceTree = "<group>"; };
+		212182F424DB371200FC49A2 /* AEPLogLevelConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPLogLevelConverter.h; sourceTree = "<group>"; };
+		212182F524DB371200FC49A2 /* AEPLogLevelConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AEPLogLevelConverter.m; sourceTree = "<group>"; };
+		212182F924DB379700FC49A2 /* AEPPrivacyStatusConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPPrivacyStatusConverter.h; sourceTree = "<group>"; };
+		212182FA24DB379700FC49A2 /* AEPPrivacyStatusConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AEPPrivacyStatusConverter.m; sourceTree = "<group>"; };
+		212182FD24DB393100FC49A2 /* AEPWrapperTypeConverter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPWrapperTypeConverter.h; sourceTree = "<group>"; };
+		212182FE24DB393100FC49A2 /* AEPWrapperTypeConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AEPWrapperTypeConverter.m; sourceTree = "<group>"; };
 		213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPMobileVisitorId.h; sourceTree = "<group>"; };
 		213BC26B24D9DDB200EBEC13 /* ACPCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPCore.h; sourceTree = "<group>"; };
 		213BC27024D9DDB200EBEC13 /* ACPCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPCore.m; sourceTree = "<group>"; };
@@ -812,6 +824,23 @@
 			path = migration;
 			sourceTree = "<group>";
 		};
+		212182F824DB377500FC49A2 /* type bridges */ = {
+			isa = PBXGroup;
+			children = (
+				212182F424DB371200FC49A2 /* AEPLogLevelConverter.h */,
+				212182F524DB371200FC49A2 /* AEPLogLevelConverter.m */,
+				212182F924DB379700FC49A2 /* AEPPrivacyStatusConverter.h */,
+				212182FA24DB379700FC49A2 /* AEPPrivacyStatusConverter.m */,
+				212182FD24DB393100FC49A2 /* AEPWrapperTypeConverter.h */,
+				212182FE24DB393100FC49A2 /* AEPWrapperTypeConverter.m */,
+				212182DD24DA647500FC49A2 /* AEPEvent+ACPCore.h */,
+				212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */,
+				212182E824DB2DE200FC49A2 /* NSError+AEPError.h */,
+				212182E924DB2DE200FC49A2 /* NSError+AEPError.m */,
+			);
+			path = "type bridges";
+			sourceTree = "<group>";
+		};
 		213BC26724D9DD3600EBEC13 /* migration */ = {
 			isa = PBXGroup;
 			children = (
@@ -820,10 +849,7 @@
 				213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */,
 				212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */,
 				213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */,
-				212182DD24DA647500FC49A2 /* AEPEvent+ACPCore.h */,
-				212182DE24DA647500FC49A2 /* AEPEvent+ACPCore.m */,
-				212182E824DB2DE200FC49A2 /* NSError+AEPError.h */,
-				212182E924DB2DE200FC49A2 /* NSError+AEPError.m */,
+				212182F824DB377500FC49A2 /* type bridges */,
 			);
 			name = migration;
 			path = BackwardsCompat;
@@ -1449,11 +1475,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				212182FF24DB393100FC49A2 /* AEPWrapperTypeConverter.h in Headers */,
 				212182DF24DA647500FC49A2 /* AEPEvent+ACPCore.h in Headers */,
 				21CAC0E72422917600C11388 /* AEPCore.h in Headers */,
 				243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */,
 				213BC27624D9DDB200EBEC13 /* ACPCore.h in Headers */,
+				212182F624DB371200FC49A2 /* AEPLogLevelConverter.h in Headers */,
 				213BC27424D9DDB200EBEC13 /* ACPMobileVisitorId.h in Headers */,
+				212182FB24DB379700FC49A2 /* AEPPrivacyStatusConverter.h in Headers */,
 				212182EA24DB2DE200FC49A2 /* NSError+AEPError.h in Headers */,
 				213BC27D24D9DDB200EBEC13 /* ACPExtensionEvent.h in Headers */,
 			);
@@ -1972,9 +2001,11 @@
 				3FB66ACE24CA004400502CAF /* ExtensionContainer.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
 				212182F324DB324C00FC49A2 /* ACPExtensionEvent.m in Sources */,
+				212182FC24DB379700FC49A2 /* AEPPrivacyStatusConverter.m in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
 				3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */,
 				3FB66AD824CA004400502CAF /* Extension.swift in Sources */,
+				2121830024DB393100FC49A2 /* AEPWrapperTypeConverter.m in Sources */,
 				BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */,
 				3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */,
 				3FB66AD224CA004400502CAF /* EventHub.swift in Sources */,
@@ -1982,6 +2013,7 @@
 				BB00E27224D9C00F00C578C1 /* String+Equal.swift in Sources */,
 				3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */,
 				3FB66ACC24CA004400502CAF /* EventHubPlaceholderExtension.swift in Sources */,
+				212182F724DB371200FC49A2 /* AEPLogLevelConverter.m in Sources */,
 				3FB66AE824CA004400502CAF /* Cacheable.swift in Sources */,
 				3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */,
 				3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,

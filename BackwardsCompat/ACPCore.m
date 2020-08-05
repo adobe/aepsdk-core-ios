@@ -13,6 +13,9 @@ governing permissions and limitations under the License.
 #import "ACPCore.h"
 #import "AEPEvent+ACPCore.h"
 #import "NSError+AEPError.h"
+#import "AEPLogLevelConverter.h"
+#import "AEPPrivacyStatusConverter.h"
+#import "AEPWrapperTypeConverter.h"
 
 #pragma mark - ACPCore Implementation
 
@@ -52,13 +55,13 @@ static NSMutableArray *_pendingExtensions;
 
 + (void) getPrivacyStatus: (nonnull void (^) (ACPMobilePrivacyStatus status)) callback {
     [AEPCore getPrivacyStatus:^(enum AEPPrivacyStatus status) {
-        callback([self convertToACPPrivacyStatus:status]);
+        callback([AEPPrivacyStatusConverter convertToACPPrivacyStatus:status]);
     }];
 }
 
 + (void) getPrivacyStatusWithCompletionHandler: (nonnull void (^) (ACPMobilePrivacyStatus status, NSError* _Nullable error)) callback {
     [AEPCore getPrivacyStatus:^(enum AEPPrivacyStatus status) {
-        callback([self convertToACPPrivacyStatus:status], nil);
+        callback([AEPPrivacyStatusConverter convertToACPPrivacyStatus:status], nil);
     }];
 }
 
@@ -71,11 +74,11 @@ static NSMutableArray *_pendingExtensions;
 }
 
 + (void) setLogLevel: (ACPMobileLogLevel) logLevel {
-    [AEPCore setLogLevel:[self convertToAEPLogLevel:logLevel]];
+    [AEPCore setLogLevel:[AEPLogLevelConverter convertToAEPLogLevel:logLevel]];
 }
 
 + (void) setPrivacyStatus: (ACPMobilePrivacyStatus) status {
-    [AEPCore setPrivacy:[self convertToAEPPrivacyStatus:status]];
+    [AEPCore setPrivacy:[AEPPrivacyStatusConverter convertToAEPPrivacyStatus:status]];
 }
 
 + (void) updateConfiguration: (NSDictionary* __nullable) config {
@@ -169,7 +172,7 @@ static NSMutableArray *_pendingExtensions;
 #pragma mark - Logging Utilities
 
 + (ACPMobileLogLevel) logLevel {
-    return [self convertToACPLogLevel:[AEPLog logFilter]];
+    return [AEPLogLevelConverter convertToACPLogLevel:[AEPLog logFilter]];
 }
 
 + (void) log: (ACPMobileLogLevel) logLevel tag: (nonnull NSString*) tag message: (nonnull NSString*) message {
@@ -200,101 +203,7 @@ static NSMutableArray *_pendingExtensions;
 #pragma mark - Wrapper Support
 
 + (void) setWrapperType: (ACPMobileWrapperType) wrapperType {
-    [AEPCore setWrapperType:[self covertToAEPWrapperType:wrapperType]];
-}
-
-+ (ACPMobilePrivacyStatus)convertToACPPrivacyStatus: (AEPPrivacyStatus) privacyStatus {
-    switch (privacyStatus) {
-        case AEPPrivacyStatusOptedIn:
-            return ACPMobilePrivacyStatusOptIn;
-            break;
-        case AEPPrivacyStatusOptedOut:
-            return ACPMobilePrivacyStatusOptOut;
-            break;
-        default:
-            return ACPMobilePrivacyStatusUnknown;
-            break;
-    }
-}
-
-+ (AEPPrivacyStatus)convertToAEPPrivacyStatus: (ACPMobilePrivacyStatus) privacyStatus {
-    switch (privacyStatus) {
-        case ACPMobilePrivacyStatusOptIn:
-            return AEPPrivacyStatusOptedIn;
-            break;
-        case ACPMobilePrivacyStatusOptOut:
-            return AEPPrivacyStatusOptedOut;
-            break;
-        default:
-            return AEPPrivacyStatusUnknown;
-            break;
-    }
-}
-
-+ (AEPWrapperType)covertToAEPWrapperType: (ACPMobileWrapperType) wrapperType {
-    switch (wrapperType) {
-        case ACPMobileWrapperTypeNone:
-            return AEPWrapperTypeNone;
-            break;
-        case ACPMobileWrapperTypeReactNative:
-            return AEPWrapperTypeReactNative;
-            break;
-        case ACPMobileWrapperTypeFlutter:
-            return AEPWrapperTypeFlutter;
-            break;
-        case ACPMobileWrapperTypeCordova:
-            return AEPWrapperTypeCordova;
-            break;
-        case ACPMobileWrapperTypeUnity:
-            return AEPWrapperTypeUnity;
-            break;
-        case ACPMobileWrapperTypeXamarin:
-            return AEPWrapperTypeXamarin;
-            break;
-        default:
-            return AEPWrapperTypeNone;
-            break;
-    }
-}
-
-+ (AEPLogLevel)convertToAEPLogLevel: (ACPMobileLogLevel) logLevel {
-    switch (logLevel) {
-        case ACPMobileLogLevelVerbose:
-            return AEPLogLevelTrace;
-            break;
-        case ACPMobileLogLevelDebug:
-            return AEPLogLevelDebug;
-            break;
-        case ACPMobileLogLevelWarning:
-            return AEPLogLevelWarning;
-            break;
-        case ACPMobileLogLevelError:
-            return AEPLogLevelError;
-            break;
-        default:
-            return AEPLogLevelError;
-            break;
-    }
-}
-
-+ (ACPMobileLogLevel)convertToACPLogLevel: (AEPLogLevel) logLevel {
-    switch (logLevel) {
-        case AEPLogLevelTrace:
-            return ACPMobileLogLevelVerbose;
-            break;
-        case AEPLogLevelDebug:
-            return ACPMobileLogLevelDebug;
-            break;
-        case AEPLogLevelWarning:
-            return ACPMobileLogLevelWarning;
-            break;
-        case AEPLogLevelError:
-            return ACPMobileLogLevelError;
-            break;
-        default:
-            return ACPMobileLogLevelError;
-            break;
-    }
+    [AEPCore setWrapperType:[AEPWrapperTypeConverter covertToAEPWrapperType:wrapperType]];
 }
 
 @end
