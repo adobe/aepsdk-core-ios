@@ -12,6 +12,7 @@
 
 import Foundation
 
+
 // TODO: - Confirm optional Any as the expected value type for this
 extension Dictionary where Key == String, Value == Any? {
     private static let SUFFIX_FOR_OBJECT = "[*]"

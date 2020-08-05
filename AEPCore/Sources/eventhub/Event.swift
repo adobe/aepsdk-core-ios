@@ -29,7 +29,7 @@ import AEPServices
     @objc public let source: String
     
     /// Optional data associated with this event
-    @objc public let data: [String: Any]?
+    @objc public internal(set) var data: [String: Any]?
     
     /// Date this event was created
     @objc public private(set) var timestamp = Date()

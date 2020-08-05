@@ -35,15 +35,36 @@ struct LaunchRulesEngine {
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
     }
-
+    
+    func trace(with tracer: @escaping RulesTracer){
+        rulesEngine.trace(with: tracer)
+    }
+    
     /// Downloads the rules from the remote server
     /// - Parameter url: the `URL` of the remote urls
-    func loadRemoteRules(from url: URL) {}
-
+    func loadRemoteRules(from url: URL) {
+        rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
+            guard let data = data else{
+                return
+            }
+            
+            let rules = JSONRulesParser.parse(data)
+            self.rulesEngine.addRules(rules: rules)
+            
+        }
+    }
+    
     /// Reads the cached rules
     /// - Parameter url: the `URL` of the remote urls
-    func loadCachedRules(for url: URL) {}
+    func loadCachedRules(for url: URL) {
+        guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else{
+            return
+        }
 
+        let rules = JSONRulesParser.parse(data)
+        self.rulesEngine.addRules(rules: rules)
+    }
+    
     /// Evaluates all the current rules against the supplied `Event`.
     /// - Parameters:
     ///   - event: the `Event` against which to evaluate the rules
@@ -52,21 +73,30 @@ struct LaunchRulesEngine {
     func process(event: Event) -> Event {
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         let rules = rulesEngine.evaluate(data: traversableTokenFinder)
+        var eventData = event.data
         for rule in rules {
             for consequence in rule.consequences {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
-                    attachDataEvent(event: event, consequenceWithConcreteValue: consequenceWithConcreteValue)
+                    guard var originData = consequenceWithConcreteValue.eventData else{
+                        continue
+                    }
+                    originData.mergeOverwrite(new: eventData ?? [:], deleteIfEmpty: false)
+                    eventData = originData as [String : Any]
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
-                    modifyDataEvent(event: event, consequenceWithConcreteValue: consequenceWithConcreteValue)
-                default:
+                    if var originData = eventData as? [String:Any?], let newData =  consequenceWithConcreteValue.eventData{
+                        originData.mergeOverwrite(new: newData, deleteIfEmpty: true)
+                        eventData = originData as [String : Any]
+                    }
+                    default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         extensionRuntime.dispatch(event: event)
                     }
                 }
             }
         }
+        event.data = eventData
         return event
     }
 
@@ -79,8 +109,8 @@ struct LaunchRulesEngine {
         let dict = replaceToken(in: consequence.detailDict, data: data)
         return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }
-
-    private func replaceToken(in dict: [String: Any], data: Traversable) -> [String: Any] {
+    
+    private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
         var mutableDict = dict
         for (key, value) in mutableDict {
             switch value {
@@ -111,11 +141,5 @@ struct LaunchRulesEngine {
         return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: dict)
     }
 
-    private func attachDataEvent(event: Event, consequenceWithConcreteValue: Consequence) {
-        // TODO: attach data to the incoming event
-    }
 
-    private func modifyDataEvent(event: Event, consequenceWithConcreteValue: Consequence) {
-        // TODO: modify data of the incoming event
-    }
 }

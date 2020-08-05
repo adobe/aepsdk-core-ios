@@ -16,39 +16,39 @@ import Foundation
 public struct AnyCodable: Codable {
     public let value: Any?
 
-    var stringValue: String? {
+    public var stringValue: String? {
         return value as? String
     }
     
-    var boolValue: Bool? {
+    public var boolValue: Bool? {
         return value as? Bool
     }
     
-    var intValue: Int? {
+    public var intValue: Int? {
         return value as? Int
     }
     
-    var longValue: Int64? {
+    public var longValue: Int64? {
         return value as? Int64
     }
     
-    var floatValue: Float? {
+    public var floatValue: Float? {
         return value as? Float
     }
     
-    var doubleValue: Double? {
+    public var doubleValue: Double? {
         return value as? Double
     }
     
-    var arrayValue: [Any]? {
+    public var arrayValue: [Any]? {
         return value as? [Any]
     }
     
-    var dictionaryValue: [String: Any]? {
+    public var dictionaryValue: [String: Any]? {
         return value as? [String: Any]
     }
     
-    var dataValue: Data? {
+    public var dataValue: Data? {
         return value as? Data
     }
     

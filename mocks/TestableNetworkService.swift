@@ -10,13 +10,18 @@
  */
 
 import Foundation
+import AEPServices
 
-extension Array {
-    /// Accesses the element at the specified position safely (return nil if provided index is invalid).
-    public subscript(safe index: Int) -> Element? {
-        guard count > index else {
-            return nil
-        }
-        return self[index]
+public class TestableNetworkService: Networking {
+    
+    public var mockRespsonse: (data:Data?, respsonse: HTTPURLResponse?, error: Error?)?
+    public var requests:[NetworkRequest] = []
+    
+    
+    public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
+        requests.append(networkRequest)
+        
+        let httpConnection = HttpConnection(data: mockRespsonse?.data, response: mockRespsonse?.respsonse, error: mockRespsonse?.error)
+        completionHandler!(httpConnection)
     }
 }
