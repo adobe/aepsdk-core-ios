@@ -31,7 +31,7 @@ class IdentityTests: XCTestCase {
     /// Tests that when identity receives a identity request identity event with the base url that we dispatch a response event with the updated url
     func testIdentityRequestAppendUrlHappy() {
         // setup
-        let appendUrlEvent = Event(name: "Test Append URL Event", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
         mockRuntime.simulateSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: appendUrlEvent, data: (["testKey":"testVal"], .set))
         
         // test
@@ -46,7 +46,7 @@ class IdentityTests: XCTestCase {
     /// Tests that when identity receives a identity request identity event and no config is available that we do not dispatch a response event
     func testIdentityRequestAppendUrlNoConfig() {
         // setup
-        let appendUrlEvent = Event(name: "Test Append URL Event", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
         
         // test
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
@@ -59,7 +59,7 @@ class IdentityTests: XCTestCase {
     /// Tests that when identity receives a identity request identity event with url variables that we dispatch a response event with the url variables
     func testIdentityRequestGetUrlVariablesHappy() {
         // setup
-        let appendUrlEvent = Event(name: "Test Get URL Variables Event", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+        let appendUrlEvent = Event(name: "Test Get URL Variables Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         mockRuntime.simulateSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: appendUrlEvent, data: (["testKey":"testVal"], .set))
         
         // test
@@ -74,7 +74,7 @@ class IdentityTests: XCTestCase {
     /// Tests that when identity receives a identity request identity event and no config is available that we do not dispatch a response event
     func testIdentityRequestGetUrlVariablesEmptyConfig() {
         // setup
-        let appendUrlEvent = Event(name: "Test Get URL Variables Event", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+        let appendUrlEvent = Event(name: "Test Get URL Variables Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
         // test
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
@@ -87,7 +87,7 @@ class IdentityTests: XCTestCase {
     /// Tests that when identity receives a identity request identity event with empty event data that we dispatch a response event with the identifiers
     func testIdentityRequestIdentifiersHappy() {
         // setup
-        let appendUrlEvent = Event(name: "Test Request Identifiers", type: .identity, source: .requestIdentity, data: nil)
+        let appendUrlEvent = Event(name: "Test Request Identifiers", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         mockRuntime.simulateSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: appendUrlEvent, data: (["testKey":"testVal"], .set))
         
         // test
@@ -102,7 +102,7 @@ class IdentityTests: XCTestCase {
     /// Tests that when identity receives a identity request identity event with empty event data and no config that we dispatch a response event with the identifiers
     func testIdentityRequestIdentifiersNoConfig() {
         // setup
-        let appendUrlEvent = Event(name: "Test Request Identifiers", type: .identity, source: .requestIdentity, data: nil)
+        let appendUrlEvent = Event(name: "Test Request Identifiers", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         
         // test
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
@@ -124,7 +124,7 @@ class IdentityTests: XCTestCase {
         
         let testOrgId = "testOrgId"
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
-        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
         // test
@@ -147,7 +147,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
 
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue] as [String : Any]
-        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
         // test
@@ -170,7 +170,7 @@ class IdentityTests: XCTestCase {
         
         let testOrgId = "testOrgId"
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
-        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
         // test
@@ -194,7 +194,7 @@ class IdentityTests: XCTestCase {
         
         let testOrgId = "testOrgId"
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
-        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
         // test
@@ -219,7 +219,7 @@ class IdentityTests: XCTestCase {
         
         let testOrgId = "testOrgId"
         let data = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String : Any]
-        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
         // test
@@ -241,7 +241,7 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
         
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue] as [String : Any]
-        let event = Event(name: "Test Configuration response", type: .configuration, source: .responseContent, data: data)
+        let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
         
         // test

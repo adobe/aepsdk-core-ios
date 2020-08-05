@@ -42,7 +42,7 @@ class MobileCore_IdentityTests: XCTestCase {
         
         EventHub.shared.start()
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual("test-ad-id", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
@@ -65,7 +65,7 @@ class MobileCore_IdentityTests: XCTestCase {
         
         EventHub.shared.start()
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual("", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
@@ -91,7 +91,7 @@ class MobileCore_IdentityTests: XCTestCase {
         let pushIdData = "test-push-id".data(using: .utf8)!
         let encodedPushId = "746573742d707573682d6964"
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
             expectation.fulfill()
         })
@@ -115,7 +115,7 @@ class MobileCore_IdentityTests: XCTestCase {
         let pushIdData = "".data(using: .utf8)!
         let encodedPushId = ""
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
             expectation.fulfill()
         })
@@ -138,7 +138,7 @@ class MobileCore_IdentityTests: XCTestCase {
         EventHub.shared.start()
         let encodedPushId = ""
         
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: .genericIdentity, source: .requestContent, listener: { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
             expectation.fulfill()
         })

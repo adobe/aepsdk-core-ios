@@ -13,13 +13,13 @@
 import Foundation
 
 /// provides all the methods needed by an `Extension`
-@objc public protocol ExtensionRuntime {
+@objc(AEPExtensionRuntime) public protocol ExtensionRuntime {
     /// Registers an `EventListener` for the specified `EventType` and `EventSource`
     /// - Parameters:
     ///   - type: `EventType` to listen for
     ///   - source: `EventSource` to listen for
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives an `Event` matching `type` and `source`
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener)
+    func registerListener(type: String, source: String, listener: @escaping EventListener)
 
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`

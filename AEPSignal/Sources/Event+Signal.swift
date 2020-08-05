@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -11,13 +11,18 @@
  */
 
 import Foundation
+import AEPCore
 
-/// Defines a platform service to be used to initialize `DataQueue` objects
-@objc(AEPDataQueuing) public protocol DataQueuing {
-    static var shared: DataQueuing { get }
-
-    /// Initialize a `DataQueue` object
-    /// - Parameter name: the label you assigned to the `DataQueue` at creation time.
-    /// - Returns: the object of `DataQueue`, return false if failed to create an object
-    func getDataQueue(label: String) -> DataQueue?
+extension Event {
+    var isPostback: Bool {
+        return false
+    }
+    
+    var isOpenUrl: Bool {
+        return false
+    }
+    
+    var isCollectPii: Bool {
+        return false
+    }
 }

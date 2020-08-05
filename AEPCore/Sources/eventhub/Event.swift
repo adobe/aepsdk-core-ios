@@ -14,7 +14,7 @@ import Foundation
 import AEPServices
 
 /// An Event to be dispatched by the Event Hub
-@objc public class Event: NSObject, Codable {
+@objc(AEPEvent) public class Event: NSObject, Codable {
     
     /// Name of the event
     @objc public let name: String
@@ -23,10 +23,10 @@ import AEPServices
     @objc public private(set) var id = UUID()
     
     /// The `EventType` for the event
-    @objc public let type: EventType
+    @objc public let type: String
     
     /// The `EventSource` for the event
-    @objc public let source: EventSource
+    @objc public let source: String
     
     /// Optional data associated with this event
     @objc public internal(set) var data: [String: Any]?
@@ -43,11 +43,11 @@ import AEPServices
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    @objc public convenience init(name: String, type: EventType, source: EventSource, data: [String: Any]?) {
+    @objc public convenience init(name: String, type: String, source: String, data: [String: Any]?) {
         self.init(name: name, type: type, source: source, data: data, requestEvent: nil)
     }
     
-    private init(name: String, type: EventType, source: EventSource, data: [String: Any]?, requestEvent: Event?) {
+    private init(name: String, type: String, source: String, data: [String: Any]?, requestEvent: Event?) {
         self.name = name
         self.type = type
         self.source = source
@@ -61,7 +61,7 @@ import AEPServices
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    public func createResponseEvent(name: String, type: EventType, source: EventSource, data: [String: Any]?) -> Event {
+    public func createResponseEvent(name: String, type: String, source: String, data: [String: Any]?) -> Event {
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
     
@@ -81,8 +81,8 @@ import AEPServices
         
         name = try values.decode(String.self, forKey: .name)
         id = try values.decode(UUID.self, forKey: .id)
-        type = try values.decode(EventType.self, forKey: .type)
-        source = try values.decode(EventSource.self, forKey: .source)
+        type = try values.decode(String.self, forKey: .type)
+        source = try values.decode(String.self, forKey: .source)
         let anyCodableDict = try? values.decode([String: AnyCodable].self, forKey: .data)
         data = AnyCodable.toAnyDictionary(dictionary: anyCodableDict)
         timestamp = try values.decode(Date.self, forKey: .timestamp)

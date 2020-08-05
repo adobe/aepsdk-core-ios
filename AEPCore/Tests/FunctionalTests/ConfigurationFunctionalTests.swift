@@ -160,7 +160,7 @@ class ConfigurationFunctionalTests: XCTestCase {
         /// Tests that no configuration event is dispatched when a lifecycle response content event and no appId is stored in persistence
         func testHandleLifecycleResponseEmptyAppId() {
             // setup
-            let lifecycleEvent = Event(name: "Lifecycle response content", type: .lifecycle, source: .responseContent, data: nil)
+            let lifecycleEvent = Event(name: "Lifecycle response content", type: EventType.lifecycle, source: EventSource.responseContent, data: nil)
             
             // test
             mockRuntime.simulateComingEvents(lifecycleEvent)
@@ -173,7 +173,7 @@ class ConfigurationFunctionalTests: XCTestCase {
     func testHandleLifecycleResponseValidAppid() {
         // setup
         let appIdEvent = createConfigAppIdEvent(appId: "testappid")
-        let lifecycleEvent = Event(name: "Lifecycle response content", type: .lifecycle, source: .responseContent, data: nil)
+        let lifecycleEvent = Event(name: "Lifecycle response content", type: EventType.lifecycle, source: EventSource.responseContent, data: nil)
         
         // test
         mockRuntime.simulateComingEvents(appIdEvent)
@@ -211,16 +211,15 @@ class ConfigurationFunctionalTests: XCTestCase {
     
         /// Tests the API call where the path to the config is invalid
         func testLoadInvalidPathBundledConfig() {
-
-                    // setup
-                    let filePathEvent = createConfigFilePathEvent(filePath: "Invalid/Path/ADBMobileConfig.json")
-            
-                    // test
-                    mockRuntime.simulateComingEvents(filePathEvent)
-            
-                    // verify
-                    XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-                    XCTAssertEqual( 1, mockRuntime.createdSharedStates.count, "Configuration still should update shared state")
+            // setup
+            let filePathEvent = createConfigFilePathEvent(filePath: "Invalid/Path/ADBMobileConfig.json")
+    
+            // test
+            mockRuntime.simulateComingEvents(filePathEvent)
+    
+            // verify
+            XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+            XCTAssertEqual( 1, mockRuntime.createdSharedStates.count, "Configuration still should update shared state")
             
             XCTAssertEqual(0, mockRuntime.firstSharedState?.count)
         }
@@ -231,8 +230,8 @@ class ConfigurationFunctionalTests: XCTestCase {
             let filePathEvent = createConfigFilePathEvent(filePath: "Invalid/Path/ADBMobileConfig.json")
             let configUpdateEvent = createConfigUpdateEvent(configDict:  ["global.privacy": "optedOut"])
 
-    // test
-    mockRuntime.simulateComingEvents(filePathEvent, configUpdateEvent)
+            // test
+            mockRuntime.simulateComingEvents(filePathEvent, configUpdateEvent)
             
             // verify
                     XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
@@ -292,22 +291,22 @@ class ConfigurationFunctionalTests: XCTestCase {
     
     
     func createConfigAppIdEvent(appId: String) -> Event{
-        return Event(name: "Configure with AppId", type: .configuration, source: .requestContent,
+        return Event(name: "Configure with AppId", type: EventType.configuration, source: EventSource.requestContent,
                           data: ["config.appId": appId])
     }
     
     func createConfigFilePathEvent(filePath: String) -> Event{
-        return Event(name: "Configure with file path", type: .configuration, source: .requestContent,
+        return Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
                           data: ["config.filePath": filePath])
     }
     
     func createConfigUpdateEvent(configDict: [String: Any]) -> Event{
-        return Event(name: "Configure with file path", type: .configuration, source: .requestContent,
+        return Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
                           data: ["config.update": configDict])
     }
     
     func createGetPrivacyStatusEvent() -> Event{
-        return Event(name: "Privacy Status Request", type: .configuration, source: .requestContent, data: ["config.getData": true])
+        return Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: ["config.getData": true])
         
     }
 

@@ -102,7 +102,7 @@ struct PushIDManager: PushIDManageable {
         let eventData = [IdentityConstants.Analytics.TRACK_ACTION: IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME,
                          IdentityConstants.Analytics.CONTEXT_DATA: contextData] as [String : Any]
 
-        let event = Event(name: "AnalyticsForIdentityRequest", type: .analytics, source: .requestContent, data: eventData)
+        let event = Event(name: "AnalyticsForIdentityRequest", type: EventType.analytics, source: EventSource.requestContent, data: eventData)
         eventDispatcher(event)
     }
 

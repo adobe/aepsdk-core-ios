@@ -80,7 +80,7 @@ import AEPServices
     @objc(setAdvertisingIdentifier:)
     public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
-        let event = Event(name: "SetAdvertisingIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        let event = Event(name: "SetAdvertisingIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
     
@@ -90,7 +90,7 @@ import AEPServices
     public static func setPushIdentifier(deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
-        let event = Event(name: "SetPushIdentifier", type: .genericIdentity, source: .requestContent, data: data)
+        let event = Event(name: "SetPushIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
     
@@ -99,6 +99,21 @@ import AEPServices
     @objc(setWrapperType:)
     public static func setWrapperType(type: WrapperType) {
         MobileCore.wrapperType = type
+    }
+    
+    /// Sets the logging level for the SDK
+    /// - Parameter level: The desired log level
+    @objc(setLogLevel:)
+    public static func setLogLevel(level: LogLevel) {
+        Log.logFilter = level
+    }
+    
+    /// Sets the app group used to sharing user defaults and files among containing app and extension apps.
+    /// This must be called in AppDidFinishLaunching and before any other interactions with the Adobe Mobile library have happened.
+    /// - Parameter group: the app group name
+    @objc(setAppGroup:)
+    public static func setAppGroup(group: String?) {
+        ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
     }
     
 }

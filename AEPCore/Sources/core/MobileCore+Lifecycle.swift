@@ -21,7 +21,7 @@ import Foundation
     static func lifecycleStart(additionalContextData: [String: String]?) {
         let data: [String: Any] = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.START,
                                    CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
-        let event = Event(name: "Lifecycle Start", type: .genericLifecycle, source: .requestContent, data: data)
+        let event = Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
     
@@ -29,7 +29,7 @@ import Foundation
     /// timeout timer. If no lifecycle session is running, then calling this method does nothing.
     @objc static func lifecyclePause() {
         let data = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.PAUSE]
-        let event = Event(name: "Lifecycle Pause", type: .genericLifecycle, source: .requestContent, data: data)
+        let event = Event(name: "Lifecycle Pause", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
 }

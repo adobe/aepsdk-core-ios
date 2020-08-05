@@ -22,13 +22,13 @@ struct LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_DATA_KEY_TYPE = "type"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
-    
+
     private let transform = Transform()
     private let extensionRuntime: ExtensionRuntime
-    
+
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
-    
+
     init(extensionRuntime: ExtensionRuntime) {
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
@@ -99,7 +99,7 @@ struct LaunchRulesEngine {
         event.data = eventData
         return event
     }
-    
+
     /// Replace tokens inside the provided consequence with the right value
     /// - Parameters:
     ///   - consequence: the `Consequence` instance may contain tokens
@@ -125,12 +125,12 @@ struct LaunchRulesEngine {
         }
         return mutableDict
     }
-    
+
     private func replaceToken(for value: String, data: Traversable) -> String {
         let template = Template(templateString: value, tagDelimiterPair: (LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER, LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER))
         return template.render(data: data, transformers: transform)
     }
-    
+
     /// Generate a consequence event with provided consequence data
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
@@ -138,6 +138,8 @@ struct LaunchRulesEngine {
         var dict: [String: Any] = consequence.detailDict
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: .rulesEngine, source: .responseContent, data: dict)
+        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: dict)
     }
+
+
 }

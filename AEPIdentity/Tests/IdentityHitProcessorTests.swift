@@ -53,7 +53,7 @@ class IdentityHitProcessorTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should not be retried")
         let expectedUrl = URL(string: "adobe.com")!
-        let expectedEvent = Event(name: "Hit Event", type: .identity, source: .requestIdentity, data: nil)
+        let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         mockNetworkService?.expectedResponse = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: 200, httpVersion: nil, headerFields: nil), error: nil)
 
@@ -77,7 +77,7 @@ class IdentityHitProcessorTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should be retried")
         let expectedUrl = URL(string: "adobe.com")!
-        let expectedEvent = Event(name: "Hit Event", type: .identity, source: .requestIdentity, data: nil)
+        let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         mockNetworkService?.expectedResponse = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil), error: nil)
 
@@ -101,7 +101,7 @@ class IdentityHitProcessorTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should not be retried")
         let expectedUrl = URL(string: "adobe.com")!
-        let expectedEvent = Event(name: "Hit Event", type: .identity, source: .requestIdentity, data: nil)
+        let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         mockNetworkService?.expectedResponse = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: -1, httpVersion: nil, headerFields: nil), error: nil)
 

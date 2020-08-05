@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// An object which can be registered with the `EventHub`
-@objc public protocol Extension {
+@objc(AEPExtension) public protocol Extension {
 
     /// Name of the extension
     var name: String { get }
@@ -44,7 +44,7 @@ import Foundation
     func readyForEvent(_ event: Event) -> Bool
 
     // An `Extension` must support parameterless initializer
-    init(runtime: ExtensionRuntime)
+    init?(runtime: ExtensionRuntime)
 }
 
 /// Contains methods for developers to interact with in their own extensions
@@ -55,7 +55,7 @@ public extension Extension {
     ///   - type: `EventType` to be listened for
     ///   - source: `EventSource` to be listened for
     ///   - listener: The `EventListener` to be invoked when `EventHub` dispatches an `Event` with matching `type` and `source`
-    func registerListener(type: EventType, source: EventSource, listener: @escaping EventListener) {
+    func registerListener(type: String, source: String, listener: @escaping EventListener) {
         runtime.registerListener(type: type, source: source, listener: listener)
     }
     
