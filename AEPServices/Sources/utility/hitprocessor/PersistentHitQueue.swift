@@ -46,7 +46,6 @@ public class PersistentHitQueue: HitQueuing {
 
     public func clear() {
         let _ = dataQueue.clear()
-        
     }
     
     /// A recursive function for processing hits, it will continue processing all the hits until none are left in the data queue
