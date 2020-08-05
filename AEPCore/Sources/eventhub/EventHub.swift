@@ -223,7 +223,7 @@ final class EventHub {
     }
 
     private func createSharedStateEvent(extensionName: String) -> Event {
-        return Event(name: EventHubConstants.STATE_CHANGE, type: .hub, source: .sharedState,
+        return Event(name: EventHubConstants.STATE_CHANGE, type: EventType.hub, source: EventSource.sharedState,
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
     }
 

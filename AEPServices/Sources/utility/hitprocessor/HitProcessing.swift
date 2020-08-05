@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// A class of types who provide the functionality for processing hits
-public protocol HitProcessable: class {
+public protocol HitProcessing: class {
     
     /// Defines the interval at which hits should be retried if failed
     var retryInterval: TimeInterval { get }

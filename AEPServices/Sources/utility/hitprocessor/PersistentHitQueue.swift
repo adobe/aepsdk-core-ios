@@ -13,7 +13,7 @@ import Foundation
 
 /// Provides functionality for asynchronous processing of hits in a synchronous manner while providing the ability to retry hits
 public class PersistentHitQueue: HitQueuing {
-    public let processor: HitProcessable
+    public let processor: HitProcessing
     let dataQueue: DataQueue
     
     private static let DEFAULT_RETRY_INTERVAL = TimeInterval(30)
@@ -22,8 +22,8 @@ public class PersistentHitQueue: HitQueuing {
     
     /// Creates a new `HitQueue` with the underlying `DataQueue` which is used to persist hits
     /// - Parameter dataQueue: a `DataQueue` used to persist hits
-    /// - Parameter processor: a `HitProcessable` used to process hits
-    public init(dataQueue: DataQueue, processor: HitProcessable) {
+    /// - Parameter processor: a `HitProcessing` used to process hits
+    public init(dataQueue: DataQueue, processor: HitProcessing) {
         self.dataQueue = dataQueue
         self.processor = processor
     }

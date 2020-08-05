@@ -13,14 +13,14 @@ import Foundation
 @testable import AEPServices
 
 public class MockHitQueue: HitQueuing {
-    public var processor: HitProcessable
+    public var processor: HitProcessing
     public var queuedHits = [DataEntity]()
 
     public var calledBeginProcessing = false
     public var calledSuspend = false
     public var calledClear = false
 
-    public init(processor: HitProcessable) {
+    public init(processor: HitProcessing) {
         self.processor = processor
     }
 

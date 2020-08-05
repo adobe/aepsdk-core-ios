@@ -60,9 +60,9 @@ struct TokenFinder: Traversable {
                 if path.count == 1 {
                     switch path[0] {
                     case TOKEN_KEY_EVENT_TYPE:
-                        return event.type.rawValue
+                        return event.type
                     case TOKEN_KEY_EVENT_SOURCE:
-                        return event.source.rawValue
+                        return event.source
                     case TOKEN_KEY_TIMESTAMP_UNIX:
                         return now.getUnixTimeInSeconds()
                     case TOKEN_KEY_TIMESTAMP_ISO8601:

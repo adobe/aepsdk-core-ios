@@ -21,7 +21,7 @@ import AEPCore
     ///   - completion: closure which will be invoked once the updated url is available, along with an error if any occurred
     @objc static func appendTo(url: URL?, completion: @escaping (URL?, AEPError) -> ()) {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
-        let event = Event(name: "Append to URL", type: .identity, source: .requestIdentity, data: data)
+        let event = Event(name: "Append to URL", type: EventType.identity, source: EventSource.requestIdentity, data: data)
         
         MobileCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
@@ -42,7 +42,7 @@ import AEPCore
     /// - Parameter completion: closure which will be invoked once the customer identifiers are available.
     @objc(getIdentifiers:)
     static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError) -> ()) {
-        let event = Event(name: "Get Identifiers", type: .identity, source: .requestIdentity, data: nil)
+        let event = Event(name: "Get Identifiers", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         
         MobileCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {
@@ -63,7 +63,7 @@ import AEPCore
     /// - Parameter completion: closure which will be invoked once Experience Cloud ID is available.
     @objc(getExperienceCloudId:)
     static func getExperienceCloudId(completion: @escaping (String?) -> ()) {
-        let event = Event(name: "Get experience cloud ID", type: .identity, source: .requestIdentity, data: nil)
+        let event = Event(name: "Get experience cloud ID", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         
         MobileCore.dispatch(event: event) { (responseEvent) in
             let experienceCloudId = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String
@@ -100,7 +100,7 @@ import AEPCore
         eventData[IdentityConstants.EventDataKeys.FORCE_SYNC] = false
         eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
         
-        let event = Event(name: "ID Sync", type: .identity, source: .requestIdentity, data: eventData)
+        let event = Event(name: "ID Sync", type: EventType.identity, source: EventSource.requestIdentity, data: eventData)
         MobileCore.dispatch(event: event)
     }
     
@@ -108,7 +108,7 @@ import AEPCore
     /// - Parameter completion: closure invoked with a value containing the visitor identifiers as a query string upon completion of the service request
     @objc(getUrlVariables:)
     static func getUrlVariables(completion: @escaping (String?, AEPError) -> ()) {
-        let event = Event(name: "Get URL variables", type: .identity, source: .requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+        let event = Event(name: "Get URL variables", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
         
          MobileCore.dispatch(event: event) { (responseEvent) in
             guard let responseEvent = responseEvent else {

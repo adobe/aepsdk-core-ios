@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPServices
 
-class IdentityHitProcessor: HitProcessable {
+class IdentityHitProcessor: HitProcessing {
     private let LOG_TAG = "IdentityHitProcessor"
     
     let retryInterval = TimeInterval(30)
@@ -27,7 +27,7 @@ class IdentityHitProcessor: HitProcessable {
         self.responseHandler = responseHandler
     }
 
-    // MARK: HitProcessable
+    // MARK: HitProcessing
     
     func processHit(entity: DataEntity, completion: @escaping (Bool) -> ()) {
         guard let data = entity.data, let identityHit = try? JSONDecoder().decode(IdentityHit.self, from: data) else {

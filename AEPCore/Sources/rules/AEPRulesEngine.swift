@@ -22,28 +22,28 @@ struct LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_DATA_KEY_TYPE = "type"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
-    
+
     private let transform = Transform()
     private let extensionRuntime: ExtensionRuntime
-    
+
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
-    
+
     init(extensionRuntime: ExtensionRuntime) {
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
     }
-    
+
     /// Downloads the rules from the remote server
     /// - Parameter url: the `URL` of the remote urls
     func loadRemoteRules(from url: URL) {}
-    
+
     /// Reads the cached rules
     /// - Parameter url: the `URL` of the remote urls
     func loadCachedRules(for url: URL) {}
-    
+
     /// Evaluates all the current rules against the supplied `Event`.
     /// - Parameters:
     ///   - event: the `Event` against which to evaluate the rules
@@ -69,7 +69,7 @@ struct LaunchRulesEngine {
         }
         return event
     }
-    
+
     /// Replace tokens inside the provided consequence with the right value
     /// - Parameters:
     ///   - consequence: the `Consequence` instance may contain tokens
@@ -79,7 +79,7 @@ struct LaunchRulesEngine {
         let dict = replaceToken(in: consequence.detailDict, data: data)
         return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }
-    
+
     private func replaceToken(in dict: [String: Any], data: Traversable) -> [String: Any] {
         var mutableDict = dict
         for (key, value) in mutableDict {
@@ -95,12 +95,12 @@ struct LaunchRulesEngine {
         }
         return mutableDict
     }
-    
+
     private func replaceToken(for value: String, data: Traversable) -> String {
         let template = Template(templateString: value, tagDelimiterPair: (LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER, LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER))
         return template.render(data: data, transformers: transform)
     }
-    
+
     /// Generate a consequence event with provided consequence data
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
@@ -108,13 +108,13 @@ struct LaunchRulesEngine {
         var dict: [String: Any] = consequence.detailDict
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: .rulesEngine, source: .responseContent, data: dict)
+        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: dict)
     }
-    
+
     private func attachDataEvent(event: Event, consequenceWithConcreteValue: Consequence) {
         // TODO: attach data to the incoming event
     }
-    
+
     private func modifyDataEvent(event: Event, consequenceWithConcreteValue: Consequence) {
         // TODO: modify data of the incoming event
     }

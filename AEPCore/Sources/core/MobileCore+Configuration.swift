@@ -20,7 +20,7 @@ import Foundation
     /// download, the updated file is downloaded and replaces the cached file.
     /// - Parameter appId: A unique identifier assigned to the app instance by Adobe Launch
     @objc static func configureWith(appId: String) {
-        let event = Event(name: "Configure with AppId", type: .configuration, source: .requestContent,
+        let event = Event(name: "Configure with AppId", type: EventType.configuration, source: EventSource.requestContent,
                           data: [CoreConstants.Keys.JSON_APP_ID: appId])
         MobileCore.dispatch(event: event)
     }
@@ -29,7 +29,7 @@ import Foundation
     /// the configuration from the file at `filePath` is not preserved and this method must be called again if desired.
     /// - Parameter filePath: Absolute path to a local configuration file.
     @objc static func configureWith(filePath: String) {
-        let event = Event(name: "Configure with file path", type: .configuration, source: .requestContent,
+        let event = Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
                           data: [CoreConstants.Keys.JSON_FILE_PATH: filePath])
         MobileCore.dispatch(event: event)
     }
@@ -42,7 +42,7 @@ import Foundation
     /// - Parameter configDict: configuration key/value pairs to be updated or added.
     @objc(updateConfiguration:)
     static func updateConfigurationWith(configDict: [String: Any]) {
-        let event = Event(name: "Configuration Update", type: .configuration, source: .requestContent,
+        let event = Event(name: "Configuration Update", type: EventType.configuration, source: EventSource.requestContent,
                           data: [CoreConstants.Keys.UPDATE_CONFIG: configDict])
         MobileCore.dispatch(event: event)
     }
@@ -60,7 +60,7 @@ import Foundation
     /// - Parameter completion: Invoked with the current `PrivacyStatus`
     @objc(getPrivacyStatus:)
     static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
-        let event = Event(name: "Privacy Status Request", type: .configuration, source: .requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
+        let event = Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { (responseEvent) in
             self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
@@ -73,7 +73,7 @@ import Foundation
     /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format a and `AEPError` if the request failed
     @objc(getSdkIdentities:)
     static func getSdkIdentities(completion: @escaping (String?, AEPError) -> ()) {
-        let event = Event(name: "GetSdkIdentities", type: .configuration, source: .requestIdentity, data: nil)
+        let event = Event(name: "GetSdkIdentities", type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
         
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (responseEvent) in
             guard let responseEvent = responseEvent else {
