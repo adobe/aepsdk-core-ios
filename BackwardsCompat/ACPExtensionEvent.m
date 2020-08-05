@@ -50,11 +50,11 @@ governing permissions and limitations under the License.
 }
 
 - (nonnull NSString*) eventUniqueIdentifier {
-    return @"";
+    return [[event_ id] UUIDString];
 }
 
 - (long) eventTimestamp {
-    return -1;
+    return [[event_ timestamp] timeIntervalSince1970];
 }
 
 - (int) eventNumber {
