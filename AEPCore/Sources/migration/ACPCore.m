@@ -9,6 +9,7 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
+#import <AEPCore/AEPCore-Swift.h>
 #import "ACPCore.h"
 #import "AEPEvent+ACPCore.h"
 #import "NSError+AEPError.h"
@@ -23,14 +24,6 @@ static NSMutableArray *_pendingExtensions;
 @implementation ACPCore
 
 #pragma mark - Configuration
-
-+ (void)registerExtension:(id<AEPExtension> _Nonnull) extension {
-    if (!_pendingExtensions) {
-        _pendingExtensions = [NSMutableArray array];
-    }
-    
-    [_pendingExtensions addObject:extension];
-}
 
 + (void) configureWithAppId: (NSString* __nullable) appid {
     [AEPCore configureWithAppId:appid];
@@ -88,8 +81,13 @@ static NSMutableArray *_pendingExtensions;
 
 + (BOOL) registerExtension: (nonnull Class) extensionClass
                      error: (NSError* _Nullable* _Nullable) error {
-    // TODO
-    return false;
+    if (!_pendingExtensions) {
+        _pendingExtensions = [NSMutableArray array];
+    }
+    
+    [_pendingExtensions addObject:extensionClass];
+    
+    return YES;
 }
 
 + (void) start: (nullable void (^) (void)) callback {

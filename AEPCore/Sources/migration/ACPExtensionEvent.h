@@ -13,6 +13,7 @@ governing permissions and limitations under the License.
 #define ADOBEMOBILE_ADBEXTENSIONEVENT_H
 
 #import <Foundation/Foundation.h>
+@class AEPEvent;
 
 @interface ACPExtensionEvent : NSObject {}
 
