@@ -39,7 +39,7 @@ class RulesEngineFunctionalTests: XCTestCase {
     
     func testUpdateConfigurationWithDictTwice() {
         // setup
-        let event =  Event(name: "Configure with file path", type: .lifecycle, source: .responseContent,
+        let event =  Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
                            data: ["lifecyclecontextdata": ["launchevent":"LaunchEvent"]])
         
         let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip")
