@@ -120,7 +120,6 @@
 		3F03983A24BE62AA0019F095 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983624BE62AA0019F095 /* ADBMobileConfig.json */; };
 		3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983724BE62AA0019F095 /* TestConfig.json */; };
 		3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
-		3F08FF9324D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9224D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift */; };
 		3F08FF9524D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */; };
 		3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */; };
 		3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */; };
@@ -256,10 +255,6 @@
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
 		BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
 		BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
-		BB00E27224D9C00F00C578C1 /* String+Equal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27124D9C00F00C578C1 /* String+Equal.swift */; };
-		BB00E27324D9C00F00C578C1 /* String+Equal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27124D9C00F00C578C1 /* String+Equal.swift */; };
-		BB00E27524D9C03800C578C1 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */; };
-		BB00E27624D9C03800C578C1 /* Array+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */; };
 		BB59402B24CF6E1D00EE0C6C /* AEPRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -544,7 +539,6 @@
 		3F03983524BE62AA0019F095 /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
 		3F03983624BE62AA0019F095 /* ADBMobileConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
-		3F08FF9224D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyCodable+ToDictionary.swift"; sourceTree = "<group>"; };
 		3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+MergeOverwrite.swift"; sourceTree = "<group>"; };
 		3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryMergeOverwriteTests.swift; sourceTree = "<group>"; };
 		3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineFunctionalTests.swift; sourceTree = "<group>"; };
@@ -685,8 +679,6 @@
 		BB00E26724D8C94600C578C1 /* EventDataFlattener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataFlattener.swift; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtility.swift; sourceTree = "<group>"; };
-		BB00E27124D9C00F00C578C1 /* String+Equal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Equal.swift"; sourceTree = "<group>"; };
-		BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+SafeIndex.swift"; sourceTree = "<group>"; };
 		BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngineTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1339,9 +1331,6 @@
 				3FB66AB524CA004400502CAF /* RulesDownloader.swift */,
 				3FB66AB724CA004400502CAF /* RulesLoader.swift */,
 				BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */,
-				BB00E27124D9C00F00C578C1 /* String+Equal.swift */,
-				BB00E27424D9C03800C578C1 /* Array+SafeIndex.swift */,
-				3F08FF9224D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -1905,7 +1894,6 @@
 				3FB66AE424CA004400502CAF /* CachedRules.swift in Sources */,
 				2467E43D24CB54B70022F6BE /* MockDiskCache.swift in Sources */,
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
-				BB00E27524D9C03800C578C1 /* Array+SafeIndex.swift in Sources */,
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
@@ -1920,7 +1908,6 @@
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
 				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,
-				3F08FF9324D9D29B00D34DE3 /* AnyCodable+ToDictionary.swift in Sources */,
 				3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */,
 				3FB66AE624CA004400502CAF /* ConfigurationDownloader.swift in Sources */,
 				213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */,
@@ -1933,7 +1920,6 @@
 				BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */,
 				3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */,
 				3FB66AD224CA004400502CAF /* EventHub.swift in Sources */,
-				BB00E27224D9C00F00C578C1 /* String+Equal.swift in Sources */,
 				3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */,
 				3FB66ACC24CA004400502CAF /* EventHubPlaceholderExtension.swift in Sources */,
 				3FB66AE824CA004400502CAF /* Cacheable.swift in Sources */,
@@ -2006,9 +1992,7 @@
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
 				3F0397FB24BE60910019F095 /* ThreadSafeArray.swift in Sources */,
-				BB00E27324D9C00F00C578C1 /* String+Equal.swift in Sources */,
 				3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */,
-				BB00E27624D9C03800C578C1 /* Array+SafeIndex.swift in Sources */,
 				3F0397CC24BE5FF30019F095 /* NetworkService.swift in Sources */,
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
 				3F0397D724BE5FF30019F095 /* DataQueueService.swift in Sources */,
