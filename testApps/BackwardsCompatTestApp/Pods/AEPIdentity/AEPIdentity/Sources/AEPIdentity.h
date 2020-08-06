@@ -15,5 +15,5 @@ FOUNDATION_EXPORT double AEPIdentityVersionNumber;
 FOUNDATION_EXPORT const unsigned char AEPIdentityVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AEPIdentity/PublicHeader.h>
-#import "ACPIdentity.h"
+#import <AEPIdentity/ACPIdentity.h>
 

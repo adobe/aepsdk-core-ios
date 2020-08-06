@@ -17,9 +17,6 @@ governing permissions and limitations under the License.
 #import "ACPCore.h"
 #import "ACPExtensionEvent.h"
 #import "NSError+AEPError.h"
-#import "AEPLogLevelConverter.h"
-#import "AEPPrivacyStatusConverter.h"
-#import "AEPWrapperTypeConverter.h"
 
 #pragma mark - ACPCore Implementation
 
@@ -51,13 +48,13 @@ static NSMutableArray *_pendingExtensions;
 
 + (void) getPrivacyStatus: (nonnull void (^) (ACPMobilePrivacyStatus status)) callback {
     [AEPCore getPrivacyStatus:^(enum AEPPrivacyStatus status) {
-        callback([AEPPrivacyStatusConverter convertToACPPrivacyStatus:status]);
+        callback((ACPMobilePrivacyStatus) status);
     }];
 }
 
 + (void) getPrivacyStatusWithCompletionHandler: (nonnull void (^) (ACPMobilePrivacyStatus status, NSError* _Nullable error)) callback {
     [AEPCore getPrivacyStatus:^(enum AEPPrivacyStatus status) {
-        callback([AEPPrivacyStatusConverter convertToACPPrivacyStatus:status], nil);
+        callback((ACPMobilePrivacyStatus) status, nil);
     }];
 }
 
@@ -70,11 +67,11 @@ static NSMutableArray *_pendingExtensions;
 }
 
 + (void) setLogLevel: (ACPMobileLogLevel) logLevel {
-    [AEPCore setLogLevel:[AEPLogLevelConverter convertToAEPLogLevel:logLevel]];
+    [AEPCore setLogLevel:logLevel];
 }
 
 + (void) setPrivacyStatus: (ACPMobilePrivacyStatus) status {
-    [AEPCore setPrivacy:[AEPPrivacyStatusConverter convertToAEPPrivacyStatus:status]];
+    [AEPCore setPrivacy:(AEPPrivacyStatus) status];
 }
 
 + (void) updateConfiguration: (NSDictionary* __nullable) config {
@@ -174,7 +171,7 @@ static NSMutableArray *_pendingExtensions;
 #pragma mark - Logging Utilities
 
 + (ACPMobileLogLevel) logLevel {
-    return [AEPLogLevelConverter convertToACPLogLevel:[AEPLog logFilter]];
+    return [AEPLog logFilter];
 }
 
 + (void) log: (ACPMobileLogLevel) logLevel tag: (nonnull NSString*) tag message: (nonnull NSString*) message {
@@ -205,7 +202,7 @@ static NSMutableArray *_pendingExtensions;
 #pragma mark - Wrapper Support
 
 + (void) setWrapperType: (ACPMobileWrapperType) wrapperType {
-    [AEPCore setWrapperType:[AEPWrapperTypeConverter covertToAEPWrapperType:wrapperType]];
+    [AEPCore setWrapperType:wrapperType];
 }
 
 @end

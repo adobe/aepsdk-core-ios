@@ -19,5 +19,5 @@ FOUNDATION_EXPORT double AEPLifecycleVersionNumber;
 FOUNDATION_EXPORT const unsigned char AEPLifecycleVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AEPLifecycle/PublicHeader.h>
-#import "ACPLifecycle.h"
+#import <AEPLifecycle/ACPLifecycle.h>
 

@@ -13,9 +13,9 @@ import Foundation
 
 /// An enum type representing the possible opt-out and privacy settings.
 @objc(AEPPrivacyStatus) public enum PrivacyStatus: Int, RawRepresentable, Codable {
-    case unknown
-    case optedIn
-    case optedOut
+    case optedIn = 0
+    case optedOut = 1
+    case unknown = 2
     
     public typealias RawValue = String
     
