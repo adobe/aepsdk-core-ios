@@ -12,64 +12,68 @@
 
 import Foundation
 
-
-// TODO: - Confirm optional Any as the expected value type for this
-extension Dictionary where Key == String, Value == Any? {
+struct DictionaryMerger {
+    
     private static let SUFFIX_FOR_OBJECT = "[*]"
-    ///
-    /// Merges the new dictionary into this Dictionary, overwriting matching key value pairs from the new dictionary
-    /// - Parameters
-    ///     - new: The new Dictionary containing the higher priority key value pairs
-    ///     - deleteIfEmpty: A bool indicating whether a key should be removed if the value is nil
-    mutating func mergeOverwrite(new: [String: Any?], deleteIfEmpty: Bool) {
-       // First, overwrite all matching key value pairs with new values, and recursively handle nested dictionaries
-       self.merge(new, uniquingKeysWith: { (old, new) in
-        guard let newDict = new as? [String: Any?] else { return new }
-        guard var oldDict = old as? [String: Any?] else { return new }
-        oldDict.mergeOverwrite(new: newDict, deleteIfEmpty: deleteIfEmpty)
-        return oldDict
-       })
-        
-        for (k, v) in self {
-            // Secondly, now we must check for the unique SUFFIX_FOR_OBJECT in the key to attach the data in the internal dict
-            if k.range(of: Dictionary.SUFFIX_FOR_OBJECT) != nil {
-                guard let range = k.range(of: Dictionary.SUFFIX_FOR_OBJECT) else { continue }
-                let keyWithoutSuffix: String = String(k[..<range.lowerBound])
-                // The KV exists without the suffix, so we must attach the data to each item in the Array
-                if self[keyWithoutSuffix] != nil {
-                    // If the new attach data dict value is nil, set nil and continue
-                    // Must do this because new[k] == nil checks if the key exists, not if the value is nil
-                    if new.keys.contains(k), new[k]! == nil {
-                        self.updateValue(nil, forKey: keyWithoutSuffix)
-                        continue
-                    }
-                    // The array of items which will receive the attach data payload
-                    guard let arrOfReceivers: [Any?] = self[keyWithoutSuffix] as? [Any?] else { continue }
-                    let arrWithAttachedData = arrOfReceivers.map { item -> Any? in
-                        // check if the item is a dictionary, if so, attach data to it
-                        guard var itemDict = item as? [String: Any?] else { return item }
-                        guard let attachData = self[k] as? [String: Any?] else { return item }
-                        itemDict.mergeOverwrite(new: attachData, deleteIfEmpty: deleteIfEmpty)
-                        return itemDict
-                    }
-                    
-                    self[keyWithoutSuffix] = arrWithAttachedData
-                    // Remove the attach data from the merged dict
-                    self.removeValue(forKey: k)
-                }
-            } else if deleteIfEmpty {
-                // If it's a nested dictionary, handle internal nil values
-                if var innerDict = v as? [String: Any?] {
-                    innerDict.mergeOverwrite(new: [:], deleteIfEmpty: deleteIfEmpty)
-                    self[k] = innerDict
-                }
-            }
-        }
-        
-        if deleteIfEmpty {
-            // Remove top level nils
-            let nonilDict = self.compactMapValues { $0 }
-            self = nonilDict
-        }
+    
+    /// Merges one dictionary into another. `overwrite` indicates when there is a confict, which value will take priority
+    /// - Parameters:
+    ///   - to: the dictionary to be merged to
+    ///   - from: the dictionary contains new data
+    ///   - overwrite: true if the from dictionary take priority
+    static func merging(to: [String: Any?], from: [String: Any?], overwrite: Bool) -> [String:Any] {
+        // overwrite all matching key value pairs with new values, and recursively handle nested dictionaries
+        let combinedDictionary = combining(to: to, from: from, overwrite: overwrite)
+        // handle the array wild card modification
+        let mergedDictionary = handleArrayWildCard(dict: combinedDictionary, overwrite: overwrite)
+        // remove nil from the dict
+        return mergedDictionary.compactMapValues { $0 }
     }
+    
+    static func combining(to: [String: Any?], from: [String: Any?], overwrite: Bool) -> [String:Any?] {
+        // First, overwrite all matching key value pairs with new values, and recursively handle nested dictionaries
+        return to.merging(from, uniquingKeysWith: { (old, new) in
+            if let newDict = new as? [String: Any?], let oldDict = old as? [String: Any?]  {
+                // merge inner dictionary
+                return merging(to:oldDict, from: newDict, overwrite: overwrite)
+            } else if let newArray = new as? [Any], let oldArray = old as? [Any] {
+                //TODO: currently it just combines the two arrays, the behavior is different with v5
+                // merge array
+                return oldArray + newArray
+            }
+            return overwrite ?  new : old
+        })
+    }
+    
+    static func handleArrayWildCard(dict: [String: Any?], overwrite:Bool) -> [String: Any?] {
+        var dict = dict
+        for (k, v) in dict {
+            
+            // check for the unique SUFFIX_FOR_OBJECT
+            guard let range = k.range(of: SUFFIX_FOR_OBJECT) else { continue }
+            
+            // Remove the special key from the dict
+            dict.removeValue(forKey: k)
+            
+            let keyWithoutSuffix: String = String(k[..<range.lowerBound])
+            
+            // do nothing if there is no targeted array
+            guard let arrOfReceivers: [Any?] = dict[keyWithoutSuffix] as? [Any?] else { continue }
+            
+            // do nothing if the attachData is not a dictionary
+            guard let attachData = v as? [String: Any?] else { continue}
+                        
+            // attach the data to each item in the array
+            let arrWithAttachedData = arrOfReceivers.map { item -> Any? in
+                // check if the item is a dictionary, if so, attach data to it
+                guard let itemDict = item as? [String: Any?] else { return item }
+                return merging(to: itemDict, from: attachData, overwrite: overwrite)
+            }
+            
+            dict[keyWithoutSuffix] = arrWithAttachedData
+              
+        }
+        return dict
+    }
+    
 }
