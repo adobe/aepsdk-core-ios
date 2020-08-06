@@ -15,4 +15,4 @@ FOUNDATION_EXPORT double AEPSignalVersionNumber;
 FOUNDATION_EXPORT const unsigned char AEPSignalVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AEPSignal/PublicHeader.h>
-#import "ACPSignal.h"
+#import <AEPSignal/ACPSignal.h>
