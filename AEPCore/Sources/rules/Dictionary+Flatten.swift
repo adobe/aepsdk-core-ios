@@ -19,17 +19,13 @@ extension Dictionary where Key == String, Value == Any {
     ///  `[rootKey.key2: value2]`
     ///
     /// - Returns: flattened dictionary
-    func flatten() -> [String: Any] {
-        return Dictionary.flatten(eventData: self)
-    }
-
-    private static func flatten(eventData: [String: Any], prefix: String = "") -> [String: Any] {
+    func flattening(prefix: String = "") -> [String: Any] {
         let keyPrefix = (prefix.count > 0) ? (prefix + ".") : prefix
         var flattenedDict = [String: Any]()
-        for (key, value) in eventData {
+        for (key, value) in self {
             let expandedKey = keyPrefix + key
             if let dict = value as? [String: Any] {
-                flattenedDict.merge(flatten(eventData: dict, prefix: expandedKey)) { _, new in new }
+                flattenedDict.merge(dict.flattening(prefix: expandedKey)) { _, new in new }
             } else {
                 flattenedDict[expandedKey] = value
             }

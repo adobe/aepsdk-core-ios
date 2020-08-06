@@ -77,7 +77,7 @@ class TokenFinder: Traversable {
                 Log.debug(label: LOG_TAG, "Current event data is nil, can not use it to generate an url query string")
                 return EMPTY_STRING
             }
-            return URLUtility.generateQueryString(parameters: dict.flatten())
+            return URLUtility.generateQueryString(parameters: dict.flattening())
         case TOKEN_KEY_ALL_JSON:
             return generateJsonString(AnyCodable.from(dictionary: event.data))
             
@@ -102,7 +102,7 @@ class TokenFinder: Traversable {
             return nil
         }
         
-        let flattenedData = data.flatten()
+        let flattenedData = data.flattening()
         return flattenedData[dataKeyName]
     }
     
@@ -111,7 +111,7 @@ class TokenFinder: Traversable {
             Log.trace(label: LOG_TAG, "Current event data is nil, can not use it to do token replacement")
             return ""
         }
-        return dict.flatten()[key]
+        return dict.flattening()[key]
     }
     
     private func generateJsonString(_ data: [String: AnyCodable]?) -> String {
