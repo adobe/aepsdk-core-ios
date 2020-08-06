@@ -37,6 +37,11 @@ import AEPServices
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
     @objc public let responseID: UUID?
     
+    /// Event description used for logging
+    @objc public override var description: String {
+        return "id: \(id.uuidString) name: \(self.name) type: \(self.type) source: \(self.source) data: \(String(describing: self.data)) timestamp: \(timestamp.description) responseId: \(String(describing: responseID?.uuidString))"
+    }
+    
     /// Creates a new `Event` with the given parameters
     /// - Parameters:
     ///   - name: Name for the `Event`
