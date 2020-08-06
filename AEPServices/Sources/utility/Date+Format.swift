@@ -20,13 +20,13 @@ public extension Date {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd'T'HH:mm:ssZZZ")
-        return formatter.string(from: Date())
+        return formatter.string(from: self)
     }
 
     func getISO8601Date() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd'T'HH:mm:ssXXX")
-        return formatter.string(from: Date())
+        return formatter.string(from: self)
     }
 }
