@@ -26,8 +26,8 @@ class URLUtility {
             } else {
                 queryString += "\(generateKVP(key: key, value: String(describing: value)))&"
             }
-            queryString.removeLast()
         }
+        if queryString.count > 0 { queryString.removeLast() }
         return queryString
     }
 
