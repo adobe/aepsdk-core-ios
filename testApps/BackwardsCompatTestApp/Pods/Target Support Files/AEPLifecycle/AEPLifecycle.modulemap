@@ -1,6 +1,0 @@
-framework module AEPLifecycle {
-  umbrella header "AEPLifecycle-umbrella.h"
-
-  export *
-  module * { export * }
-}
