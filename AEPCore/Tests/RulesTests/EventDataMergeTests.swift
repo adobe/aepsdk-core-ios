@@ -14,7 +14,7 @@ import XCTest
 @testable import AEPCore
 @testable import AEPServices
 
-class DictionaryMergeOverwriteTests: XCTestCase {
+class EventDataMergeTests: XCTestCase {
      
     
     func testSimpleMerge(){

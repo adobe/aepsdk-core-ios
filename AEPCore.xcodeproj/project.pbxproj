@@ -121,7 +121,7 @@
 		3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983724BE62AA0019F095 /* TestConfig.json */; };
 		3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */; };
-		3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */; };
+		3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */; };
 		3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */; };
 		3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */; };
 		3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */; };
@@ -540,7 +540,7 @@
 		3F03983624BE62AA0019F095 /* ADBMobileConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataMerger.swift; sourceTree = "<group>"; };
-		3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryMergeOverwriteTests.swift; sourceTree = "<group>"; };
+		3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataMergeTests.swift; sourceTree = "<group>"; };
 		3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineFunctionalTests.swift; sourceTree = "<group>"; };
 		3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_functional_1.zip; sourceTree = "<group>"; };
 		3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
@@ -1203,7 +1203,7 @@
 			isa = PBXGroup;
 			children = (
 				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
-				3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */,
+				3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */,
 				3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */,
 				BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */,
 			);
@@ -1944,7 +1944,7 @@
 				3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
-				3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */,
+				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
