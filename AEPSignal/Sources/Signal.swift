@@ -57,8 +57,9 @@ public class Signal: NSObject, Extension {
     private func handleConfigurationResponse(event: Event) {
         if let privacyStatusStr = event.data?[SignalConstants.Configuration.GLOBAL_PRIVACY] as? String {
             let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
+            hitQueue.handlePrivacyChange(status: privacyStatus)
             if privacyStatus == .optedOut {
-                handleOptOut()
+                Log.debug(label: SignalConstants.LOG_PREFIX, "Device has opted-out of tracking. Clearing the Signal queue.")
             }
         }
     }
@@ -74,15 +75,7 @@ public class Signal: NSObject, Extension {
             handleOpenURL(event: event)
         }
     }
-    
-    // MARK: - Privacy
-    
-    /// Clears the signal queue when a device has opted out of tracking
-    private func handleOptOut() {
-        Log.debug(label: SignalConstants.LOG_PREFIX, "Device has opted-out of tracking. Clearing the Signal queue.")
-        hitQueue.clear()
-    }
-    
+        
     // MARK: - Rule Consequence Handling
     
     /// Handles a postback in the form of a GET or POST HTTPS request
@@ -93,13 +86,39 @@ public class Signal: NSObject, Extension {
     ///
     /// - Parameter event: the event containing postback definition
     private func handlePostback(event: Event) {
+        guard let urlString = event.templateUrl else {
+            Log.warning(label: SignalConstants.LOG_PREFIX, "Dropping postback, missing templateurl from EventData.")
+            return
+        }
         
+        guard let url = URL(string: urlString) else {
+            Log.warning(label: SignalConstants.LOG_PREFIX, "Dropping postback, templateurl from EventData is malformed.")
+            return
+        }
+        
+        guard let postbackJsonData = try? JSONEncoder().encode(SignalHit(url: url, postBody: event.templateBody, contentType: event.contentType ?? SignalConstants.Defaults.CONTENT_TYPE, timeout: event.timeout, event: event)) else {
+            Log.debug(label: SignalConstants.LOG_PREFIX, "Dropping postback, unable to encode JSON data.")
+            return
+        }
+        
+        hitQueue.queue(entity: DataEntity(data: postbackJsonData))
     }
         
     private func handleOpenURL(event: Event) {
+        guard let urlString = event.urlToOpen else {
+            Log.warning(label: SignalConstants.LOG_PREFIX, "Unable to process OpenURL consequence - no URL was found in EventData.")
+            return
+        }
         
+        guard let url = URL(string: urlString) else {
+            Log.warning(label: SignalConstants.LOG_PREFIX, "Unable to process OpenURL consequence - URL in EventData was malformed.")
+            return
+        }
+        
+        Log.debug(label: SignalConstants.LOG_PREFIX, "Opening URL \(url.absoluteString)")
+        ServiceProvider.shared.urlService.openUrl(url)
     }
-    
+        
     // MARK: - Helpers
     
     /// Determines if the event should be ignored by the Signal extension

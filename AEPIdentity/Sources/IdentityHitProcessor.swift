@@ -63,7 +63,7 @@ class IdentityHitProcessor: HitProcessing {
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
-            Log.warning(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, request with url \(hit.url.absoluteString) failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1)")
+            Log.warning(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, request with url \(hit.url.absoluteString) failed with error \(connection.error?.localizedDescription ?? "") and unrecoverable status code \(connection.responseCode ?? -1)")
             responseHandler(entity, connection.data)
             completion(true)
         }
