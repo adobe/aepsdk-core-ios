@@ -22,25 +22,18 @@ class EventDataFlattener {
     /// - Parameter eventData: the `EventData` to flatten
     /// - Returns: flattened dictionary
     static func getFlattenedDataDict(eventData: [String: Any]) -> [String: Any] {
-        var flattenedDict = [String: Any]()
-        for (key, value) in eventData {
-            if let subDict = value as? [String: Any] {
-                flattenedDict.merge(dict: flatten(key: key, eventData: subDict))
-            } else {
-                flattenedDict[key] = value
-            }
-        }
-        return flattenedDict
+        return flatten(eventData: eventData)
     }
 
-    private static func flatten(key: String, eventData: [String: Any]) -> [String: Any] {
+    private static func flatten(key: String = "", eventData: [String: Any]) -> [String: Any] {
+        let keyPrefix = (key.count > 0) ? (key + ".") : key
         var flattenedDict = [String: Any]()
-        for (subKey, value) in eventData {
-            let newKey = key + "." + subKey
-            if let subDict = value as? [String: Any] {
-                flattenedDict.merge(dict: flatten(key: newKey, eventData: subDict))
+        for (key, value) in eventData {
+            let expandedKey = keyPrefix + key
+            if let dict = value as? [String: Any] {
+                flattenedDict.merge(dict: flatten(key: expandedKey, eventData: dict))
             } else {
-                flattenedDict[newKey] = value
+                flattenedDict[expandedKey] = value
             }
         }
         return flattenedDict
@@ -51,7 +44,7 @@ class EventDataFlattener {
 extension Dictionary {
     /// Merge a new dictionary to the current dictionary
     /// - Parameter dict: a new dictionary to be merged
-    mutating func merge<K, V>(dict: [K: V]) {
+    fileprivate mutating func merge<K, V>(dict: [K: V]) {
         for (k, v) in dict {
             updateValue(v as! Value, forKey: k as! Key)
         }

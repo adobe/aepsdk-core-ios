@@ -256,6 +256,8 @@
 		BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
 		BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
 		BB59402B24CF6E1D00EE0C6C /* AEPRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */; };
+		BBE1294F24DBBBD60045CD8D /* EventDataFlattenerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE1294E24DBBBD60045CD8D /* EventDataFlattenerTests.swift */; };
+		BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -680,6 +682,8 @@
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtility.swift; sourceTree = "<group>"; };
 		BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPRulesEngineTests.swift; sourceTree = "<group>"; };
+		BBE1294E24DBBBD60045CD8D /* EventDataFlattenerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDataFlattenerTests.swift; sourceTree = "<group>"; };
+		BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenFinderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1206,6 +1210,8 @@
 				3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */,
 				3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */,
 				BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */,
+				BBE1294E24DBBBD60045CD8D /* EventDataFlattenerTests.swift */,
+				BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */,
 			);
 			path = RulesTests;
 			sourceTree = "<group>";
@@ -1943,12 +1949,14 @@
 				3F08FFA324DA179400D34DE3 /* TestableNetworkService.swift in Sources */,
 				3F39521724CA096200F7325B /* EventHub+Testable.swift in Sources */,
 				3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */,
+				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
 				3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
+				BBE1294F24DBBBD60045CD8D /* EventDataFlattenerTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
 				3F39520924CA096100F7325B /* EventHubTests.swift in Sources */,
