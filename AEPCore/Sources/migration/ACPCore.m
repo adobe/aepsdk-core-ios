@@ -15,7 +15,7 @@ governing permissions and limitations under the License.
     #import <AEPCore/AEPCore-Swift.h>
 #endif
 #import "ACPCore.h"
-#import "AEPEvent+ACPCore.h"
+#import "ACPExtensionEvent.h"
 #import "NSError+AEPError.h"
 #import "AEPLogLevelConverter.h"
 #import "AEPPrivacyStatusConverter.h"
@@ -138,7 +138,7 @@ static NSMutableArray *_pendingExtensions;
 
 + (BOOL) dispatchEvent: (nonnull ACPExtensionEvent*) event
                  error: (NSError* _Nullable* _Nullable) error {
-    AEPEvent *convertedEvent = [[AEPEvent alloc] initWithACPEvent:event];
+    AEPEvent *convertedEvent = [[AEPEvent alloc] initWithName:event.eventName type:event.eventType source:event.eventSource data:event.eventData];
     [AEPCore dispatch:convertedEvent];
     return YES;
 }
@@ -147,7 +147,7 @@ static NSMutableArray *_pendingExtensions;
                           responseCallback: (nonnull void (^) (ACPExtensionEvent* _Nonnull responseEvent)) responseCallback
                                      error: (NSError* _Nullable* _Nullable) error {
     
-    AEPEvent *convertedEvent = [[AEPEvent alloc] initWithACPEvent:requestEvent];
+    AEPEvent *convertedEvent = [[AEPEvent alloc] initWithName:requestEvent.eventName type:requestEvent.eventType source:requestEvent.eventSource data:requestEvent.eventData];
     [AEPCore dispatch:convertedEvent responseCallback:^(AEPEvent * _Nullable responseEvent) {
         ACPExtensionEvent *convertedResponseEvent = [[ACPExtensionEvent alloc] initWithAEPEvent:responseEvent];
         responseCallback(convertedResponseEvent);

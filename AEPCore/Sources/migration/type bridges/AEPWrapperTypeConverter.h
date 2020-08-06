@@ -10,15 +10,10 @@ governing permissions and limitations under the License.
 */
 
 #import <Foundation/Foundation.h>
-#if __has_include("AEPCore-Swift.h")
-    #import "AEPCore-Swift.h"
-#else
-    #import <AEPCore/AEPCore-Swift.h>
-#endif
 #import "ACPCore.h"
 
 @interface AEPWrapperTypeConverter : NSObject
 
-+ (AEPWrapperType)covertToAEPWrapperType: (ACPMobileWrapperType) wrapperType;
++ (NSInteger)covertToAEPWrapperType: (NSInteger) wrapperType;
 
 @end

@@ -10,11 +10,9 @@ governing permissions and limitations under the License.
 */
 
 #import <Foundation/Foundation.h>
-#if __has_include("AEPCore-Swift.h")
-    #import "AEPCore-Swift.h"
-#else
-    #import <AEPCore/AEPCore-Swift.h>
-#endif
+
+// Forward declare AEPError
+typedef NS_ENUM(NSInteger, AEPError);
 
 @interface NSError (AEPError)
 

@@ -10,10 +10,15 @@ governing permissions and limitations under the License.
 */
 
 #import "AEPWrapperTypeConverter.h"
+#if __has_include("AEPCore-Swift.h")
+    #import "AEPCore-Swift.h"
+#else
+    #import <AEPCore/AEPCore-Swift.h>
+#endif
 
 @implementation AEPWrapperTypeConverter
 
-+ (AEPWrapperType)covertToAEPWrapperType: (ACPMobileWrapperType) wrapperType {
++ (NSInteger)covertToAEPWrapperType: (NSInteger) wrapperType {
     switch (wrapperType) {
         case ACPMobileWrapperTypeNone:
             return AEPWrapperTypeNone;

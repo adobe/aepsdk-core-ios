@@ -10,10 +10,15 @@ governing permissions and limitations under the License.
 */
 
 #import "AEPLogLevelConverter.h"
+#if __has_include("AEPCore-Swift.h")
+    #import "AEPCore-Swift.h"
+#else
+    #import <AEPCore/AEPCore-Swift.h>
+#endif
 
 @implementation AEPLogLevelConverter
 
-+ (AEPLogLevel)convertToAEPLogLevel: (ACPMobileLogLevel) logLevel {
++ (NSInteger)convertToAEPLogLevel: (NSInteger) logLevel {
     switch (logLevel) {
         case ACPMobileLogLevelVerbose:
             return AEPLogLevelTrace;
@@ -33,7 +38,7 @@ governing permissions and limitations under the License.
     }
 }
 
-+ (ACPMobileLogLevel)convertToACPLogLevel: (AEPLogLevel) logLevel {
++ (NSInteger)convertToACPLogLevel: (NSInteger) logLevel {
     switch (logLevel) {
         case AEPLogLevelTrace:
             return ACPMobileLogLevelVerbose;

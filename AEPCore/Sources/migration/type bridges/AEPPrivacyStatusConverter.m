@@ -10,10 +10,15 @@ governing permissions and limitations under the License.
 */
 
 #import "AEPPrivacyStatusConverter.h"
+#if __has_include("AEPCore-Swift.h")
+    #import "AEPCore-Swift.h"
+#else
+    #import <AEPCore/AEPCore-Swift.h>
+#endif
 
 @implementation AEPPrivacyStatusConverter
 
-+ (ACPMobilePrivacyStatus)convertToACPPrivacyStatus: (AEPPrivacyStatus) privacyStatus {
++ (NSInteger)convertToACPPrivacyStatus: (NSInteger) privacyStatus {
     switch (privacyStatus) {
         case AEPPrivacyStatusOptedIn:
             return ACPMobilePrivacyStatusOptIn;
@@ -27,7 +32,7 @@ governing permissions and limitations under the License.
     }
 }
 
-+ (AEPPrivacyStatus)convertToAEPPrivacyStatus: (ACPMobilePrivacyStatus) privacyStatus {
++ (NSInteger)convertToAEPPrivacyStatus: (NSInteger) privacyStatus {
     switch (privacyStatus) {
         case ACPMobilePrivacyStatusOptIn:
             return AEPPrivacyStatusOptedIn;

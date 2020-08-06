@@ -10,6 +10,11 @@ governing permissions and limitations under the License.
 */
 
 #import "NSError+AEPError.h"
+#if __has_include("AEPCore-Swift.h")
+    #import "AEPCore-Swift.h"
+#else
+    #import <AEPCore/AEPCore-Swift.h>
+#endif
 
 NSString* const ACPErrorDomain = @"com.adobe.marketing.mobile";
 

@@ -10,16 +10,11 @@ governing permissions and limitations under the License.
 */
 
 #import <Foundation/Foundation.h>
-#if __has_include("AEPCore-Swift.h")
-    #import "AEPCore-Swift.h"
-#else
-    #import <AEPCore/AEPCore-Swift.h>
-#endif
 #import "ACPCore.h"
 
 @interface AEPLogLevelConverter : NSObject
 
-+ (AEPLogLevel)convertToAEPLogLevel: (ACPMobileLogLevel) logLevel;
-+ (ACPMobileLogLevel)convertToACPLogLevel: (AEPLogLevel) logLevel;
++ (NSInteger)convertToAEPLogLevel: (NSInteger) logLevel;
++ (NSInteger)convertToACPLogLevel: (NSInteger) logLevel;
 
 @end
