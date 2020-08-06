@@ -10,24 +10,10 @@ governing permissions and limitations under the License.
 */
 
 #import <Foundation/Foundation.h>
-#if __has_include("AEPLifecycle-Swift.h")
-    #import "AEPLifecycle-Swift.h"
-#else
-    #import <AEPLifecycle/AEPLifecycle-Swift.h>
-#endif
-#import "ACPLifecycle.h"
 #import "ACPCore.h"
 
-@implementation ACPLifecycle
+@interface AEPWrapperTypeConverter : NSObject
 
-#pragma mark - Lifecycle
-
-+ (nonnull NSString*) extensionVersion {
-    return [AEPLifecycle extensionVersion];
-}
-
-+ (void) registerExtension {
-    [ACPCore registerExtension:[AEPLifecycle class] error:nil];
-}
++ (NSInteger)covertToAEPWrapperType: (NSInteger) wrapperType;
 
 @end

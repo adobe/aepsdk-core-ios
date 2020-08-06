@@ -9,25 +9,23 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-#import <Foundation/Foundation.h>
-#if __has_include("AEPLifecycle-Swift.h")
-    #import "AEPLifecycle-Swift.h"
+#import "NSError+AEPError.h"
+#if __has_include("AEPCore-Swift.h")
+    #import "AEPCore-Swift.h"
 #else
-    #import <AEPLifecycle/AEPLifecycle-Swift.h>
+    #import <AEPCore/AEPCore-Swift.h>
 #endif
-#import "ACPLifecycle.h"
-#import "ACPCore.h"
 
-@implementation ACPLifecycle
+NSString* const ACPErrorDomain = @"com.adobe.marketing.mobile";
 
-#pragma mark - Lifecycle
+@implementation NSError (AEPError)
 
-+ (nonnull NSString*) extensionVersion {
-    return [AEPLifecycle extensionVersion];
-}
-
-+ (void) registerExtension {
-    [ACPCore registerExtension:[AEPLifecycle class] error:nil];
++ (NSError *)errorFromAEPError:(AEPError) aepError {
+    if (aepError == AEPErrorNone) {
+        return nil;
+    }
+    
+    return [[NSError alloc] initWithDomain:ACPErrorDomain code:aepError userInfo:nil];
 }
 
 @end
