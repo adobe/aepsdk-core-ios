@@ -17,7 +17,6 @@ governing permissions and limitations under the License.
     #import <AEPIdentity/AEPIdentity-Swift.h>
 #endif
 #import "ACPIdentity.h"
-#import "AEPIdentityTypeBridge.h"
 #import "NSError+AEPError.h"
 
 @implementation ACPIdentity
@@ -46,13 +45,13 @@ governing permissions and limitations under the License.
 
 + (void) getIdentifiers: (nonnull void (^) (NSArray<ACPMobileVisitorId*>* __nullable visitorIDs)) callback {
     [AEPIdentity getIdentifiers:^(NSArray<id<AEPIdentifiable>> * _Nullable visitorIDs, enum AEPError error) {
-       // TODO
+        callback(convertVisitorIds(visitorIDs));
     }];
 }
 
 + (void) getIdentifiersWithCompletionHandler: (void (^) (NSArray<ACPMobileVisitorId*>* _Nullable, NSError* _Nullable)) completionHandler {
     [AEPIdentity getIdentifiers:^(NSArray<id<AEPIdentifiable>> * _Nullable visitorIDs, enum AEPError error) {
-       // TODO
+       completionHandler(convertVisitorIds(visitorIDs), [NSError errorFromAEPError:error]);
     }];
 }
 
@@ -91,6 +90,20 @@ governing permissions and limitations under the License.
     [AEPIdentity getUrlVariables:^(NSString * _Nullable variables, enum AEPError error) {
         completionHandler(variables, [NSError errorFromAEPError:error]);
     }];
+}
+
+#pragma MARK: Private Helpers
+static NSMutableArray *convertVisitorIds(NSArray<id<AEPIdentifiable>> * _Nullable visitorIDs) {
+    NSMutableArray *arr = [NSMutableArray array];
+    
+    for (id<AEPIdentifiable> visitorID in visitorIDs) {
+        ACPMobileVisitorId *convertedId = [[ACPMobileVisitorId alloc] initWithOrigin:visitorID.origin
+                                                                                type:visitorID.type id:visitorID.identifier
+                                                                      authentication:visitorID.authenticationState];
+        [arr addObject:convertedId];
+    }
+    
+    return arr;
 }
 
 @end

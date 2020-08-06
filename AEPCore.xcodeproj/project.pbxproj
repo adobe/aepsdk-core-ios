@@ -51,6 +51,7 @@
 		21AB181F24DC6F8500B0ECD3 /* ACPSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AB181D24DC6F8500B0ECD3 /* ACPSignal.m */; };
 		21AB182224DC711B00B0ECD3 /* ACPIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AB182124DC711B00B0ECD3 /* ACPIdentity.m */; };
 		21AB182424DC712300B0ECD3 /* ACPIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 21AB182324DC712300B0ECD3 /* ACPIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21AB182A24DC7D2500B0ECD3 /* ACPMobileVisitorId.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AB182924DC7D2500B0ECD3 /* ACPMobileVisitorId.m */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
@@ -477,6 +478,7 @@
 		21AB181D24DC6F8500B0ECD3 /* ACPSignal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPSignal.m; sourceTree = "<group>"; };
 		21AB182124DC711B00B0ECD3 /* ACPIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPIdentity.m; sourceTree = "<group>"; };
 		21AB182324DC712300B0ECD3 /* ACPIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPIdentity.h; sourceTree = "<group>"; };
+		21AB182924DC7D2500B0ECD3 /* ACPMobileVisitorId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPMobileVisitorId.m; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -833,6 +835,7 @@
 				213BC27224D9DDB200EBEC13 /* ACPExtensionEvent.h */,
 				212182F224DB324C00FC49A2 /* ACPExtensionEvent.m */,
 				213BC26924D9DDB200EBEC13 /* ACPMobileVisitorId.h */,
+				21AB182924DC7D2500B0ECD3 /* ACPMobileVisitorId.m */,
 				212182F824DB377500FC49A2 /* type bridges */,
 			);
 			name = migration;
@@ -2004,6 +2007,7 @@
 				212182F324DB324C00FC49A2 /* ACPExtensionEvent.m in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
 				3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */,
+				21AB182A24DC7D2500B0ECD3 /* ACPMobileVisitorId.m in Sources */,
 				3FB66AD824CA004400502CAF /* Extension.swift in Sources */,
 				BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */,
 				3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */,
