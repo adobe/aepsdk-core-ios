@@ -53,6 +53,8 @@
 		217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217E220424D1FD7900B70B3E /* SharedStateResult.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		218E01C224C75C1500BEC470 /* HitQueuing+Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */; };
+		21AB181E24DC6F8500B0ECD3 /* ACPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 21AB181C24DC6F8500B0ECD3 /* ACPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		21AB181F24DC6F8500B0ECD3 /* ACPSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AB181D24DC6F8500B0ECD3 /* ACPSignal.m */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
@@ -481,6 +483,8 @@
 		217E220424D1FD7900B70B3E /* SharedStateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateResult.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+Privacy.swift"; sourceTree = "<group>"; };
+		21AB181C24DC6F8500B0ECD3 /* ACPSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPSignal.h; sourceTree = "<group>"; };
+		21AB181D24DC6F8500B0ECD3 /* ACPSignal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPSignal.m; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -849,6 +853,15 @@
 			path = AEPCore/Sources/migration;
 			sourceTree = "<group>";
 		};
+		21AB181B24DC6F0E00B0ECD3 /* migration */ = {
+			isa = PBXGroup;
+			children = (
+				21AB181C24DC6F8500B0ECD3 /* ACPSignal.h */,
+				21AB181D24DC6F8500B0ECD3 /* ACPSignal.m */,
+			);
+			path = migration;
+			sourceTree = "<group>";
+		};
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
@@ -1098,6 +1111,7 @@
 		24B4936724D4C36200AA38D9 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				21AB181B24DC6F0E00B0ECD3 /* migration */,
 				24B4935124D4C31100AA38D9 /* AEPSignal.h */,
 				24B4935224D4C31100AA38D9 /* Info.plist */,
 				24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */,
@@ -1486,6 +1500,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */,
+				21AB181E24DC6F8500B0ECD3 /* ACPSignal.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2049,6 +2064,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				24B4936F24D4C6F900AA38D9 /* Signal.swift in Sources */,
+				21AB181F24DC6F8500B0ECD3 /* ACPSignal.m in Sources */,
 				24B4937124D4C86C00AA38D9 /* SignalConstants.swift in Sources */,
 				24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */,
 				24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */,

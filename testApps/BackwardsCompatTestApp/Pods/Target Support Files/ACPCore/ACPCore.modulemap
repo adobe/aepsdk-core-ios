@@ -1,0 +1,6 @@
+framework module ACPCore {
+  umbrella header "ACPCore-umbrella.h"
+
+  export *
+  module * { export * }
+}

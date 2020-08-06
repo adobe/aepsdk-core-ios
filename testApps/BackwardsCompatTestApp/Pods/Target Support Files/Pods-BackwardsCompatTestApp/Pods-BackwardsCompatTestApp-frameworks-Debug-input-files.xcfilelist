@@ -1,0 +1,6 @@
+${PODS_ROOT}/Target Support Files/Pods-BackwardsCompatTestApp/Pods-BackwardsCompatTestApp-frameworks.sh
+${BUILT_PRODUCTS_DIR}/AEPCore/AEPCore.framework
+${BUILT_PRODUCTS_DIR}/AEPIdentity/AEPIdentity.framework
+${BUILT_PRODUCTS_DIR}/AEPLifecycle/AEPLifecycle.framework
+${BUILT_PRODUCTS_DIR}/AEPServices/AEPServices.framework
+${BUILT_PRODUCTS_DIR}/SwiftRulesEngine/SwiftRulesEngine.framework
