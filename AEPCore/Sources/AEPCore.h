@@ -18,6 +18,6 @@ FOUNDATION_EXPORT double AEPCoreVersionNumber;
 FOUNDATION_EXPORT const unsigned char AEPCoreVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <AEPCore/PublicHeader.h>
-#import "ACPCore.h"
-#import "ACPExtensionEvent.h"
-#import "ACPMobileVisitorId.h"
+#import <AEPCore/ACPCore.h>
+#import <AEPCore/ACPExtensionEvent.h>
+#import <AEPCore/ACPMobileVisitorId.h>
