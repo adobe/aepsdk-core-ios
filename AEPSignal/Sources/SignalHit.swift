@@ -10,12 +10,24 @@
  governing permissions and limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+import Foundation
+import AEPCore
 
-//! Project version number for AEPSignal.
-FOUNDATION_EXPORT double AEPSignalVersionNumber;
-
-//! Project version string for AEPSignal.
-FOUNDATION_EXPORT const unsigned char AEPSignalVersionString[];
-
-// In this header, you should import all the public headers of your framework using statements like #import <AEPSignal/PublicHeader.h>
+/// Struct representing a hit stored in the Signal database
+struct SignalHit: Codable {
+    
+    /// URL for the postback
+    let url: URL
+    
+    /// Optional POST body for the postback
+    let postBody: String?
+    
+    /// Content-Type header for the postback
+    let contentType: String
+    
+    /// Timeout for the network request
+    let timeout: TimeInterval?
+    
+    /// Event responsible for triggering this postback
+    let event: Event    
+}
