@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
-  s.name             = "AEPIdentity"
+  s.name             = "AEPSignal"
   s.version          = "0.0.1"
-  s.summary          = "AEPIdentity"
+  s.summary          = "AEPSignal"
   s.description      = <<-DESC
-AEPIdentity
+AEPLifecycle
                         DESC
   s.homepage         = "https://github.com/adobe/aepsdk-core-ios"
   s.license          = 'Apache V2'
@@ -12,11 +12,10 @@ AEPIdentity
 
   s.ios.deployment_target = '10.0'
 
-  s.source_files = 'AEPIdentity/Sources/**/*.{swift,h,m}'
+  s.source_files = 'AEPSignal/Sources/**/*.{swift,h,m}'
 
   s.swift_version = '5.0'
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
   s.dependency 'AEPCore'
-
 end

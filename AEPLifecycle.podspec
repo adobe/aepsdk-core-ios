@@ -12,7 +12,7 @@ AEPLifecycle
 
   s.ios.deployment_target = '10.0'
 
-  s.source_files          = 'AEPLifecycle/Sources/**/*.swift', 'AEPLifecycle/Sources/**/*.m', 'AEPLifecycle/Sources/**/*.h'
+  s.source_files = 'AEPLifecycle/Sources/**/*.{swift,h,m}'
 
   s.swift_version = '5.0'
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }

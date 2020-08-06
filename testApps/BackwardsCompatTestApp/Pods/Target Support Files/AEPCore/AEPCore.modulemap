@@ -1,0 +1,6 @@
+framework module AEPCore {
+  umbrella header "AEPCore-umbrella.h"
+
+  export *
+  module * { export * }
+}

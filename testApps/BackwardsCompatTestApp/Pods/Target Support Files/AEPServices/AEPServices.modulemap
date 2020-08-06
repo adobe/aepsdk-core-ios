@@ -1,0 +1,6 @@
+framework module AEPServices {
+  umbrella header "AEPServices-umbrella.h"
+
+  export *
+  module * { export * }
+}

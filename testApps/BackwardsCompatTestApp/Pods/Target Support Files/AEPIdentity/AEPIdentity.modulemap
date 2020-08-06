@@ -1,0 +1,6 @@
+framework module AEPIdentity {
+  umbrella header "AEPIdentity-umbrella.h"
+
+  export *
+  module * { export * }
+}
