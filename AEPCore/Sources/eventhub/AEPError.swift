@@ -16,7 +16,9 @@ import Foundation
 @objc public enum AEPError: Int, Error {
     public typealias RawValue = Int
     
-    case none
-    case unexpected
-    case callbackTimeout
+    case unexpected = 0
+    case callbackTimeout = 1
+    case callbackNil = 2
+    case none = 3
+    case errorExtensionNotInitialized = 11
 }

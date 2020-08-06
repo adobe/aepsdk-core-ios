@@ -20,10 +20,10 @@ import Foundation
 /// * _LogLevel.error_ - This method should be used when the SDK has determined that there is an unrecoverable error.  The intended audience for _error_ logs is a developer integrating the SDK.  _error_ logs are always enabled, and will be printed to the developer console regardless of the LoggingMode of the SDK.
 ///
 @objc(AEPLogLevel) public enum LogLevel: Int, Comparable {
-    case trace = 1
-    case debug
-    case warning
-    case error
+    case error = 0
+    case warning = 1
+    case debug = 2
+    case trace = 3
 
     /// Compares two `LogLevel`s for order
     /// - Parameters:

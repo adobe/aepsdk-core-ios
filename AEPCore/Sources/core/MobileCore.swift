@@ -17,7 +17,7 @@ import AEPServices
 @objc(AEPCore) public final class MobileCore: NSObject {
     
     /// Current version of the Core extension
-    public static var extensionVersion: String {
+    @objc public static var extensionVersion: String {
         if wrapperType == .none {
             return ConfigurationConstants.EXTENSION_VERSION
         }
@@ -32,6 +32,7 @@ import AEPServices
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
+    @objc(registerExtensions:completion:)
     public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
         let allExtensions = [Configuration.self] + extensions
@@ -68,6 +69,7 @@ import AEPServices
     
     /// Start event processing
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
+    @objc(start:)
     public static func start(_ completion: @escaping (()-> Void)) {
         // Start the event hub processing
         let pending = [Configuration.self] + MobileCore.pendingExtensions.shallowCopy
