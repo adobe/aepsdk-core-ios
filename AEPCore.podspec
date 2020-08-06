@@ -19,7 +19,7 @@ AEPCore
   s.dependency 'SwiftRulesEngine'
   s.dependency 'AEPServices'
 
-  s.source_files          = 'AEPCore/Sources/**/*.swift'
+  s.source_files          = 'AEPCore/Sources/**/*.swift', 'AEPCore/Sources/**/*.m', 'AEPCore/Sources/**/*.h'
 
 
 end
