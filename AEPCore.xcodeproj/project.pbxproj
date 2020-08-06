@@ -55,6 +55,8 @@
 		218E01C224C75C1500BEC470 /* HitQueuing+Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */; };
 		21AB181E24DC6F8500B0ECD3 /* ACPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 21AB181C24DC6F8500B0ECD3 /* ACPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21AB181F24DC6F8500B0ECD3 /* ACPSignal.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AB181D24DC6F8500B0ECD3 /* ACPSignal.m */; };
+		21AB182224DC711B00B0ECD3 /* ACPIdentity.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AB182124DC711B00B0ECD3 /* ACPIdentity.m */; };
+		21AB182424DC712300B0ECD3 /* ACPIdentity.h in Headers */ = {isa = PBXBuildFile; fileRef = 21AB182324DC712300B0ECD3 /* ACPIdentity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
@@ -485,6 +487,8 @@
 		218E01C124C75C1500BEC470 /* HitQueuing+Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+Privacy.swift"; sourceTree = "<group>"; };
 		21AB181C24DC6F8500B0ECD3 /* ACPSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPSignal.h; sourceTree = "<group>"; };
 		21AB181D24DC6F8500B0ECD3 /* ACPSignal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPSignal.m; sourceTree = "<group>"; };
+		21AB182124DC711B00B0ECD3 /* ACPIdentity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ACPIdentity.m; sourceTree = "<group>"; };
+		21AB182324DC712300B0ECD3 /* ACPIdentity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ACPIdentity.h; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -862,6 +866,15 @@
 			path = migration;
 			sourceTree = "<group>";
 		};
+		21AB182024DC710E00B0ECD3 /* migration */ = {
+			isa = PBXGroup;
+			children = (
+				21AB182324DC712300B0ECD3 /* ACPIdentity.h */,
+				21AB182124DC711B00B0ECD3 /* ACPIdentity.m */,
+			);
+			path = migration;
+			sourceTree = "<group>";
+		};
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
@@ -950,6 +963,7 @@
 		24B4934324D2360700AA38D9 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				21AB182024DC710E00B0ECD3 /* migration */,
 				3FE6DE3124C642330065EA05 /* AEPIdentity.h */,
 				3FE6DE5024C643060065EA05 /* CustomIdentity.swift */,
 				3FE6DE4F24C643060065EA05 /* Event+Identity.swift */,
@@ -1534,6 +1548,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE6DE3F24C642330065EA05 /* AEPIdentity.h in Headers */,
+				21AB182424DC712300B0ECD3 /* ACPIdentity.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1831,7 +1846,7 @@
 					};
 					3FE6DE2E24C642330065EA05 = {
 						CreatedOnToolsVersion = 11.5;
-						LastSwiftMigration = 1150;
+						LastSwiftMigration = 1160;
 					};
 					3FE6DE3624C642330065EA05 = {
 						CreatedOnToolsVersion = 11.5;
@@ -2224,6 +2239,7 @@
 				3FE6DE6724C643060065EA05 /* IdentityHitResponse.swift in Sources */,
 				3FE6DE6224C643060065EA05 /* Event+Identity.swift in Sources */,
 				3FE6DE6324C643060065EA05 /* CustomIdentity.swift in Sources */,
+				21AB182224DC711B00B0ECD3 /* ACPIdentity.m in Sources */,
 				3FE6DE5C24C643060065EA05 /* Identity+PublicAPI.swift in Sources */,
 				3FE6DE6924C643060065EA05 /* Identity.swift in Sources */,
 				3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */,
