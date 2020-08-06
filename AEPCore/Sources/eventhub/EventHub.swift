@@ -83,7 +83,7 @@ final class EventHub {
         // Set an event number for the event
         self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
         self.eventQueue.add(event)
-        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Event \(event) is dispatched.")
+        Log.debug(label: "\(self.LOG_TAG):\(#function)", "Event #\(String(describing: self.eventNumberMap[event.id] ?? 0)), \(event) is dispatched.")
     }
 
     /// Registers a new `Extension` to the `EventHub`. This `Extension` must implement `Extension`
