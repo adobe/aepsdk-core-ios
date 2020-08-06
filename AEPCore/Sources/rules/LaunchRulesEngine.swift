@@ -79,16 +79,15 @@ struct LaunchRulesEngine {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
-                    guard var originData = consequenceWithConcreteValue.eventData else{
+                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else{
                         continue
                     }
-                    originData.mergeOverwrite(new: eventData ?? [:], deleteIfEmpty: false)
-                    eventData = originData as [String : Any]
-                case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
-                    if var originData = eventData as? [String:Any?], let newData =  consequenceWithConcreteValue.eventData{
-                        originData.mergeOverwrite(new: newData, deleteIfEmpty: true)
-                        eventData = originData as [String : Any]
+                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: false)
+                case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:                    
+                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else{
+                        continue
                     }
+                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: true)
                     default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         extensionRuntime.dispatch(event: event)

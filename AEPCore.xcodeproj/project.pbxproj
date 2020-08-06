@@ -121,12 +121,13 @@
 		3F03983A24BE62AA0019F095 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983624BE62AA0019F095 /* ADBMobileConfig.json */; };
 		3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F03983724BE62AA0019F095 /* TestConfig.json */; };
 		3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
-		3F08FF9524D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */; };
-		3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */; };
+		3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */; };
+		3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */; };
 		3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */; };
 		3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */; };
 		3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */; };
-		3F08FFA324DA179400D34DE3 /* TestableNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FFA224DA179400D34DE3 /* TestableNetworkService.swift */; };
+		3F08FFA924DBBDD700D34DE3 /* UserDefaults+Clear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FFA724DBBDD700D34DE3 /* UserDefaults+Clear.swift */; };
+		3F08FFAA24DBBDD700D34DE3 /* TestableNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */; };
 		3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */; };
 		3F39153324CB7E2400B58C3E /* MobileCore+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */; };
 		3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951E824CA096100F7325B /* MobileCoreTests.swift */; };
@@ -249,7 +250,6 @@
 		3FF8171724D89B500064DFA1 /* AEPCoreMocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3FF8171924D89B500064DFA1 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */; };
 		3FF8171C24D89B8F0064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
-		3FF8172024D89F450064DFA1 /* UserDefaults+Clear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */; };
 		3FF8172324D8ABF80064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
@@ -557,12 +557,13 @@
 		3F03983524BE62AA0019F095 /* TestImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestImage.png; sourceTree = "<group>"; };
 		3F03983624BE62AA0019F095 /* ADBMobileConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
 		3F03983724BE62AA0019F095 /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
-		3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+MergeOverwrite.swift"; sourceTree = "<group>"; };
-		3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryMergeOverwriteTests.swift; sourceTree = "<group>"; };
+		3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataMerger.swift; sourceTree = "<group>"; };
+		3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDataMergeTests.swift; sourceTree = "<group>"; };
 		3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineFunctionalTests.swift; sourceTree = "<group>"; };
 		3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_functional_1.zip; sourceTree = "<group>"; };
 		3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloaderTests.swift; sourceTree = "<group>"; };
-		3F08FFA224DA179400D34DE3 /* TestableNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableNetworkService.swift; sourceTree = "<group>"; };
+		3F08FFA724DBBDD700D34DE3 /* UserDefaults+Clear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UserDefaults+Clear.swift"; path = "AEPCore/Mocks/UserDefaults+Clear.swift"; sourceTree = SOURCE_ROOT; };
+		3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableNetworkService.swift; path = AEPCore/Mocks/TestableNetworkService.swift; sourceTree = SOURCE_ROOT; };
 		3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParserTests.swift; sourceTree = "<group>"; };
 		3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+IdentityTests.swift"; sourceTree = "<group>"; };
 		3F3951E824CA096100F7325B /* MobileCoreTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCoreTests.swift; sourceTree = "<group>"; };
@@ -692,7 +693,6 @@
 		3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPCoreMocks.h; path = AEPCore/Mocks/AEPCoreMocks.h; sourceTree = SOURCE_ROOT; };
 		3FF8171424D89B500064DFA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPCore/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
 		3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableExtensionRuntime.swift; path = AEPCore/Mocks/TestableExtensionRuntime.swift; sourceTree = SOURCE_ROOT; };
-		3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Clear.swift"; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -1224,7 +1224,7 @@
 			isa = PBXGroup;
 			children = (
 				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
-				3F08FF9624D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift */,
+				3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */,
 				3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */,
 				BB59402924CF6CA200EE0C6C /* AEPRulesEngineTests.swift */,
 				BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */,
@@ -1344,7 +1344,7 @@
 		3FB66AB324CA004400502CAF /* rules */ = {
 			isa = PBXGroup;
 			children = (
-				3F08FF9424D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift */,
+				3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */,
 				BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */,
 				BB00E26624D8C94600C578C1 /* TokenFinder.swift */,
 				3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */,
@@ -1410,8 +1410,8 @@
 				3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */,
 				3FF8171424D89B500064DFA1 /* Info.plist */,
 				3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */,
-				3FF8171F24D89F450064DFA1 /* UserDefaults+Clear.swift */,
-				3F08FFA224DA179400D34DE3 /* TestableNetworkService.swift */,
+				3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */,
+				3F08FFA724DBBDD700D34DE3 /* UserDefaults+Clear.swift */,
 			);
 			path = mocks;
 			sourceTree = "<group>";
@@ -1952,7 +1952,7 @@
 				3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */,
 				3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
 				3FB66AC724CA004400502CAF /* Extension+Register.swift in Sources */,
-				3F08FF9524D9F1D200D34DE3 /* Dictionary+MergeOverwrite.swift in Sources */,
+				3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */,
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
 			);
@@ -1965,13 +1965,12 @@
 				BB59402B24CF6E1D00EE0C6C /* AEPRulesEngineTests.swift in Sources */,
 				3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */,
 				21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */,
-				3F08FFA324DA179400D34DE3 /* TestableNetworkService.swift in Sources */,
 				3F39521724CA096200F7325B /* EventHub+Testable.swift in Sources */,
 				3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */,
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
-				3F08FF9724D9F1F300D34DE3 /* DictionaryMergeOverwriteTests.swift in Sources */,
+				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
@@ -2190,8 +2189,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FF8172024D89F450064DFA1 /* UserDefaults+Clear.swift in Sources */,
+				3F08FFA924DBBDD700D34DE3 /* UserDefaults+Clear.swift in Sources */,
 				3FF8171924D89B500064DFA1 /* TestableExtensionRuntime.swift in Sources */,
+				3F08FFAA24DBBDD700D34DE3 /* TestableNetworkService.swift in Sources */,
 				3FF8171624D89B500064DFA1 /* Event+Timestamp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
