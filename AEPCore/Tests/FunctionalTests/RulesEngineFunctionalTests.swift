@@ -14,7 +14,7 @@ import Foundation
 import XCTest
 @testable import AEPCore
 import AEPServices
-import AEPServicesMock
+import AEPServicesMocks
 import AEPCoreMocks
 
 /// Functional tests for the rules engine feature

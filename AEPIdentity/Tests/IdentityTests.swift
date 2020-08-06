@@ -13,7 +13,7 @@ import XCTest
 @testable import AEPIdentity
 @testable import AEPCore
 import AEPServices
-import AEPServicesMock
+import AEPServicesMocks
 
 class IdentityTests: XCTestCase {
     

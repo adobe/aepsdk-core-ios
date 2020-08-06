@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 
 import XCTest
 @testable import AEPServices
-import AEPServicesMock
+import AEPServicesMocks
 
 let testBody = "{\"test\": \"json\"\"}"
 let jsonData = testBody.data(using: .utf8)

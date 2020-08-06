@@ -12,12 +12,12 @@ governing permissions and limitations under the License.
 
 #import <Foundation/Foundation.h>
 
-//! Project version number for AEPServicesMock.
-FOUNDATION_EXPORT double AEPServicesMockVersionNumber;
+//! Project version number for AEPServicesMocks.
+FOUNDATION_EXPORT double AEPServicesMocksVersionNumber;
 
-//! Project version string for AEPServicesMock.
-FOUNDATION_EXPORT const unsigned char AEPServicesMockVersionString[];
+//! Project version string for AEPServicesMocks.
+FOUNDATION_EXPORT const unsigned char AEPServicesMocksVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <AEPServicesMock/PublicHeader.h>
+// In this header, you should import all the public headers of your framework using statements like #import <AEPServicesMocks/PublicHeader.h>
 
 
