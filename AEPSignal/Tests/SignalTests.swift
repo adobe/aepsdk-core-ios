@@ -12,9 +12,16 @@
 
 import XCTest
 @testable import AEPSignal
+@testable import AEPCore
+import AEPServices
+import AEPServicesMocks
+import AEPCoreMock
 
-class AEPSignalTests: XCTestCase {
+class SignalTests: XCTestCase {
 
+    var signal: Signal!
+    var mockRuntime: TestableExtensionRuntime!
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }

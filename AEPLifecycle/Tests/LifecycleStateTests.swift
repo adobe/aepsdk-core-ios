@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPLifecycle
 import AEPServices
-import AEPServicesMock
+import AEPServicesMocks
 
 class LifecycleStateTests: XCTestCase {
     

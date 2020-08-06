@@ -14,7 +14,7 @@ import XCTest
 import AEPCore
 @testable import AEPLifecycle
 import AEPServices
-import AEPServicesMock
+import AEPServicesMocks
 import AEPCoreMocks
 
 /// Functional tests for the Lifecycle extension

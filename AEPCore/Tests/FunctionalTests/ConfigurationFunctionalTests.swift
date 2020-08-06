@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPCore
 import AEPServices
-import AEPServicesMock
+import AEPServicesMocks
 import AEPCoreMocks
 
 /// Functional tests for the Configuration extension
