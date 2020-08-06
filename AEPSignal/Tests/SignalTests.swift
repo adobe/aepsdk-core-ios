@@ -11,35 +11,47 @@
  */
 
 import XCTest
-@testable import AEPSignal
-@testable import AEPCore
-import AEPServices
+import AEPCoreMocks
 import AEPServicesMocks
-import AEPCoreMock
+
+@testable import AEPCore
+@testable import AEPServices
+@testable import AEPSignal
 
 class SignalTests: XCTestCase {
 
     var signal: Signal!
     var mockRuntime: TestableExtensionRuntime!
+    var mockNetworkService: MockNetworkServiceOverrider!
     
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
+        
+        mockRuntime = TestableExtensionRuntime()
+        mockNetworkService = ServiceProvider.shared.networkService as? MockNetworkServiceOverrider
+        
+        signal = Signal(runtime: mockRuntime)
+        signal.onRegistered()
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    func testConfigResponseOptOut() throws {
+        // setup
+        let data = [SignalConstants.Configuration.GLOBAL_PRIVACY : PrivacyStatus.optedOut.rawValue] as [String : Any]
+        let configEvent = Event(name: "Test Configuration response",
+                                type: EventType.configuration,
+                                source: EventSource.responseContent,
+                                data: data)
+        mockRuntime.simulateSharedState(for: (SignalConstants.Configuration.NAME, configEvent), data: (data, .set))
+        
+        
+        // test
+        mockRuntime.simulateComingEvents(configEvent)
+        
+        // verify
+        XCTAssertEqual(0, signal.hitQueue)()
+        
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
 
 }

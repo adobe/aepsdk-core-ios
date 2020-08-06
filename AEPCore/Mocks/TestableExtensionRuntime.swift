@@ -13,8 +13,10 @@ governing permissions and limitations under the License.
 import Foundation
 @testable import AEPCore
 
-// Testable implemetation for `ExtensionRuntime`, enable easy setup for the input and verification of the output of an extension
-public class TestableExtensionRuntime:ExtensionRuntime{
+/// Testable implemetation for `ExtensionRuntime`
+///
+/// Enable easy setup for the input and verification of the output of an extension
+public class TestableExtensionRuntime: ExtensionRuntime {
 
     public var listeners:[String:EventListener] = [:]
     public var dispatchedEvents: [Event] = []

@@ -17,7 +17,7 @@ import AEPServices
 @objc(AEPSignal)
 public class Signal: NSObject, Extension {
     
-    private var hitQueue: HitQueuing
+    private(set) var hitQueue: HitQueuing
         
     // MARK: - Extension
     public let runtime: ExtensionRuntime
