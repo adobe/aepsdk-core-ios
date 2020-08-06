@@ -2,12 +2,12 @@ import Foundation
 
 /// An enum type representing the possible wrapper types
 @objc(AEPWrapperType) public enum WrapperType: Int, RawRepresentable {
-    case none
-    case reactNative
-    case flutter
-    case cordova
-    case unity
-    case xamarin
+    case none = 0
+    case reactNative = 1
+    case flutter = 2
+    case cordova = 3
+    case unity = 4
+    case xamarin = 5
     
     public typealias RawValue = String
     

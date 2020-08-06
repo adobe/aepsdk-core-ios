@@ -13,7 +13,7 @@ import Foundation
 
 /// An enum type representing the possible authentication states
 @objc(AEPMobileVisitorAuthState) public enum MobileVisitorAuthenticationState: Int, Codable {
-    case unknown
-    case authenticated
-    case loggedOut
+    case unknown = 0
+    case authenticated = 1
+    case loggedOut = 2
 }
