@@ -719,4 +719,97 @@ class EventDataMergeTests: XCTestCase {
         */
         XCTAssertEqual(0, result.count)
     }
+    
+    func testInnerMapContainArrayWildCardMergeOverwrite(){
+           
+           let toData = """
+           {
+               "innerMap": {
+                    "array": [
+                        {
+                            "item1": "item1"
+                        },
+                       {
+                           "item2": "item2"
+                       }
+                   ]
+                }
+           }
+           """.data(using: .utf8)!
+           
+           
+           let fromData = """
+           {
+                "innerMap": {
+                   "array[*]": {
+                           "key": "newValue"
+                       }
+                }
+           }
+           """.data(using: .utf8)!
+           
+           let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
+           let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
+           
+           let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: true)
+           
+           /*
+             {
+                "innerMap": {
+                   "array": [
+                       {
+                           "item1": "item1",
+                           "key": "newValue"
+                       },
+                       {
+                           "item2": "item2",
+                           "key": "newValue"
+                       }
+                   ]
+                }
+            }
+           */
+           let array =  (result["innerMap"] as! [String:Any])["array"] as?  [[String:String]]
+           XCTAssertEqual(2, array?.count)
+           XCTAssertEqual(2, array?[0].count)
+           XCTAssertEqual(2, array?[1].count)
+       }
+    
+    func testCleanArrayWildCard(){
+           
+           let toData = """
+           {
+           }
+           """.data(using: .utf8)!
+           
+           
+           let fromData = """
+           {
+                "innerMap": {
+                   "array[*]": {
+                           "key": "newValue"
+                       }
+                },
+                "array[*]": {
+                      "key": "newValue"
+                  }
+           }
+           """.data(using: .utf8)!
+           
+           let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
+           let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
+           
+           let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: true)
+           
+           /*
+             {
+                "innerMap": {
+                }
+            }
+           */
+
+           XCTAssertEqual(1, result.count)
+           let innerMap =  result["innerMap"] as! [String:Any]
+           XCTAssertEqual(0, innerMap.count)
+       }
 }

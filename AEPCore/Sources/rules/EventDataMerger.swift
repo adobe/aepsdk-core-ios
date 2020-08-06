@@ -25,7 +25,7 @@ struct EventDataMerger {
         // overwrite all matching key value pairs with new values, and recursively handle nested dictionaries
         let combinedDictionary = pureMerging(to: to, from: from, overwrite: overwrite)
         // handle the array wild card modification
-        let mergedDictionary = handleArrayWildCard(dict: combinedDictionary, overwrite: overwrite)
+        let mergedDictionary = handleArrayWildCard(dictionary: combinedDictionary, overwrite: overwrite)
         // remove nil from the dict
         return mergedDictionary.compactMapValues { $0 }
     }
@@ -51,39 +51,45 @@ struct EventDataMerger {
     }
     
     
-    /// deal with the array wild card [*]
+    /// loop through the dictionary, if there is a key with the suffix `[*]`,  say `someArray[*]`,   then check if there is a correspsonding array under the key name `someArray`. If so, merge the data from the `someArray[*]` to every item inside the array with key`someArray`.
     /// - Parameters:
-    ///   - dict: the dictionary which may have keys end with ` [*]`
+    ///   - dictionary: the dictionary which may have keys end with ` [*]`
     ///   - overwrite: true if the data in array wild card can overwrite the data in the original array items
-    static func handleArrayWildCard(dict: [String: Any?], overwrite:Bool) -> [String: Any?] {
-        var dict = dict
-        for (k, v) in dict {
+    static func handleArrayWildCard(dictionary: [String: Any?], overwrite:Bool) -> [String: Any?] {
+        var mutableDictionary = dictionary
+        for (k, v) in dictionary {
             
             // check for the unique SUFFIX_FOR_OBJECT ([*])
-            guard let range = k.range(of: SUFFIX_FOR_OBJECT) else { continue }
+            guard let range = k.range(of: SUFFIX_FOR_OBJECT) else {
+                // clean the keys with SUFFIX_FOR_OBJECT in the embedded dictionary
+                if let innerDict = v as? [String: Any?] {
+                    mutableDictionary[k] = merging(to: innerDict, from: [:], overwrite: false)
+                }
+                continue
+            }
             
             // Remove the special key from the dict
-            dict.removeValue(forKey: k)
+            mutableDictionary.removeValue(forKey: k)
             
             let keyWithoutSuffix: String = String(k[..<range.lowerBound])
             
             // do nothing if there is no targeted array
-            guard let arrOfReceivers: [Any?] = dict[keyWithoutSuffix] as? [Any?] else { continue }
+            guard let arrOfReceivers: [Any] = mutableDictionary[keyWithoutSuffix] as? [Any] else { continue }
             
             // do nothing if the attachData is not a dictionary
             guard let attachData = v as? [String: Any?] else { continue}
                         
             // attach the data to each item in the array
-            let arrWithAttachedData = arrOfReceivers.map { item -> Any? in
+            let arrWithAttachedData = arrOfReceivers.map { item -> Any in
                 // check if the item is a dictionary, if so, attach data to it
                 guard let itemDict = item as? [String: Any?] else { return item }
                 return merging(to: itemDict, from: attachData, overwrite: overwrite)
             }
             
-            dict[keyWithoutSuffix] = arrWithAttachedData
+            mutableDictionary[keyWithoutSuffix] = arrWithAttachedData
               
         }
-        return dict
+        return mutableDictionary
     }
     
 }
