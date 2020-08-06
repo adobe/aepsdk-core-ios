@@ -11,42 +11,29 @@
 
 import Foundation
 
-/// Provides functions to "flatten"  an`EventData` dictionary.
-class EventDataFlattener {
+extension Dictionary where Key == String, Value == Any {
     /// Returns a "flattened" `Dictionary` which will not contain any `Dictionary` as a value. For example:
     ///  `[rootKey:[key1: value1, key2: value2]]`
     ///  will be flattened to
     ///  `[rootKey.key1: value1]`
     ///  `[rootKey.key2: value2]`
     ///
-    /// - Parameter eventData: the `EventData` to flatten
     /// - Returns: flattened dictionary
-    static func getFlattenedDataDict(eventData: [String: Any]) -> [String: Any] {
-        return flatten(eventData: eventData)
+    func flatten() -> [String: Any] {
+        return Dictionary.flatten(eventData: self)
     }
 
-    private static func flatten(key: String = "", eventData: [String: Any]) -> [String: Any] {
-        let keyPrefix = (key.count > 0) ? (key + ".") : key
+    private static func flatten(eventData: [String: Any], prefix: String = "") -> [String: Any] {
+        let keyPrefix = (prefix.count > 0) ? (prefix + ".") : prefix
         var flattenedDict = [String: Any]()
         for (key, value) in eventData {
             let expandedKey = keyPrefix + key
             if let dict = value as? [String: Any] {
-                flattenedDict.merge(dict: flatten(key: expandedKey, eventData: dict))
+                flattenedDict.merge(flatten(eventData: dict, prefix: expandedKey)) { _, new in new }
             } else {
                 flattenedDict[expandedKey] = value
             }
         }
         return flattenedDict
-    }
-}
-
-/// extend the `Dictionary` struct
-extension Dictionary {
-    /// Merge a new dictionary to the current dictionary
-    /// - Parameter dict: a new dictionary to be merged
-    fileprivate mutating func merge<K, V>(dict: [K: V]) {
-        for (k, v) in dict {
-            updateValue(v as! Value, forKey: k as! Key)
-        }
     }
 }

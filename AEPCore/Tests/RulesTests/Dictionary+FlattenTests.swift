@@ -17,7 +17,7 @@ class EventDataFlattenerTests: XCTestCase {
         /// Give: a nested event data dictionary
         let eventData: [String: Any] = ["key1": ["key11": "value11"], "key2": 2, "key3": ["key31": ["key32": "value32"], "key31-2": 31.2]]
         /// When: call `EventDataFlattener.getFlattenedDataDict` to flatten above event data
-        let flattenedDictionary = EventDataFlattener.getFlattenedDataDict(eventData: eventData)
+        let flattenedDictionary = eventData.flatten()
         /// Then
         let expectedResult: [String: Any] = ["key1.key11": "value11", "key2": 2, "key3.key31.key32": "value32", "key3.key31-2": 31.2]
         XCTAssertTrue(NSDictionary(dictionary: expectedResult).isEqual(to: NSDictionary(dictionary: flattenedDictionary) as! [AnyHashable: Any]))
