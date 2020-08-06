@@ -12,7 +12,7 @@
 
 import Foundation
 
-struct DictionaryMerger {
+struct EventDataMerger {
     
     private static let SUFFIX_FOR_OBJECT = "[*]"
     

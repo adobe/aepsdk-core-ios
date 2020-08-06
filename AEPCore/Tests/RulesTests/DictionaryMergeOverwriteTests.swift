@@ -34,7 +34,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: true)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: true)
 
         /*
          {
@@ -66,7 +66,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: true)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: true)
         /*
          {
              "key":"newValue"
@@ -95,7 +95,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
          {
@@ -130,7 +130,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: true)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: true)
 
         /*
          {
@@ -170,7 +170,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: true)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: true)
         /*
          {
              "inner": {
@@ -208,7 +208,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
          {
@@ -243,7 +243,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
          {
@@ -272,7 +272,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
          {
@@ -301,7 +301,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
          {
@@ -342,7 +342,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
           {
@@ -397,7 +397,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: true)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: true)
         
         /*
           {
@@ -451,7 +451,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
           {
@@ -502,7 +502,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
           {
@@ -544,7 +544,7 @@ class DictionaryMergeOverwriteTests: XCTestCase {
         let toDict = try! JSONDecoder().decode(AnyCodable.self, from: toData).dictionaryValue!
         let fromDict = try! JSONDecoder().decode(AnyCodable.self, from: fromData).dictionaryValue!
         
-        let result = DictionaryMerger.merging(to: toDict, from: fromDict, overwrite: false)
+        let result = EventDataMerger.merging(to: toDict, from: fromDict, overwrite: false)
         
         /*
           {

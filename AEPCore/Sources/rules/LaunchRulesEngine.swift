@@ -82,12 +82,12 @@ struct LaunchRulesEngine {
                     guard let from = consequenceWithConcreteValue.eventData, let to = eventData else{
                         continue
                     }
-                    eventData =  DictionaryMerger.merging(to: to, from: from, overwrite: false)
+                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: false)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:                    
                     guard let from = consequenceWithConcreteValue.eventData, let to = eventData else{
                         continue
                     }
-                    eventData =  DictionaryMerger.merging(to: to, from: from, overwrite: true)
+                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: true)
                     default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         extensionRuntime.dispatch(event: event)
