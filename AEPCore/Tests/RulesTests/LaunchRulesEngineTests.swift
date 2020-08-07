@@ -15,9 +15,9 @@ import XCTest
 @testable import AEPCore
 @testable import AEPCoreMocks
 import AEPServices
-@testable import SwiftRulesEngine
+@testable @_implementationOnly import SwiftRulesEngine
 
-class AEPRulesEngineTests: XCTestCase {
+class LaunchRulesEngineTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -36,14 +36,14 @@ class AEPRulesEngineTests: XCTestCase {
         }
         let runtime = TestableExtensionRuntime()
         let event = Event(name: "test", type: "type", source: "source", data: [:])
-        runtime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata" : ["devicename": "abc"]], status: .set))
+        runtime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["devicename": "abc"]], status: .set))
         
         /// Then: this json rules should be parsed to `LaunchRule` objects
         let rules = JSONRulesParser.parse(data)
         let rulesEngine = LaunchRulesEngine(extensionRuntime: runtime)
-        //         ~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename
+        // ~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename
         let tokens = TokenFinder(event: event, extensionRuntime: runtime)
-        let result = rulesEngine.replaceToken(for: rules[0].consequences[0], data:tokens)
+        let result = rulesEngine.replaceToken(for: rules[0].consequences[0], data: tokens)
         // http://adobe.com/device=abc
         
         let urlString = result.detailDict["url"] as! String

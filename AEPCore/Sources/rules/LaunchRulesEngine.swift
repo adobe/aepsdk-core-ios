@@ -35,36 +35,37 @@ struct LaunchRulesEngine {
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
     }
-    
-    func trace(with tracer: @escaping RulesTracer){
+
+    /// Register a `RulesTracer`
+    /// - Parameter tracer: a `RulesTracer` closure to know result of rules evaluation
+    func trace(with tracer: @escaping RulesTracer) {
         rulesEngine.trace(with: tracer)
     }
-    
+
     /// Downloads the rules from the remote server
     /// - Parameter url: the `URL` of the remote urls
     func loadRemoteRules(from url: URL) {
         rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
-            guard let data = data else{
+            guard let data = data else {
                 return
             }
-            
+
             let rules = JSONRulesParser.parse(data)
             self.rulesEngine.addRules(rules: rules)
-            
         }
     }
-    
+
     /// Reads the cached rules
     /// - Parameter url: the `URL` of the remote urls
     func loadCachedRules(for url: URL) {
-        guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else{
+        guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else {
             return
         }
 
         let rules = JSONRulesParser.parse(data)
-        self.rulesEngine.addRules(rules: rules)
+        rulesEngine.addRules(rules: rules)
     }
-    
+
     /// Evaluates all the current rules against the supplied `Event`.
     /// - Parameters:
     ///   - event: the `Event` against which to evaluate the rules
@@ -79,16 +80,16 @@ struct LaunchRulesEngine {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
-                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else{
+                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
                         continue
                     }
-                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: false)
-                case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:                    
-                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else{
+                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
+                case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
+                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
                         continue
                     }
-                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: true)
-                    default:
+                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
+                default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         extensionRuntime.dispatch(event: event)
                     }
@@ -108,7 +109,7 @@ struct LaunchRulesEngine {
         let dict = replaceToken(in: consequence.detailDict, data: data)
         return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }
-    
+
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
         var mutableDict = dict
         for (key, value) in mutableDict {
@@ -139,6 +140,4 @@ struct LaunchRulesEngine {
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
         return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: dict)
     }
-
-
 }
