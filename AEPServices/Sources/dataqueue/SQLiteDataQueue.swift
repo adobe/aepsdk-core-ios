@@ -141,6 +141,26 @@ class SQLiteDataQueue: DataQueue {
         }
     }
     
+    func count() -> Int {
+        return serialQueue.sync {
+            let queryRowStatement = """
+            SELECT count(id) FROM \(SQLiteDataQueue.TABLE_NAME);
+            """
+            guard let connection = connect() else {
+                return 0
+            }
+            defer {
+                disconnect(database: connection)
+            }
+            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let countAsString = result.first?.first?.value else {
+                Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
+                return 0
+            }
+                        
+            return Int(countAsString) ?? 0            
+        }
+    }
+    
     private func connect() -> OpaquePointer? {
         if let database = SQLiteWrapper.connect(databaseFilePath: databaseFilePath, databaseName: databaseName) {
             return database
