@@ -245,7 +245,7 @@ class DataQueueTests: XCTestCase {
         for i in 1...3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
             let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
-            _ = queue.add(dataEntity: entity)
+            queue.add(dataEntity: entity)
         }
         
         // When
