@@ -48,6 +48,10 @@ public class PersistentHitQueue: HitQueuing {
         let _ = dataQueue.clear()
     }
     
+    public func count() -> Int {
+        return dataQueue.count()
+    }
+    
     /// A recursive function for processing hits, it will continue processing all the hits until none are left in the data queue
     private func processNextHit() {
         queue.async {

@@ -42,4 +42,7 @@ public class MockHitQueue: HitQueuing {
         calledClear = true
     }
 
+    public func count() -> Int {
+        return queuedHits.count
+    }
 }

@@ -32,4 +32,7 @@ public protocol HitQueuing {
     
     /// Removes all the persisted hits from the queue
     func clear()
+    
+    /// Returns the number of items in the queue
+    func count() -> Int
 }

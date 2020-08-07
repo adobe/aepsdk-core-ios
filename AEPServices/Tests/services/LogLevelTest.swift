@@ -15,8 +15,8 @@ import XCTest
 
 class LogLevelTest: XCTestCase {
     func testLogLevelComparer() throws {
-        XCTAssertTrue(LogLevel.error > LogLevel.warning)
-        XCTAssertTrue(LogLevel.warning > LogLevel.debug)
-        XCTAssertTrue(LogLevel.debug > LogLevel.trace)
+        XCTAssertTrue(LogLevel.error < LogLevel.warning)
+        XCTAssertTrue(LogLevel.warning < LogLevel.debug)
+        XCTAssertTrue(LogLevel.debug < LogLevel.trace)
     }
 }

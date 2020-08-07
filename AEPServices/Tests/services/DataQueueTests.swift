@@ -236,6 +236,24 @@ class DataQueueTests: XCTestCase {
 
         XCTAssertFalse(tableExist)
     }
+    
+    /// count()
+    func testCount() throws {
+        // Given
+        let queue = DataQueueService.shared.getDataQueue(label: fileName)!
+        
+        for i in 1...3 {
+            let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
+            queue.add(dataEntity: entity)
+        }
+        
+        // When
+        let result = queue.count()
+        
+        // Then
+        XCTAssertEqual(3, result)
+    }
 
     /// thread-safe APIs
     func testConcurrentOperations() throws {
