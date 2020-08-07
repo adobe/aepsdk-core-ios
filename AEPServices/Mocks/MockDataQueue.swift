@@ -39,5 +39,7 @@ public class MockDataQueue: DataQueue {
         return true
     }
     
-    
+    public func count() -> Int {
+        return queue.count
+    }
 }
