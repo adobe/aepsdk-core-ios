@@ -10,7 +10,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "if which swiftlint &gt;/dev/null; then&#10;  cd ${PROJECT_DIR}&#10;  rm ${PROJECT_DIR}/swiftlint.log&#10;  exec &gt; ${PROJECT_DIR}/swiftlint.log 2&gt;&amp;1&#10;  swiftlint autocorrect&#10;else&#10;  echo &quot;warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint&quot;&#10;fi&#10;"
+               scriptText = "if which swiftlint &gt;/dev/null; then&#10;   cd ${PROJECT_DIR}&#10;   swiftformat .&#10;else&#10;echo &quot;warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat&quot;&#10;fi&#10;"
                shellToInvoke = "/usr/local/bin/zsh">
                <EnvironmentBuildable>
                   <BuildableReference

@@ -22,4 +22,5 @@ disabled_rules: # rule identifiers to exclude from running
   - orphaned_doc_comment
   - type_name
   - large_tuple
+  - trailing_comma
 
