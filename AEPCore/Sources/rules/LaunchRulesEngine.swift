@@ -27,7 +27,7 @@ struct LaunchRulesEngine {
 
     private let transform = Transform()
     private let extensionRuntime: ExtensionRuntime
-    private let rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.process")
+    private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
 
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
