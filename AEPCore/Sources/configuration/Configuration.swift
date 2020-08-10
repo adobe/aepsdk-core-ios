@@ -51,11 +51,16 @@ class Configuration: Extension {
         }
 
         configState.loadInitialConfig()
-        if !configState.environmentAwareConfiguration.isEmpty {
-            let responseEvent = Event(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: configState.environmentAwareConfiguration)
+        let config = configState.environmentAwareConfiguration
+        if !config.isEmpty {
+            let responseEvent = Event(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: config)
             dispatch(event: responseEvent)
+            pendingResolver(config)
+            // notify rules engine to load cached rules
+            if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String{
+                rulesEngine.loadCachedRules(for: rulesURLString)
+            }
         }
-        pendingResolver(configState.environmentAwareConfiguration)
     }
 
     /// Invoked when the Configuration extension has been unregistered by the `EventHub`, currently a no-op.
@@ -116,8 +121,7 @@ class Configuration: Extension {
 
         configState.updateWith(programmaticConfig: updatedConfig)
         // Create shared state and dispatch configuration response content
-        sharedStateResolver(configState.environmentAwareConfiguration)
-        dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
+        publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
     }
 
     /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
@@ -197,12 +201,23 @@ class Configuration: Extension {
     ///   - event: The event at which this configuration should be published at
     ///   - sharedStateResolver: a closure which is resolved with the current configuration
     private func publishCurrentConfig(event: Event, sharedStateResolver: SharedStateResolver) {
+        let config = configState.environmentAwareConfiguration
         // Update the shared state with the new configuration
-        sharedStateResolver(configState.environmentAwareConfiguration)
+        sharedStateResolver(config)
         // Dispatch a Configuration Response Content event with the new configuration.
-        dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
+        dispatchConfigurationResponse(triggerEvent: event, data: config)
+        // notify the rules engine about the change of config
+        notifyRuleEngine(config)
     }
 
+    /// notify the rules engine about the change of config
+    /// - Parameter config: the current config
+    private func notifyRuleEngine(_ config:[String: Any]){
+        if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String{
+            rulesEngine.loadRemoteRules(from: rulesURLString)
+        }
+    } 
+    
     // MARK: Helpers
 
     /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId

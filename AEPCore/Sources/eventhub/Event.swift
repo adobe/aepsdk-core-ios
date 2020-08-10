@@ -28,13 +28,13 @@ import Foundation
     @objc public let source: String
 
     /// Optional data associated with this event
-    @objc public internal(set) var data: [String: Any]?
+    @objc public var data: [String: Any]?
 
     /// Date this event was created
     @objc public private(set) var timestamp = Date()
 
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
-    @objc public let responseID: UUID?
+    @objc public private(set) var responseID: UUID?
 
     /// Event description used for logging
     @objc override public var description: String {
@@ -57,6 +57,14 @@ import Foundation
         self.source = source
         self.data = data
         responseID = requestEvent?.id
+    }
+    
+    internal func replacingEventData(with data:[String: Any]?) -> Event{
+        let event = Event(name: name, type: type, source: source, data: data)
+        event.id = self.id
+        event.responseID = self.responseID
+        event.timestamp = self.timestamp
+        return event
     }
 
     /// Creates a new `Event` where the `responseID` is equal to the `id` of this `Event`
