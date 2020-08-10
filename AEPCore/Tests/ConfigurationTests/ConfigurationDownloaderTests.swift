@@ -132,7 +132,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         XCTAssertNil(remoteConfig)
     }
 
-    /// Ensures that when the network service returns a 304 response that the cached config is used
+    /// Ensures that when the network service returns a 304 response that nil is passed to completion callback
     func testLoadConfigFromUrlNotModified() {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
@@ -140,20 +140,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .notModified)
 
         let appId = "test-app-id"
-        let expectedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
-                                                    "target.clientCode": "yourclientcode",
-                                                    "target.timeout": 5,
-                                                    "audience.server": "omniture.demdex.net",
-                                                    "audience.timeout": 5,
-                                                    "analytics.rsids": "mobilersidsample",
-                                                    "analytics.server": "obumobile1.sc.omtrdc.net",
-                                                    "analytics.aamForwardingEnabled": false,
-                                                    "analytics.offlineEnabled": true,
-                                                    "analytics.batchLimit": 0,
-                                                    "analytics.backdatePreviousSessionInfo": false,
-                                                    "global.privacy": "optedin",
-                                                    "lifecycle.sessionTimeout": 300,
-                                                    "rules.url": "https://link.to.rules/test.zip"]
+        let expectedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg"]
         dataStore.setObject(key: "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(cacheable: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
 
         var remoteConfig: [String: Any]?
@@ -166,7 +153,7 @@ class ConfigurationDownloaderTests: XCTestCase {
 
         // verify
         wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(expectedConfig.count, remoteConfig?.count)
+        XCTAssertNil(remoteConfig)
     }
 
     /// Tests that a nil configuration is returned when an empty appId is passed
