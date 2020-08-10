@@ -32,7 +32,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         return AnyCodable.toAnyDictionary(dictionary: getCachedConfig(appId: appId, dataStore: dataStore)?.cacheable)
     }
 
-    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> ()) {
+    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> Void) {
         guard !appId.isEmpty, let url = URL(string: ConfigurationConstants.CONFIG_URL_BASE + appId + ".json") else {
             // error - bad url
             completion(nil)
@@ -46,34 +46,34 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         }
 
         let networkRequest = NetworkRequest(url: url, httpMethod: .get, httpHeaders: headers)
-        
+
         ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
             // If we get a 304 back, we can use the config in cache and exit early
             if httpConnection.responseCode == 304 {
                 completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cacheable))
                 return
             }
-            
+
             if let data = httpConnection.data, let configDict = try? JSONDecoder().decode([String: AnyCodable].self, from: data) {
                 let config = CachedConfiguration(cacheable: configDict,
                                              lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
                                       eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
-                
+
                 dataStore.setObject(key: self.buildCacheKey(appId: appId), value: config) // cache config
                 completion(AnyCodable.toAnyDictionary(dictionary: config.cacheable))
             } else {
                 completion(nil)
             }
-            
+
         }
     }
-    
+
     /// Formats the `appId` into a Adobe namespace key
     /// - Parameter appId: appId to be encoded into the cache key
     private func buildCacheKey(appId: String) -> String {
         return "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)"
     }
-    
+
     /// Retrieves the cached configuration stored for `appId`, if any
     /// - Parameters:
     ///   - appId: The appId of the cached configuration

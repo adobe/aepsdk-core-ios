@@ -13,16 +13,16 @@ import Foundation
 
 /// Defines  a visitor identifier
 @objc(AEPIdentifiable) public protocol Identifiable {
-    
+
     /// Origin of the identifier
     var origin: String? { get }
-    
+
     /// Type of the identifier
     var type: String? { get }
-    
+
     /// The identifier
     var identifier: String? { get }
-    
+
     /// The authentication state for the identifier
     var authenticationState: MobileVisitorAuthenticationState { get }
 }

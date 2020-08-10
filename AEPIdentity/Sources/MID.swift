@@ -12,14 +12,14 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// A type which represents a Experience Cloud ID (MID)
-struct MID:  Equatable, Codable, Hashable, CustomStringConvertible {
+struct MID: Equatable, Codable, Hashable, CustomStringConvertible {
     var description: String {
         return midString
     }
-    
+
     /// Representation of the MID as a `String`
     let midString: String
-    
+
     /// Generates a new MID
     init() {
         let uuidBytes = Mirror.init(reflecting: UUID().uuid).children.map({ $0.value })
@@ -29,11 +29,11 @@ struct MID:  Equatable, Codable, Hashable, CustomStringConvertible {
         let lsb = uuidBytes[8...].reduce(Int64(0), { base, next in
             (base << 8) | Int64((next as? UInt8)! & 0xff)
         })
-        
+
         let correctedMsb = String(msb < 0 ? -msb : msb)
         let correctedLsb = String(lsb < 0 ? -lsb : lsb)
-        
+
         midString = "\(String(repeating: "0", count: 19 - correctedMsb.count))\(correctedMsb)\(String(repeating: "0", count: 19 - correctedLsb.count))\(correctedLsb)"
     }
-    
+
 }

@@ -15,37 +15,37 @@ import Foundation
 public final class ThreadSafeArray<T> {
     private var array: [T] = []
     private var queue: DispatchQueue
-    
+
     /// Creates a new thread safe array
     /// - Parameter identifier: A unique identifier for this array, a reverse-DNS naming style (com.example.myqueue) is recommended
     public init(identifier: String = "com.adobe.threadsafearray.queue") {
         queue = DispatchQueue(label: identifier)
     }
-    
+
     /// Appends a new element safetly to the array
     public func append(_ newElement: T) {
         queue.async {
             self.array.append(newElement)
         }
     }
-    
+
     /// Clears the array by removing all elements
     public func clear() {
         queue.async {
             self.array.removeAll()
         }
     }
-        
+
     /// Returns if the array is empty or not
     public var isEmpty: Bool {
         return queue.sync { return self.array.isEmpty }
     }
-    
+
     /// The number of elements in the array
     public var count: Int {
         return queue.sync { return self.array.count }
     }
-    
+
     /// Gets a non thread safe shallow copy of the array
     public var shallowCopy: [T] {
         return queue.sync {
@@ -54,7 +54,7 @@ public final class ThreadSafeArray<T> {
             return array
         }
     }
-        
+
     // MARK: - Subscript
     public subscript(index: Int) -> T {
         get {

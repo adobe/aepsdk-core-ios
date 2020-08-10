@@ -22,7 +22,7 @@ class AEPCoreLifecycleTests: XCTestCase {
 
     private func registerMockExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
-        EventHub.shared.registerExtension(type) { (error) in
+        EventHub.shared.registerExtension(type) { (_) in
             semaphore.signal()
         }
 

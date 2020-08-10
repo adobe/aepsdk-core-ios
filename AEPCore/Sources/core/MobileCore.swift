@@ -15,20 +15,20 @@ import AEPServices
 
 /// Core extension for the Adobe Experience Platform SDK
 @objc(AEPCore) public final class MobileCore: NSObject {
-    
+
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         if wrapperType == .none {
             return ConfigurationConstants.EXTENSION_VERSION
         }
-        
+
         return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
     private static var wrapperType = WrapperType.none
-    
+
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingextensions.queue")
-    
+
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
@@ -36,7 +36,7 @@ import AEPServices
     public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let registeredCounter = AtomicCounter()
         let allExtensions = [Configuration.self] + extensions
-        
+
         allExtensions.forEach {
             EventHub.shared.registerExtension($0) { (_) in
                 if registeredCounter.incrementAndGet() == allExtensions.count {
@@ -46,37 +46,37 @@ import AEPServices
             }
         }
     }
-    
+
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
     @objc(dispatch:)
     public static func dispatch(event: Event) {
         EventHub.shared.dispatch(event: event)
     }
-    
+
     /// Dispatches an `Event` through the `EventHub` and invokes a closure with the response `Event`.
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
     @objc(dispatch:responseCallback:)
-    public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> ()) {
+    public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> Void) {
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
             responseCallback(event)
         }
-        
+
         EventHub.shared.dispatch(event: event)
     }
-    
+
     /// Start event processing
     //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
     @objc(start:)
-    public static func start(_ completion: @escaping (()-> Void)) {
+    public static func start(_ completion: @escaping (() -> Void)) {
         // Start the event hub processing
         let pending = [Configuration.self] + MobileCore.pendingExtensions.shallowCopy
         MobileCore.pendingExtensions.clear()
         registerExtensions(pending, { completion() })
     }
-    
+
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
     @objc(setAdvertisingIdentifier:)
@@ -85,7 +85,7 @@ import AEPServices
         let event = Event(name: "SetAdvertisingIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
-    
+
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
     /// - Parameter deviceToken: the device token for push notifications
     @objc(setPushIdentifier:)
@@ -95,21 +95,21 @@ import AEPServices
         let event = Event(name: "SetPushIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
-    
+
     /// Sets the wrapper type for the SDK. Only applicable when being used in a cross platform environment such as React Native
     /// - Parameter type: the `WrapperType` corresponding to the current platform
     @objc(setWrapperType:)
     public static func setWrapperType(type: WrapperType) {
         MobileCore.wrapperType = type
     }
-    
+
     /// Sets the logging level for the SDK
     /// - Parameter level: The desired log level
     @objc(setLogLevel:)
     public static func setLogLevel(level: LogLevel) {
         Log.logFilter = level
     }
-    
+
     /// Sets the app group used to sharing user defaults and files among containing app and extension apps.
     /// This must be called in AppDidFinishLaunching and before any other interactions with the Adobe Mobile library have happened.
     /// - Parameter group: the app group name
@@ -117,5 +117,5 @@ import AEPServices
     public static func setAppGroup(group: String?) {
         ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
     }
-    
+
 }

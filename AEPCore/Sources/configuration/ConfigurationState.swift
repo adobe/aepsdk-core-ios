@@ -18,7 +18,7 @@ class ConfigurationState {
     let appIdManager: LaunchIDManager
     let configDownloader: ConfigurationDownloadable
     private var downloadedAppIds = Set<String>() // a set of appIds, if an appId is present then we have downloaded and applied the config
-    
+
     private(set) var currentConfiguration = [String: Any]()
     var environmentAwareConfiguration: [String: Any] {
         return computeEnvironmentConfig(config: currentConfiguration)
@@ -33,7 +33,7 @@ class ConfigurationState {
             return storedConfig ?? [:]
         }
     }
-    
+
     /// Creates a new `ConfigurationState` with an empty current configuration
     /// - Parameters:
     ///   - dataStore: The datastore in which configurations are cached
@@ -43,11 +43,11 @@ class ConfigurationState {
         self.configDownloader = configDownloader
         self.appIdManager = LaunchIDManager(dataStore: dataStore)
     }
-    
+
     /// Loads the first configuration at launch
     func loadInitialConfig() {
         var config = [String: Any]()
-        
+
         // Load any existing application ID, either saved in persistence or read from the ADBMobileAppID property in the platform's System Info Service.
         if let appId = appIdManager.loadAppId() {
             config = configDownloader.loadConfigFromCache(appId: appId, dataStore: dataStore)
@@ -56,10 +56,10 @@ class ConfigurationState {
         } else {
             config = configDownloader.loadDefaultConfigFromManifest() ?? [:]
         }
-        
+
         updateWith(newConfig: config)
     }
-    
+
     /// Merges the current configuration to `newConfig` then applies programmatic configuration on top
     /// - Parameter newConfig: The new configuration
     func updateWith(newConfig: [String: Any]) {
@@ -68,26 +68,26 @@ class ConfigurationState {
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
-    
+
     /// Updates the programmatic config, then applies these changes to the current configuration
     /// - Parameter programmaticConfig: programmatic configuration to be applied
     func updateWith(programmaticConfig: [String: Any]) {
         // Map any config keys to their correct environment key
         let mappedEnvironmentKeyConfig = mapEnvironmentKeys(programmaticConfig: programmaticConfig)
-        
+
         // Any existing programmatic configuration updates are retrieved from persistence.
         // New configuration updates are applied over the existing persisted programmatic configurations
         // New programmatic configuration updates are saved to persistence.
         programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: mappedEnvironmentKeyConfig) ?? [:]) { (_, updated) in updated }
-        
+
         // The current configuration is updated with these new programmatic configuration changes.
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
-    
+
     /// Attempts to download the configuration associated with `appId`, if downloading the remote config fails we check cache for cached config
     /// - Parameter appId: appId associated with the remote config
     /// - Parameter completion: A closure that is invoked with the downloaded config, nil if unable to download config with `appId`
-    func updateWith(appId: String, completion: @escaping ([String: Any]?) -> ()) {
+    func updateWith(appId: String, completion: @escaping ([String: Any]?) -> Void) {
         // Save the AppID in persistence for loading configuration on future launches.
         appIdManager.saveAppIdToPersistence(appId: appId)
 
@@ -97,11 +97,11 @@ class ConfigurationState {
                 self?.downloadedAppIds.insert(appId)
                 self?.replaceConfigurationWith(newConfig: loadedConfig)
             }
-            
+
             completion(config)
         })
     }
-    
+
     /// Attempts to load the configuration stored at `filePath`
     /// - Parameter filePath: Path to a configuration file
     /// - Returns: True if the configuration was loaded, false otherwise
@@ -109,17 +109,17 @@ class ConfigurationState {
          guard let bundledConfig = configDownloader.loadConfigFrom(filePath: filePath) else {
             return false
         }
-        
+
         replaceConfigurationWith(newConfig: bundledConfig)
         return true
     }
-    
+
     /// Determines if we have already downloaded the configuration associated with `appId`
     /// - Parameter appId: A valid appId
     func hasDownloadedConfig(appId: String) -> Bool {
         return downloadedAppIds.contains(appId)
     }
-    
+
     /// Replaces `currentConfiguration` with `newConfig` and then applies the existing programmatic configuration on-top
     /// - Parameter newConfig: A configuration to replace the current configuration
     private func replaceConfigurationWith(newConfig: [String: Any]) {
@@ -127,7 +127,7 @@ class ConfigurationState {
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
     }
-    
+
     /// Computes the environment aware configuration based on `config`
     /// - Parameter config: The current configuration
     /// - Returns: A configuration with the correct values for each key given the build environment, while also removing all keys prefix with `ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER`
@@ -135,18 +135,18 @@ class ConfigurationState {
         // Remove all __env__ keys, only need to process config keys who do not have the environment prefix
         var environmentAwareConfig = currentConfiguration.filter({!$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER)})
         guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else { return environmentAwareConfig }
-        
-        for key in environmentAwareConfig.keys  {
+
+        for key in environmentAwareConfig.keys {
                 let environmentKey = keyForEnvironment(key: key, environment: buildEnvironment)
                 // If a config value for the current build environment exists, replace `key` value with `environmentKey` value
                 if let environmentValue = currentConfiguration[environmentKey] {
                     environmentAwareConfig[key] = environmentValue
                 }
         }
-        
+
         return environmentAwareConfig
     }
-    
+
     /// Maps config keys to their respective build environment keys if they exist
     /// - Parameter programmaticConfig: The programmatic config from the user
     /// - Returns: `programmaticConfig` with all keys mapped to their build environment equivalent
@@ -159,10 +159,10 @@ class ConfigurationState {
             let keyToUse = currentConfiguration[environmentKey] != nil ? environmentKey : key
             mappedConfig[keyToUse] = value
         }
-        
+
         return mappedConfig
     }
-    
+
     /// Formats a configuration key with the build environment prefix
     /// - Parameters:
     ///   - key: configuration key to be prefixed

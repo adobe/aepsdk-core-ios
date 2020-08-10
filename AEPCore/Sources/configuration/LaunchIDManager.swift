@@ -15,26 +15,26 @@ import AEPServices
 /// Handles loading and saving the launch appId to the data store and manifest
 struct LaunchIDManager {
     let dataStore: NamedCollectionDataStore
-    
+
     /// Loads the appId from the data store, if not present in the data store loads from the manifest
     /// - Returns: appId loaded from persistence or manifest, nil if not present in either
     func loadAppId() -> String? {
         // Prefer appId stored in persistence over in manifest
         return loadAppIdFromPersistence() ?? loadAppIdFromManifest()
     }
-    
+
     /// Saves the appId to the data store
     /// - Parameter appId: appId to be saved to data store
     func saveAppIdToPersistence(appId: String) {
         dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: appId)
     }
-    
+
     /// Loads the appId from the data store
     /// - Returns: appId loaded from persistence, nil if not present
     func loadAppIdFromPersistence() -> String? {
         return dataStore.getString(key: ConfigurationConstants.Keys.PERSISTED_APPID)
     }
-    
+
     /// Loads the appId from the manifest
     /// - Returns: appId loaded from the manifest, nil if not present
     func loadAppIdFromManifest() -> String? {

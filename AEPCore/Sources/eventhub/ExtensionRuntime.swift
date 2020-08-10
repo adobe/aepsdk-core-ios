@@ -42,7 +42,7 @@ import Foundation
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult?
-    
+
     /// Starts the `Event` queue for this extension
     func startEvents()
 

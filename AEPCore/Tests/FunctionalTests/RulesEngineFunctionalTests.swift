@@ -27,36 +27,36 @@ class RulesEngineFunctionalTests: XCTestCase {
         UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         rulesEngine = LaunchRulesEngine(extensionRuntime: mockRuntime)
-        rulesEngine.trace { (result, rule, conext, failure) in
+        rulesEngine.trace { (_, _, _, failure) in
             print(failure)
         }
     }
-    
+
     static var rulesUrl: URL? {
         return Bundle(for: self).url(forResource: "rules_functional_1", withExtension: ".zip")
     }
-    
+
     func testUpdateConfigurationWithDictTwice() {
         // setup
         let event =  Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
-                           data: ["lifecyclecontextdata": ["launchevent":"LaunchEvent"]])
-        
+                           data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+
         let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip")
         let expectedData = try? Data(contentsOf: filePath!)
-        
+
        let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
         let mockNetworkService = TestableNetworkService()
         mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
-        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata":["carriername":"AT&T"]], status: .set))
-        
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+
         // test
         rulesEngine.loadRemoteRules(from: URL(string: "http://test.com/rules.url")!)
         let processedEvent = rulesEngine.process(event: event)
-        
+
         // verify
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual("value", processedEvent.data?["key"] as? String)
-        
+
     }
 }

@@ -18,12 +18,11 @@ class ConfigurationStateTests: XCTestCase {
     var configState: ConfigurationState!
     let dataStore = NamedCollectionDataStore(name: "ConfigurationStateTests")
     var configDownloader: MockConfigurationDownloader!
-    
 
     override func setUp() {
         configDownloader = MockConfigurationDownloader()
         configState = ConfigurationState(dataStore: dataStore, configDownloader: configDownloader)
-        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
     }
@@ -43,22 +42,22 @@ class ConfigurationStateTests: XCTestCase {
     private func putConfigInManifest(config: [String: Any]) {
         configDownloader.configFromManifest = config
     }
-    
+
     private func assertContainsConfig(config: [String: Any]) {
         for (key, _) in config {
             XCTAssertTrue(configState.currentConfiguration.contains(where: {$0.key == key}))
         }
     }
-    
+
     // MARK: loadInitialConfig() tests
-    
+
     /// Tests when appId present, cached config present, bundled config present, programmatic config present
     func testAppIdAndCachedConfigAndBundledConfigAndProgrammaticConfig() {
         // setup
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
@@ -78,7 +77,7 @@ class ConfigurationStateTests: XCTestCase {
         // setup
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
         putConfigInManifest(config: bundledConfig)
@@ -96,7 +95,7 @@ class ConfigurationStateTests: XCTestCase {
         // setup
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
-        
+
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
@@ -113,7 +112,7 @@ class ConfigurationStateTests: XCTestCase {
     func testAppIdAndCachedConfig() {
         // setup
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
-        
+
         putAppIdInPersistence(appId: "some-test-app-id")
         putCachedConfigInPersistence(config: cachedConfig)
 
@@ -129,7 +128,7 @@ class ConfigurationStateTests: XCTestCase {
         // setup
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putAppIdInPersistence(appId: "some-test-app-id")
         putProgrammaticConfigInPersistence(config: programmaticConfig)
         putConfigInManifest(config: bundledConfig)
@@ -148,7 +147,7 @@ class ConfigurationStateTests: XCTestCase {
     func testAppIdAndBundledConfig() {
         // setup
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putAppIdInPersistence(appId: "some-test-app-id")
         putConfigInManifest(config: bundledConfig)
 
@@ -164,7 +163,7 @@ class ConfigurationStateTests: XCTestCase {
     func testAppIdAndProgrammatic() {
         // setup
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
-        
+
         putAppIdInPersistence(appId: "some-test-app-id")
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
@@ -183,7 +182,7 @@ class ConfigurationStateTests: XCTestCase {
 
         // test
         configState.loadInitialConfig()
-        
+
         // verify
         XCTAssertTrue(configState.currentConfiguration.isEmpty)
     }
@@ -194,7 +193,7 @@ class ConfigurationStateTests: XCTestCase {
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putCachedConfigInPersistence(config: cachedConfig)
         putConfigInManifest(config: bundledConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
@@ -214,7 +213,7 @@ class ConfigurationStateTests: XCTestCase {
         // setup
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putCachedConfigInPersistence(config: cachedConfig)
         putConfigInManifest(config: bundledConfig)
 
@@ -232,7 +231,7 @@ class ConfigurationStateTests: XCTestCase {
         // setup
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
-        
+
         putCachedConfigInPersistence(config: cachedConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
@@ -248,7 +247,7 @@ class ConfigurationStateTests: XCTestCase {
     func testCachedConfig() {
         // setup
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
-        
+
         putCachedConfigInPersistence(config: cachedConfig)
 
         // test
@@ -263,7 +262,7 @@ class ConfigurationStateTests: XCTestCase {
         // setup
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putConfigInManifest(config: bundledConfig)
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
@@ -281,7 +280,7 @@ class ConfigurationStateTests: XCTestCase {
     func testBundledConfig() {
         // setup
         let bundledConfig: [String: Any] = ["target.timeout": 5, "bundled.config.key": "bundled.config.value"]
-        
+
         putConfigInManifest(config: bundledConfig)
 
         // test
@@ -297,7 +296,7 @@ class ConfigurationStateTests: XCTestCase {
     func testProgrammaticConfig() {
         // setup
         let programmaticConfig: [String: AnyCodable] = ["testKey": AnyCodable("testVal")]
-        
+
         putProgrammaticConfigInPersistence(config: programmaticConfig)
 
         // test
@@ -318,7 +317,7 @@ class ConfigurationStateTests: XCTestCase {
     }
 
     // MARK: updateConfigWith(newConfig) tests
-    
+
     /// Tests that we can successfully update the config with updateConfigWith(newConfig:)
     func testUpdateConfigNewConfigSimple() {
         // setup
@@ -331,7 +330,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual(1, configState.currentConfiguration.count)
         XCTAssertEqual("testVal", configState.currentConfiguration["testKey"] as! String)
     }
-    
+
     /// Tests that calling updateConfigWith(newConfig:) properly sets and updates key/values
     func testUpdateConfigNewConfigOverwriteAndMerge() {
         // setup
@@ -347,7 +346,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("overwrittenVal", configState.currentConfiguration["testKey"] as! String)
         XCTAssertEqual("newVal", configState.currentConfiguration["newKey"] as! String)
     }
-    
+
     /// Test that programmatic config and updateConfigWith merge the existing configs together
     func testUpdateConfigNewConfigPersistedConfigPresent() {
         // setup
@@ -382,7 +381,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.value as? String)
         XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
     }
-    
+
     /// Tests that updating programmatic config updates the correct build environment key
     func testUpdateProgrammaticConfigCorrectEnvironmentKey() {
         // setup
@@ -391,7 +390,7 @@ class ConfigurationStateTests: XCTestCase {
                                                 "__dev__analytics.rsids": "devrsid1,devrsid2",
                                                 "analytics.server": "old-server.com"]
         configState.updateWith(newConfig: existingConfig)
-        
+
         // test
         configState.updateWith(programmaticConfig: ["analytics.rsids": "updated-dev-rsid"])
 
@@ -411,9 +410,9 @@ class ConfigurationStateTests: XCTestCase {
 
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromUrl = cachedConfig
-        
+
         let appId = "valid-app-id"
-        
+
         // test & verify
         configState.updateWith(appId: appId) { (config) in
             XCTAssertEqual(cachedConfig.count, config?.count)
@@ -438,7 +437,7 @@ class ConfigurationStateTests: XCTestCase {
             XCTAssertFalse(self.configState.hasDownloadedConfig(appId: appId))
             expectation.fulfill()
         }
-        
+
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
@@ -449,21 +448,21 @@ class ConfigurationStateTests: XCTestCase {
         let expectation = XCTestExpectation(description: "ConfigurationDownloader closure should be invoked")
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
-        
+
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromUrl = cachedConfig
-        
+
         // test
         configState.updateWith(appId: "valid-app-id") { (config) in
             XCTAssertEqual(cachedConfig.count, config?.count)
             expectation.fulfill()
-            
+
             self.configState.updateWith(appId: "newAppId") { (newConfig) in
                 XCTAssertEqual(cachedConfig.count, newConfig?.count)
                 expectation.fulfill()
             }
         }
-        
+
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
@@ -474,39 +473,39 @@ class ConfigurationStateTests: XCTestCase {
         let expectation = XCTestExpectation(description: "ConfigurationDownloader closure should be invoked")
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
-        
+
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
         configDownloader.configFromUrl = cachedConfig
-        
+
         // test
         configState.updateWith(appId: "valid-app-id") { (config) in
             XCTAssertEqual(cachedConfig.count, config?.count)
             self.configDownloader.configFromUrl = nil
             expectation.fulfill()
-            
+
             self.configState.updateWith(appId: "invalid-app-id") { (newConfig) in
                 XCTAssertNil(newConfig)
                 XCTAssertEqual(cachedConfig.count, self.configState.currentConfiguration.count)
                 expectation.fulfill()
             }
         }
-        
+
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
 
     // MARK: updateConfigWith(filePath) tests
-    
+
     /// Tests when an empty path is supplied we return false and don't update the current configuration
     func testUpdateConfigWithFilePathEmpty() {
         XCTAssertFalse(configState.updateWith(filePath: ""))
     }
-    
+
     /// Tests when the configuration downloader returns a nil config we properly update the current configuration
     func testUpdateConfigWithFilePathInvalidPath() {
         XCTAssertFalse(configState.updateWith(filePath: "Invalid/Path/ADBMobile.json"))
     }
-    
+
     /// Tests when the configuration downloader returns a valid config we properly update the current configuration
     func testUpdateConfigWithPathSimple() {
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
@@ -514,7 +513,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertTrue(configState.updateWith(filePath: "validPath"))
         XCTAssertEqual(cachedConfig.count, configState.currentConfiguration.count)
     }
-    
+
     /// Tests when we have loaded a config from a file path, then we pass in an invalid path that the previous valid configuration is preserved
     func testUpdateConfigWithValidPathThenInvalid() {
         let cachedConfig = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg", "target.clientCode": "yourclientcode"]
@@ -526,7 +525,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertFalse(configState.updateWith(filePath: "Invalid/Path/ADBMobile.json"))
         XCTAssertEqual(cachedConfig.count, configState.currentConfiguration.count)
     }
-    
+
     /// Tests that the correct config values are shared when the build environment value is empty and all __env__ keys are removed
     func testEnvironmentConfigEmptyEnvironment() {
         // setup
@@ -536,19 +535,18 @@ class ConfigurationStateTests: XCTestCase {
                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
                                             "analytics.server": "mycompany.sc.omtrdc.net"]
         configState.updateWith(newConfig: existingConfig)
-        
+
         let expectedConfig = ["build.environment": "",
                                 "analytics.rsids": "rsid1,rsid2",
                                 "analytics.server": "mycompany.sc.omtrdc.net"]
 
-        
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
     }
-    
+
     /// Tests that the correct config values are shared when the build environment value is prod
     func testEnvironmentConfigProd() {
         // setup
@@ -557,20 +555,20 @@ class ConfigurationStateTests: XCTestCase {
                                             "__stage__analytics.rsids": "stagersid1,stagersid2",
                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
                                             "analytics.server": "mycompany.sc.omtrdc.net"]
-        
+
         configState.updateWith(newConfig: existingConfig)
-        
+
         let expectedConfig = ["build.environment": "prod",
                                 "analytics.rsids": "rsid1,rsid2",
                                 "analytics.server": "mycompany.sc.omtrdc.net"]
-        
+
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
     }
-    
+
     /// Tests that the correct config values are shared when the build environment value is staging
     func testEnvironmentConfigStaging() {
         // setup
@@ -579,20 +577,20 @@ class ConfigurationStateTests: XCTestCase {
                                             "__stage__analytics.rsids": "stagersid1,stagersid2",
                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
                                             "analytics.server": "mycompany.sc.omtrdc.net"]
-        
+
         configState.updateWith(newConfig: existingConfig)
-        
+
         let expectedConfig = ["build.environment": "stage",
                                 "analytics.rsids": "stagersid1,stagersid2",
                                 "analytics.server": "mycompany.sc.omtrdc.net"]
-        
+
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
     }
-    
+
     /// Tests that the correct config values are shared when the build environment value is dev
     func testEnvironmentConfigDev() {
         // setup
@@ -601,72 +599,71 @@ class ConfigurationStateTests: XCTestCase {
                                             "__stage__analytics.rsids": "stagersid1,stagersid2",
                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
                                             "analytics.server": "mycompany.sc.omtrdc.net"]
-        
+
         configState.updateWith(newConfig: existingConfig)
-        
+
         let expectedConfig = ["build.environment": "dev",
                                 "analytics.rsids": "devrsid1,devrsid2",
                                 "analytics.server": "mycompany.sc.omtrdc.net"]
-        
-        
+
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
     }
-    
+
     /// Tests that when there are no environment specific keys, all existing keys are not modified.
     func testMapEnvironmentKeysNoEnvKeys() {
         // setup
         let newConfig: [String: Any] = ["build.environment": "dev",
                                         "analytics.rsids": "rsid1,rsid2"]
-        
+
         // test
         let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: newConfig)
-        
+
         // verify
         XCTAssertEqual(newConfig as? [String: String], mappedConfig as? [String: String])
     }
-    
+
     /// Tests that when a config key that has a build specific key is mapped to the specific key
     func testMapEnvironmentKeysDevEnvKeyExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
                                         "analytics.rsids": "rsid1,rsid2",
                                         "__dev__analytics.rsids": "devrsid1,devrsid2"]
-        
+
         configState.updateWith(newConfig: existingConfig)
-        
+
         // __dev__ should be prepended to the analytics.rsids key as we are in dev env
         let expected: [String: Any] = ["__dev__analytics.rsids": "updated,rsids"]
-        
+
         // test
         let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids"])
-        
+
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
-    
+
     /// Tests that when there is not matching environment specific key that the key is mapped correctly
     func testMapEnvironmentKeysDevEnvKeyDoesNotExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
                                         "analytics.rsids": "rsid1,rsid2",
                                         "__dev__analytics.rsids": "devrsid1,devrsid2"]
-        
+
         configState.updateWith(newConfig: existingConfig)
-        
+
         // __dev__ should not be prepended to analytics.server as there is no __dev__analytics.sever key in the existing config
         let expected: [String: Any] = ["analytics.server": "server.com"]
-        
+
         // test
         let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.server": "server.com"])
-        
+
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
-    
+
     /// Tests that when keys that have environment specific keys and keys that do not are mapped correctly
     func testMapEnvironmentKeysDevEnvKeyExistsAndDoesNotExist() {
         // setup
@@ -674,15 +671,15 @@ class ConfigurationStateTests: XCTestCase {
                                         "analytics.rsids": "rsid1,rsid2",
                                         "__dev__analytics.rsids": "devrsid1,devrsid2",
                                         "analytics.server": "old-server.com"]
-        
+
         configState.updateWith(newConfig: existingConfig)
-        
+
         // __dev__ should be prepended to rsids but not analytics.server
         let expected: [String: Any] = ["__dev__analytics.rsids": "updated,rsids", "analytics.server": "server.com"]
-        
+
         // test
         let mappedConfig = configState.mapEnvironmentKeys(programmaticConfig: ["analytics.rsids": "updated,rsids", "analytics.server": "server.com"])
-        
+
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }

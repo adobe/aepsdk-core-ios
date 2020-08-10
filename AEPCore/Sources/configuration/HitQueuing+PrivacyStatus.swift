@@ -14,7 +14,7 @@ import Foundation
 import AEPServices
 
 extension HitQueuing {
-    
+
     /// Based on `status` determines if we should continue processing hits or if we should suspend processing and clear hits
     /// - Parameter status: the current privacy status
     public func handlePrivacyChange(status: PrivacyStatus) {

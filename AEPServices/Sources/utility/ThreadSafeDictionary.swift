@@ -17,18 +17,18 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     public typealias Element = Dictionary<K, V>.Element
     @usableFromInline internal var dictionary = [K: V]()
     @usableFromInline internal let queue: DispatchQueue
-    
+
     /// Creates a new thread safe dictionary
     /// - Parameter identifier: A unique identifier for this dictionary, a reverse-DNS naming style (com.example.myqueue) is recommended
     public init(identifier: String = "com.adobe.threadsafedictionary.queue") {
         queue = DispatchQueue(label: identifier)
     }
-    
+
     /// How many key pair values are preset in the dictionary
     public var count: Int {
         return queue.sync { return self.dictionary.keys.count }
     }
-    
+
     // Gets a non-thread-safe shallow copy of the backing dictionary
     public var shallowCopy: [K: V] {
         return queue.sync {
@@ -36,7 +36,7 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
             return dictionary
         }
     }
-    
+
     // MARK: Subscript
     public subscript(key: K) -> V? {
         get {
@@ -48,9 +48,8 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
             }
         }
     }
-    
+
     @inlinable public func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
         return queue.sync { return try? self.dictionary.first(where: predicate) }
     }
 }
-

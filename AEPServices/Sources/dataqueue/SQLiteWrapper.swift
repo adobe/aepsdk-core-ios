@@ -16,7 +16,7 @@ import SQLite3
 /// Helper class for SQLite database operations
 internal struct SQLiteWrapper {
     static private let LOG_PREFIX = "SQLiteWrapper"
-    
+
     /// Connect SQLite database with provide database name and database file path.
     /// If the database file doesn't exist, a new database will be created and return a database connection
     /// - Parameters:

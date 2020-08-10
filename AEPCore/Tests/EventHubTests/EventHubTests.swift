@@ -68,7 +68,7 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
 
         // test
-        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.acquisition, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.acquisition, source: testEvent.source) { (_) in
             expectation.fulfill()
         }
 
@@ -86,7 +86,7 @@ class EventHubTests: XCTestCase {
         let testEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
 
         // test
-        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (_) in
             expectation.fulfill()
         }
 
@@ -290,15 +290,14 @@ class EventHubTests: XCTestCase {
         registerMockExtension(MockExtensionTwo.self)
         let testEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
 
-
         // test
-        eventHub.getExtensionContainer(MockExtensionTwo.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtensionTwo.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (_) in
             expectation.fulfill()
             // simulate a long running listener
             sleep(20)
         }
 
-        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: testEvent.type, source: testEvent.source) { (_) in
             expectation1.fulfill()
         }
 
@@ -360,18 +359,18 @@ class EventHubTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Extension is registered successfully after eventHub.start()")
         expectation.assertForOverFulfill = true
-        
+
         MockExtensionTwo.registrationClosure = { expectation.fulfill() }
         // test
         eventHub.start()
         eventHub.registerExtension(MockExtensionTwo.self) { (error) in
             XCTAssertNil(error)
         }
-        
+
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
-    
+
     /// Tests that when we share state that we use configuration's version as the top level version and include all the extensions
     /*
      Expected format:
@@ -391,27 +390,27 @@ class EventHubTests: XCTestCase {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub once")
         sharedStateExpectation.assertForOverFulfill = true
-        
+
         eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { (event) in
             if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME { sharedStateExpectation.fulfill() }
         }
-        
+
         // test
         registerMockExtension(MockExtensionTwo.self)
         eventHub.start()
-        
+
         // verify
         wait(for: [sharedStateExpectation], timeout: 0.5)
         let sharedState = eventHub.getSharedState(extensionName: EventHubConstants.NAME, event: nil)!.value
-        
+
         let mockExtension = MockExtension(runtime: TestableExtensionRuntime())
         let mockExtensionTwo = MockExtensionTwo(runtime: TestableExtensionRuntime())
-        
+
         let coreVersion = sharedState?[EventHubConstants.EventDataKeys.VERSION] as! String
         let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
         let mockDetails = registeredExtensions?[mockExtension.friendlyName] as? [String: String]
         let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.friendlyName] as? [String: Any]
-        
+
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
         XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
         XCTAssertEqual(MockExtensionTwo.extensionVersion, mockDetailsTwo?[EventHubConstants.EventDataKeys.VERSION] as? String)
@@ -422,7 +421,7 @@ class EventHubTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Extension is registered successfully even if invoked before eventHub.start()")
         expectation.assertForOverFulfill = true
-        
+
         MockExtensionTwo.registrationClosure = { expectation.fulfill() }
 
         // test
@@ -440,7 +439,7 @@ class EventHubTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Extension registration fails with EventHubError.duplicateExtensionName when registered twice")
         expectation.expectedFulfillmentCount = 1
         expectation.assertForOverFulfill = true
-                
+
         // test
         eventHub.start()
         eventHub.registerExtension(MockExtensionTwo.self) { [weak self] (error) in
@@ -461,12 +460,12 @@ class EventHubTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Extensions with poor performance upon registration do not block other extensions from registering")
         expectation.assertForOverFulfill = true
-        
+
         MockExtensionTwo.registrationClosure = { expectation.fulfill() }
-        
+
         // test
         eventHub.start()
-        eventHub.registerExtension(SlowMockExtension.self) { (error) in
+        eventHub.registerExtension(SlowMockExtension.self) { (_) in
             // won't be invoked in time since SlowMockExtension has a poor performing constructor
         }
 
@@ -490,7 +489,7 @@ class EventHubTests: XCTestCase {
         for i in 0..<expectation.expectedFulfillmentCount {
             let queue = DispatchQueue(label: "com.adobe.mock.extension.\(i)")
             queue.async {
-                self.eventHub.registerExtension(MockExtensionTwo.self) { (error) in
+                self.eventHub.registerExtension(MockExtensionTwo.self) { (_) in
                     expectation.fulfill()
                 }
             }
@@ -682,7 +681,6 @@ class EventHubTests: XCTestCase {
             }
         }
 
-
         // verify
         wait(for: [expectation], timeout: 5.0)
         for event in events {
@@ -710,7 +708,6 @@ class EventHubTests: XCTestCase {
         let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
         pendingResolver(SharedStateTestHelper.ONE)
 
-
         // verify
         wait(for: [expectation], timeout: 0.5)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
@@ -734,8 +731,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: event)
 
         // test
-        let _ = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
-
+        _ = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
 
         // verify
         wait(for: [expectation], timeout: 0.25)
@@ -790,7 +786,6 @@ class EventHubTests: XCTestCase {
              }
          }
 
-
          // verify
          wait(for: [expectation], timeout: 5.0)
          for event in events {
@@ -828,7 +823,7 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
     }
-    
+
     func testCreatePendingSharedStateNilEvent() {
         // setup
         let expectation = XCTestExpectation(description: "Pending shared state resolved correctly")
@@ -846,21 +841,20 @@ class EventHubTests: XCTestCase {
         let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)
         pendingResolver(SharedStateTestHelper.ONE)
 
-
         // verify
         wait(for: [expectation], timeout: 0.5)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
-    
+
     // use event preprocessor to return a new event
     func testRegisterPreprocessor() {
         // setup
         let targetRequestContentExpectation = XCTestExpectation(description: "Received hub shared state event")
         targetRequestContentExpectation.isInverted = true
-        
+
         let analyticsRequestContentExpectation = XCTestExpectation(description: "Received hub shared state event")
         analyticsRequestContentExpectation.assertForOverFulfill = true
-        
+
         eventHub.registerPreprocessor { event in
             if event.type == EventType.target && event.source == EventSource.requestContent {
                 return Event(name: "event", type: EventType.analytics, source: EventSource.requestContent, data: nil)
@@ -869,19 +863,18 @@ class EventHubTests: XCTestCase {
         }
         eventHub.start()
 
-        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.target, source: EventSource.requestContent) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.target, source: EventSource.requestContent) { (_) in
             targetRequestContentExpectation.fulfill()
         }
-        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.analytics, source: EventSource.requestContent) { (event) in
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.analytics, source: EventSource.requestContent) { (_) in
             analyticsRequestContentExpectation.fulfill()
         }
 
         // test
         eventHub.dispatch(event: Event(name: "event", type: EventType.target, source: EventSource.requestContent, data: nil))
 
-
         // verify
-        wait(for: [targetRequestContentExpectation,analyticsRequestContentExpectation], timeout: 0.5)
+        wait(for: [targetRequestContentExpectation, analyticsRequestContentExpectation], timeout: 0.5)
     }
 
 }

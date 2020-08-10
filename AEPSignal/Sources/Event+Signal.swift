@@ -18,51 +18,51 @@ extension Event {
     var isPostback: Bool {
         return consequenceType == SignalConstants.ConsequenceTypes.POSTBACK
     }
-    
+
     var isOpenUrl: Bool {
         return consequenceType == SignalConstants.ConsequenceTypes.OPEN_URL
     }
-    
+
     var isCollectPii: Bool {
         return consequenceType == SignalConstants.ConsequenceTypes.PII
     }
-    
+
     // MARK: - Postback/PII Consequences
     var contentType: String? {
         return details?[SignalConstants.EventDataKeys.CONTENT_TYPE] as? String
     }
-    
+
     var templateUrl: String? {
         return details?[SignalConstants.EventDataKeys.TEMPLATE_URL] as? String
     }
-    
+
     var templateBody: String? {
         return details?[SignalConstants.EventDataKeys.TEMPLATE_BODY] as? String
     }
-    
+
     var timeout: TimeInterval? {
         return details?[SignalConstants.EventDataKeys.TIMEOUT] as? TimeInterval
     }
-    
+
     // MARK: - Open URL Consequences
     var urlToOpen: String? {
         return details?[SignalConstants.EventDataKeys.URL] as? String
     }
-    
+
     // MARK: - Consequence EventData Processing
-    private var consequence: [String : Any]? {
-        return data?[SignalConstants.EventDataKeys.TRIGGERED_CONSEQUENCE] as? [String : Any]
+    private var consequence: [String: Any]? {
+        return data?[SignalConstants.EventDataKeys.TRIGGERED_CONSEQUENCE] as? [String: Any]
     }
-    
+
     private var consequenceId: String? {
         return consequence?[SignalConstants.EventDataKeys.ID] as? String
     }
-    
+
     private var consequenceType: String? {
         return consequence?[SignalConstants.EventDataKeys.TYPE] as? String
     }
-    
-    private var details: [String : Any]? {
-        return consequence?[SignalConstants.EventDataKeys.DETAIL] as? [String : Any]
+
+    private var details: [String: Any]? {
+        return consequence?[SignalConstants.EventDataKeys.DETAIL] as? [String: Any]
     }
 }

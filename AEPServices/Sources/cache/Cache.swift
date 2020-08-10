@@ -18,14 +18,14 @@ import Foundation
         return ServiceProvider.shared.cacheService
     }
     private var name: String
-    
+
     /// Creates a new cache with a specified name
     /// - Parameter name: name of the cache
     public init(name: String) {
         Log.trace(label: "Cache", "Cache object created with name \(name).")
         self.name = name
     }
-    
+
     /// Sets data in the cache for `key`
     /// - Parameters:
     ///   - key: key where the data should be stored in the cache
@@ -33,14 +33,14 @@ import Foundation
     public func set(key: String, entry: CacheEntry) throws {
         try cacheService.set(cacheName: name, key: key, entry: entry)
     }
-    
+
     /// Gets data from the cache for a given key
     /// - Parameter key: the key to be read from the cache
     /// - Returns: entry in the cache if found, nil otherwise
     public func get(key: String) -> CacheEntry? {
         return cacheService.get(cacheName: name, key: key)
     }
-    
+
     /// Removes a key from the cache
     /// - Parameter key: key to be removed
     public func remove(key: String) throws {

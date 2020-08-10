@@ -17,16 +17,16 @@ struct LifecycleConstants {
     static let FRIENDLY_NAME = "Lifecycle"
     static let EXTENSION_VERSION = "0.0.1"
     static let DATA_STORE_NAME = LifecycleConstants.EXTENSION_NAME
-    
+
     static let START = "start"
     static let PAUSE = "pause"
     static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
     static let DEFAULT_LIFECYCLE_TIMEOUT = 300 // 5 min
-    
+
     struct SharedStateKeys {
         static let CONFIGURATION = "com.adobe.module.configuration"
     }
-    
+
     struct EventDataKeys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"

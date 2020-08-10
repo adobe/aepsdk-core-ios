@@ -14,27 +14,26 @@ import Foundation
 
 /// Represents the service for performing namespaced read/writes of AnyCodable values
 public protocol NamedCollectionProcessing {
-    
+
     /// Set the name of the app group that will be used to store the data
     /// - Parameter appGroup: The app group name
     func setAppGroup(_ appGroup: String?)
-    
+
     /// Sets the value for key in the collection with the given name
     /// - Parameter collectionName: The collection name used for namespacing
     /// - Parameter key: The key to be used to set the value
     /// - Parameter value: The AnyCodable? to be set in the collection
     func set(collectionName: String, key: String, value: Any?)
-    
+
     /// Gets the value for key in the collection with the given name
     /// - Parameter collectionName: The collection name used for namespacing
     /// - Parameter key: The key to be used to get the value
     /// - Return: `AnyCodable` the value returned from the collection
     func get(collectionName: String, key: String) -> Any?
-    
+
     /// Removes the value for key in the collection with the given name
     /// - Parameter collectionName: The collection name used for namespacing
     /// - Parameter key: The key to be used to remove the value
     func remove(collectionName: String, key: String)
-    
-}
 
+}

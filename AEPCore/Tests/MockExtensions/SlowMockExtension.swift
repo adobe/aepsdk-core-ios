@@ -19,15 +19,15 @@ class SlowMockExtension: Extension {
     var name = "slowMockExtension"
     var friendlyName = "slowMockExtension"
     static var extensionVersion = "0.0.1"
-    var metadata: [String : String]? = nil
-    
+    var metadata: [String: String]?
+
     let runtime: ExtensionRuntime
-    
+
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
          sleep(20) // simulate an extension doing heavy work in constructor
     }
-    
+
     func onRegistered() {}
     func onUnregistered() {}
     func readyForEvent(_ event: Event) -> Bool {

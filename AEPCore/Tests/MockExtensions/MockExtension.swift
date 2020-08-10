@@ -15,47 +15,46 @@ import Foundation
 @testable import AEPCore
 import AEPCore
 
-
 class MockExtension: Extension {
     var name = "mockExtension"
     var friendlyName = "mockExtension"
     static var extensionVersion = "0.0.1"
-    var metadata: [String : String]? = nil
-    
-    static var registrationClosure: (() -> Void)? = nil
-    static var unregistrationClosure: (() -> Void)? = nil
-    static var eventReceivedClosure: ((Event) -> Void)? = nil
-    
+    var metadata: [String: String]?
+
+    static var registrationClosure: (() -> Void)?
+    static var unregistrationClosure: (() -> Void)?
+    static var eventReceivedClosure: ((Event) -> Void)?
+
     let runtime: ExtensionRuntime
-    
+
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
     }
-    
+
     static func reset() {
         self.registrationClosure = nil
         self.unregistrationClosure = nil
         self.eventReceivedClosure = nil
     }
-    
+
     func onRegistered() {
         registerListener(type: EventType.wildcard, source: EventSource.wildcard) { (event) in
             if let closure = type(of: self).eventReceivedClosure {
                 closure(event)
             }
         }
-        
+
         if let closure = type(of: self).registrationClosure {
             closure()
         }
     }
-    
+
     func onUnregistered() {
         if let closure = type(of: self).unregistrationClosure {
             closure()
         }
     }
-    
+
     func readyForEvent(_ event: Event) -> Bool {
         return true
     }

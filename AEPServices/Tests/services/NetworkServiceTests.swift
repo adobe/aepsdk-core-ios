@@ -16,10 +16,10 @@ import AEPServicesMocks
 
 let testBody = "{\"test\": \"json\"\"}"
 let jsonData = testBody.data(using: .utf8)
-var mockSession : MockURLSession = MockURLSession(data: jsonData, urlResponse: nil, error: nil)
+var mockSession: MockURLSession = MockURLSession(data: jsonData, urlResponse: nil, error: nil)
 
-class StubNetworkService : NetworkService {
-    
+class StubNetworkService: NetworkService {
+
     override func createURLSession(networkRequest: NetworkRequest) -> URLSession {
         return mockSession
     }
@@ -32,12 +32,12 @@ class NetworkServiceTests: XCTestCase {
         self.systemInfoService = MockSystemInfoService()
         ServiceProvider.shared.systemInfoService = self.systemInfoService!
     }
-    
+
     override func tearDown() {
         // reset the mock session after previous test
         mockSession = MockURLSession(data: jsonData, urlResponse: nil, error: nil)
     }
-    
+
     // MARK: NetworkService tests
 
     func testConnectAsync_returnsError_whenIncompleteUrl() {
@@ -51,13 +51,13 @@ class NetworkServiceTests: XCTestCase {
             XCTAssertNil(connection.data)
             XCTAssertNil(connection.response)
             XCTAssertEqual("Could not connect to the server.", connection.error?.localizedDescription)
-            
+
             expectation.fulfill()
         })
-        
+
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     func testConnectAsync_returnsError_whenInsecureUrl() {
         let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
@@ -77,13 +77,13 @@ class NetworkServiceTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            
+
             expectation.fulfill()
         })
-        
+
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     func testConnectAsync_returnsError_whenInvalidUrl() {
         let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
@@ -103,30 +103,30 @@ class NetworkServiceTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            
+
             expectation.fulfill()
         })
-        
+
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     func testConnectAsync_initiatesConnection_whenValidNetworkRequest() {
         let mockUserAgent = "mock-user-agent"
         let mockLocaleName = "mock-locale-name"
         self.systemInfoService?.defaultUserAgent = mockUserAgent
         self.systemInfoService?.activeLocaleName = mockLocaleName
         let expectation = XCTestExpectation(description: "Completion handler called")
-        
+
         let testUrl = URL(string: "https://test.com")!
         let networkRequest = NetworkRequest(url: testUrl, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 2.0, readTimeout: 3.0)
         networkStub.connectAsync(networkRequest: networkRequest, completionHandler: {connection in
             XCTAssertEqual(jsonData, connection.data)
             XCTAssertNil(connection.response)
             XCTAssertNil(connection.error)
-            
+
             expectation.fulfill()
         })
-        
+
         // verify
         wait(for: [expectation], timeout: 1.0)
         XCTAssertTrue(mockSession.dataTaskWithCompletionHandlerCalled)
@@ -136,7 +136,7 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertEqual("POST", mockSession.calledWithUrlRequest?.httpMethod)
         XCTAssertEqual(testUrl, mockSession.calledWithUrlRequest?.url)
     }
-    
+
     func testConnectAsync_returnsTimeoutError_whenConnectionTimesOut() {
         let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")
@@ -147,48 +147,48 @@ class NetworkServiceTests: XCTestCase {
             XCTAssertNil(connection.data)
             XCTAssertNil(connection.response)
             XCTAssertEqual("The request timed out.", connection.error?.localizedDescription)
-            
+
             expectation.fulfill()
         })
-        
+
         wait(for: [expectation], timeout: 0.6)
     }
-    
+
     func testConnectAsync_initiatesConnection_whenValidUrl_noCompletionHandler() {
         let testUrl = URL(string: "https://test.com")!
         let networkRequest = NetworkRequest(url: testUrl)
-        
+
         // test
         networkStub.connectAsync(networkRequest: networkRequest)
-        
+
         // verify
         XCTAssertTrue(mockSession.dataTaskWithCompletionHandlerCalled)
     }
-    
+
     // MARK: NetworkService overrider tests
-    
+
     func testOverridenConnectAsync_called_whenMultipleRequests() {
-        let testNetworkService = MockNetworkServiceOverrider();
+        let testNetworkService = MockNetworkServiceOverrider()
         ServiceProvider.shared.networkService = testNetworkService
-        
+
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.post, connectPayload: "test body", httpHeaders: ["Accept": "text/html"], connectTimeout: 2.0, readTimeout: 3.0)
         let request2 = NetworkRequest(url: URL(string: "https://test2.com")!, httpMethod: HttpMethod.get, httpHeaders: ["Accept": "text/html"])
         let request3 = NetworkRequest(url: URL(string: "https://test3.com")!)
-        let completionHandler : ((HttpConnection) -> Void) = { connection in
+        let completionHandler: ((HttpConnection) -> Void) = { connection in
            print("say hi")
         }
-    
+
         // test&verify
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: completionHandler)
         XCTAssertEqual(request1.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
         XCTAssertNotNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
         testNetworkService.reset()
-        
+
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request2, completionHandler: nil)
         XCTAssertEqual(request2.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
         XCTAssertNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
         testNetworkService.reset()
-        
+
         testNetworkService.connectAsync(networkRequest: request3)
         XCTAssertEqual(request3.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
         XCTAssertNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
@@ -197,7 +197,7 @@ class NetworkServiceTests: XCTestCase {
     func testOverridenConnectAsync_addsDefaultHeaders_whenCalledWithHeaders() {
         let testNetworkService = MockNetworkServiceOverrider()
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.post, connectPayload: "test body", httpHeaders: ["Accept": "text/html"], connectTimeout: 2.0, readTimeout: 3.0)
-        
+
         // test&verify
         testNetworkService.connectAsync(networkRequest: request1)
         XCTAssertTrue(testNetworkService.connectAsyncCalled)
@@ -206,11 +206,11 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["User-Agent"])
         XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["Accept-Language"])
     }
-    
+
     func testOverridenConnectAsync_addsDefaultHeaders_whenCalledWithoutHeaders() {
         let testNetworkService = MockNetworkServiceOverrider()
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!)
-        
+
         // test&verify
         testNetworkService.connectAsync(networkRequest: request1)
         XCTAssertTrue(testNetworkService.connectAsyncCalled)
@@ -218,13 +218,13 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["User-Agent"])
         XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["Accept-Language"])
     }
-    
+
     func testOverridenConnectAsync_doesNotOverrideHeaders_whenCalledWithDefaultHeaders() {
         let testNetworkService = MockNetworkServiceOverrider()
         ServiceProvider.shared.networkService = testNetworkService
-        
+
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.get, httpHeaders: ["User-Agent": "test", "Accept-Language": "ro-RO"], connectTimeout: 2.0, readTimeout: 3.0)
-        
+
         // test&verify
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: nil)
         XCTAssertTrue(testNetworkService.connectAsyncCalled)
@@ -232,19 +232,19 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertEqual("test", testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["User-Agent"])
         XCTAssertEqual("ro-RO", testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["Accept-Language"])
     }
-    
+
     func testEnableOverride_work_whenCalledWithMultipleOverriders() {
         let testNetworkServiceOverrider1 = MockNetworkServiceOverrider()
         let testNetworkServiceOverrider2 = MockNetworkServiceOverrider()
         let testNetworkServiceOverrider3 = MockNetworkServiceOverrider()
-        
+
         // test&verify
         // set first overrider
         ServiceProvider.shared.networkService = testNetworkServiceOverrider1
         ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test1.com")!), completionHandler: nil)
         XCTAssertTrue(testNetworkServiceOverrider1.connectAsyncCalled)
         testNetworkServiceOverrider1.reset()
-        
+
         // set second overrider, the first one should not be called anymore
         ServiceProvider.shared.networkService = testNetworkServiceOverrider2
         ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test12.com")!), completionHandler: nil)
@@ -252,7 +252,7 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertTrue(testNetworkServiceOverrider2.connectAsyncCalled)
         testNetworkServiceOverrider1.reset()
         testNetworkServiceOverrider2.reset()
-        
+
         // set third overrider, the other two should not be called anymore
         ServiceProvider.shared.networkService = testNetworkServiceOverrider3
         ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: URL(string: "https://test123.com")!), completionHandler: nil)

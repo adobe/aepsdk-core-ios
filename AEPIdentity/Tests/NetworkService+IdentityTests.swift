@@ -15,31 +15,31 @@ import AEPServices
 import AEPServicesMocks
 
 class NetworkService_IdentityTests: XCTestCase {
-    
+
     var mockNetworkService: MockNetworkServiceOverrider!
-    
+
     override func setUp() {
         mockNetworkService = MockNetworkServiceOverrider()
         ServiceProvider.shared.networkService = mockNetworkService
     }
-    
+
     // MARK: NetworkService.sendOptOutRequest(...) tests
-    
+
     /// Tests that sending an opt-out request invokes the correct functions on the network service
     func testSendOptOutRequestSimple() {
         // setup
         let orgId = "test-org-id"
         let mid = MID()
         let experienceCloudServer = "identityServer.com"
-        
+
         guard let url = URL.buildOptOutURL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
             XCTFail("Network request was nil")
             return
         }
-        
+
         // test
         ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer)
-        
+
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
         XCTAssertEqual(url, mockNetworkService.connectAsyncCalledWithNetworkRequest?.url)

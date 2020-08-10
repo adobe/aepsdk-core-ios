@@ -13,7 +13,7 @@ import Foundation
 
 /// Provides functions to percent encode and decode a `String`
 public struct URLEncoder {
-    
+
     /// Percent encodes a `String`
     /// - Parameter value: the `String` to be encoded
     /// - Returns: The percent encoded `String`, empty if encoding failed
@@ -23,7 +23,7 @@ public struct URLEncoder {
         allowed.addCharacters(in: unreserved)
         return value.addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet) ?? ""
     }
-    
+
     /// Percent decodes a `String`
     /// - Parameter value: the `String` to be decoded
     /// - Returns: The percent decoded `String`, empty if decoding failed

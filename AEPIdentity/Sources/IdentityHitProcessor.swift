@@ -14,22 +14,22 @@ import AEPServices
 
 class IdentityHitProcessor: HitProcessing {
     private let LOG_TAG = "IdentityHitProcessor"
-    
+
     let retryInterval = TimeInterval(30)
-    private let responseHandler: (DataEntity, Data?) -> ()
+    private let responseHandler: (DataEntity, Data?) -> Void
     private var networkService: Networking {
         return ServiceProvider.shared.networkService
     }
 
     /// Creates a new `IdentityHitProcessor` where the `responseHandler` will be invoked after each successful processing of a hit
     /// - Parameter responseHandler: a function to be invoked with the `DataEntity` for a hit and the response data for that hit
-    init(responseHandler: @escaping (DataEntity, Data?) -> ()) {
+    init(responseHandler: @escaping (DataEntity, Data?) -> Void) {
         self.responseHandler = responseHandler
     }
 
     // MARK: HitProcessing
-    
-    func processHit(entity: DataEntity, completion: @escaping (Bool) -> ()) {
+
+    func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void) {
         guard let data = entity.data, let identityHit = try? JSONDecoder().decode(IdentityHit.self, from: data) else {
             // failed to convert data to hit, unrecoverable error, move to next hit
             completion(true)
@@ -45,13 +45,13 @@ class IdentityHitProcessor: HitProcessing {
     }
 
     // MARK: Helpers
-    
+
     /// Handles the network response after a hit has been sent to the server
     /// - Parameters:
     ///   - entity: the data entity responsible for the hit
     ///   - connection: the connection returned after we make the network request
     ///   - completion: a completion block to invoke after we have handled the network response with true for success and false for failure (retry)
-    private func handleNetworkResponse(entity: DataEntity, hit: IdentityHit, connection: HttpConnection, completion: @escaping (Bool) -> ()) {
+    private func handleNetworkResponse(entity: DataEntity, hit: IdentityHit, connection: HttpConnection, completion: @escaping (Bool) -> Void) {
         if connection.responseCode == 200 {
             // hit sent successfully
             Log.debug(label: "\(LOG_TAG):\(#function)", "Identity hit request with url \(hit.url.absoluteString) sent successfully")

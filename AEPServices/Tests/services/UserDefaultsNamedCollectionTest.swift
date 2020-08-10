@@ -15,9 +15,9 @@ import XCTest
 @testable import AEPServices
 
 class UserDefaultsNamedCollectionTest: XCTestCase {
-    
+
     let service = UserDefaultsNamedCollection()
-    
+
     func testSimpleStore() {
         let collectionName = "testName"
         let testKey = "testKey"
@@ -25,7 +25,7 @@ class UserDefaultsNamedCollectionTest: XCTestCase {
         service.set(collectionName: collectionName, key: testKey, value: testValue)
         XCTAssertEqual(service.get(collectionName: collectionName, key: testKey) as? String, testValue)
     }
-    
+
     func testRemove() {
         let collectionName = "testName"
         let testKey = "testKey"
@@ -34,18 +34,17 @@ class UserDefaultsNamedCollectionTest: XCTestCase {
         service.remove(collectionName: collectionName, key: testKey)
         XCTAssertNil(service.get(collectionName: collectionName, key: testKey))
     }
-    
-    
+
     func testNamespacing() {
         let collectionName = "testName"
         let collectionName2 = "testName2"
         let testKey = "testKey"
         let testValue: String = "testValue"
         let testValue2: String = "testValue2"
-        
+
         service.set(collectionName: collectionName, key: testKey, value: testValue)
         service.set(collectionName: collectionName2, key: testKey, value: testValue2)
-        
+
         let firstGet = service.get(collectionName: collectionName, key: testKey)
         let secondGet = service.get(collectionName: collectionName2, key: testKey)
         XCTAssertNotEqual(firstGet as? String, secondGet as? String)

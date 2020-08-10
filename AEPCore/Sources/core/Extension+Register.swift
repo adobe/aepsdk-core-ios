@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 public extension Extension {
-    
+
     /// Registers the `Extension` with the `EventHub`
     //@available(*, deprecated, message: "Use MobileCore.registerExtensions(extensions:) instead")
     static func registerExtension() {

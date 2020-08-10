@@ -15,19 +15,19 @@ import AEPCore
 
 /// Struct representing a hit stored in the Signal database
 struct SignalHit: Codable {
-    
+
     /// URL for the postback
     let url: URL
-    
+
     /// Optional POST body for the postback
     let postBody: String?
-    
+
     /// Content-Type header for the postback
     let contentType: String
-    
+
     /// Timeout for the network request
     let timeout: TimeInterval?
-    
+
     /// Event responsible for triggering this postback
-    let event: Event    
+    let event: Event
 }

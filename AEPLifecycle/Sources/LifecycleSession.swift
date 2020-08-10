@@ -15,16 +15,15 @@ import AEPServices
 /// A type for managing Lifecycle sessions
 struct LifecycleSession {
     let dataStore: NamedCollectionDataStore
-    
+
     private var lifecycleHasRun = false
-    
+
     /// Creates a new `LifecycleSession` with the given `NamedCollectionDataStore`
     /// - Parameter dataStore: The `NamedCollectionDataStore` in which Lifecycle session data will be cached
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
     }
-    
-    
+
     /// Starts a new `LifecycleSession`
     /// Returns a `LifecycleSessionInfo` struct containing the previous session's data if it is a new session
     /// Returns nil if the previous session is resumed, or if lifecycle has already run
@@ -37,21 +36,21 @@ struct LifecycleSession {
     mutating func start(date: Date, sessionTimeout: TimeInterval, coreMetrics: LifecycleMetrics) -> LifecycleSessionInfo? {
         guard !lifecycleHasRun else { return nil }
         lifecycleHasRun = true
-        
+
         var sessionContainer: LifecyclePersistedContext = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT) ?? LifecyclePersistedContext()
         let previousSessionStartDate = sessionContainer.startDate
         let previousSessionPauseDate = sessionContainer.pauseDate
         let previousSessionCrashed = !sessionContainer.successfulClose
-        
+
         // if we have a pause date, check to see if pausedTime is less than the session timeout threshold
         if let unwrappedPreviousSessionDate = previousSessionPauseDate {
             let pausedTimeInSeconds = date.timeIntervalSince1970 - unwrappedPreviousSessionDate.timeIntervalSince1970
-            
+
             if pausedTimeInSeconds < sessionTimeout && previousSessionStartDate != nil {
                 // handle sessions that did not time out by removing paused time from session
                 // do this by adding the paused time the session start time
                 sessionContainer.startDate = previousSessionStartDate?.addingTimeInterval(pausedTimeInSeconds)
-                
+
                 // clear lifecycle flags
                 sessionContainer.successfulClose = false
                 sessionContainer.pauseDate = nil
@@ -59,18 +58,18 @@ struct LifecycleSession {
                 return nil
             }
         }
-        
+
         sessionContainer.startDate = date
         sessionContainer.pauseDate = nil
         sessionContainer.successfulClose = false
         sessionContainer.launches += 1
         sessionContainer.osVersion = coreMetrics.operatingSystem
         sessionContainer.appId = coreMetrics.appId
-        
+
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: sessionContainer)
         return LifecycleSessionInfo(startDate: previousSessionStartDate, pauseDate: previousSessionPauseDate, isCrash: previousSessionCrashed)
     }
-    
+
     /// Pauses this `LifecycleSession`
     /// - Parameter pauseDate: Date at which the pause event occurred
     mutating func pause(pauseDate: Date) {
@@ -78,10 +77,10 @@ struct LifecycleSession {
         sessionContainer?.successfulClose = true
         sessionContainer?.pauseDate = pauseDate
         lifecycleHasRun = false
-        
+
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: sessionContainer)
     }
-    
+
     /// Gets session length data (used for Analytics reporting)
     /// - Parameters:
     ///   - startDate: session start date
@@ -90,15 +89,15 @@ struct LifecycleSession {
     ///   - Returns: session length context data
     func getSessionData(startDate: Date, sessionTimeout: TimeInterval, previousSessionInfo: LifecycleSessionInfo) -> [String: String] {
         var sessionContextData = [String: String]()
-        
+
         let timeSincePauseInSeconds = startDate.timeIntervalSince1970 - (previousSessionInfo.pauseDate?.timeIntervalSince1970 ?? 0.0)
         let lastSessionTimeSeconds = (previousSessionInfo.pauseDate?.timeIntervalSince1970 ?? 0.0) - (previousSessionInfo.startDate?.timeIntervalSince1970 ?? 0.0)
-        
+
         // if we have not exceeded our timeout, bail
         if timeSincePauseInSeconds < sessionTimeout {
             return sessionContextData
         }
-        
+
         // verify our session time is valid
         if lastSessionTimeSeconds > 0 && lastSessionTimeSeconds < LifecycleConstants.MAX_SESSION_LENGTH_SECONDS {
             sessionContextData[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH] = String(Int(lastSessionTimeSeconds))
@@ -106,45 +105,45 @@ struct LifecycleSession {
             // data is out of bounds, still record it in context data but put it in a different key
             sessionContextData[LifecycleConstants.EventDataKeys.IGNORED_SESSION_LENGTH] = String(Int(lastSessionTimeSeconds))
         }
-        
+
         return sessionContextData
     }
-    
+
 }
 
 /// A container struct to easily serialize lifecycle session context information
 struct LifecyclePersistedContext: Codable {
-    
+
     /// Session's start timestamp
     var startDate: Date?
-    
+
     /// Session's pause timestamp
     var pauseDate: Date?
-    
+
     /// Set to true when LifecyclePause is called and set to false when LifecycleStart is called. Used to determine if an application crash occurred.
     var successfulClose: Bool = true
-    
+
     /// Number of sessions started.
     var launches: Int = 0
-    
+
     /// Last known OS version
     var osVersion: String?
-    
+
     /// Last known application identifier
     var appId: String?
-    
+
     init() {}
 }
 
 /// Container for Lifecycle session information
 struct LifecycleSessionInfo {
-    
+
     /// Timestamp of when the session started
     let startDate: Date?
-    
+
     /// Timestamp of when the session was paused
     let pauseDate: Date?
-    
+
     /// Flag indicating whether this session crashed or not
     let isCrash: Bool
 }

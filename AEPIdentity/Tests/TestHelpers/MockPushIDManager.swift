@@ -18,7 +18,7 @@ struct MockPushIDManager: PushIDManageable {
 
     init() {}
 
-    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> ()) {
+    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> Void) {
         // no-op
     }
 

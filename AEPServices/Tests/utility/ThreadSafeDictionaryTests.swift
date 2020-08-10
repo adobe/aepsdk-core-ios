@@ -14,31 +14,31 @@ import XCTest
 @testable import AEPServices
 
 class ThreadSafeDictionaryTests: XCTestCase {
-    
+
     private var threadSafeDict: ThreadSafeDictionary<Int, Int>!
     private var dispatchQueueSerial: DispatchQueue!
     private var dispatchQueueConcurrent: DispatchQueue!
-    
+
     override func setUp() {
         threadSafeDict = ThreadSafeDictionary<Int, Int>()
         dispatchQueueSerial = DispatchQueue(label: "ThreadSafeDictionaryTests.serial")
         dispatchQueueConcurrent = DispatchQueue(label: "ThreadSafeDictionaryTests.concurrent", attributes: .concurrent)
     }
-    
+
     /// Tests 1000 concurrent operations execute as expected
     func testManyConcurrentOperations() {
         // setup
         let count = 1000
-        
+
         // test
         DispatchQueue.concurrentPerform(iterations: count) { i in
             threadSafeDict[i / 4] = threadSafeDict[i] ?? 0
         }
-        
+
         // verify
         XCTAssert(threadSafeDict.count == count / 4)
     }
-    
+
     /// Tests many queues that concurrently write and read to the dictionary
     func testSyncMultipleTimesWithDictionary() {
         // setup
@@ -47,7 +47,7 @@ class ThreadSafeDictionaryTests: XCTestCase {
         let dispatchQueue1 = DispatchQueue(label: "ThreadSafeDictionaryTests.queue1", attributes: .concurrent)
         let dispatchQueue2 = DispatchQueue(label: "ThreadSafeDictionaryTests.queue2", attributes: .concurrent)
         expectation.expectedFulfillmentCount = count
-        
+
         // test
         for i in 1...count {
             let rand = Int.random(in: 1..<100)
@@ -63,11 +63,11 @@ class ThreadSafeDictionaryTests: XCTestCase {
                 }
             }
         }
-        
+
         // verify
         wait(for: [expectation], timeout: 2.0)
     }
-    
+
     /// Tests that we can concurrently read and write to the dictionary with concurrent queues
     func testConcurrentReadingAndWriting() {
         // setup
@@ -78,7 +78,7 @@ class ThreadSafeDictionaryTests: XCTestCase {
         writeExpectation.expectedFulfillmentCount = count
         let readExpectation = expectation(description: "Read expectation")
         readExpectation.expectedFulfillmentCount = count
-        
+
         // test
         let key = 0
         for i in 0 ..< count {
@@ -88,7 +88,7 @@ class ThreadSafeDictionaryTests: XCTestCase {
             }
 
             readingQueue.async {
-                let _ = self.threadSafeDict[key]
+                _ = self.threadSafeDict[key]
                 readExpectation.fulfill()
             }
         }
@@ -96,7 +96,7 @@ class ThreadSafeDictionaryTests: XCTestCase {
         // verify
         wait(for: [writeExpectation, readExpectation], timeout: 5.0)
     }
-    
+
     /// Tests that we can concurrently read and write to the dictionary with concurrent and serial queues
     func testSyncMultipleTimesWithConcurrent() {
         // setup
@@ -121,31 +121,31 @@ class ThreadSafeDictionaryTests: XCTestCase {
                 }
             }
         }
-        
+
         // verify
         wait(for: [expectation], timeout: 5.0)
     }
-    
+
     /// Tests the .shallowCopy functionality to ensure that it doesn't deadlock and returns the appropriate copy of the backing dictionary
     func testShallowCopyNoDeadlock() {
         let count = 1000
         let testDictionary = ThreadSafeDictionary<Int, Int>()
-        
+
         for i in 0..<count {
             testDictionary[i] = i
         }
-        
+
         testDictionary.shallowCopy.values.forEach {
             XCTAssertEqual(testDictionary[$0], $0)
         }
     }
-    
+
     private func dispatchSyncWithDict(i: Int) {
         dispatchQueueSerial.sync {
             self.threadSafeDict?[0] = i
         }
     }
-    
+
     private func dispatchSyncConcurrentOp(i: Int) {
         dispatchQueueSerial.sync {
             dispatchQueueConcurrent.async {
@@ -157,5 +157,5 @@ class ThreadSafeDictionaryTests: XCTestCase {
             }
         }
     }
-    
+
 }

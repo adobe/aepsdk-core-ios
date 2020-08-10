@@ -18,34 +18,34 @@ struct SignalConstants {
     static let EXTENSION_VERSION = "0.0.1"
     static let DATASTORE_NAME = EXTENSION_NAME
     static let LOG_PREFIX = FRIENDLY_NAME
-    
+
     struct Configuration {
         static let NAME = "com.adobe.module.configuration"
         static let GLOBAL_PRIVACY = "global.privacy"
     }
-    
+
     struct Defaults {
         static let TIMEOUT: TimeInterval = 2
         static let CONTENT_TYPE = "application/json"
     }
-    
+
     struct ConsequenceTypes {
         static let POSTBACK = "pb"
         static let PII = "pii"
         static let OPEN_URL = "url"
     }
-    
+
     struct EventDataKeys {
         static let TRIGGERED_CONSEQUENCE = "triggeredconsequence"
         static let ID = "id"
         static let DETAIL = "detail"
         static let TYPE = "type"
-        
-        static let CONTENT_TYPE = "contenttype"        
+
+        static let CONTENT_TYPE = "contenttype"
         static let TEMPLATE_BODY = "templatebody"
         static let TEMPLATE_URL = "templateurl"
         static let TIMEOUT = "timeout"
-        
+
         static let URL = "url"
-    }    
+    }
 }

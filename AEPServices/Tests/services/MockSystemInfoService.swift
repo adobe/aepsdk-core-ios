@@ -15,69 +15,69 @@ import Foundation
 
 class MockSystemInfoService: SystemInfoService {
 
-    var property: String? = nil
+    var property: String?
     func getProperty(for key: String) -> String? {
         return property
     }
-    
-    var asset: String? = nil
+
+    var asset: String?
     func getAsset(fileName: String, fileType: String) -> String? {
         return asset
     }
-    
-    var assetImage: [UInt8]? = nil
+
+    var assetImage: [UInt8]?
     func getAsset(fileName: String, fileType: String) -> [UInt8]? {
         return assetImage
     }
-    
+
     var defaultUserAgent = ""
     func getDefaultUserAgent() -> String {
         return defaultUserAgent
     }
-    
+
     var activeLocaleName = ""
     func getActiveLocaleName() -> String {
         return activeLocaleName
     }
-    
+
     var deviceName = ""
     func getDeviceName() -> String {
         return deviceName
     }
-    
-    var mobileCarrierName: String? = nil
+
+    var mobileCarrierName: String?
     func getMobileCarrierName() -> String? {
         return mobileCarrierName
     }
-    
+
     var runMode: String = ""
     func getRunMode() -> String {
         return runMode
     }
-    
-    var applicationName: String? = nil
+
+    var applicationName: String?
     func getApplicationName() -> String? {
         return applicationName
     }
-    
-    var applicationBuildNumber: String? = nil
+
+    var applicationBuildNumber: String?
     func getApplicationBuildNumber() -> String? {
         return applicationBuildNumber
     }
-    
-    var applicationVersionNumber: String? = nil
+
+    var applicationVersionNumber: String?
     func getApplicationVersionNumber() -> String? {
         return applicationVersionNumber
     }
-    
+
     var operatingSystemName: String = ""
     func getOperatingSystemName() -> String {
         return operatingSystemName
     }
-    
+
     var displayInformation: (width: Int, height: Int) = (0, 0)
     func getDisplayInformation() -> (width: Int, height: Int) {
         return displayInformation
     }
-    
+
 }

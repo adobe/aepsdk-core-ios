@@ -15,11 +15,11 @@ import XCTest
 @testable import AEPServices
 
 class SystemInfoServiceTest: XCTestCase {
-    
+
     var systemInfoService: SystemInfoService!
-    
+
     var bundle: Bundle!
- 
+
     // Keep name and content up to date with TestConfig.json and TestImage.png files in test resources group
     let testStringFileName = "TestConfig"
     let testStringFileContents = "testing\n"
@@ -36,80 +36,80 @@ class SystemInfoServiceTest: XCTestCase {
         let testValue = "testValue"
         XCTAssert(systemInfoService.getProperty(for: testKey) == testValue)
     }
-    
+
     func testGetPropertyNotString() {
         // This is set in the Test's info.plist
         let testKey = "testFail"
         XCTAssertNil(systemInfoService.getProperty(for: testKey))
     }
-    
+
     func testGetStringAssetEmptyPath() {
         let stringAsset: String? = systemInfoService.getAsset(fileName: "", fileType: "")
         XCTAssertNil(stringAsset)
     }
-    
+
     func testGetStringAssetWhenFileExists() {
         // TestConfig.json is located in the tests root directory, in the 'test resources' group. Edit that file for testing.
         XCTAssertEqual(systemInfoService.getAsset(fileName: testStringFileName, fileType: "json"), testStringFileContents)
     }
-    
+
     func testGetStringAssetWhenFileDoesNotExist() {
         let stringAsset: String? = systemInfoService.getAsset(fileName: "RandomFile", fileType: ".json")
         XCTAssertNil(stringAsset)
     }
-    
+
     func testGetDataAssetEmptyPath() {
         let dataAsset: [UInt8]? = systemInfoService.getAsset(fileName: "", fileType: "")
         XCTAssertNil(dataAsset)
     }
-    
+
     func testGetDataAssetWhenFileExists() {
         // TestImage.png is located in the tests root directory, in the 'test resources' group. Edit that file for testing.
         let data: [UInt8]? = systemInfoService.getAsset(fileName: testDataFileName, fileType: "png")
         XCTAssertNotNil(data)
     }
-    
+
     func testGetDefaultUserAgent() {
         // setup
         let pattern = "Mozilla/5.0 (.+?; CPU OS .+? like Mac OS X; .+)"
         let regex = try! NSRegularExpression(pattern: pattern, options: [])
-        
+
         // test
         let userAgent = systemInfoService.getDefaultUserAgent()
-        
+
         // verify
         let matches = regex.matches(in: userAgent, options: [], range: NSRange(location: 0, length: userAgent.count))
         XCTAssertFalse(matches.isEmpty)
     }
-    
+
     func testGetActiveLocaleName() {
         XCTAssertFalse(systemInfoService.getActiveLocaleName().isEmpty)
     }
-    
+
     func testGetDeviceName() {
         XCTAssertFalse(systemInfoService.getDeviceName().isEmpty)
     }
-    
+
     func testGetRunMode() {
         XCTAssertNotNil(systemInfoService.getRunMode())
     }
-    
+
     func testGetApplicationName() {
         XCTAssertNotNil(systemInfoService.getApplicationName())
     }
-    
+
     func testGetApplicationVersion() {
         XCTAssertNotNil(systemInfoService.getApplicationBuildNumber())
     }
-    
+
     func testGetApplicationVersionCode() {
         XCTAssertNotNil(systemInfoService.getApplicationVersionNumber())
     }
-    
+
     func testGetOperatinSystemName() {
         XCTAssertNotNil(systemInfoService.getOperatingSystemName())
     }
-    
+
     func testGetDisplayInformation() {
         let displayInfo = NativeDisplayInformation()
         let testDisplayInfo = systemInfoService.getDisplayInformation()

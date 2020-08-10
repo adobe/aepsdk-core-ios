@@ -34,7 +34,7 @@ class ExtensionContainer {
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
 
-    init(_ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> ()) {
+    init(_ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
         extensionQueue = queue
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
@@ -48,7 +48,7 @@ class ExtensionContainer {
                 completion(.extensionInitializationFailure)
                 return
             }
-            
+
             self.sharedState = SharedState(unwrappedExtension.name)
             self.sharedStateName = unwrappedExtension.name
             unwrappedExtension.onRegistered()
@@ -58,7 +58,7 @@ class ExtensionContainer {
     }
 }
 
-extension ExtensionContainer:ExtensionRuntime {
+extension ExtensionContainer: ExtensionRuntime {
 
     public func registerListener(type: String, source: String, listener: @escaping EventListener) {
         let listenerContainer = EventListenerContainer(listener: listener, type: type, source: source, triggerEventId: nil, timeoutTask: nil)

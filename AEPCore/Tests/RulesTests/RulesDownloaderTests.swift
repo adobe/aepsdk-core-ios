@@ -15,7 +15,7 @@ import XCTest
 @testable import AEPServicesMocks
 
 class RulesDownloaderTests: XCTestCase {
-    
+
     private static let zipTestFileName = "testRulesDownloader"
     private let cache = MockDiskCache()
     private var mockUnzipper = MockUnzipper()
@@ -30,11 +30,11 @@ class RulesDownloaderTests: XCTestCase {
     static var bundle: Bundle {
         return Bundle(for: self)
     }
-    
+
     static var rulesUrl: URL? {
         return RulesDownloaderTests.bundle.url(forResource: RulesDownloaderTests.zipTestFileName, withExtension: ".zip")
     }
-    
+
     private var encodedUrl: String {
         get {
             let rulesUrl = RulesDownloaderTests.rulesUrl!.absoluteString
@@ -42,11 +42,11 @@ class RulesDownloaderTests: XCTestCase {
             return utf8RulesUrl!.base64EncodedString()
         }
     }
-    
+
     override func setUp() {
         ServiceProvider.shared.cacheService = cache
     }
-    
+
     func testLoadRulesFromCacheSimple() {
         let rulesData = "testdata".data(using: .utf8)!
         let testRules: CachedRules = CachedRules(cacheable: rulesData, lastModified: nil, eTag: nil)
@@ -60,12 +60,11 @@ class RulesDownloaderTests: XCTestCase {
         XCTAssertEqual(rulesData, cachedRulesData)
         XCTAssertTrue(cache.getCalled)
     }
-    
+
     func testLoadRulesFromCacheNotInCache() {
         XCTAssertNil(rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!))
         XCTAssertTrue(cache.getCalled)
     }
-    
 
     func testLoadRulesFromUrlWithCacheNotModified() {
         ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .notModified)
@@ -75,7 +74,7 @@ class RulesDownloaderTests: XCTestCase {
         let testEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
         cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with cached rules")
-        var loadedRulesData: Data? = nil
+        var loadedRulesData: Data?
 
         rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
             loadedRulesData = loadedRules
@@ -122,7 +121,7 @@ class RulesDownloaderTests: XCTestCase {
         let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper())
         ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with rules")
-        var rules: Data? = nil
+        var rules: Data?
 
         rulesDownloaderReal.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
             rules = loadedRules

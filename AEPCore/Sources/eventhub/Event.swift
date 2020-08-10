@@ -15,33 +15,33 @@ import AEPServices
 
 /// An Event to be dispatched by the Event Hub
 @objc(AEPEvent) public class Event: NSObject, Codable {
-    
+
     /// Name of the event
     @objc public let name: String
-    
+
     /// unique identifier for the event
     @objc public private(set) var id = UUID()
-    
+
     /// The `EventType` for the event
     @objc public let type: String
-    
+
     /// The `EventSource` for the event
     @objc public let source: String
-    
+
     /// Optional data associated with this event
     @objc public internal(set) var data: [String: Any]?
-    
+
     /// Date this event was created
     @objc public private(set) var timestamp = Date()
-    
+
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
     @objc public let responseID: UUID?
-    
+
     /// Event description used for logging
     @objc public override var description: String {
         return "id: \(id.uuidString) name: \(self.name) type: \(self.type) source: \(self.source) data: \(String(describing: self.data)) timestamp: \(timestamp.description) responseId: \(String(describing: responseID?.uuidString))"
     }
-    
+
     /// Creates a new `Event` with the given parameters
     /// - Parameters:
     ///   - name: Name for the `Event`
@@ -51,7 +51,7 @@ import AEPServices
     @objc public convenience init(name: String, type: String, source: String, data: [String: Any]?) {
         self.init(name: name, type: type, source: source, data: data, requestEvent: nil)
     }
-    
+
     private init(name: String, type: String, source: String, data: [String: Any]?, requestEvent: Event?) {
         self.name = name
         self.type = type
@@ -69,7 +69,7 @@ import AEPServices
     public func createResponseEvent(name: String, type: String, source: String, data: [String: Any]?) -> Event {
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
-    
+
     // MARK: Codable
     enum CodingKeys: String, CodingKey {
         case name
@@ -80,10 +80,10 @@ import AEPServices
         case timestamp
         case responseID
     }
-    
+
     required public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         name = try values.decode(String.self, forKey: .name)
         id = try values.decode(UUID.self, forKey: .id)
         type = try values.decode(String.self, forKey: .type)
@@ -93,10 +93,10 @@ import AEPServices
         timestamp = try values.decode(Date.self, forKey: .timestamp)
         responseID = try? values.decode(UUID.self, forKey: .responseID)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
         try container.encode(name, forKey: .name)
         try container.encode(id, forKey: .id)
         try container.encode(type, forKey: .type)
@@ -105,5 +105,5 @@ import AEPServices
         try container.encode(timestamp, forKey: .timestamp)
         try container.encode(responseID, forKey: .responseID)
     }
-    
+
 }

@@ -12,7 +12,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 extension URL {
-    
+
     /// Creates a new Identity hit URL
     /// - Parameters:
     ///   - experienceCloudServer: the experience cloud server
@@ -24,46 +24,46 @@ extension URL {
         components.scheme = "https"
         components.host = experienceCloudServer
         components.path = "/id"
-        
+
         var queryItems = [
             URLQueryItem(name: "d_rtbd", value: "json"),
             URLQueryItem(name: "d_ver", value: "2"),
-            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_ORGID, value: orgId),
+            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_ORGID, value: orgId)
         ]
-        
+
         if let mid = identityProperties.mid {
             queryItems += [URLQueryItem(name: IdentityConstants.RESPONSE_KEY_MID, value: mid.midString)]
         }
-        
+
         if let blob = identityProperties.blob {
             queryItems += [URLQueryItem(name: IdentityConstants.RESPONSE_KEY_BLOB, value: blob)]
         }
-        
+
         if let locationHint = identityProperties.locationHint {
             queryItems += [URLQueryItem(name: IdentityConstants.RESPONSE_KEY_HINT, value: locationHint)]
         }
-        
+
         // Add customer ids
         if let customerIds = identityProperties.customerIds {
             for customIdQueryItem in customerIds {
                 queryItems += [URLQueryItem(identifier: customIdQueryItem)]
             }
         }
-        
+
         // Add dpids
         for (key, value) in dpids {
             queryItems += [URLQueryItem(dpidKey: key, dpidValue: value)]
         }
-        
+
         components.queryItems = queryItems
-        
+
         guard let url = components.url else {
             // TODO: Add log for failure
             return nil
         }
         return url
     }
-    
+
     /// Builds the `URL` responsible for sending an opt-out hit
     /// - Parameters:
     ///   - orgId: the org id from Configuration

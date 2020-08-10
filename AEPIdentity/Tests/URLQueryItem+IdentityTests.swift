@@ -14,31 +14,31 @@ import XCTest
 
 class URLQueryItem_IdentityTests: XCTestCase {
     // MARK: URLQueryItem(identifiable) tests
-     
+
      /// Tests that one custom ID is encoded correctly
      func testQueryItemFromIdentifiableCorrectly() {
          // setup
          let expected = "d_cid_ic=DSID_20915%01test_ad_id%011"
-         
+
          // test
          let queryItem = URLQueryItem(identifier: CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated))
-         
+
          // verify
          XCTAssertEqual(expected, queryItem.description)
      }
-     
+
      // MARK: URLQueryItem(dpid) tests
-     
+
      /// Tests that one custom ID is encoded correctly
      func testQueryItemFromDpidCorrectly() {
          // setup
          let expected = "d_cid=key1%01val1"
-         
+
          // test
          let queryItem = URLQueryItem(dpidKey: "key1", dpidValue: "val1")
-         
+
          // verify
          XCTAssertEqual(expected, queryItem.description)
      }
-    
+
 }

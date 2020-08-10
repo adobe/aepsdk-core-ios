@@ -19,33 +19,33 @@ public enum NetworkServiceError: Error {
 
 class NetworkService: Networking {
     private let LOG_PREFIX = "NetworkService"
-  
+
     private var sessions = ThreadSafeDictionary<String, URLSession>(identifier: "com.adobe.networkservice.sessions")
-    
+
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
-        
+
         if !networkRequest.url.absoluteString.starts(with: "https") {
-            Log.warning(label:LOG_PREFIX, "Network request for (\( networkRequest.url.absoluteString)) could not be created, only https requests are accepted.")
+            Log.warning(label: LOG_PREFIX, "Network request for (\( networkRequest.url.absoluteString)) could not be created, only https requests are accepted.")
             if let closure = completionHandler {
                 closure(HttpConnection(data: nil, response: nil, error: NetworkServiceError.invalidUrl))
             }
             return
         }
-        
+
         let urlRequest = createURLRequest(networkRequest: networkRequest)
         let urlSession = createURLSession(networkRequest: networkRequest)
-        
+
         // initiate the network request
         Log.debug(label: LOG_PREFIX, "Initiated (\(networkRequest.httpMethod.toString())) network request to (\(networkRequest.url.absoluteString)).")
         let task = urlSession.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
             if let closure = completionHandler {
-                let httpConnection = HttpConnection(data: data, response: response as? HTTPURLResponse , error: error)
+                let httpConnection = HttpConnection(data: data, response: response as? HTTPURLResponse, error: error)
                 closure(httpConnection)
             }
         })
         task.resume()
     }
-    
+
     /// Check if a session is already created for the specified URL, readTimeout, connectTimeout or create a new one with a new `URLSessionConfiguration`
     /// - Parameter networkRequest: current network request
     func createURLSession(networkRequest: NetworkRequest) -> URLSession {
@@ -56,30 +56,30 @@ class NetworkService: Networking {
             config.urlCache = nil
             config.timeoutIntervalForRequest = networkRequest.readTimeout
             config.timeoutIntervalForResource = networkRequest.connectTimeout
-            
-            let newSession:URLSession = URLSession(configuration: config)
+
+            let newSession: URLSession = URLSession(configuration: config)
             self.sessions[sessionId] = newSession
             return newSession
         }
-        
+
         return session
     }
-    
+
     /// Creates an `URLRequest` with the provided parameters and adds the SDK default headers. The cache policy used is reloadIgnoringLocalCacheData.
     /// - Parameter networkRequest: `NetworkRequest`
     private func createURLRequest(networkRequest: NetworkRequest) -> URLRequest {
         var request = URLRequest(url: networkRequest.url)
         request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpMethod = networkRequest.httpMethod.toString()
-        
+
         if !networkRequest.connectPayload.isEmpty && networkRequest.httpMethod == .post {
             request.httpBody = networkRequest.connectPayload.data(using: .utf8)
         }
-        
+
         for (key, val) in networkRequest.httpHeaders {
             request.setValue(val, forHTTPHeaderField: key)
         }
-        
+
         return request
     }
 }

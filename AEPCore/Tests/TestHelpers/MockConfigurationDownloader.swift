@@ -14,27 +14,27 @@ import Foundation
 import AEPServices
 
 class MockConfigurationDownloader: ConfigurationDownloadable {
-    
+
     var configFromPath: [String: Any]?
-    func loadConfigFrom(filePath: String) -> [String : Any]? {
+    func loadConfigFrom(filePath: String) -> [String: Any]? {
         return configFromPath
     }
-    
+
     var configFromManifest: [String: Any]?
     var calledLoadDefaultConfig = false
     func loadDefaultConfigFromManifest() -> [String: Any]? {
         calledLoadDefaultConfig = true
         return configFromManifest
     }
-    
+
     var configFromCache: [String: Any]?
-    func loadConfigFromCache(appId: String, dataStore: NamedCollectionDataStore) -> [String : Any]? {
+    func loadConfigFromCache(appId: String, dataStore: NamedCollectionDataStore) -> [String: Any]? {
         configFromCache
     }
-    
+
     var configFromUrl: [String: Any]?
-    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String : Any]?) -> ()) {
+    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> Void) {
         completion(configFromUrl)
     }
-    
+
 }

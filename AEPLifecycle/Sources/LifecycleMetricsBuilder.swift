@@ -15,29 +15,29 @@ import AEPServices
 // Builds the LifecycleMetricsData and handles Lifecycle metrics data storage updates
 class LifecycleMetricsBuilder {
     private var lifecycleMetrics: LifecycleMetrics = LifecycleMetrics()
-    
+
     private typealias KEYS = LifecycleConstants.DataStoreKeys
 
     private let dataStore: NamedCollectionDataStore
     private let date: Date
- 
+
     private var systemInfoService: SystemInfoService {
         get {
             ServiceProvider.shared.systemInfoService
         }
     }
-    
+
     init(dataStore: NamedCollectionDataStore, date: Date) {
         self.dataStore = dataStore
         self.date = date
     }
-    
+
     /// Builds the LifecycleMetrics
     /// - Return: `LifecycleMetrics` as they are upon building
     func build() -> LifecycleMetrics {
         return lifecycleMetrics
     }
-    
+
     /// Adds install data to the lifecycle metrics and sets the data store lifecycle install date value
     /// Install data includes:
     /// - Daily engaged event
@@ -54,7 +54,7 @@ class LifecycleMetricsBuilder {
         self.dataStore.setObject(key: KEYS.INSTALL_DATE, value: date)
         return self
     }
-    
+
     /// Adds the launch data to the lifecycle metrics 
     /// Launch Metrics includes:
     /// - Days since first launch
@@ -68,15 +68,15 @@ class LifecycleMetricsBuilder {
             guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: self.date).day else {
                 return self
             }
-            
+
             lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
         }
-        
+
         if let lastLaunchDate: Date = self.dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE) {
             guard let daysSinceLastLaunch = Calendar.current.dateComponents([.day], from: lastLaunchDate, to: self.date).day else {
                 return self
             }
-            
+
             lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
             let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: self.date)
             let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
@@ -88,10 +88,10 @@ class LifecycleMetricsBuilder {
                 lifecycleMetrics.dailyEngagedEvent = true
             }
         }
-        
+
         return self
     }
-    
+
     /// Adds the launch count, event, and time data to the lifecycle metrics
     /// Launch event and time data includes:
     /// - Launches
@@ -139,7 +139,7 @@ class LifecycleMetricsBuilder {
         }
         return self
     }
-    
+
     /// Adds the crash data to the lifecycle metrics
     /// Crash data includes:
     /// - Crash event
@@ -155,7 +155,7 @@ class LifecycleMetricsBuilder {
         }
         return self
     }
-    
+
     /// Adds the device data to the lifecycle metrics
     /// Core data includes:
     /// - Device name
@@ -172,7 +172,7 @@ class LifecycleMetricsBuilder {
         if !deviceName.isEmpty {
             lifecycleMetrics.deviceName = deviceName
         }
-        
+
         if let carrierName = systemInfoService.getMobileCarrierName() {
             lifecycleMetrics.carrierName = carrierName
         }
@@ -180,7 +180,7 @@ class LifecycleMetricsBuilder {
         if !applicationIdentifier.isEmpty {
             lifecycleMetrics.appId = applicationIdentifier
         }
-        
+
         lifecycleMetrics.deviceResolution = getResolution()
         lifecycleMetrics.operatingSystem = systemInfoService.getOperatingSystemName()
         lifecycleMetrics.locale = getLocale()
@@ -188,8 +188,8 @@ class LifecycleMetricsBuilder {
 
         return self
     }
-    
-    /// MARK: - Private helper functions
+
+    // MARK: - Private helper functions
     /// Combines the application name, version, and version code into a formatted application identifier
     /// - Return: `String` formatted Application identifier
     private func getApplicationIdentifier() -> String {
@@ -199,14 +199,14 @@ class LifecycleMetricsBuilder {
         // Make sure that the formatted identifier removes white space if any of the values are empty, and remove the () version wrapper if version is empty as well
         return "\(applicationName) \(applicationVersion) (\(applicationBuildNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     /// Gets the resolution of the current device
     /// - Return: `String` formatted resolution
     private func getResolution() -> String {
         let displayInfo = systemInfoService.getDisplayInformation()
         return "\(displayInfo.width)x\(displayInfo.height)"
     }
-    
+
     /// Gets the formatted locale
     /// - Return: `String` formatted locale
     private func getLocale() -> String {
@@ -214,4 +214,3 @@ class LifecycleMetricsBuilder {
         return locale.replacingOccurrences(of: "_", with: "-")
     }
 }
-

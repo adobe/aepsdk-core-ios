@@ -13,22 +13,22 @@ import Foundation
 
 /// Adds convenience properties to an `Event` for the Configuration extension
 extension Event {
-    
+
     /// Returns true if this `Event` is an update configuration event, otherwise false
     var isUpdateConfigEvent: Bool {
         return data?[ConfigurationConstants.Keys.UPDATE_CONFIG] != nil
     }
-    
+
     /// Returns true if this `Event` is a get configuration event, otherwise false
     var isGetConfigEvent: Bool {
         return data?[ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool ?? false
     }
-    
+
     /// Returns the appId stored in `data` if found, otherwise nil
     var appId: String? {
         return data?[ConfigurationConstants.Keys.JSON_APP_ID] as? String
     }
-    
+
     /// Returns the file path stored in `data` if found, otherwise nil
     var filePath: String? {
          return data?[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String

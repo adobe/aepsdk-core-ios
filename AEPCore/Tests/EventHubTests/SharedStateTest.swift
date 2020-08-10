@@ -80,10 +80,10 @@ class SharedStateTest: XCTestCase {
     }
 
     func testUpdatePendingInterleaved() {
-        sharedState.set(version:0, data: SharedStateTestHelper.ZERO)
-        sharedState.set(version:1, data: SharedStateTestHelper.ONE)
-        sharedState.addPending(version:2)
-        sharedState.set(version:3, data: SharedStateTestHelper.THREE)
+        sharedState.set(version: 0, data: SharedStateTestHelper.ZERO)
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+        sharedState.addPending(version: 2)
+        sharedState.set(version: 3, data: SharedStateTestHelper.THREE)
 
         sharedState.updatePending(version: 2, data: SharedStateTestHelper.TWO)
 
@@ -94,7 +94,7 @@ class SharedStateTest: XCTestCase {
     }
 
     func testBackwardLookingResolve() {
-        sharedState.set(version:10, data: SharedStateTestHelper.TEN)
+        sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
 
         validateSharedState(10, "ten")
         validateSharedState(11, "ten")
@@ -102,7 +102,7 @@ class SharedStateTest: XCTestCase {
     }
 
     func testForwardLookingResolve() {
-        sharedState.set(version:10, data: SharedStateTestHelper.TEN)
+        sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
 
         validateSharedState(10, "ten")
         validateSharedState(9, "ten")
@@ -111,9 +111,9 @@ class SharedStateTest: XCTestCase {
     }
 
     func testMiddleResolve() {
-        sharedState.set(version:1, data: SharedStateTestHelper.ONE)
-        sharedState.set(version:5, data: SharedStateTestHelper.FIVE)
-        sharedState.set(version:10, data: SharedStateTestHelper.TEN)
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+        sharedState.set(version: 5, data: SharedStateTestHelper.FIVE)
+        sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
 
         validateSharedState(4, "one")
         validateSharedState(5, "five")

@@ -13,33 +13,33 @@ import Foundation
 import AEPCore
 
 extension Event {
-    
+
     /// Returns true if this event is a sync event
     var isSyncEvent: Bool {
         return data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
     }
-    
+
     /// Reads the push identifier from the event data and packages it into dpids format
     var dpids: [String: String]? {
         guard let pushId = data?[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String else { return nil }
         return [IdentityConstants.EventDataKeys.MCPNS_DPID: pushId]
     }
-    
+
     /// Reads the identifiers from the event data
     var identifiers: [String: String]? {
         return data?[IdentityConstants.EventDataKeys.IDENTIFIERS] as? [String: String]
     }
-    
+
     /// Reads the authentication state from the event data
     var authenticationState: MobileVisitorAuthenticationState {
         return data?[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] as? MobileVisitorAuthenticationState ?? .unknown
     }
-    
+
     /// Returns true if the event data contains the force sync flag
     var forceSync: Bool {
         return data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
     }
-    
+
     /// Reads the advertising from the event data and builds a `CustomIdentity`
     var adId: CustomIdentity? {
         let adId = data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String
@@ -48,7 +48,7 @@ extension Event {
                               identifier: adId,
                               authenticationState: .authenticated)
     }
-    
+
     /// Reads the base url from the event data if present
     var baseUrl: String? {
         return data?[IdentityConstants.EventDataKeys.BASE_URL] as? String
@@ -58,19 +58,19 @@ extension Event {
     var urlVariables: Bool {
         return data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? Bool ?? false
     }
-    
+
     /// Creates a force sync event as a response event to this event
     /// - Returns: an event with the force sync event data as a response event to this event
     func forceSyncEvent() -> Event {
-        let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String : Any]
+        let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String: Any]
         return createResponseEvent(name: "Forced Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
     }
-    
+
     /// Creates a force sync event
     /// - Returns: an event with the force sync event data
     static func forceSyncEvent() -> Event {
-        let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String : Any]
+        let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String: Any]
         return Event(name: "Forced Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
     }
-    
+
 }

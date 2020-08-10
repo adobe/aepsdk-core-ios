@@ -14,17 +14,17 @@ import Foundation
 
 /// The HttpConnection represents the response to NetworkRequest, to be used for network completion handlers and when overriding the network stack in place of internal network connection implementation.
 public struct HttpConnection {
-    
+
     /// Returns application server response data from the connection or nil if there was an error
     public let data: Data?
-    
+
     /// Response metadata provided by the server
     public let response: HTTPURLResponse?
-    
+
     /// The error associated with the request failure or nil on success
     public let error: Error?
-    
-    public init(data: Data?, response: HTTPURLResponse?, error: Error?){
+
+    public init(data: Data?, response: HTTPURLResponse?, error: Error?) {
         self.data = data
         self.response = response
         self.error = error
@@ -37,24 +37,24 @@ public extension HttpConnection {
         if let unwrappedData = data {
             return String(data: unwrappedData, encoding: .utf8)
         }
-       
+
         return nil
     }
-   
+
     /// Returns the connection response code for the connection request.
     var responseCode: Int? {
         return response?.statusCode
     }
-    
+
     /// Returns application server response message as string extracted from the `response` property, if available.
     var responseMessage: String? {
         if let code = responseCode {
             return HTTPURLResponse.localizedString(forStatusCode: code)
         }
-        
+
         return nil
     }
-   
+
     /// Returns a value for the response header key from the `response` property, if available.
     /// This is protocol specific. For example, HTTP URLs could have headers like "last-modified", or "ETag" set.
     /// - Parameter forKey: the header key name sent in response when requesting a connection to the URL.

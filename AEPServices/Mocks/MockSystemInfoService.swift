@@ -14,73 +14,73 @@ import Foundation
 @testable import AEPServices
 
 public class MockSystemInfoService: SystemInfoService {
-    public init(){
-        
+    public init() {
+
     }
-        
-    public var property: String? = nil
+
+    public var property: String?
     public func getProperty(for key: String) -> String? {
         return property
     }
-    
-    public var asset: String? = nil
+
+    public var asset: String?
     public func getAsset(fileName: String, fileType: String) -> String? {
         return asset
     }
-    
-    public var assetImage: [UInt8]? = nil
+
+    public var assetImage: [UInt8]?
     public func getAsset(fileName: String, fileType: String) -> [UInt8]? {
         return assetImage
     }
-    
+
     public var defaultUserAgent = ""
     public func getDefaultUserAgent() -> String {
         return defaultUserAgent
     }
-    
+
     public var activeLocaleName = ""
     public func getActiveLocaleName() -> String {
         return activeLocaleName
     }
-    
+
     public var deviceName = ""
     public func getDeviceName() -> String {
         return deviceName
     }
-    
-    public var mobileCarrierName: String? = nil
+
+    public var mobileCarrierName: String?
     public func getMobileCarrierName() -> String? {
         return mobileCarrierName
     }
-    
+
     public var runMode: String = ""
     public func getRunMode() -> String {
         return runMode
     }
-    
-    public var applicationName: String? = nil
+
+    public var applicationName: String?
     public func getApplicationName() -> String? {
         return applicationName
     }
-    
-    public var applicationBuildNumber: String? = nil
+
+    public var applicationBuildNumber: String?
     public func getApplicationBuildNumber() -> String? {
         return applicationBuildNumber
     }
-    
-    public var applicationVersionNumber: String? = nil
+
+    public var applicationVersionNumber: String?
     public func getApplicationVersionNumber() -> String? {
         return applicationVersionNumber
     }
-    
+
     public var operatingSystemName: String = ""
     public func getOperatingSystemName() -> String {
         return operatingSystemName
     }
-    
+
     public var displayInformation: (width: Int, height: Int) = (0, 0)
     public func getDisplayInformation() -> (width: Int, height: Int) {
         return displayInformation
     }
-    
+
 }

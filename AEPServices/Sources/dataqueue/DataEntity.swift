@@ -30,7 +30,7 @@ public class DataEntity: NSObject {
         self.timestamp = Date()
         self.data = data
     }
-    
+
     /// Generates a new `DataEntity`
     /// - Parameters:
     ///   - uniqueIdentifier: a string identifier for `DataEntity`

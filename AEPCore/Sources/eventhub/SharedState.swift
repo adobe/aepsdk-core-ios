@@ -34,7 +34,7 @@ class SharedState {
     /// - Parameters:
     ///   - version: The version of the `SharedState` to set (must be > any existing version)
     ///   - data: The data dictionary to set.
-    internal func set(version: Int, data: [String:Any]?) {
+    internal func set(version: Int, data: [String: Any]?) {
         add(version: version, data: data, status: .set)
     }
 
@@ -49,7 +49,7 @@ class SharedState {
     /// - Parameters:
     ///   - version: The version of the pending `SharedState` to set (must already exist)
     ///   - data: The data dictionary to set.
-    internal func updatePending(version: Int, data: [String:Any]?) {
+    internal func updatePending(version: Int, data: [String: Any]?) {
         queue.async(flags: .barrier) {
             var cur = self.head
             while let unwrapped = cur {
@@ -74,7 +74,7 @@ class SharedState {
     /// - Returns
     ///     - value: The current set value for the shared state
     ///     - status: The current `SharedState.Status` of the returned state
-    internal func resolve(version: Int) -> (value: [String:Any]?, status: SharedStateStatus) {
+    internal func resolve(version: Int) -> (value: [String: Any]?, status: SharedStateStatus) {
         return queue.sync {
             var cur = head
             while let unwrapped = cur {
@@ -86,12 +86,12 @@ class SharedState {
                 cur = unwrapped.previousNode
             }
             return (nil, .none)
-            
+
         }
     }
 
     // MARK: Private API
-    private func add(version: Int, data: [String:Any]?, status: SharedStateStatus) {
+    private func add(version: Int, data: [String: Any]?, status: SharedStateStatus) {
         queue.async(flags: .barrier) {
             if let unwrapped = self.head {
                 if unwrapped.version < version {
@@ -109,18 +109,18 @@ class SharedState {
     /// Node class defines a specific version of a SharedState
     private class Node {
         var nodeStatus: SharedStateStatus = .pending
-        var previousNode: Node? = nil
+        var previousNode: Node?
         let version: Int
-        var data: [String:Any]? = nil
+        var data: [String: Any]?
 
         // appends a node to this node and returns the new node.
-        func append(version: Int, data: [String:Any]?, status: SharedStateStatus) -> Node? {
+        func append(version: Int, data: [String: Any]?, status: SharedStateStatus) -> Node? {
             let newNode = Node(version: version, data: data, status: status)
             newNode.previousNode = self
             return newNode
         }
 
-        init(version: Int, data: [String:Any]?, status: SharedStateStatus) {
+        init(version: Int, data: [String: Any]?, status: SharedStateStatus) {
             self.version = version
             self.data = data
             self.nodeStatus = status

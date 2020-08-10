@@ -17,16 +17,16 @@ import Foundation
 
     /// Name of the extension
     var name: String { get }
-    
+
     /// A friendly human readable name of the extension
     var friendlyName: String { get }
 
     /// Version of the extension
     static var extensionVersion: String { get }
-    
+
     /// Optional metadata to be provided to the `EventHub`
     var metadata: [String: String]? { get }
-    
+
     /// Provides the methods can be used by extension
     var runtime: ExtensionRuntime { get }
 
@@ -35,7 +35,7 @@ import Foundation
 
     /// Invoked when the extension has been unregistered by the `EventHub`
     func onUnregistered()
-    
+
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
     /// Should be overridden by any extension that wants to control it's own event flow on a per event basis.
     ///
@@ -49,7 +49,7 @@ import Foundation
 
 /// Contains methods for developers to interact with in their own extensions
 public extension Extension {
-    
+
     /// Registers a `EventListener` with the `EventHub`
     /// - Parameters:
     ///   - type: `EventType` to be listened for
@@ -58,7 +58,7 @@ public extension Extension {
     func registerListener(type: String, source: String, listener: @escaping EventListener) {
         runtime.registerListener(type: type, source: source, listener: listener)
     }
-    
+
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event) {
@@ -75,7 +75,6 @@ public extension Extension {
         runtime.createSharedState(data: data, event: event)
     }
 
-
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
@@ -89,7 +88,7 @@ public extension Extension {
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return runtime.getSharedState(extensionName: extensionName, event: event)
     }
-    
+
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
     /// Should be overridden by any extension that wants to control it's own event flow on a per event basis.
     ///
@@ -98,21 +97,21 @@ public extension Extension {
     func readyForEvent(_ event: Event) -> Bool {
         return true
     }
-    
+
     /// Starts the `Event` queue for this extension
     func startEvents() {
         runtime.startEvents()
     }
-    
+
     /// Stops the `Event` queue for this extension
     func stopEvents() {
         runtime.stopEvents()
     }
-    
+
     /// Register a event preprocessor
     /// - Parameter preprocessor: The `EventPreprocessor`
-    internal func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor){
+    internal func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor) {
         EventHub.shared.registerPreprocessor(preprocessor)
     }
-    
+
 }

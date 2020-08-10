@@ -14,9 +14,8 @@ import Foundation
 extension FileManager {
     typealias CentralDirectoryStructure = ZipEntry.CentralDirectoryStructure
 
-
     // MARK: - Helpers
-    
+
     ///
     /// Checks if an item exists at the given url
     /// - Parameter url: The url to check
@@ -24,7 +23,7 @@ extension FileManager {
     func itemExists(at url: URL) -> Bool {
         return (try? url.checkResourceIsReachable()) == true
     }
-    
+
     ///
     /// Creates a parent directory structure for a given url
     /// - Parameter url: The url to create the parent directory for
@@ -53,7 +52,7 @@ extension FileManager {
         attributes[.posixPermissions] = NSNumber(value: permissions)
         return attributes
     }
-    
+
     ///
     /// Gets the posix permissions for the ZipEntry
     /// - Parameters

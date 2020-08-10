@@ -14,12 +14,11 @@ import AEPServices
 
 /// Used to store a configuration to cache with some metadata
 struct CachedConfiguration: Cacheable, Codable {
-    
-    let cacheable: [String : AnyCodable]
-    
+
+    let cacheable: [String: AnyCodable]
+
     let lastModified: String?
-    
+
     let eTag: String?
-    
-    
+
 }

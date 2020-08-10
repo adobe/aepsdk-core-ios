@@ -43,13 +43,13 @@ struct MockConfigurationDownloaderNetworkService: Networking {
                           "analytics.aamForwardingEnabled": true
                         }
                         """.data(using: .utf8)
-    
+
     let expectedValidHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
     let expectedInValidHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 500, httpVersion: nil, headerFields: [:])
     let expectedNotModifiedHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 304, httpVersion: nil, headerFields: [:])
-    
+
     func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
-        
+
         switch responseType {
         case .success:
             let httpConnection = HttpConnection(data: expectedData, response: expectedValidHttpUrlResponse, error: nil)
@@ -63,7 +63,7 @@ struct MockConfigurationDownloaderNetworkService: Networking {
         case .none:
             print("invalid response type")
         }
-        
+
     }
-    
+
 }

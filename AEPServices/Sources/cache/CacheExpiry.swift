@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-
 import Foundation
 
 /// Represents a cache expiry date
@@ -18,7 +17,7 @@ public enum CacheExpiry: Equatable {
     case never
     case seconds(TimeInterval)
     case date(Date)
-    
+
     /// Returns the date associated with the expiry
     public var date: Date {
       switch self {

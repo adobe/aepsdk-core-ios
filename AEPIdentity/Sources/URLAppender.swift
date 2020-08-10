@@ -54,7 +54,7 @@ struct URLAppender {
         } else if queryIndex < 0 || isQueryAfterAnchor {
             idString.insert("?", at: idString.startIndex)
         }
-        
+
         var modifiedUrl = baseUrl
         modifiedUrl.insert(contentsOf: idString, at: modifiedUrl.index(modifiedUrl.startIndex, offsetBy: insertIndex))
 

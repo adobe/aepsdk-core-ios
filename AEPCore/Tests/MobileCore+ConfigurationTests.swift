@@ -12,7 +12,6 @@ governing permissions and limitations under the License.
 import XCTest
 @testable import AEPCore
 
-
 class MobileCore_ConfigurationTests: XCTestCase {
 
     override func setUp() {
@@ -23,14 +22,13 @@ class MobileCore_ConfigurationTests: XCTestCase {
         registerMockExtension(MockExtension.self)
     }
 
-
     override func tearDown() {
         EventHub.reset()
     }
 
     private func registerMockExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
-        EventHub.shared.registerExtension(type) { (error) in
+        EventHub.shared.registerExtension(type) { (_) in
             semaphore.signal()
         }
 
@@ -133,7 +131,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        MobileCore.getPrivacyStatus { (status) in}
+        MobileCore.getPrivacyStatus { (_) in}
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -144,7 +142,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         let expectation = XCTestExpectation(description: "getSdkIdentities dispatches a configuration request identity event")
         expectation.assertForOverFulfill = true
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestIdentity) { (_) in
             expectation.fulfill()
         }
 

@@ -20,9 +20,9 @@ enum MockRulesDownloaderResponses {
 
 struct MockRulesDownloaderNetworkService: Networking {
     var response: MockRulesDownloaderResponses!
-    
+
     let expectedData = try? Data(contentsOf: RulesDownloaderTests.rulesUrl!)
-    
+
     let validResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
     let invalidResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 500, httpVersion: nil, headerFields: nil)
     let notModifiedResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 304, httpVersion: nil, headerFields: nil)

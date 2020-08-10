@@ -16,7 +16,7 @@ import Foundation
 @objc(AEPHttpMethod) public enum HttpMethod: Int {
     case get
     case post
-    
+
     public func toString() -> String {
         switch self {
         case .get:

@@ -16,7 +16,7 @@ import Foundation
 struct LaunchRule: Rule {
     public let condition: Evaluable
     public let consequences: [Consequence]
-    
+
     init(condition: Evaluable, consequences: [Consequence]) {
         self.condition = condition
         self.consequences = consequences
@@ -27,7 +27,7 @@ struct Consequence {
     let id: String
     let type: String
     var detailDict: [String: Any?]
-    
+
     var eventData: [String: Any?]? {
         return detailDict["eventdata"] as? [String: Any?]
     }

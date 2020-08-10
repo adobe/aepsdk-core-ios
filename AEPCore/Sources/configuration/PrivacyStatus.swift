@@ -16,9 +16,9 @@ import Foundation
     case optedIn = 0
     case optedOut = 1
     case unknown = 2
-    
+
     public typealias RawValue = String
-    
+
     public var rawValue: RawValue {
         switch self {
         case .optedIn:
@@ -29,7 +29,7 @@ import Foundation
             return ConfigurationConstants.Privacy.UNKNOWN
         }
     }
-    
+
     public init?(rawValue: RawValue) {
         switch rawValue {
         case ConfigurationConstants.Privacy.OPT_IN:

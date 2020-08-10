@@ -17,7 +17,7 @@ public class NamedCollectionDataStore {
 
     private var storageService: NamedCollectionProcessing
     private var name: String
-    
+
     public init(name: String) {
         self.storageService = ServiceProvider.shared.namedKeyValueService
         self.name = name
@@ -31,7 +31,7 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func set(key: String, value: Int?) {
         set(key: key, value: value as Any?)
     }
@@ -39,7 +39,7 @@ public class NamedCollectionDataStore {
     public func getInt(key: String, fallback: Int? = nil) -> Int? {
         return get(key: key) as? Int ?? fallback
     }
-    
+
     public subscript(key: String) -> String? {
         get {
             return getString(key: key)
@@ -48,7 +48,7 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func set(key: String, value: String?) {
         set(key: key, value: value as Any?)
     }
@@ -56,7 +56,7 @@ public class NamedCollectionDataStore {
     public func getString(key: String, fallback: String? = nil) -> String? {
         return get(key: key) as? String ?? fallback
     }
-    
+
     public subscript(key: String) -> Double? {
         get {
             return getDouble(key: key)
@@ -65,15 +65,15 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func set(key: String, value: Double?) {
         set(key: key, value: value as Any?)
     }
-    
+
     public func getDouble(key: String, fallback: Double? = nil) -> Double? {
         return get(key: key) as? Double ?? fallback
     }
-    
+
     public subscript(key: String) -> Int64? {
         get {
             return getLong(key: key)
@@ -82,15 +82,15 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func set(key: String, value: Int64?) {
         set(key: key, value: value as Any?)
     }
-    
+
     public func getLong(key: String, fallback: Int64? = nil) -> Int64? {
         return get(key: key) as? Int64 ?? fallback
     }
-    
+
     public subscript(key: String) -> Float? {
         get {
             return getFloat(key: key)
@@ -99,19 +99,19 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func set(key: String, value: Float?) {
         set(key: key, value: value as Any?)
     }
-    
+
     public func getFloat(key: String, fallback: Float? = nil) -> Float? {
         return get(key: key) as? Float ?? fallback
     }
-    
+
     public func set(key: String, value: Bool?) {
         set(key: key, value: value as Any?)
     }
-    
+
     public subscript(key: String) -> Bool? {
         get {
             return getBool(key: key)
@@ -120,12 +120,11 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func getBool(key: String, fallback: Bool? = nil) -> Bool? {
         return get(key: key) as? Bool ?? fallback
     }
-    
-    
+
     public subscript(key: String) -> [Any]? {
         get {
             return getArray(key: key)
@@ -134,15 +133,15 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func set(key: String, value: [Any]?) {
         set(key: key, value: value as Any)
     }
-    
+
     public func getArray(key: String, fallback: [Any]? = nil) -> [Any]? {
         return get(key: key) as? [Any] ?? fallback
     }
-    
+
     public subscript(key: String) -> [AnyHashable: Any]? {
         get {
             return getDictionary(key: key)
@@ -151,15 +150,15 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func set(key: String, value: [AnyHashable: Any]?) {
         set(key: key, value: value as Any)
     }
-    
+
     public func getDictionary(key: String, fallback: [AnyHashable: Any]? = nil) -> [AnyHashable: Any]? {
         return get(key: key) as? [AnyHashable: Any] ?? fallback
     }
-    
+
     public subscript<T: Codable>(key: String) -> T? {
         get {
             return getObject(key: key)
@@ -168,30 +167,30 @@ public class NamedCollectionDataStore {
             set(key: key, value: newValue)
         }
     }
-    
+
     public func setObject<T: Codable>(key: String, value: T) {
         let encoder = JSONEncoder()
         let encodedValue = try? encoder.encode(value)
         set(key: key, value: encodedValue)
     }
-    
+
     public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
         if let savedData = get(key: key) as? Data {
             return try? JSONDecoder().decode(T.self, from: savedData)
         }
-        
+
         return fallback
     }
 
     public func contains(key: String) -> Bool {
         return (get(key: key) != nil) ? true : false
     }
-    
+
     public func remove(key: String) {
         if key.isEmpty {
             return
         }
-        
+
         storageService.remove(collectionName: self.name, key: key)
     }
 

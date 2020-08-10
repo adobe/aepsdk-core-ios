@@ -13,21 +13,21 @@ import Foundation
 import AEPServices
 
 extension URLQueryItem {
-    
+
     /// Creates a `URLQueryItem` configured with a `Identifiable`
     /// - Parameter identifier: The `Identifiable` to be encoded into the `URLQueryItem`
     init(identifier: Identifiable) {
         var queryString = URLEncoder.encode(value: identifier.type ?? "")
-        
+
         let encodedId = URLEncoder.encode(value: identifier.identifier ?? "")
         if !encodedId.isEmpty {
             queryString += IdentityConstants.CID_DELIMITER + encodedId
         }
-        
+
         queryString += "\(IdentityConstants.CID_DELIMITER)\(identifier.authenticationState.rawValue)"
         self = URLQueryItem(name: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, value: queryString)
     }
-    
+
     /// Creates a `QueryItem` for the dpid
     /// - Parameters:
     ///   - dpidKey: dpid key
@@ -36,7 +36,7 @@ extension URLQueryItem {
         let encodedKey = URLEncoder.encode(value: dpidKey)
         let encodedValue = URLEncoder.encode(value: dpidValue)
         let queryString = "\(encodedKey)\(IdentityConstants.CID_DELIMITER)\(encodedValue)"
-        
+
         self = URLQueryItem(name: "d_cid", value: queryString)
     }
 }

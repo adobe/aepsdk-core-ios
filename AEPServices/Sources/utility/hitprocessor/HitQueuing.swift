@@ -13,26 +13,26 @@ import Foundation
 
 /// A class of types who provide the functionality for queuing hits
 public protocol HitQueuing {
-    
+
     /// The processor responsible for implementing the logic for processing an individual hit
     var processor: HitProcessing { get }
-    
+
     /// Queues a `DataEntity` to be processed
     /// - Parameters:
     ///   - entity: the entity to be processed
     /// - Returns: True if queuing the entity was successful, false otherwise
     @discardableResult
     func queue(entity: DataEntity) -> Bool
-    
+
     /// Puts the queue in non-suspended state and begins processing hits
     func beginProcessing()
-    
+
     /// Puts the queue in a suspended state and discontinues hit processing
     func suspend()
-    
+
     /// Removes all the persisted hits from the queue
     func clear()
-    
+
     /// Returns the number of items in the queue
     func count() -> Int
 }

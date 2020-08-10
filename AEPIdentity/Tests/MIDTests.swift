@@ -13,37 +13,37 @@ import XCTest
 @testable import AEPIdentity
 
 class MIDTests: XCTestCase {
-    
+
     /// Ensures that an MID has a length of 38
     func testMIDCorrectLength() {
         // test
         let mid = MID()
-        
+
         // verify
         XCTAssertEqual(38, mid.midString.count)
     }
-    
+
     /// MID should only contain numbers
     func testMIDContainsOnlyNumbers() {
         // test
         let mid = MID()
-        
+
         // verify
         let isNumeric = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: mid.midString))
         XCTAssertTrue(isNumeric)
     }
-    
+
     /// MID should be reasonably random
     func testMIDReasonablyRandom() {
         // setup
         let count = 1000
         var mids = Set<MID>()
-        
+
         // test
         for _ in 0..<count {
             mids.insert(MID())
         }
-        
+
         // verify
         XCTAssertEqual(count, mids.count)
     }

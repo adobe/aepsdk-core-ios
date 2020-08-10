@@ -27,9 +27,9 @@ class AnyCodableTests: XCTestCase {
             "nullKey": null
         }
         """.data(using: .utf8)!
-        
+
         let decoded = try JSONDecoder().decode([String: AnyCodable].self, from: jsonData)
-        
+
         XCTAssertEqual(decoded["stringKey"]?.value as! String, "stringValue")
         XCTAssertEqual(decoded["boolKey"]?.value as! Bool, true)
         XCTAssertEqual(decoded["doubleKey"]?.value as! Double, 123.456)
@@ -37,23 +37,23 @@ class AnyCodableTests: XCTestCase {
         XCTAssertEqual(decoded["intKey1"]?.value as! Int, 1)
         XCTAssertNil(decoded["nullKey"]?.value)
     }
-    
+
     func testDecodeWithArrayAnyCodable() throws {
         let jsonData = """
         {
             "anyCodableArray": ["stringValue", true, 123.456, 123]
         }
         """.data(using: .utf8)!
-        
+
         let decoded = try JSONDecoder().decode([String: AnyCodable].self, from: jsonData)
         let anyCodableArray = decoded["anyCodableArray"]?.value as! [Any]
-        
+
         XCTAssertEqual(anyCodableArray[0] as! String, "stringValue")
         XCTAssertEqual(anyCodableArray[1] as! Bool, true)
         XCTAssertEqual(anyCodableArray[2] as! Double, 123.456)
         XCTAssertEqual(anyCodableArray[3] as! Int, 123)
     }
-    
+
     func testDecodeWithDictAnyCodable() throws {
         let jsonData = """
         {
@@ -65,15 +65,14 @@ class AnyCodableTests: XCTestCase {
                               }
         }
         """.data(using: .utf8)!
-        
+
         let decoded = try JSONDecoder().decode([String: AnyCodable].self, from: jsonData)["anyCodableDict"]?.value as! [String: Any]
-        
+
         XCTAssertEqual(decoded["stringKey"] as! String, "stringValue")
         XCTAssertEqual(decoded["boolKey"] as! Bool, true)
         XCTAssertEqual(decoded["doubleKey"] as! Double, 123.456)
         XCTAssertEqual(decoded["intKey"] as! Int, 123)
     }
-    
 
     func testEncodeSimpleTypes() throws {
         //let doubleValue: AnyCodable = AnyCodable(doubleLiteral: 123.456)
@@ -105,7 +104,7 @@ class AnyCodableTests: XCTestCase {
 
         XCTAssertEqual(encodedJSONObject, expectedJSONObject)
     }
-    
+
     func testEncodeSimpleTypesFromDict() throws {
         let dictionary: [String: Any] = [
             "stringKey": "stringValue",
@@ -135,15 +134,15 @@ class AnyCodableTests: XCTestCase {
 
         XCTAssertEqual(encodedJSONObject, expectedJSONObject)
     }
-    
+
     func testEncodeWithAnyCodableArray() throws {
         let dictionary: [String: AnyCodable] = [
             "anyCodableArray": ["stringValue", true, 123.456, 123]
         ]
-        
+
         let json = try JSONEncoder().encode(dictionary)
         let encodedJSONObject = try JSONSerialization.jsonObject(with: json, options: []) as! NSDictionary
-        
+
         let expected = """
         {
             "anyCodableArray": ["stringValue", true, 123.456, 123]
@@ -153,6 +152,5 @@ class AnyCodableTests: XCTestCase {
 
         XCTAssertEqual(encodedJSONObject, expectedJSONObject)
     }
-
 
 }

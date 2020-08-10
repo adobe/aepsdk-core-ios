@@ -14,14 +14,14 @@ import Foundation
 @testable import AEPCore
 
 // Testable implemetation for `ExtensionRuntime`, enable easy setup for the input and verification of the output of an extension
-public class TestableExtensionRuntime:ExtensionRuntime{
+public class TestableExtensionRuntime: ExtensionRuntime {
 
-    public var listeners:[String:EventListener] = [:]
+    public var listeners: [String: EventListener] = [:]
     public var dispatchedEvents: [Event] = []
-    public var createdSharedStates: [[String : Any]?] = []
+    public var createdSharedStates: [[String: Any]?] = []
     public var mockedSharedStates: [String: SharedStateResult] = [:]
 
-    public init(){
+    public init() {
 
     }
 
@@ -35,7 +35,7 @@ public class TestableExtensionRuntime:ExtensionRuntime{
         dispatchedEvents += [event]
     }
 
-    public func createSharedState(data: [String : Any], event: Event?) {
+    public func createSharedState(data: [String: Any], event: Event?) {
         self.createdSharedStates += [data]
     }
 
@@ -64,7 +64,7 @@ public class TestableExtensionRuntime:ExtensionRuntime{
     /// Simulate the events that are being sent to event hub, if there is a listener registered for that type of event, that listener will receive the event
     /// - Parameters:
     ///   - events: the sequence of the events
-    public func simulateComingEvents(_ events:Event...){
+    public func simulateComingEvents(_ events: Event...) {
         for event in events {
             listeners["\(event.type)-\(event.source)"]?(event)
             listeners["\(EventType.wildcard)-\(EventSource.wildcard)"]?(event)
@@ -79,12 +79,11 @@ public class TestableExtensionRuntime:ExtensionRuntime{
         return listeners["\(type)-\(source)"]
     }
 
-
     /// Simulate the shared state of an extension for a matching event
     /// - Parameters:
     ///   - pair: the (extension, event) pair
     ///   - data: the shared state tuple (value, status)
-    public func simulateSharedState(for pair:(extensionName: String, event: Event), data: (value: [String : Any]?, status: SharedStateStatus)) {
+    public func simulateSharedState(for pair:(extensionName: String, event: Event), data: (value: [String: Any]?, status: SharedStateStatus)) {
         mockedSharedStates["\(pair.extensionName)-\(pair.event.id)"] = SharedStateResult(status: data.status, value: data.value)
     }
 
@@ -92,41 +91,40 @@ public class TestableExtensionRuntime:ExtensionRuntime{
     /// - Parameters:
     ///   - extensionName: extension name
     ///   - data: the shared state tuple (value, status)
-    public func simulateSharedState(for extensionName: String, data: (value: [String : Any]?, status: SharedStateStatus)) {
+    public func simulateSharedState(for extensionName: String, data: (value: [String: Any]?, status: SharedStateStatus)) {
         mockedSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: data.value)
     }
 
     /// clear the events and shared states that have been created by the current extension
-    public func resetDispatchedEventAndCreatedSharedStates(){
+    public func resetDispatchedEventAndCreatedSharedStates() {
         dispatchedEvents = []
         createdSharedStates = []
     }
 
-
 }
 
-extension TestableExtensionRuntime{
-    public var firstEvent: Event?{
+extension TestableExtensionRuntime {
+    public var firstEvent: Event? {
         dispatchedEvents[0]
     }
 
-    public var secondEvent: Event?{
+    public var secondEvent: Event? {
         dispatchedEvents[1]
     }
 
-    public var thirdEvent: Event?{
+    public var thirdEvent: Event? {
         dispatchedEvents[2]
     }
 
-    public var firstSharedState: [String : Any]?{
+    public var firstSharedState: [String: Any]? {
         createdSharedStates[0]
     }
 
-    public var secondSharedState: [String : Any]?{
+    public var secondSharedState: [String: Any]? {
         createdSharedStates[1]
     }
 
-    public var thirdSharedState: [String : Any]?{
+    public var thirdSharedState: [String: Any]? {
         createdSharedStates[2]
     }
 }

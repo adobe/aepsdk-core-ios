@@ -30,11 +30,11 @@ struct RulesDownloader: RulesLoader {
         case unableToCreateTempDirectory
         case unableToStoreDataInTempDirectory
     }
-    
+
     func loadRulesFromCache(rulesUrl: URL) -> Data? {
         return getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable
     }
-    
+
     func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Data?) -> Void) {
 
         /// 304 - Not Modified support
@@ -72,12 +72,12 @@ struct RulesDownloader: RulesLoader {
                 completion(self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable)
                 return
             }
-            
+
             completion(nil)
         }
-        
+
     }
-    
+
     ///
     /// Stores the requested rules.zip data in a temp directory
     /// - Parameter data: The rules.zip as data to be stored in the temp directory
@@ -94,10 +94,10 @@ struct RulesDownloader: RulesLoader {
         guard let _ = try? data.write(to: temporaryDirectoryWithZip) else {
             return .failure(.unableToStoreDataInTempDirectory)
         }
-        
+
         return .success(temporaryDirectoryWithZip)
     }
-    
+
     ///
     /// Unzips the rules at the source url to a destination url and returns the rules as a dictionary
     /// - Parameter source: source URL for the zip file
@@ -114,7 +114,7 @@ struct RulesDownloader: RulesLoader {
             return nil
         }
     }
-    
+
     ///
     /// Builds the cache key from the rules url and the rules cache prefix
     /// - Parameter rulesUrl: The rules url
@@ -124,10 +124,10 @@ struct RulesDownloader: RulesLoader {
         guard let base64RulesUrl = utf8RulesUrl?.base64EncodedString() else {
             return RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + rulesUrl
         }
-        
+
         return RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + base64RulesUrl
     }
-   
+
     ///
     /// Caches the given rules
     /// - Parameters:
@@ -145,7 +145,7 @@ struct RulesDownloader: RulesLoader {
             return false
         }
     }
-    
+
     ///
     /// Gets the cached rules for the given rulesUrl
     /// - Parameter rulesUrl: The rules url as a string to be used to get the right cached rules
@@ -158,4 +158,3 @@ struct RulesDownloader: RulesLoader {
     }
 
 }
-

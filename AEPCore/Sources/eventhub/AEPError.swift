@@ -15,7 +15,7 @@ import Foundation
 /// An enum which describes different errors from the AEP SDK can return
 @objc public enum AEPError: Int, Error {
     public typealias RawValue = Int
-    
+
     case unexpected = 0
     case callbackTimeout = 1
     case callbackNil = 2

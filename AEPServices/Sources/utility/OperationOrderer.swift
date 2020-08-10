@@ -18,16 +18,16 @@ import Foundation
 public class OperationOrderer<T> {
     /// Used to coordinate processing of item queue.
     private let source: DispatchSourceUserDataOr
-    
+
     /// Dispatch queue used for all features of this class
     private let queue: DispatchQueue
-    
+
     /// Handler function used to operate on items.
-    private var handler: ((T) -> Bool)? = nil
-        
+    private var handler: ((T) -> Bool)?
+
     /// Array of waiting items, only accessed by `queue` to maintain thread safety.
     private var array: [T] = []
-    
+
     /// Current state of the queue (started or stopped)
     ///
     /// - Note: When set to active this will automatically trigger `source` to jump-start queue operation
@@ -36,7 +36,7 @@ public class OperationOrderer<T> {
             triggerSourceIfNeeded()
         }
     }
-            
+
     /// Initializes a new `OperationOrderer` with an optional tag.
     ///
     /// - Parameters:
@@ -48,7 +48,7 @@ public class OperationOrderer<T> {
         source.setEventHandler(handler: drain)
         source.activate() // Must activate DispatchSource to avoid crashes on deinit.
     }
-    
+
     /// Adds an item of type `T` to the `queue`.
     ///
     /// - Parameter item: Item of type `T` to add to the queue.
@@ -58,13 +58,13 @@ public class OperationOrderer<T> {
             self.triggerSourceIfNeeded()
         }
     }
-    
+
     /// Schedules a closure on the internal queue, to allow for ordering external operations against the `OperationOrderer`
     /// - Parameter closure: closure to schedule on the queue.
     private func async(_ execute: @escaping () -> Void) {
         queue.async(execute: execute)
     }
-    
+
     /// Sets the item handler function for this `OperationOrderer`
     ///
     /// - Parameter handler: Function called for each queued item (in-order).
@@ -73,21 +73,21 @@ public class OperationOrderer<T> {
     ///         until another item is added or until the `start` function is called.
     public func setHandler(_ handler: @escaping (T) -> Bool) {
         async {
-            if (self.active) {
+            if self.active {
                 self.drain()
             }
             self.handler = handler
             self.triggerSourceIfNeeded()
         }
     }
-    
+
     /// Puts queue in active state.
     public func start() {
         async {
             self.active = true
         }
     }
-    
+
     /// Puts queue in active state after a time interval
     /// - Parameter after: seconds to wait before starting the queue
     public func start(after: TimeInterval) {
@@ -95,7 +95,7 @@ public class OperationOrderer<T> {
             self.start()
         }
     }
-    
+
     /// Puts queue in inactive state.
     /// - Note: This is not an immediate stop, already queued items may continue to be handled.
     public func stop() {
@@ -103,7 +103,7 @@ public class OperationOrderer<T> {
             self.active = false
         }
     }
-    
+
     /// Triggers the DispatchOr source if the queue is currently active.
     /// - Note: Should only be called from internal `queue`.
     private func triggerSourceIfNeeded() {
@@ -111,7 +111,7 @@ public class OperationOrderer<T> {
             self.source.or(data: 1)
         }
     }
-    
+
     /// Attempts to drain the queue by iterating over all queued items and calling the handle function on them.
     private func drain() {
         while let item = self.array.first {

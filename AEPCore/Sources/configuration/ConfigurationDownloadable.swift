@@ -14,27 +14,27 @@ import AEPServices
 
 /// Defines a type which fetches configuration from various locations
 protocol ConfigurationDownloadable {
-    
+
     /// Loads the bundled config located at `filePath`.
     /// - Parameter filePath: Path to the config to load
     /// - Returns: The configuration at `filePath`, nil if not found
     func loadConfigFrom(filePath: String) -> [String: Any]?
-    
+
     /// Loads the default config in the main bundled named `ConfigurationConstants.CONFIG_BUNDLED_FILE_NAME`.
     /// - Returns: The default configuration stored in the manifest, nil if not found
     func loadDefaultConfigFromManifest() -> [String: Any]?
-    
+
     /// Loads the cached configuration for `appId`.
     /// - Parameters:
     ///   - appId: Optional app id, if provided the `ConfigurationDownloader` will attempt to download a configuration with `appId`
     ///   - dataStore: Optional `NamedCollectionDataStore`, if provided this will be used as the cache for retrieving and storing configurations.
     /// - Returns: The cached configuration for `appId` in `dataStore`, nil if not found
     func loadConfigFromCache(appId: String, dataStore: NamedCollectionDataStore) -> [String: Any]?
-    
+
     /// Loads the remote configuration for `appId` and caches the result.
     /// - Parameters:
     ///   - appId: Optional app id, if provided the `ConfigurationDownloader` will attempt to download a configuration with `appId`
     ///   - dataStore: Optional `NamedCollectionDataStore`, if provided this will be used as the cache for retrieving and storing configurations.
     ///   - completion: Invoked with the loaded configuration, nil if loading the configuration failed.
-    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> ())
+    func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> Void)
 }

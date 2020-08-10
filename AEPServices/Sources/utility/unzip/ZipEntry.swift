@@ -31,12 +31,12 @@ struct ZipEntry {
         case osx = 19
         case unused = 20
     }
-    
+
     /// The type of a ZipEntry
     enum EntryType: Int {
         case file
         case directory
-        
+
         init(mode: mode_t) {
             switch mode & S_IFMT {
             case S_IFDIR:
@@ -117,7 +117,7 @@ struct ZipEntry {
         let encoding = self.centralDirectoryStructure.usesUTF8PathEncoding ? .utf8 : codepage437
         return self.path(using: encoding)
     }
-    
+
     var type: EntryType {
         let mode = mode_t(self.centralDirectoryStructure.externalFileAttributes >> 16) & S_IFMT
         switch mode {
@@ -129,7 +129,7 @@ struct ZipEntry {
             return .file
         }
     }
-    
+
     var dataOffset: Int {
         var dataOffset = Int(self.centralDirectoryStructure.relativeOffsetOfLocalHeader)
         dataOffset += LocalFileHeader.size

@@ -12,19 +12,19 @@ governing permissions and limitations under the License.
 import Foundation
 
 extension Date {
-    
+
     private static var sdfDateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "M/d/yyyy"
         formatter.locale = Locale(identifier: "en_US")
-        
+
         return formatter
     }
-    
+
     func toSdfString() -> String {
         return Date.sdfDateFormatter.string(from: self)
     }
-    
+
     static func fromSdfString(sdfString: String) -> Date? {
         return sdfDateFormatter.date(from: sdfString)
     }
@@ -32,30 +32,30 @@ extension Date {
 
 /// A well-typed struct representing Lifecycle data
 struct LifecycleMetrics: Equatable {
-    var installEvent: Bool? = nil
-    var launchEvent: Bool? = nil
-    var crashEvent: Bool? = nil
-    var upgradeEvent: Bool? = nil
-    var dailyEngagedEvent: Bool? = nil
-    var monthlyEngagedEvent: Bool? = nil
-    var installDate: Date? = nil
-    var launches: Int? = nil
-    var daysSinceFirstLaunch: Int? = nil
-    var daysSinceLastLaunch: Int? = nil
-    var hourOfTheDay: Int? = nil
-    var dayOfTheWeek: Int? = nil
-    var operatingSystem: String? = nil
-    var appId: String? = nil
-    var daysSinceLastUpgrade: Int? = nil
-    var launchesSinceUpgrade: Int? = nil
-    var deviceName: String? = nil
-    var deviceResolution: String? = nil
-    var carrierName: String? = nil
-    var locale: String? = nil
-    var runMode: String? = nil
-    var previousOsVersion: String? = nil
-    var previousAppId: String? = nil
-    
+    var installEvent: Bool?
+    var launchEvent: Bool?
+    var crashEvent: Bool?
+    var upgradeEvent: Bool?
+    var dailyEngagedEvent: Bool?
+    var monthlyEngagedEvent: Bool?
+    var installDate: Date?
+    var launches: Int?
+    var daysSinceFirstLaunch: Int?
+    var daysSinceLastLaunch: Int?
+    var hourOfTheDay: Int?
+    var dayOfTheWeek: Int?
+    var operatingSystem: String?
+    var appId: String?
+    var daysSinceLastUpgrade: Int?
+    var launchesSinceUpgrade: Int?
+    var deviceName: String?
+    var deviceResolution: String?
+    var carrierName: String?
+    var locale: String?
+    var runMode: String?
+    var previousOsVersion: String?
+    var previousAppId: String?
+
     init() {}
 }
 
@@ -94,13 +94,13 @@ extension LifecycleMetrics: Encodable {
     static let UPGRADE_EVENT = "UpgradeEvent"
     static let CRASH_EVENT = "CrashEvent"
     static let LAUNCH_EVENT = "LaunchEvent"
-    
+
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
+
         if installEvent ?? false { try container.encode(LifecycleMetrics.INSTALL_EVENT, forKey: .installEvent) }
         if launchEvent ?? false { try container.encode(LifecycleMetrics.LAUNCH_EVENT, forKey: .launchEvent) }
-        if crashEvent ?? false  { try container.encode(LifecycleMetrics.CRASH_EVENT, forKey: .crashEvent) }
+        if crashEvent ?? false { try container.encode(LifecycleMetrics.CRASH_EVENT, forKey: .crashEvent) }
         if upgradeEvent ?? false { try container.encode(LifecycleMetrics.UPGRADE_EVENT, forKey: .upgradeEvent) }
         if dailyEngagedEvent ?? false { try container.encode(LifecycleMetrics.DAILY_ENG_USER_EVENT, forKey: .dailyEngagedEvent) }
         if monthlyEngagedEvent ?? false { try container.encode(LifecycleMetrics.MONTHLY_ENG_USER_EVENT, forKey: .monthlyEngagedEvent) }
@@ -122,7 +122,7 @@ extension LifecycleMetrics: Encodable {
         if let unwrapped = previousOsVersion { try container.encode(unwrapped, forKey: .previousOsVersion)}
         if let unwrapped = previousAppId { try container.encode(unwrapped, forKey: .previousAppId)}
     }
-    
+
 }
 
 extension LifecycleMetrics: Decodable {
@@ -138,7 +138,7 @@ extension LifecycleMetrics: Decodable {
         if let sdfDateString = try? values.decode(String?.self, forKey: .installDate) {
             installDate = Date.fromSdfString(sdfString: sdfDateString)
         }
-        
+
         if let unwrapped = try? values.decode(String?.self, forKey: .launches) { launches = Int(unwrapped) }
         if let unwrapped = try? values.decode(String?.self, forKey: .daysSinceFirstLaunch) { daysSinceFirstLaunch = Int(unwrapped) }
         if let unwrapped = try? values.decode(String?.self, forKey: .daysSinceLastLaunch) { daysSinceLastLaunch = Int(unwrapped) }

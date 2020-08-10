@@ -16,12 +16,12 @@ import AEPServices
 protocol Cacheable {
     associatedtype T
     /// The cachable Dictionary
-    var cacheable:T  { get }
-    
+    var cacheable: T { get }
+
     /// Date this cachable was last modified on the server, read from the Last-Modified HTTP header
     /// Format: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
     var lastModified: String? { get }
-    
+
     /// ETag of the cachable on the server
     var eTag: String? { get }
 }

@@ -14,52 +14,50 @@ import Foundation
 @testable import AEPCore
 
 class TestableExtensionRuntime: ExtensionRuntime {
-    var listeners:[String:EventListener] = [:]
+    var listeners: [String: EventListener] = [:]
     var dispatchedEvents: [Event] = []
-    var createdSharedStates: [[String : Any]?] = []
+    var createdSharedStates: [[String: Any]?] = []
     var otherSharedStates: [String: SharedStateResult] = [:]
-    
-    func getListener(type: String, source: String) -> EventListener?{
+
+    func getListener(type: String, source: String) -> EventListener? {
         return listeners["\(type)-\(source)"]
     }
-    
-    func simulateComingEvent(event:Event){
+
+    func simulateComingEvent(event: Event) {
         listeners["\(event.type)-\(event.source)"]?(event)
         listeners["\(EventType.wildcard)-\(EventSource.wildcard)"]?(event)
     }
-    
+
     func registerListener(type: String, source: String, listener: @escaping EventListener) {
         listeners["\(type)-\(source)"] = listener
     }
-    
-    
+
     func dispatch(event: Event) {
         dispatchedEvents += [event]
     }
-    
-    func createSharedState(data: [String : Any], event: Event?) {
+
+    func createSharedState(data: [String: Any], event: Event?) {
         self.createdSharedStates += [data]
     }
-    
+
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
         return { data in
             self.createdSharedStates += [data]
         }
     }
-    
+
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
-    
-    func simulateSharedState(extensionName: String, event: Event?, data: (value: [String : Any]?, status: SharedStateStatus)) {
+
+    func simulateSharedState(extensionName: String, event: Event?, data: (value: [String: Any]?, status: SharedStateStatus)) {
         otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: data.value)
     }
-    
+
     func startEvents() {
     }
-    
+
     func stopEvents() {
     }
-    
-    
+
 }

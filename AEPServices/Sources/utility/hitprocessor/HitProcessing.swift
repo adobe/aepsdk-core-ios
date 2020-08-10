@@ -13,13 +13,13 @@ import Foundation
 
 /// A class of types who provide the functionality for processing hits
 public protocol HitProcessing: class {
-    
+
     /// Defines the interval at which hits should be retried if failed
     var retryInterval: TimeInterval { get }
-    
+
     /// Function that is invoked with a `DataEntity` and provides functionality for processing the hit
     /// - Parameters:
     ///   - entity: The `DataEntity` to be processed
     ///   - completion: a closure to be invoked with `true` if processing was successful and should not be retried, false if processing the hit should be retried
-    func processHit(entity: DataEntity, completion: @escaping (Bool) -> ())
+    func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void)
 }

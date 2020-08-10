@@ -14,10 +14,10 @@ import Foundation
 @testable import AEPCore
 import AEPServices
 
-class MockNetworkServiceOverrider : Networking {
-    
-    var connectAsyncCalled:Bool = false
-    var connectAsyncCalledWithNetworkRequest:NetworkRequest?
+class MockNetworkServiceOverrider: Networking {
+
+    var connectAsyncCalled: Bool = false
+    var connectAsyncCalledWithNetworkRequest: NetworkRequest?
     var connectAsyncCalledWithCompletionHandler: ((HttpConnection) -> Void)?
 
     func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
@@ -26,7 +26,7 @@ class MockNetworkServiceOverrider : Networking {
         connectAsyncCalledWithNetworkRequest = networkRequest
         connectAsyncCalledWithCompletionHandler = completionHandler
     }
-    
+
     func reset() {
         connectAsyncCalled = false
         connectAsyncCalledWithNetworkRequest = nil

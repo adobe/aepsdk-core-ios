@@ -17,7 +17,7 @@ public class CustomIdentity: Identifiable, Codable {
     public var type: String?
     public var identifier: String?
     public var authenticationState: MobileVisitorAuthenticationState
-    
+
     /// Creates a new `CustomIdentity` with the given parameters
     /// - Parameters:
     ///   - origin: Origin of the identifier

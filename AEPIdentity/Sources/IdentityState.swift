@@ -15,7 +15,7 @@ import AEPServices
 
 /// Manages the business logic of the Identity extension
 class IdentityState {
-    
+
     private let LOG_TAG = "IdentityState"
     private(set) var identityProperties: IdentityProperties
     private(set) var hitQueue: HitQueuing
@@ -25,7 +25,7 @@ class IdentityState {
     #else
     private var lastValidConfig: [String: Any] = [:]
     #endif
-    
+
     /// Creates a new `IdentityState` with the given identity properties
     /// - Parameter identityProperties: identity properties
     /// - Parameter pushIdManager: a push id manager
@@ -34,19 +34,19 @@ class IdentityState {
         self.hitQueue = hitQueue
         self.pushIdManager = pushIdManager
     }
-    
+
     /// Completes init for the Identity extension and determines if we need to share state
     /// - Parameters:
     ///   - configSharedState: the current configuration shared state available at registration time
     ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
     /// - Returns: True if we should share state after bootup, false otherwise
-    func bootup(configSharedState: [String: Any]?, eventDispatcher: (Event) -> ()) -> Bool {
+    func bootup(configSharedState: [String: Any]?, eventDispatcher: (Event) -> Void) -> Bool {
         // load data from local storage
         identityProperties.loadFromPersistence()
-        
+
         // Load privacy status
         identityProperties.privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
-        
+
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
@@ -58,7 +58,7 @@ class IdentityState {
         // The force sync event processed above will create a shared state if the privacy is not opt-out
         return identityProperties.privacyStatus == .optedOut
     }
-    
+
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
     /// - Parameters:
     ///   - event: event corresponding to sync identifiers call or containing a new ADID value.
@@ -73,10 +73,10 @@ class IdentityState {
             // can't process this event, wait for a valid config and retry later
             return false
         }
-        
+
         return true
     }
-    
+
     /// Will queue a sync identifiers hit if there are any new valid identifiers to be synced (non null/empty id_type and id values),
     /// Updates the persistence values for the identifiers and ad id
     /// Assumes a valid config is in `lastValidConfig` from calling `readyForSyncIdentifiers`
@@ -89,7 +89,7 @@ class IdentityState {
             // TODO: Add log
             return nil
         }
-        
+
         // Early exit if privacy is opt-out
         let privacyStatusStr = lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
@@ -97,51 +97,51 @@ class IdentityState {
             // TODO: Add log
             return nil
         }
-        
+
         // Update push identifier if present
         if let pushId = event.dpids?.values.first {
             // update push identifiers
             identityProperties.pushIdentifier = SHA256.hash(pushId)
             pushIdManager.updatePushId(pushId: pushId)
         }
-        
+
         // generate customer ids
         let authState = event.authenticationState
         var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)}) ?? []
-        
+
         // update adid if changed and extract the new adid value as VisitorId to be synced
         if let adId = event.adId, shouldUpdateAdId(newAdID: adId.identifier ?? "") {
             // check if changed, update
             identityProperties.advertisingIdentifier = adId.identifier
             customerIds.append(adId)
         }
-        
+
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
         // empty adid is also removed from the customer_ids_ list by merging with the new ids then filtering out any empty ids
         identityProperties.mergeAndCleanCustomerIds(customerIds)
         customerIds.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
-        
+
         // valid config: check if there's a need to sync. Don't if we're already up to date.
         if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: lastValidConfig) {
             queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event)
         } else {
             // TODO: Log error
         }
-        
+
         // save properties
         identityProperties.saveToPersistence()
-        
+
         // return event data to be used in identity shared state
         return identityProperties.toEventData()
     }
-    
+
     /// Invoked by the Identity extension each time we receive a network response for a processed hit
     /// - Parameters:
     ///   - hit: the hit that was processed
     ///   - response: the response data if any
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
+    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
         // regardless of response, update last sync time
         identityProperties.lastSync = Date()
 
@@ -165,7 +165,6 @@ class IdentityState {
         }
     }
 
-    
     /// Verifies if a sync network call is required. This method returns true if there is at least one identifier to be synced,
     /// at least one dpid, if force sync is true (bootup identity sync call) or if the
     /// last sync was more than `ttl_` seconds ago. Also, in order for a sync call to happen, the provided configuration should be
@@ -179,35 +178,35 @@ class IdentityState {
     private func shouldSync(customerIds: [CustomIdentity]?, dpids: [String: String]?, forceSync: Bool, currentEventValidConfig: [String: Any]) -> Bool {
         var syncForProps = true
         var syncForIds = true
-        
+
         // check config
         if !canSyncForCurrentConfiguration(config: currentEventValidConfig) {
             // TOOD: Add log
             syncForProps = false
         }
-        
+
         let needResync = Date().timeIntervalSince1970 - (identityProperties.lastSync?.timeIntervalSince1970 ?? 0) > identityProperties.ttl || forceSync
         let hasIds = !(customerIds?.isEmpty ?? true)
         let hasDpids = !(dpids?.isEmpty ?? true)
-        
+
         if identityProperties.mid != nil && !hasIds && !hasDpids && !needResync {
             syncForIds = false
         } else if identityProperties.mid == nil {
             identityProperties.mid = MID()
         }
-        
+
         return syncForIds && syncForProps
     }
-    
+
     /// Updates and makes any required actions when the privacy status has updated
     /// - Parameters:
     ///   - event: the event triggering the privacy change
     ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
     ///   - createSharedState: a function which can create Identity shared state
-    func processPrivacyChange(event: Event, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event) -> ()) {
+    func processPrivacyChange(event: Event, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event) -> Void) {
         let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let newPrivacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
-        
+
         if newPrivacyStatus == identityProperties.privacyStatus {
             return
         }
@@ -235,15 +234,15 @@ class IdentityState {
         // update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: newPrivacyStatus)
     }
-    
+
     /// Updates the last valid config to `newConfig`
     /// - Parameter newConfig: The new configuration to replace the current last valid config
     func updateLastValidConfig(newConfig: [String: Any]) {
         lastValidConfig = newConfig
     }
-    
+
     // MARK: Private APIs
-    
+
     /// Inspects the current configuration to determine if a sync can be made, this is determined by if a valid org id is present and if the privacy is not set to opted-out
     /// - Parameter config: The current configuration
     /// - Returns: True if a sync can be made with the current configuration, false otherwise
@@ -253,7 +252,7 @@ class IdentityState {
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
         return !orgId.isEmpty && privacyStatus != .optedOut
     }
-    
+
     /// Determines if we should update the ad id with `newAdID`
     /// - Parameter newAdID: the new ad id
     /// - Returns: True if we should update the ad id, false otherwise
@@ -261,7 +260,7 @@ class IdentityState {
         let existingAdId = identityProperties.advertisingIdentifier ?? ""
         return (!newAdID.isEmpty && newAdID != existingAdId) || (newAdID.isEmpty && !existingAdId.isEmpty)
     }
-    
+
     /// Queues an Identity hit within the `hitQueue`
     /// - Parameters:
     ///   - identityProperties: Current identity properties
@@ -293,7 +292,7 @@ class IdentityState {
     ///   - response: the network response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> (), createSharedState: ([String: Any], Event?) -> ()) {
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return

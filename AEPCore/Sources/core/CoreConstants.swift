@@ -22,7 +22,7 @@ struct CoreConstants {
     static let DOWNLOAD_RETRY_INTERVAL = TimeInterval(5) // 5 seconds
     static let API_TIMEOUT = TimeInterval(1) // 1 second
     static let ENVIRONMENT_PREFIX_DELIMITER = "__"
-    
+
     struct Keys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
@@ -48,7 +48,7 @@ struct CoreConstants {
         static let OPT_OUT = "optedout"
         static let OPT_IN = "optedin"
     }
-    
+
     struct WrapperType {
         static let REACT_NATIVE = "R"
         static let FLUTTER = "F"
@@ -57,7 +57,7 @@ struct CoreConstants {
         static let XAMARIN = "X"
         static let NONE = "N"
     }
-    
+
     struct Lifecycle {
         static let START = "start"
         static let PAUSE = "pause"

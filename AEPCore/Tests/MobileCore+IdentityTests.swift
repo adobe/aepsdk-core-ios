@@ -9,17 +9,16 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-
 import XCTest
 @testable import AEPCore
 
 class MobileCore_IdentityTests: XCTestCase {
-    
+
     override func setUp() {
         EventHub.reset()
         MockExtension.reset()
     }
-    
+
     private func registerMockExtension<T: Extension> (_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
         EventHub.shared.registerExtension(type) { (error) in
@@ -29,124 +28,119 @@ class MobileCore_IdentityTests: XCTestCase {
 
         semaphore.wait()
     }
-    
+
     // MARK: setAdvertisingIdentifier(...) tests
-    
+
     /// Tests that when setAdvertisingIdentifier is called that we dispatch an event with the advertising identifier in the event data
     func testSetAdvertisingIdentifierHappy() {
         // setup
         let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the ad id")
         expectation.assertForOverFulfill = true
-        
+
         registerMockExtension(MockExtension.self)
-        
+
         EventHub.shared.start()
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual("test-ad-id", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
-        
+
         // test
         MobileCore.setAdvertisingIdentifier(adId: "test-ad-id")
 
-        
         // verify
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     /// Tests that when nil is passed to setAdvertisingId that we convert it to an empty string since swift cannot hold nil in a dict
     func testSetAdvertisingIdentifierNil() {
         // setup
         let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the ad id")
         expectation.assertForOverFulfill = true
-        
+
         registerMockExtension(MockExtension.self)
-        
+
         EventHub.shared.start()
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual("", event.data?[CoreConstants.Keys.ADVERTISING_IDENTIFIER] as? String)
             expectation.fulfill()
         })
-        
+
         // test
         MobileCore.setAdvertisingIdentifier(adId: nil)
 
-        
         // verify
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     // MARK: setPushIdentifier(...) tests
-    
+
     /// Tests that when setPushIdentifier is called that we dispatch an event with the push identifier in the event data
     func testSetPushIdentifierHappy() {
         // setup
         let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the push id")
         expectation.assertForOverFulfill = true
-        
+
         registerMockExtension(MockExtension.self)
         EventHub.shared.start()
         let pushIdData = "test-push-id".data(using: .utf8)!
         let encodedPushId = "746573742d707573682d6964"
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
             expectation.fulfill()
         })
-        
+
         // test
         MobileCore.setPushIdentifier(deviceToken: pushIdData)
 
-        
         // verify
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     /// Tests that when setPushIdentifier is called that we dispatch an event with the push identifier in the event data and that an empty push id is handled properly
     func testSetPushIdentifierEmptyPushId() {
         // setup
         let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the push id")
         expectation.assertForOverFulfill = true
-        
+
         registerMockExtension(MockExtension.self)
         EventHub.shared.start()
         let pushIdData = "".data(using: .utf8)!
         let encodedPushId = ""
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
             expectation.fulfill()
         })
-        
+
         // test
         MobileCore.setPushIdentifier(deviceToken: pushIdData)
 
-        
         // verify
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     /// Tests that when setPushIdentifier is called that we dispatch an event with the push identifier in the event data and that an nil push id is handled properly
     func testSetPushIdentifierNilPushId() {
         // setup
         let expectation = XCTestExpectation(description: "Should dispatch a generic identity event with the push id")
         expectation.assertForOverFulfill = true
-        
+
         registerMockExtension(MockExtension.self)
         EventHub.shared.start()
         let encodedPushId = ""
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { (event) in
             XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
             expectation.fulfill()
         })
-        
+
         // test
         MobileCore.setPushIdentifier(deviceToken: nil)
 
-        
         // verify
         wait(for: [expectation], timeout: 1.0)
     }

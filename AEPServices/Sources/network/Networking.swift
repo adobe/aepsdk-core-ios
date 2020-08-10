@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 import Foundation
 
 public protocol Networking {
-    
+
     /// Initiates an asynchronous network connection to the specified NetworkRequest.url. This API uses `URLRequest.CachePolicy.reloadIgnoringLocalCache`.
     /// - Parameters:
     ///   - networkRequest: the `NetworkRequest` used for this connection

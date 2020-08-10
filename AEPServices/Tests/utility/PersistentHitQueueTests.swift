@@ -22,69 +22,69 @@ class PersistentHitQueueTests: XCTestCase {
         guard let mockProcessor = hitProcessor as? MockHitProcessor else { return [] }
         return mockProcessor.processedHits.shallowCopy
     }
-    
+
     override func setUp() {
         hitProcessor = MockHitProcessor()
         hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
     }
-    
+
     /// Tests that when the queue is in a suspended state that we store the hit in the data queue and do not invoke the processor
     func testDoesntProcessByDefault() {
         // setup
         let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
-        
+
         // test
         let result = hitQueue.queue(entity: entity)
-        
+
         // verify
         XCTAssertEqual(hitQueue.dataQueue.peek(), entity) // hit should be in persistent queue
         XCTAssertTrue(processedHits.isEmpty) // mock hit processor should have never been invoked with the data entity
         XCTAssertTrue(result) // queuing hit should be successful
     }
-    
+
     /// Tests that when the queue is in a suspended state that we store the hit in the data queue and do not invoke the processor
     func testClearQueue() {
         // setup
         let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
-        
+
         // test
         let result = hitQueue.queue(entity: entity)
         hitQueue.clear()
-        
+
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue
         XCTAssertTrue(processedHits.isEmpty) // mock hit processor should have never been invoked with the data entity
         XCTAssertTrue(result) // queuing hit should be successful
     }
-    
+
     /// Tests that when the queue is not in a suspended state that the hit processor is invoked with the hit
     func testProcessesHit() {
         // setup
         let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
-        
+
         // test
         let result = hitQueue.queue(entity: entity)
         hitQueue.beginProcessing()
         sleep(1)
-        
+
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
         XCTAssertEqual(processedHits.first, entity) // mock hit processor should have been invoked with the data entity
         XCTAssertTrue(result) // queuing hit should be successful
     }
-    
+
     /// Tests that multiple hits are processed and the data queue is empty
     func testProcessesHits() {
         // setup
         let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
         let entity1 = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
-        
+
         // test
         let result = hitQueue.queue(entity: entity)
         let result1 = hitQueue.queue(entity: entity1)
         hitQueue.beginProcessing()
         sleep(1)
-        
+
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
         XCTAssertEqual(processedHits.first, entity) // mock hit processor should have been invoked with the data entity
@@ -92,76 +92,76 @@ class PersistentHitQueueTests: XCTestCase {
         XCTAssertTrue(result) // queuing hit should be successful
         XCTAssertTrue(result1) // queuing hit should be successful
     }
-    
+
     /// Tests that many hits are processed and the data queue is empty
     func testProcessesHitsMany() {
         // setup
         hitQueue.beginProcessing()
-        
+
         // test
         for _ in 0..<100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        
+
         sleep(1)
-        
+
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
         XCTAssertEqual(100, processedHits.count) // all 100 hits should have been processed
     }
-    
+
     /// Tests that not all hits are processed when we suspend the queue
     func testProcessesHitsManyWithSuspend() {
         // test
         for _ in 0..<100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        
+
         hitQueue.beginProcessing()
         hitQueue.suspend()
         sleep(1)
-        
+
         // verify
         XCTAssertNotNil(hitQueue.dataQueue.peek()) // some hits should still be in the queue
         XCTAssertNotEqual(100, processedHits.count) // we should have not processed all 100 hits by the time we have suspended
     }
-    
+
     /// Tests that not all hits are processed when we suspend the queue, but then when we resume processing that the remaining hits a processed
     func testProcessesHitsManyWithSuspendThenResume() {
         // test
         for _ in 0..<100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        
+
         hitQueue.beginProcessing()
         hitQueue.suspend()
         sleep(1)
-        
+
         // verify pt. 1
         XCTAssertNotNil(hitQueue.dataQueue.peek()) // some hits should still be in the queue
         XCTAssertNotEqual(100, processedHits.count) // we should have not processed all 100 hits by the time we have suspended
-        
+
         hitQueue.beginProcessing()
         sleep(1)
-        
+
         // verify pt. 2
         XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
         XCTAssertEqual(100, processedHits.count) // now all hits should have been sent to the hit processor
     }
-    
+
     /// Tests that hits are retried properly and do not block the queue
     func testProcessesHitsManyWithIntermittentProcessor() {
         hitProcessor = MockHitIntermittentProcessor()
         hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
-        
+
         // test
         for _ in 0..<100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        
+
         hitQueue.beginProcessing()
         sleep(1)
-        
+
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hits should no longer be in the queue as its been processed
         let intermittentProcessor = hitQueue.processor as? MockHitIntermittentProcessor
@@ -169,15 +169,14 @@ class PersistentHitQueueTests: XCTestCase {
         XCTAssertFalse(intermittentProcessor?.failedHits.isEmpty ?? true) // some of the hits should have failed
     }
 
-
 }
 
 class MockHitProcessor: HitProcessing {
     var retryInterval: TimeInterval = 1
-    
+
     let processedHits = ThreadSafeArray<DataEntity>()
-    
-    func processHit(entity: DataEntity, completion: (Bool) -> ()) {
+
+    func processHit(entity: DataEntity, completion: (Bool) -> Void) {
         processedHits.append(entity)
         completion(true)
     }
@@ -185,21 +184,21 @@ class MockHitProcessor: HitProcessing {
 
 class MockHitIntermittentProcessor: HitProcessing {
     var retryInterval: TimeInterval = 0
-    
+
     let processedHits = ThreadSafeArray<DataEntity>()
     var failedHits = Set<String>()
-    
+
     // 50% of hits need to be processed twice, other 50% process successfully the first time
-    func processHit(entity: DataEntity, completion: (Bool) -> ()) {
+    func processHit(entity: DataEntity, completion: (Bool) -> Void) {
         // check if we've already "failed" at processing this hit
         if failedHits.contains(entity.uniqueIdentifier) {
             processedHits.append(entity)
             completion(true)
             return
         }
-        
+
         let shouldRetry = entity.uniqueIdentifier.hashValue % 2 == 0 // retry 50% of hits
-        
+
         if !shouldRetry {
             processedHits.append(entity)
             completion(true)

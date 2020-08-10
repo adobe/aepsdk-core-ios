@@ -17,7 +17,7 @@ public class MockHitProcessor: HitProcessing {
 
     public init() {}
 
-    public func processHit(entity: DataEntity, completion: @escaping (Bool) -> ()) {
+    public func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void) {
         completion(true)
     }
 }

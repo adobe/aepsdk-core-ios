@@ -18,7 +18,7 @@ struct SharedStateTestHelper {
     public static let ONE: [String: Any] = [DICT_KEY: "one"]
     public static let TWO: [String: Any] = [DICT_KEY: "two"]
     public static let THREE: [String: Any] = [DICT_KEY: "three"]
-    public static let FOUR: [String:Any] = [DICT_KEY:"four"]
-    public static let FIVE: [String:Any] = [DICT_KEY:"five"]
-    public static let TEN: [String:Any] = [DICT_KEY:"ten"]
+    public static let FOUR: [String: Any] = [DICT_KEY: "four"]
+    public static let FIVE: [String: Any] = [DICT_KEY: "five"]
+    public static let TEN: [String: Any] = [DICT_KEY: "ten"]
 }

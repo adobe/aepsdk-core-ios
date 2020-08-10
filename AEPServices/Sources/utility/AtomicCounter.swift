@@ -13,11 +13,11 @@ import Foundation
 
 public final class AtomicCounter {
     private var count: Int32 = 0
-    
-    public init(){
-        
+
+    public init() {
+
     }
-    
+
     public func incrementAndGet() -> Int {
         return Int(OSAtomicIncrement32(&count))
     }

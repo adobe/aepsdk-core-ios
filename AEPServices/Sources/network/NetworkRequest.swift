@@ -16,14 +16,14 @@ import Foundation
 @objc(AEPNetworkRequest) public class NetworkRequest: NSObject {
     private static let REQUEST_HEADER_KEY_USER_AGENT = "User-Agent"
     private static let REQUEST_HEADER_KEY_LANGUAGE = "Accept-Language"
-    
+
     public let url: URL
     public let httpMethod: HttpMethod
     public let connectPayload: String
     public let httpHeaders: [String: String]
     public let connectTimeout: TimeInterval
     public let readTimeout: TimeInterval
-    
+
     /// Initialize the `NetworkRequest`
     /// - Parameters:
     ///   - url: URL used to initiate the network connection, should use https scheme
@@ -37,12 +37,12 @@ import Foundation
         self.url = url
         self.httpMethod = httpMethod
         self.connectPayload = connectPayload
-        
+
         let systemInfoService = ServiceProvider.shared.systemInfoService
         let defaultHeaders = [NetworkRequest.REQUEST_HEADER_KEY_USER_AGENT: systemInfoService.getDefaultUserAgent(),
                               NetworkRequest.REQUEST_HEADER_KEY_LANGUAGE: systemInfoService.getActiveLocaleName()]
         self.httpHeaders = defaultHeaders.merging(httpHeaders) { (_, new) in new } // add in default headers and apply `httpHeaders` on top
-        
+
         self.connectTimeout = connectTimeout
         self.readTimeout = readTimeout
     }

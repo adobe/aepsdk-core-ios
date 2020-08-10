@@ -13,7 +13,7 @@ import Foundation
 import AEPServices
 
 class MockUnzipper: Unzipping {
-    
+
     var unzippedResults: [String] = []
     var unzipCalled = false
     func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {

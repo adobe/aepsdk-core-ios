@@ -13,17 +13,17 @@ governing permissions and limitations under the License.
 import Foundation
 import AEPServices
 
-public class MockNetworkServiceOverrider : Networking {
-    
-    public var connectAsyncCalled:Bool = false
-    public var connectAsyncCalledWithNetworkRequest:NetworkRequest?
+public class MockNetworkServiceOverrider: Networking {
+
+    public var connectAsyncCalled: Bool = false
+    public var connectAsyncCalledWithNetworkRequest: NetworkRequest?
     public var connectAsyncCalledWithCompletionHandler: ((HttpConnection) -> Void)?
     public var expectedResponse: HttpConnection?
-    
-    public init(){
-        
+
+    public init() {
+
     }
-    
+
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
         print("Do nothing \(networkRequest)")
         connectAsyncCalled = true
@@ -33,7 +33,7 @@ public class MockNetworkServiceOverrider : Networking {
             completionHandler(expectedResponse)
         }
     }
-    
+
     public func reset() {
         connectAsyncCalled = false
         connectAsyncCalledWithNetworkRequest = nil

@@ -15,11 +15,11 @@ import XCTest
 @testable import AEPServices
 
 class NamedCollectionDataStoreTest: XCTestCase {
-    
+
     var store: NamedCollectionDataStore?
 
     let mockKeyValueService = MockKeyValueService()
-    
+
     var keyPrefix = "com.adobe.mobile.datastore.testStore."
     let INT_KEY = "INT_KEY"
     let STRING_KEY = "STRING_KEY"
@@ -30,102 +30,102 @@ class NamedCollectionDataStoreTest: XCTestCase {
     let ARRAY_KEY = "ARRAY_KEY"
     let DICT_KEY = "DICT_KEY"
     let OBJ_KEY = "OBJECT_KEY"
-    
+
     override func setUp() {
         // Override the KeyValueStoreService with mock
         ServiceProvider.shared.namedKeyValueService = self.mockKeyValueService
         self.store = NamedCollectionDataStore(name: "testStore.")
     }
-    
+
     func testGetIntFallback() {
         let defaultVal: Int = 0
         mockKeyValueService.getResult = nil
         XCTAssertEqual(store?.getInt(key: INT_KEY, fallback: defaultVal), defaultVal)
     }
-    
+
     func testGetInt() {
         let putVal: Int = 1
         mockKeyValueService.getResult = putVal
         XCTAssertEqual(store?.getInt(key: INT_KEY), putVal)
     }
-    
+
     func testSetInt() {
         let val: Int = 1
         store?.set(key: INT_KEY, value: val)
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Int, val)
     }
-    
+
     func testIntSubscript() {
         let val: Int = 1
         store?[INT_KEY] = val
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Int, val)
-        
+
         let val2: Any = 2
         mockKeyValueService.getResult = val2
         XCTAssertEqual(store?[INT_KEY], val2 as? Int)
     }
-    
+
     func testGetDoubleFallback() {
         let defaultVal: Double = 0.0
         mockKeyValueService.getResult = nil
         XCTAssertEqual(store?.getDouble(key: DOUBLE_KEY, fallback: defaultVal), defaultVal)
     }
-    
+
     func testGetDouble() {
         let putVal: Double = 1.0
         mockKeyValueService.getResult = putVal
         XCTAssertEqual(store?.getDouble(key: DOUBLE_KEY), putVal)
     }
-    
+
     func testSetDouble() {
         let val: Double = 1.0
         store?.set(key: DOUBLE_KEY, value: val)
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Double, val)
     }
-    
+
     func testDoubleSubscript() {
         let val: Double = 1.0
         store?[DOUBLE_KEY] = val
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Double, val)
-        
+
         let val2: Any = 2.0
         mockKeyValueService.getResult = val2
         XCTAssertEqual(store?[DOUBLE_KEY], val2 as? Double)
     }
-    
+
     func testGetStringFallback() {
         let defaultVal: String = "test"
         mockKeyValueService.getResult = nil
         XCTAssertEqual(store?.getString(key: STRING_KEY, fallback: defaultVal), defaultVal)
     }
-    
+
     func testGetString() {
         let putVal: String = "test"
         mockKeyValueService.getResult = putVal
         XCTAssertEqual(store?.getString(key: STRING_KEY), putVal)
     }
-    
+
     func testSetString() {
         let val: String = "test"
         store?.set(key: STRING_KEY, value: val)
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? String, val)
     }
-    
+
     func testStringSubscript() {
         let val: String = "test"
         store?[STRING_KEY] = val
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? String, val)
-        
+
         let val2: Any = "test2"
         mockKeyValueService.getResult = val2
         XCTAssertEqual(store?[STRING_KEY], val2 as? String)
-        
+
     }
 
     func testGetLongFallback() {
@@ -133,61 +133,61 @@ class NamedCollectionDataStoreTest: XCTestCase {
         mockKeyValueService.getResult = nil
         XCTAssertEqual(store?.getLong(key: LONG_KEY, fallback: defaultVal), defaultVal)
     }
-    
+
     func testGetLong() {
         let putVal: AnyCodable = 1
         mockKeyValueService.getResult = putVal
         XCTAssertEqual(store?.getLong(key: LONG_KEY), putVal.longValue)
     }
-    
+
     func testSetLong() {
         let val: Int64 = 1
         store?.set(key: LONG_KEY, value: val)
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Int64, val)
     }
-    
+
     func testLongSubscript() {
         let val: Int64 = 1
         store?[LONG_KEY] = val
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Int64, val)
-        
+
         let val2: Any = 2
         mockKeyValueService.getResult = val2
         XCTAssertEqual(store?[LONG_KEY], val2 as? Int64)
     }
-    
+
     func testGetFloatFallback() {
         let defaultVal: Float = 1.0
         mockKeyValueService.getResult = nil
         XCTAssertEqual(store?.getFloat(key: FLOAT_KEY, fallback: defaultVal), defaultVal)
     }
-    
+
     func testGetFloat() {
         let putVal: Float = 1.0
         mockKeyValueService.getResult = putVal
         XCTAssertEqual(store?.getFloat(key: FLOAT_KEY), putVal)
     }
-    
+
     func testSetFloat() {
         let val: Float = 1.0
         store?.set(key: FLOAT_KEY, value: val)
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Float, val)
     }
-    
+
     func testFloatSubscript() {
         let val: Float = 1.0
         store?[FLOAT_KEY] = val
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Float, val)
-        
+
         let val2: Any = 2.0
         mockKeyValueService.getResult = val2
         XCTAssertEqual(store?[FLOAT_KEY], val2 as? Float)
     }
-    
+
     func testGetBoolFallback() {
         let defaultVal: AnyCodable = false
         mockKeyValueService.getResult = nil
@@ -199,25 +199,25 @@ class NamedCollectionDataStoreTest: XCTestCase {
         mockKeyValueService.getResult = putVal
         XCTAssertEqual(store?.getBool(key: BOOL_KEY), putVal)
     }
-    
+
     func testSetBool() {
         let val: Bool = true
         store?.set(key: BOOL_KEY, value: val)
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Bool, val)
     }
-    
+
     func testBoolSubscript() {
         let val: Bool = false
         store?[BOOL_KEY] = val
         XCTAssertTrue(mockKeyValueService.setCalled)
         XCTAssertEqual(mockKeyValueService.setValue as? Bool, val)
-        
+
         let val2: Any = true
         mockKeyValueService.getResult = val2
         XCTAssertEqual(store?[BOOL_KEY], val2 as? Bool)
     }
-    
+
     func testGetArrayFallback() {
         let defaultArrVal: String = "test"
         let defaultVal: [String] = [defaultArrVal]
@@ -229,7 +229,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let val = arr[0] as? String
         XCTAssertEqual(val, defaultArrVal)
     }
-    
+
     func testGetArray() {
         let putArrVal: String = "test"
         let putVal: [String] = [putArrVal]
@@ -241,7 +241,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let val = arr[0] as? String
         XCTAssertEqual(val, putArrVal)
     }
-    
+
     func testSetArray() {
         let val: String = "test"
         let putArrVal: [String] = [val]
@@ -254,7 +254,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let testVal = arr[0] as? String
         XCTAssertEqual(testVal, val)
     }
-    
+
     func testArraySubscript() {
         let val: String = "test"
         let putArrVal: [String] = [val]
@@ -264,7 +264,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
             XCTFail()
             return
         }
-        
+
         let testVal = arr[0] as? String
         XCTAssertEqual(testVal, val)
 
@@ -275,15 +275,15 @@ class NamedCollectionDataStoreTest: XCTestCase {
             XCTFail()
             return
         }
-        
+
         let testVal2 = testArr2[0] as? String
         XCTAssertEqual(testVal2, val2)
     }
-    
+
     func testGetDictFallback() {
         let defaultDictKey: String = "testKey"
         let defaultDictVal: String = "test"
-        
+
         let defaultVal: [String: String] = [defaultDictKey: defaultDictVal]
         mockKeyValueService.getResult = nil
         guard let dict = store?.getDictionary(key: DICT_KEY, fallback: defaultVal) else {
@@ -292,9 +292,9 @@ class NamedCollectionDataStoreTest: XCTestCase {
         }
         let val = dict[defaultDictKey] as? String
         XCTAssertEqual(val, defaultDictVal)
-        
+
     }
-    
+
     func testGetDict() {
         let putDictKey: String = "testKey"
         let putDictVal: String = "test"
@@ -307,23 +307,23 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let val = dict[putDictKey] as? String
         XCTAssertEqual(val, putDictVal)
     }
-    
+
     func testSetDict() {
         let valKey: String = "testKey"
         let val: String = "test"
         let putDictVal = [valKey: val]
-        
+
         store?.set(key: DICT_KEY, value: putDictVal)
         XCTAssertTrue(mockKeyValueService.setCalled)
         guard let dict = mockKeyValueService.setValue as? [AnyHashable: Any] else {
             XCTFail()
             return
         }
-        
+
         let testVal = dict[valKey] as? String
         XCTAssertEqual(testVal, val)
     }
-    
+
     func testDictSubscript() {
         let valKey: String = "testKey"
         let val: String = "test"
@@ -334,10 +334,10 @@ class NamedCollectionDataStoreTest: XCTestCase {
             XCTFail()
             return
         }
-        
+
         let testVal = dict[valKey] as? String
         XCTAssertEqual(testVal, val)
-        
+
         let val2Key: String = "test2Key"
         let val2: String = "test2"
         let putDictVal2: Any = [val2Key: val2]
@@ -346,18 +346,18 @@ class NamedCollectionDataStoreTest: XCTestCase {
             XCTFail()
             return
         }
-        
+
         let testVal2 = testDict2[val2Key] as? String
         XCTAssertEqual(testVal2, val2)
-        
+
     }
-    
+
     func testGetCodableFallback() {
         let defaultVal: MockCoding = MockCoding(id: 0, name: "testName")
         mockKeyValueService.getResult = nil
         XCTAssertEqual(store?.getObject(key: OBJ_KEY, fallback: defaultVal)?.id, defaultVal.id)
     }
-    
+
     func testGetCodable() {
         let putVal = MockCoding(id: 1, name: "testName")
         let defaultVal = MockCoding(id: 0, name: "fallback")
@@ -365,7 +365,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         mockKeyValueService.getResult = putVal
         XCTAssertEqual(store?.getObject(key: OBJ_KEY, fallback: defaultVal)?.id, putVal.id)
     }
-    
+
     func testSetCodable() {
         let val = MockCoding(id: 1, name: "testName")
         mockKeyValueService.shouldDecode = true
@@ -374,7 +374,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let setVal = mockKeyValueService.setValue as? MockCoding
         XCTAssertEqual(setVal?.id, val.id)
     }
-    
+
     func testCodableSubscript() {
         let val = MockCoding(id: 1, name: "testName")
         mockKeyValueService.shouldEncode = true
@@ -382,32 +382,31 @@ class NamedCollectionDataStoreTest: XCTestCase {
         XCTAssertTrue(mockKeyValueService.setCalled)
         let setVal = mockKeyValueService.setValue as? MockCoding
         XCTAssertEqual(setVal?.id, val.id)
-        
+
         let val2 = MockCoding(id: 2, name: "testName2")
         mockKeyValueService.getResult = val2
         let subscriptResult: MockCoding? = store?[OBJ_KEY]
         XCTAssertEqual(subscriptResult?.id, val2.id)
     }
-    
+
     func testRemoveEmptyKey() {
         store?.remove(key: "")
         XCTAssertFalse(mockKeyValueService.removeCalled)
     }
-    
+
     func testRemove() {
         store?.remove(key: INT_KEY)
         XCTAssertTrue(mockKeyValueService.removeCalled)
     }
-    
+
 }
 
 class MockKeyValueService: NamedCollectionProcessing {
-    var appGroup:String?
+    var appGroup: String?
     func setAppGroup(_ appGroup: String?) {
         self.appGroup = appGroup
     }
-    
-    
+
     var getResult: Any?
     var getCalled: Bool = false
     // helper to know if the mock is handling codable
@@ -418,11 +417,11 @@ class MockKeyValueService: NamedCollectionProcessing {
             let encoded = try? JSONEncoder().encode(getResult as? MockCoding)
             return encoded
         }
-        
+
         return getResult
-        
+
     }
-    
+
     var setCalled: Bool = false
     var setValue: Any?
     // helper to know if the mock is handling codable
@@ -438,12 +437,12 @@ class MockKeyValueService: NamedCollectionProcessing {
         }
 
     }
-    
+
     var removeCalled: Bool = false
     func remove(collectionName: String, key: String) {
         removeCalled = true
     }
-    
+
     var removeAllCalled: Bool = false
     func removeAll(collectionName: String) {
         removeAllCalled = true
@@ -454,7 +453,7 @@ class MockKeyValueService: NamedCollectionProcessing {
 struct MockCoding: Codable {
     var id: Int
     var name: String
-    
+
     init(id: Int, name: String) {
         self.id = id
         self.name = name

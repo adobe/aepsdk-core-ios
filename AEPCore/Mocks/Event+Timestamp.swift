@@ -13,13 +13,13 @@ governing permissions and limitations under the License.
 import Foundation
 @testable import AEPCore
 
-extension Event{
-    public func copyWithNewTimeStamp(_ timestamp: Date) -> Event{
+extension Event {
+    public func copyWithNewTimeStamp(_ timestamp: Date) -> Event {
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
-        
+
         let data = try! encoder.encode(self)
-        var json = try! JSONSerialization.jsonObject(with: data, options: []) as? [String:Any]
+        var json = try! JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
         json?["timestamp"] = timestamp.timeIntervalSinceReferenceDate
         let jsonData = try! JSONSerialization.data(withJSONObject: json as Any, options: .prettyPrinted)
 

@@ -13,21 +13,21 @@ governing permissions and limitations under the License.
 import Foundation
 
 /// Describes the interface for a data cache
-public protocol Caching {    
+public protocol Caching {
     /// Sets a key value pair in the cache
     /// - Parameters:
     ///   - cacheName: name of the cache
     ///   - key: key for the value
     ///   - entry: entry to be cached
     func set(cacheName: String, key: String, entry: CacheEntry) throws
-    
+
     /// Gets the value for `key` from the cache with `cacheName`
     /// - Parameters:
     ///   - cacheName: name of the cache
     ///   - key: key to be read from the cache
     /// - Returns: the cache entry, nil if not found
     func get(cacheName: String, key: String) -> CacheEntry?
-    
+
     /// Removes a key from the cache
     /// - Parameters:
     ///   - cacheName: name of the cache

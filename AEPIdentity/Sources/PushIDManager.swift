@@ -38,11 +38,11 @@ struct PushIDManager: PushIDManageable {
     }
 
     private var dataStore: NamedCollectionDataStore
-    private var eventDispatcher: (Event) -> ()
+    private var eventDispatcher: (Event) -> Void
 
     // MARK: PushIDManageable
-    
-    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> ()) {
+
+    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> Void) {
         self.dataStore = dataStore
         self.eventDispatcher = eventDispatcher
     }
@@ -69,7 +69,7 @@ struct PushIDManager: PushIDManageable {
             updatePushStatusAndSendAnalyticsEvent(enabled: true)
         }
     }
-    
+
     // MARK: Private APIs
 
     /// Compares the provided newPushId against the one in data store (if exists)
@@ -100,7 +100,7 @@ struct PushIDManager: PushIDManageable {
         let pushStatusStr = enabled ? "True": "False"
         let contextData = [IdentityConstants.Analytics.EVENT_PUSH_STATUS: pushStatusStr]
         let eventData = [IdentityConstants.Analytics.TRACK_ACTION: IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME,
-                         IdentityConstants.Analytics.CONTEXT_DATA: contextData] as [String : Any]
+                         IdentityConstants.Analytics.CONTEXT_DATA: contextData] as [String: Any]
 
         let event = Event(name: "AnalyticsForIdentityRequest", type: EventType.analytics, source: EventSource.requestContent, data: eventData)
         eventDispatcher(event)

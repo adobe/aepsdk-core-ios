@@ -17,13 +17,13 @@ class EventHubPlaceholderExtension: Extension {
     let name = EventHubConstants.NAME
     let friendlyName = EventHubConstants.FRIENDLY_NAME
     static let extensionVersion = "0.0.1"
-    let metadata: [String : String]? = nil
+    let metadata: [String: String]? = nil
     let runtime: ExtensionRuntime
 
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
     }
-    
+
     func onRegistered() {}
     func onUnregistered() {}
     func readyForEvent(_ event: Event) -> Bool {

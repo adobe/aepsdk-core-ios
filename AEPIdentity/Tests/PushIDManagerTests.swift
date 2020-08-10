@@ -61,7 +61,7 @@ class PushIDManagerTests: XCTestCase {
         expectation.isInverted = true
         ServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.ANALYTICS_PUSH_SYNC, value: true)
 
-        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (_) in
             expectation.fulfill()
         })
 
@@ -87,7 +87,7 @@ class PushIDManagerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Analytics events should be NOT dispatched with the push status")
         expectation.isInverted = true
 
-        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (_) in
             expectation.fulfill()
         })
 
@@ -135,7 +135,7 @@ class PushIDManagerTests: XCTestCase {
         let testPushId = "newPushId"
         pushEnabled = true
 
-        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (event) in
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "PushIDManagerTests"), eventDispatcher: { (_) in
             expectation.fulfill() // should not dispatch an analytics request as we already have push enabled set to true
         })
 

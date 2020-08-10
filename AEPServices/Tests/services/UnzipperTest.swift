@@ -39,7 +39,7 @@ class FileUnzipperTest: XCTestCase {
             return
         }
     }
-    
+
     func testUnzippingRulesSuccessSimple() {
         guard let sourceURL = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
             XCTFail()
@@ -60,7 +60,7 @@ class FileUnzipperTest: XCTestCase {
             XCTFail("Failed to create archive")
             return
         }
-        
+
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testDataFileName)
         guard !unzipper.unzipItem(at: sourceURL, to: destinationURL).isEmpty else {
             XCTFail("Unzipping failed")
@@ -97,7 +97,7 @@ class FileUnzipperTest: XCTestCase {
         XCTAssert(subFolderRulesEntry2Exists)
         XCTAssert(imageFileExists)
     }
-    
+
     func testUnzippingRulesDoesntExist() {
         let testFileName = "doesntExist"
         let testFileExt = ".zip"

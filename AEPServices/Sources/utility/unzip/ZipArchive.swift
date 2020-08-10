@@ -19,16 +19,16 @@ import Compression
 /// A `ZipArchive` is a sequence of ZipEntries. You can
 /// iterate over an archive using a `for`-`in` loop to get access to individual `ZipEntry` objects	
 final class ZipArchive: Sequence {
-    
+
     /// An unsigned 32-Bit Integer representing a checksum.
     typealias CRC32 = UInt32
-    
+
     /// a custom handler that consumes a `data` object containing partial entry data.
     /// - Parameters:
     ///   - data: a chunk of `data` to consume.
     /// - Throws: can throw to indicate errors during data consumption.
     typealias EntryDataConsumer = (_ data: Data) throws -> Void
-    
+
     /// A custom handler that receives a position and a size that can be used to provide data from an arbitrary source.
     /// - Parameters:
     ///   - position: The current read position.
@@ -36,7 +36,7 @@ final class ZipArchive: Sequence {
     /// - Returns: A chunk of `Data`.
     /// - Throws: Can throw to indicate errors in the data source.
     typealias Provider = (_ position: Int, _ size: Int) throws -> Data
-    
+
     typealias LocalFileHeader = ZipEntry.LocalFileHeader
     typealias DataDescriptor = ZipEntry.DataDescriptor
     typealias CentralDirectoryStructure = ZipEntry.CentralDirectoryStructure
@@ -54,15 +54,15 @@ final class ZipArchive: Sequence {
         /// Thrown when an extract operation was canceled.
         case cancelledOperation
     }
-    
+
     private let LOG_PREFIX = "ZipArchive"
-    
+
     /// An error that occurs during decompression
     enum DecompressionError: Error {
         case invalidStream
         case corruptedData
     }
-    
+
     struct EndOfCentralDirectoryRecord: HeaderDataSerializable {
 
         let endOfCentralDirectorySignature = UInt32(FileUnzipperConstants.endOfCentralDirectorySignature)
@@ -96,7 +96,7 @@ final class ZipArchive: Sequence {
             Log.warning(label: LOG_PREFIX, "Unable to obtain end of central directory record for archive file at \(archiveFile.debugDescription)")
             return nil
         }
-        
+
         self.url = url
         self.archiveFile = archiveFile
         self.endOfCentralDirectoryRecord = endOfCentralDirectoryRecord
@@ -105,7 +105,7 @@ final class ZipArchive: Sequence {
     deinit {
         fclose(self.archiveFile)
     }
-    
+
     /// Read a `ZipEntry` from the receiver and write it to `url`.
     ///
     /// - Parameters:
@@ -151,9 +151,9 @@ final class ZipArchive: Sequence {
         try fileManager.setAttributes(attributes, ofItemAtPath: url.path)
         return checksum
     }
-    
+
     ///
-    /// MARK: - Sequence Protocol makeIterator implementation
+    // MARK: - Sequence Protocol makeIterator implementation
     ///
     func makeIterator() -> AnyIterator<ZipEntry> {
         let endOfCentralDirectoryRecord = self.endOfCentralDirectoryRecord
@@ -186,11 +186,11 @@ final class ZipArchive: Sequence {
                             localFileHeader: localFileHeader, dataDescriptor: dataDescriptor)
         }
     }
-    
+
     //
-    //    MARK: - Helpers
+    // MARK: - Helpers
     //
-    
+
     ///
     /// Decompresses the compressed ZipEntry and returns the checksum
     /// - Parameters:
@@ -216,7 +216,7 @@ final class ZipArchive: Sequence {
         let fileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
         return fopen(fileSystemRepresentation, "rb")
     }
-    
+
     ///
     /// Gets the end of central directory record for the given file
     /// - Parameter file: The c style pointer to the file
@@ -242,7 +242,7 @@ final class ZipArchive: Sequence {
         }
         return nil
     }
-    
+
     /// Decompress the output of `provider` and pass it to `consumer`.
     /// - Parameters:
     ///   - size: The compressed size of the data to be decompressed.
@@ -297,7 +297,7 @@ final class ZipArchive: Sequence {
         } while status == COMPRESSION_STATUS_OK
         return crc32
     }
-    
+
     /// Calculate the `CRC32` checksum of the receiver.
     ///
     /// - Parameter checksum: The starting seed.
@@ -337,7 +337,7 @@ extension ZipArchive {
         let subdata = data.subdata(in: start..<start+MemoryLayout<T>.size)
         return subdata.withUnsafeBytes { $0.load(as: T.self) }
     }
-    
+
     ///
     /// Initializes and returns a DataSerializable from a given file pointer and offset
     /// - Parameters:
@@ -354,7 +354,7 @@ extension ZipArchive {
         })
         return structure
     }
-    
+
     ///
     /// Reads a chunk of data of the given size from the file pointer
     /// - Parameters:
@@ -371,7 +371,7 @@ extension ZipArchive {
         }
         return Data(bytesNoCopy: bytes, count: bytesRead, deallocator: .custom({ buf, _ in buf.deallocate() }))
     }
-    
+
     ///
     /// Writes the chunk of data to the given C file pointer
     /// - Parameters:

@@ -15,21 +15,21 @@ import AEPServices
 public class MockDataStore: NamedCollectionProcessing {
     public func setAppGroup(_ appGroup: String?) {
     }
-    
+
     public var dict = [String: Any?]()
-    
-    public init(){
-        
+
+    public init() {
+
     }
-    
+
     public func set(collectionName: String, key: String, value: Any?) {
         dict[key] = value
     }
-    
+
     public func get(collectionName: String, key: String) -> Any? {
         return dict[key] as Any?
     }
-    
+
     public func remove(collectionName: String, key: String) {
         dict.removeValue(forKey: key)
     }

@@ -15,7 +15,7 @@ import Foundation
 /// Constants for the FileUnzipper utility
 ///
 enum FileUnzipperConstants {
-    
+
     static let defaultReadChunkSize = UInt32(16*1024)
     static let defaultFilePermissions = UInt16(0o644)
     static let defaultDirectoryPermissions = UInt16(0o755)
@@ -28,7 +28,7 @@ enum FileUnzipperConstants {
     static let localFileHeaderSignature = 0x04034b50
     static let dataDescriptorSignature = 0x08074b50
     static let centralDirectorySignature = 0x02014b50
-    
+
     /// The lookup table used to calculate `CRC32` checksums.
     static let crcTable: [UInt32] = [
         0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419,

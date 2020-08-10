@@ -15,13 +15,13 @@ import XCTest
 import AEPServicesMocks
 
 class LifecycleMetricsBuilderTests: XCTestCase {
-    
+
     private var dataStore: FakeDataStore?
     private var metricsBuilder: LifecycleMetricsBuilder?
     private var systemInfoService: MockSystemInfoService?
     private var date: Date = Date()
     private typealias KEYS = LifecycleConstants.EventDataKeys
-    
+
     override func setUp() {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
@@ -32,11 +32,11 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.dataStore = FakeDataStore(name: "testStore")
         self.metricsBuilder = LifecycleMetricsBuilder(dataStore: self.dataStore!, date: self.date)
     }
-    
+
     override func tearDown() {
         metricsBuilder = nil
     }
-    
+
     func testAddInstallData() {
         metricsBuilder?.addInstallData()
         let metrics = metricsBuilder?.build()
@@ -47,14 +47,14 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue((dataStore?.setObjectCalled)!)
         XCTAssertEqual(dataStore?.setObjectValues[0] as? Date, self.date)
     }
-    
+
     // Tests add launch data when last launch is in the same month as current launch
     func testAddLaunchDataSameMonth() {
         let lastLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: self.date)
         let firstLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: lastLaunchDate!)
         dataStore?.getObjectValues.append(firstLaunchDate!)
         dataStore?.getObjectValues.append(lastLaunchDate!)
-        
+
         metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
 
@@ -64,14 +64,14 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.daysSinceLastLaunch, 1)
         XCTAssertEqual(metrics?.daysSinceFirstLaunch, 2)
     }
-    
+
     // Tests add launch data when last launch was a month before this launch
     func testAddLaunchDataDifferentMonth() {
         let lastLaunchDate = Calendar.current.date(byAdding: .month, value: -1, to: self.date)
         let firstLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: lastLaunchDate!)
         dataStore?.getObjectValues.append(firstLaunchDate!)
         dataStore?.getObjectValues.append(lastLaunchDate!)
-        
+
         metricsBuilder?.addLaunchData()
         let metrics = metricsBuilder?.build()
 
@@ -81,59 +81,59 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.daysSinceLastLaunch, 30)
         XCTAssertEqual(metrics?.daysSinceFirstLaunch, 31)
     }
-    
+
     func testAddGenericDataWithLaunches() {
         let numberOfLaunches = 1
         var mockPersistedContext = LifecyclePersistedContext()
         mockPersistedContext.launches = numberOfLaunches
         dataStore?.getObjectValues.append(mockPersistedContext)
-        
+
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
-        
+
         metricsBuilder?.addLaunchEventData()
         let metrics = metricsBuilder?.build()
-        
+
         XCTAssertEqual(metrics?.launches, numberOfLaunches)
         XCTAssertEqual(metrics?.dayOfTheWeek, currentDateComponents.weekday)
         XCTAssertEqual(metrics?.hourOfTheDay, currentDateComponents.hour)
         XCTAssertTrue(metrics!.launchEvent ?? false)
     }
-    
+
     func testAddGenericDataWithoutLaunches() {
         let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
-        
+
         metricsBuilder?.addLaunchEventData()
         let metrics = metricsBuilder?.build()
-        
+
         XCTAssertNil(metrics?.launches)
         XCTAssertEqual(metrics?.dayOfTheWeek, currentDateComponents.weekday)
         XCTAssertEqual(metrics?.hourOfTheDay, currentDateComponents.hour)
         XCTAssertTrue(metrics!.launchEvent ?? false)
     }
-    
+
     func testAddUpgradeDataWithUpgrade() {
         metricsBuilder?.addUpgradeData(upgrade: true)
         let metrics = metricsBuilder?.build()
-        
+
         XCTAssertTrue(metrics!.upgradeEvent ?? false)
         XCTAssertEqual(dataStore?.setObjectValues[0] as? Date, self.date)
         XCTAssertEqual(dataStore?.setIntValues[0], 0)
     }
-    
+
     func testAddUpgradeDataWithoutUpgrade() {
         let daysSinceLastUpgrade = 5
         let lastUpgradeDate = Calendar.current.date(byAdding: .day, value: -(daysSinceLastUpgrade), to: self.date)
         dataStore?.getObjectValues.append(lastUpgradeDate!)
         var launchesSinceLastUpgrade = 10
         dataStore?.getIntValues.append(launchesSinceLastUpgrade)
-        let _ = metricsBuilder?.addUpgradeData(upgrade: false)
+        _ = metricsBuilder?.addUpgradeData(upgrade: false)
         let metrics = metricsBuilder?.build()
         launchesSinceLastUpgrade += 1
         XCTAssertEqual(metrics?.daysSinceLastUpgrade, daysSinceLastUpgrade)
         XCTAssertEqual(dataStore?.setIntValues[0], launchesSinceLastUpgrade)
         XCTAssertEqual(metrics?.launchesSinceUpgrade, launchesSinceLastUpgrade)
     }
-    
+
     func testAddCrashData() {
         let previousSessionCrash = true
         let osVersion = "13.0"
@@ -144,7 +144,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.previousOsVersion, osVersion)
         XCTAssertEqual(metrics?.previousAppId, appID)
     }
-    
+
     func testAddDeviceData() {
         let deviceName = "testDevice"
         self.systemInfoService?.deviceName = deviceName
@@ -168,7 +168,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         self.systemInfoService?.activeLocaleName = locale
         let runMode = "Application"
         self.systemInfoService?.runMode = runMode
-        
+
         metricsBuilder?.addDeviceData()
         let metrics = metricsBuilder?.build()
         XCTAssertEqual(metrics?.deviceName, deviceName)
@@ -179,7 +179,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.locale, formattedLocale)
         XCTAssertEqual(metrics?.runMode, runMode)
     }
-    
+
     func testAddDeviceDataNoName() {
         let applicationVersionNumber = "1.0.1"
         let applicationBuildNumber = "11C29"
@@ -190,7 +190,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let metricsNoName = metricsBuilder?.build()
         XCTAssertEqual(metricsNoName?.appId, applicationIdentifierNoName)
     }
-    
+
     func testAddDeviceDataNoVersionNumber() {
         let applicationName = "testAppName"
         let applicationBuildNumber = "11C29"
@@ -201,7 +201,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let metricsNoBuild = metricsBuilder?.build()
         XCTAssertEqual(metricsNoBuild?.appId, applicationIdentifierNoVersionNumber)
     }
-    
+
     func testAddDeviceDataNoBuildNumber() {
         let applicationName = "testAppName"
         let applicationVersionNumber = "1.0.1"
@@ -212,7 +212,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let metricsNoVersion = metricsBuilder?.build()
         XCTAssertEqual(metricsNoVersion?.appId, applicationIdentifierNoBuildNumber)
     }
-    
+
     func testAddDeviceDataNoNameOrBuild() {
         let applicationVersionNumber = "1.0.1"
         self.systemInfoService?.applicationVersionNumber = applicationVersionNumber
@@ -221,7 +221,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let metricsNoNameOrBuild = metricsBuilder?.build()
         XCTAssertEqual(metricsNoNameOrBuild?.appId, appIDNoNameOrBuild)
     }
-    
+
     func testAddDeviceDataNoNameOrVersion() {
         let applicationBuildNumber = "12C33"
         self.systemInfoService?.applicationBuildNumber = applicationBuildNumber
@@ -230,7 +230,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let metricsNoNameOrVersion = metricsBuilder?.build()
         XCTAssertEqual(metricsNoNameOrVersion?.appId, appIDNoNameOrVersion)
     }
-    
+
     func testAddDeviceDataNoBuildOrVersion() {
         let applicationName = "testAppName"
         self.systemInfoService?.applicationName = applicationName
@@ -241,18 +241,18 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let metricsNoBuildOrVersion = metricsBuilder?.build()
         XCTAssertEqual(metricsNoBuildOrVersion?.appId, appIDNoBuildOrVersion)
     }
-    
+
 }
 
-fileprivate class FakeDataStore: NamedCollectionDataStore {
-    
+private class FakeDataStore: NamedCollectionDataStore {
+
     var setIntCalled = false
     var setIntValues: [Int?] = []
     override func set(key: String, value: Int?) {
         setIntCalled = true
         setIntValues.append(value)
     }
-    
+
     var getIntValues: [Int] = []
     private var getIntCallCount = 0
     override func getInt(key: String, fallback: Int? = nil) -> Int? {
@@ -260,21 +260,19 @@ fileprivate class FakeDataStore: NamedCollectionDataStore {
         if getIntCallCount == 0 || getIntValues.count == 0 { return nil }
         return getIntValues[getIntCallCount - 1]
     }
-    
+
     var setObjectCalled = false
     var setObjectValues: [Any] = []
-    override func setObject<T>(key: String, value: T) where T : Decodable, T : Encodable {
+    override func setObject<T>(key: String, value: T) where T: Decodable, T: Encodable {
         setObjectCalled = true
         setObjectValues.append(value)
     }
-    
-    
+
     var getObjectValues: [Any] = []
     private var getObjectCallCount = 0
-    override func getObject<T>(key: String, fallback: T? = nil) -> T? where T : Decodable, T : Encodable {
+    override func getObject<T>(key: String, fallback: T? = nil) -> T? where T: Decodable, T: Encodable {
         getObjectCallCount += 1
         if getObjectCallCount == 0 || getObjectValues.count == 0 { return nil }
         return getObjectValues[getObjectCallCount - 1] as? T
     }
 }
-
