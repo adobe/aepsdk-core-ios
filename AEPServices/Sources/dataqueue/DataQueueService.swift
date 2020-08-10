@@ -19,9 +19,9 @@ public class DataQueueService: DataQueuing {
     public static let shared: DataQueuing = DataQueueService()
     private let serialQueue = DispatchQueue(label: "com.adobe.marketing.mobile.dataqueueservice")
     #if DEBUG
-    internal var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
+        internal var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
     #else
-    private var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
+        private var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
     #endif
 
     private init() {}

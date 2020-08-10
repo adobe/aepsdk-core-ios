@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -64,13 +64,13 @@ class DiskCacheService: Caching {
     /// - Parameter cacheName: name of the cache to be created if needed
     private func createDirectoryIfNeeded(cacheName: String) throws {
         let path = cachePath(for: cacheName)
-      guard !fileManager.fileExists(atPath: path) else {
-        return
-      }
+        guard !fileManager.fileExists(atPath: path) else {
+            return
+        }
 
         Log.trace(label: LOG_PREFIX, "Attempting to create directory at path '\(path)'")
         try fileManager.createDirectory(atPath: path, withIntermediateDirectories: true,
-                                      attributes: nil)
+                                        attributes: nil)
     }
 
     /// Builds the file path for the given key
@@ -98,12 +98,11 @@ class DiskCacheService: Caching {
     private func dataStoreKey(for cacheName: String, with key: String) -> String {
         return "\(cacheName.alphanumeric)/\(key.alphanumeric)"
     }
-
 }
 
 /// Used to sanitize cache name and key
 private extension String {
     var alphanumeric: String {
-        return self.components(separatedBy: CharacterSet.alphanumerics.inverted).joined().lowercased()
+        return components(separatedBy: CharacterSet.alphanumerics.inverted).joined().lowercased()
     }
 }

@@ -1,18 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
+import CoreTelephony
 import Foundation
 import UIKit
-import CoreTelephony
 
 /// The Core system info service implementation which provides
 ///     - network connection status
@@ -20,7 +20,6 @@ import CoreTelephony
 ///     - bundled assets
 ///     - TBD as WIP as of now, holds required functionality for ConfigurationExtension
 class ApplicationSystemInfoService: SystemInfoService {
-
     private let bundle: Bundle
     private lazy var userAgent: String = {
         let model = UIDevice.current.model
@@ -35,7 +34,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getProperty(for key: String) -> String? {
-        return self.bundle.object(forInfoDictionaryKey: key) as? String
+        return bundle.object(forInfoDictionaryKey: key) as? String
     }
 
     func getAsset(fileName: String, fileType: String) -> String? {
@@ -131,26 +130,18 @@ class ApplicationSystemInfoService: SystemInfoService {
 
 struct NativeDisplayInformation {
     private var screenRect: CGRect {
-        get {
-            UIScreen.main.bounds
-        }
+        UIScreen.main.bounds
     }
 
     private var screenScale: CGFloat {
-        get {
-            UIScreen.main.scale
-        }
+        UIScreen.main.scale
     }
 
     var widthPixels: Int {
-        get {
-            Int(self.screenRect.size.width * screenScale)
-        }
+        Int(screenRect.size.width * screenScale)
     }
 
     var heightPixels: Int {
-        get {
-            Int(self.screenRect.size.height * screenScale)
-        }
+        Int(screenRect.size.height * screenScale)
     }
 }

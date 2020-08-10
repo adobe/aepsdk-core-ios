@@ -12,11 +12,10 @@
 import Foundation
 
 public class FileUnzipper: Unzipping {
-
     private let LOG_PREFIX = "FileUnzipper"
 
     /// Creates a new FileUnzipper
-    public init() { }
+    public init() {}
 
     public func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
         let fileManager = FileManager()
@@ -51,7 +50,7 @@ public class FileUnzipper: Unzipping {
                 return []
             }
 
-            guard let _  = try? archive.extract(entry, to: destinationEntryURL) else {
+            guard let _ = try? archive.extract(entry, to: destinationEntryURL) else {
                 Log.warning(label: LOG_PREFIX, "Failed to extract entry \(entry) to destination \(destinationEntryURL)")
                 return []
             }

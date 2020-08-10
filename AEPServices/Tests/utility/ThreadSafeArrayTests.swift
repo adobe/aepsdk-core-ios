@@ -3,15 +3,15 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
 
-import XCTest
 @testable import AEPServices
+import XCTest
 
 class ThreadSafeArrayTests: XCTestCase {
     private var threadSafeArray: ThreadSafeArray<Int>!
@@ -43,8 +43,8 @@ class ThreadSafeArrayTests: XCTestCase {
         expectation.expectedFulfillmentCount = count
 
         // test
-        for i in 1...count {
-            let rand = Int.random(in: 1..<100)
+        for i in 1 ... count {
+            let rand = Int.random(in: 1 ..< 100)
             if rand % 2 == 0 {
                 dispatchQueue1.async {
                     self.dispatchSyncWithArray(i: i)
@@ -107,8 +107,8 @@ class ThreadSafeArrayTests: XCTestCase {
         let dispatchQueue2 = DispatchQueue(label: "ThreadSafeArrayTests.queue2", attributes: .concurrent)
 
         // test
-        for i in 1...count {
-            let rand = Int.random(in: 1..<100)
+        for i in 1 ... count {
+            let rand = Int.random(in: 1 ..< 100)
             if rand % 2 == 0 {
                 dispatchQueue1.async {
                     self.dispatchSyncConcurrentOp(i: i)
@@ -133,7 +133,7 @@ class ThreadSafeArrayTests: XCTestCase {
         expectation.expectedFulfillmentCount = count
         expectation.assertForOverFulfill = true
         let tsArray = ThreadSafeArray<Int>()
-        for i in 0..<count {
+        for i in 0 ..< count {
             tsArray.append(i)
         }
 
@@ -163,7 +163,7 @@ class ThreadSafeArrayTests: XCTestCase {
         let tsArray = ThreadSafeArray<Int>()
 
         // fill array
-        for i in 0..<count {
+        for i in 0 ..< count {
             tsArray.append(i)
         }
 
@@ -174,7 +174,7 @@ class ThreadSafeArrayTests: XCTestCase {
         XCTAssertEqual(tsArray.shallowCopy.count, 0)
 
         // fill array again
-        for i in 0..<count {
+        for i in 0 ..< count {
             tsArray.append(i)
         }
 
@@ -187,7 +187,7 @@ class ThreadSafeArrayTests: XCTestCase {
         let tsArray = ThreadSafeArray<Int>()
 
         // fill array
-        for i in 0..<count {
+        for i in 0 ..< count {
             tsArray.append(i)
         }
 
@@ -196,7 +196,6 @@ class ThreadSafeArrayTests: XCTestCase {
         tsArray.clear()
 
         XCTAssertEqual(tsArray.count, 0)
-
     }
 
     // Tests that the .shallowCopy functionality doesn't deadlock against the backing array
@@ -205,14 +204,14 @@ class ThreadSafeArrayTests: XCTestCase {
         let tsArray = ThreadSafeArray<Int>()
 
         // fill array
-        for i in 0..<count {
+        for i in 0 ..< count {
             tsArray.append(i)
         }
 
         var counter = 0
         tsArray.shallowCopy.forEach {
             XCTAssertEqual($0, tsArray[counter])
-            counter = counter+1
+            counter = counter + 1
         }
     }
 
@@ -245,5 +244,4 @@ class ThreadSafeArrayTests: XCTestCase {
             }
         }
     }
-
 }

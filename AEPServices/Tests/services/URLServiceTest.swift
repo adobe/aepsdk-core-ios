@@ -21,13 +21,13 @@ class URLServiceTest: XCTestCase {
     }
 
     public class URLServiceReturnFalse: URLOpening {
-        public func openUrl(_ url: URL) -> Bool {
+        public func openUrl(_: URL) -> Bool {
             return false
         }
     }
 
     public class URLServiceReturnTrue: URLOpening {
-        public func openUrl(_ url: URL) -> Bool {
+        public func openUrl(_: URL) -> Bool {
             return true
         }
     }

@@ -1,21 +1,21 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 import AEPCore
+import AEPCoreMocks
 @testable import AEPLifecycle
 import AEPServices
 import AEPServicesMocks
-import AEPCoreMocks
+import XCTest
 
 /// Functional tests for the Lifecycle extension
 class LifecycleFunctionalTests: XCTestCase {
@@ -59,7 +59,7 @@ class LifecycleFunctionalTests: XCTestCase {
         // test
         mockRuntime.simulateComingEvents(createStartEvent())
 
-        //verify
+        // verify
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
@@ -102,7 +102,7 @@ class LifecycleFunctionalTests: XCTestCase {
         // test
         mockRuntime.simulateComingEvents(event)
 
-        //verify
+        // verify
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
@@ -135,7 +135,6 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("DailyEngUserEvent", lifecycleData?["dailyenguserevent"] as? String)
         XCTAssertEqual("7/27/2020", lifecycleData?["installdate"] as? String)
         XCTAssertEqual("1", lifecycleData?["launches"] as? String)
-
     }
 
     /// Tests additional data
@@ -148,7 +147,7 @@ class LifecycleFunctionalTests: XCTestCase {
         // test
         mockRuntime.simulateComingEvents(event)
 
-        //verify
+        // verify
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
@@ -178,9 +177,9 @@ class LifecycleFunctionalTests: XCTestCase {
     /// Tests simple start then pause, then start again, the second start call should NOT be ignored
     func testLifecycleStartPauseStartOverTimeout() {
         // setup
-        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 10))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 40))
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 10))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 40))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -193,12 +192,11 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("1", (mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
         XCTAssertEqual("2", (mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
 
-        XCTAssertEqual(1595909459, mockRuntime.dispatchedEvents[1].data?["previoussessionstarttimestampmillis"] as? Double)
-        XCTAssertEqual(1595909469, mockRuntime.dispatchedEvents[1].data?["previoussessionpausetimestampmillis"] as? Double)
+        XCTAssertEqual(1_595_909_459, mockRuntime.dispatchedEvents[1].data?["previoussessionstarttimestampmillis"] as? Double)
+        XCTAssertEqual(1_595_909_469, mockRuntime.dispatchedEvents[1].data?["previoussessionpausetimestampmillis"] as? Double)
         XCTAssertEqual(86400.0 * 7.0, mockRuntime.dispatchedEvents[1].data?["maxsessionlength"] as? Double)
-        XCTAssertEqual(1595909499, mockRuntime.dispatchedEvents[1].data?["starttimestampmillis"] as? Double)
+        XCTAssertEqual(1_595_909_499, mockRuntime.dispatchedEvents[1].data?["starttimestampmillis"] as? Double)
         XCTAssertEqual("start", mockRuntime.dispatchedEvents[1].data?["sessionevent"] as? String)
-
     }
 
     /// Tests crash event when the last session was not gracefully closed
@@ -223,15 +221,14 @@ class LifecycleFunctionalTests: XCTestCase {
         // verify
         XCTAssertEqual(1, mockRuntimeSession2.dispatchedEvents.count)
         XCTAssertEqual("CrashEvent", (mockRuntimeSession2.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["crashevent"] as? String)
-
     }
 
     /// Tests  start then pause after max session length
     func testLifecycleStartPauseStartOverMaxSessionLength() {
         // setup
-        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 10000000))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 10000000 + 40))
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 10_000_000))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 10_000_000 + 40))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -251,9 +248,9 @@ class LifecycleFunctionalTests: XCTestCase {
     /// Tests  start then pause
     func testLifecycleStartPauseStartSessionLength() {
         // setup
-        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100 + 40))
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 40))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -273,9 +270,9 @@ class LifecycleFunctionalTests: XCTestCase {
     /// Tests upgrade event when app version changes
     func testUpgrade() {
         // setup
-        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100 + 40))
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 40))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -302,9 +299,9 @@ class LifecycleFunctionalTests: XCTestCase {
     /// Tests dailyUserEvent when the new launch happens in the same day
     func testDailyUserEventWithinSameDay() {
         // setup
-        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100 + 40))
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 40))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -322,9 +319,9 @@ class LifecycleFunctionalTests: XCTestCase {
     /// Tests dailyUserEvent when the new launch happens after one day
     func testDailyUserEventAfterOneDay() {
         // setup
-        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100 + 60 * 60 * 24))
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 60 * 60 * 24))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -340,51 +337,51 @@ class LifecycleFunctionalTests: XCTestCase {
     }
 
     /// Tests dailyUserEvent when the new launch happens in the same month
-       func testMonthlyUserEventWithinSameMonth() {
-           // setup
-           let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-           let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100))
-           let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100 + 60 * 60 * 24))
+    func testMonthlyUserEventWithinSameMonth() {
+        // setup
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 60 * 60 * 24))
 
-           mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
-           // test
-           mockRuntime.simulateComingEvents(startEvent1, pauseEvent)
-           mockRuntime.resetDispatchedEventAndCreatedSharedStates()
-           mockRuntime.simulateComingEvents(startEvent2)
+        // test
+        mockRuntime.simulateComingEvents(startEvent1, pauseEvent)
+        mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        mockRuntime.simulateComingEvents(startEvent2)
 
-           // verify
-           XCTAssertNil((mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"])
-           let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
-           XCTAssertNil(lifecycleData?["monthlyenguserevent"])
-       }
+        // verify
+        XCTAssertNil((mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"])
+        let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
+        XCTAssertNil(lifecycleData?["monthlyenguserevent"])
+    }
 
-       /// Tests dailyUserEvent when the new launch happens after one day
-       func testMonthlyUserEventAfterOneMonth() {
-           // setup
-           let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-           let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100))
-           let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100 + 60 * 60 * 24 * 30))
+    /// Tests dailyUserEvent when the new launch happens after one day
+    func testMonthlyUserEventAfterOneMonth() {
+        // setup
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 60 * 60 * 24 * 30))
 
-           mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
-           // test
-           mockRuntime.simulateComingEvents(startEvent1, pauseEvent)
-           mockRuntime.resetDispatchedEventAndCreatedSharedStates()
-           mockRuntime.simulateComingEvents(startEvent2)
+        // test
+        mockRuntime.simulateComingEvents(startEvent1, pauseEvent)
+        mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        mockRuntime.simulateComingEvents(startEvent2)
 
-           // verify
-           XCTAssertEqual("MonthlyEngUserEvent", (mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"] as? String)
-           let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
-           XCTAssertEqual("MonthlyEngUserEvent", lifecycleData?["monthlyenguserevent"] as? String)
-       }
+        // verify
+        XCTAssertEqual("MonthlyEngUserEvent", (mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"] as? String)
+        let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
+        XCTAssertEqual("MonthlyEngUserEvent", lifecycleData?["monthlyenguserevent"] as? String)
+    }
 
     /// Tests restore of the lifecycle shared state from the previous session
     func testForceCloseThenRestartWithinSessionTimeout() {
         // setup
-        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459))
-        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1595909459 + 100 + 10))
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 10))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 

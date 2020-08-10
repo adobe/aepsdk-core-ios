@@ -1,13 +1,13 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import XCTest
 
@@ -23,9 +23,9 @@ class MobileCoreTests: XCTestCase {
         MockExtensionTwo.reset()
     }
 
-    private func registerMockExtension<T: Extension> (_ type: T.Type) {
+    private func registerMockExtension<T: Extension>(_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
-        EventHub.shared.registerExtension(type) { (error) in
+        EventHub.shared.registerExtension(type) { error in
             XCTAssertNil(error)
             semaphore.signal()
         }
@@ -38,7 +38,7 @@ class MobileCoreTests: XCTestCase {
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
         MockExtension.registerExtension()
-        MobileCore.start { }
+        MobileCore.start {}
         wait(for: [expectation], timeout: 0.5)
     }
 
@@ -51,7 +51,7 @@ class MobileCoreTests: XCTestCase {
         MockExtension.registerExtension()
         MockExtensionTwo.registrationClosure = { expectation2.fulfill() }
         MockExtensionTwo.registerExtension()
-        MobileCore.start { }
+        MobileCore.start {}
         wait(for: [expectation, expectation2], timeout: 0.5)
     }
 
@@ -63,7 +63,7 @@ class MobileCoreTests: XCTestCase {
             if $0.name == eventName { expectation.fulfill() }
         }
         MockExtension.registerExtension()
-        MobileCore.start { }
+        MobileCore.start {}
         EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
@@ -76,7 +76,7 @@ class MobileCoreTests: XCTestCase {
         MockExtension.eventReceivedClosure = { if $0.name == eventName { expectation.fulfill() } }
         MockExtension.registerExtension()
 
-        MobileCore.start { }
+        MobileCore.start {}
         wait(for: [expectation], timeout: 1.0)
     }
 
@@ -94,7 +94,7 @@ class MobileCoreTests: XCTestCase {
 
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
-        MobileCore.start { }
+        MobileCore.start {}
         EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
         wait(for: [expectation], timeout: 1.0)
     }
@@ -114,7 +114,7 @@ class MobileCoreTests: XCTestCase {
         MockExtension.registerExtension()
         MockExtensionTwo.registerExtension()
         EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
-        MobileCore.start { }
+        MobileCore.start {}
 
         wait(for: [expectation], timeout: 1.0)
     }
@@ -125,25 +125,22 @@ class MobileCoreTests: XCTestCase {
         expectation.assertForOverFulfill = true
 
         MockExtension.registrationClosure = { expectation.fulfill() }
-        MobileCore.start {
-        }
+        MobileCore.start {}
         wait(for: [expectation], timeout: 0.5)
 
-        let expectation2 = XCTestExpectation(description: ("callback invoked 2nd time"))
+        let expectation2 = XCTestExpectation(description: "callback invoked 2nd time")
         expectation2.assertForOverFulfill = true
         expectation2.isInverted = true
 
         MockExtension.registrationClosure = { expectation2.fulfill() }
         MockExtension.registerExtension()
-        MobileCore.start {
-        }
+        MobileCore.start {}
 
         wait(for: [expectation2], timeout: 0.5)
-
     }
 
     func testRegisterExtensionsSimple() {
-        let expectation = XCTestExpectation(description: ("registration completed in timely fashion"))
+        let expectation = XCTestExpectation(description: "registration completed in timely fashion")
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
         // test
@@ -154,7 +151,7 @@ class MobileCoreTests: XCTestCase {
     }
 
     func testRegisterExtensionsSimpleMultiple() {
-        let expectation = XCTestExpectation(description: ("registration completed in timely fashion"))
+        let expectation = XCTestExpectation(description: "registration completed in timely fashion")
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
@@ -168,7 +165,7 @@ class MobileCoreTests: XCTestCase {
     }
 
     func testRegisterExtensionsWithSlowExtension() {
-        let expectation = XCTestExpectation(description: ("registration completed in timely fashion when long running extension is in play"))
+        let expectation = XCTestExpectation(description: "registration completed in timely fashion when long running extension is in play")
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
@@ -182,7 +179,7 @@ class MobileCoreTests: XCTestCase {
     }
 
     func testRegisterExtensionsSimpleEventDispatch() {
-        let expectation = XCTestExpectation(description: ("expected event seen"))
+        let expectation = XCTestExpectation(description: "expected event seen")
         expectation.expectedFulfillmentCount = 1
         expectation.assertForOverFulfill = true
 
@@ -198,7 +195,7 @@ class MobileCoreTests: XCTestCase {
 
     func testRegisterExtensionsDispatchEventBeforeRegister() {
         // setup
-        let expectation = XCTestExpectation(description: ("expected event seen"))
+        let expectation = XCTestExpectation(description: "expected event seen")
         expectation.expectedFulfillmentCount = 1
         expectation.assertForOverFulfill = true
 
@@ -214,7 +211,7 @@ class MobileCoreTests: XCTestCase {
 
     func testRegisterMultipleExtensionsSimpleEventDispatch() {
         // setup
-        let expectation = XCTestExpectation(description: ("expected event seen"))
+        let expectation = XCTestExpectation(description: "expected event seen")
         expectation.expectedFulfillmentCount = 1
         expectation.assertForOverFulfill = true
 
@@ -230,7 +227,7 @@ class MobileCoreTests: XCTestCase {
 
     func testRegisterMultipleExtensionsDispatchEventBeforeRegister() {
         // setup
-        let expectation = XCTestExpectation(description: ("expected event seen"))
+        let expectation = XCTestExpectation(description: "expected event seen")
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
 
@@ -247,16 +244,14 @@ class MobileCoreTests: XCTestCase {
 
     func testRegisterSameExtensionTwice() {
         // setup
-        let expectation = XCTestExpectation(description: ("extension should not register twice"))
+        let expectation = XCTestExpectation(description: "extension should not register twice")
         expectation.assertForOverFulfill = true
 
         MockExtension.registrationClosure = { expectation.fulfill() }
 
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtension.self])
-        MobileCore.start {
-
-        }
+        MobileCore.start {}
 
         // verify
         wait(for: [expectation], timeout: 0.25)
@@ -271,14 +266,14 @@ class MobileCoreTests: XCTestCase {
         let eventExpectation = XCTestExpectation(description: "Should receive the event when dispatched through the event hub")
         eventExpectation.assertForOverFulfill = true
 
-        EventHub.shared.registerExtension(MockExtension.self) { (_) in
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
             registerExpectation.fulfill()
         }
 
         wait(for: [registerExpectation], timeout: 1.0)
 
         // register listener after registration
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: expectedEvent.type, source: expectedEvent.source) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: expectedEvent.type, source: expectedEvent.source) { event in
             XCTAssertEqual(event.id, expectedEvent.id)
             eventExpectation.fulfill()
         }
@@ -302,7 +297,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.dispatch(event: expectedEvent) { (responseEvent) in
+        MobileCore.dispatch(event: expectedEvent) { responseEvent in
             XCTAssertEqual(responseEvent?.id, expectedResponseEvent.id)
             responseExpectation.fulfill()
         }
@@ -405,5 +400,4 @@ class MobileCoreTests: XCTestCase {
         let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
         XCTAssertEqual(appGroup, keyValueService?.appGroup)
     }
-
 }

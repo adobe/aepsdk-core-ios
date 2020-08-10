@@ -9,10 +9,10 @@
  governing permissions and limitations under the License.
  */
 
-import XCTest
 @testable import AEPServices
+import XCTest
 
-/// TODO: - Add more robust testing. Also make sure to make use of the new return type for the unzip api in the tests
+// TODO: - Add more robust testing. Also make sure to make use of the new return type for the unzip api in the tests
 class FileUnzipperTest: XCTestCase {
     let unzipper = FileUnzipper()
     let testDataFileName = "TestRules"
@@ -101,7 +101,7 @@ class FileUnzipperTest: XCTestCase {
     func testUnzippingRulesDoesntExist() {
         let testFileName = "doesntExist"
         let testFileExt = ".zip"
-        let sourceURL = FileUnzipperTest.bundle.bundleURL.appendingPathComponent(testFileName+testFileExt)
+        let sourceURL = FileUnzipperTest.bundle.bundleURL.appendingPathComponent(testFileName + testFileExt)
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testFileName)
         let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
         XCTAssertTrue(unzippedItems.isEmpty)

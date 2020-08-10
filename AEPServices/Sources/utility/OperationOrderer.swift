@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -43,8 +43,8 @@ public class OperationOrderer<T> {
     ///     - tag: Optional string identifier for the internal queue, useful for debugging purposes.
     /// - Returns: A new `OperationOrderer` in a stopped state.
     public init(_ tag: String = "anonymous") {
-        self.queue = DispatchQueue(label: "com.adobe.OperationOrderer(\(tag))")
-        self.source = DispatchSource.makeUserDataOrSource(queue: queue)
+        queue = DispatchQueue(label: "com.adobe.OperationOrderer(\(tag))")
+        source = DispatchSource.makeUserDataOrSource(queue: queue)
         source.setEventHandler(handler: drain)
         source.activate() // Must activate DispatchSource to avoid crashes on deinit.
     }
@@ -107,17 +107,17 @@ public class OperationOrderer<T> {
     /// Triggers the DispatchOr source if the queue is currently active.
     /// - Note: Should only be called from internal `queue`.
     private func triggerSourceIfNeeded() {
-        if self.active {
-            self.source.or(data: 1)
+        if active {
+            source.or(data: 1)
         }
     }
 
     /// Attempts to drain the queue by iterating over all queued items and calling the handle function on them.
     private func drain() {
-        while let item = self.array.first {
-            guard let handleFunc = self.handler else { return }
+        while let item = array.first {
+            guard let handleFunc = handler else { return }
             if handleFunc(item) { // Handler processed item, we can remove.
-                self.array.removeFirst()
+                array.removeFirst()
             } else { // Handler declined to process, bail and wait for another trigger.
                 return
             }

@@ -1,21 +1,20 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPLifecycle
 import AEPServices
 import AEPServicesMocks
+import XCTest
 
 class LifecycleStateTests: XCTestCase {
-
     var lifecycleState: LifecycleState!
     var dataStore = NamedCollectionDataStore(name: "LifecycleStateTests")
     var mockSystemInfoService: MockSystemInfoService!
@@ -127,7 +126,6 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertNil(actualContextData?.lifecycleMetrics.installEvent)
         XCTAssertEqual(persistedContext.startDate, prevSessionInfo?.startDate)
         XCTAssertEqual(persistedContext.pauseDate, prevSessionInfo?.pauseDate)
-
     }
 
     func testStartAppResumeVersionUpgradeNoLifecycleInMemory() {
@@ -259,7 +257,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertEqual(currentDate, lastUsedDate)
         XCTAssertEqual(currentDate, actualContext.startDate)
         XCTAssertEqual(appVersion, dataStore.getString(key: LifecycleConstants.DataStoreKeys.LAST_VERSION))
-        XCTAssertFalse(actualContext.successfulClose )
+        XCTAssertFalse(actualContext.successfulClose)
         XCTAssertEqual(additionalData, actualContextData?.additionalContextData)
         XCTAssertEqual(adId, actualContextData?.advertisingIdentifier)
         XCTAssertEqual(persistedContext.startDate, prevSessionInfo?.startDate)
@@ -267,13 +265,14 @@ class LifecycleStateTests: XCTestCase {
     }
 
     // MARK: Pause(...) tests
+
     func testPauseSimple() {
         // test
         lifecycleState.pause(pauseDate: currentDate)
 
         // verify
         let actualContext: LifecyclePersistedContext! = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
-        XCTAssertTrue(actualContext.successfulClose )
+        XCTAssertTrue(actualContext.successfulClose)
         XCTAssertEqual(currentDate, actualContext.pauseDate)
     }
 
@@ -407,6 +406,7 @@ class LifecycleStateTests: XCTestCase {
     }
 
     // MARK: computeBootData() tests
+
     /// By default compute boot data should return device data and launch event data
     func testComputeBootDataSimple() {
         // test

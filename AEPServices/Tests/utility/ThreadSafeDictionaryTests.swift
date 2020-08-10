@@ -3,18 +3,17 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
 
-import XCTest
 @testable import AEPServices
+import XCTest
 
 class ThreadSafeDictionaryTests: XCTestCase {
-
     private var threadSafeDict: ThreadSafeDictionary<Int, Int>!
     private var dispatchQueueSerial: DispatchQueue!
     private var dispatchQueueConcurrent: DispatchQueue!
@@ -49,8 +48,8 @@ class ThreadSafeDictionaryTests: XCTestCase {
         expectation.expectedFulfillmentCount = count
 
         // test
-        for i in 1...count {
-            let rand = Int.random(in: 1..<100)
+        for i in 1 ... count {
+            let rand = Int.random(in: 1 ..< 100)
             if rand % 2 == 0 {
                 dispatchQueue1.async {
                     self.dispatchSyncWithDict(i: i)
@@ -107,8 +106,8 @@ class ThreadSafeDictionaryTests: XCTestCase {
         let dispatchQueue2 = DispatchQueue(label: "ThreadSafeDictionaryTests.queue2", attributes: .concurrent)
 
         // test
-        for i in 1...count {
-            let rand = Int.random(in: 1..<100)
+        for i in 1 ... count {
+            let rand = Int.random(in: 1 ..< 100)
             if rand % 2 == 0 {
                 dispatchQueue1.async {
                     self.dispatchSyncConcurrentOp(i: i)
@@ -131,7 +130,7 @@ class ThreadSafeDictionaryTests: XCTestCase {
         let count = 1000
         let testDictionary = ThreadSafeDictionary<Int, Int>()
 
-        for i in 0..<count {
+        for i in 0 ..< count {
             testDictionary[i] = i
         }
 
@@ -157,5 +156,4 @@ class ThreadSafeDictionaryTests: XCTestCase {
             }
         }
     }
-
 }

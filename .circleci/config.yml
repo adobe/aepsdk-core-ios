@@ -24,6 +24,12 @@ jobs:
       - run: 
           name: Swift Linting
           command: swiftlint lint
+      - run:
+          name: Install nicklockwood/SwiftFormat
+          command: brew install swiftformat
+      - run: 
+          name: Swift Formating
+          command: swiftformat . --lint
       # pre-start the simulator to prevent timeouts
       - run:
           name: Pre-start Simulator

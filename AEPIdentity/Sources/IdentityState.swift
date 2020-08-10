@@ -1,29 +1,28 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPCore
 import AEPServices
+import Foundation
 
 /// Manages the business logic of the Identity extension
 class IdentityState {
-
     private let LOG_TAG = "IdentityState"
     private(set) var identityProperties: IdentityProperties
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
     #if DEBUG
-    var lastValidConfig: [String: Any] = [:]
+        var lastValidConfig: [String: Any] = [:]
     #else
-    private var lastValidConfig: [String: Any] = [:]
+        private var lastValidConfig: [String: Any] = [:]
     #endif
 
     /// Creates a new `IdentityState` with the given identity properties
@@ -63,7 +62,7 @@ class IdentityState {
     /// - Parameters:
     ///   - event: event corresponding to sync identifiers call or containing a new ADID value.
     ///   - configurationSharedState: config shared state corresponding to the event to be processed
-    func readyForSyncIdentifiers(event: Event, configurationSharedState: [String: Any]) -> Bool {
+    func readyForSyncIdentifiers(event _: Event, configurationSharedState: [String: Any]) -> Bool {
         // org id is a requirement.
         // Use what's in current config shared state. if that's missing, check latest config.
         // if latest config doesn't have org id either, Identity can't proceed.
@@ -107,7 +106,7 @@ class IdentityState {
 
         // generate customer ids
         let authState = event.authenticationState
-        var customerIds = event.identifiers?.map({CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState)}) ?? []
+        var customerIds = event.identifiers?.map { CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState) } ?? []
 
         // update adid if changed and extract the new adid value as VisitorId to be synced
         if let adId = event.adId, shouldUpdateAdId(newAdID: adId.identifier ?? "") {
@@ -119,7 +118,7 @@ class IdentityState {
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
         // empty adid is also removed from the customer_ids_ list by merging with the new ids then filtering out any empty ids
         identityProperties.mergeAndCleanCustomerIds(customerIds)
-        customerIds.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
+        customerIds.removeAll(where: { $0.identifier?.isEmpty ?? true }) // clean all identifiers by removing all that have a nil or empty identifier
 
         // valid config: check if there's a need to sync. Don't if we're already up to date.
         if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: lastValidConfig) {
@@ -189,7 +188,7 @@ class IdentityState {
         let hasIds = !(customerIds?.isEmpty ?? true)
         let hasDpids = !(dpids?.isEmpty ?? true)
 
-        if identityProperties.mid != nil && !hasIds && !hasDpids && !needResync {
+        if identityProperties.mid != nil, !hasIds, !hasDpids, !needResync {
             syncForIds = false
         } else if identityProperties.mid == nil {
             identityProperties.mid = MID()
@@ -305,9 +304,9 @@ class IdentityState {
             eventDispatcher(event)
         }
 
-        //something's wrong - n/w call returned an error. update the pending state.
+        // something's wrong - n/w call returned an error. update the pending state.
         if let error = identityResponse.error {
-            //should never happen bc we generate mid locally before n/w request.
+            // should never happen bc we generate mid locally before n/w request.
             // Still, generate mid locally if there's none yet.
             identityProperties.mid = identityProperties.mid ?? MID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
@@ -324,6 +323,5 @@ class IdentityState {
                 createSharedState(identityProperties.toEventData(), nil)
             }
         }
-
     }
 }

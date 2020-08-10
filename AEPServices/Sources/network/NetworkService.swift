@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -23,9 +23,8 @@ class NetworkService: Networking {
     private var sessions = ThreadSafeDictionary<String, URLSession>(identifier: "com.adobe.networkservice.sessions")
 
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
-
         if !networkRequest.url.absoluteString.starts(with: "https") {
-            Log.warning(label: LOG_PREFIX, "Network request for (\( networkRequest.url.absoluteString)) could not be created, only https requests are accepted.")
+            Log.warning(label: LOG_PREFIX, "Network request for (\(networkRequest.url.absoluteString)) could not be created, only https requests are accepted.")
             if let closure = completionHandler {
                 closure(HttpConnection(data: nil, response: nil, error: NetworkServiceError.invalidUrl))
             }
@@ -37,7 +36,7 @@ class NetworkService: Networking {
 
         // initiate the network request
         Log.debug(label: LOG_PREFIX, "Initiated (\(networkRequest.httpMethod.toString())) network request to (\(networkRequest.url.absoluteString)).")
-        let task = urlSession.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
+        let task = urlSession.dataTask(with: urlRequest, completionHandler: { data, response, error in
             if let closure = completionHandler {
                 let httpConnection = HttpConnection(data: data, response: response as? HTTPURLResponse, error: error)
                 closure(httpConnection)
@@ -50,7 +49,7 @@ class NetworkService: Networking {
     /// - Parameter networkRequest: current network request
     func createURLSession(networkRequest: NetworkRequest) -> URLSession {
         let sessionId = "\(networkRequest.url.absoluteString)\(networkRequest.readTimeout)\(networkRequest.connectTimeout)"
-        guard let session = self.sessions[sessionId] else {
+        guard let session = sessions[sessionId] else {
             // Create config for an ephemeral NSURLSession with specified timeouts
             let config = URLSessionConfiguration.ephemeral
             config.urlCache = nil
@@ -58,7 +57,7 @@ class NetworkService: Networking {
             config.timeoutIntervalForResource = networkRequest.connectTimeout
 
             let newSession: URLSession = URLSession(configuration: config)
-            self.sessions[sessionId] = newSession
+            sessions[sessionId] = newSession
             return newSession
         }
 
@@ -72,7 +71,7 @@ class NetworkService: Networking {
         request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpMethod = networkRequest.httpMethod.toString()
 
-        if !networkRequest.connectPayload.isEmpty && networkRequest.httpMethod == .post {
+        if !networkRequest.connectPayload.isEmpty, networkRequest.httpMethod == .post {
             request.httpBody = networkRequest.connectPayload.data(using: .utf8)
         }
 

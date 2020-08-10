@@ -1,20 +1,20 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPCore
+import AEPCoreMocks
 import AEPServices
 import AEPServicesMocks
-import AEPCoreMocks
+import XCTest
 
 /// Functional tests for the Configuration extension
 class ConfigurationFunctionalTests: XCTestCase {
@@ -71,7 +71,6 @@ class ConfigurationFunctionalTests: XCTestCase {
 
     /// Tests the happy path with updating the config multiple times with a new value
     func testUpdateConfigurationWithDictTwiceWithNewValue() {
-
         // test
         mockRuntime.simulateComingEvents(createConfigUpdateEvent(configDict: ["global.privacy": "optedin"]))
         mockRuntime.simulateComingEvents(createConfigUpdateEvent(configDict: ["global.privacy": "optedout"]))
@@ -89,7 +88,6 @@ class ConfigurationFunctionalTests: XCTestCase {
 
     /// Tests the happy path with updating the config multiple times with new keys
     func testUpdateConfigurationWithDictWithNewKeys() {
-
         // test
         mockRuntime.simulateComingEvents(createConfigUpdateEvent(configDict: ["global.privacy": "optedin"]))
         mockRuntime.simulateComingEvents(createConfigUpdateEvent(configDict: ["analytics.server": "server"]))
@@ -117,55 +115,55 @@ class ConfigurationFunctionalTests: XCTestCase {
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
     }
 
-        // MARK: getPrivacyStatus(...) tests
+    // MARK: getPrivacyStatus(...) tests
 
-        /// Ensures that get response event even when config is empty
-        func testGetPrivacyStatusWhenConfigureIsEmpty() {
-            // setup
-            let event = createGetPrivacyStatusEvent()
+    /// Ensures that get response event even when config is empty
+    func testGetPrivacyStatusWhenConfigureIsEmpty() {
+        // setup
+        let event = createGetPrivacyStatusEvent()
 
-            // test
-            mockRuntime.simulateComingEvents(event)
+        // test
+        mockRuntime.simulateComingEvents(event)
 
-            // verify
-            XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-            XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
-            XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
-            XCTAssertEqual(0, mockRuntime.firstEvent?.data?.count)
-            XCTAssertEqual(event.id, mockRuntime.firstEvent?.responseID)
-        }
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+        XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
+        XCTAssertEqual(0, mockRuntime.firstEvent?.data?.count)
+        XCTAssertEqual(event.id, mockRuntime.firstEvent?.responseID)
+    }
 
-        /// Happy path for get privacy status
-        func testGetPrivacyStatusSimpleOptIn() {
-            // setup
-            let configUpdateEvent = createConfigUpdateEvent(configDict: ["global.privacy": "optedOut"])
-            let getPrivacyStatusEvent = createGetPrivacyStatusEvent()
+    /// Happy path for get privacy status
+    func testGetPrivacyStatusSimpleOptIn() {
+        // setup
+        let configUpdateEvent = createConfigUpdateEvent(configDict: ["global.privacy": "optedOut"])
+        let getPrivacyStatusEvent = createGetPrivacyStatusEvent()
 
-            // test
-            mockRuntime.simulateComingEvents(configUpdateEvent)
-            mockRuntime.resetDispatchedEventAndCreatedSharedStates()
-            mockRuntime.simulateComingEvents(getPrivacyStatusEvent)
+        // test
+        mockRuntime.simulateComingEvents(configUpdateEvent)
+        mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        mockRuntime.simulateComingEvents(getPrivacyStatusEvent)
 
-            // verify
-            XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-            XCTAssertEqual(1, mockRuntime.firstEvent?.data?.count)
-            XCTAssertEqual("optedOut", mockRuntime.firstEvent?.data?["global.privacy"] as? String)
-            XCTAssertEqual(getPrivacyStatusEvent.id, mockRuntime.firstEvent?.responseID)
-        }
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.firstEvent?.data?.count)
+        XCTAssertEqual("optedOut", mockRuntime.firstEvent?.data?["global.privacy"] as? String)
+        XCTAssertEqual(getPrivacyStatusEvent.id, mockRuntime.firstEvent?.responseID)
+    }
 
-        // MARK: Lifecycle response event tests
+    // MARK: Lifecycle response event tests
 
-        /// Tests that no configuration event is dispatched when a lifecycle response content event and no appId is stored in persistence
-        func testHandleLifecycleResponseEmptyAppId() {
-            // setup
-            let lifecycleEvent = Event(name: "Lifecycle response content", type: EventType.lifecycle, source: EventSource.responseContent, data: nil)
+    /// Tests that no configuration event is dispatched when a lifecycle response content event and no appId is stored in persistence
+    func testHandleLifecycleResponseEmptyAppId() {
+        // setup
+        let lifecycleEvent = Event(name: "Lifecycle response content", type: EventType.lifecycle, source: EventSource.responseContent, data: nil)
 
-            // test
-            mockRuntime.simulateComingEvents(lifecycleEvent)
+        // test
+        mockRuntime.simulateComingEvents(lifecycleEvent)
 
-            // verify
-            XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-        }
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
 
     /// Tests that configuration event is dispatched when a lifecycle response content event and an valid appId is stored in persistence
     func testHandleLifecycleResponseValidAppid() {
@@ -185,125 +183,122 @@ class ConfigurationFunctionalTests: XCTestCase {
         XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
     }
 
-        // MARK: configureWith(filePath) tests
+    // MARK: configureWith(filePath) tests
 
-        /// Tests the happy path when passing in a valid path to a bundled config
-        func testLoadBundledConfig() {
-            // setup
-            let path = Bundle(for: type(of: self)).path(forResource: "ADBMobileConfig", ofType: "json")!
-            let filePathEvent = createConfigFilePathEvent(filePath: path)
+    /// Tests the happy path when passing in a valid path to a bundled config
+    func testLoadBundledConfig() {
+        // setup
+        let path = Bundle(for: type(of: self)).path(forResource: "ADBMobileConfig", ofType: "json")!
+        let filePathEvent = createConfigFilePathEvent(filePath: path)
 
-            // test
-            mockRuntime.simulateComingEvents(filePathEvent)
+        // test
+        mockRuntime.simulateComingEvents(filePathEvent)
 
-            // verify
-            XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-            XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
-            XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
-            XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+        XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
 
-            XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
-            XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
-        }
+        XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
+        XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
+    }
 
-        /// Tests the API call where the path to the config is invalid
-        func testLoadInvalidPathBundledConfig() {
-            // setup
-            let filePathEvent = createConfigFilePathEvent(filePath: "Invalid/Path/ADBMobileConfig.json")
+    /// Tests the API call where the path to the config is invalid
+    func testLoadInvalidPathBundledConfig() {
+        // setup
+        let filePathEvent = createConfigFilePathEvent(filePath: "Invalid/Path/ADBMobileConfig.json")
 
-            // test
-            mockRuntime.simulateComingEvents(filePathEvent)
+        // test
+        mockRuntime.simulateComingEvents(filePathEvent)
 
-            // verify
-            XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-            XCTAssertEqual( 1, mockRuntime.createdSharedStates.count, "Configuration still should update shared state")
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.createdSharedStates.count, "Configuration still should update shared state")
 
-            XCTAssertEqual(0, mockRuntime.firstSharedState?.count)
-        }
+        XCTAssertEqual(0, mockRuntime.firstSharedState?.count)
+    }
 
-        /// Test that programmatic config is applied over the (failed) loaded json
-        func testLoadInvalidBundledConfigWithProgrammaticApplied() {
-            // setup
-            let filePathEvent = createConfigFilePathEvent(filePath: "Invalid/Path/ADBMobileConfig.json")
-            let configUpdateEvent = createConfigUpdateEvent(configDict: ["global.privacy": "optedOut"])
+    /// Test that programmatic config is applied over the (failed) loaded json
+    func testLoadInvalidBundledConfigWithProgrammaticApplied() {
+        // setup
+        let filePathEvent = createConfigFilePathEvent(filePath: "Invalid/Path/ADBMobileConfig.json")
+        let configUpdateEvent = createConfigUpdateEvent(configDict: ["global.privacy": "optedOut"])
 
-            // test
-            mockRuntime.simulateComingEvents(filePathEvent, configUpdateEvent)
+        // test
+        mockRuntime.simulateComingEvents(filePathEvent, configUpdateEvent)
 
-            // verify
-                    XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-                    XCTAssertEqual( 2, mockRuntime.createdSharedStates.count)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
 
-            XCTAssertEqual(1, mockRuntime.firstEvent?.data?.count)
+        XCTAssertEqual(1, mockRuntime.firstEvent?.data?.count)
 
-            XCTAssertEqual(0, mockRuntime.firstSharedState?.count)
-            XCTAssertEqual(1, mockRuntime.secondSharedState?.count)
+        XCTAssertEqual(0, mockRuntime.firstSharedState?.count)
+        XCTAssertEqual(1, mockRuntime.secondSharedState?.count)
+    }
 
-        }
+    // MARK: configureWith(appId) tests
 
-        // MARK: configureWith(appId) tests
+    /// When network service returns a valid response configure with appId succeeds
+    func testConfigureWithAppId() {
+        // setup
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
+        ServiceProvider.shared.networkService = mockNetworkService
+        let appIdEvent = createConfigAppIdEvent(appId: "valid-app-id")
 
-        /// When network service returns a valid response configure with appId succeeds
-        func testConfigureWithAppId() {
-            // setup
-            let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-            ServiceProvider.shared.networkService = mockNetworkService
-            let appIdEvent = createConfigAppIdEvent(appId: "valid-app-id")
+        // test
+        mockRuntime.simulateComingEvents(appIdEvent)
 
-            // test
-            mockRuntime.simulateComingEvents(appIdEvent)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+        XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
 
-            // verify
-            XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-            XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
-            XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
-            XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
+        XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
+        XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
+    }
 
-            XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
-            XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
-        }
+    /// Tests that we can re-try network requests, and it will succeed when the network comes back online
+    func testConfigureWithAppIdNetworkDownThenComesOnline() {
+        // setup
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .error)
+        ServiceProvider.shared.networkService = mockNetworkService
 
-        /// Tests that we can re-try network requests, and it will succeed when the network comes back online
-        func testConfigureWithAppIdNetworkDownThenComesOnline() {
-            // setup
-            let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .error)
-            ServiceProvider.shared.networkService = mockNetworkService
+        let appIdEvent = createConfigAppIdEvent(appId: "valid-app-id")
+        let invalidAppIdEvent = createConfigAppIdEvent(appId: "invalid-app-id")
+        // test
+        mockRuntime.simulateComingEvents(invalidAppIdEvent)
+        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success) // setup a valid network response
+        mockRuntime.simulateComingEvents(appIdEvent)
 
-            let appIdEvent = createConfigAppIdEvent(appId: "valid-app-id")
-            let invalidAppIdEvent = createConfigAppIdEvent(appId: "invalid-app-id")
-            // test
-            mockRuntime.simulateComingEvents(invalidAppIdEvent)
-            ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success) // setup a valid network response
-            mockRuntime.simulateComingEvents(appIdEvent)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+        XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
 
-            // verify
-            XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-            XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
-            XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
-            XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
-
-            XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
-            XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
-        }
+        XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
+        XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
+    }
 
     func createConfigAppIdEvent(appId: String) -> Event {
         return Event(name: "Configure with AppId", type: EventType.configuration, source: EventSource.requestContent,
-                          data: ["config.appId": appId])
+                     data: ["config.appId": appId])
     }
 
     func createConfigFilePathEvent(filePath: String) -> Event {
         return Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
-                          data: ["config.filePath": filePath])
+                     data: ["config.filePath": filePath])
     }
 
     func createConfigUpdateEvent(configDict: [String: Any]) -> Event {
         return Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
-                          data: ["config.update": configDict])
+                     data: ["config.update": configDict])
     }
 
     func createGetPrivacyStatusEvent() -> Event {
         return Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: ["config.getData": true])
-
     }
-
 }

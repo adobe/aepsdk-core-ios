@@ -9,8 +9,8 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 enum MockRulesDownloaderResponses {
     case success
@@ -26,7 +26,7 @@ struct MockRulesDownloaderNetworkService: Networking {
     let validResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
     let invalidResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 500, httpVersion: nil, headerFields: nil)
     let notModifiedResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 304, httpVersion: nil, headerFields: nil)
-    func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
+    func connectAsync(networkRequest _: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
         switch response {
         case .success:
             let httpConnection = HttpConnection(data: expectedData, response: validResponse, error: nil)

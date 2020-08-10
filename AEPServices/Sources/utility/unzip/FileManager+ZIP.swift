@@ -30,7 +30,7 @@ extension FileManager {
     /// - Throws: throws if unable to create the parent directory
     func createParentDirectoryStructure(for url: URL) throws {
         let parentDirectoryURL = url.deletingLastPathComponent()
-        try self.createDirectory(at: parentDirectoryURL, withIntermediateDirectories: true, attributes: nil)
+        try createDirectory(at: parentDirectoryURL, withIntermediateDirectories: true, attributes: nil)
     }
 
     ///
@@ -77,24 +77,23 @@ extension Date {
         msdosDateTime <<= 16
         msdosDateTime |= Int(dateTime.1)
         var unixTime = tm()
-        unixTime.tm_sec = Int32((msdosDateTime&31)*2)
-        unixTime.tm_min = Int32((msdosDateTime>>5)&63)
-        unixTime.tm_hour = Int32((Int(dateTime.1)>>11)&31)
-        unixTime.tm_mday = Int32((msdosDateTime>>16)&31)
-        unixTime.tm_mon = Int32((msdosDateTime>>21)&15)
+        unixTime.tm_sec = Int32((msdosDateTime & 31) * 2)
+        unixTime.tm_min = Int32((msdosDateTime >> 5) & 63)
+        unixTime.tm_hour = Int32((Int(dateTime.1) >> 11) & 31)
+        unixTime.tm_mday = Int32((msdosDateTime >> 16) & 31)
+        unixTime.tm_mon = Int32((msdosDateTime >> 21) & 15)
         unixTime.tm_mon -= 1 // UNIX time struct month entries are zero based.
-        unixTime.tm_year = Int32(1980+(msdosDateTime>>25))
+        unixTime.tm_year = Int32(1980 + (msdosDateTime >> 25))
         unixTime.tm_year -= 1900 // UNIX time structs count in "years since 1900".
         let time = timegm(&unixTime)
         self = Date(timeIntervalSince1970: TimeInterval(time))
     }
-
 }
 
 extension URL {
     func isContained(in parentDirectoryURL: URL) -> Bool {
         // Ensure this URL is contained in the passed in URL
         let parentDirectoryURL = URL(fileURLWithPath: parentDirectoryURL.path, isDirectory: true).standardized
-        return self.standardized.absoluteString.hasPrefix(parentDirectoryURL.absoluteString)
+        return standardized.absoluteString.hasPrefix(parentDirectoryURL.absoluteString)
     }
 }

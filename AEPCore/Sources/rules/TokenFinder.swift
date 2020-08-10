@@ -24,7 +24,7 @@ extension String {
     fileprivate func substring(from: Int, to: Int) -> String {
         let startIndex = index(self.startIndex, offsetBy: from)
         let endIndex = index(self.startIndex, offsetBy: to)
-        return String(self[startIndex...endIndex])
+        return String(self[startIndex ... endIndex])
     }
 }
 
@@ -43,7 +43,7 @@ class TokenFinder: Traversable {
     private let TOKEN_KEY_ALL_JSON = "~all_json"
     private let TOKEN_KEY_SHARED_STATE = "~state"
     private let EMPTY_STRING = ""
-    private let RANDOM_INT_BOUNDARY = 100000000
+    private let RANDOM_INT_BOUNDARY = 100_000_000
 
     let event: Event
     let extensionRuntime: ExtensionRuntime
@@ -71,7 +71,7 @@ class TokenFinder: Traversable {
         case TOKEN_KEY_SDK_VERSION:
             return MobileCore.extensionVersion
         case TOKEN_KEY_CACHEBUST:
-            return String(Int.random(in: 1..<RANDOM_INT_BOUNDARY))
+            return String(Int.random(in: 1 ..< RANDOM_INT_BOUNDARY))
         case TOKEN_KEY_ALL_URL:
             guard let dict = event.data else {
                 Log.debug(label: LOG_TAG, "Current event data is nil, can not use it to generate an url query string")

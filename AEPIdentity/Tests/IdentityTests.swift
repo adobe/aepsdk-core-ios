@@ -1,22 +1,21 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
-@testable import AEPIdentity
 @testable import AEPCore
+@testable import AEPIdentity
 import AEPServices
 import AEPServicesMocks
+import XCTest
 
 class IdentityTests: XCTestCase {
-
     var identity: Identity!
     var mockRuntime: TestableExtensionRuntime!
 
@@ -38,7 +37,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
 
         // verify
-        let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
+        let responseEvent = mockRuntime.dispatchedEvents.first(where: { $0.responseID == appendUrlEvent.id })
         XCTAssertNotNil(responseEvent)
         XCTAssertNotNil(responseEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL])
     }
@@ -52,7 +51,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
 
         // verify
-        let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
+        let responseEvent = mockRuntime.dispatchedEvents.first(where: { $0.responseID == appendUrlEvent.id })
         XCTAssertNil(responseEvent)
     }
 
@@ -66,7 +65,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
 
         // verify
-        let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
+        let responseEvent = mockRuntime.dispatchedEvents.first(where: { $0.responseID == appendUrlEvent.id })
         XCTAssertNotNil(responseEvent)
         XCTAssertNotNil(responseEvent?.data?[IdentityConstants.EventDataKeys.URL_VARIABLES])
     }
@@ -80,7 +79,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
 
         // verify
-        let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
+        let responseEvent = mockRuntime.dispatchedEvents.first(where: { $0.responseID == appendUrlEvent.id })
         XCTAssertNil(responseEvent)
     }
 
@@ -94,7 +93,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
 
         // verify
-        let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
+        let responseEvent = mockRuntime.dispatchedEvents.first(where: { $0.responseID == appendUrlEvent.id })
         XCTAssertNotNil(responseEvent)
         XCTAssertNotNil(responseEvent?.data)
     }
@@ -108,7 +107,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: appendUrlEvent)
 
         // verify
-        let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
+        let responseEvent = mockRuntime.dispatchedEvents.first(where: { $0.responseID == appendUrlEvent.id })
         XCTAssertNotNil(responseEvent)
         XCTAssertNotNil(responseEvent?.data)
     }
@@ -253,5 +252,4 @@ class IdentityTests: XCTestCase {
         XCTAssertEqual(PrivacyStatus.unknown, identity.state?.identityProperties.privacyStatus) // identity state should have remained unknown
         XCTAssertNil(identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have NOT been updated with the org id
     }
-
 }

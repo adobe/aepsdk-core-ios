@@ -30,8 +30,8 @@ import Foundation
 
     public init?(rawValue: RawValue) {
         switch rawValue {
-       case CoreConstants.WrapperType.NONE:
-           self = .none
+        case CoreConstants.WrapperType.NONE:
+            self = .none
         case CoreConstants.WrapperType.REACT_NATIVE:
             self = .reactNative
         case CoreConstants.WrapperType.FLUTTER:

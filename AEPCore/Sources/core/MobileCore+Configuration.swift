@@ -1,19 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
 /// Implements the `Configuration` public APIs
 @objc public extension MobileCore {
-
     /// Configure the SDK by downloading the remote configuration file hosted on Adobe servers
     /// specified by the given application ID. The configuration file is cached once downloaded
     /// and used in subsequent calls to this API. If the remote file is updated after the first
@@ -62,7 +61,7 @@ import Foundation
     static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> Void) {
         let event = Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { (responseEvent) in
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { responseEvent in
             self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
         }
 
@@ -75,7 +74,7 @@ import Foundation
     static func getSdkIdentities(completion: @escaping (String?, AEPError) -> Void) {
         let event = Event(name: "GetSdkIdentities", type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
 
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (responseEvent) in
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { responseEvent in
             guard let responseEvent = responseEvent else {
                 completion(nil, .callbackTimeout)
                 return
@@ -93,6 +92,7 @@ import Foundation
     }
 
     // MARK: Helper
+
     private static func handleGetPrivacyListener(responseEvent: Event?, completion: @escaping (PrivacyStatus) -> Void) {
         guard let privacyStatusString = responseEvent?.data?[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
             return completion(PrivacyStatus.unknown)
@@ -100,5 +100,4 @@ import Foundation
 
         completion(PrivacyStatus(rawValue: privacyStatusString) ?? PrivacyStatus.unknown)
     }
-
 }

@@ -1,21 +1,20 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPCore
 @testable import AEPIdentity
+import XCTest
 
 class MobileIdentitiesTests: XCTestCase {
-
     let configurationSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-orgid"]
     var identitySharedState: [String: Any] {
         return buildIdentitySharedState()
@@ -45,7 +44,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // test
         let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
-            return SharedStateResult(status: .pending, value: nil)
+            SharedStateResult(status: .pending, value: nil)
         }
 
         // verify
@@ -59,7 +58,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // test
         let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
-            return SharedStateResult(status: .none, value: nil)
+            SharedStateResult(status: .none, value: nil)
         }
 
         // verify
@@ -73,7 +72,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // test
         let ready = MobileIdentities().areSharedStatesReady(event: event) { (_, _) -> SharedStateResult? in
-            return SharedStateResult(status: .set, value: nil)
+            SharedStateResult(status: .set, value: nil)
         }
 
         // verify
@@ -138,7 +137,7 @@ class MobileIdentitiesTests: XCTestCase {
         // test
         var mobileIdentities = MobileIdentities()
         mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
-             if extensionName == IdentityConstants.EXTENSION_NAME {
+            if extensionName == IdentityConstants.EXTENSION_NAME {
                 return SharedStateResult(status: .set, value: identitySharedState)
             }
 
@@ -152,5 +151,4 @@ class MobileIdentitiesTests: XCTestCase {
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}]}"
         XCTAssertEqual(expected, identifiers)
     }
-
 }

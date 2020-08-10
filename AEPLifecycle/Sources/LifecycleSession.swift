@@ -1,16 +1,16 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPServices
+import Foundation
 
 /// A type for managing Lifecycle sessions
 struct LifecycleSession {
@@ -46,7 +46,7 @@ struct LifecycleSession {
         if let unwrappedPreviousSessionDate = previousSessionPauseDate {
             let pausedTimeInSeconds = date.timeIntervalSince1970 - unwrappedPreviousSessionDate.timeIntervalSince1970
 
-            if pausedTimeInSeconds < sessionTimeout && previousSessionStartDate != nil {
+            if pausedTimeInSeconds < sessionTimeout, previousSessionStartDate != nil {
                 // handle sessions that did not time out by removing paused time from session
                 // do this by adding the paused time the session start time
                 sessionContainer.startDate = previousSessionStartDate?.addingTimeInterval(pausedTimeInSeconds)
@@ -99,7 +99,7 @@ struct LifecycleSession {
         }
 
         // verify our session time is valid
-        if lastSessionTimeSeconds > 0 && lastSessionTimeSeconds < LifecycleConstants.MAX_SESSION_LENGTH_SECONDS {
+        if lastSessionTimeSeconds > 0, lastSessionTimeSeconds < LifecycleConstants.MAX_SESSION_LENGTH_SECONDS {
             sessionContextData[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH] = String(Int(lastSessionTimeSeconds))
         } else {
             // data is out of bounds, still record it in context data but put it in a different key
@@ -108,12 +108,10 @@ struct LifecycleSession {
 
         return sessionContextData
     }
-
 }
 
 /// A container struct to easily serialize lifecycle session context information
 struct LifecyclePersistedContext: Codable {
-
     /// Session's start timestamp
     var startDate: Date?
 
@@ -137,7 +135,6 @@ struct LifecyclePersistedContext: Codable {
 
 /// Container for Lifecycle session information
 struct LifecycleSessionInfo {
-
     /// Timestamp of when the session started
     let startDate: Date?
 

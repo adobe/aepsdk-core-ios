@@ -1,18 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPCore
 import AEPServices
+import XCTest
 
 class ConfigurationStateTests: XCTestCase {
     var configState: ConfigurationState!
@@ -45,7 +45,7 @@ class ConfigurationStateTests: XCTestCase {
 
     private func assertContainsConfig(config: [String: Any]) {
         for (key, _) in config {
-            XCTAssertTrue(configState.currentConfiguration.contains(where: {$0.key == key}))
+            XCTAssertTrue(configState.currentConfiguration.contains(where: { $0.key == key }))
         }
     }
 
@@ -386,9 +386,9 @@ class ConfigurationStateTests: XCTestCase {
     func testUpdateProgrammaticConfigCorrectEnvironmentKey() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
-                                                "analytics.rsids": "rsid1,rsid2",
-                                                "__dev__analytics.rsids": "devrsid1,devrsid2",
-                                                "analytics.server": "old-server.com"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                             "analytics.server": "old-server.com"]
         configState.updateWith(newConfig: existingConfig)
 
         // test
@@ -414,7 +414,7 @@ class ConfigurationStateTests: XCTestCase {
         let appId = "valid-app-id"
 
         // test & verify
-        configState.updateWith(appId: appId) { (config) in
+        configState.updateWith(appId: appId) { config in
             XCTAssertEqual(cachedConfig.count, config?.count)
             XCTAssertTrue(self.configState.hasDownloadedConfig(appId: appId))
             expectation.fulfill()
@@ -432,7 +432,7 @@ class ConfigurationStateTests: XCTestCase {
         let appId = "app-id-not-on-server"
 
         // test
-        configState.updateWith(appId: appId) { (config) in
+        configState.updateWith(appId: appId) { config in
             XCTAssertNil(config)
             XCTAssertFalse(self.configState.hasDownloadedConfig(appId: appId))
             expectation.fulfill()
@@ -453,11 +453,11 @@ class ConfigurationStateTests: XCTestCase {
         configDownloader.configFromUrl = cachedConfig
 
         // test
-        configState.updateWith(appId: "valid-app-id") { (config) in
+        configState.updateWith(appId: "valid-app-id") { config in
             XCTAssertEqual(cachedConfig.count, config?.count)
             expectation.fulfill()
 
-            self.configState.updateWith(appId: "newAppId") { (newConfig) in
+            self.configState.updateWith(appId: "newAppId") { newConfig in
                 XCTAssertEqual(cachedConfig.count, newConfig?.count)
                 expectation.fulfill()
             }
@@ -478,12 +478,12 @@ class ConfigurationStateTests: XCTestCase {
         configDownloader.configFromUrl = cachedConfig
 
         // test
-        configState.updateWith(appId: "valid-app-id") { (config) in
+        configState.updateWith(appId: "valid-app-id") { config in
             XCTAssertEqual(cachedConfig.count, config?.count)
             self.configDownloader.configFromUrl = nil
             expectation.fulfill()
 
-            self.configState.updateWith(appId: "invalid-app-id") { (newConfig) in
+            self.configState.updateWith(appId: "invalid-app-id") { newConfig in
                 XCTAssertNil(newConfig)
                 XCTAssertEqual(cachedConfig.count, self.configState.currentConfiguration.count)
                 expectation.fulfill()
@@ -530,15 +530,15 @@ class ConfigurationStateTests: XCTestCase {
     func testEnvironmentConfigEmptyEnvironment() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "",
-                                            "analytics.rsids": "rsid1,rsid2",
-                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
-                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
-                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                             "analytics.server": "mycompany.sc.omtrdc.net"]
         configState.updateWith(newConfig: existingConfig)
 
         let expectedConfig = ["build.environment": "",
-                                "analytics.rsids": "rsid1,rsid2",
-                                "analytics.server": "mycompany.sc.omtrdc.net"]
+                              "analytics.rsids": "rsid1,rsid2",
+                              "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
@@ -551,16 +551,16 @@ class ConfigurationStateTests: XCTestCase {
     func testEnvironmentConfigProd() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "prod",
-                                            "analytics.rsids": "rsid1,rsid2",
-                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
-                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
-                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                             "analytics.server": "mycompany.sc.omtrdc.net"]
 
         configState.updateWith(newConfig: existingConfig)
 
         let expectedConfig = ["build.environment": "prod",
-                                "analytics.rsids": "rsid1,rsid2",
-                                "analytics.server": "mycompany.sc.omtrdc.net"]
+                              "analytics.rsids": "rsid1,rsid2",
+                              "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
@@ -573,16 +573,16 @@ class ConfigurationStateTests: XCTestCase {
     func testEnvironmentConfigStaging() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "stage",
-                                            "analytics.rsids": "rsid1,rsid2",
-                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
-                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
-                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                             "analytics.server": "mycompany.sc.omtrdc.net"]
 
         configState.updateWith(newConfig: existingConfig)
 
         let expectedConfig = ["build.environment": "stage",
-                                "analytics.rsids": "stagersid1,stagersid2",
-                                "analytics.server": "mycompany.sc.omtrdc.net"]
+                              "analytics.rsids": "stagersid1,stagersid2",
+                              "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
@@ -595,16 +595,16 @@ class ConfigurationStateTests: XCTestCase {
     func testEnvironmentConfigDev() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
-                                            "analytics.rsids": "rsid1,rsid2",
-                                            "__stage__analytics.rsids": "stagersid1,stagersid2",
-                                            "__dev__analytics.rsids": "devrsid1,devrsid2",
-                                            "analytics.server": "mycompany.sc.omtrdc.net"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__stage__analytics.rsids": "stagersid1,stagersid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                             "analytics.server": "mycompany.sc.omtrdc.net"]
 
         configState.updateWith(newConfig: existingConfig)
 
         let expectedConfig = ["build.environment": "dev",
-                                "analytics.rsids": "devrsid1,devrsid2",
-                                "analytics.server": "mycompany.sc.omtrdc.net"]
+                              "analytics.rsids": "devrsid1,devrsid2",
+                              "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
         let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
@@ -630,8 +630,8 @@ class ConfigurationStateTests: XCTestCase {
     func testMapEnvironmentKeysDevEnvKeyExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
-                                        "analytics.rsids": "rsid1,rsid2",
-                                        "__dev__analytics.rsids": "devrsid1,devrsid2"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2"]
 
         configState.updateWith(newConfig: existingConfig)
 
@@ -649,8 +649,8 @@ class ConfigurationStateTests: XCTestCase {
     func testMapEnvironmentKeysDevEnvKeyDoesNotExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
-                                        "analytics.rsids": "rsid1,rsid2",
-                                        "__dev__analytics.rsids": "devrsid1,devrsid2"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2"]
 
         configState.updateWith(newConfig: existingConfig)
 
@@ -668,9 +668,9 @@ class ConfigurationStateTests: XCTestCase {
     func testMapEnvironmentKeysDevEnvKeyExistsAndDoesNotExist() {
         // setup
         let existingConfig: [String: Any] = ["build.environment": "dev",
-                                        "analytics.rsids": "rsid1,rsid2",
-                                        "__dev__analytics.rsids": "devrsid1,devrsid2",
-                                        "analytics.server": "old-server.com"]
+                                             "analytics.rsids": "rsid1,rsid2",
+                                             "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                             "analytics.server": "old-server.com"]
 
         configState.updateWith(newConfig: existingConfig)
 
@@ -683,5 +683,4 @@ class ConfigurationStateTests: XCTestCase {
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
-
 }

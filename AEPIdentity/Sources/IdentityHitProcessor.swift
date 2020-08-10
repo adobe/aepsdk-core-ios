@@ -1,16 +1,16 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPServices
+import Foundation
 
 class IdentityHitProcessor: HitProcessing {
     private let LOG_TAG = "IdentityHitProcessor"
@@ -39,7 +39,7 @@ class IdentityHitProcessor: HitProcessing {
         let headers = [NetworkServiceConstants.Headers.CONTENT_TYPE: NetworkServiceConstants.HeaderValues.CONTENT_TYPE_URL_ENCODED]
         let networkRequest = NetworkRequest(url: identityHit.url, httpMethod: .get, connectPayload: "", httpHeaders: headers, connectTimeout: IdentityConstants.Default.TIMEOUT, readTimeout: IdentityConstants.Default.TIMEOUT)
 
-        networkService.connectAsync(networkRequest: networkRequest) { (connection) in
+        networkService.connectAsync(networkRequest: networkRequest) { connection in
             self.handleNetworkResponse(entity: entity, hit: identityHit, connection: connection, completion: completion)
         }
     }
@@ -68,5 +68,4 @@ class IdentityHitProcessor: HitProcessing {
             completion(true)
         }
     }
-
 }

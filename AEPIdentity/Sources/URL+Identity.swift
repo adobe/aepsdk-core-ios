@@ -1,18 +1,17 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
 extension URL {
-
     /// Creates a new Identity hit URL
     /// - Parameters:
     ///   - experienceCloudServer: the experience cloud server
@@ -28,7 +27,7 @@ extension URL {
         var queryItems = [
             URLQueryItem(name: "d_rtbd", value: "json"),
             URLQueryItem(name: "d_ver", value: "2"),
-            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_ORGID, value: orgId)
+            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_ORGID, value: orgId),
         ]
 
         if let mid = identityProperties.mid {
@@ -77,7 +76,7 @@ extension URL {
         components.path = IdentityConstants.KEY_PATH_OPTOUT
         components.queryItems = [
             URLQueryItem(name: IdentityConstants.RESPONSE_KEY_ORGID, value: orgId),
-            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_MID, value: mid.midString)
+            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_MID, value: mid.midString),
         ]
 
         guard let url = components.url else {

@@ -1,21 +1,20 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPServices
+import Foundation
 
 /// Core extension for the Adobe Experience Platform SDK
 @objc(AEPCore) public final class MobileCore: NSObject {
-
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         if wrapperType == .none {
@@ -24,6 +23,7 @@ import AEPServices
 
         return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
+
     private static var wrapperType = WrapperType.none
 
     /// Pending extensions to be registered for legacy support
@@ -38,7 +38,7 @@ import AEPServices
         let allExtensions = [Configuration.self] + extensions
 
         allExtensions.forEach {
-            EventHub.shared.registerExtension($0) { (_) in
+            EventHub.shared.registerExtension($0) { _ in
                 if registeredCounter.incrementAndGet() == allExtensions.count {
                     EventHub.shared.start()
                     completion?()
@@ -60,7 +60,7 @@ import AEPServices
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
     @objc(dispatch:responseCallback:)
     public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> Void) {
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { (event) in
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { event in
             responseCallback(event)
         }
 
@@ -68,13 +68,13 @@ import AEPServices
     }
 
     /// Start event processing
-    //@available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
+    // @available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
     @objc(start:)
     public static func start(_ completion: @escaping (() -> Void)) {
         // Start the event hub processing
         let pending = [Configuration.self] + MobileCore.pendingExtensions.shallowCopy
         MobileCore.pendingExtensions.clear()
-        registerExtensions(pending, { completion() })
+        registerExtensions(pending) { completion() }
     }
 
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
@@ -117,5 +117,4 @@ import AEPServices
     public static func setAppGroup(group: String?) {
         ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
     }
-
 }

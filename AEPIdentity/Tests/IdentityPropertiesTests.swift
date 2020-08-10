@@ -1,19 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPIdentity
+import XCTest
 
 class IdentityPropertiesTests: XCTestCase {
-
     /// When all properties all nil, the event data should be empty
     func testToEventDataEmpty() {
         // setup
@@ -108,37 +107,36 @@ class IdentityPropertiesTests: XCTestCase {
 
     /// Tests that when two `CustomIdentity`'s have the same value for identifier they are properly merged
     func testMergeAndCleanCustomerIdsSomeDuplicates() {
-         // setup
-         var properties = IdentityProperties()
-         let existingIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id", authenticationState: .authenticated)]
-         properties.customerIds = existingIds
+        // setup
+        var properties = IdentityProperties()
+        let existingIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id", authenticationState: .authenticated)]
+        properties.customerIds = existingIds
 
-         // test
-         let newIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id_1", authenticationState: .authenticated),
-                       CustomIdentity(origin: "new_origin", type: "new_type", identifier: "id", authenticationState: .loggedOut)]
-         properties.mergeAndCleanCustomerIds(newIds)
+        // test
+        let newIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id_1", authenticationState: .authenticated),
+                      CustomIdentity(origin: "new_origin", type: "new_type", identifier: "id", authenticationState: .loggedOut)]
+        properties.mergeAndCleanCustomerIds(newIds)
 
-         // verify
+        // verify
         // can't guarantee order of IDs
         XCTAssertTrue(newIds == properties.customerIds || newIds.reversed() == properties.customerIds)
     }
 
     /// Tests that `CustomIdentity`'s with an empty identifier are removed after merging
     func testMergeAndCleanCustomerIdsEmptyIdentifiersRemoved() {
-         // setup
-         var properties = IdentityProperties()
-         let existingIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id", authenticationState: .authenticated),
-                            CustomIdentity(origin: "empty", type: "empty", identifier: "", authenticationState: .unknown)]
-         properties.customerIds = existingIds
+        // setup
+        var properties = IdentityProperties()
+        let existingIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id", authenticationState: .authenticated),
+                           CustomIdentity(origin: "empty", type: "empty", identifier: "", authenticationState: .unknown)]
+        properties.customerIds = existingIds
 
-         // test
-         let newIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id_1", authenticationState: .authenticated),
-                       CustomIdentity(origin: "new_origin", type: "new_type", identifier: "id", authenticationState: .loggedOut)]
-         properties.mergeAndCleanCustomerIds(newIds)
+        // test
+        let newIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id_1", authenticationState: .authenticated),
+                      CustomIdentity(origin: "new_origin", type: "new_type", identifier: "id", authenticationState: .loggedOut)]
+        properties.mergeAndCleanCustomerIds(newIds)
 
-         // verify
+        // verify
         // can't guarantee order of IDs
         XCTAssertTrue(newIds == properties.customerIds || newIds.reversed() == properties.customerIds)
     }
-
 }

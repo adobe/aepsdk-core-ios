@@ -9,8 +9,8 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 /// Represents an Object which is Cachable via the CacheService
 protocol Cacheable {

@@ -9,21 +9,19 @@
  governing permissions and limitations under the License.
  */
 
-import XCTest
 @testable import AEPCore
 @testable import AEPServices
 @testable import AEPServicesMocks
+import XCTest
 
 class RulesDownloaderTests: XCTestCase {
-
     private static let zipTestFileName = "testRulesDownloader"
     private let cache = MockDiskCache()
     private var mockUnzipper = MockUnzipper()
     var rulesDownloader: RulesDownloader {
-        get {
-            return RulesDownloader(fileUnzipper: mockUnzipper)
-        }
+        return RulesDownloader(fileUnzipper: mockUnzipper)
     }
+
     // The number of items in the rules.json for verifying in tests
     private let numOfRuleDictionaryItems = 23
 
@@ -36,11 +34,9 @@ class RulesDownloaderTests: XCTestCase {
     }
 
     private var encodedUrl: String {
-        get {
-            let rulesUrl = RulesDownloaderTests.rulesUrl!.absoluteString
-            let utf8RulesUrl = rulesUrl.data(using: .utf8)
-            return utf8RulesUrl!.base64EncodedString()
-        }
+        let rulesUrl = RulesDownloaderTests.rulesUrl!.absoluteString
+        let utf8RulesUrl = rulesUrl.data(using: .utf8)
+        return utf8RulesUrl!.base64EncodedString()
     }
 
     override func setUp() {

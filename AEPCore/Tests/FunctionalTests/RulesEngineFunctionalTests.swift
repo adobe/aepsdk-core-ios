@@ -1,21 +1,21 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
-import XCTest
 @testable import AEPCore
+import AEPCoreMocks
 import AEPServices
 import AEPServicesMocks
-import AEPCoreMocks
+import XCTest
 
 /// Functional tests for the rules engine feature
 class RulesEngineFunctionalTests: XCTestCase {
@@ -27,7 +27,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         rulesEngine = LaunchRulesEngine(extensionRuntime: mockRuntime)
-        rulesEngine.trace { (_, _, _, failure) in
+        rulesEngine.trace { _, _, _, failure in
             print(failure)
         }
     }
@@ -38,13 +38,13 @@ class RulesEngineFunctionalTests: XCTestCase {
 
     func testUpdateConfigurationWithDictTwice() {
         // setup
-        let event =  Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
-                           data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
 
         let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip")
         let expectedData = try? Data(contentsOf: filePath!)
 
-       let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
+        let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
         let mockNetworkService = TestableNetworkService()
         mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
@@ -57,6 +57,5 @@ class RulesEngineFunctionalTests: XCTestCase {
         // verify
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual("value", processedEvent.data?["key"] as? String)
-
     }
 }

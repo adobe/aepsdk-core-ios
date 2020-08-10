@@ -1,16 +1,16 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPCore
+import Foundation
 
 /// Represents the JSON structure for the company context
 private struct CompanyContext: Codable {
@@ -32,7 +32,6 @@ private struct UserID: Codable {
 
 /// Responsible for reading the shared state of multiple extensions to read the identifiers
 struct MobileIdentities: Codable {
-
     typealias SharedStateProvider = (String, Event?) -> SharedStateResult?
     private var companyContexts: [CompanyContext]?
     private var users: [Users]?
@@ -60,7 +59,7 @@ struct MobileIdentities: Codable {
         // TODO: Target
 
         if !userIds.isEmpty {
-            self.users = [Users(userIDs: userIds)]
+            users = [Users(userIDs: userIds)]
         }
     }
 
@@ -101,7 +100,7 @@ struct MobileIdentities: Codable {
         // So, there is no need to fetch the advertising identifier with advertisingidentifer namespace DSID_20914 separately.
         if let customVisitorIds = identitySharedState.value?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity] {
             // convert each `CustomIdentity` to a `UserID`, then remove any nil values
-            visitorIds.append(contentsOf: customVisitorIds.map {$0.toUserID()}.compactMap {$0})
+            visitorIds.append(contentsOf: customVisitorIds.map { $0.toUserID() }.compactMap { $0 })
         }
 
         // push identifier
@@ -127,7 +126,6 @@ struct MobileIdentities: Codable {
 }
 
 private extension CustomIdentity {
-
     /// Converts a `CustomIdentity` into a `UserID`
     /// - Returns: a `UserID` where the namespace is value, value is identifier, and type is integrationCode
     func toUserID() -> UserID? {

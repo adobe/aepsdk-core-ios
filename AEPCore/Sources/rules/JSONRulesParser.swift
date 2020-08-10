@@ -79,8 +79,7 @@ class JSONCondition: Codable {
                                  "sw": "startsWith",
                                  "ew": "endsWith",
                                  "ex": "exists",
-                                 "nx": "notExists"
-    ]
+                                 "nx": "notExists"]
 
     var type: ConditionType
     var definition: JSONDefinition

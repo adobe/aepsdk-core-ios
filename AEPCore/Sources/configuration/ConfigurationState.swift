@@ -1,16 +1,16 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPServices
+import Foundation
 
 /// Manages the internal state for the `Configuration` extension
 class ConfigurationState {
@@ -23,6 +23,7 @@ class ConfigurationState {
     var environmentAwareConfiguration: [String: Any] {
         return computeEnvironmentConfig(config: currentConfiguration)
     }
+
     private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
         set {
             dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: newValue)
@@ -41,7 +42,7 @@ class ConfigurationState {
     init(dataStore: NamedCollectionDataStore, configDownloader: ConfigurationDownloadable) {
         self.dataStore = dataStore
         self.configDownloader = configDownloader
-        self.appIdManager = LaunchIDManager(dataStore: dataStore)
+        appIdManager = LaunchIDManager(dataStore: dataStore)
     }
 
     /// Loads the first configuration at launch
@@ -51,8 +52,8 @@ class ConfigurationState {
         // Load any existing application ID, either saved in persistence or read from the ADBMobileAppID property in the platform's System Info Service.
         if let appId = appIdManager.loadAppId() {
             config = configDownloader.loadConfigFromCache(appId: appId, dataStore: dataStore)
-                        ?? configDownloader.loadDefaultConfigFromManifest()
-                        ?? [:]
+                ?? configDownloader.loadDefaultConfigFromManifest()
+                ?? [:]
         } else {
             config = configDownloader.loadDefaultConfigFromManifest() ?? [:]
         }
@@ -63,10 +64,10 @@ class ConfigurationState {
     /// Merges the current configuration to `newConfig` then applies programmatic configuration on top
     /// - Parameter newConfig: The new configuration
     func updateWith(newConfig: [String: Any]) {
-        currentConfiguration.merge(newConfig) { (_, updated) in updated }
+        currentConfiguration.merge(newConfig) { _, updated in updated }
 
         // Apply any programmatic configuration updates
-        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
+        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
 
     /// Updates the programmatic config, then applies these changes to the current configuration
@@ -78,10 +79,10 @@ class ConfigurationState {
         // Any existing programmatic configuration updates are retrieved from persistence.
         // New configuration updates are applied over the existing persisted programmatic configurations
         // New programmatic configuration updates are saved to persistence.
-        programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: mappedEnvironmentKeyConfig) ?? [:]) { (_, updated) in updated }
+        programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: mappedEnvironmentKeyConfig) ?? [:]) { _, updated in updated }
 
         // The current configuration is updated with these new programmatic configuration changes.
-        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
+        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
 
     /// Attempts to download the configuration associated with `appId`, if downloading the remote config fails we check cache for cached config
@@ -92,7 +93,7 @@ class ConfigurationState {
         appIdManager.saveAppIdToPersistence(appId: appId)
 
         // Try to download config from network, if fails try to load from cache
-        configDownloader.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { [weak self] (config) in
+        configDownloader.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { [weak self] config in
             if let loadedConfig = config {
                 self?.downloadedAppIds.insert(appId)
                 self?.replaceConfigurationWith(newConfig: loadedConfig)
@@ -106,7 +107,7 @@ class ConfigurationState {
     /// - Parameter filePath: Path to a configuration file
     /// - Returns: True if the configuration was loaded, false otherwise
     func updateWith(filePath: String) -> Bool {
-         guard let bundledConfig = configDownloader.loadConfigFrom(filePath: filePath) else {
+        guard let bundledConfig = configDownloader.loadConfigFrom(filePath: filePath) else {
             return false
         }
 
@@ -125,23 +126,23 @@ class ConfigurationState {
     private func replaceConfigurationWith(newConfig: [String: Any]) {
         currentConfiguration = newConfig
         // Apply any programmatic configuration updates
-        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { (_, updated) in updated }
+        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
 
     /// Computes the environment aware configuration based on `config`
     /// - Parameter config: The current configuration
     /// - Returns: A configuration with the correct values for each key given the build environment, while also removing all keys prefix with `ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER`
-    func computeEnvironmentConfig(config: [String: Any]) -> [String: Any] {
+    func computeEnvironmentConfig(config _: [String: Any]) -> [String: Any] {
         // Remove all __env__ keys, only need to process config keys who do not have the environment prefix
-        var environmentAwareConfig = currentConfiguration.filter({!$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER)})
+        var environmentAwareConfig = currentConfiguration.filter { !$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER) }
         guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else { return environmentAwareConfig }
 
         for key in environmentAwareConfig.keys {
-                let environmentKey = keyForEnvironment(key: key, environment: buildEnvironment)
-                // If a config value for the current build environment exists, replace `key` value with `environmentKey` value
-                if let environmentValue = currentConfiguration[environmentKey] {
-                    environmentAwareConfig[key] = environmentValue
-                }
+            let environmentKey = keyForEnvironment(key: key, environment: buildEnvironment)
+            // If a config value for the current build environment exists, replace `key` value with `environmentKey` value
+            if let environmentValue = currentConfiguration[environmentKey] {
+                environmentAwareConfig[key] = environmentValue
+            }
         }
 
         return environmentAwareConfig

@@ -56,10 +56,11 @@ public final class ThreadSafeArray<T> {
     }
 
     // MARK: - Subscript
+
     public subscript(index: Int) -> T {
         get {
             queue.sync {
-                return self.array[index]
+                self.array[index]
             }
         }
         set {

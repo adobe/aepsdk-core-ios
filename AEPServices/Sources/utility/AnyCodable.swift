@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -73,10 +73,11 @@ public struct AnyCodable: Codable {
 
     public static func toAnyDictionary(dictionary: [String: AnyCodable]?) -> [String: Any]? {
         guard let unwrappedDict = dictionary else { return nil }
-        return unwrappedDict.filter({$0.value != nil}).mapValues({$0.value!})
+        return unwrappedDict.filter { $0.value != nil }.mapValues { $0.value! }
     }
 
     // MARK: - Decodable
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
 
@@ -104,6 +105,7 @@ public struct AnyCodable: Codable {
     }
 
     // MARK: - Codable
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
@@ -169,6 +171,7 @@ public struct AnyCodable: Codable {
 }
 
 // MARK: - Literal extensions
+
 extension AnyCodable: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(value)
@@ -211,15 +214,16 @@ extension AnyCodable: ExpressibleByDictionaryLiteral {
 }
 
 extension AnyCodable: ExpressibleByNilLiteral {
-    public init(nilLiteral: ()) {
+    public init(nilLiteral _: ()) {
         self.init(nil)
     }
 }
 
 // MARK: - Equatable
+
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
-        if lhs.value == nil && rhs.value == nil {
+        if lhs.value == nil, rhs.value == nil {
             return true
         }
 

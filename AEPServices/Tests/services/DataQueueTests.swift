@@ -98,7 +98,7 @@ class DataQueueTests: XCTestCase {
         // Given
         let queue = DataQueueService.shared.getDataQueue(label: fileName)!
         var events: [EventEntity] = []
-        for i in 1...3 {
+        for i in 1 ... 3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
             events.append(event)
             let data = try JSONEncoder().encode(event)
@@ -173,7 +173,7 @@ class DataQueueTests: XCTestCase {
         // Given
         let queue = DataQueueService.shared.getDataQueue(label: fileName)!
         var events: [EventEntity] = []
-        for i in 1...3 {
+        for i in 1 ... 3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
             events.append(event)
             let data = try JSONEncoder().encode(event)
@@ -216,7 +216,7 @@ class DataQueueTests: XCTestCase {
         // Given
         let queue = DataQueueService.shared.getDataQueue(label: fileName)!
 
-        for i in 1...3 {
+        for i in 1 ... 3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
             let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
             _ = queue.add(dataEntity: entity)
@@ -242,7 +242,7 @@ class DataQueueTests: XCTestCase {
         // Given
         let queue = DataQueueService.shared.getDataQueue(label: fileName)!
 
-        for i in 1...3 {
+        for i in 1 ... 3 {
             let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
             let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: nil)
             queue.add(dataEntity: entity)
@@ -269,7 +269,7 @@ class DataQueueTests: XCTestCase {
         expectation.expectedFulfillmentCount = loop * 3
 
         // When
-        for i in 1...loop {
+        for i in 1 ... loop {
             dispatchQueue1.async {
                 do {
                     let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
@@ -287,14 +287,14 @@ class DataQueueTests: XCTestCase {
             }
         }
 
-        for _ in 1...loop {
+        for _ in 1 ... loop {
             dispatchQueue2.async {
                 _ = queue.peek()
                 expectation.fulfill()
             }
         }
 
-        for _ in 1...loop {
+        for _ in 1 ... loop {
             dispatchQueue3.async {
                 _ = queue.remove()
                 expectation.fulfill()

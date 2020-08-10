@@ -1,29 +1,26 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 @testable import AEPCore
+import Foundation
 
 // Testable implemetation for `ExtensionRuntime`, enable easy setup for the input and verification of the output of an extension
 public class TestableExtensionRuntime: ExtensionRuntime {
-
     public var listeners: [String: EventListener] = [:]
     public var dispatchedEvents: [Event] = []
     public var createdSharedStates: [[String: Any]?] = []
     public var mockedSharedStates: [String: SharedStateResult] = [:]
 
-    public init() {
-
-    }
+    public init() {}
 
     // MARK: ExtensionRuntime methods implementation
 
@@ -35,11 +32,11 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         dispatchedEvents += [event]
     }
 
-    public func createSharedState(data: [String: Any], event: Event?) {
-        self.createdSharedStates += [data]
+    public func createSharedState(data: [String: Any], event _: Event?) {
+        createdSharedStates += [data]
     }
 
-    public func createPendingSharedState(event: Event?) -> SharedStateResolver {
+    public func createPendingSharedState(event _: Event?) -> SharedStateResolver {
         return { data in
             self.createdSharedStates += [data]
         }
@@ -53,11 +50,9 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         return mockedSharedStates["\(extensionName)"]
     }
 
-    public func startEvents() {
-    }
+    public func startEvents() {}
 
-    public func stopEvents() {
-    }
+    public func stopEvents() {}
 
     // MARK: Helper methods
 
@@ -83,7 +78,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     /// - Parameters:
     ///   - pair: the (extension, event) pair
     ///   - data: the shared state tuple (value, status)
-    public func simulateSharedState(for pair:(extensionName: String, event: Event), data: (value: [String: Any]?, status: SharedStateStatus)) {
+    public func simulateSharedState(for pair: (extensionName: String, event: Event), data: (value: [String: Any]?, status: SharedStateStatus)) {
         mockedSharedStates["\(pair.extensionName)-\(pair.event.id)"] = SharedStateResult(status: data.status, value: data.value)
     }
 
@@ -100,7 +95,6 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         dispatchedEvents = []
         createdSharedStates = []
     }
-
 }
 
 extension TestableExtensionRuntime {

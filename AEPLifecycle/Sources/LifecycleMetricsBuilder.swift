@@ -9,8 +9,8 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 // Builds the LifecycleMetricsData and handles Lifecycle metrics data storage updates
 class LifecycleMetricsBuilder {
@@ -22,9 +22,7 @@ class LifecycleMetricsBuilder {
     private let date: Date
 
     private var systemInfoService: SystemInfoService {
-        get {
-            ServiceProvider.shared.systemInfoService
-        }
+        ServiceProvider.shared.systemInfoService
     }
 
     init(dataStore: NamedCollectionDataStore, date: Date) {
@@ -47,15 +45,15 @@ class LifecycleMetricsBuilder {
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     @discardableResult
     func addInstallData() -> LifecycleMetricsBuilder {
-        self.lifecycleMetrics.dailyEngagedEvent = true
-        self.lifecycleMetrics.monthlyEngagedEvent = true
-        self.lifecycleMetrics.installEvent = true
-        self.lifecycleMetrics.installDate = date
-        self.dataStore.setObject(key: KEYS.INSTALL_DATE, value: date)
+        lifecycleMetrics.dailyEngagedEvent = true
+        lifecycleMetrics.monthlyEngagedEvent = true
+        lifecycleMetrics.installEvent = true
+        lifecycleMetrics.installDate = date
+        dataStore.setObject(key: KEYS.INSTALL_DATE, value: date)
         return self
     }
 
-    /// Adds the launch data to the lifecycle metrics 
+    /// Adds the launch data to the lifecycle metrics
     /// Launch Metrics includes:
     /// - Days since first launch
     /// - Days since last launch
@@ -64,21 +62,21 @@ class LifecycleMetricsBuilder {
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     @discardableResult
     func addLaunchData() -> LifecycleMetricsBuilder {
-        if let firstLaunchDate: Date = self.dataStore.getObject(key: KEYS.INSTALL_DATE) {
-            guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: self.date).day else {
+        if let firstLaunchDate: Date = dataStore.getObject(key: KEYS.INSTALL_DATE) {
+            guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: date).day else {
                 return self
             }
 
             lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
         }
 
-        if let lastLaunchDate: Date = self.dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE) {
-            guard let daysSinceLastLaunch = Calendar.current.dateComponents([.day], from: lastLaunchDate, to: self.date).day else {
+        if let lastLaunchDate: Date = dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE) {
+            guard let daysSinceLastLaunch = Calendar.current.dateComponents([.day], from: lastLaunchDate, to: date).day else {
                 return self
             }
 
             lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
-            let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: self.date)
+            let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
             let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
             // Check if we have launched this month already
             if currentDateComponents.month != lastLaunchDateComponents.month || currentDateComponents.year != lastLaunchDateComponents.year {
@@ -104,7 +102,7 @@ class LifecycleMetricsBuilder {
         let context: LifecyclePersistedContext? = dataStore.getObject(key: KEYS.PERSISTED_CONTEXT)
         lifecycleMetrics.launches = context?.launches
 
-        let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
+        let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: date)
         lifecycleMetrics.launchEvent = true
         lifecycleMetrics.dayOfTheWeek = currentDateComponents.weekday
         lifecycleMetrics.hourOfTheDay = currentDateComponents.hour
@@ -126,10 +124,10 @@ class LifecycleMetricsBuilder {
         }
 
         if upgrade {
-            dataStore.setObject(key: KEYS.UPGRADE_DATE, value: self.date)
+            dataStore.setObject(key: KEYS.UPGRADE_DATE, value: date)
             dataStore.set(key: KEYS.LAUNCHES_SINCE_UPGRADE, value: 0)
         } else if let upgradeDate: Date = dataStore.getObject(key: KEYS.UPGRADE_DATE) {
-            let daysSinceLastUpgrade = Calendar.current.dateComponents([.day], from: upgradeDate, to: self.date).day
+            let daysSinceLastUpgrade = Calendar.current.dateComponents([.day], from: upgradeDate, to: date).day
             lifecycleMetrics.daysSinceLastUpgrade = daysSinceLastUpgrade
             if var launchesSinceUpgrade = dataStore.getInt(key: KEYS.LAUNCHES_SINCE_UPGRADE, fallback: 0) {
                 launchesSinceUpgrade += 1
@@ -190,6 +188,7 @@ class LifecycleMetricsBuilder {
     }
 
     // MARK: - Private helper functions
+
     /// Combines the application name, version, and version code into a formatted application identifier
     /// - Return: `String` formatted Application identifier
     private func getApplicationIdentifier() -> String {

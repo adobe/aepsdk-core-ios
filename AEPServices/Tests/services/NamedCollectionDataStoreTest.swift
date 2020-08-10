@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -15,7 +15,6 @@ import XCTest
 @testable import AEPServices
 
 class NamedCollectionDataStoreTest: XCTestCase {
-
     var store: NamedCollectionDataStore?
 
     let mockKeyValueService = MockKeyValueService()
@@ -33,8 +32,8 @@ class NamedCollectionDataStoreTest: XCTestCase {
 
     override func setUp() {
         // Override the KeyValueStoreService with mock
-        ServiceProvider.shared.namedKeyValueService = self.mockKeyValueService
-        self.store = NamedCollectionDataStore(name: "testStore.")
+        ServiceProvider.shared.namedKeyValueService = mockKeyValueService
+        store = NamedCollectionDataStore(name: "testStore.")
     }
 
     func testGetIntFallback() {
@@ -125,7 +124,6 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let val2: Any = "test2"
         mockKeyValueService.getResult = val2
         XCTAssertEqual(store?[STRING_KEY], val2 as? String)
-
     }
 
     func testGetLongFallback() {
@@ -292,7 +290,6 @@ class NamedCollectionDataStoreTest: XCTestCase {
         }
         let val = dict[defaultDictKey] as? String
         XCTAssertEqual(val, defaultDictVal)
-
     }
 
     func testGetDict() {
@@ -349,7 +346,6 @@ class NamedCollectionDataStoreTest: XCTestCase {
 
         let testVal2 = testDict2[val2Key] as? String
         XCTAssertEqual(testVal2, val2)
-
     }
 
     func testGetCodableFallback() {
@@ -398,7 +394,6 @@ class NamedCollectionDataStoreTest: XCTestCase {
         store?.remove(key: INT_KEY)
         XCTAssertTrue(mockKeyValueService.removeCalled)
     }
-
 }
 
 class MockKeyValueService: NamedCollectionProcessing {
@@ -411,7 +406,7 @@ class MockKeyValueService: NamedCollectionProcessing {
     var getCalled: Bool = false
     // helper to know if the mock is handling codable
     var shouldEncode: Bool = false
-    func get(collectionName: String, key: String) -> Any? {
+    func get(collectionName _: String, key _: String) -> Any? {
         getCalled = true
         if shouldEncode {
             let encoded = try? JSONEncoder().encode(getResult as? MockCoding)
@@ -419,14 +414,13 @@ class MockKeyValueService: NamedCollectionProcessing {
         }
 
         return getResult
-
     }
 
     var setCalled: Bool = false
     var setValue: Any?
     // helper to know if the mock is handling codable
     var shouldDecode: Bool = false
-    func set(collectionName: String, key: String, value: Any?) {
+    func set(collectionName _: String, key _: String, value: Any?) {
         setCalled = true
         if shouldDecode {
             if let data = value as? Data {
@@ -435,16 +429,15 @@ class MockKeyValueService: NamedCollectionProcessing {
         } else {
             setValue = value
         }
-
     }
 
     var removeCalled: Bool = false
-    func remove(collectionName: String, key: String) {
+    func remove(collectionName _: String, key _: String) {
         removeCalled = true
     }
 
     var removeAllCalled: Bool = false
-    func removeAll(collectionName: String) {
+    func removeAll(collectionName _: String) {
         removeAllCalled = true
     }
 }

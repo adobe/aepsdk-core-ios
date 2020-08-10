@@ -3,15 +3,15 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 ///
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
@@ -23,7 +23,7 @@ struct RulesDownloader: RulesLoader {
 
     init(fileUnzipper: Unzipping) {
         self.fileUnzipper = fileUnzipper
-        self.cache = Cache(name: RulesDownloaderConstants.RULES_CACHE_NAME)
+        cache = Cache(name: RulesDownloaderConstants.RULES_CACHE_NAME)
     }
 
     enum RulesDownloaderError: Error {
@@ -36,7 +36,6 @@ struct RulesDownloader: RulesLoader {
     }
 
     func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Data?) -> Void) {
-
         /// 304 - Not Modified support
         var headers = [String: String]()
         if let cachedRules = getCachedRules(rulesUrl: rulesUrl.absoluteString) {
@@ -44,11 +43,11 @@ struct RulesDownloader: RulesLoader {
         }
 
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
-        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { (httpConnection) in
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in
             if let data = httpConnection.data {
                 // Store Zip file in temp directory for unzipping
                 switch self.storeDataInTempDirectory(data: data) {
-                case .success(let url):
+                case let .success(url):
                     // Unzip the rules.json from the zip file in the temp directory and get the rules dict from the json file
                     guard let data = self.unzipRules(at: url) else {
                         completion(nil)
@@ -63,7 +62,7 @@ struct RulesDownloader: RulesLoader {
                     }
                     completion(data)
                     return
-                case .failure(let error):
+                case let .failure(error):
                     Log.warning(label: "rules downloader", error.localizedDescription)
                     completion(nil)
                     return
@@ -75,7 +74,6 @@ struct RulesDownloader: RulesLoader {
 
             completion(nil)
         }
-
     }
 
     ///
@@ -138,7 +136,7 @@ struct RulesDownloader: RulesLoader {
         do {
             let data = try JSONEncoder().encode(cachedRules)
             let cacheEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
-            try self.cache.set(key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
+            try cache.set(key: buildCacheKey(rulesUrl: rulesUrl), entry: cacheEntry)
             return true
         } catch {
             // Handle Error
@@ -156,5 +154,4 @@ struct RulesDownloader: RulesLoader {
         }
         return try? JSONDecoder().decode(CachedRules.self, from: cachedEntry.data)
     }
-
 }

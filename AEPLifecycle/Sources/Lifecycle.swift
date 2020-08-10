@@ -1,17 +1,17 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
-import AEPServices
 import AEPCore
+import AEPServices
+import Foundation
 
 @objc(AEPLifecycle) public class Lifecycle: NSObject, Extension {
     public let name = LifecycleConstants.EXTENSION_NAME
@@ -43,7 +43,7 @@ import AEPCore
     public func onUnregistered() {}
 
     public func readyForEvent(_ event: Event) -> Bool {
-        if event.type == EventType.genericLifecycle && event.source == EventSource.requestContent {
+        if event.type == EventType.genericLifecycle, event.source == EventSource.requestContent {
             let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event)
             return configurationSharedState?.status == .set
         }
@@ -120,7 +120,7 @@ import AEPCore
             LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: date.timeIntervalSince1970,
             LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS,
             LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP: previousStartDate?.timeIntervalSince1970 ?? 0.0,
-            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0.0
+            LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0.0,
         ]
 
         dispatch(event: Event(name: "LifecycleStart", type: EventType.lifecycle, source: EventSource.responseContent, data: eventData))

@@ -1,18 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPServices
 import AEPServicesMocks
+import XCTest
 
 /// Test type to ensure we can cache codable types
 private struct Person: Codable, Equatable {
@@ -21,7 +21,6 @@ private struct Person: Codable, Equatable {
 }
 
 class DiskCacheServiceTests: XCTestCase {
-
     var diskCache = DiskCacheService()
     let CACHE_NAME = "DiskCacheServiceTests"
     let ENTRY_KEY = "testEntryKey"
@@ -81,14 +80,14 @@ class DiskCacheServiceTests: XCTestCase {
         var entries = [CacheEntry]()
 
         // test
-        for i in 0..<count {
+        for i in 0 ..< count {
             let entry = CacheEntry(data: "\(i)".data(using: .utf8)!, expiry: .date(dateOneMinInFuture), metadata: ["metadataKey": "metadataValue"])
             entries.append(entry)
             try! diskCache.set(cacheName: CACHE_NAME, key: "\(i)", entry: entry)
         }
 
         // verify
-        for i in 0..<count {
+        for i in 0 ..< count {
             let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: "\(i)")
             XCTAssertEqual(entries[i], storedEntry)
         }
@@ -146,5 +145,4 @@ class DiskCacheServiceTests: XCTestCase {
         // verify pt. 2
         XCTAssertNil(diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY))
     }
-
 }

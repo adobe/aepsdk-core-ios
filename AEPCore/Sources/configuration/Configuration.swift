@@ -63,7 +63,7 @@ class Configuration: Extension {
 
     /// Check if the next event is requesting identities, if so check if ready, otherwise return true
     /// - Parameter event: an   `Event`
-    func readyForEvent(_ event: Event) -> Bool {
+    func readyForEvent(_: Event) -> Bool {
         return true
     }
 
@@ -85,7 +85,7 @@ class Configuration: Extension {
 
     /// Invoked by the `eventQueue` each time a new lifecycle response event is received
     /// - Parameter event: A lifecycle response event
-    private func receiveLifecycleResponse(event: Event) {
+    private func receiveLifecycleResponse(event _: Event) {
         // Re-fetch the latest config if appId is present.
         // Lifecycle does not load bundled/manual configuration if appId is absent.
         guard let appId = appIdManager.loadAppId(), !appId.isEmpty else {

@@ -1,21 +1,20 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
-import AEPServices
 import AEPCore
+import AEPServices
+import Foundation
 
 /// Represents a type which contains instances variables for the Identity extension
 struct IdentityProperties: Codable {
-
     /// The current Experience Cloud ID
     var mid: MID?
 
@@ -83,9 +82,9 @@ struct IdentityProperties: Codable {
     /// Merges `newCustomIds` into `customerIds` by overwriting duplicate identities with new values in `newCustomIds`, and removes any identifiers with an empty or nil identifier
     /// - Parameter newCustomIds: a list of new custom ids to be merged into 1customerIds
     mutating func mergeAndCleanCustomerIds(_ newCustomerIds: [CustomIdentity]) {
-         // convert array of IDs to a dict of <identifier, ID>, then merge by taking the new ID for duplicate IDs, then convert back into an array
-        customerIds = idListToDict(customerIds).merging(idListToDict(newCustomerIds), uniquingKeysWith: { (_, new) in new }).map {$0.value}
-        customerIds?.removeAll(where: {$0.identifier?.isEmpty ?? true}) // clean all identifiers by removing all that have a nil or empty identifier
+        // convert array of IDs to a dict of <identifier, ID>, then merge by taking the new ID for duplicate IDs, then convert back into an array
+        customerIds = idListToDict(customerIds).merging(idListToDict(newCustomerIds), uniquingKeysWith: { _, new in new }).map { $0.value }
+        customerIds?.removeAll(where: { $0.identifier?.isEmpty ?? true }) // clean all identifiers by removing all that have a nil or empty identifier
     }
 
     /// Returns a dict where the key is the `identifier` of the identity and the value is the `CustomIdentity`

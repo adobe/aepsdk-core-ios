@@ -1,19 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPIdentity
+import XCTest
 
 class URL_IdentityTests: XCTestCase {
-
     // MARK: URL(experienceCloudServer, orgId, identityProperties, dpids) tests
 
     /// Tests that the Identity hit url is constructed properly when all properties are nil
@@ -54,7 +53,7 @@ class URL_IdentityTests: XCTestCase {
         let experienceCloudServer = "dpm.demdex.net"
         let orgId = "testOrg@AdobeOrg"
         let customIds = [CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated),
-                        CustomIdentity(origin: "d_cid_ic_2", type: "DSID_20915_2", identifier: "test_ad_id_2", authenticationState: .loggedOut)]
+                         CustomIdentity(origin: "d_cid_ic_2", type: "DSID_20915_2", identifier: "test_ad_id_2", authenticationState: .loggedOut)]
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test

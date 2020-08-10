@@ -9,14 +9,13 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 class MockUnzipper: Unzipping {
-
     var unzippedResults: [String] = []
     var unzipCalled = false
-    func unzipItem(at sourceURL: URL, to destinationURL: URL) -> [String] {
+    func unzipItem(at _: URL, to _: URL) -> [String] {
         unzipCalled = true
         return unzippedResults
     }

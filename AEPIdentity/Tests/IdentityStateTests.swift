@@ -1,26 +1,26 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
+import AEPCore
 @testable import AEPIdentity
 import AEPServices
-import AEPCore
 import AEPServicesMocks
+import XCTest
 
 class IdentityStateTests: XCTestCase {
-
     var state: IdentityState!
     var mockHitQueue: MockHitQueue {
         return state.hitQueue as! MockHitQueue
     }
+
     var mockDataStore: MockDataStore {
         return ServiceProvider.shared.namedKeyValueService as! MockDataStore
     }
@@ -31,7 +31,6 @@ class IdentityStateTests: XCTestCase {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockPushIdManager = MockPushIDManager()
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
-
     }
 
     // MARK: bootup(...) tests
@@ -43,7 +42,7 @@ class IdentityStateTests: XCTestCase {
         expectation.assertForOverFulfill = true
 
         // test
-        let result = state.bootup(configSharedState: nil) { (_) in
+        let result = state.bootup(configSharedState: nil) { _ in
             expectation.fulfill()
         }
 
@@ -62,7 +61,7 @@ class IdentityStateTests: XCTestCase {
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn]
 
         // test
-        let result = state.bootup(configSharedState: configSharedState) { (_) in
+        let result = state.bootup(configSharedState: configSharedState) { _ in
             expectation.fulfill()
         }
 
@@ -81,7 +80,7 @@ class IdentityStateTests: XCTestCase {
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut]
 
         // test
-        let result = state.bootup(configSharedState: configSharedState) { (_) in
+        let result = state.bootup(configSharedState: configSharedState) { _ in
             expectation.fulfill()
         }
 
@@ -100,7 +99,7 @@ class IdentityStateTests: XCTestCase {
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown]
 
         // test
-        let result = state.bootup(configSharedState: configSharedState) { (_) in
+        let result = state.bootup(configSharedState: configSharedState) { _ in
             expectation.fulfill()
         }
 
@@ -150,8 +149,8 @@ class IdentityStateTests: XCTestCase {
     func testSyncIdentifiersHappyPushID() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
-                         IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
-                         IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         state.lastValidConfig = configSharedState
 
         // test
@@ -213,8 +212,8 @@ class IdentityStateTests: XCTestCase {
     func testSyncIdentifiersAppendsBlobAndLocationHint() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
-                         IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
-                         IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.locationHint = "locHinty"
         props.blob = "blobby"
@@ -330,10 +329,10 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (event) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
             XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
             dispatchedEventExpectation.fulfill()
-        }) { (_, _) in
+        }) { _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -363,9 +362,9 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (_) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { (_, _) in
+        }) { _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -395,9 +394,9 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (_) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { (_, _) in
+        }) { _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -427,9 +426,9 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { (_) in
+        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { (_, _) in
+        }) { _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -456,9 +455,9 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: nil), response: nil, eventDispatcher: { (_) in
+        state.handleHitResponse(hit: DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: nil), response: nil, eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { (_, _) in
+        }) { _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -480,9 +479,9 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { (_) in
+        state.processPrivacyChange(event: event, eventDispatcher: { _ in
             XCTFail("No events should be dispatched")
-        }) { (_, _) in
+        }) { _, _ in
             XCTFail("Shared state should not be updated")
         }
 
@@ -504,9 +503,9 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { (_) in
+        state.processPrivacyChange(event: event, eventDispatcher: { _ in
             XCTFail("No events should be dispatched")
-        }) { (_, _) in
+        }) { _, _ in
             XCTFail("Shared state should not be updated")
         }
 
@@ -529,9 +528,9 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { (_) in
+        state.processPrivacyChange(event: event, eventDispatcher: { _ in
             XCTFail("No events should be dispatched")
-        }) { (_, _) in
+        }) { _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -554,12 +553,12 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { (event) in
+        state.processPrivacyChange(event: event, eventDispatcher: { event in
             let forceSync = event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
             let isSync = event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
             XCTAssertTrue(forceSync && isSync)
             dispatchEventExpectation.fulfill()
-        }) { (_, _) in
+        }) { _, _ in
             XCTFail("No shared state should be shared")
         }
 
@@ -581,12 +580,12 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { (event) in
+        state.processPrivacyChange(event: event, eventDispatcher: { event in
             let forceSync = event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
             let isSync = event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
             XCTAssertTrue(forceSync && isSync)
             dispatchEventExpectation.fulfill()
-        }) { (_, _) in
+        }) { _, _ in
             XCTFail("No shared state should be shared")
         }
 
@@ -596,7 +595,6 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(mockHitQueue.calledSuspend) // we should have suspended the hit queue
         XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should change to opt in
     }
-
 }
 
 private extension Event {

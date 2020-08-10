@@ -1,17 +1,17 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPCore
 import AEPServices
+import Foundation
 
 @objc(AEPIdentity) public class Identity: NSObject, Extension {
     public let runtime: ExtensionRuntime
@@ -23,6 +23,7 @@ import AEPServices
     private(set) var state: IdentityState?
 
     // MARK: Extension
+
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
         super.init()
@@ -57,7 +58,7 @@ import AEPServices
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
-        } else if event.type == EventType.configuration && event.source == EventSource.requestIdentity {
+        } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         }
 
@@ -128,6 +129,7 @@ import AEPServices
     }
 
     // MARK: Event Handlers
+
     private func processAppendToUrl(baseUrl: String, event: Event) {
         guard let properties = state?.identityProperties else { return }
         guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
@@ -159,6 +161,7 @@ import AEPServices
     }
 
     // MARK: Network Response Handler
+
     /// Invoked by the `IdentityHitProcessor` each time we receive a network response
     /// - Parameters:
     ///   - entity: The `DataEntity` that was processed by the hit processor
@@ -193,5 +196,4 @@ import AEPServices
 
         return privacyStatus == .optedOut
     }
-
 }
