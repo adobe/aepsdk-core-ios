@@ -1,1 +1,1 @@
---disable redundantReturn, anyObjectProtocol
+--disable redundantReturn, anyObjectProtocol, preferKeyPath, elseOnSameLine, wrapMultilineStatementBraces, 
