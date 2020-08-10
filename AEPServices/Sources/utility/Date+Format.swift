@@ -13,7 +13,7 @@ import Foundation
 
 public extension Date {
     func getUnixTimeInSeconds() -> Int64 {
-        return Int64(self.timeIntervalSince1970)
+        return Int64(timeIntervalSince1970)
     }
 
     func getRFC822Date() -> String {

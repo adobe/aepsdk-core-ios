@@ -26,11 +26,11 @@ public class DataEntity: NSObject {
     /// - Parameters:
     ///   - data: a JSON-encoded representation for `DataEntity`
     public init(data: Data?) {
-        self.uniqueIdentifier = UUID().uuidString
-        self.timestamp = Date()
+        uniqueIdentifier = UUID().uuidString
+        timestamp = Date()
         self.data = data
     }
-    
+
     /// Generates a new `DataEntity`
     /// - Parameters:
     ///   - uniqueIdentifier: a string identifier for `DataEntity`

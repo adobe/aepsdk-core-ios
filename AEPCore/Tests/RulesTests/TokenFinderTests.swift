@@ -51,7 +51,7 @@ class TokenFinderTests: XCTestCase {
             return
         }
         /// Then:  return `Int` value less then  100000000
-        XCTAssertTrue(randomInt < 100000000)
+        XCTAssertTrue(randomInt < 100_000_000)
     }
 
     func testGetTokenValue_url() {

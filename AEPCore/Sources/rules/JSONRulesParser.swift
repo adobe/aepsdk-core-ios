@@ -79,9 +79,8 @@ class JSONCondition: Codable {
                                  "sw": "startsWith",
                                  "ew": "endsWith",
                                  "ex": "exists",
-                                 "nx": "notExists"
-    ]
-    
+                                 "nx": "notExists"]
+
     var type: ConditionType
     var definition: JSONDefinition
     func convert() -> Evaluable? {
@@ -117,7 +116,7 @@ class JSONCondition: Codable {
     }
 
     func convert(key: String, matcher: String, anyCodable: AnyCodable) -> Evaluable? {
-        guard let matcher = JSONCondition.matcherMapping[matcher] else{
+        guard let matcher = JSONCondition.matcherMapping[matcher] else {
             return nil
         }
         let key = "{{\(key)}}"
@@ -152,7 +151,6 @@ class JSONCondition: Codable {
     }
 }
 
-
 struct JSONDefinition: Codable {
     let logic: String?
     let conditions: [JSONCondition]?
@@ -181,7 +179,7 @@ struct JSONConsequence: Codable {
         id = try? container.decode(String.self, forKey: .id)
         type = try? container.decode(String.self, forKey: .type)
         detail = try? container.decode(AnyCodable.self, forKey: .detail)
-        
+
         if let detailDictionaryValue = detail?.dictionaryValue {
             detailDict = detailDictionaryValue
         } else {

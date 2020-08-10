@@ -9,26 +9,25 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import Compression
+import Foundation
 
 /// A sequence of uncompressed or compressed ZIP entries.
 ///
 /// You use a `ZipArchive` to read existing ZIP files.
 ///
 /// A `ZipArchive` is a sequence of ZipEntries. You can
-/// iterate over an archive using a `for`-`in` loop to get access to individual `ZipEntry` objects	
+/// iterate over an archive using a `for`-`in` loop to get access to individual `ZipEntry` objects
 final class ZipArchive: Sequence {
-    
     /// An unsigned 32-Bit Integer representing a checksum.
     typealias CRC32 = UInt32
-    
+
     /// a custom handler that consumes a `data` object containing partial entry data.
     /// - Parameters:
     ///   - data: a chunk of `data` to consume.
     /// - Throws: can throw to indicate errors during data consumption.
     typealias EntryDataConsumer = (_ data: Data) throws -> Void
-    
+
     /// A custom handler that receives a position and a size that can be used to provide data from an arbitrary source.
     /// - Parameters:
     ///   - position: The current read position.
@@ -36,7 +35,7 @@ final class ZipArchive: Sequence {
     /// - Returns: A chunk of `Data`.
     /// - Throws: Can throw to indicate errors in the data source.
     typealias Provider = (_ position: Int, _ size: Int) throws -> Data
-    
+
     typealias LocalFileHeader = ZipEntry.LocalFileHeader
     typealias DataDescriptor = ZipEntry.DataDescriptor
     typealias CentralDirectoryStructure = ZipEntry.CentralDirectoryStructure
@@ -54,17 +53,16 @@ final class ZipArchive: Sequence {
         /// Thrown when an extract operation was canceled.
         case cancelledOperation
     }
-    
+
     private let LOG_PREFIX = "ZipArchive"
-    
+
     /// An error that occurs during decompression
     enum DecompressionError: Error {
         case invalidStream
         case corruptedData
     }
-    
-    struct EndOfCentralDirectoryRecord: HeaderDataSerializable {
 
+    struct EndOfCentralDirectoryRecord: HeaderDataSerializable {
         let endOfCentralDirectorySignature = UInt32(FileUnzipperConstants.endOfCentralDirectorySignature)
         let numberOfDisk: UInt16
         let numberOfDiskStart: UInt16
@@ -96,7 +94,7 @@ final class ZipArchive: Sequence {
             Log.warning(label: LOG_PREFIX, "Unable to obtain end of central directory record for archive file at \(archiveFile.debugDescription)")
             return nil
         }
-        
+
         self.url = url
         self.archiveFile = archiveFile
         self.endOfCentralDirectoryRecord = endOfCentralDirectoryRecord
@@ -105,7 +103,7 @@ final class ZipArchive: Sequence {
     deinit {
         fclose(self.archiveFile)
     }
-    
+
     /// Read a `ZipEntry` from the receiver and write it to `url`.
     ///
     /// - Parameters:
@@ -138,22 +136,24 @@ final class ZipArchive: Sequence {
             // Set closure to handle writing data chunks to destination file
             let consumer = { try ZipArchive.write(chunk: $0, to: destinationFile) }
             // Set file pointer position to the given entry's data offset
-            fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
-            checksum = try self.readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
+            fseek(archiveFile, entry.dataOffset, SEEK_SET)
+            checksum = try readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
         case .directory:
             let consumer = { (_: Data) in
                 try fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
             }
-            fseek(self.archiveFile, entry.dataOffset, SEEK_SET)
+            fseek(archiveFile, entry.dataOffset, SEEK_SET)
             try consumer(Data())
         }
         let attributes = FileManager.attributes(from: entry)
         try fileManager.setAttributes(attributes, ofItemAtPath: url.path)
         return checksum
     }
-    
+
     ///
-    /// MARK: - Sequence Protocol makeIterator implementation
+
+    // MARK: - Sequence Protocol makeIterator implementation
+
     ///
     func makeIterator() -> AnyIterator<ZipEntry> {
         let endOfCentralDirectoryRecord = self.endOfCentralDirectoryRecord
@@ -162,12 +162,12 @@ final class ZipArchive: Sequence {
         return AnyIterator {
             guard index < Int(endOfCentralDirectoryRecord.totalNumberOfEntriesInCentralDirectory) else { return nil }
             guard let centralDirStruct: CentralDirectoryStructure = ZipArchive.readStruct(from: self.archiveFile,
-                                                                                    at: directoryIndex) else {
-                                                                                        return nil
+                                                                                          at: directoryIndex) else {
+                return nil
             }
             let offset = Int(centralDirStruct.relativeOffsetOfLocalHeader)
             guard let localFileHeader: LocalFileHeader = ZipArchive.readStruct(from: self.archiveFile,
-                                                                         at: offset) else { return nil }
+                                                                               at: offset) else { return nil }
             var dataDescriptor: DataDescriptor?
             if centralDirStruct.usesDataDescriptor {
                 let additionalSize = Int(localFileHeader.fileNameLength + localFileHeader.extraFieldLength)
@@ -186,11 +186,13 @@ final class ZipArchive: Sequence {
                             localFileHeader: localFileHeader, dataDescriptor: dataDescriptor)
         }
     }
-    
+
     //
-    //    MARK: - Helpers
+
+    // MARK: - Helpers
+
     //
-    
+
     ///
     /// Decompresses the compressed ZipEntry and returns the checksum
     /// - Parameters:
@@ -201,8 +203,8 @@ final class ZipArchive: Sequence {
     private func readCompressed(entry: ZipEntry, bufferSize: UInt32, with consumer: EntryDataConsumer) throws -> CRC32 {
         let size = Int(entry.centralDirectoryStructure.compressedSize)
         return try decompress(size: size, bufferSize: Int(bufferSize), provider: { (_, chunkSize) -> Data in
-                                    return try ZipArchive.readChunk(of: chunkSize, from: self.archiveFile)
-        }, consumer: { (data) in
+            try ZipArchive.readChunk(of: chunkSize, from: self.archiveFile)
+        }, consumer: { data in
             try consumer(data)
         })
     }
@@ -216,7 +218,7 @@ final class ZipArchive: Sequence {
         let fileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: url.path)
         return fopen(fileSystemRepresentation, "rb")
     }
-    
+
     ///
     /// Gets the end of central directory record for the given file
     /// - Parameter file: The c style pointer to the file
@@ -230,7 +232,7 @@ final class ZipArchive: Sequence {
         // Get the length of the file in bytes
         let archiveLength = ftell(file)
         // Find the end of central directory
-        while directoryEnd == 0 && index < FileUnzipperConstants.maxDirectoryEndOffset && index <= archiveLength {
+        while directoryEnd == 0, index < FileUnzipperConstants.maxDirectoryEndOffset, index <= archiveLength {
             fseek(file, archiveLength - index, SEEK_SET)
             var potentialDirectoryEndTag: UInt32 = UInt32()
             fread(&potentialDirectoryEndTag, 1, MemoryLayout<UInt32>.size, file)
@@ -242,7 +244,7 @@ final class ZipArchive: Sequence {
         }
         return nil
     }
-    
+
     /// Decompress the output of `provider` and pass it to `consumer`.
     /// - Parameters:
     ///   - size: The compressed size of the data to be decompressed.
@@ -268,7 +270,7 @@ final class ZipArchive: Sequence {
         repeat {
             if stream.src_size == 0 {
                 do {
-                    sourceData = try provider(position, Swift.min((size - position), bufferSize))
+                    sourceData = try provider(position, Swift.min(size - position, bufferSize))
                     if let sourceData = sourceData {
                         position += sourceData.count
                         stream.src_size = sourceData.count
@@ -276,7 +278,7 @@ final class ZipArchive: Sequence {
                 } catch { throw error }
             }
             if let sourceData = sourceData {
-                sourceData.withUnsafeBytes { (rawBufferPointer) in
+                sourceData.withUnsafeBytes { rawBufferPointer in
                     if let baseAddress = rawBufferPointer.baseAddress {
                         let pointer = baseAddress.assumingMemoryBound(to: UInt8.self)
                         stream.src_ptr = pointer.advanced(by: sourceData.count - stream.src_size)
@@ -297,7 +299,7 @@ final class ZipArchive: Sequence {
         } while status == COMPRESSION_STATUS_OK
         return crc32
     }
-    
+
     /// Calculate the `CRC32` checksum of the receiver.
     ///
     /// - Parameter checksum: The starting seed.
@@ -305,15 +307,15 @@ final class ZipArchive: Sequence {
     private func calcChecksum(data: Data, checksum: CRC32) -> CRC32 {
         // The typecast is necessary on 32-bit platforms because of
         // https://bugs.swift.org/browse/SR-1774
-        let mask = 0xffffffff as UInt32
-        let bufferSize = data.count/MemoryLayout<UInt8>.size
+        let mask = 0xFFFF_FFFF as UInt32
+        let bufferSize = data.count / MemoryLayout<UInt8>.size
         var result = checksum ^ mask
         FileUnzipperConstants.crcTable.withUnsafeBufferPointer { crcTablePointer in
             data.withUnsafeBytes { bufferPointer in
                 let bytePointer = bufferPointer.bindMemory(to: UInt8.self)
-                for bufferIndex in 0..<bufferSize {
+                for bufferIndex in 0 ..< bufferSize {
                     let byte = bytePointer[bufferIndex]
-                    let index = Int((result ^ UInt32(byte)) & 0xff)
+                    let index = Int((result ^ UInt32(byte)) & 0xFF)
                     result = (result >> 8) ^ crcTablePointer[index]
                 }
             }
@@ -334,10 +336,10 @@ extension ZipArchive {
     /// - Parameter start: The start position to start scanning from
     /// - Returns: The scanned subdata as T
     static func scanValue<T>(start: Int, data: Data) -> T {
-        let subdata = data.subdata(in: start..<start+MemoryLayout<T>.size)
+        let subdata = data.subdata(in: start ..< start + MemoryLayout<T>.size)
         return subdata.withUnsafeBytes { $0.load(as: T.self) }
     }
-    
+
     ///
     /// Initializes and returns a DataSerializable from a given file pointer and offset
     /// - Parameters:
@@ -346,15 +348,15 @@ extension ZipArchive {
     /// - Returns: The initialized DataSerializable
     static func readStruct<T: HeaderDataSerializable>(from file: UnsafeMutablePointer<FILE>, at offset: Int) -> T? {
         fseek(file, offset, SEEK_SET)
-        guard let data = try? self.readChunk(of: T.size, from: file) else {
+        guard let data = try? readChunk(of: T.size, from: file) else {
             return nil
         }
         let structure = T(data: data, additionalDataProvider: { (additionalDataSize) -> Data in
-            return try self.readChunk(of: additionalDataSize, from: file)
+            try self.readChunk(of: additionalDataSize, from: file)
         })
         return structure
     }
-    
+
     ///
     /// Reads a chunk of data of the given size from the file pointer
     /// - Parameters:
@@ -369,9 +371,9 @@ extension ZipArchive {
         if error > 0 {
             throw DataError.unreadableFile
         }
-        return Data(bytesNoCopy: bytes, count: bytesRead, deallocator: .custom({ buf, _ in buf.deallocate() }))
+        return Data(bytesNoCopy: bytes, count: bytesRead, deallocator: .custom { buf, _ in buf.deallocate() })
     }
-    
+
     ///
     /// Writes the chunk of data to the given C file pointer
     /// - Parameters:
@@ -379,7 +381,7 @@ extension ZipArchive {
     ///     - file: The C file pointer to write the data to
     /// - throws an error
     static func write(chunk: Data, to file: UnsafeMutablePointer<FILE>) throws {
-        chunk.withUnsafeBytes { (rawBufferPointer) in
+        chunk.withUnsafeBytes { rawBufferPointer in
             if let baseAddress = rawBufferPointer.baseAddress, rawBufferPointer.count > 0 {
                 let pointer = baseAddress.assumingMemoryBound(to: UInt8.self)
                 _ = fwrite(pointer, 1, chunk.count, file)
@@ -396,15 +398,15 @@ extension ZipArchive.EndOfCentralDirectoryRecord {
     init?(data: Data, additionalDataProvider provider: (Int) throws -> Data) {
         guard data.count == ZipArchive.EndOfCentralDirectoryRecord.size else { return nil }
         guard ZipArchive.scanValue(start: 0, data: data) == endOfCentralDirectorySignature else { return nil }
-        self.numberOfDisk = ZipArchive.scanValue(start: 4, data: data)
-        self.numberOfDiskStart = ZipArchive.scanValue(start: 6, data: data)
-        self.totalNumberOfEntriesOnDisk = ZipArchive.scanValue(start: 8, data: data)
-        self.totalNumberOfEntriesInCentralDirectory = ZipArchive.scanValue(start: 10, data: data)
-        self.sizeOfCentralDirectory = ZipArchive.scanValue(start: 12, data: data)
-        self.offsetToStartOfCentralDirectory = ZipArchive.scanValue(start: 16, data: data)
-        self.zipFileCommentLength = ZipArchive.scanValue(start: 20, data: data)
-        guard let commentData = try? provider(Int(self.zipFileCommentLength)) else { return nil }
-        guard commentData.count == Int(self.zipFileCommentLength) else { return nil }
-        self.zipFileCommentData = commentData
+        numberOfDisk = ZipArchive.scanValue(start: 4, data: data)
+        numberOfDiskStart = ZipArchive.scanValue(start: 6, data: data)
+        totalNumberOfEntriesOnDisk = ZipArchive.scanValue(start: 8, data: data)
+        totalNumberOfEntriesInCentralDirectory = ZipArchive.scanValue(start: 10, data: data)
+        sizeOfCentralDirectory = ZipArchive.scanValue(start: 12, data: data)
+        offsetToStartOfCentralDirectory = ZipArchive.scanValue(start: 16, data: data)
+        zipFileCommentLength = ZipArchive.scanValue(start: 20, data: data)
+        guard let commentData = try? provider(Int(zipFileCommentLength)) else { return nil }
+        guard commentData.count == Int(zipFileCommentLength) else { return nil }
+        zipFileCommentData = commentData
     }
 }

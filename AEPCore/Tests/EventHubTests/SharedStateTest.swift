@@ -1,21 +1,20 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import XCTest
 
 @testable import AEPCore
 
 class SharedStateTest: XCTestCase {
-
     private var sharedState: SharedState = SharedState()
 
     // helper function
@@ -27,8 +26,7 @@ class SharedStateTest: XCTestCase {
         sharedState = SharedState()
     }
 
-    override func tearDown() {
-    }
+    override func tearDown() {}
 
     func testSetVersion() {
         sharedState.set(version: 0, data: SharedStateTestHelper.ZERO)
@@ -80,10 +78,10 @@ class SharedStateTest: XCTestCase {
     }
 
     func testUpdatePendingInterleaved() {
-        sharedState.set(version:0, data: SharedStateTestHelper.ZERO)
-        sharedState.set(version:1, data: SharedStateTestHelper.ONE)
-        sharedState.addPending(version:2)
-        sharedState.set(version:3, data: SharedStateTestHelper.THREE)
+        sharedState.set(version: 0, data: SharedStateTestHelper.ZERO)
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+        sharedState.addPending(version: 2)
+        sharedState.set(version: 3, data: SharedStateTestHelper.THREE)
 
         sharedState.updatePending(version: 2, data: SharedStateTestHelper.TWO)
 
@@ -94,7 +92,7 @@ class SharedStateTest: XCTestCase {
     }
 
     func testBackwardLookingResolve() {
-        sharedState.set(version:10, data: SharedStateTestHelper.TEN)
+        sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
 
         validateSharedState(10, "ten")
         validateSharedState(11, "ten")
@@ -102,7 +100,7 @@ class SharedStateTest: XCTestCase {
     }
 
     func testForwardLookingResolve() {
-        sharedState.set(version:10, data: SharedStateTestHelper.TEN)
+        sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
 
         validateSharedState(10, "ten")
         validateSharedState(9, "ten")
@@ -111,9 +109,9 @@ class SharedStateTest: XCTestCase {
     }
 
     func testMiddleResolve() {
-        sharedState.set(version:1, data: SharedStateTestHelper.ONE)
-        sharedState.set(version:5, data: SharedStateTestHelper.FIVE)
-        sharedState.set(version:10, data: SharedStateTestHelper.TEN)
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+        sharedState.set(version: 5, data: SharedStateTestHelper.FIVE)
+        sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
 
         validateSharedState(4, "one")
         validateSharedState(5, "five")
@@ -135,8 +133,8 @@ class SharedStateTest: XCTestCase {
 
     func testAddPerformance() {
         // This is an example of a performance test case.
-        self.measure {
-            for version in 1...1000 {
+        measure {
+            for version in 1 ... 1000 {
                 sharedState.set(version: version, data: SharedStateTestHelper.ZERO)
             }
             // Put the code you want to measure the time of here.
@@ -144,15 +142,14 @@ class SharedStateTest: XCTestCase {
     }
 
     func testResolvePerformance() {
-        self.measure {
-            for version in 1...1000 {
+        measure {
+            for version in 1 ... 1000 {
                 sharedState.set(version: version, data: SharedStateTestHelper.ZERO)
             }
 
-            for version in 1...1000 {
+            for version in 1 ... 1000 {
                 _ = sharedState.resolve(version: version)
             }
         }
     }
-
 }

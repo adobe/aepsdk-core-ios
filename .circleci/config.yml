@@ -18,7 +18,18 @@ jobs:
 
     steps:
       - checkout
-
+      - run:
+          name: Install realm/SwiftLint
+          command: brew install swiftlint
+      - run: 
+          name: Swift Linting
+          command: swiftlint lint
+      - run:
+          name: Install nicklockwood/SwiftFormat
+          command: brew install swiftformat
+      - run: 
+          name: Swift Formating
+          command: swiftformat . --lint --swiftversion 5.2
       # pre-start the simulator to prevent timeouts
       - run:
           name: Pre-start Simulator

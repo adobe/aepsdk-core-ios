@@ -1,23 +1,23 @@
-///*
-//Copyright 2020 Adobe. All rights reserved.
-//This file is licensed to you under the Apache License, Version 2.0 (the "License");
-//you may not use this file except in compliance with the License. You may obtain a copy
-//of the License at http://www.apache.org/licenses/LICENSE-2.0
+/// *
+// Copyright 2020 Adobe. All rights reserved.
+// This file is licensed to you under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License. You may obtain a copy
+// of the License at http://www.apache.org/licenses/LICENSE-2.0
 //
-//Unless required by applicable law or agreed to in writing, software distributed under
-//the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-//OF ANY KIND, either express or implied. See the License for the specific language
-//governing permissions and limitations under the License.
-//*/
+// Unless required by applicable law or agreed to in writing, software distributed under
+// the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+// OF ANY KIND, either express or implied. See the License for the specific language
+// governing permissions and limitations under the License.
+// */
 //
-//import XCTest
-//@testable import AEPCore
-//import AEPServices
+// import XCTest
+// @testable import AEPCore
+// import AEPServices
 //
 // TODO: rewrite
 // TODO: Move getSdkIdentities functional tests to Identity functional tests
 ///// Functional tests for the Configuration extension
-//class ConfigurationFunctionalTests: XCTestCase {
+// class ConfigurationFunctionalTests: XCTestCase {
 //
 //    override func setUp() {
 //        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
@@ -583,4 +583,4 @@
 //        // verify
 //        wait(for: [expectation], timeout: 5.0)
 //    }
-//}
+// }

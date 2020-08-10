@@ -9,19 +9,18 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 public class TestableNetworkService: Networking {
-    
-    public var mockRespsonse: (data:Data?, respsonse: HTTPURLResponse?, error: Error?)?
-    public var requests:[NetworkRequest] = []
-    
-    public init(){}
-    
+    public var mockRespsonse: (data: Data?, respsonse: HTTPURLResponse?, error: Error?)?
+    public var requests: [NetworkRequest] = []
+
+    public init() {}
+
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
         requests.append(networkRequest)
-        
+
         let httpConnection = HttpConnection(data: mockRespsonse?.data, response: mockRespsonse?.respsonse, error: mockRespsonse?.error)
         completionHandler!(httpConnection)
     }

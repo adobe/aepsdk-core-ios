@@ -9,34 +9,31 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 class MockDiskCache: Caching {
-    
     var mockCache: [String: CacheEntry] = [:]
-    
+
     enum MockDiskCacheError: Error {
         case setFailure
     }
-    
+
     var shouldThrow: Bool = false
     var setCalled = false
-    func set(cacheName: String, key: String, entry: CacheEntry) throws {
+    func set(cacheName _: String, key: String, entry: CacheEntry) throws {
         setCalled = true
         if shouldThrow {
             throw MockDiskCacheError.setFailure
         }
         mockCache[key] = entry
     }
-    
+
     var getCalled = false
-    func get(cacheName: String, key: String) -> CacheEntry? {
+    func get(cacheName _: String, key: String) -> CacheEntry? {
         getCalled = true
         return mockCache[key]
     }
-    
-    func remove(cacheName: String, key: String) throws {
-        
-    }
+
+    func remove(cacheName _: String, key _: String) throws {}
 }
