@@ -18,7 +18,12 @@ jobs:
 
     steps:
       - checkout
-
+      - run:
+          name: Install realm/SwiftLint
+          command: brew install swiftlint
+      - run: 
+          name: Swift Linting
+          command: swiftlint lint
       # pre-start the simulator to prevent timeouts
       - run:
           name: Pre-start Simulator
