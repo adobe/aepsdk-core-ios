@@ -128,8 +128,8 @@ struct LaunchRulesEngine {
                 }
             }
         }
-        
-        return event.replacingEventData(with: eventData)
+        event.data = eventData
+        return event
     }
 
     /// Replace tokens inside the provided consequence with the right value
