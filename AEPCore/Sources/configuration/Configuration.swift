@@ -43,7 +43,6 @@ class Configuration: Extension {
         registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
         registerListener(type: EventType.lifecycle, source: EventSource.responseContent, listener: receiveLifecycleResponse(event:))
 
-        let pendingResolver = createPendingSharedState(event: nil)
 
         // If we have an appId stored in persistence, kick off the configureWithAppId event
         if let appId = appIdManager.loadAppId(), !appId.isEmpty {
@@ -55,7 +54,7 @@ class Configuration: Extension {
         if !config.isEmpty {
             let responseEvent = Event(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: config)
             dispatch(event: responseEvent)
-            pendingResolver(config)
+            createSharedState(data: config, event: nil)
             // notify rules engine to load cached rules
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String{
                 rulesEngine.loadCachedRules(for: rulesURLString)
@@ -217,7 +216,7 @@ class Configuration: Extension {
             rulesEngine.loadRemoteRules(from: rulesURLString)
         }
     } 
-    
+
     // MARK: Helpers
 
     /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId

@@ -48,7 +48,7 @@ struct RulesDownloader: RulesLoader {
                 completion(self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable)
                 return
             }
-            
+
             guard let data = httpConnection.data else{
                 completion(nil)
                 return

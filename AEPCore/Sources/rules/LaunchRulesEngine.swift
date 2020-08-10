@@ -38,11 +38,11 @@ struct LaunchRulesEngine {
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
     }
-    
+
     func trace(with tracer: @escaping RulesTracer) {
         rulesEngine.trace(with: tracer)
     }
-    
+
     /// Downloads the rules from the remote server
     /// - Parameter urlString: the url of the remote rules
     func loadRemoteRules(from urlString: String) {
@@ -54,7 +54,7 @@ struct LaunchRulesEngine {
             guard let data = data else {
                 return
             }
-            
+
             guard let rules = JSONRulesParser.parse(data) else {
                 return
             }
@@ -62,11 +62,11 @@ struct LaunchRulesEngine {
                 self.rulesEngine.clearRules()
                 self.rulesEngine.addRules(rules: rules)
                 Log.debug(label: RulesConstants.LOG_TAG, "Rules load from remote (count: \(rules.count))")
-                        
+
             }
         }
     }
-    
+
     /// Reads the cached rules
     /// - Parameter urlString: the url of the remote rules
     func loadCachedRules(for urlString: String) {
@@ -88,7 +88,7 @@ struct LaunchRulesEngine {
             Log.debug(label: RulesConstants.LOG_TAG, "Rules load from cache (count: \(rules.count))")
         }
     }
-    
+
     /// Evaluates all the current rules against the supplied `Event`.
     /// - Parameters:
     ///   - event: the `Event` against which to evaluate the rules
@@ -141,7 +141,7 @@ struct LaunchRulesEngine {
         let dict = replaceToken(in: consequence.detailDict, data: data)
         return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }
-    
+
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
         var mutableDict = dict
         for (key, value) in mutableDict {
