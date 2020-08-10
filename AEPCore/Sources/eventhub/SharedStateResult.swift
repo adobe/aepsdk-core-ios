@@ -13,8 +13,8 @@ import Foundation
 
 /// Contains the status and value for a given shared state
 @objc(AEPSharedStateResult) public class SharedStateResult: NSObject {
-    public let status: SharedStateStatus
-    public let value: [String: Any]?
+    @objc public let status: SharedStateStatus
+    @objc public let value: [String: Any]?
 
     /// Creates a new shared state result with given status and value
     /// - Parameters:
