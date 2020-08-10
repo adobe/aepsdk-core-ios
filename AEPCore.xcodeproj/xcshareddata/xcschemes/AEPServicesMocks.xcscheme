@@ -11,7 +11,7 @@
             <ActionContent
                title = "Run Script"
                scriptText = "if which swiftlint &gt;/dev/null; then&#10;   cd ${PROJECT_DIR}&#10;   swiftformat .&#10;else&#10;echo &quot;warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat&quot;&#10;fi&#10;"
-               shellToInvoke = "/usr/local/bin/zsh">
+               shellToInvoke = "/bin/zsh">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
