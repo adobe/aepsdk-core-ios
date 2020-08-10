@@ -141,4 +141,11 @@ public class Signal: NSObject, Extension {
 
         return privacyStatus == .optedOut
     }
+
+    // MARK: - Testing Helpers
+    #if DEBUG
+    func setHitQueue(hitQueue: HitQueuing) {
+        self.hitQueue = hitQueue
+    }
+    #endif
 }

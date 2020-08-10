@@ -20,19 +20,33 @@ import AEPServicesMocks
 
 class SignalTests: XCTestCase {
     var signal: Signal!
-    var mockRuntime: TestableExtensionRuntime!
+    var mockHitQueue: MockHitQueue!
     var mockNetworkService: MockNetworkServiceOverrider!
+    var mockOpenURLService: MockU
+    var mockRuntime: TestableExtensionRuntime!
     
-    override func setUpWithError() throws {
+    // before all
+    override class func setUp() {
         ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
-        
+    }
+    
+    // before each
+    override func setUp() {
+        mockHitQueue = MockHitQueue(processor: SignalHitProcessor())
         mockRuntime = TestableExtensionRuntime()
         mockNetworkService = ServiceProvider.shared.networkService as? MockNetworkServiceOverrider
         
         signal = Signal(runtime: mockRuntime)
         signal.onRegistered()
+        signal.setHitQueue(hitQueue: mockHitQueue)
     }
+    
+    // after each
+    override func tearDown() {}
+    
+    // after all
+    override class func tearDown() {}
         
     // MARK: - handleConfigurationResponse(event: Event)
     /// on privacy opt-out, the hit queue should be cleared
@@ -97,7 +111,6 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        
         XCTAssertEqual(1, signal.hitQueue.count())
     }
     
@@ -106,12 +119,16 @@ class SignalTests: XCTestCase {
     /// an event without a valid configuration shared state or an opted-out privacy status should be ignored
     func testRulesEngineResponseEventShouldBeIgnored() throws {
         // setup
-        
+        let configEvent = getConfigSharedStateEvent(privacy: .optedIn)
+        mockRuntime.simulateSharedState(for: (SignalConstants.Configuration.NAME, configEvent),
+                                        data: (configEvent.data!, .set))
+        let rulesEvent = getRulesResponseEvent(type: "url")
         
         // test
-        
+        mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
+        XCTAssert
     }
     
     // MARK: - Helpers
