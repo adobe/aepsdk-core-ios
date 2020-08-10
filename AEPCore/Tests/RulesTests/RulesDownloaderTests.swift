@@ -78,7 +78,7 @@ class RulesDownloaderTests: XCTestCase {
         })
 
         wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(rulesData, loadedRulesData)
+        XCTAssertNil(loadedRulesData)
         XCTAssertFalse(mockUnzipper.unzipCalled)
         XCTAssertTrue(cache.getCalled)
         XCTAssertFalse(cache.setCalled)

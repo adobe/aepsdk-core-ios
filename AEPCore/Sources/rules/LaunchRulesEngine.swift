@@ -39,6 +39,8 @@ struct LaunchRulesEngine {
         self.extensionRuntime = extensionRuntime
     }
 
+    /// Register a `RulesTracer`
+    /// - Parameter tracer: a `RulesTracer` closure to know result of rules evaluation
     func trace(with tracer: @escaping RulesTracer) {
         rulesEngine.trace(with: tracer)
     }

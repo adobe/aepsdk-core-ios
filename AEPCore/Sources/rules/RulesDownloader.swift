@@ -45,11 +45,11 @@ struct RulesDownloader: RulesLoader {
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
         ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in
             if httpConnection.responseCode == 304 {
-                completion(self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable)
+                completion(nil)
                 return
             }
 
-            guard let data = httpConnection.data else{
+            guard let data = httpConnection.data else {
                 completion(nil)
                 return
             }
