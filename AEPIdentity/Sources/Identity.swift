@@ -1,17 +1,17 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPCore
 import AEPServices
+import Foundation
 
 @objc(AEPIdentity) public class Identity: NSObject, Extension {
     public let runtime: ExtensionRuntime
@@ -21,12 +21,13 @@ import AEPServices
     public static let extensionVersion = IdentityConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     private(set) var state: IdentityState?
-    
+
     // MARK: Extension
+
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
         super.init()
-        
+
         guard let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
             Log.error(label: "\(name):\(#function)", "Failed to create Data Queue, Identity could not be initialized")
             return
@@ -43,7 +44,7 @@ import AEPServices
         registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
         registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
-        
+
         let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value
         if state?.bootup(configSharedState: configSharedState, eventDispatcher: dispatch(event:)) ?? false, let props = state?.identityProperties {
             // privacy was opt-out, share state
@@ -57,11 +58,11 @@ import AEPServices
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
-        } else if event.type == EventType.configuration && event.source == EventSource.requestIdentity {
+        } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         }
 
-        return getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
+        return getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
     }
 
     // MARK: Event Listeners
@@ -71,7 +72,7 @@ import AEPServices
             Log.debug(label: "\(name):\(#function)", "Ignore Identity Request event, user is currently opted-out")
             return
         }
-        
+
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)
@@ -84,7 +85,7 @@ import AEPServices
             processIdentifiersRequest(event: event)
         }
     }
-    
+
     /// Handles the configuration response event
     /// - Parameter event: the configuration response event
     private func handleConfigurationResponse(event: Event) {
@@ -112,7 +113,7 @@ import AEPServices
             Log.debug(label: "\(name):\(#function)", "Ignore Configuration Identity event, user is currently opted-out")
             return
         }
-        
+
         var mobileIdentities = MobileIdentities()
         mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
 
@@ -123,14 +124,15 @@ import AEPServices
 
         let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
         let eventData = [IdentityConstants.Configuration.ALL_IDENTIFIERS: identitiesStr]
-        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: EventType.configuration, source: EventSource.responseIdentity, data: eventData as [String : Any])
+        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: EventType.configuration, source: EventSource.responseIdentity, data: eventData as [String: Any])
         dispatch(event: responseEvent)
     }
 
     // MARK: Event Handlers
+
     private func processAppendToUrl(baseUrl: String, event: Event) {
         guard let properties = state?.identityProperties else { return }
-        guard let configurationSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
+        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
@@ -141,7 +143,7 @@ import AEPServices
 
     private func processGetUrlVariables(event: Event) {
         guard let properties = state?.identityProperties else { return }
-        guard let configurationSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
+        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
         let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
@@ -159,6 +161,7 @@ import AEPServices
     }
 
     // MARK: Network Response Handler
+
     /// Invoked by the `IdentityHitProcessor` each time we receive a network response
     /// - Parameters:
     ///   - entity: The `DataEntity` that was processed by the hit processor
@@ -166,7 +169,7 @@ import AEPServices
     private func handleNetworkResponse(entity: DataEntity, responseData: Data?) {
         state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
     }
-    
+
     /// Sends an opt-out network request if the current privacy status is opt-out
     /// - Parameter event: the event responsible for sending this opt-out hit
     private func handleOptOut(event: Event) {
@@ -174,7 +177,7 @@ import AEPServices
         guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let privacyStatusStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
-        
+
         if privacyStatus == .optedOut {
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
             guard let mid = state?.identityProperties.mid else { return }
@@ -182,16 +185,15 @@ import AEPServices
             ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
         }
     }
-    
+
     /// Determines if we should ignore an event
     /// - Parameter event: the event
     /// - Returns: Returns true if we should ignore this event (if user is opted-out)
     private func shouldIgnore(event: Event) -> Bool {
-        let configSharedState = getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value
+        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value
         let privacyStatusStr = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
-        
+
         return privacyStatus == .optedOut
     }
-    
 }

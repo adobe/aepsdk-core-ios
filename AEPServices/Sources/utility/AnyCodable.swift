@@ -1,14 +1,14 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
 import Foundation
 
@@ -19,46 +19,46 @@ public struct AnyCodable: Codable {
     public var stringValue: String? {
         return value as? String
     }
-    
+
     public var boolValue: Bool? {
         return value as? Bool
     }
-    
+
     public var intValue: Int? {
         return value as? Int
     }
-    
+
     public var longValue: Int64? {
         return value as? Int64
     }
-    
+
     public var floatValue: Float? {
         return value as? Float
     }
-    
+
     public var doubleValue: Double? {
         return value as? Double
     }
-    
+
     public var arrayValue: [Any]? {
         return value as? [Any]
     }
-    
+
     public var dictionaryValue: [String: Any]? {
         return value as? [String: Any]
     }
-    
+
     public var dataValue: Data? {
         return value as? Data
     }
-    
+
     public init(_ value: Any?) {
         self.value = value
     }
-    
+
     public static func from(dictionary: [String: Any]?) -> [String: AnyCodable]? {
         guard let unwrappedDict = dictionary else { return nil }
-        
+
         var newDict: [String: AnyCodable] = [:]
         for (key, val) in unwrappedDict {
             if let anyCodableVal = val as? AnyCodable {
@@ -67,19 +67,20 @@ public struct AnyCodable: Codable {
                 newDict[key] = AnyCodable(val)
             }
         }
-        
+
         return newDict
     }
-    
+
     public static func toAnyDictionary(dictionary: [String: AnyCodable]?) -> [String: Any]? {
         guard let unwrappedDict = dictionary else { return nil }
-        return unwrappedDict.filter({$0.value != nil}).mapValues({$0.value!})
+        return unwrappedDict.filter { $0.value != nil }.mapValues { $0.value! }
     }
-    
+
     // MARK: - Decodable
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        
+
         if let string = try? container.decode(String.self) {
             self.init(string)
         } else if let bool = try? container.decode(Bool.self) {
@@ -102,16 +103,17 @@ public struct AnyCodable: Codable {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Failed to decode AnyCodable")
         }
     }
-    
+
     // MARK: - Codable
+
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        
+
         guard value != nil else {
             try container.encodeNil()
             return
         }
-        
+
         switch value {
         case let num as NSNumber:
             try encode(nsNumber: num, into: &container)
@@ -137,7 +139,7 @@ public struct AnyCodable: Codable {
             print("AnyCodable - encode: Failed to encode \(String(describing: value))")
         }
     }
-    
+
     private func encode(nsNumber: NSNumber, into container: inout SingleValueEncodingContainer) throws {
         switch CFNumberGetType(nsNumber) {
         case .charType:
@@ -169,6 +171,7 @@ public struct AnyCodable: Codable {
 }
 
 // MARK: - Literal extensions
+
 extension AnyCodable: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
         self.init(value)
@@ -185,7 +188,7 @@ extension AnyCodable: ExpressibleByIntegerLiteral {
     public init(integerLiteral value: Int) {
         self.init(value)
     }
-    
+
     public init(longLiteral value: Int64) {
         self.init(value)
     }
@@ -203,8 +206,6 @@ extension AnyCodable: ExpressibleByArrayLiteral {
     }
 }
 
-
-
 extension AnyCodable: ExpressibleByDictionaryLiteral {
     public init(dictionaryLiteral elements: (String, Any)...) {
         let dict = [String: Any](elements, uniquingKeysWith: { key, _ in key })
@@ -213,18 +214,19 @@ extension AnyCodable: ExpressibleByDictionaryLiteral {
 }
 
 extension AnyCodable: ExpressibleByNilLiteral {
-    public init(nilLiteral: ()) {
+    public init(nilLiteral _: ()) {
         self.init(nil)
     }
 }
 
 // MARK: - Equatable
+
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {
-        if lhs.value == nil && rhs.value == nil {
+        if lhs.value == nil, rhs.value == nil {
             return true
         }
-        
+
         switch (lhs.value, rhs.value) {
         case let (lhs as String, rhs as String):
             return lhs == rhs

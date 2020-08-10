@@ -20,18 +20,18 @@ extension String {
     fileprivate func indexOf(char: Character) -> Int? {
         return firstIndex(of: char)?.utf16Offset(in: self)
     }
-    
+
     fileprivate func substring(from: Int, to: Int) -> String {
         let startIndex = index(self.startIndex, offsetBy: from)
         let endIndex = index(self.startIndex, offsetBy: to)
-        return String(self[startIndex...endIndex])
+        return String(self[startIndex ... endIndex])
     }
 }
 
 /// Implementation of the `Traversable` protocol which will be used by `SwiftRulesEngine`
 class TokenFinder: Traversable {
     private let LOG_TAG = "TokenFinder"
-    
+
     private let TOKEN_KEY_EVENT_TYPE = "~type"
     private let TOKEN_KEY_EVENT_SOURCE = "~source"
     private let TOKEN_KEY_TIMESTAMP_UNIX = "~timestampu"
@@ -43,17 +43,17 @@ class TokenFinder: Traversable {
     private let TOKEN_KEY_ALL_JSON = "~all_json"
     private let TOKEN_KEY_SHARED_STATE = "~state"
     private let EMPTY_STRING = ""
-    private let RANDOM_INT_BOUNDARY = 100000000
-    
+    private let RANDOM_INT_BOUNDARY = 100_000_000
+
     let event: Event
     let extensionRuntime: ExtensionRuntime
     let now = Date()
-    
+
     init(event: Event, extensionRuntime: ExtensionRuntime) {
         self.event = event
         self.extensionRuntime = extensionRuntime
     }
-    
+
     /// Implement the `Traversable` protocol. Retrieve the token value for the specific key.
     /// - Parameter key: the token name
     func get(key: String) -> Any? {
@@ -71,7 +71,7 @@ class TokenFinder: Traversable {
         case TOKEN_KEY_SDK_VERSION:
             return MobileCore.extensionVersion
         case TOKEN_KEY_CACHEBUST:
-            return String(Int.random(in: 1..<RANDOM_INT_BOUNDARY))
+            return String(Int.random(in: 1 ..< RANDOM_INT_BOUNDARY))
         case TOKEN_KEY_ALL_URL:
             guard let dict = event.data else {
                 Log.debug(label: LOG_TAG, "Current event data is nil, can not use it to generate an url query string")
@@ -80,32 +80,32 @@ class TokenFinder: Traversable {
             return URLUtility.generateQueryString(parameters: dict.flattening())
         case TOKEN_KEY_ALL_JSON:
             return generateJsonString(AnyCodable.from(dictionary: event.data))
-            
+
         default:
             if key.starts(with: TOKEN_KEY_SHARED_STATE) {
                 return getValueFromSharedState(key: key)
             }
-            
+
             return getValueFromEvent(key: key)
         }
     }
-    
+
     private func getValueFromSharedState(key: String) -> Any? {
         guard let index = key.indexOf(char: "/") else {
             return nil
         }
         let extensionName = key.substring(from: TOKEN_KEY_SHARED_STATE.count + 1, to: index - 1)
         let dataKeyName = key.substring(from: index + 1, to: key.count - 1)
-        
+
         guard let data = extensionRuntime.getSharedState(extensionName: String(extensionName), event: event)?.value else {
             Log.trace(label: LOG_TAG, "Can not find the shared state of extension [\(extensionName)]")
             return nil
         }
-        
+
         let flattenedData = data.flattening()
         return flattenedData[dataKeyName]
     }
-    
+
     private func getValueFromEvent(key: String) -> Any? {
         guard let dict = event.data else {
             Log.trace(label: LOG_TAG, "Current event data is nil, can not use it to do token replacement")
@@ -113,7 +113,7 @@ class TokenFinder: Traversable {
         }
         return dict.flattening()[key]
     }
-    
+
     private func generateJsonString(_ data: [String: AnyCodable]?) -> String {
         guard let data = data else {
             return ""

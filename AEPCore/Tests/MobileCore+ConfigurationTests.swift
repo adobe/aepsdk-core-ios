@@ -1,20 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPCore
-
+import XCTest
 
 class MobileCore_ConfigurationTests: XCTestCase {
-
     override func setUp() {
         EventHub.reset()
         MockExtension.reset()
@@ -23,14 +21,13 @@ class MobileCore_ConfigurationTests: XCTestCase {
         registerMockExtension(MockExtension.self)
     }
 
-
     override func tearDown() {
         EventHub.reset()
     }
 
-    private func registerMockExtension<T: Extension> (_ type: T.Type) {
+    private func registerMockExtension<T: Extension>(_ type: T.Type) {
         let semaphore = DispatchSemaphore(value: 0)
-        EventHub.shared.registerExtension(type) { (error) in
+        EventHub.shared.registerExtension(type) { _ in
             semaphore.signal()
         }
 
@@ -44,7 +41,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let expectedAppId = "test-app-id"
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { event in
             if let _ = event.data, let appid = event.data![ConfigurationConstants.Keys.JSON_APP_ID] as? String {
                 XCTAssertEqual(expectedAppId, appid)
                 expectation.fulfill()
@@ -64,7 +61,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let expectedFilePath = "test-file-path"
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { event in
             if let _ = event.data, let path = event.data![ConfigurationConstants.Keys.JSON_FILE_PATH] as? String {
                 XCTAssertEqual(expectedFilePath, path)
                 expectation.fulfill()
@@ -85,7 +82,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let updateDict = ["testKey": "testVal"]
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { event in
             if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
                 XCTAssertEqual(updateDict, updateEventData)
                 expectation.fulfill()
@@ -106,7 +103,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let updateDict = [ConfigurationConstants.Keys.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { event in
             if let _ = event.data, let updateEventData = event.data![ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: String] {
                 XCTAssertEqual(updateDict, updateEventData)
                 expectation.fulfill()
@@ -125,7 +122,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Get privacy status dispatches configuration request content with the correct data")
         expectation.assertForOverFulfill = true
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { event in
             if let _ = event.data, let retrieveConfig = event.data![ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool {
                 XCTAssertTrue(retrieveConfig)
                 expectation.fulfill()
@@ -133,7 +130,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        MobileCore.getPrivacyStatus { (status) in}
+        MobileCore.getPrivacyStatus { _ in }
 
         // verify
         wait(for: [expectation], timeout: 0.5)
@@ -144,15 +141,14 @@ class MobileCore_ConfigurationTests: XCTestCase {
         let expectation = XCTestExpectation(description: "getSdkIdentities dispatches a configuration request identity event")
         expectation.assertForOverFulfill = true
 
-        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestIdentity) { (event) in
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestIdentity) { _ in
             expectation.fulfill()
         }
 
         // test
-        MobileCore.getSdkIdentities { (_, _) in }
+        MobileCore.getSdkIdentities { _, _ in }
 
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
-
 }

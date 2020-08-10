@@ -1,22 +1,21 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPLifecycle
+import XCTest
 
 class LifecycleMetricsUnitTests: XCTestCase {
-
     var lifecycleMetrics: LifecycleMetrics!
-    
+
     private func fillData() {
         lifecycleMetrics.installEvent = true
         lifecycleMetrics.launchEvent = true
@@ -40,9 +39,8 @@ class LifecycleMetricsUnitTests: XCTestCase {
         lifecycleMetrics.runMode = "Application"
         lifecycleMetrics.previousOsVersion = "10.0"
         lifecycleMetrics.previousAppId = "prev-app-id"
-
     }
-    
+
     override func setUp() {
         lifecycleMetrics = LifecycleMetrics()
     }
@@ -50,25 +48,25 @@ class LifecycleMetricsUnitTests: XCTestCase {
     func testEmptyLifecycleDataTest() {
         // setup
         let expectedString = "{}"
-        
+
         // test
         let data = try? JSONEncoder().encode(lifecycleMetrics)
         let jsonStr = String(data: data!, encoding: .utf8)
-        
+
         // verify
         XCTAssertEqual(expectedString, jsonStr!)
     }
-    
+
     func testFullLifecycleDataEncodedCorrectly() {
         // setup
         fillData()
         let expectedDate = Date()
         lifecycleMetrics.installDate = expectedDate
-        
+
         // test
         let encodedLifecycleData = try? JSONEncoder().encode(lifecycleMetrics)
         let decodedDict = try? JSONDecoder().decode([String: String].self, from: encodedLifecycleData!)
-        
+
         // verify
         XCTAssertEqual(LifecycleMetrics.INSTALL_EVENT, decodedDict?[LifecycleMetrics.CodingKeys.installEvent.rawValue])
         XCTAssertEqual(LifecycleMetrics.LAUNCH_EVENT, decodedDict?[LifecycleMetrics.CodingKeys.launchEvent.rawValue])
@@ -94,19 +92,19 @@ class LifecycleMetricsUnitTests: XCTestCase {
         XCTAssertEqual(lifecycleMetrics.previousOsVersion, decodedDict?[LifecycleMetrics.CodingKeys.previousOsVersion.rawValue])
         XCTAssertEqual(lifecycleMetrics.previousAppId, decodedDict?[LifecycleMetrics.CodingKeys.previousAppId.rawValue])
     }
-    
+
     func testFullLifecycleDataTestRoundTrip() {
         // setup
         fillData()
-        
+
         // test
         let encodedLifecycleData = try? JSONEncoder().encode(lifecycleMetrics)
         let decodedLifecycleData = try! JSONDecoder().decode(LifecycleMetrics.self, from: encodedLifecycleData!)
-        
+
         // verify
         XCTAssertEqual(decodedLifecycleData, lifecycleMetrics)
     }
-    
+
     func testFullLifecycleDataTestRoundTripEmptyEventType() {
         // setup
         lifecycleMetrics.launches = 10
@@ -125,13 +123,12 @@ class LifecycleMetricsUnitTests: XCTestCase {
         lifecycleMetrics.runMode = "Application"
         lifecycleMetrics.previousOsVersion = "10.0"
         lifecycleMetrics.previousAppId = "prev-app-id"
-        
+
         // test
         let encodedLifecycleData = try? JSONEncoder().encode(lifecycleMetrics)
         let decodedLifecycleData = try! JSONDecoder().decode(LifecycleMetrics.self, from: encodedLifecycleData!)
-        
+
         // verify
         XCTAssertEqual(decodedLifecycleData, lifecycleMetrics)
     }
-
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1150"
+   LastUpgradeVersion = "1160"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,9 +15,9 @@
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "3FE6DE2E24C642330065EA05"
-                     BuildableName = "AEPIdentity.framework"
-                     BlueprintName = "AEPIdentity"
+                     BlueprintIdentifier = "3FE6DDA824C62C090065EA05"
+                     BuildableName = "AEPServicesMocks.framework"
+                     BlueprintName = "AEPServicesMocks"
                      ReferencedContainer = "container:AEPCore.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
@@ -33,9 +33,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3FE6DE2E24C642330065EA05"
-               BuildableName = "AEPIdentity.framework"
-               BlueprintName = "AEPIdentity"
+               BlueprintIdentifier = "3FE6DDA824C62C090065EA05"
+               BuildableName = "AEPServicesMocks.framework"
+               BlueprintName = "AEPServicesMocks"
                ReferencedContainer = "container:AEPCore.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,16 +47,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3FE6DE3624C642330065EA05"
-               BuildableName = "AEPIdentityTests.xctest"
-               BlueprintName = "AEPIdentityTests"
-               ReferencedContainer = "container:AEPCore.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -79,9 +69,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3FE6DE2E24C642330065EA05"
-            BuildableName = "AEPIdentity.framework"
-            BlueprintName = "AEPIdentity"
+            BlueprintIdentifier = "3FE6DDA824C62C090065EA05"
+            BuildableName = "AEPServicesMocks.framework"
+            BlueprintName = "AEPServicesMocks"
             ReferencedContainer = "container:AEPCore.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

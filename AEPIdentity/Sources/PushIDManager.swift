@@ -1,17 +1,17 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPCore
 import AEPServices
+import Foundation
 
 /// A type which manages dispatching events based on Push ID changes
 struct PushIDManager: PushIDManageable {
@@ -38,11 +38,11 @@ struct PushIDManager: PushIDManageable {
     }
 
     private var dataStore: NamedCollectionDataStore
-    private var eventDispatcher: (Event) -> ()
+    private var eventDispatcher: (Event) -> Void
 
     // MARK: PushIDManageable
-    
-    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> ()) {
+
+    init(dataStore: NamedCollectionDataStore, eventDispatcher: @escaping (Event) -> Void) {
         self.dataStore = dataStore
         self.eventDispatcher = eventDispatcher
     }
@@ -54,22 +54,22 @@ struct PushIDManager: PushIDManageable {
             return
         }
 
-        //push ID has changed, update it in local storage
+        // push ID has changed, update it in local storage
         var properties = IdentityProperties()
         properties.loadFromPersistence()
         properties.pushIdentifier = SHA256.hash(pushId)
         properties.saveToPersistence()
 
-        if pushId?.isEmpty ?? true && !pushEnabled {
+        if pushId?.isEmpty ?? true, !pushEnabled {
             updatePushStatusAndSendAnalyticsEvent(enabled: false)
             Log.trace(label: "\(LOG_TAG):\(#function)", "First time sending a.push.optin False")
-        } else if pushId?.isEmpty ?? true && pushEnabled {
+        } else if pushId?.isEmpty ?? true, pushEnabled {
             updatePushStatusAndSendAnalyticsEvent(enabled: false)
         } else if let pushId = pushId, !pushId.isEmpty, !pushEnabled {
             updatePushStatusAndSendAnalyticsEvent(enabled: true)
         }
     }
-    
+
     // MARK: Private APIs
 
     /// Compares the provided newPushId against the one in data store (if exists)
@@ -97,13 +97,12 @@ struct PushIDManager: PushIDManageable {
     /// - Parameter enabled: a boolean flag indicating if push is enabled or disabled
     private mutating func updatePushStatusAndSendAnalyticsEvent(enabled: Bool) {
         pushEnabled = enabled
-        let pushStatusStr = enabled ? "True": "False"
+        let pushStatusStr = enabled ? "True" : "False"
         let contextData = [IdentityConstants.Analytics.EVENT_PUSH_STATUS: pushStatusStr]
         let eventData = [IdentityConstants.Analytics.TRACK_ACTION: IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME,
-                         IdentityConstants.Analytics.CONTEXT_DATA: contextData] as [String : Any]
+                         IdentityConstants.Analytics.CONTEXT_DATA: contextData] as [String: Any]
 
         let event = Event(name: "AnalyticsForIdentityRequest", type: EventType.analytics, source: EventSource.requestContent, data: eventData)
         eventDispatcher(event)
     }
-
 }

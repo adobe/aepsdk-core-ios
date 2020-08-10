@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -20,14 +20,14 @@ class SQLiteDataQueue: DataQueue {
     public let databaseName: String
     public let databaseFilePath: FileManager.SearchPathDirectory
     public static let TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
-    
+
     private let serialQueue: DispatchQueue
     private let TB_KEY_UNIQUE_IDENTIFIER = "uniqueIdentifier"
     private let TB_KEY_TIMESTAMP = "timestamp"
     private let TB_KEY_DATA = "data"
-    
+
     private let LOG_PREFIX = "SQLiteDataQueue"
-    
+
     /// Creates a  new `DataQueue` with a database file path and a serial dispatch queue
     /// If it fails to create database or table, a `nil` will be returned.
     /// - Parameters:
@@ -43,32 +43,32 @@ class SQLiteDataQueue: DataQueue {
             return nil
         }
     }
-    
+
     func add(dataEntity: DataEntity) -> Bool {
         return serialQueue.sync {
             var dataString = ""
             if let data = dataEntity.data {
                 dataString = String(data: data, encoding: .utf8) ?? ""
             }
-            
+
             let insertRowStatement = """
             INSERT INTO \(SQLiteDataQueue.TABLE_NAME) (uniqueIdentifier, timestamp, data)
             VALUES ("\(dataEntity.uniqueIdentifier)", \(dataEntity.timestamp.millisecondsSince1970), '\(dataString)');
             """
-            
+
             guard let connection = connect() else {
                 return false
             }
-            
+
             defer {
                 disconnect(database: connection)
             }
-            
+
             let result = SQLiteWrapper.execute(database: connection, sql: insertRowStatement)
             return result
         }
     }
-    
+
     func peek() -> DataEntity? {
         return serialQueue.sync {
             let queryRowStatement = """
@@ -84,7 +84,7 @@ class SQLiteDataQueue: DataQueue {
                 Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return nil
             }
-            
+
             guard let uniqueIdentifier = firstRow[TB_KEY_UNIQUE_IDENTIFIER], let dateString = firstRow[TB_KEY_TIMESTAMP], let dataString = firstRow[TB_KEY_DATA] else {
                 Log.trace(label: LOG_PREFIX, "Database record did not have valid data: \(queryRowStatement).")
                 return nil
@@ -101,7 +101,7 @@ class SQLiteDataQueue: DataQueue {
             return DataEntity(uniqueIdentifier: uniqueIdentifier, timestamp: date, data: data)
         }
     }
-    
+
     func remove() -> Bool {
         return serialQueue.sync {
             guard let connection = connect() else {
@@ -120,7 +120,7 @@ class SQLiteDataQueue: DataQueue {
             return true
         }
     }
-    
+
     func clear() -> Bool {
         return serialQueue.sync {
             let dropTableStatement = """
@@ -136,11 +136,11 @@ class SQLiteDataQueue: DataQueue {
                 Log.warning(label: LOG_PREFIX, "Failed to drop table '\(SQLiteDataQueue.TABLE_NAME)' in database: \(self.databaseName).")
                 return false
             }
-            
+
             return true
         }
     }
-    
+
     func count() -> Int {
         return serialQueue.sync {
             let queryRowStatement = """
@@ -156,11 +156,11 @@ class SQLiteDataQueue: DataQueue {
                 Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return 0
             }
-                        
-            return Int(countAsString) ?? 0            
+
+            return Int(countAsString) ?? 0
         }
     }
-    
+
     private func connect() -> OpaquePointer? {
         if let database = SQLiteWrapper.connect(databaseFilePath: databaseFilePath, databaseName: databaseName) {
             return database
@@ -169,11 +169,11 @@ class SQLiteDataQueue: DataQueue {
             return nil
         }
     }
-    
+
     private func disconnect(database: OpaquePointer) {
         SQLiteWrapper.disconnect(database: database)
     }
-    
+
     private func createTableIfNotExists(tableName: String) -> Bool {
         guard let connection = connect() else {
             return false
@@ -192,14 +192,14 @@ class SQLiteDataQueue: DataQueue {
                 "data"        TEXT
             );
             """
-            
+
             let result = SQLiteWrapper.execute(database: connection, sql: createTableStatement)
             if result {
                 Log.trace(label: LOG_PREFIX, "Successfully created table '\(tableName)'.")
             } else {
                 Log.warning(label: LOG_PREFIX, "Failed to create table '\(tableName)'.")
             }
-            
+
             return result
         }
     }
@@ -209,7 +209,7 @@ extension Date {
     var millisecondsSince1970: Int64 {
         return Int64((timeIntervalSince1970 * 1000.0).rounded())
     }
-    
+
     init(milliseconds: Int64) {
         self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
     }

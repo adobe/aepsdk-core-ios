@@ -9,19 +9,19 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 /// Represents an Object which is Cachable via the CacheService
 protocol Cacheable {
     associatedtype T
     /// The cachable Dictionary
-    var cacheable:T  { get }
-    
+    var cacheable: T { get }
+
     /// Date this cachable was last modified on the server, read from the Last-Modified HTTP header
     /// Format: <day-name>, <day> <month> <year> <hour>:<minute>:<second> GMT
     var lastModified: String? { get }
-    
+
     /// ETag of the cachable on the server
     var eTag: String? { get }
 }

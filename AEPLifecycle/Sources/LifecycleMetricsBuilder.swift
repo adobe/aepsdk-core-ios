@@ -9,35 +9,33 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import AEPServices
+import Foundation
 
 // Builds the LifecycleMetricsData and handles Lifecycle metrics data storage updates
 class LifecycleMetricsBuilder {
     private var lifecycleMetrics: LifecycleMetrics = LifecycleMetrics()
-    
+
     private typealias KEYS = LifecycleConstants.DataStoreKeys
 
     private let dataStore: NamedCollectionDataStore
     private let date: Date
- 
+
     private var systemInfoService: SystemInfoService {
-        get {
-            ServiceProvider.shared.systemInfoService
-        }
+        ServiceProvider.shared.systemInfoService
     }
-    
+
     init(dataStore: NamedCollectionDataStore, date: Date) {
         self.dataStore = dataStore
         self.date = date
     }
-    
+
     /// Builds the LifecycleMetrics
     /// - Return: `LifecycleMetrics` as they are upon building
     func build() -> LifecycleMetrics {
         return lifecycleMetrics
     }
-    
+
     /// Adds install data to the lifecycle metrics and sets the data store lifecycle install date value
     /// Install data includes:
     /// - Daily engaged event
@@ -47,15 +45,15 @@ class LifecycleMetricsBuilder {
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     @discardableResult
     func addInstallData() -> LifecycleMetricsBuilder {
-        self.lifecycleMetrics.dailyEngagedEvent = true
-        self.lifecycleMetrics.monthlyEngagedEvent = true
-        self.lifecycleMetrics.installEvent = true
-        self.lifecycleMetrics.installDate = date
-        self.dataStore.setObject(key: KEYS.INSTALL_DATE, value: date)
+        lifecycleMetrics.dailyEngagedEvent = true
+        lifecycleMetrics.monthlyEngagedEvent = true
+        lifecycleMetrics.installEvent = true
+        lifecycleMetrics.installDate = date
+        dataStore.setObject(key: KEYS.INSTALL_DATE, value: date)
         return self
     }
-    
-    /// Adds the launch data to the lifecycle metrics 
+
+    /// Adds the launch data to the lifecycle metrics
     /// Launch Metrics includes:
     /// - Days since first launch
     /// - Days since last launch
@@ -64,21 +62,21 @@ class LifecycleMetricsBuilder {
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     @discardableResult
     func addLaunchData() -> LifecycleMetricsBuilder {
-        if let firstLaunchDate: Date = self.dataStore.getObject(key: KEYS.INSTALL_DATE) {
-            guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: self.date).day else {
+        if let firstLaunchDate: Date = dataStore.getObject(key: KEYS.INSTALL_DATE) {
+            guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: date).day else {
                 return self
             }
-            
+
             lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
         }
-        
-        if let lastLaunchDate: Date = self.dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE) {
-            guard let daysSinceLastLaunch = Calendar.current.dateComponents([.day], from: lastLaunchDate, to: self.date).day else {
+
+        if let lastLaunchDate: Date = dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE) {
+            guard let daysSinceLastLaunch = Calendar.current.dateComponents([.day], from: lastLaunchDate, to: date).day else {
                 return self
             }
-            
+
             lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
-            let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: self.date)
+            let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
             let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
             // Check if we have launched this month already
             if currentDateComponents.month != lastLaunchDateComponents.month || currentDateComponents.year != lastLaunchDateComponents.year {
@@ -88,10 +86,10 @@ class LifecycleMetricsBuilder {
                 lifecycleMetrics.dailyEngagedEvent = true
             }
         }
-        
+
         return self
     }
-    
+
     /// Adds the launch count, event, and time data to the lifecycle metrics
     /// Launch event and time data includes:
     /// - Launches
@@ -104,7 +102,7 @@ class LifecycleMetricsBuilder {
         let context: LifecyclePersistedContext? = dataStore.getObject(key: KEYS.PERSISTED_CONTEXT)
         lifecycleMetrics.launches = context?.launches
 
-        let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: self.date)
+        let currentDateComponents = Calendar.current.dateComponents([.weekday, .hour], from: date)
         lifecycleMetrics.launchEvent = true
         lifecycleMetrics.dayOfTheWeek = currentDateComponents.weekday
         lifecycleMetrics.hourOfTheDay = currentDateComponents.hour
@@ -126,10 +124,10 @@ class LifecycleMetricsBuilder {
         }
 
         if upgrade {
-            dataStore.setObject(key: KEYS.UPGRADE_DATE, value: self.date)
+            dataStore.setObject(key: KEYS.UPGRADE_DATE, value: date)
             dataStore.set(key: KEYS.LAUNCHES_SINCE_UPGRADE, value: 0)
         } else if let upgradeDate: Date = dataStore.getObject(key: KEYS.UPGRADE_DATE) {
-            let daysSinceLastUpgrade = Calendar.current.dateComponents([.day], from: upgradeDate, to: self.date).day
+            let daysSinceLastUpgrade = Calendar.current.dateComponents([.day], from: upgradeDate, to: date).day
             lifecycleMetrics.daysSinceLastUpgrade = daysSinceLastUpgrade
             if var launchesSinceUpgrade = dataStore.getInt(key: KEYS.LAUNCHES_SINCE_UPGRADE, fallback: 0) {
                 launchesSinceUpgrade += 1
@@ -139,7 +137,7 @@ class LifecycleMetricsBuilder {
         }
         return self
     }
-    
+
     /// Adds the crash data to the lifecycle metrics
     /// Crash data includes:
     /// - Crash event
@@ -155,7 +153,7 @@ class LifecycleMetricsBuilder {
         }
         return self
     }
-    
+
     /// Adds the device data to the lifecycle metrics
     /// Core data includes:
     /// - Device name
@@ -172,7 +170,7 @@ class LifecycleMetricsBuilder {
         if !deviceName.isEmpty {
             lifecycleMetrics.deviceName = deviceName
         }
-        
+
         if let carrierName = systemInfoService.getMobileCarrierName() {
             lifecycleMetrics.carrierName = carrierName
         }
@@ -180,7 +178,7 @@ class LifecycleMetricsBuilder {
         if !applicationIdentifier.isEmpty {
             lifecycleMetrics.appId = applicationIdentifier
         }
-        
+
         lifecycleMetrics.deviceResolution = getResolution()
         lifecycleMetrics.operatingSystem = systemInfoService.getOperatingSystemName()
         lifecycleMetrics.locale = getLocale()
@@ -188,8 +186,9 @@ class LifecycleMetricsBuilder {
 
         return self
     }
-    
-    /// MARK: - Private helper functions
+
+    // MARK: - Private helper functions
+
     /// Combines the application name, version, and version code into a formatted application identifier
     /// - Return: `String` formatted Application identifier
     private func getApplicationIdentifier() -> String {
@@ -199,14 +198,14 @@ class LifecycleMetricsBuilder {
         // Make sure that the formatted identifier removes white space if any of the values are empty, and remove the () version wrapper if version is empty as well
         return "\(applicationName) \(applicationVersion) (\(applicationBuildNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     /// Gets the resolution of the current device
     /// - Return: `String` formatted resolution
     private func getResolution() -> String {
         let displayInfo = systemInfoService.getDisplayInformation()
         return "\(displayInfo.width)x\(displayInfo.height)"
     }
-    
+
     /// Gets the formatted locale
     /// - Return: `String` formatted locale
     private func getLocale() -> String {
@@ -214,4 +213,3 @@ class LifecycleMetricsBuilder {
         return locale.replacingOccurrences(of: "_", with: "-")
     }
 }
-

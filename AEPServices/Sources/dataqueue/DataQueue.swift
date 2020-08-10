@@ -29,7 +29,7 @@ import Foundation
     /// Removes all stored `DataEntity` object
     @discardableResult
     func clear() -> Bool
-    
+
     /// Returns the number of `DataEntity` objects in the DataQueue
     func count() -> Int
 }

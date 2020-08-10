@@ -30,4 +30,10 @@ archive:
 clean:
 	rm -rf ./build
 
+format:
+	swiftformat . --lint --swiftversion 5.2
+
+lint:
+	swiftlint lint
+
 

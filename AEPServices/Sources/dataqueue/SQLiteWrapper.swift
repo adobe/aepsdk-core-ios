@@ -15,8 +15,8 @@ import SQLite3
 
 /// Helper class for SQLite database operations
 internal struct SQLiteWrapper {
-    static private let LOG_PREFIX = "SQLiteWrapper"
-    
+    private static let LOG_PREFIX = "SQLiteWrapper"
+
     /// Connect SQLite database with provide database name and database file path.
     /// If the database file doesn't exist, a new database will be created and return a database connection
     /// - Parameters:
@@ -92,7 +92,7 @@ internal struct SQLiteWrapper {
         while code == SQLITE_ROW {
             var dictionary: [String: String] = [:]
 
-            for i in 0..<sqlite3_column_count(statement) {
+            for i in 0 ..< sqlite3_column_count(statement) {
                 let column: String = String(cString: sqlite3_column_name(statement, i))
                 if let rowValue = sqlite3_column_text(statement, i) {
                     let value: String = String(cString: rowValue)

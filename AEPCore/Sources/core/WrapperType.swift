@@ -8,9 +8,9 @@ import Foundation
     case cordova = 3
     case unity = 4
     case xamarin = 5
-    
+
     public typealias RawValue = String
-    
+
     public var rawValue: RawValue {
         switch self {
         case .none:
@@ -27,11 +27,11 @@ import Foundation
             return CoreConstants.WrapperType.XAMARIN
         }
     }
-    
+
     public init?(rawValue: RawValue) {
         switch rawValue {
-       case CoreConstants.WrapperType.NONE:
-           self = .none
+        case CoreConstants.WrapperType.NONE:
+            self = .none
         case CoreConstants.WrapperType.REACT_NATIVE:
             self = .reactNative
         case CoreConstants.WrapperType.FLUTTER:

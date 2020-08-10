@@ -1,34 +1,33 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
 @testable import AEPCore
 @testable import AEPServices
+import XCTest
 
 class ConfigurationDownloaderTests: XCTestCase {
-
     let dataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
     let validAppId = "valid-app-id"
     let invalidAppId = "invalid-app-id"
-    
+
     override func setUp() {
-        for key in UserDefaults.standard.dictionaryRepresentation().keys{
+        for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
     }
-    
+
     override class func tearDown() {
         ServiceProvider.shared.reset()
     }
-    
+
     /// Tests that we can load a bundled config from the bundle
     func testLoadConfigFromFilePathSimple() {
         // setup
@@ -40,7 +39,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // verify
         XCTAssertEqual(16, config?.count)
     }
-    
+
     /// Tests that no config is loaded when an invalid file path is given
     func testLoadConfigFromFilePathInvalid() {
         // test
@@ -49,7 +48,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // verify
         XCTAssertNil(config)
     }
-    
+
     /// Stores a config into the cache then attempts to load from the cache
     func testLoadConfigFromCacheSimple() {
         // setup
@@ -76,7 +75,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // verify
         XCTAssertEqual(14, cachedConfig?.count)
     }
-    
+
     /// Ensures that different appId's do not load other appId's cached configuration
     func testLoadConfigFromCacheInvalid() {
         // setup
@@ -90,7 +89,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // verify
         XCTAssertNil(cachedConfig)
     }
-    
+
     /// Ensures that when the network service returns a valid response that the configuration is loaded and cached properly
     func testLoadConfigFromUrlSimple() {
         // setup
@@ -99,10 +98,10 @@ class ConfigurationDownloaderTests: XCTestCase {
         ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         let expectedConfigSize = 16
 
-        var remoteConfig: [String: Any]? = nil
-        
+        var remoteConfig: [String: Any]?
+
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { (loadedConfig) in
+        ConfigurationDownloader().loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -112,18 +111,18 @@ class ConfigurationDownloaderTests: XCTestCase {
         XCTAssertEqual(expectedConfigSize, remoteConfig?.count)
         XCTAssertEqual(expectedConfigSize, ConfigurationDownloader().loadConfigFromCache(appId: validAppId, dataStore: dataStore)?.count) // ensure downloaded config is cached
     }
-    
+
     /// When the network service returns an invalid response that we do not return a config
     func testLoadConfigFromUrlInvalid() {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
         ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
-        
-        var remoteConfig: [String: Any]? = nil
-        
+
+        var remoteConfig: [String: Any]?
+
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { (loadedConfig) in
+        ConfigurationDownloader().loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -132,14 +131,14 @@ class ConfigurationDownloaderTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
         XCTAssertNil(remoteConfig)
     }
-    
+
     /// Ensures that when the network service returns a 304 response that the cached config is used
     func testLoadConfigFromUrlNotModified() {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
         ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .notModified)
-        
+
         let appId = "test-app-id"
         let expectedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
                                                     "target.clientCode": "yourclientcode",
@@ -157,10 +156,10 @@ class ConfigurationDownloaderTests: XCTestCase {
                                                     "rules.url": "https://link.to.rules/test.zip"]
         dataStore.setObject(key: "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(cacheable: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
 
-        var remoteConfig: [String: Any]? = nil
-        
+        var remoteConfig: [String: Any]?
+
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { (loadedConfig) in
+        ConfigurationDownloader().loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -169,7 +168,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
         XCTAssertEqual(expectedConfig.count, remoteConfig?.count)
     }
-    
+
     /// Tests that a nil configuration is returned when an empty appId is passed
     func testLoadConfigFromUrlEmptyAppId() {
         // setup
@@ -177,10 +176,10 @@ class ConfigurationDownloaderTests: XCTestCase {
         expectation.assertForOverFulfill = true
         let appId = ""
 
-        var remoteConfig: [String: Any]? = nil
-        
+        var remoteConfig: [String: Any]?
+
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { (loadedConfig) in
+        ConfigurationDownloader().loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -189,7 +188,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
         XCTAssertNil(remoteConfig)
     }
-    
+
     /// Ensures that when a config is present in the manifest it can be loaded.
     func testLoadDefaultBundledConfig() {
         // setup
@@ -201,5 +200,4 @@ class ConfigurationDownloaderTests: XCTestCase {
         // verify
         XCTAssertEqual(16, config?.count)
     }
-
 }

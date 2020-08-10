@@ -1,19 +1,18 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import Foundation
 import AEPServices
+import Foundation
 
 private extension String {
-
     /// Returns the first index of the character in this `String`
     /// - Parameter char: character to be indexed
     /// - Returns: The index of `char` in this `String`, otherwise -1
@@ -24,7 +23,6 @@ private extension String {
 
 /// Provides functions to append visitor information to a URL
 struct URLAppender {
-
     /// Appends identity payload to base url, present in the event data of the event param.
     /// - Parameters:
     ///   - baseUrl: url to which the identity payload needs to be appended onto
@@ -54,7 +52,7 @@ struct URLAppender {
         } else if queryIndex < 0 || isQueryAfterAnchor {
             idString.insert("?", at: idString.startIndex)
         }
-        
+
         var modifiedUrl = baseUrl
         modifiedUrl.insert(contentsOf: idString, at: modifiedUrl.index(modifiedUrl.startIndex, offsetBy: insertIndex))
 
@@ -114,5 +112,4 @@ struct URLAppender {
 
         return "\(original)|\(newUrlVar)"
     }
-
 }

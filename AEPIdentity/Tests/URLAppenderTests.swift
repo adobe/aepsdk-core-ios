@@ -1,20 +1,19 @@
 /*
-Copyright 2020 Adobe. All rights reserved.
-This file is licensed to you under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License. You may obtain a copy
-of the License at http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software distributed under
-the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
-OF ANY KIND, either express or implied. See the License for the specific language
-governing permissions and limitations under the License.
-*/
+ Copyright 2020 Adobe. All rights reserved.
+ This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License. You may obtain a copy
+ of the License at http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software distributed under
+ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ OF ANY KIND, either express or implied. See the License for the specific language
+ governing permissions and limitations under the License.
+ */
 
-import XCTest
-@testable import AEPIdentity
 import AEPCore
+@testable import AEPIdentity
+import XCTest
 
 private extension String {
-
     /// Returns the first index of the character in this `String`
     /// - Parameter char: character to be indexed
     /// - Returns: The index of `char` in this `String`, otherwise nil
@@ -23,19 +22,19 @@ private extension String {
     }
 
     func substring(from: Int, to: Int) -> String {
-        let startIndex = self.index(self.startIndex, offsetBy: from)
-        let endIndex = self.index(self.startIndex, offsetBy: to)
-        return String(self[startIndex...endIndex])
-     }
+        let startIndex = index(self.startIndex, offsetBy: from)
+        let endIndex = index(self.startIndex, offsetBy: to)
+        return String(self[startIndex ... endIndex])
+    }
 }
 
 class URLAppenderTests: XCTestCase {
     // MARK: appendVisitorInfo(...) tests
-    
+
     /// When base url is empty the result should be empty
     func testAppendVisitorInfoEmptyBaseUrl() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "testOrg@AdobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "testOrg@AdobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"]
 
         // test
@@ -48,7 +47,7 @@ class URLAppenderTests: XCTestCase {
     func testAppendVisitorInfoForUrlShouldFormatUrlCorrectly() {
         // setup
         let mockUserIdentifier = "test-vid"
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: mockUserIdentifier]
         var props = IdentityProperties()
         props.mid = MID()
@@ -74,12 +73,12 @@ class URLAppenderTests: XCTestCase {
     }
 
     // MARK: generateVisitorIdPayload(...) tests
-    
+
     /// Tests that when the vid is not provided that we do not append the url parameter for the vid
     func testGenerateVisitorIdPayloadNoVid() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String : Any]
-        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"] as [String: Any]
         var props = IdentityProperties()
         props.mid = MID()
         let expected = "MCMID%3D\(props.mid!.midString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg"
@@ -104,8 +103,8 @@ class URLAppenderTests: XCTestCase {
     /// Tests that when the vid is empty that we do not append the url parameter for the vid
     func testGenerateVisitorIdPayloadEmptyVid() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String : Any]
-        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: ""] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: ""] as [String: Any]
         var props = IdentityProperties()
         props.mid = MID()
         let expected = "MCMID%3D\(props.mid!.midString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg"
@@ -131,8 +130,8 @@ class URLAppenderTests: XCTestCase {
     func testGenerateVisitorIdPayloadEncodedVID() {
         // setup
         let mockUserIdentifier = "?&#&#&#&#?"
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String : Any]
-        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: mockUserIdentifier] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: mockUserIdentifier] as [String: Any]
         var props = IdentityProperties()
         props.mid = MID()
         let expected = "MCMID%3D\(props.mid!.midString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg&adobe_aa_vid=%3F%26%23%26%23%26%23%26%23%3F"
@@ -153,5 +152,4 @@ class URLAppenderTests: XCTestCase {
         result = result.substring(from: mcmidIndex?.lowerBound.utf16Offset(in: result) ?? -1, to: result.count - 1)
         XCTAssertEqual(expected, result)
     }
-    
 }
