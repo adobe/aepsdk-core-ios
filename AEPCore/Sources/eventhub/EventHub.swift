@@ -212,7 +212,8 @@ final class EventHub {
             version = eventNumberCounter.incrementAndGet()
         }
 
-        return (extensionContainer.sharedState!, version)
+        guard let sharedState = extensionContainer.sharedState else { return nil }
+        return (sharedState, version)
     }
 
     private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?) {
