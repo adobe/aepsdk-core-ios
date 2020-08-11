@@ -22,7 +22,7 @@ struct SignalHit: Codable {
     let postBody: String?
 
     /// Content-Type header for the postback
-    let contentType: String
+    let contentType: String?
 
     /// Timeout for the network request
     let timeout: TimeInterval?

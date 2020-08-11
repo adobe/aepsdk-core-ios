@@ -39,7 +39,11 @@ class SignalHitProcessor: HitProcessing {
             httpMethod = .post
         }
 
-        let headers = [NetworkServiceConstants.Headers.CONTENT_TYPE: signalHit.contentType]
+        var headers: [String : String] = [:]
+        if signalHit.contentType != nil {
+            headers[NetworkServiceConstants.Headers.CONTENT_TYPE] = signalHit.contentType
+        }
+
         let request = NetworkRequest(url: signalHit.url, httpMethod: httpMethod, connectPayload: signalHit.postBody ?? "", httpHeaders: headers, connectTimeout: timeout, readTimeout: timeout)
 
         networkService.connectAsync(networkRequest: request) { connection in
