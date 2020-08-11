@@ -14,7 +14,7 @@ import AEPServices
 import Foundation
 
 /// Represents a type which contains instances variables for the Identity extension
-struct IdentityProperties: Codable {
+public struct IdentityProperties: Codable {
     /// The current Experience Cloud ID
     var mid: MID?
 

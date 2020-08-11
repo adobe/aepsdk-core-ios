@@ -20,6 +20,10 @@ class UserDefaultsNamedCollection: NamedCollectionProcessing {
         self.appGroup = appGroup
     }
 
+    func getAppGroup() -> String? {
+        return appGroup
+    }
+
     func set(collectionName: String, key: String, value: Any?) {
         userDefault.set(value, forKey: keyNameFor(collectionName: collectionName, key: key))
     }
