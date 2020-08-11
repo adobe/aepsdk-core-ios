@@ -6,7 +6,7 @@ This document covers the high level concepts about developing your own extension
 
 #### Defining an Extension
 
-For an extension to be registered with the `EventHub`, it must conform to the `Extension` protocol. The `Extension` protocol defines an `Extension` as a class which provides a parameterless initializer, a  `name`, `version` and implements two methods: `onRegistered()` and `onUnregistered()` .
+For an extension to be registered with the `EventHub`, it must conform to the `Extension` protocol. The `Extension` protocol defines an `Extension` as a type which provides a initializer which takes in a `ExtensionRuntime`, a  `name`, `friendlyName`, `version`, `metadata` and implements two methods: `onRegistered()`, `onUnregistered()`, and `readyForEvent()`.
 
 See [`Extension.swift`](https://github.com/adobe/aepsdk-core-ios/blob/master/Sources/eventhub/Extension.swift) for the complete definition.
 
@@ -20,14 +20,14 @@ See [`Extension.swift`](https://github.com/adobe/aepsdk-core-ios/blob/master/Sou
 ##### Creating an `Event`
 
 ```swift
-let event = Event(name: "Configuration Request Event", type: .configuration, source: .requestContent, data: data)
+let event = Event(name: "Configuration Request Event", type: EventType.configuration, source: EventSource.requestContent, data: data)
 ```
 
 ##### Creating a response `Event`
 
 ```swift
 let triggerEvent: Event = ...
-let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: data)
+let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: data)
 ```
 
 #### Dispatching Events
@@ -35,7 +35,7 @@ let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Respon
 Extensions can dispatch an `Event` to the `EventHub` via the `dispatch(event: Event)` API, which is provided by default to all classes that implement `Extension`. This API will result in all listeners whose `EventType` and `EventSource` match to be invoked with the `event`.
 
 ```swift
-let event = Event(name: "My Event", type: .analytics, source: .requestContent, data: myData)
+let event = Event(name: "My Event", type: EventType.analytics, source: EventSource.requestContent, data: data)
 dispatch(event: event)
 ```
 
@@ -45,7 +45,7 @@ Occasionally, an extension may want to dispatch a response event for a given `Ev
 
 ```swift
 let triggerEvent: Event = ...
-let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: .configuration, source: .responseContent, data: data)
+let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: data)
 dispatch(event: responseEvent)
 ```
 
@@ -61,7 +61,7 @@ The `EventHub` provides extensions two APIs for listening for Events:
 
 ```swift
 // Registers a `EventListener` with the `EventHub`
-registerListener(type: EventType, source: EventSource, listener: @escaping EventListener)
+registerListener(type: String, source: String, listener: @escaping EventListener)
 
 // Registers an `EventListener` with the `EventHub` that is invoked when `triggerEvent`'s response event is dispatched
 registerResponseListener(triggerEvent: Event, listener: @escaping EventListener)
@@ -73,14 +73,14 @@ registerResponseListener(triggerEvent: Event, listener: @escaping EventListener)
 
 ```swift
 // receiveConfigurationRequest is invoked whenever the `EventHub` dispatches an event with type configuration and source request content
-registerListener(type: .configuration, source: .requestContent, listener: receiveConfigurationRequest(event:))
+registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
 
 private func receiveConfigurationRequest(event: Event) {
    // handle event
 }
 
 // Can also be implemented with a closure
-registerListener(type: .configuration, source: .requestContent) { (event) in
+registerListener(type: EventType.configuration, source: EventSource.requestContent) { (event) in
    // handle event            
 }
 ```
@@ -91,7 +91,7 @@ Some extensions may have the requirement to be notified of all events that are d
 
 ```swift
 // Invoked for all events that are dispatched from the `EventHub`
-registerListener(type: .wildcard, source: .wildcard) { (event) in
+registerListener(type: EventType.wildcard, source: EventSource.wildcard) { (event) in
    // handle event            
 }
 ```
@@ -112,48 +112,42 @@ registerResponseListener(triggerEvent: triggerEvent, timeout: 1) { (responseEven
 
 ##### Defining the public APIs for an `Extension`
 
-Extensions should define their public APIs within a `protocol`, which is implemented by the class that also conforms to the `Extension` protocol.
-
-All APIs should be static, and for APIs that return a value, _most_ should provide those values in the form of an asynchronous callback. Each API definition should provide clear documentation about it's behavior and the required parameters.
+Extensions should define their public APIs within their extension class or in an `extension` on the class. All APIs should be static, and for APIs that return a value, _most_ should provide those values in the form of an asynchronous callback. Each API definition should provide clear documentation about it's behavior and the required parameters.
 
 ##### Public API Definition Example
 
 ```swift
-protocol Identity {
+/// Defines the public interface for the Identity extension
+@objc public extension Identity {
     /// Appends visitor information to the given URL.
     /// - Parameters:
     ///   - url: URL to which the visitor info needs to be appended. Returned as is if it is nil or empty.
-    ///   - completion: closure which will be invoked once the updated url is available.
-    static func appendTo(url: URL?, completion: @escaping (URL?) -> ())
-
-    /// Returns all customer identifiers which were previously synced with the Adobe Experience Cloud.
-    /// - Parameter completion: closure which will be invoked once the customer identifiers are available.
-    static func getIdentifiers(completion: @escaping ([MobileVisitorId]?) -> ())
+    ///   - completion: closure which will be invoked once the updated url is available, along with an error if any occurred
+    static func appendTo(url: URL?, completion: @escaping (URL?, AEPError) -> Void) {
+			// ...
+    }
 }
 ```
 
 ##### Implementing your public APIs
 
-Most implementations of public APIs should be lightweight, usually just dispatching an `Event` to your extension, and occasionally listening for a response `Event` to provide a returned value.
-
-We recommend creating an `extension` on your class, which conforms to `Extension` to implement your API protocol.
-
-```swift
-extension AEPIdentity: Identity {
-  // implement your public APIs
-}
-```
+Most implementations of public APIs should be lightweight, usually just dispatching an `Event` to your extension, and occasionally listening for a response `Event` to provide a return value.
 
 ##### APIs that don't return a value
 
-APIs that only result in an action being taken and no value being returned can usually be implemented in just a few lines. In the following example the `AEPConfiguration` extension is listening for an `Event` of type `configuration` and source `requestContent` with the app id payload. When the `AEPConfiguration` extension receives this `Event` it will carry out the required processing to configure the SDK with the given `appId` and potentially dispatch other events and update it's shared state. 
+APIs that only result in an action being taken and no value being returned can usually be implemented in just a few lines. In the following example the `AEPConfiguration` extension is listening for an `Event` of type `EventType.configuration` and source `EventSource.requestContent` with the app id payload. When the `Configuration` extension receives this `Event` it will carry out the required processing to configure the SDK with the given `appId` and potentially dispatch other events and update it's shared state. 
 
 ```swift
-extension AEPCore: Configuration {
-    public static func configureWith(appId: String) {
-        let event = Event(name: "Configure with AppId", type: .configuration, source: .requestContent,
-                          data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
-        AEPCore.dispatch(event: event)
+@objc public extension MobileCore {
+    /// Configure the SDK by downloading the remote configuration file hosted on Adobe servers
+    /// specified by the given application ID. The configuration file is cached once downloaded
+    /// and used in subsequent calls to this API. If the remote file is updated after the first
+    /// download, the updated file is downloaded and replaces the cached file.
+    /// - Parameter appId: A unique identifier assigned to the app instance by Adobe Launch
+    static func configureWith(appId: String) {
+        let event = Event(name: "Configure with AppId", type: EventType.configuration, source: EventSource.requestContent,
+                          data: [CoreConstants.Keys.JSON_APP_ID: appId])
+        MobileCore.dispatch(event: event)
     }
 }
 ```
@@ -163,15 +157,18 @@ extension AEPCore: Configuration {
 For APIs that return a value, response listeners should be used. In the following example the API dispatches an `Event` to the `AEPConfiguration` extension, which results in a response `Event` being dispatched with the privacy status stored in the event data, subsequently notifying the response listener.
 
 ```swift
-extension AEPCore: Configuration {
-      public static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> ()) {
-        let event = Event(name: "Privacy Status Request", type: .configuration, source: .requestContent, data: [ConfigurationConstants.Keys.RETRIEVE_CONFIG: true])
+@objc public extension MobileCore {
+    /// Gets the currently configured `PrivacyStatus` and returns it via `completion`
+    /// - Parameter completion: Invoked with the current `PrivacyStatus`
+    @objc(getPrivacyStatus:)
+    static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> Void) {
+        let event = Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
-        EventHub.shared.registerResponseListener(parentExtension: AEPConfiguration.self, triggerEvent: event) { (responseEvent) in
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { responseEvent in
             self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
         }
 
-        AEPCore.dispatch(event: event)
+        MobileCore.dispatch(event: event)
     }
 }
 ```
@@ -183,59 +180,23 @@ The general pattern for getters follows:
 3. Dispatch the request `Event`.
 4. Handle the returned value within the response listener.
 
-#### Event Processing (TBD)
+#### Event Processing
 
-One of the most fundamental responsibilities for an extension is to process incoming events; these events often represent APIs being invoked. Extensions should only process one `Event` at a time, in a synchronous manner. To assist with this requirement, we provide a utility class `OperationOrderer`. The `OperationOrderer` allows for an extension to synchronously process events and decide if it should pause and wait for incoming data (potentially shared state) or proceed to the next `Event`.
+One of the most fundamental responsibilities for an extension is to process incoming events; these events often represent APIs being invoked. Extensions should only process one `Event` at a time, in a synchronous manner.
 
-##### `EventHandlerMapping`
+##### `readyForEvent`
 
-A convenience type definition of `EventHandlerMapping` exists in the `EventHub`, which is defined as a tuple containing an `Event` and a reference to a function that takes in an `Event` and returns a `Bool`.
+In many situations when processing an `Event` you will depend upon shared state from antother extension, for example a valid configuration from the Configuration extension. When implementing the `Extension` protocol, you have the option to impelemnt `readyForEvent(Event() -> Bool`, this function is invoked by the `EventHub` each time an `Event` is dispatched and gives extensions the ability to state if they have all the dependencies required to process that specfic `Event`.  
 
-```swift
-public typealias EventHandlerMapping = (event: Event, handler: (Event) -> (Bool))
-```
-
-##### Creating the `OperationOrderer`
+For example, in the Identity extension when processing an `Event` of type `genericIdentity` it requires a valid configuration to exist, so in our implementation of `readyForEvent` we determine if a valid configuration exists before handling the `Event`.
 
 ```swift
-// create
-private let eventQueue = OperationOrderer<EventHandlerMapping>(ConfigurationConstants.EXTENSION_NAME)
-```
-
-After creating an `OperationOrderer,` you must set the `handler`. The `handler` is a function that takes in an `Event` and returns a `Bool` indicating if `Event` processing should continue (`true`) or pause (`false`).
-
-In the following example we make use of the `EventHandlerMapping`, so that when we queue an `Event`, we also provide the associated function which will process that `Event`, this associated function returns a `Bool`.
-
-```swift
-eventQueue.setHandler({ return $0.handler($0.event) })
-```
-
-##### Adding an Event to the `OperationOrderer`
-
-When an extension receives a new `Event` it can add the `Event` and the corresponding function to handle it.
-
-```swift
-private func receiveConfigurationRequest(event: Event) {
-    eventQueue.add((event, handleConfigurationRequest(event:)))
+public func readyForEvent(_ event: Event) -> Bool {
+    return getSharedState(extensionName:  IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
 }
 ```
 
-##### Processing an Event
-
-As we have built up to this point, we have declared that any configuration request event will be handled by a new function `handleConfigurationRequest()`
-
-```swift
-private func handleConfigurationRequest(event: Event) -> Bool {
-   // process event, return true to continue to next event, false to pause the queue
-}
-```
-
-##### Restarting the Queue
-
-There are a few ways the queue will come back online and attempt to process the next `Event` if it is currently paused.
-
-1. A new `Event` is added to the queue
-2. `eventQueue.start()` is invoked
+Once the extension has signaled that it is ready for a given `Event`, the corresponding listener in the extension is notified of the `Event`. `Events` are dispatched to listeners in a synchronous fashion per extension, ensuring that any given extension cannot process more than one `Event` at a time.
 
 #### Shared States
 
@@ -287,7 +248,7 @@ All extensions are provided a default API to read shared state from another exte
 /// - Parameters:
 ///   - extensionName: An extension name whose `SharedState` will be returned
 ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
-func getSharedState(extensionName: String, event: Event?) -> (value: [String: Any]?, status: SharedStateStatus)?
+func getSharedState(extensionName: String, event: Event?) -> SharedStateResult?
 ```
 
 ##### Listening for Shared State Updates
@@ -295,7 +256,7 @@ func getSharedState(extensionName: String, event: Event?) -> (value: [String: An
 In some instances an extension may want to be notified of when an extension publishes a new shared state, to do this an extension can register a listener which listens for an `Event` of type `hub` and source `sharedState`, then it can inspect the event data to determine which extension has published new shared state.
 
 ```swift
-registerListener(type: .hub, source: .sharedState) { (event) in
+registerListener(type: EventType.hub, source: EventSource.sharedState) { (event) in
     guard let stateOwner = event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String else { return }
     // check if stateOwner is equal to the Extension whose Shared State you need
 }
@@ -303,4 +264,46 @@ registerListener(type: .hub, source: .sharedState) { (event) in
 
 #### Testing an Extension
 
-TODO
+Testing an extension can be done by using the `TestableExtensionRuntime`, this mock can simulate events to and from the `EventHub`, along with simulating shared state updates. The ``TestableExtensionRuntime` can be injected into any extension via the `init?(runtime: ExtensionRuntime)` initializer.
+
+##### Example #1
+
+For the first example, the following tests ensures that the Identity extension dispatches an `Event` with the proper data after it receives a Identity request identity `Event`.
+
+```swift
+func testIdentityRequestAppendUrlHappy() {
+    // Create our fake `Event` that Identity will receive
+    let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+    mockRuntime.simulateSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: appendUrlEvent, data: (["testKey":"testVal"], .set))
+    
+		// Simulate that `Event` being dispatched from the `EventHub`
+    mockRuntime.simulateComingEvent(event: appendUrlEvent)
+
+    // Inspect any `Event`s the Identity extension has dispatched
+    let responseEvent = mockRuntime.dispatchedEvents.first(where: {$0.responseID == appendUrlEvent.id})
+    XCTAssertNotNil(responseEvent)
+    XCTAssertNotNil(responseEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL])
+}
+```
+
+##### Example #2
+
+In this second example we are testing that the Configuration extension dispatches an `Event` containing the privacy status after receiving a get privacy status `Event`.
+
+```swift
+func testGetPrivacyStatusWhenConfigureIsEmpty() {
+    // Create our fake `Event`
+    let event = createGetPrivacyStatusEvent()
+    
+    // Simulate that `Event` being dispatched from the `EventHub`
+    mockRuntime.simulateComingEvents(event)
+    
+    // Inspect any `Event`s the Configuration extension has dispatched
+    XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+    XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+    XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
+    XCTAssertEqual(0, mockRuntime.firstEvent?.data?.count)
+    XCTAssertEqual(event.id, mockRuntime.firstEvent?.responseID)
+}
+```
+
