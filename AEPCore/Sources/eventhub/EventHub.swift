@@ -211,7 +211,7 @@ final class EventHub {
             // default to next event number
             version = eventNumberCounter.incrementAndGet()
         }
-        
+
         guard let sharedState = extensionContainer.sharedState else { return nil }
         return (sharedState, version)
     }
