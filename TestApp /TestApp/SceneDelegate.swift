@@ -9,7 +9,6 @@
  governing permissions and limitations under the License.
  */
 
-
 import UIKit
 import AEPCore
 import AEPIdentity
@@ -20,7 +19,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -30,7 +28,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
         }
         MobileCore.configureWith(appId: "94f571f308d5/66c427df16aa/launch-5f644611e053-development")
-
 
     }
 
@@ -62,6 +59,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-
 }
-

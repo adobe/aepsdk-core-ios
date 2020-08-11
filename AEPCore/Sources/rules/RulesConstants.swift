@@ -12,5 +12,5 @@ import Foundation
 
 /// Constant values used throughout Rules Engine
 enum RulesConstants {
-    static let LOG_TAG = "Rules Engine"
+    static let LOG_MODULE_PREFIX = "Launch Rules Engine"
 }

@@ -9,7 +9,6 @@
  governing permissions and limitations under the License.
  */
 
-
 import UIKit
 import AEPCore
 
@@ -21,10 +20,8 @@ class ViewController: UIViewController {
     }
     @IBAction func eventClicked(_ sender: Any) {
 
-        let event =  Event(name: "Test Event", type: EventType.genericPii, source: EventSource.requestContent, data: ["contextdata": ["app.age":"3"]])
+        let event =  Event(name: "Test Event", type: EventType.genericPii, source: EventSource.requestContent, data: ["contextdata": ["app.age": "3"]])
         MobileCore.dispatch(event: event)
     }
 
-
 }
-

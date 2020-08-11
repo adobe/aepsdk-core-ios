@@ -43,7 +43,6 @@ class Configuration: Extension {
         registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
         registerListener(type: EventType.lifecycle, source: EventSource.responseContent, listener: receiveLifecycleResponse(event:))
 
-
         // If we have an appId stored in persistence, kick off the configureWithAppId event
         if let appId = appIdManager.loadAppId(), !appId.isEmpty {
             dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
@@ -56,7 +55,7 @@ class Configuration: Extension {
             dispatch(event: responseEvent)
             createSharedState(data: config, event: nil)
             // notify rules engine to load cached rules
-            if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String{
+            if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
                 rulesEngine.loadCachedRules(for: rulesURLString)
             }
         }
@@ -211,11 +210,11 @@ class Configuration: Extension {
 
     /// notify the rules engine about the change of config
     /// - Parameter config: the current config
-    private func notifyRuleEngine(_ config:[String: Any]){
-        if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String{
+    private func notifyRuleEngine(_ config: [String: Any]) {
+        if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
             rulesEngine.loadRemoteRules(from: rulesURLString)
         }
-    } 
+    }
 
     // MARK: Helpers
 
