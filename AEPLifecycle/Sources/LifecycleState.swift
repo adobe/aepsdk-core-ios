@@ -56,7 +56,7 @@ struct LifecycleState {
     ///   - adId: The advertising identifier provided by the identity extension
     ///   - sessionTimeout: The session timeout for this start event, defaults to 300 seconds
     /// - Returns: The previous session info if exists, otherwise nil
-    mutating func start(date: Date, additionalContextData: [String: String]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)) -> LifecycleSessionInfo? {
+    mutating func start(date: Date, additionalContextData: [String: Any]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)) -> LifecycleSessionInfo? {
         let sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
         // Build default LifecycleMetrics
         let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()

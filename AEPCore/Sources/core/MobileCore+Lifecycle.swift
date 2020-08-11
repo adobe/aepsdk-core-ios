@@ -17,7 +17,7 @@ import Foundation
     /// If a current session is running, then calling this method does nothing.
     /// - Parameter additionalContextData: Optional additional context for this session.
     @objc(lifecycleStart:)
-    static func lifecycleStart(additionalContextData: [String: String]?) {
+    static func lifecycleStart(additionalContextData: [String: Any]?) {
         let data: [String: Any] = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.START,
                                    CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
         let event = Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)

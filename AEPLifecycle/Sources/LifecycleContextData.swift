@@ -10,20 +10,14 @@
  */
 
 import Foundation
+import AEPServices
 
 /// Represents context data collected from the Lifecycle extension
-struct LifecycleContextData: Codable, Equatable {
+struct LifecycleContextData {
     var lifecycleMetrics: LifecycleMetrics = LifecycleMetrics()
-    var sessionContextData: [String: String] = [String: String]()
-    var additionalContextData: [String: String] = [String: String]()
+    var sessionContextData: [String: Any] = [String: Any]()
+    var additionalContextData: [String: Any] = [String: Any]()
     var advertisingIdentifier: String?
-
-    enum CodingKeys: String, CodingKey {
-        case lifecycleMetrics
-        case sessionContextData
-        case additionalContextData = "additionalcontextdata"
-        case advertisingIdentifier = "advertisingidentifier"
-    }
 
     init() {}
 
@@ -77,5 +71,43 @@ struct LifecycleContextData: Codable, Equatable {
         }
 
         return eventData
+    }
+}
+
+extension LifecycleContextData: Equatable {
+    static func == (lhs: LifecycleContextData, rhs: LifecycleContextData) -> Bool {
+        return lhs.lifecycleMetrics == rhs.lifecycleMetrics
+            && NSDictionary(dictionary: lhs.sessionContextData).isEqual(to: rhs.sessionContextData)
+            && NSDictionary(dictionary: lhs.additionalContextData).isEqual(to: rhs.additionalContextData)
+            && lhs.advertisingIdentifier == rhs.advertisingIdentifier
+    }
+}
+
+extension LifecycleContextData: Codable {
+    enum CodingKeys: String, CodingKey {
+        case lifecycleMetrics
+        case sessionContextData
+        case additionalContextData = "additionalcontextdata"
+        case advertisingIdentifier = "advertisingidentifier"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+
+        lifecycleMetrics = try values.decode(LifecycleMetrics.self, forKey: .lifecycleMetrics)
+        let anyCodableSessionData = try? values.decode([String: AnyCodable].self, forKey: .sessionContextData)
+        sessionContextData = AnyCodable.toAnyDictionary(dictionary: anyCodableSessionData) ?? [:]
+        let anyCodableAdditionalData = try? values.decode([String: AnyCodable].self, forKey: .additionalContextData)
+        additionalContextData = AnyCodable.toAnyDictionary(dictionary: anyCodableAdditionalData) ?? [:]
+        advertisingIdentifier = try? values.decode(String.self, forKey: .advertisingIdentifier)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(lifecycleMetrics, forKey: .lifecycleMetrics)
+        try container.encode(AnyCodable.from(dictionary: sessionContextData), forKey: .sessionContextData)
+        try container.encode(AnyCodable.from(dictionary: additionalContextData), forKey: .additionalContextData)
+        try container.encode(advertisingIdentifier, forKey: .advertisingIdentifier)
     }
 }
