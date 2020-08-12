@@ -24,8 +24,8 @@ extension Event {
     }
 
     /// Returns the additional data associated with a Lifecycle event
-    var additionalData: [String: String]? {
-        return data?[LifecycleConstants.EventDataKeys.ADDITIONAL_CONTEXT_DATA] as? [String: String]
+    var additionalData: [String: Any]? {
+        return data?[LifecycleConstants.EventDataKeys.ADDITIONAL_CONTEXT_DATA] as? [String: Any]
     }
 
     /// Private helper to read the action value out of `data`
