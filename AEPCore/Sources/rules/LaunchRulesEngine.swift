@@ -20,11 +20,14 @@ struct LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
     private static let CONSEQUENCE_EVENT_DATA_KEY_ID = "id"
     private static let CONSEQUENCE_EVENT_DATA_KEY_TYPE = "type"
+    private static let CONSEQUENCE_EVENT_DATA_KEY_DETAIL = "detail"
+    private static let CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE = "triggeredconsequence"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
 
     private let transform = Transform()
     private let extensionRuntime: ExtensionRuntime
+    private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
 
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
@@ -43,27 +46,49 @@ struct LaunchRulesEngine {
     }
 
     /// Downloads the rules from the remote server
-    /// - Parameter url: the `URL` of the remote urls
-    func loadRemoteRules(from url: URL) {
+    /// - Parameter urlString: the url of the remote rules
+    func loadRemoteRules(from urlString: String) {
+        guard let url = URL(string: urlString) else {
+            Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
+            return
+        }
         rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
             guard let data = data else {
                 return
             }
 
-            let rules = JSONRulesParser.parse(data)
-            self.rulesEngine.addRules(rules: rules)
+            guard let rules = JSONRulesParser.parse(data) else {
+                return
+            }
+            self.rulesQueue.sync {
+                self.rulesEngine.clearRules()
+                self.rulesEngine.addRules(rules: rules)
+                Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from remote (count: \(rules.count))")
+
+            }
         }
     }
 
     /// Reads the cached rules
-    /// - Parameter url: the `URL` of the remote urls
-    func loadCachedRules(for url: URL) {
+    /// - Parameter urlString: the url of the remote rules
+    func loadCachedRules(for urlString: String) {
+        guard let url = URL(string: urlString) else {
+            Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
+            return
+        }
         guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else {
             return
         }
 
-        let rules = JSONRulesParser.parse(data)
-        rulesEngine.addRules(rules: rules)
+        guard let rules = JSONRulesParser.parse(data) else {
+            return
+        }
+
+        rulesQueue.async {
+            self.rulesEngine.clearRules()
+            self.rulesEngine.addRules(rules: rules)
+            Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from cache (count: \(rules.count))")
+        }
     }
 
     /// Evaluates all the current rules against the supplied `Event`.
@@ -73,9 +98,15 @@ struct LaunchRulesEngine {
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
-        let rules = rulesEngine.evaluate(data: traversableTokenFinder)
+        var matchedRules: [LaunchRule]?
+        rulesQueue.sync {
+            matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
+        }
+        guard let matchedRulesUnwrapped = matchedRules else {
+            return event
+        }
         var eventData = event.data
-        for rule in rules {
+        for rule in matchedRulesUnwrapped {
             for consequence in rule.consequences {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
@@ -83,14 +114,17 @@ struct LaunchRulesEngine {
                     guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
                         continue
                     }
-                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
+                    Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Attaching event data with \(from)")
+                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: false)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
                         continue
                     }
-                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
+                    Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Modifying event data with \(from)")
+                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: true)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
+                        Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Generating new consequence event \(event)")
                         extensionRuntime.dispatch(event: event)
                     }
                 }
@@ -135,9 +169,10 @@ struct LaunchRulesEngine {
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
     private func generateConsequenceEvent(consequence: Consequence) -> Event? {
-        var dict: [String: Any] = consequence.detailDict
+        var dict: [String: Any] = [:]
+        dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.detailDict
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: dict)
+        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
     }
 }

@@ -43,7 +43,7 @@ class LaunchRulesEngineTests: XCTestCase {
         let rulesEngine = LaunchRulesEngine(extensionRuntime: runtime)
         // ~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename
         let tokens = TokenFinder(event: event, extensionRuntime: runtime)
-        let result = rulesEngine.replaceToken(for: rules[0].consequences[0], data: tokens)
+        let result = rulesEngine.replaceToken(for: (rules?[0].consequences[0])!, data: tokens)
         // http://adobe.com/device=abc
 
         let urlString = result.detailDict["url"] as! String

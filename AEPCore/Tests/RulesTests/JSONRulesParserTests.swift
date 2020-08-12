@@ -22,6 +22,7 @@ class JSONRulesParserTests: XCTestCase {
     {
         "version": 1,
         "rules": []
+    }
     """
     private let INVALID_JSON_RULE = """
     {
@@ -44,13 +45,13 @@ class JSONRulesParserTests: XCTestCase {
         }
         /// Then: this json rules should be parsed to `LaunchRule` objects
         let rules = JSONRulesParser.parse(data)
-        XCTAssertEqual(2, rules.count)
-        XCTAssertTrue(rules[0].condition is LogicalExpression)
+        XCTAssertEqual(2, rules?.count)
+        XCTAssertTrue(rules?[0].condition is LogicalExpression)
 
-        XCTAssertTrue(rules[1].condition is LogicalExpression)
-        XCTAssertEqual("and", (rules[1].condition as! LogicalExpression).operationName)
+        XCTAssertTrue(rules?[1].condition is LogicalExpression)
+        XCTAssertEqual("and", (rules?[1].condition as! LogicalExpression).operationName)
 
-        let levelOneGroupAnd = rules[0].condition as! LogicalExpression
+        let levelOneGroupAnd = rules?[0].condition as! LogicalExpression
         XCTAssertEqual("and", levelOneGroupAnd.operationName)
 
         XCTAssertTrue(levelOneGroupAnd.operands[0] is LogicalExpression)
@@ -69,11 +70,11 @@ class JSONRulesParserTests: XCTestCase {
 
     func testGenerateLaunchRulesEmpty() {
         let rules = JSONRulesParser.parse(EMPTY_JSON_RULE.data(using: .utf8)!)
-        XCTAssertEqual(0, rules.count)
+        XCTAssertEqual(0, rules?.count)
     }
 
     func testGenerateLaunchRulesInvalid() {
         let rules = JSONRulesParser.parse(INVALID_JSON_RULE.data(using: .utf8)!)
-        XCTAssertEqual(0, rules.count)
+        XCTAssertNil(rules)
     }
 }
