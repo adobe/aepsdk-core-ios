@@ -6,7 +6,7 @@ This document covers the high level concepts about developing your own extension
 
 #### Defining an Extension
 
-For an extension to be registered with the `EventHub`, it must conform to the `Extension` protocol. The `Extension` protocol defines an `Extension` as a type which provides a initializer which takes in a `ExtensionRuntime`, a  `name`, `friendlyName`, `version`, `metadata` and implements two methods: `onRegistered()`, `onUnregistered()`, and `readyForEvent()`.
+For an extension to be registered with the `EventHub`, it must conform to the `Extension` protocol. The `Extension` protocol defines an `Extension` as a type which provides a initializer which takes in a `ExtensionRuntime`, a  `name`, `friendlyName`, `version`, `metadata` and implements three methods: `onRegistered()`, `onUnregistered()`, and `readyForEvent()`.
 
 See [`Extension.swift`](https://github.com/adobe/aepsdk-core-ios/blob/master/Sources/eventhub/Extension.swift) for the complete definition.
 
@@ -157,18 +157,14 @@ APIs that only result in an action being taken and no value being returned can u
 For APIs that return a value, response listeners should be used. In the following example the API dispatches an `Event` to the `AEPConfiguration` extension, which results in a response `Event` being dispatched with the privacy status stored in the event data, subsequently notifying the response listener.
 
 ```swift
-@objc public extension MobileCore {
-    /// Gets the currently configured `PrivacyStatus` and returns it via `completion`
-    /// - Parameter completion: Invoked with the current `PrivacyStatus`
-    @objc(getPrivacyStatus:)
-    static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> Void) {
-        let event = Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
+/// Gets the currently configured `PrivacyStatus` and returns it via `completion`
+/// - Parameter completion: Invoked with the current `PrivacyStatus`
+@objc(getPrivacyStatus:)
+static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> Void) {
+    let event = Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { responseEvent in
-            self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
-        }
-
-        MobileCore.dispatch(event: event)
+    MobileCore.dispatch(event: event) { (responseEvent) in
+        self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
     }
 }
 ```
@@ -264,7 +260,7 @@ registerListener(type: EventType.hub, source: EventSource.sharedState) { (event)
 
 #### Testing an Extension
 
-Testing an extension can be done by using the `TestableExtensionRuntime`, this mock can simulate events to and from the `EventHub`, along with simulating shared state updates. The ``TestableExtensionRuntime` can be injected into any extension via the `init?(runtime: ExtensionRuntime)` initializer.
+Testing an extension can be done by using the `TestableExtensionRuntime`, this mock can simulate events to and from the `EventHub`, along with simulating shared state updates. The `TestableExtensionRuntime` can be injected into any extension via the `init?(runtime: ExtensionRuntime)` initializer.
 
 ##### Example #1
 
