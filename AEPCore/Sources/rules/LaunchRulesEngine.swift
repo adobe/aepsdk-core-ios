@@ -30,17 +30,21 @@ class LaunchRulesEngine {
     private let extensionRuntime: ExtensionRuntime
     private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
     private var cachedEvents: [Event]?
+    private let dataStore: NamedCollectionDataStore
 
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
     init(name: String, extensionRuntime: ExtensionRuntime, shouldCacheEvent: Bool = false) {
         self.name = name
+        dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
-        if shouldCacheEvent { cachedEvents = [Event]() }
+        if shouldCacheEvent, dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
+            cachedEvents = [Event]()
+        }
     }
 
     /// Register a `RulesTracer`
@@ -52,6 +56,7 @@ class LaunchRulesEngine {
     /// Downloads the rules from the remote server
     /// - Parameter urlString: the url of the remote rules
     func loadRemoteRules(from urlString: String) {
+        reprocessCachedEventsIfExists()
         guard let url = URL(string: urlString) else {
             Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
             return
@@ -75,6 +80,7 @@ class LaunchRulesEngine {
     /// Reads the cached rules
     /// - Parameter urlString: the url of the remote rules
     func loadCachedRules(for urlString: String) {
+        reprocessCachedEventsIfExists()
         guard let url = URL(string: urlString) else {
             Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
             return
@@ -100,20 +106,12 @@ class LaunchRulesEngine {
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
-        if var events = cachedEvents {
-            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
-                for e in events {
-                    _ = process(event: e)
-                }
-                cachedEvents = nil
-            } else {
-                events.append(event)
-            }
-        }
-
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         var matchedRules: [LaunchRule]?
         rulesQueue.sync {
+            if var events = cachedEvents {
+                events.append(event)
+            }
             matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
         }
         guard let matchedRulesUnwrapped = matchedRules else {
@@ -177,6 +175,15 @@ class LaunchRulesEngine {
     private func replaceToken(for value: String, data: Traversable) -> String {
         let template = Template(templateString: value, tagDelimiterPair: (LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER, LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER))
         return template.render(data: data, transformers: transform)
+    }
+
+    private func reprocessCachedEventsIfExists() {
+        if let events = cachedEvents {
+            for e in events {
+                _ = process(event: e)
+            }
+            cachedEvents = nil
+        }
     }
 
     /// Generate a consequence event with provided consequence data

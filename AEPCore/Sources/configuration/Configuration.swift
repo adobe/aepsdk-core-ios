@@ -32,12 +32,7 @@ class Configuration: Extension {
     /// Initializes the Configuration extension and it's dependencies
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        if let _ = dataStore.getBool(key: ConfigurationConstants.Keys.APP_HAS_LAUNCHED) {
-            rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: runtime)
-        } else {
-            dataStore.set(key: ConfigurationConstants.Keys.APP_HAS_LAUNCHED, value: true)
-            rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: runtime, shouldCacheEvent: true)
-        }
+        rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: runtime, shouldCacheEvent: true)
 
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
@@ -221,10 +216,6 @@ class Configuration: Extension {
         if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
             rulesEngine.loadRemoteRules(from: rulesURLString)
         }
-    }
-
-    private func reprocessEvents() {
-        dispatch(event: Event(name: rulesEngineName, type: EventType.rulesEngine, source: EventSource.requestReset, data: nil))
     }
 
     // MARK: Helpers
