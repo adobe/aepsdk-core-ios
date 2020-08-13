@@ -14,7 +14,7 @@ import Foundation
 @_implementationOnly import SwiftRulesEngine
 
 /// A rules engine for Launch rules
-struct LaunchRulesEngine {
+class LaunchRulesEngine {
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
@@ -26,17 +26,21 @@ struct LaunchRulesEngine {
     private static let CONSEQUENCE_TYPE_MOD = "mod"
 
     private let transform = Transform()
+    private let name: String
     private let extensionRuntime: ExtensionRuntime
     private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
+    private var cachedEvents: [Event]?
 
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
-    init(extensionRuntime: ExtensionRuntime) {
+    init(name: String, extensionRuntime: ExtensionRuntime, shouldCacheEvent: Bool = false) {
+        self.name = name
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
+        if shouldCacheEvent { cachedEvents = [Event]() }
     }
 
     /// Register a `RulesTracer`
@@ -64,7 +68,6 @@ struct LaunchRulesEngine {
                 self.rulesEngine.clearRules()
                 self.rulesEngine.addRules(rules: rules)
                 Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from remote (count: \(rules.count))")
-
             }
         }
     }
@@ -97,6 +100,17 @@ struct LaunchRulesEngine {
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
+        if var events = cachedEvents {
+            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+                for e in events {
+                    _ = process(event: e)
+                }
+                cachedEvents = nil
+            } else {
+                events.append(event)
+            }
+        }
+
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         var matchedRules: [LaunchRule]?
         rulesQueue.sync {
@@ -115,13 +129,13 @@ struct LaunchRulesEngine {
                         continue
                     }
                     Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Attaching event data with \(from)")
-                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: false)
+                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
                         continue
                     }
                     Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Modifying event data with \(from)")
-                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: true)
+                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Generating new consequence event \(event)")

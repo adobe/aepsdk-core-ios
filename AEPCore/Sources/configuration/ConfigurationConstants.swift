@@ -38,6 +38,7 @@ struct ConfigurationConstants {
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
         static let RULES_URL = "rules.url"
+        static let APP_HAS_LAUNCHED = "config.app.has.launched"
     }
 
     struct Privacy {
