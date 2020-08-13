@@ -43,7 +43,12 @@ extension Event {
     }
 
     var timeout: TimeInterval? {
-        return details?[SignalConstants.EventDataKeys.TIMEOUT] as? TimeInterval
+        if let intervalDouble = details?[SignalConstants.EventDataKeys.TIMEOUT] as? Double {
+            return TimeInterval(intervalDouble)
+        } else if let intervalInt = details?[SignalConstants.EventDataKeys.TIMEOUT] as? Int {
+            return TimeInterval(intervalInt)
+        }
+        return nil
     }
 
     // MARK: - Open URL Consequences

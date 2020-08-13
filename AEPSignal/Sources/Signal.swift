@@ -40,6 +40,13 @@ public class Signal: NSObject, Extension {
         super.init()
     }
 
+    // internal init added for testing
+    internal init(runtime: ExtensionRuntime, hitQueue: HitQueuing) {
+        self.hitQueue = hitQueue
+        self.runtime = runtime
+        super.init()
+    }
+
     public func onRegistered() {
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
         registerListener(type: EventType.rulesEngine, source: EventSource.responseContent, listener: handleRulesEngineResponse)
@@ -147,11 +154,4 @@ public class Signal: NSObject, Extension {
 
         return privacyStatus == .optedOut
     }
-
-    // MARK: - Testing Helpers
-    #if DEBUG
-        func setHitQueue(hitQueue: HitQueuing) {
-            self.hitQueue = hitQueue
-        }
-    #endif
 }

@@ -23,6 +23,12 @@ public struct HttpConnection {
     /// The error associated with the request failure or nil on success
     public let error: Error?
 
+    /// Initialize an HttpConnection structure
+    ///
+    /// - Parameters:
+    ///   - data: optional data returned from the server in the connection
+    ///   - response: the response from the server
+    ///   - error: an optional error if something failed
     public init(data: Data?, response: HTTPURLResponse?, error: Error?) {
         self.data = data
         self.response = response

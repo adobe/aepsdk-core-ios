@@ -39,9 +39,8 @@ class SignalTests: XCTestCase {
         ServiceProvider.shared.networkService = mockNetworkService
         ServiceProvider.shared.urlService = mockOpenURLService
                 
-        signal = Signal(runtime: mockRuntime)
+        signal = Signal(runtime: mockRuntime, hitQueue: mockHitQueue)
         signal.onRegistered()
-        signal.setHitQueue(hitQueue: mockHitQueue)
     }
     
     // after each
