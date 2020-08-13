@@ -12,6 +12,12 @@
 
 ## Contract
 
+
+### Event hub:
+- Event hub itself is not accessible, you can interact with it through `MobileCore` class or Extension's API.
+- When initialize the event hub, the set of the extension class need to be passed to it. Currently we do not support dynmaically add or remove an extension. 
+- Once all the extensions's `onRegistered()` have finished, the event hub is considered booted and it begins to distribue events to each extensiosn.
+
 In the following docs, assuming the events coming in the order of:
 
 E1 → E2 → E3 → .... → EN1 → EN2 → EN3 → EN4 → .......
@@ -26,7 +32,6 @@ E1 → E2 → E3 → .... → EN1 → EN2 → EN3 → EN4 → .......
 
 - All the extensions are being registered at the same time, simultaneously, when the public `start` method gets called.
 - init() always runs before onRegistered()
-- Once all the extensions's onRegistered() have finished, the event hub is considered booted.
 - Avoid reading shared state of any other extension during initialization or registration.
 - Do minimal job in init()
 - Register listeners, init data queues, read local storage inside onRegister
