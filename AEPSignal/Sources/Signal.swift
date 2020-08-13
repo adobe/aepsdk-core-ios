@@ -16,7 +16,8 @@ import Foundation
 
 @objc(AEPSignal)
 public class Signal: NSObject, Extension {
-    private var hitQueue: HitQueuing
+
+    private(set) var hitQueue: HitQueuing
 
     // MARK: - Extension
 
@@ -36,6 +37,13 @@ public class Signal: NSObject, Extension {
         hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: SignalHitProcessor())
         self.runtime = runtime
 
+        super.init()
+    }
+
+    // internal init added for testing
+    internal init(runtime: ExtensionRuntime, hitQueue: HitQueuing) {
+        self.hitQueue = hitQueue
+        self.runtime = runtime
         super.init()
     }
 
@@ -91,6 +99,12 @@ public class Signal: NSObject, Extension {
             return
         }
 
+        // https required for pii calls
+        if event.isCollectPii && !urlString.starts(with: "https") {
+            Log.warning(label: SignalConstants.LOG_PREFIX, "Dropping collect pii call, url must be https.")
+            return
+        }
+
         guard let url = URL(string: urlString) else {
             Log.warning(label: SignalConstants.LOG_PREFIX, "Dropping postback, templateurl from EventData is malformed.")
             return
@@ -132,7 +146,7 @@ public class Signal: NSObject, Extension {
     private func shouldIgnore(event: Event) -> Bool {
         guard let configSharedState = getSharedState(extensionName: SignalConstants.Configuration.NAME, event: event)?.value else {
             Log.debug(label: SignalConstants.LOG_PREFIX, "Configuration is unavailable - unable to process event '\(event.id)'.")
-            return false
+            return true
         }
 
         let privacyStatusStr = configSharedState[SignalConstants.Configuration.GLOBAL_PRIVACY] as? String ?? ""

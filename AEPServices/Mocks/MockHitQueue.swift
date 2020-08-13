@@ -24,6 +24,7 @@ public class MockHitQueue: HitQueuing {
         self.processor = processor
     }
 
+    @discardableResult
     public func queue(entity: DataEntity) -> Bool {
         queuedHits.append(entity)
         return true

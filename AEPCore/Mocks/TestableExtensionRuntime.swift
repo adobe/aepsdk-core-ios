@@ -13,7 +13,9 @@
 @testable import AEPCore
 import Foundation
 
-// Testable implemetation for `ExtensionRuntime`, enable easy setup for the input and verification of the output of an extension
+/// Testable implementation for `ExtensionRuntime`
+///
+/// Enable easy setup for the input and verification of the output of an extension
 public class TestableExtensionRuntime: ExtensionRuntime {
     public var listeners: [String: EventListener] = [:]
     public var dispatchedEvents: [Event] = []
@@ -22,7 +24,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
 
     public init() {}
 
-    // MARK: ExtensionRuntime methods implementation
+    // MARK: - ExtensionRuntime methods implementation
 
     public func registerListener(type: String, source: String, listener: @escaping EventListener) {
         listeners["\(type)-\(source)"] = listener
@@ -54,7 +56,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
 
     public func stopEvents() {}
 
-    // MARK: Helper methods
+    // MARK: - Helper methods
 
     /// Simulate the events that are being sent to event hub, if there is a listener registered for that type of event, that listener will receive the event
     /// - Parameters:

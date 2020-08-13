@@ -10,23 +10,17 @@
  governing permissions and limitations under the License.
  */
 
-import AEPCore
+import AEPServices
 import Foundation
 
-/// Struct representing a hit stored in the Signal database
-struct SignalHit: Codable {
-    /// URL for the postback
-    let url: URL
+public class MockURLService: URLOpening {
+    public var dispatchedUrls: [ URL ] = []
 
-    /// Optional POST body for the postback
-    let postBody: String?
+    public init() {}
 
-    /// Content-Type header for the postback
-    let contentType: String?
-
-    /// Timeout for the network request
-    let timeout: TimeInterval?
-
-    /// Event responsible for triggering this postback
-    let event: Event
+    @discardableResult
+    public func openUrl(_ url: URL) -> Bool {
+        dispatchedUrls.append(url)
+        return true
+    }
 }

@@ -39,11 +39,15 @@ class SignalHitProcessor: HitProcessing {
             httpMethod = .post
         }
 
-        let headers = [NetworkServiceConstants.Headers.CONTENT_TYPE: signalHit.contentType]
+        var headers: [String: String] = [:]
+        if let contentType = signalHit.contentType {
+            headers[NetworkServiceConstants.Headers.CONTENT_TYPE] = contentType
+        }
+
         let request = NetworkRequest(url: signalHit.url, httpMethod: httpMethod, connectPayload: signalHit.postBody ?? "", httpHeaders: headers, connectTimeout: timeout, readTimeout: timeout)
 
         networkService.connectAsync(networkRequest: request) { connection in
-            self.handleNetworkResponse(entity: entity, hit: signalHit, connection: connection, completion: completion)
+            self.handleNetworkResponse(hit: signalHit, connection: connection, completion: completion)
         }
     }
 
@@ -51,17 +55,17 @@ class SignalHitProcessor: HitProcessing {
 
     /// Handles the network response after a hit has been sent to the server
     /// - Parameters:
-    ///   - entity: the data entity responsible for the hit
+    ///   - hit: the signal hit being processed
     ///   - connection: the connection returned after we make the network request
     ///   - completion: a completion block to invoke after we have handled the network response with true for success and false for failure (retry)
-    private func handleNetworkResponse(entity _: DataEntity, hit: SignalHit, connection: HttpConnection, completion: @escaping (Bool) -> Void) {
+    private func handleNetworkResponse(hit: SignalHit, connection: HttpConnection, completion: @escaping (Bool) -> Void) {
         if connection.responseCode == 200 {
             // hit sent successfully
             Log.debug(label: LOG_TAG, "Signal request successfully sent: \(hit.url.absoluteString) sent successfully")
             completion(true)
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
-            Log.warning(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later:  \(hit.url.absoluteString)")
+            Log.warning(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(hit.url.absoluteString)")
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
