@@ -20,14 +20,14 @@ class JSONRulesParser {
     /// - Parameter data: data of json rules
     /// - Returns: an array of `LaunchRule`
     /// - Returns: empty array if json data are invalid or empty
-    static func parse(_ data: Data) -> [LaunchRule] {
+    static func parse(_ data: Data) -> [LaunchRule]? {
         let jsonDecoder = JSONDecoder()
         do {
             let root = try jsonDecoder.decode(JSONRuleRoot.self, from: data)
             return root.convert()
         } catch {
             Log.error(label: JSONRulesParser.LOG_LABEL, "Failed to encode json rules, the error is: \(error)")
-            return []
+            return nil
         }
     }
 }

@@ -47,7 +47,7 @@ Protocols that describe a capability should be named using the suffixes "able", 
 Use caseless enums to store constants as static variables. NOTE: The advantage of using enums over structs is that they can't be mistakenly instantiated and function as a pure namespace.
 
 Preferred:
-```
+```swift
 enum LifecycleConstants {
   static let start = "start"
   static let pause = "pause"
@@ -55,7 +55,7 @@ enum LifecycleConstants {
 ```
 
 Not Preferred:
-```
+```swift
 extension AEPCore: Lifecycle {
   // Constants
   static let start = "start"
@@ -77,7 +77,7 @@ extension AEPCore: Lifecycle {
 * The class name of AEP extension should NOT use prefix `AEP`.
 
   Preferred:
-  ```  
+  ```
   MobileCore.swift
   Lifecycle.swift
   ```
@@ -133,7 +133,7 @@ This includes but is not limited to:
 - methods
 
 Example:
-```
+```swift
 @objc(AEPMyClass)
 class MyClass {
 
@@ -148,7 +148,7 @@ func canHazCheezburger() -> Bool {
 ##### Attributes should be on the same line as variables and imports.
 
 Example:
-```
+```swift
 @testable import MyTestLib
 
 @nonobjc var onlyForSwift: String
@@ -159,7 +159,7 @@ Example:
 Use compiler provided type inference features to write shorter and cleaner code.
 
 Preferred:
-```
+```swift
 let str = "str"
 ```
 Not Preferred:
@@ -172,12 +172,12 @@ let str: String = "str"
 Use shortcut type declarations over the full generic counterpart.
 
 Preferred:
-```
+```swift
 func getArray() -> [String]
 func getDict() -> [String: String]
 ```
 Not Preferred:
-```
+```swift
 func getArray() -> Array<String>
 func getDict() -> Dictionary<String, String>
 ```
@@ -186,11 +186,11 @@ func getDict() -> Dictionary<String, String>
 For optional binding, shadow the original name when possible.
 
 Preferred:
-```
+```swift
 if let event = event { … }
 ```
 Not Preferred:
-```
+```swift
 if let unwrappedEvent = event { ... }
 ```
 
@@ -199,7 +199,7 @@ if let unwrappedEvent = event { ... }
 Use Apple's recommended [Markup language](https://developer.apple.com/library/archive/documentation/Xcode/Reference/xcode_markup_formatting_ref/AddingMarkup.html#//apple_ref/doc/uid/TP40016497-CH100-SW1) for documentation.
 
 Preferred:
-```
+```swift
 /**
  Creates a full name string from a given first name and last name
 
@@ -213,7 +213,7 @@ func getFullName(firstName: String, lastName: String) -> String
 ```
 
 Not Preferred:
-```
+```swift
 // Returns a full name string from a given first name and last name
 func getFullName(firstName: String, lastName: String) -> String
 ```

@@ -44,35 +44,38 @@ struct RulesDownloader: RulesLoader {
 
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
         ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in
-            if let data = httpConnection.data {
-                // Store Zip file in temp directory for unzipping
-                switch self.storeDataInTempDirectory(data: data) {
-                case let .success(url):
-                    // Unzip the rules.json from the zip file in the temp directory and get the rules dict from the json file
-                    guard let data = self.unzipRules(at: url) else {
-                        completion(nil)
-                        return
-                    }
-                    let cachedRules = CachedRules(cacheable: data,
-                                                  lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
-                                                  eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
-                    // Cache the rules, if fails, log message
-                    if !self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
-                        Log.warning(label: "rules downloader", "Unable to cache rules")
-                    }
-                    completion(data)
-                    return
-                case let .failure(error):
-                    Log.warning(label: "rules downloader", error.localizedDescription)
-                    completion(nil)
-                    return
-                }
-            } else if httpConnection.responseCode == 304 {
-                completion(self.getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable)
+            if httpConnection.responseCode == 304 {
+                completion(nil)
                 return
             }
 
-            completion(nil)
+            guard let data = httpConnection.data else {
+                completion(nil)
+                return
+            }
+            // Store Zip file in temp directory for unzipping
+            switch self.storeDataInTempDirectory(data: data) {
+            case let .success(url):
+                // Unzip the rules.json from the zip file in the temp directory and get the rules dict from the json file
+                guard let data = self.unzipRules(at: url) else {
+                    completion(nil)
+                    return
+                }
+                let cachedRules = CachedRules(cacheable: data,
+                                              lastModified: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.LAST_MODIFIED] as? String,
+                                              eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
+                // Cache the rules, if fails, log message
+                if !self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
+                    Log.warning(label: "rules downloader", "Unable to cache rules")
+                }
+                completion(data)
+                return
+            case let .failure(error):
+                Log.warning(label: "rules downloader", error.localizedDescription)
+                completion(nil)
+                return
+            }
+
         }
     }
 

@@ -8,8 +8,8 @@ This document outlines the specification for an Event Hub `Event`. These events 
 | ---------- | -------------- | ------------------------------------------------------------ |
 | name       | String         | Event name used primarily for logging                        |
 | id         | UUID           | UUID which uniquely identifies this event                    |
-| type       | EventType      | See [Event Type](#event-type)                                |
-| source     | EventSource    | See [Event Source](#event-source)                            |
+| type       | String         | See [Event Type](#event-type)                                |
+| source     | String        | See [Event Source](#event-source)                            |
 | data       | [String: Any]? | Dictionary holding one or more key value pairs that are associated with the event. |
 | timestamp  | Date           | The time that this event was generated                       |
 | responseID | UUID?          | If this event is a response event, it indiciates the event which triggered this event. |
@@ -68,6 +68,6 @@ Along with an `EventType`, an `Event` has a `EventSource` enum associated with i
 Creating a new `Event` is easy:
 
 ```swift
-let event = Event(name: "MyEvent", type: .analytics, source: .responseContent, data: ["myKey": true])
+let event = Event(name: "MyEvent", type: EventType.analytics, source: EventSource.responseContent, data: ["myKey": true])
 ```
 
