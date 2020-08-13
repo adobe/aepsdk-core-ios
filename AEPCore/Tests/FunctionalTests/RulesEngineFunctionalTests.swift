@@ -51,7 +51,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
 
         // test
-        rulesEngine.loadRemoteRules(from: URL(string: "http://test.com/rules.url")!)
+        rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
         let processedEvent = rulesEngine.process(event: event)
 
         // verify

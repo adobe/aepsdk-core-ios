@@ -37,6 +37,7 @@ struct ConfigurationConstants {
         static let BUILD_ENVIRONMENT = "build.environment"
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
+        static let RULES_URL = "rules.url"
     }
 
     struct Privacy {
@@ -54,6 +55,6 @@ enum RulesDownloaderConstants {
     static let RULES_TEMP_DIR = "com.adobe.rules"
 
     enum Keys {
-        static let RULES_CACHE_PREFIX = "cached.rules"
+        static let RULES_CACHE_PREFIX = "cached.rules."
     }
 }

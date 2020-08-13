@@ -91,7 +91,7 @@ class LifecycleContextDataTests: XCTestCase {
         contextData = contextData.merging(with: otherContextData)
 
         // verify
-        XCTAssertEqual(otherContextData.additionalContextData, contextData.additionalContextData)
+        XCTAssertEqual(otherContextData.additionalContextData as? [String: String], contextData.additionalContextData as? [String: String])
     }
 
     /// Tests that session context data is merged correctly
@@ -107,7 +107,7 @@ class LifecycleContextDataTests: XCTestCase {
         contextData = contextData.merging(with: otherContextData)
 
         // verify
-        XCTAssertEqual(otherContextData.sessionContextData, contextData.sessionContextData)
+        XCTAssertEqual(otherContextData.sessionContextData as? [String: String], contextData.sessionContextData as? [String: String])
     }
 
     /// Tests that we can merge the lifecycle metrics, advertising id, additional context data, and session context at once
@@ -131,8 +131,8 @@ class LifecycleContextDataTests: XCTestCase {
         XCTAssertEqual(otherContextData.lifecycleMetrics.appId, contextData.lifecycleMetrics.appId)
         XCTAssertEqual(otherContextData.advertisingIdentifier, contextData.advertisingIdentifier)
         XCTAssertTrue(contextData.lifecycleMetrics.installEvent ?? false)
-        XCTAssertEqual(otherContextData.additionalContextData, contextData.additionalContextData)
-        XCTAssertEqual(otherContextData.sessionContextData, contextData.sessionContextData)
+        XCTAssertEqual(otherContextData.additionalContextData as? [String: String], contextData.additionalContextData as? [String: String])
+        XCTAssertEqual(otherContextData.sessionContextData as? [String: String], contextData.sessionContextData as? [String: String])
     }
 
     // MARK: toEventData() tests

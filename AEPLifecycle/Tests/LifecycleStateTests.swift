@@ -250,7 +250,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertTrue(actualContextData?.lifecycleMetrics.launchEvent ?? false)
         XCTAssertEqual(mockSystemInfoService.getActiveLocaleName(), actualContextData?.lifecycleMetrics.locale)
         XCTAssertEqual(mockSystemInfoService.getRunMode(), actualContextData?.lifecycleMetrics.runMode)
-        XCTAssertEqual("3000", actualContextData?.sessionContextData[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH])
+        XCTAssertEqual("3000", actualContextData?.sessionContextData[LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH] as? String)
         XCTAssertEqual(1, actualContextData?.lifecycleMetrics.daysSinceFirstLaunch)
         XCTAssertEqual(0, actualContextData?.lifecycleMetrics.daysSinceLastLaunch)
         XCTAssertEqual(1, actualContext.launches)
@@ -258,7 +258,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertEqual(currentDate, actualContext.startDate)
         XCTAssertEqual(appVersion, dataStore.getString(key: LifecycleConstants.DataStoreKeys.LAST_VERSION))
         XCTAssertFalse(actualContext.successfulClose)
-        XCTAssertEqual(additionalData, actualContextData?.additionalContextData)
+        XCTAssertEqual(additionalData as? [String: String], actualContextData?.additionalContextData as? [String: String])
         XCTAssertEqual(adId, actualContextData?.advertisingIdentifier)
         XCTAssertEqual(persistedContext.startDate, prevSessionInfo?.startDate)
         XCTAssertEqual(persistedContext.pauseDate, prevSessionInfo?.pauseDate)
@@ -294,7 +294,7 @@ class LifecycleStateTests: XCTestCase {
         let actualContextData = lifecycleState.getContextData()
 
         // verify
-        XCTAssertEqual(actualContextData?.additionalContextData, contextData.additionalContextData)
+        XCTAssertEqual(actualContextData?.additionalContextData as? [String: String], contextData.additionalContextData as? [String: String])
     }
 
     /// Should properly return `lifecycleContextData` even when `previousSessionLifecycleContextData` is non-nil
@@ -312,7 +312,7 @@ class LifecycleStateTests: XCTestCase {
         let actualContextData = lifecycleState.getContextData()
 
         // verify
-        XCTAssertEqual(actualContextData?.additionalContextData, contextData.additionalContextData)
+        XCTAssertEqual(actualContextData?.additionalContextData as? [String: String], contextData.additionalContextData as? [String: String])
     }
 
     /// Should properly return `previousSessionLifecycleContextData` when `lifecycleContextData` is nil
@@ -326,7 +326,7 @@ class LifecycleStateTests: XCTestCase {
         let actualContextData = lifecycleState.getContextData()
 
         // verify
-        XCTAssertEqual(actualContextData?.additionalContextData, contextData.additionalContextData)
+        XCTAssertEqual(actualContextData?.additionalContextData as? [String: String], contextData.additionalContextData as? [String: String])
     }
 
     /// When `lifecycleContextData` and `previousSessionLifecycleContextData` are nil we should attempt to load from data store
@@ -340,7 +340,7 @@ class LifecycleStateTests: XCTestCase {
         let actualContextData = lifecycleState.getContextData()
 
         // verify
-        XCTAssertEqual(actualContextData?.additionalContextData, contextData.additionalContextData)
+        XCTAssertEqual(actualContextData?.additionalContextData as? [String: String], contextData.additionalContextData as? [String: String])
     }
 
     // MARK: applyApplicationUpgrade(...) tests
@@ -435,7 +435,7 @@ class LifecycleStateTests: XCTestCase {
         let actualContextData = lifecycleState.computeBootData()
 
         // verify
-        XCTAssertEqual(lifecycleData.additionalContextData, actualContextData.additionalContextData)
+        XCTAssertEqual(lifecycleData.additionalContextData as? [String: String], actualContextData.additionalContextData as? [String: String])
         XCTAssertNotNil(actualContextData.lifecycleMetrics.appId)
         XCTAssertNotNil(actualContextData.lifecycleMetrics.deviceResolution)
         XCTAssertEqual(mockSystemInfoService.getMobileCarrierName(), actualContextData.lifecycleMetrics.carrierName)
