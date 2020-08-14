@@ -108,7 +108,7 @@ class LaunchRulesEngine {
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
         rulesQueue.sync {
-            if var events = cachedEvents {
+            if let events = cachedEvents {
                 if event.name == self.name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
                     for e in events {
                         _ = self.processEvent(event: e)
