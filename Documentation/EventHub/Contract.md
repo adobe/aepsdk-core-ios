@@ -6,7 +6,7 @@
 - Once all the initial extensions's `onRegistered()` have finished, the EventHub is considered booted and it begins to distribute events to every extension.
 - Currently, dynamically adding or removing of extensions is not supported. 
 
-In the following docs, assuming the events coming in the order of:
+In the following docs, assume the events come in the following order:
 
 E1 → E2 → E3 → .... → EN1 → EN2 → EN3 → EN4 → .......
 
