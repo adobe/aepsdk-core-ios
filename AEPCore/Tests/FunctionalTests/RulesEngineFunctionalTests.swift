@@ -80,7 +80,10 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         // test
         rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
-        _ = rulesEngine.process(event: Event(name: "test_rules_engine", type: EventType.rulesEngine, source: EventSource.requestReset, data: nil))
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        // test
+        _ = rulesEngine.process(event: mockRuntime.dispatchedEvents[0])
         // verify
         XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         let secondEvent = mockRuntime.dispatchedEvents[1]
