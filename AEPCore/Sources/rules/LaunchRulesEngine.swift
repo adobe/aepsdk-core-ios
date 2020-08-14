@@ -14,7 +14,7 @@ import Foundation
 @_implementationOnly import SwiftRulesEngine
 
 /// A rules engine for Launch rules
-struct LaunchRulesEngine {
+class LaunchRulesEngine {
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
@@ -26,17 +26,27 @@ struct LaunchRulesEngine {
     private static let CONSEQUENCE_TYPE_MOD = "mod"
 
     private let transform = Transform()
+    private let name: String
     private let extensionRuntime: ExtensionRuntime
     private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
+    private var cachedEvents: [Event]?
+    private let dataStore: NamedCollectionDataStore
 
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
-    init(extensionRuntime: ExtensionRuntime) {
+    init(name: String, extensionRuntime: ExtensionRuntime) {
+        self.name = name
+        dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
+        /// Uses this flag to decide if we need to cache incoming events
+        if dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
+            cachedEvents = [Event]()
+            dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
+        }
     }
 
     /// Register a `RulesTracer`
@@ -64,8 +74,8 @@ struct LaunchRulesEngine {
                 self.rulesEngine.clearRules()
                 self.rulesEngine.addRules(rules: rules)
                 Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from remote (count: \(rules.count))")
-
             }
+            self.sendReprocessEventsRequest()
         }
     }
 
@@ -89,6 +99,7 @@ struct LaunchRulesEngine {
             self.rulesEngine.addRules(rules: rules)
             Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from cache (count: \(rules.count))")
         }
+        sendReprocessEventsRequest()
     }
 
     /// Evaluates all the current rules against the supplied `Event`.
@@ -97,11 +108,29 @@ struct LaunchRulesEngine {
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
+        rulesQueue.sync {
+            appendOrClearCachedEvents(event: event)
+            return evaluateRules(for: event)
+        }
+    }
+
+    private func appendOrClearCachedEvents(event: Event) {
+        if let events = cachedEvents {
+            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+                for e in events {
+                    _ = evaluateRules(for: e)
+                }
+                cachedEvents = nil
+            } else {
+                cachedEvents?.append(event)
+            }
+        }
+    }
+
+    private func evaluateRules(for event: Event) -> Event {
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         var matchedRules: [LaunchRule]?
-        rulesQueue.sync {
-            matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
-        }
+        matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
         guard let matchedRulesUnwrapped = matchedRules else {
             return event
         }
@@ -115,13 +144,13 @@ struct LaunchRulesEngine {
                         continue
                     }
                     Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Attaching event data with \(from)")
-                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: false)
+                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
                         continue
                     }
                     Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Modifying event data with \(from)")
-                    eventData =  EventDataMerger.merging(to: to, from: from, overwrite: true)
+                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Generating new consequence event \(event)")
@@ -163,6 +192,10 @@ struct LaunchRulesEngine {
     private func replaceToken(for value: String, data: Traversable) -> String {
         let template = Template(templateString: value, tagDelimiterPair: (LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER, LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER))
         return template.render(data: data, transformers: transform)
+    }
+
+    private func sendReprocessEventsRequest() {
+        extensionRuntime.dispatch(event: Event(name: name, type: EventType.rulesEngine, source: EventSource.requestReset, data: nil))
     }
 
     /// Generate a consequence event with provided consequence data
