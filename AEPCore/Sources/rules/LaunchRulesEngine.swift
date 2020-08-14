@@ -42,6 +42,7 @@ class LaunchRulesEngine {
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
+        /// Uses this flag to decide if we need to cache incoming events
         if dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
             cachedEvents = [Event]()
             dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
@@ -108,21 +109,25 @@ class LaunchRulesEngine {
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
         rulesQueue.sync {
-            if let events = cachedEvents {
-                if event.name == self.name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
-                    for e in events {
-                        _ = self.processEvent(event: e)
-                    }
-                    self.cachedEvents = nil
-                } else {
-                    self.cachedEvents?.append(event)
-                }
-            }
-            return processEvent(event: event)
+            appendOrClearCachedEvents(event: event)
+            return evaluateRules(for: event)
         }
     }
 
-    private func processEvent(event: Event) -> Event {
+    private func appendOrClearCachedEvents(event: Event) {
+        if let events = cachedEvents {
+            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+                for e in events {
+                    _ = evaluateRules(for: e)
+                }
+                cachedEvents = nil
+            } else {
+                cachedEvents?.append(event)
+            }
+        }
+    }
+
+    private func evaluateRules(for event: Event) -> Event {
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         var matchedRules: [LaunchRule]?
         matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
