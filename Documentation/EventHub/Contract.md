@@ -1,18 +1,5 @@
 # EventHub Contract
 
-# Glossary:
-
-### Event:
-
-### EventHub:
-
-### Shared State:
-
-### Event Listener:
-
-## Contract
-
-
 ### EventHub:
 - EventHub itself is not accessible, interact with it by calling the methods from the `MobileCore` class or the Extension's API.
 - When initializing the EventHub, the set of the initial extension classes need to be passed to it. 
