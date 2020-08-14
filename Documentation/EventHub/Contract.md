@@ -15,8 +15,9 @@
 
 ### Event hub:
 - Event hub itself is not accessible, you can interact with it through `MobileCore` class or Extension's API.
-- When initialize the event hub, the set of the extension class need to be passed to it. Currently we do not support dynmaically add or remove an extension. 
-- Once all the extensions's `onRegistered()` have finished, the event hub is considered booted and it begins to distribue events to each extensiosn.
+- When initializing the event hub, the set of the initial extension classes need to be passed to it. 
+- Once all the initial extensions's `onRegistered()` have finished, the event hub is considered booted and it begins to distribue events to every extensiosn.
+- Currently dynmaically adding or removing of extensions is not supported. 
 
 In the following docs, assuming the events coming in the order of:
 
@@ -25,17 +26,14 @@ E1 → E2 → E3 → .... → EN1 → EN2 → EN3 → EN4 → .......
 ### Extension:
 
 - Extension owns a dispatch queue.
-- All the listeners from the same extension are running on the same dispatch queue
-- It is impossible that two listeners will be running simultaneously
+- All the listeners from the same extension are running on the same dispatch queue.
+- It is impossible that two listeners from the same extension can be running simultaneously.
 
-### Registration:
+### Extension Registration:
 
-- All the extensions are being registered at the same time, simultaneously, when the public `start` method gets called.
+- All the initial extensions are being registered at the same time, simultaneously, when the public `start` method gets called.
 - init() always runs before onRegistered()
-- Avoid reading shared state of any other extension during initialization or registration.
-- Do minimal job in init()
-- Register listeners, init data queues, read local storage inside onRegister
-- The order of extensions registration is unknown
+- The order of extensions registration is unknown, how fast an extension can finish its registration is unknown.
 
 ### UnRegistration:
 
