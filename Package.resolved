@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftRulesEngine",
+        "repositoryURL": "https://github.com/adobe/aepsdk-rulesengine-ios.git",
+        "state": {
+          "branch": "dev",
+          "revision": "df4dd8d0112eed11972649ff28b8e07f17125507",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

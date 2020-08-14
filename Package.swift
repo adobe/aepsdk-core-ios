@@ -1,4 +1,6 @@
 // swift-tools-version:5.0
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
 /*
  Copyright 2020 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -15,7 +17,7 @@ import PackageDescription
 
 let package = Package(
     name: "AEPCore",
-    platforms: [.iOS(.v10), .tvOS(.v10)],
+    platforms: [.iOS(.v10)],
     products: [
         .library(name: "AEPCore", targets: ["AEPCore"]),
         .library(name: "AEPIdentity", targets: ["AEPIdentity"]),
@@ -23,14 +25,24 @@ let package = Package(
         .library(name: "AEPServices", targets: ["AEPServices"]),
         .library(name: "AEPSignal", targets: ["AEPSignal"]),
     ],
-    targets: [
-        .target(name: "AEPCore", path: "AEPCore/Sources", dependencies: ["SwiftRulesEngine"]),
-        .target(name: "AEPIdentity", path: "AEPIdentity/Sources", dependencies: ["AEPCore", "AEPServices"]),
-        .target(name: "AEPLifecycle", path: "AEPLifecycle/Sources", dependencies: ["AEPCore", "AEPServices"]),
-        .target(name: "AEPServices", path: "AEPServices/Sources", dependencies: ["AEPCore"]),
-        .target(name: "AEPSignal", path: "AEPSignal/Sources", dependencies: ["AEPCore", "AEPServices"]),
-    ],
     dependencies: [
-        .package(name: "SwiftRulesEngine", url: "https://github.com/adobe/aepsdk-rulesengine-ios.git"),
+        .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .branch("dev")),
+    ],
+    targets: [
+        .target(name: "AEPCore",
+                dependencies: ["AEPServices", "SwiftRulesEngine"],
+                path: "AEPCore/Sources"),
+        .target(name: "AEPIdentity",
+                dependencies: ["AEPCore"],
+                path: "AEPIdentity/Sources"),
+        .target(name: "AEPLifecycle",
+                dependencies: ["AEPCore"],
+                path: "AEPLifecycle/Sources"),
+        .target(name: "AEPServices",
+                dependencies: [],
+                path: "AEPServices/Sources"),
+        .target(name: "AEPSignal",
+                dependencies: ["AEPCore"],
+                path: "AEPSignal/Sources"),
     ]
 )
