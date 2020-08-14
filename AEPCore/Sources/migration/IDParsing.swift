@@ -9,29 +9,13 @@
  governing permissions and limitations under the License.
  */
 
-import AEPServices
 import Foundation
 
-public class MockDataStore: NamedCollectionProcessing {
-    public func getAppGroup() -> String? {
-        return nil
-    }
+/// Defines types who can parse visitor id strings into dictionary representations
+protocol IDParsing {
 
-    public func setAppGroup(_: String?) {}
-
-    public var dict = [String: Any?]()
-
-    public init() {}
-
-    public func set(collectionName _: String, key: String, value: Any?) {
-        dict[key] = value
-    }
-
-    public func get(collectionName _: String, key: String) -> Any? {
-        return dict[key] as Any?
-    }
-
-    public func remove(collectionName _: String, key: String) {
-        dict.removeValue(forKey: key)
-    }
+    /// Converts a `String` of visitor ids to an array of  dictionary representations of each id in the `String`
+    /// - Parameter idString: The `String` containing the ids
+    /// - Returns: A list of dictionaries, where each dictionary represents a single id
+    func convertStringToIds(idString: String?) -> [[String: Any]]
 }

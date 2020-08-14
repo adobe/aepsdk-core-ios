@@ -67,9 +67,8 @@ private enum MigrationConstants {
 
 /// A type which provides functionality for migrating keys from V4 to V5
 struct V4Migrator {
-    static let LOG_TAG = "V4Migrator"
-
-    private static var v4Defaults: UserDefaults {
+    private let LOG_TAG = "V4Migrator"
+    private var v4Defaults: UserDefaults {
         if let v4AppGroup = ServiceProvider.shared.namedKeyValueService.getAppGroup(), !v4AppGroup.isEmpty {
             return UserDefaults(suiteName: v4AppGroup) ?? UserDefaults.standard
         }
@@ -77,8 +76,10 @@ struct V4Migrator {
         return UserDefaults.standard
     }
 
+    let idParser: IDParsing
+
     /// Migrates the V4 datastore into V5 datastore
-    static func migrate() {
+    func migrate() {
         if defaultsNeedsMigration() {
             migrateLocalStorage()
             migrateConfigurationLocalStorage()
@@ -93,68 +94,29 @@ struct V4Migrator {
             // log
         }
     }
-    
-    
-    static func convertStringToIds(idString: String?) -> [[String: Any]] {
-        guard let idString = idString, !idString.isEmpty else { return [] }
-
-        let customerIdComponentsArray = idString.components(separatedBy: "&")
-        var ids: [[String: Any]] = []
-
-        for idInfo in customerIdComponentsArray where !idInfo.isEmpty {
-            // AMSDK-3686
-            // equals signs are causing a crash when we load stored values from defaults
-            // to fix, we will look for the first equals sign and create the array based off of that
-            let firstEqualsIndex = (idInfo as NSString).range(of: "=")
-
-            if firstEqualsIndex.location == NSNotFound {
-                continue
-            }
-
-            let currentCustomerIdOrigin = (idInfo as NSString).substring(to: firstEqualsIndex.location)
-            let currentCustomerIdValue = (idInfo as NSString).substring(from: firstEqualsIndex.location + 1)
-
-            // make sure we have valid values
-            if currentCustomerIdOrigin.isEmpty || currentCustomerIdValue.isEmpty {
-                continue
-            }
-
-            let idValueComponents = currentCustomerIdValue.components(separatedBy: CoreConstants.Identity.CID_DELIMITER)
-
-            // must have 3 entries
-            if idValueComponents.count != 3 {
-                continue
-            }
-
-            let IdDict = ["origin": currentCustomerIdOrigin, "type": idValueComponents[0], "id": idValueComponents[1], "authenticationState": Int(idValueComponents[2]) ?? 0] as [String: Any]
-            ids.append(IdDict)
-        }
-
-        return ids
-    }
 
     // MARK: Private APIs
 
     /// Determine if we need to migrate V4 to V5
     /// - Returns: True if an install date exists in V4 user defaults, false otherwise
-    private static func defaultsNeedsMigration() -> Bool {
+    private func defaultsNeedsMigration() -> Bool {
         return v4Defaults.object(forKey: MigrationConstants.Lifecycle.V4InstallDate) != nil
     }
 
     /// Determine if we need to migrate V4 to V5
     /// - Returns: True if a privacy status key exists in the V4 defaults
-    private static func configNeedsMigration() -> Bool {
+    private func configNeedsMigration() -> Bool {
         return v4Defaults.object(forKey: MigrationConstants.Configuration.V4PrivacyStatus) != nil
     }
 
     /// Determine whether we need to migrate vid from Identity to Analytics
     /// - Returns: True if we need to migrate the vid from Identity to Analytics
-    private static func visitorIdNeedsMigration() -> Bool {
+    private func visitorIdNeedsMigration() -> Bool {
         // TOOD: Implement when implementing the Analytics extension
         return false
     }
 
-    private static func migrateLocalStorage() {
+    private func migrateLocalStorage() {
         // Mobile Services
         migrateMobileServicesLocalStorage()
 
@@ -170,7 +132,8 @@ struct V4Migrator {
         // TODO: Audience Manager
     }
 
-    private static func migrateMobileServicesLocalStorage() {
+    /// Migrates the v4 Mobile Services values into the v5 Mobile Services data store
+    private func migrateMobileServicesLocalStorage() {
         let acquisitionDataMap = v4Defaults.object(forKey: MigrationConstants.MobileServices.V4AcquisitionData) as? [String: String]
         let installDate = v4Defaults.object(forKey: MigrationConstants.Lifecycle.V4InstallDate) as? Date
         let excludeList = v4Defaults.object(forKey: MigrationConstants.MobileServices.V4InAppExcludeList) as? [String: Int]
@@ -186,7 +149,8 @@ struct V4Migrator {
         Log.debug(label: LOG_TAG, "Migration complete for Mobile Services data.")
     }
 
-    private static func migrateIdentityLocalStorage() {
+    /// Migrates the v4 Identity values into the v5 Identity data store
+    private func migrateIdentityLocalStorage() {
         let mid = v4Defaults.string(forKey: MigrationConstants.Identity.V4MID)
         let hint = v4Defaults.string(forKey: MigrationConstants.Identity.V4Hint)
         let blob = v4Defaults.string(forKey: MigrationConstants.Identity.V4Blob)
@@ -198,9 +162,9 @@ struct V4Migrator {
             "mid": ["midString": mid],
             "locationHint": hint,
             "blob": blob,
-            "customerIds": convertStringToIds(idString: ids),
+            "customerIds": idParser.convertStringToIds(idString: ids),
             "ttl": 30,
-            "privacyStatus": 2
+            "privacyStatus": PrivacyStatus.unknown.rawValue
         ]
 
         // save values
@@ -219,7 +183,8 @@ struct V4Migrator {
         Log.debug(label: LOG_TAG, "Migration complete for Identity data.")
     }
 
-    private static func migrateLifecycleLocalStorage() {
+    /// Migrates the v4 Lifecycle values into the v5 Lifecycle data store
+    private func migrateLifecycleLocalStorage() {
         let installDate = v4Defaults.object(forKey: MigrationConstants.Lifecycle.V4InstallDate) as? Date
         let lastVersion = v4Defaults.string(forKey: MigrationConstants.Lifecycle.V4LastVersion)
         let lastUsedDate = v4Defaults.object(forKey: MigrationConstants.Lifecycle.V4LastUsedDate) as? Date
@@ -251,7 +216,8 @@ struct V4Migrator {
         Log.debug(label: LOG_TAG, "Migration complete for Lifecycle data.")
     }
 
-    private static func migrateConfigurationLocalStorage() {
+    /// Migrates the v4 Configuration values into the v5 Configuration data store
+    private func migrateConfigurationLocalStorage() {
         let v4PrivacyStatus = v4Defaults.object(forKey: MigrationConstants.Configuration.V4PrivacyStatus) as? NSNumber
         if let v4PrivacyStatus = v4PrivacyStatus, v4PrivacyStatus.intValue > 0 && v4PrivacyStatus.intValue < 4 {
             var v5PrivacyStatus = PrivacyStatus.unknown
@@ -283,8 +249,8 @@ struct V4Migrator {
 
         }
     }
-    
-    private static func migrateVisitorIdLocalStorage() {
+
+    private func migrateVisitorIdLocalStorage() {
         // TOOD: Implement when implementing the Analytics extension
     }
 
