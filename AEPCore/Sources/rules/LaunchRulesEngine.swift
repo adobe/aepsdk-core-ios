@@ -35,15 +35,16 @@ class LaunchRulesEngine {
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
-    init(name: String, extensionRuntime: ExtensionRuntime, shouldCacheEvent: Bool = false) {
+    init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
-        if shouldCacheEvent, dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
+        if dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
             cachedEvents = [Event]()
+            dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
         }
     }
 
@@ -56,7 +57,6 @@ class LaunchRulesEngine {
     /// Downloads the rules from the remote server
     /// - Parameter urlString: the url of the remote rules
     func loadRemoteRules(from urlString: String) {
-        reprocessCachedEventsIfExists()
         guard let url = URL(string: urlString) else {
             Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
             return
@@ -74,13 +74,13 @@ class LaunchRulesEngine {
                 self.rulesEngine.addRules(rules: rules)
                 Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from remote (count: \(rules.count))")
             }
+            self.sendReprocessEventsRequest()
         }
     }
 
     /// Reads the cached rules
     /// - Parameter urlString: the url of the remote rules
     func loadCachedRules(for urlString: String) {
-        reprocessCachedEventsIfExists()
         guard let url = URL(string: urlString) else {
             Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
             return
@@ -98,6 +98,7 @@ class LaunchRulesEngine {
             self.rulesEngine.addRules(rules: rules)
             Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from cache (count: \(rules.count))")
         }
+        sendReprocessEventsRequest()
     }
 
     /// Evaluates all the current rules against the supplied `Event`.
@@ -106,14 +107,25 @@ class LaunchRulesEngine {
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
     func process(event: Event) -> Event {
-        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
-        var matchedRules: [LaunchRule]?
         rulesQueue.sync {
             if var events = cachedEvents {
-                events.append(event)
+                if event.name == self.name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+                    for e in events {
+                        _ = self.processEvent(event: e)
+                    }
+                    self.cachedEvents = nil
+                } else {
+                    self.cachedEvents?.append(event)
+                }
             }
-            matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
+            return processEvent(event: event)
         }
+    }
+
+    private func processEvent(event: Event) -> Event {
+        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
+        var matchedRules: [LaunchRule]?
+        matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
         guard let matchedRulesUnwrapped = matchedRules else {
             return event
         }
@@ -177,13 +189,8 @@ class LaunchRulesEngine {
         return template.render(data: data, transformers: transform)
     }
 
-    private func reprocessCachedEventsIfExists() {
-        if let events = cachedEvents {
-            for e in events {
-                _ = process(event: e)
-            }
-            cachedEvents = nil
-        }
+    private func sendReprocessEventsRequest() {
+        extensionRuntime.dispatch(event: Event(name: name, type: EventType.rulesEngine, source: EventSource.requestReset, data: nil))
     }
 
     /// Generate a consequence event with provided consequence data

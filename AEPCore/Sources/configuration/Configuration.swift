@@ -32,7 +32,7 @@ class Configuration: Extension {
     /// Initializes the Configuration extension and it's dependencies
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: runtime, shouldCacheEvent: true)
+        rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: runtime)
 
         appIdManager = LaunchIDManager(dataStore: dataStore)
         configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
