@@ -54,7 +54,9 @@ To add the AEPCore Package to your application, from the Xcode menu select:
 
 `File > Swift Packages > Add Package Dependency...`
 
-Enter the URL for the AEPCore package repository: `https://github.com/adobe/aepsdk-core-ios.git`
+Enter the URL for the AEPCore package repository: `https://github.com/adobe/aepsdk-core-ios.git`.
+
+When prompted, make sure you change the branch to `main`. (in the future we will reference specific tags/versions instead)
 
 Alternatively, if your project has a `Package.swift` file, you can add AEPCore directly to your dependencies:
 
