@@ -24,14 +24,12 @@ struct IDParser: IDParsing {
             // AMSDK-3686
             // equals signs are causing a crash when we load stored values from defaults
             // to fix, we will look for the first equals sign and create the array based off of that
-            let firstEqualsIndex = (idInfo as NSString).range(of: "=")
-
-            if firstEqualsIndex.location == NSNotFound {
+            guard let firstEqualsIndex = idInfo.range(of: "=") else {
                 continue
             }
 
-            let currentCustomerIdOrigin = (idInfo as NSString).substring(to: firstEqualsIndex.location)
-            let currentCustomerIdValue = (idInfo as NSString).substring(from: firstEqualsIndex.location + 1)
+            let currentCustomerIdOrigin = idInfo[...firstEqualsIndex.upperBound]
+            let currentCustomerIdValue = idInfo[firstEqualsIndex.upperBound...]
 
             // make sure we have valid values
             if currentCustomerIdOrigin.isEmpty || currentCustomerIdValue.isEmpty {
