@@ -49,7 +49,16 @@ $ pod install
 TBD
 
 ### [Swift Package Manager](https://github.com/apple/swift-package-manager)
-TBD
+
+After your Swift package is set up, add the AEPCore as a dependency in your Package.swift file:
+
+```
+dependencies: [
+    .package(name: "AEPCore",
+              url:"https://github.com/adobe/aepsdk-core-ios.git",
+              from: "0.0.1")
+]
+```
 
 ## Current version
 Adobe Experience Platform in Swift is currently in development.
