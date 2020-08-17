@@ -26,7 +26,7 @@ class RulesEngineFunctionalTests: XCTestCase {
     override func setUp() {
         UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
-        rulesEngine = LaunchRulesEngine(extensionRuntime: mockRuntime)
+        rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: mockRuntime)
         rulesEngine.trace { _, _, _, failure in
             print(failure)
         }
@@ -55,7 +55,40 @@ class RulesEngineFunctionalTests: XCTestCase {
         let processedEvent = rulesEngine.process(event: event)
 
         // verify
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual("value", processedEvent.data?["key"] as? String)
+    }
+
+    func testReprocessEvents() {
+        // setup
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+
+        let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip")
+        let expectedData = try? Data(contentsOf: filePath!)
+
+        let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockNetworkService = TestableNetworkService()
+        mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
+        ServiceProvider.shared.networkService = mockNetworkService
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        // test
+        _ = rulesEngine.process(event: mockRuntime.dispatchedEvents[0])
+        // verify
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
+        let secondEvent = mockRuntime.dispatchedEvents[1]
+        XCTAssertEqual("Rules Consequence Event", secondEvent.name)
+        XCTAssertEqual(EventType.rulesEngine, secondEvent.type)
+        XCTAssertEqual(EventSource.responseContent, secondEvent.source)
     }
 }
