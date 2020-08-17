@@ -209,7 +209,8 @@ class V4MigratorTests: XCTestCase {
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
-
+    
+    /// Tests that existing v4 config is migrated
     func testExistingV4ConfigurationData() {
         // setup
         v4Defaults.set("identityIds", forKey: MigrationConstants.Identity.V4Ids)
@@ -231,7 +232,8 @@ class V4MigratorTests: XCTestCase {
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
-
+    
+    /// Tests that when we have existing v5 config without a privacy that we migrated the v4 privacy and keep the existing config values
     func testExistingV4ConfigurationWhenV5ContainsOverriddenConfigWithoutPrivacyKey() {
         // setup
         v4Defaults.set(2, forKey: MigrationConstants.Configuration.V4PrivacyStatus)
@@ -252,7 +254,8 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
         XCTAssertTrue(storedConfig?["global.ssl"]?.boolValue ?? false)
     }
-
+    
+    /// Tests that when we have existing v5 config with a privacy that we did not migrate the v4 privacy and keep the existing config values
     func testExistingV4ConfigurationWhenV5ContainsOverriddenConfigWithPrivacyKey() {
         // setup
         v4Defaults.set(2, forKey: MigrationConstants.Configuration.V4PrivacyStatus)
@@ -273,7 +276,8 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual("optedin", storedConfig?["global.privacy"]?.stringValue)
         XCTAssertTrue(storedConfig?["global.ssl"]?.boolValue ?? false)
     }
-
+    
+    /// Tests that the opted in privacy status is migrated
     func testExistingV4ConfigurationDataForOptIn() {
         // setup
         v4Defaults.set(1, forKey: MigrationConstants.Configuration.V4PrivacyStatus) // v4 opted in value
@@ -290,7 +294,8 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optedin", storedConfig?["global.privacy"]?.stringValue)
     }
-
+    
+    /// Tests that the opted out privacy status is migrated
     func testExistingV4ConfigurationDataForOptOut() {
         // setup
         v4Defaults.set(2, forKey: MigrationConstants.Configuration.V4PrivacyStatus) // v4 opted out value
@@ -307,7 +312,8 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
-
+    
+    /// Tests that the unknown privacy status is migrated
     func testExistingV4ConfigurationDataForUnknown() {
         // setup
         v4Defaults.set(3, forKey: MigrationConstants.Configuration.V4PrivacyStatus) // v4 opted out value

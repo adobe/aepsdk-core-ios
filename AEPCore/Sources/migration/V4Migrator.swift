@@ -28,17 +28,20 @@ struct V4Migrator {
     /// Migrates the V4 datastore into V5 datastore
     func migrate() {
         if defaultsNeedsMigration() {
+            Log.debug(label: LOG_TAG, "Migrating Adobe SDK v4 NSUserDefaults for use with Adobe SDK v5.")
             migrateLocalStorage()
             migrateConfigurationLocalStorage()
-            // add log
+            Log.debug(label: LOG_TAG, "Full migration of NSUserDefaults successful.")
         } else if configNeedsMigration() {
+            Log.debug(label: LOG_TAG, "Migrating Adobe SDK v4 Configuration NSUserDefaults for use with Adobe SDK v5.")
             migrateConfigurationLocalStorage()
-            // log
+            Log.debug(label: LOG_TAG, "Full migration of NSUserDefaults successful.")
         }
 
         if visitorIdNeedsMigration() {
+            Log.debug(label: LOG_TAG, "Migrating Adobe SDK v4 Identity to Analytics NSUserDefaults for use with Adobe SDK v5.")
             migrateVisitorIdLocalStorage()
-            // log
+            Log.debug(label: LOG_TAG, "Full migration of Identity to Analytics NSUserDefaults successful.")
         }
     }
 
