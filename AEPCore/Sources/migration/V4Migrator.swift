@@ -12,59 +12,6 @@
 import Foundation
 import AEPServices
 
-/// Constants for V4 -> V5 migration
-private enum MigrationConstants {
-    // V4 Datastore Name
-    static let V4AppGroup = "ADB_APP_GROUP"
-    static let V4UserDefaultsKey = "adbUserDefaults"
-
-    enum MobileServices {
-        static let V4InAppExcludeList = "ADBMessageBlackList"
-        static let V5InAppExcludeList = "Adobe.MobileServices.blacklist"
-        static let V4AcquisitionData = "ADBAcquisitionData"
-        static let V5AcquisitionData = "Adobe.MobileServices.acquisition_json"
-        static let install = "Adobe.MobileServices.install"
-        static let installSearchAd = "Adobe.MobileServices.install.searchad"
-    }
-
-    enum Configuration {
-        static let V4PrivacyStatus = "PrivacyStatus"
-        static let V5PrivacyStatus = "global.privacy"
-        static let V5OverriddenConfig = "config.overridden.map"
-    }
-
-    enum Identity {
-        // Migrate
-        static let V4MID = "ADBMOBILE_PERSISTED_MID"
-        static let V4Hint = "ADBMOBILE_PERSISTED_MID_HINT"
-        static let V4Blob = "ADBMOBILE_PERSISTED_MID_BLOB"
-        static let V4Ids = "ADBMOBILE_VISITORID_IDS"
-        static let V4PushEnabled = "ADBMOBILE_KEY_PUSH_ENABLED"
-        static let V4Vid = "AOMS_AppMeasurement_StoredDefaults_VisitorID"
-        // Keys to be deleted
-        static let V4TTL = "ADBMOBILE_VISITORID_TTL"
-        static let V4SyncTime = "ADBMOBILE_VISITORID_SYNCTIME"
-        static let V4PushToken = "ADBMOBILE_KEY_PUSH_TOKEN"
-    }
-
-    enum Lifecycle {
-        // Migrate
-        static let V4InstallDate = "OMCK1"
-        static let V4LastVersion = "OMCK2"
-        static let V4LastUsedDate = "OMCK5"
-        static let V4Launches = "OMCK6"
-        static let V4SuccessfulClose = "OMCK7"
-        // Keys to be deleted
-        static let V4LifecycleData         = "ADMS_LifecycleData"
-        static let V4StartDate             = "ADMS_START"
-        static let V4ApplicationID         = "ADOBEMOBILE_STOREDDEFAULTS_APPID"
-        static let V4OS                    = "ADOBEMOBILE_STOREDDEFAULTS_OS"
-        static let V4PauseDate             = "ADMS_PAUSE"
-        static let V4UpgradeDate           = "OMCK3"
-        static let V4LaunchesAfterUpgrade  = "OMCK4"
-    }
-}
-
 /// A type which provides functionality for migrating keys from V4 to V5
 struct V4Migrator {
     private let LOG_TAG = "V4Migrator"
@@ -144,6 +91,7 @@ struct V4Migrator {
         mobileServicesDataStore.setObject(key: MigrationConstants.MobileServices.installSearchAd, value: installDate)
         mobileServicesDataStore.setObject(key: MigrationConstants.MobileServices.V5InAppExcludeList, value: excludeList)
 
+        v4Defaults.removeObject(forKey: MigrationConstants.MobileServices.V4AcquisitionData) // should be removed after acquisition migration
         v4Defaults.removeObject(forKey: MigrationConstants.MobileServices.V4InAppExcludeList)
 
         Log.debug(label: LOG_TAG, "Migration complete for Mobile Services data.")
@@ -175,10 +123,14 @@ struct V4Migrator {
 
         // remove identity values from v4 data store
         v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4MID)
+        v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4TTL)
+        v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4Vid)
         v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4Hint)
         v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4Blob)
         v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4Ids)
         v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4PushEnabled)
+        v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4SyncTime)
+        v4Defaults.removeObject(forKey: MigrationConstants.Identity.V4PushToken)
 
         Log.debug(label: LOG_TAG, "Migration complete for Identity data.")
     }
@@ -238,16 +190,17 @@ struct V4Migrator {
                     Log.debug(label: LOG_TAG, "V5 configuration data already contains setting for global privacy. V4 global privacy not migrated.")
                 } else {
                     overriddenConfig[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] = AnyCodable(v5PrivacyStatus.rawValue)
-                    configDataStore.setObject(key: CoreConstants.Configuration.DATASTORE_NAME, value: overriddenConfig)
+                    configDataStore.setObject(key: CoreConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
                     Log.debug(label: LOG_TAG, "V5 configuration data did not contain a global privacy. Migrated V4 global privacy with value of \(v5PrivacyStatus.rawValue)")
                 }
             } else {
                 // no current v5 overridden config, create one with migrated v4 privacy status
                 let overriddenConfig: [String: AnyCodable] = [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: AnyCodable(v5PrivacyStatus.rawValue)]
-                configDataStore.setObject(key: CoreConstants.Configuration.DATASTORE_NAME, value: overriddenConfig)
+                configDataStore.setObject(key: CoreConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
             }
-
         }
+
+        v4Defaults.removeObject(forKey: MigrationConstants.Configuration.V4PrivacyStatus)
     }
 
     private func migrateVisitorIdLocalStorage() {

@@ -13,11 +13,15 @@ import AEPServices
 import Foundation
 
 public class MockDataStore: NamedCollectionProcessing {
+    private var appGroup: String?
+
     public func getAppGroup() -> String? {
-        return nil
+        return appGroup
     }
 
-    public func setAppGroup(_: String?) {}
+    public func setAppGroup(_ appGroup: String?) {
+        self.appGroup = appGroup
+    }
 
     public var dict = [String: Any?]()
 

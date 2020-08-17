@@ -43,6 +43,8 @@
 		21F79AB724E704C5003204C3 /* IDParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AB624E704C5003204C3 /* IDParser.swift */; };
 		21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABA24E70CDC003204C3 /* IDParsing.swift */; };
 		21F79ABF24E71B03003204C3 /* IDParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABD24E7144F003204C3 /* IDParserTests.swift */; };
+		21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC024E72204003204C3 /* V4MigratorTests.swift */; };
+		21F79AC324E73554003204C3 /* MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC224E73554003204C3 /* MigrationConstants.swift */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
 		243DCE4824C7AA7C00E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
@@ -480,6 +482,8 @@
 		21F79AB624E704C5003204C3 /* IDParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParser.swift; sourceTree = "<group>"; };
 		21F79ABA24E70CDC003204C3 /* IDParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParsing.swift; sourceTree = "<group>"; };
 		21F79ABD24E7144F003204C3 /* IDParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParserTests.swift; sourceTree = "<group>"; };
+		21F79AC024E72204003204C3 /* V4MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4MigratorTests.swift; sourceTree = "<group>"; };
+		21F79AC224E73554003204C3 /* MigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationConstants.swift; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
 		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
@@ -815,6 +819,7 @@
 			isa = PBXGroup;
 			children = (
 				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
+				21F79AC224E73554003204C3 /* MigrationConstants.swift */,
 				21F79AB624E704C5003204C3 /* IDParser.swift */,
 				21F79ABA24E70CDC003204C3 /* IDParsing.swift */,
 			);
@@ -875,6 +880,7 @@
 			isa = PBXGroup;
 			children = (
 				21F79ABD24E7144F003204C3 /* IDParserTests.swift */,
+				21F79AC024E72204003204C3 /* V4MigratorTests.swift */,
 			);
 			path = MigrationTests;
 			sourceTree = "<group>";
@@ -2098,6 +2104,7 @@
 				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,
 				21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */,
 				3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */,
+				21F79AC324E73554003204C3 /* MigrationConstants.swift in Sources */,
 				3FB66AE624CA004400502CAF /* ConfigurationDownloader.swift in Sources */,
 				213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */,
 				3FB66ACF24CA004400502CAF /* Event.swift in Sources */,
@@ -2136,6 +2143,7 @@
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
 				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
+				21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
 				BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */,

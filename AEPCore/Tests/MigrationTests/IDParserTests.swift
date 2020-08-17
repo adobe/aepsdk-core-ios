@@ -11,7 +11,6 @@
 
 import XCTest
 @testable import AEPCore
-import AEPIdentity
 
 class IDParserTests: XCTestCase {
 
@@ -39,15 +38,15 @@ class IDParserTests: XCTestCase {
         for id in parsedIds {
             if id["type"] as? String == "loginidhash" {
                 XCTAssertEqual("97717", id["id"] as? String)
-                XCTAssertEqual(MobileVisitorAuthenticationState.unknown.rawValue, id["authenticationState"] as? Int)
+                XCTAssertEqual(0, id["authenticationState"] as? Int)
                 matches += 1
             } else if id["type"] as? String == "xboxlivehash" {
                 XCTAssertEqual("1629158955", id["id"] as? String)
-                XCTAssertEqual(MobileVisitorAuthenticationState.authenticated.rawValue, id["authenticationState"] as? Int)
+                XCTAssertEqual(1, id["authenticationState"] as? Int)
                 matches += 1
             } else if id["type"] as? String == "psnidhash" {
                 XCTAssertEqual("1144032295", id["id"] as? String)
-                XCTAssertEqual(MobileVisitorAuthenticationState.loggedOut.rawValue, id["authenticationState"] as? Int)
+                XCTAssertEqual(2, id["authenticationState"] as? Int)
                 matches += 1
             }
         }
@@ -70,11 +69,11 @@ class IDParserTests: XCTestCase {
         for id in parsedIds {
             if id["type"] as? String == "loginidhash" {
                 XCTAssertEqual("97717", id["id"] as? String)
-                XCTAssertEqual(MobileVisitorAuthenticationState.unknown.rawValue, id["authenticationState"] as? Int)
+                XCTAssertEqual(0, id["authenticationState"] as? Int)
                 matches += 1
             } else if id["type"] as? String == "psnidhash" {
                 XCTAssertEqual("1144032295", id["id"] as? String)
-                XCTAssertEqual(MobileVisitorAuthenticationState.loggedOut.rawValue, id["authenticationState"] as? Int)
+                XCTAssertEqual(2, id["authenticationState"] as? Int)
                 matches += 1
             }
         }

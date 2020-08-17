@@ -41,7 +41,7 @@ struct IDParser: IDParsing {
             let idValueComponents = currentCustomerIdValue.components(separatedBy: CoreConstants.Identity.CID_DELIMITER)
 
             // must have 3 entries and id not empty
-            if idValueComponents.count != 3 || (idValueComponents[1] as? String)?.isEmpty ?? true {
+            if idValueComponents.count != 3 || idValueComponents[1].isEmpty {
                 continue
             }
 
