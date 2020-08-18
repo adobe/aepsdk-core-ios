@@ -22,34 +22,34 @@ enum V5MigrationConstants {
         static let DATASTORE_NAME = "visitorIDServiceDataStore"
         // migrate
         static let MID = "ADOBEMOBILE_PERSISTED_MID"
-        static let HINT = "ADOBEMOBILE_PERSISTED_MID_HINT"
-        static let BLOB = "ADOBEMOBILE_PERSISTED_MID_BLOB"
-        static let IDS = "ADOBEMOBILE_VISITORID_IDS"
-        static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
+        static let Hint = "ADOBEMOBILE_PERSISTED_MID_HINT"
+        static let Blob = "ADOBEMOBILE_PERSISTED_MID_BLOB"
+        static let Ids = "ADOBEMOBILE_VISITORID_IDS"
+        static let PushEnabled = "ADOBEMOBILE_PUSH_ENABLED"
         static let VID = "ADOBEMOBILE_VISITOR_ID"
 
         // delete
         static let TTL = "ADBMOBILE_VISITORID_TTL"
-        static let SYNC_TIME = "ADBMOBILE_VISITORID_SYNCTIME"
-        static let PUSH_TOKEN = "ADBMOBILE_KEY_PUSH_TOKEN"
+        static let SyncTime = "ADBMOBILE_VISITORID_SYNCTIME"
+        static let PushToken = "ADBMOBILE_KEY_PUSH_TOKEN"
     }
 
     enum Lifecycle {
         // migrate
         static let DATASTORE_NAME = "AdobeMobile_Lifecycle"
-        static let INSTALL_DATE = "InstallDate"
-        static let LAST_VERSION = "LastVersion"
-        static let LAST_USED_DATE = "LastDateUsed"
-        static let LAUNCHES = "Launches"
-        static let SUCCESSFUL_CLOSE = "SuccessfulClose"
+        static let InstallDate = "InstallDate"
+        static let LastVersion = "LastVersion"
+        static let LastUsedDate = "LastDateUsed"
+        static let Launches = "Launches"
+        static let SuccessfulClose = "SuccessfulClose"
 
         // delete
-        static let LIFECYCLE_DATA = "LifecycleData"
-        static let START_DATE = "SessionStart"
-        static let APP_ID = "AppId"
-        static let OS_VERSION = "OsVersion"
-        static let PAUSE_DATE = "PauseDate"
-        static let UPGRADE_DATE = "UpgradeDate"
-        static let LAUNCHES_AFTER_UPGRADE = "LaunchesAfterUpgrade"
+        static let LifecycleData = "LifecycleData"
+        static let StartDate = "SessionStart"
+        static let AppId = "AppId"
+        static let OsVersion = "OsVersion"
+        static let PauseDate = "PauseDate"
+        static let UpgradeDate = "UpgradeDate"
+        static let LaunchesAfterUpgrade = "LaunchesAfterUpgrade"
     }
 }
