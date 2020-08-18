@@ -112,13 +112,13 @@ class V4MigratorTests: XCTestCase {
         let dataStore = NamedCollectionDataStore(name: "testable")
         let actualAcqData: [String: String]? = v4Defaults.object(forKey: MigrationConstants.MobileServices.V5AcquisitionData) as? [String: String]
         XCTAssertEqual(["acqkey": "acqvalue"], actualAcqData)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
-        XCTAssertTrue(dataStore.getBool(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
-        let installDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, fallback: nil)
+        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
+        XCTAssertTrue(dataStore.getBool(key: MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
+        let installDate: Date? = dataStore.getObject(key: MigrationConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, fallback: nil)
         XCTAssertEqual(mockDate, installDate)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT))
-        XCTAssertEqual("version", dataStore.getString(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
-        let lastUsedDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
+        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: MigrationConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT))
+        XCTAssertEqual("version", dataStore.getString(key: MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
+        let lastUsedDate: Date? = dataStore.getObject(key: MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate, lastUsedDate)
         let msInstallDate: Date? = v4Defaults.object(forKey: MigrationConstants.MobileServices.install) as? Date
         XCTAssertEqual(mockDate, msInstallDate)
@@ -193,13 +193,13 @@ class V4MigratorTests: XCTestCase {
         let dataStore = NamedCollectionDataStore(name: "testable")
         let actualAcqData: [String: String]? = v4Defaults.object(forKey: MigrationConstants.MobileServices.V5AcquisitionData) as? [String: String]
         XCTAssertEqual(["acqkey": "acqvalue"], actualAcqData)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
-        XCTAssertTrue(dataStore.getBool(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
-        let installDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, fallback: nil)
+        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
+        XCTAssertTrue(dataStore.getBool(key: MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
+        let installDate: Date? = dataStore.getObject(key: MigrationConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, fallback: nil)
         XCTAssertEqual(mockDate, installDate)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT))
-        XCTAssertEqual("version", dataStore.getString(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
-        let lastUsedDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
+        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: MigrationConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT))
+        XCTAssertEqual("version", dataStore.getString(key: MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
+        let lastUsedDate: Date? = dataStore.getObject(key: MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate, lastUsedDate)
         let msInstallDate: Date? = v4Defaults.object(forKey: MigrationConstants.MobileServices.install) as? Date
         XCTAssertEqual(mockDate, msInstallDate)
@@ -227,7 +227,7 @@ class V4MigratorTests: XCTestCase {
         XCTAssertNil(v4Defaults.object(forKey: MigrationConstants.Configuration.V4PrivacyStatus))
 
         // only v5 configuration defaults have been set
-        XCTAssertNil(mockDataStore.get(collectionName: "", key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
+        XCTAssertNil(mockDataStore.get(collectionName: "", key: MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         let dataStore = NamedCollectionDataStore(name: "testable")
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)

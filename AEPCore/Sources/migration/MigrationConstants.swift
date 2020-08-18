@@ -18,6 +18,8 @@ enum MigrationConstants {
     static let V4UserDefaultsKey = "adbUserDefaults"
 
     enum MobileServices {
+        static let DATASTORE_NAME = "MobileServices"
+
         static let V4InAppExcludeList = "ADBMessageBlackList"
         static let V5InAppExcludeList = "Adobe.MobileServices.blacklist"
         static let V4AcquisitionData = "ADBAcquisitionData"
@@ -27,12 +29,17 @@ enum MigrationConstants {
     }
 
     enum Configuration {
+        static let DATASTORE_NAME = "com.adobe.module.configuration"
+
         static let V4PrivacyStatus = "PrivacyStatus"
         static let V5PrivacyStatus = "global.privacy"
         static let V5OverriddenConfig = "config.overridden.map"
     }
 
     enum Identity {
+        static let DATASTORE_NAME = "com.adobe.module.identity"
+        static let CID_DELIMITER = "%01"
+
         // Migrate
         static let V4MID = "ADBMOBILE_PERSISTED_MID"
         static let V4Hint = "ADBMOBILE_PERSISTED_MID_HINT"
@@ -44,9 +51,16 @@ enum MigrationConstants {
         static let V4TTL = "ADBMOBILE_VISITORID_TTL"
         static let V4SyncTime = "ADBMOBILE_VISITORID_SYNCTIME"
         static let V4PushToken = "ADBMOBILE_KEY_PUSH_TOKEN"
+
+        struct DataStoreKeys {
+            static let IDENTITY_PROPERTIES = "identitiesproperties"
+            static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
+        }
     }
 
     enum Lifecycle {
+        static let DATASTORE_NAME = "com.adobe.module.lifecycle"
+
         // Migrate
         static let V4InstallDate = "OMCK1"
         static let V4LastVersion = "OMCK2"
@@ -61,5 +75,15 @@ enum MigrationConstants {
         static let V4PauseDate             = "ADMS_PAUSE"
         static let V4UpgradeDate           = "OMCK3"
         static let V4LaunchesAfterUpgrade  = "OMCK4"
+
+        struct DataStoreKeys {
+            static let INSTALL_DATE = "InstallDate"
+            static let LAST_LAUNCH_DATE = "LastDateUsed"
+            static let UPGRADE_DATE = "UpgradeDate"
+            static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
+            static let PERSISTED_CONTEXT = "PersistedContext"
+            static let LIFECYCLE_DATA = "LifecycleData"
+            static let LAST_VERSION = "LastVersion"
+        }
     }
 }

@@ -14,6 +14,8 @@ import Foundation
 /// Parses visitor id strings into dictionary representations
 struct IDParser: IDParsing {
 
+    private let CID_DELIMITER = "%01"
+
     func convertStringToIds(idString: String?) -> [[String: Any]] {
         guard let idString = idString, !idString.isEmpty else { return [] }
 
@@ -36,7 +38,7 @@ struct IDParser: IDParsing {
                 continue
             }
 
-            let idValueComponents = currentCustomerIdValue.components(separatedBy: CoreConstants.Identity.CID_DELIMITER)
+            let idValueComponents = currentCustomerIdValue.components(separatedBy: CID_DELIMITER)
 
             // must have 3 entries and id not empty
             if idValueComponents.count != 3 || idValueComponents[1].isEmpty {
