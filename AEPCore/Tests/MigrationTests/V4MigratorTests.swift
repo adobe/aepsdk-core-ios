@@ -110,7 +110,7 @@ class V4MigratorTests: XCTestCase {
 
         // data should have been migrated to v5 location
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let actualAcqData: [String: String]? = dataStore.getObject(key: MigrationConstants.MobileServices.V5AcquisitionData)
+        let actualAcqData: [String: String]? = v4Defaults.object(forKey: MigrationConstants.MobileServices.V5AcquisitionData) as? [String: String]
         XCTAssertEqual(["acqkey": "acqvalue"], actualAcqData)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         XCTAssertTrue(dataStore.getBool(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
@@ -120,11 +120,11 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual("version", dataStore.getString(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate, lastUsedDate)
-        let msInstallDate: Date? = dataStore.getObject(key: MigrationConstants.MobileServices.install, fallback: nil)
+        let msInstallDate: Date? = v4Defaults.object(forKey: MigrationConstants.MobileServices.install) as? Date
         XCTAssertEqual(mockDate, msInstallDate)
-        let msSeachAdInstallDate: Date? = dataStore.getObject(key: MigrationConstants.MobileServices.installSearchAd, fallback: nil)
+        let msSeachAdInstallDate: Date? = v4Defaults.object(forKey: MigrationConstants.MobileServices.installSearchAd) as? Date
         XCTAssertEqual(mockDate, msSeachAdInstallDate)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: MigrationConstants.MobileServices.V5InAppExcludeList))
+        XCTAssertNotNil(v4Defaults.object(forKey: MigrationConstants.MobileServices.V5InAppExcludeList))
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
@@ -191,7 +191,7 @@ class V4MigratorTests: XCTestCase {
 
         // data should have been migrated to v5 location
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let actualAcqData: [String: String]? = dataStore.getObject(key: MigrationConstants.MobileServices.V5AcquisitionData)
+        let actualAcqData: [String: String]? = v4Defaults.object(forKey: MigrationConstants.MobileServices.V5AcquisitionData) as? [String: String]
         XCTAssertEqual(["acqkey": "acqvalue"], actualAcqData)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         XCTAssertTrue(dataStore.getBool(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
@@ -201,11 +201,11 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual("version", dataStore.getString(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate, lastUsedDate)
-        let msInstallDate: Date? = dataStore.getObject(key: MigrationConstants.MobileServices.install, fallback: nil)
+        let msInstallDate: Date? = v4Defaults.object(forKey: MigrationConstants.MobileServices.install) as? Date
         XCTAssertEqual(mockDate, msInstallDate)
-        let msSeachAdInstallDate: Date? = dataStore.getObject(key: MigrationConstants.MobileServices.installSearchAd, fallback: nil)
+        let msSeachAdInstallDate: Date? = v4Defaults.object(forKey: MigrationConstants.MobileServices.installSearchAd) as? Date
         XCTAssertEqual(mockDate, msSeachAdInstallDate)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: MigrationConstants.MobileServices.V5InAppExcludeList))
+        XCTAssertNotNil(v4Defaults.object(forKey: MigrationConstants.MobileServices.V5InAppExcludeList))
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }

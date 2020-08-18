@@ -88,11 +88,11 @@ struct V4Migrator {
         let installDate = v4Defaults.object(forKey: MigrationConstants.Lifecycle.V4InstallDate) as? Date
         let excludeList = v4Defaults.object(forKey: MigrationConstants.MobileServices.V4InAppExcludeList) as? [String: Int]
 
-        let mobileServicesDataStore = NamedCollectionDataStore(name: CoreConstants.MobileServices.DATASTORE_NAME)
-        mobileServicesDataStore.setObject(key: MigrationConstants.MobileServices.V5AcquisitionData, value: acquisitionDataMap)
-        mobileServicesDataStore.setObject(key: MigrationConstants.MobileServices.install, value: installDate)
-        mobileServicesDataStore.setObject(key: MigrationConstants.MobileServices.installSearchAd, value: installDate)
-        mobileServicesDataStore.setObject(key: MigrationConstants.MobileServices.V5InAppExcludeList, value: excludeList)
+        // We use the v4 defaults to set this as the mobile services extension just uses the same user defaults just different keys
+        v4Defaults.set(acquisitionDataMap, forKey: MigrationConstants.MobileServices.V5AcquisitionData)
+        v4Defaults.set(installDate, forKey: MigrationConstants.MobileServices.install)
+        v4Defaults.set(installDate, forKey: MigrationConstants.MobileServices.installSearchAd)
+        v4Defaults.set(excludeList, forKey: MigrationConstants.MobileServices.V5InAppExcludeList)
 
         v4Defaults.removeObject(forKey: MigrationConstants.MobileServices.V4AcquisitionData) // should be removed after acquisition migration
         v4Defaults.removeObject(forKey: MigrationConstants.MobileServices.V4InAppExcludeList)
