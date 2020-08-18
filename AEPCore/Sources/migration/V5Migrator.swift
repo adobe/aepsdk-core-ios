@@ -94,8 +94,8 @@ struct V5Migrator {
         let mid = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.MID))
         let hint = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.Hint))
         let blob = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.Blob))
-        let ids = v5Defaults.string(forKey:  keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.Ids))
-        let pushEnabled = v5Defaults.bool(forKey:  keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.PushEnabled))
+        let ids = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.Ids))
+        let pushEnabled = v5Defaults.bool(forKey: keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.PushEnabled))
 
         // Build data
         let identityPropsDict: [String: Any?] = [
