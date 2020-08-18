@@ -20,18 +20,36 @@ enum V5MigrationConstants {
 
     enum Identity {
         static let DATASTORE_NAME = "visitorIDServiceDataStore"
+        // migrate
+        static let MID = "ADOBEMOBILE_PERSISTED_MID"
+        static let HINT = "ADOBEMOBILE_PERSISTED_MID_HINT"
+        static let BLOB = "ADOBEMOBILE_PERSISTED_MID_BLOB"
+        static let IDS = "ADOBEMOBILE_VISITORID_IDS"
+        static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
+        static let VID = "ADOBEMOBILE_VISITOR_ID"
+
+        // delete
+        static let TTL = "ADBMOBILE_VISITORID_TTL"
+        static let SYNC_TIME = "ADBMOBILE_VISITORID_SYNCTIME"
+        static let PUSH_TOKEN = "ADBMOBILE_KEY_PUSH_TOKEN"
     }
 
     enum Lifecycle {
+        // migrate
         static let DATASTORE_NAME = "AdobeMobile_Lifecycle"
         static let INSTALL_DATE = "InstallDate"
-    }
+        static let LAST_VERSION = "LastVersion"
+        static let LAST_USED_DATE = "LastDateUsed"
+        static let LAUNCHES = "Launches"
+        static let SUCCESSFUL_CLOSE = "SuccessfulClose"
 
-    enum MobileServices {
-        static let DATASTORE_NAME = "MobileServices"
-        static let AcquisitionData = "Adobe.MobileServices.acquisition_json"
-        static let Install = "Adobe.MobileServices.install"
-        static let InstallSearchAd = "Adobe.MobileServices.install.searchad"
-        static let ExcludeList = "Adobe.MobileServices.blacklist"
+        // delete
+        static let LIFECYCLE_DATA = "LifecycleData"
+        static let START_DATE = "SessionStart"
+        static let APP_ID = "AppId"
+        static let OS_VERSION = "OsVersion"
+        static let PAUSE_DATE = "PauseDate"
+        static let UPGRADE_DATE = "UpgradeDate"
+        static let LAUNCHES_AFTER_UPGRADE = "LaunchesAfterUpgrade"
     }
 }

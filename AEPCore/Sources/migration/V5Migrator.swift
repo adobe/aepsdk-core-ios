@@ -60,12 +60,12 @@ struct V5Migrator {
         guard let config = getV5OverriddenConfig() else { return false }
         return config[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] != nil
     }
-    
+
     private func getV5OverriddenConfig() -> [String: Any]? {
         let overriddenConfigKey = keyWithPrefix(datastoreName: V5MigrationConstants.Configuration.DATASTORE_NAME, key: V5MigrationConstants.Configuration.OVERRIDDEN_CONFIG)
         guard let configJsonData = v5Defaults.string(forKey: overriddenConfigKey)?.data(using: .utf8) else { return nil }
         let config = try? JSONSerialization.jsonObject(with: configJsonData, options: .mutableContainers) as? [String: Any]
-        
+
         return config
     }
 
@@ -91,11 +91,11 @@ struct V5Migrator {
 
     /// Migrates the v4 Identity values into the v5 Identity data store
     private func migrateIdentityLocalStorage() {
-        let mid = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4MID)
-        let hint = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4Hint)
-        let blob = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4Blob)
-        let ids = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4Ids)
-        let pushEnabled = v4Defaults.bool(forKey: V4MigrationConstants.Identity.V4PushEnabled)
+        let mid = v5Defaults.string(forKey: V5MigrationConstants.Identity.MID)
+        let hint = v5Defaults.string(forKey: V5MigrationConstants.Identity.HINT)
+        let blob = v5Defaults.string(forKey: V5MigrationConstants.Identity.BLOB)
+        let ids = v5Defaults.string(forKey: V5MigrationConstants.Identity.IDS)
+        let pushEnabled = v5Defaults.bool(forKey: V5MigrationConstants.Identity.PUSH_ENABLED)
 
         // Build data
         let identityPropsDict: [String: Any?] = [
@@ -113,66 +113,57 @@ struct V5Migrator {
         identityDataStore.setObject(key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES, value: identityPropsData)
         identityDataStore.set(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
-        // remove identity values from v4 data store
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4MID)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4TTL)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Vid)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Hint)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Blob)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Ids)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4PushEnabled)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4SyncTime)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4PushToken)
+        // remove identity values from v5 data store
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.MID)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.TTL)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.VID)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.HINT)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.BLOB)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.IDS)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.PUSH_ENABLED)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.SYNC_TIME)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Identity.PUSH_TOKEN)
 
         Log.debug(label: LOG_TAG, "Migration complete for Identity data.")
     }
 
     /// Migrates the v4 Lifecycle values into the v5 Lifecycle data store
     private func migrateLifecycleLocalStorage() {
-        let installDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4InstallDate) as? Date
-        let lastVersion = v4Defaults.string(forKey: V4MigrationConstants.Lifecycle.V4LastVersion)
-        let lastUsedDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate) as? Date
-        let launches = v4Defaults.integer(forKey: V4MigrationConstants.Lifecycle.V4Launches)
-        let successfulClose = v4Defaults.bool(forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose)
+        let installDateInterval = v5Defaults.double(forKey: V5MigrationConstants.Lifecycle.INSTALL_DATE)
+        let lastVersion = v5Defaults.string(forKey: V5MigrationConstants.Lifecycle.LAST_VERSION)
+        let lastUsedDateInterval = v5Defaults.double(forKey: V5MigrationConstants.Lifecycle.LAST_USED_DATE)
+        let launches = v5Defaults.integer(forKey: V5MigrationConstants.Lifecycle.LAUNCHES)
+        let successfulClose = v5Defaults.bool(forKey: V5MigrationConstants.Lifecycle.SUCCESSFUL_CLOSE)
 
         let lifecycleDataStore = NamedCollectionDataStore(name: CoreConstants.Lifecycle.DATASTORE_NAME)
-        lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: installDate)
+        lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: Date(timeIntervalSince1970: installDateInterval))
         lifecycleDataStore.set(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION, value: lastVersion)
-        lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: lastUsedDate)
+        lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: Date(timeIntervalSince1970: lastUsedDateInterval))
 
         let persistedDict = ["launches": launches, "successfulClose": successfulClose] as [String: Any]
         let persistedData = try? JSONSerialization.data(withJSONObject: persistedDict)
         lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT, value: persistedData)
 
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4InstallDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LastVersion)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4Launches)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LifecycleData)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4StartDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4ApplicationID)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4OS)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4PauseDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4UpgradeDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LaunchesAfterUpgrade)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.INSTALL_DATE)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.LAST_VERSION)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.LAST_USED_DATE)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.LAUNCHES)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.SUCCESSFUL_CLOSE)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.LIFECYCLE_DATA)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.START_DATE)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.APP_ID)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.OS_VERSION)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.PAUSE_DATE)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.UPGRADE_DATE)
+        v5Defaults.removeObject(forKey: V5MigrationConstants.Lifecycle.LAUNCHES_AFTER_UPGRADE)
 
         Log.debug(label: LOG_TAG, "Migration complete for Lifecycle data.")
     }
 
     /// Migrates the v4 Configuration values into the v5 Configuration data store
     private func migrateConfigurationLocalStorage() {
-        let v4PrivacyStatus = v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus) as? NSNumber
-        if let v4PrivacyStatus = v4PrivacyStatus, v4PrivacyStatus.intValue > 0 && v4PrivacyStatus.intValue < 4 {
-            var v5PrivacyStatus = PrivacyStatus.unknown
-            switch v4PrivacyStatus {
-            case 1:
-                v5PrivacyStatus = .optedIn
-            case 2:
-                v5PrivacyStatus = .optedOut
-            default:
-                v5PrivacyStatus = .unknown
-            }
+        let v5OverridenConfig = getV5OverriddenConfig()
+        if let existingPrivacyStatus = v5OverridenConfig?[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String, let v5PrivacyStatus = PrivacyStatus(rawValue: existingPrivacyStatus) {
 
             let configDataStore = NamedCollectionDataStore(name: CoreConstants.Configuration.DATASTORE_NAME)
             let overriddenConfig: [String: AnyCodable]? = configDataStore.getObject(key: CoreConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
@@ -192,7 +183,8 @@ struct V5Migrator {
             }
         }
 
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus)
+        let overriddenConfigKey = keyWithPrefix(datastoreName: V5MigrationConstants.Configuration.DATASTORE_NAME, key: V5MigrationConstants.Configuration.OVERRIDDEN_CONFIG)
+        v5Defaults.removeObject(forKey: overriddenConfigKey)
     }
 
     private func migrateVisitorIdLocalStorage() {
