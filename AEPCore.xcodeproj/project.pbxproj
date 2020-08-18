@@ -38,6 +38,7 @@
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
 		217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217E220424D1FD7900B70B3E /* SharedStateResult.swift */; };
 		218C813B24EC3EBC009B4F31 /* V5Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813A24EC3EBC009B4F31 /* V5Migrator.swift */; };
+		218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -478,6 +479,7 @@
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		217E220424D1FD7900B70B3E /* SharedStateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateResult.swift; sourceTree = "<group>"; };
 		218C813A24EC3EBC009B4F31 /* V5Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5Migrator.swift; sourceTree = "<group>"; };
+		218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5MigrationConstants.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
@@ -828,8 +830,9 @@
 			isa = PBXGroup;
 			children = (
 				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
-				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
 				21F79AC224E73554003204C3 /* V4MigrationConstants.swift */,
+				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
+				218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */,
 				21F79AB624E704C5003204C3 /* IDParser.swift */,
 				21F79ABA24E70CDC003204C3 /* IDParsing.swift */,
 			);
@@ -2099,6 +2102,7 @@
 				3FB66ADD24CA004400502CAF /* JSONRulesParser.swift in Sources */,
 				3FB66AE424CA004400502CAF /* CachedRules.swift in Sources */,
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
+				218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */,
 				3F16761424E1B0630041B970 /* RulesConstants.swift in Sources */,
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
