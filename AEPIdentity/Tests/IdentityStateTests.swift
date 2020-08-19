@@ -29,7 +29,6 @@ class IdentityStateTests: XCTestCase {
 
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
-        MockPushIDManager.reset()
         mockPushIdManager = MockPushIDManager()
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
     }
