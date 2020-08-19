@@ -21,10 +21,15 @@ struct MockPushIDManager: PushIDManageable {
         // no-op
     }
 
-    var calledUpdatePushId = false
-    var calledUpdatePushIdWithArg: String?
+    static var calledUpdatePushId = false
+    static var calledUpdatePushIdWithArg: String?
     mutating func updatePushId(pushId: String?) {
-        calledUpdatePushId = true
-        calledUpdatePushIdWithArg = pushId
+        MockPushIDManager.calledUpdatePushId = true
+        MockPushIDManager.calledUpdatePushIdWithArg = pushId
+    }
+
+    static func reset() {
+        calledUpdatePushId = false
+        calledUpdatePushIdWithArg = nil
     }
 }

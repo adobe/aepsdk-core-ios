@@ -94,7 +94,7 @@ class Configuration: Extension {
         // Re-fetch the latest config if appId is present.
         // Lifecycle does not load bundled/manual configuration if appId is absent.
         guard let appId = appIdManager.loadAppId(), !appId.isEmpty else {
-            // TODO: Add error log
+            Log.debug(label: name, "Ignoring Lifecycle response event, app id already exists.")
             return
         }
 

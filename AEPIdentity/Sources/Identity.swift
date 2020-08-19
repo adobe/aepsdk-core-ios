@@ -118,7 +118,7 @@ import Foundation
         mobileIdentities.collectIdentifiers(event: event, sharedStateProvider: getSharedState(extensionName:event:))
 
         guard let encodedIdentities = try? JSONEncoder().encode(mobileIdentities) else {
-            // TODO: Error log
+            Log.error(label: name, "Failed to encode mobile entities, processing of configuration identity event failed.")
             return
         }
 

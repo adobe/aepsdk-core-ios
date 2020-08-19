@@ -85,7 +85,7 @@ class IdentityState {
     func syncIdentifiers(event: Event) -> [String: Any]? {
         // sanity check, config should never be empty
         if lastValidConfig.isEmpty {
-            // TODO: Add log
+            Log.debug(label: LOG_TAG, "Ignoring sync identifiers request as last valid config is empty")
             return nil
         }
 
@@ -93,7 +93,7 @@ class IdentityState {
         let privacyStatusStr = lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
         if privacyStatus == .optedOut {
-            // TODO: Add log
+            Log.debug(label: LOG_TAG, "Ignoring sync identifiers request as privacy is opted-out")
             return nil
         }
 
@@ -124,7 +124,7 @@ class IdentityState {
         if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: lastValidConfig) {
             queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event)
         } else {
-            // TODO: Log error
+            Log.debug(label: LOG_TAG, "sync identifiers request failed, shouldSync returned false.")
         }
 
         // save properties
