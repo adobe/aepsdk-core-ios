@@ -36,6 +36,31 @@ class V5MigratorTests: XCTestCase {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
     }
 
+    override func tearDown() {
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITORID_IDS")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADBMOBILE_VISITORID_TTL")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITOR_ID")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID_BLOB")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID_HINT")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADBMOBILE_VISITORID_SYNCTIME")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADBMOBILE_KEY_PUSH_TOKEN")
+        v5Defaults.removeObject(forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PUSH_ENABLED")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.InstallDate")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.OsVersion")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.Launches")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.SessionStart")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.PauseDate")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.LastVersion")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.UpgradeDate")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.LastDateUsed")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.AppId")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.LifecycleData")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.SuccessfulClose")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.LaunchesAfterUpgrade")
+        v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map")
+    }
+
     /// Tests that on a fresh install that all values are nil and nothing is migrated
     func testFreshInstall() {
         // setup
@@ -47,7 +72,7 @@ class V5MigratorTests: XCTestCase {
         // verify
         XCTAssertTrue(mockDataStore.dict.isEmpty) // no data to migrate, nothing should be put in the data store
     }
-    
+
     /// Tests that when there is existing data from legacy v5 that we migrate that data
     func testExistingV5Data() {
         // setup
@@ -108,15 +133,15 @@ class V5MigratorTests: XCTestCase {
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         XCTAssertTrue(dataStore.getBool(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
         let installDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, fallback: nil)
-        XCTAssertEqual(mockDate, installDate)
+        XCTAssertEqual(mockDate.timeIntervalSince1970, installDate?.timeIntervalSince1970)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT))
         XCTAssertEqual("version", dataStore.getString(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
-        XCTAssertEqual(mockDate, lastUsedDate)
+        XCTAssertEqual(mockDate.timeIntervalSince1970, lastUsedDate?.timeIntervalSince1970)
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
-    
+
     /// Tests that when the app group is set that migration works as expected from legacy v5
     func testExistingV5DataInAppGroup() {
         // setup
@@ -178,15 +203,15 @@ class V5MigratorTests: XCTestCase {
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         XCTAssertTrue(dataStore.getBool(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
         let installDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, fallback: nil)
-        XCTAssertEqual(mockDate, installDate)
+        XCTAssertEqual(mockDate.timeIntervalSince1970, installDate?.timeIntervalSince1970)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: CoreConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT))
         XCTAssertEqual("version", dataStore.getString(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
-        XCTAssertEqual(mockDate, lastUsedDate)
+        XCTAssertEqual(mockDate.timeIntervalSince1970, lastUsedDate?.timeIntervalSince1970)
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
-    
+
     /// Tests that legacy v5 configuration is migrated
     func testExistingV5ConfigurationData() {
         // setup
