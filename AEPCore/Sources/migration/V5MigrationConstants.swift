@@ -16,6 +16,10 @@ enum V5MigrationConstants {
     enum Configuration {
         static let DATASTORE_NAME = "AdobeMobile_ConfigState"
         static let OVERRIDDEN_CONFIG = "config.overridden.map"
+
+        enum DataStoreKeys {
+            static let PERSISTED_OVERRIDDEN_CONFIG = "config.overridden.map"
+        }
     }
 
     enum Identity {
@@ -32,6 +36,11 @@ enum V5MigrationConstants {
         static let TTL = "ADBMOBILE_VISITORID_TTL"
         static let SyncTime = "ADBMOBILE_VISITORID_SYNCTIME"
         static let PushToken = "ADBMOBILE_KEY_PUSH_TOKEN"
+
+        enum DataStoreKeys {
+            static let IDENTITY_PROPERTIES = "identitiesproperties"
+            static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
+        }
     }
 
     enum Lifecycle {
@@ -51,5 +60,15 @@ enum V5MigrationConstants {
         static let PauseDate = "PauseDate"
         static let UpgradeDate = "UpgradeDate"
         static let LaunchesAfterUpgrade = "LaunchesAfterUpgrade"
+
+        enum DataStoreKeys {
+            static let INSTALL_DATE = "InstallDate"
+            static let LAST_LAUNCH_DATE = "LastDateUsed"
+            static let UPGRADE_DATE = "UpgradeDate"
+            static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
+            static let PERSISTED_CONTEXT = "PersistedContext"
+            static let LIFECYCLE_DATA = "LifecycleData"
+            static let LAST_VERSION = "LastVersion"
+        }
     }
 }

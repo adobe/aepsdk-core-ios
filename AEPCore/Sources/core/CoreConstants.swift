@@ -58,42 +58,9 @@ struct CoreConstants {
         static let NONE = "N"
     }
 
-    struct Configuration {
-        static let DATASTORE_NAME = "com.adobe.module.configuration"
-
-        struct DataStoreKeys {
-            static let PERSISTED_OVERRIDDEN_CONFIG = "config.overridden.map"
-        }
-    }
-
     struct Lifecycle {
-        static let DATASTORE_NAME = "com.adobe.module.lifecycle"
         static let START = "start"
         static let PAUSE = "pause"
-
-        struct DataStoreKeys {
-            static let INSTALL_DATE = "InstallDate"
-            static let LAST_LAUNCH_DATE = "LastDateUsed"
-            static let UPGRADE_DATE = "UpgradeDate"
-            static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
-            static let PERSISTED_CONTEXT = "PersistedContext"
-            static let LIFECYCLE_DATA = "LifecycleData"
-            static let LAST_VERSION = "LastVersion"
-        }
-    }
-
-    struct Identity {
-        static let DATASTORE_NAME = "com.adobe.module.identity"
-        static let CID_DELIMITER = "%01"
-        struct DataStoreKeys {
-            static let IDENTITY_PROPERTIES = "identitiesproperties"
-            static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
-        }
-    }
-
-    struct MobileServices {
-        static let DATASTORE_NAME = "MobileServices"
-
     }
 
 }

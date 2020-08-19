@@ -108,10 +108,10 @@ struct V5Migrator {
         ]
 
         // save values
-        let identityDataStore = NamedCollectionDataStore(name: CoreConstants.Identity.DATASTORE_NAME)
+        let identityDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Identity.DATASTORE_NAME)
         let identityPropsData = try? JSONSerialization.data(withJSONObject: identityPropsDict)
-        identityDataStore.setObject(key: CoreConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES, value: identityPropsData)
-        identityDataStore.set(key: CoreConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
+        identityDataStore.setObject(key: V5MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES, value: identityPropsData)
+        identityDataStore.set(key: V5MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
         // remove identity values from v5 data store
         v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Identity.DATASTORE_NAME, V5MigrationConstants.Identity.MID))
@@ -135,14 +135,14 @@ struct V5Migrator {
         let launches = v5Defaults.integer(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.DATASTORE_NAME, V5MigrationConstants.Lifecycle.Launches))
         let successfulClose = v5Defaults.bool(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.DATASTORE_NAME, V5MigrationConstants.Lifecycle.SuccessfulClose))
 
-        let lifecycleDataStore = NamedCollectionDataStore(name: CoreConstants.Lifecycle.DATASTORE_NAME)
-        lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: Date(timeIntervalSince1970: installDateInterval))
-        lifecycleDataStore.set(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_VERSION, value: lastVersion)
-        lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: Date(timeIntervalSince1970: lastUsedDateInterval))
+        let lifecycleDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Lifecycle.DATASTORE_NAME)
+        lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: Date(timeIntervalSince1970: installDateInterval))
+        lifecycleDataStore.set(key: V5MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION, value: lastVersion)
+        lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: Date(timeIntervalSince1970: lastUsedDateInterval))
 
         let persistedDict = ["launches": launches, "successfulClose": successfulClose] as [String: Any]
         let persistedData = try? JSONSerialization.data(withJSONObject: persistedDict)
-        lifecycleDataStore.setObject(key: CoreConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT, value: persistedData)
+        lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT, value: persistedData)
 
         v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.DATASTORE_NAME, V5MigrationConstants.Lifecycle.InstallDate))
         v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.DATASTORE_NAME, V5MigrationConstants.Lifecycle.LastVersion))
@@ -165,21 +165,21 @@ struct V5Migrator {
         let v5OverridenConfig = getV5OverriddenConfig()
         if let existingPrivacyStatus = v5OverridenConfig?[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String, let v5PrivacyStatus = PrivacyStatus(rawValue: existingPrivacyStatus) {
 
-            let configDataStore = NamedCollectionDataStore(name: CoreConstants.Configuration.DATASTORE_NAME)
-            let overriddenConfig: [String: AnyCodable]? = configDataStore.getObject(key: CoreConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
+            let configDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Configuration.DATASTORE_NAME)
+            let overriddenConfig: [String: AnyCodable]? = configDataStore.getObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
 
             if var overriddenConfig = overriddenConfig {
                 if let _ = overriddenConfig[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY]?.value as? String {
                     Log.debug(label: LOG_TAG, "V5 Swift configuration data already contains setting for global privacy. Existing V5 global privacy not migrated.")
                 } else {
                     overriddenConfig[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] = AnyCodable(v5PrivacyStatus.rawValue)
-                    configDataStore.setObject(key: CoreConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
+                    configDataStore.setObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
                     Log.debug(label: LOG_TAG, "V5 Swift configuration data did not contain a global privacy. Migrated V5 global privacy with value of \(v5PrivacyStatus.rawValue)")
                 }
             } else {
                 // no current v5 overridden config, create one with migrated v5 privacy status
                 let overriddenConfig: [String: AnyCodable] = [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: AnyCodable(v5PrivacyStatus.rawValue)]
-                configDataStore.setObject(key: CoreConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
+                configDataStore.setObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
             }
         }
 
