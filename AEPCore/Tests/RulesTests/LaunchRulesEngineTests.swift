@@ -40,7 +40,7 @@ class LaunchRulesEngineTests: XCTestCase {
 
         /// Then: this json rules should be parsed to `LaunchRule` objects
         let rules = JSONRulesParser.parse(data)
-        let rulesEngine = LaunchRulesEngine(extensionRuntime: runtime)
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
         // ~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename
         let tokens = TokenFinder(event: event, extensionRuntime: runtime)
         let result = rulesEngine.replaceToken(for: (rules?[0].consequences[0])!, data: tokens)

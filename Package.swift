@@ -43,6 +43,6 @@ let package = Package(
                 path: "AEPServices/Sources"),
         .target(name: "AEPSignal",
                 dependencies: ["AEPCore"],
-                path: "AEPSignal/Sources")
+                path: "AEPSignal/Sources"),
     ]
 )

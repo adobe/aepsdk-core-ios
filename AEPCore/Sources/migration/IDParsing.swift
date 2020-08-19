@@ -8,13 +8,14 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+
 import Foundation
 
-/// Constant values used throughout Rules Engine
-enum RulesConstants {
-    static let LOG_MODULE_PREFIX = "Launch Rules Engine"
-    static let DATA_STORE_PREFIX = "com.adobe.module.rulesengine"
-    struct Keys {
-        static let APP_HAS_LAUNCHED = "config.app.has.launched"
-    }
+/// Defines types who can parse visitor id strings into dictionary representations
+protocol IDParsing {
+
+    /// Converts a `String` of visitor ids to an array of  dictionary representations of each id in the `String`
+    /// - Parameter idString: The `String` containing the ids
+    /// - Returns: A list of dictionaries, where each dictionary represents a single id
+    func convertStringToIds(idString: String?) -> [[String: Any]]
 }

@@ -402,6 +402,10 @@ class MockKeyValueService: NamedCollectionProcessing {
         self.appGroup = appGroup
     }
 
+    func getAppGroup() -> String? {
+        return appGroup
+    }
+
     var getResult: Any?
     var getCalled: Bool = false
     // helper to know if the mock is handling codable
