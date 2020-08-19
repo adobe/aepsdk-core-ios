@@ -21,10 +21,10 @@ class MockPushIDManager: PushIDManageable {
         // no-op
     }
 
-    static var calledUpdatePushId = false
-    static var calledUpdatePushIdWithArg: String?
+    var calledUpdatePushId = false
+    var calledUpdatePushIdWithArg: String?
     func updatePushId(pushId: String?) {
-        MockPushIDManager.calledUpdatePushId = true
-        MockPushIDManager.calledUpdatePushIdWithArg = pushId
+        calledUpdatePushId = true
+        calledUpdatePushIdWithArg = pushId
     }
 }
