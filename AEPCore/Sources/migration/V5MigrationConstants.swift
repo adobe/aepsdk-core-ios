@@ -14,7 +14,8 @@ import Foundation
 /// Constants for V5 -> V5 migration
 enum V5MigrationConstants {
     enum Configuration {
-        static let DATASTORE_NAME = "AdobeMobile_ConfigState"
+        static let DATASTORE_NAME = "com.adobe.module.configuration"
+        static let LEGACY_DATASTORE_NAME = "AdobeMobile_ConfigState"
         static let OVERRIDDEN_CONFIG = "config.overridden.map"
 
         enum DataStoreKeys {
@@ -23,7 +24,8 @@ enum V5MigrationConstants {
     }
 
     enum Identity {
-        static let DATASTORE_NAME = "visitorIDServiceDataStore"
+        static let DATASTORE_NAME = "com.adobe.module.identity"
+        static let LEGACY_DATASTORE_NAME = "visitorIDServiceDataStore"
         // migrate
         static let MID = "ADOBEMOBILE_PERSISTED_MID"
         static let Hint = "ADOBEMOBILE_PERSISTED_MID_HINT"
@@ -45,7 +47,8 @@ enum V5MigrationConstants {
 
     enum Lifecycle {
         // migrate
-        static let DATASTORE_NAME = "AdobeMobile_Lifecycle"
+        static let DATASTORE_NAME = "com.adobe.module.lifecycle"
+        static let LEGACY_DATASTORE_NAME = "AdobeMobile_Lifecycle"
         static let InstallDate = "InstallDate"
         static let LastVersion = "LastVersion"
         static let LastUsedDate = "LastDateUsed"
