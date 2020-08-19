@@ -487,7 +487,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
-        XCTAssertFalse(MockPushIDManager.calledUpdatePushId)
+        XCTAssertFalse(mockPushIdManager.calledUpdatePushId)
         XCTAssertTrue(!mockHitQueue.calledBeginProcessing && !mockHitQueue.calledSuspend && !mockHitQueue.calledClear) // should not notify the hit queue of the privacy change
         XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should not change
     }
@@ -510,7 +510,7 @@ class IdentityStateTests: XCTestCase {
         }
 
         // verify
-        XCTAssertFalse(MockPushIDManager.calledUpdatePushId)
+        XCTAssertFalse(mockPushIdManager.calledUpdatePushId)
         XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
         XCTAssertTrue(mockHitQueue.calledBeginProcessing) // we should start the hit queue
         XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should change to opt in
@@ -537,7 +537,7 @@ class IdentityStateTests: XCTestCase {
         // verify
         wait(for: [sharedStateExpectation], timeout: 0.5)
         XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
-        XCTAssertTrue(MockPushIDManager.calledUpdatePushId)
+        XCTAssertTrue(mockPushIdManager.calledUpdatePushId)
         XCTAssertTrue(mockHitQueue.calledSuspend && mockHitQueue.calledClear) // we should suspend the queue and clear it
         XCTAssertEqual(PrivacyStatus.optedOut, state.identityProperties.privacyStatus) // privacy status should change to opt out
     }
