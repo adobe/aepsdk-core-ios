@@ -58,7 +58,7 @@ struct V5Migrator {
     /// - Returns: True if a privacy status key exists in the V5 defaults
     private func configNeedsMigration() -> Bool {
         guard let config = getV5OverriddenConfig() else { return false }
-        return config[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] != nil
+        return !config.isEmpty
     }
 
     private func getV5OverriddenConfig() -> [String: Any]? {
@@ -162,27 +162,16 @@ struct V5Migrator {
 
     /// Migrates the v5 Configuration values into the v5 Configuration data store
     private func migrateConfigurationLocalStorage() {
-        let v5OverridenConfig = getV5OverriddenConfig()
-        if let existingPrivacyStatus = v5OverridenConfig?[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String, let v5PrivacyStatus = PrivacyStatus(rawValue: existingPrivacyStatus) {
+        var legacyV5OverriddenConfig = AnyCodable.from(dictionary: getV5OverriddenConfig()) ?? [:]
+        let configDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Configuration.DATASTORE_NAME)
 
-            let configDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Configuration.DATASTORE_NAME)
-            let overriddenConfig: [String: AnyCodable]? = configDataStore.getObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
-
-            if var overriddenConfig = overriddenConfig {
-                if let _ = overriddenConfig[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY]?.value as? String {
-                    Log.debug(label: LOG_TAG, "V5 Swift configuration data already contains setting for global privacy. Existing V5 global privacy not migrated.")
-                } else {
-                    overriddenConfig[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] = AnyCodable(v5PrivacyStatus.rawValue)
-                    configDataStore.setObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
-                    Log.debug(label: LOG_TAG, "V5 Swift configuration data did not contain a global privacy. Migrated V5 global privacy with value of \(v5PrivacyStatus.rawValue)")
-                }
-            } else {
-                // no current v5 overridden config, create one with migrated v5 privacy status
-                let overriddenConfig: [String: AnyCodable] = [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: AnyCodable(v5PrivacyStatus.rawValue)]
-                configDataStore.setObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: overriddenConfig)
-            }
+        // attempt to load existing swift overridden config
+        if let overriddenConfig: [String: AnyCodable] = configDataStore.getObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG) {
+            // if v5 swift overridden config exists, apply it over the existing legacy v5 overridden config
+            legacyV5OverriddenConfig = legacyV5OverriddenConfig.merging(overriddenConfig) { (_, new) in new }
         }
 
+        configDataStore.setObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: legacyV5OverriddenConfig)
         let overriddenConfigKey = keyWithPrefix(V5MigrationConstants.Configuration.LEGACY_DATASTORE_NAME, V5MigrationConstants.Configuration.OVERRIDDEN_CONFIG)
         v5Defaults.removeObject(forKey: overriddenConfigKey)
     }
