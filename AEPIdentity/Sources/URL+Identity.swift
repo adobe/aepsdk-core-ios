@@ -10,8 +10,12 @@
  */
 
 import Foundation
+import AEPServices
 
 extension URL {
+
+    private static let LOG_TAG = "URL+Identity"
+
     /// Creates a new Identity hit URL
     /// - Parameters:
     ///   - experienceCloudServer: the experience cloud server
@@ -57,7 +61,7 @@ extension URL {
         components.queryItems = queryItems
 
         guard let url = components.url else {
-            // TODO: Add log for failure
+            Log.error(label: LOG_TAG, "Building Identity hit URL failed, returning nil.")
             return nil
         }
         return url
@@ -80,7 +84,7 @@ extension URL {
         ]
 
         guard let url = components.url else {
-            // TODO: Add log for failure
+            Log.error(label: LOG_TAG, "Building Identity opt-out hit URL failed, returning nil.")
             return nil
         }
         return url

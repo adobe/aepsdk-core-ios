@@ -53,4 +53,11 @@ struct LifecycleConstants {
         static let LIFECYCLE_DATA = "LifecycleData"
         static let LAST_VERSION = "LastVersion"
     }
+
+    struct Identity {
+        static let NAME = "com.adobe.module.identity"
+        struct EventDataKeys {
+            static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
+        }
+    }
 }

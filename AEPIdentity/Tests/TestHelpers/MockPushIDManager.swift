@@ -14,16 +14,16 @@ import AEPCore
 import AEPServices
 import Foundation
 
-struct MockPushIDManager: PushIDManageable {
+class MockPushIDManager: PushIDManageable {
     init() {}
 
-    init(dataStore _: NamedCollectionDataStore, eventDispatcher _: @escaping (Event) -> Void) {
+    required init(dataStore _: NamedCollectionDataStore, eventDispatcher _: @escaping (Event) -> Void) {
         // no-op
     }
 
     var calledUpdatePushId = false
     var calledUpdatePushIdWithArg: String?
-    mutating func updatePushId(pushId: String?) {
+    func updatePushId(pushId: String?) {
         calledUpdatePushId = true
         calledUpdatePushIdWithArg = pushId
     }

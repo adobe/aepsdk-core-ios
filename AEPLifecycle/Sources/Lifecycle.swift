@@ -87,15 +87,13 @@ import Foundation
     /// - Parameter event: event to version the shared state
     /// - Returns: the advertising identifier, nil if not found or if Identity shared state is not available
     private func getAdvertisingIdentifier(event: Event) -> String? {
-        // TODO: Replace with Identity name via constant when Identity extension is merged
-        guard let identitySharedState = getSharedState(extensionName: "com.adobe.module.identity", event: event) else {
+        guard let identitySharedState = getSharedState(extensionName: LifecycleConstants.Identity.NAME, event: event) else {
             return nil
         }
 
         if identitySharedState.status == .pending { return nil }
 
-        // TODO: Replace with data key via constant when Identity extension is merged
-        return identitySharedState.value?["advertisingidentifier"] as? String
+        return identitySharedState.value?[LifecycleConstants.Identity.EventDataKeys.ADVERTISING_IDENTIFIER] as? String
     }
 
     /// Updates the Lifecycle shared state versioned at `event` with `data`
