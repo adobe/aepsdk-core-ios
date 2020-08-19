@@ -34,6 +34,8 @@ import Foundation
     /// - Parameter completion: Closure to run when extensions have been registered
     @objc(registerExtensions:completion:)
     public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
+        V4Migrator(idParser: IDParser()).migrate() // before starting SDK, migrate from v4 if needed
+
         let registeredCounter = AtomicCounter()
         let allExtensions = [Configuration.self] + extensions
 
