@@ -39,7 +39,7 @@ class V4MigratorTests: XCTestCase {
     /// Tests that on a fresh install that all values are nil and nothing is migrated
     func testFreshInstall() {
         // setup
-        v4Defaults.set(nil, forKey: "Adobe.AdobeMobile_Lifecycle.InstallDate")
+        v4Defaults.set(nil, forKey: V4MigrationConstants.Lifecycle.V4InstallDate)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()

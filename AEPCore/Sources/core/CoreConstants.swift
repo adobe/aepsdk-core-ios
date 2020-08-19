@@ -95,4 +95,5 @@ struct CoreConstants {
         static let DATASTORE_NAME = "MobileServices"
 
     }
+
 }
