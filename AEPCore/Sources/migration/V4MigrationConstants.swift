@@ -12,7 +12,7 @@
 import Foundation
 
 /// Constants for V4 -> V5 migration
-enum MigrationConstants {
+enum V4MigrationConstants {
     // V4 Datastore Name
     static let V4AppGroup = "ADB_APP_GROUP"
     static let V4UserDefaultsKey = "adbUserDefaults"

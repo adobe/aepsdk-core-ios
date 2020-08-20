@@ -33,19 +33,22 @@
 		2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02F24C9FFB2002935CF /* SHA256Tests.swift */; };
 		21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21377D4024E3383E004BAC01 /* V4Migrator.swift */; };
 		213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F8A0324D8DC5A0003B8AF /* WrapperType.swift */; };
+		215A6CE224ED92C500FE0657 /* V4MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
 		217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 217E220424D1FD7900B70B3E /* SharedStateResult.swift */; };
+		218C813B24EC3EBC009B4F31 /* V5Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813A24EC3EBC009B4F31 /* V5Migrator.swift */; };
+		218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
+		21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */; };
 		21F79AB724E704C5003204C3 /* IDParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AB624E704C5003204C3 /* IDParser.swift */; };
 		21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABA24E70CDC003204C3 /* IDParsing.swift */; };
 		21F79ABF24E71B03003204C3 /* IDParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABD24E7144F003204C3 /* IDParserTests.swift */; };
 		21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC024E72204003204C3 /* V4MigratorTests.swift */; };
-		21F79AC324E73554003204C3 /* MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC224E73554003204C3 /* MigrationConstants.swift */; };
+		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
 		243DCE4824C7AA7C00E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24543A1324E1DAFC002D8D9A /* MockURLService.swift */; };
@@ -472,22 +475,25 @@
 		2107F02F24C9FFB2002935CF /* SHA256Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256Tests.swift; sourceTree = "<group>"; };
 		21377D4024E3383E004BAC01 /* V4Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4Migrator.swift; sourceTree = "<group>"; };
 		213F8A0324D8DC5A0003B8AF /* WrapperType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperType.swift; sourceTree = "<group>"; };
+		215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = V4MigrationConstants.swift; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		217E220424D1FD7900B70B3E /* SharedStateResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateResult.swift; sourceTree = "<group>"; };
+		218C813A24EC3EBC009B4F31 /* V5Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5Migrator.swift; sourceTree = "<group>"; };
+		218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5MigrationConstants.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21CAC0DF2422917600C11388 /* AEPCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0E62422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
+		21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5MigratorTests.swift; sourceTree = "<group>"; };
 		21F79AB624E704C5003204C3 /* IDParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParser.swift; sourceTree = "<group>"; };
 		21F79ABA24E70CDC003204C3 /* IDParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParsing.swift; sourceTree = "<group>"; };
 		21F79ABD24E7144F003204C3 /* IDParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParserTests.swift; sourceTree = "<group>"; };
 		21F79AC024E72204003204C3 /* V4MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4MigratorTests.swift; sourceTree = "<group>"; };
-		21F79AC224E73554003204C3 /* MigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationConstants.swift; sourceTree = "<group>"; };
+		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		24543A1324E1DAFC002D8D9A /* MockURLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLService.swift; path = AEPServices/Mocks/MockURLService.swift; sourceTree = SOURCE_ROOT; };
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
@@ -826,7 +832,9 @@
 			isa = PBXGroup;
 			children = (
 				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
-				21F79AC224E73554003204C3 /* MigrationConstants.swift */,
+				215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */,
+				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
+				218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */,
 				21F79AB624E704C5003204C3 /* IDParser.swift */,
 				21F79ABA24E70CDC003204C3 /* IDParsing.swift */,
 			);
@@ -889,6 +897,7 @@
 			children = (
 				21F79ABD24E7144F003204C3 /* IDParserTests.swift */,
 				21F79AC024E72204003204C3 /* V4MigratorTests.swift */,
+				21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */,
 			);
 			path = MigrationTests;
 			sourceTree = "<group>";
@@ -2089,12 +2098,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				218C813B24EC3EBC009B4F31 /* V5Migrator.swift in Sources */,
 				3FB66ACD24CA004400502CAF /* EventHubConstants.swift in Sources */,
 				3FB66ADF24CA004400502CAF /* ConfigurationConstants.swift in Sources */,
 				3FB66ADE24CA004400502CAF /* Configuration.swift in Sources */,
 				3FB66ADD24CA004400502CAF /* JSONRulesParser.swift in Sources */,
 				3FB66AE424CA004400502CAF /* CachedRules.swift in Sources */,
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
+				218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */,
 				3F16761424E1B0630041B970 /* RulesConstants.swift in Sources */,
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
@@ -2105,6 +2116,7 @@
 				3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */,
 				3FB66AE224CA004400502CAF /* Event+Configuration.swift in Sources */,
 				3FB66AD124CA004400502CAF /* SharedState.swift in Sources */,
+				215A6CE224ED92C500FE0657 /* V4MigrationConstants.swift in Sources */,
 				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
@@ -2113,7 +2125,6 @@
 				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,
 				21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */,
 				3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */,
-				21F79AC324E73554003204C3 /* MigrationConstants.swift in Sources */,
 				3FB66AE624CA004400502CAF /* ConfigurationDownloader.swift in Sources */,
 				213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */,
 				3FB66ACF24CA004400502CAF /* Event.swift in Sources */,
@@ -2150,6 +2161,7 @@
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
+				21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */,
 				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */,
