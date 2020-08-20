@@ -214,4 +214,35 @@ class IdentityFunctionalTests: XCTestCase {
         // verify
         XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
     }
+
+    // MARK: receiveConfigurationIdentity(...) tests
+
+    /// Tests that an event of type configuration and source request identity cause an event to be dispatched with the SDK identities
+    func testReceiveConfigurationIdentity() {
+        // setup
+        let event = Event(name: "GetSdkIdentities", type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.configuration, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.Configuration.ALL_IDENTIFIERS])
+    }
+
+    /// Tests that an event of type configuration and source request identity is ignored when the config privacy is opted out
+    func testReceiveConfigurationIdentityOptedOut() {
+        // setup
+        let event = Event(name: "GetSdkIdentities", type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+    }
 }
