@@ -134,13 +134,15 @@ struct V5Migrator {
         let lastUsedDateInterval = v5Defaults.double(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.LEGACY_DATASTORE_NAME, V5MigrationConstants.Lifecycle.LastUsedDate))
         let launches = v5Defaults.integer(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.LEGACY_DATASTORE_NAME, V5MigrationConstants.Lifecycle.Launches))
         let successfulClose = v5Defaults.bool(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.LEGACY_DATASTORE_NAME, V5MigrationConstants.Lifecycle.SuccessfulClose))
+        let osVersion = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.LEGACY_DATASTORE_NAME, V5MigrationConstants.Lifecycle.OsVersion))
+        let appId = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Lifecycle.LEGACY_DATASTORE_NAME, V5MigrationConstants.Lifecycle.AppId))
 
         let lifecycleDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Lifecycle.DATASTORE_NAME)
         lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: Date(timeIntervalSince1970: installDateInterval))
         lifecycleDataStore.set(key: V5MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION, value: lastVersion)
         lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: Date(timeIntervalSince1970: lastUsedDateInterval))
 
-        let persistedDict = ["launches": launches, "successfulClose": successfulClose] as [String: Any]
+        let persistedDict = ["launches": launches, "successfulClose": successfulClose, "osVersion": osVersion, "appId": appId] as [String: Any?]
         let persistedData = try? JSONSerialization.data(withJSONObject: persistedDict)
         lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT, value: persistedData)
 

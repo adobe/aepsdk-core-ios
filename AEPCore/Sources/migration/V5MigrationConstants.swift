@@ -11,7 +11,7 @@
 
 import Foundation
 
-/// Constants for V5 -> V5 migration
+/// Constants for V5 C++ -> V5 Swift migration
 enum V5MigrationConstants {
     enum Configuration {
         static let DATASTORE_NAME = "com.adobe.module.configuration"
