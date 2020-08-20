@@ -243,6 +243,25 @@ class IdentityFunctionalTests: XCTestCase {
 
         // test
         mockRuntime.simulateComingEvent(event: event)
+
+        // verify
         XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+    }
+
+    // MARK: handleConfigurationResponse(...) tests
+
+    /// Tests that when Identity gets a configuration response event that the privacy and orig id are updated
+    func testHandleConfigurationResponse() {
+        // setup
+        let newConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "new-org-id", "test-key": "test-val"]
+        let event = Event(name: "Config Response Event", type: EventType.configuration, source: EventSource.responseContent, data: newConfig)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        XCTAssertEqual(PrivacyStatus.optedIn.rawValue, identity.state?.lastValidConfig[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String)
+        XCTAssertEqual("new-org-id", identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String)
+        XCTAssertEqual("test-val", identity.state?.lastValidConfig["test-key"] as? String)
     }
 }
