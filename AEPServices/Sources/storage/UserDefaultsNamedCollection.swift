@@ -12,7 +12,7 @@
 
 import Foundation
 
-class UserDefaultsNamedCollection: NamedCollectionProcessing {
+public class UserDefaultsNamedCollection: NamedCollectionProcessing {
     let keyPrefix = "com.adobe.mobile.datastore"
     var appGroup: String?
 
