@@ -184,7 +184,7 @@ class IdentityFunctionalTests: XCTestCase {
 
     // MARK: processIdentifiersRequest(...) tests
 
-    /// Tests that processIdentifiers does not dispatch an event when the user is opted out
+    /// Tests that processIdentifiers dispatches an event
     func testProcessIdentifiers() {
         // setup
         let event = Event(name: "Get Identifiers", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
@@ -245,7 +245,8 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertNotNil(mockRuntime.dispatchedEvents.first) // empty event should have been dispatched
+        XCTAssertNil(mockRuntime.dispatchedEvents.first?.data) // data should be nil
     }
 
     // MARK: handleConfigurationResponse(...) tests

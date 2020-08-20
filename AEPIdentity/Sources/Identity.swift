@@ -110,6 +110,8 @@ import Foundation
     /// - Parameter event: The event coming from the getSdkIdentities API
     private func receiveConfigurationIdentity(event: Event) {
         if shouldIgnore(event: event) {
+            let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: EventType.configuration, source: EventSource.responseIdentity, data: nil)
+            dispatch(event: responseEvent)
             Log.debug(label: "\(name):\(#function)", "Ignore Configuration Identity event, user is currently opted-out")
             return
         }
