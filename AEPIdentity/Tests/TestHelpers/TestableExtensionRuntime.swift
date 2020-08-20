@@ -54,6 +54,12 @@ class TestableExtensionRuntime: ExtensionRuntime {
         otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: data.value)
     }
 
+    /// clear the events and shared states that have been created by the current extension
+    public func resetDispatchedEventAndCreatedSharedStates() {
+        dispatchedEvents = []
+        createdSharedStates = []
+    }
+
     func startEvents() {}
 
     func stopEvents() {}
