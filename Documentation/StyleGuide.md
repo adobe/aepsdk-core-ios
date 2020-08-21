@@ -19,6 +19,7 @@ This style guide highlights common patterns from the above linked style guide, w
   - [Type Inference](#type-inference)
   - [Shortcut Declarations](#shortcut-declarations)
   - [Optional Binding](#optional-binding)
+  - [Data Store Keys](#data-store-keys)
 - [Documentation Guidelines](#documentation-guidelines)
 
 
@@ -192,6 +193,34 @@ if let event = event { … }
 Not Preferred:
 ```swift
 if let unwrappedEvent = event { ... }
+```
+
+### Data Store Keys
+
+Keys used to store values within `UserDefaults` or any other local storage should be of the following pattern:
+
+- The constant definition should be in all uppercase 
+- String value for the key should be all lowercase seperated by periods
+- Be defined within an `enum` named `DataStoreKeys`
+
+Preferred:
+
+```swift
+enum DataStoreKeys {
+    static let IDENTITY_PROPERTIES = "identity.properties"
+    static let PUSH_ENABLED = "push.enabled"
+    static let ANALYTICS_PUSH_SYNC = "analytics.push.sync"
+}
+```
+
+Not Preferred:
+
+```swift
+struct Keys {
+    static let identityProperties = "identityProperties"
+    static let PUSH_ENABLED = "pushEnabled"
+    static let ANALYTICS_PUSH_SYNC = "analytics_push_sync"
+}
 ```
 
 ## Documentation Guidelines

@@ -69,7 +69,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     /// Formats the `appId` into a Adobe namespace key
     /// - Parameter appId: appId to be encoded into the cache key
     private func buildCacheKey(appId: String) -> String {
-        return "\(ConfigurationConstants.Keys.CONFIG_CACHE_PREFIX)\(appId)"
+        return "\(ConfigurationConstants.DataStoreKeys.CONFIG_CACHE_PREFIX)\(appId)"
     }
 
     /// Retrieves the cached configuration stored for `appId`, if any

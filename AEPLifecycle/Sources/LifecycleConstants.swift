@@ -12,7 +12,7 @@
 import Foundation
 
 /// Constants for `Lifecycle`
-struct LifecycleConstants {
+enum LifecycleConstants {
     static let EXTENSION_NAME = "com.adobe.module.lifecycle"
     static let FRIENDLY_NAME = "Lifecycle"
     static let EXTENSION_VERSION = "0.0.1"
@@ -23,11 +23,11 @@ struct LifecycleConstants {
     static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
     static let DEFAULT_LIFECYCLE_TIMEOUT = 300 // 5 min
 
-    struct SharedStateKeys {
+    enum SharedStateKeys {
         static let CONFIGURATION = "com.adobe.module.configuration"
     }
 
-    struct EventDataKeys {
+    enum EventDataKeys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
         // LifecycleSession Keys
@@ -44,17 +44,17 @@ struct LifecycleConstants {
         static let CONFIG_SESSION_TIMEOUT = "lifecycle.sessionTimeout"
     }
 
-    struct DataStoreKeys {
-        static let INSTALL_DATE = "InstallDate"
-        static let LAST_LAUNCH_DATE = "LastDateUsed"
-        static let UPGRADE_DATE = "UpgradeDate"
-        static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
-        static let PERSISTED_CONTEXT = "PersistedContext"
-        static let LIFECYCLE_DATA = "LifecycleData"
-        static let LAST_VERSION = "LastVersion"
+    enum DataStoreKeys {
+        static let INSTALL_DATE = "install.date"
+        static let LAST_LAUNCH_DATE = "last.date.used"
+        static let UPGRADE_DATE = "upgrade.date"
+        static let LAUNCHES_SINCE_UPGRADE = "launches.after.upgrade"
+        static let PERSISTED_CONTEXT = "persisted.context"
+        static let LIFECYCLE_DATA = "lifecycle.data"
+        static let LAST_VERSION = "last.version"
     }
 
-    struct Identity {
+    enum Identity {
         static let NAME = "com.adobe.module.identity"
         struct EventDataKeys {
             static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
