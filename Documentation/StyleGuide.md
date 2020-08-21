@@ -200,7 +200,7 @@ if let unwrappedEvent = event { ... }
 Keys used to store values within `UserDefaults` or any other local storage should be of the following pattern:
 
 - The constant definition should be in all uppercase 
-- String value for the key should be all lowercase seperated by periods
+- String value for the key should be all lowercase separated by periods
 - Be defined within an `enum` named `DataStoreKeys`
 
 Preferred:
