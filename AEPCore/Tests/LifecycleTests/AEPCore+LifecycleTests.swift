@@ -10,6 +10,7 @@
  */
 
 @testable import AEPCore
+@testable import AEPCoreMocks
 import XCTest
 
 class AEPCoreLifecycleTests: XCTestCase {
