@@ -15,14 +15,14 @@ import XCTest
 @testable import AEPCore
 @testable import AEPServices
 
-class ContractTest: XCTestCase {
+class EventHubContractTest: XCTestCase {
     override func setUp() {
-    }
-
-    override func tearDown() {
         EventHub.reset()
         ContractExtensionOne.reset()
         ContractExtensionTwo.reset()
+    }
+
+    override func tearDown() {
 
     }
 
