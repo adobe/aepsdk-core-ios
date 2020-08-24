@@ -116,15 +116,15 @@ public class OperationOrderer<T> {
     private func drain() {
         guard let handleFunc = handler else { return }
         if !self.active { return }
-        if let item = array.first {
-            if handleFunc(item) { // Handler processed item, we can remove.
-                array.removeFirst()
-                async {
-                    self.triggerSourceIfNeeded()
-                }
-            } else { // Handler declined to process, bail and wait for another trigger.
-                return
+        guard let item = array.first else { return }
+        if handleFunc(item) { // Handler processed item, we can remove.
+            array.removeFirst()
+            // kick it on the dispatch queue, so it will recheck `active` before processing the next data
+            async {
+                self.drain()
             }
+        } else { // Handler declined to process, bail and wait for another trigger.
+            return
         }
     }
 }
