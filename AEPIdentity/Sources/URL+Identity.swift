@@ -22,7 +22,8 @@ extension URL {
     ///   - orgId: the org id from Configuration
     ///   - identityProperties: the current `IdentityProperties` in the Identity extension
     ///   - dpids: a dictionary of dpids
-    static func buildIdentityHitURL(experienceCloudServer: String, orgId: String, identityProperties: IdentityProperties, dpids: [String: String]) -> URL? {
+    ///   - adIdChanged: true if the adId changed, false otherwise
+    static func buildIdentityHitURL(experienceCloudServer: String, orgId: String, identityProperties: IdentityProperties, dpids: [String: String], adIdChanged: Bool) -> URL? {
         var components = URLComponents()
         components.scheme = "https"
         components.host = experienceCloudServer
@@ -31,19 +32,19 @@ extension URL {
         var queryItems = [
             URLQueryItem(name: "d_rtbd", value: "json"),
             URLQueryItem(name: "d_ver", value: "2"),
-            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_ORGID, value: orgId),
+            URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_ORGID, value: orgId),
         ]
 
         if let mid = identityProperties.mid {
-            queryItems += [URLQueryItem(name: IdentityConstants.RESPONSE_KEY_MID, value: mid.midString)]
+            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_MID, value: mid.midString)]
         }
 
         if let blob = identityProperties.blob {
-            queryItems += [URLQueryItem(name: IdentityConstants.RESPONSE_KEY_BLOB, value: blob)]
+            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_BLOB, value: blob)]
         }
 
         if let locationHint = identityProperties.locationHint {
-            queryItems += [URLQueryItem(name: IdentityConstants.RESPONSE_KEY_HINT, value: locationHint)]
+            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_HINT, value: locationHint)]
         }
 
         // Add customer ids
@@ -56,6 +57,12 @@ extension URL {
         // Add dpids
         for (key, value) in dpids {
             queryItems += [URLQueryItem(dpidKey: key, dpidValue: value)]
+        }
+
+        // Add IDFA consent
+        if adIdChanged {
+            let idEmpty = (identityProperties.advertisingIdentifier?.isEmpty ?? true) ? "0" : "1"
+            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_IDFA_CONSENT, value: idEmpty)]
         }
 
         components.queryItems = queryItems
@@ -79,8 +86,8 @@ extension URL {
         components.host = experienceCloudServer
         components.path = IdentityConstants.KEY_PATH_OPTOUT
         components.queryItems = [
-            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_ORGID, value: orgId),
-            URLQueryItem(name: IdentityConstants.RESPONSE_KEY_MID, value: mid.midString),
+            URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_ORGID, value: orgId),
+            URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_MID, value: mid.midString),
         ]
 
         guard let url = components.url else {

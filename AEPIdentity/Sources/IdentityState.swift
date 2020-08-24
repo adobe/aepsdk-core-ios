@@ -109,10 +109,12 @@ class IdentityState {
         var customerIds = event.identifiers?.map { CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState) } ?? []
 
         // update adid if changed and extract the new adid value as VisitorId to be synced
+        var adIdChanged = false
         if let adId = event.adId, shouldUpdateAdId(newAdID: adId.identifier ?? "") {
             // check if changed, update
             identityProperties.advertisingIdentifier = adId.identifier
             customerIds.append(adId)
+            adIdChanged = true
         }
 
         // merge new identifiers with the existing ones and remove any VisitorIds with empty id values
@@ -122,7 +124,7 @@ class IdentityState {
 
         // valid config: check if there's a need to sync. Don't if we're already up to date.
         if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: lastValidConfig) {
-            queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event)
+            queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, adIdChanged: adIdChanged)
         } else {
             Log.debug(label: LOG_TAG, "sync identifiers request failed, shouldSync returned false.")
         }
@@ -256,8 +258,25 @@ class IdentityState {
     /// - Parameter newAdID: the new ad id
     /// - Returns: True if we should update the ad id, false otherwise
     private func shouldUpdateAdId(newAdID: String) -> Bool {
+        var newId = newAdID
+        // If ad id is all zeros, treat as if null/empty
+        if newId == IdentityConstants.Default.ZERO_ADVERTISING_ID {
+            newId = ""
+        }
+
         let existingAdId = identityProperties.advertisingIdentifier ?? ""
-        return (!newAdID.isEmpty && newAdID != existingAdId) || (newAdID.isEmpty && !existingAdId.isEmpty)
+
+        // did the advertising identifier change?
+        if (!newId.isEmpty && newId != existingAdId)
+            || (newId.isEmpty && !existingAdId.isEmpty) {
+            // Now we know the value changed, but did it change to/from null?
+            // Handle case where existingAdId loaded from persistence with all zeros and new value is not empty.
+            if (newId.isEmpty || existingAdId.isEmpty || existingAdId == IdentityConstants.Default.ZERO_ADVERTISING_ID) {
+                return true
+            }
+        }
+
+        return false
     }
 
     /// Queues an Identity hit within the `hitQueue`
@@ -265,7 +284,8 @@ class IdentityState {
     ///   - identityProperties: Current identity properties
     ///   - configSharedState: Current configuration shared state
     ///   - event: event responsible for the hit
-    private func queueHit(identityProperties: IdentityProperties, configSharedState: [String: Any], event: Event) {
+    ///   - adIdChanged: flag indicating if the adId changed
+    private func queueHit(identityProperties: IdentityProperties, configSharedState: [String: Any], event: Event, adIdChanged: Bool) {
         let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.Default.SERVER
 
         guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else {
@@ -273,7 +293,7 @@ class IdentityState {
             return
         }
 
-        guard let url = URL.buildIdentityHitURL(experienceCloudServer: server, orgId: orgId, identityProperties: identityProperties, dpids: event.dpids ?? [:]) else {
+        guard let url = URL.buildIdentityHitURL(experienceCloudServer: server, orgId: orgId, identityProperties: identityProperties, dpids: event.dpids ?? [:], adIdChanged: adIdChanged) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, failed to create hit URL")
             return
         }

@@ -18,10 +18,6 @@ struct IdentityConstants {
     static let DATASTORE_NAME = EXTENSION_NAME
 
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
-    static let RESPONSE_KEY_ORGID = "d_orgid"
-    static let RESPONSE_KEY_MID = "d_mid"
-    static let RESPONSE_KEY_BLOB = "d_blob"
-    static let RESPONSE_KEY_HINT = "dcs_region"
     static let VISITOR_ID_PARAMETER_KEY_CUSTOMER = "d_cid_ic"
     static let KEY_PATH_OPTOUT = "/demoptout.jpg"
     static let DEFAULT_SERVER = "dpm.demdex.net"
@@ -65,18 +61,24 @@ struct IdentityConstants {
     }
 
     struct URLKeys {
+        static let RESPONSE_KEY_ORGID = "d_orgid"
+        static let RESPONSE_KEY_MID = "d_mid"
+        static let RESPONSE_KEY_BLOB = "d_blob"
+        static let RESPONSE_KEY_HINT = "dcs_region"
         static let VISITOR_TIMESTAMP_KEY = "TS"
         static let VISITOR_PAYLOAD_MARKETING_CLOUD_ID_KEY = "MCMID"
         static let VISITOR_PAYLOAD_KEY = "adobe_mc"
         static let VISITOR_PAYLOAD_MARKETING_CLOUD_ORG_ID = "MCORGID"
         static let VISITOR_PAYLOAD_ANALYTICS_ID_KEY = "MCAID"
         static let ANALYTICS_PAYLOAD_KEY = "adobe_aa_vid"
+        static let RESPONSE_KEY_IDFA_CONSENT = "idfa_consent"
     }
 
     struct Default {
         static let TTL = TimeInterval(600)
         static let TIMEOUT = TimeInterval(2000)
         static let SERVER = "dpm.demdex.net"
+        static let ZERO_ADVERTISING_ID = "00000000-0000-0000-0000-000000000000"
     }
 
     struct Analytics {
