@@ -1,6 +1,6 @@
 # Definition of Terms
 
-| Term | Description    |
+| <div style="width: 200px">Term</div> | Description    |
 | ---- | -------------- |
 | [Event](Event.md)     | The object used to pass data through the **Event Hub**. An Event is defined by a combination of its **Event Data**, **Event Source**, and **Event Type**. An Event contains the data necessary for registered **Extensions** to determine if and how they should respond to the Event. Events can originate externally from public API calls, or internally from the Event Hub or registered Extensions. |
 | Event Data            | A dictionary (`[String: Any]`) of values containing data specific to the **Event**. The Event Data helps interested **Extensions** know _how_ the Event should be handled. |
