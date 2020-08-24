@@ -15,7 +15,7 @@ import Foundation
 @testable import AEPCore
 
 class ContractExtensionOne: Extension {
-    var name = "ContractExtensionOne"
+    var name = "com.adobe.ContractExtensionOne"
     var friendlyName = "ContractExtensionOne"
     static var extensionVersion = "0.0.1"
     var metadata: [String: String]?
@@ -25,6 +25,7 @@ class ContractExtensionOne: Extension {
     static var unregistrationClosure: (() -> Void)?
     static var eventReceivedClosure: ((Event) -> Void)?
     static var readyForEventClosure: (() -> Bool)?
+    static var runtime: ExtensionRuntime?
 
     let runtime: ExtensionRuntime
 
@@ -33,6 +34,7 @@ class ContractExtensionOne: Extension {
         if let closure = type(of: self).onInitClosure {
             closure()
         }
+        ContractExtensionOne.runtime = runtime
     }
 
     static func reset() {
@@ -41,6 +43,7 @@ class ContractExtensionOne: Extension {
         unregistrationClosure = nil
         eventReceivedClosure = nil
         readyForEventClosure = nil
+        runtime = nil
     }
 
     func onRegistered() {

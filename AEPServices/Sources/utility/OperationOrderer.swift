@@ -114,10 +114,14 @@ public class OperationOrderer<T> {
 
     /// Attempts to drain the queue by iterating over all queued items and calling the handle function on them.
     private func drain() {
-        while let item = array.first {
-            guard let handleFunc = handler else { return }
+        guard let handleFunc = handler else { return }
+        if !self.active { return }
+        if let item = array.first {
             if handleFunc(item) { // Handler processed item, we can remove.
                 array.removeFirst()
+                async {
+                    self.triggerSourceIfNeeded()
+                }
             } else { // Handler declined to process, bail and wait for another trigger.
                 return
             }

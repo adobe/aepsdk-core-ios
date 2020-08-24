@@ -15,7 +15,7 @@ import Foundation
 @testable import AEPCore
 
 class ContractExtensionTwo: Extension {
-    var name = "ContractExtensionTwo"
+    var name = "com.adobe.ContractExtensionTwo"
     var friendlyName = "ContractExtensionTwo"
     static var extensionVersion = "0.0.1"
     var metadata: [String: String]?

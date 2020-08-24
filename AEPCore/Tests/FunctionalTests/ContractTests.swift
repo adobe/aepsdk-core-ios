@@ -27,9 +27,9 @@ class ContractTest: XCTestCase {
     }
 
 
-    // MARK: - EventHub
+    // MARK: - EventHub Registriation
 
-    /// Tests the init is called before onRegister
+    /// Tests init is called before onRegister
     func testInitThenOnRegister() {
         // setup
         let extensionOneInitExpectation = XCTestExpectation()
@@ -139,6 +139,9 @@ class ContractTest: XCTestCase {
         wait(for: [startExpectation, sharedStateEventExpectation], timeout: 0.5, enforceOrder: true)
     }
 
+
+    // MARK: - Event order
+
     /// Tests the events dispatched before start callback will be received by extension after start
     func testEventsDispatchedBeforeStart() {
         // setup
@@ -169,6 +172,8 @@ class ContractTest: XCTestCase {
         // verify
         wait(for: [startExpectation, firstEventExpectation, secondEventExpectation, sharedStateEventExpectation], timeout: 0.5)
     }
+
+    // MARK: - Extension dispatch queue
 
     /// Tests the lilsterns from different extension are running on separate threads
     func testListenersFromDifferetnExtensiosnRunOnDifferentThread() {
@@ -227,4 +232,296 @@ class ContractTest: XCTestCase {
         // verify that it takes 0.6 second to process three events
         XCTAssertTrue(interval > 0.6)
     }
+
+    // MARK: - Shared State
+
+    /// Tests nil is returned when getting a shared state for an extension which is not registered.
+    func testSharedStateOfUnknownExtension() {
+        // setup
+        let startExpectation = XCTestExpectation()
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+
+        // verify
+        wait(for: [startExpectation], timeout: 0.5)
+        let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "unknownExtension", event: nil)
+        XCTAssertNil(sharedState)
+    }
+
+    /// Tests nil is returned when getting a shared state for an extension which is not registered.
+    func testSharedStateOfExtensionWithNoSharedState() {
+        // setup
+        let startExpectation = XCTestExpectation()
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+
+        // verify
+        wait(for: [startExpectation], timeout: 0.5)
+        let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: nil)
+        XCTAssertEqual(SharedStateStatus.none, sharedState?.status)
+    }
+
+    /// Tests extension can set the shared state for EN2 after setting shared state for EN1.
+    func testSetSharedStateInOrder() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 0.5)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], event: event2)
+
+        // verify
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent1?.value as? [String:String])
+
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        XCTAssertEqual(["event":"second"], sharedStateForEvent2?.value as? [String:String])
+    }
+
+    /// Tests once an extension has set the shared state for EN2, it will not be allowed to set the shared state for EN1.
+    func testSetSharedStateInWrongOrder() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 0.5)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], event: event2)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
+
+        // verify
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        // shared state retrieved for event1 is the shared stated set for event2
+        XCTAssertEqual(["event":"second"], sharedStateForEvent1?.value as? [String:String])
+
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        XCTAssertEqual(["event":"second"], sharedStateForEvent2?.value as? [String:String])
+    }
+
+    /// Tests if the last shared state ExtensionA has been set is for EN1 with ShareStateEN1 (no matter .set or .pending), ShareStateEN1 is returned when getting shared state of ExtensionA for EN1, or EN2 or any events after.
+    func testGetSharedStateWhenSharedStateIsSetForAEarlierEvent() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        let event3 = Event(name: "three", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+        MobileCore.dispatch(event: event3)
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 0.5)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
+
+        // verify
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent1?.value as? [String:String])
+
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent2?.value as? [String:String])
+
+        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent3?.value as? [String:String])
+
+    }
+
+    /// Tests if ExtensionA has set shared state for EN1 with ShareStateEN1 and for EN4 with ShareStateEN4, ShareStateEN1 is returned when getting shared state of ExtensionA for EN1, EN2 and EN3.
+    func testGetSharedStateWhenAnotherSharedStateSetForALaterEvent() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        let event3 = Event(name: "three", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+        MobileCore.dispatch(event: event3)
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 0.5)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
+
+        // verify
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent1?.value as? [String:String])
+
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent2?.value as? [String:String])
+
+        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        XCTAssertEqual(["event":"three"], sharedStateForEvent3?.value as? [String:String])
+
+    }
+
+    /// Tests createPendingSharedState and then resolve it
+    func testResolvePendingSharedState() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        let event3 = Event(name: "three", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+        MobileCore.dispatch(event: event3)
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 0.5)
+        let resolver = ContractExtensionOne.runtime?.createPendingSharedState(event: event1)
+
+        // verify
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        XCTAssertEqual(SharedStateStatus.pending, sharedStateForEvent1?.status)
+
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        XCTAssertEqual(SharedStateStatus.pending, sharedStateForEvent2?.status)
+
+        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        XCTAssertEqual(SharedStateStatus.pending, sharedStateForEvent3?.status)
+
+        // test
+        resolver?(["event":"first"])
+
+        // verify
+        let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent1New?.value as? [String:String])
+
+        let sharedStateForEvent2New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent2New?.value as? [String:String])
+
+        let sharedStateForEvent3New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent3New?.value as? [String:String])
+
+    }
+
+    /// Tests if the first shared state set by ExtensionA is for EN1 with ShareStateEN1, ShareStateEN1 is returned when getting shared state of ExtensionA for E1, E2 E3 and any event triggered before EN1.
+    func testGetSharedStateIfOnlySetSharedStateForEventThree() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        let event3 = Event(name: "three", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+        MobileCore.dispatch(event: event3)
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 0.5)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
+
+        // verify
+        let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        XCTAssertEqual(["event":"three"], sharedStateForEvent1New?.value as? [String:String])
+
+        let sharedStateForEvent2New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        XCTAssertEqual(["event":"three"], sharedStateForEvent2New?.value as? [String:String])
+
+        let sharedStateForEvent3New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        XCTAssertEqual(["event":"three"], sharedStateForEvent3New?.value as? [String:String])
+
+    }
+
+    // MARK: - stop and start
+    /// Tests when the stopEvents API is called, the extension will pause handling events
+    func testStopEvents() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let firstEventExpectation = XCTestExpectation()
+        let secondEventInvertedExpectation = XCTestExpectation()
+        secondEventInvertedExpectation.isInverted = true
+        let thirdEventInvertedExpectation = XCTestExpectation()
+        thirdEventInvertedExpectation.isInverted = true
+        ContractExtensionOne.eventReceivedClosure = { event in
+            switch event.name{
+            case "first":
+                firstEventExpectation.fulfill()
+                ContractExtensionOne.runtime?.stopEvents()
+            case "second":
+                secondEventInvertedExpectation.fulfill()
+            case "three":
+                thirdEventInvertedExpectation.fulfill()
+            default:
+                return
+            }
+        }
+
+        // test
+        MobileCore.dispatch(event: Event(name: "first", type: "test", source: "test", data: nil))
+        MobileCore.dispatch(event: Event(name: "second", type: "test", source: "test", data: nil))
+        MobileCore.dispatch(event: Event(name: "three", type: "test", source: "test", data: nil))
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+
+        // verify
+        wait(for: [startExpectation, firstEventExpectation, secondEventInvertedExpectation,thirdEventInvertedExpectation], timeout: 0.5)
+    }
+
+    /// Tests start events resume the event processing
+    func testStartEvents() {
+        // setup
+        let startExpectation = XCTestExpectation()
+        let firstEventExpectation = XCTestExpectation()
+        let secondEventExpectation = XCTestExpectation()
+        let thirdEventExpectation = XCTestExpectation()
+        ContractExtensionOne.eventReceivedClosure = { event in
+            switch event.name{
+            case "first":
+                firstEventExpectation.fulfill()
+                ContractExtensionOne.runtime?.stopEvents()
+            case "second":
+                secondEventExpectation.fulfill()
+            case "three":
+                thirdEventExpectation.fulfill()
+            default:
+                return
+            }
+        }
+
+        // test
+        MobileCore.dispatch(event: Event(name: "first", type: "test", source: "test", data: nil))
+        MobileCore.dispatch(event: Event(name: "second", type: "test", source: "test", data: nil))
+        MobileCore.dispatch(event: Event(name: "three", type: "test", source: "test", data: nil))
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+
+        // verify
+        wait(for: [startExpectation, firstEventExpectation], timeout: 0.5)
+
+        ContractExtensionOne.runtime?.startEvents()
+        wait(for: [secondEventExpectation,thirdEventExpectation], timeout: 0.5)
+    }
+
 }
