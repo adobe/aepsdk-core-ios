@@ -1,8 +1,8 @@
 # AEP SDK Swift Core
 
-Docs for core and stuff.
+[Discussion for content and layout](https://github.com/adobe/aepsdk-core-ios/issues/250)
 
-[Discussion for content and layout](https://github.com/adobe/aepsdk-core-ios/issues/250) 
+Docs for core and stuff.
 
 ### [Event Hub](EventHub/README.md)
 
