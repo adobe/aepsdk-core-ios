@@ -75,7 +75,7 @@ public extension Extension {
 
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at
-    /// - Returns: a `SharedStateResolver`
+    /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
         return runtime.createPendingSharedState(event: event)
     }

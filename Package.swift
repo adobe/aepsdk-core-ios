@@ -31,33 +31,18 @@ let package = Package(
     targets: [
         .target(name: "AEPCore",
                 dependencies: ["AEPServices", "SwiftRulesEngine"],
-                path: "AEPCore/Sources",
-                linkerSettings: [
-                    .unsafeFlags(["BUILD_LIBRARY_FOR_DISTRIBUTION=YES"]),
-                ]),
+                path: "AEPCore/Sources"),
         .target(name: "AEPIdentity",
                 dependencies: ["AEPCore"],
-                path: "AEPIdentity/Sources",
-                linkerSettings: [
-                    .unsafeFlags(["BUILD_LIBRARY_FOR_DISTRIBUTION=YES"]),
-                ]),
+                path: "AEPIdentity/Sources"),
         .target(name: "AEPLifecycle",
                 dependencies: ["AEPCore"],
-                path: "AEPLifecycle/Sources",
-                linkerSettings: [
-                    .unsafeFlags(["BUILD_LIBRARY_FOR_DISTRIBUTION=YES"]),
-                ]),
+                path: "AEPLifecycle/Sources"),
         .target(name: "AEPServices",
                 dependencies: [],
-                path: "AEPServices/Sources",
-                linkerSettings: [
-                    .unsafeFlags(["BUILD_LIBRARY_FOR_DISTRIBUTION=YES"]),
-                ]),
+                path: "AEPServices/Sources"),
         .target(name: "AEPSignal",
                 dependencies: ["AEPCore"],
-                path: "AEPSignal/Sources",
-                linkerSettings: [
-                    .unsafeFlags(["BUILD_LIBRARY_FOR_DISTRIBUTION=YES"]),
-                ]),
+                path: "AEPSignal/Sources"),                
     ]
 )
