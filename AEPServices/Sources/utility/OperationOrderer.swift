@@ -112,7 +112,7 @@ public class OperationOrderer<T> {
         }
     }
 
-    /// Attempts to drain the queue by iterating over all queued items and calling the handle function on them.
+    /// Attempts to drain the queue by getting the first item and calling the handle function on it, then recursively calling the `drain()` method itself
     private func drain() {
         guard let handleFunc = handler else { return }
         if !self.active { return }
