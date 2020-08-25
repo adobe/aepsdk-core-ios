@@ -16,13 +16,14 @@ import Foundation
 /// Manages the business logic of the Identity extension
 class IdentityState {
     private let LOG_TAG = "IdentityState"
-    private(set) var identityProperties: IdentityProperties
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
+        var identityProperties: IdentityProperties
     #else
         private var lastValidConfig: [String: Any] = [:]
+        private(set) var identityProperties: IdentityProperties
     #endif
 
     /// Creates a new `IdentityState` with the given identity properties
@@ -271,7 +272,7 @@ class IdentityState {
             || (newId.isEmpty && !existingAdId.isEmpty) {
             // Now we know the value changed, but did it change to/from null?
             // Handle case where existingAdId loaded from persistence with all zeros and new value is not empty.
-            if (newId.isEmpty || existingAdId.isEmpty || existingAdId == IdentityConstants.Default.ZERO_ADVERTISING_ID) {
+            if newId.isEmpty || existingAdId.isEmpty || existingAdId == IdentityConstants.Default.ZERO_ADVERTISING_ID {
                 return true
             }
         }

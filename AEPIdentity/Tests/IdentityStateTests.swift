@@ -187,6 +187,69 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
 
+    /// SetAdvertisingIdentifier with empty id and empty persisted id will not sync
+    func testSyncIdentifiersAdIdDidNotChangeEmpty() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        state.lastValidConfig = configSharedState
+        state.identityProperties.advertisingIdentifier = ""
+        state.identityProperties.lastSync = Date()
+        state.identityProperties.mid = MID()
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: ""]
+        let event = Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
+        let eventData = state.syncIdentifiers(event: event)
+
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+    }
+
+    /// SetAdvertisingIdentifier with same id will not sync
+    func testSyncIdentifiersAdIdDidNotChange() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        state.lastValidConfig = configSharedState
+        state.identityProperties.advertisingIdentifier = "test-ad-id"
+        state.identityProperties.lastSync = Date()
+        state.identityProperties.mid = MID()
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: "test-ad-id"]
+        let event = Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
+        let eventData = state.syncIdentifiers(event: event)
+
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+    }
+
+    /// SetAdvertisingIdentifier with all zeros and empty persisted id will not sync
+    func testSyncIdentifiersAdIdWithZeros() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        state.lastValidConfig = configSharedState
+        state.identityProperties.advertisingIdentifier = ""
+        state.identityProperties.lastSync = Date()
+        state.identityProperties.mid = MID()
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: IdentityConstants.Default.ZERO_ADVERTISING_ID]
+        let event = Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
+        let eventData = state.syncIdentifiers(event: event)
+
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+    }
+
     /// Tests that the ad is is correctly preserved when the same ad id is sync'd
     func testSyncIdentifiersAdIDIsSame() {
         // setup
@@ -275,6 +338,8 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertNil(eventData)
     }
+
+
 
     // MARK: readyForSyncIdentifiers(...)
 
