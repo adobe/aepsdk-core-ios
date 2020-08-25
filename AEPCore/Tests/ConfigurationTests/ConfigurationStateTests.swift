@@ -28,7 +28,7 @@ class ConfigurationStateTests: XCTestCase {
     }
 
     private func putAppIdInPersistence(appId: String) {
-        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: appId)
+        dataStore.set(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID, value: appId)
     }
 
     private func putCachedConfigInPersistence(config: [String: Any]) {
@@ -36,7 +36,7 @@ class ConfigurationStateTests: XCTestCase {
     }
 
     private func putProgrammaticConfigInPersistence(config: [String: AnyCodable]) {
-        dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: config)
+        dataStore.setObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: config)
     }
 
     private func putConfigInManifest(config: [String: Any]) {
@@ -379,7 +379,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("testVal", configState.currentConfiguration["testKey"] as! String)
         XCTAssertEqual(1, configState.programmaticConfigInDataStore.count)
         XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.value as? String)
-        XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
+        XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
     }
 
     /// Tests that updating programmatic config updates the correct build environment key

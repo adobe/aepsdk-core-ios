@@ -30,14 +30,17 @@ struct ConfigurationConstants {
         static let RETRIEVE_CONFIG = "config.getData"
         static let JSON_APP_ID = "config.appId"
         static let JSON_FILE_PATH = "config.filePath"
-        static let PERSISTED_OVERRIDDEN_CONFIG = "config.overridden.map"
-        static let PERSISTED_APPID = "config.appID"
         static let IS_INTERNAL_EVENT = "config.isinternalevent"
-        static let CONFIG_CACHE_PREFIX = "cached.config."
         static let BUILD_ENVIRONMENT = "build.environment"
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
         static let RULES_URL = "rules.url"
+    }
+
+    struct DataStoreKeys {
+        static let PERSISTED_OVERRIDDEN_CONFIG = "config.overridden.map"
+        static let PERSISTED_APPID = "config.appID"
+        static let CONFIG_CACHE_PREFIX = "cached.config."
     }
 
     struct Privacy {
