@@ -279,6 +279,7 @@
 		BBA512A324F4A16A0030DAD1 /* rules_testMatcherLe.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512A224F4A16A0030DAD1 /* rules_testMatcherLe.json */; };
 		BBA512A524F4A1790030DAD1 /* rules_testMatcherCo.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512A424F4A1790030DAD1 /* rules_testMatcherCo.json */; };
 		BBA512A724F4A18B0030DAD1 /* rules_testMatcherNc.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512A624F4A18B0030DAD1 /* rules_testMatcherNc.json */; };
+		BBA512A924F4A7EE0030DAD1 /* rules_testMatcherNx.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512A824F4A7EE0030DAD1 /* rules_testMatcherNx.json */; };
 		BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */; };
 		BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */; };
 /* End PBXBuildFile section */
@@ -743,6 +744,8 @@
 		BBA512A224F4A16A0030DAD1 /* rules_testMatcherLe.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherLe.json; sourceTree = "<group>"; };
 		BBA512A424F4A1790030DAD1 /* rules_testMatcherCo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherCo.json; sourceTree = "<group>"; };
 		BBA512A624F4A18B0030DAD1 /* rules_testMatcherNc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNc.json; sourceTree = "<group>"; };
+		BBA512A824F4A7EE0030DAD1 /* rules_testMatcherNx.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNx.json; sourceTree = "<group>"; };
+		BBA512AC24F5784C0030DAD1 /* aepsdk-rulesengine-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "aepsdk-rulesengine-ios"; path = "../../v5-swift/aepsdk-rulesengine-ios"; sourceTree = "<group>"; };
 		BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+FlattenTests.swift"; sourceTree = "<group>"; };
 		BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenFinderTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -862,6 +865,7 @@
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
+				BBA512AC24F5784C0030DAD1 /* aepsdk-rulesengine-ios */,
 				21CAC0D82422917600C11388 /* AEPCore */,
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
@@ -1343,6 +1347,7 @@
 				BBA512A224F4A16A0030DAD1 /* rules_testMatcherLe.json */,
 				BBA512A424F4A1790030DAD1 /* rules_testMatcherCo.json */,
 				BBA512A624F4A18B0030DAD1 /* rules_testMatcherNc.json */,
+				BBA512A824F4A7EE0030DAD1 /* rules_testMatcherNx.json */,
 			);
 			path = TestResources;
 			sourceTree = "<group>";
@@ -1916,6 +1921,7 @@
 				3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */,
 				3F39520C24CA096100F7325B /* rules_1.json in Resources */,
 				BBA512A524F4A1790030DAD1 /* rules_testMatcherCo.json in Resources */,
+				BBA512A924F4A7EE0030DAD1 /* rules_testMatcherNx.json in Resources */,
 				BBA512A124F4A15C0030DAD1 /* rules_testMatcherLt.json in Resources */,
 				3F39520D24CA096100F7325B /* ADBMobileConfig.json in Resources */,
 				BBA5129D24F4899B0030DAD1 /* rules_testMatcherGt.json in Resources */,

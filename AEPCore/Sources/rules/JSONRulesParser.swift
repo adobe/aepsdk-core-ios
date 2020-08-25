@@ -79,7 +79,7 @@ class JSONCondition: Codable {
                                  "sw": "startsWith",
                                  "ew": "endsWith",
                                  "ex": "exists",
-                                 "nx": "notExists"]
+                                 "nx": "notExist"]
 
     var type: ConditionType
     var definition: JSONDefinition
@@ -98,6 +98,9 @@ class JSONCondition: Codable {
             return nil
         case .matcher:
             if let key = definition.key, let matcher = definition.matcher, let values = definition.values {
+                if values.count == 0 {
+                    return convert(key: key, matcher: matcher, anyCodable: "")
+                }
                 if values.count == 1 {
                     return convert(key: key, matcher: matcher, anyCodable: values[0])
                 }
@@ -121,6 +124,9 @@ class JSONCondition: Codable {
         }
         let key = "{{\(key)}}"
         if let value = anyCodable.value {
+            if matcher == "exists" || matcher == "notExist" {
+                return ComparisonExpression(lhs: Operand<Any>(mustache: key), operationName: matcher, rhs: Operand<Any>(mustache: ""))
+            }
             switch value {
             case is String:
                 if let stringValue = anyCodable.value as? String {

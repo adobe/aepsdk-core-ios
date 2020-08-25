@@ -158,7 +158,29 @@ class RulesEngineFunctionalTests: XCTestCase {
 
     // Matcher: nx (Not Exists)
     func testMatcherNx() {
-        // ???
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherNx")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: nil, status: .pending))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
 
     // Matcher: gt (Greater Than)
