@@ -14,16 +14,17 @@ import Foundation
 
 /// Represents the source of which an event originates from
 @objc(AEPEventSource)
+@objcMembers
 public class EventSource: NSObject {
-    @objc public static let none = "com.adobe.eventSource.none"
-    @objc public static let os = "com.adobe.eventSource.os"
-    @objc public static let requestContent = "com.adobe.eventSource.requestContent"
-    @objc public static let requestIdentity = "com.adobe.eventSource.requestIdentity"
-    @objc public static let requestProfile = "com.adobe.eventSource.requestProfile"
-    @objc public static let requestReset = "com.adobe.eventSource.requestReset"
-    @objc public static let responseContent = "com.adobe.eventSource.responseContent"
-    @objc public static let responseIdentity = "com.adobe.eventSource.responseIdentity"
-    @objc public static let responseProfile = "com.adobe.eventSource.responseProfile"
-    @objc public static let sharedState = "com.adobe.eventSource.sharedState"
-    @objc public static let wildcard = "com.adobe.eventSource._wildcard_"
+    public static let none = "com.adobe.eventSource.none"
+    public static let os = "com.adobe.eventSource.os"
+    public static let requestContent = "com.adobe.eventSource.requestContent"
+    public static let requestIdentity = "com.adobe.eventSource.requestIdentity"
+    public static let requestProfile = "com.adobe.eventSource.requestProfile"
+    public static let requestReset = "com.adobe.eventSource.requestReset"
+    public static let responseContent = "com.adobe.eventSource.responseContent"
+    public static let responseIdentity = "com.adobe.eventSource.responseIdentity"
+    public static let responseProfile = "com.adobe.eventSource.responseProfile"
+    public static let sharedState = "com.adobe.eventSource.sharedState"
+    public static let wildcard = "com.adobe.eventSource._wildcard_"
 }

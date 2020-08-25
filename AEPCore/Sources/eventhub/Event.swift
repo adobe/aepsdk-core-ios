@@ -65,7 +65,7 @@ import Foundation
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    @objc(createResponseEvent:type:source:data:)
+    @objc(responseEventWithName:type:source:data:)
     public func createResponseEvent(name: String, type: String, source: String, data: [String: Any]?) -> Event {
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
