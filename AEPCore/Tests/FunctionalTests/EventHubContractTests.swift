@@ -32,10 +32,10 @@ class EventHubContractTest: XCTestCase {
     /// Tests init is called before onRegister
     func testInitThenOnRegister() {
         // setup
-        let extensionOneInitExpectation = XCTestExpectation()
-        let extensionTwoInitExpectation = XCTestExpectation()
-        let extensionOneRegisteredExpectation = XCTestExpectation()
-        let extensionTwoRegisteredExpectation = XCTestExpectation()
+        let extensionOneInitExpectation = XCTestExpectation(description: "Extension one init is invoked")
+        let extensionTwoInitExpectation = XCTestExpectation(description: "Extension two init is invoked")
+        let extensionOneRegisteredExpectation = XCTestExpectation(description: "Extension one onRegistered is invoked")
+        let extensionTwoRegisteredExpectation = XCTestExpectation(description: "Extension two onRegistered is invoked")
         ContractExtensionOne.onInitClosure = {
             extensionOneInitExpectation.fulfill()
         }
@@ -64,9 +64,9 @@ class EventHubContractTest: XCTestCase {
     /// Tests the start callback gets called after all the extension finish registriation
     func testStartCallbackCalledAfterRegistrationComplete() {
         // setup
-        let extensionOneRegisteredExpectation = XCTestExpectation()
-        let extensionTwoRegisteredExpectation = XCTestExpectation()
-        let startExpectation = XCTestExpectation()
+        let extensionOneRegisteredExpectation = XCTestExpectation(description: "Extension one onRegistered is invoked")
+        let extensionTwoRegisteredExpectation = XCTestExpectation(description: "Extension two onRegistered is invoked")
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         ContractExtensionOne.registrationClosure = {
             extensionOneRegisteredExpectation.fulfill()
         }
@@ -90,7 +90,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests the registration of extensions running on separat threads
     func testExtensionRegistrationRunningOnSeparateThreads() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         ContractExtensionOne.onInitClosure = {
             Thread.sleep(forTimeInterval:0.2 )
         }
@@ -119,8 +119,8 @@ class EventHubContractTest: XCTestCase {
     /// Tests the shared state event of eventhub dispatched after start
     func testFirstEventBeSharedStateEventOfEventHub() {
         // setup
-        let startExpectation = XCTestExpectation()
-        let sharedStateEventExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let sharedStateEventExpectation = XCTestExpectation(description: "Event Hub shared stated event is received")
         ContractExtensionOne.eventReceivedClosure = { event in
             switch event.name{
             case "STATE_CHANGE_EVENT":
@@ -145,10 +145,10 @@ class EventHubContractTest: XCTestCase {
     /// Tests the events dispatched before start callback will be received by extension after start
     func testEventsDispatchedBeforeStart() {
         // setup
-        let startExpectation = XCTestExpectation()
-        let firstEventExpectation = XCTestExpectation()
-        let secondEventExpectation = XCTestExpectation()
-        let sharedStateEventExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let firstEventExpectation = XCTestExpectation(description: "First event is received")
+        let secondEventExpectation = XCTestExpectation(description: "Second event is received")
+        let sharedStateEventExpectation = XCTestExpectation(description: "Event Hub shared stated event is received")
         ContractExtensionOne.eventReceivedClosure = { event in
             switch event.name{
             case "first":
@@ -178,8 +178,8 @@ class EventHubContractTest: XCTestCase {
     /// Tests the lilsterns from different extension are running on separate threads
     func testListenersFromDifferetnExtensiosnRunOnDifferentThread() {
         // setup
-        let startExpectation = XCTestExpectation()
-        let eventsExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let eventsExpectation = XCTestExpectation(description: "Both two extensions finish processing")
         eventsExpectation.expectedFulfillmentCount = 2
         ContractExtensionOne.eventReceivedClosure = { event in
             Thread.sleep(forTimeInterval:0.2 )
@@ -205,9 +205,8 @@ class EventHubContractTest: XCTestCase {
     /// Tests the lilsterns from the same extension are running on the same threads
     func testListenersFromOneExtensiosnRunOnSameThread() {
         // setup
-
-        let startExpectation = XCTestExpectation()
-        let eventsExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let eventsExpectation = XCTestExpectation(description: "Receive all the 3 events")
         eventsExpectation.expectedFulfillmentCount = 3
         ContractExtensionOne.eventReceivedClosure = { event in
             if(event.type == "test"){
@@ -238,7 +237,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests nil is returned when getting a shared state for an extension which is not registered.
     func testSharedStateOfUnknownExtension() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
 
         // test
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
@@ -254,7 +253,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests nil is returned when getting a shared state for an extension which is not registered.
     func testSharedStateOfExtensionWithNoSharedState() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
 
         // test
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
@@ -270,7 +269,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests extension can set the shared state for EN2 after setting shared state for EN1.
     func testSetSharedStateInOrder() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         let event1 = Event(name: "first", type: "test", source: "test", data: nil)
         let event2 = Event(name: "second", type: "test", source: "test", data: nil)
         MobileCore.dispatch(event: event1)
@@ -295,7 +294,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests once an extension has set the shared state for EN2, it will not be allowed to set the shared state for EN1.
     func testSetSharedStateInWrongOrder() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         let event1 = Event(name: "first", type: "test", source: "test", data: nil)
         let event2 = Event(name: "second", type: "test", source: "test", data: nil)
         MobileCore.dispatch(event: event1)
@@ -321,7 +320,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests if the last shared state ExtensionA has been set is for EN1 with ShareStateEN1 (no matter .set or .pending), ShareStateEN1 is returned when getting shared state of ExtensionA for EN1, or EN2 or any events after.
     func testGetSharedStateWhenSharedStateIsSetForAEarlierEvent() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         let event1 = Event(name: "first", type: "test", source: "test", data: nil)
         let event2 = Event(name: "second", type: "test", source: "test", data: nil)
         let event3 = Event(name: "three", type: "test", source: "test", data: nil)
@@ -351,7 +350,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests if ExtensionA has set shared state for EN1 with ShareStateEN1 and for EN4 with ShareStateEN4, ShareStateEN1 is returned when getting shared state of ExtensionA for EN1, EN2 and EN3.
     func testGetSharedStateWhenAnotherSharedStateSetForALaterEvent() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         let event1 = Event(name: "first", type: "test", source: "test", data: nil)
         let event2 = Event(name: "second", type: "test", source: "test", data: nil)
         let event3 = Event(name: "three", type: "test", source: "test", data: nil)
@@ -382,7 +381,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests createPendingSharedState and then resolve it
     func testResolvePendingSharedState() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         let event1 = Event(name: "first", type: "test", source: "test", data: nil)
         let event2 = Event(name: "second", type: "test", source: "test", data: nil)
         let event3 = Event(name: "three", type: "test", source: "test", data: nil)
@@ -425,7 +424,7 @@ class EventHubContractTest: XCTestCase {
     /// Tests if the first shared state set by ExtensionA is for EN1 with ShareStateEN1, ShareStateEN1 is returned when getting shared state of ExtensionA for E1, E2 E3 and any event triggered before EN1.
     func testGetSharedStateIfOnlySetSharedStateForEventThree() {
         // setup
-        let startExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
         let event1 = Event(name: "first", type: "test", source: "test", data: nil)
         let event2 = Event(name: "second", type: "test", source: "test", data: nil)
         let event3 = Event(name: "three", type: "test", source: "test", data: nil)
@@ -456,11 +455,11 @@ class EventHubContractTest: XCTestCase {
     /// Tests when the stopEvents API is called, the extension will pause handling events
     func testStopEvents() {
         // setup
-        let startExpectation = XCTestExpectation()
-        let firstEventExpectation = XCTestExpectation()
-        let secondEventInvertedExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let firstEventExpectation = XCTestExpectation(description: "First event is received")
+        let secondEventInvertedExpectation = XCTestExpectation(description: "Second event should not be received")
         secondEventInvertedExpectation.isInverted = true
-        let thirdEventInvertedExpectation = XCTestExpectation()
+        let thirdEventInvertedExpectation = XCTestExpectation(description: "Third event should not be received")
         thirdEventInvertedExpectation.isInverted = true
         ContractExtensionOne.eventReceivedClosure = { event in
             switch event.name{
@@ -491,10 +490,10 @@ class EventHubContractTest: XCTestCase {
     /// Tests start events resume the event processing
     func testStartEvents() {
         // setup
-        let startExpectation = XCTestExpectation()
-        let firstEventExpectation = XCTestExpectation()
-        let secondEventExpectation = XCTestExpectation()
-        let thirdEventExpectation = XCTestExpectation()
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let firstEventExpectation = XCTestExpectation(description: "First event is received")
+        let secondEventExpectation = XCTestExpectation(description: "Second event is received")
+        let thirdEventExpectation = XCTestExpectation(description: "Third event is received")
         ContractExtensionOne.eventReceivedClosure = { event in
             switch event.name{
             case "first":
