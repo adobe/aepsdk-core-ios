@@ -10,6 +10,7 @@
  */
 
 @testable import AEPCore
+@testable import AEPCoreMocks
 import XCTest
 
 class MobileCore_IdentityTests: XCTestCase {
