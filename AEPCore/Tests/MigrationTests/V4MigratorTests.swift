@@ -124,7 +124,7 @@ class V4MigratorTests: XCTestCase {
         let msSeachAdInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.installSearchAd, fallback: nil)
         XCTAssertEqual(mockDate, msSeachAdInstallDate)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.MobileServices.V5InAppExcludeList))
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
 
@@ -205,7 +205,7 @@ class V4MigratorTests: XCTestCase {
         let msSeachAdInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.installSearchAd, fallback: nil)
         XCTAssertEqual(mockDate, msSeachAdInstallDate)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.MobileServices.V5InAppExcludeList))
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
 
@@ -228,7 +228,7 @@ class V4MigratorTests: XCTestCase {
         // only v5 configuration defaults have been set
         XCTAssertNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
 
@@ -239,7 +239,7 @@ class V4MigratorTests: XCTestCase {
 
         let existingConfig: [String: AnyCodable] = ["global.ssl": AnyCodable(true)]
         let dataStore = NamedCollectionDataStore(name: "testable")
-        dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: existingConfig)
+        dataStore.setObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: existingConfig)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
@@ -248,7 +248,7 @@ class V4MigratorTests: XCTestCase {
         // v4 defaults removed
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
 
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(2, storedConfig?.count)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
         XCTAssertTrue(storedConfig?["global.ssl"]?.boolValue ?? false)
@@ -261,7 +261,7 @@ class V4MigratorTests: XCTestCase {
 
         let existingConfig: [String: AnyCodable] = ["global.ssl": AnyCodable(true), "global.privacy": AnyCodable(PrivacyStatus.optedIn.rawValue)]
         let dataStore = NamedCollectionDataStore(name: "testable")
-        dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: existingConfig)
+        dataStore.setObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: existingConfig)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
@@ -270,7 +270,7 @@ class V4MigratorTests: XCTestCase {
         // v4 defaults removed
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
 
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(2, storedConfig?.count)
         XCTAssertEqual("optedin", storedConfig?["global.privacy"]?.stringValue)
         XCTAssertTrue(storedConfig?["global.ssl"]?.boolValue ?? false)
@@ -289,7 +289,7 @@ class V4MigratorTests: XCTestCase {
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optedin", storedConfig?["global.privacy"]?.stringValue)
     }
@@ -307,7 +307,7 @@ class V4MigratorTests: XCTestCase {
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
@@ -325,7 +325,7 @@ class V4MigratorTests: XCTestCase {
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optunknown", storedConfig?["global.privacy"]?.stringValue)
     }
