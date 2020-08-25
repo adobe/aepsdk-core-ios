@@ -138,7 +138,7 @@ class V5MigratorTests: XCTestCase {
         XCTAssertEqual("version", dataStore.getString(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate.timeIntervalSince1970, lastUsedDate?.timeIntervalSince1970)
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
 
@@ -208,7 +208,7 @@ class V5MigratorTests: XCTestCase {
         XCTAssertEqual("version", dataStore.getString(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate.timeIntervalSince1970, lastUsedDate?.timeIntervalSince1970)
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
 
@@ -229,7 +229,7 @@ class V5MigratorTests: XCTestCase {
         XCTAssertNil(v5Defaults.object(forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map"))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
 
@@ -240,7 +240,7 @@ class V5MigratorTests: XCTestCase {
 
         let existingConfig: [String: AnyCodable] = ["global.ssl": AnyCodable(true), "global.privacy": AnyCodable(PrivacyStatus.optedIn.rawValue)]
         let dataStore = NamedCollectionDataStore(name: "testable")
-        dataStore.setObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG, value: existingConfig)
+        dataStore.setObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: existingConfig)
 
         // test
         V5Migrator(idParser: MockIDParser()).migrate()
@@ -249,7 +249,7 @@ class V5MigratorTests: XCTestCase {
         // legacy v5 defaults removed
         XCTAssertNil(v5Defaults.object(forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map"))
 
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(2, storedConfig?.count)
         XCTAssertEqual("optedin", storedConfig?["global.privacy"]?.stringValue)
         XCTAssertTrue(storedConfig?["global.ssl"]?.boolValue ?? false)
@@ -268,7 +268,7 @@ class V5MigratorTests: XCTestCase {
         XCTAssertNil(v5Defaults.object(forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map"))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optedin", storedConfig?["global.privacy"]?.stringValue)
     }
@@ -286,7 +286,7 @@ class V5MigratorTests: XCTestCase {
         XCTAssertNil(v5Defaults.object(forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map"))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
@@ -304,7 +304,7 @@ class V5MigratorTests: XCTestCase {
         XCTAssertNil(v5Defaults.object(forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map"))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.Keys.PERSISTED_OVERRIDDEN_CONFIG)
+        let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(1, storedConfig?.count)
         XCTAssertEqual("optunknown", storedConfig?["global.privacy"]?.stringValue)
     }
