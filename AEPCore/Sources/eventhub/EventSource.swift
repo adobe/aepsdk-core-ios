@@ -13,7 +13,9 @@
 import Foundation
 
 /// Represents the source of which an event originates from
-public enum EventSource {
+@objc(AEPEventSource)
+@objcMembers
+public class EventSource: NSObject {
     public static let none = "com.adobe.eventSource.none"
     public static let os = "com.adobe.eventSource.os"
     public static let requestContent = "com.adobe.eventSource.requestContent"

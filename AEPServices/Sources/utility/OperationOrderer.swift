@@ -112,15 +112,19 @@ public class OperationOrderer<T> {
         }
     }
 
-    /// Attempts to drain the queue by iterating over all queued items and calling the handle function on them.
+    /// Attempts to drain the queue by getting the first item and calling the handle function on it, then recursively calling the `drain()` method itself
     private func drain() {
-        while let item = array.first {
-            guard let handleFunc = handler else { return }
-            if handleFunc(item) { // Handler processed item, we can remove.
-                array.removeFirst()
-            } else { // Handler declined to process, bail and wait for another trigger.
-                return
+        guard let handleFunc = handler else { return }
+        if !self.active { return }
+        guard let item = array.first else { return }
+        if handleFunc(item) { // Handler processed item, we can remove.
+            array.removeFirst()
+            // kick it on the dispatch queue, so it will recheck `active` before processing the next data
+            async {
+                self.drain()
             }
+        } else { // Handler declined to process, bail and wait for another trigger.
+            return
         }
     }
 }
