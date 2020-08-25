@@ -48,7 +48,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         let mockNetworkService = TestableNetworkService()
         mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
-        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
 
         // test
         rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
