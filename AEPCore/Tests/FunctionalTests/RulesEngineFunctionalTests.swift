@@ -345,6 +345,43 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
 
+    func testAttachData() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testAttachData")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        // test
+        let processedEvent = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        guard let attachedData = processedEvent.data?["attached_data"] as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("value1", attachedData["key1"] as? String)
+    }
+
+    func testModifyData() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testModifyData")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "launches": 2]], status: .set))
+        // test
+        let processedEvent = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        guard let lifecycleContextData = processedEvent.data?["lifecyclecontextdata"] as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertTrue(lifecycleContextData["launchevent"] == nil)
+        XCTAssertEqual("2", lifecycleContextData["launches"] as? String)
+    }
+
     private func resetRulesEngine(withNewRules rulesJsonFileName: String) {
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: rulesJsonFileName, withExtension: "json"), let data = try? Data(contentsOf: url) else {
