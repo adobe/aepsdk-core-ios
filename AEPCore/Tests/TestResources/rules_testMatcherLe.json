@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.lifecycle"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.responseContent"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.launchevent",
+                            "matcher": "ex",
+                            "values": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~state.com.adobe.module.lifecycle/lifecyclecontextdata.launches",
+                      "matcher": "le",
+                      "values": [
+                        2
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RC41cd28bbf4564162855c114271b5b56b",
+          "type": "pb",
+          "detail": {
+            "timeout": 0,
+            "templateurl": "http://www.adobe.com"
+          }
+        }
+      ]
+    }
+  ]
+}
