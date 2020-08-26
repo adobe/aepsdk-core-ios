@@ -263,8 +263,7 @@ class IdentityState {
 
         // did the advertising identifier change?
         if (!newAdID.isEmpty && newAdID != existingAdId)
-            || (newAdID.isEmpty && !existingAdId.isEmpty)
-            || (newAdID != existingAdId) {
+            || (newAdID.isEmpty && !existingAdId.isEmpty) {
             // Now we know the value changed, but did it change to/from null?
             // Handle case where existingAdId loaded from persistence with all zeros and new value is not empty.
             if newAdID.isEmpty || existingAdId.isEmpty || existingAdId == IdentityConstants.Default.ZERO_ADVERTISING_ID {
