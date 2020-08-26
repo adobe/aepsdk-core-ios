@@ -271,6 +271,27 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
 
+    /// Tests that the ad is is correctly updated when a new value is passed
+    func testSyncIdentifiersAdIDIsUpdated() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = "old-test-ad-id"
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state.lastValidConfig = configSharedState
+
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent())
+
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+    }
+
     /// Tests that the location hint and blob are present int he event data
     func testSyncIdentifiersAppendsBlobAndLocationHint() {
         // setup

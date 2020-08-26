@@ -259,20 +259,15 @@ class IdentityState {
     /// - Parameter newAdID: the new ad id
     /// - Returns: True if we should update the ad id, false otherwise
     private func shouldUpdateAdId(newAdID: String) -> Bool {
-        var newId = newAdID
-        // If ad id is all zeros, treat as if null/empty
-        if newId == IdentityConstants.Default.ZERO_ADVERTISING_ID {
-            newId = ""
-        }
-
         let existingAdId = identityProperties.advertisingIdentifier ?? ""
 
         // did the advertising identifier change?
-        if (!newId.isEmpty && newId != existingAdId)
-            || (newId.isEmpty && !existingAdId.isEmpty) {
+        if (!newAdID.isEmpty && newAdID != existingAdId)
+            || (newAdID.isEmpty && !existingAdId.isEmpty)
+            || (newAdID != existingAdId) {
             // Now we know the value changed, but did it change to/from null?
             // Handle case where existingAdId loaded from persistence with all zeros and new value is not empty.
-            if newId.isEmpty || existingAdId.isEmpty || existingAdId == IdentityConstants.Default.ZERO_ADVERTISING_ID {
+            if newAdID.isEmpty || existingAdId.isEmpty || existingAdId == IdentityConstants.Default.ZERO_ADVERTISING_ID || newAdID != existingAdId {
                 return true
             }
         }
