@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -13,17 +14,18 @@ import AEPCore
 import AEPServices
 import Foundation
 
-@objc(AEPLifecycle) public class Lifecycle: NSObject, Extension {
+@objc(AEPLifecycle)
+public class Lifecycle: NSObject, Extension {
+    private var lifecycleState: LifecycleState
+
+    // MARK: Extension
+
     public let name = LifecycleConstants.EXTENSION_NAME
     public let friendlyName = LifecycleConstants.FRIENDLY_NAME
     public static let extensionVersion = LifecycleConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
 
     public let runtime: ExtensionRuntime
-
-    private var lifecycleState: LifecycleState
-
-    // MARK: Extension
 
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     public required init(runtime: ExtensionRuntime) {
@@ -56,11 +58,16 @@ import Foundation
     /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`
     /// - Parameter event: the generic lifecycle event
     private func receiveLifecycleRequest(event: Event) {
-        guard let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event) else { return }
+        guard let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event) else {
+            Log.trace(label: LifecycleConstants.LOG_TAG, "Waiting for valid configuration to process lifecycle.")
+            return
+        }
 
         if event.isLifecycleStartEvent {
+            Log.debug(label: LifecycleConstants.LOG_TAG, "Starting lifecycle.")
             start(event: event, configurationSharedState: configurationSharedState)
         } else if event.isLifecyclePauseEvent {
+            Log.debug(label: LifecycleConstants.LOG_TAG, "Pausing lifecycle.")
             lifecycleState.pause(pauseDate: event.timestamp)
         }
     }
@@ -121,7 +128,9 @@ import Foundation
             LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0.0,
         ]
 
-        dispatch(event: Event(name: "LifecycleStart", type: EventType.lifecycle, source: EventSource.responseContent, data: eventData))
+        let startEvent = Event(name: "LifecycleStart", type: EventType.lifecycle, source: EventSource.responseContent, data: eventData)
+        Log.trace(label: LifecycleConstants.LOG_TAG, "Dispatching lifecycle start event with data: \(eventData)")
+        dispatch(event: startEvent)
     }
 
     /// Reads the session timeout from the configuration shared state, if not found returns the default session timeout
