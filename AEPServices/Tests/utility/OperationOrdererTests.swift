@@ -146,10 +146,11 @@ class OperationOrdererTests: XCTestCase {
         }
 
         queue.start()
-        queue.stop()
         wait(for: [firstSetExpectation], timeout: 1.0)
         XCTAssert(firstSetCounter == itemCount)
         XCTAssert(secondSetCounter == 0)
+
+        queue.stop()
 
         firstSetCounter = 0
         for i in itemCount ..< itemCount * 2 {
@@ -157,7 +158,6 @@ class OperationOrdererTests: XCTestCase {
         }
 
         queue.start()
-        queue.stop()
         wait(for: [secondSetExpectation], timeout: 1.0)
         XCTAssert(firstSetCounter == 0)
         XCTAssert(secondSetCounter == itemCount)
@@ -208,16 +208,11 @@ class OperationOrdererTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    /// Ensure that handlers can be swapped while a queue is running, and that ordering is maintained.
-    /// (e.g. all items queued prior to the swap are handled by the first handler, and all items queued after the swap are handled by the second handler)
+    /// Ensure that handlers can be swapped while a queue is running
+    /// (it won't be guaranteed that all items queued prior to the swap are handled by the first handler)
     func testMidRunHandlerSwap() {
         let firstHandlerExpectation = XCTestExpectation()
-        firstHandlerExpectation.assertForOverFulfill = true
-        firstHandlerExpectation.expectedFulfillmentCount = itemCount
-
-        let secondHandlerExpectation = XCTestExpectation()
-        secondHandlerExpectation.assertForOverFulfill = true
-        secondHandlerExpectation.expectedFulfillmentCount = itemCount
+        firstHandlerExpectation.expectedFulfillmentCount = itemCount * 2
 
         let queue = OperationOrderer<Int>()
         queue.start()
@@ -232,7 +227,7 @@ class OperationOrdererTests: XCTestCase {
         }
 
         queue.setHandler { (_) -> Bool in
-            secondHandlerExpectation.fulfill()
+            firstHandlerExpectation.fulfill()
             return true
         }
 
@@ -240,6 +235,6 @@ class OperationOrdererTests: XCTestCase {
             queue.add(i)
         }
 
-        wait(for: [firstHandlerExpectation, secondHandlerExpectation], timeout: 1.0)
+        wait(for: [firstHandlerExpectation], timeout: 1.0)
     }
 }

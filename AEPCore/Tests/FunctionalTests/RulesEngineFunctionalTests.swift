@@ -48,7 +48,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         let mockNetworkService = TestableNetworkService()
         mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
-        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
 
         // test
         rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
@@ -90,5 +90,272 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual("Rules Consequence Event", secondEvent.name)
         XCTAssertEqual(EventType.rulesEngine, secondEvent.type)
         XCTAssertEqual(EventSource.responseContent, secondEvent.source)
+    }
+
+    // Group: OR & AND
+    func testGroupLogicalOperators() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testGroupLogicalOperators")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: eq
+    func testMatcherEq() {
+        // covered by `RulesEngineFunctionalTests.testGroupLogicalOperators()`
+    }
+
+    // Matcher: ne
+    func testMatcherNe() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherNe")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "Verizon"]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: ex
+    func testMatcherEx() {
+        // covered by `RulesEngineFunctionalTests.testGroupLogicalOperators()`
+    }
+
+    // Matcher: nx (Not Exists)
+    func testMatcherNx() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherNx")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: nil, status: .pending))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: gt (Greater Than)
+    func testMatcherGt() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherGt")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 2]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 3]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: ge (Greater Than or Equals)
+    func testMatcherGe() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherGe")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 1]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 2]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: lt (Less Than)
+    func testMatcherLt() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherLt")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 2]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 1]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: le (Less Than or Equals)
+    func testMatcherLe() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherLe")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 3]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 2]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: co (Contains)
+    func testMatcherCo() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherCo")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "Verizon"]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&"]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: nc (Not Contains)
+    func testMatcherNc() {
+        // setup
+        resetRulesEngine(withNewRules: "rules_testMatcherNc")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&"]], status: .set))
+        // test
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // test
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "Verizon"]], status: .set))
+        _ = rulesEngine.process(event: event)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    private func resetRulesEngine(withNewRules rulesJsonFileName: String) {
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: rulesJsonFileName, withExtension: "json"), let data = try? Data(contentsOf: url) else {
+            XCTFail()
+            return
+        }
+        guard let rules = JSONRulesParser.parse(data) else {
+            XCTFail()
+            return
+        }
+        rulesEngine.rulesEngine.clearRules()
+        rulesEngine.rulesEngine.addRules(rules: rules)
     }
 }
