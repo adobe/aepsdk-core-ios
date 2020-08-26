@@ -15,7 +15,7 @@ import Foundation
 
 /// A rules engine for Launch rules
 class LaunchRulesEngine {
-    private let LOG_TAG = "\(RulesConstants.LOG_MODULE_PREFIX) - LaunchRule"
+    private let LOG_TAG = "\(RulesConstants.LOG_MODULE_PREFIX) - LaunchRulesEngine"
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
