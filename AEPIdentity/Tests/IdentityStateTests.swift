@@ -205,6 +205,8 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
+        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
 
@@ -216,6 +218,7 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         state.lastValidConfig = configSharedState
         state.identityProperties.advertisingIdentifier = "test-ad-id"
+        state.identityProperties.customerIds = [CustomIdentity(origin: "test-origin", type: "test-type", identifier: "test-id", authenticationState: .authenticated)]
         state.identityProperties.lastSync = Date()
         state.identityProperties.mid = MID()
 
@@ -225,7 +228,14 @@ class IdentityStateTests: XCTestCase {
         let eventData = state.syncIdentifiers(event: event)
 
         // verify
-        XCTAssertEqual(3, eventData!.count)
+        XCTAssertEqual(4, eventData!.count)
+        XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(1, idList?.count)
+        let customId = idList?.first!
+        XCTAssertEqual("test-id", customId?.identifier)
+        XCTAssertEqual("test-origin", customId?.origin)
+        XCTAssertEqual("test-type", customId?.type)
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
 
@@ -247,6 +257,8 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
+        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
 
@@ -268,6 +280,12 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(3, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(1, idList?.count)
+        let customId = idList?.first!
+        XCTAssertEqual("test-ad-id", customId?.identifier)
+        XCTAssertEqual("d_cid_ic", customId?.origin)
+        XCTAssertEqual("DSID_20915", customId?.type)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertFalse(hit.url.absoluteString.contains("device_consent")) // device flag should NOT be added
@@ -291,6 +309,12 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(3, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(1, idList?.count)
+        let customId = idList?.first!
+        XCTAssertEqual("test-ad-id", customId?.identifier)
+        XCTAssertEqual("d_cid_ic", customId?.origin)
+        XCTAssertEqual("DSID_20915", customId?.type)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
@@ -314,6 +338,12 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(3, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(1, idList?.count)
+        let customId = idList?.first!
+        XCTAssertEqual("test-ad-id", customId?.identifier)
+        XCTAssertEqual("d_cid_ic", customId?.origin)
+        XCTAssertEqual("DSID_20915", customId?.type)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
@@ -337,6 +367,12 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(3, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(1, idList?.count)
+        let customId = idList?.first!
+        XCTAssertEqual("test-ad-id", customId?.identifier)
+        XCTAssertEqual("d_cid_ic", customId?.origin)
+        XCTAssertEqual("DSID_20915", customId?.type)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
@@ -361,6 +397,8 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertEqual(2, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
@@ -385,6 +423,8 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertEqual(2, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
@@ -411,6 +451,8 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertEqual(3, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
 
@@ -431,6 +473,13 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertEqual(3, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
+        XCTAssertEqual(1, idList?.count)
+        let customId = idList?.first!
+        XCTAssertEqual("test-ad-id", customId?.identifier)
+        XCTAssertEqual("d_cid_ic", customId?.origin)
+        XCTAssertEqual("DSID_20915", customId?.type)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
@@ -503,8 +552,6 @@ class IdentityStateTests: XCTestCase {
         // verify
         XCTAssertNil(eventData)
     }
-
-
 
     // MARK: readyForSyncIdentifiers(...)
 
