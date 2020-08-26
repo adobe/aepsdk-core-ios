@@ -2,19 +2,19 @@
 
 This document outlines the specification for an Event Hub `Event`. These events are dispatched from the Event Hub and received by listeners that are registered with the Event Hub.
 
-## Event Specification
+### Event Specification
 
 | Name       | Type           | Description                                                  |
 | ---------- | -------------- | ------------------------------------------------------------ |
 | name       | String         | Event name used primarily for logging                        |
 | id         | UUID           | UUID which uniquely identifies this event                    |
 | type       | String         | See [Event Type](#event-type)                                |
-| source     | String        | See [Event Source](#event-source)                            |
+| source     | String         | See [Event Source](#event-source)                            |
 | data       | [String: Any]? | Dictionary holding one or more key value pairs that are associated with the event. |
 | timestamp  | Date           | The time that this event was generated                       |
-| responseID | UUID?          | If this event is a response event, it indiciates the event which triggered this event. |
+| responseID | UUID?          | If this event was generated in response to a previous event, this value holds the `id` of the triggering event. |
 
-## Event Type
+### Event Type
 
 Every `Event` has an `EventType` enum associated with it, which defines what kind of event it is and determines who is notified when this event occurs.
 
@@ -44,7 +44,7 @@ Every `Event` has an `EventType` enum associated with it, which defines what kin
 | Generic Data      | genericData      | com.adobe.eventType.generic.data      |
 | Wildcard          | wildcard         | com.adobe.eventType.\_wildcard_       |
 
-## Event Source
+### Event Source
 
 Along with an `EventType`, an `Event` has a `EventSource` enum associated with it, which defines where the event originated and is used to determine who is notified when this event occurs.
 
@@ -63,11 +63,10 @@ Along with an `EventType`, an `Event` has a `EventSource` enum associated with i
 | Shared State      | sharedState      | com.adobe.eventSource.sharedState      |
 | Wildcard          | wildcard         | com.adobe.eventSource.\_wildcard_      |
 
-## Creating an `Event`
+### Creating an `Event`
 
 Creating a new `Event` is easy:
 
 ```swift
 let event = Event(name: "MyEvent", type: EventType.analytics, source: EventSource.responseContent, data: ["myKey": true])
 ```
-
