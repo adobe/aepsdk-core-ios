@@ -62,7 +62,7 @@ extension URL {
         // Add IDFA consent
         if adIdChanged {
             let idEmpty = (identityProperties.advertisingIdentifier?.isEmpty ?? true) ? "0" : "1"
-            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_IDFA_CONSENT, value: idEmpty)]
+            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_DEVICE_CONSENT, value: idEmpty)]
         }
 
         components.queryItems = queryItems
