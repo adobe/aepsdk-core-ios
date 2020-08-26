@@ -22,8 +22,8 @@ extension URL {
     ///   - orgId: the org id from Configuration
     ///   - identityProperties: the current `IdentityProperties` in the Identity extension
     ///   - dpids: a dictionary of dpids
-    ///   - adIdChanged: true if the adId changed, false otherwise
-    static func buildIdentityHitURL(experienceCloudServer: String, orgId: String, identityProperties: IdentityProperties, dpids: [String: String], adIdChanged: Bool) -> URL? {
+    ///   - addConsentFlag: true if the adId changed, false otherwise
+    static func buildIdentityHitURL(experienceCloudServer: String, orgId: String, identityProperties: IdentityProperties, dpids: [String: String], addConsentFlag: Bool) -> URL? {
         var components = URLComponents()
         components.scheme = "https"
         components.host = experienceCloudServer
@@ -60,7 +60,7 @@ extension URL {
         }
 
         // Add IDFA consent
-        if adIdChanged {
+        if addConsentFlag {
             let idEmpty = (identityProperties.advertisingIdentifier?.isEmpty ?? true) ? "0" : "1"
             queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.RESPONSE_KEY_DEVICE_CONSENT, value: idEmpty)]
         }
