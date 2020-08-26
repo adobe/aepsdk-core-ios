@@ -12,30 +12,30 @@
 
 import Foundation
 
-struct SignalConstants {
+enum SignalConstants {
     static let EXTENSION_NAME = "com.adobe.module.signal"
     static let FRIENDLY_NAME = "Signal"
     static let EXTENSION_VERSION = "0.0.1"
     static let DATASTORE_NAME = EXTENSION_NAME
     static let LOG_PREFIX = FRIENDLY_NAME
 
-    struct Configuration {
+    enum Configuration {
         static let NAME = "com.adobe.module.configuration"
         static let GLOBAL_PRIVACY = "global.privacy"
     }
 
-    struct Defaults {
+    enum Defaults {
         static let TIMEOUT: TimeInterval = 2
         static let CONTENT_TYPE = "application/json"
     }
 
-    struct ConsequenceTypes {
+    enum ConsequenceTypes {
         static let POSTBACK = "pb"
         static let PII = "pii"
         static let OPEN_URL = "url"
     }
 
-    struct EventDataKeys {
+    enum EventDataKeys {
         static let TRIGGERED_CONSEQUENCE = "triggeredconsequence"
         static let ID = "id"
         static let DETAIL = "detail"

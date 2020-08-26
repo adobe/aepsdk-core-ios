@@ -13,7 +13,9 @@
 import Foundation
 
 /// Represents the type of an event
-public enum EventType {
+@objc(AEPEventType)
+@objcMembers
+public class EventType: NSObject {
     public static let acquisition = "com.adobe.eventType.acquisition"
     public static let analytics = "com.adobe.eventType.analytics"
     public static let audienceManager = "com.adobe.eventType.audienceManager"

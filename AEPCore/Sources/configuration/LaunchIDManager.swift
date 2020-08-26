@@ -26,13 +26,13 @@ struct LaunchIDManager {
     /// Saves the appId to the data store
     /// - Parameter appId: appId to be saved to data store
     func saveAppIdToPersistence(appId: String) {
-        dataStore.set(key: ConfigurationConstants.Keys.PERSISTED_APPID, value: appId)
+        dataStore.set(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID, value: appId)
     }
 
     /// Loads the appId from the data store
     /// - Returns: appId loaded from persistence, nil if not present
     func loadAppIdFromPersistence() -> String? {
-        return dataStore.getString(key: ConfigurationConstants.Keys.PERSISTED_APPID)
+        return dataStore.getString(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID)
     }
 
     /// Loads the appId from the manifest

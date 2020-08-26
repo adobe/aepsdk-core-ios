@@ -52,7 +52,7 @@ enum V4MigrationConstants {
         static let V4SyncTime = "ADBMOBILE_VISITORID_SYNCTIME"
         static let V4PushToken = "ADBMOBILE_KEY_PUSH_TOKEN"
 
-        struct DataStoreKeys {
+        enum DataStoreKeys {
             static let IDENTITY_PROPERTIES = "identitiesproperties"
             static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
         }
@@ -76,7 +76,7 @@ enum V4MigrationConstants {
         static let V4UpgradeDate           = "OMCK3"
         static let V4LaunchesAfterUpgrade  = "OMCK4"
 
-        struct DataStoreKeys {
+        enum DataStoreKeys {
             static let INSTALL_DATE = "InstallDate"
             static let LAST_LAUNCH_DATE = "LastDateUsed"
             static let UPGRADE_DATE = "UpgradeDate"

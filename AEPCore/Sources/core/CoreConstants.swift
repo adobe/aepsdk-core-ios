@@ -11,7 +11,7 @@
 
 import Foundation
 
-struct CoreConstants {
+enum CoreConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
     static let EXTENSION_VERSION = "0.0.1"
     static let DATA_STORE_NAME = EXTENSION_NAME
@@ -23,7 +23,7 @@ struct CoreConstants {
     static let API_TIMEOUT = TimeInterval(1) // 1 second
     static let ENVIRONMENT_PREFIX_DELIMITER = "__"
 
-    struct Keys {
+    enum Keys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
@@ -31,8 +31,6 @@ struct CoreConstants {
         static let RETRIEVE_CONFIG = "config.getData"
         static let JSON_APP_ID = "config.appId"
         static let JSON_FILE_PATH = "config.filePath"
-        static let PERSISTED_OVERRIDDEN_CONFIG = "config.overridden.map"
-        static let PERSISTED_APPID = "config.appID"
         static let IS_INTERNAL_EVENT = "config.isinternalevent"
         static let CONFIG_CACHE_PREFIX = "cached.config."
         static let ALL_IDENTIFIERS = "config.allidentifiers"
@@ -43,13 +41,18 @@ struct CoreConstants {
         static let PUSH_IDENTIFIER = "pushidentifier"
     }
 
-    struct Privacy {
+    enum DataStoreKeys {
+        static let PERSISTED_OVERRIDDEN_CONFIG = "config.overridden.map"
+        static let PERSISTED_APPID = "config.appid"
+    }
+
+    enum Privacy {
         static let UNKNOWN = "optunknown"
         static let OPT_OUT = "optedout"
         static let OPT_IN = "optedin"
     }
 
-    struct WrapperType {
+    enum WrapperType {
         static let REACT_NATIVE = "R"
         static let FLUTTER = "F"
         static let CORDOVA = "C"
@@ -58,7 +61,7 @@ struct CoreConstants {
         static let NONE = "N"
     }
 
-    struct Lifecycle {
+    enum Lifecycle {
         static let START = "start"
         static let PAUSE = "pause"
     }
