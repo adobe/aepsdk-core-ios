@@ -250,27 +250,6 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
 
-    /// Tests that when the ad id does not change we do not sync
-    func testSyncIdentifiersAdIDIsSameWithValidMID() {
-        // setup
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
-                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
-                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
-        var props = IdentityProperties()
-        props.advertisingIdentifier = "test-ad-id"
-        props.mid = MID()
-        props.lastSync = Date()
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
-        state.lastValidConfig = configSharedState
-
-        // test
-        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent())
-
-        // verify
-        XCTAssertEqual(3, eventData!.count)
-        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
-    }
-
     /// Tests that the ad is is correctly updated when a new value is passed
     func testSyncIdentifiersAdIDIsUpdated() {
         // setup
@@ -409,6 +388,52 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
+    }
+
+    /// When ad id is currently zero string and updated to an empty string we should not sync
+    func testSyncIdentifiersAdIDIsUpdatedFromZerosToEmpty() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = IdentityConstants.Default.ZERO_ADVERTISING_ID
+        props.mid = MID()
+        props.lastSync = Date()
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state.lastValidConfig = configSharedState
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: ""]
+        let event = Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
+        let eventData = state.syncIdentifiers(event: event)
+
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+    }
+
+    /// Tests that when updating the ad id from zero string to valid we add the consent flag as true
+    func testSyncIdentifiersAdIDIsUpdatedFromZeroStringToValid() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = IdentityConstants.Default.ZERO_ADVERTISING_ID
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state.lastValidConfig = configSharedState
+
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeAdIDEvent())
+
+        // verify
+        XCTAssertEqual(3, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+        let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
+        XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
     }
 
     /// Tests that the location hint and blob are present int he event data
