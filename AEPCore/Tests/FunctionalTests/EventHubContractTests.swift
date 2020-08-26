@@ -14,6 +14,7 @@ import XCTest
 
 @testable import AEPCore
 @testable import AEPServices
+@testable import AEPCoreMocks
 
 class EventHubContractTest: XCTestCase {
     override func setUp() {
