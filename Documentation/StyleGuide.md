@@ -75,13 +75,34 @@ extension AEPCore: Lifecycle {
   AEPLifecycle
   ```
 
-* The class name of AEP extension should NOT use prefix `AEP`.
+* The Swift class name of AEP extension should NOT use prefix `AEP`.
 
   Preferred:
   ```
   MobileCore.swift
   Lifecycle.swift
   ```
+
+  Not Preferred:
+  ```
+  AEPMobileCore.swift
+  AEPMobileLifecycle.swift
+  ```
+
+* The Objective-C class name of AEP extension should use the prefix `AEPMobile`.
+
+  Preferred:
+  ```
+  @objc(AEPMobileCore)
+  @objc(AEPMobileLifecycle)
+  ```
+
+  Not Preferred:
+  ```
+  @objc(AEPCore)
+  @objc(AEPLifecycle)
+  ```
+
 * The class defining `MobileCore` public API for each Core extension should be named “MobileCore” and the extension's name separated by a “+”.
 
   Preferred:
@@ -199,7 +220,7 @@ if let unwrappedEvent = event { ... }
 
 Keys used to store values within `UserDefaults` or any other local storage should be of the following pattern:
 
-- The constant definition should be in all uppercase 
+- The constant definition should be in all uppercase
 - String value for the key should be all lowercase separated by periods
 - Be defined within an `enum` named `DataStoreKeys`
 
