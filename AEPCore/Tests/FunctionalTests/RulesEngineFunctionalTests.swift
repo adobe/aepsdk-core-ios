@@ -345,6 +345,55 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
 
+    func testUrlenc() {
+        /// Given:
+        resetRulesEngine(withNewRules: "rules_testUrlenc")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "x y"]], status: .set))
+        /// When:
+        _ = rulesEngine.process(event: event)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any], let detail = dataWithType["detail"] as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("url", dataWithType["type"] as! String)
+        XCTAssertEqual("http://www.adobe.com/a=x%20y", detail["url"] as! String)
+    }
+
+    func testUrlenc_invalidFnName() {
+        /// Given:
+        //    {
+        //      "id": "RC48ef3f5e83c84405a3da6cc5128c090c",
+        //      "type": "url",
+        //      "detail": {
+        //        "url": "http://www.adobe.com/a={%urlenc1(~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername)%}"
+        //      }
+        //    }
+        resetRulesEngine(withNewRules: "rules_testUrlenc_invalidFnName")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "x y"]], status: .set))
+        /// When:
+        _ = rulesEngine.process(event: event)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any], let detail = dataWithType["detail"] as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("url", dataWithType["type"] as! String)
+        XCTAssertEqual("http://www.adobe.com/a=x y", detail["url"] as! String)
+    }
+
     func testAttachData() {
         /// Given: a launch rule to attach data to event
 

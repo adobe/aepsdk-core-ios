@@ -48,6 +48,12 @@ class LaunchRulesEngine {
             cachedEvents = [Event]()
             dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
         }
+        transform.register(name: "urlenc", transformation: { value in
+            if let valueString = value as? String {
+                return valueString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+            }
+            return value
+        })
     }
 
     /// Register a `RulesTracer`
