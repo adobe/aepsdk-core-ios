@@ -14,7 +14,7 @@ import AEPServices
 import Foundation
 
 /// Core extension for the Adobe Experience Platform SDK
-@objc(AEPCore) public final class MobileCore: NSObject {
+@objc(AEPMobileCore) public final class MobileCore: NSObject {
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         if wrapperType == .none {
