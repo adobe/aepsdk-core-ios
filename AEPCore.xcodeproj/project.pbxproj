@@ -276,6 +276,7 @@
 		BB3E86DE24F86B6700E39C53 /* rules_testUrlenc.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */; };
 		BB3E86E024F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */; };
 		BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */; };
+		BB3E86E424F99C9600E39C53 /* IdentityPublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */; };
 		BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */; };
 		BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */; };
 		BBA5129B24F477550030DAD1 /* rules_testMatcherNe.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */; };
@@ -752,6 +753,7 @@
 		BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testUrlenc.json; sourceTree = "<group>"; };
 		BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testUrlenc_invalidFnName.json; sourceTree = "<group>"; };
 		BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testMatcherWithDifferentTypesOfParameters.json; sourceTree = "<group>"; };
+		BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IdentityPublicAPITests.swift; path = AEPIdentity/Tests/IdentityPublicAPITests.swift; sourceTree = SOURCE_ROOT; };
 		BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngineTests.swift; sourceTree = "<group>"; };
 		BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testGroupLogicalOperators.json; sourceTree = "<group>"; };
 		BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNe.json; sourceTree = "<group>"; };
@@ -1014,6 +1016,7 @@
 			children = (
 				3FE6DE8624C643EA0065EA05 /* TestHelpers */,
 				218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */,
+				BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */,
 				3FE6DE7124C643620065EA05 /* IdentityFunctionalTests.swift */,
 				3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */,
 				3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */,
@@ -2461,6 +2464,7 @@
 				218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */,
 				3FE6DE7B24C643620065EA05 /* URLQueryItem+IdentityTests.swift in Sources */,
 				3FE6DE7924C643620065EA05 /* MobileIdentitiesTests.swift in Sources */,
+				BB3E86E424F99C9600E39C53 /* IdentityPublicAPITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
