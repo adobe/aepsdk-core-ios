@@ -61,17 +61,17 @@ enum IdentityConstants {
     }
 
     enum URLKeys {
-        static let RESPONSE_KEY_ORGID = "d_orgid"
-        static let RESPONSE_KEY_MID = "d_mid"
-        static let RESPONSE_KEY_BLOB = "d_blob"
-        static let RESPONSE_KEY_HINT = "dcs_region"
+        static let ORGID = "d_orgid"
+        static let MID = "d_mid"
+        static let BLOB = "d_blob"
+        static let HINT = "dcs_region"
         static let VISITOR_TIMESTAMP_KEY = "TS"
         static let VISITOR_PAYLOAD_MARKETING_CLOUD_ID_KEY = "MCMID"
         static let VISITOR_PAYLOAD_KEY = "adobe_mc"
         static let VISITOR_PAYLOAD_MARKETING_CLOUD_ORG_ID = "MCORGID"
         static let VISITOR_PAYLOAD_ANALYTICS_ID_KEY = "MCAID"
         static let ANALYTICS_PAYLOAD_KEY = "adobe_aa_vid"
-        static let RESPONSE_KEY_DEVICE_CONSENT = "device_consent"
+        static let DEVICE_CONSENT = "device_consent"
     }
 
     enum Default {

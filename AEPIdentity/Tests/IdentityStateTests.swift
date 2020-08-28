@@ -291,7 +291,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(hit.url.absoluteString.contains("device_consent")) // device flag should NOT be added
     }
 
-    /// Tests that the ad is is correctly updated when a new value is passed
+    /// Tests that the ad id is is correctly updated when a new value is passed
     func testSyncIdentifiersAdIDIsUpdatedFromEmpty() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
@@ -320,7 +320,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
     }
 
-    /// Tests that the ad is is correctly updated when a new value is passed
+    /// Tests that the ad id is correctly updated when a new value is passed (ad id changed from nil to valid value), hit is successfully queued and device_consent is set to 1.
     func testSyncIdentifiersAdIDIsUpdatedFromNil() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
