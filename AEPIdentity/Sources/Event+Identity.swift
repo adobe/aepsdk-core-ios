@@ -41,7 +41,12 @@ extension Event {
 
     /// Reads the advertising from the event data and builds a `CustomIdentity`
     var adId: CustomIdentity? {
-        let adId = data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String
+        var adId = data?[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String
+        // If ad id is all zeros, treat as if null/empty
+        if adId == IdentityConstants.Default.ZERO_ADVERTISING_ID {
+            adId = ""
+        }
+
         return CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER,
                               type: IdentityConstants.ADID_DSID,
                               identifier: adId,

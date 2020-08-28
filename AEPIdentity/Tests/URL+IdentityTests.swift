@@ -24,7 +24,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
-        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
 
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -40,7 +40,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
-        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
 
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -57,7 +57,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
-        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
 
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -73,7 +73,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
-        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids, addConsentFlag: false)
 
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
@@ -88,7 +88,7 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
-        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids)
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids, addConsentFlag: false)
 
         // verify
         XCTAssertTrue(url?.absoluteString.contains("&d_cid=20920%2501testPushId") ?? false)
@@ -104,7 +104,37 @@ class URL_IdentityTests: XCTestCase {
         let properties = IdentityProperties(mid: mid, advertisingIdentifier: nil, pushIdentifier: nil, blob: "testBlob", locationHint: "testHint", customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
-        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:])
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
+
+        // verify
+        XCTAssertEqual(expectedUrl, url?.absoluteString)
+    }
+
+    /// Tests that when the ad id is empty and it is changed that we send a 0 for idfa consent
+    func testIdentityHitURLWithChangedAdIEmpty() {
+        // setup
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&device_consent=0"
+        let orgId = "testOrg@AdobeOrg"
+        let experienceCloudServer = "dpm.demdex.net"
+        let properties = IdentityProperties(mid: nil, advertisingIdentifier: "", pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+
+        // test
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: true)
+
+        // verify
+        XCTAssertEqual(expectedUrl, url?.absoluteString)
+    }
+
+    /// Tests that when the ad id is not empty and it is changed that we send a 1 for idfa consent
+    func testIdentityHitURLWithChangedAdIdNotEmpty() {
+        // setup
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&device_consent=1"
+        let orgId = "testOrg@AdobeOrg"
+        let experienceCloudServer = "dpm.demdex.net"
+        let properties = IdentityProperties(mid: nil, advertisingIdentifier: "test-ad-id", pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+
+        // test
+        let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: true)
 
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
