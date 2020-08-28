@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AEPSample_Swift_binaries.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>4564B87535247C2656CAC5D81EBC4F3DE8698424</string>
+				<key>dateExpires</key>
+				<string>7/3/21</string>
+				<key>type</key>
+				<string>Apple Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>4564B87535247C2656CAC5D81EBC4F3DE8698424</string>
+						<key>dateExpires</key>
+						<string>7/3/21</string>
+						<key>type</key>
+						<string>Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AEPCore.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>9UL7T55WG6</string>
+						<key>name</key>
+						<string>Beijing HeiJiao Wenhua Chuanmei Co., Ltd.</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>4564B87535247C2656CAC5D81EBC4F3DE8698424</string>
+						<key>dateExpires</key>
+						<string>7/3/21</string>
+						<key>type</key>
+						<string>Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AEPIdentity.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>9UL7T55WG6</string>
+						<key>name</key>
+						<string>Beijing HeiJiao Wenhua Chuanmei Co., Ltd.</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>4564B87535247C2656CAC5D81EBC4F3DE8698424</string>
+						<key>dateExpires</key>
+						<string>7/3/21</string>
+						<key>type</key>
+						<string>Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AEPLifecycle.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>9UL7T55WG6</string>
+						<key>name</key>
+						<string>Beijing HeiJiao Wenhua Chuanmei Co., Ltd.</string>
+					</dict>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>4564B87535247C2656CAC5D81EBC4F3DE8698424</string>
+						<key>dateExpires</key>
+						<string>7/3/21</string>
+						<key>type</key>
+						<string>Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>AEPServices.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>9UL7T55WG6</string>
+						<key>name</key>
+						<string>Beijing HeiJiao Wenhua Chuanmei Co., Ltd.</string>
+					</dict>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>9UL7T55WG6.com.adobe.mobile.AEPSample-Swift-binaries</string>
+				<key>com.apple.developer.team-identifier</key>
+				<string>9UL7T55WG6</string>
+				<key>get-task-allow</key>
+				<false/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>9UL7T55WG6.com.adobe.mobile.AEPSample-Swift-binaries</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>AEPSample_Swift_binaries.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>f60748c6-4d11-4059-af8d-c0bf733f5479</string>
+				<key>name</key>
+				<string>iOS Team Ad Hoc Provisioning Profile: *</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>9UL7T55WG6</string>
+				<key>name</key>
+				<string>Beijing HeiJiao Wenhua Chuanmei Co., Ltd.</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>
