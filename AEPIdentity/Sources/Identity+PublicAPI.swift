@@ -32,7 +32,8 @@ import Foundation
                 completion(nil, .unexpected)
                 return
             }
-
+            let url = URL(string: updatedUrlStr)
+            let url2 = URL(string: updatedUrlStr)
             completion(URL(string: updatedUrlStr), .none)
         }
     }

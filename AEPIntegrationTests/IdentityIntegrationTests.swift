@@ -16,7 +16,6 @@ import AEPIdentity
 import AEPLifecycle
 import AEPSignal
 
-
 class IdentityIntegrationTests: XCTestCase {
 
     override func setUp() {
@@ -101,7 +100,7 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
-        Identity.getUrlVariables { (variables, error) in
+        Identity.getUrlVariables { (_, _) in
 
             variablesExpection.fulfill()
         }
@@ -120,8 +119,7 @@ class IdentityIntegrationTests: XCTestCase {
         let url2 = URL(string: "https://adobe.com")
         let a = url2?.absoluteString
 
-
-        Identity.appendTo(url: URL(string: "https://adobe.com")) { (url, error) in
+        Identity.appendTo(url: URL(string: "https://adobe.com")) { (url, _) in
 
             let c = url?.absoluteString
             urlExpection.fulfill()

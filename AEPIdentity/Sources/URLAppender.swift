@@ -67,7 +67,7 @@ struct URLAppender {
     /// - Returns a string formatted with the visitor id payload
     static func generateVisitorIdPayload(configSharedState: [String: Any], analyticsSharedState: [String: Any], identityProperties: IdentityProperties) -> String {
         // append timestamp
-        var theIdString = appendParameterToVisitorIdString(original: "", key: IdentityConstants.URLKeys.VISITOR_TIMESTAMP_KEY, value: String(Date().timeIntervalSince1970))
+        var theIdString = appendParameterToVisitorIdString(original: "", key: IdentityConstants.URLKeys.VISITOR_TIMESTAMP_KEY, value: String(Int(Date().timeIntervalSince1970)))
         // append mid
         if let mid = identityProperties.mid {
             theIdString = appendParameterToVisitorIdString(original: theIdString, key: IdentityConstants.URLKeys.VISITOR_PAYLOAD_MARKETING_CLOUD_ID_KEY, value: mid.midString)
