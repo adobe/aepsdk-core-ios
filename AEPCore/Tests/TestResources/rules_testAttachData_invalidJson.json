@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.lifecycle"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.responseContent"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.launchevent",
+                            "matcher": "ex",
+                            "values": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername",
+                      "matcher": "eq",
+                      "values": [
+                        "AT&T"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RCa839e401f54a459a9049328f9b609a07",
+          "type": "add",
+          "detail": {
+            "eventdata_xyz": {
+              "attached_data": {
+                "key1": "value1",
+                "launches": "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.launches%}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

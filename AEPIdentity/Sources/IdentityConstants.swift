@@ -11,7 +11,7 @@
 
 import Foundation
 
-struct IdentityConstants {
+enum IdentityConstants {
     static let EXTENSION_NAME = "com.adobe.module.identity"
     static let FRIENDLY_NAME = "Identity"
     static let EXTENSION_VERSION = "0.0.1"
@@ -28,11 +28,11 @@ struct IdentityConstants {
     static let CID_DELIMITER = "%01"
     static let ADID_DSID = "DSID_20915"
 
-    struct SharedStateKeys {
+    enum SharedStateKeys {
         static let CONFIGURATION = "com.adobe.module.configuration"
     }
 
-    struct Configuration {
+    enum Configuration {
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
@@ -40,7 +40,7 @@ struct IdentityConstants {
         static let UPDATE_CONFIG = "config.update"
     }
 
-    struct EventDataKeys {
+    enum EventDataKeys {
         static let BASE_URL = "baseurl"
         static let UPDATED_URL = "updatedurl"
         static let VISITOR_IDS_LIST = "visitoridslist"
@@ -58,13 +58,13 @@ struct IdentityConstants {
         static let MCPNS_DPID = "20920"
     }
 
-    struct DataStoreKeys {
-        static let IDENTITY_PROPERTIES = "identitiesproperties"
-        static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
-        static let ANALYTICS_PUSH_SYNC = "ADOBEMOBILE_ANALYTICS_PUSH_SYNC"
+    enum DataStoreKeys {
+        static let IDENTITY_PROPERTIES = "identity.properties"
+        static let PUSH_ENABLED = "push.enabled"
+        static let ANALYTICS_PUSH_SYNC = "analytics.push.sync"
     }
 
-    struct URLKeys {
+    enum URLKeys {
         static let VISITOR_TIMESTAMP_KEY = "TS"
         static let VISITOR_PAYLOAD_MARKETING_CLOUD_ID_KEY = "MCMID"
         static let VISITOR_PAYLOAD_KEY = "adobe_mc"
@@ -73,13 +73,13 @@ struct IdentityConstants {
         static let ANALYTICS_PAYLOAD_KEY = "adobe_aa_vid"
     }
 
-    struct Default {
+    enum Default {
         static let TTL = TimeInterval(600)
         static let TIMEOUT = TimeInterval(2000)
         static let SERVER = "dpm.demdex.net"
     }
 
-    struct Analytics {
+    enum Analytics {
         static let ANALYTICS_ID = "aid"
         static let VISITOR_IDENTIFIER = "vid"
         static let TRACK_ACTION = "action"

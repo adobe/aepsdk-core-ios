@@ -16,7 +16,7 @@ To expose something to Objective-C, you need to add the `@objc` annotation in fr
 
 All public APIs need to be compatible with Objective-C. This means they must use types that can be represented in Objective-C, which means types such as structs, enums with associated values cannot be used in public APIs.
 
-To define a public API as being exposed in Objective-C you need to annotate the API with `@objc`. In the following example 
+To define a public API as being exposed in Objective-C you need to annotate the API with `@objc`. In the following example
 
 ```swift
 @objc(setPrivacy:)
@@ -52,9 +52,9 @@ Making your extension compatible with Objective-C is simple; you need to make yo
 
 Example:
 
-​	`@objc(AEPIdentity) public class Identity: NSObject, Extension {}`
+​	`@objc(AEPMobileIdentity) public class Identity: NSObject, Extension {}`
 
-> Note: In the above example, we rename the Swift class `Identity` to `AEPIdentity` to follow the 3-letter prefix for Objective-C.
+> Note: In the above example, we rename the Swift class `Identity` to `AEPMobileIdentity` to follow the 3-letter prefix for Objective-C. Also note that you cannot have a type which uses the same name as your framework due to Swift limitations.
 
 Then you must ensure you invoke `super.init()` in your required initializer after all your properties have been initialized.
 

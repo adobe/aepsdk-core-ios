@@ -10,6 +10,8 @@ For an extension to be registered with the `EventHub`, it must conform to the `E
 
 See [`Extension.swift`](https://github.com/adobe/aepsdk-core-ios/blob/master/Sources/eventhub/Extension.swift) for the complete definition.
 
+> Note: Some of the APIs found in the `Extension` class are part of a Swift `extension` and are therefore not visible in Objective-C. If the extension is being implemented in Objective-C rather than Swift, you must use the `ExtensionRuntime` directly instead of the `extension Extension` APIs. E.g: `runtime.dispatch(event: event)` instead of `dispatch(event: event)` from within the `Extension` implementation.  
+
 #### Events
 
 ##### Purpose of an `Event`
@@ -261,6 +263,8 @@ registerListener(type: EventType.hub, source: EventSource.sharedState) { (event)
 #### Testing an Extension
 
 Testing an extension can be done by using the `TestableExtensionRuntime`, this mock can simulate events to and from the `EventHub`, along with simulating shared state updates. The `TestableExtensionRuntime` can be injected into any extension via the `init?(runtime: ExtensionRuntime)` initializer.
+
+
 
 ##### Example #1
 
