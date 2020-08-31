@@ -16,13 +16,7 @@ import os.log
 
 class RulesEngineNativeLogging: RulesEngineLogging {
     private let cachedOSLogs = ThreadSafeDictionary<String, OSLog>()
-    private let logPrefix: String
-    private let LOG_SUB_SYSTEM_NAME: String
-
-    init(logPrefix: String) {
-        self.logPrefix = logPrefix
-        self.LOG_SUB_SYSTEM_NAME = "com.adobe.mobile.marketing.aep.rules.engine.\(logPrefix)"
-    }
+    private let LOG_SUB_SYSTEM_NAME = "com.adobe.mobile.marketing.aep.rules.engine"
 
     /// Generates or Retrieves an `OSLog` object by a label name
     /// - Parameter label: a name of label, which can be used to identify the consumer of this logging service
@@ -54,7 +48,6 @@ class RulesEngineNativeLogging: RulesEngineLogging {
     }
 
     func log(level: RulesEngineLogLevel, label: String, message: String) {
-        let newLabel = "\(logPrefix) - \(label)"
-        os_log("%@", log: osLog(newLabel), type: osLogType(level), message)
+        os_log("%@", log: osLog(label), type: osLogType(level), message)
     }
 }
