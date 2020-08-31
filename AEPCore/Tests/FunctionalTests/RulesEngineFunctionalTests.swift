@@ -36,7 +36,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         return Bundle(for: self).url(forResource: "rules_functional_1", withExtension: ".zip")
     }
 
-    func testUpdateConfigurationWithDictTwice() {
+    func testLoadRulesFromRemoteURL() {
         /// Given:
         let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
                           data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
@@ -56,6 +56,31 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         /// Then:
         XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual("value", processedEvent.data?["key"] as? String)
+    }
+
+    func testLoadRulesFromLocalCachedFile() {
+        /// Given:
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+
+        let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip")
+        let expectedData = try? Data(contentsOf: filePath!)
+
+        let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
+        let mockNetworkService = TestableNetworkService()
+        mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
+        ServiceProvider.shared.networkService = mockNetworkService
+        rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
+        rulesEngine.rulesEngine.clearRules()
+
+        /// When:
+        rulesEngine.loadCachedRules(for: "http://test.com/rules.url")
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then:
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual("value", processedEvent.data?["key"] as? String)
     }
 
@@ -343,6 +368,30 @@ class RulesEngineFunctionalTests: XCTestCase {
             return
         }
         XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    func testMatcherWithDifferentTypesOfParameters() {
+        /// Given:
+        //        {
+        //            "type": "matcher",
+        //            "definition": {
+        //                "key": "~state.com.adobe.module.lifecycle/lifecyclecontextdata.launches",
+        //                "matcher": "gt",
+        //                "values": [
+        //                "2"
+        //                ]
+        //            }
+        //        }
+
+        resetRulesEngine(withNewRules: "rules_testMatcherWithDifferentTypesOfParameters")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+
+        /// When:
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 3]], status: .set))
+        _ = rulesEngine.process(event: event)
+        /// Then:
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testUrlenc() {
