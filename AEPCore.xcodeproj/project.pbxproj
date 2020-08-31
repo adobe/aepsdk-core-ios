@@ -751,7 +751,6 @@
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtility.swift; sourceTree = "<group>"; };
-		BB0E397024FD55820050C181 /* aepsdk-rulesengine-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "aepsdk-rulesengine-ios"; path = "../../v5-swift/aepsdk-rulesengine-ios"; sourceTree = "<group>"; };
 		BB0E397124FD56100050C181 /* RulesEngineNativeLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineNativeLogging.swift; sourceTree = "<group>"; };
 		BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testUrlenc.json; sourceTree = "<group>"; };
 		BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testUrlenc_invalidFnName.json; sourceTree = "<group>"; };
@@ -898,7 +897,6 @@
 				3F03983E24BE635D0019F095 /* Frameworks */,
 				21CAC0D72422917600C11388 /* Products */,
 				2499461B24E5E67700D3F7B2 /* Package.swift */,
-				BB0E397024FD55820050C181 /* aepsdk-rulesengine-ios */,
 			);
 			sourceTree = "<group>";
 		};
