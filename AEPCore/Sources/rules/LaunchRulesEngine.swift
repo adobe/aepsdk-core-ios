@@ -41,7 +41,7 @@ class LaunchRulesEngine {
         self.name = name
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         let evaluator = ConditionEvaluator(options: .defaultOptions)
-        rulesEngine = RulesEngine(evaluator: evaluator)
+        rulesEngine = RulesEngine(evaluator: evaluator, logging: RulesEngineNativeLogging(logPrefix: name), logFilter: LaunchRulesEngine.getRulesEngineLogLevel(Log.logFilter))
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
         /// Uses this flag to decide if we need to cache incoming events
@@ -55,6 +55,21 @@ class LaunchRulesEngine {
             }
             return value
         })
+    }
+
+    private static func getRulesEngineLogLevel(_ level: LogLevel) -> RulesEngineLogLevel {
+        switch level {
+        case .trace:
+            return RulesEngineLogLevel.trace
+        case .debug:
+            return RulesEngineLogLevel.debug
+        case .warning:
+            return RulesEngineLogLevel.warning
+        case .error:
+            return RulesEngineLogLevel.error
+        @unknown default:
+            return RulesEngineLogLevel.error
+        }
     }
 
     /// Register a `RulesTracer`

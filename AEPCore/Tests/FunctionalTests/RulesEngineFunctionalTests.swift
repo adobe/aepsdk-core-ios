@@ -26,6 +26,7 @@ class RulesEngineFunctionalTests: XCTestCase {
     override func setUp() {
         UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
+        Log.logFilter = .trace
         rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: mockRuntime)
         rulesEngine.trace { _, _, _, failure in
             print(failure)
@@ -382,7 +383,6 @@ class RulesEngineFunctionalTests: XCTestCase {
         //                ]
         //            }
         //        }
-
         resetRulesEngine(withNewRules: "rules_testMatcherWithDifferentTypesOfParameters")
         let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
                           data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])

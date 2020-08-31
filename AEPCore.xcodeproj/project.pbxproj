@@ -273,6 +273,7 @@
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
 		BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
 		BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
+		BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0E397124FD56100050C181 /* RulesEngineNativeLogging.swift */; };
 		BB3E86DE24F86B6700E39C53 /* rules_testUrlenc.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */; };
 		BB3E86E024F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */; };
 		BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */; };
@@ -750,6 +751,8 @@
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtility.swift; sourceTree = "<group>"; };
+		BB0E397024FD55820050C181 /* aepsdk-rulesengine-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "aepsdk-rulesengine-ios"; path = "../../v5-swift/aepsdk-rulesengine-ios"; sourceTree = "<group>"; };
+		BB0E397124FD56100050C181 /* RulesEngineNativeLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineNativeLogging.swift; sourceTree = "<group>"; };
 		BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testUrlenc.json; sourceTree = "<group>"; };
 		BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testUrlenc_invalidFnName.json; sourceTree = "<group>"; };
 		BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testMatcherWithDifferentTypesOfParameters.json; sourceTree = "<group>"; };
@@ -895,6 +898,7 @@
 				3F03983E24BE635D0019F095 /* Frameworks */,
 				21CAC0D72422917600C11388 /* Products */,
 				2499461B24E5E67700D3F7B2 /* Package.swift */,
+				BB0E397024FD55820050C181 /* aepsdk-rulesengine-ios */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1474,6 +1478,7 @@
 				3FB66AB724CA004400502CAF /* RulesLoader.swift */,
 				BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */,
 				3F16761324E1B0630041B970 /* RulesConstants.swift */,
+				BB0E397124FD56100050C181 /* RulesEngineNativeLogging.swift */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -2190,6 +2195,7 @@
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
+				BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */,
 				21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
 				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
