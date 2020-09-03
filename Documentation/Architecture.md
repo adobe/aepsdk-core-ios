@@ -18,7 +18,11 @@ Event Hub is the controller of the SDK. The Event Hub is responsible for receivi
 
 ## Core Structure
 
-This diagram shows the relationship between Event Hub, Extension Container and Extension, and how Extension Container works as a intermediator. There are four main responsiblilties of Extension Container:
+This diagram shows the relationship between Event Hub, Extension Container and Extension, and how Extension Container works as a intermediator. 
+
+![Extension Container](https://app.lucidchart.com/publicSegments/view/488c0d86-8134-4952-ab38-4a9d7a244cb8/image.png)
+
+There are four main responsiblilties of Extension Container:
 
 1. Lifecyle delegate. EventHub controls the lifecycle of Container, and Container in turn controls the lifecycle Extensions.  
 2. Extension Runtime. Extension doesn't direclty interact with Event Hub, instead Container creates and provides a Extension Runtime instance to Extension. With it, extension can register listeners, dispatch events,  get or udpate shared states, and start or stop the event processing.
@@ -26,8 +30,6 @@ This diagram shows the relationship between Event Hub, Extension Container and E
 4. Threading. Each Container is backed by a Dispatch Queue, so all the extensions are running parallel. Extension can even control temporaily stop the events processing by calling start or stop API provided by the Extension Runtime.
 
 
-
-![Extension Container](https://app.lucidchart.com/publicSegments/view/488c0d86-8134-4952-ab38-4a9d7a244cb8/image.png)
 
 
 
@@ -49,7 +51,7 @@ AEPCore is the heart of the AEP SDK. It includes  [Event Hub](./EventHub/README.
 
 #### Extensions
 
-Extensions are the heavy lifters for each feature/solution. Extensions are responsible for handling transforming the event into an action (ex. Event to Analytics Hit).
+Extensions are the heavy lifters for each feature/solution, they are responsible for handling transforming the event into an action (ex. Event to Analytics Hit).
 
-Adobe provides extensions to work with solutions in Adobe Experience Cloud, including Analytics, Target, Audience Manager, Campaign and so on. Any partener or any develper can also built their services as an extensions and integrate with Adobe's ecosystem.  
+Adobe provides extensions to work with solutions of Adobe Experience Cloud, including Analytics, Target, Audience Manager, Campaign and so on. Any partener or any develper can also built their services as an extensions and integrate with Adobe's ecosystem.  
 
