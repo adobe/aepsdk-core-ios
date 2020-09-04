@@ -38,4 +38,5 @@ cd aep-sdk-compatibility
 make make-libs
 ```
 
-After running these commands, you can find the `.xcframework`'s within the build directory. Drag and drop these into your project and ensure that you have copy items if needed checked.
+After running these commands, you can find the `.xcframework`'s within the build directory. Drag and drop these into your project and ensure that you have 
+"copy items if needed" checked.
