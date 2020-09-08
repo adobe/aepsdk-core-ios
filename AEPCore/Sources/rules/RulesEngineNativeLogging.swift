@@ -15,39 +15,23 @@ import os.log
 @_implementationOnly import SwiftRulesEngine
 
 class RulesEngineNativeLogging: RulesEngineLogging {
-    private let cachedOSLogs = ThreadSafeDictionary<String, OSLog>()
-    private let LOG_SUB_SYSTEM_NAME = "com.adobe.mobile.marketing.aep.rules.engine"
-
-    /// Generates or Retrieves an `OSLog` object by a label name
-    /// - Parameter label: a name of label, which can be used to identify the consumer of this logging service
-    /// - Returns: an `OSLog` object
-    private func osLog(_ label: String) -> OSLog {
-        if let osLog = cachedOSLogs[label] {
-            return osLog
-        } else {
-            let osLog = OSLog(subsystem: LOG_SUB_SYSTEM_NAME, category: label)
-            cachedOSLogs[label] = osLog
-            return osLog
-        }
-    }
-
-    /// Converts `LogLevel` to Apple's `OSLogType`
-    /// - Parameter logLevel: a `LogLevel` object
-    /// - Returns: a `OSLogType` object
-    private func osLogType(_ logLevel: RulesEngineLogLevel) -> OSLogType {
+    /// Converts `RulesEngineLogLevel` to Core `LogLevel`
+    /// - Parameter logLevel: a `RulesEngineLogLevel` object
+    /// - Returns: a `LogLevel` object
+    private func convert(_ logLevel: RulesEngineLogLevel) -> LogLevel {
         switch logLevel {
         case .error:
-            return .fault
-        case .warning:
             return .error
+        case .warning:
+            return .warning
         case .debug:
             return .debug
         case .trace:
-            return .info
+            return .trace
         }
     }
 
     func log(level: RulesEngineLogLevel, label: String, message: String) {
-        os_log("%@", log: osLog(label), type: osLogType(level), message)
+        ServiceProvider.shared.loggingService.log(level: convert(level), label: label, message: message)
     }
 }
