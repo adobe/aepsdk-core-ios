@@ -72,6 +72,7 @@ enum IdentityConstants {
         static let VISITOR_PAYLOAD_ANALYTICS_ID_KEY = "MCAID"
         static let ANALYTICS_PAYLOAD_KEY = "adobe_aa_vid"
         static let DEVICE_CONSENT = "device_consent"
+        static let NAMESPACE_CODE = "d_nsid"
     }
 
     enum Default {
