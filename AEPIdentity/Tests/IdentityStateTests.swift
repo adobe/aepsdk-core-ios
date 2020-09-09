@@ -453,7 +453,32 @@ class IdentityStateTests: XCTestCase {
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
         XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
-        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+    }
+
+    /// When ad id is currently zero string and updated to an empty string we should not sync
+    func testSyncIdentifiersAdIDIsUpdatedFromValidToEmptyFirstSync() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = "test-ad-id"
+        props.mid = MID()
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state.lastValidConfig = configSharedState
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: ""]
+        let event = Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
+        let eventData = state.syncIdentifiers(event: event)
+
+        // verify
+        XCTAssertEqual(2, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
 
     /// Tests that when updating the ad id from zero string to valid we add the consent flag as true
