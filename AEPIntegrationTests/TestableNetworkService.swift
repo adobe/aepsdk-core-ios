@@ -14,20 +14,27 @@ import Foundation
 
 public typealias NetworkRespsonse = (data: Data?, respsonse: HTTPURLResponse?, error: Error?)
 public typealias ReqeustResolver = (NetworkRequest) -> NetworkRespsonse?
+
 public class TestableNetworkService: Networking {
     public var requests: [NetworkRequest] = []
-    public var resolver: ReqeustResolver?
+    public var resolvers: [ReqeustResolver] = []
 
     public init() {}
 
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
         requests.append(networkRequest)
-
-        if let respsone = resolver?(networkRequest) {
-            let httpConnection = HttpConnection(data: respsone.data, response: respsone.respsonse, error: respsone.error)
-            completionHandler?(httpConnection)
-        } else {
-            completionHandler?(HttpConnection(data: nil, response: nil, error: nil))
+        for resolver in resolvers {
+            if let respsone = resolver(networkRequest) {
+                let httpConnection = HttpConnection(data: respsone.data, response: respsone.respsonse, error: respsone.error)
+                completionHandler?(httpConnection)
+                return
+            }
         }
+
+        completionHandler?(HttpConnection(data: nil, response: nil, error: nil))
+    }
+
+    public func mock(resolver:@escaping ReqeustResolver){
+        resolvers += [resolver]
     }
 }

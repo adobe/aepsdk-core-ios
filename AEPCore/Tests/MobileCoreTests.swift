@@ -35,6 +35,7 @@ class MobileCoreTests: XCTestCase {
     }
 
     func testLegacyRegisterAndStart() {
+
         let expectation = XCTestExpectation(description: "callback invoked")
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }

@@ -14,8 +14,6 @@ import Foundation
 
 /// Defines a platform service to be used to initialize `DataQueue` objects
 @objc(AEPDataQueuing) public protocol DataQueuing {
-    static var shared: DataQueuing { get }
-
     /// Initialize a `DataQueue` object
     /// - Parameter name: the label you assigned to the `DataQueue` at creation time.
     /// - Returns: the object of `DataQueue`, return false if failed to create an object

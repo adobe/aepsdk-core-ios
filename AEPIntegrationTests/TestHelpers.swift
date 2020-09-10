@@ -27,3 +27,30 @@ extension UserDefaults {
         }
     }
 }
+extension FileManager{
+
+    func clearCache()  {
+        if let url = self.urls(for: .cachesDirectory, in: .userDomainMask).first{
+
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.module.signal"))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.module.identity"))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.mobile.diskcache" , isDirectory:true))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+
+        }
+
+    }
+
+}

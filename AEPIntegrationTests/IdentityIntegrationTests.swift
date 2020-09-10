@@ -11,7 +11,7 @@
 
 import XCTest
 @testable import AEPCore
-import AEPServices
+@testable import AEPServices
 import AEPIdentity
 import AEPLifecycle
 import AEPSignal
@@ -20,10 +20,9 @@ class IdentityIntegrationTests: XCTestCase {
 
     override func setUp() {
         UserDefaults.clear()
+        FileManager.default.clearCache()
+        ServiceProvider.shared.reset()
         EventHub.reset()
-    }
-
-    override func tearDown() {
     }
 
     func initExtensionsAndWait() {
@@ -35,13 +34,13 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [initExpection], timeout: 0.5)
     }
 
-    func testIdentity() {
+    func testSyncIdentifiers() {
         initExtensionsAndWait()
 
         let requestExpection = XCTestExpectation()
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
-        mockNetworkService.resolver = { request in
+        mockNetworkService.mock { request in
             if request.url.absoluteString.contains("d_cid_ic=id1%2501value1%25010") {
                 XCTAssertTrue(request.url.absoluteString.contains("https://test.com/id"))
                 XCTAssertTrue(request.url.absoluteString.contains("d_orgid=orgid"))
@@ -51,20 +50,19 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
 
         wait(for: [requestExpection], timeout: 1)
     }
 
-    func testIdentityOptout() {
+    func testOptedout() {
         initExtensionsAndWait()
 
         let requestExpection = XCTestExpectation()
         requestExpection.isInverted = true
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
-        mockNetworkService.resolver = { request in
+        mockNetworkService.mock { request in
             if request.url.absoluteString.contains("d_cid_ic=id1%2501value1%25010") {
                 requestExpection.fulfill()
             }
@@ -72,13 +70,12 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedout"])
-        MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
 
         wait(for: [requestExpection], timeout: 1)
     }
 
-    func testIdentityOptout1() {
+    func testOptedIn() {
         initExtensionsAndWait()
 
         let ecidExpection = XCTestExpectation()
@@ -92,40 +89,103 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [ecidExpection], timeout: 1)
     }
 
-    func testIdentityOptout2() {
+    func testGetUrlVariables() {
         initExtensionsAndWait()
 
         let variablesExpection = XCTestExpectation()
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
-        Identity.syncIdentifiers(identifiers: ["id1": "value1"])
-        Identity.getUrlVariables { (_, _) in
-
+        Identity.getUrlVariables { variables, _ in
+            XCTAssertTrue(variables?.contains("TS") ?? false)
+            XCTAssertTrue(variables?.contains("MCMID") ?? false)
+            XCTAssertTrue(variables?.contains("MCORGID") ?? false)
             variablesExpection.fulfill()
         }
 
         wait(for: [variablesExpection], timeout: 1)
     }
 
-    func testIdentityOptout3() {
+    func testAppendTo() {
         initExtensionsAndWait()
 
         let urlExpection = XCTestExpectation()
-
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
-        Identity.syncIdentifiers(identifiers: ["id1": "value1"])
-        let url2 = URL(string: "https://adobe.com")
-        let a = url2?.absoluteString
-
         Identity.appendTo(url: URL(string: "https://adobe.com")) { (url, _) in
 
-            let c = url?.absoluteString
+            XCTAssertTrue(url?.absoluteString.contains("TS") ?? false)
+            XCTAssertTrue(url?.absoluteString.contains("MCMID") ?? false)
+            XCTAssertTrue(url?.absoluteString.contains("MCORGID") ?? false)
             urlExpection.fulfill()
         }
 
         wait(for: [urlExpection], timeout: 1)
+    }
+
+    func testGetExperienceCloudId() {
+        initExtensionsAndWait()
+
+        let urlExpection = XCTestExpectation()
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.getExperienceCloudId { ecid in
+            XCTAssertFalse(ecid!.isEmpty)
+            urlExpection.fulfill()
+        }
+        wait(for: [urlExpection], timeout: 1)
+    }
+
+    func testGetSdkIdentities() {
+        initExtensionsAndWait()
+
+        let urlExpection = XCTestExpectation()
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        MobileCore.setAdvertisingIdentifier(adId: "adid")
+        Identity.syncIdentifiers(identifiers: ["id1": "value1"])
+        MobileCore.getSdkIdentities { identityString, _ in
+            XCTAssertTrue(identityString?.contains("DSID_20915") ?? false)
+            XCTAssertTrue(identityString?.contains("id1") ?? false)
+            XCTAssertTrue(identityString?.contains("imsOrgID") ?? false)
+            urlExpection.fulfill()
+        }
+        wait(for: [urlExpection], timeout: 1)
+    }
+
+    func testSetPushIdentifier() {
+        initExtensionsAndWait()
+
+        let requestExpection = XCTestExpectation()
+        let mockNetworkService = TestableNetworkService()
+        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.mock { request in
+            if request.url.absoluteString.contains("20920") {
+                XCTAssertTrue(request.url.absoluteString.contains("d_cid=20920%25013935313632353862363233306166646439336366306364303762386464383435"))
+                requestExpection.fulfill()
+            }
+            return nil
+        }
+
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        MobileCore.setPushIdentifier(deviceToken: "9516258b6230afdd93cf0cd07b8dd845".data(using: .utf8))
+
+        wait(for: [requestExpection], timeout: 1)
+    }
+
+    func testSetAdvertisingIdentifier() {
+        initExtensionsAndWait()
+
+        let requestExpection = XCTestExpectation()
+        let mockNetworkService = TestableNetworkService()
+        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.mock { request in
+            if request.url.absoluteString.contains("20915") {
+                XCTAssertTrue(request.url.absoluteString.contains("d_cid_ic=DSID_20915%2501adid%25011"))
+                requestExpection.fulfill()
+            }
+            return nil
+        }
+
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        MobileCore.setAdvertisingIdentifier(adId: "adid")
+        wait(for: [requestExpection], timeout: 1)
     }
 
 }
