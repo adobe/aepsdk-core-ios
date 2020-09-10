@@ -123,7 +123,7 @@ class IdentityState {
         customerIds.removeAll(where: { $0.identifier?.isEmpty ?? true }) // clean all identifiers by removing all that have a nil or empty identifier
 
         // valid config: check if there's a need to sync. Don't if we're already up to date.
-        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: lastValidConfig) {
+        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
             queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, addConsentFlag: shouldAddConsentFlag)
         } else {
             Log.debug(label: LOG_TAG, "sync identifiers request failed, shouldSync returned false.")
