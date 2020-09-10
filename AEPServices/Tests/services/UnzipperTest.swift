@@ -179,7 +179,16 @@ class FileUnzipperTest: XCTestCase {
         }
         let temporaryDirectory = FileManager.default.temporaryDirectory
             .appendingPathComponent("performanceTestFiles")
-        measure {
+
+        let measureOptions = XCTMeasureOptions()
+        measureOptions.iterationCount = 1
+        if #available(iOS 13.0, *) {
+            measure(options: measureOptions, block: {
+                let unzippedItems = self.unzipper.unzipItem(at: sourceUrl, to: temporaryDirectory)
+                XCTAssertEqual(unzippedItems.count, 2)
+
+            })
+        } else {
             let unzippedItems = self.unzipper.unzipItem(at: sourceUrl, to: temporaryDirectory)
             XCTAssertEqual(unzippedItems.count, 2)
         }
