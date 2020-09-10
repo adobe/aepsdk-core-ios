@@ -18,9 +18,6 @@ class SQLiteWrapperTests: XCTestCase {
 
     override func setUp() {
         DataQueueServiceTests.removeDbFileIfExists(databaseName)
-        if let service = DataQueueService.shared as? DataQueueService {
-            service.cleanCache()
-        }
     }
 
     override func tearDown() {}
