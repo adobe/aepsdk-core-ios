@@ -32,7 +32,7 @@ class SignalIntegrationTests: XCTestCase {
         mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
 
-        let initExpection = XCTestExpectation()
+        let initExpection = XCTestExpectation(description: "init extenions")
         MobileCore.setLogLevel(level: .trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpection.fulfill()
@@ -46,7 +46,7 @@ class SignalIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin",
                                                         "rules.url": "https://rules.com/rules.zip"])
 
-        let requestExpection = XCTestExpectation()
+        let requestExpection = XCTestExpectation(description: "signal request")
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.signal.com") {
                 XCTAssertEqual("https://www.signal.com?name=testGetRequest", request.url.absoluteString)
@@ -68,7 +68,7 @@ class SignalIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin",
                                                         "rules.url": "https://rules.com/rules.zip"])
 
-        let requestExpection = XCTestExpectation()
+        let requestExpection = XCTestExpectation(description: "signal request")
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.signal.com") {
                 XCTAssertEqual("https://www.signal.com?name=testPostRequest", request.url.absoluteString)
@@ -94,7 +94,7 @@ class SignalIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedout",
                                                         "rules.url": "https://rules.com/rules.zip"])
 
-        let requestExpection = XCTestExpectation()
+        let requestExpection = XCTestExpectation(description: "no signal request")
         requestExpection.isInverted = true
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.signal.com") {

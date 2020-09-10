@@ -26,7 +26,7 @@ class IdentityIntegrationTests: XCTestCase {
     }
 
     func initExtensionsAndWait() {
-        let initExpection = XCTestExpectation()
+        let initExpection = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(level: .trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpection.fulfill()
@@ -37,7 +37,7 @@ class IdentityIntegrationTests: XCTestCase {
     func testSyncIdentifiers() {
         initExtensionsAndWait()
 
-        let requestExpection = XCTestExpectation()
+        let requestExpection = XCTestExpectation(description: "syncIdentifiers request")
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
@@ -58,7 +58,7 @@ class IdentityIntegrationTests: XCTestCase {
     func testOptedout() {
         initExtensionsAndWait()
 
-        let requestExpection = XCTestExpectation()
+        let requestExpection = XCTestExpectation(description: "expect no syncIdentifiers request")
         requestExpection.isInverted = true
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
@@ -75,24 +75,10 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [requestExpection], timeout: 1)
     }
 
-    func testOptedIn() {
-        initExtensionsAndWait()
-
-        let ecidExpection = XCTestExpectation()
-
-        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        Identity.getExperienceCloudId { ecid in
-            XCTAssertTrue(!ecid!.isEmpty)
-            ecidExpection.fulfill()
-        }
-
-        wait(for: [ecidExpection], timeout: 1)
-    }
-
     func testGetUrlVariables() {
         initExtensionsAndWait()
 
-        let variablesExpection = XCTestExpectation()
+        let variablesExpection = XCTestExpectation(description: "getUrlVariables callback")
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         Identity.getUrlVariables { variables, _ in
@@ -108,7 +94,7 @@ class IdentityIntegrationTests: XCTestCase {
     func testAppendTo() {
         initExtensionsAndWait()
 
-        let urlExpection = XCTestExpectation()
+        let urlExpection = XCTestExpectation(description: "appendTo callback")
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         Identity.appendTo(url: URL(string: "https://adobe.com")) { (url, _) in
 
@@ -124,7 +110,7 @@ class IdentityIntegrationTests: XCTestCase {
     func testGetExperienceCloudId() {
         initExtensionsAndWait()
 
-        let urlExpection = XCTestExpectation()
+        let urlExpection = XCTestExpectation(description: "getExperienceCloudId callback")
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         Identity.getExperienceCloudId { ecid in
             XCTAssertFalse(ecid!.isEmpty)
@@ -136,7 +122,7 @@ class IdentityIntegrationTests: XCTestCase {
     func testGetSdkIdentities() {
         initExtensionsAndWait()
 
-        let urlExpection = XCTestExpectation()
+        let urlExpection = XCTestExpectation(description: "getSdkIdentities callback")
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setAdvertisingIdentifier(adId: "adid")
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
@@ -152,7 +138,7 @@ class IdentityIntegrationTests: XCTestCase {
     func testSetPushIdentifier() {
         initExtensionsAndWait()
 
-        let requestExpection = XCTestExpectation()
+        let requestExpection = XCTestExpectation(description: "push identifier sync request")
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
@@ -172,7 +158,7 @@ class IdentityIntegrationTests: XCTestCase {
     func testSetAdvertisingIdentifier() {
         initExtensionsAndWait()
 
-        let requestExpection = XCTestExpectation()
+        let requestExpection = XCTestExpectation(description: "advertising identifier sync request")
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in

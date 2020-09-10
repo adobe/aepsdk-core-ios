@@ -30,7 +30,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
 
-        let initExpection = XCTestExpectation()
+        let initExpection = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(level: .trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpection.fulfill()
@@ -112,7 +112,7 @@ class ConfigurationIntegrationTests: XCTestCase {
     }
 
     func mockRemoteConfig(for appId: String, with data: Data?) {
-        let initExpection = XCTestExpectation()
+        let initExpection = XCTestExpectation(description: "load remote configuration")
 
         let response = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
@@ -122,13 +122,13 @@ class ConfigurationIntegrationTests: XCTestCase {
             return (data: data, respsonse: response, error: nil)
         }
         MobileCore.configureWith(appId: appId)
-        wait(for: [initExpection], timeout: 1)
+        wait(for: [initExpection], timeout: 2)
 
     }
 
     func getPrivacyStatus() -> PrivacyStatus? {
         var returnedPrivacyStatus: PrivacyStatus?
-        let privacyExpection = XCTestExpectation()
+        let privacyExpection = XCTestExpectation(description: "get privacy status")
         MobileCore.getPrivacyStatus { privacyStatus in
             returnedPrivacyStatus = privacyStatus
             privacyExpection.fulfill()
