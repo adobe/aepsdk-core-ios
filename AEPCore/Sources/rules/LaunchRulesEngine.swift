@@ -25,6 +25,7 @@ class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE = "triggeredconsequence"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
+    private static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
 
     private let transform = Transform()
     private let name: String
@@ -48,6 +49,12 @@ class LaunchRulesEngine {
             cachedEvents = [Event]()
             dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
         }
+        transform.register(name: LaunchRulesEngine.URL_ENCODING_FUNCTION_IN_RULES, transformation: { value in
+            if let valueString = value as? String {
+                return URLEncoder.encode(value: valueString)
+            }
+            return value
+        })
     }
 
     /// Register a `RulesTracer`
