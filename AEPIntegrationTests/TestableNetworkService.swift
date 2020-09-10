@@ -34,7 +34,7 @@ public class TestableNetworkService: Networking {
         completionHandler?(HttpConnection(data: nil, response: nil, error: nil))
     }
 
-    public func mock(resolver:@escaping ReqeustResolver){
+    public func mock(resolver:@escaping ReqeustResolver) {
         resolvers += [resolver]
     }
 }

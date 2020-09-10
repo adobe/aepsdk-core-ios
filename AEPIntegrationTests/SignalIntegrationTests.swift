@@ -40,13 +40,11 @@ class SignalIntegrationTests: XCTestCase {
         wait(for: [initExpection], timeout: 1)
     }
 
-
     func testGetRequest() {
         // setup
         mockRemoteRules(with: "rules_signal")
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin",
-                                                        "rules.url" : "https://rules.com/rules.zip"])
-
+                                                        "rules.url": "https://rules.com/rules.zip"])
 
         let requestExpection = XCTestExpectation()
         mockNetworkService.mock { request in
@@ -59,7 +57,7 @@ class SignalIntegrationTests: XCTestCase {
             return nil
         }
 
-        let event = Event(name: "Test", type: "type", source: "source", data:["name": "testGetRequest"])
+        let event = Event(name: "Test", type: "type", source: "source", data: ["name": "testGetRequest"])
         MobileCore.dispatch(event: event)
         wait(for: [requestExpection], timeout: 2)
     }
@@ -68,8 +66,7 @@ class SignalIntegrationTests: XCTestCase {
         // setup
         mockRemoteRules(with: "rules_signal")
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin",
-                                                        "rules.url" : "https://rules.com/rules.zip"])
-
+                                                        "rules.url": "https://rules.com/rules.zip"])
 
         let requestExpection = XCTestExpectation()
         mockNetworkService.mock { request in
@@ -86,7 +83,7 @@ class SignalIntegrationTests: XCTestCase {
             return nil
         }
 
-        let event = Event(name: "Test", type: "type", source: "source", data:["name": "testPostRequest"])
+        let event = Event(name: "Test", type: "type", source: "source", data: ["name": "testPostRequest"])
         MobileCore.dispatch(event: event)
         wait(for: [requestExpection], timeout: 2)
     }
@@ -95,8 +92,7 @@ class SignalIntegrationTests: XCTestCase {
         // setup
         mockRemoteRules(with: "rules_signal")
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedout",
-                                                        "rules.url" : "https://rules.com/rules.zip"])
-
+                                                        "rules.url": "https://rules.com/rules.zip"])
 
         let requestExpection = XCTestExpectation()
         requestExpection.isInverted = true
@@ -107,14 +103,14 @@ class SignalIntegrationTests: XCTestCase {
             return nil
         }
 
-        let event1 = Event(name: "Test", type: "type", source: "source", data:["name": "testPostRequest"])
-        let event2 = Event(name: "Test", type: "type", source: "source", data:["name": "testGetRequest"])
+        let event1 = Event(name: "Test", type: "type", source: "source", data: ["name": "testPostRequest"])
+        let event2 = Event(name: "Test", type: "type", source: "source", data: ["name": "testGetRequest"])
         MobileCore.dispatch(event: event1)
         MobileCore.dispatch(event: event2)
         wait(for: [requestExpection], timeout: 2)
     }
 
-    func mockRemoteRules(with localRulesName:String){
+    func mockRemoteRules(with localRulesName: String) {
         let response = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
         mockNetworkService.mock { request in

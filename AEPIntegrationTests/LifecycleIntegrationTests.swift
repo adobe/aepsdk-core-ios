@@ -40,7 +40,6 @@ class LifecycleIntegrationTests: XCTestCase {
         wait(for: [initExpection], timeout: 0.5)
     }
 
-
     func testInstall() {
         // setup
         let configData = """
@@ -51,7 +50,6 @@ class LifecycleIntegrationTests: XCTestCase {
         }
         """.data(using: .utf8)
         mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
-
 
         let lifecycleExpection = XCTestExpectation()
         mockNetworkService.mock { request in
@@ -110,7 +108,7 @@ class LifecycleIntegrationTests: XCTestCase {
           "rules.url" : "https://rules.com/rules.zip"
         }
         """.data(using: .utf8)
-        mockRemoteConfigAndRules(for:  "appid", with: configData, localRulesName: "rules_lifecycle")
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
 
         // test
         MobileCore.lifecycleStart(additionalContextData: nil)
@@ -143,7 +141,7 @@ class LifecycleIntegrationTests: XCTestCase {
           "rules.url" : "https://rules.com/rules.zip"
         }
         """.data(using: .utf8)
-        mockRemoteConfigAndRules(for:  "appid", with: configData, localRulesName: "rules_lifecycle")
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
 
         // test
         let lifecycleExpection = XCTestExpectation()
@@ -156,10 +154,9 @@ class LifecycleIntegrationTests: XCTestCase {
             return nil
         }
 
-        MobileCore.lifecycleStart(additionalContextData: ["key":"value"])
+        MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
         wait(for: [lifecycleExpection], timeout: 2)
     }
-
 
     func testSessionContinue() {
         // setup
@@ -194,7 +191,7 @@ class LifecycleIntegrationTests: XCTestCase {
         wait(for: [lifecycleExpection], timeout: 2)
     }
 
-    func mockRemoteConfigAndRules(for appId: String, with configData:Data?, localRulesName:String){
+    func mockRemoteConfigAndRules(for appId: String, with configData: Data?, localRulesName: String) {
         let initExpection = XCTestExpectation()
         let rulesExpection = XCTestExpectation()
 

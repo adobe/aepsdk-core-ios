@@ -111,7 +111,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         XCTAssertEqual(.optedOut, getPrivacyStatus())
     }
 
-    func mockRemoteConfig(for appId: String, with data:Data?){
+    func mockRemoteConfig(for appId: String, with data: Data?) {
         let initExpection = XCTestExpectation()
 
         let response = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
@@ -126,8 +126,8 @@ class ConfigurationIntegrationTests: XCTestCase {
 
     }
 
-    func getPrivacyStatus() -> PrivacyStatus?{
-        var returnedPrivacyStatus : PrivacyStatus?
+    func getPrivacyStatus() -> PrivacyStatus? {
+        var returnedPrivacyStatus: PrivacyStatus?
         let privacyExpection = XCTestExpectation()
         MobileCore.getPrivacyStatus { privacyStatus in
             returnedPrivacyStatus = privacyStatus

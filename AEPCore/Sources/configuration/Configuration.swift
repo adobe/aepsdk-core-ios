@@ -145,7 +145,7 @@ class Configuration: Extension {
         // check if the configuration state has downloaded the config associated with appId, if so early exit
         guard !configState.hasDownloadedConfig(appId: appId) else {
             sharedStateResolver(configState.environmentAwareConfiguration)
-            return            
+            return
         }
 
         // stop all other event processing while we are attempting to download the config

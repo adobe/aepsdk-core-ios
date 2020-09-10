@@ -27,10 +27,10 @@ extension UserDefaults {
         }
     }
 }
-extension FileManager{
+extension FileManager {
 
-    func clearCache()  {
-        if let url = self.urls(for: .cachesDirectory, in: .userDomainMask).first{
+    func clearCache() {
+        if let url = self.urls(for: .cachesDirectory, in: .userDomainMask).first {
 
             do {
                 try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.module.signal"))
@@ -44,7 +44,7 @@ extension FileManager{
                 print("ERROR DESCRIPTION: \(error)")
             }
             do {
-                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.mobile.diskcache" , isDirectory:true))
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.mobile.diskcache", isDirectory: true))
             } catch {
                 print("ERROR DESCRIPTION: \(error)")
             }
