@@ -12,10 +12,14 @@
 @testable import AEPServices
 import XCTest
 
+
 // TODO: - Add more robust testing. Also make sure to make use of the new return type for the unzip api in the tests
 class FileUnzipperTest: XCTestCase {
     let unzipper = FileUnzipper()
     let testDataFileName = "TestRules"
+    let testLargeFileName = "TestLarge"
+    let testCorruptFileName = "TestCorruptFile"
+    let testInvalidCompressionMethodFileName = "TestInvalidCompressionMethod"
 
     enum TestFileNames: String {
         case testDataSubFolderRulesName = "rules"
@@ -27,6 +31,12 @@ class FileUnzipperTest: XCTestCase {
     class var bundle: Bundle {
         return Bundle(for: self)
     }
+
+    static var tempZipDirectoryURL: URL = {
+        var tempZipDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+        tempZipDirectory.appendPathComponent("ZipTempDirectory")
+        return tempZipDirectory
+    }()
 
     override func setUp() {
         do {
@@ -41,7 +51,7 @@ class FileUnzipperTest: XCTestCase {
     }
 
     func testUnzippingRulesSuccessSimple() {
-        guard let sourceURL = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
+        guard let sourceURL = getResourceURLWith(name: testDataFileName) else {
             XCTFail()
             return
         }
@@ -52,7 +62,7 @@ class FileUnzipperTest: XCTestCase {
 
     func testUnzippingRulesSuccessFilesExist() {
         let fileManager = FileManager()
-        guard let sourceURL = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip") else {
+        guard let sourceURL = getResourceURLWith(name: testDataFileName) else {
             XCTFail()
             return
         }
@@ -105,5 +115,91 @@ class FileUnzipperTest: XCTestCase {
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testFileName)
         let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
         XCTAssertTrue(unzippedItems.isEmpty)
+    }
+
+    func testExtractCorruptFile() {
+        guard let sourceUrl = getResourceURLWith(name: testCorruptFileName) else {
+            XCTFail()
+            return
+        }
+
+        let fileManager = FileManager()
+        let destinationFileSystemRepresentation = fileManager.fileSystemRepresentation(withPath: sourceUrl.path)
+        let destinationFile: UnsafeMutablePointer<FILE> = fopen(destinationFileSystemRepresentation, "r+b")
+
+        do {
+            fseek(destinationFile, 64, SEEK_SET)
+            // Inject large enough zeroes block to make sure that libcompression detects failure when reading the stream
+            try ZipArchive.write(chunk: Data(count: 512*1024), to: destinationFile)
+            fclose(destinationFile)
+            guard let zipArchive = ZipArchive(url: sourceUrl) else {
+                XCTFail("Failed to read archive")
+                return
+            }
+            guard let entry = zipArchive.filter({ $0.path == "data.random"}).first else {
+                XCTFail("Failed to read entry")
+                return
+            }
+            _ = try zipArchive.extract(entry, to: FileUnzipperTest.tempZipDirectoryURL)
+        } catch let error as ZipArchive.DecompressionError {
+            XCTAssert(error == ZipArchive.DecompressionError.corruptedData)
+        } catch {
+            XCTFail("Unexpected error while testing unzip corrupted file")
+        }
+    }
+
+    func testExtractInvalidCompressionMethod() {
+        guard let sourceUrl = getResourceURLWith(name: testInvalidCompressionMethodFileName) else {
+            XCTFail()
+            return
+        }
+
+        guard let zipArchive = ZipArchive(url: sourceUrl) else {
+            XCTFail("Unable to create zip archive")
+            return
+        }
+
+        for entry in zipArchive {
+            do {
+                var tempFileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+                tempFileURL.appendPathComponent(entry.path)
+                _ = try zipArchive.extract(entry, to: tempFileURL)
+            } catch let error as ZipArchive.ArchiveError {
+                XCTAssert(error == .invalidCompressionMethod)
+            } catch {
+                XCTFail("Unexpected error while trying to extract zip entry with invalid compression method")
+            }
+        }
+    }
+
+    func testLargeUnzipPerformance() {
+        guard let sourceUrl = getResourceURLWith(name: testLargeFileName) else {
+            XCTFail()
+            return
+        }
+        let temporaryDirectory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("performanceTestFiles")
+        measure {
+            let unzippedItems = self.unzipper.unzipItem(at: sourceUrl, to: temporaryDirectory)
+            XCTAssertEqual(unzippedItems.count, 2)
+        }
+    }
+
+    func testSmallUnzipPerformance() {
+
+        guard let sourceURL = getResourceURLWith(name: testDataFileName) else {
+            XCTFail()
+            return
+        }
+        let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testDataFileName)
+        measure {
+            let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
+            XCTAssertFalse(unzippedItems.isEmpty)
+        }
+    }
+
+    // MARK: - Helpers
+    func getResourceURLWith(name: String) -> URL? {
+        return FileUnzipperTest.bundle.url(forResource: name, withExtension: "zip")
     }
 }

@@ -39,16 +39,17 @@ extension FileManager {
     /// - Returns: The attributes as a dictionary
     class func attributes(from entry: ZipEntry) -> [FileAttributeKey: Any] {
         let centralDirectoryStructure = entry.centralDirectoryStructure
-        let fileTime = centralDirectoryStructure.lastModFileTime
-        let fileDate = centralDirectoryStructure.lastModFileDate
+        let entryType = entry.type
+        let entryTime = centralDirectoryStructure.lastModFileTime
+        let entryDate = centralDirectoryStructure.lastModFileDate
         let defaultPermissions = FileUnzipperConstants.defaultFilePermissions
         var attributes = [.posixPermissions: defaultPermissions] as [FileAttributeKey: Any]
-        attributes[.modificationDate] = Date(dateTime: (fileDate, fileTime))
+        attributes[.modificationDate] = Date(dateTime: (entryDate, entryTime))
         let versionMadeBy = centralDirectoryStructure.versionMadeBy
         guard let osType = ZipEntry.OSType(rawValue: UInt(versionMadeBy >> 8)) else { return attributes }
 
         let externalFileAttributes = centralDirectoryStructure.externalFileAttributes
-        let permissions = self.permissions(for: externalFileAttributes, osType: osType)
+        let permissions = self.permissions(for: externalFileAttributes, osType: osType, entryType: entryType)
         attributes[.posixPermissions] = NSNumber(value: permissions)
         return attributes
     }
@@ -59,14 +60,14 @@ extension FileManager {
     ///     - externalFileAttributes: The external file attributes from teh central directory structure
     ///     - osType: The OS type
     /// - Returns: The permissions for the ZipEntry as UInt16
-    class func permissions(for externalFileAttributes: UInt32, osType: ZipEntry.OSType) -> UInt16 {
+    class func permissions(for externalFileAttributes: UInt32, osType: ZipEntry.OSType, entryType: ZipEntry.EntryType) -> UInt16 {
         switch osType {
         case .unix, .osx:
             let permissions = mode_t(externalFileAttributes >> 16) & (~S_IFMT)
-            let defaultPermissions = FileUnzipperConstants.defaultFilePermissions
+            let defaultPermissions = entryType == ZipEntry.EntryType.directory ? FileUnzipperConstants.defaultDirectoryPermissions : FileUnzipperConstants.defaultFilePermissions
             return permissions == 0 ? defaultPermissions : UInt16(permissions)
         default:
-            return FileUnzipperConstants.defaultFilePermissions
+            return entryType == .directory ? FileUnzipperConstants.defaultDirectoryPermissions : FileUnzipperConstants.defaultFilePermissions
         }
     }
 }
