@@ -59,15 +59,19 @@ class LifecycleMetricsBuilder {
     /// - Days since last launch
     /// - Daily engaged event
     /// - Monthly engaged event
+    /// - Previous OS version
+    /// - Previous app id
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     @discardableResult
-    func addLaunchData() -> LifecycleMetricsBuilder {
+    func addLaunchData(prevOsVersion: String?, prevAppId: String?) -> LifecycleMetricsBuilder {
         if let firstLaunchDate: Date = dataStore.getObject(key: KEYS.INSTALL_DATE) {
             guard let daysSinceFirstLaunch = Calendar.current.dateComponents([.day], from: firstLaunchDate, to: date).day else {
                 return self
             }
 
             lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
+            lifecycleMetrics.previousOsVersion = prevOsVersion
+            lifecycleMetrics.previousAppId = prevAppId
         }
 
         if let lastLaunchDate: Date = dataStore.getObject(key: KEYS.LAST_LAUNCH_DATE) {
@@ -145,11 +149,9 @@ class LifecycleMetricsBuilder {
     /// - Previous app id
     /// Return: `LifecycleMetricsBuilder` returns the mutated builder
     @discardableResult
-    func addCrashData(previousSessionCrash: Bool, osVersion: String, appId: String) -> LifecycleMetricsBuilder {
+    func addCrashData(previousSessionCrash: Bool) -> LifecycleMetricsBuilder {
         if previousSessionCrash {
             lifecycleMetrics.crashEvent = true
-            lifecycleMetrics.previousOsVersion = osVersion
-            lifecycleMetrics.previousAppId = appId
         }
         return self
     }

@@ -73,11 +73,9 @@ struct LifecycleState {
             // upgrade and launch hits
             let upgrade = isUpgrade()
             metricsBuilder.addLaunchEventData()
-                .addLaunchData()
+                .addLaunchData(prevOsVersion: sessionContainer?.osVersion, prevAppId: sessionContainer?.appId)
                 .addUpgradeData(upgrade: upgrade)
-                .addCrashData(previousSessionCrash: previousSessionInfo.isCrash,
-                              osVersion: sessionContainer?.osVersion ?? "unavailable",
-                              appId: sessionContainer?.appId ?? "unavailable")
+                .addCrashData(previousSessionCrash: previousSessionInfo.isCrash)
 
             let sessionContextData = lifecycleSession.getSessionData(startDate: date, sessionTimeout: sessionTimeout, previousSessionInfo: previousSessionInfo)
             lifecycleData.sessionContextData = sessionContextData
