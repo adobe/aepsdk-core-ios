@@ -42,7 +42,6 @@ class LaunchRulesEngine {
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
-        RulesEngineLog.filter = LaunchRulesEngine.getRulesEngineLogLevel(Log.logFilter)
         if RulesEngineLog.logging == nil {
             RulesEngineLog.logging = RulesEngineNativeLogging()
         }

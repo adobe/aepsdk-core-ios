@@ -32,6 +32,8 @@ class RulesEngineNativeLogging: RulesEngineLogging {
     }
 
     func log(level: RulesEngineLogLevel, label: String, message: String) {
-        ServiceProvider.shared.loggingService.log(level: convert(level), label: label, message: message)
+        if Log.logFilter >= convert(level) {
+            ServiceProvider.shared.loggingService.log(level: convert(level), label: label, message: message)
+        }
     }
 }
