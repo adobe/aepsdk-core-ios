@@ -243,7 +243,16 @@ final class EventHub {
         // TODO: Determine which version of Core to use in the top level version field
         let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
                                    EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
-        createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
+
+        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value.sharedState else {
+            Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered with EventHub")
+            return
+        }
+
+        let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
+        sharedState.set(version: version, data: data)
+        dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME))
+        Log.debug(label: "\(LOG_TAG):\(#function)", "Shared state is created for \(EventHubConstants.NAME) with data \(String(describing: data)) and version \(version)")
     }
 }
 
