@@ -60,21 +60,6 @@ class LaunchRulesEngine {
         })
     }
 
-    private static func getRulesEngineLogLevel(_ level: LogLevel) -> RulesEngineLogLevel {
-        switch level {
-        case .trace:
-            return RulesEngineLogLevel.trace
-        case .debug:
-            return RulesEngineLogLevel.debug
-        case .warning:
-            return RulesEngineLogLevel.warning
-        case .error:
-            return RulesEngineLogLevel.error
-        @unknown default:
-            return RulesEngineLogLevel.error
-        }
-    }
-
     /// Register a `RulesTracer`
     /// - Parameter tracer: a `RulesTracer` closure to know result of rules evaluation
     func trace(with tracer: @escaping RulesTracer) {

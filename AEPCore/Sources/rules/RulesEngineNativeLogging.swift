@@ -11,7 +11,6 @@
 
 import AEPServices
 import Foundation
-import os.log
 @_implementationOnly import SwiftRulesEngine
 
 class RulesEngineNativeLogging: RulesEngineLogging {
