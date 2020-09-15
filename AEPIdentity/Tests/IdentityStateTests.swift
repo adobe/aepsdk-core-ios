@@ -402,7 +402,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
-        XCTAssertTrue(hit.url.absoluteString.contains("d_nsid=DSID_20915")) // id namespace should be added
+        XCTAssertTrue(hit.url.absoluteString.contains("d_consent_ic=DSID_20915")) // id namespace should be added
     }
 
     /// Tests that the ad is is correctly updated when a new value is passed
@@ -429,7 +429,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
-        XCTAssertTrue(hit.url.absoluteString.contains("d_nsid=DSID_20915")) // id namespace should be added
+        XCTAssertTrue(hit.url.absoluteString.contains("d_consent_ic=DSID_20915")) // id namespace should be added
     }
 
     /// When ad id is currently zero string and updated to an empty string we should not sync
