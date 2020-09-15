@@ -53,8 +53,10 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let firstLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: lastLaunchDate!)
         dataStore?.getObjectValues.append(firstLaunchDate!)
         dataStore?.getObjectValues.append(lastLaunchDate!)
+        let osVersion = "13.0"
+        let appID = "testAppID"
 
-        metricsBuilder?.addLaunchData()
+        metricsBuilder?.addLaunchData(prevOsVersion: osVersion, prevAppId: appID)
         let metrics = metricsBuilder?.build()
 
         XCTAssertTrue(metrics!.dailyEngagedEvent ?? false)
@@ -62,6 +64,8 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         // Check that the "daysSinceLastLaunch" and "daysSinceFirstLaunch" values are correct
         XCTAssertEqual(metrics?.daysSinceLastLaunch, 1)
         XCTAssertEqual(metrics?.daysSinceFirstLaunch, 2)
+        XCTAssertEqual(metrics?.previousOsVersion, osVersion)
+        XCTAssertEqual(metrics?.previousAppId, appID)
     }
 
     // Tests add launch data when last launch was a month before this launch
@@ -70,8 +74,10 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let firstLaunchDate = Calendar.current.date(byAdding: .day, value: -1, to: lastLaunchDate!)
         dataStore?.getObjectValues.append(firstLaunchDate!)
         dataStore?.getObjectValues.append(lastLaunchDate!)
+        let osVersion = "13.0"
+        let appID = "testAppID"
 
-        metricsBuilder?.addLaunchData()
+        metricsBuilder?.addLaunchData(prevOsVersion: osVersion, prevAppId: appID)
         let metrics = metricsBuilder?.build()
 
         XCTAssertTrue(metrics!.dailyEngagedEvent ?? false)
@@ -79,6 +85,8 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         // Check that the "daysSinceLastLaunch" and "daysSinceFirstLaunch" values are correct when last launch was a month prior, and first launch was one day before that
         XCTAssertEqual(metrics?.daysSinceLastLaunch, 30)
         XCTAssertEqual(metrics?.daysSinceFirstLaunch, 31)
+        XCTAssertEqual(metrics?.previousOsVersion, osVersion)
+        XCTAssertEqual(metrics?.previousAppId, appID)
     }
 
     func testAddGenericDataWithLaunches() {
@@ -135,13 +143,9 @@ class LifecycleMetricsBuilderTests: XCTestCase {
 
     func testAddCrashData() {
         let previousSessionCrash = true
-        let osVersion = "13.0"
-        let appID = "testAppID"
-        metricsBuilder?.addCrashData(previousSessionCrash: previousSessionCrash, osVersion: osVersion, appId: appID)
+        metricsBuilder?.addCrashData(previousSessionCrash: previousSessionCrash)
         let metrics = metricsBuilder?.build()
         XCTAssertEqual(metrics?.crashEvent, previousSessionCrash)
-        XCTAssertEqual(metrics?.previousOsVersion, osVersion)
-        XCTAssertEqual(metrics?.previousAppId, appID)
     }
 
     func testAddDeviceData() {
