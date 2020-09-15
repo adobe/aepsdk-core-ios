@@ -372,9 +372,11 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
+    /// Tests that an extension that is registered can be unregistered without an error
     func testEventHubUnregisterExtensionSuccess() {
         // setup
         let expectation = XCTestExpectation(description: "Extension is unregistered successfully after eventHub.start()")
+        expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
         registerMockExtension(MockExtensionTwo.self)
 
@@ -382,7 +384,75 @@ class EventHubTests: XCTestCase {
         // test
         eventHub.start()
         eventHub.unregisterExtension(MockExtensionTwo.self) { error in
+            expectation.fulfill()
             XCTAssertNil(error)
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+
+    /// Tests that an extension that is not registered cannot be unregistered
+    func testEventHubUnregisterExtensionFails() {
+        // setup
+        let expectation = XCTestExpectation(description: "Extension is unregistration fails as MockExtensionTwo is not registered")
+        expectation.assertForOverFulfill = true
+
+        // test
+        eventHub.start()
+        eventHub.unregisterExtension(MockExtensionTwo.self) { error in
+            expectation.fulfill()
+            XCTAssertEqual(EventHubError.extensionNotRegistered, error)
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+
+    /// An extension can be registered, then unregistered, then registered again
+    func testEventHubUnregisterExtensionThenRegister() {
+        // setup
+        registerMockExtension(MockExtensionTwo.self)
+        let expectation = XCTestExpectation(description: "Extension is unregistered successfully after eventHub.start()")
+        expectation.assertForOverFulfill = true
+        let registerExpectation = XCTestExpectation(description: "Extension is registered successfully after being unregistered")
+        registerExpectation.assertForOverFulfill = true
+
+        MockExtensionTwo.unregistrationClosure = { expectation.fulfill() }
+        MockExtensionTwo.registrationClosure = { registerExpectation.fulfill() }
+
+        // test
+        eventHub.start()
+        eventHub.unregisterExtension(MockExtensionTwo.self) { error in
+            XCTAssertNil(error)
+            self.eventHub.registerExtension(MockExtensionTwo.self) { (error) in
+                XCTAssertNil(error)
+            }
+        }
+
+        // verify
+        wait(for: [expectation, registerExpectation], timeout: 0.5)
+    }
+
+    /// Tests that after an extension is unregistered that it cannot receive new events
+    func testEventHubUnregisteredExtensionDoesNotReceiveEvents() {
+        // setup
+        let expectation = XCTestExpectation(description: "Mock extension should only receive one event")
+        expectation.assertForOverFulfill = true
+        expectation.expectedFulfillmentCount = 2 // should receive two events, "First event" and the event hub shared state update
+        registerMockExtension(MockExtensionTwo.self)
+
+        MockExtensionTwo.eventReceivedClosure = { event in
+            print(event.name)
+            expectation.fulfill()
+        }
+
+        // test
+        eventHub.start()
+        eventHub.dispatch(event: Event(name: "First event", type: EventType.acquisition, source: EventSource.none, data: nil))
+        eventHub.unregisterExtension(MockExtensionTwo.self) { error in
+            XCTAssertNil(error)
+            self.eventHub.dispatch(event: Event(name: "Second event", type: EventType.acquisition, source: EventSource.none, data: nil))
         }
 
         // verify
