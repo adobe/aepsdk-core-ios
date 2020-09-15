@@ -12,6 +12,12 @@
 import Compression
 import Foundation
 
+/// The compression method of a `ZipEntry` in a `ZipArchive`
+enum CompressionMethod: UInt16 {
+    /// Contents were compressed using a zlib compatible Deflate algorithm
+    case deflate = 8
+}
+
 /// A sequence of uncompressed or compressed ZIP entries.
 ///
 /// You use a `ZipArchive` to read existing ZIP files.
@@ -19,6 +25,13 @@ import Foundation
 /// A `ZipArchive` is a sequence of ZipEntries. You can
 /// iterate over an archive using a `for`-`in` loop to get access to individual `ZipEntry` objects
 final class ZipArchive: Sequence {
+
+    /// A DataError for the data within a ZipArchive
+    enum DataError: Error {
+        case unreadableFile
+        case unwritableFile
+    }
+
     /// An unsigned 32-Bit Integer representing a checksum.
     typealias CRC32 = UInt32
 
@@ -42,16 +55,8 @@ final class ZipArchive: Sequence {
 
     /// An error that occurs during reading, creating or updating a ZIP file.
     enum ArchiveError: Error {
-        /// Thrown when an archive file is either damaged or inaccessible.
-        case unreadableArchive
         /// Thrown when a `ZipEntry` can't be stored in the archive with the proposed compression method.
         case invalidCompressionMethod
-        /// Thrown when the start of the central directory exceeds `UINT32_MAX`
-        case invalidStartOfCentralDirectoryOffset
-        /// Thrown when an archive does not contain the required End of Central Directory Record.
-        case missingEndOfCentralDirectoryRecord
-        /// Thrown when an extract operation was canceled.
-        case cancelledOperation
     }
 
     private let LOG_PREFIX = "ZipArchive"
@@ -137,6 +142,9 @@ final class ZipArchive: Sequence {
             let consumer = { try ZipArchive.write(chunk: $0, to: destinationFile) }
             // Set file pointer position to the given entry's data offset
             fseek(archiveFile, entry.dataOffset, SEEK_SET)
+            guard let _ = CompressionMethod(rawValue: entry.localFileHeader.compressionMethod) else {
+                throw ArchiveError.invalidCompressionMethod
+            }
             checksum = try readCompressed(entry: entry, bufferSize: bufferSize, with: consumer)
         case .directory:
             let consumer = { (_: Data) in
@@ -322,11 +330,6 @@ final class ZipArchive: Sequence {
         }
         return result ^ mask
     }
-}
-
-enum DataError: Error {
-    case unreadableFile
-    case unwritableFile
 }
 
 // Data helpers for a ZipArchive

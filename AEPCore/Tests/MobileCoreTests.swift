@@ -34,112 +34,6 @@ class MobileCoreTests: XCTestCase {
         semaphore.wait()
     }
 
-    func testLegacyRegisterAndStart() {
-        let expectation = XCTestExpectation(description: "callback invoked")
-        expectation.assertForOverFulfill = true
-        MockExtension.registrationClosure = { expectation.fulfill() }
-        MockExtension.registerExtension()
-        MobileCore.start {}
-        wait(for: [expectation], timeout: 0.5)
-    }
-
-    func testLegacyRegisterAndStartMultiple() {
-        let expectation = XCTestExpectation(description: "mock extension registered")
-        expectation.assertForOverFulfill = true
-        let expectation2 = XCTestExpectation(description: "mock extension 2 registered")
-        expectation2.assertForOverFulfill = true
-        MockExtension.registrationClosure = { expectation.fulfill() }
-        MockExtension.registerExtension()
-        MockExtensionTwo.registrationClosure = { expectation2.fulfill() }
-        MockExtensionTwo.registerExtension()
-        MobileCore.start {}
-        wait(for: [expectation, expectation2], timeout: 0.5)
-    }
-
-    func testLegacyRegisterEventDispatchSimple() {
-        let expectation = XCTestExpectation(description: "callback invoked")
-        expectation.assertForOverFulfill = true
-        let eventName = "test-event"
-        MockExtension.eventReceivedClosure = {
-            if $0.name == eventName { expectation.fulfill() }
-        }
-        MockExtension.registerExtension()
-        MobileCore.start {}
-        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
-        wait(for: [expectation], timeout: 1.0)
-    }
-
-    func testLegacyRegisterExtensionsDispatchEventBeforeRegister() {
-        let expectation = XCTestExpectation(description: "callback invoked")
-        expectation.assertForOverFulfill = true
-        let eventName = "test-event"
-        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
-        MockExtension.eventReceivedClosure = { if $0.name == eventName { expectation.fulfill() } }
-        MockExtension.registerExtension()
-
-        MobileCore.start {}
-        wait(for: [expectation], timeout: 1.0)
-    }
-
-    func testLegacyRegisterMultipleExtensionsSimpleEventDispatch() {
-        let expectation = XCTestExpectation(description: "callback invoked")
-        expectation.assertForOverFulfill = true
-        expectation.expectedFulfillmentCount = 2
-        let eventName = "test-event"
-        MockExtension.eventReceivedClosure = {
-            if $0.name == eventName { expectation.fulfill() }
-        }
-        MockExtensionTwo.eventReceivedClosure = {
-            if $0.name == eventName { expectation.fulfill() }
-        }
-
-        MockExtension.registerExtension()
-        MockExtensionTwo.registerExtension()
-        MobileCore.start {}
-        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
-        wait(for: [expectation], timeout: 1.0)
-    }
-
-    func testLegacyRegisterMultipleExtensionsDispatchEventBeforeRegister() {
-        let eventName = "test-event"
-        let expectation = XCTestExpectation(description: "callback invoked")
-        expectation.assertForOverFulfill = true
-        expectation.expectedFulfillmentCount = 2
-
-        MockExtension.eventReceivedClosure = {
-            if $0.name == eventName { expectation.fulfill() }
-        }
-        MockExtensionTwo.eventReceivedClosure = {
-            if $0.name == eventName { expectation.fulfill() }
-        }
-        MockExtension.registerExtension()
-        MockExtensionTwo.registerExtension()
-        EventHub.shared.dispatch(event: Event(name: eventName, type: EventType.analytics, source: EventSource.requestContent, data: nil))
-        MobileCore.start {}
-
-        wait(for: [expectation], timeout: 1.0)
-    }
-
-    func testLegacyRegisterSameExtensionTwice() {
-        MockExtension.registerExtension()
-        let expectation = XCTestExpectation(description: "callback invoked")
-        expectation.assertForOverFulfill = true
-
-        MockExtension.registrationClosure = { expectation.fulfill() }
-        MobileCore.start {}
-        wait(for: [expectation], timeout: 0.5)
-
-        let expectation2 = XCTestExpectation(description: "callback invoked 2nd time")
-        expectation2.assertForOverFulfill = true
-        expectation2.isInverted = true
-
-        MockExtension.registrationClosure = { expectation2.fulfill() }
-        MockExtension.registerExtension()
-        MobileCore.start {}
-
-        wait(for: [expectation2], timeout: 0.5)
-    }
-
     func testRegisterExtensionsSimple() {
         let expectation = XCTestExpectation(description: "registration completed in timely fashion")
         expectation.assertForOverFulfill = true
@@ -252,7 +146,6 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtension.self])
-        MobileCore.start {}
 
         // verify
         wait(for: [expectation], timeout: 0.25)

@@ -131,6 +131,18 @@ class SharedStateTest: XCTestCase {
         XCTAssertEqual(sharedState.resolve(version: 0).status, SharedStateStatus.none)
     }
 
+    func testSharedStatePendingPreservesData() {
+        // setup
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+        sharedState.addPending(version: 2)
+
+        // test
+        let (data, _) = sharedState.resolve(version: 2)
+
+        // verify
+        XCTAssertEqual(SharedStateTestHelper.ONE as! [String: String], data as! [String: String])
+    }
+
     func testAddPerformance() {
         // This is an example of a performance test case.
         measure {

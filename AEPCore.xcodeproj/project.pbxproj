@@ -173,7 +173,6 @@
 		3FB66A9C24CA003700502CAF /* SwiftRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3FB66A9B24CA003700502CAF /* SwiftRulesEngine */; };
 		3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9E24CA004400502CAF /* CoreConstants.swift */; };
 		3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9F24CA004400502CAF /* MobileCore.swift */; };
-		3FB66AC724CA004400502CAF /* Extension+Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA024CA004400502CAF /* Extension+Register.swift */; };
 		3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */; };
 		3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */; };
 		3FB66ACC24CA004400502CAF /* EventHubPlaceholderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AA624CA004400502CAF /* EventHubPlaceholderExtension.swift */; };
@@ -268,6 +267,11 @@
 		3FF8171924D89B500064DFA1 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */; };
 		3FF8171C24D89B8F0064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
 		3FF8172324D8ABF80064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
+		78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */; };
+		78AA4EBC2502E42400205AE9 /* TestCorruptFile.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78AA4EBB2502E42400205AE9 /* TestCorruptFile.zip */; };
+		78AA4EBE2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78AA4EBD2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip */; };
+		78AA4EC02509731B00205AE9 /* FileManager+ZipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */; };
+		78AA4EC2250AB55800205AE9 /* TestLarge.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78AA4EC1250AB55800205AE9 /* TestLarge.zip */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
@@ -646,7 +650,6 @@
 		3FB5F7CF24D2848900F0F6DF /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		3FB66A9E24CA004400502CAF /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreConstants.swift; sourceTree = "<group>"; };
 		3FB66A9F24CA004400502CAF /* MobileCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileCore.swift; sourceTree = "<group>"; };
-		3FB66AA024CA004400502CAF /* Extension+Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Extension+Register.swift"; sourceTree = "<group>"; };
 		3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+Configuration.swift"; sourceTree = "<group>"; };
 		3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+Lifecycle.swift"; sourceTree = "<group>"; };
 		3FB66AA624CA004400502CAF /* EventHubPlaceholderExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventHubPlaceholderExtension.swift; sourceTree = "<group>"; };
@@ -747,6 +750,11 @@
 		3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPCoreMocks.h; path = AEPCore/Mocks/AEPCoreMocks.h; sourceTree = SOURCE_ROOT; };
 		3FF8171424D89B500064DFA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPCore/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
 		3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableExtensionRuntime.swift; path = AEPCore/Mocks/TestableExtensionRuntime.swift; sourceTree = SOURCE_ROOT; };
+		78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipArchiveTest.swift; sourceTree = "<group>"; };
+		78AA4EBB2502E42400205AE9 /* TestCorruptFile.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestCorruptFile.zip; sourceTree = "<group>"; };
+		78AA4EBD2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestInvalidCompressionMethod.zip; sourceTree = "<group>"; };
+		78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+ZipTests.swift"; sourceTree = "<group>"; };
+		78AA4EC1250AB55800205AE9 /* TestLarge.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestLarge.zip; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -1285,6 +1293,8 @@
 				3F03980824BE61520019F095 /* SQLiteWrapperTests.swift */,
 				3F03980224BE61520019F095 /* SystemInfoServiceTest.swift */,
 				3F03980124BE61520019F095 /* UnzipperTest.swift */,
+				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
+				78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */,
 				3F03980524BE61520019F095 /* URLServiceTest.swift */,
 				3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */,
 			);
@@ -1312,6 +1322,9 @@
 				3F03983724BE62AA0019F095 /* TestConfig.json */,
 				3F03983524BE62AA0019F095 /* TestImage.png */,
 				3F03983424BE62AA0019F095 /* TestRules.zip */,
+				78AA4EBB2502E42400205AE9 /* TestCorruptFile.zip */,
+				78AA4EBD2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip */,
+				78AA4EC1250AB55800205AE9 /* TestLarge.zip */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -1433,7 +1446,6 @@
 			isa = PBXGroup;
 			children = (
 				3FB66A9E24CA004400502CAF /* CoreConstants.swift */,
-				3FB66AA024CA004400502CAF /* Extension+Register.swift */,
 				3FB66A9F24CA004400502CAF /* MobileCore.swift */,
 				3FB66AA224CA004400502CAF /* MobileCore+Configuration.swift */,
 				3FB66AA324CA004400502CAF /* MobileCore+Lifecycle.swift */,
@@ -2006,6 +2018,9 @@
 				3F03983824BE62AA0019F095 /* TestRules.zip in Resources */,
 				3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */,
 				3F03983A24BE62AA0019F095 /* ADBMobileConfig.json in Resources */,
+				78AA4EBC2502E42400205AE9 /* TestCorruptFile.zip in Resources */,
+				78AA4EC2250AB55800205AE9 /* TestLarge.zip in Resources */,
+				78AA4EBE2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip in Resources */,
 				3F03983924BE62AA0019F095 /* TestImage.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2226,7 +2241,6 @@
 				3FB66AE824CA004400502CAF /* Cacheable.swift in Sources */,
 				3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */,
 				3FB66AE124CA004400502CAF /* LaunchIDManager.swift in Sources */,
-				3FB66AC724CA004400502CAF /* Extension+Register.swift in Sources */,
 				3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */,
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
@@ -2360,11 +2374,13 @@
 				3F03982724BE61520019F095 /* ThreadSafeDictionaryTests.swift in Sources */,
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
 				2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */,
+				78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */,
 				3F03981924BE61520019F095 /* URLServiceTest.swift in Sources */,
 				3F03982324BE61520019F095 /* PersistentHitQueueTests.swift in Sources */,
 				3F03981724BE61520019F095 /* DataQueueService+Testable.swift in Sources */,
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */,
+				78AA4EC02509731B00205AE9 /* FileManager+ZipTests.swift in Sources */,
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
 				3F03981D24BE61520019F095 /* MockSystemInfoService.swift in Sources */,
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
