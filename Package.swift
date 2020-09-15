@@ -25,15 +25,13 @@ let package = Package(
         .library(name: "AEPLifecycle", targets: ["AEPLifecycle"]),
         .library(name: "AEPServices", targets: ["AEPServices"]),
         .library(name: "AEPSignal", targets: ["AEPSignal"]),
-        
         // dynamic
         .library(name: "AEPCoreDynamic", type: .dynamic, targets: ["AEPCore"]),
         .library(name: "AEPIdentityDynamic", type: .dynamic, targets: ["AEPIdentity"]),
         .library(name: "AEPLifecycleDynamic", type: .dynamic, targets: ["AEPLifecycle"]),
         .library(name: "AEPServicesDynamic", type: .dynamic, targets: ["AEPServices"]),
         .library(name: "AEPSignalDynamic", type: .dynamic, targets: ["AEPSignal"]),
-        
-        // statics
+        // static
         .library(name: "AEPCoreStatic", type: .static, targets: ["AEPCore"]),
         .library(name: "AEPIdentityStatic", type: .static, targets: ["AEPIdentity"]),
         .library(name: "AEPLifecycleStatic", type: .static, targets: ["AEPLifecycle"]),
