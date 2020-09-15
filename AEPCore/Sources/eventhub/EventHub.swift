@@ -130,7 +130,7 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
-    ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil, it will be versioned at the latest
+    ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil the shared state is versioned zero
     func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
         guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) else {
             Log.error(label: "\(LOG_TAG):\(#function)", "Error in creating shared state.")
@@ -145,7 +145,7 @@ final class EventHub {
     /// Sets the `SharedState` for the extension to pending at `event`'s version and returns a `SharedStateResolver` which is to be invoked with data for the `SharedState` once available.
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
-    ///   - event: Event which has the `SharedState` should be versioned for
+    ///   - event: Event which has the `SharedState` should be versioned for, if nil the shared state is versioned zero
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
     func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
         var pendingVersion: Int?
@@ -165,7 +165,7 @@ final class EventHub {
     /// Retrieves the `SharedState` for a specific extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the latest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the earliest `SharedState`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else {
