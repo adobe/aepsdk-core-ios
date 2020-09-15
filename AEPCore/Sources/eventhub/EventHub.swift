@@ -173,9 +173,9 @@ final class EventHub {
             return nil
         }
 
-        var version = Int.max
+        var version = 0 // default to version 0 if event nil
         if let unwrappedEvent = event {
-            version = eventNumberMap[unwrappedEvent.id] ?? Int.max
+            version = eventNumberMap[unwrappedEvent.id] ?? 0
         }
 
         let result = sharedState.resolve(version: version)
@@ -203,13 +203,10 @@ final class EventHub {
             return nil
         }
 
-        var version = -1
+        var version = 0 // default to version 0
         // attempt to version at the event
         if let unwrappedEvent = event, let eventNumber = eventNumberMap[unwrappedEvent.id] {
             version = eventNumber
-        } else {
-            // default to next event number
-            version = eventNumberCounter.incrementAndGet()
         }
 
         guard let sharedState = extensionContainer.sharedState else { return nil }
