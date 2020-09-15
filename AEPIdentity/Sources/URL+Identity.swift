@@ -65,7 +65,7 @@ extension URL {
             queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.DEVICE_CONSENT, value: idEmpty)]
 
             if idEmpty == "0" {
-                queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.NAMESPACE_CODE, value: IdentityConstants.ADID_DSID)]
+                queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.CONSENT_INTEGRATION_CODE, value: IdentityConstants.ADID_DSID)]
             }
         }
 
