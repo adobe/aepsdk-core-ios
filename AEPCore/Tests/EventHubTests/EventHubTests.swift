@@ -372,6 +372,23 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
+    func testEventHubUnregisterExtensionSuccess() {
+        // setup
+        let expectation = XCTestExpectation(description: "Extension is unregistered successfully after eventHub.start()")
+        expectation.assertForOverFulfill = true
+        registerMockExtension(MockExtensionTwo.self)
+
+        MockExtensionTwo.unregistrationClosure = { expectation.fulfill() }
+        // test
+        eventHub.start()
+        eventHub.unregisterExtension(MockExtensionTwo.self) { error in
+            XCTAssertNil(error)
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+
     /// Tests that when we share state that we use configuration's version as the top level version and include all the extensions
     /*
      Expected format:

@@ -111,6 +111,28 @@ final class EventHub {
         }
     }
 
+    /// Unregisters the extension from the `EventHub` if registered
+    /// - Parameters:
+    ///   - type: The extension to be unregistered
+    ///   - completion: A closure invoked when the extension has been unregistered
+    func unregisterExtension(_ type: Extension.Type, completion: @escaping (_ error: EventHubError?) -> Void) {
+        eventHubQueue.async {
+            guard !type.typeName.isEmpty else {
+                Log.error(label: "\(self.LOG_TAG):\(#function)", "Extension name must not be empty.")
+                completion(.invalidExtensionName)
+                return
+            }
+            guard self.registeredExtensions[type.typeName] != nil else {
+                Log.error(label: "\(self.LOG_TAG):\(#function)", "Cannot unregister an extension that is not registered.")
+                completion(.duplicateExtensionName)
+                return
+            }
+
+            let extensionContainer = self.registeredExtensions.removeValue(forKey: type.typeName) // remove the corresponding extension container
+            extensionContainer?.exten?.onUnregistered() // invoke the onUnregistered delegate function
+        }
+    }
+
     /// Registers an `EventListener` which will be invoked when the response `Event` to `triggerEvent` is dispatched
     /// - Parameters:
     ///   - triggerEvent: An `Event` which will trigger a response `Event`

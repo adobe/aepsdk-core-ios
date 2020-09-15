@@ -25,6 +25,9 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public init() {}
 
     // MARK: - ExtensionRuntime methods implementation
+    public func unregisterExtension() {
+        // no-op
+    }
 
     public func registerListener(type: String, source: String, listener: @escaping EventListener) {
         listeners["\(type)-\(source)"] = listener

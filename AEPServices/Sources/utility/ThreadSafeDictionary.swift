@@ -53,4 +53,10 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     @inlinable public func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
         return queue.sync { return try? self.dictionary.first(where: predicate) }
     }
+
+    @inlinable public func removeValue(forKey key: K) -> V? {
+        return queue.sync {
+            return self.dictionary.removeValue(forKey: key)
+        }
+    }
 }
