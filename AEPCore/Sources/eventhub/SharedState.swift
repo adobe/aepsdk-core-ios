@@ -15,7 +15,7 @@ import Foundation
 
 /// Type representing the state of an extension's `SharedState`
 @objc (AEPSharedStateStatus) public enum SharedStateStatus: Int {
-    case set, pending, none
+    case settled, set, pending, none
 }
 
 class SharedState {
@@ -87,6 +87,18 @@ class SharedState {
                 cur = unwrapped.previousNode
             }
             return (nil, .none)
+        }
+    }
+
+    /// Sets the heads status to `settled` if `version` is greater than or equal to the heads version
+    /// - Parameter version: Version of the `Event` just processed
+    internal func settle(for version: Int) {
+        queue.async(flags: .barrier) {
+            guard let head = self.head else { return }
+            // mark previous shared state as settled if, the event pointer has moved past the version and current status is set
+            if head.version <= version && head.nodeStatus == .set {
+                self.head?.nodeStatus = .settled
+            }
         }
     }
 

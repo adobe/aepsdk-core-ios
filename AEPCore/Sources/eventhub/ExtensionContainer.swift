@@ -107,6 +107,10 @@ private extension ExtensionContainer {
             }
         }
 
+        if let eventNumber = EventHub.shared.eventNumberFor(event: event) {
+            sharedState?.settle(for: eventNumber)
+        }
+
         return true
     }
 }

@@ -143,6 +143,65 @@ class SharedStateTest: XCTestCase {
         XCTAssertEqual(SharedStateTestHelper.ONE as! [String: String], data as! [String: String])
     }
 
+    // MARK: settle(...) tests
+
+    /// Tests that when the version is equal to the head version that we settle the set shared state
+    func testSettleShouldSettleSet() {
+        // setup
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+
+        // test
+        sharedState.settle(for: 1)
+
+        // verify
+        XCTAssertEqual(SharedStateStatus.settled, sharedState.resolve(version: 1).status)
+    }
+
+    /// Tests that when the version is greater than or equal to the head version that we settle the set shared state
+    func testSettleShouldSettleSetGreaterThan() {
+        // setup
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+
+        // test
+        sharedState.settle(for: 2)
+
+        // verify
+        XCTAssertEqual(SharedStateStatus.settled, sharedState.resolve(version: 1).status)
+    }
+
+    /// Tests that when the version is less than to the head version that we do not settle the shared state
+    func testSettleShouldNotSettle() {
+        // setup
+        sharedState.set(version: 2, data: SharedStateTestHelper.ONE)
+
+        // test
+        sharedState.settle(for: 1)
+
+        // verify
+        XCTAssertEqual(SharedStateStatus.set, sharedState.resolve(version: 1).status)
+    }
+
+    /// Tests that we do not settle the pending shared state even when version is greater than or equal to the head version
+    func testSettleShouldNotSettlePending() {
+        // setup
+        sharedState.addPending(version: 1)
+
+        // test
+        sharedState.settle(for: 1)
+
+        // verify
+        XCTAssertEqual(SharedStateStatus.pending, sharedState.resolve(version: 1).status)
+    }
+
+    /// Tests that we do not settle the pending shared state even when version is greater than or equal to the head version
+    func testSettleShouldNotSettleNone() {
+        // test
+        sharedState.settle(for: 1)
+
+        // verify
+        XCTAssertEqual(SharedStateStatus.none, sharedState.resolve(version: 1).status)
+    }
+
     func testAddPerformance() {
         // This is an example of a performance test case.
         measure {

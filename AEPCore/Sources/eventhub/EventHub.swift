@@ -195,6 +195,13 @@ final class EventHub {
         preprocessors.append(preprocessor)
     }
 
+    /// Returns the event number for the given `Event`
+    /// - Parameter event: An `Event` that has been processed through the `EventHub`
+    /// - Returns: The event number for the `Event` if it has been dispatched through the `EventHub`, otherwise nil
+    func eventNumberFor(event: Event) -> Int? {
+        return eventNumberMap[event.id]
+    }
+
     // MARK: Private
 
     private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
