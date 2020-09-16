@@ -86,7 +86,7 @@ class MobileCoreTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
-    
+
     /// Tests that a registered extension can be unregistered
     func testUnRegisterExtensionsSimple() {
         let expectation = XCTestExpectation(description: "unregistration completed in timely fashion")
