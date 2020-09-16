@@ -45,25 +45,45 @@ Protocols that describe a capability should be named using the suffixes "able", 
 
 #### Constants
 
-Use caseless enums to store constants as static variables. NOTE: The advantage of using enums over structs is that they can't be mistakenly instantiated and function as a pure namespace.
+Use caseless enums to store constants as static variables. 
 
 Preferred:
 ```swift
 enum LifecycleConstants {
-  static let start = "start"
-  static let pause = "pause"
+  static let START = "START"
+  static let PAUSE = "PAUSE"
 }
 ```
 
 Not Preferred:
 ```swift
-extension AEPCore: Lifecycle {
-  // Constants
+extension AEPCore {
   static let start = "start"
   static let pause = "pause"
 
 }
 ```
+
+> Note: The advantage of using enums over structs is that they can't be mistakenly instantiated and function as a pure namespace.
+
+When defining a constant outside of an enum, they should be defined as `static let` using upper-case and underscores.
+
+Preferred:
+```swift
+class Lifecycle {
+  static let start = "START"
+  static let pause = "PAUSE"
+}
+```
+
+Not Preferred:
+```swift
+class Lifecycle {
+  let start = "start"
+  let pause = "pause"
+}
+```
+
 
 ### AEP Extensions
 

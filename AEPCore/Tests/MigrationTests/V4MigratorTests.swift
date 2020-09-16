@@ -39,7 +39,7 @@ class V4MigratorTests: XCTestCase {
     /// Tests that on a fresh install that all values are nil and nothing is migrated
     func testFreshInstall() {
         // setup
-        v4Defaults.set(nil, forKey: V4MigrationConstants.Lifecycle.V4InstallDate)
+        v4Defaults.set(nil, forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
@@ -52,64 +52,64 @@ class V4MigratorTests: XCTestCase {
     func testExistingV4Data() {
         // setup
         let mockDate = Date()
-        v4Defaults.set(["acqkey": "acqvalue"], forKey: V4MigrationConstants.MobileServices.V4AcquisitionData)
-        v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4Ids)
-        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4MID)
-        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4TTL)
-        v4Defaults.set("vid", forKey: V4MigrationConstants.Identity.V4Vid)
-        v4Defaults.set("blob", forKey: V4MigrationConstants.Identity.V4Blob)
-        v4Defaults.set("hint", forKey: V4MigrationConstants.Identity.V4Hint)
-        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4SyncTime)
-        v4Defaults.set("pushtoken", forKey: V4MigrationConstants.Identity.V4PushToken)
-        v4Defaults.set(true, forKey: V4MigrationConstants.Identity.V4PushEnabled)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4InstallDate)
-        v4Defaults.set("os", forKey: V4MigrationConstants.Lifecycle.V4OS)
-        v4Defaults.set(552, forKey: V4MigrationConstants.Lifecycle.V4Launches)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4StartDate)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4PauseDate)
-        v4Defaults.set("version", forKey: V4MigrationConstants.Lifecycle.V4LastVersion)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4UpgradeDate)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate)
-        v4Defaults.set("appid", forKey: V4MigrationConstants.Lifecycle.V4ApplicationID)
-        v4Defaults.set(["lifecyclekey": "lifecycleval"], forKey: V4MigrationConstants.Lifecycle.V4LifecycleData)
-        v4Defaults.set(true, forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose)
-        v4Defaults.set(3, forKey: V4MigrationConstants.Lifecycle.V4LaunchesAfterUpgrade)
-        v4Defaults.set(["test": 1], forKey: V4MigrationConstants.MobileServices.V4InAppExcludeList)
-        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus)
+        v4Defaults.set(["acqkey": "acqvalue"], forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA)
+        v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4_IDS)
+        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4_TTL)
+        v4Defaults.set("vid", forKey: V4MigrationConstants.Identity.V4_VID)
+        v4Defaults.set("blob", forKey: V4MigrationConstants.Identity.V4_BLOB)
+        v4Defaults.set("hint", forKey: V4MigrationConstants.Identity.V4_HINT)
+        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4_SYNC_TIME)
+        v4Defaults.set("pushtoken", forKey: V4MigrationConstants.Identity.V4_PUSH_TOKEN)
+        v4Defaults.set(true, forKey: V4MigrationConstants.Identity.V4_PUSH_ENABLED)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE)
+        v4Defaults.set("os", forKey: V4MigrationConstants.Lifecycle.V4_OS)
+        v4Defaults.set(552, forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_START_DATE)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_PAUSE_DATE)
+        v4Defaults.set("version", forKey: V4MigrationConstants.Lifecycle.V4_LAST_VERSION)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_UPGRADE_DATE)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE)
+        v4Defaults.set("appid", forKey: V4MigrationConstants.Lifecycle.V4_APPLICATION_ID)
+        v4Defaults.set(["lifecyclekey": "lifecycleval"], forKey: V4MigrationConstants.Lifecycle.V4_LIFECYCLE_DATA)
+        v4Defaults.set(true, forKey: V4MigrationConstants.Lifecycle.V4_SUCCESSFUL_CLOSE)
+        v4Defaults.set(3, forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES_AFTER_UPGRADE)
+        v4Defaults.set(["test": 1], forKey: V4MigrationConstants.MobileServices.V4_IN_APP_EXCLUDE_LIST)
+        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
 
         // verify
         // v4 defaults should have been removed
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4AcquisitionData))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Ids))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4MID))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4TTL))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Vid))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Blob))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Hint))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4SyncTime))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4PushToken))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4PushEnabled))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4InstallDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4OS))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4Launches))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4StartDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4PauseDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LastVersion))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4UpgradeDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4ApplicationID))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LifecycleData))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LaunchesAfterUpgrade))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4InAppExcludeList))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_IDS))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_MID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_TTL))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_VID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_BLOB))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_HINT))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_SYNC_TIME))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_PUSH_TOKEN))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_PUSH_ENABLED))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_OS))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_START_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_PAUSE_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAST_VERSION))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_UPGRADE_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_APPLICATION_ID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LIFECYCLE_DATA))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_SUCCESSFUL_CLOSE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES_AFTER_UPGRADE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_IN_APP_EXCLUDE_LIST))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         // data should have been migrated to v5 location
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let actualAcqData: [String: String]? = dataStore.getObject(key: V4MigrationConstants.MobileServices.V5AcquisitionData)
+        let actualAcqData: [String: String]? = dataStore.getObject(key: V4MigrationConstants.MobileServices.V5_ACQUISITION_DATA)
         XCTAssertEqual(["acqkey": "acqvalue"], actualAcqData)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         XCTAssertTrue(dataStore.getBool(key: V4MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
@@ -119,11 +119,11 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual("version", dataStore.getString(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate, lastUsedDate)
-        let msInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.install, fallback: nil)
+        let msInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.INSTALL, fallback: nil)
         XCTAssertEqual(mockDate, msInstallDate)
-        let msSeachAdInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.installSearchAd, fallback: nil)
+        let msSeachAdInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.INSTALL_SEARCH_AD, fallback: nil)
         XCTAssertEqual(mockDate, msSeachAdInstallDate)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.MobileServices.V5InAppExcludeList))
+        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.MobileServices.V5_IN_APP_EXCLUDE_LIST))
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
@@ -133,64 +133,64 @@ class V4MigratorTests: XCTestCase {
         // setup
         mockDataStore.setAppGroup("test-app-group")
         let mockDate = Date()
-        v4Defaults.set(["acqkey": "acqvalue"], forKey: V4MigrationConstants.MobileServices.V4AcquisitionData)
-        v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4Ids)
-        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4MID)
-        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4TTL)
-        v4Defaults.set("vid", forKey: V4MigrationConstants.Identity.V4Vid)
-        v4Defaults.set("blob", forKey: V4MigrationConstants.Identity.V4Blob)
-        v4Defaults.set("hint", forKey: V4MigrationConstants.Identity.V4Hint)
-        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4SyncTime)
-        v4Defaults.set("pushtoken", forKey: V4MigrationConstants.Identity.V4PushToken)
-        v4Defaults.set(true, forKey: V4MigrationConstants.Identity.V4PushEnabled)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4InstallDate)
-        v4Defaults.set("os", forKey: V4MigrationConstants.Lifecycle.V4OS)
-        v4Defaults.set(552, forKey: V4MigrationConstants.Lifecycle.V4Launches)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4StartDate)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4PauseDate)
-        v4Defaults.set("version", forKey: V4MigrationConstants.Lifecycle.V4LastVersion)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4UpgradeDate)
-        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate)
-        v4Defaults.set("appid", forKey: V4MigrationConstants.Lifecycle.V4ApplicationID)
-        v4Defaults.set(["lifecyclekey": "lifecycleval"], forKey: V4MigrationConstants.Lifecycle.V4LifecycleData)
-        v4Defaults.set(true, forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose)
-        v4Defaults.set(3, forKey: V4MigrationConstants.Lifecycle.V4LaunchesAfterUpgrade)
-        v4Defaults.set(["test": 1], forKey: V4MigrationConstants.MobileServices.V4InAppExcludeList)
-        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus)
+        v4Defaults.set(["acqkey": "acqvalue"], forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA)
+        v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4_IDS)
+        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4_TTL)
+        v4Defaults.set("vid", forKey: V4MigrationConstants.Identity.V4_VID)
+        v4Defaults.set("blob", forKey: V4MigrationConstants.Identity.V4_BLOB)
+        v4Defaults.set("hint", forKey: V4MigrationConstants.Identity.V4_HINT)
+        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4_SYNC_TIME)
+        v4Defaults.set("pushtoken", forKey: V4MigrationConstants.Identity.V4_PUSH_TOKEN)
+        v4Defaults.set(true, forKey: V4MigrationConstants.Identity.V4_PUSH_ENABLED)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE)
+        v4Defaults.set("os", forKey: V4MigrationConstants.Lifecycle.V4_OS)
+        v4Defaults.set(552, forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_START_DATE)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_PAUSE_DATE)
+        v4Defaults.set("version", forKey: V4MigrationConstants.Lifecycle.V4_LAST_VERSION)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_UPGRADE_DATE)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE)
+        v4Defaults.set("appid", forKey: V4MigrationConstants.Lifecycle.V4_APPLICATION_ID)
+        v4Defaults.set(["lifecyclekey": "lifecycleval"], forKey: V4MigrationConstants.Lifecycle.V4_LIFECYCLE_DATA)
+        v4Defaults.set(true, forKey: V4MigrationConstants.Lifecycle.V4_SUCCESSFUL_CLOSE)
+        v4Defaults.set(3, forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES_AFTER_UPGRADE)
+        v4Defaults.set(["test": 1], forKey: V4MigrationConstants.MobileServices.V4_IN_APP_EXCLUDE_LIST)
+        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
 
         // verify
         // v4 defaults should have been removed
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4AcquisitionData))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Ids))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4MID))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4TTL))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Vid))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Blob))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Hint))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4SyncTime))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4PushToken))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4PushEnabled))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4InstallDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4OS))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4Launches))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4StartDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4PauseDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LastVersion))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4UpgradeDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4ApplicationID))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LifecycleData))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LaunchesAfterUpgrade))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4InAppExcludeList))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_IDS))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_MID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_TTL))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_VID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_BLOB))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_HINT))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_SYNC_TIME))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_PUSH_TOKEN))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_PUSH_ENABLED))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_OS))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_START_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_PAUSE_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAST_VERSION))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_UPGRADE_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_APPLICATION_ID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LIFECYCLE_DATA))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_SUCCESSFUL_CLOSE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES_AFTER_UPGRADE))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_IN_APP_EXCLUDE_LIST))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         // data should have been migrated to v5 location
         let dataStore = NamedCollectionDataStore(name: "testable")
-        let actualAcqData: [String: String]? = dataStore.getObject(key: V4MigrationConstants.MobileServices.V5AcquisitionData)
+        let actualAcqData: [String: String]? = dataStore.getObject(key: V4MigrationConstants.MobileServices.V5_ACQUISITION_DATA)
         XCTAssertEqual(["acqkey": "acqvalue"], actualAcqData)
         XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
         XCTAssertTrue(dataStore.getBool(key: V4MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED) ?? false)
@@ -200,11 +200,11 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual("version", dataStore.getString(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION))
         let lastUsedDate: Date? = dataStore.getObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, fallback: nil)
         XCTAssertEqual(mockDate, lastUsedDate)
-        let msInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.install, fallback: nil)
+        let msInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.INSTALL, fallback: nil)
         XCTAssertEqual(mockDate, msInstallDate)
-        let msSeachAdInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.installSearchAd, fallback: nil)
+        let msSeachAdInstallDate: Date? = dataStore.getObject(key: V4MigrationConstants.MobileServices.INSTALL_SEARCH_AD, fallback: nil)
         XCTAssertEqual(mockDate, msSeachAdInstallDate)
-        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.MobileServices.V5InAppExcludeList))
+        XCTAssertNotNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.MobileServices.V5_IN_APP_EXCLUDE_LIST))
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual("optedout", storedConfig?["global.privacy"]?.stringValue)
     }
@@ -212,18 +212,18 @@ class V4MigratorTests: XCTestCase {
     /// Tests that existing v4 config is migrated
     func testExistingV4ConfigurationData() {
         // setup
-        v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4Ids)
-        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4MID)
-        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus)
+        v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4_IDS)
+        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
 
         // verify
         // v4 defaults should have been removed
-        XCTAssertNotNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4Ids))
-        XCTAssertNotNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4MID))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNotNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_IDS))
+        XCTAssertNotNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_MID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         // only v5 configuration defaults have been set
         XCTAssertNil(mockDataStore.get(collectionName: "", key: V4MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES))
@@ -235,7 +235,7 @@ class V4MigratorTests: XCTestCase {
     /// Tests that when we have existing v5 config without a privacy that we migrated the v4 privacy and keep the existing config values
     func testExistingV4ConfigurationWhenV5ContainsOverriddenConfigWithoutPrivacyKey() {
         // setup
-        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus)
+        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
 
         let existingConfig: [String: AnyCodable] = ["global.ssl": AnyCodable(true)]
         let dataStore = NamedCollectionDataStore(name: "testable")
@@ -246,7 +246,7 @@ class V4MigratorTests: XCTestCase {
 
         // verify
         // v4 defaults removed
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(2, storedConfig?.count)
@@ -257,7 +257,7 @@ class V4MigratorTests: XCTestCase {
     /// Tests that when we have existing v5 config with a privacy that we did not migrate the v4 privacy and keep the existing config values
     func testExistingV4ConfigurationWhenV5ContainsOverriddenConfigWithPrivacyKey() {
         // setup
-        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus)
+        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
 
         let existingConfig: [String: AnyCodable] = ["global.ssl": AnyCodable(true), "global.privacy": AnyCodable(PrivacyStatus.optedIn.rawValue)]
         let dataStore = NamedCollectionDataStore(name: "testable")
@@ -268,7 +268,7 @@ class V4MigratorTests: XCTestCase {
 
         // verify
         // v4 defaults removed
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
         XCTAssertEqual(2, storedConfig?.count)
@@ -279,14 +279,14 @@ class V4MigratorTests: XCTestCase {
     /// Tests that the opted in privacy status is migrated
     func testExistingV4ConfigurationDataForOptIn() {
         // setup
-        v4Defaults.set(1, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus) // v4 opted in value
+        v4Defaults.set(1, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS) // v4 opted in value
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
 
         // verify
         // v4 defaults removed
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
@@ -297,14 +297,14 @@ class V4MigratorTests: XCTestCase {
     /// Tests that the opted out privacy status is migrated
     func testExistingV4ConfigurationDataForOptOut() {
         // setup
-        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus) // v4 opted out value
+        v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS) // v4 opted out value
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
 
         // verify
         // v4 defaults removed
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
@@ -315,14 +315,14 @@ class V4MigratorTests: XCTestCase {
     /// Tests that the unknown privacy status is migrated
     func testExistingV4ConfigurationDataForUnknown() {
         // setup
-        v4Defaults.set(3, forKey: V4MigrationConstants.Configuration.V4PrivacyStatus) // v4 opted out value
+        v4Defaults.set(3, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS) // v4 opted out value
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
 
         // verify
         // v4 defaults removed
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         let dataStore = NamedCollectionDataStore(name: "testable")
         let storedConfig: [String: AnyCodable]? = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG)
