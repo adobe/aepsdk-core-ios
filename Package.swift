@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
@@ -43,7 +43,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "AEPCore",
-                dependencies: ["AEPServices", "SwiftRulesEngine"],
+                dependencies: ["AEPServices", "AEPRulesEngine"],
                 path: "AEPCore/Sources"),
         .target(name: "AEPIdentity",
                 dependencies: ["AEPCore"],

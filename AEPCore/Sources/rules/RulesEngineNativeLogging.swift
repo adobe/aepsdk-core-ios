@@ -11,7 +11,7 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import SwiftRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 class RulesEngineNativeLogging: RulesEngineLogging {
     /// Converts `RulesEngineLogLevel` to Core `LogLevel`
