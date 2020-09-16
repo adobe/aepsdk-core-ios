@@ -71,8 +71,8 @@ When defining a constant outside of an enum, they should be defined as `static l
 Preferred:
 ```swift
 class Lifecycle {
-  static let start = "START"
-  static let pause = "PAUSE"
+  static let START = "START"
+  static let PAUSE = "PAUSE"
 }
 ```
 
