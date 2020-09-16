@@ -28,6 +28,10 @@ class TestableExtensionRuntime: ExtensionRuntime {
         listeners["\(EventType.wildcard)-\(EventSource.wildcard)"]?(event)
     }
 
+    func unregisterExtension() {
+        // no-op
+    }
+
     func registerListener(type: String, source: String, listener: @escaping EventListener) {
         listeners["\(type)-\(source)"] = listener
     }

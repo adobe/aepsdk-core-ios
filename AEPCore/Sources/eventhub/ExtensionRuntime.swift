@@ -14,6 +14,10 @@ import Foundation
 
 /// provides all the methods needed by an `Extension`
 @objc(AEPExtensionRuntime) public protocol ExtensionRuntime {
+
+    /// Unregisters this extension from the `EventHub`
+    func unregisterExtension()
+
     /// Registers an `EventListener` for the specified `EventType` and `EventSource`
     /// - Parameters:
     ///   - type: `EventType` to listen for
