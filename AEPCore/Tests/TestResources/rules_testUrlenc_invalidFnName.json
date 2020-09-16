@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.lifecycle"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.responseContent"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.launchevent",
+                            "matcher": "ex",
+                            "values": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RC48ef3f5e83c84405a3da6cc5128c090c",
+          "type": "url",
+          "detail": {
+            "url": "http://www.adobe.com/a={%urlenc1(~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername)%}"
+          }
+        }
+      ]
+    }
+  ]
+}

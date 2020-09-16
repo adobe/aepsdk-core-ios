@@ -16,13 +16,14 @@ import Foundation
 /// Manages the business logic of the Identity extension
 class IdentityState {
     private let LOG_TAG = "IdentityState"
-    private(set) var identityProperties: IdentityProperties
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
+        var identityProperties: IdentityProperties
     #else
         private var lastValidConfig: [String: Any] = [:]
+        private(set) var identityProperties: IdentityProperties
     #endif
 
     /// Creates a new `IdentityState` with the given identity properties
@@ -109,9 +110,10 @@ class IdentityState {
         var customerIds = event.identifiers?.map { CustomIdentity(origin: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, type: $0.key, identifier: $0.value, authenticationState: authState) } ?? []
 
         // update adid if changed and extract the new adid value as VisitorId to be synced
-        if let adId = event.adId, shouldUpdateAdId(newAdID: adId.identifier ?? "") {
+        let (adIdChanged, shouldAddConsentFlag) = shouldUpdateAdId(newAdID: event.adId?.identifier)
+        if adIdChanged, let adId = event.adId {
             // check if changed, update
-            identityProperties.advertisingIdentifier = adId.identifier
+            identityProperties.advertisingIdentifier = event.adId?.identifier
             customerIds.append(adId)
         }
 
@@ -121,8 +123,8 @@ class IdentityState {
         customerIds.removeAll(where: { $0.identifier?.isEmpty ?? true }) // clean all identifiers by removing all that have a nil or empty identifier
 
         // valid config: check if there's a need to sync. Don't if we're already up to date.
-        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync, currentEventValidConfig: lastValidConfig) {
-            queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event)
+        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
+            queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, addConsentFlag: shouldAddConsentFlag)
         } else {
             Log.debug(label: LOG_TAG, "sync identifiers request failed, shouldSync returned false.")
         }
@@ -254,10 +256,24 @@ class IdentityState {
 
     /// Determines if we should update the ad id with `newAdID`
     /// - Parameter newAdID: the new ad id
-    /// - Returns: True if we should update the ad id, false otherwise
-    private func shouldUpdateAdId(newAdID: String) -> Bool {
+    /// - Returns: A tuple indicating if the ad id has changed, and if the consent flag should be added
+    private func shouldUpdateAdId(newAdID: String?) -> (adIdChanged: Bool, addConsentFlag: Bool) {
+        guard let newAdID = newAdID else { return (false, false) }
         let existingAdId = identityProperties.advertisingIdentifier ?? ""
-        return (!newAdID.isEmpty && newAdID != existingAdId) || (newAdID.isEmpty && !existingAdId.isEmpty)
+
+        // did the advertising identifier change?
+        if (!newAdID.isEmpty && newAdID != existingAdId)
+            || (newAdID.isEmpty && !existingAdId.isEmpty) {
+            // Now we know the value changed, but did it change to/from null?
+            // Handle case where existingAdId loaded from persistence with all zeros and new value is not empty.
+            if newAdID.isEmpty || existingAdId.isEmpty || existingAdId == IdentityConstants.Default.ZERO_ADVERTISING_ID {
+                return (true, true)
+            }
+
+            return (true, false)
+        }
+
+        return (false, false)
     }
 
     /// Queues an Identity hit within the `hitQueue`
@@ -265,7 +281,8 @@ class IdentityState {
     ///   - identityProperties: Current identity properties
     ///   - configSharedState: Current configuration shared state
     ///   - event: event responsible for the hit
-    private func queueHit(identityProperties: IdentityProperties, configSharedState: [String: Any], event: Event) {
+    ///   - addConsentFlag: flag indicating if the adId changed
+    private func queueHit(identityProperties: IdentityProperties, configSharedState: [String: Any], event: Event, addConsentFlag: Bool) {
         let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.Default.SERVER
 
         guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else {
@@ -273,7 +290,7 @@ class IdentityState {
             return
         }
 
-        guard let url = URL.buildIdentityHitURL(experienceCloudServer: server, orgId: orgId, identityProperties: identityProperties, dpids: event.dpids ?? [:]) else {
+        guard let url = URL.buildIdentityHitURL(experienceCloudServer: server, orgId: orgId, identityProperties: identityProperties, dpids: event.dpids ?? [:], addConsentFlag: addConsentFlag) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, failed to create hit URL")
             return
         }

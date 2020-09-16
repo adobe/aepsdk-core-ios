@@ -14,7 +14,7 @@ import AEPCore
 import AEPServices
 import Foundation
 
-@objc(AEPLifecycle)
+@objc(AEPMobileLifecycle)
 public class Lifecycle: NSObject, Extension {
     private var lifecycleState: LifecycleState
 

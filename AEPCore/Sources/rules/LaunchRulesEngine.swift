@@ -15,6 +15,7 @@ import Foundation
 
 /// A rules engine for Launch rules
 class LaunchRulesEngine {
+    private let LOG_TAG = "\(RulesConstants.LOG_MODULE_PREFIX) - LaunchRulesEngine"
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
@@ -24,6 +25,7 @@ class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE = "triggeredconsequence"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
+    private static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
 
     private let transform = Transform()
     private let name: String
@@ -40,6 +42,9 @@ class LaunchRulesEngine {
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
+        if RulesEngineLog.logging == nil {
+            RulesEngineLog.logging = RulesEngineNativeLogging()
+        }
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
         /// Uses this flag to decide if we need to cache incoming events
@@ -47,6 +52,12 @@ class LaunchRulesEngine {
             cachedEvents = [Event]()
             dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
         }
+        transform.register(name: LaunchRulesEngine.URL_ENCODING_FUNCTION_IN_RULES, transformation: { value in
+            if let valueString = value as? String {
+                return URLEncoder.encode(value: valueString)
+            }
+            return value
+        })
     }
 
     /// Register a `RulesTracer`
@@ -59,7 +70,7 @@ class LaunchRulesEngine {
     /// - Parameter urlString: the url of the remote rules
     func loadRemoteRules(from urlString: String) {
         guard let url = URL(string: urlString) else {
-            Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
+            Log.warning(label: LOG_TAG, "Invalid rules ulr: \(urlString)")
             return
         }
         rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
@@ -73,7 +84,7 @@ class LaunchRulesEngine {
             self.rulesQueue.sync {
                 self.rulesEngine.clearRules()
                 self.rulesEngine.addRules(rules: rules)
-                Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from remote (count: \(rules.count))")
+                Log.debug(label: self.LOG_TAG, "Rules load from remote (count: \(rules.count))")
             }
             self.sendReprocessEventsRequest()
         }
@@ -83,7 +94,7 @@ class LaunchRulesEngine {
     /// - Parameter urlString: the url of the remote rules
     func loadCachedRules(for urlString: String) {
         guard let url = URL(string: urlString) else {
-            Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules ulr: \(urlString)")
+            Log.warning(label: LOG_TAG, "Invalid rules ulr: \(urlString)")
             return
         }
         guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else {
@@ -97,7 +108,7 @@ class LaunchRulesEngine {
         rulesQueue.async {
             self.rulesEngine.clearRules()
             self.rulesEngine.addRules(rules: rules)
-            Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Rules load from cache (count: \(rules.count))")
+            Log.debug(label: self.LOG_TAG, "Rules load from cache (count: \(rules.count))")
         }
         sendReprocessEventsRequest()
     }
@@ -140,20 +151,30 @@ class LaunchRulesEngine {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
-                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
+                    guard let from = consequenceWithConcreteValue.eventData else {
+                        Log.error(label: LOG_TAG, "Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
-                    Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Attaching event data with \(from)")
+                    guard let to = eventData else {
+                        Log.error(label: LOG_TAG, "Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
+                        continue
+                    }
+                    Log.trace(label: LOG_TAG, "Attaching event data with \(from)")
                     eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
-                    guard let from = consequenceWithConcreteValue.eventData, let to = eventData else {
+                    guard let from = consequenceWithConcreteValue.eventData else {
+                        Log.error(label: LOG_TAG, "Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
-                    Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Modifying event data with \(from)")
+                    guard let to = eventData else {
+                        Log.error(label: LOG_TAG, "Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
+                        continue
+                    }
+                    Log.trace(label: LOG_TAG, "Modifying event data with \(from)")
                     eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
-                        Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Generating new consequence event \(event)")
+                        Log.trace(label: LOG_TAG, "Generating new consequence event \(event)")
                         extensionRuntime.dispatch(event: event)
                     }
                 }

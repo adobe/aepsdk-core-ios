@@ -14,7 +14,7 @@ import AEPServices
 import Foundation
 
 /// Core extension for the Adobe Experience Platform SDK
-@objc(AEPCore) public final class MobileCore: NSObject {
+@objc(AEPMobileCore) public final class MobileCore: NSObject {
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         if wrapperType == .none {
@@ -69,16 +69,6 @@ import Foundation
         }
 
         EventHub.shared.dispatch(event: event)
-    }
-
-    /// Start event processing
-    // @available(*, deprecated, message: "Use `registerExtensions(extensions:)` for both registering extensions and starting the SDK")
-    @objc(start:)
-    public static func start(_ completion: @escaping (() -> Void)) {
-        // Start the event hub processing
-        let pending = [Configuration.self] + MobileCore.pendingExtensions.shallowCopy
-        MobileCore.pendingExtensions.clear()
-        registerExtensions(pending) { completion() }
     }
 
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.

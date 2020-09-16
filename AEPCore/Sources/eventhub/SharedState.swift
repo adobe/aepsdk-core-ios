@@ -42,7 +42,8 @@ class SharedState {
     /// - Parameters:
     ///   - version: The version of the `SharedState` to to create as pending
     internal func addPending(version: Int) {
-        add(version: version, data: nil, status: .pending)
+        // set state to pending and use the existing (if any) shared state data as placeholder
+        add(version: version, data: resolve(version: Int.max).value, status: .pending)
     }
 
     /// Updates a pending version of `SharedState` to a concrete value.

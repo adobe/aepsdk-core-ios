@@ -18,7 +18,7 @@ import XCTest
 
 class EventHubContractTest: XCTestCase {
     override func setUp() {
-        EventHub.reset()
+        EventHub.reset()  
         ContractExtensionOne.reset()
         ContractExtensionTwo.reset()
     }
