@@ -529,7 +529,6 @@ class EventHubTests: XCTestCase {
         let coreVersion = sharedState?[EventHubConstants.EventDataKeys.VERSION] as! String
         let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
         let mockDetails = registeredExtensions?[mockExtension.friendlyName] as? [String: String]
-        let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.friendlyName] as? [String: Any]
 
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
         XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
