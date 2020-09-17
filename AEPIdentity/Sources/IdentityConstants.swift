@@ -20,7 +20,6 @@ enum IdentityConstants {
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
     static let VISITOR_ID_PARAMETER_KEY_CUSTOMER = "d_cid_ic"
     static let KEY_PATH_OPTOUT = "/demoptout.jpg"
-    static let DEFAULT_SERVER = "dpm.demdex.net"
     static let CID_DELIMITER = "%01"
     static let ADID_DSID = "DSID_20915"
 
