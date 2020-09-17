@@ -66,21 +66,23 @@ extension AEPCore {
 
 > Note: The advantage of using enums over structs is that they can't be mistakenly instantiated and function as a pure namespace.
 
-When defining a constant outside of an enum, they should be defined as `static let` using upper-case and underscores.
+When defining a constant outside of an enum, they should be defined as `private` and can either be `static` or just an instance variable depending on the use case using upper-case and underscores.
 
 Preferred:
 ```swift
 class Lifecycle {
-  static let START = "START"
-  static let PAUSE = "PAUSE"
+  private static let START = "START"
+  private static let PAUSE = "PAUSE"
+  private let MY_CONST = "MY_CONST"
 }
 ```
 
 Not Preferred:
 ```swift
 class Lifecycle {
-  let start = "start"
+  static let start = "start"
   let pause = "pause"
+  let MY_CONST = "MY_CONST"
 }
 ```
 
