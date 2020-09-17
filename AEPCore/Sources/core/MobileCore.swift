@@ -56,7 +56,7 @@ import Foundation
     @objc(registerExtension:completion:)
     public static func registerExtension(_ exten: Extension.Type, _ completion: (() -> Void)? = nil) {
         EventHub.shared.registerExtension(exten) { _ in
-            EventHub.shared.start() // call start to share EventHub shared state
+            EventHub.shared.shareEventHubSharedState()
             completion?()
         }
     }

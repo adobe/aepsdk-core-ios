@@ -213,6 +213,28 @@ final class EventHub {
     func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor) {
         preprocessors.append(preprocessor)
     }
+    
+    // MARK: Internal
+    /// Shares a shared state for the `EventHub` with data containing all the registered extensions
+    func shareEventHubSharedState() {
+        var extensionsInfo = [String: [String: Any]]()
+        for (_, val) in registeredExtensions.shallowCopy
+            where val.sharedStateName != EventHubConstants.NAME {
+            if let exten = val.exten {
+                let version = type(of: exten).extensionVersion
+                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
+                if let metadata = exten.metadata, !metadata.isEmpty {
+                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
+                }
+            }
+        }
+
+        // TODO: Determine which version of Core to use in the top level version field
+        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
+                                   EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
+        createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
+    }
 
     // MARK: Private
 
@@ -245,27 +267,6 @@ final class EventHub {
     private func createSharedStateEvent(extensionName: String) -> Event {
         return Event(name: EventHubConstants.STATE_CHANGE, type: EventType.hub, source: EventSource.sharedState,
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
-    }
-
-    /// Shares a shared state for the `EventHub` with data containing all the registered extensions
-    private func shareEventHubSharedState() {
-        var extensionsInfo = [String: [String: Any]]()
-        for (_, val) in registeredExtensions.shallowCopy
-            where val.sharedStateName != EventHubConstants.NAME {
-            if let exten = val.exten {
-                let version = type(of: exten).extensionVersion
-                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
-                if let metadata = exten.metadata, !metadata.isEmpty {
-                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
-                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
-                }
-            }
-        }
-
-        // TODO: Determine which version of Core to use in the top level version field
-        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
-                                   EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
-        createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
     }
 }
 
