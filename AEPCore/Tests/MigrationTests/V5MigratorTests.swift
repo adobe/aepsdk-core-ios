@@ -64,7 +64,7 @@ class V5MigratorTests: XCTestCase {
     /// Tests that on a fresh install that all values are nil and nothing is migrated
     func testFreshInstall() {
         // setup
-        v5Defaults.set(nil, forKey: V4MigrationConstants.Lifecycle.V4InstallDate)
+        v5Defaults.set(nil, forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE)
 
         // test
         V4Migrator(idParser: MockIDParser()).migrate()
