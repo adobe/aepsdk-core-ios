@@ -213,7 +213,7 @@ final class EventHub {
     func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor) {
         preprocessors.append(preprocessor)
     }
-    
+
     // MARK: Internal
     /// Shares a shared state for the `EventHub` with data containing all the registered extensions
     func shareEventHubSharedState() {
