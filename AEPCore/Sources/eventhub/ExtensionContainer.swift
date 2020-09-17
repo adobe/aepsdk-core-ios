@@ -34,6 +34,9 @@ class ExtensionContainer {
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
 
+    /// The last `Event` that was processed by this extension, nil if no events have been processed
+    var lastProcessedEvent: Event?
+
     init(_ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
         extensionQueue = queue
         eventOrderer = OperationOrderer<Event>()
@@ -85,8 +88,8 @@ extension ExtensionContainer: ExtensionRuntime {
         return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event)
     }
 
-    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
-        return EventHub.shared.getSharedState(extensionName: extensionName, event: event)
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
+        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
     }
 
     func startEvents() {
@@ -112,6 +115,7 @@ private extension ExtensionContainer {
             }
         }
 
+        lastProcessedEvent = event
         return true
     }
 }

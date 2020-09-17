@@ -185,8 +185,8 @@ final class EventHub {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the latest `SharedState`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
-        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
+        guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState else {
             Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered")
             return nil
         }
@@ -197,7 +197,14 @@ final class EventHub {
         }
 
         let result = sharedState.resolve(version: version)
-        return SharedStateResult(status: result.status, value: result.value)
+
+        let stateProviderLastVersion = eventNumberMap[container.lastProcessedEvent?.id ?? UUID()] ?? 0
+        // shared state is still considered pending if barrier is used and the state provider has not processed past this 
+        if barrier && stateProviderLastVersion < version && result.status == .set {
+            return SharedStateResult(status: .pending, value: result.value)
+        }
+
+        return SharedStateResult(status: result.status == .settled ? .set : result.status, value: result.value)
     }
 
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type
