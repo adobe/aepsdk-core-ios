@@ -32,12 +32,12 @@ class LifecycleIntegrationTests: XCTestCase {
         mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
 
-        let initExpection = XCTestExpectation(description: "init extensions")
+        let initExpectation = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(level: .trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
-            initExpection.fulfill()
+            initExpectation.fulfill()
         }
-        wait(for: [initExpection], timeout: 0.5)
+        wait(for: [initExpectation], timeout: 0.5)
     }
 
     func testInstall() {
@@ -51,10 +51,10 @@ class LifecycleIntegrationTests: XCTestCase {
         """.data(using: .utf8)
         mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
 
-        let lifecycleExpection = XCTestExpectation(description: "singal triggered by lifecycle event")
+        let lifecycleExpectation = XCTestExpectation(description: "singal triggered by lifecycle event")
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
-                lifecycleExpection.fulfill()
+                lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=InstallEvent"))
                 return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
             }
@@ -62,7 +62,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpection], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: 2)
     }
 
     func testLaunchEvent() {
@@ -84,10 +84,10 @@ class LifecycleIntegrationTests: XCTestCase {
         // restart
         initExtensionsAndWait()
         mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
-        let lifecycleExpection = XCTestExpectation(description: "singal triggered by lifecycle event")
+        let lifecycleExpectation = XCTestExpectation(description: "singal triggered by lifecycle event")
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
-                lifecycleExpection.fulfill()
+                lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=&"))
                 XCTAssertTrue(request.url.absoluteString.contains("launchevent=LaunchEvent"))
                 return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
@@ -96,7 +96,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpection], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: 2)
     }
 
     func testCrash() {
@@ -116,10 +116,10 @@ class LifecycleIntegrationTests: XCTestCase {
 
         // restart
         initExtensionsAndWait()
-        let lifecycleExpection = XCTestExpectation(description: "singal triggered by lifecycle event")
+        let lifecycleExpectation = XCTestExpectation(description: "singal triggered by lifecycle event")
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
-                lifecycleExpection.fulfill()
+                lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=&"))
                 XCTAssertTrue(request.url.absoluteString.contains("launchevent=LaunchEvent"))
                 XCTAssertTrue(request.url.absoluteString.contains("crashevent=CrashEvent"))
@@ -129,7 +129,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpection], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: 2)
     }
 
     func testAdditionalContextData() {
@@ -144,10 +144,10 @@ class LifecycleIntegrationTests: XCTestCase {
         mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
 
         // test
-        let lifecycleExpection = XCTestExpectation(description: "singal triggered by lifecycle event")
+        let lifecycleExpectation = XCTestExpectation(description: "singal triggered by lifecycle event")
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
-                lifecycleExpection.fulfill()
+                lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("key=value"))
                 return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
             }
@@ -155,7 +155,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
-        wait(for: [lifecycleExpection], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: 2)
     }
 
     func testSessionContinue() {
@@ -177,41 +177,41 @@ class LifecycleIntegrationTests: XCTestCase {
         // restart
         initExtensionsAndWait()
         mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
-        let lifecycleExpection = XCTestExpectation(description: "no singal triggered by lifecycle event")
-        lifecycleExpection.isInverted = true
+        let lifecycleExpectation = XCTestExpectation(description: "no singal triggered by lifecycle event")
+        lifecycleExpectation.isInverted = true
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
-                lifecycleExpection.fulfill()
+                lifecycleExpectation.fulfill()
                 return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
             }
             return nil
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpection], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: 2)
     }
 
     func mockRemoteConfigAndRules(for appId: String, with configData: Data?, localRulesName: String) {
-        let configExpection = XCTestExpectation(description: "read remote configruation")
-        let rulesExpection = XCTestExpectation(description: "read remote rules")
+        let configExpectation = XCTestExpectation(description: "read remote configruation")
+        let rulesExpectation = XCTestExpectation(description: "read remote rules")
 
         let response = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://assets.adobedtm.com") {
-                configExpection.fulfill()
+                configExpectation.fulfill()
                 return (data: configData, respsonse: response, error: nil)
             }
             if request.url.absoluteString.starts(with: "https://rules.com/") {
                 let filePath = Bundle(for: type(of: self)).url(forResource: localRulesName, withExtension: ".zip")
                 let data = try? Data(contentsOf: filePath!)
-                rulesExpection.fulfill()
+                rulesExpectation.fulfill()
                 return (data: data, respsonse: response, error: nil)
             }
             return nil
         }
         MobileCore.configureWith(appId: appId)
-        wait(for: [configExpection, rulesExpection], timeout: 2)
+        wait(for: [configExpectation, rulesExpectation], timeout: 2)
 
     }
 

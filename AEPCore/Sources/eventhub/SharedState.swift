@@ -21,13 +21,14 @@ import Foundation
 class SharedState {
     private let queue: DispatchQueue /// Allows multi-threaded access to shared state.  Reads are concurrent, Add/Updates act as barriers.
     private var head: Node?
-    private let LOG_TAG = "SharedState"
+    private let LOG_TAG:String
 
     // MARK: Internal API
 
     init(_ name: String = "anonymous") {
         queue = DispatchQueue(label: "com.adobe.mobile.sharedstate(\(name))", qos: .default, attributes: .concurrent)
         head = nil
+        LOG_TAG = "SharedState(\(name))"
     }
 
     /// Sets the given version of this `SharedState` to the given data dictionary.
@@ -98,7 +99,7 @@ class SharedState {
                 if unwrapped.version < version {
                     self.head = unwrapped.append(version: version, data: data, status: status)
                 } else {
-                    Log.error(label: "\(self.LOG_TAG):\(#function)", "Trying to add an already existing version.")
+                    Log.debug(label: "\(self.LOG_TAG):\(#function)", "Trying to add an already existing version (\(version)), current version \(unwrapped.version).")
                 }
             } else {
                 self.head = Node(version: version, data: data, status: status)

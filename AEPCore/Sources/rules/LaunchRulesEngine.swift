@@ -34,13 +34,14 @@ class LaunchRulesEngine {
     private var cachedEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
 
+    let evaluator:ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
     init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
-        let evaluator = ConditionEvaluator(options: .defaultOptions)
+        evaluator = ConditionEvaluator(options: .caseInsensitive)
         rulesEngine = RulesEngine(evaluator: evaluator)
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
@@ -55,6 +56,7 @@ class LaunchRulesEngine {
             }
             return value
         })
+        expandEvaluator()
     }
 
     /// Register a `RulesTracer`
@@ -120,6 +122,62 @@ class LaunchRulesEngine {
             appendOrClearCachedEvents(event: event)
             return evaluateRules(for: event)
         }
+    }
+
+    private func expandEvaluator() -> ConditionEvaluator {
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: String, rhs: Int) in
+            guard let lhsInt = Int(lhs) else {return false}
+            return lhsInt == rhs
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: Int, rhs: String) in
+            return String(lhs) == rhs.lowercased()
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: String, rhs: Double) in
+            guard let lhsDouble = Double(lhs) else {return false}
+            return lhsDouble == rhs
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: Double, rhs: String) in
+            return String(lhs) == rhs.lowercased()
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: Double, rhs: Int) in
+            return lhs == Double(rhs)
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: Int, rhs: Double) in
+            return Double(lhs) == rhs
+        }
+
+        let stringBoolEquals = { (lhs: String, rhs: Bool) in
+            return (rhs && lhs.lowercased() == "true")
+                ||  (rhs && lhs.lowercased() == "1")
+                ||  (!rhs && lhs.lowercased() == "0")
+                ||  (!rhs && lhs.lowercased() == "false")
+        }
+        let doubleBoolEquals = { (lhs: Double, rhs: Bool) in
+            return (rhs && lhs == 1)
+                || (!rhs && lhs == 0)
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: String, rhs: Bool) in
+            return stringBoolEquals(lhs, rhs)
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: Bool, rhs: String) in
+            return stringBoolEquals(rhs, lhs)
+        }
+
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: Bool, rhs: Int) in
+            return doubleBoolEquals(Double(rhs), lhs)
+        }
+        evaluator.addComparisonOperator(operation: "equal") { (lhs: Bool, rhs: Double) in
+            return doubleBoolEquals(rhs, lhs)
+        }
+        return evaluator
     }
 
     private func appendOrClearCachedEvents(event: Event) {

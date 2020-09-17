@@ -30,12 +30,12 @@ class ConfigurationIntegrationTests: XCTestCase {
         mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
 
-        let initExpection = XCTestExpectation(description: "init extensions")
+        let initExpectation = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(level: .trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
-            initExpection.fulfill()
+            initExpectation.fulfill()
         }
-        wait(for: [initExpection], timeout: 0.5)
+        wait(for: [initExpectation], timeout: 0.5)
     }
 
     func testConfigLocalFile() {
@@ -112,28 +112,28 @@ class ConfigurationIntegrationTests: XCTestCase {
     }
 
     func mockRemoteConfig(for appId: String, with data: Data?) {
-        let initExpection = XCTestExpectation(description: "load remote configuration")
+        let initExpectation = XCTestExpectation(description: "load remote configuration")
 
         let response = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
         mockNetworkService.mock { request in
-            initExpection.fulfill()
+            initExpectation.fulfill()
             XCTAssertEqual("https://assets.adobedtm.com/\(appId).json", request.url.absoluteString)
             return (data: data, respsonse: response, error: nil)
         }
         MobileCore.configureWith(appId: appId)
-        wait(for: [initExpection], timeout: 2)
+        wait(for: [initExpectation], timeout: 2)
 
     }
 
     func getPrivacyStatus() -> PrivacyStatus? {
         var returnedPrivacyStatus: PrivacyStatus?
-        let privacyExpection = XCTestExpectation(description: "get privacy status")
+        let privacyExpectation = XCTestExpectation(description: "get privacy status")
         MobileCore.getPrivacyStatus { privacyStatus in
             returnedPrivacyStatus = privacyStatus
-            privacyExpection.fulfill()
+            privacyExpectation.fulfill()
         }
-        wait(for: [privacyExpection], timeout: 2)
+        wait(for: [privacyExpectation], timeout: 2)
         return returnedPrivacyStatus
 
     }
