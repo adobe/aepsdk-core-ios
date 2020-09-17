@@ -238,7 +238,7 @@
 		3FE6DE5D24C643060065EA05 /* IdentityConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */; };
 		3FE6DE5F24C643060065EA05 /* Networking+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4C24C643050065EA05 /* Networking+Identity.swift */; };
 		3FE6DE6024C643060065EA05 /* IdentityState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4D24C643050065EA05 /* IdentityState.swift */; };
-		3FE6DE6124C643060065EA05 /* MID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4E24C643060065EA05 /* MID.swift */; };
+		3FE6DE6124C643060065EA05 /* ECID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4E24C643060065EA05 /* ECID.swift */; };
 		3FE6DE6224C643060065EA05 /* Event+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE4F24C643060065EA05 /* Event+Identity.swift */; };
 		3FE6DE6324C643060065EA05 /* CustomIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5024C643060065EA05 /* CustomIdentity.swift */; };
 		3FE6DE6424C643060065EA05 /* IdentityHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5124C643060065EA05 /* IdentityHit.swift */; };
@@ -249,7 +249,7 @@
 		3FE6DE6924C643060065EA05 /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5624C643060065EA05 /* Identity.swift */; };
 		3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5724C643060065EA05 /* Identifiable.swift */; };
 		3FE6DE6B24C643060065EA05 /* URL+Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE5824C643060065EA05 /* URL+Identity.swift */; };
-		3FE6DE7824C643620065EA05 /* MIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6C24C643610065EA05 /* MIDTests.swift */; };
+		3FE6DE7824C643620065EA05 /* ECIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6C24C643610065EA05 /* ECIDTests.swift */; };
 		3FE6DE7924C643620065EA05 /* MobileIdentitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */; };
 		3FE6DE7A24C643620065EA05 /* URL+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */; };
 		3FE6DE7B24C643620065EA05 /* URLQueryItem+IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */; };
@@ -721,7 +721,7 @@
 		3FE6DE4A24C643050065EA05 /* IdentityConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityConstants.swift; sourceTree = "<group>"; };
 		3FE6DE4C24C643050065EA05 /* Networking+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Networking+Identity.swift"; sourceTree = "<group>"; };
 		3FE6DE4D24C643050065EA05 /* IdentityState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityState.swift; sourceTree = "<group>"; };
-		3FE6DE4E24C643060065EA05 /* MID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MID.swift; sourceTree = "<group>"; };
+		3FE6DE4E24C643060065EA05 /* ECID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECID.swift; sourceTree = "<group>"; };
 		3FE6DE4F24C643060065EA05 /* Event+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+Identity.swift"; sourceTree = "<group>"; };
 		3FE6DE5024C643060065EA05 /* CustomIdentity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomIdentity.swift; sourceTree = "<group>"; };
 		3FE6DE5124C643060065EA05 /* IdentityHit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityHit.swift; sourceTree = "<group>"; };
@@ -732,7 +732,7 @@
 		3FE6DE5624C643060065EA05 /* Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identity.swift; sourceTree = "<group>"; };
 		3FE6DE5724C643060065EA05 /* Identifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		3FE6DE5824C643060065EA05 /* URL+Identity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Identity.swift"; sourceTree = "<group>"; };
-		3FE6DE6C24C643610065EA05 /* MIDTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MIDTests.swift; sourceTree = "<group>"; };
+		3FE6DE6C24C643610065EA05 /* ECIDTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECIDTests.swift; sourceTree = "<group>"; };
 		3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MobileIdentitiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+IdentityTests.swift"; sourceTree = "<group>"; };
 		3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLQueryItem+IdentityTests.swift"; sourceTree = "<group>"; };
@@ -1007,7 +1007,7 @@
 				3FE6DE4D24C643050065EA05 /* IdentityState.swift */,
 				3FE6DE4924C643050065EA05 /* Identity+PublicAPI.swift */,
 				3FE6DE3224C642330065EA05 /* Info.plist */,
-				3FE6DE4E24C643060065EA05 /* MID.swift */,
+				3FE6DE4E24C643060065EA05 /* ECID.swift */,
 				3FE6DE5324C643060065EA05 /* MobileIdentities.swift */,
 				3FE6DE4624C643050065EA05 /* MobileVisitorAuthenticationState.swift */,
 				3FE6DE4C24C643050065EA05 /* Networking+Identity.swift */,
@@ -1034,7 +1034,7 @@
 				3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */,
 				3FE6DE7624C643620065EA05 /* IdentityTests.swift */,
 				3FE6DE3E24C642330065EA05 /* Info.plist */,
-				3FE6DE6C24C643610065EA05 /* MIDTests.swift */,
+				3FE6DE6C24C643610065EA05 /* ECIDTests.swift */,
 				3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */,
 				3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */,
 				3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */,
@@ -2454,7 +2454,7 @@
 				3FE6DE5C24C643060065EA05 /* Identity+PublicAPI.swift in Sources */,
 				3FE6DE6924C643060065EA05 /* Identity.swift in Sources */,
 				3FE6DE6A24C643060065EA05 /* Identifiable.swift in Sources */,
-				3FE6DE6124C643060065EA05 /* MID.swift in Sources */,
+				3FE6DE6124C643060065EA05 /* ECID.swift in Sources */,
 				3FE6DE6524C643060065EA05 /* URLAppender.swift in Sources */,
 				2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */,
 				3FE6DE5B24C643060065EA05 /* IdentityProperties.swift in Sources */,
@@ -2468,7 +2468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3FE6DE8024C643620065EA05 /* IdentityHitResponseTests.swift in Sources */,
-				3FE6DE7824C643620065EA05 /* MIDTests.swift in Sources */,
+				3FE6DE7824C643620065EA05 /* ECIDTests.swift in Sources */,
 				3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */,
 				3FE6DE7C24C643620065EA05 /* IdentityStateTests.swift in Sources */,
 				21FE152024F03254008A82FF /* IdentityPublicAPITests.swift in Sources */,

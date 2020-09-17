@@ -40,7 +40,7 @@ enum IdentityConstants {
         static let BASE_URL = "baseurl"
         static let UPDATED_URL = "updatedurl"
         static let VISITOR_IDS_LIST = "visitoridslist"
-        static let VISITOR_ID_MID = "mid"
+        static let VISITOR_ID_ECID = "mid"
         static let IDENTIFIERS = "visitoridentifiers"
         static let AUTHENTICATION_STATE = "authenticationstate"
         static let FORCE_SYNC = "forcesync"
@@ -62,7 +62,7 @@ enum IdentityConstants {
 
     enum URLKeys {
         static let ORGID = "d_orgid"
-        static let MID = "d_mid"
+        static let ECID = "d_mid"
         static let BLOB = "d_blob"
         static let HINT = "dcs_region"
         static let VISITOR_TIMESTAMP_KEY = "TS"

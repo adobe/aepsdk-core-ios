@@ -28,7 +28,7 @@ class IdentityHitResponseTests: XCTestCase {
         let response = try! JSONDecoder().decode(IdentityHitResponse.self, from: jsonStr.data(using: .utf8)!)
 
         // verify
-        XCTAssertEqual("11055975576108377572226656299476126353", response.mid)
+        XCTAssertEqual("11055975576108377572226656299476126353", response.ecid)
         XCTAssertEqual("global", response.optOutList?.first)
         XCTAssertEqual("6", response.hint)
         XCTAssertEqual("wxyz5432", response.blob)
@@ -49,7 +49,7 @@ class IdentityHitResponseTests: XCTestCase {
         let response = try! JSONDecoder().decode(IdentityHitResponse.self, from: jsonStr.data(using: .utf8)!)
 
         // verify
-        XCTAssertEqual("11055975576108377572226656299476126353", response.mid)
+        XCTAssertEqual("11055975576108377572226656299476126353", response.ecid)
         XCTAssertNil(response.optOutList)
         XCTAssertEqual("6", response.hint)
         XCTAssertEqual("wxyz5432", response.blob)
@@ -65,7 +65,7 @@ class IdentityHitResponseTests: XCTestCase {
         let response = try! JSONDecoder().decode(IdentityHitResponse.self, from: jsonStr.data(using: .utf8)!)
 
         // verify
-        XCTAssertNil(response.mid)
+        XCTAssertNil(response.ecid)
         XCTAssertNil(response.optOutList)
         XCTAssertNil(response.hint)
         XCTAssertNil(response.blob)
