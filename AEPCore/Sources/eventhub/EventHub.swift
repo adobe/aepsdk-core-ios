@@ -125,6 +125,7 @@ final class EventHub {
 
             let extensionContainer = self.registeredExtensions.removeValue(forKey: type.typeName) // remove the corresponding extension container
             extensionContainer?.exten?.onUnregistered() // invoke the onUnregistered delegate function
+            self.shareEventHubSharedState()
             completion(nil)
         }
     }

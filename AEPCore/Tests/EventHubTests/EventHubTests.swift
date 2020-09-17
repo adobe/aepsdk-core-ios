@@ -505,6 +505,36 @@ class EventHubTests: XCTestCase {
         XCTAssertEqual(mockExtensionTwo.metadata, mockDetailsTwo?[EventHubConstants.EventDataKeys.METADATA] as? [String: String])
     }
 
+    func testEventHubRegisterAndUnregisterExtensionSharesState() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub once")
+        sharedStateExpectation.expectedFulfillmentCount = 2
+        sharedStateExpectation.assertForOverFulfill = true
+
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME { sharedStateExpectation.fulfill() }
+        }
+
+        // test
+        registerMockExtension(MockExtensionTwo.self)
+        eventHub.start()
+        eventHub.unregisterExtension(MockExtensionTwo.self, completion: nil)
+
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 0.5)
+        let sharedState = eventHub.getSharedState(extensionName: EventHubConstants.NAME, event: nil)!.value
+
+        let mockExtension = MockExtension(runtime: TestableExtensionRuntime())
+
+        let coreVersion = sharedState?[EventHubConstants.EventDataKeys.VERSION] as! String
+        let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
+        let mockDetails = registeredExtensions?[mockExtension.friendlyName] as? [String: String]
+        let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.friendlyName] as? [String: Any]
+
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
+        XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
+    }
+
     func testEventHubRegisterExtensionSuccessQueuedBeforeStart() {
         // setup
         let expectation = XCTestExpectation(description: "Extension is registered successfully even if invoked before eventHub.start()")
