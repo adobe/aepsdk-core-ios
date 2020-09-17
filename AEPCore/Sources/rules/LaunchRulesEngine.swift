@@ -11,7 +11,7 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import SwiftRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 /// A rules engine for Launch rules
 class LaunchRulesEngine {
