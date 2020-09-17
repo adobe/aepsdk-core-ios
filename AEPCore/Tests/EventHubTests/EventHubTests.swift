@@ -518,7 +518,7 @@ class EventHubTests: XCTestCase {
         // test
         registerMockExtension(MockExtensionTwo.self)
         eventHub.start()
-        eventHub.unregisterExtension(MockExtensionTwo.self, completion: nil)
+        eventHub.unregisterExtension(MockExtensionTwo.self, completion: { (_) in })
 
         // verify
         wait(for: [sharedStateExpectation], timeout: 0.5)
