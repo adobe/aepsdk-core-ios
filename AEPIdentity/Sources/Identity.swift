@@ -68,11 +68,6 @@ import Foundation
     // MARK: Event Listeners
 
     private func handleIdentityRequest(event: Event) {
-        if shouldIgnore(event: event) {
-            Log.debug(label: "\(name):\(#function)", "Ignore Identity Request event, user is currently opted-out")
-            return
-        }
-
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)

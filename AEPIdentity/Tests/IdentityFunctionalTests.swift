@@ -64,7 +64,7 @@ class IdentityFunctionalTests: XCTestCase {
     /// Tests that when opted out that we do not make a shared state update
     func testSyncIdentifiersSyncEventOptedOut() {
         // setup
-        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
         let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
         let event = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
 
@@ -130,7 +130,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertFalse(mockRuntime.dispatchedEvents.isEmpty)
     }
 
     // MARK: processGetUrlVariables(...) tests
@@ -179,7 +179,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertFalse(mockRuntime.dispatchedEvents.isEmpty)
     }
 
     // MARK: processIdentifiersRequest(...) tests
@@ -212,7 +212,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertFalse(mockRuntime.dispatchedEvents.isEmpty)
     }
 
     // MARK: receiveConfigurationIdentity(...) tests
