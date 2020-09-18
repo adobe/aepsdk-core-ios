@@ -98,7 +98,7 @@ class IdentityPropertiesTests: XCTestCase {
         properties.customerIds = existingIds
 
         // test
-        let newIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id_1", authenticationState: .authenticated)]
+        let newIds = [CustomIdentity(origin: "origin", type: "type_1", identifier: "id", authenticationState: .authenticated)]
         properties.mergeAndCleanCustomerIds(newIds)
 
         // verify
