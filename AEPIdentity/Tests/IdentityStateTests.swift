@@ -112,7 +112,7 @@ class IdentityStateTests: XCTestCase {
 
     // MARK: syncIdentifiers(...) tests
 
-    /// Tests that syncIdentifiers appends the MID and the two custom IDs to the visitor ID list
+    /// Tests that syncIdentifiers appends the ECID and the two custom IDs to the visitor ID list
     func testSyncIdentifiersHappyIDs() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
@@ -124,7 +124,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(2, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(2, idList?.count)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
@@ -158,12 +158,12 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(2, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual(SHA256.hash("test-push-id"), eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
     }
 
-    /// Tests that the mid is appended and the ad id is appended to the visitor id list
+    /// Tests that the ECID is appended and the ad id is appended to the visitor id list
     func testSyncIdentifiersHappyAdID() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
@@ -176,7 +176,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(1, idList?.count)
@@ -196,7 +196,7 @@ class IdentityStateTests: XCTestCase {
         state.lastValidConfig = configSharedState
         state.identityProperties.advertisingIdentifier = ""
         state.identityProperties.lastSync = Date()
-        state.identityProperties.mid = MID()
+        state.identityProperties.ecid = ECID()
 
         // test
         let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: ""]
@@ -220,7 +220,7 @@ class IdentityStateTests: XCTestCase {
         state.identityProperties.advertisingIdentifier = "test-ad-id"
         state.identityProperties.customerIds = [CustomIdentity(origin: "test-origin", type: "test-type", identifier: "test-id", authenticationState: .authenticated)]
         state.identityProperties.lastSync = Date()
-        state.identityProperties.mid = MID()
+        state.identityProperties.ecid = ECID()
 
         // test
         let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: "test-ad-id"]
@@ -248,7 +248,7 @@ class IdentityStateTests: XCTestCase {
         state.lastValidConfig = configSharedState
         state.identityProperties.advertisingIdentifier = ""
         state.identityProperties.lastSync = Date()
-        state.identityProperties.mid = MID()
+        state.identityProperties.ecid = ECID()
 
         // test
         let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: IdentityConstants.Default.ZERO_ADVERTISING_ID]
@@ -278,7 +278,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(1, idList?.count)
@@ -307,7 +307,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(1, idList?.count)
@@ -336,7 +336,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(1, idList?.count)
@@ -365,7 +365,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(1, idList?.count)
@@ -396,7 +396,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(2, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
@@ -423,7 +423,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(2, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
@@ -440,7 +440,7 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = IdentityConstants.Default.ZERO_ADVERTISING_ID
-        props.mid = MID()
+        props.ecid = ECID()
         props.lastSync = Date()
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         state.lastValidConfig = configSharedState
@@ -452,7 +452,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
@@ -468,7 +468,7 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = "test-ad-id"
-        props.mid = MID()
+        props.ecid = ECID()
         props.lastSync = Date()
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         state.lastValidConfig = configSharedState
@@ -480,7 +480,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
@@ -504,7 +504,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(3, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual("test-ad-id", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity]
         XCTAssertEqual(1, idList?.count)
@@ -534,7 +534,7 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertEqual(4, eventData!.count)
-        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertEqual(props.locationHint, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] as? String)
         XCTAssertEqual(props.blob, eventData![IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] as? String)
         XCTAssertEqual(SHA256.hash("test-push-id"), eventData![IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
@@ -548,8 +548,8 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
-        props.mid = MID() // visitor ID is null initially and set for the first time in
-        // shouldSync(). Mimic a second call to shouldSync by setting the mid
+        props.ecid = ECID() // visitor ID is null initially and set for the first time in
+        // shouldSync(). Mimic a second call to shouldSync by setting the ecid
         props.lastSync = Date() // set last sync to now
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         state.lastValidConfig = configSharedState
@@ -782,7 +782,7 @@ class IdentityStateTests: XCTestCase {
         // setup
         var props = IdentityProperties()
         props.privacyStatus = .unknown
-        props.mid = MID()
+        props.ecid = ECID()
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
@@ -806,7 +806,7 @@ class IdentityStateTests: XCTestCase {
         // setup
         var props = IdentityProperties()
         props.privacyStatus = .unknown
-        props.mid = MID()
+        props.ecid = ECID()
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
@@ -831,7 +831,7 @@ class IdentityStateTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
         var props = IdentityProperties()
         props.privacyStatus = .unknown
-        props.mid = MID()
+        props.ecid = ECID()
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
@@ -936,6 +936,6 @@ private extension DataEntity {
 
 private extension IdentityHitResponse {
     static func fakeHitResponse(error: String?, optOutList: [String]?) -> IdentityHitResponse {
-        return IdentityHitResponse(blob: "response-test-blob", mid: "response-test-mid", hint: "response-test-hint", error: error, ttl: 3000, optOutList: optOutList)
+        return IdentityHitResponse(blob: "response-test-blob", ecid: "response-test-ecid", hint: "response-test-hint", error: error, ttl: 3000, optOutList: optOutList)
     }
 }

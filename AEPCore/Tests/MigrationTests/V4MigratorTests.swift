@@ -54,7 +54,7 @@ class V4MigratorTests: XCTestCase {
         let mockDate = Date()
         v4Defaults.set(["acqkey": "acqvalue"], forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA)
         v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4_IDS)
-        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.set("identityECID", forKey: V4MigrationConstants.Identity.V4_ECID)
         v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4_TTL)
         v4Defaults.set("vid", forKey: V4MigrationConstants.Identity.V4_VID)
         v4Defaults.set("blob", forKey: V4MigrationConstants.Identity.V4_BLOB)
@@ -84,7 +84,7 @@ class V4MigratorTests: XCTestCase {
         // v4 defaults should have been removed
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_IDS))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_MID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_ECID))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_TTL))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_VID))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_BLOB))
@@ -135,7 +135,7 @@ class V4MigratorTests: XCTestCase {
         let mockDate = Date()
         v4Defaults.set(["acqkey": "acqvalue"], forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA)
         v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4_IDS)
-        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.set("identityECID", forKey: V4MigrationConstants.Identity.V4_ECID)
         v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4_TTL)
         v4Defaults.set("vid", forKey: V4MigrationConstants.Identity.V4_VID)
         v4Defaults.set("blob", forKey: V4MigrationConstants.Identity.V4_BLOB)
@@ -165,7 +165,7 @@ class V4MigratorTests: XCTestCase {
         // v4 defaults should have been removed
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_IDS))
-        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_MID))
+        XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_ECID))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_TTL))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_VID))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_BLOB))
@@ -213,7 +213,7 @@ class V4MigratorTests: XCTestCase {
     func testExistingV4ConfigurationData() {
         // setup
         v4Defaults.set("identityIds", forKey: V4MigrationConstants.Identity.V4_IDS)
-        v4Defaults.set("identityMid", forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.set("identityECID", forKey: V4MigrationConstants.Identity.V4_ECID)
         v4Defaults.set(2, forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
 
         // test
@@ -222,7 +222,7 @@ class V4MigratorTests: XCTestCase {
         // verify
         // v4 defaults should have been removed
         XCTAssertNotNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_IDS))
-        XCTAssertNotNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_MID))
+        XCTAssertNotNil(v4Defaults.object(forKey: V4MigrationConstants.Identity.V4_ECID))
         XCTAssertNil(v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS))
 
         // only v5 configuration defaults have been set

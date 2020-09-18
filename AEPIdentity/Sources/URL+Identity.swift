@@ -35,8 +35,8 @@ extension URL {
             URLQueryItem(name: IdentityConstants.URLKeys.ORGID, value: orgId),
         ]
 
-        if let mid = identityProperties.mid {
-            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.MID, value: mid.midString)]
+        if let ecid = identityProperties.ecid {
+            queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.ECID, value: ecid.ecidString)]
         }
 
         if let blob = identityProperties.blob {
@@ -81,17 +81,17 @@ extension URL {
     /// Builds the `URL` responsible for sending an opt-out hit
     /// - Parameters:
     ///   - orgId: the org id from Configuration
-    ///   - mid: the mid
+    ///   - ecid: the experience cloud id
     ///   - experienceCloudServer: the experience cloud server
     /// - Returns: A network request configured to send the opt-out request, nil if failed
-    static func buildOptOutURL(orgId: String, mid: MID, experienceCloudServer: String) -> URL? {
+    static func buildOptOutURL(orgId: String, ecid: ECID, experienceCloudServer: String) -> URL? {
         var components = URLComponents()
         components.scheme = "https"
         components.host = experienceCloudServer
         components.path = IdentityConstants.KEY_PATH_OPTOUT
         components.queryItems = [
             URLQueryItem(name: IdentityConstants.URLKeys.ORGID, value: orgId),
-            URLQueryItem(name: IdentityConstants.URLKeys.MID, value: mid.midString),
+            URLQueryItem(name: IdentityConstants.URLKeys.ECID, value: ecid.ecidString),
         ]
 
         guard let url = components.url else {

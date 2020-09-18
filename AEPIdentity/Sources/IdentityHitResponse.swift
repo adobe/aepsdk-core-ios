@@ -17,7 +17,7 @@ struct IdentityHitResponse: Codable {
     let blob: String?
 
     /// Marketing cloud id value as received in the visitor id service network response json.
-    let mid: String?
+    let ecid: String?
 
     /// Location value as received in the visitor id service network response json.
     let hint: String?
@@ -33,7 +33,7 @@ struct IdentityHitResponse: Codable {
 
     enum CodingKeys: String, CodingKey {
         case blob = "d_blob"
-        case mid = "d_mid"
+        case ecid = "d_mid"
         case hint = "dcs_region"
         case error = "error_msg"
         case ttl = "id_sync_ttl"

@@ -11,16 +11,16 @@
 
 import Foundation
 
-/// A type which represents a Experience Cloud ID (MID)
-struct MID: Equatable, Codable, Hashable, CustomStringConvertible {
+/// A type which represents a Experience Cloud ID (ECID)
+struct ECID: Equatable, Codable, Hashable, CustomStringConvertible {
     var description: String {
-        return midString
+        return ecidString
     }
 
-    /// Representation of the MID as a `String`
-    let midString: String
+    /// Representation of the ECID as a `String`
+    let ecidString: String
 
-    /// Generates a new MID
+    /// Generates a new ECID
     init() {
         let uuidBytes = Mirror(reflecting: UUID().uuid).children.map { $0.value }
         let msb = uuidBytes[..<8].reduce(Int64(0)) { base, next in
@@ -33,6 +33,6 @@ struct MID: Equatable, Codable, Hashable, CustomStringConvertible {
         let correctedMsb = String(msb < 0 ? -msb : msb)
         let correctedLsb = String(lsb < 0 ? -lsb : lsb)
 
-        midString = "\(String(repeating: "0", count: 19 - correctedMsb.count))\(correctedMsb)\(String(repeating: "0", count: 19 - correctedLsb.count))\(correctedLsb)"
+        ecidString = "\(String(repeating: "0", count: 19 - correctedMsb.count))\(correctedMsb)\(String(repeating: "0", count: 19 - correctedLsb.count))\(correctedLsb)"
     }
 }

@@ -116,7 +116,7 @@ class IdentityTests: XCTestCase {
     func testConfigurationResponseEventOptOut() {
         // setup
         var props = IdentityProperties()
-        props.mid = MID()
+        props.ecid = ECID()
         props.saveToPersistence()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
@@ -140,7 +140,7 @@ class IdentityTests: XCTestCase {
     func testConfigurationResponseEventOptOutMissingOrgId() {
         // setup
         var props = IdentityProperties()
-        props.mid = MID()
+        props.ecid = ECID()
         props.saveToPersistence()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
@@ -162,7 +162,7 @@ class IdentityTests: XCTestCase {
     func testConfigurationResponseEventOptIn() {
         // setup
         var props = IdentityProperties()
-        props.mid = MID()
+        props.ecid = ECID()
         props.saveToPersistence()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
@@ -186,7 +186,7 @@ class IdentityTests: XCTestCase {
     func testConfigurationResponseEventUnknown() {
         // setup
         var props = IdentityProperties()
-        props.mid = MID()
+        props.ecid = ECID()
         props.saveToPersistence()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
@@ -210,7 +210,7 @@ class IdentityTests: XCTestCase {
     func testConfigurationResponseEventNoPrivacyStatus() {
         // setup
         var props = IdentityProperties()
-        props.mid = MID()
+        props.ecid = ECID()
         props.privacyStatus = .optedIn
         props.saveToPersistence()
         identity = Identity(runtime: mockRuntime)
@@ -234,7 +234,7 @@ class IdentityTests: XCTestCase {
     func testConfigurationResponseEventNoOrgId() {
         // setup
         var props = IdentityProperties()
-        props.mid = MID()
+        props.ecid = ECID()
         props.saveToPersistence()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
