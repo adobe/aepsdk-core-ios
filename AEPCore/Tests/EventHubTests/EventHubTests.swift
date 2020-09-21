@@ -909,7 +909,7 @@ class EventHubTests: XCTestCase {
 
         // verify
         wait(for: [expectation], timeout: 0.5)
-        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
+        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.pending)
     }
 
     func testCreatePendingSharedStateNilEvent() {

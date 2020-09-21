@@ -94,6 +94,14 @@ public extension Extension {
         return runtime.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
     }
 
+    /// Gets the `SharedState` data for a specified extension
+    /// - Parameters:
+    ///   - extensionName: An extension name whose `SharedState` will be returned
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+        return runtime.getSharedState(extensionName: extensionName, event: event, barrier: true)
+    }
+
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
     /// Should be overridden by any extension that wants to control it's own event flow on a per event basis.
     ///
