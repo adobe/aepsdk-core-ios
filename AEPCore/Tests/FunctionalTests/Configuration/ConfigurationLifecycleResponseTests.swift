@@ -71,6 +71,8 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
         XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
         XCTAssertEqual(EventSource.requestContent, mockRuntime.firstEvent?.source)
         XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
+
+        mockSystemInfoService.property = nil
     }
 
 }
