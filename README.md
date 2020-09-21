@@ -58,13 +58,19 @@ Enter the URL for the AEPCore package repository: `https://github.com/adobe/aeps
 
 When prompted, make sure you change the branch to `main`. (Once the repo is public, we will reference specific tags/versions instead of a branch)
 
+There are three options for selecting your dependencies as identified by the *suffix* of the library name:
+
+- "Dynamic" - the library will be linked dynamically
+- "Static" - the library will be linked statically
+- *(none)* - (default) SPM will determine whether the library will be linked dynamically or statically
+
 Alternatively, if your project has a `Package.swift` file, you can add AEPCore directly to your dependencies:
 
 ```
 dependencies: [
     .package(name: "AEPCore",
               url: "https://github.com/adobe/aepsdk-core-ios.git",
-              from: "0.0.1")
+              branch: "main")
 ]
 ```
 
