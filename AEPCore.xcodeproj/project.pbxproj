@@ -55,7 +55,6 @@
 		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
 		243DCE4824C7AA7C00E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		244DD7322512A82D000AAF97 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 244DD7312512A82D000AAF97 /* AEPRulesEngine */; };
 		24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24543A1324E1DAFC002D8D9A /* MockURLService.swift */; };
 		24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
@@ -182,6 +181,7 @@
 		3F5D45F8251903030040E298 /* LaunchRuleTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */; };
 		3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */; };
 		3F5D45FD25190E8D0040E298 /* rules_testTransform.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F5D45FC25190E8C0040E298 /* rules_testTransform.json */; };
+		3F5D460225195D280040E298 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3F5D460125195D280040E298 /* AEPRulesEngine */; };
 		3F5F9ED12502D34500C8A0B4 /* ConfigurationIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F9ED02502D34500C8A0B4 /* ConfigurationIntegrationTests.swift */; };
 		3FB5F7D024D2848900F0F6DF /* ConfigurationUpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB5F7CF24D2848900F0F6DF /* ConfigurationUpdateTests.swift */; };
 		3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9E24CA004400502CAF /* CoreConstants.swift */; };
@@ -712,7 +712,6 @@
 		3F4256FE24F474F4005D4006 /* IdentityIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityIntegrationTests.swift; sourceTree = "<group>"; };
 		3F42570024F474F4005D4006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F42570F24F4754F005D4006 /* TestableNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableNetworkService.swift; sourceTree = "<group>"; };
-		3F5D45F12513CC6B0040E298 /* aepsdk-rulesengine-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "aepsdk-rulesengine-ios"; path = "../aepsdk-rulesengine-ios"; sourceTree = "<group>"; };
 		3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRuleTransformer.swift; sourceTree = "<group>"; };
 		3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRuleTransformerTests.swift; sourceTree = "<group>"; };
 		3F5D45FC25190E8C0040E298 /* rules_testTransform.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTransform.json; sourceTree = "<group>"; };
@@ -868,7 +867,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				244DD7322512A82D000AAF97 /* AEPRulesEngine in Frameworks */,
+				3F5D460225195D280040E298 /* AEPRulesEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,7 +989,6 @@
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
-				3F5D45F12513CC6B0040E298 /* aepsdk-rulesengine-ios */,
 				21CAC0D82422917600C11388 /* AEPCore */,
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
@@ -1772,7 +1770,7 @@
 			);
 			name = AEPCore;
 			packageProductDependencies = (
-				244DD7312512A82D000AAF97 /* AEPRulesEngine */,
+				3F5D460125195D280040E298 /* AEPRulesEngine */,
 			);
 			productName = AEPCore;
 			productReference = 21CAC0D62422917600C11388 /* AEPCore.framework */;
@@ -2095,6 +2093,7 @@
 			);
 			mainGroup = 21CAC0CC2422917600C11388;
 			packageReferences = (
+				3F5D460025195D280040E298 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
 			);
 			productRefGroup = 21CAC0D72422917600C11388 /* Products */;
 			projectDirPath = "";
@@ -3769,9 +3768,21 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		3F5D460025195D280040E298 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
+			requirement = {
+				branch = dev;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
-		244DD7312512A82D000AAF97 /* AEPRulesEngine */ = {
+		3F5D460125195D280040E298 /* AEPRulesEngine */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 3F5D460025195D280040E298 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
 			productName = AEPRulesEngine;
 		};
 /* End XCSwiftPackageProductDependency section */
