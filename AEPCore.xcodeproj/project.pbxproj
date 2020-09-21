@@ -1760,7 +1760,6 @@
 				21CAC0D22422917600C11388 /* Sources */,
 				21CAC0D42422917600C11388 /* Resources */,
 				21CAC0D32422917600C11388 /* Frameworks */,
-				BB6812FF24E19B55007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1805,7 +1804,6 @@
 				24B4934B24D4C31100AA38D9 /* Sources */,
 				24B4934C24D4C31100AA38D9 /* Frameworks */,
 				24B4934D24D4C31100AA38D9 /* Resources */,
-				BB68130724E19C32007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1846,7 +1844,6 @@
 				3F03978324BE5DD30019F095 /* Sources */,
 				3F03978424BE5DD30019F095 /* Frameworks */,
 				3F03978524BE5DD30019F095 /* Resources */,
-				BB68130424E19C23007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1926,7 +1923,6 @@
 				3FE6DDCD24C62EE60065EA05 /* Sources */,
 				3FE6DDCE24C62EE60065EA05 /* Frameworks */,
 				3FE6DDCF24C62EE60065EA05 /* Resources */,
-				BB68130224E19C15007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1967,7 +1963,6 @@
 				3FE6DE2B24C642330065EA05 /* Sources */,
 				3FE6DE2C24C642330065EA05 /* Frameworks */,
 				3FE6DE2D24C642330065EA05 /* Resources */,
-				BB68130124E19C10007FDCF7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2266,23 +2261,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ${PROJECT_DIR}/AEPIntegrationTests/resources\nzip -r rules_lifecycle.zip rules_lifecycle.json\nzip -r rules_signal.zip rules_signal.json\n\n";
 		};
-		BB6812FF24E19B55007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
 		BB68130024E19C06007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2300,75 +2278,7 @@
 			shellPath = /bin/zsh;
 			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n\n";
 		};
-		BB68130124E19C10007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
-		BB68130224E19C15007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
-		BB68130424E19C23007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
 		BB68130624E19C2E007FDCF7 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
-		};
-		BB68130724E19C32007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
