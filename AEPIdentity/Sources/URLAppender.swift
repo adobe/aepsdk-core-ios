@@ -68,9 +68,9 @@ struct URLAppender {
     static func generateVisitorIdPayload(configSharedState: [String: Any], analyticsSharedState: [String: Any], identityProperties: IdentityProperties) -> String {
         // append timestamp
         var theIdString = appendParameterToVisitorIdString(original: "", key: IdentityConstants.URLKeys.VISITOR_TIMESTAMP_KEY, value: String(Int(Date().timeIntervalSince1970)))
-        // append mid
-        if let mid = identityProperties.mid {
-            theIdString = appendParameterToVisitorIdString(original: theIdString, key: IdentityConstants.URLKeys.VISITOR_PAYLOAD_MARKETING_CLOUD_ID_KEY, value: mid.midString)
+        // append ecid
+        if let ecid = identityProperties.ecid {
+            theIdString = appendParameterToVisitorIdString(original: theIdString, key: IdentityConstants.URLKeys.VISITOR_PAYLOAD_MARKETING_CLOUD_ID_KEY, value: ecid.ecidString)
         }
 
         // aid

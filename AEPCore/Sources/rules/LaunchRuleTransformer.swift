@@ -34,7 +34,7 @@ class LaunchRuleTransformer {
                 return value
             case is Double:
                 if let doubleValue = value as? Double {
-                    return Int(doubleValue) 
+                    return Int(doubleValue)
                 }
             case is Bool:
                 if let boolValue = value as? Bool {

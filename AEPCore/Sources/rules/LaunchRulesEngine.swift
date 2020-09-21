@@ -26,7 +26,7 @@ class LaunchRulesEngine {
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
 
-    private let transform:Transforming
+    private let transform: Transforming
     private let name: String
     private let extensionRuntime: ExtensionRuntime
     private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")

@@ -37,7 +37,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         let config = ConfigurationDownloader().loadConfigFrom(filePath: path)
 
         // verify
-        XCTAssertEqual(16, config?.count)
+        XCTAssertEqual(18, config?.count)
     }
 
     /// Tests that no config is loaded when an invalid file path is given
@@ -198,6 +198,6 @@ class ConfigurationDownloaderTests: XCTestCase {
         let config = ConfigurationDownloader().loadDefaultConfigFromManifest()
 
         // verify
-        XCTAssertEqual(16, config?.count)
+        XCTAssertEqual(18, config?.count)
     }
 }

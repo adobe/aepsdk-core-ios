@@ -16,10 +16,10 @@ extension Networking {
     /// Sends the `NetworkRequest` responsible for sending an opt-out hit
     /// - Parameters:
     ///   - orgId: the org id from Configuration
-    ///   - mid: the mid
+    ///   - ecid: the experience cloud id
     ///   - experienceCloudServer: the experience cloud server
-    func sendOptOutRequest(orgId: String, mid: MID, experienceCloudServer: String) {
-        guard let url = URL.buildOptOutURL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else { return }
+    func sendOptOutRequest(orgId: String, ecid: ECID, experienceCloudServer: String) {
+        guard let url = URL.buildOptOutURL(orgId: orgId, ecid: ecid, experienceCloudServer: experienceCloudServer) else { return }
         ServiceProvider.shared.networkService.connectAsync(networkRequest: NetworkRequest(url: url), completionHandler: nil) // fire and forget
     }
 }

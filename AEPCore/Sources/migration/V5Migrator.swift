@@ -91,7 +91,7 @@ struct V5Migrator {
 
     /// Migrates the v4 Identity values into the v5 Identity data store
     private func migrateIdentityLocalStorage() {
-        let mid = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.MID))
+        let ecid = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.ECID))
         let hint = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.HINT))
         let blob = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.BLOB))
         let ids = v5Defaults.string(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.IDS))
@@ -99,7 +99,7 @@ struct V5Migrator {
 
         // Build data
         let identityPropsDict: [String: Any?] = [
-            "mid": ["midString": mid],
+            "ecid": ["ecidString": ecid],
             "locationHint": hint,
             "blob": blob,
             "customerIds": idParser.convertStringToIds(idString: ids),
@@ -114,7 +114,7 @@ struct V5Migrator {
         identityDataStore.set(key: V5MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
         // remove identity values from v5 data store
-        v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.MID))
+        v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.ECID))
         v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.TTL))
         v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.VID))
         v5Defaults.removeObject(forKey: keyWithPrefix(V5MigrationConstants.Identity.LEGACY_DATASTORE_NAME, V5MigrationConstants.Identity.HINT))

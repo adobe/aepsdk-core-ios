@@ -16,7 +16,7 @@ import Foundation
 /// Represents a type which contains instances variables for the Identity extension
 struct IdentityProperties: Codable {
     /// The current Experience Cloud ID
-    var mid: MID?
+    var ecid: ECID?
 
     /// The IDFA from retrieved Apple APIs
     var advertisingIdentifier: String? {
@@ -50,7 +50,7 @@ struct IdentityProperties: Codable {
     /// - Returns: A dictionary representing this `IdentityProperties`
     func toEventData() -> [String: Any] {
         var eventData = [String: Any]()
-        eventData[IdentityConstants.EventDataKeys.VISITOR_ID_MID] = mid?.midString
+        eventData[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] = ecid?.ecidString
         eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = advertisingIdentifier
         eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = pushIdentifier
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
@@ -91,6 +91,6 @@ struct IdentityProperties: Codable {
     /// - Parameter ids: a list of identities
     private func idListToDict(_ ids: [CustomIdentity]?) -> [String?: CustomIdentity] {
         guard let ids = ids else { return [:] }
-        return Dictionary(uniqueKeysWithValues: ids.map { ($0.identifier, $0) })
+        return Dictionary(uniqueKeysWithValues: ids.map { ($0.type, $0) })
     }
 }

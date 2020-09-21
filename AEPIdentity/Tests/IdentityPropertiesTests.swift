@@ -29,7 +29,7 @@ class IdentityPropertiesTests: XCTestCase {
     func testToEventDataFull() {
         // setup
         var properties = IdentityProperties()
-        properties.mid = MID()
+        properties.ecid = ECID()
         properties.advertisingIdentifier = "test-ad-id"
         properties.pushIdentifier = "test-push-id"
         properties.blob = "test-blob"
@@ -42,7 +42,7 @@ class IdentityPropertiesTests: XCTestCase {
 
         // verify
         XCTAssertEqual(7, eventData.count)
-        XCTAssertEqual(properties.mid?.midString, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String)
+        XCTAssertEqual(properties.ecid?.ecidString, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
         XCTAssertEqual(properties.advertisingIdentifier, eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         XCTAssertEqual(properties.pushIdentifier, eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         XCTAssertEqual(properties.blob, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] as? String)
@@ -90,7 +90,7 @@ class IdentityPropertiesTests: XCTestCase {
         XCTAssertEqual(newIds, properties.customerIds)
     }
 
-    /// Tests that when no duplicate ids found that the lists of ids are combined
+    /// Tests that when no duplicate types are found that the lists of `CustomIdentity`'s are combined
     func testMergeAndCleanCustomerIdsNoDuplicates() {
         // setup
         var properties = IdentityProperties()
@@ -98,7 +98,7 @@ class IdentityPropertiesTests: XCTestCase {
         properties.customerIds = existingIds
 
         // test
-        let newIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id_1", authenticationState: .authenticated)]
+        let newIds = [CustomIdentity(origin: "origin", type: "type_1", identifier: "id", authenticationState: .authenticated)]
         properties.mergeAndCleanCustomerIds(newIds)
 
         // verify
