@@ -37,7 +37,7 @@ enum V4MigrationConstants {
         static let CID_DELIMITER = "%01"
 
         // Migrate
-        static let V4_MID = "ADBMOBILE_PERSISTED_MID"
+        static let V4_ECID = "ADBMOBILE_PERSISTED_MID"
         static let V4_HINT = "ADBMOBILE_PERSISTED_MID_HINT"
         static let V4_BLOB = "ADBMOBILE_PERSISTED_MID_BLOB"
         static let V4_IDS = "ADBMOBILE_VISITORID_IDS"

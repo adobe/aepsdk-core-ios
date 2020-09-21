@@ -27,7 +27,7 @@ enum V5MigrationConstants {
         static let DATASTORE_NAME = "com.adobe.module.identity"
         static let LEGACY_DATASTORE_NAME = "visitorIDServiceDataStore"
         // migrate
-        static let MID = "ADOBEMOBILE_PERSISTED_MID"
+        static let ECID = "ADOBEMOBILE_PERSISTED_MID"
         static let HINT = "ADOBEMOBILE_PERSISTED_MID_HINT"
         static let BLOB = "ADOBEMOBILE_PERSISTED_MID_BLOB"
         static let IDS = "ADOBEMOBILE_VISITORID_IDS"

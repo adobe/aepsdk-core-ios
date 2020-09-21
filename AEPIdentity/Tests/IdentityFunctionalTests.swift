@@ -44,7 +44,7 @@ class IdentityFunctionalTests: XCTestCase {
 
         // verify
         let sharedState = mockRuntime.createdSharedStates.last!
-        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
     }
 
     /// Tests that a generic event dispatches a shared state update
@@ -58,7 +58,7 @@ class IdentityFunctionalTests: XCTestCase {
 
         // verify
         let sharedState = mockRuntime.createdSharedStates.last!
-        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_MID])
+        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
     }
 
     /// Tests that when opted out that we do not make a shared state update

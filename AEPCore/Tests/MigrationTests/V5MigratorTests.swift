@@ -77,7 +77,7 @@ class V5MigratorTests: XCTestCase {
     func testExistingV5Data() {
         // setup
         let mockDate = Date()
-        v5Defaults.set("identityMid", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
+        v5Defaults.set("identityECID", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
         v5Defaults.set("identityIds", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITORID_IDS")
         v5Defaults.set(1234, forKey: "Adobe.visitorIDServiceDataStore.ADBMOBILE_VISITORID_TTL")
         v5Defaults.set("vid", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITOR_ID")
@@ -147,7 +147,7 @@ class V5MigratorTests: XCTestCase {
         // setup
         mockDataStore.setAppGroup("test-app-group")
         let mockDate = Date()
-        v5Defaults.set("identityMid", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
+        v5Defaults.set("identityECID", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
         v5Defaults.set("identityIds", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITORID_IDS")
         v5Defaults.set(1234, forKey: "Adobe.visitorIDServiceDataStore.ADBMOBILE_VISITORID_TTL")
         v5Defaults.set("vid", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITOR_ID")
@@ -215,7 +215,7 @@ class V5MigratorTests: XCTestCase {
     /// Tests that legacy v5 configuration is migrated
     func testExistingV5ConfigurationData() {
         // setup
-        v5Defaults.set("identityMid", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
+        v5Defaults.set("identityECID", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
         v5Defaults.set("identityIds", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITORID_IDS")
         v5Defaults.set("{\"global.privacy\": \"optedout\"}", forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map")
 

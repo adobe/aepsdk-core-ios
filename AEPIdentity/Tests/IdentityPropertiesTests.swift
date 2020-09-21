@@ -29,7 +29,7 @@ class IdentityPropertiesTests: XCTestCase {
     func testToEventDataFull() {
         // setup
         var properties = IdentityProperties()
-        properties.mid = MID()
+        properties.ecid = ECID()
         properties.advertisingIdentifier = "test-ad-id"
         properties.pushIdentifier = "test-push-id"
         properties.blob = "test-blob"
@@ -42,7 +42,7 @@ class IdentityPropertiesTests: XCTestCase {
 
         // verify
         XCTAssertEqual(7, eventData.count)
-        XCTAssertEqual(properties.mid?.midString, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String)
+        XCTAssertEqual(properties.ecid?.ecidString, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
         XCTAssertEqual(properties.advertisingIdentifier, eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
         XCTAssertEqual(properties.pushIdentifier, eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         XCTAssertEqual(properties.blob, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] as? String)
