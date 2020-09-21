@@ -58,7 +58,8 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
         XCTAssertEqual(EventSource.requestContent, mockRuntime.firstEvent?.source)
         XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
     }
-
+    
+    /// Tests that 
     func testHandleLifecycleResponseValidAppidFromManifest() {
         let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.property = "testappid"
@@ -109,8 +110,5 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
         XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
         XCTAssertEqual(EventSource.requestContent, mockRuntime.firstEvent?.source)
         XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
-
     }
-
-
 }
