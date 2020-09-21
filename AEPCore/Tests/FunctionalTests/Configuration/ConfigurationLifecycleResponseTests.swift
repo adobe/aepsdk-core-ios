@@ -59,7 +59,7 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
         XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
     }
     
-    /// Tests that 
+    /// Tests that app id is loaded from manifest on lifecycle response event
     func testHandleLifecycleResponseValidAppidFromManifest() {
         let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.property = "testappid"
@@ -80,7 +80,8 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
         mockSystemInfoService.property = nil
     }
 
-    func testHandleValidAppidFromManifest() {
+    /// Tests that app id is loaded from manifest on normal startup after being persisted
+    func testHandleValidAppidFromManifestPersisted() {
         let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.property = "testappid"
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
