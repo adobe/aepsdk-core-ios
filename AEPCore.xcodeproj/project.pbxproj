@@ -33,6 +33,7 @@
 		2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02F24C9FFB2002935CF /* SHA256Tests.swift */; };
 		21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21377D4024E3383E004BAC01 /* V4Migrator.swift */; };
 		213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F8A0324D8DC5A0003B8AF /* WrapperType.swift */; };
+		214154A825186734005CEB80 /* CustomIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214154A725186734005CEB80 /* CustomIdentityTests.swift */; };
 		215A6CE224ED92C500FE0657 /* V4MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
 		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
@@ -502,6 +503,7 @@
 		2107F02F24C9FFB2002935CF /* SHA256Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256Tests.swift; sourceTree = "<group>"; };
 		21377D4024E3383E004BAC01 /* V4Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4Migrator.swift; sourceTree = "<group>"; };
 		213F8A0324D8DC5A0003B8AF /* WrapperType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperType.swift; sourceTree = "<group>"; };
+		214154A725186734005CEB80 /* CustomIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIdentityTests.swift; sourceTree = "<group>"; };
 		215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = V4MigrationConstants.swift; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
@@ -1042,6 +1044,7 @@
 				3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */,
 				2107F02924C9FF46002935CF /* PushIDManagerTests.swift */,
 				21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */,
+				214154A725186734005CEB80 /* CustomIdentityTests.swift */,
 			);
 			name = tests;
 			path = AEPIdentity/Tests;
@@ -2471,6 +2474,7 @@
 				3FE6DE7824C643620065EA05 /* ECIDTests.swift in Sources */,
 				3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */,
 				3FE6DE7C24C643620065EA05 /* IdentityStateTests.swift in Sources */,
+				214154A825186734005CEB80 /* CustomIdentityTests.swift in Sources */,
 				21FE152024F03254008A82FF /* IdentityPublicAPITests.swift in Sources */,
 				2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */,
 				3FE6DE7D24C643620065EA05 /* IdentityFunctionalTests.swift in Sources */,
