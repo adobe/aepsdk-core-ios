@@ -48,6 +48,12 @@ import Foundation
 
 /// Contains methods for developers to interact with in their own extensions
 public extension Extension {
+
+    /// Unregisters this extension from the `EventHub`
+    func unregisterExtension() {
+        runtime.unregisterExtension()
+    }
+
     /// Registers a `EventListener` with the `EventHub`
     /// - Parameters:
     ///   - type: `EventType` to be listened for

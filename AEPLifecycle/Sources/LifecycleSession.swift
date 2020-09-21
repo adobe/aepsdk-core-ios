@@ -55,6 +55,8 @@ struct LifecycleSession {
                 sessionContainer.successfulClose = false
                 sessionContainer.pauseDate = nil
                 dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: sessionContainer)
+
+                Log.trace(label: LifecycleConstants.LOG_TAG, "Lifecycle start was called but only \(pausedTimeInSeconds) seconds have passed since the previous launch. Lifecycle timeout threshold is \(sessionTimeout) seconds. A lifecycle event will not be dispatched.")
                 return nil
             }
         }

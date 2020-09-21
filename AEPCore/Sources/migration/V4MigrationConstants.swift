@@ -13,27 +13,23 @@ import Foundation
 
 /// Constants for V4 -> V5 migration
 enum V4MigrationConstants {
-    // V4 Datastore Name
-    static let V4AppGroup = "ADB_APP_GROUP"
-    static let V4UserDefaultsKey = "adbUserDefaults"
-
     enum MobileServices {
         static let DATASTORE_NAME = "MobileServices"
 
-        static let V4InAppExcludeList = "ADBMessageBlackList"
-        static let V5InAppExcludeList = "Adobe.MobileServices.blacklist"
-        static let V4AcquisitionData = "ADBAcquisitionData"
-        static let V5AcquisitionData = "Adobe.MobileServices.acquisition_json"
-        static let install = "Adobe.MobileServices.install"
-        static let installSearchAd = "Adobe.MobileServices.install.searchad"
+        static let V4_IN_APP_EXCLUDE_LIST = "ADBMessageBlackList"
+        static let V5_IN_APP_EXCLUDE_LIST = "Adobe.MobileServices.blacklist"
+        static let V4_ACQUISITION_DATA = "ADBAcquisitionData"
+        static let V5_ACQUISITION_DATA = "Adobe.MobileServices.acquisition_json"
+        static let INSTALL = "Adobe.MobileServices.install"
+        static let INSTALL_SEARCH_AD = "Adobe.MobileServices.install.searchad"
     }
 
     enum Configuration {
         static let DATASTORE_NAME = "com.adobe.module.configuration"
 
-        static let V4PrivacyStatus = "PrivacyStatus"
+        static let V4_PRIVACY_STATUS = "PrivacyStatus"
         static let V5PrivacyStatus = "global.privacy"
-        static let V5OverriddenConfig = "config.overridden.map"
+        static let V5_OVERIDDEN_CONFIG = "config.overridden.map"
     }
 
     enum Identity {
@@ -41,16 +37,16 @@ enum V4MigrationConstants {
         static let CID_DELIMITER = "%01"
 
         // Migrate
-        static let V4MID = "ADBMOBILE_PERSISTED_MID"
-        static let V4Hint = "ADBMOBILE_PERSISTED_MID_HINT"
-        static let V4Blob = "ADBMOBILE_PERSISTED_MID_BLOB"
-        static let V4Ids = "ADBMOBILE_VISITORID_IDS"
-        static let V4PushEnabled = "ADBMOBILE_KEY_PUSH_ENABLED"
-        static let V4Vid = "AOMS_AppMeasurement_StoredDefaults_VisitorID"
+        static let V4_ECID = "ADBMOBILE_PERSISTED_MID"
+        static let V4_HINT = "ADBMOBILE_PERSISTED_MID_HINT"
+        static let V4_BLOB = "ADBMOBILE_PERSISTED_MID_BLOB"
+        static let V4_IDS = "ADBMOBILE_VISITORID_IDS"
+        static let V4_PUSH_ENABLED = "ADBMOBILE_KEY_PUSH_ENABLED"
+        static let V4_VID = "AOMS_AppMeasurement_StoredDefaults_VisitorID"
         // Keys to be deleted
-        static let V4TTL = "ADBMOBILE_VISITORID_TTL"
-        static let V4SyncTime = "ADBMOBILE_VISITORID_SYNCTIME"
-        static let V4PushToken = "ADBMOBILE_KEY_PUSH_TOKEN"
+        static let V4_TTL = "ADBMOBILE_VISITORID_TTL"
+        static let V4_SYNC_TIME = "ADBMOBILE_VISITORID_SYNCTIME"
+        static let V4_PUSH_TOKEN = "ADBMOBILE_KEY_PUSH_TOKEN"
 
         enum DataStoreKeys {
             static let IDENTITY_PROPERTIES = "identitiesproperties"
@@ -62,19 +58,19 @@ enum V4MigrationConstants {
         static let DATASTORE_NAME = "com.adobe.module.lifecycle"
 
         // Migrate
-        static let V4InstallDate = "OMCK1"
-        static let V4LastVersion = "OMCK2"
-        static let V4LastUsedDate = "OMCK5"
-        static let V4Launches = "OMCK6"
-        static let V4SuccessfulClose = "OMCK7"
+        static let V4_INSTALL_DATE = "OMCK1"
+        static let V4_LAST_VERSION = "OMCK2"
+        static let V4_LAST_USED_DATE = "OMCK5"
+        static let V4_LAUNCHES = "OMCK6"
+        static let V4_SUCCESSFUL_CLOSE = "OMCK7"
         // Keys to be deleted
-        static let V4LifecycleData         = "ADMS_LifecycleData"
-        static let V4StartDate             = "ADMS_START"
-        static let V4ApplicationID         = "ADOBEMOBILE_STOREDDEFAULTS_APPID"
-        static let V4OS                    = "ADOBEMOBILE_STOREDDEFAULTS_OS"
-        static let V4PauseDate             = "ADMS_PAUSE"
-        static let V4UpgradeDate           = "OMCK3"
-        static let V4LaunchesAfterUpgrade  = "OMCK4"
+        static let V4_LIFECYCLE_DATA         = "ADMS_LifecycleData"
+        static let V4_START_DATE             = "ADMS_START"
+        static let V4_APPLICATION_ID         = "ADOBEMOBILE_STOREDDEFAULTS_APPID"
+        static let V4_OS                    = "ADOBEMOBILE_STOREDDEFAULTS_OS"
+        static let V4_PAUSE_DATE             = "ADMS_PAUSE"
+        static let V4_UPGRADE_DATE           = "OMCK3"
+        static let V4_LAUNCHES_AFTER_UPGRADE  = "OMCK4"
 
         enum DataStoreKeys {
             static let INSTALL_DATE = "InstallDate"

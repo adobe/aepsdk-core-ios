@@ -51,6 +51,25 @@ import Foundation
         }
     }
 
+    /// Registers the extension from MobileCore
+    /// - Parameter exten: The extension to be registered
+    @objc(registerExtension:completion:)
+    public static func registerExtension(_ exten: Extension.Type, _ completion: (() -> Void)? = nil) {
+        EventHub.shared.registerExtension(exten) { _ in
+            EventHub.shared.shareEventHubSharedState()
+            completion?()
+        }
+    }
+
+    /// Unregisters the extension from MobileCore
+    /// - Parameter exten: The extension to be unregistered
+    @objc(unregisterExtension:completion:)
+    public static func unregisterExtension(_ exten: Extension.Type, _ completion: (() -> Void)? = nil) {
+        EventHub.shared.unregisterExtension(exten) { _ in
+            completion?()
+        }
+    }
+
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
     @objc(dispatch:)

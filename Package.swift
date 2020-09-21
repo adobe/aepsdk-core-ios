@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
@@ -19,18 +19,31 @@ let package = Package(
     name: "AEPCore",
     platforms: [.iOS(.v10)],
     products: [
+        // default
         .library(name: "AEPCore", targets: ["AEPCore"]),
         .library(name: "AEPIdentity", targets: ["AEPIdentity"]),
         .library(name: "AEPLifecycle", targets: ["AEPLifecycle"]),
         .library(name: "AEPServices", targets: ["AEPServices"]),
         .library(name: "AEPSignal", targets: ["AEPSignal"]),
+        // dynamic
+        .library(name: "AEPCoreDynamic", type: .dynamic, targets: ["AEPCore"]),
+        .library(name: "AEPIdentityDynamic", type: .dynamic, targets: ["AEPIdentity"]),
+        .library(name: "AEPLifecycleDynamic", type: .dynamic, targets: ["AEPLifecycle"]),
+        .library(name: "AEPServicesDynamic", type: .dynamic, targets: ["AEPServices"]),
+        .library(name: "AEPSignalDynamic", type: .dynamic, targets: ["AEPSignal"]),
+        // static
+        .library(name: "AEPCoreStatic", type: .static, targets: ["AEPCore"]),
+        .library(name: "AEPIdentityStatic", type: .static, targets: ["AEPIdentity"]),
+        .library(name: "AEPLifecycleStatic", type: .static, targets: ["AEPLifecycle"]),
+        .library(name: "AEPServicesStatic", type: .static, targets: ["AEPServices"]),
+        .library(name: "AEPSignalStatic", type: .static, targets: ["AEPSignal"]),
     ],
     dependencies: [
         .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .branch("dev")),
     ],
     targets: [
         .target(name: "AEPCore",
-                dependencies: ["AEPServices", "SwiftRulesEngine"],
+                dependencies: ["AEPServices", "AEPRulesEngine"],
                 path: "AEPCore/Sources"),
         .target(name: "AEPIdentity",
                 dependencies: ["AEPCore"],

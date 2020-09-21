@@ -12,38 +12,38 @@
 @testable import AEPIdentity
 import XCTest
 
-class MIDTests: XCTestCase {
-    /// Ensures that an MID has a length of 38
-    func testMIDCorrectLength() {
+class ECIDTests: XCTestCase {
+    /// Ensures that an ECID has a length of 38
+    func testECIDCorrectLength() {
         // test
-        let mid = MID()
+        let ecid = ECID()
 
         // verify
-        XCTAssertEqual(38, mid.midString.count)
+        XCTAssertEqual(38, ecid.ecidString.count)
     }
 
-    /// MID should only contain numbers
-    func testMIDContainsOnlyNumbers() {
+    /// ECID should only contain numbers
+    func testECIDContainsOnlyNumbers() {
         // test
-        let mid = MID()
+        let ecid = ECID()
 
         // verify
-        let isNumeric = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: mid.midString))
+        let isNumeric = CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: ecid.ecidString))
         XCTAssertTrue(isNumeric)
     }
 
-    /// MID should be reasonably random
-    func testMIDReasonablyRandom() {
+    /// ECID should be reasonably random
+    func testECIDReasonablyRandom() {
         // setup
         let count = 1000
-        var mids = Set<MID>()
+        var ecids = Set<ECID>()
 
         // test
         for _ in 0 ..< count {
-            mids.insert(MID())
+            ecids.insert(ECID())
         }
 
         // verify
-        XCTAssertEqual(count, mids.count)
+        XCTAssertEqual(count, ecids.count)
     }
 }

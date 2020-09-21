@@ -17,6 +17,7 @@ public enum EventHubError: Error {
     case invalidExtensionName
     case duplicateExtensionName
     case extensionInitializationFailure
+    case extensionNotRegistered
     case unknown
 }
 
@@ -29,6 +30,8 @@ extension EventHubError: LocalizedError {
             return "An extension with this name has already been registered"
         case .extensionInitializationFailure:
             return "An extension has failed to initialize"
+        case .extensionNotRegistered:
+            return "No extension with this type has been registered"
         case .unknown:
             return "An unknown error has occurred"
         }
