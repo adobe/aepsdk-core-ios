@@ -116,7 +116,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
     }
 
-    /// Tests that this event is ignored when the current config is opted out
+    /// Tests that this event is NOT ignored when the current config is opted out
     func testAppendToUrlOptedOut() {
         // setup
         let expectedUrl = URL(string: "https://www.adobe.com/")
@@ -167,7 +167,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
     }
 
-    /// Tests that getUrlVariables does not dispatch an event when the user is opted out
+    /// Tests that getUrlVariables does dispatch an event when the user is opted out
     func testGetUrlVariablesOptedOut() {
         // setup
         let event = Event(name: "Get URL variables", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
@@ -200,7 +200,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
     }
 
-    /// Tests that processIdentifiers does not dispatch an event when the user is opted out
+    /// Tests that processIdentifiers does dispatch an event when the user is opted out
     func testProcessIdentifiersOptedOut() {
         // setup
         let event = Event(name: "Get Identifiers", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
