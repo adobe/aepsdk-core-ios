@@ -90,7 +90,7 @@ class IdentityPropertiesTests: XCTestCase {
         XCTAssertEqual(newIds, properties.customerIds)
     }
 
-    /// Tests that when no duplicate ids found that the lists of ids are combined
+    /// Tests that when no duplicate types are found that the lists of `CustomIdentity`'s are combined
     func testMergeAndCleanCustomerIdsNoDuplicates() {
         // setup
         var properties = IdentityProperties()
@@ -98,7 +98,7 @@ class IdentityPropertiesTests: XCTestCase {
         properties.customerIds = existingIds
 
         // test
-        let newIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id_1", authenticationState: .authenticated)]
+        let newIds = [CustomIdentity(origin: "origin", type: "type_1", identifier: "id", authenticationState: .authenticated)]
         properties.mergeAndCleanCustomerIds(newIds)
 
         // verify

@@ -147,9 +147,9 @@ class IdentityState {
         identityProperties.lastSync = Date()
 
         // check privacy here in case the status changed while response was in-flight
-        if identityProperties.privacyStatus != .optedOut {
+        if identityProperties.privacyStatus != .optedOut, let data = hit.data, let hit = try? JSONDecoder().decode(IdentityHit.self, from: data) {
             // update properties
-            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState)
+            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState, event: hit.event)
 
             // save
             identityProperties.saveToPersistence()
@@ -308,7 +308,8 @@ class IdentityState {
     ///   - response: the network response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
+    ///   - event: The event responsible for the network response
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: (([String: Any], Event?) -> Void), event: Event) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return
@@ -327,7 +328,7 @@ class IdentityState {
             // Still, generate ECID locally if there's none yet.
             identityProperties.ecid = identityProperties.ecid ?? ECID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
-            createSharedState(identityProperties.toEventData(), nil)
+            createSharedState(identityProperties.toEventData(), event)
             return
         }
 
@@ -337,7 +338,7 @@ class IdentityState {
             identityProperties.locationHint = identityResponse.hint
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
             if shouldShareState {
-                createSharedState(identityProperties.toEventData(), nil)
+                createSharedState(identityProperties.toEventData(), event)
             }
         }
     }
