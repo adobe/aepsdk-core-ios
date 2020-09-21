@@ -58,7 +58,7 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
         XCTAssertEqual(EventSource.requestContent, mockRuntime.firstEvent?.source)
         XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
     }
-    
+
     /// Tests that app id is loaded from manifest on lifecycle response event
     func testHandleLifecycleResponseValidAppidFromManifest() {
         let mockSystemInfoService = MockSystemInfoService()
