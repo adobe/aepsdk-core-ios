@@ -10,7 +10,7 @@ Reviewing the [Definition of Terms](EventHub/DefinitionOfTerms.md) is recommende
 
 ![Events stream](https://app.lucidchart.com/publicSegments/view/e720c862-bb1d-4aab-b663-7fe5ae1aa53a/image.png)
 
-An Event is the start of a process. It can represent any action, and must be run inside of the event loop to maintain event order integrity. Events can originate from from many locations. For example, the developer providing data to the SDK via a public API, or an SDK extension publishing its data that other extensions may find useful.
+An Event is the start of a process. It can represent any action, and must be run inside of the event loop to maintain event order integrity. Events can originate from many locations. For example, the developer providing data to the SDK via a public API, or an SDK extension publishing its data that other extensions may find useful.
 
 The **Event Hub** is the controller of the SDK. The Event Hub is responsible for receiving **Events**, maintaining their correct order, and passing them along to interested **Extensions**. It creates and maintains an **Extension Container** instance for each registered Extension and forwards events to the containers. Extension Containers holds the instance of their corresponding Extensions. When an Event enters the container, the container is responsible for delivering the Event to any matching Listener for the Extension.
 
