@@ -43,9 +43,10 @@ class LaunchRulesEngine {
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
         rulesEngine = RulesEngine(evaluator: evaluator, transformer: transform)
-        if RulesEngineLog.logging == nil {
-            RulesEngineLog.logging = RulesEngineNativeLogging()
-        }
+        // you can enable the log when debugging rules engine
+//        if RulesEngineLog.logging == nil {
+//            RulesEngineLog.logging = RulesEngineNativeLogging()
+//        }
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
         /// Uses this flag to decide if we need to cache incoming events

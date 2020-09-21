@@ -37,7 +37,7 @@ class LifecycleIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 0.5)
+        wait(for: [initExpectation], timeout: 1)
     }
 
     func testInstall() {
@@ -112,10 +112,11 @@ class LifecycleIntegrationTests: XCTestCase {
 
         // test
         MobileCore.lifecycleStart(additionalContextData: nil)
-        sleep(1)
+        sleep(2)
 
         // restart
         initExtensionsAndWait()
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_lifecycle")
         let lifecycleExpectation = XCTestExpectation(description: "singal triggered by lifecycle event")
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
@@ -172,7 +173,7 @@ class LifecycleIntegrationTests: XCTestCase {
         // test
         MobileCore.lifecycleStart(additionalContextData: nil)
         MobileCore.lifecyclePause()
-        sleep(1)
+        sleep(2)
 
         // restart
         initExtensionsAndWait()
