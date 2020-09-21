@@ -11,7 +11,7 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import SwiftRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 /// A rules engine for Launch rules
 class LaunchRulesEngine {
@@ -42,6 +42,9 @@ class LaunchRulesEngine {
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         let evaluator = ConditionEvaluator(options: .defaultOptions)
         rulesEngine = RulesEngine(evaluator: evaluator)
+        if RulesEngineLog.logging == nil {
+            RulesEngineLog.logging = RulesEngineNativeLogging()
+        }
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
         /// Uses this flag to decide if we need to cache incoming events

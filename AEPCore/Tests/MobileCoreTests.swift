@@ -45,6 +45,20 @@ class MobileCoreTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
+    /// Tests that a single extension can be registered
+    func testRegisterExtensionSimple() {
+        let expectation = XCTestExpectation(description: "registration completed in timely fashion")
+        expectation.assertForOverFulfill = true
+        MockExtension.registrationClosure = { expectation.fulfill() }
+        EventHub.shared.start()
+
+        // test
+        MobileCore.registerExtension(MockExtension.self)
+
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+
     func testRegisterExtensionsSimpleMultiple() {
         let expectation = XCTestExpectation(description: "registration completed in timely fashion")
         expectation.expectedFulfillmentCount = 2
@@ -68,6 +82,21 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self, SlowMockExtension.self])
+
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
+
+    /// Tests that a registered extension can be unregistered
+    func testUnRegisterExtensionsSimple() {
+        let expectation = XCTestExpectation(description: "unregistration completed in timely fashion")
+        expectation.assertForOverFulfill = true
+        MockExtension.unregistrationClosure = { expectation.fulfill() }
+        MobileCore.registerExtensions([MockExtension.self])
+
+        // test
+        MobileCore.unregisterExtension(MockExtension.self)
+
 
         // verify
         wait(for: [expectation], timeout: 0.5)

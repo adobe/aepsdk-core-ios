@@ -24,7 +24,7 @@ pod 'AEPServices', '1.0.0'
 pod 'AEPCore', '1.0.0'
 pod 'AEPLifecycle', '1.0.0'
 pod 'AEPIdentity', '1.0.0'
-pod 'SwiftRulesEngine', '1.0.0'
+pod 'AEPRulesEngine', '1.0.0'
 pod 'ACPCore', :git => 'https://github.com/adobe/aep-sdk-compatibility-ios.git', :branch => 'main'
 ```
 

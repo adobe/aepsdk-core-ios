@@ -50,8 +50,8 @@ class URLAppenderTests: XCTestCase {
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: mockUserIdentifier]
         var props = IdentityProperties()
-        props.mid = MID()
-        let expected = "MCMID%3D\(props.mid!.midString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg&adobe_aa_vid=\(mockUserIdentifier)"
+        props.ecid = ECID()
+        let expected = "MCMID%3D\(props.ecid!.ecidString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg&adobe_aa_vid=\(mockUserIdentifier)"
 
         let baseUrl = "test-base-url.com/"
 
@@ -80,8 +80,8 @@ class URLAppenderTests: XCTestCase {
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"] as [String: Any]
         var props = IdentityProperties()
-        props.mid = MID()
-        let expected = "MCMID%3D\(props.mid!.midString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg"
+        props.ecid = ECID()
+        let expected = "MCMID%3D\(props.ecid!.ecidString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg"
 
         // test
         var result = URLAppender.generateVisitorIdPayload(configSharedState: configSharedState, analyticsSharedState: analyticsSharedState, identityProperties: props)
@@ -106,8 +106,8 @@ class URLAppenderTests: XCTestCase {
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: ""] as [String: Any]
         var props = IdentityProperties()
-        props.mid = MID()
-        let expected = "MCMID%3D\(props.mid!.midString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg"
+        props.ecid = ECID()
+        let expected = "MCMID%3D\(props.ecid!.ecidString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg"
 
         // test
         var result = URLAppender.generateVisitorIdPayload(configSharedState: configSharedState, analyticsSharedState: analyticsSharedState, identityProperties: props)
@@ -133,8 +133,8 @@ class URLAppenderTests: XCTestCase {
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "29849020983@adobeOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid", IdentityConstants.Analytics.VISITOR_IDENTIFIER: mockUserIdentifier] as [String: Any]
         var props = IdentityProperties()
-        props.mid = MID()
-        let expected = "MCMID%3D\(props.mid!.midString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg&adobe_aa_vid=%3F%26%23%26%23%26%23%26%23%3F"
+        props.ecid = ECID()
+        let expected = "MCMID%3D\(props.ecid!.ecidString)%7CMCAID%3Dtest-aid%7CMCORGID%3D29849020983%40adobeOrg&adobe_aa_vid=%3F%26%23%26%23%26%23%26%23%3F"
 
         // test
         var result = URLAppender.generateVisitorIdPayload(configSharedState: configSharedState, analyticsSharedState: analyticsSharedState, identityProperties: props)

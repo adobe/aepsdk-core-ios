@@ -20,7 +20,6 @@ enum IdentityConstants {
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
     static let VISITOR_ID_PARAMETER_KEY_CUSTOMER = "d_cid_ic"
     static let KEY_PATH_OPTOUT = "/demoptout.jpg"
-    static let DEFAULT_SERVER = "dpm.demdex.net"
     static let CID_DELIMITER = "%01"
     static let ADID_DSID = "DSID_20915"
 
@@ -40,7 +39,7 @@ enum IdentityConstants {
         static let BASE_URL = "baseurl"
         static let UPDATED_URL = "updatedurl"
         static let VISITOR_IDS_LIST = "visitoridslist"
-        static let VISITOR_ID_MID = "mid"
+        static let VISITOR_ID_ECID = "mid"
         static let IDENTIFIERS = "visitoridentifiers"
         static let AUTHENTICATION_STATE = "authenticationstate"
         static let FORCE_SYNC = "forcesync"
@@ -62,7 +61,7 @@ enum IdentityConstants {
 
     enum URLKeys {
         static let ORGID = "d_orgid"
-        static let MID = "d_mid"
+        static let ECID = "d_mid"
         static let BLOB = "d_blob"
         static let HINT = "dcs_region"
         static let VISITOR_TIMESTAMP_KEY = "TS"
@@ -72,6 +71,7 @@ enum IdentityConstants {
         static let VISITOR_PAYLOAD_ANALYTICS_ID_KEY = "MCAID"
         static let ANALYTICS_PAYLOAD_KEY = "adobe_aa_vid"
         static let DEVICE_CONSENT = "device_consent"
+        static let CONSENT_INTEGRATION_CODE = "d_consent_ic"
     }
 
     enum Default {
