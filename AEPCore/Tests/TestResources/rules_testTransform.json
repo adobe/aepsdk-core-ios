@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.lifecycle"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.responseContent"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.numberString",
+                            "matcher": "eq",
+                            "values": [3]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.numberString",
+                            "matcher": "eq",
+                            "values": ["3"]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.numberString",
+                            "matcher": "eq",
+                            "values": [false]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.numberString",
+                            "matcher": "eq",
+                            "values": [false]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.booleanValue",
+                            "matcher": "eq",
+                            "values": [true]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.booleanValue",
+                            "matcher": "eq",
+                            "values": [1]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.booleanValue",
+                            "matcher": "eq",
+                            "values": ["true"]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.intValue",
+                            "matcher": "eq",
+                            "values": ["5"]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.intValue",
+                            "matcher": "eq",
+                            "values": [5]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.doubleValue",
+                            "matcher": "eq",
+                            "values": [10.3]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.doubleValue",
+                            "matcher": "co",
+                            "values": ["10."]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RC48ef3f5e83c84405a3da6cc5128c090c",
+          "type": "url",
+          "detail": {
+            "url": "http://www.adobe.com"
+          }
+        }
+      ]
+    }
+  ]
+}

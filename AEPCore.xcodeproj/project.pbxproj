@@ -178,7 +178,9 @@
 		3F4256FF24F474F4005D4006 /* IdentityIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4256FE24F474F4005D4006 /* IdentityIntegrationTests.swift */; };
 		3F42570124F474F4005D4006 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		3F42571024F4754F005D4006 /* TestableNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F42570F24F4754F005D4006 /* TestableNetworkService.swift */; };
-		3F5D45F42513F20B0040E298 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3F5D45F32513F20B0040E298 /* AEPRulesEngine */; };
+		3F5D45F8251903030040E298 /* LaunchRuleTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */; };
+		3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */; };
+		3F5D45FD25190E8D0040E298 /* rules_testTransform.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F5D45FC25190E8C0040E298 /* rules_testTransform.json */; };
 		3F5F9ED12502D34500C8A0B4 /* ConfigurationIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F9ED02502D34500C8A0B4 /* ConfigurationIntegrationTests.swift */; };
 		3FB5F7D024D2848900F0F6DF /* ConfigurationFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB5F7CF24D2848900F0F6DF /* ConfigurationFunctionalTests.swift */; };
 		3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9E24CA004400502CAF /* CoreConstants.swift */; };
@@ -705,6 +707,9 @@
 		3F42570024F474F4005D4006 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F42570F24F4754F005D4006 /* TestableNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableNetworkService.swift; sourceTree = "<group>"; };
 		3F5D45F12513CC6B0040E298 /* aepsdk-rulesengine-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "aepsdk-rulesengine-ios"; path = "../aepsdk-rulesengine-ios"; sourceTree = "<group>"; };
+		3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRuleTransformer.swift; sourceTree = "<group>"; };
+		3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRuleTransformerTests.swift; sourceTree = "<group>"; };
+		3F5D45FC25190E8C0040E298 /* rules_testTransform.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTransform.json; sourceTree = "<group>"; };
 		3F5F9ED02502D34500C8A0B4 /* ConfigurationIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationIntegrationTests.swift; sourceTree = "<group>"; };
 		3FB5F7CF24D2848900F0F6DF /* ConfigurationFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationFunctionalTests.swift; sourceTree = "<group>"; };
 		3FB66A9E24CA004400502CAF /* CoreConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreConstants.swift; sourceTree = "<group>"; };
@@ -1426,6 +1431,7 @@
 				BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */,
 				BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */,
 				BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */,
+				3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */,
 			);
 			path = RulesTests;
 			sourceTree = "<group>";
@@ -1473,6 +1479,7 @@
 				BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */,
 				BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */,
 				BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */,
+				3F5D45FC25190E8C0040E298 /* rules_testTransform.json */,
 			);
 			path = TestResources;
 			sourceTree = "<group>";
@@ -1585,6 +1592,7 @@
 				BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */,
 				3F16761324E1B0630041B970 /* RulesConstants.swift */,
 				BB0E397124FD56100050C181 /* RulesEngineNativeLogging.swift */,
+				3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */,
 			);
 			path = rules;
 			sourceTree = "<group>";
@@ -2121,6 +2129,7 @@
 				BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */,
 				BBA5129F24F4A14C0030DAD1 /* rules_testMatcherGe.json in Resources */,
 				BBA512B724F6C4D90030DAD1 /* rules_testAttachData_invalidJson.json in Resources */,
+				3F5D45FD25190E8D0040E298 /* rules_testTransform.json in Resources */,
 				BBA512B324F5CF380030DAD1 /* rules_testAttachData.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2409,6 +2418,7 @@
 				3F08FF9524D9F1D200D34DE3 /* EventDataMerger.swift in Sources */,
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
+				3F5D45F8251903030040E298 /* LaunchRuleTransformer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2424,6 +2434,7 @@
 				3F16762C24F032E60041B970 /* ContractExtensionTwo.swift in Sources */,
 				3F16762824F031A00041B970 /* EventHubContractTests.swift in Sources */,
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
+				3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
@@ -2789,7 +2800,6 @@
 		};
 		3F5D45F62513F23F0040E298 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 3F5D45F52513F23F0040E298 /* AEPRulesEngine */;
 		};
 		3FE6DDBE24C62DAB0065EA05 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3734,7 +3744,6 @@
 /* Begin XCSwiftPackageProductDependency section */
 		244DD7312512A82D000AAF97 /* AEPRulesEngine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3FE6DE9324C64B8D0065EA05 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
 			productName = AEPRulesEngine;
 		};
 /* End XCSwiftPackageProductDependency section */
