@@ -21,7 +21,7 @@ import Foundation
 class SharedState {
     private let queue: DispatchQueue /// Allows multi-threaded access to shared state.  Reads are concurrent, Add/Updates act as barriers.
     private var head: Node?
-    private let LOG_TAG:String
+    private let LOG_TAG: String
 
     // MARK: Internal API
 

@@ -63,6 +63,10 @@ extension URL {
         if addConsentFlag {
             let idEmpty = (identityProperties.advertisingIdentifier?.isEmpty ?? true) ? "0" : "1"
             queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.DEVICE_CONSENT, value: idEmpty)]
+
+            if idEmpty == "0" {
+                queryItems += [URLQueryItem(name: IdentityConstants.URLKeys.CONSENT_INTEGRATION_CODE, value: IdentityConstants.ADID_DSID)]
+            }
         }
 
         components.queryItems = queryItems

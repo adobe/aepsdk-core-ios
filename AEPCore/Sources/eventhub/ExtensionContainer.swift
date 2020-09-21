@@ -59,6 +59,11 @@ class ExtensionContainer {
 }
 
 extension ExtensionContainer: ExtensionRuntime {
+    func unregisterExtension() {
+        guard let exten = exten else { return }
+        EventHub.shared.unregisterExtension(type(of: exten), completion: {_ in })
+    }
+
     public func registerListener(type: String, source: String, listener: @escaping EventListener) {
         let listenerContainer = EventListenerContainer(listener: listener, type: type, source: source, triggerEventId: nil, timeoutTask: nil)
         eventListeners.append(listenerContainer)

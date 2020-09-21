@@ -11,7 +11,7 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import SwiftRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 /// A rules engine for Launch rules
 class LaunchRulesEngine {
@@ -26,6 +26,9 @@ class LaunchRulesEngine {
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
     private static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
+    private static let TRANSFORM_TO_INT = "int"
+    private static let TRANSFORM_TO_DOUBLE = "double"
+    private static let TRANSFORM_TO_STRING = "string"
 
     private let transform = Transform()
     private let name: String
@@ -34,7 +37,7 @@ class LaunchRulesEngine {
     private var cachedEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
 
-    let evaluator:ConditionEvaluator
+    let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
@@ -42,7 +45,10 @@ class LaunchRulesEngine {
         self.name = name
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
-        rulesEngine = RulesEngine(evaluator: evaluator)
+        rulesEngine = RulesEngine(evaluator: evaluator, transformer: transform )
+        if RulesEngineLog.logging == nil {
+            RulesEngineLog.logging = RulesEngineNativeLogging()
+        }
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
         /// Uses this flag to decide if we need to cache incoming events
@@ -56,7 +62,62 @@ class LaunchRulesEngine {
             }
             return value
         })
-        expandEvaluator()
+
+        transform.register(name: LaunchRulesEngine.TRANSFORM_TO_INT, transformation: { value in
+            switch value {
+            case is String:
+                if let stringValue = value as? String, let intValue = Int(stringValue) {
+                    return intValue
+                }
+            case is Int:
+                return value
+            case is Double:
+                if let doubleValue = value as? Double {
+                    return Int(exactly: doubleValue) ?? 0
+                }
+            case is Bool:
+                if let boolValue = value as? Bool {
+                    return boolValue ? 1:0
+                }
+            case is Float:
+                if let floatValue = value as? Float {
+                    return Int(exactly: floatValue) ?? 0
+                }
+            default:
+                return value
+            }
+            return value
+        })
+
+        transform.register(name: LaunchRulesEngine.TRANSFORM_TO_STRING, transformation: { value in
+            return String(describing: value)
+        })
+
+        transform.register(name: LaunchRulesEngine.TRANSFORM_TO_DOUBLE, transformation: { value in
+            switch value {
+            case is String:
+                if let stringValue = value as? String, let doubleValue = Double(stringValue) {
+                    return doubleValue
+                }
+            case is Double:
+                return value
+            case is Int:
+                if let intValue = value as? Int {
+                    return Double(exactly: intValue) ?? 0.0
+                }
+            case is Bool:
+                if let boolValue = value as? Bool {
+                    return boolValue ? 1.0:0.0
+                }
+            case is Float:
+                if let floatValue = value as? Float {
+                    return Double(exactly: floatValue) ?? 0.0
+                }
+            default:
+                return value
+            }
+            return value
+        })
     }
 
     /// Register a `RulesTracer`

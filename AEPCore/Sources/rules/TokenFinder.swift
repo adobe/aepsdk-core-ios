@@ -11,7 +11,7 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import SwiftRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 extension String {
     /// Returns the first index of the character in this `String`
@@ -28,7 +28,7 @@ extension String {
     }
 }
 
-/// Implementation of the `Traversable` protocol which will be used by `SwiftRulesEngine`
+/// Implementation of the `Traversable` protocol which will be used by `AEPRulesEngine`
 class TokenFinder: Traversable {
     private let LOG_TAG = "TokenFinder"
 

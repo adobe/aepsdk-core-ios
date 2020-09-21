@@ -50,13 +50,13 @@ struct V4Migrator {
     /// Determine if we need to migrate V4 to V5
     /// - Returns: True if an install date exists in V4 user defaults, false otherwise
     private func defaultsNeedsMigration() -> Bool {
-        return v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4InstallDate) != nil
+        return v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE) != nil
     }
 
     /// Determine if we need to migrate V4 to V5
     /// - Returns: True if a privacy status key exists in the V4 defaults
     private func configNeedsMigration() -> Bool {
-        return v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus) != nil
+        return v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS) != nil
     }
 
     /// Determine whether we need to migrate vid from Identity to Analytics
@@ -84,29 +84,29 @@ struct V4Migrator {
 
     /// Migrates the v4 Mobile Services values into the v5 Mobile Services data store
     private func migrateMobileServicesLocalStorage() {
-        let acquisitionDataMap = v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4AcquisitionData) as? [String: String]
-        let installDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4InstallDate) as? Date
-        let excludeList = v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4InAppExcludeList) as? [String: Int]
+        let acquisitionDataMap = v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA) as? [String: String]
+        let installDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE) as? Date
+        let excludeList = v4Defaults.object(forKey: V4MigrationConstants.MobileServices.V4_IN_APP_EXCLUDE_LIST) as? [String: Int]
 
         let mobileServicesDataStore = NamedCollectionDataStore(name: V4MigrationConstants.MobileServices.DATASTORE_NAME)
-        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.V5AcquisitionData, value: acquisitionDataMap)
-        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.install, value: installDate)
-        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.installSearchAd, value: installDate)
-        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.V5InAppExcludeList, value: excludeList)
+        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.V5_ACQUISITION_DATA, value: acquisitionDataMap)
+        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.INSTALL, value: installDate)
+        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.INSTALL_SEARCH_AD, value: installDate)
+        mobileServicesDataStore.setObject(key: V4MigrationConstants.MobileServices.V5_IN_APP_EXCLUDE_LIST, value: excludeList)
 
-        v4Defaults.removeObject(forKey: V4MigrationConstants.MobileServices.V4AcquisitionData) // should be removed after acquisition migration
-        v4Defaults.removeObject(forKey: V4MigrationConstants.MobileServices.V4InAppExcludeList)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.MobileServices.V4_ACQUISITION_DATA) // should be removed after acquisition migration
+        v4Defaults.removeObject(forKey: V4MigrationConstants.MobileServices.V4_IN_APP_EXCLUDE_LIST)
 
         Log.debug(label: LOG_TAG, "Migration complete for Mobile Services data.")
     }
 
     /// Migrates the v4 Identity values into the v5 Identity data store
     private func migrateIdentityLocalStorage() {
-        let mid = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4MID)
-        let hint = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4Hint)
-        let blob = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4Blob)
-        let ids = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4Ids)
-        let pushEnabled = v4Defaults.bool(forKey: V4MigrationConstants.Identity.V4PushEnabled)
+        let mid = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_MID)
+        let hint = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_HINT)
+        let blob = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_BLOB)
+        let ids = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_IDS)
+        let pushEnabled = v4Defaults.bool(forKey: V4MigrationConstants.Identity.V4_PUSH_ENABLED)
 
         // Build data
         let identityPropsDict: [String: Any?] = [
@@ -125,26 +125,26 @@ struct V4Migrator {
         identityDataStore.set(key: V4MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
         // remove identity values from v4 data store
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4MID)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4TTL)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Vid)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Hint)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Blob)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4Ids)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4PushEnabled)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4SyncTime)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4PushToken)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_TTL)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_VID)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_HINT)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_BLOB)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_IDS)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_PUSH_ENABLED)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_SYNC_TIME)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_PUSH_TOKEN)
 
         Log.debug(label: LOG_TAG, "Migration complete for Identity data.")
     }
 
     /// Migrates the v4 Lifecycle values into the v5 Lifecycle data store
     private func migrateLifecycleLocalStorage() {
-        let installDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4InstallDate) as? Date
-        let lastVersion = v4Defaults.string(forKey: V4MigrationConstants.Lifecycle.V4LastVersion)
-        let lastUsedDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate) as? Date
-        let launches = v4Defaults.integer(forKey: V4MigrationConstants.Lifecycle.V4Launches)
-        let successfulClose = v4Defaults.bool(forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose)
+        let installDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE) as? Date
+        let lastVersion = v4Defaults.string(forKey: V4MigrationConstants.Lifecycle.V4_LAST_VERSION)
+        let lastUsedDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE) as? Date
+        let launches = v4Defaults.integer(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES)
+        let successfulClose = v4Defaults.bool(forKey: V4MigrationConstants.Lifecycle.V4_SUCCESSFUL_CLOSE)
 
         let lifecycleDataStore = NamedCollectionDataStore(name: V4MigrationConstants.Lifecycle.DATASTORE_NAME)
         lifecycleDataStore.setObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: installDate)
@@ -155,25 +155,25 @@ struct V4Migrator {
         let persistedData = try? JSONSerialization.data(withJSONObject: persistedDict)
         lifecycleDataStore.setObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT, value: persistedData)
 
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4InstallDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LastVersion)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LastUsedDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4Launches)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4SuccessfulClose)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LifecycleData)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4StartDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4ApplicationID)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4OS)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4PauseDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4UpgradeDate)
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4LaunchesAfterUpgrade)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_LAST_VERSION)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_SUCCESSFUL_CLOSE)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_LIFECYCLE_DATA)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_START_DATE)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_APPLICATION_ID)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_OS)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_PAUSE_DATE)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_UPGRADE_DATE)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES_AFTER_UPGRADE)
 
         Log.debug(label: LOG_TAG, "Migration complete for Lifecycle data.")
     }
 
     /// Migrates the v4 Configuration values into the v5 Configuration data store
     private func migrateConfigurationLocalStorage() {
-        let v4PrivacyStatus = v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus) as? NSNumber
+        let v4PrivacyStatus = v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS) as? NSNumber
         if let v4PrivacyStatus = v4PrivacyStatus, v4PrivacyStatus.intValue > 0 && v4PrivacyStatus.intValue < 4 {
             var v5PrivacyStatus = PrivacyStatus.unknown
             switch v4PrivacyStatus {
@@ -186,24 +186,24 @@ struct V4Migrator {
             }
 
             let configDataStore = NamedCollectionDataStore(name: V4MigrationConstants.Configuration.DATASTORE_NAME)
-            let overriddenConfig: [String: AnyCodable]? = configDataStore.getObject(key: V4MigrationConstants.Configuration.V5OverriddenConfig)
+            let overriddenConfig: [String: AnyCodable]? = configDataStore.getObject(key: V4MigrationConstants.Configuration.V5_OVERIDDEN_CONFIG)
 
             if var overriddenConfig = overriddenConfig {
                 if let _ = overriddenConfig[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY]?.value as? String {
                     Log.debug(label: LOG_TAG, "V5 configuration data already contains setting for global privacy. V4 global privacy not migrated.")
                 } else {
                     overriddenConfig[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] = AnyCodable(v5PrivacyStatus.rawValue)
-                    configDataStore.setObject(key: V4MigrationConstants.Configuration.V5OverriddenConfig, value: overriddenConfig)
+                    configDataStore.setObject(key: V4MigrationConstants.Configuration.V5_OVERIDDEN_CONFIG, value: overriddenConfig)
                     Log.debug(label: LOG_TAG, "V5 configuration data did not contain a global privacy. Migrated V4 global privacy with value of \(v5PrivacyStatus.rawValue)")
                 }
             } else {
                 // no current v5 overridden config, create one with migrated v4 privacy status
                 let overriddenConfig: [String: AnyCodable] = [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: AnyCodable(v5PrivacyStatus.rawValue)]
-                configDataStore.setObject(key: V4MigrationConstants.Configuration.V5OverriddenConfig, value: overriddenConfig)
+                configDataStore.setObject(key: V4MigrationConstants.Configuration.V5_OVERIDDEN_CONFIG, value: overriddenConfig)
             }
         }
 
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Configuration.V4PrivacyStatus)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
     }
 
     private func migrateVisitorIdLocalStorage() {
