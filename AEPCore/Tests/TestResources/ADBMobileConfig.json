@@ -14,5 +14,7 @@
   "analytics.batchLimit": 3,
   "property.id": "PR3dd64c475eb747339f0319676d56b1df",
   "global.ssl": true,
-  "analytics.aamForwardingEnabled": true
+  "analytics.aamForwardingEnabled": true,
+  "__prod__analytics.rsids": "prodmobile5adobe.store.sprint.demo",
+  "__dev__analytics.rsids": "devmobile5adobe.store.sprint.demo"
 }
