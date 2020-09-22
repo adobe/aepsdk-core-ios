@@ -47,13 +47,8 @@ struct ContentView: View {
                     .font(.caption)
             }.cornerRadius(5)
             Button(action: {
-//                PerfExtension.LIFECYCLE_START_RESPONSE_EVENT_RECEIVED = false
                 PerfExtension.RULES_CONSEQUENCE_EVENTS = 0
                 self.status = "...."
-//                MobileCore.setLogLevel(level: .error)
-//                MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self, PerfExtension.self]) {}
-//                MobileCore.configureWith(appId: "94f571f308d5/fec7505defe0/launch-eaa54c95a6b5-development")
-//                MobileCore.lifecycleStart(additionalContextData: nil)
                 for _ in 0...9{
                     MobileCore.dispatch(event: Event(name: "mock event", type: "com.adobe.eventType.generic.track", source: "com.adobe.eventSource.requestContent", data: ["action" : "action"]))
                 }
