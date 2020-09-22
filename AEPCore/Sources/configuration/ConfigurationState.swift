@@ -141,7 +141,7 @@ class ConfigurationState {
         // Remove all __env__ keys, only need to process config keys who do not have the environment prefix
         var environmentAwareConfig = currentConfiguration.filter { !$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER) }
         guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else {
-            Log.trace(label: logTag, "Build environment not found, returning environment aware config")
+            Log.trace(label: logTag, "Build environment not found in current config, returning environment aware config.")
             return environmentAwareConfig
         }
 
@@ -161,7 +161,7 @@ class ConfigurationState {
     /// - Returns: `programmaticConfig` with all keys mapped to their build environment equivalent
     func mapEnvironmentKeys(programmaticConfig: [String: Any]) -> [String: Any] {
         guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else {
-            Log.trace(label: logTag, "")
+            Log.trace(label: logTag, "Build environment not found in current config, returning programmatic config.")
             return programmaticConfig
         }
 
