@@ -247,7 +247,7 @@ class EventHubContractTest: XCTestCase {
 
         // verify
         wait(for: [startExpectation], timeout: 0.5)
-        let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "unknownExtension", event: nil)
+        let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "unknownExtension", event: nil, barrier: true)
         XCTAssertNil(sharedState)
     }
 
@@ -263,7 +263,7 @@ class EventHubContractTest: XCTestCase {
 
         // verify
         wait(for: [startExpectation], timeout: 0.5)
-        let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: nil)
+        let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: nil, barrier: true)
         XCTAssertEqual(SharedStateStatus.none, sharedState?.status)
     }
 
@@ -285,10 +285,10 @@ class EventHubContractTest: XCTestCase {
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], event: event2)
 
         // verify
-        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent1?.value as? [String:String])
 
-        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true)
         XCTAssertEqual(["event":"second"], sharedStateForEvent2?.value as? [String:String])
     }
 
@@ -310,11 +310,11 @@ class EventHubContractTest: XCTestCase {
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
 
         // verify
-        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
         // shared state retrieved for event1 is the shared stated set for event2
         XCTAssertEqual(["event":"second"], sharedStateForEvent1?.value as? [String:String])
 
-        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true)
         XCTAssertEqual(["event":"second"], sharedStateForEvent2?.value as? [String:String])
     }
 
@@ -337,13 +337,13 @@ class EventHubContractTest: XCTestCase {
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
 
         // verify
-        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent1?.value as? [String:String])
 
-        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent2?.value as? [String:String])
 
-        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent3?.value as? [String:String])
 
     }
@@ -368,13 +368,13 @@ class EventHubContractTest: XCTestCase {
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
 
         // verify
-        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent1?.value as? [String:String])
 
-        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent2?.value as? [String:String])
 
-        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true)
         XCTAssertEqual(["event":"three"], sharedStateForEvent3?.value as? [String:String])
 
     }
@@ -398,26 +398,26 @@ class EventHubContractTest: XCTestCase {
         let resolver = ContractExtensionOne.runtime?.createPendingSharedState(event: event1)
 
         // verify
-        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
         XCTAssertEqual(SharedStateStatus.pending, sharedStateForEvent1?.status)
 
-        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true)
         XCTAssertEqual(SharedStateStatus.pending, sharedStateForEvent2?.status)
 
-        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true)
         XCTAssertEqual(SharedStateStatus.pending, sharedStateForEvent3?.status)
 
         // test
         resolver?(["event":"first"])
 
         // verify
-        let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent1New?.value as? [String:String])
 
-        let sharedStateForEvent2New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        let sharedStateForEvent2New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent2New?.value as? [String:String])
 
-        let sharedStateForEvent3New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        let sharedStateForEvent3New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true)
         XCTAssertEqual(["event":"first"], sharedStateForEvent3New?.value as? [String:String])
 
     }
@@ -441,13 +441,13 @@ class EventHubContractTest: XCTestCase {
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
 
         // verify
-        let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1)
+        let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
         XCTAssertEqual(["event":"three"], sharedStateForEvent1New?.value as? [String:String])
 
-        let sharedStateForEvent2New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2)
+        let sharedStateForEvent2New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true)
         XCTAssertEqual(["event":"three"], sharedStateForEvent2New?.value as? [String:String])
 
-        let sharedStateForEvent3New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3)
+        let sharedStateForEvent3New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true)
         XCTAssertEqual(["event":"three"], sharedStateForEvent3New?.value as? [String:String])
 
     }

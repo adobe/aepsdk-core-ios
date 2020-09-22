@@ -968,10 +968,10 @@ class EventHubTests: XCTestCase {
         XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.none)
     }
 
-    /// hasSharedState returns true when we have published a shared state
+    /// Setting shared state for first version is considered set
     func testEventHubHasSharedStatePublished() {
         // setup
-        let expectation = XCTestExpectation(description: "hasSharedState returns true when we have published a shared state")
+        let expectation = XCTestExpectation(description: "Creating shared state dispatches an event")
         expectation.assertForOverFulfill = true
         eventHub.start()
 
