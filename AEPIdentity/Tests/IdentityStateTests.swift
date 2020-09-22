@@ -55,7 +55,7 @@ class IdentityStateTests: XCTestCase {
         let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
 
         // verify
-        XCTAssertFalse(result)
+        XCTAssertTrue(result)
         XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should have been updated
         XCTAssertTrue(mockHitQueue.calledBeginProcessing) // opt-in should result in hit processing hits
     }
