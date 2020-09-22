@@ -68,9 +68,7 @@ Alternatively, if your project has a `Package.swift` file, you can add AEPCore d
 
 ```
 dependencies: [
-    .package(name: "AEPCore",
-              url: "https://github.com/adobe/aepsdk-core-ios.git",
-              branch: "main")
+    .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .branch("main"))
 ]
 ```
 
