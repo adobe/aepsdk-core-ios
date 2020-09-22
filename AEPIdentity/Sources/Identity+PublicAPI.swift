@@ -32,7 +32,6 @@ import Foundation
                 completion(nil, .unexpected)
                 return
             }
-
             completion(URL(string: updatedUrlStr), .none)
         }
     }

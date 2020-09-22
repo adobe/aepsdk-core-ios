@@ -30,8 +30,8 @@ class SignalHitProcessor: HitProcessing {
             completion(true)
             return
         }
-
-        let timeout = signalHit.timeout ?? SignalConstants.Defaults.TIMEOUT
+        let timeoutRaw = signalHit.timeout ?? 0
+        let timeout = timeoutRaw > 0 ? timeoutRaw : SignalConstants.Defaults.TIMEOUT
         var httpMethod: HttpMethod
         if signalHit.postBody?.isEmpty ?? true {
             httpMethod = .get
