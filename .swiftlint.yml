@@ -7,6 +7,14 @@ excluded: # paths to ignore during linting. Takes precedence over `included`.
   - AEPServices/Mocks
   - AEPSignal/Tests
   - .build
+  
+included:
+  - AEPCore
+  - AEPIdentity
+  - AEPLifecycle
+  - AEPSignal
+  - AEPServices
+
 line_length: 1000
 
 disabled_rules: # rule identifiers to exclude from running

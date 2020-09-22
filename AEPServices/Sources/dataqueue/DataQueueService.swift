@@ -16,7 +16,7 @@ import Foundation
 ///      - initializes `DataQueue` objects by label name
 ///      - caches `DataQueue` objects, then it can be retrieved later by the same label name
 public class DataQueueService: DataQueuing {
-    public static let shared: DataQueuing = DataQueueService()
+
     private let serialQueue = DispatchQueue(label: "com.adobe.marketing.mobile.dataqueueservice")
     #if DEBUG
         internal var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
@@ -24,7 +24,7 @@ public class DataQueueService: DataQueuing {
         private var threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
     #endif
 
-    private init() {}
+    public init() {}
 
     public func getDataQueue(label databaseName: String) -> DataQueue? {
         if let queue = threadSafeDictionary[databaseName] {

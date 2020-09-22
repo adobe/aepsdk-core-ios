@@ -24,7 +24,7 @@ public class ServiceProvider {
     private var defaultKeyValueService = UserDefaultsNamedCollection()
     private var overrideNetworkService: Networking?
     private var defaultNetworkService = NetworkService()
-    private var defaultDataQueueService = DataQueueService.shared
+    private var defaultDataQueueService = DataQueueService()
     private var overrideCacheService: Caching?
     private var defaultCacheService = DiskCacheService()
     private var overrideURLService: URLOpening?
@@ -110,6 +110,14 @@ public class ServiceProvider {
     }
 
     internal func reset() {
+        defaultSystemInfoService = ApplicationSystemInfoService()
+        defaultKeyValueService = UserDefaultsNamedCollection()
+        defaultNetworkService = NetworkService()
+        defaultDataQueueService = DataQueueService()
+        defaultCacheService = DiskCacheService()
+        defaultURLService = URLService()
+        defaultLoggingService = LoggingService()
+
         overrideSystemInfoService = nil
         overrideKeyValueService = nil
         overrideNetworkService = nil

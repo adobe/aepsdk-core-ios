@@ -184,10 +184,11 @@ final class EventHub {
     /// Retrieves the `SharedState` for a specific extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the earliest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the latest `SharedState`
+    ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
-        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
+        guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState else {
             Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered")
             return nil
         }
@@ -198,6 +199,13 @@ final class EventHub {
         }
 
         let result = sharedState.resolve(version: version)
+
+        let stateProviderLastVersion = eventNumberFor(event: container.lastProcessedEvent)
+        // shared state is still considered pending if barrier is used and the state provider has not processed past this
+        if barrier && stateProviderLastVersion < version && result.status == .set {
+            return SharedStateResult(status: .pending, value: result.value)
+        }
+
         return SharedStateResult(status: result.status, value: result.value)
     }
 
@@ -249,7 +257,7 @@ final class EventHub {
 
     private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
         guard let extensionContainer = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else {
-            Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered with EventHub")
+            Log.error(label: "\(LOG_TAG):\(#function)", "Extension \(extensionName) not registered with EventHub")
             return nil
         }
 
@@ -275,6 +283,16 @@ final class EventHub {
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
     }
 
+    /// Returns the event number for the event
+    /// - Parameter event: The `Event` to be looked up
+    /// - Returns: The `Event` number if found, otherwise 0
+    private func eventNumberFor(event: Event?) -> Int {
+        if let event = event {
+            return eventNumberMap[event.id] ?? 0
+        }
+
+        return 0
+    }
 }
 
 private extension Extension {

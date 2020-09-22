@@ -38,6 +38,11 @@
                BlueprintName = "AEPServicesTests"
                ReferencedContainer = "container:AEPCore.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "FileUnzipperTest/testLargeUnzipPerformance()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

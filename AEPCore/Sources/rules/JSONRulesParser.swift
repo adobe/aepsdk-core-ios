@@ -122,32 +122,31 @@ class JSONCondition: Codable {
         guard let matcher = JSONCondition.matcherMapping[matcher] else {
             return nil
         }
-        let key = "{{\(key)}}"
         if let value = anyCodable.value {
             if matcher == "exists" || matcher == "notExist" {
-                return ComparisonExpression(lhs: Operand<Any>(mustache: key), operationName: matcher, rhs: Operand<Any>(mustache: ""))
+                return ComparisonExpression(lhs: Operand<Any>(mustache: "{{\(key)}}"), operationName: matcher, rhs: Operand<Any>(mustache: ""))
             }
             switch value {
             case is String:
                 if let stringValue = anyCodable.value as? String {
-                    return ComparisonExpression(lhs: Operand<String>(mustache: key), operationName: matcher, rhs: Operand(stringLiteral: stringValue))
+                    return ComparisonExpression(lhs: Operand<String>(mustache: "{{string(\(key))}}"), operationName: matcher, rhs: Operand(stringLiteral: stringValue))
                 }
             case is Int:
                 if let intValue = anyCodable.value as? Int {
-                    return ComparisonExpression(lhs: Operand<Int>(mustache: key), operationName: matcher, rhs: Operand(integerLiteral: intValue))
+                    return ComparisonExpression(lhs: Operand<Int>(mustache: "{{int(\(key))}}"), operationName: matcher, rhs: Operand(integerLiteral: intValue))
                 }
             case is Double:
                 if let doubleValue = anyCodable.value as? Double {
-                    return ComparisonExpression(lhs: Operand<Double>(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: doubleValue))
+                    return ComparisonExpression(lhs: Operand<Double>(mustache: "{{double(\(key))}}"), operationName: matcher, rhs: Operand(floatLiteral: doubleValue))
                 }
             case is Bool:
                 if let boolValue = anyCodable.value as? Bool {
-                    return ComparisonExpression(lhs: Operand<Bool>(mustache: key), operationName: matcher, rhs: Operand(booleanLiteral: boolValue))
+                    return ComparisonExpression(lhs: Operand<Bool>(mustache: "{{bool(\(key))}}"), operationName: matcher, rhs: Operand(booleanLiteral: boolValue))
                 }
             /// rules engine doesn't accept `Float` type, so convert it to `Double` object here.
             case is Float:
                 if let floatValue = anyCodable.value as? Float {
-                    return ComparisonExpression(lhs: Operand<Float>(mustache: key), operationName: matcher, rhs: Operand(floatLiteral: Double(floatValue)))
+                    return ComparisonExpression(lhs: Operand<Float>(mustache: "{{double(\(key))}}"), operationName: matcher, rhs: Operand(floatLiteral: Double(floatValue)))
                 }
             default:
                 return nil

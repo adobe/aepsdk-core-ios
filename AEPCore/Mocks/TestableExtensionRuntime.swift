@@ -47,7 +47,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         }
     }
 
-    public func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+    public func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
         if let id = event?.id {
             return mockedSharedStates["\(extensionName)-\(id)"] ?? mockedSharedStates["\(extensionName)"]
