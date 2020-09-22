@@ -39,18 +39,16 @@ import Foundation
         V5Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v5 if needed
 
         let registeredCounter = AtomicCounter()
-        EventHub.shared.registerExtension(Configuration.self){ _ in
-            extensions.forEach {
-                EventHub.shared.registerExtension($0) { _ in
-                    if registeredCounter.incrementAndGet() == extensions.count {
-                        EventHub.shared.start()
-                        completion?()
-                    }
+        let allExtensions = [Configuration.self] + extensions
+
+        allExtensions.forEach {
+            EventHub.shared.registerExtension($0) { _ in
+                if registeredCounter.incrementAndGet() == allExtensions.count {
+                    EventHub.shared.start()
+                    completion?()
                 }
             }
         }
-        
-        
     }
 
     /// Registers the extension from MobileCore
