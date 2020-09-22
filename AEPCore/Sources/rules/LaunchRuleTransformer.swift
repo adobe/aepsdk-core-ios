@@ -15,7 +15,7 @@ import Foundation
 
 /// generate the `Transforming` instance used by Launch Rules Engine
 class LaunchRuleTransformer {
-    static func createTransforming() -> Transform {
+    static func createTransforming() -> Transforming {
         let transform = Transform()
         transform.register(name: RulesConstants.Transform.URL_ENCODING_FUNCTION_IN_RULES, transformation: { value in
             if let valueString = value as? String {
