@@ -25,26 +25,28 @@ class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE = "triggeredconsequence"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
-    private static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
 
-    private let transform = Transform()
+    private let transform: Transforming
     private let name: String
     private let extensionRuntime: ExtensionRuntime
     private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
     private var cachedEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
 
+    let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
     init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
+        transform = LaunchRuleTransformer.createTransforming()
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
-        let evaluator = ConditionEvaluator(options: .defaultOptions)
-        rulesEngine = RulesEngine(evaluator: evaluator)
-        if RulesEngineLog.logging == nil {
-            RulesEngineLog.logging = RulesEngineNativeLogging()
-        }
+        evaluator = ConditionEvaluator(options: .caseInsensitive)
+        rulesEngine = RulesEngine(evaluator: evaluator, transformer: transform)
+        // you can enable the log when debugging rules engine
+//        if RulesEngineLog.logging == nil {
+//            RulesEngineLog.logging = RulesEngineNativeLogging()
+//        }
         rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
         /// Uses this flag to decide if we need to cache incoming events
@@ -52,12 +54,6 @@ class LaunchRulesEngine {
             cachedEvents = [Event]()
             dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
         }
-        transform.register(name: LaunchRulesEngine.URL_ENCODING_FUNCTION_IN_RULES, transformation: { value in
-            if let valueString = value as? String {
-                return URLEncoder.encode(value: valueString)
-            }
-            return value
-        })
     }
 
     /// Register a `RulesTracer`
