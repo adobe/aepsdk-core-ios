@@ -940,9 +940,9 @@
 		21CAC0D82422917600C11388 /* AEPCore */ = {
 			isa = PBXGroup;
 			children = (
-				3FF8170424D89AC50064DFA1 /* mocks */,
-				24B4934124D2310700AA38D9 /* src */,
-				24B4934224D231D800AA38D9 /* tests */,
+				3FF8170424D89AC50064DFA1 /* Mocks */,
+				24B4934124D2310700AA38D9 /* Sources */,
+				24B4934224D231D800AA38D9 /* Tests */,
 			);
 			name = AEPCore;
 			sourceTree = "<group>";
@@ -965,7 +965,7 @@
 			path = MigrationTests;
 			sourceTree = "<group>";
 		};
-		24B4934124D2310700AA38D9 /* src */ = {
+		24B4934124D2310700AA38D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				21377D3F24E33830004BAC01 /* migration */,
@@ -976,11 +976,11 @@
 				21CAC0D92422917600C11388 /* AEPCore.h */,
 				21CAC0DA2422917600C11388 /* Info.plist */,
 			);
-			name = src;
+			name = Sources;
 			path = AEPCore/Sources;
 			sourceTree = "<group>";
 		};
-		24B4934224D231D800AA38D9 /* tests */ = {
+		24B4934224D231D800AA38D9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				21F79ABC24E71427003204C3 /* MigrationTests */,
@@ -997,11 +997,11 @@
 				3F3951E824CA096100F7325B /* MobileCoreTests.swift */,
 				21CAC0E62422917600C11388 /* Info.plist */,
 			);
-			name = tests;
+			name = Tests;
 			path = AEPCore/Tests;
 			sourceTree = "<group>";
 		};
-		24B4934324D2360700AA38D9 /* src */ = {
+		24B4934324D2360700AA38D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				3FE6DE3124C642330065EA05 /* AEPIdentity.h */,
@@ -1027,11 +1027,11 @@
 				3FE6DE4724C643050065EA05 /* URLQueryItem+Identity.swift */,
 				3FE6DE5824C643060065EA05 /* URL+Identity.swift */,
 			);
-			name = src;
+			name = Sources;
 			path = AEPIdentity/Sources;
 			sourceTree = "<group>";
 		};
-		24B4934424D2361000AA38D9 /* tests */ = {
+		24B4934424D2361000AA38D9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				3FE6DE8624C643EA0065EA05 /* TestHelpers */,
@@ -1054,11 +1054,11 @@
 				21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */,
 				214154A725186734005CEB80 /* CustomIdentityTests.swift */,
 			);
-			name = tests;
+			name = Tests;
 			path = AEPIdentity/Tests;
 			sourceTree = "<group>";
 		};
-		24B4934524D23AAB00AA38D9 /* tests */ = {
+		24B4934524D23AAB00AA38D9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				3F39153624CB823100B58C3E /* FunctionalTests */,
@@ -1069,11 +1069,11 @@
 				3FE6DDFE24C630DE0065EA05 /* LifecycleSessionTests.swift */,
 				3FE6DDFD24C630DE0065EA05 /* LifecycleStateTests.swift */,
 			);
-			name = tests;
+			name = Tests;
 			path = AEPLifecycle/Tests;
 			sourceTree = "<group>";
 		};
-		24B4934624D23AB200AA38D9 /* src */ = {
+		24B4934624D23AB200AA38D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */,
@@ -1087,11 +1087,11 @@
 				3FE6DE1624C631100065EA05 /* LifecycleSession.swift */,
 				3FE6DE0624C630EA0065EA05 /* LifecycleState.swift */,
 			);
-			name = src;
+			name = Sources;
 			path = AEPLifecycle/Sources;
 			sourceTree = "<group>";
 		};
-		24B4934724D337A800AA38D9 /* tests */ = {
+		24B4934724D337A800AA38D9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				3F03983324BE62AA0019F095 /* resources */,
@@ -1099,11 +1099,11 @@
 				3F03980E24BE61520019F095 /* utility */,
 				3F03979624BE5DD30019F095 /* Info.plist */,
 			);
-			name = tests;
+			name = Tests;
 			path = AEPServices/Tests;
 			sourceTree = "<group>";
 		};
-		24B4934824D337B300AA38D9 /* src */ = {
+		24B4934824D337B300AA38D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				3F03979F24BE5FF30019F095 /* cache */,
@@ -1120,11 +1120,11 @@
 				3F0397C024BE5FF30019F095 /* URLOpening.swift */,
 				3F0397C124BE5FF30019F095 /* URLService.swift */,
 			);
-			name = src;
+			name = Sources;
 			path = AEPServices/Sources;
 			sourceTree = "<group>";
 		};
-		24B4934924D3380400AA38D9 /* mock */ = {
+		24B4934924D3380400AA38D9 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
 				3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */,
@@ -1141,20 +1141,20 @@
 				24543A1324E1DAFC002D8D9A /* MockURLService.swift */,
 				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
 			);
-			name = mock;
+			name = Mocks;
 			path = AEPServices/Mocks;
 			sourceTree = "<group>";
 		};
 		24B4935024D4C31100AA38D9 /* AEPSignal */ = {
 			isa = PBXGroup;
 			children = (
-				24B4936724D4C36200AA38D9 /* src */,
-				24B4936624D4C35B00AA38D9 /* tests */,
+				24B4936724D4C36200AA38D9 /* Sources */,
+				24B4936624D4C35B00AA38D9 /* Tests */,
 			);
 			name = AEPSignal;
 			sourceTree = "<group>";
 		};
-		24B4936624D4C35B00AA38D9 /* tests */ = {
+		24B4936624D4C35B00AA38D9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */,
@@ -1162,11 +1162,11 @@
 				24B4935C24D4C31100AA38D9 /* SignalTests.swift */,
 				24B4935E24D4C31100AA38D9 /* Info.plist */,
 			);
-			name = tests;
+			name = Tests;
 			path = AEPSignal/Tests;
 			sourceTree = "<group>";
 		};
-		24B4936724D4C36200AA38D9 /* src */ = {
+		24B4936724D4C36200AA38D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				24B4935124D4C31100AA38D9 /* AEPSignal.h */,
@@ -1177,16 +1177,16 @@
 				24B4937924DA18BE00AA38D9 /* SignalHit.swift */,
 				24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */,
 			);
-			name = src;
+			name = Sources;
 			path = AEPSignal/Sources;
 			sourceTree = "<group>";
 		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
 			isa = PBXGroup;
 			children = (
-				24B4934924D3380400AA38D9 /* mock */,
-				24B4934824D337B300AA38D9 /* src */,
-				24B4934724D337A800AA38D9 /* tests */,
+				24B4934924D3380400AA38D9 /* Mocks */,
+				24B4934824D337B300AA38D9 /* Sources */,
+				24B4934724D337A800AA38D9 /* Tests */,
 			);
 			name = AEPServices;
 			sourceTree = "<group>";
@@ -1526,8 +1526,8 @@
 		3FE6DDD224C62EE60065EA05 /* AEPLifecycle */ = {
 			isa = PBXGroup;
 			children = (
-				24B4934624D23AB200AA38D9 /* src */,
-				24B4934524D23AAB00AA38D9 /* tests */,
+				24B4934624D23AB200AA38D9 /* Sources */,
+				24B4934524D23AAB00AA38D9 /* Tests */,
 			);
 			name = AEPLifecycle;
 			sourceTree = "<group>";
@@ -1535,8 +1535,8 @@
 		3FE6DE3024C642330065EA05 /* AEPIdentity */ = {
 			isa = PBXGroup;
 			children = (
-				24B4934324D2360700AA38D9 /* src */,
-				24B4934424D2361000AA38D9 /* tests */,
+				24B4934324D2360700AA38D9 /* Sources */,
+				24B4934424D2361000AA38D9 /* Tests */,
 			);
 			name = AEPIdentity;
 			sourceTree = "<group>";
@@ -1550,7 +1550,7 @@
 			path = TestHelpers;
 			sourceTree = "<group>";
 		};
-		3FF8170424D89AC50064DFA1 /* mocks */ = {
+		3FF8170424D89AC50064DFA1 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
 				3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */,
@@ -1560,7 +1560,8 @@
 				3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */,
 				3F08FFA724DBBDD700D34DE3 /* UserDefaults+Clear.swift */,
 			);
-			path = mocks;
+			name = Mocks;
+			path = AEPCore/Mocks;
 			sourceTree = "<group>";
 		};
 		78AA4EC72513AE5200205AE9 /* Configuration */ = {

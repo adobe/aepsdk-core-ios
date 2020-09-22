@@ -1,5 +1,9 @@
 # AEPCore
 
+## BETA
+
+AEPCore is currently in beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
+
 ## About this project
 
 The Mobile Core represents the core Adobe Experience Platform SDK that is required for every app implementation. The core contains a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, Rules Engine, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
@@ -10,12 +14,6 @@ The Mobile Core represents the core Adobe Experience Platform SDK that is requir
 
 ## Installation
 These are currently the supported installation options:
-
-### Manual
-Include the AEPCore.xcodeproj into the project, and link all the needed targets to your app.
-
-### Binaries
-Run `make archive`, it will generates the .xcframeworks under the `build` folder. Drag and drop all the .xcframeworks to your app target.
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 ```ruby
@@ -45,9 +43,6 @@ Replace `YOUR_TARGET_NAME` and then, in the `Podfile` directory, type:
 $ pod install
 ```
 
-### [Carthage](https://github.com/Carthage/Carthage)
-TBD
-
 ### [Swift Package Manager](https://github.com/apple/swift-package-manager)
 
 To add the AEPCore Package to your application, from the Xcode menu select:
@@ -72,13 +67,18 @@ dependencies: [
 ]
 ```
 
-## Current version
-Adobe Experience Platform in Swift is currently in development.
+### Project Reference
 
-### Contributing
+Include `AEPCore.xcodeproj` in the targeted Xcode project and link all necessary libraries to your app target.
+
+### Binaries
+
+Run `make archive` from the root directory to generate `.xcframeworks` for each module under the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
+
+## Contributing
 
 Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
 
-### Licensing
+## Licensing
 
 This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.
