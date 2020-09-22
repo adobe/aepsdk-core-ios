@@ -115,6 +115,7 @@ class Configuration: Extension {
         // Update the overriddenConfig with the new config from API and persist them in disk, and abort if overridden config is empty
         guard let updatedConfig = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any], !updatedConfig.isEmpty else {
             // error, resolve pending shared state with current config
+            Log.warning(label: name, "Overriden config is empty, resolving pending shared state with current config")
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
@@ -132,12 +133,14 @@ class Configuration: Extension {
     private func processConfigureWith(appId: String, event: Event, sharedStateResolver: @escaping SharedStateResolver) {
         guard !appId.isEmpty else {
             // Error: No appId provided or its empty, resolve pending shared state with current config
+            Log.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
 
         guard validateForInternalEventAppIdChange(event: event, newAppId: appId) else {
             // error: app Id update already in-flight, resolve pending shared state with current config
+            Log.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
@@ -153,8 +156,10 @@ class Configuration: Extension {
                 self?.startEvents()
             } else {
                 // If downloading config failed try again later
-                self?.retryQueue.asyncAfter(deadline: .now() + 5) {
-                    _ = self?.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
+                guard let self = self else { return }
+                Log.trace(label: self.name, "Downloading config failed, trying again")
+                self.retryQueue.asyncAfter(deadline: .now() + 5) {
+                    _ = self.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
                 }
             }
         }
@@ -168,6 +173,7 @@ class Configuration: Extension {
     private func processConfigureWith(filePath: String, event: Event, sharedStateResolver: SharedStateResolver) {
         guard let filePath = event.data?[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String, !filePath.isEmpty else {
             // Error: Shared state is updated with previous config
+            Log.warning(label: name, "Loaded configuration from file path was empty, using previous config.")
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
