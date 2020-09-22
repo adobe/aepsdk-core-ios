@@ -44,17 +44,23 @@ import Foundation
         registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
         registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
-
-        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value
-        if state?.bootup(configSharedState: configSharedState, eventDispatcher: dispatch(event:)) ?? false, let props = state?.identityProperties {
-            // privacy was opt-out, share state
-            createSharedState(data: props.toEventData(), event: nil)
-        }
     }
 
     public func onUnregistered() {}
 
     public func readyForEvent(_ event: Event) -> Bool {
+        if state?.hasBooted ?? true {
+            guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
+            if state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false {
+                // we can bootup once we can do a force sync
+                if state?.bootup(configSharedState: configSharedState, event: event) ?? false, let props = state?.identityProperties {
+                    // privacy was opt-out, share state
+                    createSharedState(data: props.toEventData(), event: nil)
+                }
+            }
+            return false // cannot handle any events until we have booted
+        }
+        
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
