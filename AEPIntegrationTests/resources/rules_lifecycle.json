@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.lifecycle"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.responseContent"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "lifecyclecontextdata.launchevent",
+                            "matcher": "ex",
+                            "values": []
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RCc223ec648df44fbbaab737e6cc6da50e",
+          "type": "pb",
+          "detail": {
+            "timeout": 0,
+            "templateurl": "https://www.lifecycle.com?installevent={%lifecyclecontextdata.installevent%}&launchevent={%lifecyclecontextdata.launchevent%}&crashevent={%lifecyclecontextdata.crashevent%}&launches={%lifecyclecontextdata.launches%}&key={%lifecyclecontextdata.key%}"
+          }
+        }
+      ]
+    }
+  ]
+}

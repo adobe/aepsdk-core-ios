@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "name",
+                            "matcher": "eq",
+                            "values": ["testGetRequest"]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RCc223ec648df44fbbaab737e6cc6da50e",
+          "type": "pb",
+          "detail": {
+            "timeout": 0,
+            "templateurl": "https://www.signal.com?name={%name%}"
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "name",
+                            "matcher": "eq",
+                            "values": ["testPostRequest"]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RCc223ec648df44fbbaab737e6cc6da50e",
+          "type": "pb",
+          "detail": {
+            "timeout": 0,
+            "templateurl": "https://www.signal.com?name={%name%}",
+            "templatebody" : "name={%name%}",
+            "contenttype" : "zip"
+          }
+        }
+      ]
+    }
+  ]
+}

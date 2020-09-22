@@ -5,6 +5,7 @@ AEPSERVICES_TARGET_NAME = AEPServices
 AEPLIFECYCLE_TARGET_NAME = AEPLifecycle
 AEPIDENTITY_TARGET_NAME = AEPIdentity
 AEPSIGNAL_TARGET_NAME = AEPSignal
+AEPINTEGRATION_TEST_TARGET_NAME = AEPIntegrationTests
 
 SIMULATOR_ARCHIVE_PATH = ./build/ios_simulator.xcarchive/Products/Library/Frameworks/
 IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
@@ -19,6 +20,12 @@ unit-test:
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPIDENTITY_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSIGNAL_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
+
+integration-test:
+	@echo "######################################################################"
+	@echo "### Integration Testing iOS"
+	@echo "######################################################################"
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8'
 
 archive:
 	xcodebuild archive -scheme AEP-All -archivePath "./build/ios.xcarchive" -sdk iphoneos -destination="iOS" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES

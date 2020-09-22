@@ -18,9 +18,6 @@ class DataQueueServiceTests: XCTestCase {
 
     override func setUp() {
         DataQueueServiceTests.removeDbFileIfExists(fileName)
-        if let service = DataQueueService.shared as? DataQueueService {
-            service.cleanCache()
-        }
     }
 
     override func tearDown() {}
@@ -42,7 +39,7 @@ class DataQueueServiceTests: XCTestCase {
         // Given
 
         // When
-        _ = DataQueueService.shared.getDataQueue(label: fileName)
+        _ = DataQueueService().getDataQueue(label: fileName)
 
         // Then
         XCTAssertTrue(DataQueueServiceTests.dbFileExists(fileName))
@@ -55,7 +52,7 @@ class DataQueueServiceTests: XCTestCase {
         // Given
 
         // When
-        let result = DataQueueService.shared.getDataQueue(label: "")
+        let result = DataQueueService().getDataQueue(label: "")
 
         // Then
         XCTAssertNil(result)
@@ -64,10 +61,11 @@ class DataQueueServiceTests: XCTestCase {
     /// initDataQueue()
     func testDataQueueInstanceShouldBeCached() throws {
         // Given
-        let dataQueueFirst = DataQueueService.shared.getDataQueue(label: fileName)
+        let dataQueue = DataQueueService()
+        let dataQueueFirst = dataQueue.getDataQueue(label: fileName)
 
         // When
-        let dataQueueSecond = DataQueueService.shared.getDataQueue(label: fileName)
+        let dataQueueSecond = dataQueue.getDataQueue(label: fileName)
 
         // Then
         XCTAssertTrue(dataQueueFirst as AnyObject? === dataQueueSecond as AnyObject?)

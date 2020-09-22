@@ -606,6 +606,29 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertTrue(lifecycleContextData["launches"] == nil)
     }
 
+
+    // MARK: - Transforming tests
+    // test that the data can be transformed to the correct type
+    func testTransform() {
+        /// Given:
+        resetRulesEngine(withNewRules: "rules_testTransform")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["numberString": "3", "booleanValue": true, "intValue": 5, "doubleValue": 10.3]])
+
+        /// When:
+        _ = rulesEngine.process(event: event)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("url", dataWithType["type"] as! String)
+    }
+
     private func resetRulesEngine(withNewRules rulesJsonFileName: String) {
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: rulesJsonFileName, withExtension: "json"), let data = try? Data(contentsOf: url) else {

@@ -17,4 +17,11 @@ enum RulesConstants {
     enum Keys {
         static let APP_HAS_LAUNCHED = "config.app.has.launched"
     }
+    enum Transform {
+        static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
+        static let TRANSFORM_TO_INT = "int"
+        static let TRANSFORM_TO_DOUBLE = "double"
+        static let TRANSFORM_TO_STRING = "string"
+        static let TRANSFORM_TO_BOOL = "bool"
+    }
 }
