@@ -14,9 +14,9 @@ import Foundation
 
 /// Responsible for downloading configuration files and caching them
 struct ConfigurationDownloader: ConfigurationDownloadable {
-    
+
     private let logTag = "configuration downloader"
-    
+
     func loadConfigFrom(filePath: String) -> [String: Any]? {
         guard let data = try? String(contentsOfFile: filePath).data(using: .utf8) else {
             Log.error(label: logTag, "Loading config from file path failed")
