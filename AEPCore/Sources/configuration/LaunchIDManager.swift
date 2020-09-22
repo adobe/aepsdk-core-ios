@@ -15,6 +15,7 @@ import Foundation
 /// Handles loading and saving the launch appId to the data store and manifest
 struct LaunchIDManager {
     let dataStore: NamedCollectionDataStore
+    private let logTag = "LaunchIDManager"
 
     /// Loads the appId from the data store, if not present in the data store loads from the manifest
     /// - Returns: appId loaded from persistence or manifest, nil if not present in either
@@ -26,13 +27,21 @@ struct LaunchIDManager {
     /// Saves the appId to the data store
     /// - Parameter appId: appId to be saved to data store
     func saveAppIdToPersistence(appId: String) {
+        if appId.isEmpty {
+            Log.trace(label: logTag, "Attempting to set App ID in data store with empty string")
+            return
+        }
         dataStore.set(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID, value: appId)
     }
 
     /// Loads the appId from the data store
     /// - Returns: appId loaded from persistence, nil if not present
     func loadAppIdFromPersistence() -> String? {
-        return dataStore.getString(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID)
+        if let appId = dataStore.getString(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID) {
+            return appId
+        }
+        Log.trace(label: logTag, "App ID not found in data store")
+        return nil
     }
 
     /// Loads the appId from the manifest
@@ -42,7 +51,7 @@ struct LaunchIDManager {
             saveAppIdToPersistence(appId: appId)
             return appId
         }
-
+        Log.trace(label: logTag, "App ID not found in manifest")
         return nil
     }
 }
