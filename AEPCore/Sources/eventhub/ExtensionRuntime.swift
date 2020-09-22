@@ -45,6 +45,7 @@ import Foundation
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+    ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult?
 
     /// Starts the `Event` queue for this extension
