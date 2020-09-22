@@ -15,7 +15,7 @@ import Foundation
 
 /// Type representing the state of an extension's `SharedState`
 @objc (AEPSharedStateStatus) public enum SharedStateStatus: Int {
-    case settled, set, pending, none
+    case set, pending, none
 }
 
 class SharedState {

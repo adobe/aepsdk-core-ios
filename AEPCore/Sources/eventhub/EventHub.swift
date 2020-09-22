@@ -204,7 +204,7 @@ final class EventHub {
             return SharedStateResult(status: .pending, value: result.value)
         }
 
-        return SharedStateResult(status: result.status == .settled ? .set : result.status, value: result.value)
+        return SharedStateResult(status: result.status, value: result.value)
     }
 
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type
