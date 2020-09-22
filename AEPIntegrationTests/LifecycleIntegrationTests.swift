@@ -26,6 +26,10 @@ class LifecycleIntegrationTests: XCTestCase {
         ServiceProvider.shared.reset()
         initExtensionsAndWait()
     }
+    
+    override func tearDown() {
+        sleep(1)
+    }
 
     func initExtensionsAndWait() {
         EventHub.reset()

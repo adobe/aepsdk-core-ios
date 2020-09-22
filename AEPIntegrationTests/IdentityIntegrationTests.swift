@@ -24,6 +24,10 @@ class IdentityIntegrationTests: XCTestCase {
         ServiceProvider.shared.reset()
         EventHub.reset()
     }
+    
+    override func tearDown() {
+        sleep(1)
+    }
 
     func initExtensionsAndWait() {
         let initExpectation = XCTestExpectation(description: "init extensions")
