@@ -49,9 +49,7 @@ import Foundation
     public func onUnregistered() {}
 
     public func readyForEvent(_ event: Event) -> Bool {
-        if !canProcessEvents(event: event) {
-            return false
-        }
+        guard canProcessEvents(event: event) else { return false }
 
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
