@@ -13,6 +13,7 @@
 import Foundation
 
 public class MockDataQueue: DataQueue {
+
     let queue = ThreadSafeArray<DataEntity>()
 
     public init() {}
@@ -39,5 +40,8 @@ public class MockDataQueue: DataQueue {
 
     public func count() -> Int {
         return queue.count
+    }
+
+    public func close() {
     }
 }

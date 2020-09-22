@@ -34,6 +34,7 @@ import Foundation
         }
 
         let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(entity:responseData:)))
+
         let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let pushIdManager = PushIDManager(dataStore: dataStore, eventDispatcher: dispatch(event:))
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager)
@@ -52,7 +53,9 @@ import Foundation
         }
     }
 
-    public func onUnregistered() {}
+    public func onUnregistered() {
+        state?.hitQueue.close()
+    }
 
     public func readyForEvent(_ event: Event) -> Bool {
         if event.isSyncEvent || event.type == EventType.genericIdentity {

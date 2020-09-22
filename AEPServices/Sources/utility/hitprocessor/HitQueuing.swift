@@ -34,4 +34,7 @@ public protocol HitQueuing {
 
     /// Returns the number of items in the queue
     func count() -> Int
+
+    /// Closes the curernt `HitQueuing`
+    func close()
 }

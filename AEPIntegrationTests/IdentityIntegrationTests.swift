@@ -26,7 +26,12 @@ class IdentityIntegrationTests: XCTestCase {
     }
 
     override func tearDown() {
-        sleep(1)
+
+        let initExpectation = XCTestExpectation(description: "init extensions")
+        MobileCore.unregisterExtension(Identity.self) {
+            initExpectation.fulfill()
+        }
+        wait(for: [initExpectation], timeout: 2)
     }
 
     func initExtensionsAndWait() {
@@ -136,7 +141,7 @@ class IdentityIntegrationTests: XCTestCase {
             XCTAssertTrue(identityString?.contains("imsOrgID") ?? false)
             urlExpectation.fulfill()
         }
-        wait(for: [urlExpectation], timeout: 1)
+        wait(for: [urlExpectation], timeout: 2)
     }
 
     func testSetPushIdentifier() {

@@ -63,7 +63,7 @@ class SignalIntegrationTests: XCTestCase {
 
         let event = Event(name: "Test", type: "type", source: "source", data: ["name": "testGetRequest"])
         MobileCore.dispatch(event: event)
-        wait(for: [requestExpectation], timeout: 2)
+        wait(for: [requestExpectation], timeout: 4)
     }
 
     func testPostRequest() {
@@ -89,7 +89,7 @@ class SignalIntegrationTests: XCTestCase {
 
         let event = Event(name: "Test", type: "type", source: "source", data: ["name": "testPostRequest"])
         MobileCore.dispatch(event: event)
-        wait(for: [requestExpectation], timeout: 2)
+        wait(for: [requestExpectation], timeout: 4)
     }
 
     func testOptedOut() {

@@ -17,6 +17,7 @@ import Foundation
 ///    - `DataEntity` objects inside this queue will be persisted in SQLite database automatically
 ///    - the database operations is performed in series
 class SQLiteDataQueue: DataQueue {
+
     public let databaseName: String
     public let databaseFilePath: FileManager.SearchPathDirectory
     public static let TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
@@ -25,6 +26,7 @@ class SQLiteDataQueue: DataQueue {
     private let TB_KEY_UNIQUE_IDENTIFIER = "uniqueIdentifier"
     private let TB_KEY_TIMESTAMP = "timestamp"
     private let TB_KEY_DATA = "data"
+    private var isClosed = false
 
     private let LOG_PREFIX = "SQLiteDataQueue"
 
@@ -45,6 +47,7 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func add(dataEntity: DataEntity) -> Bool {
+        if isClosed { return false}
         return serialQueue.sync {
             var dataString = ""
             if let data = dataEntity.data {
@@ -70,6 +73,7 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func peek() -> DataEntity? {
+        if isClosed { return nil}
         return serialQueue.sync {
             let queryRowStatement = """
             SELECT min(id),uniqueIdentifier,timestamp,data FROM \(SQLiteDataQueue.TABLE_NAME);
@@ -103,6 +107,7 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func remove() -> Bool {
+        if isClosed { return false}
         return serialQueue.sync {
             guard let connection = connect() else {
                 return false
@@ -122,6 +127,7 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func clear() -> Bool {
+        if isClosed { return false}
         return serialQueue.sync {
             let dropTableStatement = """
             DROP TABLE IF EXISTS \(SQLiteDataQueue.TABLE_NAME);
@@ -142,6 +148,7 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func count() -> Int {
+        if isClosed { return 0}
         return serialQueue.sync {
             let queryRowStatement = """
             SELECT count(id) FROM \(SQLiteDataQueue.TABLE_NAME);
@@ -158,6 +165,13 @@ class SQLiteDataQueue: DataQueue {
             }
 
             return Int(countAsString) ?? 0
+        }
+    }
+
+    func close() {
+        isClosed = true
+        // waiting for the current operations finished
+        serialQueue.sync {
         }
     }
 
