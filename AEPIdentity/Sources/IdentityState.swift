@@ -36,21 +36,26 @@ class IdentityState {
         self.pushIdManager = pushIdManager
     }
 
-    /// Completes init for the Identity extension and determines if we need to share state
+    /// Completes init for the Identity extension if we can force sync and determines if we need to share state
     /// - Parameters:
     ///   - configSharedState: the current configuration shared state available at registration time
     ///   - event: The `Event` triggering the bootup
     /// - Returns: True if we should share state after bootup, false otherwise
-    func bootup(configSharedState: [String: Any]?, event: Event) -> Bool {
+    func bootupIfReady(configSharedState: [String: Any], event: Event) -> Bool {
+        // Only bootup once we can perform the first force sync
+        guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else { return false }
+
         // load data from local storage
         identityProperties.loadFromPersistence()
 
         // Load privacy status
-        identityProperties.privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        identityProperties.privacyStatus = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
 
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
+        hasBooted = true
+        Log.debug(label: LOG_TAG, "Identity has successfully booted up")
         // Identity should always share its state
         // However, don't create a shared state twice, which will log an error
         // The force sync event processed above will create a shared state if the privacy is not opt-out
