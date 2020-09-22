@@ -26,7 +26,7 @@ class SignalIntegrationTests: XCTestCase {
         ServiceProvider.shared.reset()
         initExtensionsAndWait()
     }
-    
+
     override func tearDown() {
         sleep(1)
     }

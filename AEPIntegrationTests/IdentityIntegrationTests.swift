@@ -24,7 +24,7 @@ class IdentityIntegrationTests: XCTestCase {
         ServiceProvider.shared.reset()
         EventHub.reset()
     }
-    
+
     override func tearDown() {
         sleep(1)
     }
