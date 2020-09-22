@@ -114,7 +114,6 @@ class Configuration: Extension {
     private func processUpdateConfig(event: Event, sharedStateResolver: SharedStateResolver) {
         // Update the overriddenConfig with the new config from API and persist them in disk, and abort if overridden config is empty
         guard let updatedConfig = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any], !updatedConfig.isEmpty else {
-            // error, resolve pending shared state with current config
             Log.warning(label: name, "Overriden config is empty, resolving pending shared state with current config")
             sharedStateResolver(configState.environmentAwareConfiguration)
             return

@@ -15,11 +15,11 @@ import Foundation
 /// Responsible for downloading configuration files and caching them
 struct ConfigurationDownloader: ConfigurationDownloadable {
 
-    private let logTag = "configuration downloader"
+    private let logTag = "ConfigurationDownloader"
 
     func loadConfigFrom(filePath: String) -> [String: Any]? {
         guard let data = try? String(contentsOfFile: filePath).data(using: .utf8) else {
-            Log.error(label: logTag, "Loading config from file path failed")
+            Log.error(label: logTag, "Failed to load config from file path: \(filePath)")
             return nil
         }
         let decoded = try? JSONDecoder().decode([String: AnyCodable].self, from: data)
@@ -42,8 +42,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
 
     func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> Void) {
         guard !appId.isEmpty, let url = URL(string: ConfigurationConstants.CONFIG_URL_BASE + appId + ".json") else {
-            // error - bad url
-            Log.error(label: logTag, "Loading config from URL failed. Bad URL")
+            Log.error(label: logTag, "Failed to load config from URL: \(ConfigurationConstants.CONFIG_URL_BASE + appId + ".json")")
             completion(nil)
             return
         }
