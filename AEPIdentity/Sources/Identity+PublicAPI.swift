@@ -65,7 +65,7 @@ import Foundation
         let event = Event(name: "Get experience cloud ID", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
         MobileCore.dispatch(event: event) { responseEvent in
-            let experienceCloudId = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String
+            let experienceCloudId = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String
             completion(experienceCloudId)
         }
     }

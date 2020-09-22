@@ -4,6 +4,8 @@
 
 Docs for core and stuff.
 
+### [Architecture](Architecture.md)
+
 ### [Event Hub](EventHub/README.md)
 
 ### [Swift Style Guide](StyleGuide.md)

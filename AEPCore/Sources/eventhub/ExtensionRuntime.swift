@@ -34,11 +34,11 @@ import Foundation
     /// Creates a new `SharedState for this extension
     /// - Parameters:
     ///   - data: Data for the `SharedState`
-    ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned at the latest
+    ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned zero
     func createSharedState(data: [String: Any], event: Event?)
 
     /// Creates a pending `SharedState` versioned at `event`
-    /// - Parameter event: The event for the pending `SharedState` to be created at
+    /// - Parameter event: The event for the pending `SharedState` to be created at, if nil the shared state is versioned zero
     func createPendingSharedState(event: Event?) -> SharedStateResolver
 
     /// Gets the `SharedState` data for a specified extension

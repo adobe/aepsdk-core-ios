@@ -125,6 +125,7 @@ final class EventHub {
 
             let extensionContainer = self.registeredExtensions.removeValue(forKey: type.typeName) // remove the corresponding extension container
             extensionContainer?.exten?.onUnregistered() // invoke the onUnregistered delegate function
+            self.shareEventHubSharedState()
             completion(nil)
         }
     }
@@ -148,7 +149,7 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
-    ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil, it will be versioned at the latest
+    ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil the shared state is versioned zero
     func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
         guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) else {
             Log.error(label: "\(LOG_TAG):\(#function)", "Error in creating shared state.")
@@ -163,7 +164,7 @@ final class EventHub {
     /// Sets the `SharedState` for the extension to pending at `event`'s version and returns a `SharedStateResolver` which is to be invoked with data for the `SharedState` once available.
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
-    ///   - event: Event which has the `SharedState` should be versioned for
+    ///   - event: Event which has the `SharedState` should be versioned for, if nil the shared state is versioned zero
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
     func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
         var pendingVersion: Int?
@@ -192,15 +193,15 @@ final class EventHub {
             return nil
         }
 
-        var version = Int.max
+        var version = 0 // default to version 0 if event nil
         if let unwrappedEvent = event {
-            version = eventNumberMap[unwrappedEvent.id] ?? Int.max
+            version = eventNumberMap[unwrappedEvent.id] ?? 0
         }
 
         let result = sharedState.resolve(version: version)
 
         let stateProviderLastVersion = eventNumberFor(event: container.lastProcessedEvent)
-        // shared state is still considered pending if barrier is used and the state provider has not processed past this 
+        // shared state is still considered pending if barrier is used and the state provider has not processed past this
         if barrier && stateProviderLastVersion < version && result.status == .set {
             return SharedStateResult(status: .pending, value: result.value)
         }
@@ -221,6 +222,37 @@ final class EventHub {
         preprocessors.append(preprocessor)
     }
 
+    // MARK: Internal
+    /// Shares a shared state for the `EventHub` with data containing all the registered extensions
+    func shareEventHubSharedState() {
+        var extensionsInfo = [String: [String: Any]]()
+        for (_, val) in registeredExtensions.shallowCopy
+            where val.sharedStateName != EventHubConstants.NAME {
+            if let exten = val.exten {
+                let version = type(of: exten).extensionVersion
+                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
+                if let metadata = exten.metadata, !metadata.isEmpty {
+                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
+                }
+            }
+        }
+
+        // TODO: Determine which version of Core to use in the top level version field
+        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
+                                   EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
+
+        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value.sharedState else {
+            Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered with EventHub")
+            return
+        }
+
+        let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
+        sharedState.set(version: version, data: data)
+        dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME))
+        Log.debug(label: "\(LOG_TAG):\(#function)", "Shared state is created for \(EventHubConstants.NAME) with data \(String(describing: data)) and version \(version)")
+    }
+
     // MARK: Private
 
     private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
@@ -229,13 +261,10 @@ final class EventHub {
             return nil
         }
 
-        var version = -1
+        var version = 0 // default to version 0
         // attempt to version at the event
         if let unwrappedEvent = event, let eventNumber = eventNumberMap[unwrappedEvent.id] {
             version = eventNumber
-        } else {
-            // default to next event number
-            version = eventNumberCounter.incrementAndGet()
         }
 
         guard let sharedState = extensionContainer.sharedState else { return nil }
@@ -253,28 +282,6 @@ final class EventHub {
         return Event(name: EventHubConstants.STATE_CHANGE, type: EventType.hub, source: EventSource.sharedState,
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
     }
-
-    /// Shares a shared state for the `EventHub` with data containing all the registered extensions
-    private func shareEventHubSharedState() {
-        var extensionsInfo = [String: [String: Any]]()
-        for (_, val) in registeredExtensions.shallowCopy
-            where val.sharedStateName != EventHubConstants.NAME {
-            if let exten = val.exten {
-                let version = type(of: exten).extensionVersion
-                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
-                if let metadata = exten.metadata, !metadata.isEmpty {
-                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
-                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
-                }
-            }
-        }
-
-        // TODO: Determine which version of Core to use in the top level version field
-        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
-                                   EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
-        createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
-    }
-
 
     /// Returns the event number for the event
     /// - Parameter event: The `Event` to be looked up

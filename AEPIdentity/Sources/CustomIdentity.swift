@@ -34,7 +34,6 @@ public class CustomIdentity: Identifiable, Codable {
 
 extension CustomIdentity: Equatable {
     public static func == (lhs: CustomIdentity, rhs: CustomIdentity) -> Bool {
-        return lhs.origin == rhs.origin && lhs.type == rhs.type &&
-            lhs.identifier == rhs.identifier && lhs.authenticationState == rhs.authenticationState
+        return lhs.type == rhs.type
     }
 }

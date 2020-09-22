@@ -505,6 +505,35 @@ class EventHubTests: XCTestCase {
         XCTAssertEqual(mockExtensionTwo.metadata, mockDetailsTwo?[EventHubConstants.EventDataKeys.METADATA] as? [String: String])
     }
 
+    func testEventHubRegisterAndUnregisterExtensionSharesState() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub once")
+        sharedStateExpectation.expectedFulfillmentCount = 2
+        sharedStateExpectation.assertForOverFulfill = true
+
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME { sharedStateExpectation.fulfill() }
+        }
+
+        // test
+        registerMockExtension(MockExtensionTwo.self)
+        eventHub.start()
+        eventHub.unregisterExtension(MockExtensionTwo.self, completion: { (_) in })
+
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 0.5)
+        let sharedState = eventHub.getSharedState(extensionName: EventHubConstants.NAME, event: nil)!.value
+
+        let mockExtension = MockExtension(runtime: TestableExtensionRuntime())
+
+        let coreVersion = sharedState?[EventHubConstants.EventDataKeys.VERSION] as! String
+        let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
+        let mockDetails = registeredExtensions?[mockExtension.friendlyName] as? [String: String]
+
+        XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
+        XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
+    }
+
     func testEventHubRegisterExtensionSuccessQueuedBeforeStart() {
         // setup
         let expectation = XCTestExpectation(description: "Extension is registered successfully even if invoked before eventHub.start()")
@@ -674,11 +703,15 @@ class EventHubTests: XCTestCase {
         eventHub.start()
 
         // test
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
+        let event = Event(name: "Test event", type: EventType.analytics, source: EventSource.none, data: nil)
+        eventHub.dispatch(event: event)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
+        let event1 = Event(name: "Test event", type: EventType.analytics, source: EventSource.none, data: nil)
+        eventHub.dispatch(event: event1)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
 
         // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event1, "two")
     }
 
     /// Tests that multiple shared state updates function properly
@@ -687,14 +720,22 @@ class EventHubTests: XCTestCase {
         eventHub.start()
 
         // test
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.THREE, event: nil)
+        let event = Event(name: "Test event", type: EventType.analytics, source: EventSource.none, data: nil)
+        eventHub.dispatch(event: event)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
+
+        let event1 = Event(name: "Test event", type: EventType.analytics, source: EventSource.none, data: nil)
+        eventHub.dispatch(event: event1)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event1, "two")
+
+        let event2 = Event(name: "Test event", type: EventType.analytics, source: EventSource.none, data: nil)
+        eventHub.dispatch(event: event2)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.THREE, event: event2)
 
         // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "three")
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event2, "three")
     }
 
     /// Shared state is versioned at event correctly
@@ -718,15 +759,52 @@ class EventHubTests: XCTestCase {
 
         // test
         let event = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
         eventHub.dispatch(event: event)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
         let event1 = Event(name: "test1", type: EventType.analytics, source: EventSource.requestContent, data: nil)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
         eventHub.dispatch(event: event1)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
 
         // verify
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one")
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event1, "two")
+    }
+
+    func testGetSharedStateNilEvent() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+    }
+
+    func testGetSharedStateNilEventTwice() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+    }
+
+    func testGetSharedStateNilEventVersionsAtZero() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+        let event1 = Event(name: "test1", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event1)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
 
     /// Tests that events are associated with current shared state when updated rapidly
@@ -850,7 +928,7 @@ class EventHubTests: XCTestCase {
         pendingResolver(SharedStateTestHelper.TWO)
 
         wait(for: [expectation], timeout: 0.5)
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "two")
     }
 
     /// Tests that we can create and resolve a pending shared state from many queues

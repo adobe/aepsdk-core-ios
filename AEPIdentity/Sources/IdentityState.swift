@@ -126,7 +126,7 @@ class IdentityState {
         if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
             queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, addConsentFlag: shouldAddConsentFlag)
         } else {
-            Log.debug(label: LOG_TAG, "sync identifiers request failed, shouldSync returned false.")
+            Log.debug(label: LOG_TAG, "Ignored an ID sync request because no new IDs to sync after the last request.")
         }
 
         // save properties
@@ -147,9 +147,9 @@ class IdentityState {
         identityProperties.lastSync = Date()
 
         // check privacy here in case the status changed while response was in-flight
-        if identityProperties.privacyStatus != .optedOut {
+        if identityProperties.privacyStatus != .optedOut, let data = hit.data, let hit = try? JSONDecoder().decode(IdentityHit.self, from: data) {
             // update properties
-            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState)
+            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState, event: hit.event)
 
             // save
             identityProperties.saveToPersistence()
@@ -190,10 +190,10 @@ class IdentityState {
         let hasIds = !(customerIds?.isEmpty ?? true)
         let hasDpids = !(dpids?.isEmpty ?? true)
 
-        if identityProperties.mid != nil, !hasIds, !hasDpids, !needResync {
+        if identityProperties.ecid != nil, !hasIds, !hasDpids, !needResync {
             syncForIds = false
-        } else if identityProperties.mid == nil {
-            identityProperties.mid = MID()
+        } else if identityProperties.ecid == nil {
+            identityProperties.ecid = ECID()
         }
 
         return syncForIds && syncForProps
@@ -215,7 +215,7 @@ class IdentityState {
         identityProperties.privacyStatus = newPrivacyStatus
 
         if newPrivacyStatus == .optedOut {
-            identityProperties.mid = nil
+            identityProperties.ecid = nil
             identityProperties.advertisingIdentifier = nil
             identityProperties.blob = nil
             identityProperties.locationHint = nil
@@ -226,7 +226,7 @@ class IdentityState {
             pushIdManager.updatePushId(pushId: nil)
             identityProperties.saveToPersistence()
             createSharedState(identityProperties.toEventData(), event)
-        } else if identityProperties.mid == nil {
+        } else if identityProperties.ecid == nil {
             // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
             // Queue up a request to sync the new ID with the Identity Service
             eventDispatcher(event.forceSyncEvent())
@@ -308,7 +308,8 @@ class IdentityState {
     ///   - response: the network response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
+    ///   - event: The event responsible for the network response
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: (([String: Any], Event?) -> Void), event: Event) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return
@@ -323,21 +324,21 @@ class IdentityState {
 
         // something's wrong - n/w call returned an error. update the pending state.
         if let error = identityResponse.error {
-            // should never happen bc we generate mid locally before n/w request.
-            // Still, generate mid locally if there's none yet.
-            identityProperties.mid = identityProperties.mid ?? MID()
+            // should never happen bc we generate ECID locally before n/w request.
+            // Still, generate ECID locally if there's none yet.
+            identityProperties.ecid = identityProperties.ecid ?? ECID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
-            createSharedState(identityProperties.toEventData(), nil)
+            createSharedState(identityProperties.toEventData(), event)
             return
         }
 
-        if let mid = identityResponse.mid, !mid.isEmpty {
+        if let ecid = identityResponse.ecid, !ecid.isEmpty {
             let shouldShareState = identityResponse.blob != identityProperties.blob || identityResponse.hint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
             identityProperties.locationHint = identityResponse.hint
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
             if shouldShareState {
-                createSharedState(identityProperties.toEventData(), nil)
+                createSharedState(identityProperties.toEventData(), event)
             }
         }
     }

@@ -102,7 +102,7 @@ struct V4Migrator {
 
     /// Migrates the v4 Identity values into the v5 Identity data store
     private func migrateIdentityLocalStorage() {
-        let mid = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_MID)
+        let ecid = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_ECID)
         let hint = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_HINT)
         let blob = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_BLOB)
         let ids = v4Defaults.string(forKey: V4MigrationConstants.Identity.V4_IDS)
@@ -110,7 +110,7 @@ struct V4Migrator {
 
         // Build data
         let identityPropsDict: [String: Any?] = [
-            "mid": ["midString": mid],
+            "ecid": ["ecidString": ecid],
             "locationHint": hint,
             "blob": blob,
             "customerIds": idParser.convertStringToIds(idString: ids),
@@ -125,7 +125,7 @@ struct V4Migrator {
         identityDataStore.set(key: V4MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
         // remove identity values from v4 data store
-        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_MID)
+        v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_ECID)
         v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_TTL)
         v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_VID)
         v4Defaults.removeObject(forKey: V4MigrationConstants.Identity.V4_HINT)

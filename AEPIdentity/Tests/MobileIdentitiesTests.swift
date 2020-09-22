@@ -22,7 +22,7 @@ class MobileIdentitiesTests: XCTestCase {
 
     private func buildIdentitySharedState() -> [String: Any] {
         var identitySharedState = [String: Any]()
-        identitySharedState[IdentityConstants.EventDataKeys.VISITOR_ID_MID] = "test-mid"
+        identitySharedState[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] = "test-ecid"
 
         let customIdOne = CustomIdentity(origin: "origin1", type: "type1", identifier: "id1", authenticationState: .authenticated)
         let customIdTwo = CustomIdentity(origin: "origin2", type: "type2", identifier: "id2", authenticationState: .loggedOut)
@@ -102,7 +102,7 @@ class MobileIdentitiesTests: XCTestCase {
         let identifiers = String(data: encodedIdentities!, encoding: .utf8)
 
         // verify
-        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-ecid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
         XCTAssertEqual(expected, identifiers)
     }
 
@@ -148,7 +148,7 @@ class MobileIdentitiesTests: XCTestCase {
         let identifiers = String(data: encodedIdentities!, encoding: .utf8)
 
         // verify
-        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-mid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}]}"
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-ecid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}]}"
         XCTAssertEqual(expected, identifiers)
     }
 }

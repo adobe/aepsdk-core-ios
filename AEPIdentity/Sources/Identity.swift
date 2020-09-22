@@ -68,11 +68,6 @@ import Foundation
     // MARK: Event Listeners
 
     private func handleIdentityRequest(event: Event) {
-        if shouldIgnore(event: event) {
-            Log.debug(label: "\(name):\(#function)", "Ignore Identity Request event, user is currently opted-out")
-            return
-        }
-
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)
@@ -182,9 +177,9 @@ import Foundation
 
         if privacyStatus == .optedOut {
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
-            guard let mid = state?.identityProperties.mid else { return }
-            let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.DEFAULT_SERVER
-            ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: server)
+            guard let ecid = state?.identityProperties.ecid else { return }
+            let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.Default.SERVER
+            ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, ecid: ecid, experienceCloudServer: server)
         }
     }
 
