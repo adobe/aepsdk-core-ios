@@ -111,6 +111,25 @@ final class EventHub {
         }
     }
 
+    /// Unregisters the extension from the `EventHub` if registered
+    /// - Parameters:
+    ///   - type: The extension to be unregistered
+    ///   - completion: A closure invoked when the extension has been unregistered
+    func unregisterExtension(_ type: Extension.Type, completion: @escaping (_ error: EventHubError?) -> Void) {
+        eventHubQueue.async {
+            guard self.registeredExtensions[type.typeName] != nil else {
+                Log.error(label: "\(self.LOG_TAG):\(#function)", "Cannot unregister an extension that is not registered.")
+                completion(.extensionNotRegistered)
+                return
+            }
+
+            let extensionContainer = self.registeredExtensions.removeValue(forKey: type.typeName) // remove the corresponding extension container
+            extensionContainer?.exten?.onUnregistered() // invoke the onUnregistered delegate function
+            self.shareEventHubSharedState()
+            completion(nil)
+        }
+    }
+
     /// Registers an `EventListener` which will be invoked when the response `Event` to `triggerEvent` is dispatched
     /// - Parameters:
     ///   - triggerEvent: An `Event` which will trigger a response `Event`
@@ -130,7 +149,7 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
-    ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil, it will be versioned at the latest
+    ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil the shared state is versioned zero
     func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
         guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) else {
             Log.error(label: "\(LOG_TAG):\(#function)", "Error in creating shared state.")
@@ -145,7 +164,7 @@ final class EventHub {
     /// Sets the `SharedState` for the extension to pending at `event`'s version and returns a `SharedStateResolver` which is to be invoked with data for the `SharedState` once available.
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
-    ///   - event: Event which has the `SharedState` should be versioned for
+    ///   - event: Event which has the `SharedState` should be versioned for, if nil the shared state is versioned zero
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
     func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
         var pendingVersion: Int?
@@ -165,7 +184,7 @@ final class EventHub {
     /// Retrieves the `SharedState` for a specific extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the latest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the earliest `SharedState`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else {
@@ -173,9 +192,9 @@ final class EventHub {
             return nil
         }
 
-        var version = Int.max
+        var version = 0 // default to version 0 if event nil
         if let unwrappedEvent = event {
-            version = eventNumberMap[unwrappedEvent.id] ?? Int.max
+            version = eventNumberMap[unwrappedEvent.id] ?? 0
         }
 
         let result = sharedState.resolve(version: version)
@@ -195,6 +214,37 @@ final class EventHub {
         preprocessors.append(preprocessor)
     }
 
+    // MARK: Internal
+    /// Shares a shared state for the `EventHub` with data containing all the registered extensions
+    func shareEventHubSharedState() {
+        var extensionsInfo = [String: [String: Any]]()
+        for (_, val) in registeredExtensions.shallowCopy
+            where val.sharedStateName != EventHubConstants.NAME {
+            if let exten = val.exten {
+                let version = type(of: exten).extensionVersion
+                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
+                if let metadata = exten.metadata, !metadata.isEmpty {
+                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
+                }
+            }
+        }
+
+        // TODO: Determine which version of Core to use in the top level version field
+        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
+                                   EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
+
+        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value.sharedState else {
+            Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered with EventHub")
+            return
+        }
+
+        let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
+        sharedState.set(version: version, data: data)
+        dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME))
+        Log.debug(label: "\(LOG_TAG):\(#function)", "Shared state is created for \(EventHubConstants.NAME) with data \(String(describing: data)) and version \(version)")
+    }
+
     // MARK: Private
 
     private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
@@ -203,13 +253,10 @@ final class EventHub {
             return nil
         }
 
-        var version = -1
+        var version = 0 // default to version 0
         // attempt to version at the event
         if let unwrappedEvent = event, let eventNumber = eventNumberMap[unwrappedEvent.id] {
             version = eventNumber
-        } else {
-            // default to next event number
-            version = eventNumberCounter.incrementAndGet()
         }
 
         guard let sharedState = extensionContainer.sharedState else { return nil }
@@ -228,26 +275,6 @@ final class EventHub {
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
     }
 
-    /// Shares a shared state for the `EventHub` with data containing all the registered extensions
-    private func shareEventHubSharedState() {
-        var extensionsInfo = [String: [String: Any]]()
-        for (_, val) in registeredExtensions.shallowCopy
-            where val.sharedStateName != EventHubConstants.NAME {
-            if let exten = val.exten {
-                let version = type(of: exten).extensionVersion
-                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
-                if let metadata = exten.metadata, !metadata.isEmpty {
-                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
-                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
-                }
-            }
-        }
-
-        // TODO: Determine which version of Core to use in the top level version field
-        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
-                                   EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
-        createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
-    }
 }
 
 private extension Extension {

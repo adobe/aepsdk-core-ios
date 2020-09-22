@@ -21,7 +21,7 @@ class URL_IdentityTests: XCTestCase {
         let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg"
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
-        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
@@ -37,7 +37,7 @@ class URL_IdentityTests: XCTestCase {
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
         let customIds = [CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated)]
-        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
@@ -54,7 +54,7 @@ class URL_IdentityTests: XCTestCase {
         let orgId = "testOrg@AdobeOrg"
         let customIds = [CustomIdentity(origin: "d_cid_ic", type: "DSID_20915", identifier: "test_ad_id", authenticationState: .authenticated),
                          CustomIdentity(origin: "d_cid_ic_2", type: "DSID_20915_2", identifier: "test_ad_id_2", authenticationState: .loggedOut)]
-        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: customIds, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
@@ -70,7 +70,7 @@ class URL_IdentityTests: XCTestCase {
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
         let dpids = ["20920": "testPushId"]
-        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids, addConsentFlag: false)
@@ -85,7 +85,7 @@ class URL_IdentityTests: XCTestCase {
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
         let dpids = ["20920": "testPushId", "20920_2": "testPushId_2"]
-        let properties = IdentityProperties(mid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: nil, advertisingIdentifier: nil, pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: dpids, addConsentFlag: false)
@@ -95,13 +95,13 @@ class URL_IdentityTests: XCTestCase {
         XCTAssertTrue(url?.absoluteString.contains("&d_cid=20920_2%2501testPushId_2") ?? false)
     }
 
-    func testIdentityHitURLWithMidBlobHint() {
+    func testIdentityHitURLWithECIDBlobHint() {
         // setup
-        let mid = MID()
-        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_mid=\(mid.midString)&d_blob=testBlob&dcs_region=testHint"
+        let ecid = ECID()
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&d_mid=\(ecid.ecidString)&d_blob=testBlob&dcs_region=testHint"
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
-        let properties = IdentityProperties(mid: mid, advertisingIdentifier: nil, pushIdentifier: nil, blob: "testBlob", locationHint: "testHint", customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: ecid, advertisingIdentifier: nil, pushIdentifier: nil, blob: "testBlob", locationHint: "testHint", customerIds: [], lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: false)
@@ -113,10 +113,10 @@ class URL_IdentityTests: XCTestCase {
     /// Tests that when the ad id is empty and it is changed that we send a 0 for idfa consent
     func testIdentityHitURLWithChangedAdIEmpty() {
         // setup
-        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&device_consent=0"
+        let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&device_consent=0&d_consent_ic=DSID_20915"
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
-        let properties = IdentityProperties(mid: nil, advertisingIdentifier: "", pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: nil, advertisingIdentifier: "", pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: true)
@@ -131,7 +131,7 @@ class URL_IdentityTests: XCTestCase {
         let expectedUrl = "https://dpm.demdex.net/id?d_rtbd=json&d_ver=2&d_orgid=testOrg@AdobeOrg&device_consent=1"
         let orgId = "testOrg@AdobeOrg"
         let experienceCloudServer = "dpm.demdex.net"
-        let properties = IdentityProperties(mid: nil, advertisingIdentifier: "test-ad-id", pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
+        let properties = IdentityProperties(ecid: nil, advertisingIdentifier: "test-ad-id", pushIdentifier: nil, blob: nil, locationHint: nil, customerIds: nil, lastSync: nil, ttl: 5, privacyStatus: .optedIn)
 
         // test
         let url = URL.buildIdentityHitURL(experienceCloudServer: experienceCloudServer, orgId: orgId, identityProperties: properties, dpids: [:], addConsentFlag: true)
@@ -140,18 +140,18 @@ class URL_IdentityTests: XCTestCase {
         XCTAssertEqual(expectedUrl, url?.absoluteString)
     }
 
-    // MARK: URL(orgId, mid, experienceCloudServer) tests
+    // MARK: URL(orgId, ecid, experienceCloudServer) tests
 
     /// Tests that the URL is built correctly
     func testOptOutURL() {
         // setup
         let orgId = "test-org-id"
-        let mid = MID()
+        let ecid = ECID()
         let experienceCloudServer = "identityServer.com"
-        let expectedUrl = "https://\(experienceCloudServer)/demoptout.jpg?d_orgid=\(orgId)&d_mid=\(mid.midString)"
+        let expectedUrl = "https://\(experienceCloudServer)/demoptout.jpg?d_orgid=\(orgId)&d_mid=\(ecid.ecidString)"
 
         // test
-        guard let url = URL.buildOptOutURL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
+        guard let url = URL.buildOptOutURL(orgId: orgId, ecid: ecid, experienceCloudServer: experienceCloudServer) else {
             XCTFail("Network request was nil")
             return
         }

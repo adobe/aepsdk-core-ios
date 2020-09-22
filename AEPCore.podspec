@@ -12,11 +12,11 @@ AEPCore
 
   s.ios.deployment_target = '10.0'
 
-  s.swift_version = '5.0'
-  
+  s.swift_version = '5.1'
+
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
-  s.dependency 'SwiftRulesEngine'
+  s.dependency 'AEPRulesEngine'
   s.dependency 'AEPServices'
 
   s.source_files          = 'AEPCore/Sources/**/*.swift'

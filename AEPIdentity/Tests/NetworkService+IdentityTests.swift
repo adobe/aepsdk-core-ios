@@ -28,16 +28,16 @@ class NetworkService_IdentityTests: XCTestCase {
     func testSendOptOutRequestSimple() {
         // setup
         let orgId = "test-org-id"
-        let mid = MID()
+        let ecid = ECID()
         let experienceCloudServer = "identityServer.com"
 
-        guard let url = URL.buildOptOutURL(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer) else {
+        guard let url = URL.buildOptOutURL(orgId: orgId, ecid: ecid, experienceCloudServer: experienceCloudServer) else {
             XCTFail("Network request was nil")
             return
         }
 
         // test
-        ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, mid: mid, experienceCloudServer: experienceCloudServer)
+        ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, ecid: ecid, experienceCloudServer: experienceCloudServer)
 
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)

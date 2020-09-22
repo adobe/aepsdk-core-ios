@@ -10,7 +10,7 @@
  */
 
 import Foundation
-@_implementationOnly import SwiftRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 /// A `Rule` type represents the functions defined by Launch UI
 struct LaunchRule: Rule {

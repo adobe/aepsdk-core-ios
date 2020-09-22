@@ -91,7 +91,7 @@ struct MobileIdentities: Codable {
         var visitorIds = [UserID]()
 
         // marketing cloud id
-        if let marketingCloudId = identitySharedState.value?[IdentityConstants.EventDataKeys.VISITOR_ID_MID] as? String {
+        if let marketingCloudId = identitySharedState.value?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String {
             visitorIds.append(UserID(namespace: MobileIdentities.NAMESPACE_MCID, value: marketingCloudId, type: MobileIdentities.NAMESPACE_ID))
         }
 
