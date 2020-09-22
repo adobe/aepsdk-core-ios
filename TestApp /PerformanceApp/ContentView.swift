@@ -25,7 +25,7 @@ struct ContentView: View {
             Button(action: {
                 PerfExtension.LIFECYCLE_START_RESPONSE_EVENT_RECEIVED = false
                 PerfExtension.RULES_CONSEQUENCE_EVENTS = 0
-                MobileCore.setLogLevel(level: .trace)
+                MobileCore.setLogLevel(level: .error)
                 MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self, PerfExtension.self]) {}
                 MobileCore.configureWith(appId: "94f571f308d5/fec7505defe0/launch-eaa54c95a6b5-development")
                 MobileCore.lifecycleStart(additionalContextData: nil)
@@ -49,12 +49,12 @@ struct ContentView: View {
             Button(action: {
                 PerfExtension.RULES_CONSEQUENCE_EVENTS = 0
                 self.status = "...."
-                for _ in 0...9{
+                for _ in 0...99{
                     MobileCore.dispatch(event: Event(name: "mock event", type: "com.adobe.eventType.generic.track", source: "com.adobe.eventSource.requestContent", data: ["action" : "action"]))
                 }
 
                 for _ in 0...30000{
-                    if PerfExtension.RULES_CONSEQUENCE_EVENTS >= 100 {
+                    if PerfExtension.RULES_CONSEQUENCE_EVENTS >= 1000 {
                         self.status = "1000 Rules were Evaluated"
                         break
                     }else{
