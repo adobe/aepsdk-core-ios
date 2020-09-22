@@ -198,7 +198,7 @@ final class EventHub {
 
         let result = sharedState.resolve(version: version)
 
-        let stateProviderLastVersion = eventNumberMap[container.lastProcessedEvent?.id ?? UUID()] ?? 0
+        let stateProviderLastVersion = eventNumberFor(event: container.lastProcessedEvent)
         // shared state is still considered pending if barrier is used and the state provider has not processed past this 
         if barrier && stateProviderLastVersion < version && result.status == .set {
             return SharedStateResult(status: .pending, value: result.value)
@@ -272,6 +272,18 @@ final class EventHub {
         let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
                                    EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
         createSharedState(extensionName: EventHubConstants.NAME, data: data, event: nil)
+    }
+
+
+    /// Returns the event number for the event
+    /// - Parameter event: The `Event` to be looked up
+    /// - Returns: The `Event` number if found, otherwise 0
+    private func eventNumberFor(event: Event?) -> Int {
+        if let event = event {
+            return eventNumberMap[event.id] ?? 0
+        }
+
+        return 0
     }
 }
 
