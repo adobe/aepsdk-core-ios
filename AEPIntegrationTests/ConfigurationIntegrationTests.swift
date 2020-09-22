@@ -105,6 +105,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         """.data(using: .utf8)
         mockRemoteConfig(for: "appid", with: configData)
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedout"])
+        XCTAssertEqual(.optedOut, getPrivacyStatus())
 
         initExtensionsAndWait()
         mockRemoteConfig(for: "appid", with: configData)
