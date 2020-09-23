@@ -99,6 +99,121 @@ MobileCore.unregisterExtension(Lifecycle.self) {
 }];
 ```
 
+##### Configuring the SDK with an app id:
+
+###### Swift
+
+```swift
+// Use the App id assigned to this application via Adobe Launch
+MobileCore.configureWith(appId: "your-app-id")
+```
+
+###### Objective-C
+
+```objective-c
+// Use the App id assigned to this application via Adobe Launch
+[AEPMobileCore configureWithAppId: @"your-app-id"];
+```
+
+##### Configuring the SDK with a bundled configuration file:
+
+###### Swift
+
+```swift
+let filePath = Bundle.main.path(forResource: "ExampleJSONFile", ofType: "json")
+MobileCore.configureWith(filePath: filePath)
+```
+
+###### Objective-C
+
+```objective-c
+NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ExampleJSONFile"ofType:@"json"];
+[AEPMobileCore configureWithFilePath:filePath];
+```
+
+##### Programatically updating the configuration:
+
+###### Swift
+
+```swift
+let updatedConfig = ["analytics.rsids": "your-rsids"]
+MobileCore.updateConfigurationWith(configDict: updatedConfig)
+```
+
+###### Objective-C
+
+```objective-c
+NSDictionary *updatedConfig = @{ @"analytics.rsids": @"your-rsids"};
+[AEPMobileCore updateConfiguration:updatedConfig];
+```
+
+##### Setting the privacy status:
+
+`PrivacyStatus` is defined as:
+
+```swift
+@objc(AEPPrivacyStatus) public enum PrivacyStatus: Int, RawRepresentable, Codable {
+    case optedIn = 0
+    case optedOut = 1
+    case unknown = 2
+}
+```
+
+###### Swift
+
+```swift
+MobileCore.setPrivacy(status: .optedOut)
+```
+
+###### Objective-C
+
+```objective-c
+[AEPMobileCore setPrivacy:AEPPrivacyStatusOptedOut];
+```
+
+##### Reading the privacy status:
+
+###### Swift
+
+```swift
+MobileCore.getPrivacyStatus { (privacyStatus) in
+    // handle completion
+}
+```
+
+###### Objective-C
+
+```objective-c
+[AEPMobileCore getPrivacyStatus:^(enum AEPPrivacyStatus privacyStatus) {
+    // handle completion
+}];
+```
+
+##### Setting the log level:
+
+`LogLevel` is defined as:
+
+```swift
+@objc(AEPLogLevel) public enum LogLevel: Int, Comparable {
+    case error = 0
+    case warning = 1
+    case debug = 2
+    case trace = 3
+}
+```
+
+###### Swift
+
+```swift
+MobileCore.setLogLevel(level: .trace)
+```
+
+###### Objective-C
+
+```objective-c
+[AEPMobileCore setLogLevel: AEPLogLevelTrace];
+```
+
 ##### Starting a Lifecycle session:
 
 ###### Swift
@@ -222,31 +337,6 @@ MobileCore.setWrapperType(type: .flutter)
 
 > Note: This API should only be used when implementing the SDK within a cross-platform solution such as React Native.
 
-##### Setting the log level:
-
-`LogLevel` is defined as:
-
-```swift
-@objc(AEPLogLevel) public enum LogLevel: Int, Comparable {
-    case error = 0
-    case warning = 1
-    case debug = 2
-    case trace = 3
-}
-```
-
-###### Swift
-
-```swift
-MobileCore.setLogLevel(level: .trace)
-```
-
-###### Objective-C
-
-```objective-c
-[AEPMobileCore setLogLevel: AEPLogLevelTrace];
-```
-
 ##### Setting the app group:
 
 ###### Swift
@@ -261,106 +351,22 @@ MobileCore.setAppGroup(group: "your-app-group")
 [AEPMobileCore setAppGroup:@"your-app-group"];
 ```
 
-##### Configuring the SDK with an app id:
-
-###### Swift
-
-```swift
-// Use the App id assigned to this application via Adobe Launch
-MobileCore.configureWith(appId: "your-app-id")
-```
-
-###### Objective-C
-
-```objective-c
-// Use the App id assigned to this application via Adobe Launch
-[AEPMobileCore configureWithAppId: @"your-app-id"];
-```
-
-##### Configuring the SDK with a bundled configuration file:
-
-###### Swift
-
-```swift
-let filePath = Bundle.main.path(forResource: "ExampleJSONFile", ofType: "json")
-MobileCore.configureWith(filePath: filePath)
-```
-
-###### Objective-C
-
-```objective-c
-NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ExampleJSONFile"ofType:@"json"];
-[AEPMobileCore configureWithFilePath:filePath];
-```
-
-##### Programatically updating the configuration:
-
-###### Swift
-
-```swift
-let updatedConfig = ["analytics.rsids": "your-rsids"]
-MobileCore.updateConfigurationWith(configDict: updatedConfig)
-```
-
-###### Objective-C
-
-```objective-c
-NSDictionary *updatedConfig = @{ @"analytics.rsids": @"your-rsids"};
-[AEPMobileCore updateConfiguration:updatedConfig];
-```
-
-##### Setting the privacy status:
-
-`PrivacyStatus` is defined as:
-
-```swift
-@objc(AEPPrivacyStatus) public enum PrivacyStatus: Int, RawRepresentable, Codable {
-    case optedIn = 0
-    case optedOut = 1
-    case unknown = 2
-}
-```
-
-###### Swift
-
-```swift
-MobileCore.setPrivacy(status: .optedOut)
-```
-
-###### Objective-C
-
-```objective-c
-[AEPMobileCore setPrivacy:AEPPrivacyStatusOptedOut];
-```
-
-##### Reading the privacy status:
-
-###### Swift
-
-```swift
-
-```
-
-###### Objective-C
-
-```objective-c
-[AEPMobileCore getPrivacyStatus:^(enum AEPPrivacyStatus privacyStatus) {
-    // handle completion
-}];
-```
-
 ##### Reading the SDK identities:
 
 ###### Swift
 
 ```swift
-
+MobileCore.getSdkIdentities { (ids, error) in
+    // handle completion
+}
 ```
 
 ###### Objective-C
 
 ```objective-c
-
+[AEPMobileCore getSdkIdentities:^(NSString * _Nullable ids, enum AEPError error) {
+    // handle completion
+}];
 ```
 
 ##### 
