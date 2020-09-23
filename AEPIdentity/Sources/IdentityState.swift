@@ -231,8 +231,10 @@ class IdentityState {
             createSharedState(identityProperties.toEventData(), event)
         } else if identityProperties.ecid == nil {
             // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
-            // Queue up a request to sync the new ID with the Identity Service
-            eventDispatcher(event.forceSyncEvent())
+            // Sync the new ID with the Identity Service
+            if let sharedStateData = syncIdentifiers(event: event) {
+                createSharedState(sharedStateData, event)
+            }
         }
 
         // update hit queue with privacy status
