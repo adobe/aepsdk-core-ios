@@ -1,22 +1,30 @@
 # Objective-C Compatibility
 
-When designing interfaces that can be used publicly, we should usually always make them compatible with Objective-C. This document covers some best practices to ensure that the code you write will be compatible with Objective-C.
+When designing interfaces that can be used publicly, the interfaces should always be compatible with Objective-C. This document covers some best practices to ensure that the code written will be compatible with Objective-C.
 
-## `@objc`
+## [Annotate with Attributes](https://docs.swift.org/swift-book/ReferenceManual/Attributes.html)
 
-Nothing that is Swift Specific is visible in Objective-C, this means Swift enums, structs, classes that do not inherit from `NSObject`, and extensions on protocols.
+### `@objc`
 
-To expose something to Objective-C, you need to add the `@objc` annotation in front of the type. When adding `@objc` to your type, you may encounter compiler errors telling you that something you have represented in Swift cannot be expressed in Objective-C.
+To expose something to Objective-C, add the `@objc` attribute in front of it. If a compiler error is present, it may indicate that the represented Swift type cannot be expressed in Objective-C.
 
-## `@nonobjc`
+Nothing that is Swift-specific is representable in Objective-C. This list includes:
+- Swift enums
+- structs
+- classes that do not inherit from `NSObject`
+- extensions on protocols
 
-`@nonobjc` can be used when you want to explicitly state that you do not want to export a symbol to Objective-C. `@nonobjc` can be useful when you have an Objective-C method that overrides a Swift method. This annotation is typically used rarely.
+### `@nonobjc`
+
+`@nonobjc` can be used to explicitly state that a symbol should not be exported to Objective-C. `@nonobjc` can be useful in the scenario where an Objective-C method overrides a Swift method. This attribute is rarely used.
 
 ## Public APIs
 
-All public APIs need to be compatible with Objective-C. This means they must use types that can be represented in Objective-C, which means types such as structs, enums with associated values cannot be used in public APIs.
+All public APIs need to be compatible with Objective-C. Public APIs must use types representable in Objective-C. See the list above for Swift-specific types.
 
-To define a public API as being exposed in Objective-C you need to annotate the API with `@objc`. In the following example
+To define a public API as being exposed in Objective-C you need to annotate the API with the `@objc` attribute.
+
+For example:
 
 ```swift
 @objc(setPrivacy:)
@@ -25,7 +33,7 @@ static func setPrivacy(status: PrivacyStatus) {
 }
 ```
 
-Then the API can be invoked in Objective-C with:
+The `@objc(setPrivacy:)` annotation exposes this API to Objective-C. It can be invoked as follows:
 
 ```objective-c
 [AEPCore setPrivacy:PrivacyStatusOptedIn];
@@ -46,19 +54,24 @@ Then it can be invoked in Objective-C with:
 [AEPIdentity syncIdentifiers:@{@"type": @"id"} authenticationState:MobileVisitorAuthenticationStateLoggedOut];
 ```
 
-## Make Extensions visible to Objective-C
+## Make AEP SDK Extensions visible to Objective-C
 
-Making your extension compatible with Objective-C is simple; you need to make your extension visible to Objective-C with the `@objc` annotation and ensure that your extension inherits from `NSObject`.
+To make an extension compatible with Objective-C, use the `@objc` attribute and ensure that the extension inherits from `NSObject`.
 
 Example:
 
-​	`@objc(AEPMobileIdentity) public class Identity: NSObject, Extension {}`
+```swift
+@objc(AEPMobileIdentity)
+public class Identity: NSObject, Extension {
+    ...
+}
+```
 
-> Note: In the above example, we rename the Swift class `Identity` to `AEPMobileIdentity` to follow the 3-letter prefix for Objective-C. Also note that you cannot have a type which uses the same name as your framework due to Swift limitations.
+> Note: In the above example, the Swift class is named `Identity` but renamed to `AEPMobileIdentity` following the 3-letter prefix for Objective-C. Keep in mind that types cannot share names with their containing framework, due to Swift limitations.
 
-Then you must ensure you invoke `super.init()` in your required initializer after all your properties have been initialized.
+Calling `super.init()` in the required initializer should happen after all class properties have been initialized.
 
-``` objective-c
+```swift
 public required init(runtime: ExtensionRuntime) {
     self.runtime = runtime
     super.init()

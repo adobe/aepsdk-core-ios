@@ -135,7 +135,7 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setAdvertisingIdentifier(adId: "adid")
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
-        MobileCore.getSdkIdentities { identityString, _ in
+        MobileCore.getSdkIdentities { identityString, error in
             XCTAssertTrue(identityString?.contains("DSID_20915") ?? false)
             XCTAssertTrue(identityString?.contains("id1") ?? false)
             XCTAssertTrue(identityString?.contains("imsOrgID") ?? false)
