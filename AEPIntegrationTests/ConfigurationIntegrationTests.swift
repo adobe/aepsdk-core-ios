@@ -22,6 +22,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         UserDefaults.clear()
         FileManager.default.clearCache()
         ServiceProvider.shared.reset()
+        resetTestEnv()
         initExtensionsAndWait()
     }
 
@@ -39,11 +40,13 @@ class ConfigurationIntegrationTests: XCTestCase {
 
     }
 
-    func initExtensionsAndWait() {
+    func resetTestEnv(){
         EventHub.reset()
         mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
+    }
 
+    func initExtensionsAndWait() {
         let initExpectation = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(level: .trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
@@ -121,7 +124,9 @@ class ConfigurationIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedout"])
         XCTAssertEqual(.optedOut, getPrivacyStatus())
 
-        initExtensionsAndWait()
+        resetTestEnv()
+        MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
+        }
         mockRemoteConfig(for: "appid", with: configData)
         XCTAssertEqual(.optedOut, getPrivacyStatus())
     }
