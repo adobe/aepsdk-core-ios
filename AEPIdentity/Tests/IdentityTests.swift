@@ -125,6 +125,7 @@ class IdentityTests: XCTestCase {
         let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId] as [String: Any]
         let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        let _ = identity.readyForEvent(event)
 
         // test
         mockRuntime.simulateComingEvent(event: event)

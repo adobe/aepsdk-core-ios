@@ -44,17 +44,13 @@ import Foundation
         registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
         registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
-
-        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value
-        if state?.bootup(configSharedState: configSharedState, eventDispatcher: dispatch(event:)) ?? false, let props = state?.identityProperties {
-            // privacy was opt-out, share state
-            createSharedState(data: props.toEventData(), event: nil)
-        }
     }
 
     public func onUnregistered() {}
 
     public func readyForEvent(_ event: Event) -> Bool {
+        guard canProcessEvents(event: event) else { return false }
+
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
@@ -63,6 +59,23 @@ import Foundation
         }
 
         return getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
+    }
+
+    /// Determines if Identity is ready to handle events, this is determined by if the Identity extension has booted up
+    /// - Parameter event: An `Event`
+    /// - Returns: True if we can process events, false otherwise
+    private func canProcessEvents(event: Event) -> Bool {
+        guard let state = state else { return false }
+        guard !state.hasBooted else { return true } // we have booted, return true
+
+        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
+        // attempt to bootup
+        if state.bootupIfReady(configSharedState: configSharedState, event: event) {
+            createSharedState(data: state.identityProperties.toEventData(), event: nil)
+        }
+
+        return false // cannot handle any events until we have booted
+
     }
 
     // MARK: Event Listeners
