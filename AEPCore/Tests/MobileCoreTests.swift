@@ -42,7 +42,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.registerExtensions([MockExtension.self])
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that a single extension can be registered
@@ -56,7 +56,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.registerExtension(MockExtension.self)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testRegisterExtensionsSimpleMultiple() {
@@ -70,7 +70,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testRegisterExtensionsWithSlowExtension() {
@@ -84,7 +84,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self, SlowMockExtension.self])
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that a registered extension can be unregistered
@@ -114,7 +114,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testRegisterExtensionsDispatchEventBeforeRegister() {
@@ -130,7 +130,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.registerExtensions([MockExtension.self])
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testRegisterMultipleExtensionsSimpleEventDispatch() {
@@ -146,7 +146,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testRegisterMultipleExtensionsDispatchEventBeforeRegister() {

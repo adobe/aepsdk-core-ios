@@ -54,7 +54,7 @@ class IdentityAPITests: XCTestCase {
         Identity.appendTo(url: expectedUrl) { (url, error) in }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that getIdentifiers dispatches an identity request identity event
@@ -71,7 +71,7 @@ class IdentityAPITests: XCTestCase {
         Identity.getIdentifiers { (identifiers, error) in }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that getExperienceCloudId dispatches an identity request identity event
@@ -87,7 +87,7 @@ class IdentityAPITests: XCTestCase {
         Identity.getExperienceCloudId { (id) in }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that sync identifier dispatches an event with the correct identifiers and auth state
@@ -110,7 +110,7 @@ class IdentityAPITests: XCTestCase {
         Identity.syncIdentifier(identifierType: expectedType, identifier: expectedId, authenticationState: expectedAuthState)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that sync identifiers dispatches an event with the correct identifiers and unknown auth state
@@ -130,7 +130,7 @@ class IdentityAPITests: XCTestCase {
         Identity.syncIdentifiers(identifiers: expectedIds)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that sync identifiers dispatches an event with the correct identifiers and auth state
@@ -151,7 +151,7 @@ class IdentityAPITests: XCTestCase {
         Identity.syncIdentifiers(identifiers: expectedIds, authenticationState: expectedAuthState)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that getUrlVariables dispatches an identity request identity event with correct data
@@ -169,7 +169,7 @@ class IdentityAPITests: XCTestCase {
         Identity.getUrlVariables { (variables, error) in }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
 }
