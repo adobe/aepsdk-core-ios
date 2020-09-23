@@ -27,11 +27,17 @@ class IdentityIntegrationTests: XCTestCase {
 
     override func tearDown() {
 
-        let initExpectation = XCTestExpectation(description: "init extensions")
+        let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
+        unregisterExpectation.expectedFulfillmentCount = 2
         MobileCore.unregisterExtension(Identity.self) {
-            initExpectation.fulfill()
+            unregisterExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 2)
+
+        MobileCore.unregisterExtension(Signal.self) {
+            unregisterExpectation.fulfill()
+        }
+        wait(for: [unregisterExpectation], timeout: 2)
+
     }
 
     func initExtensionsAndWait() {
