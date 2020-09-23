@@ -52,6 +52,11 @@ public class PersistentHitQueue: HitQueuing {
         return dataQueue.count()
     }
 
+    public func close() {
+        suspend()
+        dataQueue.close()
+    }
+
     /// A recursive function for processing hits, it will continue processing all the hits until none are left in the data queue
     private func processNextHit() {
         queue.async {

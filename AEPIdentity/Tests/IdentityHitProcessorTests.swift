@@ -42,7 +42,7 @@ class IdentityHitProcessorTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertTrue(responseCallbackArgs.isEmpty) // response handler should not have been invoked
         XCTAssertFalse(mockNetworkService?.connectAsyncCalled ?? true) // no network request should have been made
     }
@@ -65,7 +65,7 @@ class IdentityHitProcessorTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertFalse(responseCallbackArgs.isEmpty) // response handler should have been invoked
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
         XCTAssertEqual(mockNetworkService?.connectAsyncCalledWithNetworkRequest?.url, expectedUrl) // network request should be made with the url in the hit
@@ -89,7 +89,7 @@ class IdentityHitProcessorTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertTrue(responseCallbackArgs.isEmpty) // response handler should have not been invoked
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
         XCTAssertEqual(mockNetworkService?.connectAsyncCalledWithNetworkRequest?.url, expectedUrl) // network request should be made with the url in the hit
@@ -113,7 +113,7 @@ class IdentityHitProcessorTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertFalse(responseCallbackArgs.isEmpty) // response handler should have been invoked
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
         XCTAssertEqual(mockNetworkService?.connectAsyncCalledWithNetworkRequest?.url, expectedUrl) // network request should be made with the url in the hit

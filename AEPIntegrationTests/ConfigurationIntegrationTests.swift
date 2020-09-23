@@ -22,24 +22,37 @@ class ConfigurationIntegrationTests: XCTestCase {
         UserDefaults.clear()
         FileManager.default.clearCache()
         ServiceProvider.shared.reset()
+        resetTestEnv()
         initExtensionsAndWait()
     }
 
     override func tearDown() {
-        sleep(1)
+        let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
+        unregisterExpectation.expectedFulfillmentCount = 2
+        MobileCore.unregisterExtension(Identity.self) {
+            unregisterExpectation.fulfill()
+        }
+
+        MobileCore.unregisterExtension(Signal.self) {
+            unregisterExpectation.fulfill()
+        }
+        wait(for: [unregisterExpectation], timeout: 2)
+
     }
 
-    func initExtensionsAndWait() {
+    func resetTestEnv(){
         EventHub.reset()
         mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
+    }
 
+    func initExtensionsAndWait() {
         let initExpectation = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(level: .trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 0.5)
+        wait(for: [initExpectation], timeout: 1)
     }
 
     func testConfigLocalFile() {
@@ -111,7 +124,9 @@ class ConfigurationIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedout"])
         XCTAssertEqual(.optedOut, getPrivacyStatus())
 
-        initExtensionsAndWait()
+        resetTestEnv()
+        MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
+        }
         mockRemoteConfig(for: "appid", with: configData)
         XCTAssertEqual(.optedOut, getPrivacyStatus())
     }

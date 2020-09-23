@@ -62,18 +62,4 @@ extension Event {
     var urlVariables: Bool {
         return data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? Bool ?? false
     }
-
-    /// Creates a force sync event as a response event to this event
-    /// - Returns: an event with the force sync event data as a response event to this event
-    func forceSyncEvent() -> Event {
-        let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String: Any]
-        return createResponseEvent(name: "Forced Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
-    }
-
-    /// Creates a force sync event
-    /// - Returns: an event with the force sync event data
-    static func forceSyncEvent() -> Event {
-        let data = [IdentityConstants.EventDataKeys.FORCE_SYNC: true, IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown] as [String: Any]
-        return Event(name: "Forced Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
-    }
 }

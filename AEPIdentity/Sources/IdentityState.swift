@@ -18,6 +18,7 @@ class IdentityState {
     private let LOG_TAG = "IdentityState"
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
+    private(set) var hasBooted = false
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
         var identityProperties: IdentityProperties
@@ -35,28 +36,30 @@ class IdentityState {
         self.pushIdManager = pushIdManager
     }
 
-    /// Completes init for the Identity extension and determines if we need to share state
+    /// Completes init for the Identity extension if we can force sync and determines if we need to share state
     /// - Parameters:
     ///   - configSharedState: the current configuration shared state available at registration time
-    ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
+    ///   - event: The `Event` triggering the bootup
     /// - Returns: True if we should share state after bootup, false otherwise
-    func bootup(configSharedState: [String: Any]?, eventDispatcher: (Event) -> Void) -> Bool {
+    func bootupIfReady(configSharedState: [String: Any], event: Event) -> Bool {
+        // Only bootup once we can perform the first force sync
+        guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else { return false }
+
         // load data from local storage
         identityProperties.loadFromPersistence()
 
         // Load privacy status
-        identityProperties.privacyStatus = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        identityProperties.privacyStatus = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
 
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
-        // Create and dispatch a forced sync event
-        eventDispatcher(Event.forceSyncEvent())
-
+        hasBooted = true
+        Log.debug(label: LOG_TAG, "Identity has successfully booted up")
         // Identity should always share its state
         // However, don't create a shared state twice, which will log an error
         // The force sync event processed above will create a shared state if the privacy is not opt-out
-        return identityProperties.privacyStatus == .optedOut
+        return syncIdentifiers(event: event) != nil || identityProperties.privacyStatus == .optedOut
     }
 
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
@@ -202,9 +205,8 @@ class IdentityState {
     /// Updates and makes any required actions when the privacy status has updated
     /// - Parameters:
     ///   - event: the event triggering the privacy change
-    ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
     ///   - createSharedState: a function which can create Identity shared state
-    func processPrivacyChange(event: Event, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event) -> Void) {
+    func processPrivacyChange(event: Event, createSharedState: ([String: Any], Event) -> Void) {
         let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let newPrivacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 
@@ -228,8 +230,10 @@ class IdentityState {
             createSharedState(identityProperties.toEventData(), event)
         } else if identityProperties.ecid == nil {
             // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
-            // Queue up a request to sync the new ID with the Identity Service
-            eventDispatcher(event.forceSyncEvent())
+            // Sync the new ID with the Identity Service
+            if let sharedStateData = syncIdentifiers(event: event) {
+                createSharedState(sharedStateData, event)
+            }
         }
 
         // update hit queue with privacy status
