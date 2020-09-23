@@ -104,7 +104,7 @@ import Foundation
                 handleOptOut(event: event)
             }
             // if config contains new global privacy status, process the request
-            state?.processPrivacyChange(event: event, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
+            state?.processPrivacyChange(event: event, createSharedState: createSharedState(data:event:))
         }
 
         // if config contains org id, update the latest configuration
