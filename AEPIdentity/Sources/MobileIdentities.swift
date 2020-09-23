@@ -69,12 +69,11 @@ struct MobileIdentities: Codable {
     ///   - sharedStateProvider: a function that can resolve `SharedState` given an extension name
     /// - Returns: True if all shared states are ready, false otherwise
     func areSharedStatesReady(event: Event, sharedStateProvider: SharedStateProvider) -> Bool {
-        let identityStatus = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event)?.status ?? .none
-        let configurationStatus = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event)?.status ?? .none
+        let configurationStatus = sharedStateProvider(IdentityConstants.SharedStateKeys.CONFIGURATION, event)?.status ?? .none
         // TODO: Analytics
         // TODO: Audience
         // TODO: Target
-        return identityStatus != .pending && configurationStatus != .pending
+        return configurationStatus != .pending
     }
 
     // MARK: Private APIs
@@ -86,7 +85,6 @@ struct MobileIdentities: Codable {
     /// - Returns: a list of all the Identity extension identities in the form of a `UserID`
     private func getVisitorIdentifiers(event: Event, sharedStateProvider: SharedStateProvider) -> [UserID] {
         guard let identitySharedState = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event) else { return [] }
-        guard identitySharedState.status == .set else { return [] }
 
         var visitorIds = [UserID]()
 
@@ -118,7 +116,7 @@ struct MobileIdentities: Codable {
     /// - Returns: a list of all the Configuration extension identities in the form of a `CompanyContext`
     private func getCompanyContexts(event: Event, sharedStateProvider: SharedStateProvider) -> CompanyContext? {
         guard let configurationSharedState = sharedStateProvider(IdentityConstants.SharedStateKeys.CONFIGURATION, event) else { return nil }
-        guard configurationSharedState.status == .set else { return nil }
+
         guard let marketingCloudOrgId = configurationSharedState.value?[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String, !marketingCloudOrgId.isEmpty else { return nil }
 
         return CompanyContext(marketingCloudId: marketingCloudOrgId)

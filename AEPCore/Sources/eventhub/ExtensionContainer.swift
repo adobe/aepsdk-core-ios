@@ -115,6 +115,7 @@ private extension ExtensionContainer {
             }
         }
 
+        Log.error(label: "\(ExtensionContainer.LOG_TAG):\(#function)", "\(sharedStateName) eventProcessor: \(event.id)")
         lastProcessedEvent = event
         return true
     }
