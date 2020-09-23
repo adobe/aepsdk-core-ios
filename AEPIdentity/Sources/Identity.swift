@@ -66,18 +66,16 @@ import Foundation
     /// - Returns: True if we can process events, false otherwise
     private func canProcessEvents(event: Event) -> Bool {
         guard let state = state else { return false }
-        if !state.hasBooted {
-            guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
-            // attempt to bootup
-            if state.bootupIfReady(configSharedState: configSharedState, event: event) {
-                createSharedState(data: state.identityProperties.toEventData(), event: nil)
-            }
-
-            return false // cannot handle any events until we have booted
+        guard !state.hasBooted else { return true } // we have booted, return true
+   
+        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
+        // attempt to bootup
+        if state.bootupIfReady(configSharedState: configSharedState, event: event) {
+            createSharedState(data: state.identityProperties.toEventData(), event: nil)
         }
 
-        // we have booted, return true
-        return true
+        return false // cannot handle any events until we have booted
+
     }
 
     // MARK: Event Listeners
