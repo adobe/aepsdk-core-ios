@@ -25,6 +25,16 @@ class PerformanceTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testLoadAppPerformance() throws {
+        if #available(iOS 13.0, *) {
+            let app = XCUIApplication()
+            let options = XCTMeasureOptions()
+            options.iterationCount = 5
+            measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)], options: options) {
+                app.launch()
+            }
+        }
+    }
 
     func testLoadAEPSdkPerformance() throws {
         if #available(iOS 13.0, *) {
@@ -49,7 +59,7 @@ class PerformanceTests: XCTestCase {
             app.buttons["Load AEP SDK"].tap()
             measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)]) {
                 app.buttons["Evaluate Rules"].tap()
-                XCTAssert(app.staticTexts["1000 Rules were Evaluated"].waitForExistence(timeout: 10))
+                XCTAssert(app.staticTexts["10000 Rules were Evaluated"].waitForExistence(timeout: 10))
             }
         }
     }

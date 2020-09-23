@@ -60,7 +60,7 @@ struct ContentView: View {
 
                 for _ in 0...30000{
                     if PerfExtension.RULES_CONSEQUENCE_EVENTS >= 1000 {
-                        self.status = "1000 Rules were Evaluated"
+                        self.status = "10000 Rules were Evaluated"
                         break
                     }else{
                         usleep(100)
