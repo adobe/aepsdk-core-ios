@@ -100,6 +100,12 @@ import Foundation
     /// Handles the configuration response event
     /// - Parameter event: the configuration response event
     private func handleConfigurationResponse(event: Event) {
+        // if config contains org id, update the latest configuration
+        if let orgId = event.data?[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
+            // update to new config
+            state?.updateLastValidConfig(newConfig: event.data ?? [:])
+        }
+
         if let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String {
             let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
             if privacyStatus == .optedOut {
@@ -107,13 +113,7 @@ import Foundation
                 handleOptOut(event: event)
             }
             // if config contains new global privacy status, process the request
-            state?.processPrivacyChange(event: event, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
-        }
-
-        // if config contains org id, update the latest configuration
-        if let orgId = event.data?[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
-            // update to new config
-            state?.updateLastValidConfig(newConfig: event.data ?? [:])
+            state?.processPrivacyChange(event: event, createSharedState: createSharedState(data:event:))
         }
     }
 

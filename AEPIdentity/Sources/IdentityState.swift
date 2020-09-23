@@ -205,9 +205,8 @@ class IdentityState {
     /// Updates and makes any required actions when the privacy status has updated
     /// - Parameters:
     ///   - event: the event triggering the privacy change
-    ///   - eventDispatcher: a function which can dispatch an `Event` to the `EventHub`
     ///   - createSharedState: a function which can create Identity shared state
-    func processPrivacyChange(event: Event, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event) -> Void) {
+    func processPrivacyChange(event: Event, createSharedState: ([String: Any], Event) -> Void) {
         let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let newPrivacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 
@@ -231,8 +230,10 @@ class IdentityState {
             createSharedState(identityProperties.toEventData(), event)
         } else if identityProperties.ecid == nil {
             // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
-            // Queue up a request to sync the new ID with the Identity Service
-            eventDispatcher(event.forceSyncEvent())
+            // Sync the new ID with the Identity Service
+            if let sharedStateData = syncIdentifiers(event: event) {
+                createSharedState(sharedStateData, event)
+            }
         }
 
         // update hit queue with privacy status

@@ -766,11 +766,9 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { _ in
-            XCTFail("No events should be dispatched")
-        }) { _, _ in
+        state.processPrivacyChange(event: event, createSharedState: { (data, event) in
             XCTFail("Shared state should not be updated")
-        }
+        })
 
         // verify
         XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
@@ -790,11 +788,9 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { _ in
-            XCTFail("No events should be dispatched")
-        }) { _, _ in
+        state.processPrivacyChange(event: event, createSharedState: { (_, _) in
             XCTFail("Shared state should not be updated")
-        }
+        })
 
         // verify
         XCTAssertFalse(mockPushIdManager.calledUpdatePushId)
@@ -815,11 +811,9 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { _ in
-            XCTFail("No events should be dispatched")
-        }) { _, _ in
+        state.processPrivacyChange(event: event, createSharedState: { (data, event) in
             sharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [sharedStateExpectation], timeout: 1)
@@ -832,26 +826,25 @@ class IdentityStateTests: XCTestCase {
     /// Tests that when we got from opt out to opt in that we dispatch a force sync event
     func testProcessPrivacyChangeFromOptOutToOptIn() {
         // setup
-        let dispatchEventExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        state.lastValidConfig = configSharedState
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { event in
-            let forceSync = event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
-            let isSync = event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
-            XCTAssertTrue(forceSync && isSync)
-            dispatchEventExpectation.fulfill()
-        }) { _, _ in
-            XCTFail("No shared state should be shared")
-        }
+        state.processPrivacyChange(event: event, createSharedState: { (_, _) in
+            sharedStateExpectation.fulfill()
+        })
 
         // verify
-        wait(for: [dispatchEventExpectation], timeout: 1)
-        XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
+        wait(for: [sharedStateExpectation], timeout: 1)
+        XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
         XCTAssertTrue(mockHitQueue.calledBeginProcessing) // we should start the hit queue
         XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should change to opt in
     }
@@ -859,26 +852,25 @@ class IdentityStateTests: XCTestCase {
     /// When we go from opt-out to unknown we should suspend the queue and update the privacy status
     func testProcessPrivacyChangeFromOptOutToUnknown() {
         // setup
-        let dispatchEventExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
+        let sharedStateExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        state.lastValidConfig = configSharedState
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, eventDispatcher: { event in
-            let forceSync = event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? false
-            let isSync = event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false
-            XCTAssertTrue(forceSync && isSync)
-            dispatchEventExpectation.fulfill()
-        }) { _, _ in
-            XCTFail("No shared state should be shared")
-        }
+        state.processPrivacyChange(event: event, createSharedState: { _, _ in
+            sharedStateExpectation.fulfill()
+        })
 
         // verify
-        wait(for: [dispatchEventExpectation], timeout: 1)
-        XCTAssertTrue(mockDataStore.dict.isEmpty) // identity properties should have not been saved to persistence
+        wait(for: [sharedStateExpectation], timeout: 1)
+        XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
         XCTAssertTrue(mockHitQueue.calledSuspend) // we should have suspended the hit queue
         XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should change to opt in
     }
