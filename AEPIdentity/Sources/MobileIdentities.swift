@@ -69,11 +69,12 @@ struct MobileIdentities: Codable {
     ///   - sharedStateProvider: a function that can resolve `SharedState` given an extension name
     /// - Returns: True if all shared states are ready, false otherwise
     func areSharedStatesReady(event: Event, sharedStateProvider: SharedStateProvider) -> Bool {
+        let identityStatus = sharedStateProvider(IdentityConstants.EXTENSION_NAME, event)?.status ?? .none
         let configurationStatus = sharedStateProvider(IdentityConstants.SharedStateKeys.CONFIGURATION, event)?.status ?? .none
         // TODO: Analytics
         // TODO: Audience
         // TODO: Target
-        return configurationStatus != .pending
+        return identityStatus != .pending && configurationStatus != .pending
     }
 
     // MARK: Private APIs

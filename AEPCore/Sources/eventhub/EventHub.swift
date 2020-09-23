@@ -202,7 +202,7 @@ final class EventHub {
 
         let stateProviderLastVersion = eventNumberFor(event: container.lastProcessedEvent)
         // shared state is still considered pending if barrier is used and the state provider has not processed past this
-        if barrier && stateProviderLastVersion < version && result.status == .set {
+        if barrier && stateProviderLastVersion < version - 1 && result.status == .set {
             return SharedStateResult(status: .pending, value: result.value)
         }
 
