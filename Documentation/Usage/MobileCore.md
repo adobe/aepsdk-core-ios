@@ -369,5 +369,3 @@ MobileCore.getSdkIdentities { (ids, error) in
 }];
 ```
 
-##### 
-
