@@ -47,7 +47,7 @@ class AEPCoreLifecycleTests: XCTestCase {
         MobileCore.lifecycleStart(additionalContextData: expectedContextData)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testLifecyclePause() {
@@ -66,6 +66,6 @@ class AEPCoreLifecycleTests: XCTestCase {
         MobileCore.lifecyclePause()
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 }

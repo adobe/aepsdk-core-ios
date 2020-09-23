@@ -77,7 +77,7 @@ class RulesDownloaderTests: XCTestCase {
             expectation.fulfill()
         })
 
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertNil(loadedRulesData)
         XCTAssertFalse(mockUnzipper.unzipCalled)
         XCTAssertTrue(cache.getCalled)
@@ -92,7 +92,7 @@ class RulesDownloaderTests: XCTestCase {
             expectation.fulfill()
         })
 
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertFalse(mockUnzipper.unzipCalled)
         XCTAssertTrue(cache.getCalled)
         XCTAssertFalse(cache.setCalled)
@@ -105,7 +105,7 @@ class RulesDownloaderTests: XCTestCase {
             XCTAssertNil(loadedRules)
             expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertTrue(mockUnzipper.unzipCalled)
         XCTAssertTrue(cache.getCalled)
         XCTAssertFalse(cache.setCalled)
@@ -124,7 +124,7 @@ class RulesDownloaderTests: XCTestCase {
             expectation.fulfill()
         })
 
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertNotNil(rules)
     }
 }

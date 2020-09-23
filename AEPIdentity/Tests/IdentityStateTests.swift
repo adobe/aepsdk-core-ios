@@ -624,7 +624,7 @@ class IdentityStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [dispatchedEventExpectation], timeout: 0.5)
+        wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertEqual(hitResponse.blob, state.identityProperties.blob) // blob should have been updated
         XCTAssertEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should have been updated
@@ -656,7 +656,7 @@ class IdentityStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [dispatchedEventExpectation], timeout: 0.5)
+        wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertEqual(hitResponse.blob, state.identityProperties.blob) // blob should have been updated
         XCTAssertEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should have been updated
@@ -688,7 +688,7 @@ class IdentityStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [dispatchedEventExpectation], timeout: 0.5)
+        wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertNotEqual(hitResponse.blob, state.identityProperties.blob) // blob should not have been updated
         XCTAssertNotEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should not have been updated
@@ -720,7 +720,7 @@ class IdentityStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [dispatchedEventExpectation], timeout: 0.5)
+        wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertNotEqual(hitResponse.blob, state.identityProperties.blob) // blob should not have been updated
         XCTAssertNotEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should not have been updated
@@ -749,7 +749,7 @@ class IdentityStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [dispatchedEventExpectation], timeout: 0.5)
+        wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
     }
 
@@ -816,7 +816,7 @@ class IdentityStateTests: XCTestCase {
         })
 
         // verify
-        wait(for: [sharedStateExpectation], timeout: 0.5)
+        wait(for: [sharedStateExpectation], timeout: 1)
         XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
         XCTAssertTrue(mockPushIdManager.calledUpdatePushId)
         XCTAssertTrue(mockHitQueue.calledSuspend && mockHitQueue.calledClear) // we should suspend the queue and clear it
@@ -843,7 +843,7 @@ class IdentityStateTests: XCTestCase {
         })
 
         // verify
-        wait(for: [sharedStateExpectation], timeout: 0.5)
+        wait(for: [sharedStateExpectation], timeout: 1)
         XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
         XCTAssertTrue(mockHitQueue.calledBeginProcessing) // we should start the hit queue
         XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should change to opt in
@@ -869,7 +869,7 @@ class IdentityStateTests: XCTestCase {
         })
 
         // verify
-        wait(for: [sharedStateExpectation], timeout: 0.5)
+        wait(for: [sharedStateExpectation], timeout: 1)
         XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
         XCTAssertTrue(mockHitQueue.calledSuspend) // we should have suspended the hit queue
         XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should change to opt in

@@ -47,7 +47,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: nil)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertNil(props.pushIdentifier) // push identifier should be nil
@@ -68,7 +68,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: nil)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertNil(props.pushIdentifier) // push identifier should be nil
@@ -94,7 +94,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: existingPushId)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertEqual(props.pushIdentifier, existingProps.pushIdentifier) // push ID should have remained the same
@@ -118,7 +118,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: testPushId)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertEqual(props.pushIdentifier, SHA256.hash(testPushId)) // push id in datastore should have been updated
@@ -142,7 +142,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: testPushId)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertEqual(props.pushIdentifier, SHA256.hash(testPushId))
@@ -170,7 +170,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: testPushId)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertEqual(props.pushIdentifier, SHA256.hash(testPushId))
@@ -199,7 +199,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: nil)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertNil(props.pushIdentifier)
@@ -228,7 +228,7 @@ class PushIDManagerTests: XCTestCase {
         pushIdManager.updatePushId(pushId: "")
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
         XCTAssertNotEqual(existingProps.pushIdentifier, props.pushIdentifier)
