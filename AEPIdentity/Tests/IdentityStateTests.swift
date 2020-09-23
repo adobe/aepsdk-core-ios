@@ -33,79 +33,57 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
     }
 
-    // MARK: bootup(...) tests
+    // MARK: bootupIfReady(...) tests
 
-    /// Tests that the properties are not updated and unknown privacy is used
-    func testBootupEmptyConfigSharedState() {
-        // setup
-        let expectation = XCTestExpectation(description: "Force sync event is dispatched")
-        expectation.assertForOverFulfill = true
-
+    /// Tests that the properties are not update and we ignore the call
+    func testBootupIfReadyEmptyConfigSharedState() {
         // test
-        let result = state.bootup(configSharedState: nil) { _ in
-            expectation.fulfill()
-        }
+        let result = state.bootupIfReady(configSharedState: [:], event: Event.fakeSyncIDEvent())
 
         // verify
-        wait(for: [expectation], timeout: 1)
         XCTAssertFalse(result)
         XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus)
-        XCTAssertTrue(mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
+        XCTAssertFalse(mockHitQueue.calledBeginProcessing && mockHitQueue.calledClear && mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
     }
 
-    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is not created
-    func testBootupWithOptInPrivacyReturnsFalse() {
+    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is create due to force sync
+    func testBootupIfReadyWithOptInPrivacyReturnsTrue() {
         // setup
-        let expectation = XCTestExpectation(description: "Force sync event is dispatched")
-        expectation.assertForOverFulfill = true
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
-        let result = state.bootup(configSharedState: configSharedState) { _ in
-            expectation.fulfill()
-        }
+        let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
 
         // verify
-        wait(for: [expectation], timeout: 1)
-        XCTAssertFalse(result)
+        XCTAssertTrue(result)
         XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should have been updated
         XCTAssertTrue(mockHitQueue.calledBeginProcessing) // opt-in should result in hit processing hits
     }
 
     /// Tests that the properties are updated, and the hit queue processes the change
-    func testBootupWithOptOutPrivacyReturnsTrue() {
+    func testBootupIfReadyWithOptOutPrivacyReturnsTrue() {
         // setup
-        let expectation = XCTestExpectation(description: "Force sync event is dispatched")
-        expectation.assertForOverFulfill = true
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
-        let result = state.bootup(configSharedState: configSharedState) { _ in
-            expectation.fulfill()
-        }
+        let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
 
         // verify
-        wait(for: [expectation], timeout: 1)
         XCTAssertTrue(result)
         XCTAssertEqual(PrivacyStatus.optedOut, state.identityProperties.privacyStatus) // privacy status should have been updated
         XCTAssertTrue(mockHitQueue.calledSuspend && mockHitQueue.calledClear) // opt-out should suspend and clear the queue
     }
 
-    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is not created
-    func testBootupWithUnknownPrivacyReturnsFalse() {
+    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created from the force sync
+    func testBootupIfReadyWithUnknownPrivacyReturnsFalse() {
         // setup
-        let expectation = XCTestExpectation(description: "Force sync event is dispatched")
-        expectation.assertForOverFulfill = true
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
-        let result = state.bootup(configSharedState: configSharedState) { _ in
-            expectation.fulfill()
-        }
+        let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
 
         // verify
-        wait(for: [expectation], timeout: 1)
-        XCTAssertFalse(result)
+        XCTAssertTrue(result)
         XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should have been updated
         XCTAssertTrue(mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
     }
