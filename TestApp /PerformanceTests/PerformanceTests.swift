@@ -34,7 +34,7 @@ class PerformanceTests: XCTestCase {
             measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)], options: options) {
                 app.launch()
                 app.buttons["Load AEP SDK"].tap()
-                XCTAssert(app.staticTexts["Lifecycle Start"].waitForExistence(timeout: 5))
+                XCTAssert(app.staticTexts["Eventhub Booted"].waitForExistence(timeout: 5))
             }
         }
     }

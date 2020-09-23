@@ -24,14 +24,17 @@ struct ContentView: View {
         VStack {
             Button(action: {
                 PerfExtension.LIFECYCLE_START_RESPONSE_EVENT_RECEIVED = false
+                PerfExtension.EVENT_HUB_BOOTED = false
                 PerfExtension.RULES_CONSEQUENCE_EVENTS = 0
+                self.status = "...."
+
                 MobileCore.setLogLevel(level: .error)
                 MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self, PerfExtension.self]) {}
                 MobileCore.configureWith(appId: "94f571f308d5/fec7505defe0/launch-eaa54c95a6b5-development")
                 MobileCore.lifecycleStart(additionalContextData: nil)
                 for _ in 0...10000{
-                    if PerfExtension.LIFECYCLE_START_RESPONSE_EVENT_RECEIVED {
-                        self.status = "Lifecycle Start"
+                    if PerfExtension.EVENT_HUB_BOOTED {
+                        self.status = "Eventhub Booted"
                         break
                     }else{
                         usleep(100)
@@ -47,8 +50,10 @@ struct ContentView: View {
                     .font(.caption)
             }.cornerRadius(5)
             Button(action: {
+                PerfExtension.EVENT_HUB_BOOTED = false
                 PerfExtension.RULES_CONSEQUENCE_EVENTS = 0
                 self.status = "...."
+
                 for _ in 0...99{
                     MobileCore.dispatch(event: Event(name: "mock event", type: "com.adobe.eventType.generic.track", source: "com.adobe.eventSource.requestContent", data: ["action" : "action"]))
                 }
