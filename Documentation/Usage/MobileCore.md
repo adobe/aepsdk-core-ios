@@ -252,13 +252,13 @@ MobileCore.setLogLevel(level: .trace)
 ###### Swift
 
 ```swift
-
+MobileCore.setAppGroup(group: "your-app-group")
 ```
 
 ###### Objective-C
 
 ```objective-c
-
+[AEPMobileCore setAppGroup:@"your-app-group"];
 ```
 
 ##### Configuring the SDK with an app id:
@@ -266,13 +266,15 @@ MobileCore.setLogLevel(level: .trace)
 ###### Swift
 
 ```swift
-
+// Use the App id assigned to this application via Adobe Launch
+MobileCore.configureWith(appId: "your-app-id")
 ```
 
 ###### Objective-C
 
 ```objective-c
-
+// Use the App id assigned to this application via Adobe Launch
+[AEPMobileCore configureWithAppId: @"your-app-id"];
 ```
 
 ##### Configuring the SDK with a bundled configuration file:
@@ -280,13 +282,15 @@ MobileCore.setLogLevel(level: .trace)
 ###### Swift
 
 ```swift
-
+let filePath = Bundle.main.path(forResource: "ExampleJSONFile", ofType: "json")
+MobileCore.configureWith(filePath: filePath)
 ```
 
 ###### Objective-C
 
 ```objective-c
-
+NSString *filePath = [[NSBundle mainBundle] pathForResource:@"ExampleJSONFile"ofType:@"json"];
+[AEPMobileCore configureWithFilePath:filePath];
 ```
 
 ##### Programatically updating the configuration:
@@ -294,27 +298,39 @@ MobileCore.setLogLevel(level: .trace)
 ###### Swift
 
 ```swift
-
+let updatedConfig = ["analytics.rsids": "your-rsids"]
+MobileCore.updateConfigurationWith(configDict: updatedConfig)
 ```
 
 ###### Objective-C
 
 ```objective-c
-
+NSDictionary *updatedConfig = @{ @"analytics.rsids": @"your-rsids"};
+[AEPMobileCore updateConfiguration:updatedConfig];
 ```
 
 ##### Setting the privacy status:
 
+`PrivacyStatus` is defined as:
+
+```swift
+@objc(AEPPrivacyStatus) public enum PrivacyStatus: Int, RawRepresentable, Codable {
+    case optedIn = 0
+    case optedOut = 1
+    case unknown = 2
+}
+```
+
 ###### Swift
 
 ```swift
-
+MobileCore.setPrivacy(status: .optedOut)
 ```
 
 ###### Objective-C
 
 ```objective-c
-
+[AEPMobileCore setPrivacy:AEPPrivacyStatusOptedOut];
 ```
 
 ##### Reading the privacy status:
@@ -328,7 +344,9 @@ MobileCore.setLogLevel(level: .trace)
 ###### Objective-C
 
 ```objective-c
-
+[AEPMobileCore getPrivacyStatus:^(enum AEPPrivacyStatus privacyStatus) {
+    // handle completion
+}];
 ```
 
 ##### Reading the SDK identities:
