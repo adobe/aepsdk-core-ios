@@ -17,7 +17,6 @@ import Foundation
 /// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
 ///
 struct RulesDownloader: RulesLoader {
-    private let loggingService = ServiceProvider.shared.loggingService
     private let fileUnzipper: Unzipping
     private let cache: Cache
 

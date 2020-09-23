@@ -50,7 +50,7 @@ class TestableExtensionRuntime: ExtensionRuntime {
         }
     }
 
-    func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
 

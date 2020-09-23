@@ -97,7 +97,7 @@ class TokenFinder: Traversable {
         let extensionName = key.substring(from: TOKEN_KEY_SHARED_STATE.count + 1, to: index - 1)
         let dataKeyName = key.substring(from: index + 1, to: key.count - 1)
 
-        guard let data = extensionRuntime.getSharedState(extensionName: String(extensionName), event: event)?.value else {
+        guard let data = extensionRuntime.getSharedState(extensionName: String(extensionName), event: event, barrier: false)?.value else {
             Log.trace(label: LOG_TAG, "Can not find the shared state of extension [\(extensionName)]")
             return nil
         }
