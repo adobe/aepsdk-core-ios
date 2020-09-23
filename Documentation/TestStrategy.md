@@ -1,9 +1,8 @@
-# Tests Strategy
-This document defines different levels of tests are being used in the project. By defining a clear test boundaries, it helps us increase the confidence of code and decrease the overlapping between different tests and in turn will lower the time spent on maintaining the tests.
+# Testing Strategy
 
+This document defines different levels of tests being used by modules in this repository. By defining clear test boundaries, it helps increase confidence in the code and decrease overlap between different kinds of tests. This will lower the required time spent to maintain tests.
 
-
-## Levels
+## Testing Levels
 
                                                    /\                                
                                                   /  \                               
@@ -25,7 +24,7 @@ This document defines different levels of tests are being used in the project. B
                                   /----------------------------------\               
                                  /                                    \              
                                 /                                      \             
-                               /          Funtional Testing             \            
+                               /          Functional Testing            \            
                               /                                          \           
                              ---------------------------------------------\          
                             /                                              \         
@@ -36,59 +35,50 @@ This document defines different levels of tests are being used in the project. B
 
 
 
-## Unit Testing:
+## Unit Testing
 
-* Should only test a singal method.
+* CI will run unit tests after each code check-in.
 
-* CI will run this test after each code check-in.
+* Should only test a single method.
 
-* Read more about the best practice for [Unit Test Best Practices](./UnitTestBestPractices.md).
+* Read more about [Unit Testing Best Practices](./UnitTestBestPractices.md).
 
-  
+## Functional Testing
 
-## Functional Testing:
+* CI will run functional tests after each code check-in.
 
-* Test a single extension, and treat this extension as a black box.
+* Black box tests for a single extension.
 
-* Use the testable `ExtensionRuntime` to simulate or mock the interaction with the Event Hub.
+* Use the testable `ExtensionRuntime` to simulate or mock interactions with the Event Hub.
 
-* Use the mock `NetworkServices` to monitor or mock the network activities.
+* Use the mock `NetworkServices` to monitor or mock network activities.
 
-* Test input: Simulated incoming events + shared states of other extensions+ network responses 
+* Test input: Simulated incoming events + shared states of other extensions + network responses
 
-  Test output: Outgoing events + network requests + shared states
+* Test output: Outgoing events + network requests + shared states
 
-* CI will run this test after each code check-in 
+## Integration Testing
 
-  
+* CI will run integration tests after each code check-in.
 
-## Integration Testing:
+* Use the real `eventhub`, but mock `NetworkServices`.
 
-* Use the real eventhub but mock `NetworkServices` 
-* Focus on: 
+* Focus on:
+
     - Happy path of the public APIs.
-    - The dependencies between extensions, in particular, the shared states dependency and events dependency.
-* CI will run this test after each code check-in 
 
+    - Dependencies between extensions. In particular, shared state and event dependencies.
 
+## Performance Testing
 
-## Performance Testing:
+* Cover memory consumption, memory leaks, thread consumption, CPU consumption and execution speed.
 
-* Cover memory consumption, memory leak, thread consumption, CPU consumption and execution speed
+* Automate tests for execution speed and run them as part of the integration testing.
 
-* Automate the tests for execution speed and run it as part of the integration testing.
+## Manual Testing
 
-  
+* Test with production-ready code against production servers.
 
+* Test anything that cannot be covered by automated tests.
 
-## Manual Testing:
-* Test against production servers.
-* Test all the other things couldn't be covered by automation test.
-* Should run the test before each release.
-* TBD: How to use Griffon?
-
-
-
-
-## Example
-TBD.
+* Should be run before each release.
