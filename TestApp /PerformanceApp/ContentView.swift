@@ -58,9 +58,9 @@ struct ContentView: View {
                     MobileCore.dispatch(event: Event(name: "mock event", type: "com.adobe.eventType.generic.track", source: "com.adobe.eventSource.requestContent", data: ["action" : "action"]))
                 }
 
-                for _ in 0...30000{
+                for _ in 0...300000{
                     if PerfExtension.RULES_CONSEQUENCE_EVENTS >= 1000 {
-                        self.status = "10000 Rules were Evaluated"
+                        self.status = "1000 Rules were Evaluated"
                         break
                     }else{
                         usleep(100)

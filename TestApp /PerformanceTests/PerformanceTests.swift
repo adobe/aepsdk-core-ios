@@ -59,7 +59,7 @@ class PerformanceTests: XCTestCase {
             app.buttons["Load AEP SDK"].tap()
             measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)]) {
                 app.buttons["Evaluate Rules"].tap()
-                XCTAssert(app.staticTexts["10000 Rules were Evaluated"].waitForExistence(timeout: 10))
+                XCTAssert(app.staticTexts["1000 Rules were Evaluated"].waitForExistence(timeout: 10))
             }
         }
     }
