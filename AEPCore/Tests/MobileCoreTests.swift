@@ -324,7 +324,7 @@ class MobileCoreTests: XCTestCase {
         XCTAssertEqual(appGroup, keyValueService?.appGroup)
     }
 
-    // MARK: collectLaunchInfo(...) tests
+    // MARK: collectMessageInfo(...) tests
 
     /// When launch info is empty no event should be dispatched
     func testCollectLaunchInfoEmpty() {
@@ -349,14 +349,14 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectLaunchInfo(userInfo: [:])
+        MobileCore.collectMessageInfo(userInfo: [:])
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
     }
 
     /// When user info is not empty we should dispatch an event
-    func testCollectLaunchInfoWithData() {
+    func testCollectMessageInfoWithData() {
         // setup
         let userInfo = ["testKey": "testVal"]
 
@@ -380,7 +380,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectLaunchInfo(userInfo: userInfo)
+        MobileCore.collectMessageInfo(userInfo: userInfo)
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)

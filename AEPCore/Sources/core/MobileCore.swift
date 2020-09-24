@@ -132,16 +132,16 @@ import Foundation
         ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
     }
 
-    /// Provide user info to the SDK from various launch points in your application.
-    /// - Parameter userInfo: Dictionary of data relevant to the expected use case
+    /// For scenarios where the app is launched as a result of notification tap
+    /// - Parameter messageInfo: Dictionary of data relevant to the expected use case
     @objc(collectLaunchInfo:)
-    public static func collectLaunchInfo(userInfo: [String: Any]) {
-        guard !userInfo.isEmpty else {
-            Log.trace(label: LOG_TAG, "CollectData - data was empty, no event was dispatched")
+    public static func collectMessageInfo(messageInfo: [String: Any]) {
+        guard !messageInfo.isEmpty else {
+            Log.trace(label: LOG_TAG, "collectMessageInfo - data was empty, no event was dispatched")
             return
         }
 
-        let event = Event(name: "CollectData", type: EventType.genericData, source: EventSource.os, data: userInfo)
+        let event = Event(name: "CollectMessageData", type: EventType.genericData, source: EventSource.os, data: messageInfo)
         MobileCore.dispatch(event: event)
     }
 }
