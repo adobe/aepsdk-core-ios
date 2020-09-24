@@ -50,6 +50,6 @@ class LoggingService: Logging {
     // MARK: Logging
 
     func log(level: LogLevel, label: String, message: String) {
-        os_log("[AEP SDK] : %@", log: osLog(label), type: osLogType(level), message)
+        os_log("%@", log: osLog("AEP SDK : \(label)"), type: osLogType(level), message)
     }
 }
