@@ -5,7 +5,7 @@ This document provides details about how to collect AEP SDK core components' per
 # Test Setup
 
 - Connect a physical iOS device to Xcode
-- Open the Xcode project from [here](https://github.com/adobe/aepsdk-core-ios/tree/main/TestApp%20), tit contains two targets used for performance testing - `PerformanceApp` and `PerformanceTests`
+- Open the Xcode project from [here](https://github.com/adobe/aepsdk-core-ios/tree/main/TestApp%20), it contains two targets used for performance testing - `PerformanceApp` and `PerformanceTests`
 
 # Performance Metrics
 
