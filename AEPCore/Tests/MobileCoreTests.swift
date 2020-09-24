@@ -349,7 +349,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectMessageInfo(userInfo: [:])
+        MobileCore.collectMessageInfo(messageInfo: [:])
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
@@ -358,7 +358,7 @@ class MobileCoreTests: XCTestCase {
     /// When user info is not empty we should dispatch an event
     func testCollectMessageInfoWithData() {
         // setup
-        let userInfo = ["testKey": "testVal"]
+        let messageInfo = ["testKey": "testVal"]
 
         let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
         registerExpectation.assertForOverFulfill = true
@@ -380,7 +380,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectMessageInfo(userInfo: userInfo)
+        MobileCore.collectMessageInfo(messageInfo: userInfo)
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
