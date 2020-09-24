@@ -327,7 +327,7 @@ class MobileCoreTests: XCTestCase {
     // MARK: collectMessageInfo(...) tests
 
     /// When launch info is empty no event should be dispatched
-    func testCollectLaunchInfoEmpty() {
+    func testCollectMessageInfoEmpty() {
         // setup
         let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
         registerExpectation.assertForOverFulfill = true

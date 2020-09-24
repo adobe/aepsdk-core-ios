@@ -134,7 +134,7 @@ import Foundation
 
     /// For scenarios where the app is launched as a result of notification tap
     /// - Parameter messageInfo: Dictionary of data relevant to the expected use case
-    @objc(collectLaunchInfo:)
+    @objc(collectMessageInfo:)
     public static func collectMessageInfo(messageInfo: [String: Any]) {
         guard !messageInfo.isEmpty else {
             Log.trace(label: LOG_TAG, "collectMessageInfo - data was empty, no event was dispatched")
