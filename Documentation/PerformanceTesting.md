@@ -4,26 +4,25 @@ This document provides details about how to collect AEP SDK core components' per
 
 # Test Setup
 
-- Connect an iphone device to your Mac machine
-- Open an Xcode project from [here](https://github.com/adobe/aepsdk-core-ios/tree/main/TestApp%20), then you will see two targets (`PerformanceApp` and `PerformanceTests`) in the project
-- Run above two targets manually on the iphone device to collect the following performance data
+- Connect a physical iOS device to Xcode
+- Open the Xcode project from [here](https://github.com/adobe/aepsdk-core-ios/tree/main/TestApp%20), tit contains two targets used for performance testing - `PerformanceApp` and `PerformanceTests`
 
-# Performance Metric
+# Performance Metrics
 
 - ### Execution Time
 
   - Run `PerformanceTests` target 
   - Then the test result will show the execution time of `loading all SDK core conponents` and `evaluating 1000 rules in Rules Engine`
 
-- ### Memory Consumption/Thread Consumption/CPU Consumption
+- ### Memory/CPU/Thread Consumption
 
   - Launch the `PerformanceApp` and open the `debug navigation` view from Xcode.
-  - Then click the buttons (`Load AEP SDK` and `Evaluate Rules`) on the App, and at the same time check the memory usage/ thead comsumption and CPU usage from Xcode.
+  - Click the buttons (`Load AEP SDK` and `Evaluate Rules`) on the app, , in the meantime, monitor the memory/cpu/thead usage in Xcode.
 
 - ### Memory Leak
 
-  - Launch the `PerformanceApp` and open the `debug navigation` view from Xcode.
-  - Go to `debug navigation` view and select the `Memory` catagory, then click the button `Profile in Instruments` from the right side.
+  - Launch the `PerformanceApp` and open the `debug navigator` view from Xcode.
+  - Go to `debug navigator` view and select the `Memory` catagory, then click the button `Profile in Instruments` from the right side.
   - Then the `Instruments` tool will show the memory `Allocations` and `Leaks`. if the UI show the green icons, it indicates the test app doesn't have any memory leaks. 
 
 # Performance Baseline 
