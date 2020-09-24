@@ -10,7 +10,7 @@ The `NamedCollectionProcessing` service provides shared functionality to read an
 
 ## Usage
 
-While you can access the `Logging` service directly via the `ServiceProvider`, it is recommended to use the wrapper class, `NamedCollectionDataStore`. This class can read and write values to local storage while using the underlying `NamedCollectionProcessing` service.
+While you can access the logging service directly via the `ServiceProvider`, it is recommended to use the wrapper class, `NamedCollectionDataStore`. This class can read and write values to local storage while using the underlying `NamedCollectionProcessing` service.
 
 ```swift
 // Create your datastore
