@@ -27,6 +27,8 @@ public class PerfExtension:NSObject, Extension{
     
     public static var LIFECYCLE_START_RESPONSE_EVENT_RECEIVED = false
     
+    public static var EVENT_HUB_BOOTED = false
+    
     public static var RULES_CONSEQUENCE_EVENTS = 0
     
     public required init?(runtime: ExtensionRuntime) {
@@ -38,6 +40,11 @@ public class PerfExtension:NSObject, Extension{
         registerListener(type: EventType.lifecycle, source: EventSource.responseContent) { (event) in
             if event.name == "LifecycleStart" {
                 PerfExtension.LIFECYCLE_START_RESPONSE_EVENT_RECEIVED = true
+            }
+        }
+        registerListener(type: EventType.hub, source: EventSource.sharedState) { (event) in
+            if event.name == "STATE_CHANGE_EVENT", let owner = event.data?["stateowner"] as? String, owner == "com.adobe.module.eventhub" {
+                PerfExtension.EVENT_HUB_BOOTED = true
             }
         }
         registerListener(type: EventType.rulesEngine, source: EventSource.responseContent) { (event) in
