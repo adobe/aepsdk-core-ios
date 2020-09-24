@@ -16,7 +16,7 @@ This document provides details about how to collect AEP SDK core components' per
 
 - ### Memory/CPU/Thread Consumption
 
-  - Launch the `PerformanceApp` and open the `debug navigation` view from Xcode.
+  - Launch the `PerformanceApp` and open the `debug navigator` view from Xcode.
   - Click the buttons (`Load AEP SDK` and `Evaluate Rules`) on the app, , in the meantime, monitor the memory/cpu/thead usage in Xcode.
 
 - ### Memory Leak
