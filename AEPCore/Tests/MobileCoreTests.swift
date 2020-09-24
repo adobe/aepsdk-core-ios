@@ -373,14 +373,14 @@ class MobileCoreTests: XCTestCase {
 
         // register listener after registration
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericData, source: EventSource.os) { event in
-            XCTAssertEqual(event.data as! [String : String], userInfo)
+            XCTAssertEqual(event.data as! [String : String], messageInfo)
             eventExpectation.fulfill()
         }
 
         EventHub.shared.start()
 
         // test
-        MobileCore.collectMessageInfo(messageInfo: userInfo)
+        MobileCore.collectMessageInfo(messageInfo: messageInfo)
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
