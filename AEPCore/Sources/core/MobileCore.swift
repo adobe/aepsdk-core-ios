@@ -15,6 +15,7 @@ import Foundation
 
 /// Core extension for the Adobe Experience Platform SDK
 @objc(AEPMobileCore) public final class MobileCore: NSObject {
+    private static let LOG_TAG = "MobileCore"
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         if wrapperType == .none {
@@ -129,5 +130,18 @@ import Foundation
     @objc(setAppGroup:)
     public static func setAppGroup(group: String?) {
         ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
+    }
+
+    /// Provide user info to the SDK from various launch points in your application.
+    /// - Parameter userInfo: Dictionary of data relevant to the expected use case
+    @objc(collectLaunchInfo:)
+    public static func collectLaunchInfo(userInfo: [String: Any]) {
+        guard !userInfo.isEmpty else {
+            Log.trace(label: LOG_TAG, "CollectData - data was empty, no event was dispatched")
+            return
+        }
+
+        let event = Event(name: "CollectData", type: EventType.genericData, source: EventSource.os, data: userInfo)
+        MobileCore.dispatch(event: event)
     }
 }

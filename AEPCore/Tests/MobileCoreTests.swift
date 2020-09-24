@@ -323,4 +323,66 @@ class MobileCoreTests: XCTestCase {
         let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
         XCTAssertEqual(appGroup, keyValueService?.appGroup)
     }
+
+    // MARK: collectLaunchInfo(...) tests
+
+    /// When launch info is empty no event should be dispatched
+    func testCollectLaunchInfoEmpty() {
+        // setup
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should NOT receive an event")
+        eventExpectation.assertForOverFulfill = true
+        eventExpectation.isInverted = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericData, source: EventSource.os) { event in
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectLaunchInfo(userInfo: [:])
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
+
+    /// When user info is not empty we should dispatch an event
+    func testCollectLaunchInfoWithData() {
+        // setup
+        let userInfo = ["testKey": "testVal"]
+
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should receive the event when dispatched through the event hub")
+        eventExpectation.assertForOverFulfill = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericData, source: EventSource.os) { event in
+            XCTAssertEqual(event.data as! [String : String], userInfo)
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectLaunchInfo(userInfo: userInfo)
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
 }
