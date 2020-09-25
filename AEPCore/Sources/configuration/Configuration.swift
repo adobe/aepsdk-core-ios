@@ -161,7 +161,7 @@ class Configuration: Extension {
                 guard let self = self else { return }
                 Log.trace(label: self.name, "Downloading config failed, trying again")
                 self.retryQueue.asyncAfter(deadline: .now() + 5) {
-                    _ = self.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
+                    self.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
                 }
             }
         }
