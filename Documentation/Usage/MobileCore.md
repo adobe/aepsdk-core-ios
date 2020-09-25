@@ -369,3 +369,35 @@ MobileCore.getSdkIdentities { (ids, error) in
 }];
 ```
 
+##### Collecting message info:
+
+###### Swift
+
+```swift
+let messageInfo = ["testKey": "testVal"]
+MobileCore.collectMessageInfo(messageInfo: messageInfo)
+```
+
+###### Objective-C
+
+```objective-c
+NSDictionary *messageInfo = @{@"testKey": @"testVal"}
+[AEPMobileCore collectMessageInfo:messageInfo];
+```
+
+##### Collecting Pii:
+
+###### Swift
+
+```swift
+let data = ["testKey": "testVal"]
+MobileCore.collectPii(messageInfo: data)
+```
+
+###### Objective-C
+
+```objective-c
+NSDictionary *data = @{@"testKey": @"testVal"}
+[AEPMobileCore collectPii:data];
+```
+
