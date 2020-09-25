@@ -149,7 +149,7 @@ public final class MobileCore: NSObject {
     /// Submits a generic PII collection request event with type `generic.pii`.
     /// - Parameter data: a dictionary containing PII data
     @objc(collectPii:)
-    public static func collectPii(data: [String: String]) {
+    public static func collectPii(data: [String: Any]) {
         guard !data.isEmpty else {
             Log.trace(label: LOG_TAG, "collectPii - data was empty, no event was dispatched")
             return
