@@ -326,7 +326,7 @@ class MobileCoreTests: XCTestCase {
 
     // MARK: collectMessageInfo(...) tests
 
-    /// When launch info is empty no event should be dispatched
+    /// When message info is empty no event should be dispatched
     func testCollectMessageInfoEmpty() {
         // setup
         let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
@@ -355,7 +355,7 @@ class MobileCoreTests: XCTestCase {
         wait(for: [eventExpectation], timeout: 1.0)
     }
 
-    /// When user info is not empty we should dispatch an event
+    /// When message info is not empty we should dispatch an event
     func testCollectMessageInfoWithData() {
         // setup
         let messageInfo = ["testKey": "testVal"]
@@ -381,6 +381,68 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.collectMessageInfo(messageInfo: messageInfo)
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
+
+    // MARK: collectPii(...) tests
+
+    /// When data is empty no event should be dispatched
+    func testCollectPiiDataEmpty() {
+        // setup
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should NOT receive an event")
+        eventExpectation.assertForOverFulfill = true
+        eventExpectation.isInverted = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericPii, source: EventSource.requestContent) { event in
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectPii(data: [:])
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
+
+    /// When data is not nil we should dispatch an event
+    func testCollectPiiWithData() {
+        // setup
+        let data = ["testKey": "testVal"]
+
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should receive the event when dispatched through the event hub")
+        eventExpectation.assertForOverFulfill = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericPii, source: EventSource.requestContent) { event in
+            XCTAssertEqual(event.data as! [String : [String: String]], [CoreConstants.Signal.EventDataKeys.CONTEXT_DATA: data])
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectPii(data: data)
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
