@@ -59,7 +59,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testEvent)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubDoesNotInvokeListenerWrongType() {
@@ -77,7 +77,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testEvent)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubNeverDispatchesEventToListenerWithoutStart() {
@@ -114,7 +114,7 @@ class EventHubTests: XCTestCase {
         eventHub.start()
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubDispatchesEventToListenerAndIgnoresNonMatchingEvent() {
@@ -135,7 +135,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testEvent1) // should not invoke listener
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubDispatchesEventsToListener() {
@@ -157,7 +157,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testEvent1)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubDispatchesEventsToMultipleListeners() {
@@ -186,7 +186,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testEvent)
 
         // verify
-        wait(for: [expectation, expectation1], timeout: 0.5)
+        wait(for: [expectation, expectation1], timeout: 1)
     }
 
     func testEventHubDispatchesEventsToCorrectListeners() {
@@ -214,7 +214,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testEvent1) // should invoke second listener
 
         // verify
-        wait(for: [expectation, expectation1], timeout: 0.5)
+        wait(for: [expectation, expectation1], timeout: 1)
     }
 
     func testEventHubTestResponseListener() {
@@ -235,7 +235,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testResponseEvent)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubTestResponseListenerRemovedAfterInvoked() {
@@ -257,7 +257,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testResponseEvent)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubTestResponseListenerNotInvoked() {
@@ -279,7 +279,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: otherResponseEvent)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubDispatchesEventsWithBlockingListener() {
@@ -306,7 +306,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: testEvent)
 
         // verify
-        wait(for: [expectation, expectation1], timeout: 0.5)
+        wait(for: [expectation, expectation1], timeout: 1)
     }
 
     func testEventHubDispatchesEventFromExtensionQueue() {
@@ -326,7 +326,7 @@ class EventHubTests: XCTestCase {
         DispatchQueue(label: "com.adobe.mock.extension").async { self.eventHub.dispatch(event: testEvent) }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubDispatchesEventFromManyExtensionQueues() {
@@ -369,7 +369,7 @@ class EventHubTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that an extension that is registered can be unregistered without an error
@@ -389,7 +389,7 @@ class EventHubTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that an extension that is not registered cannot be unregistered
@@ -406,7 +406,7 @@ class EventHubTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// An extension can be registered, then unregistered, then registered again
@@ -431,7 +431,7 @@ class EventHubTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation, registerExpectation], timeout: 0.5)
+        wait(for: [expectation, registerExpectation], timeout: 1)
     }
 
     /// Tests that after an extension is unregistered that it cannot receive new events
@@ -456,7 +456,7 @@ class EventHubTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that when we share state that we use configuration's version as the top level version and include all the extensions
@@ -488,7 +488,7 @@ class EventHubTests: XCTestCase {
         eventHub.start()
 
         // verify
-        wait(for: [sharedStateExpectation], timeout: 0.5)
+        wait(for: [sharedStateExpectation], timeout: 1)
         let sharedState = eventHub.getSharedState(extensionName: EventHubConstants.NAME, event: nil)!.value
 
         let mockExtension = MockExtension(runtime: TestableExtensionRuntime())
@@ -521,7 +521,7 @@ class EventHubTests: XCTestCase {
         eventHub.unregisterExtension(MockExtensionTwo.self, completion: { (_) in })
 
         // verify
-        wait(for: [sharedStateExpectation], timeout: 0.5)
+        wait(for: [sharedStateExpectation], timeout: 1)
         let sharedState = eventHub.getSharedState(extensionName: EventHubConstants.NAME, event: nil)!.value
 
         let mockExtension = MockExtension(runtime: TestableExtensionRuntime())
@@ -548,7 +548,7 @@ class EventHubTests: XCTestCase {
         eventHub.start()
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubRegisterSameExtensionTwiceFails() {
@@ -570,7 +570,7 @@ class EventHubTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubRegistersExtensionWithSlowExtensionStillRegisters() {
@@ -591,7 +591,7 @@ class EventHubTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     // Can somewhat test thread safety, however it is registering the same extension 100 times..
@@ -875,7 +875,7 @@ class EventHubTests: XCTestCase {
         pendingResolver(SharedStateTestHelper.ONE)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
 
@@ -927,7 +927,7 @@ class EventHubTests: XCTestCase {
         let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event)
         pendingResolver(SharedStateTestHelper.TWO)
 
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "two")
     }
 
@@ -986,7 +986,7 @@ class EventHubTests: XCTestCase {
         eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: nil, event: nil)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
     }
 
@@ -1008,7 +1008,7 @@ class EventHubTests: XCTestCase {
         pendingResolver(SharedStateTestHelper.ONE)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
 
@@ -1040,6 +1040,6 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: Event(name: "event", type: EventType.target, source: EventSource.requestContent, data: nil))
 
         // verify
-        wait(for: [targetRequestContentExpectation, analyticsRequestContentExpectation], timeout: 0.5)
+        wait(for: [targetRequestContentExpectation, analyticsRequestContentExpectation], timeout: 1)
     }
 }

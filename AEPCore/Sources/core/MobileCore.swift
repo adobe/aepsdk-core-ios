@@ -14,7 +14,9 @@ import AEPServices
 import Foundation
 
 /// Core extension for the Adobe Experience Platform SDK
-@objc(AEPMobileCore) public final class MobileCore: NSObject {
+@objc(AEPMobileCore)
+public final class MobileCore: NSObject {
+    private static let LOG_TAG = "MobileCore"
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         if wrapperType == .none {
@@ -129,5 +131,32 @@ import Foundation
     @objc(setAppGroup:)
     public static func setAppGroup(group: String?) {
         ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
+    }
+
+    /// For scenarios where the app is launched as a result of notification tap
+    /// - Parameter messageInfo: Dictionary of data relevant to the expected use case
+    @objc(collectMessageInfo:)
+    public static func collectMessageInfo(messageInfo: [String: Any]) {
+        guard !messageInfo.isEmpty else {
+            Log.trace(label: LOG_TAG, "collectMessageInfo - data was empty, no event was dispatched")
+            return
+        }
+
+        let event = Event(name: "CollectMessageData", type: EventType.genericData, source: EventSource.os, data: messageInfo)
+        MobileCore.dispatch(event: event)
+    }
+
+    /// Submits a generic PII collection request event with type `generic.pii`.
+    /// - Parameter data: a dictionary containing PII data
+    @objc(collectPii:)
+    public static func collectPii(data: [String: Any]) {
+        guard !data.isEmpty else {
+            Log.trace(label: LOG_TAG, "collectPii - data was empty, no event was dispatched")
+            return
+        }
+
+        let eventData = [CoreConstants.Signal.EventDataKeys.CONTEXT_DATA: data]
+        let event = Event(name: "collectPii", type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
+        MobileCore.dispatch(event: event)
     }
 }

@@ -31,6 +31,9 @@ public class ServiceProvider {
     private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
 
+    // Don't allow init of ServiceProvider outside the class
+    private init() {}
+
     /// The SystemInfoService, either set externally (override) or the default implementation
     public var systemInfoService: SystemInfoService {
         get {

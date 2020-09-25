@@ -11,7 +11,8 @@
 
 import XCTest
 
-class PerformanceTests: XCTestCase {
+class E2ETestingUITests: XCTestCase {
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
@@ -25,31 +26,20 @@ class PerformanceTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testExample() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
 
-    func testLoadAEPSdkPerformance() throws {
-        if #available(iOS 13.0, *) {
-            let app = XCUIApplication()
-            let options = XCTMeasureOptions()
-            options.iterationCount = 5
-            measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)], options: options) {
-                app.launch()
-                app.buttons["Load AEP SDK"].tap()
-                XCTAssert(app.staticTexts["Lifecycle Start"].waitForExistence(timeout: 5))
-            }
-        }
+        // Use recording to get started writing UI tests.
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
-
-    func testRulesEnginePerformance() throws {
-        if #available(iOS 13.0, *) {
-            let options = XCTMeasureOptions()
-            options.iterationCount = 5
-            let app = XCUIApplication()
-            app.launch()
-            app.buttons["Load AEP SDK"].tap()
-            measure(metrics: [XCTClockMetric(), XCTCPUMetric(application: app), XCTMemoryMetric(application: app)]) {
-                app.buttons["Evaluate Rules"].tap()
-                XCTAssert(app.staticTexts["1000 Rules were Evaluated"].waitForExistence(timeout: 10))
+    func testLaunchPerformance() throws {
+        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
+            // This measures how long it takes to launch your application.
+            measure(metrics: [XCTApplicationLaunchMetric()]) {
+                XCUIApplication().launch()
             }
         }
     }

@@ -32,4 +32,7 @@ import Foundation
 
     /// Returns the number of `DataEntity` objects in the DataQueue
     func count() -> Int
+
+    /// Closes the current `DataQueue`
+    func close()
 }

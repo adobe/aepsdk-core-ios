@@ -52,7 +52,9 @@ public class Signal: NSObject, Extension {
         registerListener(type: EventType.rulesEngine, source: EventSource.responseContent, listener: handleRulesEngineResponse)
     }
 
-    public func onUnregistered() {}
+    public func onUnregistered() {
+        hitQueue.close()
+    }
 
     public func readyForEvent(_ event: Event) -> Bool {
         return getSharedState(extensionName: SignalConstants.Configuration.NAME, event: event)?.status == .set
