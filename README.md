@@ -1,8 +1,10 @@
 # AEPCore
 
-## BETA
+## BETA ACKNOWLEDGEMENT
 
-AEPCore is currently in beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
+AEPCore is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
+
+By using the Beta, you hereby acknowledge that the Beta is provided "as is" without warranty of any kind. Adobe shall have no obligation to maintain, correct, update, change, modify or otherwise support the Beta. You are advised to use caution and not to rely in any way on the correct functioning or performance of such Beta and/or accompanying materials.
 
 ## About this project
 
@@ -78,6 +80,14 @@ Run `make archive` from the root directory to generate `.xcframeworks` for each 
 ## Documentation
 
 Additional documentation for usage and SDK architecture can be found under the [Documentation](Documentation/README.md) directory.
+
+## Related Projects
+
+[AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) contains iOS sample apps for the AEP SDK. Examples are provided for both Objective-c and Swift implementation.
+
+[AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-c and Swift.
+
+[AEP SDK Compatibility for iOS](https://github.com/adobe/aepsdk-compatibility-ios) contains code that bridges `ACPCore` and 3rd party extension implementations into the AEP SDK runtime.
 
 ## Contributing
 
