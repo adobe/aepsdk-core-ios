@@ -391,7 +391,7 @@ NSDictionary *messageInfo = @{@"testKey": @"testVal"}
 
 ```swift
 let data = ["testKey": "testVal"]
-MobileCore.collectPii(messageInfo: data)
+MobileCore.collectPii(data: data)
 ```
 
 ###### Objective-C
