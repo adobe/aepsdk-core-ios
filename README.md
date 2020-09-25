@@ -81,6 +81,14 @@ Run `make archive` from the root directory to generate `.xcframeworks` for each 
 
 Additional documentation for usage and SDK architecture can be found under the [Documentation](Documentation/README.md) directory.
 
+## Related Projects
+
+[AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) contains iOS sample apps for the AEP SDK. Examples are provided for both Objective-c and Swift implementation.
+
+[AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-c and Swift.
+
+[AEP SDK Compatibility for iOS](https://github.com/adobe/aepsdk-compatibility-ios) contains code that bridges `ACPCore` and 3rd party extension implementations into the AEP SDK runtime.
+
 ## Contributing
 
 Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
