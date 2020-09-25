@@ -85,6 +85,8 @@ Additional documentation for usage and SDK architecture can be found under the [
 
 [AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-c and Swift.
 
+[AEP SDK Compatibility for iOS](https://github.com/adobe/aepsdk-compatibility-ios) contains the code required to upgrade from the existing ACP SDK to the latest AEP SDK without introducing breaking changes so you can enjoy the benefits of the newest AEP SDK without needing to reimplement the SDK.
+
 ## Contributing
 
 Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
