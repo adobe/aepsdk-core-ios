@@ -81,9 +81,9 @@ Additional documentation for usage and SDK architecture can be found under the [
 
 ## Related Projects
 
-[AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) This repository contains iOS sample apps for the AEP SDK. Examples are provided for both Objective-c and Swift implementation.
+[AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) contains iOS sample apps for the AEP SDK. Examples are provided for both Objective-c and Swift implementation.
 
-[AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) This repository contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-c and Swift.
+[AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-c and Swift.
 
 ## Contributing
 
