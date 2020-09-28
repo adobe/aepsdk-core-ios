@@ -134,7 +134,7 @@ class SignalIntegrationTests: XCTestCase {
 
         let requestExpectation = XCTestExpectation(description: "pii request")
         mockNetworkService.mock { request in
-            if request.url.absoluteString.starts(with: "https://www.pii.com") {
+            if request.url.absoluteString.starts(with: "https://www.pii.com?name=aep") {
                 requestExpectation.fulfill()
                 return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
             }

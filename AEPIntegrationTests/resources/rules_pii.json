@@ -53,7 +53,7 @@
           "type": "pii",
           "detail": {
             "timeout": 0,
-            "templateurl": "https://www.pii.com?name={%name%}"
+            "templateurl": "https://www.pii.com?name={%contextdata.name%}"
           }
         }
       ]
