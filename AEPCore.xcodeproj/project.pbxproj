@@ -275,6 +275,8 @@
 		3FE6DE8224C643620065EA05 /* IdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7624C643620065EA05 /* IdentityTests.swift */; };
 		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
 		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
+		3FEEA0DD2522436E007EC317 /* rules_pii.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FEEA0DB2522436E007EC317 /* rules_pii.json */; };
+		3FEEA0DE2522436E007EC317 /* rules_pii.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3FEEA0DC2522436E007EC317 /* rules_pii.zip */; };
 		3FF8171624D89B500064DFA1 /* Event+Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */; };
 		3FF8171724D89B500064DFA1 /* AEPCoreMocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3FF8171924D89B500064DFA1 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */; };
@@ -813,6 +815,8 @@
 		3FE6DE7624C643620065EA05 /* IdentityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityTests.swift; sourceTree = "<group>"; };
 		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
+		3FEEA0DB2522436E007EC317 /* rules_pii.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_pii.json; sourceTree = "<group>"; };
+		3FEEA0DC2522436E007EC317 /* rules_pii.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_pii.zip; sourceTree = "<group>"; };
 		3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCoreMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+Timestamp.swift"; path = "AEPCore/Mocks/Event+Timestamp.swift"; sourceTree = SOURCE_ROOT; };
 		3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPCoreMocks.h; path = AEPCore/Mocks/AEPCoreMocks.h; sourceTree = SOURCE_ROOT; };
@@ -1673,6 +1677,8 @@
 				3FF8294B2507FB3800483C74 /* rules_lifecycle.zip */,
 				3FF8296B2509942300483C74 /* rules_signal.json */,
 				3FF8296A2509942200483C74 /* rules_signal.zip */,
+				3FEEA0DB2522436E007EC317 /* rules_pii.json */,
+				3FEEA0DC2522436E007EC317 /* rules_pii.zip */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -2195,9 +2201,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3FEEA0DD2522436E007EC317 /* rules_pii.json in Resources */,
 				3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */,
 				3FF8296C2509942300483C74 /* rules_signal.zip in Resources */,
 				3FF8296D2509942300483C74 /* rules_signal.json in Resources */,
+				3FEEA0DE2522436E007EC317 /* rules_pii.zip in Resources */,
 				3FF8294C2507FB3800483C74 /* rules_lifecycle.zip in Resources */,
 				3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */,
 			);
@@ -2264,7 +2272,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ${PROJECT_DIR}/AEPIntegrationTests/resources\nzip -r rules_lifecycle.zip rules_lifecycle.json\nzip -r rules_signal.zip rules_signal.json\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ${PROJECT_DIR}/AEPIntegrationTests/resources\nzip -r rules_lifecycle.zip rules_lifecycle.json\nzip -r rules_signal.zip rules_signal.json\nzip -r rules_pii.zip rules_pii.json\n\n";
 		};
 		BB6812FF24E19B55007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3166,7 +3174,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3185,7 +3193,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

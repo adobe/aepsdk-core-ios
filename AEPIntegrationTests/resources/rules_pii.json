@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "or",
+                "conditions": [
+                  {
+                    "type": "group",
+                    "definition": {
+                      "logic": "and",
+                      "conditions": [
+                        
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventType.generic.pii"
+                            ]
+                          }
+                        },
+                        {
+                          "type": "matcher",
+                          "definition": {
+                            "key": "~source",
+                            "matcher": "eq",
+                            "values": [
+                              "com.adobe.eventSource.requestContent"
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "RCc223ec648df44fbbaab737e6cc6da50e",
+          "type": "pii",
+          "detail": {
+            "timeout": 0,
+            "templateurl": "https://www.pii.com?name={%contextdata.name%}"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -113,6 +113,7 @@ class SignalIntegrationTests: XCTestCase {
         requestExpectation.isInverted = true
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.signal.com") {
+                requestExpectation.fulfill()
                 return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
             }
             return nil
@@ -124,6 +125,26 @@ class SignalIntegrationTests: XCTestCase {
         MobileCore.dispatch(event: event2)
         wait(for: [requestExpectation], timeout: 2)
     }
+
+    func testPii() {
+        // setup
+        mockRemoteRules(with: "rules_pii")
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedin",
+                                                        "rules.url": "https://rules.com/rules.zip"])
+
+        let requestExpectation = XCTestExpectation(description: "pii request")
+        mockNetworkService.mock { request in
+            if request.url.absoluteString.starts(with: "https://www.pii.com?name=aep") {
+                requestExpectation.fulfill()
+                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+            }
+            return nil
+        }
+        MobileCore.collectPii(data:["name":"aep"])
+
+        wait(for: [requestExpectation], timeout: 2)
+    }
+
 
     func mockRemoteRules(with localRulesName: String) {
         let response = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
