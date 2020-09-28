@@ -15,31 +15,32 @@ import Foundation
 
 /// generate the `Transforming` instance used by Launch Rules Engine
 class LaunchRuleTransformer {
+
     static func createTransforming() -> Transforming {
         let transform = Transform()
+        addConsequnceTransform(to: transform)
+        addTypeTransform(to: transform)
+        return transform
+    }
+
+    private static func addConsequnceTransform(to transform: Transform) {
         transform.register(name: RulesConstants.Transform.URL_ENCODING_FUNCTION_IN_RULES, transformation: { value in
             if let valueString = value as? String {
                 return URLEncoder.encode(value: valueString)
             }
             return value
         })
+    }
 
+    private static func addTypeTransform(to transform: Transform) {
         transform.register(name: RulesConstants.Transform.TRANSFORM_TO_INT, transformation: { value in
             switch value {
             case is String:
-                if let stringValue = value as? String, let intValue = Int(stringValue) {
-                    return intValue
-                }
-            case is Int:
-                return value
+                if let stringValue = value as? String, let intValue = Int(stringValue) { return intValue}
             case is Double:
-                if let doubleValue = value as? Double {
-                    return Int(doubleValue)
-                }
+                if let doubleValue = value as? Double { return Int(doubleValue) }
             case is Bool:
-                if let boolValue = value as? Bool {
-                    return boolValue ? 1:0
-                }
+                if let boolValue = value as? Bool { return boolValue ? 1:0}
             default:
                 return value
             }
@@ -53,19 +54,11 @@ class LaunchRuleTransformer {
         transform.register(name: RulesConstants.Transform.TRANSFORM_TO_DOUBLE, transformation: { value in
             switch value {
             case is String:
-                if let stringValue = value as? String, let doubleValue = Double(stringValue) {
-                    return doubleValue
-                }
-            case is Double:
-                return value
+                if let stringValue = value as? String, let doubleValue = Double(stringValue) { return doubleValue}
             case is Int:
-                if let intValue = value as? Int {
-                    return Double(intValue)
-                }
+                if let intValue = value as? Int { return Double(intValue)}
             case is Bool:
-                if let boolValue = value as? Bool {
-                    return boolValue ? 1.0:0.0
-                }
+                if let boolValue = value as? Bool { return boolValue ? 1.0:0.0}
             default:
                 return value
             }
@@ -75,25 +68,16 @@ class LaunchRuleTransformer {
         transform.register(name: RulesConstants.Transform.TRANSFORM_TO_BOOL, transformation: { value in
             switch value {
             case is String:
-                if let stringValue = value as? String {
-                    return stringValue.lowercased() == "true"
-                }
+                if let stringValue = value as? String { return stringValue.lowercased() == "true"}
             case is Double:
-                if let doubleValue = value as? Double {
-                    return doubleValue == 1
-                }
+                if let doubleValue = value as? Double { return doubleValue == 1}
             case is Int:
-                if let intValue = value as? Int {
-                    return intValue == 1
-                }
-            case is Bool:
-                return value
+                if let intValue = value as? Int { return intValue == 1 }
             default:
                 return value
             }
             return value
         })
-        return transform
     }
 
 }
