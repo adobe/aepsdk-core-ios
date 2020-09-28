@@ -28,7 +28,18 @@ class LifecycleIntegrationTests: XCTestCase {
     }
 
     override func tearDown() {
-        sleep(1)
+
+        let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
+        unregisterExpectation.expectedFulfillmentCount = 2
+        MobileCore.unregisterExtension(Identity.self) {
+            unregisterExpectation.fulfill()
+        }
+
+        MobileCore.unregisterExtension(Signal.self) {
+            unregisterExpectation.fulfill()
+        }
+        wait(for: [unregisterExpectation], timeout: 2)
+
     }
 
     func initExtensionsAndWait() {

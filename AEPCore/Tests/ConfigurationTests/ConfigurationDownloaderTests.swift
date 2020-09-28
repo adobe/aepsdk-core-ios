@@ -107,7 +107,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         })
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertEqual(expectedConfigSize, remoteConfig?.count)
         XCTAssertEqual(expectedConfigSize, ConfigurationDownloader().loadConfigFromCache(appId: validAppId, dataStore: dataStore)?.count) // ensure downloaded config is cached
     }
@@ -128,7 +128,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         })
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertNil(remoteConfig)
     }
 
@@ -165,7 +165,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         })
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertEqual(expectedConfig.count, remoteConfig?.count)
     }
 
@@ -185,7 +185,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         })
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
         XCTAssertNil(remoteConfig)
     }
 

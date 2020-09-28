@@ -70,7 +70,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
                 dataStore.setObject(key: self.buildCacheKey(appId: appId), value: config) // cache config
                 completion(AnyCodable.toAnyDictionary(dictionary: config.cacheable))
             } else {
-                Log.error(label: self.logTag, "Loading config from URL failed with response code: \(httpConnection.responseCode as Int?)")
+                Log.error(label: self.logTag, "Loading config from URL \(url.absoluteString) failed with response code: \(httpConnection.responseCode as Int?)")
                 completion(nil)
             }
         }

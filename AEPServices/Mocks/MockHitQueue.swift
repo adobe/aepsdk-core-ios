@@ -13,6 +13,7 @@
 import Foundation
 
 public class MockHitQueue: HitQueuing {
+
     public var processor: HitProcessing
     public var queuedHits = [DataEntity]()
 
@@ -45,5 +46,8 @@ public class MockHitQueue: HitQueuing {
 
     public func count() -> Int {
         return queuedHits.count
+    }
+
+    public func close() {
     }
 }

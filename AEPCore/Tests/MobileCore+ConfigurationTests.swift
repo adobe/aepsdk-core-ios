@@ -53,7 +53,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         MobileCore.configureWith(appId: expectedAppId)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testConfigureWithFilePath() {
@@ -73,7 +73,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         MobileCore.configureWith(filePath: expectedFilePath)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that a configuration request content event is dispatched with the updated dict
@@ -94,7 +94,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: updateDict)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that set privacy status dispatches a configuration request content event with the new privacy status
@@ -115,7 +115,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         MobileCore.setPrivacy(status: PrivacyStatus.optedIn)
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that get privacy status dispatches an event of configuration request content with the correct retrieve config data
@@ -134,7 +134,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         MobileCore.getPrivacyStatus { _ in }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that getSdkIdentities dispatches a configuration request identity event
@@ -150,6 +150,6 @@ class MobileCore_ConfigurationTests: XCTestCase {
         MobileCore.getSdkIdentities { _, _ in }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 }

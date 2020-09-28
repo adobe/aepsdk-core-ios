@@ -1,5 +1,11 @@
 # AEPCore
 
+## BETA ACKNOWLEDGEMENT
+
+AEPCore is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
+
+By using the Beta, you hereby acknowledge that the Beta is provided "as is" without warranty of any kind. Adobe shall have no obligation to maintain, correct, update, change, modify or otherwise support the Beta. You are advised to use caution and not to rely in any way on the correct functioning or performance of such Beta and/or accompanying materials.
+
 ## About this project
 
 The Mobile Core represents the core Adobe Experience Platform SDK that is required for every app implementation. The core contains a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, Rules Engine, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
@@ -10,12 +16,6 @@ The Mobile Core represents the core Adobe Experience Platform SDK that is requir
 
 ## Installation
 These are currently the supported installation options:
-
-### Manual
-Include the AEPCore.xcodeproj into the project, and link all the needed targets to your app.
-
-### Binaries
-Run `make archive`, it will generates the .xcframeworks under the `build` folder. Drag and drop all the .xcframeworks to your app target.
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 ```ruby
@@ -45,9 +45,6 @@ Replace `YOUR_TARGET_NAME` and then, in the `Podfile` directory, type:
 $ pod install
 ```
 
-### [Carthage](https://github.com/Carthage/Carthage)
-TBD
-
 ### [Swift Package Manager](https://github.com/apple/swift-package-manager)
 
 To add the AEPCore Package to your application, from the Xcode menu select:
@@ -72,13 +69,30 @@ dependencies: [
 ]
 ```
 
-## Current version
-Adobe Experience Platform in Swift is currently in development.
+### Project Reference
 
-### Contributing
+Include `AEPCore.xcodeproj` in the targeted Xcode project and link all necessary libraries to your app target.
+
+### Binaries
+
+Run `make archive` from the root directory to generate `.xcframeworks` for each module under the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
+
+## Documentation
+
+Additional documentation for usage and SDK architecture can be found under the [Documentation](Documentation/README.md) directory.
+
+## Related Projects
+
+[AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) contains iOS sample apps for the AEP SDK. Examples are provided for both Objective-c and Swift implementation.
+
+[AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-c and Swift.
+
+[AEP SDK Compatibility for iOS](https://github.com/adobe/aepsdk-compatibility-ios) contains code that bridges `ACPCore` and 3rd party extension implementations into the AEP SDK runtime.
+
+## Contributing
 
 Contributions are welcomed! Read the [Contributing Guide](./.github/CONTRIBUTING.md) for more information.
 
-### Licensing
+## Licensing
 
 This project is licensed under the Apache V2 License. See [LICENSE](LICENSE) for more information.

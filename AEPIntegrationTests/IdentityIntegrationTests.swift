@@ -26,7 +26,18 @@ class IdentityIntegrationTests: XCTestCase {
     }
 
     override func tearDown() {
-        sleep(1)
+
+        let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
+        unregisterExpectation.expectedFulfillmentCount = 2
+        MobileCore.unregisterExtension(Identity.self) {
+            unregisterExpectation.fulfill()
+        }
+
+        MobileCore.unregisterExtension(Signal.self) {
+            unregisterExpectation.fulfill()
+        }
+        wait(for: [unregisterExpectation], timeout: 2)
+
     }
 
     func initExtensionsAndWait() {
@@ -35,7 +46,7 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 0.5)
+        wait(for: [initExpectation], timeout: 1)
     }
 
     func testSyncIdentifiers() {
@@ -130,13 +141,13 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setAdvertisingIdentifier(adId: "adid")
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
-        MobileCore.getSdkIdentities { identityString, _ in
+        MobileCore.getSdkIdentities { identityString, error in
             XCTAssertTrue(identityString?.contains("DSID_20915") ?? false)
             XCTAssertTrue(identityString?.contains("id1") ?? false)
             XCTAssertTrue(identityString?.contains("imsOrgID") ?? false)
             urlExpectation.fulfill()
         }
-        wait(for: [urlExpectation], timeout: 1)
+        wait(for: [urlExpectation], timeout: 2)
     }
 
     func testSetPushIdentifier() {

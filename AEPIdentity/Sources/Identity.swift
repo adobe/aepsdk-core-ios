@@ -34,6 +34,7 @@ import Foundation
         }
 
         let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(entity:responseData:)))
+
         let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let pushIdManager = PushIDManager(dataStore: dataStore, eventDispatcher: dispatch(event:))
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager)
@@ -44,17 +45,15 @@ import Foundation
         registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
         registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
-
-        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value
-        if state?.bootup(configSharedState: configSharedState, eventDispatcher: dispatch(event:)) ?? false, let props = state?.identityProperties {
-            // privacy was opt-out, share state
-            createSharedState(data: props.toEventData(), event: nil)
-        }
     }
 
-    public func onUnregistered() {}
+    public func onUnregistered() {
+        state?.hitQueue.close()
+    }
 
     public func readyForEvent(_ event: Event) -> Bool {
+        guard canProcessEvents(event: event) else { return false }
+
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
@@ -63,6 +62,23 @@ import Foundation
         }
 
         return getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
+    }
+
+    /// Determines if Identity is ready to handle events, this is determined by if the Identity extension has booted up
+    /// - Parameter event: An `Event`
+    /// - Returns: True if we can process events, false otherwise
+    private func canProcessEvents(event: Event) -> Bool {
+        guard let state = state else { return false }
+        guard !state.hasBooted else { return true } // we have booted, return true
+
+        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
+        // attempt to bootup
+        if state.bootupIfReady(configSharedState: configSharedState, event: event) {
+            createSharedState(data: state.identityProperties.toEventData(), event: nil)
+        }
+
+        return false // cannot handle any events until we have booted
+
     }
 
     // MARK: Event Listeners
@@ -84,6 +100,12 @@ import Foundation
     /// Handles the configuration response event
     /// - Parameter event: the configuration response event
     private func handleConfigurationResponse(event: Event) {
+        // if config contains org id, update the latest configuration
+        if let orgId = event.data?[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
+            // update to new config
+            state?.updateLastValidConfig(newConfig: event.data ?? [:])
+        }
+
         if let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String {
             let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
             if privacyStatus == .optedOut {
@@ -91,13 +113,7 @@ import Foundation
                 handleOptOut(event: event)
             }
             // if config contains new global privacy status, process the request
-            state?.processPrivacyChange(event: event, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
-        }
-
-        // if config contains org id, update the latest configuration
-        if let orgId = event.data?[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String, !orgId.isEmpty {
-            // update to new config
-            state?.updateLastValidConfig(newConfig: event.data ?? [:])
+            state?.processPrivacyChange(event: event, createSharedState: createSharedState(data:event:))
         }
     }
 

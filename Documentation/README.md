@@ -1,15 +1,15 @@
-# AEP SDK Swift Core
+# AEPCore Documentation
 
-[Discussion for content and layout](https://github.com/adobe/aepsdk-core-ios/issues/250)
+### Contents:
 
-Docs for core and stuff.
+- [SDK Architecture](Architecture.md)
 
-### [Architecture](Architecture.md)
+- [Event Hub Architecture](EventHub/README.md)
 
-### [Event Hub](EventHub/README.md)
+- [Swift Style Guide for Contributing](StyleGuide.md)
 
-### [Swift Style Guide](StyleGuide.md)
+- [Unit Testing Best Practices](UnitTestBestPractices.md)
 
-### [Unit Testing](UnitTestBestPractices.md)
+- [Objective-C Compatibility](ObjectiveC-Compatibility.md)
 
-### [Objective-c Compatibility](ObjectiveC-Compatibility.md)
+- [Migration from ACPCore](Migration/ACP-Migration.md)

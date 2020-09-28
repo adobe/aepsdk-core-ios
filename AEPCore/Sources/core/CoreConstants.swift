@@ -66,4 +66,10 @@ enum CoreConstants {
         static let PAUSE = "pause"
     }
 
+    enum Signal {
+        enum EventDataKeys {
+            static let CONTEXT_DATA = "contextdata"
+        }
+    }
+
 }

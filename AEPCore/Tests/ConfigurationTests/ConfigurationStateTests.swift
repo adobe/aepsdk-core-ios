@@ -421,7 +421,7 @@ class ConfigurationStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests when network is down or app id is invalid, no cached config
@@ -439,7 +439,7 @@ class ConfigurationStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that we can configure with multiple app ids
@@ -464,7 +464,7 @@ class ConfigurationStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     /// Tests that a valid config is preserved even when an invalid app id is passed
@@ -491,7 +491,7 @@ class ConfigurationStateTests: XCTestCase {
         }
 
         // verify
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 1)
     }
 
     // MARK: updateConfigWith(filePath) tests

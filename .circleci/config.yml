@@ -41,7 +41,8 @@ jobs:
 
       - run:
           name: Upload Code Coverage Reports
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPCore" -J "AEPServices" -J "AEPLifecycle" -J "AEPIdentity" -J "AEPSignal" 
-      # - run:
-      #     name: Run Integration Tests
-      #     command: make integration-test
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPCore" -J "AEPServices" -J "AEPLifecycle" -J "AEPIdentity" -J "AEPSignal" -J "AEPIntegrationTests"
+
+      - run:
+          name: Run Integration Tests
+          command: make integration-test

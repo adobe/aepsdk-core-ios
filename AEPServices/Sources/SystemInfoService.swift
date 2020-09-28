@@ -12,7 +12,7 @@
 
 import Foundation
 
-/// This service provides system info as needed and is a WIP
+/// This service provides system info as needed
 public protocol SystemInfoService {
     /// Gets a system property for the given key
     ///  - Parameter key: The key to be used to get the property value

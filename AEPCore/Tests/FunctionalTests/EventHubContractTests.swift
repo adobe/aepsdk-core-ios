@@ -171,7 +171,7 @@ class EventHubContractTest: XCTestCase {
         }
 
         // verify
-        wait(for: [startExpectation, firstEventExpectation, secondEventExpectation, sharedStateEventExpectation], timeout: 0.5)
+        wait(for: [startExpectation, firstEventExpectation, secondEventExpectation, sharedStateEventExpectation], timeout: 1)
     }
 
     // MARK: - Extension dispatch queue
@@ -198,7 +198,7 @@ class EventHubContractTest: XCTestCase {
         }
 
         // verify
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         // verify that it takes less than 0.3 second
         wait(for: [eventsExpectation], timeout: 0.3)
     }
@@ -225,7 +225,7 @@ class EventHubContractTest: XCTestCase {
         }
 
         // verify
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         let startTime = Date()
         wait(for: [eventsExpectation], timeout: 1)
         let interval =  Date().timeIntervalSince(startTime)
@@ -246,7 +246,7 @@ class EventHubContractTest: XCTestCase {
         }
 
         // verify
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "unknownExtension", event: nil, barrier: true)
         XCTAssertNil(sharedState)
     }
@@ -262,7 +262,7 @@ class EventHubContractTest: XCTestCase {
         }
 
         // verify
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         let sharedState = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: nil, barrier: true)
         XCTAssertEqual(SharedStateStatus.none, sharedState?.status)
     }
@@ -280,7 +280,7 @@ class EventHubContractTest: XCTestCase {
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
             startExpectation.fulfill()
         }
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], event: event2)
 
@@ -305,7 +305,7 @@ class EventHubContractTest: XCTestCase {
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
             startExpectation.fulfill()
         }
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], event: event2)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
 
@@ -333,7 +333,7 @@ class EventHubContractTest: XCTestCase {
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
             startExpectation.fulfill()
         }
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
 
         // verify
@@ -363,7 +363,7 @@ class EventHubContractTest: XCTestCase {
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
             startExpectation.fulfill()
         }
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
 
@@ -394,7 +394,7 @@ class EventHubContractTest: XCTestCase {
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
             startExpectation.fulfill()
         }
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         let resolver = ContractExtensionOne.runtime?.createPendingSharedState(event: event1)
 
         // verify
@@ -437,7 +437,7 @@ class EventHubContractTest: XCTestCase {
         MobileCore.registerExtensions([ContractExtensionOne.self]) {
             startExpectation.fulfill()
         }
-        wait(for: [startExpectation], timeout: 0.5)
+        wait(for: [startExpectation], timeout: 1)
         ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
 
         // verify
@@ -485,7 +485,7 @@ class EventHubContractTest: XCTestCase {
         }
 
         // verify
-        wait(for: [startExpectation, firstEventExpectation, secondEventInvertedExpectation,thirdEventInvertedExpectation], timeout: 0.5)
+        wait(for: [startExpectation, firstEventExpectation, secondEventInvertedExpectation,thirdEventInvertedExpectation], timeout: 1)
     }
 
     /// Tests start events resume the event processing
@@ -518,10 +518,10 @@ class EventHubContractTest: XCTestCase {
         }
 
         // verify
-        wait(for: [startExpectation, firstEventExpectation], timeout: 0.5)
+        wait(for: [startExpectation, firstEventExpectation], timeout: 1)
 
         ContractExtensionOne.runtime?.startEvents()
-        wait(for: [secondEventExpectation,thirdEventExpectation], timeout: 0.5)
+        wait(for: [secondEventExpectation,thirdEventExpectation], timeout: 1)
     }
 
 }
