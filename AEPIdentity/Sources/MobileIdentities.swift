@@ -14,8 +14,13 @@ import Foundation
 
 /// Represents the JSON structure for the company context
 private struct CompanyContext: Codable {
-    let namespace = "imsOrgID"
+    let namespace: String
     let marketingCloudId: String
+
+    init(marketingCloudId: String) {
+        self.namespace = "imsOrgID"
+        self.marketingCloudId = marketingCloudId
+    }
 }
 
 /// Represents the JSON structure for a list of `UserID`
