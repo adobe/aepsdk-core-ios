@@ -15,17 +15,17 @@ unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing iOS"
 	@echo "######################################################################"
-	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPCORE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSERVICES_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPIDENTITY_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSIGNAL_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPCORE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/$(AEPCORE_TARGET_NAME)/out -enableCodeCoverage YES
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSERVICES_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/$(AEPSERVICES_TARGET_NAME)/out -enableCodeCoverage YES
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/$(AEPLIFECYCLE_TARGET_NAME)/out -enableCodeCoverage YES
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPIDENTITY_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/$(AEPIDENTITY_TARGET_NAME)/out -enableCodeCoverage YES
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSIGNAL_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/$(AEPSIGNAL_TARGET_NAME)/out -enableCodeCoverage YES
 
 integration-test:
 	@echo "######################################################################"
 	@echo "### Integration Testing iOS"
 	@echo "######################################################################"
-	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/$(AEPINTEGRATION_TEST_TARGET_NAME)/out -enableCodeCoverage YES
 
 archive:
 	xcodebuild archive -scheme AEP-All -archivePath "./build/ios.xcarchive" -sdk iphoneos -destination="iOS" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
