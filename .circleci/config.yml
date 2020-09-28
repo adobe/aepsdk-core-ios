@@ -42,19 +42,19 @@ jobs:
       # Code coverage reports 
       - run:
           name: Upload Code Coverage Reports for AEPCore
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/AEPCore/out" -J "AEPCore" 
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPCore" 
       - run:
           name: Upload Code Coverage Reports for AEPServices
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/AEPServices/out" -J "AEPServices" 
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPServices" 
       - run:
           name: Upload Code Coverage Reports for AEPLifecycle
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/AEPLifecycle/out" -J "AEPLifecycle" 
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPLifecycle" 
       - run:
           name: Upload Code Coverage Reports for AEPIdentity
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/AEPIdentity/out" -J "AEPIdentity" 
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPIdentity" 
       - run:
           name: Upload Code Coverage Reports for AEPSignal
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/AEPSignal/out" -J "AEPSignal" 
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPSignal" 
 
       - run:
           name: Run Integration Tests
