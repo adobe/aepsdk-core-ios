@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -12,7 +13,8 @@
 import Foundation
 
 /// Implements the `Configuration` public APIs
-@objc public extension MobileCore {
+@objc
+public extension MobileCore {
     /// Configure the SDK by downloading the remote configuration file hosted on Adobe servers
     /// specified by the given application ID. The configuration file is cached once downloaded
     /// and used in subsequent calls to this API. If the remote file is updated after the first
@@ -62,14 +64,17 @@ import Foundation
         let event = Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { responseEvent in
-            self.handleGetPrivacyListener(responseEvent: responseEvent, completion: completion)
+            guard let privacyStatusString = responseEvent?.data?[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
+                return completion(PrivacyStatus.unknown)
+            }
+            completion(PrivacyStatus(rawValue: privacyStatusString) ?? PrivacyStatus.unknown)
         }
 
         MobileCore.dispatch(event: event)
     }
 
     /// Get a JSON string containing all of the user's identities known by the SDK  and calls a handler upon completion.
-    /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format a and `AEPError` if the request failed
+    /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format and an `AEPError` if the request failed
     @objc(getSdkIdentities:)
     static func getSdkIdentities(completion: @escaping (String?, AEPError) -> Void) {
         let event = Event(name: "GetSdkIdentities", type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
@@ -89,15 +94,5 @@ import Foundation
         }
 
         MobileCore.dispatch(event: event)
-    }
-
-    // MARK: Helper
-
-    private static func handleGetPrivacyListener(responseEvent: Event?, completion: @escaping (PrivacyStatus) -> Void) {
-        guard let privacyStatusString = responseEvent?.data?[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
-            return completion(PrivacyStatus.unknown)
-        }
-
-        completion(PrivacyStatus(rawValue: privacyStatusString) ?? PrivacyStatus.unknown)
     }
 }

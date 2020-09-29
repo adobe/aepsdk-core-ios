@@ -13,9 +13,7 @@
 import AEPServices
 import Foundation
 
-///
 /// Represents a Cached rules type which has some additional metadata on top of the rules
-///
 struct CachedRules: Cacheable, Codable {
     let cacheable: Data
 

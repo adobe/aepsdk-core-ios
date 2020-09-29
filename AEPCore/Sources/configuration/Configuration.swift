@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -27,7 +28,7 @@ class Configuration: Extension {
     private let retryQueue = DispatchQueue(label: "com.adobe.configuration.retry")
     private let rulesEngineName = "\(ConfigurationConstants.EXTENSION_NAME).rulesengine"
 
-    // MARK: Extension
+    // MARK: - Extension
 
     /// Initializes the Configuration extension and it's dependencies
     required init(runtime: ExtensionRuntime) {
@@ -66,13 +67,13 @@ class Configuration: Extension {
     /// Invoked when the Configuration extension has been unregistered by the `EventHub`, currently a no-op.
     func onUnregistered() {}
 
-    /// Check if the next event is requesting identities, if so check if ready, otherwise return true
-    /// - Parameter event: an   `Event`
-    func readyForEvent(_: Event) -> Bool {
+    /// Configuration extension is always ready for an `Event`
+    /// - Parameter event: an `Event`
+    func readyForEvent(_ event: Event) -> Bool {
         return true
     }
 
-    // MARK: Event Listeners
+    // MARK: - Event Listeners
 
     /// Invoked by the `eventQueue` each time a new configuration request event is received
     /// - Parameter event: A configuration request event
@@ -90,7 +91,7 @@ class Configuration: Extension {
 
     /// Invoked by the `eventQueue` each time a new lifecycle response event is received
     /// - Parameter event: A lifecycle response event
-    private func receiveLifecycleResponse(event _: Event) {
+    private func receiveLifecycleResponse(event: Event) {
         // Re-fetch the latest config if appId is present.
         // Lifecycle does not load bundled/manual configuration if appId is absent.
         guard let appId = appIdManager.loadAppId(), !appId.isEmpty else {
@@ -104,7 +105,7 @@ class Configuration: Extension {
         dispatchConfigurationRequest(data: data)
     }
 
-    // MARK: Event Processors
+    // MARK: - Event Processors
 
     /// Interacts with the `ConfigurationState` to update the configuration with the new configuration contained in `event`
     /// - Parameters:
@@ -188,10 +189,12 @@ class Configuration: Extension {
         }
     }
 
-    // MARK: Dispatchers
+    // MARK: - Dispatchers
 
     /// Dispatches a configuration response content event with corresponding data
-    /// - Parameter data: Optional data to be attached to the event
+    /// - Parameters:
+    ///   - triggerEvent: The `Event` to which the newly dispatched `Event` is responding
+    ///   - data: Optional data to be attached to the event
     private func dispatchConfigurationResponse(triggerEvent: Event, data: [String: Any]?) {
         let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: data)
         dispatch(event: responseEvent)
@@ -215,24 +218,22 @@ class Configuration: Extension {
         // Dispatch a Configuration Response Content event with the new configuration.
         dispatchConfigurationResponse(triggerEvent: event, data: config)
         // notify the rules engine about the change of config
-        notifyRuleEngine(config)
+        notifyRulesEngine(newConfiguration: config)
     }
 
-    /// notify the rules engine about the change of config
-    /// - Parameter config: the current config
-    private func notifyRuleEngine(_ config: [String: Any]) {
-        if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
+    /// Notifies the rules engine about a change in config
+    /// - Parameter newConfiguration: the current config
+    private func notifyRulesEngine(newConfiguration: [String: Any]) {
+        if let rulesURLString = newConfiguration[ConfigurationConstants.Keys.RULES_URL] as? String {
             rulesEngine.loadRemoteRules(from: rulesURLString)
         }
     }
 
-    // MARK: Helpers
+    // MARK: - Helpers
 
-    /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
     /// This method validates the appId for the SetAppIDInternalEvent
-    /// returns true, if the persisted appId is same as the internalEvent appId present in the eventData
-    /// returns false, if the persisted appId is different from the internalEvent appId present in the eventData
-    /// https://jira.corp.adobe.com/browse/AMSDK-6555
+    /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
+    /// This method returns true if the persisted appId is same as the appId present in the eventData of internalEvent
     /// - Parameters:
     ///   - event: event for the API call
     ///   - newAppId: appId passed into the API

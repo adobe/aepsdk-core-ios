@@ -36,7 +36,7 @@ import Foundation
     func onUnregistered()
 
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
-    /// Should be overridden by any extension that wants to control it's own event flow on a per event basis.
+    /// Should be overridden by any extension that wants to control its own event flow on a per event basis.
     ///
     /// - Parameter event: event that will be processed next
     /// - Returns: *true* if event processing should continue, *false* if processing should be paused

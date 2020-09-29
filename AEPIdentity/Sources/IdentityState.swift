@@ -185,7 +185,7 @@ class IdentityState {
 
         // check config
         if !canSyncForCurrentConfiguration(config: currentEventValidConfig) {
-            // TOOD: Add log
+            // TODO: Add log
             syncForProps = false
         }
 
