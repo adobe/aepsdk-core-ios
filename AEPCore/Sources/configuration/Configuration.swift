@@ -232,7 +232,6 @@ class Configuration: Extension {
     /// This method validates the appId for the SetAppIDInternalEvent
     /// returns true, if the persisted appId is same as the internalEvent appId present in the eventData
     /// returns false, if the persisted appId is different from the internalEvent appId present in the eventData
-    /// https://jira.corp.adobe.com/browse/AMSDK-6555
     /// - Parameters:
     ///   - event: event for the API call
     ///   - newAppId: appId passed into the API
