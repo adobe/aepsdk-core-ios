@@ -23,6 +23,8 @@ coverage:
     - "./AEPLifecycle/Tests/.*"
     - "./AEPServices/Tests/**/*"
     - "./AEPServices/Tests/.*"
+    - "./AEPServices/Mocks/**/*"
+    - "./AEPServices/Mocks/.*"
     - "./AEPSignal/Tests/**/*"
     - "./AEPSignal/Tests/.*"
     - "./TestApps"
