@@ -10,37 +10,40 @@ AEPINTEGRATION_TEST_TARGET_NAME = AEPIntegrationTests
 SIMULATOR_ARCHIVE_PATH = ./build/ios_simulator.xcarchive/Products/Library/Frameworks/
 IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
 
-DERIVED_DATA_COVERAGE_PATH = ./build/out/Logs/Test
-COVERAGE_REPORT_PATH = ./build/coverageReports
-
 # targets
-unit-test:
+aep-core-unit-test:
 	@echo "######################################################################"
-	@echo "### Unit Testing iOS"
+	@echo "### Unit Testing AEPCore"
 	@echo "######################################################################"
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPCORE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	mkdir -p $(COVERAGE_REPORT_PATH)/$(AEPCORE_TARGET_NAME)
-	mv $(DERIVED_DATA_COVERAGE_PATH)/*.xcresult $(COVERAGE_REPORT_PATH)/$(AEPCORE_TARGET_NAME)/
+aep-services-unit-test:
+	@echo "######################################################################"
+	@echo "### Unit Testing AEPServices"
+	@echo "######################################################################"
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSERVICES_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	mkdir -p $(COVERAGE_REPORT_PATH)/$(AEPSERVICES_TARGET_NAME)
-	mv $(DERIVED_DATA_COVERAGE_PATH)/*.xcresult $(COVERAGE_REPORT_PATH)/$(AEPSERVICES_TARGET_NAME)/
+aep-lifecycle-unit-test:
+	@echo "######################################################################"
+	@echo "### Unit Testing AEPLifecycle"
+	@echo "######################################################################"
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	mkdir -p $(COVERAGE_REPORT_PATH)/$(AEPLIFECYCLE_TARGET_NAME)
-	mv $(DERIVED_DATA_COVERAGE_PATH)/*.xcresult $(COVERAGE_REPORT_PATH)/$(AEPLIFECYCLE_TARGET_NAME)/
+aep-identity-unit-test:
+	@echo "######################################################################"
+	@echo "### Unit Testing AEPIdentity"
+	@echo "######################################################################"
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPIDENTITY_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	mkdir -p $(COVERAGE_REPORT_PATH)/$(AEPIDENTITY_TARGET_NAME)
-	mv $(DERIVED_DATA_COVERAGE_PATH)/*.xcresult $(COVERAGE_REPORT_PATH)/$(AEPIDENTITY_TARGET_NAME)/
+aep-signal-unit-test:
+	@echo "######################################################################"
+	@echo "### Unit Testing AEPSignal"
+	@echo "######################################################################"
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPSIGNAL_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	mkdir -p $(COVERAGE_REPORT_PATH)/$(AEPSIGNAL_TARGET_NAME)
-	mv $(DERIVED_DATA_COVERAGE_PATH)/*.xcresult $(COVERAGE_REPORT_PATH)/$(AEPSIGNAL_TARGET_NAME)/
+
+unit-test-all: aep-core-unit-test aep-services-unit-test aep-lifecycle-unit-test aep-identity-unit-test aep-signal-unit-test
 
 integration-test:
 	@echo "######################################################################"
 	@echo "### Integration Testing iOS"
 	@echo "######################################################################"
 	xcodebuild test -project $(PROJECT_NAME).xcodeproj -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
-	mkdir -p $(COVERAGE_REPORT_PATH)/$(AEPINTEGRATION_TEST_TARGET_NAME)
-	mv $(DERIVED_DATA_COVERAGE_PATH)/*.xcresult $(COVERAGE_REPORT_PATH)/$(AEPINTEGRATION_TEST_TARGET_NAME)/
 
 archive:
 	xcodebuild archive -scheme AEP-All -archivePath "./build/ios.xcarchive" -sdk iphoneos -destination="iOS" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES

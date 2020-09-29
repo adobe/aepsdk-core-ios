@@ -6,8 +6,6 @@ version: 2.1
 # Workflows orchestrate a set of jobs to be run;
 workflows:
   version: 2
-  orbs:
-    codecov: codecov/codecov@1.0.2
   build-test:
     jobs:
       - build-and-test
@@ -38,25 +36,44 @@ jobs:
           command: xcrun instruments -w "iPhone 8 (13.0) [" || true
 
       - run:
-          name: Run Tests
-          command: make unit-test
+          name: Run AEPCore Tests
+          command: make aep-core-unit-test
 
-      # Code coverage reports 
-      - codecov/upload:
-          file: {{ "./build/coverageReports/AEPCore" }}
-          upload_name: AEPCore Coverage
-      - codecov/upload:
-          file: {{ "./build/coverageReports/AEPServices" }}
-          upload_name: AEPServices Coverage
-      - codecov/upload:
-          file: {{ "./build/coverageReports/AEPLifecycle" }}
-          upload_name: AEPLifecycle Coverage
-      - codecov/upload:
-          file: {{ "./build/coverageReports/AEPIdentity" }}
-          upload_name: AEPIdentity Coverage
-      - codecov/upload:
-          file: {{ "./build/coverageReports/AEPSignal" }}
-          upload_name: AEPIdentity Coverage
+      - run:
+          name: Upload Code Coverage Reports for AEPCore
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPCore" 
+
+      - run:
+          name: Run AEPServices Tests
+          command: make aep-services-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPServices
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPServices" 
+
+      - run:
+          name: Run AEPLifecycle Tests
+          command: make aep-lifecycle-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPLifecycle
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPLifecycle" 
+
+      - run:
+          name: Run AEPIdentity Tests
+          command: make aep-identity-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPIdentity
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPIdentity" 
+
+      - run:
+          name: Run AEPSignal Tests
+          command: make aep-signal-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPSignal
+          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/out" -J "AEPSignal" 
 
       - run:
           name: Run Integration Tests
