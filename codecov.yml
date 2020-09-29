@@ -12,10 +12,21 @@ coverage:
     patch: yes
     changes: no
 
-  # ignore:
-  #   - "./Tests/**/*"
-  #   - "./Tests/.*"
-  #   - "./SampleApps"
+  ignore:
+    - "./AEPCore/Mocks/.*"
+    - "./AEPCore/Mocks/**/*"
+    - "./AEPCore/Tests/**/*"
+    - "./AEPCore/Tests/.*"
+    - "./AEPIdentity/Tests/**/*"
+    - "./AEPIdentity/Tests/.*"
+    - "./AEPLifecycle/Tests/**/*"
+    - "./AEPLifecycle/Tests/.*"
+    - "./AEPServices/Tests/**/*"
+    - "./AEPServices/Tests/.*"
+    - "./AEPSignal/Tests/**/*"
+    - "./AEPSignal/Tests/.*"
+    - "./TestApps"
+    - "./Documentation"
 
 parsers:
   gcov:
