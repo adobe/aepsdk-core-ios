@@ -6,6 +6,8 @@ version: 2.1
 # Workflows orchestrate a set of jobs to be run;
 workflows:
   version: 2
+  orbs:
+    codecov: codecov/codecov@1.0.2
   build-test:
     jobs:
       - build-and-test
@@ -40,21 +42,21 @@ jobs:
           command: make unit-test
 
       # Code coverage reports 
-      - run:
-          name: Upload Code Coverage Reports for AEPCore
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/coverageReports/AEPCore" -J "AEPCore" 
-      - run:
-          name: Upload Code Coverage Reports for AEPServices
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/coverageReports/AEPServices" -J "AEPServices" 
-      - run:
-          name: Upload Code Coverage Reports for AEPLifecycle
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/coverageReports/AEPLifecycle" -J "AEPLifecycle" 
-      - run:
-          name: Upload Code Coverage Reports for AEPIdentity
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/coverageReports/AEPIdentity" -J "AEPIdentity" 
-      - run:
-          name: Upload Code Coverage Reports for AEPSignal
-          command: bash <(curl -s https://codecov.io/bash) -v -X s3 -c -D "./build/coverageReports/AEPSignal" -J "AEPSignal" 
+      - codecov/upload:
+          file: {{ "./build/coverageReports/AEPCore" }}
+          upload_name: AEPCore Coverage
+      - codecov/upload:
+          file: {{ "./build/coverageReports/AEPServices" }}
+          upload_name: AEPServices Coverage
+      - codecov/upload:
+          file: {{ "./build/coverageReports/AEPLifecycle" }}
+          upload_name: AEPLifecycle Coverage
+      - codecov/upload:
+          file: {{ "./build/coverageReports/AEPIdentity" }}
+          upload_name: AEPIdentity Coverage
+      - codecov/upload:
+          file: {{ "./build/coverageReports/AEPSignal" }}
+          upload_name: AEPIdentity Coverage
 
       - run:
           name: Run Integration Tests
