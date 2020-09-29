@@ -234,6 +234,7 @@ class Configuration: Extension {
     /// This method validates the appId for the SetAppIDInternalEvent
     /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
     /// This method returns true if the persisted appId is same as the appId present in the eventData of internalEvent
+    /// returns true, if the persisted appId is same as the internalEvent appId present in the eventData
     /// - Parameters:
     ///   - event: event for the API call
     ///   - newAppId: appId passed into the API

@@ -223,7 +223,7 @@ class IdentityState {
             identityProperties.locationHint = nil
             identityProperties.customerIds?.removeAll()
 
-            // TODO: AMSDK-10268 Clear AID from analytics
+            // TODO: Clear AID from analytics
             identityProperties.pushIdentifier = nil
             pushIdManager.updatePushId(pushId: nil)
             identityProperties.saveToPersistence()

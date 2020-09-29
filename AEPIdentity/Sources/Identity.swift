@@ -186,7 +186,7 @@ import Foundation
     /// Sends an opt-out network request if the current privacy status is opt-out
     /// - Parameter event: the event responsible for sending this opt-out hit
     private func handleOptOut(event: Event) {
-        // TODO: AMSDK-10267 Check if AAM will handle the opt-out hit
+        // TODO: Check if AAM will handle the opt-out hit
         guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let privacyStatusStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown

@@ -83,7 +83,7 @@ struct PushIDManager: PushIDManageable {
         let newHashedId = SHA256.hash(newPushId) ?? ""
         let pushIdsMatch = existingPushId == newHashedId
 
-        // AMSDK-10074 process the update only if the value changed or if this is not the first time setting the push token to null
+        // process the update only if the value changed or if this is not the first time setting the push token to null
         if (pushIdsMatch && !newHashedId.isEmpty) || (pushIdsMatch && analyticsSynced) {
             return false
         }
