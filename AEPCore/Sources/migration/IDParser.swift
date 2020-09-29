@@ -23,7 +23,6 @@ struct IDParser: IDParsing {
         var ids: [[String: Any]] = []
 
         for idInfo in customerIdComponentsArray where !idInfo.isEmpty {
-            // AMSDK-3686
             // equals signs are causing a crash when we load stored values from defaults
             // to fix, we will look for the first equals sign and create the array based off of that
             guard let firstEqualsIndex = idInfo.range(of: "=") else {
