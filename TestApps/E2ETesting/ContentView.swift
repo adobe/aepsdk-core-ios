@@ -140,6 +140,18 @@ struct ContentView: View {
                     .foregroundColor(.white)
                     .font(.caption)
             }.cornerRadius(5)
+            Divider()
+            Button(action: {
+                self.status = "...."
+                Identity.syncIdentifier(identifierType: "idTypeSYNC", identifier: "idValueSYNC", authenticationState: MobileVisitorAuthenticationState.authenticated)
+            }) {
+                Text("syncIdentifier")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray)
+                    .foregroundColor(.white)
+                    .font(.caption)
+            }.cornerRadius(5)
         }
     }
 }
