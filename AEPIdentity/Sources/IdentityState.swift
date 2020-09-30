@@ -185,7 +185,7 @@ class IdentityState {
 
         // check config
         if !canSyncForCurrentConfiguration(config: currentEventValidConfig) {
-            // TODO: Add log
+            Log.trace(label: LOG_TAG, "Waiting for a valid configuration to sync identities.")
             syncForProps = false
         }
 
