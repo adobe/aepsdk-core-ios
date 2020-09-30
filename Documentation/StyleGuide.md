@@ -10,6 +10,7 @@ This style guide highlights common patterns from the above linked style guide, w
 - [Naming](#naming)
   - [Protocols](#protocols)
   - [Variables](#variables)
+  - [Methods](#methods)
   - [AEP Extensions](#aep-extensions)
   - [AEP Services](#aep-services)
 - [General](#general)
@@ -40,6 +41,17 @@ See [Apple's API design guidelines](https://swift.org/documentation/api-design-g
 #### Variables
 
 Prefer "camelCase" patterns when naming variables.
+
+#### Methods
+
+Always name parameters for a method. If the method name ends with a word that makes the name of the first parameter implicit, make the parameter name optional.
+
+*Examples:*
+```swift
+func receiveConfigurationRequest(event: Event)
+
+func readyForEvent(_ event: Event) -> Bool
+```
 
 #### Constants
 

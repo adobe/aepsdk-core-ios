@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -22,7 +23,7 @@ class ConfigurationState {
 
     private(set) var currentConfiguration = [String: Any]()
     var environmentAwareConfiguration: [String: Any] {
-        return computeEnvironmentConfig(config: currentConfiguration)
+        return computeEnvironmentConfig()
     }
 
     private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
@@ -42,7 +43,8 @@ class ConfigurationState {
     /// Creates a new `ConfigurationState` with an empty current configuration
     /// - Parameters:
     ///   - dataStore: The datastore in which configurations are cached
-    ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration from various locations
+    ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration
+    ///     from various locations
     init(dataStore: NamedCollectionDataStore, configDownloader: ConfigurationDownloadable) {
         self.dataStore = dataStore
         self.configDownloader = configDownloader
@@ -90,9 +92,11 @@ class ConfigurationState {
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
 
-    /// Attempts to download the configuration associated with `appId`, if downloading the remote config fails we check cache for cached config
+    /// Attempts to download the configuration associated with `appId`. If downloading the remote config fails,
+    /// check for a cached config
     /// - Parameter appId: appId associated with the remote config
-    /// - Parameter completion: A closure that is invoked with the downloaded config, nil if unable to download config with `appId`
+    /// - Parameter completion: A closure that is invoked with the downloaded config, nil if unable to download
+    ///   config with `appId`
     func updateWith(appId: String, completion: @escaping ([String: Any]?) -> Void) {
         // Save the AppID in persistence for loading configuration on future launches.
         appIdManager.saveAppIdToPersistence(appId: appId)
@@ -110,7 +114,7 @@ class ConfigurationState {
 
     /// Attempts to load the configuration stored at `filePath`
     /// - Parameter filePath: Path to a configuration file
-    /// - Returns: True if the configuration was loaded, false otherwise
+    /// - Returns: True if the configuration was loaded
     func updateWith(filePath: String) -> Bool {
         guard let bundledConfig = configDownloader.loadConfigFrom(filePath: filePath) else {
             return false
@@ -122,22 +126,15 @@ class ConfigurationState {
 
     /// Determines if we have already downloaded the configuration associated with `appId`
     /// - Parameter appId: A valid appId
+    /// - Returns: True if configuration has been downloaded for the provided `appId`
     func hasDownloadedConfig(appId: String) -> Bool {
         return downloadedAppIds.contains(appId)
     }
 
-    /// Replaces `currentConfiguration` with `newConfig` and then applies the existing programmatic configuration on-top
-    /// - Parameter newConfig: A configuration to replace the current configuration
-    private func replaceConfigurationWith(newConfig: [String: Any]) {
-        currentConfiguration = newConfig
-        // Apply any programmatic configuration updates
-        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
-    }
-
-    /// Computes the environment aware configuration based on `config`
-    /// - Parameter config: The current configuration
-    /// - Returns: A configuration with the correct values for each key given the build environment, while also removing all keys prefix with `ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER`
-    func computeEnvironmentConfig(config _: [String: Any]) -> [String: Any] {
+    /// Computes the environment aware configuration based on `self.currentConfiguration`
+    /// - Returns: A configuration with the correct values for each key given the build environment, while also
+    ///   removing all keys prefix with `ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER`
+    func computeEnvironmentConfig() -> [String: Any] {
         // Remove all __env__ keys, only need to process config keys who do not have the environment prefix
         var environmentAwareConfig = currentConfiguration.filter { !$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER) }
         guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else {
@@ -173,6 +170,16 @@ class ConfigurationState {
         }
 
         return mappedConfig
+    }
+
+    // MARK: - Private Methods
+
+    /// Replaces `currentConfiguration` with `newConfig` and then applies the existing programmatic configuration on-top
+    /// - Parameter newConfig: A configuration to replace the current configuration
+    private func replaceConfigurationWith(newConfig: [String: Any]) {
+        currentConfiguration = newConfig
+        // Apply any programmatic configuration updates
+        currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
 
     /// Formats a configuration key with the build environment prefix

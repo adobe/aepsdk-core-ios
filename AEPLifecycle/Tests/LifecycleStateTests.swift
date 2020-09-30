@@ -258,7 +258,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertEqual(currentDate, actualContext.startDate)
         XCTAssertEqual(appVersion, dataStore.getString(key: LifecycleConstants.DataStoreKeys.LAST_VERSION))
         XCTAssertFalse(actualContext.successfulClose)
-        XCTAssertEqual(additionalData as? [String: String], actualContextData?.additionalContextData as? [String: String])
+        XCTAssertEqual(additionalData as [String: String], actualContextData?.additionalContextData as? [String: String])
         XCTAssertEqual(adId, actualContextData?.advertisingIdentifier)
         XCTAssertEqual(persistedContext.startDate, prevSessionInfo?.startDate)
         XCTAssertEqual(persistedContext.pauseDate, prevSessionInfo?.pauseDate)

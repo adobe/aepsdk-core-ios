@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -16,6 +17,9 @@ struct IDParser: IDParsing {
 
     private let CID_DELIMITER = "%01"
 
+    /// Converts a `String` of visitor ids to an array of dictionary representations of each id in the `String`
+    /// - Parameter idString: The `String` containing the ids
+    /// - Returns: A list of dictionaries, where each dictionary represents a single id
     func convertStringToIds(idString: String?) -> [[String: Any]] {
         guard let idString = idString, !idString.isEmpty else { return [] }
 
@@ -23,8 +27,6 @@ struct IDParser: IDParsing {
         var ids: [[String: Any]] = []
 
         for idInfo in customerIdComponentsArray where !idInfo.isEmpty {
-            // equals signs are causing a crash when we load stored values from defaults
-            // to fix, we will look for the first equals sign and create the array based off of that
             guard let firstEqualsIndex = idInfo.range(of: "=") else {
                 continue
             }

@@ -29,7 +29,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         Log.logFilter = .trace
         rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: mockRuntime)
         rulesEngine.trace { _, _, _, failure in
-            print(failure)
+            print(failure ?? "unknown failure")
         }
     }
 

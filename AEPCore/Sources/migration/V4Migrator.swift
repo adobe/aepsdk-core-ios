@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -45,27 +46,28 @@ struct V4Migrator {
         }
     }
 
-    // MARK: Private APIs
+    // MARK: - Private APIs
 
-    /// Determine if we need to migrate V4 to V5
-    /// - Returns: True if an install date exists in V4 user defaults, false otherwise
+    /// Determines if a migration from V4 to V5 is needed for user defaults
+    /// - Returns: True if an install date exists in V4 user defaults
     private func defaultsNeedsMigration() -> Bool {
         return v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE) != nil
     }
 
-    /// Determine if we need to migrate V4 to V5
+    /// Determines if a migration from V4 to V5 is needed for privacy configuration
     /// - Returns: True if a privacy status key exists in the V4 defaults
     private func configNeedsMigration() -> Bool {
         return v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS) != nil
     }
 
-    /// Determine whether we need to migrate vid from Identity to Analytics
-    /// - Returns: True if we need to migrate the vid from Identity to Analytics
+    /// Determines if a migration from Identity to Analytics is needed
+    /// - Returns: True if a `vid` value exists that needs to migrate from Identity to Analytics
     private func visitorIdNeedsMigration() -> Bool {
-        // TOOD: Implement when implementing the Analytics extension
+        // TODO: Implement when implementing the Analytics extension
         return false
     }
 
+    /// Migrates local storage for each of the extensions
     private func migrateLocalStorage() {
         // Mobile Services
         migrateMobileServicesLocalStorage()
@@ -206,8 +208,9 @@ struct V4Migrator {
         v4Defaults.removeObject(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
     }
 
+    /// Migrates the v4 Identity values to v5 Analtyics data store
     private func migrateVisitorIdLocalStorage() {
-        // TOOD: Implement when implementing the Analytics extension
+        // TODO: Implement when implementing the Analytics extension
     }
 
 }
