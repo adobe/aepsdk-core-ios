@@ -109,6 +109,37 @@ struct ContentView: View {
                     .foregroundColor(.white)
                     .font(.caption)
             }.cornerRadius(5)
+            Divider()
+            Button(action: {
+                self.status = "...."
+                for _ in 0...1000{
+                    if MyExtension.LIFECYCLE_START_EVENT {
+                        self.status = "Catch lifecycle start event"
+                        break
+                    }else{
+                        usleep(100)
+                    }
+                }
+            }) {
+                Text("Verify Lifecycle Start Event")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray)
+                    .foregroundColor(.white)
+                    .font(.caption)
+            }.cornerRadius(5)
+            Divider()
+            Button(action: {
+                self.status = "...."
+                MobileCore.dispatch(event: Event(name: "track action event to trigger signal (openURL) action", type: "com.adobe.eventType.generic.track", source: "com.adobe.eventSource.requestContent", data: ["action" : "openURL"]))
+            }) {
+                Text("Verify Open URL")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray)
+                    .foregroundColor(.white)
+                    .font(.caption)
+            }.cornerRadius(5)
         }
     }
 }
