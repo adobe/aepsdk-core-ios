@@ -541,7 +541,7 @@ class ConfigurationStateTests: XCTestCase {
                               "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
-        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+        let envAwareConfig = configState.computeEnvironmentConfig()
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
@@ -563,7 +563,7 @@ class ConfigurationStateTests: XCTestCase {
                               "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
-        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+        let envAwareConfig = configState.computeEnvironmentConfig()
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
@@ -585,7 +585,7 @@ class ConfigurationStateTests: XCTestCase {
                               "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
-        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+        let envAwareConfig = configState.computeEnvironmentConfig()
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
@@ -607,7 +607,7 @@ class ConfigurationStateTests: XCTestCase {
                               "analytics.server": "mycompany.sc.omtrdc.net"]
 
         // test
-        let envAwareConfig = configState.computeEnvironmentConfig(config: existingConfig)
+        let envAwareConfig = configState.computeEnvironmentConfig()
 
         // verify
         XCTAssertEqual(expectedConfig, envAwareConfig as? [String: String])
