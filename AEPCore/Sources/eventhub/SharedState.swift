@@ -22,6 +22,9 @@ class SharedState {
     private let queue: DispatchQueue /// Allows multi-threaded access to shared state.  Reads are concurrent, Add/Updates act as barriers.
     private var head: Node?
     private let LOG_TAG: String
+    var isEmpty: Bool {
+        return queue.sync { head == nil }
+    }
 
     // MARK: Internal API
 

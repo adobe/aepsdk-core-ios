@@ -261,13 +261,18 @@ final class EventHub {
             return nil
         }
 
-        var version = 0 // default to version 0
+        guard let sharedState = extensionContainer.sharedState else { return nil }
+
+        // default to version 0
+        var version = 0
         // attempt to version at the event
         if let unwrappedEvent = event, let eventNumber = eventNumberMap[unwrappedEvent.id] {
             version = eventNumber
+        } else if !sharedState.isEmpty {
+            // if event is nil and shared state is not empty version at the latest
+            version = eventNumberCounter.incrementAndGet()
         }
 
-        guard let sharedState = extensionContainer.sharedState else { return nil }
         return (sharedState, version)
     }
 
