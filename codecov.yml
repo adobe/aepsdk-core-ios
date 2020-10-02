@@ -1,0 +1,44 @@
+codecov:
+  notify:
+    require_ci_to_pass: yes
+
+coverage:
+  precision: 2
+  round: nearest
+  range: "70...90"
+
+  status:
+    project: yes
+    patch: yes
+    changes: no
+
+  ignore:
+    - "./AEPCore/Mocks/.*"
+    - "./AEPCore/Mocks/**/*"
+    - "./AEPCore/Tests/**/*"
+    - "./AEPCore/Tests/.*"
+    - "./AEPIdentity/Tests/**/*"
+    - "./AEPIdentity/Tests/.*"
+    - "./AEPLifecycle/Tests/**/*"
+    - "./AEPLifecycle/Tests/.*"
+    - "./AEPServices/Tests/**/*"
+    - "./AEPServices/Tests/.*"
+    - "./AEPServices/Mocks/**/*"
+    - "./AEPServices/Mocks/.*"
+    - "./AEPSignal/Tests/**/*"
+    - "./AEPSignal/Tests/.*"
+    - "./TestApps"
+    - "./Documentation"
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: no
+      macro: no
+
+comment:
+  layout: "header, diff"
+  behavior: default
+  require_changes: no

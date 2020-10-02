@@ -37,6 +37,8 @@ public class MyExtension:NSObject, Extension{
     
     public static var TRACK_ACTION_EVENT_WITH_MODIFIED_DATA = false
     
+    public static var LIFECYCLE_START_EVENT = false
+    
     public required init?(runtime: ExtensionRuntime) {
         self.runtime = runtime
         super.init()
@@ -56,6 +58,11 @@ public class MyExtension:NSObject, Extension{
         registerListener(type: EventType.rulesEngine, source: EventSource.responseContent) { (event) in
             if event.name == "Rules Consequence Event", let triggeredconsequence = event.data?["triggeredconsequence"] as? [String:Any], let detail = triggeredconsequence["detail"] as? [String: Any], let url = detail["templateurl"] as? String, url == "http://www.reprocess-events.com" {
                 MyExtension.RULES_CONSEQUENCE_FOR_INSTALL_EVENT = true
+            }
+        }
+        registerListener(type: EventType.lifecycle, source: EventSource.responseContent) { (event) in
+            if event.name == "LifecycleStart" {
+                MyExtension.LIFECYCLE_START_EVENT = true
             }
         }
         registerListener(type: EventType.genericTrack, source: EventSource.requestContent) { (event) in

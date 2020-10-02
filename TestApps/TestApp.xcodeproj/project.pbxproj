@@ -7,17 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3F912DA024E1A75C00E2AC84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F912D9F24E1A75C00E2AC84 /* AppDelegate.swift */; };
-		3F912DA224E1A75C00E2AC84 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F912DA124E1A75C00E2AC84 /* SceneDelegate.swift */; };
-		3F912DA424E1A75C00E2AC84 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F912DA324E1A75C00E2AC84 /* ViewController.swift */; };
-		3F912DA724E1A75C00E2AC84 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F912DA524E1A75C00E2AC84 /* Main.storyboard */; };
-		3F912DA924E1A75E00E2AC84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F912DA824E1A75E00E2AC84 /* Assets.xcassets */; };
-		3F912DAC24E1A75E00E2AC84 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3F912DAA24E1A75E00E2AC84 /* LaunchScreen.storyboard */; };
-		3F912DB524E1A78400E2AC84 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F912DB424E1A78400E2AC84 /* AEPCore.framework */; };
-		3F912DB724E1A78400E2AC84 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F912DB624E1A78400E2AC84 /* AEPIdentity.framework */; };
-		3F912DB924E1A78400E2AC84 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F912DB824E1A78400E2AC84 /* AEPLifecycle.framework */; };
-		3F912DBB24E1A78400E2AC84 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F912DBA24E1A78400E2AC84 /* AEPServices.framework */; };
-		3F912DBD24E1A78400E2AC84 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F912DBC24E1A78400E2AC84 /* AEPSignal.framework */; };
+		BB7798BE2523D71E003507D9 /* E2ETesting_FirstLaunch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7798BD2523D71E003507D9 /* E2ETesting_FirstLaunch.swift */; };
 		BBF55F36251E494C00CAAC53 /* E2ETestingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F35251E494C00CAAC53 /* E2ETestingApp.swift */; };
 		BBF55F38251E494C00CAAC53 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F37251E494C00CAAC53 /* ContentView.swift */; };
 		BBF55F3A251E494D00CAAC53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF55F39251E494D00CAAC53 /* Assets.xcassets */; };
@@ -51,18 +41,6 @@
 		BBF5EE422512BA240003265F /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; };
 		BBF5EE432512BA240003265F /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BBFDDD65251179EB0084A12F /* PerformanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFDDD64251179EB0084A12F /* PerformanceTests.swift */; };
-		BBFDDD7425117A290084A12F /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; };
-		BBFDDD7525117A290084A12F /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBFDDD7725117A2E0084A12F /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
-		BBFDDD7825117A2E0084A12F /* AEPIdentity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBFDDD7925117A320084A12F /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; };
-		BBFDDD7A25117A320084A12F /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBFDDD7B25117A370084A12F /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; };
-		BBFDDD7C25117A370084A12F /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBFDDD7D25117A3B0084A12F /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
-		BBFDDD7E25117A410084A12F /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
-		BBFDDD7F25117A460084A12F /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; };
-		BBFDDD8025117A460084A12F /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BBFF40A42514293600E1331D /* PerfExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBFF40A32514293600E1331D /* PerfExtension.swift */; };
 /* End PBXBuildFile section */
 
@@ -151,47 +129,19 @@
 			remoteGlobalIDString = 24B4935724D4C31100AA38D9;
 			remoteInfo = AEPSignalTests;
 		};
-		3F16760924E1AA210041B970 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 21CAC0D52422917600C11388;
-			remoteInfo = AEPCore;
-		};
-		3F16760B24E1AA210041B970 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 3FE6DE2E24C642330065EA05;
-			remoteInfo = AEPIdentity;
-		};
-		3F16760D24E1AA210041B970 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 3FE6DDD024C62EE60065EA05;
-			remoteInfo = AEPLifecycle;
-		};
-		3F16760F24E1AA210041B970 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 3F03978624BE5DD30019F095;
-			remoteInfo = AEPServices;
-		};
-		3F16761124E1AA210041B970 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 24B4934E24D4C31100AA38D9;
-			remoteInfo = AEPSignal;
-		};
 		BB032AB2251BABCB00544673 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3F4256FC24F474F4005D4006;
 			remoteInfo = AEPIntegrationTests;
+		};
+		BB7798C02523D71E003507D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F912D9424E1A75C00E2AC84 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBF55F32251E494C00CAAC53;
+			remoteInfo = E2ETesting;
 		};
 		BBF55F4F251E494D00CAAC53 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -240,38 +190,18 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BBFDDD7625117A290084A12F /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				BBFDDD7A25117A320084A12F /* AEPLifecycle.framework in Embed Frameworks */,
-				BBFDDD7525117A290084A12F /* AEPCore.framework in Embed Frameworks */,
-				BBFDDD7825117A2E0084A12F /* AEPIdentity.framework in Embed Frameworks */,
-				BBFDDD7C25117A370084A12F /* AEPServices.framework in Embed Frameworks */,
-				BBFDDD8025117A460084A12F /* AEPSignal.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AEPCore.xcodeproj; path = ../AEPCore.xcodeproj; sourceTree = "<group>"; };
-		3F912D9C24E1A75C00E2AC84 /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F912D9F24E1A75C00E2AC84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3F912DA124E1A75C00E2AC84 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		3F912DA324E1A75C00E2AC84 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3F912DA624E1A75C00E2AC84 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		3F912DA824E1A75E00E2AC84 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		3F912DAB24E1A75E00E2AC84 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		3F912DAD24E1A75E00E2AC84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3F912DB424E1A78400E2AC84 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F912DB624E1A78400E2AC84 /* AEPIdentity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPIdentity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F912DB824E1A78400E2AC84 /* AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F912DBA24E1A78400E2AC84 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F912DBC24E1A78400E2AC84 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB7798BB2523D71E003507D9 /* E2ETesting_FirstLaunch.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E2ETesting_FirstLaunch.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB7798BD2523D71E003507D9 /* E2ETesting_FirstLaunch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E2ETesting_FirstLaunch.swift; sourceTree = "<group>"; };
+		BB7798BF2523D71E003507D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBF55F33251E494C00CAAC53 /* E2ETesting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = E2ETesting.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF55F35251E494C00CAAC53 /* E2ETestingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E2ETestingApp.swift; sourceTree = "<group>"; };
 		BBF55F37251E494C00CAAC53 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -297,22 +227,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		3F912D9924E1A75C00E2AC84 /* Frameworks */ = {
+		BB7798B82523D71E003507D9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBFDDD7925117A320084A12F /* AEPLifecycle.framework in Frameworks */,
-				BBFDDD7425117A290084A12F /* AEPCore.framework in Frameworks */,
-				BBFDDD7B25117A370084A12F /* AEPServices.framework in Frameworks */,
-				3F912DB524E1A78400E2AC84 /* AEPCore.framework in Frameworks */,
-				BBFDDD7E25117A410084A12F /* AEPIdentity.framework in Frameworks */,
-				3F912DB724E1A78400E2AC84 /* AEPIdentity.framework in Frameworks */,
-				3F912DB924E1A78400E2AC84 /* AEPLifecycle.framework in Frameworks */,
-				BBFDDD7F25117A460084A12F /* AEPSignal.framework in Frameworks */,
-				3F912DBB24E1A78400E2AC84 /* AEPServices.framework in Frameworks */,
-				BBFDDD7D25117A3B0084A12F /* AEPIdentity.framework in Frameworks */,
-				3F912DBD24E1A78400E2AC84 /* AEPSignal.framework in Frameworks */,
-				BBFDDD7725117A2E0084A12F /* AEPIdentity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,11 +299,11 @@
 			isa = PBXGroup;
 			children = (
 				3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */,
-				3F912D9E24E1A75C00E2AC84 /* TestApp */,
 				BBFDDD63251179EB0084A12F /* PerformanceTests */,
 				BBF5EE262512BA0B0003265F /* PerformanceApp */,
 				BBF55F34251E494C00CAAC53 /* E2ETesting */,
 				BBF55F51251E494D00CAAC53 /* E2ETestingUITests */,
+				BB7798BC2523D71E003507D9 /* E2ETesting_FirstLaunch */,
 				3F912D9D24E1A75C00E2AC84 /* Products */,
 				3F912DB324E1A78400E2AC84 /* Frameworks */,
 			);
@@ -394,27 +312,13 @@
 		3F912D9D24E1A75C00E2AC84 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3F912D9C24E1A75C00E2AC84 /* TestApp.app */,
 				BBFDDD62251179EB0084A12F /* PerformanceTests.xctest */,
 				BBF5EE252512BA0B0003265F /* PerformanceApp.app */,
 				BBF55F33251E494C00CAAC53 /* E2ETesting.app */,
 				BBF55F4E251E494D00CAAC53 /* E2ETestingUITests.xctest */,
+				BB7798BB2523D71E003507D9 /* E2ETesting_FirstLaunch.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		3F912D9E24E1A75C00E2AC84 /* TestApp */ = {
-			isa = PBXGroup;
-			children = (
-				3F912D9F24E1A75C00E2AC84 /* AppDelegate.swift */,
-				3F912DA124E1A75C00E2AC84 /* SceneDelegate.swift */,
-				3F912DA324E1A75C00E2AC84 /* ViewController.swift */,
-				3F912DA524E1A75C00E2AC84 /* Main.storyboard */,
-				3F912DA824E1A75E00E2AC84 /* Assets.xcassets */,
-				3F912DAA24E1A75E00E2AC84 /* LaunchScreen.storyboard */,
-				3F912DAD24E1A75E00E2AC84 /* Info.plist */,
-			);
-			path = TestApp;
 			sourceTree = "<group>";
 		};
 		3F912DB324E1A78400E2AC84 /* Frameworks */ = {
@@ -427,6 +331,15 @@
 				3F912DBC24E1A78400E2AC84 /* AEPSignal.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BB7798BC2523D71E003507D9 /* E2ETesting_FirstLaunch */ = {
+			isa = PBXGroup;
+			children = (
+				BB7798BD2523D71E003507D9 /* E2ETesting_FirstLaunch.swift */,
+				BB7798BF2523D71E003507D9 /* Info.plist */,
+			);
+			path = E2ETesting_FirstLaunch;
 			sourceTree = "<group>";
 		};
 		BBF55F34251E494C00CAAC53 /* E2ETesting */ = {
@@ -494,28 +407,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3F912D9B24E1A75C00E2AC84 /* TestApp */ = {
+		BB7798BA2523D71E003507D9 /* E2ETesting_FirstLaunch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3F912DB024E1A75E00E2AC84 /* Build configuration list for PBXNativeTarget "TestApp" */;
+			buildConfigurationList = BB7798CD2523D71E003507D9 /* Build configuration list for PBXNativeTarget "E2ETesting_FirstLaunch" */;
 			buildPhases = (
-				3F912D9824E1A75C00E2AC84 /* Sources */,
-				3F912D9924E1A75C00E2AC84 /* Frameworks */,
-				3F912D9A24E1A75C00E2AC84 /* Resources */,
-				BBFDDD7625117A290084A12F /* Embed Frameworks */,
+				BB7798B72523D71E003507D9 /* Sources */,
+				BB7798B82523D71E003507D9 /* Frameworks */,
+				BB7798B92523D71E003507D9 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				3F16760A24E1AA210041B970 /* PBXTargetDependency */,
-				3F16760C24E1AA210041B970 /* PBXTargetDependency */,
-				3F16760E24E1AA210041B970 /* PBXTargetDependency */,
-				3F16761024E1AA210041B970 /* PBXTargetDependency */,
-				3F16761224E1AA210041B970 /* PBXTargetDependency */,
+				BB7798C12523D71E003507D9 /* PBXTargetDependency */,
 			);
-			name = TestApp;
-			productName = TestApp;
-			productReference = 3F912D9C24E1A75C00E2AC84 /* TestApp.app */;
-			productType = "com.apple.product-type.application";
+			name = E2ETesting_FirstLaunch;
+			productName = E2ETesting_FirstLaunch;
+			productReference = BB7798BB2523D71E003507D9 /* E2ETesting_FirstLaunch.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		BBF55F32251E494C00CAAC53 /* E2ETesting */ = {
 			isa = PBXNativeTarget;
@@ -599,8 +507,9 @@
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = Adobe;
 				TargetAttributes = {
-					3F912D9B24E1A75C00E2AC84 = {
-						CreatedOnToolsVersion = 11.3.1;
+					BB7798BA2523D71E003507D9 = {
+						CreatedOnToolsVersion = 12.0;
+						TestTargetID = BBF55F32251E494C00CAAC53;
 					};
 					BBF55F32251E494C00CAAC53 = {
 						CreatedOnToolsVersion = 12.0;
@@ -637,11 +546,11 @@
 			);
 			projectRoot = "";
 			targets = (
-				3F912D9B24E1A75C00E2AC84 /* TestApp */,
 				BBFDDD61251179EB0084A12F /* PerformanceTests */,
 				BBF5EE242512BA0B0003265F /* PerformanceApp */,
 				BBF55F32251E494C00CAAC53 /* E2ETesting */,
 				BBF55F4D251E494D00CAAC53 /* E2ETestingUITests */,
+				BB7798BA2523D71E003507D9 /* E2ETesting_FirstLaunch */,
 			);
 		};
 /* End PBXProject section */
@@ -741,13 +650,10 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		3F912D9A24E1A75C00E2AC84 /* Resources */ = {
+		BB7798B92523D71E003507D9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F912DAC24E1A75E00E2AC84 /* LaunchScreen.storyboard in Resources */,
-				3F912DA924E1A75E00E2AC84 /* Assets.xcassets in Resources */,
-				3F912DA724E1A75C00E2AC84 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -787,13 +693,11 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3F912D9824E1A75C00E2AC84 /* Sources */ = {
+		BB7798B72523D71E003507D9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F912DA424E1A75C00E2AC84 /* ViewController.swift in Sources */,
-				3F912DA024E1A75C00E2AC84 /* AppDelegate.swift in Sources */,
-				3F912DA224E1A75C00E2AC84 /* SceneDelegate.swift in Sources */,
+				BB7798BE2523D71E003507D9 /* E2ETesting_FirstLaunch.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,30 +741,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		3F16760A24E1AA210041B970 /* PBXTargetDependency */ = {
+		BB7798C12523D71E003507D9 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = AEPCore;
-			targetProxy = 3F16760924E1AA210041B970 /* PBXContainerItemProxy */;
-		};
-		3F16760C24E1AA210041B970 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AEPIdentity;
-			targetProxy = 3F16760B24E1AA210041B970 /* PBXContainerItemProxy */;
-		};
-		3F16760E24E1AA210041B970 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AEPLifecycle;
-			targetProxy = 3F16760D24E1AA210041B970 /* PBXContainerItemProxy */;
-		};
-		3F16761024E1AA210041B970 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AEPServices;
-			targetProxy = 3F16760F24E1AA210041B970 /* PBXContainerItemProxy */;
-		};
-		3F16761224E1AA210041B970 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = AEPSignal;
-			targetProxy = 3F16761124E1AA210041B970 /* PBXContainerItemProxy */;
+			target = BBF55F32251E494C00CAAC53 /* E2ETesting */;
+			targetProxy = BB7798C02523D71E003507D9 /* PBXContainerItemProxy */;
 		};
 		BBF55F50251E494D00CAAC53 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -875,22 +759,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3F912DA524E1A75C00E2AC84 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3F912DA624E1A75C00E2AC84 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		3F912DAA24E1A75E00E2AC84 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3F912DAB24E1A75E00E2AC84 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
 		BBF5EE322512BA0D0003265F /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1016,39 +884,45 @@
 			};
 			name = Release;
 		};
-		3F912DB124E1A75E00E2AC84 /* Debug */ = {
+		BB7798C22523D71E003507D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = TestApp/Info.plist;
+				DEVELOPMENT_TEAM = FKGEE875K4;
+				INFOPLIST_FILE = E2ETesting_FirstLaunch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.TestApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.mobile.marketing.E2ETesting-FirstLaunch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = E2ETesting;
 			};
 			name = Debug;
 		};
-		3F912DB224E1A75E00E2AC84 /* Release */ = {
+		BB7798C32523D71E003507D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = TestApp/Info.plist;
+				DEVELOPMENT_TEAM = FKGEE875K4;
+				INFOPLIST_FILE = E2ETesting_FirstLaunch/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.TestApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.mobile.marketing.E2ETesting-FirstLaunch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = E2ETesting;
 			};
 			name = Release;
 		};
@@ -1236,11 +1110,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3F912DB024E1A75E00E2AC84 /* Build configuration list for PBXNativeTarget "TestApp" */ = {
+		BB7798CD2523D71E003507D9 /* Build configuration list for PBXNativeTarget "E2ETesting_FirstLaunch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3F912DB124E1A75E00E2AC84 /* Debug */,
-				3F912DB224E1A75E00E2AC84 /* Release */,
+				BB7798C22523D71E003507D9 /* Debug */,
+				BB7798C32523D71E003507D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
