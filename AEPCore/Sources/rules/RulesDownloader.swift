@@ -13,9 +13,7 @@
 import AEPServices
 import Foundation
 
-///
-/// The Rules Downloader responsible for loading rules from cache, or downloading the rules remotely
-///
+/// The `RulesDownloader` is responsible for loading `Rule`s from cache and/or downloading them from the remote server
 struct RulesDownloader: RulesLoader {
     private let fileUnzipper: Unzipping
     private let cache: Cache
@@ -78,7 +76,6 @@ struct RulesDownloader: RulesLoader {
         }
     }
 
-    ///
     /// Stores the requested rules.zip data in a temp directory
     /// - Parameter data: The rules.zip as data to be stored in the temp directory
     /// - Returns a `Result<URL, RulesDownloaderError>` with a `URL` to the zip file if successful or a `RulesDownloaderError` if a failure occurs
@@ -98,7 +95,6 @@ struct RulesDownloader: RulesLoader {
         return .success(temporaryDirectoryWithZip)
     }
 
-    ///
     /// Unzips the rules at the source url to a destination url and returns the rules as a dictionary
     /// - Parameter source: source URL for the zip file
     /// - Returns: The unzipped rules as a dictionary
@@ -115,7 +111,6 @@ struct RulesDownloader: RulesLoader {
         }
     }
 
-    ///
     /// Builds the cache key from the rules url and the rules cache prefix
     /// - Parameter rulesUrl: The rules url
     /// - Returns: The built cache key for the rules
@@ -128,7 +123,6 @@ struct RulesDownloader: RulesLoader {
         return RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + base64RulesUrl
     }
 
-    ///
     /// Caches the given rules
     /// - Parameters:
     ///     - rulesUrl: The rules url string to be used for building the key
@@ -146,7 +140,6 @@ struct RulesDownloader: RulesLoader {
         }
     }
 
-    ///
     /// Gets the cached rules for the given rulesUrl
     /// - Parameter rulesUrl: The rules url as a string to be used to get the right cached rules
     /// - Returns: The `CachedRules` for the given rulesUrl

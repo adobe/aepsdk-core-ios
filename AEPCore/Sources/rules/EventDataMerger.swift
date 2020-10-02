@@ -15,11 +15,12 @@ import Foundation
 struct EventDataMerger {
     private static let SUFFIX_FOR_OBJECT = "[*]"
 
-    /// Merges one event data into another. `overwrite` indicates when there is a confict, whether from or to map will take priority
+    /// Merges one dictionary into another
     /// - Parameters:
     ///   - to: the dictionary to be merged to
-    ///   - from: the dictionary contains new data
-    ///   - overwrite: true if the from dictionary take priority
+    ///   - from: the dictionary containing new data
+    ///   - overwrite: set to `true` if the `from` dictionary should take priority
+    /// - Returns: a `[String: Any]` merge of `to` and `from`
     static func merging(to: [String: Any?], from: [String: Any?], overwrite: Bool) -> [String: Any] {
         // overwrite all matching key value pairs with new values, and recursively handle nested dictionaries
         let combinedDictionary = pureMerging(to: to, from: from, overwrite: overwrite)
@@ -29,11 +30,12 @@ struct EventDataMerger {
         return mergedDictionary.compactMapValues { $0 }
     }
 
-    /// merge the dictionary, and recursively do the same to the embeded dictionary
+    /// Merge two dictionaries and recursively do the same for embedded dictionaries
     /// - Parameters:
     ///   - to: the dictionary to be merged to
-    ///   - from: the dictionary contains new data
-    ///   - overwrite: true if the from dictionary take priority
+    ///   - from: the dictionary containing new data
+    ///   - overwrite: set to `true` if the `from` dictionary should take priority
+    /// - Returns: a `[String: Any?]` representing a merged dictionary
     static func pureMerging(to: [String: Any?], from: [String: Any?], overwrite: Bool) -> [String: Any?] {
         // First, overwrite all matching key value pairs with new values, and recursively handle nested dictionaries
         return to.merging(from, uniquingKeysWith: { old, new in
@@ -49,10 +51,13 @@ struct EventDataMerger {
         })
     }
 
-    /// loop through the dictionary, if there is a key with the suffix `[*]`,  say `someArray[*]`,   then check if there is a correspsonding array under the key name `someArray`. If so, merge the data from the `someArray[*]` to every item inside the array with key`someArray`.
+    /// Loops through a dictionary and converts special instances to an array.
+    /// If a key contians the special suffix `[*]` (e.g. `someArray[*]`), then check if there is a correspsonding array
+    /// for the key named `someArray`. If one exists, merge the data from `someArray[*]` to every item in the array
+    /// with key `someArray`.
     /// - Parameters:
-    ///   - dictionary: the dictionary which may have keys end with ` [*]`
-    ///   - overwrite: true if the data in array wild card can overwrite the data in the original array items
+    ///   - dictionary: a dictionary which may have keys with suffix `[*]`
+    ///   - overwrite: set to `true` if the data in the special array should overwrite the data in the original array
     static func handleArrayWildCard(dictionary: [String: Any?], overwrite: Bool) -> [String: Any?] {
         var mutableDictionary = dictionary
         for (k, v) in dictionary {

@@ -36,8 +36,9 @@ struct EventListenerContainer: Equatable {
     /// A DispatchWorkItem that is scheduled on the `EventHub` thread which will be executed after half a second if the listener has not already be notified to signify a timeout
     let timeoutTask: DispatchWorkItem?
 
-    /// Returns true if `listener` should be notified of the `Event`, false otherwise
-    /// - Parameter event: An `Event` being dispatched by `EventHub`
+    /// Returns true if `self.listener` should be notified of `event`
+    /// - Parameter event: An `Event` being dispatched by the `EventHub`
+    /// - Returns True if the listener should be notified
     func shouldNotify(_ event: Event) -> Bool {
         if let listenerTriggerId = triggerEventId {
             return listenerTriggerId == event.responseID
