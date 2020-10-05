@@ -14,10 +14,12 @@ import AEPServices
 import Foundation
 
 /// Type representing the state of an extension's `SharedState`
-@objc (AEPSharedStateStatus) public enum SharedStateStatus: Int {
+@objc (AEPSharedStateStatus)
+public enum SharedStateStatus: Int {
     case set, pending, none
 }
 
+/// Provides a construct by which an `Extension` can share its state with other `Extension`s
 class SharedState {
     private let queue: DispatchQueue /// Allows multi-threaded access to shared state.  Reads are concurrent, Add/Updates act as barriers.
     private var head: Node?
@@ -26,7 +28,7 @@ class SharedState {
         return queue.sync { head == nil }
     }
 
-    // MARK: Internal API
+    // MARK: - Internal API
 
     init(_ name: String = "anonymous") {
         queue = DispatchQueue(label: "com.adobe.mobile.sharedstate(\(name))", qos: .default, attributes: .concurrent)
@@ -94,7 +96,7 @@ class SharedState {
         }
     }
 
-    // MARK: Private API
+    // MARK: - Private API
 
     private func add(version: Int, data: [String: Any]?, status: SharedStateStatus) {
         queue.async(flags: .barrier) {
@@ -110,7 +112,7 @@ class SharedState {
         }
     }
 
-    // MARK: Internal Class (Node definition)
+    // MARK: Node definition (private class)
 
     /// Node class defines a specific version of a SharedState
     private class Node {
@@ -119,7 +121,12 @@ class SharedState {
         let version: Int
         var data: [String: Any]?
 
-        // appends a node to this node and returns the new node.
+        /// Appends a `Node` to this `Node` and returns the new `Node`
+        /// - Parameters:
+        ///   - version: the version of the shared state
+        ///   - data: the data for the shared state
+        ///   - status: the status of the shared state
+        /// - Returns: A `Node?` with a reference to the previous `Node`
         func append(version: Int, data: [String: Any]?, status: SharedStateStatus) -> Node? {
             let newNode = Node(version: version, data: data, status: status)
             newNode.previousNode = self

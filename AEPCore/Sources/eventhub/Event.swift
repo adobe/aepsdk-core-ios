@@ -14,7 +14,8 @@ import AEPServices
 import Foundation
 
 /// An Event to be dispatched by the Event Hub
-@objc(AEPEvent) public class Event: NSObject, Codable {
+@objc(AEPEvent)
+public class Event: NSObject, Codable {
     /// Name of the event
     @objc public let name: String
 
@@ -47,10 +48,18 @@ import Foundation
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    @objc public convenience init(name: String, type: String, source: String, data: [String: Any]?) {
+    @objc
+    public convenience init(name: String, type: String, source: String, data: [String: Any]?) {
         self.init(name: name, type: type, source: source, data: data, requestEvent: nil)
     }
 
+    /// Creates a new `Event` with the given parameters
+    /// - Parameters:
+    ///   - name: Name for the `Event`
+    ///   - type: `EventType` for the `Event`
+    ///   - source: `EventSource` for the `Event`
+    ///   - data: Any associated data with this `Event`
+    ///   - requestEvent: The requesting `Event` for which this `Event` will be a response
     private init(name: String, type: String, source: String, data: [String: Any]?, requestEvent: Event?) {
         self.name = name
         self.type = type
@@ -70,7 +79,7 @@ import Foundation
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
 
-    // MARK: Codable
+    // MARK: - Codable
 
     enum CodingKeys: String, CodingKey {
         case name

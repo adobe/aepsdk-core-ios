@@ -13,7 +13,10 @@
 import Foundation
 
 /// provides all the methods needed by an `Extension`
-@objc(AEPExtensionRuntime) public protocol ExtensionRuntime {
+@objc(AEPExtensionRuntime)
+public protocol ExtensionRuntime {
+
+    // MARK: - Registration
 
     /// Unregisters this extension from the `EventHub`
     func unregisterExtension()
@@ -25,13 +28,21 @@ import Foundation
     ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives an `Event` matching `type` and `source`
     func registerListener(type: String, source: String, listener: @escaping EventListener)
 
+    // MARK: - Event control
+
+    /// Starts the `Event` queue for this extension
+    func startEvents()
+
+    /// Stops the `Event` queue for this extension
+    func stopEvents()
+
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event)
 
-    // MARK: Shared State
+    // MARK: - Shared State
 
-    /// Creates a new `SharedState for this extension
+    /// Creates a new `SharedState` for this extension
     /// - Parameters:
     ///   - data: Data for the `SharedState`
     ///   - event: An event for the `SharedState` to be versioned at. When `event` is nil shared state will be versioned at 0 if this extension is yet to publish a shared state, otherwise, it will be published at the latest shared state version
@@ -39,6 +50,7 @@ import Foundation
 
     /// Creates a pending `SharedState` versioned at `event`
     /// - Parameter event: The event for the pending `SharedState` to be created at, if nil the shared state is versioned zero
+    /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
     func createPendingSharedState(event: Event?) -> SharedStateResolver
 
     /// Gets the `SharedState` data for a specified extension
@@ -46,11 +58,6 @@ import Foundation
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+    /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult?
-
-    /// Starts the `Event` queue for this extension
-    func startEvents()
-
-    /// Stops the `Event` queue for this extension
-    func stopEvents()
 }
