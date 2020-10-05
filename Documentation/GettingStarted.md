@@ -10,7 +10,7 @@ Set up a mobile property as outlined in the Adobe Experience Platform [docs](htt
 
 ## Get the Swift Mobile Core
 
-Now that a Mobile Property is created head over to our [install instructions](https://github.com/adobe/aepsdk-core-ios#installation) to install the SDK.
+Now that a Mobile Property is created, head over to the [install instructions](https://github.com/adobe/aepsdk-core-ios#installation) to install the SDK.
 
 ## Initial SDK Setup
 
@@ -33,13 +33,13 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
  MobileCore.setLogLevel(level: .trace)
 
  MobileCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self], {
-  // Use the App id assigned to this application via Adobe Launch
-  MobileCore.configureWith(appId: "appId")
-  if application.applicationState != .background {
-   // Only start lifecycle if the application is not in the background
-   MobileCore.lifecycleStart(additionalContextData: ["contextDataKey": "contextDataVal"])
-  }
-   
+ // Use the App id assigned to this application via Adobe Launch
+ MobileCore.configureWith(appId: "appId")
+ if application.applicationState != .background {
+  // Only start lifecycle if the application is not in the background
+  MobileCore.lifecycleStart(additionalContextData: ["contextDataKey": "contextDataVal"])
+ }
+  
  })  
  return true
 }
@@ -60,13 +60,13 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
  MobileCore.setLogLevel(level: .trace)
 
  MobileCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self], {
-  // Use the App id assigned to this application via Adobe Launch
-  MobileCore.configureWith(appId: "appId")
-  if application.applicationState != .background {
-   // Only start lifecycle if the application is not in the background
-   MobileCore.lifecycleStart(additionalContextData: ["contextDataKey": "contextDataVal"])
-  }
-   
+ // Use the App id assigned to this application via Adobe Launch
+ MobileCore.configureWith(appId: "appId")
+ if application.applicationState != .background {
+  // Only start lifecycle if the application is not in the background
+  MobileCore.lifecycleStart(additionalContextData: ["contextDataKey": "contextDataVal"])
+ }
+  
  })  
  return true
 }
@@ -90,12 +90,12 @@ func applicationDidEnterBackground(_ application: UIApplication) {
 
 ## Sample Apps
 
-To download more examples of integrating the AEP Swift SDK, head over to our sample app resources.
+To download more examples of integrating the AEP Swift SDK, head over to the sample app resources.
 
 [View Samples](https://github.com/adobe/aepsdk-sample-app-ios)
 
 ## Next Steps
 
-- Get familiar with the various APIs offered by the AEP SDK by checking out our [API usage documents](./Usage/). 
+- Get familiar with the various APIs offered by the AEP SDK by checking out the [API usage documents](./Usage/). 
 - To leverage shared services offered by the AEP SDK, check out the [Services documentation](./Services/README.md).
 - To build an extension on-top of the AEP SDK, check out the [Building Extensions documentation](./EventHub/BuildingExtensions.md).
