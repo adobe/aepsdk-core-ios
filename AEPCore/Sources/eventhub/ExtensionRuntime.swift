@@ -17,7 +17,7 @@ import Foundation
 public protocol ExtensionRuntime {
 
     // MARK: - Registration
-    
+
     /// Unregisters this extension from the `EventHub`
     func unregisterExtension()
 
@@ -29,13 +29,13 @@ public protocol ExtensionRuntime {
     func registerListener(type: String, source: String, listener: @escaping EventListener)
 
     // MARK: - Event control
-    
+
     /// Starts the `Event` queue for this extension
     func startEvents()
-    
+
     /// Stops the `Event` queue for this extension
     func stopEvents()
-    
+
     /// Dispatches an `Event` to the `EventHub`
     /// - Parameter event: An `Event` to be dispatched to the `EventHub`
     func dispatch(event: Event)

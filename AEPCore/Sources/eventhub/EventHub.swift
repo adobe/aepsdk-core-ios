@@ -223,7 +223,7 @@ final class EventHub {
     func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor) {
         preprocessors.append(preprocessor)
     }
-    
+
     /// Shares a shared state for the `EventHub` with data containing all the registered extensions
     func shareEventHubSharedState() {
         var extensionsInfo = [String: [String: Any]]()
@@ -269,13 +269,13 @@ final class EventHub {
         }
 
         guard let sharedState = extensionContainer.sharedState else { return nil }
-        
+
         var version = 0 // default to version 0
         // attempt to version at the event
         if let event = event, let eventNumber = eventNumberMap[event.id] {
             version = eventNumber
         }
-        
+
         return (sharedState, version)
     }
 
