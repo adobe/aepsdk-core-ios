@@ -40,3 +40,19 @@ make make-libs
 
 After running these commands, you can find the `.xcframework`'s within the build directory. Drag and drop these into your project and ensure that you have 
 "copy items if needed" checked.
+
+## Sample Apps
+
+To download more examples of integrating the AEP Swift SDK via the Compatibility layer, head over to our sample apps.
+
+[View Samples](https://github.com/adobe/aepsdk-compatibility-ios/tree/main/testApps)
+
+## Next Steps
+
+Now that you have the Compatibility layer installed you can build and run your app without making any implementation changes to the SDK. 
+
+- Get familiar with the various APIs offered by the AEP SDK by checking out our [API usage documents](./Usage/). 
+- If you want to leverage shared services offered by the AEP SDK, check out the [Services documentation](./Services/README.md).
+- If you want to build an extension on-top of the AEP SDK, check out the [Building Extensions documentation](./EventHub/BuildingExtensions.md).
+- Verify your implementation with [Assurance](https://aep-sdks.gitbook.io/docs/beta/project-griffon).
+
