@@ -75,10 +75,10 @@ public extension Extension {
     // MARK: - Shared State
 
     /// Creates a new `SharedState` for this extension
-    /// If `event` is `nil`, the result `SharedState` will be versioned at the latest.
+    /// If `event` is nil shared state will be versioned at 0 if this extension is yet to publish a shared state, otherwise, it will be published at the latest shared state version.
     /// - Parameters:
     ///   - data: Data for the `SharedState`
-    ///   - event: An `Event` for which the `SharedState` will be versioned
+    ///   - event: An event for the `SharedState` to be versioned.
     func createSharedState(data: [String: Any], event: Event?) {
         runtime.createSharedState(data: data, event: event)
     }

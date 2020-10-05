@@ -143,6 +143,26 @@ class SharedStateTest: XCTestCase {
         XCTAssertEqual(SharedStateTestHelper.ONE as! [String: String], data as! [String: String])
     }
 
+    func testSharedStateIsEmpty() {
+        XCTAssertTrue(sharedState.isEmpty)
+    }
+
+    func testSharedStateIsNotEmptySet() {
+        // setup
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+
+        // verify
+        XCTAssertFalse(sharedState.isEmpty)
+    }
+
+    func testSharedStateIsNotEmptyPending() {
+        // setup
+        sharedState.addPending(version: 1)
+
+        // verify
+        XCTAssertFalse(sharedState.isEmpty)
+    }
+
     func testAddPerformance() {
         // This is an example of a performance test case.
         measure {

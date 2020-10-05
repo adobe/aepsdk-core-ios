@@ -45,7 +45,7 @@ public protocol ExtensionRuntime {
     /// Creates a new `SharedState` for this extension
     /// - Parameters:
     ///   - data: Data for the `SharedState`
-    ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned zero
+    ///   - event: An event for the `SharedState` to be versioned at. When `event` is nil shared state will be versioned at 0 if this extension is yet to publish a shared state, otherwise, it will be published at the latest shared state version
     func createSharedState(data: [String: Any], event: Event?)
 
     /// Creates a pending `SharedState` versioned at `event`
