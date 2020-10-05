@@ -145,7 +145,7 @@ class Configuration: Extension {
             return
         }
 
-        // check if the configuration state has downloaded the config associated with appId, if so early exit
+        // check if the configuration state has unexpired config associated with appId, if so early exit
         guard !configState.hasUnexpiredConfig(appId: appId) else {
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
