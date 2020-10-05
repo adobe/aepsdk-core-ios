@@ -12,9 +12,7 @@
 
 import Foundation
 
-///
 /// Defines a type which can load rules from cache, or download the rules remotely
-///
 protocol RulesLoader {
     /// Loads the cached rules for `appId`.
     /// - Parameter rulesUrl: rulesUrl, if provided the `RulesDownloader` will attempt to load a rules with `appId`

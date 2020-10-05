@@ -12,8 +12,10 @@
 
 import Foundation
 
+// MARK: - Extension protocol
 /// An object which can be registered with the `EventHub`
-@objc(AEPExtension) public protocol Extension {
+@objc(AEPExtension)
+public protocol Extension {
     /// Name of the extension
     var name: String { get }
 
@@ -36,15 +38,16 @@ import Foundation
     func onUnregistered()
 
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
-    /// Should be overridden by any extension that wants to control its own event flow on a per event basis.
-    ///
+    /// Should be overridden by any extension that wants to control its own `Event` flow on a per `Event` basis.
     /// - Parameter event: event that will be processed next
-    /// - Returns: *true* if event processing should continue, *false* if processing should be paused
+    /// - Returns: *true* if event processing should continue for this `Extension`
     func readyForEvent(_ event: Event) -> Bool
 
-    // An `Extension` must support parameterless initializer
+    /// An `Extension` must support parameterless initializer
     init?(runtime: ExtensionRuntime)
 }
+
+// MARK: - Extension extension
 
 /// Contains methods for developers to interact with in their own extensions
 public extension Extension {
@@ -69,12 +72,13 @@ public extension Extension {
         runtime.dispatch(event: event)
     }
 
-    // MARK: Shared State
+    // MARK: - Shared State
 
-    /// Creates a new `SharedState for this extension
+    /// Creates a new `SharedState` for this extension
+    /// If `event` is `nil`, the result `SharedState` will be versioned at the latest.
     /// - Parameters:
     ///   - data: Data for the `SharedState`
-    ///   - event: An event for the `SharedState` to be versioned at, if nil the shared state is versioned at the latest
+    ///   - event: An `Event` for which the `SharedState` will be versioned
     func createSharedState(data: [String: Any], event: Event?) {
         runtime.createSharedState(data: data, event: event)
     }
@@ -91,6 +95,7 @@ public extension Extension {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+    /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
         return runtime.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
     }
@@ -99,15 +104,15 @@ public extension Extension {
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+    /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return runtime.getSharedState(extensionName: extensionName, event: event, barrier: true)
     }
 
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
     /// Should be overridden by any extension that wants to control it's own event flow on a per event basis.
-    ///
-    /// - Parameter event: event that will be processed next
-    /// - Returns: *true* if event processing should continue, *false* if processing should be paused
+    /// - Parameter event: `Event` that will be processed next
+    /// - Returns: *true* if event processing should continue for this `Extension`
     func readyForEvent(_: Event) -> Bool {
         return true
     }

@@ -13,6 +13,8 @@
 import AEPServices
 import Foundation
 
+// MARK: - ExtensionContainer
+
 /// Contains an `Extension` and additional information related to the extension
 class ExtensionContainer {
     private static let LOG_TAG = "ExtensionContainer"
@@ -61,6 +63,8 @@ class ExtensionContainer {
     }
 }
 
+// MARK: - ExtensionContainer public extension
+
 extension ExtensionContainer: ExtensionRuntime {
     func unregisterExtension() {
         guard let exten = exten else { return }
@@ -100,6 +104,8 @@ extension ExtensionContainer: ExtensionRuntime {
         eventOrderer.stop()
     }
 }
+
+// MARK: - ExtensionContainer private extension
 
 private extension ExtensionContainer {
     /// Handles event processing, called by the `OperationOrderer` owned by this `ExtensionContainer`

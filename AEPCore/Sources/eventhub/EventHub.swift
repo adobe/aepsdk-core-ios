@@ -36,8 +36,9 @@ final class EventHub {
         internal static let shared = EventHub()
     #endif
 
-    // MARK: Internal API
+    // MARK: - Internal API
 
+    /// Creates a new instance of `EventHub`
     init() {
         // setup a fake extension container for `EventHub` so we can shared and retrieve state
         registerExtension(EventHubPlaceholderExtension.self, completion: { _ in })
@@ -134,7 +135,7 @@ final class EventHub {
     /// - Parameters:
     ///   - triggerEvent: An `Event` which will trigger a response `Event`
     ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
-    ///   - listener: Function or closure which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
+    ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         var responseListenerContainer: EventListenerContainer? // initialized here so we can use in timeout block
         responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEvent.id, timeout: DispatchWorkItem {
@@ -145,7 +146,8 @@ final class EventHub {
         responseEventListeners.append(responseListenerContainer!)
     }
 
-    /// Creates a new `SharedState` for the extension with provided data, versioned at `event` if not nil otherwise versioned at latest
+    /// Creates a new `SharedState` for the extension with provided data, versioned at `event`
+    /// If `event` is `nil`, the new `SharedState` will be versioned at zero
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
@@ -221,8 +223,7 @@ final class EventHub {
     func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor) {
         preprocessors.append(preprocessor)
     }
-
-    // MARK: Internal
+    
     /// Shares a shared state for the `EventHub` with data containing all the registered extensions
     func shareEventHubSharedState() {
         var extensionsInfo = [String: [String: Any]]()
@@ -253,24 +254,37 @@ final class EventHub {
         Log.debug(label: "\(LOG_TAG):\(#function)", "Shared state is created for \(EventHubConstants.NAME) with data \(String(describing: data)) and version \(version)")
     }
 
-    // MARK: Private
+    // MARK: - Private
 
+    /// Gets the appropriate `SharedState` for the provided `extensionName` and `event`
+    /// If the provided `event` is `nil`, this method will retrieve `SharedState` for version 0.
+    /// - Parameters:
+    ///   - extensionName: A `String` containing the name of the extension
+    ///   - event: An `Event?` which may contain a specific event from which the correct `SharedState` can be retrieved
+    /// - Returns: A `(SharedState, Int)?` containing the state for the provided extension and its version number
     private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
         guard let extensionContainer = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else {
             Log.error(label: "\(LOG_TAG):\(#function)", "Extension \(extensionName) not registered with EventHub")
             return nil
         }
 
+        guard let sharedState = extensionContainer.sharedState else { return nil }
+        
         var version = 0 // default to version 0
         // attempt to version at the event
-        if let unwrappedEvent = event, let eventNumber = eventNumberMap[unwrappedEvent.id] {
+        if let event = event, let eventNumber = eventNumberMap[event.id] {
             version = eventNumber
         }
-
-        guard let sharedState = extensionContainer.sharedState else { return nil }
+        
         return (sharedState, version)
     }
 
+    /// Updates a pending `SharedState` and dispatches it to the `EventHub`
+    /// Not providing a `version` or providing a `version` for which there is no pending state will result in a no-op.
+    /// - Parameters:
+    ///   - extensionName: A `String` containing the name of the extension
+    ///   - version: An `Int?` containing the version of the state being updated
+    ///   - data: A `[String: Any]?` containing data to add to the pending state prior to it being dispatched
     private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?) {
         guard let pendingVersion = version, let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else { return }
 
@@ -278,6 +292,9 @@ final class EventHub {
         dispatch(event: createSharedStateEvent(extensionName: extensionName))
     }
 
+    /// Creates a template `Event` for `SharedState` of the provided `extensionName`
+    /// - Parameter extensionName: A `String` containing the name of the extension
+    /// - Returns: An empty `SharedState` `Event` for the provided `extensionName`
     private func createSharedStateEvent(extensionName: String) -> Event {
         return Event(name: EventHubConstants.STATE_CHANGE, type: EventType.hub, source: EventSource.sharedState,
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
