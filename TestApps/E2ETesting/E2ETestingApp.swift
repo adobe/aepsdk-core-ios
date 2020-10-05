@@ -17,5 +17,10 @@ struct E2ETestingApp: App {
         WindowGroup {
             ContentView()
         }
+        .onChange(of: scenePhase) { phase in
+            if phase == .background {
+                //perform cleanup
+            }
+        }
     }
 }
