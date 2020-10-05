@@ -15,7 +15,7 @@ import Foundation
 
 /// Manages the internal state for the `Configuration` extension
 class ConfigurationState {
-    private static let configruationTTL = TimeInterval(15)
+    private static let CONFIGURATION_TTL = TimeInterval(15)
 
     let dataStore: NamedCollectionDataStore
     let appIdManager: LaunchIDManager
@@ -132,7 +132,7 @@ class ConfigurationState {
     /// - Returns: True if configuration has been downloaded for the provided `appId` and has not expired
     func hasUnexpiredConfig(appId: String) -> Bool {
         let lasteDownloadedDate = appIdDownloadDateMap[appId]
-        if let expiredDate = lasteDownloadedDate?.addingTimeInterval(ConfigurationState.configruationTTL) {
+        if let expiredDate = lasteDownloadedDate?.addingTimeInterval(ConfigurationState.CONFIGURATION_TTL) {
             return expiredDate > Date()
         }
         return false
