@@ -29,7 +29,7 @@ governing permissions and limitations under the License.
     [AEPMobileCore setLogLevel:AEPLogLevelTrace];
      
     [AEPMobileCore registerExtensions:@[AEPMobileLifecycle.class, AEPMobileSignal.class, AEPMobileIdentity.class] completion:^{
-        [AEPMobileCore updateConfiguration:@{@"lifecycle.sessionTimeout":@"1"}];
+        [AEPMobileCore updateConfiguration:@{@"lifecycle.sessionTimeout":@1}];
         [AEPMobileCore configureWithAppId:@"94f571f308d5/07c3fc1109d1/launch-2f01e36464da-development"];
         
     }];

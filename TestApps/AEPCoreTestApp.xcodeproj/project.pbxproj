@@ -340,7 +340,7 @@
 				BBF55F34251E494C00CAAC53 /* E2ETesting */,
 				BBF55F51251E494D00CAAC53 /* E2ETestingUITests */,
 				BB7798BC2523D71E003507D9 /* E2ETesting_FirstLaunch */,
-				3FAD091125267460000D207D /* Testapp_Objc */,
+				3FAD091125267460000D207D /* TestApp_Objc */,
 				3F912D9D24E1A75C00E2AC84 /* Products */,
 				3F912DB324E1A78400E2AC84 /* Frameworks */,
 			);
@@ -371,7 +371,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3FAD091125267460000D207D /* Testapp_Objc */ = {
+		3FAD091125267460000D207D /* TestApp_Objc */ = {
 			isa = PBXGroup;
 			children = (
 				3FAD091225267460000D207D /* AppDelegate.h */,
@@ -386,7 +386,7 @@
 				3FAD092325267463000D207D /* Info.plist */,
 				3FAD092425267463000D207D /* main.m */,
 			);
-			path = Testapp_Objc;
+			path = TestApp_Objc;
 			sourceTree = "<group>";
 		};
 		BB7798BC2523D71E003507D9 /* E2ETesting_FirstLaunch */ = {
