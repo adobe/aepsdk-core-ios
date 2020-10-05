@@ -23,7 +23,7 @@ import AEPIdentity
 import AEPSignal
 ```
 
-2. Register the core extensions, configure the SDK with the assigned application identifier, and start lifecycle metrics.
+2. Register the core extensions and configure the SDK with the assigned application identifier.
 To do this, add the following code to the Application Delegate's `application(_:didFinishLaunchingWithOptions:)` method:
 
 ```swift
@@ -35,10 +35,6 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
  MobileCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self], {
  // Use the App id assigned to this application via Adobe Launch
  MobileCore.configureWith(appId: "appId")
- if application.applicationState != .background {
-  // Only start lifecycle if the application is not in the background
-  MobileCore.lifecycleStart(additionalContextData: ["contextDataKey": "contextDataVal"])
- }
   
  })  
  return true
