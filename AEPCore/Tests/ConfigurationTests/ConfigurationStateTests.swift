@@ -416,7 +416,7 @@ class ConfigurationStateTests: XCTestCase {
         // test & verify
         configState.updateWith(appId: appId) { config in
             XCTAssertEqual(cachedConfig.count, config?.count)
-            XCTAssertTrue(self.configState.hasDownloadedConfig(appId: appId))
+            XCTAssertTrue(self.configState.hasUnexpiredConfig(appId: appId))
             expectation.fulfill()
         }
 
@@ -434,7 +434,7 @@ class ConfigurationStateTests: XCTestCase {
         // test
         configState.updateWith(appId: appId) { config in
             XCTAssertNil(config)
-            XCTAssertFalse(self.configState.hasDownloadedConfig(appId: appId))
+            XCTAssertFalse(self.configState.hasUnexpiredConfig(appId: appId))
             expectation.fulfill()
         }
 
