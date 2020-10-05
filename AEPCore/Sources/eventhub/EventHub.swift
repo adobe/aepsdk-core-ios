@@ -194,8 +194,8 @@ final class EventHub {
         }
 
         var version = 0 // default to version 0 if event nil
-        if let unwrappedEvent = event {
-            version = eventNumberMap[unwrappedEvent.id] ?? 0
+        if let event = event {
+            version = eventNumberMap[event.id] ?? 0
         }
 
         let result = sharedState.resolve(version: version)
@@ -266,7 +266,7 @@ final class EventHub {
         // default to version 0
         var version = 0
         // attempt to version at the event
-        if let unwrappedEvent = event, let eventNumber = eventNumberMap[unwrappedEvent.id] {
+        if let event = event, let eventNumber = eventNumberMap[event.id] {
             version = eventNumber
         } else if !sharedState.isEmpty {
             // if event is nil and shared state is not empty version at the latest
