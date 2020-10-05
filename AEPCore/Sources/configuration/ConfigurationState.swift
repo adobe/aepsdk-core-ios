@@ -15,10 +15,13 @@ import Foundation
 
 /// Manages the internal state for the `Configuration` extension
 class ConfigurationState {
+    private static let configruationTTL = TimeInterval(15)
+
     let dataStore: NamedCollectionDataStore
     let appIdManager: LaunchIDManager
     let configDownloader: ConfigurationDownloadable
-    private var downloadedAppIds = Set<String>() // a set of appIds, if an appId is present then we have downloaded and applied the config
+
+    private var appIdDownloadDateMap: [String: Date] = [:]
     private let logTag = "ConfigurationState"
 
     private(set) var currentConfiguration = [String: Any]()
@@ -104,7 +107,7 @@ class ConfigurationState {
         // Try to download config from network, if fails try to load from cache
         configDownloader.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { [weak self] config in
             if let loadedConfig = config {
-                self?.downloadedAppIds.insert(appId)
+                self?.appIdDownloadDateMap[appId] = Date()
                 self?.replaceConfigurationWith(newConfig: loadedConfig)
             }
 
@@ -124,11 +127,15 @@ class ConfigurationState {
         return true
     }
 
-    /// Determines if we have already downloaded the configuration associated with `appId`
+    /// Determines if the configuration associated with `appId` has been downloaded and not expired.
     /// - Parameter appId: A valid appId
-    /// - Returns: True if configuration has been downloaded for the provided `appId`
-    func hasDownloadedConfig(appId: String) -> Bool {
-        return downloadedAppIds.contains(appId)
+    /// - Returns: True if configuration has been downloaded for the provided `appId` and has not expired
+    func hasUnexpiredConfig(appId: String) -> Bool {
+        let lasteDownloadedDate = appIdDownloadDateMap[appId]
+        if let expiredDate = lasteDownloadedDate?.addingTimeInterval(ConfigurationState.configruationTTL) {
+            return expiredDate > Date()
+        }
+        return false
     }
 
     /// Computes the environment aware configuration based on `self.currentConfiguration`
