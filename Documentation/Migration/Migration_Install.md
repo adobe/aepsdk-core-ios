@@ -1,12 +1,12 @@
-# Migrate your ACPCore iOS app to the latest AEPCore
+# Migrate an ACPCore iOS app to the latest AEPCore
 
-If you are a current ACPCore user interested in upgrading to the latest AEPCore SDK, this guide describes how to upgrade. We have made upgrading seamless by providing a backward-compatible layer, which will ensure that your existing ACPCore implementation will be compatible with AEPCore.
+Existing ACPCore users who are interested in upgrading to the latest AEPCore SDK, this guide describes how to upgrade. We have made upgrading seamless by providing a backward-compatible layer, which will ensure that an existing ACPCore implementation will be compatible with AEPCore.
 
 ## Upgrading
 
 ### Cocoapods
 
-The easiest way to upgrade from ACPCore to AEPCore is by using Cocoapods. To upgrade, update your reference to `ACPCore` in your projects `Podfile` as such:
+The easiest way to upgrade from ACPCore to AEPCore is by using Cocoapods. To upgrade, update the reference to `ACPCore` in your projects `Podfile` as such:
 
 ```diff
 - pod 'ACPCore'
@@ -17,7 +17,7 @@ The easiest way to upgrade from ACPCore to AEPCore is by using Cocoapods. To upg
 
 #### Version Control
 
-You may be interested in controlling which version of AEPCore will be used when using this upgrade method. To do this, you specify the versions in your `Podfile`.
+To control which version of AEPCore will be used when using this upgrade method, specify the versions in the `Podfile`.
 
 ```ruby
 pod 'AEPServices', '1.0.0'
@@ -29,17 +29,14 @@ pod 'ACPCore', :git => 'https://github.com/adobe/aep-sdk-compatibility-ios.git',
 ```
 
 ### Manual Installation
-
-If you would prefer not to use Cocoapods, you can build the library and manually include them into your project. To build the compatibility layer, you can use the following commands:
+If Cocoapods is not an option, the compatibility layer can be built manually using the following commands:
 
 ```bash
 git clone https://github.com/adobe/aep-sdk-compatibility-ios.git
 cd aep-sdk-compatibility
 make make-libs
 ```
-
-After running these commands, you can find the `.xcframework`'s within the build directory. Drag and drop these into your project and ensure that you have 
-"copy items if needed" checked.
+After running these commands, the `.xcframework's` can be found within the build directory. Drag and drop these into an Xcode project and ensure that "copy items if needed" is checked.
 
 ## Sample Apps
 
@@ -49,10 +46,7 @@ To download more examples of integrating the AEP Swift SDK via the Compatibility
 
 ## Next Steps
 
-Now that you have the Compatibility layer installed you can build and run your app without making any implementation changes to the SDK. 
-
 - Get familiar with the various APIs offered by the AEP SDK by checking out our [API usage documents](./Usage/). 
-- If you want to leverage shared services offered by the AEP SDK, check out the [Services documentation](./Services/README.md).
-- If you want to build an extension on-top of the AEP SDK, check out the [Building Extensions documentation](./EventHub/BuildingExtensions.md).
+- To leverage shared services offered by the AEP SDK, check out the [Services documentation](./Services/README.md).
+- To build an extension on top of the AEP SDK, check out the [Building Extensions documentation](./EventHub/BuildingExtensions.md).
 - Verify your implementation with [Assurance](https://aep-sdks.gitbook.io/docs/beta/project-griffon).
-
