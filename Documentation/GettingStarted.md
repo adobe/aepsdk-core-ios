@@ -94,5 +94,5 @@ To download more examples of integrating the AEP Swift SDK, head over to the sam
 
 - Get familiar with the various APIs offered by the AEP SDK by checking out the [API usage documents](./Usage/). 
 - Integrate with the [ Experience Platform Extension](https://github.com/adobe/aepsdk-platform-ios). 
-- To leverage shared services offered by the AEP SDK, check out the [Services documentation](./Services/README.md).
+- Validate SDK implementation with [Assurance](./Debugging.md).
 - To build an extension on-top of the AEP SDK, check out the [Building Extensions documentation](./EventHub/BuildingExtensions.md).
