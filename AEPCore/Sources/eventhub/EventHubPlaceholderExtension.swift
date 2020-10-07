@@ -12,11 +12,11 @@
 
 import Foundation
 
-/// A "dummy" extension for `EventHub` so it can share state
+/// An `Extension` for `EventHub`. This serves no purpose other than to allow `EventHub` to share state.
 class EventHubPlaceholderExtension: Extension {
     let name = EventHubConstants.NAME
     let friendlyName = EventHubConstants.FRIENDLY_NAME
-    static let extensionVersion = "0.0.1"
+    static let extensionVersion = EventHubConstants.VERSION_NUMBER
     let metadata: [String: String]? = nil
     let runtime: ExtensionRuntime
 

@@ -12,7 +12,7 @@
 
 import Foundation
 
-/// Represents the source of which an event originates from
+/// Represents the source from which an event originates
 @objc(AEPEventSource)
 @objcMembers
 public class EventSource: NSObject {

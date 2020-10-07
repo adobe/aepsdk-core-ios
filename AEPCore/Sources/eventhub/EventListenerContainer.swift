@@ -12,7 +12,7 @@
 
 import Foundation
 
-/// Contains an `EventListener` and additional information related to the listener
+/// Contains an `EventListener` and additional information related to the listener.
 struct EventListenerContainer: Equatable {
     /// Equatable
     static func == (lhs: EventListenerContainer, rhs: EventListenerContainer) -> Bool {
@@ -24,21 +24,25 @@ struct EventListenerContainer: Equatable {
     /// The `EventListener`
     let listener: EventListener
 
-    /// The `EventType` `listener` is listening for, nil if `listener` is a response listener
+    /// The `EventType` for which `listener` is listening.
+    /// If `listener` is an `EventResponseListener`, `type` will be `nil`.
     let type: String?
 
-    /// The `EventSource` `listener` is listening for, nil if `listener` is a response listener
+    /// The `EventSource` for which `listener` is listening.
+    /// If `listener` is an `EventResponseListener`, `source` will be `nil`.
     let source: String?
 
-    /// If `listener` was registered as a response listener, `triggerEventId` will equal the `Event.id` of the `Event` who will trigger the response `Event`
+    /// Holds a reference to the `Event.id` of the `Event` for which this `Event` is responding.
+    /// If `listener` is an `EventListener`, `triggerEventId` will be `nil`.
     let triggerEventId: UUID?
 
-    /// A DispatchWorkItem that is scheduled on the `EventHub` thread which will be executed after half a second if the listener has not already be notified to signify a timeout
+    /// A DispatchWorkItem that is scheduled on the `EventHub` thread which will be executed after 500 ms
+    /// provided the `listener` has not already been notified of a timeout
     let timeoutTask: DispatchWorkItem?
 
-    /// Returns true if `self.listener` should be notified of `event`
+    /// Determines if `listener` should be notified of `event`
     /// - Parameter event: An `Event` being dispatched by the `EventHub`
-    /// - Returns True if the listener should be notified
+    /// - Returns: True if `listener` should be notified of `event`
     func shouldNotify(_ event: Event) -> Bool {
         if let listenerTriggerId = triggerEventId {
             return listenerTriggerId == event.responseID
@@ -50,11 +54,11 @@ struct EventListenerContainer: Equatable {
 }
 
 internal extension EventListenerContainer {
-    /// Additional convenience initializer for constructing an `EventResponseListener` based `EventListenerContainer`
+    /// Additional convenience initializer for constructing an `EventListenerContainer` with a backing `EventResponseListener`
     /// - Parameters:
     ///     - listener: Closure to be executed when the matching event is received
     ///     - triggerEventId: The event `UUID` that this `EventResponseListener` is waiting for
-    ///     - timeout: `DispatchWorkItem` to be invoked if the event is not received in time.
+    ///     - timeout: `DispatchWorkItem` to be invoked if the event is not received in time
     init(listener: @escaping EventResponseListener, triggerEventId: UUID, timeout: DispatchWorkItem?) {
         self.init(listener: listener, type: nil, source: nil, triggerEventId: triggerEventId, timeoutTask: timeout)
     }
