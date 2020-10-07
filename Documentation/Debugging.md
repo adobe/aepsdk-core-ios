@@ -8,6 +8,14 @@ The AEP SDK offers an extension to inspect quickly, validate, debug data collect
 
 The Assurance extension requires the backward-compatible layer. Instructions on installing the backward compatible layer can be found [here](./Migration/ACP-Migration.md).
 
+#### Add Assurance to your app
+
+Include the Assurance extension via Cocoapods.
+
+```ruby
+pod 'AEPAssurance'
+```
+
 #### Update Extension Registration
 
 Now that the backward compatible layer is installed, `ACPCore` can now be imported into the `AppDelegate` file allowing Assurance to be registered. Replace usage of `MobileCore.registerExtensions` with `ACPCore.registerExtensions` while including the Assurance extension.
