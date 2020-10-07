@@ -14,28 +14,33 @@
 		3FAD091F25267463000D207D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FAD091E25267463000D207D /* Assets.xcassets */; };
 		3FAD092225267463000D207D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FAD092025267463000D207D /* LaunchScreen.storyboard */; };
 		3FAD092525267463000D207D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD092425267463000D207D /* main.m */; };
-		3FC95D2625277F8600020CD7 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; };
-		3FC95D2725277F8600020CD7 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
-		3FC95D2825277F8600020CD7 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; };
-		3FC95D2925277F8600020CD7 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; };
-		3FC95D2A25277F8600020CD7 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; };
-		BB7798BE2523D71E003507D9 /* E2ETesting_FirstLaunch.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7798BD2523D71E003507D9 /* E2ETesting_FirstLaunch.swift */; };
-		BBF55F36251E494C00CAAC53 /* E2ETestingApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F35251E494C00CAAC53 /* E2ETestingApp.swift */; };
-		BBF55F38251E494C00CAAC53 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F37251E494C00CAAC53 /* ContentView.swift */; };
-		BBF55F3A251E494D00CAAC53 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF55F39251E494D00CAAC53 /* Assets.xcassets */; };
-		BBF55F3D251E494D00CAAC53 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BBF55F3C251E494D00CAAC53 /* Preview Assets.xcassets */; };
+		3FB58F86252CE33A009C1358 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB58F85252CE33A009C1358 /* AppDelegate.swift */; };
+		3FB58F8A252CE33A009C1358 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB58F89252CE33A009C1358 /* ViewController.swift */; };
+		3FB58F8D252CE33A009C1358 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F8B252CE33A009C1358 /* Main.storyboard */; };
+		3FB58F8F252CE33B009C1358 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F8E252CE33B009C1358 /* Assets.xcassets */; };
+		3FB58F92252CE33B009C1358 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F90252CE33B009C1358 /* LaunchScreen.storyboard */; };
+		3FB58FA7252CFFD4009C1358 /* MyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB58FA6252CFFD4009C1358 /* MyExtension.swift */; };
+		3FB58FBB252E1721009C1358 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; };
+		3FB58FBC252E1721009C1358 /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FB58FBE252E1723009C1358 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
+		3FB58FBF252E1723009C1358 /* AEPIdentity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FB58FC0252E1724009C1358 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; };
+		3FB58FC1252E1724009C1358 /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FB58FC2252E1725009C1358 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; };
+		3FB58FC3252E1725009C1358 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FB58FC4252E1726009C1358 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; };
+		3FB58FC5252E1726009C1358 /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3FB58FC6252E172F009C1358 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; };
+		3FB58FC7252E172F009C1358 /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FC9252E1731009C1358 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
+		3FB58FCA252E1731009C1358 /* AEPIdentity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FCB252E1732009C1358 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; };
+		3FB58FCC252E1732009C1358 /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FCD252E1733009C1358 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; };
+		3FB58FCE252E1733009C1358 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FCF252E1734009C1358 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; };
+		3FB58FD0252E1734009C1358 /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BBF55F53251E494D00CAAC53 /* E2ETestingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */; };
-		BBF55F72251E49B100CAAC53 /* MyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F71251E49B100CAAC53 /* MyExtension.swift */; };
-		BBF55F98251E4A2100CAAC53 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; };
-		BBF55F99251E4A2100CAAC53 /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBF55F9A251E4A2100CAAC53 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
-		BBF55F9B251E4A2100CAAC53 /* AEPIdentity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBF55F9C251E4A2100CAAC53 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; };
-		BBF55F9D251E4A2100CAAC53 /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBF55F9E251E4A2100CAAC53 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; };
-		BBF55F9F251E4A2100CAAC53 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		BBF55FA0251E4A2100CAAC53 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; };
-		BBF55FA1251E4A2100CAAC53 /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		BBF5EE282512BA0B0003265F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE272512BA0B0003265F /* AppDelegate.swift */; };
 		BBF5EE2A2512BA0B0003265F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE292512BA0B0003265F /* SceneDelegate.swift */; };
 		BBF5EE2C2512BA0B0003265F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE2B2512BA0B0003265F /* ContentView.swift */; };
@@ -141,26 +146,54 @@
 			remoteGlobalIDString = 24B4935724D4C31100AA38D9;
 			remoteInfo = AEPSignalTests;
 		};
+		3FB58FAA252E1682009C1358 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F912D9424E1A75C00E2AC84 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FB58F82252CE33A009C1358;
+			remoteInfo = E2E_Swift;
+		};
+		3FB58FAC252E16F4009C1358 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 21CAC0D52422917600C11388;
+			remoteInfo = AEPCore;
+		};
+		3FB58FAE252E16F4009C1358 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DE2E24C642330065EA05;
+			remoteInfo = AEPIdentity;
+		};
+		3FB58FB0252E16F4009C1358 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DDD024C62EE60065EA05;
+			remoteInfo = AEPLifecycle;
+		};
+		3FB58FB2252E16F4009C1358 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 3F03978624BE5DD30019F095;
+			remoteInfo = AEPServices;
+		};
+		3FB58FB4252E16F4009C1358 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 24B4934E24D4C31100AA38D9;
+			remoteInfo = AEPSignal;
+		};
 		BB032AB2251BABCB00544673 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 3F4256FC24F474F4005D4006;
 			remoteInfo = AEPIntegrationTests;
-		};
-		BB7798C02523D71E003507D9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F912D9424E1A75C00E2AC84 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BBF55F32251E494C00CAAC53;
-			remoteInfo = E2ETesting;
-		};
-		BBF55F4F251E494D00CAAC53 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3F912D9424E1A75C00E2AC84 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BBF55F32251E494C00CAAC53;
-			remoteInfo = E2ETesting;
 		};
 		BBF5EE442512BA290003265F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -172,17 +205,32 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		BBF55FA2251E4A2200CAAC53 /* Embed Frameworks */ = {
+		3FB58FBD252E1721009C1358 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				BBF55F9D251E4A2100CAAC53 /* AEPLifecycle.framework in Embed Frameworks */,
-				BBF55F99251E4A2100CAAC53 /* AEPCore.framework in Embed Frameworks */,
-				BBF55F9B251E4A2100CAAC53 /* AEPIdentity.framework in Embed Frameworks */,
-				BBF55F9F251E4A2100CAAC53 /* AEPServices.framework in Embed Frameworks */,
-				BBF55FA1251E4A2100CAAC53 /* AEPSignal.framework in Embed Frameworks */,
+				3FB58FC1252E1724009C1358 /* AEPLifecycle.framework in Embed Frameworks */,
+				3FB58FBC252E1721009C1358 /* AEPCore.framework in Embed Frameworks */,
+				3FB58FBF252E1723009C1358 /* AEPIdentity.framework in Embed Frameworks */,
+				3FB58FC3252E1725009C1358 /* AEPServices.framework in Embed Frameworks */,
+				3FB58FC5252E1726009C1358 /* AEPSignal.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3FB58FC8252E1730009C1358 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3FB58FCC252E1732009C1358 /* AEPLifecycle.framework in Embed Frameworks */,
+				3FB58FC7252E172F009C1358 /* AEPCore.framework in Embed Frameworks */,
+				3FB58FCA252E1731009C1358 /* AEPIdentity.framework in Embed Frameworks */,
+				3FB58FCE252E1733009C1358 /* AEPServices.framework in Embed Frameworks */,
+				3FB58FD0252E1734009C1358 /* AEPSignal.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -223,19 +271,17 @@
 		3FAD092125267463000D207D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3FAD092325267463000D207D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FAD092425267463000D207D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		BB7798BB2523D71E003507D9 /* E2ETesting_FirstLaunch.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E2ETesting_FirstLaunch.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB7798BD2523D71E003507D9 /* E2ETesting_FirstLaunch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E2ETesting_FirstLaunch.swift; sourceTree = "<group>"; };
-		BB7798BF2523D71E003507D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BBF55F33251E494C00CAAC53 /* E2ETesting.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = E2ETesting.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BBF55F35251E494C00CAAC53 /* E2ETestingApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E2ETestingApp.swift; sourceTree = "<group>"; };
-		BBF55F37251E494C00CAAC53 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		BBF55F39251E494D00CAAC53 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		BBF55F3C251E494D00CAAC53 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		BBF55F3E251E494D00CAAC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BBF55F4E251E494D00CAAC53 /* E2ETestingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E2ETestingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FB58F83252CE33A009C1358 /* E2E_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = E2E_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3FB58F85252CE33A009C1358 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		3FB58F89252CE33A009C1358 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3FB58F8C252CE33A009C1358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3FB58F8E252CE33B009C1358 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3FB58F91252CE33B009C1358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3FB58F93252CE33B009C1358 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3FB58FA6252CFFD4009C1358 /* MyExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyExtension.swift; sourceTree = "<group>"; };
+		BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E2E_SwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E2ETestingUITests.swift; sourceTree = "<group>"; };
 		BBF55F54251E494D00CAAC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BBF55F71251E49B100CAAC53 /* MyExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyExtension.swift; sourceTree = "<group>"; };
 		BBF5EE252512BA0B0003265F /* PerformanceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PerformanceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF5EE272512BA0B0003265F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BBF5EE292512BA0B0003265F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -255,30 +301,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3FC95D2625277F8600020CD7 /* AEPCore.framework in Frameworks */,
-				3FC95D2725277F8600020CD7 /* AEPIdentity.framework in Frameworks */,
-				3FC95D2825277F8600020CD7 /* AEPLifecycle.framework in Frameworks */,
-				3FC95D2925277F8600020CD7 /* AEPServices.framework in Frameworks */,
-				3FC95D2A25277F8600020CD7 /* AEPSignal.framework in Frameworks */,
+				3FB58FCB252E1732009C1358 /* AEPLifecycle.framework in Frameworks */,
+				3FB58FC9252E1731009C1358 /* AEPIdentity.framework in Frameworks */,
+				3FB58FC6252E172F009C1358 /* AEPCore.framework in Frameworks */,
+				3FB58FCD252E1733009C1358 /* AEPServices.framework in Frameworks */,
+				3FB58FCF252E1734009C1358 /* AEPSignal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BB7798B82523D71E003507D9 /* Frameworks */ = {
+		3FB58F80252CE33A009C1358 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BBF55F30251E494C00CAAC53 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BBF55F9C251E4A2100CAAC53 /* AEPLifecycle.framework in Frameworks */,
-				BBF55F98251E4A2100CAAC53 /* AEPCore.framework in Frameworks */,
-				BBF55F9A251E4A2100CAAC53 /* AEPIdentity.framework in Frameworks */,
-				BBF55F9E251E4A2100CAAC53 /* AEPServices.framework in Frameworks */,
-				BBF55FA0251E4A2100CAAC53 /* AEPSignal.framework in Frameworks */,
+				3FB58FC0252E1724009C1358 /* AEPLifecycle.framework in Frameworks */,
+				3FB58FBE252E1723009C1358 /* AEPIdentity.framework in Frameworks */,
+				3FB58FBB252E1721009C1358 /* AEPCore.framework in Frameworks */,
+				3FB58FC2252E1725009C1358 /* AEPServices.framework in Frameworks */,
+				3FB58FC4252E1726009C1358 /* AEPSignal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,9 +376,8 @@
 				3F1675E124E1AA150041B970 /* AEPCore.xcodeproj */,
 				BBFDDD63251179EB0084A12F /* PerformanceTests */,
 				BBF5EE262512BA0B0003265F /* PerformanceApp */,
-				BBF55F34251E494C00CAAC53 /* E2ETesting */,
-				BBF55F51251E494D00CAAC53 /* E2ETestingUITests */,
-				BB7798BC2523D71E003507D9 /* E2ETesting_FirstLaunch */,
+				3FB58F84252CE33A009C1358 /* E2E_Swift */,
+				BBF55F51251E494D00CAAC53 /* E2E_SwiftUITests */,
 				3FAD091125267460000D207D /* TestApp_Objc */,
 				3F912D9D24E1A75C00E2AC84 /* Products */,
 				3F912DB324E1A78400E2AC84 /* Frameworks */,
@@ -351,10 +389,9 @@
 			children = (
 				BBFDDD62251179EB0084A12F /* PerformanceTests.xctest */,
 				BBF5EE252512BA0B0003265F /* PerformanceApp.app */,
-				BBF55F33251E494C00CAAC53 /* E2ETesting.app */,
-				BBF55F4E251E494D00CAAC53 /* E2ETestingUITests.xctest */,
-				BB7798BB2523D71E003507D9 /* E2ETesting_FirstLaunch.xctest */,
+				BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */,
 				3FAD091025267460000D207D /* TestApp_Objc.app */,
+				3FB58F83252CE33A009C1358 /* E2E_Swift.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -389,43 +426,27 @@
 			path = TestApp_Objc;
 			sourceTree = "<group>";
 		};
-		BB7798BC2523D71E003507D9 /* E2ETesting_FirstLaunch */ = {
+		3FB58F84252CE33A009C1358 /* E2E_Swift */ = {
 			isa = PBXGroup;
 			children = (
-				BB7798BD2523D71E003507D9 /* E2ETesting_FirstLaunch.swift */,
-				BB7798BF2523D71E003507D9 /* Info.plist */,
+				3FB58F85252CE33A009C1358 /* AppDelegate.swift */,
+				3FB58F89252CE33A009C1358 /* ViewController.swift */,
+				3FB58FA6252CFFD4009C1358 /* MyExtension.swift */,
+				3FB58F8B252CE33A009C1358 /* Main.storyboard */,
+				3FB58F8E252CE33B009C1358 /* Assets.xcassets */,
+				3FB58F90252CE33B009C1358 /* LaunchScreen.storyboard */,
+				3FB58F93252CE33B009C1358 /* Info.plist */,
 			);
-			path = E2ETesting_FirstLaunch;
+			path = E2E_Swift;
 			sourceTree = "<group>";
 		};
-		BBF55F34251E494C00CAAC53 /* E2ETesting */ = {
-			isa = PBXGroup;
-			children = (
-				BBF55F35251E494C00CAAC53 /* E2ETestingApp.swift */,
-				BBF55F37251E494C00CAAC53 /* ContentView.swift */,
-				BBF55F71251E49B100CAAC53 /* MyExtension.swift */,
-				BBF55F39251E494D00CAAC53 /* Assets.xcassets */,
-				BBF55F3E251E494D00CAAC53 /* Info.plist */,
-				BBF55F3B251E494D00CAAC53 /* Preview Content */,
-			);
-			path = E2ETesting;
-			sourceTree = "<group>";
-		};
-		BBF55F3B251E494D00CAAC53 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				BBF55F3C251E494D00CAAC53 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		BBF55F51251E494D00CAAC53 /* E2ETestingUITests */ = {
+		BBF55F51251E494D00CAAC53 /* E2E_SwiftUITests */ = {
 			isa = PBXGroup;
 			children = (
 				BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */,
 				BBF55F54251E494D00CAAC53 /* Info.plist */,
 			);
-			path = E2ETestingUITests;
+			path = E2E_SwiftUITests;
 			sourceTree = "<group>";
 		};
 		BBF5EE262512BA0B0003265F /* PerformanceApp */ = {
@@ -470,6 +491,7 @@
 				3FAD090C25267460000D207D /* Sources */,
 				3FAD090D25267460000D207D /* Frameworks */,
 				3FAD090E25267460000D207D /* Resources */,
+				3FB58FC8252E1730009C1358 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -480,45 +502,32 @@
 			productReference = 3FAD091025267460000D207D /* TestApp_Objc.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BB7798BA2523D71E003507D9 /* E2ETesting_FirstLaunch */ = {
+		3FB58F82252CE33A009C1358 /* E2E_Swift */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BB7798CD2523D71E003507D9 /* Build configuration list for PBXNativeTarget "E2ETesting_FirstLaunch" */;
+			buildConfigurationList = 3FB58FA4252CE33B009C1358 /* Build configuration list for PBXNativeTarget "E2E_Swift" */;
 			buildPhases = (
-				BB7798B72523D71E003507D9 /* Sources */,
-				BB7798B82523D71E003507D9 /* Frameworks */,
-				BB7798B92523D71E003507D9 /* Resources */,
+				3FB58F7F252CE33A009C1358 /* Sources */,
+				3FB58F80252CE33A009C1358 /* Frameworks */,
+				3FB58F81252CE33A009C1358 /* Resources */,
+				3FB58FBD252E1721009C1358 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				BB7798C12523D71E003507D9 /* PBXTargetDependency */,
+				3FB58FAD252E16F4009C1358 /* PBXTargetDependency */,
+				3FB58FAF252E16F4009C1358 /* PBXTargetDependency */,
+				3FB58FB1252E16F4009C1358 /* PBXTargetDependency */,
+				3FB58FB3252E16F4009C1358 /* PBXTargetDependency */,
+				3FB58FB5252E16F4009C1358 /* PBXTargetDependency */,
 			);
-			name = E2ETesting_FirstLaunch;
-			productName = E2ETesting_FirstLaunch;
-			productReference = BB7798BB2523D71E003507D9 /* E2ETesting_FirstLaunch.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		BBF55F32251E494C00CAAC53 /* E2ETesting */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = BBF55F64251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2ETesting" */;
-			buildPhases = (
-				BBF55F2F251E494C00CAAC53 /* Sources */,
-				BBF55F30251E494C00CAAC53 /* Frameworks */,
-				BBF55F31251E494C00CAAC53 /* Resources */,
-				BBF55FA2251E4A2200CAAC53 /* Embed Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = E2ETesting;
-			productName = E2ETesting;
-			productReference = BBF55F33251E494C00CAAC53 /* E2ETesting.app */;
+			name = E2E_Swift;
+			productName = E2E_Swift;
+			productReference = 3FB58F83252CE33A009C1358 /* E2E_Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BBF55F4D251E494D00CAAC53 /* E2ETestingUITests */ = {
+		BBF55F4D251E494D00CAAC53 /* E2E_SwiftUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2ETestingUITests" */;
+			buildConfigurationList = BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2E_SwiftUITests" */;
 			buildPhases = (
 				BBF55F4A251E494D00CAAC53 /* Sources */,
 				BBF55F4B251E494D00CAAC53 /* Frameworks */,
@@ -527,11 +536,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				BBF55F50251E494D00CAAC53 /* PBXTargetDependency */,
+				3FB58FAB252E1682009C1358 /* PBXTargetDependency */,
 			);
-			name = E2ETestingUITests;
+			name = E2E_SwiftUITests;
 			productName = E2ETestingUITests;
-			productReference = BBF55F4E251E494D00CAAC53 /* E2ETestingUITests.xctest */;
+			productReference = BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		BBF5EE242512BA0B0003265F /* PerformanceApp */ = {
@@ -576,23 +585,19 @@
 		3F912D9424E1A75C00E2AC84 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1200;
+				LastSwiftUpdateCheck = 1130;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = Adobe;
 				TargetAttributes = {
 					3FAD090F25267460000D207D = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
-					BB7798BA2523D71E003507D9 = {
-						CreatedOnToolsVersion = 12.0;
-						TestTargetID = BBF55F32251E494C00CAAC53;
-					};
-					BBF55F32251E494C00CAAC53 = {
-						CreatedOnToolsVersion = 12.0;
+					3FB58F82252CE33A009C1358 = {
+						CreatedOnToolsVersion = 11.3.1;
 					};
 					BBF55F4D251E494D00CAAC53 = {
 						CreatedOnToolsVersion = 12.0;
-						TestTargetID = BBF55F32251E494C00CAAC53;
+						TestTargetID = 3FB58F82252CE33A009C1358;
 					};
 					BBF5EE242512BA0B0003265F = {
 						CreatedOnToolsVersion = 11.7;
@@ -622,11 +627,10 @@
 			);
 			projectRoot = "";
 			targets = (
-				BBFDDD61251179EB0084A12F /* PerformanceTests */,
 				BBF5EE242512BA0B0003265F /* PerformanceApp */,
-				BBF55F32251E494C00CAAC53 /* E2ETesting */,
-				BBF55F4D251E494D00CAAC53 /* E2ETestingUITests */,
-				BB7798BA2523D71E003507D9 /* E2ETesting_FirstLaunch */,
+				BBFDDD61251179EB0084A12F /* PerformanceTests */,
+				3FB58F82252CE33A009C1358 /* E2E_Swift */,
+				BBF55F4D251E494D00CAAC53 /* E2E_SwiftUITests */,
 				3FAD090F25267460000D207D /* TestApp_Objc */,
 			);
 		};
@@ -737,19 +741,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BB7798B92523D71E003507D9 /* Resources */ = {
+		3FB58F81252CE33A009C1358 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BBF55F31251E494C00CAAC53 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BBF55F3D251E494D00CAAC53 /* Preview Assets.xcassets in Resources */,
-				BBF55F3A251E494D00CAAC53 /* Assets.xcassets in Resources */,
+				3FB58F92252CE33B009C1358 /* LaunchScreen.storyboard in Resources */,
+				3FB58F8F252CE33B009C1358 /* Assets.xcassets in Resources */,
+				3FB58F8D252CE33A009C1358 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,21 +789,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		BB7798B72523D71E003507D9 /* Sources */ = {
+		3FB58F7F252CE33A009C1358 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB7798BE2523D71E003507D9 /* E2ETesting_FirstLaunch.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		BBF55F2F251E494C00CAAC53 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				BBF55F38251E494C00CAAC53 /* ContentView.swift in Sources */,
-				BBF55F36251E494C00CAAC53 /* E2ETestingApp.swift in Sources */,
-				BBF55F72251E49B100CAAC53 /* MyExtension.swift in Sources */,
+				3FB58F8A252CE33A009C1358 /* ViewController.swift in Sources */,
+				3FB58F86252CE33A009C1358 /* AppDelegate.swift in Sources */,
+				3FB58FA7252CFFD4009C1358 /* MyExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -839,15 +829,35 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		BB7798C12523D71E003507D9 /* PBXTargetDependency */ = {
+		3FB58FAB252E1682009C1358 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BBF55F32251E494C00CAAC53 /* E2ETesting */;
-			targetProxy = BB7798C02523D71E003507D9 /* PBXContainerItemProxy */;
+			target = 3FB58F82252CE33A009C1358 /* E2E_Swift */;
+			targetProxy = 3FB58FAA252E1682009C1358 /* PBXContainerItemProxy */;
 		};
-		BBF55F50251E494D00CAAC53 /* PBXTargetDependency */ = {
+		3FB58FAD252E16F4009C1358 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BBF55F32251E494C00CAAC53 /* E2ETesting */;
-			targetProxy = BBF55F4F251E494D00CAAC53 /* PBXContainerItemProxy */;
+			name = AEPCore;
+			targetProxy = 3FB58FAC252E16F4009C1358 /* PBXContainerItemProxy */;
+		};
+		3FB58FAF252E16F4009C1358 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AEPIdentity;
+			targetProxy = 3FB58FAE252E16F4009C1358 /* PBXContainerItemProxy */;
+		};
+		3FB58FB1252E16F4009C1358 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AEPLifecycle;
+			targetProxy = 3FB58FB0252E16F4009C1358 /* PBXContainerItemProxy */;
+		};
+		3FB58FB3252E16F4009C1358 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AEPServices;
+			targetProxy = 3FB58FB2252E16F4009C1358 /* PBXContainerItemProxy */;
+		};
+		3FB58FB5252E16F4009C1358 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = AEPSignal;
+			targetProxy = 3FB58FB4252E16F4009C1358 /* PBXContainerItemProxy */;
 		};
 		BBF5EE452512BA290003265F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -869,6 +879,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				3FAD092125267463000D207D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		3FB58F8B252CE33A009C1358 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3FB58F8C252CE33A009C1358 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		3FB58F90252CE33B009C1358 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3FB58F91252CE33B009C1358 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -934,7 +960,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -988,7 +1014,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1004,7 +1030,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Testapp_Objc/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1021,7 +1047,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Testapp_Objc/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1032,88 +1058,36 @@
 			};
 			name = Release;
 		};
-		BB7798C22523D71E003507D9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = FKGEE875K4;
-				INFOPLIST_FILE = E2ETesting_FirstLaunch/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.mobile.marketing.E2ETesting-FirstLaunch";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = E2ETesting;
-			};
-			name = Debug;
-		};
-		BB7798C32523D71E003507D9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = FKGEE875K4;
-				INFOPLIST_FILE = E2ETesting_FirstLaunch/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.mobile.marketing.E2ETesting-FirstLaunch";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = E2ETesting;
-			};
-			name = Release;
-		};
-		BBF55F55251E494D00CAAC53 /* Debug */ = {
+		3FB58F94252CE33B009C1358 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"E2ETesting/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = E2ETesting/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				INFOPLIST_FILE = E2E_Swift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.marketing.E2ETesting;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.mobile.E2E-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		BBF55F56251E494D00CAAC53 /* Release */ = {
+		3FB58F95252CE33B009C1358 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"E2ETesting/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = E2ETesting/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				INFOPLIST_FILE = E2E_Swift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.mobile.marketing.E2ETesting;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.mobile.E2E-Swift";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1127,8 +1101,8 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
-				INFOPLIST_FILE = E2ETestingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = E2E_SwiftUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1138,7 +1112,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = E2ETesting;
+				TEST_TARGET_NAME = E2E_Swift;
 			};
 			name = Debug;
 		};
@@ -1149,8 +1123,8 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
-				INFOPLIST_FILE = E2ETestingUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = E2E_SwiftUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1160,7 +1134,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = E2ETesting;
+				TEST_TARGET_NAME = E2E_Swift;
 			};
 			name = Release;
 		};
@@ -1267,25 +1241,16 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB7798CD2523D71E003507D9 /* Build configuration list for PBXNativeTarget "E2ETesting_FirstLaunch" */ = {
+		3FB58FA4252CE33B009C1358 /* Build configuration list for PBXNativeTarget "E2E_Swift" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BB7798C22523D71E003507D9 /* Debug */,
-				BB7798C32523D71E003507D9 /* Release */,
+				3FB58F94252CE33B009C1358 /* Debug */,
+				3FB58F95252CE33B009C1358 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BBF55F64251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2ETesting" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BBF55F55251E494D00CAAC53 /* Debug */,
-				BBF55F56251E494D00CAAC53 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2ETestingUITests" */ = {
+		BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2E_SwiftUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BBF55F59251E494D00CAAC53 /* Debug */,
