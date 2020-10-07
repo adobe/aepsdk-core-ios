@@ -21,15 +21,15 @@
 		3FB58F92252CE33B009C1358 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F90252CE33B009C1358 /* LaunchScreen.storyboard */; };
 		3FB58FA7252CFFD4009C1358 /* MyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB58FA6252CFFD4009C1358 /* MyExtension.swift */; };
 		3FB58FBB252E1721009C1358 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; };
-		3FB58FBC252E1721009C1358 /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FBC252E1721009C1358 /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB58FBE252E1723009C1358 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
-		3FB58FBF252E1723009C1358 /* AEPIdentity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FBF252E1723009C1358 /* AEPIdentity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB58FC0252E1724009C1358 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; };
-		3FB58FC1252E1724009C1358 /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FC1252E1724009C1358 /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675FC24E1AA150041B970 /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB58FC2252E1725009C1358 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; };
-		3FB58FC3252E1725009C1358 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FC3252E1725009C1358 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760024E1AA150041B970 /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB58FC4252E1726009C1358 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; };
-		3FB58FC5252E1726009C1358 /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3FB58FC5252E1726009C1358 /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F16760624E1AA150041B970 /* AEPSignal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3FB58FC6252E172F009C1358 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; };
 		3FB58FC7252E172F009C1358 /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F224E1AA150041B970 /* AEPCore.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3FB58FC9252E1731009C1358 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F1675F824E1AA150041B970 /* AEPIdentity.framework */; };
@@ -627,11 +627,11 @@
 			);
 			projectRoot = "";
 			targets = (
-				BBFDDD61251179EB0084A12F /* PerformanceTests */,
 				BBF5EE242512BA0B0003265F /* PerformanceApp */,
-				3FAD090F25267460000D207D /* TestApp_Objc */,
+				BBFDDD61251179EB0084A12F /* PerformanceTests */,
 				3FB58F82252CE33A009C1358 /* E2E_Swift */,
 				BBF55F4D251E494D00CAAC53 /* E2E_SwiftUITests */,
+				3FAD090F25267460000D207D /* TestApp_Objc */,
 			);
 		};
 /* End PBXProject section */
@@ -1063,6 +1063,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = E2E_Swift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1080,6 +1081,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = E2E_Swift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
