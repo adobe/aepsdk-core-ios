@@ -16,7 +16,7 @@ import Foundation
 class EventHubPlaceholderExtension: Extension {
     let name = EventHubConstants.NAME
     let friendlyName = EventHubConstants.FRIENDLY_NAME
-    static var extensionVersion = EventHubConstants.VERSION_NUMBER
+    static let extensionVersion = EventHubConstants.VERSION_NUMBER
     let metadata: [String: String]? = nil
     let runtime: ExtensionRuntime
 
