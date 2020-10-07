@@ -21,18 +21,14 @@ pod 'AEPAssurance'
 Now that the backward compatible layer is installed, `ACPCore` can now be imported into the `AppDelegate` file allowing Assurance to be registered. Replace usage of `MobileCore.registerExtensions` with `ACPCore.registerExtensions` while including the Assurance extension.
 
 ```diff
-+ import ACPCore
 + import AEPAssurance
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
--  MobileCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, ...], {
--   //...
--  })  
-
-+  ACPCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, AEPAssurance.self, ...], {
-+   //...
-+  }) 
++  AEPAssurance.registerExtension()
+   MobileCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, ...], {
+      //...
+   })  
 
   return true
 } 
