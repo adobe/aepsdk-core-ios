@@ -25,15 +25,15 @@ extension EventHubError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidExtensionName:
-            return "Extension names must be non-empty"
+            return "Extension names must be non-empty."
         case .duplicateExtensionName:
-            return "An extension with this name has already been registered"
+            return "An extension with this name has already been registered."
         case .extensionInitializationFailure:
-            return "An extension has failed to initialize"
+            return "An extension has failed to initialize."
         case .extensionNotRegistered:
-            return "No extension with this type has been registered"
+            return "No extension with this type has been registered."
         case .unknown:
-            return "An unknown error has occurred"
+            return "An unknown error has occurred."
         }
     }
 }

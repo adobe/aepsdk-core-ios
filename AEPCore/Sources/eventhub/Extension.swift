@@ -19,16 +19,17 @@ public protocol Extension {
     /// Name of the extension
     var name: String { get }
 
-    /// A friendly human readable name of the extension
+    /// A friendly, human-readable name of the extension
     var friendlyName: String { get }
 
     /// Version of the extension
+    /// This variable is `static` so that it may be accessed from a `static` public API.
     static var extensionVersion: String { get }
 
     /// Optional metadata to be provided to the `EventHub`
     var metadata: [String: String]? { get }
 
-    /// Provides the methods can be used by extension
+    /// Provides access to `ExtensionRuntime` methods that can be used by extension
     var runtime: ExtensionRuntime { get }
 
     /// Invoked when the extension has been registered by the `EventHub`
@@ -43,13 +44,13 @@ public protocol Extension {
     /// - Returns: *true* if event processing should continue for this `Extension`
     func readyForEvent(_ event: Event) -> Bool
 
-    /// An `Extension` must support parameterless initializer
+    /// An `Extension` must support parameterless initialization
     init?(runtime: ExtensionRuntime)
 }
 
 // MARK: - Extension extension
 
-/// Contains methods for developers to interact with in their own extensions
+/// Contains methods for interacting with extensions
 public extension Extension {
 
     /// Unregisters this extension from the `EventHub`
@@ -75,16 +76,21 @@ public extension Extension {
     // MARK: - Shared State
 
     /// Creates a new `SharedState` for this extension
-    /// If `event` is nil shared state will be versioned at 0 if this extension is yet to publish a shared state, otherwise, it will be published at the latest shared state version.
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
     /// - Parameters:
     ///   - data: Data for the `SharedState`
-    ///   - event: An event for the `SharedState` to be versioned.
+    ///   - event: `Event` for which the `SharedState` should be versioned
     func createSharedState(data: [String: Any], event: Event?) {
         runtime.createSharedState(data: data, event: event)
     }
 
     /// Creates a pending `SharedState` versioned at `event`
-    /// - Parameter event: The event for the pending `SharedState` to be created at
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
+    /// - Parameter event: `Event` for which the `SharedState` should be versioned
     /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
         return runtime.createPendingSharedState(event: event)

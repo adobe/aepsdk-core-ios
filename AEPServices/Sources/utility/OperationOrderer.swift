@@ -14,7 +14,7 @@ import Foundation
 
 /// OperationOrderer implements a startable/stoppable queue of items and an associated handler function.
 ///
-/// This class maintains it's own internal GCD queueing mechanisms, so all available functions are thread safe.
+/// This class maintains its own internal GCD queueing mechanisms, so all available functions are thread safe.
 public class OperationOrderer<T> {
     /// Used to coordinate processing of item queue.
     private let source: DispatchSourceUserDataOr

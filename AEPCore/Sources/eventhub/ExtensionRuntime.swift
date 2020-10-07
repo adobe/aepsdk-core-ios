@@ -43,17 +43,23 @@ public protocol ExtensionRuntime {
     // MARK: - Shared State
 
     /// Creates a new `SharedState` for this extension
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
     /// - Parameters:
     ///   - data: Data for the `SharedState`
-    ///   - event: An event for the `SharedState` to be versioned at. When `event` is nil shared state will be versioned at 0 if this extension is yet to publish a shared state, otherwise, it will be published at the latest shared state version
+    ///   - event: `Event` for which the `SharedState` should be versioned
     func createSharedState(data: [String: Any], event: Event?)
 
     /// Creates a pending `SharedState` versioned at `event`
-    /// - Parameter event: The event for the pending `SharedState` to be created at, if nil the shared state is versioned zero
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
+    /// - Parameter event: `Event` for which the `SharedState` should be versioned
     /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
     func createPendingSharedState(event: Event?) -> SharedStateResolver
 
-    /// Gets the `SharedState` data for a specified extension
+    /// Gets the `SharedState` data for a specified extension    
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`

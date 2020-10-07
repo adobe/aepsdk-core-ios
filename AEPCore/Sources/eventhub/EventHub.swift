@@ -22,13 +22,13 @@ public typealias EventPreprocessor = (Event) -> Event
 /// Responsible for delivering events to listeners and maintaining registered extension's lifecycle.
 final class EventHub {
     private let LOG_TAG = "EventHub"
-    private let eventHubQueue = DispatchQueue(label: "com.adobe.eventhub.queue")
-    private var registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventhub.registeredExtensions.queue")
-    private let eventNumberMap = ThreadSafeDictionary<UUID, Int>(identifier: "com.adobe.eventhub.eventNumber.queue")
-    private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventhub.response.queue")
+    private let eventHubQueue = DispatchQueue(label: "com.adobe.eventHub.queue")
+    private var registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventHub.registeredExtensions.queue")
+    private let eventNumberMap = ThreadSafeDictionary<UUID, Int>(identifier: "com.adobe.eventHub.eventNumber.queue")
+    private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventHub.response.queue")
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
-    private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventhub.preprocessors.queue")
+    private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
 
     #if DEBUG
         public internal(set) static var shared = EventHub()
@@ -40,7 +40,7 @@ final class EventHub {
 
     /// Creates a new instance of `EventHub`
     init() {
-        // setup a fake extension container for `EventHub` so we can shared and retrieve state
+        // setup a place-holder extension container for `EventHub` so we can shared and retrieve state
         registerExtension(EventHubPlaceholderExtension.self, completion: { _ in })
 
         // Setup eventQueue handler for the main OperationOrderer
@@ -84,7 +84,7 @@ final class EventHub {
         // Set an event number for the event
         eventNumberMap[event.id] = eventNumberCounter.incrementAndGet()
         eventQueue.add(event)
-        Log.debug(label: "\(LOG_TAG):\(#function)", "Event #\(String(describing: eventNumberMap[event.id] ?? 0)), \(event) is dispatched.")
+        Log.trace(label: "\(LOG_TAG):\(#function)", "Event #\(String(describing: eventNumberMap[event.id] ?? 0)), \(event) is dispatched.")
     }
 
     /// Registers a new `Extension` to the `EventHub`. This `Extension` must implement `Extension`
@@ -94,12 +94,12 @@ final class EventHub {
     func registerExtension(_ type: Extension.Type, completion: @escaping (_ error: EventHubError?) -> Void) {
         eventHubQueue.async {
             guard !type.typeName.isEmpty else {
-                Log.error(label: "\(self.LOG_TAG):\(#function)", "Extension name must not be empty.")
+                Log.warning(label: "\(self.LOG_TAG):\(#function)", "Extension name must not be empty.")
                 completion(.invalidExtensionName)
                 return
             }
             guard self.registeredExtensions[type.typeName] == nil else {
-                Log.error(label: "\(self.LOG_TAG):\(#function)", "Cannot register an extension multiple times.")
+                Log.warning(label: "\(self.LOG_TAG):\(#function)", "Cannot register an extension multiple times.")
                 completion(.duplicateExtensionName)
                 return
             }
@@ -147,14 +147,16 @@ final class EventHub {
     }
 
     /// Creates a new `SharedState` for the extension with provided data, versioned at `event`
-    /// If `event` is `nil`, the new `SharedState` will be versioned at zero
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
-    ///   - event: If not nil, the `SharedState` will be versioned at `event`, if nil the shared state is versioned zero
+    ///   - event: `Event` for which the `SharedState` should be versioned
     func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
         guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) else {
-            Log.error(label: "\(LOG_TAG):\(#function)", "Error in creating shared state.")
+            Log.warning(label: "\(LOG_TAG):\(#function)", "Error creating shared state for \(extensionName).")
             return
         }
 
@@ -164,9 +166,12 @@ final class EventHub {
     }
 
     /// Sets the `SharedState` for the extension to pending at `event`'s version and returns a `SharedStateResolver` which is to be invoked with data for the `SharedState` once available.
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
-    ///   - event: Event which has the `SharedState` should be versioned for, if nil the shared state is versioned zero
+    ///   - event: `Event` for which the `SharedState` should be versioned
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
     func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
         var pendingVersion: Int?
@@ -186,12 +191,12 @@ final class EventHub {
     /// Retrieves the `SharedState` for a specific extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version, if nil will return the latest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
         guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState else {
-            Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered")
+            Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to retrieve shared state for \(extensionName). No such extension is registered.")
             return nil
         }
 
@@ -239,12 +244,11 @@ final class EventHub {
             }
         }
 
-        // TODO: Determine which version of Core to use in the top level version field
-        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: ConfigurationConstants.EXTENSION_VERSION,
+        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: EventHubConstants.VERSION_NUMBER,
                                    EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
 
         guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value.sharedState else {
-            Log.error(label: "\(LOG_TAG):\(#function)", "Extension not registered with EventHub")
+            Log.warning(label: "\(LOG_TAG):\(#function)", "Extension not registered with EventHub")
             return
         }
 

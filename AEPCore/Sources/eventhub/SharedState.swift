@@ -58,19 +58,19 @@ class SharedState {
     ///   - data: The data dictionary to set.
     internal func updatePending(version: Int, data: [String: Any]?) {
         queue.async(flags: .barrier) {
-            var cur = self.head
-            while let unwrapped = cur {
-                if unwrapped.version == version {
-                    if unwrapped.nodeStatus == .pending {
-                        unwrapped.data = data
-                        unwrapped.nodeStatus = .set
+            var current = self.head
+            while let node = current {
+                if node.version == version {
+                    if node.nodeStatus == .pending {
+                        node.data = data
+                        node.nodeStatus = .set
                     } else {
                         Log.error(label: "\(self.LOG_TAG):\(#function)", "Attempting to update a non-pending entry.")
                     }
                     break
                 }
 
-                cur = unwrapped.previousNode
+                current = node.previousNode
             }
         }
     }
@@ -83,14 +83,14 @@ class SharedState {
     ///     - status: The current `SharedState.Status` of the returned state
     internal func resolve(version: Int) -> (value: [String: Any]?, status: SharedStateStatus) {
         return queue.sync {
-            var cur = head
-            while let unwrapped = cur {
-                if unwrapped.version <= version {
-                    return (unwrapped.data, unwrapped.nodeStatus)
-                } else if unwrapped.previousNode == nil {
-                    return (unwrapped.data, unwrapped.nodeStatus)
+            var current = self.head
+            while let node = current {
+                if node.version <= version {
+                    return (node.data, node.nodeStatus)
+                } else if node.previousNode == nil {
+                    return (node.data, node.nodeStatus)
                 }
-                cur = unwrapped.previousNode
+                current = node.previousNode
             }
             return (nil, .none)
         }
@@ -100,11 +100,11 @@ class SharedState {
 
     private func add(version: Int, data: [String: Any]?, status: SharedStateStatus) {
         queue.async(flags: .barrier) {
-            if let unwrapped = self.head {
-                if unwrapped.version < version {
-                    self.head = unwrapped.append(version: version, data: data, status: status)
+            if let head = self.head {
+                if head.version < version {
+                    self.head = head.append(version: version, data: data, status: status)
                 } else {
-                    Log.debug(label: "\(self.LOG_TAG):\(#function)", "Trying to add an already existing version (\(version)), current version \(unwrapped.version).")
+                    Log.debug(label: "\(self.LOG_TAG):\(#function)", "Trying to add an already existing version (\(version)), current version \(head.version).")
                 }
             } else {
                 self.head = Node(version: version, data: data, status: status)
@@ -112,7 +112,7 @@ class SharedState {
         }
     }
 
-    // MARK: Node definition (private class)
+    // MARK: - Node definition (private class)
 
     /// Node class defines a specific version of a SharedState
     private class Node {
@@ -126,8 +126,8 @@ class SharedState {
         ///   - version: the version of the shared state
         ///   - data: the data for the shared state
         ///   - status: the status of the shared state
-        /// - Returns: A `Node?` with a reference to the previous `Node`
-        func append(version: Int, data: [String: Any]?, status: SharedStateStatus) -> Node? {
+        /// - Returns: A `Node` with a reference to the previous `Node`
+        func append(version: Int, data: [String: Any]?, status: SharedStateStatus) -> Node {
             let newNode = Node(version: version, data: data, status: status)
             newNode.previousNode = self
             return newNode

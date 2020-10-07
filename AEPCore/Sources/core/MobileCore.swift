@@ -29,7 +29,7 @@ public final class MobileCore: NSObject {
     private static var wrapperType = WrapperType.none
 
     /// Pending extensions to be registered for legacy support
-    static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingextensions.queue")
+    static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
 
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
