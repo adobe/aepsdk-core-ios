@@ -16,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BB7798BA2523D71E003507D9"
-               BuildableName = "E2ETesting_FirstLaunch.xctest"
-               BlueprintName = "E2ETesting_FirstLaunch"
+               BlueprintIdentifier = "BBF55F4D251E494D00CAAC53"
+               BuildableName = "E2E_SwiftUITests.xctest"
+               BlueprintName = "E2E_SwiftUITests"
                ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
             </BuildableReference>
          </TestableReference>

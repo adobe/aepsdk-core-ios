@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1170"
+   LastUpgradeVersion = "1130"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3F912D9B24E1A75C00E2AC84"
-               BuildableName = "TestApp.app"
-               BlueprintName = "TestApp"
-               ReferencedContainer = "container:TestApp.xcodeproj">
+               BlueprintIdentifier = "BBF5EE242512BA0B0003265F"
+               BuildableName = "PerformanceApp.app"
+               BlueprintName = "PerformanceApp"
+               ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -28,16 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BBFDDD61251179EB0084A12F"
-               BuildableName = "PerformanceTests.xctest"
-               BlueprintName = "PerformanceTests"
-               ReferencedContainer = "container:TestApp.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -54,10 +44,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3F912D9B24E1A75C00E2AC84"
-            BuildableName = "TestApp.app"
-            BlueprintName = "TestApp"
-            ReferencedContainer = "container:TestApp.xcodeproj">
+            BlueprintIdentifier = "BBF5EE242512BA0B0003265F"
+            BuildableName = "PerformanceApp.app"
+            BlueprintName = "PerformanceApp"
+            ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -71,10 +61,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3F912D9B24E1A75C00E2AC84"
-            BuildableName = "TestApp.app"
-            BlueprintName = "TestApp"
-            ReferencedContainer = "container:TestApp.xcodeproj">
+            BlueprintIdentifier = "BBF5EE242512BA0B0003265F"
+            BuildableName = "PerformanceApp.app"
+            BlueprintName = "PerformanceApp"
+            ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

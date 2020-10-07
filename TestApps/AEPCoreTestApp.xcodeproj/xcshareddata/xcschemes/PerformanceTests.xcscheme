@@ -16,9 +16,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BBF55F4D251E494D00CAAC53"
-               BuildableName = "E2ETestingUITests.xctest"
-               BlueprintName = "E2ETestingUITests"
+               BlueprintIdentifier = "BBFDDD61251179EB0084A12F"
+               BuildableName = "PerformanceTests.xctest"
+               BlueprintName = "PerformanceTests"
                ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
             </BuildableReference>
          </TestableReference>

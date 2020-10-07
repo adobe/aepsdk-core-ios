@@ -279,7 +279,7 @@
 		3FB58F91252CE33B009C1358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3FB58F93252CE33B009C1358 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FB58FA6252CFFD4009C1358 /* MyExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyExtension.swift; sourceTree = "<group>"; };
-		BBF55F4E251E494D00CAAC53 /* E2ETestingUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E2ETestingUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E2E_SwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = E2ETestingUITests.swift; sourceTree = "<group>"; };
 		BBF55F54251E494D00CAAC53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BBF5EE252512BA0B0003265F /* PerformanceApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PerformanceApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -377,7 +377,7 @@
 				BBFDDD63251179EB0084A12F /* PerformanceTests */,
 				BBF5EE262512BA0B0003265F /* PerformanceApp */,
 				3FB58F84252CE33A009C1358 /* E2E_Swift */,
-				BBF55F51251E494D00CAAC53 /* E2ETestingUITests */,
+				BBF55F51251E494D00CAAC53 /* E2E_SwiftUITests */,
 				3FAD091125267460000D207D /* TestApp_Objc */,
 				3F912D9D24E1A75C00E2AC84 /* Products */,
 				3F912DB324E1A78400E2AC84 /* Frameworks */,
@@ -389,7 +389,7 @@
 			children = (
 				BBFDDD62251179EB0084A12F /* PerformanceTests.xctest */,
 				BBF5EE252512BA0B0003265F /* PerformanceApp.app */,
-				BBF55F4E251E494D00CAAC53 /* E2ETestingUITests.xctest */,
+				BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */,
 				3FAD091025267460000D207D /* TestApp_Objc.app */,
 				3FB58F83252CE33A009C1358 /* E2E_Swift.app */,
 			);
@@ -440,13 +440,13 @@
 			path = E2E_Swift;
 			sourceTree = "<group>";
 		};
-		BBF55F51251E494D00CAAC53 /* E2ETestingUITests */ = {
+		BBF55F51251E494D00CAAC53 /* E2E_SwiftUITests */ = {
 			isa = PBXGroup;
 			children = (
 				BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */,
 				BBF55F54251E494D00CAAC53 /* Info.plist */,
 			);
-			path = E2ETestingUITests;
+			path = E2E_SwiftUITests;
 			sourceTree = "<group>";
 		};
 		BBF5EE262512BA0B0003265F /* PerformanceApp */ = {
@@ -525,9 +525,9 @@
 			productReference = 3FB58F83252CE33A009C1358 /* E2E_Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BBF55F4D251E494D00CAAC53 /* E2ETestingUITests */ = {
+		BBF55F4D251E494D00CAAC53 /* E2E_SwiftUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2ETestingUITests" */;
+			buildConfigurationList = BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2E_SwiftUITests" */;
 			buildPhases = (
 				BBF55F4A251E494D00CAAC53 /* Sources */,
 				BBF55F4B251E494D00CAAC53 /* Frameworks */,
@@ -538,9 +538,9 @@
 			dependencies = (
 				3FB58FAB252E1682009C1358 /* PBXTargetDependency */,
 			);
-			name = E2ETestingUITests;
+			name = E2E_SwiftUITests;
 			productName = E2ETestingUITests;
-			productReference = BBF55F4E251E494D00CAAC53 /* E2ETestingUITests.xctest */;
+			productReference = BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		BBF5EE242512BA0B0003265F /* PerformanceApp */ = {
@@ -629,9 +629,9 @@
 			targets = (
 				BBFDDD61251179EB0084A12F /* PerformanceTests */,
 				BBF5EE242512BA0B0003265F /* PerformanceApp */,
-				BBF55F4D251E494D00CAAC53 /* E2ETestingUITests */,
 				3FAD090F25267460000D207D /* TestApp_Objc */,
 				3FB58F82252CE33A009C1358 /* E2E_Swift */,
+				BBF55F4D251E494D00CAAC53 /* E2E_SwiftUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1099,7 +1099,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
-				INFOPLIST_FILE = E2ETestingUITests/Info.plist;
+				INFOPLIST_FILE = E2E_SwiftUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1121,7 +1121,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
-				INFOPLIST_FILE = E2ETestingUITests/Info.plist;
+				INFOPLIST_FILE = E2E_SwiftUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1248,7 +1248,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2ETestingUITests" */ = {
+		BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2E_SwiftUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BBF55F59251E494D00CAAC53 /* Debug */,
