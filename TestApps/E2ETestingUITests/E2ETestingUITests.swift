@@ -13,27 +13,44 @@ import XCTest
 
 class E2ETestingUITests: XCTestCase {
 
-    override func setUpWithError() throws {
+    override func setUp()  {
         continueAfterFailure = true
+    }
+
+    override func tearDown() {
+
+    }
+
+    func testFirstLaunchRule() throws {
+        let app = XCUIApplication()
+        app.launch()
+        app.buttons["Clear Caches/UserDefault"].tap()
+        app.buttons["Load AEP SDK"].tap()
+        XCTAssert(app.staticTexts["Eventhub Booted"].waitForExistence(timeout: 5))
+        sleep(3)
+        app.buttons["Verify First Launch Rules"].tap()
+        XCTAssert(app.staticTexts["Install event got evaluated"].waitForExistence(timeout: 5))
+    }
+
+    func testAttachDataRule() throws {
+
         let app = XCUIApplication()
         app.launch()
         app.buttons["Load AEP SDK"].tap()
         XCTAssert(app.staticTexts["Eventhub Booted"].waitForExistence(timeout: 5))
-    }
 
-    override func tearDownWithError() throws {
-
-    }
-
-    func testAttachDataRule() throws {
-        let app = XCUIApplication()
-        app.buttons["Verify Attach Data Rule"].tap()
+        app.buttons["Verify Attach Data Rules"].tap()
         XCTAssert(app.staticTexts["Catch the track action event with attached data"].waitForExistence(timeout: 5))
     }
 
     func testModifyDataRule() throws {
+
         let app = XCUIApplication()
-        app.buttons["Verify Modify Data Rule"].tap()
+        app.launch()
+        app.buttons["Load AEP SDK"].tap()
+        XCTAssert(app.staticTexts["Eventhub Booted"].waitForExistence(timeout: 5))
+
+        app.buttons["Verify Modify Data Rules"].tap()
         XCTAssert(app.staticTexts["Catch the track action event with modified data"].waitForExistence(timeout: 5))
     }
 }
