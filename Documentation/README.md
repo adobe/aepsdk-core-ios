@@ -10,7 +10,7 @@
 * [Building Extensions](./EventHub/README.md)
     * [Services](./Services/README.md)
     * [Objective-C Compatiblity](./Contributing/ObjectiveC-Compatibility.md)
-* [Third Party Extensions](./ThirdParties/README.md)
+* [Third-Party Extension Support](./ThirdParties/README.md)
 * [Testing Strategy](./Testing/README.md)
 * [Architecture](./Architecture.md)
 * Contributing
