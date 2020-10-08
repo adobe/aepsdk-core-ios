@@ -35,6 +35,7 @@ coverage:
     - "./AEPSignal/Tests/.*"
     - "./TestApps"
     - "./Documentation"
+    - "./build"
 
 parsers:
   gcov:
