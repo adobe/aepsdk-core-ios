@@ -111,7 +111,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpectation], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: 3)
     }
 
     func testCrash() {
