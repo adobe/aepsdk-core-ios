@@ -36,7 +36,7 @@ git clone https://github.com/adobe/aep-sdk-compatibility-ios.git
 cd aep-sdk-compatibility
 make make-libs
 ```
-After running these commands, the `.xcframework's` can be found within the build directory. Drag and drop these into an Xcode project and ensure that "copy items if needed" is checked.
+After running these commands, the `.xcframework` can be found within the build directory. Drag and drop these into an Xcode project and ensure that "copy items if needed" is checked.
 
 ## Sample Apps
 

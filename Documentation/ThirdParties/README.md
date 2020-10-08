@@ -1,6 +1,6 @@
-# Third Party Extension Support
+# Third-Party Extension Support
 
-All third party extensions built on the previous generation of the Adobe Experience Platform will be compatible with the latest AEP Swift SDK. Using existing third party extensions in AEP Swift can be achieved by using a compatibility layer to bridge between the legacy ACPCore and the new AEPCore. The following documents guide partners who have developed an extension and for customers who are currently using third party extensions.
+All third-party extensions built on the previous generation of the Adobe Experience Platform will be compatible with the latest AEP Swift SDK. Using existing third party extensions in AEP Swift can be achieved by using a compatibility layer to bridge between the legacy ACPCore and the new AEPCore. The following documents guide partners who have developed an extension and for customers who are currently using third party extensions.
 
 ## Contents
 
