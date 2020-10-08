@@ -18,7 +18,7 @@ Now that the backwards compatibility layer is installed, `ACPCore` can be import
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-+  // Register any third party extensions before `registerExtensions`
++  // Register any third-party extensions before `registerExtensions`
 +  ThirdPartyExtension.registerExtension()
 +  ACPCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, ...], {
 +     //...
