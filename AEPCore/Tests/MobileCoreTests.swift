@@ -102,36 +102,36 @@ class MobileCoreTests: XCTestCase {
         wait(for: [expectation], timeout: 2)
     }
 
-    func testRegisterExtensionsSimpleEventDispatch() {
-        let expectation = XCTestExpectation(description: "expected event seen")
-        expectation.expectedFulfillmentCount = 1
-        expectation.assertForOverFulfill = true
-
-        MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
-
-        // test
-        MobileCore.registerExtensions([MockExtension.self])
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
-
-        // verify
-        wait(for: [expectation], timeout: 1)
-    }
-
-    func testRegisterExtensionsDispatchEventBeforeRegister() {
-        // setup
-        let expectation = XCTestExpectation(description: "expected event seen")
-        expectation.expectedFulfillmentCount = 1
-        expectation.assertForOverFulfill = true
-
-        MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
-
-        // test
-        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
-        MobileCore.registerExtensions([MockExtension.self])
-
-        // verify
-        wait(for: [expectation], timeout: 1)
-    }
+//    func testRegisterExtensionsSimpleEventDispatch() {
+//        let expectation = XCTestExpectation(description: "expected event seen")
+//        expectation.expectedFulfillmentCount = 1
+//        expectation.assertForOverFulfill = true
+//
+//        MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
+//
+//        // test
+//        MobileCore.registerExtensions([MockExtension.self])
+//        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
+//
+//        // verify
+//        wait(for: [expectation], timeout: 1)
+//    }
+//
+//    func testRegisterExtensionsDispatchEventBeforeRegister() {
+//        // setup
+//        let expectation = XCTestExpectation(description: "expected event seen")
+//        expectation.expectedFulfillmentCount = 1
+//        expectation.assertForOverFulfill = true
+//
+//        MockExtension.eventReceivedClosure = { if $0.name == "test-event" { expectation.fulfill() } }
+//
+//        // test
+//        EventHub.shared.dispatch(event: Event(name: "test-event", type: EventType.analytics, source: EventSource.requestContent, data: nil))
+//        MobileCore.registerExtensions([MockExtension.self])
+//
+//        // verify
+//        wait(for: [expectation], timeout: 1)
+//    }
 
     func testRegisterMultipleExtensionsSimpleEventDispatch() {
         // setup
