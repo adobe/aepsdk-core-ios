@@ -16,4 +16,4 @@ Provides a specification for **Events**, which are the objects that allow data t
 
 ## [Building Extensions](BuildingExtensions.md)
 
-**Extensions** allow developers to extend the functionality of the AEP SDKs with their code. Third party extensions are first-class citizens in this ecosystem, and are given access to all of the same features and services provided to first party extensions.
+**Extensions** allow developers to extend the functionality of the AEP SDKs with their code. Third-party extensions are first-class citizens in this ecosystem, and are given access to all of the same features and services provided to first party extensions.

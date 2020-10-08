@@ -1,4 +1,4 @@
-# Third party Extension Support for Customers
+# Third-party Extension Support for Customers
 
 All existing third-party extensions are compatible with the AEP Swift SDK. Using third-party extensions will need to use the backward compatibility layer and update how extensions are registered. This document will walk through the steps to get setup using third-party extensions in the AEP Swift SDK.
 
@@ -18,7 +18,7 @@ Now that the backwards compatibility layer is installed, `ACPCore` can be import
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-+  // Register any third party extensions before `registerExtensions`
++  // Register any third-party extensions before `registerExtensions`
 +  ThirdPartyExtension.registerExtension()
 +  ACPCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, ...], {
 +     //...

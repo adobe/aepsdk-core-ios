@@ -2,7 +2,7 @@
 
 This guide walks through how to get up and running with the AEP Swift SDK with only a few lines of code.
 
-> Existing ACP SDK customers should check out the [migration document](./Migration/ACP-Migration.md).
+> Existing ACP SDK customers should check out the [migration document](./Migration/Migration_Install.md).
 
 ## Set up a Mobile Property
 
@@ -92,7 +92,7 @@ To download more examples of integrating the AEP Swift SDK, head over to the sam
 
 ## Next Steps
 
-- Get familiar with the various APIs offered by the AEP SDK by checking out the [API usage documents](./Usage/). 
+- Get familiar with the various APIs offered by the AEP SDK by checking out the [API usage documents](./Usage/README.md). 
 - Integrate with the [ Experience Platform Extension](https://github.com/adobe/aepsdk-platform-ios). 
 - Validate SDK implementation with [Assurance](./Debugging.md).
 - To build an extension on-top of the AEP SDK, check out the [Building Extensions documentation](./EventHub/BuildingExtensions.md).

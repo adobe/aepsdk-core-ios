@@ -69,7 +69,7 @@ public class Identity: NSObject, Extension {
 
 > Note: In the above example, the Swift class is named `Identity` but renamed to `AEPMobileIdentity` following the 3-letter prefix for Objective-C. Keep in mind that types cannot share names with their containing framework, due to Swift limitations.
 
-Calling `super.init()` in the required initializer should happen after all class properties have been initialized.
+Invoking `super.init()` in the required initializer should happen after all class properties have been initialized.
 
 ```swift
 public required init(runtime: ExtensionRuntime) {
