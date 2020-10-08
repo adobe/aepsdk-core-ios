@@ -99,7 +99,7 @@ class MobileCoreTests: XCTestCase {
 
 
         // verify
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: 2)
     }
 
     func testRegisterExtensionsSimpleEventDispatch() {
