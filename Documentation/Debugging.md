@@ -1,6 +1,6 @@
 # Implementation Validation with Assurance
 
-The AEP SDK offers an extension to inspect quickly, validate, debug data collection, and experiences for any mobile app using the AEP SDK. We built Assurance to do the heavy lifting of getting an SDK implementation right, so app developers can focus on creating engaging experiences.
+The AEP SDK offers an extension to quickly inspect, validate, debug data collection, and experiences for any mobile app using the AEP SDK. We built Assurance to do the heavy lifting of getting an SDK implementation right, so app developers can focus on creating engaging experiences.
 
 ## Quick Setup
 
@@ -21,14 +21,18 @@ pod 'AEPAssurance'
 Now that the backward compatible layer is installed, `ACPCore` can now be imported into the `AppDelegate` file allowing Assurance to be registered. Replace usage of `MobileCore.registerExtensions` with `ACPCore.registerExtensions` while including the Assurance extension.
 
 ```diff
++ import ACPCore
 + import AEPAssurance
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-+  AEPAssurance.registerExtension()
-   MobileCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, ...], {
-      //...
-   })  
++  AEPAssurance.registerExtension()  
++  ACPCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, ...], {
++     //...
++  })
+-  MobileCore.registerExtensions([Lifecycle.self, Identity.self, Signal.self, ...], {
+-      //...
+-  })
 
   return true
 } 
