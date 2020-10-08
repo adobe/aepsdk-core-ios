@@ -10,10 +10,12 @@ coverage:
   status:
     project:
       default:
-        informational: true
+        target: 85%
+        threshold: 5%
     patch:
       default:
-        informational: true
+        target: 85%
+        threshold: 5%
     changes: no
 
   ignore:
