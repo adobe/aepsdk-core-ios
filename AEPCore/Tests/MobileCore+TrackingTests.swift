@@ -46,7 +46,7 @@ class MobileCoreTrackingTests: XCTestCase {
         EventHub.shared.start()
         
         // test
-        MobileCore.trackAction(expectedAction, data: expectedContextData)
+        MobileCore.track(action: expectedAction, data: expectedContextData)
         
         // verify
         wait(for: [expectation], timeout: 1)
@@ -68,7 +68,7 @@ class MobileCoreTrackingTests: XCTestCase {
         EventHub.shared.start()
         
         // test
-        MobileCore.trackState(expectedState, data: expectedContextData)
+        MobileCore.track(state: expectedState, data: expectedContextData)
         
         // verify
         wait(for: [expectation], timeout: 1)

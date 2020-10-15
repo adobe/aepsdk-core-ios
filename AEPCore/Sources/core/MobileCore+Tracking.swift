@@ -20,7 +20,7 @@ public extension MobileCore {
     ///   - action: `String` representing the name of the action to be tracked
     ///   - data: Dictionary of data to attach to the dispatched `Event`
     @objc(trackAction:data:)
-    static func trackAction(_ action: String?, data: [String: Any]?) {
+    static func track(action: String?, data: [String: Any]?) {
         var eventData: [String: Any] = [:]
         eventData[CoreConstants.Keys.CONTEXT_DATA] = data
         eventData[CoreConstants.Keys.ACTION] = action
@@ -32,7 +32,7 @@ public extension MobileCore {
     ///   - state: `String` representing the name of the state to be tracked
     ///   - data: Dictionary of data to attach to the dispatched `Event`
     @objc(trackState:data:)
-    static func trackState(_ state: String?, data: [String: Any]?) {
+    static func track(state: String?, data: [String: Any]?) {
         var eventData: [String: Any] = [:]
         eventData[CoreConstants.Keys.CONTEXT_DATA] = data
         eventData[CoreConstants.Keys.STATE] = state
