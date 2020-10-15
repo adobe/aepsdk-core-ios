@@ -128,7 +128,10 @@ public class Lifecycle: NSObject, Extension {
             LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0.0,
         ]
 
-        let startEvent = Event(name: "LifecycleStart", type: EventType.lifecycle, source: EventSource.responseContent, data: eventData)
+        let startEvent = Event(name: LifecycleConstants.EventNames.LIFECYCLE_START,
+                               type: EventType.lifecycle,
+                               source: EventSource.responseContent,
+                               data: eventData)
         Log.trace(label: LifecycleConstants.LOG_TAG, "Dispatching lifecycle start event with data: \(eventData)")
         dispatch(event: startEvent)
     }

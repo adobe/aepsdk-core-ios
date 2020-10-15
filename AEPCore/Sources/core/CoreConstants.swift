@@ -29,6 +29,8 @@ enum CoreConstants {
         static let COLLECT_DATA = "CollectData"
         static let CONFIGURE_WITH_APP_ID = "Configure with AppId"
         static let CONFIGURE_WITH_FILE_PATH = "Configure with FilePath"
+        static let CONFIGURATION_REQUEST_EVENT = "Configuration Request Event"
+        static let CONFIGURATION_RESPONSE_EVENT = "Configuration Response Event"
         static let CONFIGURATION_UPDATE = "Configuration Update"
         static let GET_SDK_IDENTITIES = "GetSdkIdentities Event"
         static let LIFECYCLE_PAUSE = "LifecyclePause"

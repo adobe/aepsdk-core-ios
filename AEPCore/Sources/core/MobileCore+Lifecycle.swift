@@ -30,6 +30,7 @@ public extension MobileCore {
     /// Pauses the current lifecycle session. Calling pause on an already paused session updates the paused timestamp,
     /// having the effect of resetting the session timeout timer. If no lifecycle session is running,
     /// then calling this method does nothing.
+    @objc(lifecyclePause)
     static func lifecyclePause() {
         let data = [CoreConstants.Keys.ACTION: CoreConstants.Lifecycle.PAUSE]
         let event = Event(name: CoreConstants.EventNames.LIFECYCLE_PAUSE, type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
