@@ -21,9 +21,9 @@ public extension MobileCore {
     /// - Parameter additionalContextData: Optional additional context for this session.
     @objc(lifecycleStart:)
     static func lifecycleStart(additionalContextData: [String: Any]?) {
-        let data: [String: Any] = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.START,
+        let data: [String: Any] = [CoreConstants.Keys.ACTION: CoreConstants.Lifecycle.START,
                                    CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
-        let event = Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
+        let event = Event(name: CoreConstants.EventNames.LIFECYCLE_RESUME, type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
 
@@ -31,8 +31,8 @@ public extension MobileCore {
     /// having the effect of resetting the session timeout timer. If no lifecycle session is running,
     /// then calling this method does nothing.
     static func lifecyclePause() {
-        let data = [CoreConstants.Keys.ACTION_KEY: CoreConstants.Lifecycle.PAUSE]
-        let event = Event(name: "Lifecycle Pause", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
+        let data = [CoreConstants.Keys.ACTION: CoreConstants.Lifecycle.PAUSE]
+        let event = Event(name: CoreConstants.EventNames.LIFECYCLE_PAUSE, type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
 }

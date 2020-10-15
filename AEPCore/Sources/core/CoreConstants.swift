@@ -23,8 +23,26 @@ enum CoreConstants {
     static let API_TIMEOUT = TimeInterval(1) // 1 second
     static let ENVIRONMENT_PREFIX_DELIMITER = "__"
 
+    enum EventNames {
+        static let ANALYTICS_TRACK = "AnalyticsTrack"
+        static let COLLECT_PII = "CollectPii"
+        static let COLLECT_DATA = "CollectData"
+        static let CONFIGURE_WITH_APP_ID = "Configure with AppId"
+        static let CONFIGURE_WITH_FILE_PATH = "Configure with FilePath"
+        static let CONFIGURATION_UPDATE = "Configuration Update"
+        static let GET_SDK_IDENTITIES = "GetSdkIdentities Event"
+        static let LIFECYCLE_PAUSE = "LifecyclePause"
+        static let LIFECYCLE_RESUME = "LifecycleResume"
+        static let PRIVACY_STATUS_REQUEST = "PrivacyStatusRequest"
+        static let REFRESH_RULES = "Refresh Rules"
+        static let SET_PUSH_IDENTIFIER = "SetPushIdentifier"
+        static let SET_ADVERTISING_IDENTIFIER = "SetAdvertisingIdentifier"
+    }
+
     enum Keys {
-        static let ACTION_KEY = "action"
+        static let ACTION = "action"
+        static let STATE = "state"
+        static let CONTEXT_DATA = "contextdata"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
         static let UPDATE_CONFIG = "config.update"
