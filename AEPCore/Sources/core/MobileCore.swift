@@ -97,7 +97,7 @@ public final class MobileCore: NSObject {
     @objc(setAdvertisingIdentifier:)
     public static func setAdvertisingIdentifier(adId: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
-        let event = Event(name: "SetAdvertisingIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
+        let event = Event(name: CoreConstants.EventNames.SET_ADVERTISING_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
 
@@ -107,7 +107,7 @@ public final class MobileCore: NSObject {
     public static func setPushIdentifier(deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
-        let event = Event(name: "SetPushIdentifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
+        let event = Event(name: CoreConstants.EventNames.SET_PUSH_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
 
@@ -142,7 +142,7 @@ public final class MobileCore: NSObject {
             return
         }
 
-        let event = Event(name: "CollectMessageData", type: EventType.genericData, source: EventSource.os, data: messageInfo)
+        let event = Event(name: CoreConstants.EventNames.COLLECT_DATA, type: EventType.genericData, source: EventSource.os, data: messageInfo)
         MobileCore.dispatch(event: event)
     }
 
@@ -156,7 +156,7 @@ public final class MobileCore: NSObject {
         }
 
         let eventData = [CoreConstants.Signal.EventDataKeys.CONTEXT_DATA: data]
-        let event = Event(name: "collectPii", type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
+        let event = Event(name: CoreConstants.EventNames.COLLECT_PII, type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
         MobileCore.dispatch(event: event)
     }
 }

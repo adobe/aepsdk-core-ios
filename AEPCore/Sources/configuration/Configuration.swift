@@ -54,7 +54,7 @@ class Configuration: Extension {
         configState.loadInitialConfig()
         let config = configState.environmentAwareConfiguration
         if !config.isEmpty {
-            let responseEvent = Event(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: config)
+            let responseEvent = Event(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: config)
             dispatch(event: responseEvent)
             createSharedState(data: config, event: nil)
             // notify rules engine to load cached rules
@@ -196,14 +196,17 @@ class Configuration: Extension {
     ///   - triggerEvent: The `Event` to which the newly dispatched `Event` is responding
     ///   - data: Optional data to be attached to the event
     private func dispatchConfigurationResponse(triggerEvent: Event, data: [String: Any]?) {
-        let responseEvent = triggerEvent.createResponseEvent(name: "Configuration Response Event", type: EventType.configuration, source: EventSource.responseContent, data: data)
+        let responseEvent = triggerEvent.createResponseEvent(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
         dispatch(event: responseEvent)
     }
 
     /// Dispatches a configuration request content event with corresponding data
     /// - Parameter data: Data to be attached to the event
     private func dispatchConfigurationRequest(data: [String: Any]) {
-        let event = Event(name: "Configuration Request Event", type: EventType.configuration, source: EventSource.requestContent, data: data)
+        let event = Event(name: CoreConstants.EventNames.CONFIGURATION_REQUEST_EVENT,
+                          type: EventType.configuration,
+                          source: EventSource.requestContent,
+                          data: data)
         dispatch(event: event)
     }
 

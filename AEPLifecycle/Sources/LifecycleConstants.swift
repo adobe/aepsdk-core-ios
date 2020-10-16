@@ -29,6 +29,10 @@ enum LifecycleConstants {
         static let CONFIGURATION = "com.adobe.module.configuration"
     }
 
+    enum EventNames {
+        static let LIFECYCLE_START = "LifecycleStart"
+    }
+
     enum EventDataKeys {
         static let ACTION_KEY = "action"
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
