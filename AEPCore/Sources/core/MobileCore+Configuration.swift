@@ -21,7 +21,7 @@ public extension MobileCore {
     /// download, the updated file is downloaded and replaces the cached file.
     /// - Parameter appId: A unique identifier assigned to the app instance by Adobe Launch
     static func configureWith(appId: String) {
-        let event = Event(name: "Configure with AppId", type: EventType.configuration, source: EventSource.requestContent,
+        let event = Event(name: CoreConstants.EventNames.CONFIGURE_WITH_APP_ID, type: EventType.configuration, source: EventSource.requestContent,
                           data: [CoreConstants.Keys.JSON_APP_ID: appId])
         MobileCore.dispatch(event: event)
     }
@@ -30,7 +30,7 @@ public extension MobileCore {
     /// the configuration from the file at `filePath` is not preserved and this method must be called again if desired.
     /// - Parameter filePath: Absolute path to a local configuration file.
     static func configureWith(filePath: String) {
-        let event = Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
+        let event = Event(name: CoreConstants.EventNames.CONFIGURE_WITH_FILE_PATH, type: EventType.configuration, source: EventSource.requestContent,
                           data: [CoreConstants.Keys.JSON_FILE_PATH: filePath])
         MobileCore.dispatch(event: event)
     }
@@ -43,7 +43,7 @@ public extension MobileCore {
     /// - Parameter configDict: configuration key/value pairs to be updated or added.
     @objc(updateConfiguration:)
     static func updateConfigurationWith(configDict: [String: Any]) {
-        let event = Event(name: "Configuration Update", type: EventType.configuration, source: EventSource.requestContent,
+        let event = Event(name: CoreConstants.EventNames.CONFIGURATION_UPDATE, type: EventType.configuration, source: EventSource.requestContent,
                           data: [CoreConstants.Keys.UPDATE_CONFIG: configDict])
         MobileCore.dispatch(event: event)
     }
@@ -61,7 +61,7 @@ public extension MobileCore {
     /// - Parameter completion: Invoked with the current `PrivacyStatus`
     @objc(getPrivacyStatus:)
     static func getPrivacyStatus(completion: @escaping (PrivacyStatus) -> Void) {
-        let event = Event(name: "Privacy Status Request", type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
+        let event = Event(name: CoreConstants.EventNames.PRIVACY_STATUS_REQUEST, type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.RETRIEVE_CONFIG: true])
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: CoreConstants.API_TIMEOUT) { responseEvent in
             guard let privacyStatusString = responseEvent?.data?[CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY] as? String else {
@@ -77,7 +77,7 @@ public extension MobileCore {
     /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format and an `AEPError` if the request failed
     @objc(getSdkIdentities:)
     static func getSdkIdentities(completion: @escaping (String?, AEPError) -> Void) {
-        let event = Event(name: "GetSdkIdentities", type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
+        let event = Event(name: CoreConstants.EventNames.GET_SDK_IDENTITIES, type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { responseEvent in
             guard let responseEvent = responseEvent else {
