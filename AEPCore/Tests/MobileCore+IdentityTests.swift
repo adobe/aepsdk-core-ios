@@ -47,7 +47,7 @@ class MobileCore_IdentityTests: XCTestCase {
         })
 
         // test
-        MobileCore.setAdvertisingIdentifier(adId: "test-ad-id")
+        MobileCore.setAdvertisingIdentifier(identifier: "test-ad-id")
 
         // verify
         wait(for: [expectation], timeout: 1.0)
@@ -69,7 +69,7 @@ class MobileCore_IdentityTests: XCTestCase {
         })
 
         // test
-        MobileCore.setAdvertisingIdentifier(adId: nil)
+        MobileCore.setAdvertisingIdentifier(identifier: nil)
 
         // verify
         wait(for: [expectation], timeout: 1.0)

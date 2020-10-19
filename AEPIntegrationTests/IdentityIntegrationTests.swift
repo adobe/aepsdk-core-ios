@@ -139,7 +139,7 @@ class IdentityIntegrationTests: XCTestCase {
 
         let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.setAdvertisingIdentifier(adId: "adid")
+        MobileCore.setAdvertisingIdentifier(identifier: "adid")
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
         MobileCore.getSdkIdentities { identityString, error in
             XCTAssertTrue(identityString?.contains("DSID_20915") ?? false)
@@ -185,7 +185,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.setAdvertisingIdentifier(adId: "adid")
+        MobileCore.setAdvertisingIdentifier(identifier: "adid")
         wait(for: [requestExpectation], timeout: 1)
     }
 
