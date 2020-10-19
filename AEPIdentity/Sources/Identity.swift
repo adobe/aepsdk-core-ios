@@ -121,7 +121,10 @@ import Foundation
     /// - Parameter event: The event coming from the getSdkIdentities API
     private func receiveConfigurationIdentity(event: Event) {
         if shouldIgnore(event: event) {
-            let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: EventType.configuration, source: EventSource.responseIdentity, data: nil)
+            let responseEvent = event.createResponseEvent(name: IdentityConstants.EventNames.CONFIGURATION_RESPONSE_IDENTITY_EVENT,
+                                                          type: EventType.configuration,
+                                                          source: EventSource.responseIdentity,
+                                                          data: nil)
             dispatch(event: responseEvent)
             Log.debug(label: "\(name):\(#function)", "Ignore Configuration Identity event, user is currently opted-out")
             return
@@ -137,7 +140,10 @@ import Foundation
 
         let identitiesStr = String(data: encodedIdentities, encoding: .utf8)
         let eventData = [IdentityConstants.Configuration.ALL_IDENTIFIERS: identitiesStr]
-        let responseEvent = event.createResponseEvent(name: "Configuration Response Identity Event", type: EventType.configuration, source: EventSource.responseIdentity, data: eventData as [String: Any])
+        let responseEvent = event.createResponseEvent(name: IdentityConstants.EventNames.CONFIGURATION_RESPONSE_IDENTITY_EVENT,
+                                                      type: EventType.configuration,
+                                                      source: EventSource.responseIdentity,
+                                                      data: eventData as [String: Any])
         dispatch(event: responseEvent)
     }
 
@@ -150,7 +156,10 @@ import Foundation
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with updated url
-        let responseEvent = event.createResponseEvent(name: "Identity Appended URL", type: EventType.identity, source: EventSource.responseIdentity, data: [IdentityConstants.EventDataKeys.UPDATED_URL: updatedUrl])
+        let responseEvent = event.createResponseEvent(name: IdentityConstants.EventNames.IDENTITY_APPENDED_URL,
+                                                      type: EventType.identity,
+                                                      source: EventSource.responseIdentity,
+                                                      data: [IdentityConstants.EventDataKeys.UPDATED_URL: updatedUrl])
         dispatch(event: responseEvent)
     }
 
@@ -161,13 +170,19 @@ import Foundation
         let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with url variables
-        let responseEvent = event.createResponseEvent(name: "Identity URL Variables", type: EventType.identity, source: EventSource.responseIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: urlVariables])
+        let responseEvent = event.createResponseEvent(name: IdentityConstants.EventNames.IDENTITY_URL_VARIABLES,
+                                                      type: EventType.identity,
+                                                      source: EventSource.responseIdentity,
+                                                      data: [IdentityConstants.EventDataKeys.URL_VARIABLES: urlVariables])
         dispatch(event: responseEvent)
     }
 
     private func processIdentifiersRequest(event: Event) {
         let eventData = state?.identityProperties.toEventData()
-        let responseEvent = event.createResponseEvent(name: "Identity Response Content", type: EventType.identity, source: EventSource.responseIdentity, data: eventData)
+        let responseEvent = event.createResponseEvent(name: IdentityConstants.EventNames.IDENTITY_RESPONSE_CONTENT_ONE_TIME,
+                                                      type: EventType.identity,
+                                                      source: EventSource.responseIdentity,
+                                                      data: eventData)
 
         // dispatch identity response event with shared state data
         dispatch(event: responseEvent)

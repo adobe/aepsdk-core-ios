@@ -160,11 +160,17 @@ class IdentityState {
 
         // dispatch events
         let eventData = identityProperties.toEventData()
-        let updatedIdentityEvent = Event(name: "Updated Identity Response", type: EventType.identity, source: EventSource.responseIdentity, data: eventData)
+        let updatedIdentityEvent = Event(name: IdentityConstants.EventNames.UPDATED_IDENTITY_RESPONSE,
+                                         type: EventType.identity,
+                                         source: EventSource.responseIdentity,
+                                         data: eventData)
         eventDispatcher(updatedIdentityEvent)
 
         if let data = hit.data, let hit = try? JSONDecoder().decode(IdentityHit.self, from: data) {
-            let identityResponse = hit.event.createResponseEvent(name: "Updated Identity Response", type: EventType.identity, source: EventSource.responseIdentity, data: eventData)
+            let identityResponse = hit.event.createResponseEvent(name: IdentityConstants.EventNames.UPDATED_IDENTITY_RESPONSE,
+                                                                 type: EventType.identity,
+                                                                 source: EventSource.responseIdentity,
+                                                                 data: eventData)
             eventDispatcher(identityResponse)
         }
     }
@@ -322,7 +328,10 @@ class IdentityState {
         if let optOutList = identityResponse.optOutList, !optOutList.isEmpty {
             // Received opt-out response from ECID Service, so updating the privacy status in the configuration to opt-out.
             let updateConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue]
-            let event = Event(name: "Configuration Update From IdentityExtension", type: EventType.configuration, source: EventSource.requestContent, data: [IdentityConstants.Configuration.UPDATE_CONFIG: updateConfig])
+            let event = Event(name: IdentityConstants.EventNames.CONFIGURATION_UPDATE_FROM_IDENTITY_MODULE,
+                              type: EventType.configuration,
+                              source: EventSource.requestContent,
+                              data: [IdentityConstants.Configuration.UPDATE_CONFIG: updateConfig])
             eventDispatcher(event)
         }
 
