@@ -1,9 +1,9 @@
 Pod::Spec.new do |s|
   s.name             = "AEPIdentity"
-  s.version          = "0.0.1"
-  s.summary          = "AEPIdentity"
+  s.version          = "3.0.0-beta1"
+  s.summary          = "Identity extension for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
-AEPIdentity
+                        The AEPIdentity extension provides APIs that allow use of the Visitor ID services in the Adobe Experience Cloud SDK.
                         DESC
   s.homepage         = "https://github.com/adobe/aepsdk-core-ios"
   s.license          = 'Apache V2'
