@@ -42,7 +42,7 @@ class IdentityIntegrationTests: XCTestCase {
 
     func initExtensionsAndWait() {
         let initExpectation = XCTestExpectation(description: "init extensions")
-        MobileCore.setLogLevel(level: .trace)
+        MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
@@ -139,7 +139,7 @@ class IdentityIntegrationTests: XCTestCase {
 
         let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.setAdvertisingIdentifier(identifier: "adid")
+        MobileCore.setAdvertisingIdentifier("adid")
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
         MobileCore.getSdkIdentities { identityString, error in
             XCTAssertTrue(identityString?.contains("DSID_20915") ?? false)
@@ -165,7 +165,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.setPushIdentifier(deviceToken: "9516258b6230afdd93cf0cd07b8dd845".data(using: .utf8))
+        MobileCore.setPushIdentifier("9516258b6230afdd93cf0cd07b8dd845".data(using: .utf8))
 
         wait(for: [requestExpectation], timeout: 1)
     }
@@ -185,7 +185,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        MobileCore.setAdvertisingIdentifier(identifier: "adid")
+        MobileCore.setAdvertisingIdentifier("adid")
         wait(for: [requestExpectation], timeout: 1)
     }
 

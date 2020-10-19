@@ -95,7 +95,7 @@ public final class MobileCore: NSObject {
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
     @objc(setAdvertisingIdentifier:)
-    public static func setAdvertisingIdentifier(identifier: String?) {
+    public static func setAdvertisingIdentifier(_ identifier: String?) {
         let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: identifier ?? ""]
         let event = Event(name: CoreConstants.EventNames.SET_ADVERTISING_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
@@ -104,7 +104,7 @@ public final class MobileCore: NSObject {
     /// Submits a generic event containing the provided push token with event type `generic.identity`.
     /// - Parameter deviceToken: the device token for push notifications
     @objc(setPushIdentifier:)
-    public static func setPushIdentifier(deviceToken: Data?) {
+    public static func setPushIdentifier(_ deviceToken: Data?) {
         let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
         let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
         let event = Event(name: CoreConstants.EventNames.SET_PUSH_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
@@ -114,14 +114,14 @@ public final class MobileCore: NSObject {
     /// Sets the wrapper type for the SDK. Only applicable when being used in a cross platform environment such as React Native
     /// - Parameter type: the `WrapperType` corresponding to the current platform
     @objc(setWrapperType:)
-    public static func setWrapperType(type: WrapperType) {
+    public static func setWrapperType(_ type: WrapperType) {
         MobileCore.wrapperType = type
     }
 
     /// Sets the logging level for the SDK
     /// - Parameter level: The desired log level
     @objc(setLogLevel:)
-    public static func setLogLevel(level: LogLevel) {
+    public static func setLogLevel(_ level: LogLevel) {
         Log.logFilter = level
     }
 
@@ -129,14 +129,14 @@ public final class MobileCore: NSObject {
     /// This must be called in AppDidFinishLaunching and before any other interactions with the Adobe Mobile library have happened.
     /// - Parameter group: the app group name
     @objc(setAppGroup:)
-    public static func setAppGroup(group: String?) {
+    public static func setAppGroup(_ group: String?) {
         ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
     }
 
     /// For scenarios where the app is launched as a result of notification tap
     /// - Parameter messageInfo: Dictionary of data relevant to the expected use case
     @objc(collectMessageInfo:)
-    public static func collectMessageInfo(messageInfo: [String: Any]) {
+    public static func collectMessageInfo(_ messageInfo: [String: Any]) {
         guard !messageInfo.isEmpty else {
             Log.trace(label: LOG_TAG, "collectMessageInfo - data was empty, no event was dispatched")
             return
@@ -149,7 +149,7 @@ public final class MobileCore: NSObject {
     /// Submits a generic PII collection request event with type `generic.pii`.
     /// - Parameter data: a dictionary containing PII data
     @objc(collectPii:)
-    public static func collectPii(data: [String: Any]) {
+    public static func collectPii(_ data: [String: Any]) {
         guard !data.isEmpty else {
             Log.trace(label: LOG_TAG, "collectPii - data was empty, no event was dispatched")
             return

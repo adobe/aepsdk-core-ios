@@ -47,7 +47,7 @@ class MobileCore_IdentityTests: XCTestCase {
         })
 
         // test
-        MobileCore.setAdvertisingIdentifier(identifier: "test-ad-id")
+        MobileCore.setAdvertisingIdentifier("test-ad-id")
 
         // verify
         wait(for: [expectation], timeout: 1.0)
@@ -69,7 +69,7 @@ class MobileCore_IdentityTests: XCTestCase {
         })
 
         // test
-        MobileCore.setAdvertisingIdentifier(identifier: nil)
+        MobileCore.setAdvertisingIdentifier(nil)
 
         // verify
         wait(for: [expectation], timeout: 1.0)
@@ -94,7 +94,7 @@ class MobileCore_IdentityTests: XCTestCase {
         })
 
         // test
-        MobileCore.setPushIdentifier(deviceToken: pushIdData)
+        MobileCore.setPushIdentifier(pushIdData)
 
         // verify
         wait(for: [expectation], timeout: 1.0)
@@ -117,7 +117,7 @@ class MobileCore_IdentityTests: XCTestCase {
         })
 
         // test
-        MobileCore.setPushIdentifier(deviceToken: pushIdData)
+        MobileCore.setPushIdentifier(pushIdData)
 
         // verify
         wait(for: [expectation], timeout: 1.0)
@@ -139,7 +139,7 @@ class MobileCore_IdentityTests: XCTestCase {
         })
 
         // test
-        MobileCore.setPushIdentifier(deviceToken: nil)
+        MobileCore.setPushIdentifier(nil)
 
         // verify
         wait(for: [expectation], timeout: 1.0)

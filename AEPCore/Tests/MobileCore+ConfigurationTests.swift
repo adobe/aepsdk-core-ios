@@ -112,7 +112,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         }
 
         // test
-        MobileCore.setPrivacy(status: PrivacyStatus.optedIn)
+        MobileCore.setPrivacyStatus(.optedIn)
 
         // verify
         wait(for: [expectation], timeout: 1)
