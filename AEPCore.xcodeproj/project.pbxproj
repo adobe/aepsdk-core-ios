@@ -150,6 +150,7 @@
 		3F16762824F031A00041B970 /* EventHubContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762724F031A00041B970 /* EventHubContractTests.swift */; };
 		3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762924F032C60041B970 /* ContractExtensionOne.swift */; };
 		3F16762C24F032E60041B970 /* ContractExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762B24F032E60041B970 /* ContractExtensionTwo.swift */; };
+		3F1D71DD253DF0E900A11D84 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3F1D71DC253DF0E900A11D84 /* AEPRulesEngine */; };
 		3F2F12BB24F6D07E00600CB4 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */; };
 		3F2F12BC24F6D07E00600CB4 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */; };
 		3F2F12BD24F6D07E00600CB4 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
@@ -183,7 +184,6 @@
 		3F5D45F8251903030040E298 /* LaunchRuleTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */; };
 		3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */; };
 		3F5D45FD25190E8D0040E298 /* rules_testTransform.json in Resources */ = {isa = PBXBuildFile; fileRef = 3F5D45FC25190E8C0040E298 /* rules_testTransform.json */; };
-		3F5D460225195D280040E298 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3F5D460125195D280040E298 /* AEPRulesEngine */; };
 		3F5F9ED12502D34500C8A0B4 /* ConfigurationIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5F9ED02502D34500C8A0B4 /* ConfigurationIntegrationTests.swift */; };
 		3FB5F7D024D2848900F0F6DF /* ConfigurationUpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB5F7CF24D2848900F0F6DF /* ConfigurationUpdateTests.swift */; };
 		3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66A9E24CA004400502CAF /* CoreConstants.swift */; };
@@ -874,7 +874,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F5D460225195D280040E298 /* AEPRulesEngine in Frameworks */,
+				3F1D71DD253DF0E900A11D84 /* AEPRulesEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1777,12 +1777,12 @@
 			buildRules = (
 			);
 			dependencies = (
-				3FB58FD2252E196D009C1358 /* PBXTargetDependency */,
+				3F1D71ED253DF0FC00A11D84 /* PBXTargetDependency */,
 				3F03983D24BE63570019F095 /* PBXTargetDependency */,
 			);
 			name = AEPCore;
 			packageProductDependencies = (
-				3F5D460125195D280040E298 /* AEPRulesEngine */,
+				3F1D71DC253DF0E900A11D84 /* AEPRulesEngine */,
 			);
 			productName = AEPCore;
 			productReference = 21CAC0D62422917600C11388 /* AEPCore.framework */;
@@ -2105,7 +2105,7 @@
 			);
 			mainGroup = 21CAC0CC2422917600C11388;
 			packageReferences = (
-				3F5D460025195D280040E298 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
+				3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
 			);
 			productRefGroup = 21CAC0D72422917600C11388 /* Products */;
 			projectDirPath = "";
@@ -2785,6 +2785,10 @@
 			target = 3F03978624BE5DD30019F095 /* AEPServices */;
 			targetProxy = 3F03984024BE65120019F095 /* PBXContainerItemProxy */;
 		};
+		3F1D71ED253DF0FC00A11D84 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 3F1D71EC253DF0FC00A11D84 /* AEPRulesEngine */;
+		};
 		3F39152624CA34CA00B58C3E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 21CAC0D52422917600C11388 /* AEPCore */;
@@ -2839,10 +2843,6 @@
 			isa = PBXTargetDependency;
 			target = 24B4934E24D4C31100AA38D9 /* AEPSignal */;
 			targetProxy = 3F42570D24F47501005D4006 /* PBXContainerItemProxy */;
-		};
-		3FB58FD2252E196D009C1358 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 3FB58FD1252E196D009C1358 /* AEPRulesEngine */;
 		};
 		3FE6DDBE24C62DAB0065EA05 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -3801,25 +3801,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		3F5D460025195D280040E298 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
+		3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
 			requirement = {
-				branch = dev;
+				branch = main;
 				kind = branch;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3F5D460125195D280040E298 /* AEPRulesEngine */ = {
+		3F1D71DC253DF0E900A11D84 /* AEPRulesEngine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3F5D460025195D280040E298 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
+			package = 3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
 			productName = AEPRulesEngine;
 		};
-		3FB58FD1252E196D009C1358 /* AEPRulesEngine */ = {
+		3F1D71EC253DF0FC00A11D84 /* AEPRulesEngine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3F5D460025195D280040E298 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
+			package = 3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
 			productName = AEPRulesEngine;
 		};
 /* End XCSwiftPackageProductDependency section */
