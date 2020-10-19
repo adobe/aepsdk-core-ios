@@ -103,7 +103,7 @@ class ApplicationSystemInfoService: SystemInfoService {
 
     func getApplicationName() -> String? {
         guard let infoDict = bundle.infoDictionary,
-              let appName = infoDict["CFBundleName"] as? String ?? infoDict["CFBundleDisplayName"] as? String else {
+            let appName = infoDict["CFBundleName"] as? String ?? infoDict["CFBundleDisplayName"] as? String else {
             return nil
         }
 

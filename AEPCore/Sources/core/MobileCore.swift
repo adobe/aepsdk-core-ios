@@ -95,8 +95,8 @@ public final class MobileCore: NSObject {
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
     /// - Parameter identifier: the advertising identifier string.
     @objc(setAdvertisingIdentifier:)
-    public static func setAdvertisingIdentifier(adId: String?) {
-        let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: adId ?? ""]
+    public static func setAdvertisingIdentifier(identifier: String?) {
+        let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: identifier ?? ""]
         let event = Event(name: CoreConstants.EventNames.SET_ADVERTISING_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }
