@@ -62,7 +62,7 @@ enum LifecycleConstants {
 
     enum Identity {
         static let NAME = "com.adobe.module.identity"
-        struct EventDataKeys {
+        enum EventDataKeys {
             static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
         }
     }
