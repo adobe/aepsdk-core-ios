@@ -186,7 +186,7 @@ class IdentityIntegrationTests: XCTestCase {
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setAdvertisingIdentifier("adid")
-        wait(for: [requestExpectation], timeout: 1)
+        wait(for: [requestExpectation], timeout: 2)
     }
 
 }
