@@ -346,9 +346,10 @@ class IdentityState {
         }
 
         if let ecid = identityResponse.ecid, !ecid.isEmpty {
-            let shouldShareState = identityResponse.blob != identityProperties.blob || identityResponse.hint != identityProperties.locationHint
+            let stringHint: String? = identityResponse.hint == nil ? nil : "\(String(describing: identityResponse.hint!))"
+            let shouldShareState = identityResponse.blob != identityProperties.blob || stringHint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
-            identityProperties.locationHint = identityResponse.hint
+            identityProperties.locationHint = stringHint
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
             if shouldShareState {
                 createSharedState(identityProperties.toEventData(), event)

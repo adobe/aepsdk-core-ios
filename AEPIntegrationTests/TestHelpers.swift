@@ -30,7 +30,7 @@ extension UserDefaults {
 extension FileManager {
 
     func clearCache() {
-        if let url = self.urls(for: .cachesDirectory, in: .userDomainMask).first {
+        if let _ = self.urls(for: .cachesDirectory, in: .userDomainMask).first {
 
             do {
                 try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.module.signal"))

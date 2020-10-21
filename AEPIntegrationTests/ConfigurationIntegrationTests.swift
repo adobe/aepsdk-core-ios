@@ -48,7 +48,7 @@ class ConfigurationIntegrationTests: XCTestCase {
 
     func initExtensionsAndWait() {
         let initExpectation = XCTestExpectation(description: "init extensions")
-        MobileCore.setLogLevel(level: .trace)
+        MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
@@ -80,7 +80,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         }
         """.data(using: .utf8)
         mockRemoteConfig(for: "appid", with: configData)
-        MobileCore.setPrivacy(status: .optedOut)
+        MobileCore.setPrivacyStatus(.optedOut)
         XCTAssertEqual(.optedOut, getPrivacyStatus())
 
     }
