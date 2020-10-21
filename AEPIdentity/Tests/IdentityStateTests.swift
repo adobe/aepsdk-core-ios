@@ -610,13 +610,13 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
-        let entity = DataEntity.fakeDataEntity()
+        let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: nil)
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
+        state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
             XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
@@ -643,13 +643,13 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
-        let entity = DataEntity.fakeDataEntity()
+        let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
+        state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
@@ -675,13 +675,13 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
-        let entity = DataEntity.fakeDataEntity()
+        let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: "err message", optOutList: nil)
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
+        state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
@@ -707,13 +707,13 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedOut
-        let entity = DataEntity.fakeDataEntity()
+        let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: entity, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
+        state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
@@ -732,6 +732,7 @@ class IdentityStateTests: XCTestCase {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "One event should be dispatched")
         dispatchedEventExpectation.assertForOverFulfill = true
+        dispatchedEventExpectation.expectedFulfillmentCount = 2
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated as the response was empty")
         sharedStateExpectation.isInverted = true
 
@@ -742,7 +743,7 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
         // test
-        state.handleHitResponse(hit: DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: nil), response: nil, eventDispatcher: { _ in
+        state.handleHitResponse(hit: IdentityHit.fakeHit(), response: nil, eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
@@ -894,13 +895,12 @@ private extension Event {
     }
 }
 
-private extension DataEntity {
-    static func fakeDataEntity() -> DataEntity {
+private extension IdentityHit {
+    static func fakeHit() -> IdentityHit {
         let event = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: URL(string: "adobe.com")!, event: event)
-        let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
 
-        return entity
+        return hit
     }
 }
 
