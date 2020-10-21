@@ -20,7 +20,7 @@ struct IdentityHitResponse: Codable {
     let ecid: String?
 
     /// Location value as received in the visitor id service network response json.
-    let hint: String?
+    let hint: Int?
 
     /// Error value as received in the visitor id service network response json.
     let error: String?
