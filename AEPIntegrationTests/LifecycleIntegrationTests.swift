@@ -48,7 +48,7 @@ class LifecycleIntegrationTests: XCTestCase {
         ServiceProvider.shared.networkService = mockNetworkService
 
         let initExpectation = XCTestExpectation(description: "init extensions")
-        MobileCore.setLogLevel(level: .trace)
+        MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }

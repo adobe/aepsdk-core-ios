@@ -17,8 +17,8 @@ import XCTest
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
-        MobileCore.setWrapperType(type: .none) // reset wrapper type before each test
-        MobileCore.setLogLevel(level: .error) // reset log level to error before each test
+        MobileCore.setWrapperType(.none) // reset wrapper type before each test
+        MobileCore.setLogLevel(.error) // reset log level to error before each test
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
@@ -240,37 +240,37 @@ class MobileCoreTests: XCTestCase {
 
     // Tests that no wrapper tag is appended when the wrapper type is none
     func testSetWrapperTypeNone() {
-        MobileCore.setWrapperType(type: .none)
+        MobileCore.setWrapperType(.none)
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, MobileCore.extensionVersion)
     }
 
     /// Tests that the React Native wrapper tag is appended
     func testSetWrapperTypeReactNative() {
-        MobileCore.setWrapperType(type: .reactNative)
+        MobileCore.setWrapperType(.reactNative)
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-R", MobileCore.extensionVersion)
     }
 
     /// Tests that the Flutter wrapper tag is appended
     func testSetWrapperTypeFlutter() {
-        MobileCore.setWrapperType(type: .flutter)
+        MobileCore.setWrapperType(.flutter)
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-F", MobileCore.extensionVersion)
     }
 
     /// Tests that the Cordova wrapper tag is appended
     func testSetWrapperTypeCordova() {
-        MobileCore.setWrapperType(type: .cordova)
+        MobileCore.setWrapperType(.cordova)
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-C", MobileCore.extensionVersion)
     }
 
     /// Tests that the Unity wrapper tag is appended
     func testSetWrapperTypeUnity() {
-        MobileCore.setWrapperType(type: .unity)
+        MobileCore.setWrapperType(.unity)
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-U", MobileCore.extensionVersion)
     }
 
     /// Tests that the Xamarin wrapper tag is appended
     func testSetWrapperTypeXamarin() {
-        MobileCore.setWrapperType(type: .xamarin)
+        MobileCore.setWrapperType(.xamarin)
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION + "-X", MobileCore.extensionVersion)
     }
 
@@ -278,25 +278,25 @@ class MobileCoreTests: XCTestCase {
 
     /// Tests that the log level in the Log class is updated to debug
     func testSetLogLevelTrace() {
-        MobileCore.setLogLevel(level: .trace)
+        MobileCore.setLogLevel(.trace)
         XCTAssertEqual(Log.logFilter, .trace)
     }
 
     /// Tests that the log level in the Log class is updated to debug
     func testSetLogLevelDebug() {
-        MobileCore.setLogLevel(level: .debug)
+        MobileCore.setLogLevel(.debug)
         XCTAssertEqual(Log.logFilter, .debug)
     }
 
     /// Tests that the log level in the Log class is updated to warning
     func testSetLogLevelWarning() {
-        MobileCore.setLogLevel(level: .warning)
+        MobileCore.setLogLevel(.warning)
         XCTAssertEqual(Log.logFilter, .warning)
     }
 
     /// Tests that the log level in the Log class is updated to error
     func testSetLogLevelError() {
-        MobileCore.setLogLevel(level: .error)
+        MobileCore.setLogLevel(.error)
         XCTAssertEqual(Log.logFilter, .error)
     }
 
@@ -304,7 +304,7 @@ class MobileCoreTests: XCTestCase {
 
     /// Tests that the app group can be set to nil
     func testSetAppGroupNil() {
-        MobileCore.setAppGroup(group: nil)
+        MobileCore.setAppGroup(nil)
 
         // verify
         let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
@@ -317,7 +317,7 @@ class MobileCoreTests: XCTestCase {
         let appGroup = "test.app.group"
 
         // test
-        MobileCore.setAppGroup(group: appGroup)
+        MobileCore.setAppGroup(appGroup)
 
         // verify
         let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
@@ -349,7 +349,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectMessageInfo(messageInfo: [:])
+        MobileCore.collectMessageInfo([:])
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
@@ -380,7 +380,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectMessageInfo(messageInfo: messageInfo)
+        MobileCore.collectMessageInfo(messageInfo)
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
@@ -411,7 +411,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectPii(data: [:])
+        MobileCore.collectPii([:])
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
@@ -442,7 +442,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.shared.start()
 
         // test
-        MobileCore.collectPii(data: data)
+        MobileCore.collectPii(data)
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)

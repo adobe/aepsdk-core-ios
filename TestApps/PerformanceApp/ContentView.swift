@@ -29,7 +29,7 @@ struct ContentView: View {
                     PerfExtension.RULES_CONSEQUENCE_EVENTS = 0
                     self.status = "...."
 
-                    MobileCore.setLogLevel(level: .error)
+                    MobileCore.setLogLevel(.error)
                     MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self, PerfExtension.self]) {}
                     MobileCore.configureWith(appId: "94f571f308d5/fec7505defe0/launch-eaa54c95a6b5-development")
                     MobileCore.lifecycleStart(additionalContextData: nil)
