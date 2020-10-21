@@ -30,6 +30,13 @@ public class CustomIdentity: Identifiable, Codable {
         self.identifier = identifier
         self.authenticationState = authenticationState
     }
+
+    private enum CodingKeys: String, CodingKey {
+        case origin = "id.origin"
+        case type = "id.type"
+        case identifier = "id"
+        case authenticationState = "authentication.state"
+    }
 }
 
 extension CustomIdentity: Equatable {
