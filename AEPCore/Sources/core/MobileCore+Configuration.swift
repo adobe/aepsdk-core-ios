@@ -52,8 +52,8 @@ public extension MobileCore {
     /// configuration changes from calls to configureWithAppId or configureWithFileInPath,
     /// even across application restarts.
     /// - Parameter status: `PrivacyStatus` to be set for the SDK
-    @objc(setPrivacy:)
-    static func setPrivacy(status: PrivacyStatus) {
+    @objc(setPrivacyStatus:)
+    static func setPrivacyStatus(_ status: PrivacyStatus) {
         updateConfigurationWith(configDict: [CoreConstants.Keys.GLOBAL_CONFIG_PRIVACY: status.rawValue])
     }
 

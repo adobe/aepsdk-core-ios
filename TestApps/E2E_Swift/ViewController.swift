@@ -75,7 +75,7 @@ class ViewController: UIViewController {
         MyExtension.EVENT_HUB_BOOTED = false
         self.statusLabel.text = "...."
 
-        MobileCore.setLogLevel(level: .trace)
+        MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self, MyExtension.self]) {}
         MobileCore.configureWith(appId: "94f571f308d5/07c3fc1109d1/launch-2f01e36464da-development")
         MobileCore.lifecycleStart(additionalContextData: nil)

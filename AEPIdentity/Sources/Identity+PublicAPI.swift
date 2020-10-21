@@ -103,7 +103,7 @@ import Foundation
     static func syncIdentifiers(identifiers: [String: String]?, authenticationState: MobileVisitorAuthenticationState) {
         var eventData = [String: Any]()
         eventData[IdentityConstants.EventDataKeys.IDENTIFIERS] = identifiers
-        eventData[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] = authenticationState
+        eventData[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] = authenticationState.rawValue
         eventData[IdentityConstants.EventDataKeys.FORCE_SYNC] = false
         eventData[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] = true
 
