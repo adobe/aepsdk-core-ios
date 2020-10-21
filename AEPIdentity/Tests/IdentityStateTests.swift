@@ -627,7 +627,7 @@ class IdentityStateTests: XCTestCase {
         wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertEqual(hitResponse.blob, state.identityProperties.blob) // blob should have been updated
-        XCTAssertEqual("\(String(describing: hitResponse.hint))", state.identityProperties.locationHint) // locationHint should have been updated
+        XCTAssertEqual("\(String(describing: hitResponse.hint!))", state.identityProperties.locationHint) // locationHint should have been updated
         XCTAssertEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have been updated
     }
 
@@ -659,7 +659,7 @@ class IdentityStateTests: XCTestCase {
         wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertEqual(hitResponse.blob, state.identityProperties.blob) // blob should have been updated
-        XCTAssertEqual("\(String(describing: hitResponse.hint))", state.identityProperties.locationHint) // locationHint should have been updated
+        XCTAssertEqual("\(String(describing: hitResponse.hint!))", state.identityProperties.locationHint) // locationHint should have been updated
         XCTAssertEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have been updated
     }
 
