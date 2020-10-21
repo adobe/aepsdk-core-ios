@@ -346,7 +346,7 @@ class IdentityState {
         }
 
         if let ecid = identityResponse.ecid, !ecid.isEmpty {
-            let stringHint: String? = identityResponse.hint == nil ? nil : "\(String(describing: identityResponse.hint))"
+            let stringHint: String? = identityResponse.hint == nil ? nil : "\(String(describing: identityResponse.hint!))"
             let shouldShareState = identityResponse.blob != identityProperties.blob || stringHint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
             identityProperties.locationHint = stringHint
