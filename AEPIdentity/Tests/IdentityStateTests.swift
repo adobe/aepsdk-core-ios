@@ -627,7 +627,7 @@ class IdentityStateTests: XCTestCase {
         wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertEqual(hitResponse.blob, state.identityProperties.blob) // blob should have been updated
-        XCTAssertEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should have been updated
+        XCTAssertEqual("\(String(describing: hitResponse.hint))", state.identityProperties.locationHint) // locationHint should have been updated
         XCTAssertEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have been updated
     }
 
@@ -659,7 +659,7 @@ class IdentityStateTests: XCTestCase {
         wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertEqual(hitResponse.blob, state.identityProperties.blob) // blob should have been updated
-        XCTAssertEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should have been updated
+        XCTAssertEqual("\(String(describing: hitResponse.hint))", state.identityProperties.locationHint) // locationHint should have been updated
         XCTAssertEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have been updated
     }
 
@@ -691,7 +691,7 @@ class IdentityStateTests: XCTestCase {
         wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertNotEqual(hitResponse.blob, state.identityProperties.blob) // blob should not have been updated
-        XCTAssertNotEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should not have been updated
+        XCTAssertNotEqual(hitResponse.hint, Int(state.identityProperties.locationHint ?? "-1")) // locationHint should not have been updated
         XCTAssertNotEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should not have been updated
     }
 
@@ -723,7 +723,7 @@ class IdentityStateTests: XCTestCase {
         wait(for: [dispatchedEventExpectation], timeout: 1)
         XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
         XCTAssertNotEqual(hitResponse.blob, state.identityProperties.blob) // blob should not have been updated
-        XCTAssertNotEqual(hitResponse.hint, state.identityProperties.locationHint) // locationHint should not have been updated
+        XCTAssertNotEqual(hitResponse.hint, Int(state.identityProperties.locationHint ?? "-1")) // locationHint should not have been updated
         XCTAssertNotEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should not have been updated
     }
 
@@ -906,6 +906,6 @@ private extension DataEntity {
 
 private extension IdentityHitResponse {
     static func fakeHitResponse(error: String?, optOutList: [String]?) -> IdentityHitResponse {
-        return IdentityHitResponse(blob: "response-test-blob", ecid: "response-test-ecid", hint: "response-test-hint", error: error, ttl: 3000, optOutList: optOutList)
+        return IdentityHitResponse(blob: "response-test-blob", ecid: "response-test-ecid", hint: 6, error: error, ttl: 3000, optOutList: optOutList)
     }
 }
