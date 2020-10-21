@@ -12,12 +12,11 @@
 import Foundation
 
 /// CustomIdentity contains identifier origin, identifier type, identifier value and authentication state.
-@objc(AEPCustomIdentity)
-final public class CustomIdentity: NSObject {
-    @objc public var origin: String?
-    @objc public var type: String?
-    @objc public var identifier: String?
-    @objc public var authenticationState: MobileVisitorAuthenticationState
+public class CustomIdentity: Identifiable, Codable {
+    public var origin: String?
+    public var type: String?
+    public var identifier: String?
+    public var authenticationState: MobileVisitorAuthenticationState
 
     /// Creates a new `CustomIdentity` with the given parameters
     /// - Parameters:
@@ -25,18 +24,15 @@ final public class CustomIdentity: NSObject {
     ///   - type: Type of the identifier
     ///   - identifier: The identifier
     ///   - authenticationState: Authentication state for the identifier
-    @objc init(origin: String?, type: String?, identifier: String?, authenticationState: MobileVisitorAuthenticationState) {
+    init(origin: String?, type: String?, identifier: String?, authenticationState: MobileVisitorAuthenticationState) {
         self.origin = origin
         self.type = type
         self.identifier = identifier
         self.authenticationState = authenticationState
     }
-
 }
 
-extension CustomIdentity: Identifiable, Codable {}
-
-extension CustomIdentity {
+extension CustomIdentity: Equatable {
     public static func == (lhs: CustomIdentity, rhs: CustomIdentity) -> Bool {
         return lhs.type == rhs.type
     }
