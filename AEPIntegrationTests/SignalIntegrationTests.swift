@@ -48,7 +48,7 @@ class SignalIntegrationTests: XCTestCase {
         ServiceProvider.shared.networkService = mockNetworkService
 
         let initExpectation = XCTestExpectation(description: "init extenions")
-        MobileCore.setLogLevel(level: .trace)
+        MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
@@ -140,7 +140,7 @@ class SignalIntegrationTests: XCTestCase {
             }
             return nil
         }
-        MobileCore.collectPii(data:["name":"aep"])
+        MobileCore.collectPii(["name":"aep"])
 
         wait(for: [requestExpectation], timeout: 2)
     }
