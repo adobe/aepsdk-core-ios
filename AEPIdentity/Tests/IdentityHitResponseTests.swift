@@ -19,7 +19,7 @@ class IdentityHitResponseTests: XCTestCase {
         let jsonStr = """
         {"d_mid": "11055975576108377572226656299476126353",
         "d_optout": ["global"],
-        "dcs_region": "6",
+        "dcs_region": 6,
         "d_blob":"wxyz5432",
         "id_sync_ttl": 7200}
         """
@@ -30,7 +30,7 @@ class IdentityHitResponseTests: XCTestCase {
         // verify
         XCTAssertEqual("11055975576108377572226656299476126353", response.ecid)
         XCTAssertEqual("global", response.optOutList?.first)
-        XCTAssertEqual("6", response.hint)
+        XCTAssertEqual(6, response.hint)
         XCTAssertEqual("wxyz5432", response.blob)
         XCTAssertEqual(7200, response.ttl)
     }
@@ -40,7 +40,7 @@ class IdentityHitResponseTests: XCTestCase {
         // setup
         let jsonStr = """
         {"d_mid": "11055975576108377572226656299476126353",
-        "dcs_region": "6",
+        "dcs_region": 6,
         "d_blob":"wxyz5432",
         "id_sync_ttl": 7200}
         """
@@ -51,9 +51,26 @@ class IdentityHitResponseTests: XCTestCase {
         // verify
         XCTAssertEqual("11055975576108377572226656299476126353", response.ecid)
         XCTAssertNil(response.optOutList)
-        XCTAssertEqual("6", response.hint)
+        XCTAssertEqual(6, response.hint)
         XCTAssertEqual("wxyz5432", response.blob)
         XCTAssertEqual(7200, response.ttl)
+    }
+
+    func testDecodeAdditionalFields() {
+        // setup
+        let jsonStr = """
+        {"d_mid":"03101358720715522005676253806759106050","id_sync_ttl":604800,"d_blob":"j8Odv6LonN4r3an7LhD3WZrU1bUpAkFkkiY1ncBR96t2PTI","dcs_region":9,"d_ottl":7200,"ibs":[],"subdomain":"obumobile5","tid":"c8VdE0tuQkg="}
+        """
+
+        // test
+        let response = try! JSONDecoder().decode(IdentityHitResponse.self, from: jsonStr.data(using: .utf8)!)
+
+        // verify
+        XCTAssertEqual("03101358720715522005676253806759106050", response.ecid)
+        XCTAssertNil(response.optOutList)
+        XCTAssertEqual(9, response.hint)
+        XCTAssertEqual("j8Odv6LonN4r3an7LhD3WZrU1bUpAkFkkiY1ncBR96t2PTI", response.blob)
+        XCTAssertEqual(604800, response.ttl)
     }
 
     /// Tests that all properties are empty when the json is empty
