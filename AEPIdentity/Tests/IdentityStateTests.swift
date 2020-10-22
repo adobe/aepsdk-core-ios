@@ -159,7 +159,7 @@ class IdentityStateTests: XCTestCase {
         let idList = eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]]
         XCTAssertEqual(1, idList?.count)
         let customId = idList?.first!
-        
+
         XCTAssertEqual("test-ad-id", customId?[CustomIdentity.CodingKeys.identifier.rawValue] as? String)
         XCTAssertEqual("d_cid_ic", customId?[CustomIdentity.CodingKeys.origin.rawValue] as? String)
         XCTAssertEqual("DSID_20915", customId?[CustomIdentity.CodingKeys.type.rawValue] as? String)
