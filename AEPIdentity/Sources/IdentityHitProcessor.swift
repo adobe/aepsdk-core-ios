@@ -16,14 +16,14 @@ class IdentityHitProcessor: HitProcessing {
     private let LOG_TAG = "IdentityHitProcessor"
 
     let retryInterval = TimeInterval(30)
-    private let responseHandler: (DataEntity, Data?) -> Void
+    private let responseHandler: (IdentityHit, Data?) -> Void
     private var networkService: Networking {
         return ServiceProvider.shared.networkService
     }
 
     /// Creates a new `IdentityHitProcessor` where the `responseHandler` will be invoked after each successful processing of a hit
     /// - Parameter responseHandler: a function to be invoked with the `DataEntity` for a hit and the response data for that hit
-    init(responseHandler: @escaping (DataEntity, Data?) -> Void) {
+    init(responseHandler: @escaping (IdentityHit, Data?) -> Void) {
         self.responseHandler = responseHandler
     }
 
@@ -40,7 +40,7 @@ class IdentityHitProcessor: HitProcessing {
         let networkRequest = NetworkRequest(url: identityHit.url, httpMethod: .get, connectPayload: "", httpHeaders: headers, connectTimeout: IdentityConstants.Default.TIMEOUT, readTimeout: IdentityConstants.Default.TIMEOUT)
 
         networkService.connectAsync(networkRequest: networkRequest) { connection in
-            self.handleNetworkResponse(entity: entity, hit: identityHit, connection: connection, completion: completion)
+            self.handleNetworkResponse(hit: identityHit, connection: connection, completion: completion)
         }
     }
 
@@ -48,14 +48,14 @@ class IdentityHitProcessor: HitProcessing {
 
     /// Handles the network response after a hit has been sent to the server
     /// - Parameters:
-    ///   - entity: the data entity responsible for the hit
+    ///   - hit: the `IdentityHit`
     ///   - connection: the connection returned after we make the network request
     ///   - completion: a completion block to invoke after we have handled the network response with true for success and false for failure (retry)
-    private func handleNetworkResponse(entity: DataEntity, hit: IdentityHit, connection: HttpConnection, completion: @escaping (Bool) -> Void) {
+    private func handleNetworkResponse(hit: IdentityHit, connection: HttpConnection, completion: @escaping (Bool) -> Void) {
         if connection.responseCode == 200 {
             // hit sent successfully
             Log.debug(label: "\(LOG_TAG):\(#function)", "Identity hit request with url \(hit.url.absoluteString) sent successfully")
-            responseHandler(entity, connection.data)
+            responseHandler(hit, connection.data)
             completion(true)
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
@@ -64,7 +64,7 @@ class IdentityHitProcessor: HitProcessing {
         } else {
             // unrecoverable error. delete the hit from the database and continue
             Log.warning(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, request with url \(hit.url.absoluteString) failed with error \(connection.error?.localizedDescription ?? "") and unrecoverable status code \(connection.responseCode ?? -1)")
-            responseHandler(entity, connection.data)
+            responseHandler(hit, connection.data)
             completion(true)
         }
     }

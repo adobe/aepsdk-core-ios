@@ -102,9 +102,9 @@ struct MobileIdentities: Codable {
         // visitor ids and advertising id
         // Identity sets the advertising identifier both in ‘visitoridslist’ and as ‘advertisingidentifer’ in the Identity shared state.
         // So, there is no need to fetch the advertising identifier with advertisingidentifer namespace DSID_20914 separately.
-        if let customVisitorIds = identitySharedState.value?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity] {
-            // convert each `CustomIdentity` to a `UserID`, then remove any nil values
-            visitorIds.append(contentsOf: customVisitorIds.map { $0.toUserID() }.compactMap { $0 })
+        if let customVisitorIds = identitySharedState.value?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]] {
+            // convert each `CustomIdentity` dictionary representations to a `UserID`, then remove any nil values
+            visitorIds.append(contentsOf: customVisitorIds.map { MobileIdentities.dictToUserID(dict: $0) }.compactMap { $0 })
         }
 
         // push identifier
@@ -127,13 +127,13 @@ struct MobileIdentities: Codable {
 
         return CompanyContext(marketingCloudId: marketingCloudOrgId)
     }
-}
 
-private extension CustomIdentity {
-    /// Converts a `CustomIdentity` into a `UserID`
+    /// Converts a `CustomIdentity` dictionary representation into a `UserID`
     /// - Returns: a `UserID` where the namespace is value, value is identifier, and type is integrationCode
-    func toUserID() -> UserID? {
-        guard let type = type, let identifier = identifier, !identifier.isEmpty else { return nil }
+    private static func dictToUserID(dict: [String: Any]) -> UserID? {
+        guard let type = dict[CustomIdentity.CodingKeys.type.rawValue] as? String,
+              let identifier = dict[CustomIdentity.CodingKeys.identifier.rawValue] as? String,
+              !identifier.isEmpty else { return nil }
         return UserID(namespace: type, value: identifier, type: MobileIdentities.INTEGRATION_CODE)
     }
 }

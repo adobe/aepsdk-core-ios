@@ -47,7 +47,7 @@ class IdentityPropertiesTests: XCTestCase {
         XCTAssertEqual(properties.pushIdentifier, eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] as? String)
         XCTAssertEqual(properties.blob, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] as? String)
         XCTAssertEqual(properties.locationHint, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] as? String)
-        XCTAssertNotNil(eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [CustomIdentity])
+        XCTAssertNotNil(eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]])
         XCTAssertEqual(properties.lastSync?.timeIntervalSince1970, eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] as? TimeInterval)
     }
 
