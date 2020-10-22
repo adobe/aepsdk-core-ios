@@ -145,12 +145,12 @@ class IdentityState {
     ///   - response: the response data if any
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    func handleHitResponse(hit: DataEntity, response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
+    func handleHitResponse(hit: IdentityHit, response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
         // regardless of response, update last sync time
         identityProperties.lastSync = Date()
 
         // check privacy here in case the status changed while response was in-flight
-        if identityProperties.privacyStatus != .optedOut, let data = hit.data, let hit = try? JSONDecoder().decode(IdentityHit.self, from: data) {
+        if identityProperties.privacyStatus != .optedOut {
             // update properties
             handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState, event: hit.event)
 
@@ -166,13 +166,12 @@ class IdentityState {
                                          data: eventData)
         eventDispatcher(updatedIdentityEvent)
 
-        if let data = hit.data, let hit = try? JSONDecoder().decode(IdentityHit.self, from: data) {
-            let identityResponse = hit.event.createResponseEvent(name: IdentityConstants.EventNames.UPDATED_IDENTITY_RESPONSE,
-                                                                 type: EventType.identity,
-                                                                 source: EventSource.responseIdentity,
-                                                                 data: eventData)
-            eventDispatcher(identityResponse)
-        }
+        let identityResponse = hit.event.createResponseEvent(name: IdentityConstants.EventNames.UPDATED_IDENTITY_RESPONSE,
+                                                             type: EventType.identity,
+                                                             source: EventSource.responseIdentity,
+                                                             data: eventData)
+        eventDispatcher(identityResponse)
+
     }
 
     /// Verifies if a sync network call is required. This method returns true if there is at least one identifier to be synced,

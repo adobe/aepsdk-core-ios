@@ -245,3 +245,11 @@ extension AnyCodable: Equatable {
         }
     }
 }
+
+// MARK: Codable Helpers
+extension Encodable {
+    public func asDictionary() -> [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+    }
+}

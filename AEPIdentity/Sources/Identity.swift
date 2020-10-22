@@ -33,7 +33,7 @@ import Foundation
             return
         }
 
-        let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(entity:responseData:)))
+        let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(hit:responseData:)))
 
         let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let pushIdManager = PushIDManager(dataStore: dataStore, eventDispatcher: dispatch(event:))
@@ -192,10 +192,10 @@ import Foundation
 
     /// Invoked by the `IdentityHitProcessor` each time we receive a network response
     /// - Parameters:
-    ///   - entity: The `DataEntity` that was processed by the hit processor
+    ///   - entity: The `IdentityHit` that was processed by the hit processor
     ///   - responseData: the network response data if any
-    private func handleNetworkResponse(entity: DataEntity, responseData: Data?) {
-        state?.handleHitResponse(hit: entity, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
+    private func handleNetworkResponse(hit: IdentityHit, responseData: Data?) {
+        state?.handleHitResponse(hit: hit, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
     }
 
     /// Sends an opt-out network request if the current privacy status is opt-out

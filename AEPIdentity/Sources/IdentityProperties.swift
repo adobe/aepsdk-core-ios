@@ -56,7 +56,7 @@ struct IdentityProperties: Codable {
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] = locationHint
         if let customerIds = customerIds, !customerIds.isEmpty {
-            eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds
+            eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = customerIds.map({$0.asDictionary()})
         }
         eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync?.timeIntervalSince1970
 
