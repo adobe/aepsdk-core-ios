@@ -28,7 +28,7 @@ class MobileIdentitiesTests: XCTestCase {
         let customIdTwo = CustomIdentity(origin: "origin2", type: "type2", identifier: "id2", authenticationState: .loggedOut)
         let customIdThree = CustomIdentity(origin: "origin3", type: "DSID_20915", identifier: "test-advertisingId", authenticationState: .loggedOut)
 
-        identitySharedState[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = [customIdOne, customIdTwo, customIdThree]
+        identitySharedState[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] = [customIdOne, customIdTwo, customIdThree].map({$0.asDictionary()})
         identitySharedState[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = "test-advertisingId"
         identitySharedState[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = "test-pushid"
 

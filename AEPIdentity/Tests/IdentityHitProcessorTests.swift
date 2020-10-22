@@ -17,15 +17,15 @@ import XCTest
 
 class IdentityHitProcessorTests: XCTestCase {
     var hitProcessor: IdentityHitProcessor!
-    var responseCallbackArgs = [(DataEntity, Data?)]()
+    var responseCallbackArgs = [(IdentityHit, Data?)]()
     var mockNetworkService: MockNetworkServiceOverrider? {
         return ServiceProvider.shared.networkService as? MockNetworkServiceOverrider
     }
 
     override func setUp() {
         ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
-        hitProcessor = IdentityHitProcessor(responseHandler: { [weak self] entity, data in
-            self?.responseCallbackArgs.append((entity, data))
+        hitProcessor = IdentityHitProcessor(responseHandler: { [weak self] hit, data in
+            self?.responseCallbackArgs.append((hit, data))
         })
     }
 

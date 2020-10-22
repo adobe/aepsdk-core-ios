@@ -1,5 +1,12 @@
 # AEPCore
 
+<!--
+on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPCore)
+-->
+[![SPM](https://img.shields.io/badge/SPM-Supported-orange.svg?logo=apple&logoColor=white)](https://swift.org/package-manager/)
+[![CircleCI](https://img.shields.io/circleci/project/github/adobe/aepsdk-core-ios/master.svg?logo=circleci)](https://circleci.com/gh/adobe/workflows/aepsdk-core-ios)
+[![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-core-ios/master.svg?logo=codecov)](https://codecov.io/gh/adobe/aepsdk-core-ios/branch/master)
+
 ## BETA ACKNOWLEDGEMENT
 
 AEPCore is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
