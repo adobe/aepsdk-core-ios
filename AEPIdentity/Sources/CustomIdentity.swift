@@ -31,7 +31,7 @@ public class CustomIdentity: Identifiable, Codable {
         self.authenticationState = authenticationState
     }
 
-    private enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case origin = "id.origin"
         case type = "id.type"
         case identifier = "id"
