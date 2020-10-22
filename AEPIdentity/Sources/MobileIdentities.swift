@@ -104,7 +104,7 @@ struct MobileIdentities: Codable {
         // So, there is no need to fetch the advertising identifier with advertisingidentifer namespace DSID_20914 separately.
         if let customVisitorIds = identitySharedState.value?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]] {
             // convert each `CustomIdentity` dictionary representations to a `UserID`, then remove any nil values
-            visitorIds.append(contentsOf: customVisitorIds.map { dictToUserID(dict: $0) }.compactMap { $0 })
+            visitorIds.append(contentsOf: customVisitorIds.map { MobileIdentities.dictToUserID(dict: $0) }.compactMap { $0 })
         }
 
         // push identifier
@@ -130,7 +130,7 @@ struct MobileIdentities: Codable {
 
     /// Converts a `CustomIdentity` dictionary representation into a `UserID`
     /// - Returns: a `UserID` where the namespace is value, value is identifier, and type is integrationCode
-    private func dictToUserID(dict: [String: Any]) -> UserID? {
+    private static func dictToUserID(dict: [String: Any]) -> UserID? {
         guard let type = dict[CustomIdentity.CodingKeys.type.rawValue] as? String,
               let identifier = dict[CustomIdentity.CodingKeys.identifier.rawValue] as? String,
               !identifier.isEmpty else { return nil }
