@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/adobe/aepsdk-core-ios/branch/main/graph/badge.svg?token=ZNVGTS45O9)](undefined)
+
 # AEPCore
 
 ## BETA ACKNOWLEDGEMENT
