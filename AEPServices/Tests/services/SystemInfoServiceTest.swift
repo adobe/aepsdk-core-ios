@@ -109,6 +109,10 @@ class SystemInfoServiceTest: XCTestCase {
         XCTAssertNotNil(systemInfoService.getOperatingSystemName())
     }
 
+    func testGetCanonicalPlatformName() {
+        XCTAssertEqual("ios", systemInfoService.getCanonicalPlatformName())
+    }
+
     func testGetDisplayInformation() {
         let displayInfo = NativeDisplayInformation()
         let testDisplayInfo = systemInfoService.getDisplayInformation()
