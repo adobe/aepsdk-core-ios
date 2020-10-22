@@ -439,12 +439,10 @@ class EventHubTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "Mock extension should only receive one event")
         expectation.assertForOverFulfill = true
-        expectation.expectedFulfillmentCount = 2 // should receive two events, "First event" and the event hub shared state update
         registerMockExtension(MockExtensionTwo.self)
 
         MockExtensionTwo.eventReceivedClosure = { event in
-            print(event.name)
-            expectation.fulfill()
+            if event.type == EventType.acquisition { expectation.fulfill() }
         }
 
         // test
@@ -452,6 +450,7 @@ class EventHubTests: XCTestCase {
         eventHub.dispatch(event: Event(name: "First event", type: EventType.acquisition, source: EventSource.none, data: nil))
         eventHub.unregisterExtension(MockExtensionTwo.self) { error in
             XCTAssertNil(error)
+            // dispatch event after MockExtensionTwo has been unregistered, this should not be received by MockExtensionTwo
             self.eventHub.dispatch(event: Event(name: "Second event", type: EventType.acquisition, source: EventSource.none, data: nil))
         }
 
