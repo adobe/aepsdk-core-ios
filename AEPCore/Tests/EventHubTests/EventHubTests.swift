@@ -1064,7 +1064,7 @@ class EventHubTests: XCTestCase {
         // test
         let event = Event(name: "event", type: EventType.analytics, source: EventSource.requestContent, data: nil)
         eventHub.dispatch(event: event)
-        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event, sharedStateType: .xdm)
 
         // verify
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one", .xdm)
