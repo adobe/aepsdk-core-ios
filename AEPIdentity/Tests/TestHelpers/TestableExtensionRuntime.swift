@@ -55,7 +55,7 @@ class TestableExtensionRuntime: ExtensionRuntime {
     func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
-    
+
     public func createXDMSharedState(data: [String : Any], event: Event?) {
         createdXdmSharedStates += [data]
     }
@@ -67,7 +67,7 @@ class TestableExtensionRuntime: ExtensionRuntime {
     func simulateSharedState(extensionName: String, event: Event?, data: (value: [String: Any]?, status: SharedStateStatus)) {
         otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: data.value)
     }
-    
+
     public func simulateXDMSharedState(for extensionName: String, data: (value: [String: Any]?, status: SharedStateStatus)) {
         otherXDMSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: data.value)
     }

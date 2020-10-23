@@ -56,11 +56,11 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         }
         return mockedSharedStates["\(extensionName)"]
     }
-    
+
     public func createXDMSharedState(data: [String : Any], event: Event?) {
         createdXdmSharedStates += [data]
     }
-    
+
     public func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
         if let id = event?.id {
@@ -108,7 +108,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public func simulateSharedState(for extensionName: String, data: (value: [String: Any]?, status: SharedStateStatus)) {
         mockedSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: data.value)
     }
-    
+
     /// Simulate the XDM shared state of an extension for a matching event
     /// - Parameters:
     ///   - pair: the (extension, event) pair

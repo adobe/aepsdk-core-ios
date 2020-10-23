@@ -1041,9 +1041,9 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [targetRequestContentExpectation, analyticsRequestContentExpectation], timeout: 1)
     }
-    
+
     // MARK: XDM SharedState Tests
-    
+
     /// Tests that a registered extension can publish shared state
     func testGetXDMSharedStateSimple() {
         // setup
