@@ -154,8 +154,9 @@ final class EventHub {
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
     ///   - event: `Event` for which the `SharedState` should be versioned
-    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
-        guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) else {
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
+    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?, sharedStateType: SharedStateType = .standard) {
+        guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) else {
             Log.warning(label: "\(LOG_TAG):\(#function)", "Error creating shared state for \(extensionName).")
             return
         }
@@ -176,7 +177,7 @@ final class EventHub {
     func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
         var pendingVersion: Int?
 
-        if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) {
+        if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: .standard) {
             pendingVersion = version
             sharedState.addPending(version: version)
             Log.debug(label: "\(LOG_TAG):\(#function)", "Pending shared state is created for \(extensionName) with version \(version)")
@@ -193,9 +194,10 @@ final class EventHub {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
-        guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState else {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
+        guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
             Log.warning(label: "\(LOG_TAG):\(#function)", "Unable to retrieve shared state for \(extensionName). No such extension is registered.")
             return nil
         }
@@ -265,14 +267,15 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: A `String` containing the name of the extension
     ///   - event: An `Event?` which may contain a specific event from which the correct `SharedState` can be retrieved
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: A `(SharedState, Int)?` containing the state for the provided extension and its version number
-    private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
+    private func versionSharedState(extensionName: String, event: Event?, sharedStateType: SharedStateType = .standard) -> (SharedState, Int)? {
         guard let extensionContainer = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else {
             Log.error(label: "\(LOG_TAG):\(#function)", "Extension \(extensionName) not registered with EventHub")
             return nil
         }
 
-        guard let sharedState = extensionContainer.sharedState else { return nil }
+        guard let sharedState = extensionContainer.sharedState(for: sharedStateType) else { return nil }
 
         var version = 0 // default to version 0
         // attempt to version at the event

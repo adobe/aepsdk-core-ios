@@ -42,6 +42,7 @@
 		218C813B24EC3EBC009B4F31 /* V5Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813A24EC3EBC009B4F31 /* V5Migrator.swift */; };
 		218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
+		21A6737325434AE600A7E906 /* SharedStateType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A6737225434AE600A7E906 /* SharedStateType.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */; };
@@ -573,6 +574,7 @@
 		218C813A24EC3EBC009B4F31 /* V5Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5Migrator.swift; sourceTree = "<group>"; };
 		218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5MigrationConstants.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
+		21A6737225434AE600A7E906 /* SharedStateType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateType.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1592,6 +1594,7 @@
 				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
 				3FB66AAB24CA004400502CAF /* SharedState.swift */,
 				217E220424D1FD7900B70B3E /* SharedStateResult.swift */,
+				21A6737225434AE600A7E906 /* SharedStateType.swift */,
 			);
 			path = eventhub;
 			sourceTree = "<group>";
@@ -2457,6 +2460,7 @@
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
 				3F5D45F8251903030040E298 /* LaunchRuleTransformer.swift in Sources */,
+				21A6737325434AE600A7E906 /* SharedStateType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

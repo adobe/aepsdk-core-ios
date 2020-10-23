@@ -29,8 +29,8 @@ class EventHubTests: XCTestCase {
 
     // MARK: Helper functions
 
-    private func validateSharedState(_ extensionName: String, _ event: Event?, _ dictionaryValue: String) {
-        XCTAssertEqual(eventHub.getSharedState(extensionName: extensionName, event: event)?.value![SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
+    private func validateSharedState(_ extensionName: String, _ event: Event?, _ dictionaryValue: String, _ sharedStateType: SharedStateType = .standard) {
+        XCTAssertEqual(eventHub.getSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType)?.value![SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
     }
 
     private func registerMockExtension<T: Extension>(_ type: T.Type) {
@@ -1040,5 +1040,33 @@ class EventHubTests: XCTestCase {
 
         // verify
         wait(for: [targetRequestContentExpectation, analyticsRequestContentExpectation], timeout: 1)
+    }
+    
+    // MARK: XDM SharedState Tests
+    
+    /// Tests that a registered extension can publish shared state
+    func testGetXDMSharedStateSimple() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil, sharedStateType: .xdm)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one", .xdm)
+    }
+
+    /// Tests that a registered extension can publish shared state versioned at an event
+    func testGetXDMSharedStateSimpleWithEvent() {
+        // setup
+        eventHub.start()
+
+        // test
+        let event = Event(name: "event", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one", .xdm)
     }
 }
