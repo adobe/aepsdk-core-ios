@@ -17,7 +17,9 @@ class TestableExtensionRuntime: ExtensionRuntime {
     var listeners: [String: EventListener] = [:]
     var dispatchedEvents: [Event] = []
     var createdSharedStates: [[String: Any]?] = []
+    public var createdXdmSharedStates: [[String: Any]?] = []
     var otherSharedStates: [String: SharedStateResult] = [:]
+    var otherXDMSharedStates: [String: SharedStateResult] = [:]
 
     func getListener(type: String, source: String) -> EventListener? {
         return listeners["\(type)-\(source)"]
@@ -53,9 +55,21 @@ class TestableExtensionRuntime: ExtensionRuntime {
     func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
+    
+    public func createXDMSharedState(data: [String : Any], event: Event?) {
+        createdXdmSharedStates += [data]
+    }
+
+    public func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+        return otherXDMSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
+    }
 
     func simulateSharedState(extensionName: String, event: Event?, data: (value: [String: Any]?, status: SharedStateStatus)) {
         otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: data.value)
+    }
+    
+    public func simulateXDMSharedState(for extensionName: String, data: (value: [String: Any]?, status: SharedStateStatus)) {
+        otherXDMSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: data.value)
     }
 
     /// clear the events and shared states that have been created by the current extension
