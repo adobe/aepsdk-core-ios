@@ -59,6 +59,10 @@ public protocol SystemInfoService {
     /// - Return: `String` the operating system's name
     func getOperatingSystemName() -> String
 
+    /// Gets the string representation of the canonical platform name
+    /// - Return: `String` the platform name name
+    func getCanonicalPlatformName() -> String
+
     /// Gets the display information for the system
     /// - Return: `DisplayInformation` the system's display information
     func getDisplayInformation() -> (width: Int, height: Int)

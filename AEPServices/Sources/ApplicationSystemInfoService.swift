@@ -122,6 +122,10 @@ class ApplicationSystemInfoService: SystemInfoService {
         return UIDevice.current.systemName
     }
 
+    func getCanonicalPlatformName() -> String {
+        return "ios"
+    }
+
     func getDisplayInformation() -> (width: Int, height: Int) {
         let displayInfo = NativeDisplayInformation()
         return (displayInfo.widthPixels, displayInfo.heightPixels)

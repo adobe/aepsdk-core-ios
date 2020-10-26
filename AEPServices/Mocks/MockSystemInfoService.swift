@@ -76,6 +76,11 @@ public class MockSystemInfoService: SystemInfoService {
         return operatingSystemName
     }
 
+    public var platformName: String = ""
+    public func getCanonicalPlatformName() -> String {
+        return platformName
+    }
+
     public var displayInformation: (width: Int, height: Int) = (0, 0)
     public func getDisplayInformation() -> (width: Int, height: Int) {
         return displayInformation

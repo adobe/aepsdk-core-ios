@@ -99,5 +99,6 @@ enum IdentityConstants {
         static let CONTEXT_DATA = "contextdata"
         static let EVENT_PUSH_STATUS = "a.push.optin"
         static let PUSH_ID_ENABLED_ACTION_NAME = "Push"
+        static let TRACK_INTERNAL = "trackinternal"
     }
 }

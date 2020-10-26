@@ -99,8 +99,9 @@ struct PushIDManager: PushIDManageable {
         pushEnabled = enabled
         let pushStatusStr = enabled ? "True" : "False"
         let contextData = [IdentityConstants.Analytics.EVENT_PUSH_STATUS: pushStatusStr]
-        let eventData = [IdentityConstants.Analytics.TRACK_ACTION: IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME,
-                         IdentityConstants.Analytics.CONTEXT_DATA: contextData] as [String: Any]
+        let eventData = [IdentityConstants.Analytics.TRACK_ACTION:                  IdentityConstants.Analytics.PUSH_ID_ENABLED_ACTION_NAME,
+                         IdentityConstants.Analytics.CONTEXT_DATA: contextData,
+                         IdentityConstants.Analytics.TRACK_INTERNAL: true] as [String: Any]
 
         let event = Event(name: IdentityConstants.EventNames.ANALYTICS_FOR_IDENTITY_REQUEST,
                           type: EventType.analytics,
