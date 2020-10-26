@@ -90,11 +90,13 @@ Additional documentation for usage and SDK architecture can be found under the [
 
 ## Related Projects
 
-[AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) contains iOS sample apps for the AEP SDK. Examples are provided for both Objective-c and Swift implementation.
-
-[AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-c and Swift.
-
-[AEP SDK Compatibility for iOS](https://github.com/adobe/aepsdk-compatibility-ios) contains code that bridges `ACPCore` and 3rd party extension implementations into the AEP SDK runtime.
+| Project      | Description |
+| ------------ | ----------- |
+| [AEPEdge Extension](https://github.com/adobe/aepsdk-edge-ios) | Provides support to the Experience Platform Edge for the AEP SDK. |
+| [AEPRulesEngine](https://github.com/adobe/aepsdk-rulesengine-ios) | Implementation of the Rules Engine used by the AEP SDK. |
+| [AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) | Contains iOS sample apps for the AEP SDK. Apps are provided for both Objective-C and Swift implementations. |
+| [AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) | Contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-C and Swift.
+| [AEP SDK Compatibility for iOS](https://github.com/adobe/aepsdk-compatibility-ios) | Contains code that bridges `ACPCore` and 3rd party extension implementations into the AEP SDK runtime. |
 
 ## Contributing
 
