@@ -68,3 +68,9 @@ lint:
 
 checkFormat:
 	swiftformat . --lint --swiftversion 5.2
+
+
+loc:
+	# use the following brew command to install cloc
+	# brew install cloc
+	cloc AEPSignal/Sources AEPIdentity/Sources AEPLifecycle/Sources AEPCore/Sources AEPServices/Sources	
