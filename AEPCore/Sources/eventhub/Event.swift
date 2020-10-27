@@ -39,7 +39,15 @@ public class Event: NSObject, Codable {
 
     /// Event description used for logging
     @objc override public var description: String {
-        return "id: \(id.uuidString) name: \(name) type: \(type) source: \(source) data: \(String(describing: data)) timestamp: \(timestamp.description) responseId: \(String(describing: responseID?.uuidString))"
+        return "\n[\n" +
+                "  id: \(id.uuidString)\n" +
+                "  name: \(name)\n" +
+                "  type: \(type)\n" +
+                "  source: \(source)\n" +
+                "  data: \(data as AnyObject)\n" +
+                "  timestamp: \(timestamp.description)\n" +
+                "  responseId: \(String(describing: responseID?.uuidString))\n" +
+                "]"
     }
 
     /// Creates a new `Event` with the given parameters
