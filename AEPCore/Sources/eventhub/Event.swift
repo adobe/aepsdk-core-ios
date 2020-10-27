@@ -39,6 +39,7 @@ public class Event: NSObject, Codable {
 
     /// Event description used for logging
     @objc override public var description: String {
+        // swiftformat:disable indent
         return "\n[\n" +
                 "  id: \(id.uuidString)\n" +
                 "  name: \(name)\n" +
@@ -48,6 +49,7 @@ public class Event: NSObject, Codable {
                 "  timestamp: \(timestamp.description)\n" +
                 "  responseId: \(String(describing: responseID?.uuidString))\n" +
                 "]"
+        // swiftformat:enable indent
     }
 
     /// Creates a new `Event` with the given parameters
