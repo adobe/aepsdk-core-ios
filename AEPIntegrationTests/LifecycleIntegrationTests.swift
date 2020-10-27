@@ -18,7 +18,7 @@ import AEPSignal
 
 class LifecycleIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()
-    let defaultSucsessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
+    let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
     override func setUp() {
         UserDefaults.clear()
@@ -71,7 +71,7 @@ class LifecycleIntegrationTests: XCTestCase {
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
                 lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=InstallEvent"))
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -105,7 +105,7 @@ class LifecycleIntegrationTests: XCTestCase {
                 lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=&"))
                 XCTAssertTrue(request.url.absoluteString.contains("launchevent=LaunchEvent"))
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -139,13 +139,13 @@ class LifecycleIntegrationTests: XCTestCase {
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=&"))
                 XCTAssertTrue(request.url.absoluteString.contains("launchevent=LaunchEvent"))
                 XCTAssertTrue(request.url.absoluteString.contains("crashevent=CrashEvent"))
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpectation], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: 3)
     }
 
     func testAdditionalContextData() {
@@ -165,7 +165,7 @@ class LifecycleIntegrationTests: XCTestCase {
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
                 lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("key=value"))
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -198,7 +198,7 @@ class LifecycleIntegrationTests: XCTestCase {
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
                 lifecycleExpectation.fulfill()
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
