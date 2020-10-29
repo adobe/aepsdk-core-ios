@@ -55,23 +55,7 @@ class DateFormatTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    
-    var timezoneString: String {
-        if TimeZone.current.isDaylightSavingTime() {
-            return timezoneMapper[TimeZone.current.secondsFromGMT() - 3600]!
-        } else {
-            return timezoneMapper[TimeZone.current.secondsFromGMT()]!
-        }
-    }
-    
-    var timezoneStringWithColon: String {
-        if TimeZone.current.isDaylightSavingTime() {
-            return timezoneMapperWithColon[TimeZone.current.secondsFromGMT() - 3600]!
-        } else {
-            return timezoneMapperWithColon[TimeZone.current.secondsFromGMT()]!
-        }
-    }
-    
+
     /// [milliseconds offset from GMT : hours offset from GMT]
     let timezoneMapper: [Int:String] = [
         -21600: "-0600",   // US Mountain Standard
@@ -84,4 +68,20 @@ class DateFormatTests: XCTestCase {
         -25200: "-07:00",   // US Mountain Daylight, US Pacific Standard
         -28800: "-08:00",   // US Pacific Daylight
     ]
+    
+    var timezoneString: String {
+        if TimeZone.current.isDaylightSavingTime() {
+            return timezoneMapper[TimeZone.current.secondsFromGMT() - 3600] ?? ""
+        } else {
+            return timezoneMapper[TimeZone.current.secondsFromGMT()] ?? ""
+        }
+    }
+    
+    var timezoneStringWithColon: String {
+        if TimeZone.current.isDaylightSavingTime() {
+            return timezoneMapperWithColon[TimeZone.current.secondsFromGMT() - 3600] ?? ""
+        } else {
+            return timezoneMapperWithColon[TimeZone.current.secondsFromGMT()] ?? ""
+        }
+    }
 }
