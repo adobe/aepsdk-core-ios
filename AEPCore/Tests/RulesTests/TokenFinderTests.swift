@@ -113,17 +113,18 @@ class TokenFinderTests: XCTestCase {
         let formatter_ISO8601 = ISO8601DateFormatter()
         formatter_ISO8601.timeZone = TimeZone.current
         formatter_ISO8601.formatOptions.insert(.withInternetDateTime)
-        let formatter_PLATFORM = ISO8601DateFormatter()
-        formatter_PLATFORM.timeZone = TimeZone.current
-        formatter_PLATFORM.formatOptions.insert(.withInternetDateTime)
+        let formatter_ISO8601NoColon = DateFormatter()
+        formatter_ISO8601NoColon.locale = Locale(identifier: "en_US_POSIX")
+        formatter_ISO8601NoColon.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ"
+
         /// When: retrieve token `~timestampz`, `~timestampp` & `~timestampu`
-        guard let date_ISO8601_string = tokenFinder.get(key: "~timestampz") as? String, let date_ISO8601 = formatter_ISO8601.date(from: date_ISO8601_string), let date_PLATFORM_string = tokenFinder.get(key: "~timestampp") as? String, let date_PLATFORM = formatter_PLATFORM.date(from: date_PLATFORM_string), let date_UNIX_Int64 = tokenFinder.get(key: "~timestampu") as? Int64 else {
+        guard let date_ISO8601_string = tokenFinder.get(key: "~timestampp") as? String, let date_ISO8601 = formatter_ISO8601.date(from: date_ISO8601_string), let date_ISO8601NoColon_string = tokenFinder.get(key: "~timestampz") as? String, let date_ISO8601NoColon = formatter_ISO8601NoColon.date(from: date_ISO8601NoColon_string), let date_UNIX_Int64 = tokenFinder.get(key: "~timestampu") as? Int64 else {
             XCTFail("Expected no-nil timestamp")
             return
         }
         let date_UNIX = Date(timeIntervalSince1970: TimeInterval(date_UNIX_Int64))
         /// Then: return same timestamp with different format
-        XCTAssertEqual(date_ISO8601, date_PLATFORM)
+        XCTAssertEqual(date_ISO8601, date_ISO8601NoColon)
         XCTAssertEqual(date_ISO8601, date_UNIX)
     }
 
