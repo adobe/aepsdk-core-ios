@@ -26,17 +26,9 @@ public extension Date {
 
     // e.g. - 2020-10-28T15:08:32-0600
     func getISO8601DateNoColon() -> String {
-        let formatter = ISO8601DateFormatter()
-        formatter.timeZone = TimeZone.current
-        formatter.formatOptions.insert(.withInternetDateTime)
-        var dateString = formatter.string(from: self)
-        if formatter.timeZone.secondsFromGMT() == 0 {
-            return dateString
-        }
-        guard let index = dateString.lastIndex(of: ":") else {
-            return dateString
-        }
-        dateString.remove(at: index)
-        return dateString
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ"
+        return formatter.string(from: self)
     }
 }
