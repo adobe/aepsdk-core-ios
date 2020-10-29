@@ -28,19 +28,6 @@ class DateFormatTests: XCTestCase {
         XCTAssertEqual(victory, result * 1000)
     }
     
-    func testGetRFC822Date() {
-        // setup
-        let victory: Int64 = 1391398245000 // Feb 2, 2014 8:30:45 pm
-        let date = Date(milliseconds: victory)
-        let expectedDateString = "2014-02-02T20:30:45" + timezoneString
-        
-        // test
-        let result = date.getRFC822Date()
-        
-        // verify
-        XCTAssertEqual(expectedDateString, result)
-    }
-    
     func testGetISO8601Date() {
         // setup
         let victory: Int64 = 1391398245000 // Feb 2, 2014 8:30:45 pm
@@ -50,6 +37,19 @@ class DateFormatTests: XCTestCase {
         // test
         let result = date.getISO8601Date()
         
+        // verify
+        XCTAssertEqual(expectedDateString, result)
+    }
+    
+    func testGetISO8601DateNoColon() {
+        // setup
+        let victory: Int64 = 1391398245000 // Feb 2, 2014 8:30:45 pm
+        let date = Date(milliseconds: victory)
+        let expectedDateString = "2014-02-02T20:30:45" + timezoneString
+        
+        // test
+        let result = date.getISO8601DateNoColon()
+
         // verify
         XCTAssertEqual(expectedDateString, result)
     }

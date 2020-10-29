@@ -16,10 +16,19 @@ public extension Date {
         return Int64(timeIntervalSince1970)
     }
 
-    // e.g. - 2020-10-28T15:08:32-0600
-    func getRFC822Date() -> String {
+    // e.g. - 2020-10-28T15:08:32-06:00
+    func getISO8601Date() -> String {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = TimeZone.current
+        formatter.formatOptions.insert(.withInternetDateTime)
+        return formatter.string(from: self)
+    }
+
+    // e.g. - 2020-10-28T15:08:32-0600
+    func getISO8601DateNoColon() -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone.current
+
         formatter.formatOptions.insert(.withInternetDateTime)
         var dateString = formatter.string(from: self)
         guard let index = dateString.lastIndex(of: ":") else {
@@ -27,13 +36,5 @@ public extension Date {
         }
         dateString.remove(at: index)
         return dateString
-    }
-
-    // e.g. - 2020-10-28T15:08:32-06:00
-    func getISO8601Date() -> String {
-        let formatter = ISO8601DateFormatter()
-        formatter.timeZone = TimeZone.current
-        formatter.formatOptions.insert(.withInternetDateTime)
-        return formatter.string(from: self)
     }
 }
