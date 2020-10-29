@@ -28,9 +28,11 @@ public extension Date {
     func getISO8601DateNoColon() -> String {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = TimeZone.current
-
         formatter.formatOptions.insert(.withInternetDateTime)
         var dateString = formatter.string(from: self)
+        if formatter.timeZone.secondsFromGMT() == 0 {
+            return dateString
+        }
         guard let index = dateString.lastIndex(of: ":") else {
             return dateString
         }
