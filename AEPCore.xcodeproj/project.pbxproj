@@ -50,6 +50,7 @@
 		21F79ABF24E71B03003204C3 /* IDParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABD24E7144F003204C3 /* IDParserTests.swift */; };
 		21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC024E72204003204C3 /* V4MigratorTests.swift */; };
 		21F905F5255099010067D61B /* SharedStateType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F905F4255099010067D61B /* SharedStateType.swift */; };
+		21F906052550A3C60067D61B /* SharedStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F906042550A3C60067D61B /* SharedStateData.swift */; };
 		21FE152024F03254008A82FF /* IdentityPublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */; };
 		21FE152124F0335E008A82FF /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F524CA096100F7325B /* MockExtension.swift */; };
 		21FE152224F03386008A82FF /* EventHub+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FC24CA096100F7325B /* EventHub+Testable.swift */; };
@@ -585,6 +586,7 @@
 		21F79ABD24E7144F003204C3 /* IDParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParserTests.swift; sourceTree = "<group>"; };
 		21F79AC024E72204003204C3 /* V4MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4MigratorTests.swift; sourceTree = "<group>"; };
 		21F905F4255099010067D61B /* SharedStateType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateType.swift; sourceTree = "<group>"; };
+		21F906042550A3C60067D61B /* SharedStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateData.swift; sourceTree = "<group>"; };
 		21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPublicAPITests.swift; sourceTree = "<group>"; };
 		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
@@ -1595,6 +1597,7 @@
 				3FB66AAB24CA004400502CAF /* SharedState.swift */,
 				217E220424D1FD7900B70B3E /* SharedStateResult.swift */,
 				21F905F4255099010067D61B /* SharedStateType.swift */,
+				21F906042550A3C60067D61B /* SharedStateData.swift */,
 			);
 			path = eventhub;
 			sourceTree = "<group>";
@@ -2432,6 +2435,7 @@
 				215A6CE224ED92C500FE0657 /* V4MigrationConstants.swift in Sources */,
 				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */,
+				21F906052550A3C60067D61B /* SharedStateData.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,

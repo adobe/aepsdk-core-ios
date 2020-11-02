@@ -11,14 +11,15 @@
  */
 
 import Foundation
+@testable import AEPCore
 
 struct SharedStateTestHelper {
     public static let DICT_KEY: String = "dictionary"
-    public static let ZERO: [String: Any] = [DICT_KEY: "zero"]
-    public static let ONE: [String: Any] = [DICT_KEY: "one"]
-    public static let TWO: [String: Any] = [DICT_KEY: "two"]
-    public static let THREE: [String: Any] = [DICT_KEY: "three"]
-    public static let FOUR: [String: Any] = [DICT_KEY: "four"]
-    public static let FIVE: [String: Any] = [DICT_KEY: "five"]
-    public static let TEN: [String: Any] = [DICT_KEY: "ten"]
+    public static let ZERO = SharedStateData(standard: [DICT_KEY: "zero"], xdm: [DICT_KEY: "zero_xdm"])
+    public static let ONE = SharedStateData(standard: [DICT_KEY: "one"], xdm: [DICT_KEY: "one_xdm"])
+    public static let TWO = SharedStateData(standard: [DICT_KEY: "two"], xdm: [DICT_KEY: "two_xdm"])
+    public static let THREE = SharedStateData(standard: [DICT_KEY: "three"], xdm: [DICT_KEY: "three_xdm"])
+    public static let FOUR = SharedStateData(standard: [DICT_KEY: "four"], xdm: [DICT_KEY: "four_xdm"])
+    public static let FIVE = SharedStateData(standard: [DICT_KEY: "five"], xdm: [DICT_KEY: "five_xdm"])
+    public static let TEN = SharedStateData(standard: [DICT_KEY: "ten"], xdm: [DICT_KEY: "ten_xdm"])
 }

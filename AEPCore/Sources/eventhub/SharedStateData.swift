@@ -11,8 +11,8 @@
 
 import Foundation
 
-/// Represents the `SharedState` types in `EventHub`
-enum SharedStateType: String {
-    case standard
-    case xdm
+/// Represents data stored in `SharedState`
+struct SharedStateData {
+    let standard: [String: Any]?
+    let xdm: [String: Any]?
 }

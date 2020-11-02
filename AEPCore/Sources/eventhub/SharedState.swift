@@ -40,7 +40,7 @@ class SharedState {
     /// - Parameters:
     ///   - version: The version of the `SharedState` to set (must be > any existing version)
     ///   - data: The data dictionary to set.
-    internal func set(version: Int, data: [String: Any]?) {
+    internal func set(version: Int, data: SharedStateData?) {
         add(version: version, data: data, status: .set)
     }
 
@@ -56,7 +56,7 @@ class SharedState {
     /// - Parameters:
     ///   - version: The version of the pending `SharedState` to set (must already exist)
     ///   - data: The data dictionary to set.
-    internal func updatePending(version: Int, data: [String: Any]?) {
+    internal func updatePending(version: Int, data: SharedStateData?) {
         queue.async(flags: .barrier) {
             var current = self.head
             while let node = current {
@@ -81,7 +81,7 @@ class SharedState {
     /// - Returns
     ///     - value: The current set value for the shared state
     ///     - status: The current `SharedState.Status` of the returned state
-    internal func resolve(version: Int) -> (value: [String: Any]?, status: SharedStateStatus) {
+    internal func resolve(version: Int) -> (value: SharedStateData?, status: SharedStateStatus) {
         return queue.sync {
             var current = self.head
             while let node = current {
@@ -98,7 +98,7 @@ class SharedState {
 
     // MARK: - Private API
 
-    private func add(version: Int, data: [String: Any]?, status: SharedStateStatus) {
+    private func add(version: Int, data: SharedStateData?, status: SharedStateStatus) {
         queue.async(flags: .barrier) {
             if let head = self.head {
                 if head.version < version {
@@ -119,7 +119,7 @@ class SharedState {
         var nodeStatus: SharedStateStatus = .pending
         var previousNode: Node?
         let version: Int
-        var data: [String: Any]?
+        var data: SharedStateData?
 
         /// Appends a `Node` to this `Node` and returns the new `Node`
         /// - Parameters:
@@ -127,13 +127,13 @@ class SharedState {
         ///   - data: the data for the shared state
         ///   - status: the status of the shared state
         /// - Returns: A `Node` with a reference to the previous `Node`
-        func append(version: Int, data: [String: Any]?, status: SharedStateStatus) -> Node {
+        func append(version: Int, data: SharedStateData?, status: SharedStateStatus) -> Node {
             let newNode = Node(version: version, data: data, status: status)
             newNode.previousNode = self
             return newNode
         }
 
-        init(version: Int, data: [String: Any]?, status: SharedStateStatus) {
+        init(version: Int, data: SharedStateData?, status: SharedStateStatus) {
             self.version = version
             self.data = data
             nodeStatus = status

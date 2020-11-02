@@ -19,7 +19,7 @@ class SharedStateTest: XCTestCase {
 
     // helper function
     func validateSharedState(_ version: Int, _ dictionaryValue: String) {
-        XCTAssertEqual(sharedState.resolve(version: version).value![SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
+        XCTAssertEqual(sharedState.resolve(version: version).value!.standard?[SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
     }
 
     override func setUp() {
@@ -140,7 +140,7 @@ class SharedStateTest: XCTestCase {
         let (data, _) = sharedState.resolve(version: 2)
 
         // verify
-        XCTAssertEqual(SharedStateTestHelper.ONE as! [String: String], data as! [String: String])
+        XCTAssertEqual(SharedStateTestHelper.ONE.standard as! [String: String], data?.standard as! [String: String])
     }
 
     func testSharedStateIsEmpty() {
