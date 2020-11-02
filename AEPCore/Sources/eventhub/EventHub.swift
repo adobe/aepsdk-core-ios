@@ -153,14 +153,16 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
+    ///   - xdmData: XDM data for the `SharedState`
     ///   - event: `Event` for which the `SharedState` should be versioned
-    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
+    func createSharedState(extensionName: String, data: [String: Any]?, xdmData: [String: Any]? = nil, event: Event?) {
         guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) else {
             Log.warning(label: LOG_TAG, "Error creating shared state for \(extensionName)")
             return
         }
 
-        sharedState.set(version: version, data: data)
+        let sharedStateData = [SharedStateType.standard.rawValue: data, SharedStateType.xdm.rawValue: xdmData]
+        sharedState.set(version: version, data: sharedStateData as [String: Any])
         dispatch(event: createSharedStateEvent(extensionName: extensionName))
         Log.debug(label: LOG_TAG, "Shared state created for \(extensionName) with version \(version) and data: \n\(data as AnyObject)")
     }
@@ -194,7 +196,7 @@ final class EventHub {
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
+    func getSharedState(extensionName: String, event: Event?, sharedStateType: SharedStateType = .standard, barrier: Bool = true) -> SharedStateResult? {
         guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState else {
             Log.warning(label: LOG_TAG, "Unable to retrieve shared state for \(extensionName). No such extension is registered.")
             return nil
@@ -206,14 +208,15 @@ final class EventHub {
         }
 
         let result = sharedState.resolve(version: version)
-
+        let sharedStateData = result.value?[sharedStateType.rawValue] as? [String: Any]
+        
         let stateProviderLastVersion = eventNumberFor(event: container.lastProcessedEvent)
         // shared state is still considered pending if barrier is used and the state provider has not processed past the previous event
         if barrier && stateProviderLastVersion < version - 1 && result.status == .set {
-            return SharedStateResult(status: .pending, value: result.value)
+            return SharedStateResult(status: .pending, value: sharedStateData)
         }
 
-        return SharedStateResult(status: result.status, value: result.value)
+        return SharedStateResult(status: result.status, value: sharedStateData)
     }
 
     /// Retrieves the `ExtensionContainer` wrapper for the given extension type
@@ -253,7 +256,7 @@ final class EventHub {
         }
 
         let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
-        sharedState.set(version: version, data: data)
+        sharedState.set(version: version, data: [SharedStateType.standard.rawValue: data])
         dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME))
         Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(data as AnyObject)")
     }
@@ -295,7 +298,7 @@ final class EventHub {
     private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?) {
         guard let pendingVersion = version, let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else { return }
 
-        sharedState.updatePending(version: pendingVersion, data: data)
+        sharedState.updatePending(version: pendingVersion, data: [SharedStateType.standard.rawValue: data ?? [:]])
         dispatch(event: createSharedStateEvent(extensionName: extensionName))
     }
 
