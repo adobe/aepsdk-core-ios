@@ -81,9 +81,10 @@ public extension Extension {
     /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
     /// - Parameters:
     ///   - data: Data for the `SharedState`
+    ///   - xdmData: XDM data for the `SharedState`
     ///   - event: `Event` for which the `SharedState` should be versioned
-    func createSharedState(data: [String: Any], event: Event?) {
-        runtime.createSharedState(data: data, event: event)
+    func createSharedState(data: [String: Any], xdmData: [String: Any]?, event: Event?) {
+        runtime.createSharedState(data: data, xdmData: xdmData, event: event)
     }
 
     /// Creates a pending `SharedState` versioned at `event`

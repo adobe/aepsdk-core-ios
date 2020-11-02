@@ -56,7 +56,7 @@ class Configuration: Extension {
         if !config.isEmpty {
             let responseEvent = Event(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: config)
             dispatch(event: responseEvent)
-            createSharedState(data: config, event: nil)
+            createSharedState(data: config, xdmData: nil, event: nil)
             // notify rules engine to load cached rules
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
                 rulesEngine.loadCachedRules(for: rulesURLString)

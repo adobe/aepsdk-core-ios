@@ -281,8 +281,8 @@ class EventHubContractTest: XCTestCase {
             startExpectation.fulfill()
         }
         wait(for: [startExpectation], timeout: 1)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], event: event2)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], xdmData: nil, event: event1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], xdmData: nil, event: event2)
 
         // verify
         let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
@@ -306,8 +306,8 @@ class EventHubContractTest: XCTestCase {
             startExpectation.fulfill()
         }
         wait(for: [startExpectation], timeout: 1)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], event: event2)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"second"], xdmData: nil, event: event2)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], xdmData: nil, event: event1)
 
         // verify
         let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
@@ -334,7 +334,7 @@ class EventHubContractTest: XCTestCase {
             startExpectation.fulfill()
         }
         wait(for: [startExpectation], timeout: 1)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], xdmData: nil, event: event1)
 
         // verify
         let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
@@ -364,8 +364,8 @@ class EventHubContractTest: XCTestCase {
             startExpectation.fulfill()
         }
         wait(for: [startExpectation], timeout: 1)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], xdmData: nil, event: event1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], xdmData: nil, event: event3)
 
         // verify
         let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)
@@ -438,7 +438,7 @@ class EventHubContractTest: XCTestCase {
             startExpectation.fulfill()
         }
         wait(for: [startExpectation], timeout: 1)
-        ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], event: event3)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"three"], xdmData: nil, event: event3)
 
         // verify
         let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true)

@@ -39,8 +39,9 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         dispatchedEvents += [event]
     }
 
-    public func createSharedState(data: [String: Any], event _: Event?) {
+    public func createSharedState(data: [String : Any], xdmData: [String : Any]?, event: Event?) {
         createdSharedStates += [data]
+        createdXdmSharedStates += [xdmData]
     }
 
     public func createPendingSharedState(event _: Event?) -> SharedStateResolver {
@@ -55,11 +56,6 @@ public class TestableExtensionRuntime: ExtensionRuntime {
             return mockedSharedStates["\(extensionName)-\(id)"] ?? mockedSharedStates["\(extensionName)"]
         }
         return mockedSharedStates["\(extensionName)"]
-    }
-
-    public func createSharedState(data: [String : Any], xdmData: [String : Any], event: Event?) {
-        createdSharedStates += [data]
-        createdXdmSharedStates += [xdmData]
     }
 
     public func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {

@@ -74,7 +74,7 @@ import Foundation
         guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
         // attempt to bootup
         if state.bootupIfReady(configSharedState: configSharedState, event: event) {
-            createSharedState(data: state.identityProperties.toEventData(), event: nil)
+            createSharedState(data: state.identityProperties.toEventData(), xdmData: nil, event: nil)
         }
 
         return false // cannot handle any events until we have booted
@@ -86,7 +86,7 @@ import Foundation
     private func handleIdentityRequest(event: Event) {
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
-                createSharedState(data: eventData, event: event)
+                createSharedState(data: eventData, xdmData: nil, event: event)
             }
         } else if let baseUrl = event.baseUrl {
             processAppendToUrl(baseUrl: baseUrl, event: event)
@@ -113,7 +113,7 @@ import Foundation
                 handleOptOut(event: event)
             }
             // if config contains new global privacy status, process the request
-            state?.processPrivacyChange(event: event, createSharedState: createSharedState(data:event:))
+            state?.processPrivacyChange(event: event, createSharedState: createSharedState(data:xdmData:event:))
         }
     }
 
@@ -195,7 +195,7 @@ import Foundation
     ///   - entity: The `IdentityHit` that was processed by the hit processor
     ///   - responseData: the network response data if any
     private func handleNetworkResponse(hit: IdentityHit, responseData: Data?) {
-        state?.handleHitResponse(hit: hit, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
+        state?.handleHitResponse(hit: hit, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:xdmData:event:))
     }
 
     /// Sends an opt-out network request if the current privacy status is opt-out

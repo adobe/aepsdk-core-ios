@@ -39,7 +39,7 @@ public class Lifecycle: NSObject, Extension {
         registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent, listener: receiveLifecycleRequest(event:))
 
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
-        createSharedState(data: sharedStateData as [String: Any], event: nil)
+        createSharedState(data: sharedStateData as [String: Any], xdmData: nil, event: nil)
     }
 
     public func onUnregistered() {}
@@ -109,7 +109,7 @@ public class Lifecycle: NSObject, Extension {
     ///   - data: data for the shared state
     private func updateSharedState(event: Event, data: [String: Any]) {
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: data]
-        createSharedState(data: sharedStateData as [String: Any], event: event)
+        createSharedState(data: sharedStateData as [String: Any], xdmData: nil, event: event)
     }
 
     /// Dispatches a Lifecycle response content event with appropriate event data

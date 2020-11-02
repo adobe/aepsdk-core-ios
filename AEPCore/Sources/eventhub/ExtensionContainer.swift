@@ -84,8 +84,8 @@ extension ExtensionContainer: ExtensionRuntime {
         EventHub.shared.dispatch(event: event)
     }
 
-    func createSharedState(data: [String: Any], event: Event?) {
-        EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, xdmData: nil, event: event)
+    func createSharedState(data: [String: Any], xdmData: [String: Any]?, event: Event?) {
+        EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, xdmData: xdmData, event: event)
     }
 
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
@@ -94,10 +94,6 @@ extension ExtensionContainer: ExtensionRuntime {
 
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
-    }
-
-    func createSharedState(data: [String: Any], xdmData: [String: Any], event: Event?) {
-        EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, xdmData: xdmData, event: event)
     }
 
     func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {

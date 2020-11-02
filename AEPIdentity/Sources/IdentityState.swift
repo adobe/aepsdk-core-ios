@@ -145,7 +145,7 @@ class IdentityState {
     ///   - response: the response data if any
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    func handleHitResponse(hit: IdentityHit, response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
+    func handleHitResponse(hit: IdentityHit, response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], [String: Any]?, Event?) -> Void) {
         // regardless of response, update last sync time
         identityProperties.lastSync = Date()
 
@@ -211,7 +211,7 @@ class IdentityState {
     /// - Parameters:
     ///   - event: the event triggering the privacy change
     ///   - createSharedState: a function which can create Identity shared state
-    func processPrivacyChange(event: Event, createSharedState: ([String: Any], Event) -> Void) {
+    func processPrivacyChange(event: Event, createSharedState: ([String: Any], [String: Any]?, Event) -> Void) {
         let privacyStatusStr = event.data?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let newPrivacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 
@@ -232,12 +232,12 @@ class IdentityState {
             identityProperties.pushIdentifier = nil
             pushIdManager.updatePushId(pushId: nil)
             identityProperties.saveToPersistence()
-            createSharedState(identityProperties.toEventData(), event)
+            createSharedState(identityProperties.toEventData(), nil, event)
         } else if identityProperties.ecid == nil {
             // When changing privacy status from optedout, need to generate a new Experience Cloud ID for the user
             // Sync the new ID with the Identity Service
             if let sharedStateData = syncIdentifiers(event: event) {
-                createSharedState(sharedStateData, event)
+                createSharedState(sharedStateData, nil, event)
             }
         }
 
@@ -318,7 +318,7 @@ class IdentityState {
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
     ///   - event: The event responsible for the network response
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: (([String: Any], Event?) -> Void), event: Event) {
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: (([String: Any], [String: Any]?, Event?) -> Void), event: Event) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return
@@ -340,7 +340,7 @@ class IdentityState {
             // Still, generate ECID locally if there's none yet.
             identityProperties.ecid = identityProperties.ecid ?? ECID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
-            createSharedState(identityProperties.toEventData(), event)
+            createSharedState(identityProperties.toEventData(), nil, event)
             return
         }
 
@@ -351,7 +351,7 @@ class IdentityState {
             identityProperties.locationHint = stringHint
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
             if shouldShareState {
-                createSharedState(identityProperties.toEventData(), event)
+                createSharedState(identityProperties.toEventData(), nil, event)
             }
         }
     }
