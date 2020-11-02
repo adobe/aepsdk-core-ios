@@ -26,7 +26,7 @@ class DiskCacheService: Caching {
         let path = filePath(for: cacheName, with: key)
         _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
         try fileManager.setAttributes([.modificationDate: entry.expiry.date], ofItemAtPath: path)
-        Log.trace(label: LOG_PREFIX, "Setting key '\(key)' to value '\(String(describing: entry.metadata))' for cache '\(cacheName)'.")
+        Log.trace(label: LOG_PREFIX, "Updating cache '\(cacheName)' - setting key '\(key)' to value: \n\(entry.metadata as AnyObject)")
         dataStore.set(key: dataStoreKey(for: cacheName, with: key), value: entry.metadata)
     }
 
