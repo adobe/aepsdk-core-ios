@@ -18,7 +18,7 @@ class DateFormatTests: XCTestCase {
     
     func testGetUnixTimeInSeconds() {
         // setup
-        let victory: Int64 = 1391398245000 // Feb 2, 2014 8:30:45 pm
+        let victory: Int64 = 1391373045000 // Feb 2, 2014 8:30:45 pm GMT
         let date = Date(milliseconds: victory)
         
         // test
@@ -30,9 +30,10 @@ class DateFormatTests: XCTestCase {
     
     func testGetISO8601Date() {
         // setup
-        let victory: Int64 = 1391398245000 // Feb 2, 2014 8:30:45 pm
+        let tzOffset = TimeZone.current.secondsFromGMT()
+        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm GMT
         let date = Date(milliseconds: victory)
-        let expectedDateString = "2014-02-02T20:30:45" + timezoneStringWithColon
+        let expectedDateString = getLocalExpectedDateStringFrom(date) + timezoneStringWithColon
         
         // test
         let result = date.getISO8601Date()
@@ -43,9 +44,10 @@ class DateFormatTests: XCTestCase {
     
     func testGetISO8601DateNoColon() {
         // setup
-        let victory: Int64 = 1391398245000 // Feb 2, 2014 8:30:45 pm
+        let tzOffset = TimeZone.current.secondsFromGMT()
+        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm GMT
         let date = Date(milliseconds: victory)
-        let expectedDateString = "2014-02-02T20:30:45" + timezoneString
+        let expectedDateString = getLocalExpectedDateStringFrom(date) + timezoneString
         
         // test
         let result = date.getISO8601DateNoColon()
@@ -127,5 +129,23 @@ class DateFormatTests: XCTestCase {
         } else {
             return timezoneMapperWithColon[TimeZone.current.secondsFromGMT()] ?? ""
         }
+    }
+    
+    func getLocalExpectedDateStringFrom(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY"
+        let year = formatter.string(from: date)
+        formatter.dateFormat = "MM"
+        let month = formatter.string(from: date)
+        formatter.dateFormat = "dd"
+        let day = formatter.string(from: date)
+        formatter.dateFormat = "HH"
+        let hours = formatter.string(from: date)
+        formatter.dateFormat = "mm"
+        let minutes = formatter.string(from: date)
+        formatter.dateFormat = "ss"
+        let seconds = formatter.string(from: date)
+        
+        return "\(year)-\(month)-\(day)T\(hours):\(minutes):\(seconds)"
     }
 }
