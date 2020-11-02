@@ -66,7 +66,7 @@ public protocol ExtensionRuntime {
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult?
-    
+
     /// Creates a new `SharedState` for this extension
     /// If `event` is nil, one of two behaviors will be observed:
     /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
@@ -76,7 +76,7 @@ public protocol ExtensionRuntime {
     ///   - xdmData: XDM data for the `SharedState`
     ///   - event: `Event` for which the `SharedState` should be versioned
     func createSharedState(data: [String: Any], xdmData: [String: Any], event: Event?)
-    
+
     /// Gets the XDM `SharedState` data for a specified extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned

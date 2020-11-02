@@ -56,12 +56,12 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         }
         return mockedSharedStates["\(extensionName)"]
     }
-    
+
     public func createSharedState(data: [String : Any], xdmData: [String : Any], event: Event?) {
         createdSharedStates += [data]
         createdXdmSharedStates += [xdmData]
     }
-    
+
     public func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         if let id = event?.id {
             return mockedXdmSharedStates["\(extensionName)-\(id)"] ?? mockedXdmSharedStates["\(extensionName)"]
