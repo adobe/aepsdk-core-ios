@@ -18,7 +18,7 @@ class DateFormatTests: XCTestCase {
     
     func testGetUnixTimeInSeconds() {
         // setup
-        let victory: Int64 = 1391373045000 // Feb 2, 2014 8:30:45 pm GMT
+        let victory: Int64 = 1391373045000 // Feb 2, 2014 8:30:45 pm MST
         let date = Date(milliseconds: victory)
         
         // test
@@ -31,7 +31,7 @@ class DateFormatTests: XCTestCase {
     func testGetISO8601Date() {
         // setup
         let tzOffset = TimeZone.current.secondsFromGMT()
-        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm GMT
+        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm MST
         let date = Date(milliseconds: victory)
         let expectedDateString = getLocalExpectedDateStringFrom(date) + timezoneStringWithColon
         
@@ -45,7 +45,7 @@ class DateFormatTests: XCTestCase {
     func testGetISO8601DateNoColon() {
         // setup
         let tzOffset = TimeZone.current.secondsFromGMT()
-        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm GMT
+        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm MST
         let date = Date(milliseconds: victory)
         let expectedDateString = getLocalExpectedDateStringFrom(date) + timezoneString
         
@@ -72,7 +72,7 @@ class DateFormatTests: XCTestCase {
         10800: "+0300",
         7200: "+0200",
         3600: "+0100",
-        0: "Z",
+        0: "+0000",
         -3600: "-0100",
         -7200: "-0200",
         -10800: "-0300",
@@ -100,7 +100,7 @@ class DateFormatTests: XCTestCase {
         10800: "+03:00",
         7200: "+02:00",
         3600: "+01:00",
-        0: "Z",
+        0: "+00:00",
         -3600: "-01:00",
         -7200: "-02:00",
         -10800: "-03:00",
@@ -133,6 +133,7 @@ class DateFormatTests: XCTestCase {
     
     func getLocalExpectedDateStringFrom(_ date: Date) -> String {
         let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
         formatter.dateFormat = "YYYY"
         let year = formatter.string(from: date)
         formatter.dateFormat = "MM"
