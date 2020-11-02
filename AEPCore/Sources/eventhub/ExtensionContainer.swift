@@ -100,8 +100,8 @@ extension ExtensionContainer: ExtensionRuntime {
         EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, xdmData: xdmData, event: event)
     }
 
-    func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
-        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, sharedStateType: .xdm, barrier: barrier)
+    func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, sharedStateType: .xdm, barrier: false)
     }
 
     func startEvents() {
