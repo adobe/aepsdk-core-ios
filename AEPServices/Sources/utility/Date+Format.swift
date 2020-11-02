@@ -28,7 +28,7 @@ public extension Date {
     func getISO8601DateNoColon() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXX"
         return formatter.string(from: self)
     }
 }
