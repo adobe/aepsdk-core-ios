@@ -20,7 +20,9 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var listeners: [String: EventListener] = [:]
     public var dispatchedEvents: [Event] = []
     public var createdSharedStates: [[String: Any]?] = []
+    public var createdXdmSharedStates: [[String: Any]?] = []
     public var mockedSharedStates: [String: SharedStateResult] = [:]
+    public var mockedXdmSharedStates: [String: SharedStateResult] = [:]
 
     public init() {}
 
@@ -53,6 +55,18 @@ public class TestableExtensionRuntime: ExtensionRuntime {
             return mockedSharedStates["\(extensionName)-\(id)"] ?? mockedSharedStates["\(extensionName)"]
         }
         return mockedSharedStates["\(extensionName)"]
+    }
+    
+    public func createSharedState(data: [String : Any], xdmData: [String : Any], event: Event?) {
+        createdSharedStates += [data]
+        createdXdmSharedStates += [xdmData]
+    }
+    
+    public func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+        if let id = event?.id {
+            return mockedXdmSharedStates["\(extensionName)-\(id)"] ?? mockedXdmSharedStates["\(extensionName)"]
+        }
+        return mockedXdmSharedStates["\(extensionName)"]
     }
 
     public func startEvents() {}
