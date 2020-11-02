@@ -16,17 +16,19 @@ public extension Date {
         return Int64(timeIntervalSince1970)
     }
 
-    func getRFC822Date() -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd'T'HH:mm:ssZZZ")
+    // e.g. - 2020-10-28T15:08:32-06:00
+    func getISO8601Date() -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.formatOptions.insert(.withInternetDateTime)
         return formatter.string(from: self)
     }
 
-    func getISO8601Date() -> String {
+    // e.g. - 2020-10-28T15:08:32-0600
+    func getISO8601DateNoColon() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.setLocalizedDateFormatFromTemplate("yyyy-MM-dd'T'HH:mm:ssXXX")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssXX"
         return formatter.string(from: self)
     }
 }
