@@ -620,7 +620,7 @@ class IdentityStateTests: XCTestCase {
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
             XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }) { _, _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -652,7 +652,7 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }) { _, _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -684,7 +684,7 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }) { _, _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -716,7 +716,7 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }) { _, _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -746,7 +746,7 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: IdentityHit.fakeHit(), response: nil, eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }) { _, _, _ in
             sharedStateExpectation.fulfill()
         }
 
@@ -768,7 +768,7 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
         // test
-        state.processPrivacyChange(event: event, createSharedState: { (data, event) in
+        state.processPrivacyChange(event: event, createSharedState: { (data, xdmData, event)  in
             XCTFail("Shared state should not be updated")
         })
 
@@ -790,7 +790,7 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, createSharedState: { (_, _) in
+        state.processPrivacyChange(event: event, createSharedState: { (_, _, _) in
             XCTFail("Shared state should not be updated")
         })
 
@@ -813,7 +813,7 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, createSharedState: { (data, event) in
+        state.processPrivacyChange(event: event, createSharedState: { (data, xdmData, event) in
             sharedStateExpectation.fulfill()
         })
 
@@ -840,7 +840,7 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, createSharedState: { (_, _) in
+        state.processPrivacyChange(event: event, createSharedState: { (_, _, _) in
             sharedStateExpectation.fulfill()
         })
 
@@ -866,7 +866,7 @@ class IdentityStateTests: XCTestCase {
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue])
 
         // test
-        state.processPrivacyChange(event: event, createSharedState: { _, _ in
+        state.processPrivacyChange(event: event, createSharedState: { (_, _, _) in
             sharedStateExpectation.fulfill()
         })
 
