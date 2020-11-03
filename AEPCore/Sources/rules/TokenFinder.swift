@@ -36,8 +36,8 @@ class TokenFinder: Traversable {
     private let TOKEN_KEY_EVENT_TYPE = "~type"
     private let TOKEN_KEY_EVENT_SOURCE = "~source"
     private let TOKEN_KEY_TIMESTAMP_UNIX = "~timestampu"
-    private let TOKEN_KEY_TIMESTAMP_ISO8601 = "~timestampz"
-    private let TOKEN_KEY_TIMESTAMP_PLATFORM = "~timestampp"
+    private let TOKEN_KEY_TIMESTAMP_ISO8601_NO_COLON = "~timestampz"
+    private let TOKEN_KEY_TIMESTAMP_ISO8601 = "~timestampp"
     private let TOKEN_KEY_SDK_VERSION = "~sdkver"
     private let TOKEN_KEY_CACHEBUST = "~cachebust"
     private let TOKEN_KEY_ALL_URL = "~all_url"
@@ -65,9 +65,9 @@ class TokenFinder: Traversable {
             return event.source
         case TOKEN_KEY_TIMESTAMP_UNIX:
             return now.getUnixTimeInSeconds()
+        case TOKEN_KEY_TIMESTAMP_ISO8601_NO_COLON:
+            return now.getISO8601DateNoColon()
         case TOKEN_KEY_TIMESTAMP_ISO8601:
-            return now.getRFC822Date()
-        case TOKEN_KEY_TIMESTAMP_PLATFORM:
             return now.getISO8601Date()
         case TOKEN_KEY_SDK_VERSION:
             return MobileCore.extensionVersion

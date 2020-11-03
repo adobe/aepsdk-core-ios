@@ -62,6 +62,7 @@
 		24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
+		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
 		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
 		24B4935D24D4C31100AA38D9 /* SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4935C24D4C31100AA38D9 /* SignalTests.swift */; };
 		24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4935124D4C31100AA38D9 /* AEPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -595,6 +596,7 @@
 		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
 		247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+SignalTests.swift"; sourceTree = "<group>"; };
+		249498E0254A0C910045E392 /* Date+FormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+FormatTests.swift"; sourceTree = "<group>"; };
 		2499461B24E5E67700D3F7B2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		24B4934F24D4C31100AA38D9 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24B4935124D4C31100AA38D9 /* AEPSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPSignal.h; sourceTree = "<group>"; };
@@ -1353,12 +1355,12 @@
 				3F0397E724BE60910019F095 /* unzip */,
 				3F0397F124BE60910019F095 /* AnyCodable.swift */,
 				3F0397E624BE60910019F095 /* AtomicCounter.swift */,
+				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
 				3F0397EE24BE60910019F095 /* OperationOrderer.swift */,
 				2107F02D24C9FF88002935CF /* SHA256.swift */,
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
-				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1412,6 +1414,7 @@
 			isa = PBXGroup;
 			children = (
 				3F03981124BE61520019F095 /* AnyCodableTests.swift */,
+				249498E0254A0C910045E392 /* Date+FormatTests.swift */,
 				3F03980F24BE61520019F095 /* OperationOrdererTests.swift */,
 				3F03981024BE61520019F095 /* PersistentHitQueueTests.swift */,
 				2107F02F24C9FFB2002935CF /* SHA256Tests.swift */,
@@ -2593,6 +2596,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F03981624BE61520019F095 /* SystemInfoServiceTest.swift in Sources */,
+				249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */,
 				3F03981E24BE61520019F095 /* DataQueueTests.swift in Sources */,
 				3F03981524BE61520019F095 /* UnzipperTest.swift in Sources */,
 				3F03982424BE61520019F095 /* AnyCodableTests.swift in Sources */,
