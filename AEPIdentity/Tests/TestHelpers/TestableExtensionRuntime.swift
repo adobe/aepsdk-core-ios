@@ -54,7 +54,7 @@ class TestableExtensionRuntime: ExtensionRuntime {
 
     func createSharedState(data: [String : Any], xdmData: [String : Any]?, event: Event?) {
         createdSharedStates += [data]
-        createdXdmSharedStates += [data]
+        createdXdmSharedStates += [xdmData]
     }
 
     func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
