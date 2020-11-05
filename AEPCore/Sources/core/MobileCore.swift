@@ -72,6 +72,15 @@ public final class MobileCore: NSObject {
         }
     }
 
+    /// Fetches a list of registered extensions along with their respective versions
+    /// - Returns: list of registered extensions along with their respective versions
+    @objc
+    public static func getRegisteredExtensions() -> String {
+        let registeredExtensions = EventHub.shared.getSharedState(extensionName: EventHubConstants.NAME, event: nil)?.value
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: registeredExtensions ?? [:], options: .prettyPrinted) else { return "{}" }
+        return String(data: jsonData, encoding: .utf8) ?? "{}"
+    }
+
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
     @objc(dispatch:)

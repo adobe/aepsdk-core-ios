@@ -180,6 +180,52 @@ class MobileCoreTests: XCTestCase {
         wait(for: [expectation], timeout: 0.25)
     }
 
+    func testGetRegisteredExtensions() {
+        // setup
+        let expectation = XCTestExpectation(description: "extensions are registered")
+        expectation.assertForOverFulfill = true
+
+        let expected = """
+        {
+          "extensions" : {
+            "mockExtension" : {
+              "version" : "0.0.1"
+            },
+            "Configuration" : {
+              "version" : "3.0.0-beta.1"
+            },
+            "mockExtensionTwo" : {
+              "metadata" : {
+                "testMetaKey" : "testMetaVal"
+              },
+              "version" : "0.0.1"
+            }
+          },
+          "version" : "3.0.0-beta.1"
+        }
+        """
+        let expectedDict = jsonStrToDict(jsonStr: expected)
+
+        // test
+        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self], {
+            let registered = MobileCore.getRegisteredExtensions()
+            let registeredDict = self.jsonStrToDict(jsonStr: registered)
+            let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
+            XCTAssertTrue(equal)
+            expectation.fulfill()
+        })
+
+        // verify
+        wait(for: [expectation], timeout: 0.25)
+    }
+
+    private func jsonStrToDict(jsonStr: String) -> [String: Any]? {
+        if let data = jsonStr.data(using: .utf8) {
+            return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+        }
+        return nil
+    }
+
     func testDispatchEventSimple() {
         // setup
         let expectedEvent = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
