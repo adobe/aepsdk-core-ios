@@ -181,11 +181,11 @@ final class EventHub {
         return eventHubQueue.sync {
             var pendingVersion: Int?
 
-        if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: .standard) {
-            pendingVersion = version
-            sharedState.addPending(version: version)
-            Log.debug(label: LOG_TAG, "Pending shared state created for \(extensionName) with version \(version)")
-        }
+            if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: .standard) {
+                pendingVersion = version
+                sharedState.addPending(version: version)
+                Log.debug(label: LOG_TAG, "Pending shared state created for \(extensionName) with version \(version)")
+            }
 
             return { [weak self] data in
                 self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data)
