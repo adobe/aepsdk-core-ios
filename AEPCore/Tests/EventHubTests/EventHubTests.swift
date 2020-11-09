@@ -877,6 +877,31 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
+    
+    /// Tests that we can create and resolve a pending XDM shared state
+    func testCreatePendingAndResolveXDMPendingSimple() {
+        // setup
+        let expectation = XCTestExpectation(description: "XDM Pending shared state resolved correctly")
+        expectation.assertForOverFulfill = true
+        eventHub.start()
+
+        let event = Event(name: "test", type: EventType.acquisition, source: EventSource.requestContent, data: nil)
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String == EventHubTests.MOCK_EXTENSION_NAME {
+                expectation.fulfill()
+            }
+        }
+        eventHub.dispatch(event: event)
+
+        // test
+        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event, sharedStateType: .xdm)
+        pendingResolver(SharedStateTestHelper.ONE)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one", .xdm)
+    }
 
     /// Ensures that an extension who does not resolve their pending shared state has a nil shared state
     func testSharedStateEmptyWhenNoResolve() {

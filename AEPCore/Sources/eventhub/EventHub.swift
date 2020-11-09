@@ -176,19 +176,20 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - event: `Event` for which the `SharedState` should be versioned
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
-    func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
+    func createPendingSharedState(extensionName: String, event: Event?, sharedStateType: SharedStateType = .standard) -> SharedStateResolver {
         return eventHubQueue.sync {
             var pendingVersion: Int?
 
-            if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: .standard) {
+            if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) {
                 pendingVersion = version
                 sharedState.addPending(version: version)
                 Log.debug(label: LOG_TAG, "Pending shared state created for \(extensionName) with version \(version)")
             }
 
             return { [weak self] data in
-                self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data)
+                self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data, sharedStateType: sharedStateType)
                 Log.debug(label: self?.LOG_TAG ?? "EventHub", "Pending shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(data as AnyObject)")
             }
         }
@@ -302,9 +303,10 @@ final class EventHub {
     ///   - extensionName: A `String` containing the name of the extension
     ///   - version: An `Int?` containing the version of the state being updated
     ///   - data: A `[String: Any]?` containing data to add to the pending state prior to it being dispatched
-    private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?) {
-        guard let pendingVersion = version, let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else { return }
-
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
+    private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?, sharedStateType: SharedStateType = .standard) {
+        guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else { return }
+        guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
         dispatch(event: createSharedStateEvent(extensionName: extensionName))
     }

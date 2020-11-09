@@ -48,6 +48,12 @@ public class TestableExtensionRuntime: ExtensionRuntime {
             self.createdSharedStates += [data]
         }
     }
+    
+    public func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
+        return { data in
+            self.createdXdmSharedStates += [data]
+        }
+    }
 
     public func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.

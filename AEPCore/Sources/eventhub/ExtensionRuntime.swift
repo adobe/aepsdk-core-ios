@@ -59,6 +59,14 @@ public protocol ExtensionRuntime {
     /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
     func createPendingSharedState(event: Event?) -> SharedStateResolver
 
+    /// Creates a pending XDM `SharedState` versioned at `event`
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
+    /// - Parameter event: `Event` for which the `SharedState` should be versioned
+    /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
+    func createPendingXDMSharedState(event: Event?) -> SharedStateResolver
+
     /// Gets the `SharedState` data for a specified extension    
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned

@@ -107,6 +107,10 @@ extension ExtensionContainer: ExtensionRuntime {
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
         return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event)
     }
+    
+    func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
+        return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event, sharedStateType: .xdm)
+    }
 
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
