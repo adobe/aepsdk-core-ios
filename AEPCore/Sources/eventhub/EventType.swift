@@ -33,6 +33,7 @@ public class EventType: NSObject {
     public static let target = "com.adobe.eventType.target"
     public static let userProfile = "com.adobe.eventType.userProfile"
     public static let places = "com.adobe.eventType.places"
+    public static let offerDecisioning = "com.adobe.eventType.offerDecisioning"
     public static let genericTrack = "com.adobe.eventType.generic.track"
     public static let genericLifecycle = "com.adobe.eventType.generic.lifecycle"
     public static let genericIdentity = "com.adobe.eventType.generic.identity"
