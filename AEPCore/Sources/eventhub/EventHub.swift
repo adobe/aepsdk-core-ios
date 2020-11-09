@@ -156,9 +156,9 @@ final class EventHub {
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
     ///   - event: `Event` for which the `SharedState` should be versioned
-    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
+    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?, sharedStateType: SharedStateType = .standard) {
         eventHubQueue.async {
-            guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) else {
+            guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) else {
                 Log.warning(label: self.LOG_TAG, "Error creating shared state for \(extensionName)")
                 return
             }
@@ -201,9 +201,9 @@ final class EventHub {
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         return eventHubQueue.sync {
-            guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState else {
+            guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
                 Log.warning(label: LOG_TAG, "Unable to retrieve shared state for \(extensionName). No such extension is registered.")
                 return nil
             }
