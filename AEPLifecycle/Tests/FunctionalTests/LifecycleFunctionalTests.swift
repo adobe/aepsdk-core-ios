@@ -23,6 +23,10 @@ class LifecycleFunctionalTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var lifecycle: Lifecycle!
 
+    var expectedOSValue: String {
+        return "\(mockSystemInfoService.getOperatingSystemName()) \(mockSystemInfoService.getOperatingSystemVersion())"
+    }
+    
     override func setUp() {
         setupMockSystemInfoService()
         mockRuntime = TestableExtensionRuntime()
@@ -43,6 +47,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockSystemInfoService.applicationVersionNumber = "1.1.1"
         mockSystemInfoService.deviceName = "Test device name"
         mockSystemInfoService.operatingSystemName = "Test OS"
+        mockSystemInfoService.operatingSystemVersion = "Test Version"
         mockSystemInfoService.activeLocaleName = "en-US"
         mockSystemInfoService.displayInformation = (100, 100)
 
@@ -69,7 +74,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("100x100", dispatchedEvent.lifecycleContextData["resolution"] as? String)
         XCTAssertEqual(mockSystemInfoService.runMode, dispatchedEvent.lifecycleContextData["runmode"] as? String)
         XCTAssertEqual(mockSystemInfoService.activeLocaleName, dispatchedEvent.lifecycleContextData["locale"] as? String)
-        XCTAssertEqual(mockSystemInfoService.operatingSystemName, dispatchedEvent.lifecycleContextData["osversion"] as? String)
+        XCTAssertEqual(expectedOSValue, dispatchedEvent.lifecycleContextData["osversion"] as? String)
         XCTAssertEqual("Test app name 1.1.1 (12345)", dispatchedEvent.lifecycleContextData["appid"] as? String)
         XCTAssertEqual(mockSystemInfoService.deviceName, dispatchedEvent.lifecycleContextData["devicename"] as? String)
 
@@ -80,7 +85,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("100x100", lifecycleData?["resolution"] as? String)
         XCTAssertEqual(mockSystemInfoService.runMode, lifecycleData?["runmode"] as? String)
         XCTAssertEqual(mockSystemInfoService.activeLocaleName, lifecycleData?["locale"] as? String)
-        XCTAssertEqual(mockSystemInfoService.operatingSystemName, lifecycleData?["osversion"] as? String)
+        XCTAssertEqual(expectedOSValue, lifecycleData?["osversion"] as? String)
         XCTAssertEqual("Test app name 1.1.1 (12345)", lifecycleData?["appid"] as? String)
         XCTAssertEqual(mockSystemInfoService.deviceName, lifecycleData?["devicename"] as? String)
     }
