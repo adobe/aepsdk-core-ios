@@ -26,7 +26,7 @@ class LifecycleFunctionalTests: XCTestCase {
     var expectedOSValue: String {
         return "\(mockSystemInfoService.getOperatingSystemName()) \(mockSystemInfoService.getOperatingSystemVersion())"
     }
-    
+
     override func setUp() {
         setupMockSystemInfoService()
         mockRuntime = TestableExtensionRuntime()
