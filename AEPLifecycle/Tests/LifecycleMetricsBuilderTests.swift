@@ -162,6 +162,8 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let applicationIdentifier = "\(applicationName) \(applicationVersionNumber) (\(applicationBuildNumber))"
         let operatingSystemName = "iOS"
         systemInfoService?.operatingSystemName = operatingSystemName
+        let operatingSystemVersion = "14.0"
+        systemInfoService?.operatingSystemVersion = operatingSystemVersion
         let widthPixels = 375
         let heightPixels = 812
         let resolution = "\(widthPixels)x\(heightPixels)"
@@ -178,7 +180,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.carrierName, mobileCarrierName)
         XCTAssertEqual(metrics?.appId, applicationIdentifier)
         XCTAssertEqual(metrics?.deviceResolution, resolution)
-        XCTAssertEqual(metrics?.operatingSystem, operatingSystemName)
+        XCTAssertEqual(metrics?.operatingSystem, "\(operatingSystemName) \(operatingSystemVersion)")
         XCTAssertEqual(metrics?.locale, formattedLocale)
         XCTAssertEqual(metrics?.runMode, runMode)
     }

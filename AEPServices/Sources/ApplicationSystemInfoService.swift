@@ -122,6 +122,10 @@ class ApplicationSystemInfoService: SystemInfoService {
         return UIDevice.current.systemName
     }
 
+    func getOperatingSystemVersion() -> String {
+        return UIDevice.current.systemVersion
+    }
+
     func getCanonicalPlatformName() -> String {
         return "ios"
     }

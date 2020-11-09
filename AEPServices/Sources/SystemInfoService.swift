@@ -59,6 +59,10 @@ public protocol SystemInfoService {
     /// - Return: `String` the operating system's name
     func getOperatingSystemName() -> String
 
+    /// Gets the operating system's version
+    /// - Return: `String` the operating system's version
+    func getOperatingSystemVersion() -> String
+
     /// Gets the string representation of the canonical platform name
     /// - Return: `String` the platform name name
     func getCanonicalPlatformName() -> String
