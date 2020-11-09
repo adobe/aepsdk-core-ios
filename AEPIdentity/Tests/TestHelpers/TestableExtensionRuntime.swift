@@ -51,7 +51,7 @@ class TestableExtensionRuntime: ExtensionRuntime {
             self.createdSharedStates += [data]
         }
     }
-    
+
     func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
         return { data in
             self.createdXdmSharedStates += [data]

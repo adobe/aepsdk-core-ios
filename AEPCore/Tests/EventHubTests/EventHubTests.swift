@@ -877,7 +877,7 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
-    
+
     /// Tests that we can create and resolve a pending XDM shared state
     func testCreatePendingAndResolveXDMPendingSimple() {
         // setup
