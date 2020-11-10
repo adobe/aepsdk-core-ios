@@ -52,18 +52,18 @@ class TestableExtensionRuntime: ExtensionRuntime {
         }
     }
 
-    func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
-        return { data in
-            self.createdXdmSharedStates += [data]
-        }
-    }
-
     func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         return otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
 
     public func createXDMSharedState(data: [String : Any], event: Event?) {
         createdXdmSharedStates += [data]
+    }
+
+    func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
+        return { data in
+            self.createdXdmSharedStates += [data]
+        }
     }
 
     public func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
