@@ -67,7 +67,7 @@ A mechanism that allows **Extensions** to share state data with other Extensions
 
 ### XDM Shared State
 
-A mechanism that allows **Extensions** to share state XDM compliant data with other Extensions. XDM shared states allow extensions allow the Edge extension to collect XDM data from various mobile extensions when needed and allow for the creation of XDM data elements to be used in Launch rules.
+A mechanism that allows **Extensions** to share state XDM compliant data with other Extensions. XDM shared states allow the Edge extension to collect XDM data from various mobile extensions when needed and allow for the creation of XDM data elements to be used in Launch rules.
 
 --------------------------------------------------------------------------------
 

@@ -269,9 +269,9 @@ By default, every extension is provided with an API to update their XDM shared s
 func createXDMSharedState(data: [String: Any], event: Event?)
 ```
 
-##### Creating and Updating an XDM Pending Shared State
+##### Creating and Updating a Pending XDM Shared State
 
-In some cases, an extension may want to declare that its shared state is currently pending. For example, an extension may be doing some data manipulation, but in the meantime, the extension may invalidate its existing shared state and notify other extensions that the extension is currently working on providing a new shared state. This can be done with the API `func createPendingSharedState(event: Event?) -> SharedStateResolver`. This function creates a pending shared state versioned at an optional `Event` and returns a closure, which is to be invoked with your updated shared state data once available.
+In some cases, an extension may want to declare that its shared state is currently pending. For example, an extension may be doing some data manipulation, but in the meantime, the extension may invalidate its existing shared state and notify other extensions that the extension is currently working on providing a new shared state. This can be done with the API `func createPendingXDMSharedState(event: Event?) -> SharedStateResolver`. This function creates a pending shared state versioned at an optional `Event` and returns a closure, which is to be invoked with your updated XDM shared state data once available.
 
 ###### Pending Shared State Example
 
