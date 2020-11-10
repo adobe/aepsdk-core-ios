@@ -137,7 +137,7 @@ Most implementations of public APIs should be lightweight, usually just dispatch
 
 ##### APIs that don't return a value
 
-APIs that only result in an action being taken and no value being returned can usually be implemented in just a few lines. In the following example the `AEPConfiguration` extension is listening for an `Event` of type `EventType.configuration` and source `EventSource.requestContent` with the app id payload. When the `Configuration` extension receives this `Event` it will carry out the required processing to configure the SDK with the given `appId` and potentially dispatch other events and update it's shared state. 
+APIs that only result in an action being taken and no value being returned can usually be implemented in just a few lines. In the following example the `AEPConfiguration` extension is listening for an `Event` of type `EventType.configuration` and source `EventSource.requestContent` with the app id payload. When the `Configuration` extension receives this `Event` it will carry out the required processing to configure the SDK with the given `appId` and potentially dispatch other events and update it's shared state.
 
 ```swift
 @objc public extension MobileCore {
@@ -249,6 +249,56 @@ All extensions are provided a default API to read shared state from another exte
 func getSharedState(extensionName: String, event: Event?) -> SharedStateResult?
 ```
 
+#### XDM Shared States
+
+XDM shared states allow extensions allow the Edge extension to collect XDM data from various mobile extensions when needed and allow for the creation of XDM data elements to be used in Launch rules. All XDM Shared state data should be modeled based on known / global XDM schema.
+
+##### Updating XDM Shared State
+
+By default, every extension is provided with an API to update their XDM shared state with new data. Pass in the data and optional `Event` associated with the XDM shared state, and the `EventHub` will update your shared state and dispatch an `Event` notifying other extensions that a new shared state for your extension is available. An extension can have none, one or multiple XDM schemas shared as XDM Shared state
+
+```swift
+/// Creates a new XDM SharedState for this extension.
+/// The data passed to this API needs to be mapped to known XDM mixins; if an extension uses multiple mixins, the current data for all of them should be provided when the XDM shared state is set.
+/// If `event` is nil, one of two behaviors will be observed:
+/// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+/// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
+/// - Parameters:
+///   - data: Data for the `SharedState`
+///   - event: `Event` for which the `SharedState` should be versioned
+func createXDMSharedState(data: [String: Any], event: Event?)
+```
+
+##### Creating and Updating an XDM Pending Shared State
+
+In some cases, an extension may want to declare that its shared state is currently pending. For example, an extension may be doing some data manipulation, but in the meantime, the extension may invalidate its existing shared state and notify other extensions that the extension is currently working on providing a new shared state. This can be done with the API `func createPendingSharedState(event: Event?) -> SharedStateResolver`. This function creates a pending shared state versioned at an optional `Event` and returns a closure, which is to be invoked with your updated shared state data once available.
+
+###### Pending Shared State Example
+
+```swift
+// set your current Shared State to pending
+let pendingResolver = createPendingXDMSharedState(event: nil)
+
+// compute your new XDM Shared State data
+let updatedSharedStateData = computeXDMSharedState()
+
+// resolve your pending XDM Shared State
+pendingResolver(updatedSharedStateData)
+```
+
+##### Reading XDM Shared State from another Extension
+
+All extensions are provided a default API to read XDM shared state from another extension. Simply pass in the name of the extension and the optional `Event` to get an extension's shared state.
+
+```swift
+/// Gets the XDM SharedState data for a specified extension. If this extension populates multiple mixins in their shared state, all the data will be returned at once and it can be accessed using path discovery.
+/// - Parameters:
+///   - extensionName: An extension name whose `SharedState` will be returned
+///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+/// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
+func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult?
+```
+
 ##### Listening for Shared State Updates
 
 In some instances an extension may want to be notified of when an extension publishes a new shared state, to do this an extension can register a listener which listens for an `Event` of type `hub` and source `sharedState`, then it can inspect the event data to determine which extension has published new shared state.
@@ -275,7 +325,7 @@ func testIdentityRequestAppendUrlHappy() {
     // Create our fake `Event` that Identity will receive
     let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
     mockRuntime.simulateSharedState(extensionName: ConfigurationConstants.EXTENSION_NAME, event: appendUrlEvent, data: (["testKey":"testVal"], .set))
-    
+
 		// Simulate that `Event` being dispatched from the `EventHub`
     mockRuntime.simulateComingEvent(event: appendUrlEvent)
 
@@ -294,10 +344,10 @@ In this second example we are testing that the Configuration extension dispatche
 func testGetPrivacyStatusWhenConfigureIsEmpty() {
     // Create our fake `Event`
     let event = createGetPrivacyStatusEvent()
-    
+
     // Simulate that `Event` being dispatched from the `EventHub`
     mockRuntime.simulateComingEvents(event)
-    
+
     // Inspect any `Event`s the Configuration extension has dispatched
     XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
     XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
@@ -306,4 +356,3 @@ func testGetPrivacyStatusWhenConfigureIsEmpty() {
     XCTAssertEqual(event.id, mockRuntime.firstEvent?.responseID)
 }
 ```
-
