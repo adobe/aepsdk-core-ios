@@ -156,9 +156,9 @@ final class EventHub {
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - data: Data for the `SharedState`
     ///   - event: `Event` for which the `SharedState` should be versioned
-    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?) {
+    func createSharedState(extensionName: String, data: [String: Any]?, event: Event?, sharedStateType: SharedStateType = .standard) {
         eventHubQueue.async {
-            guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event) else {
+            guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) else {
                 Log.warning(label: self.LOG_TAG, "Error creating shared state for \(extensionName)")
                 return
             }
@@ -176,19 +176,20 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: Extension whose `SharedState` is to be updated
     ///   - event: `Event` for which the `SharedState` should be versioned
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: A `SharedStateResolver` which is invoked to set pending the `SharedState` versioned at `event`
-    func createPendingSharedState(extensionName: String, event: Event?) -> SharedStateResolver {
+    func createPendingSharedState(extensionName: String, event: Event?, sharedStateType: SharedStateType = .standard) -> SharedStateResolver {
         return eventHubQueue.sync {
             var pendingVersion: Int?
 
-            if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event) {
+            if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) {
                 pendingVersion = version
                 sharedState.addPending(version: version)
                 Log.debug(label: LOG_TAG, "Pending shared state created for \(extensionName) with version \(version)")
             }
 
             return { [weak self] data in
-                self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data)
+                self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data, sharedStateType: sharedStateType)
                 Log.debug(label: self?.LOG_TAG ?? "EventHub", "Pending shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(data as AnyObject)")
             }
         }
@@ -199,10 +200,11 @@ final class EventHub {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         return eventHubQueue.sync {
-            guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState else {
+            guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
                 Log.warning(label: LOG_TAG, "Unable to retrieve shared state for \(extensionName). No such extension is registered.")
                 return nil
             }
@@ -273,14 +275,15 @@ final class EventHub {
     /// - Parameters:
     ///   - extensionName: A `String` containing the name of the extension
     ///   - event: An `Event?` which may contain a specific event from which the correct `SharedState` can be retrieved
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: A `(SharedState, Int)?` containing the state for the provided extension and its version number
-    private func versionSharedState(extensionName: String, event: Event?) -> (SharedState, Int)? {
+    private func versionSharedState(extensionName: String, event: Event?, sharedStateType: SharedStateType = .standard) -> (SharedState, Int)? {
         guard let extensionContainer = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else {
             Log.error(label: LOG_TAG, "Extension \(extensionName) not registered with EventHub")
             return nil
         }
 
-        guard let sharedState = extensionContainer.sharedState else { return nil }
+        guard let sharedState = extensionContainer.sharedState(for: sharedStateType) else { return nil }
 
         var version = 0 // default to version 0
         // attempt to version at the event
@@ -300,9 +303,10 @@ final class EventHub {
     ///   - extensionName: A `String` containing the name of the extension
     ///   - version: An `Int?` containing the version of the state being updated
     ///   - data: A `[String: Any]?` containing data to add to the pending state prior to it being dispatched
-    private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?) {
-        guard let pendingVersion = version, let sharedState = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value.sharedState else { return }
-
+    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
+    private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?, sharedStateType: SharedStateType = .standard) {
+        guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else { return }
+        guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
         dispatch(event: createSharedStateEvent(extensionName: extensionName))
     }

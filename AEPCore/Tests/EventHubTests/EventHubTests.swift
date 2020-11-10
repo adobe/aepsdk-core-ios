@@ -29,8 +29,8 @@ class EventHubTests: XCTestCase {
 
     // MARK: Helper functions
 
-    private func validateSharedState(_ extensionName: String, _ event: Event?, _ dictionaryValue: String) {
-        XCTAssertEqual(eventHub.getSharedState(extensionName: extensionName, event: event)?.value![SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
+    private func validateSharedState(_ extensionName: String, _ event: Event?, _ dictionaryValue: String, _ sharedStateType: SharedStateType = .standard) {
+        XCTAssertEqual(eventHub.getSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType)?.value![SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
     }
 
     private func registerMockExtension<T: Extension>(_ type: T.Type) {
@@ -878,6 +878,31 @@ class EventHubTests: XCTestCase {
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
 
+    /// Tests that we can create and resolve a pending XDM shared state
+    func testCreatePendingAndResolveXDMPendingSimple() {
+        // setup
+        let expectation = XCTestExpectation(description: "XDM Pending shared state resolved correctly")
+        expectation.assertForOverFulfill = true
+        eventHub.start()
+
+        let event = Event(name: "test", type: EventType.acquisition, source: EventSource.requestContent, data: nil)
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String == EventHubTests.MOCK_EXTENSION_NAME {
+                expectation.fulfill()
+            }
+        }
+        eventHub.dispatch(event: event)
+
+        // test
+        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: event, sharedStateType: .xdm)
+        pendingResolver(SharedStateTestHelper.ONE)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one", .xdm)
+    }
+
     /// Ensures that an extension who does not resolve their pending shared state has a nil shared state
     func testSharedStateEmptyWhenNoResolve() {
         // setup
@@ -1040,5 +1065,33 @@ class EventHubTests: XCTestCase {
 
         // verify
         wait(for: [targetRequestContentExpectation, analyticsRequestContentExpectation], timeout: 1)
+    }
+
+    // MARK: XDM SharedState Tests
+
+    /// Tests that a registered extension can publish shared state
+    func testGetXDMSharedStateSimple() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil, sharedStateType: .xdm)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one", .xdm)
+    }
+
+    /// Tests that a registered extension can publish shared state versioned at an event
+    func testGetXDMSharedStateSimpleWithEvent() {
+        // setup
+        eventHub.start()
+
+        // test
+        let event = Event(name: "event", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: event, sharedStateType: .xdm)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one", .xdm)
     }
 }
