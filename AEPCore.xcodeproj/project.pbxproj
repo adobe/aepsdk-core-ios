@@ -43,6 +43,8 @@
 		218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		21A6737325434AE600A7E906 /* SharedStateType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A6737225434AE600A7E906 /* SharedStateType.swift */; };
+		21C47D86255B411D009D24B4 /* IdentityMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C47D85255B411D009D24B4 /* IdentityMap.swift */; };
+		21C47DA4255B44A1009D24B4 /* IdentityMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C47DA3255B44A1009D24B4 /* IdentityMapTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */; };
@@ -576,6 +578,8 @@
 		218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5MigrationConstants.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		21A6737225434AE600A7E906 /* SharedStateType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateType.swift; sourceTree = "<group>"; };
+		21C47D85255B411D009D24B4 /* IdentityMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityMap.swift; sourceTree = "<group>"; };
+		21C47DA3255B44A1009D24B4 /* IdentityMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityMapTests.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1111,6 +1115,7 @@
 				3FE6DE5424C643060065EA05 /* IdentityHitResponse.swift */,
 				3FE6DE4824C643050065EA05 /* IdentityProperties.swift */,
 				3FE6DE4D24C643050065EA05 /* IdentityState.swift */,
+				21C47D85255B411D009D24B4 /* IdentityMap.swift */,
 				3FE6DE4924C643050065EA05 /* Identity+PublicAPI.swift */,
 				3FE6DE3224C642330065EA05 /* Info.plist */,
 				3FE6DE4E24C643060065EA05 /* ECID.swift */,
@@ -1149,6 +1154,7 @@
 				2107F02924C9FF46002935CF /* PushIDManagerTests.swift */,
 				21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */,
 				214154A725186734005CEB80 /* CustomIdentityTests.swift */,
+				21C47DA3255B44A1009D24B4 /* IdentityMapTests.swift */,
 			);
 			name = Tests;
 			path = AEPIdentity/Tests;
@@ -2700,6 +2706,7 @@
 				3FE6DE5B24C643060065EA05 /* IdentityProperties.swift in Sources */,
 				3FE6DE6624C643060065EA05 /* MobileIdentities.swift in Sources */,
 				3FE6DE6B24C643060065EA05 /* URL+Identity.swift in Sources */,
+				21C47D86255B411D009D24B4 /* IdentityMap.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2720,6 +2727,7 @@
 				3FE6DE8224C643620065EA05 /* IdentityTests.swift in Sources */,
 				3FE6DE7A24C643620065EA05 /* URL+IdentityTests.swift in Sources */,
 				3FE6DE7F24C643620065EA05 /* IdentityHitProcessorTests.swift in Sources */,
+				21C47DA4255B44A1009D24B4 /* IdentityMapTests.swift in Sources */,
 				3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */,
 				3FE6DE7E24C643620065EA05 /* URLAppenderTests.swift in Sources */,
 				218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */,

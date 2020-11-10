@@ -101,4 +101,11 @@ enum IdentityConstants {
         static let PUSH_ID_ENABLED_ACTION_NAME = "Push"
         static let TRACK_INTERNAL = "trackinternal"
     }
+
+    enum XDM {
+        enum Keys {
+            static let IDENTITY_MAP = "identityMap"
+            static let ECID = "ECID"
+        }
+    }
 }

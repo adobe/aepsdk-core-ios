@@ -607,6 +607,8 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated since the blob/hint are updated.")
         sharedStateExpectation.assertForOverFulfill = true
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should be updated since the blob/hint are updated.")
+        xdmSharedStateExpectation.assertForOverFulfill = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -622,6 +624,8 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
+        } createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         }
 
         // verify
@@ -640,6 +644,8 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated")
         sharedStateExpectation.isInverted = true
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated")
+        xdmSharedStateExpectation.isInverted = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -654,6 +660,8 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
+        } createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         }
 
         // verify
@@ -672,6 +680,8 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated")
         sharedStateExpectation.isInverted = true
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated")
+        xdmSharedStateExpectation.isInverted = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -686,6 +696,8 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
+        } createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         }
 
         // verify
@@ -704,6 +716,8 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated as we are opted-out")
         sharedStateExpectation.isInverted = true
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated as we are opted-out")
+        xdmSharedStateExpectation.isInverted = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -718,6 +732,8 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
+        } createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         }
 
         // verify
@@ -736,6 +752,9 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.expectedFulfillmentCount = 2
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated as the response was empty")
         sharedStateExpectation.isInverted = true
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated as the response was empty")
+        xdmSharedStateExpectation.isInverted = true
+
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -748,6 +767,8 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }) { _, _ in
             sharedStateExpectation.fulfill()
+        } createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         }
 
         // verify
@@ -770,6 +791,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (data, event) in
             XCTFail("Shared state should not be updated")
+        }, createXDMSharedState: { _,_ in
+            XCTFail("XDM Shared state should not be updated")
         })
 
         // verify
@@ -792,6 +815,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (_, _) in
             XCTFail("Shared state should not be updated")
+        }, createXDMSharedState: { _,_ in
+            XCTFail("XDM Shared state should not be updated")
         })
 
         // verify
@@ -805,6 +830,7 @@ class IdentityStateTests: XCTestCase {
     func testProcessPrivacyChangeToOptOut() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should be updated once")
         var props = IdentityProperties()
         props.privacyStatus = .unknown
         props.ecid = ECID()
@@ -815,6 +841,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (data, event) in
             sharedStateExpectation.fulfill()
+        }, createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -829,6 +857,7 @@ class IdentityStateTests: XCTestCase {
     func testProcessPrivacyChangeFromOptOutToOptIn() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should be updated once")
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
@@ -842,6 +871,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (_, _) in
             sharedStateExpectation.fulfill()
+        }, createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -855,6 +886,7 @@ class IdentityStateTests: XCTestCase {
     func testProcessPrivacyChangeFromOptOutToUnknown() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
+        let xdmSharedStateExpectation = XCTestExpectation(description: "Force sync should cause XDM shared state to be updated")
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
@@ -868,6 +900,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
+        }, createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         })
 
         // verify

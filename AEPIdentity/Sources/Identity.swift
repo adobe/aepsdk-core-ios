@@ -75,6 +75,7 @@ import Foundation
         // attempt to bootup
         if state.bootupIfReady(configSharedState: configSharedState, event: event) {
             createSharedState(data: state.identityProperties.toEventData(), event: nil)
+            createXDMSharedState(data: state.identityProperties.toXDMData(), event: nil)
         }
 
         return false // cannot handle any events until we have booted
@@ -87,6 +88,9 @@ import Foundation
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             if let eventData = state?.syncIdentifiers(event: event) {
                 createSharedState(data: eventData, event: event)
+                if let xdmData = state?.identityProperties.toXDMData() {
+                    createXDMSharedState(data: xdmData, event: event)
+                }
             }
         } else if let baseUrl = event.baseUrl {
             processAppendToUrl(baseUrl: baseUrl, event: event)
@@ -113,7 +117,7 @@ import Foundation
                 handleOptOut(event: event)
             }
             // if config contains new global privacy status, process the request
-            state?.processPrivacyChange(event: event, createSharedState: createSharedState(data:event:))
+            state?.processPrivacyChange(event: event, createSharedState: createSharedState(data:event:), createXDMSharedState: createXDMSharedState(data:event:))
         }
     }
 
@@ -195,7 +199,7 @@ import Foundation
     ///   - entity: The `IdentityHit` that was processed by the hit processor
     ///   - responseData: the network response data if any
     private func handleNetworkResponse(hit: IdentityHit, responseData: Data?) {
-        state?.handleHitResponse(hit: hit, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
+        state?.handleHitResponse(hit: hit, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:), createXDMSharedState: createXDMSharedState(data:event:))
     }
 
     /// Sends an opt-out network request if the current privacy status is opt-out
