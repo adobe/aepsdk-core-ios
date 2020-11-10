@@ -74,6 +74,11 @@ class MockSystemInfoService: SystemInfoService {
         return operatingSystemName
     }
 
+    public var operatingSystemVersion: String = ""
+    public func getOperatingSystemVersion() -> String {
+        return operatingSystemVersion
+    }
+
     var platformName: String = ""
     func getCanonicalPlatformName() -> String {
         return platformName

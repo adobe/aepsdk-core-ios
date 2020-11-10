@@ -18,7 +18,9 @@ class LifecycleStateTests: XCTestCase {
     var lifecycleState: LifecycleState!
     var dataStore = NamedCollectionDataStore(name: "LifecycleStateTests")
     var mockSystemInfoService: MockSystemInfoService!
-
+    var expectedOSValue: String {
+        return "\(mockSystemInfoService.getOperatingSystemName()) \(mockSystemInfoService.getOperatingSystemVersion())"
+    }
     var currentDate: Date!
     var currentDateMinusOneSecond: Date!
     var currentDateMinusTenMin: Date!
@@ -178,7 +180,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertTrue(actualContextData?.lifecycleMetrics.launchEvent ?? false)
         XCTAssertEqual(mockSystemInfoService.getActiveLocaleName(), actualContextData?.lifecycleMetrics.locale)
         XCTAssertTrue(actualContextData?.lifecycleMetrics.monthlyEngagedEvent ?? false)
-        XCTAssertEqual(mockSystemInfoService.getOperatingSystemName(), actualContextData?.lifecycleMetrics.operatingSystem)
+        XCTAssertEqual(expectedOSValue, actualContextData?.lifecycleMetrics.operatingSystem)
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.deviceResolution)
         XCTAssertEqual(mockSystemInfoService.getRunMode(), actualContextData?.lifecycleMetrics.runMode)
         XCTAssertNil(actualContextData?.lifecycleMetrics.upgradeEvent)
@@ -242,7 +244,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.appId)
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.deviceResolution)
         XCTAssertEqual(mockSystemInfoService.getMobileCarrierName(), actualContextData?.lifecycleMetrics.carrierName)
-        XCTAssertEqual(mockSystemInfoService.getOperatingSystemName(), actualContextData?.lifecycleMetrics.operatingSystem)
+        XCTAssertEqual(expectedOSValue, actualContextData?.lifecycleMetrics.operatingSystem)
         XCTAssertEqual(mockSystemInfoService.getDeviceName(), actualContextData?.lifecycleMetrics.deviceName)
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.dayOfTheWeek)
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.hourOfTheDay)
@@ -416,7 +418,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertNotNil(actualContextData.lifecycleMetrics.appId)
         XCTAssertNotNil(actualContextData.lifecycleMetrics.deviceResolution)
         XCTAssertEqual(mockSystemInfoService.getMobileCarrierName(), actualContextData.lifecycleMetrics.carrierName)
-        XCTAssertEqual(mockSystemInfoService.getOperatingSystemName(), actualContextData.lifecycleMetrics.operatingSystem)
+        XCTAssertEqual(expectedOSValue, actualContextData.lifecycleMetrics.operatingSystem)
         XCTAssertEqual(mockSystemInfoService.getDeviceName(), actualContextData.lifecycleMetrics.deviceName)
         XCTAssertNotNil(actualContextData.lifecycleMetrics.dayOfTheWeek)
         XCTAssertNotNil(actualContextData.lifecycleMetrics.hourOfTheDay)
@@ -439,7 +441,7 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertNotNil(actualContextData.lifecycleMetrics.appId)
         XCTAssertNotNil(actualContextData.lifecycleMetrics.deviceResolution)
         XCTAssertEqual(mockSystemInfoService.getMobileCarrierName(), actualContextData.lifecycleMetrics.carrierName)
-        XCTAssertEqual(mockSystemInfoService.getOperatingSystemName(), actualContextData.lifecycleMetrics.operatingSystem)
+        XCTAssertEqual(expectedOSValue, actualContextData.lifecycleMetrics.operatingSystem)
         XCTAssertEqual(mockSystemInfoService.getDeviceName(), actualContextData.lifecycleMetrics.deviceName)
         XCTAssertNotNil(actualContextData.lifecycleMetrics.dayOfTheWeek)
         XCTAssertNotNil(actualContextData.lifecycleMetrics.hourOfTheDay)
