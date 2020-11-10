@@ -622,11 +622,11 @@ class IdentityStateTests: XCTestCase {
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
             XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        } createXDMSharedState: { _, _ in
+        }, createXDMSharedState: { _, _ in
             xdmSharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -658,11 +658,11 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        } createXDMSharedState: { _, _ in
+        }, createXDMSharedState: { _, _ in
             xdmSharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -694,11 +694,11 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        } createXDMSharedState: { _, _ in
+        }, createXDMSharedState: { _, _ in
             xdmSharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -730,11 +730,11 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        } createXDMSharedState: { _, _ in
+        }, createXDMSharedState: { _, _ in
             xdmSharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -765,11 +765,11 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: IdentityHit.fakeHit(), response: nil, eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        } createXDMSharedState: { _, _ in
+        }, createXDMSharedState: { _, _ in
             xdmSharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
