@@ -182,7 +182,7 @@ class LifecycleMetricsBuilder {
         }
 
         lifecycleMetrics.deviceResolution = getResolution()
-        lifecycleMetrics.operatingSystem = systemInfoService.getOperatingSystemName()
+        lifecycleMetrics.operatingSystem = "\(systemInfoService.getOperatingSystemName()) \(systemInfoService.getOperatingSystemVersion())"
         lifecycleMetrics.locale = getLocale()
         lifecycleMetrics.runMode = systemInfoService.getRunMode()
 
