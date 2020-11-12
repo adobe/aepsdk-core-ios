@@ -25,6 +25,7 @@ enum IdentityConstants {
 
     enum SharedStateKeys {
         static let CONFIGURATION = "com.adobe.module.configuration"
+        static let EDGE = "com.adobe.edge"
     }
 
     enum Configuration {

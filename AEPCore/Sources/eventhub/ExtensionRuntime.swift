@@ -93,4 +93,9 @@ public protocol ExtensionRuntime {
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult?
+
+    /// Determines if there exists a registered extension with `extensionName`
+    /// - Parameter extensionName: The name of the extension to be looked up
+    /// - Returns: Returns true if this extension is currently registered with the `EventHub`, otherwise false
+    func isExtensionRegistered(extensionName: String) -> Bool
 }

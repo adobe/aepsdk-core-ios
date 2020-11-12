@@ -30,7 +30,10 @@ class IdentityStateTests: XCTestCase {
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockPushIdManager = MockPushIDManager()
-        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // default to no Edge extension registered
+            return false
+        })
     }
 
     // MARK: bootupIfReady(...) tests
@@ -249,7 +252,10 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = "old-test-ad-id"
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -278,7 +284,10 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = ""
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -307,7 +316,10 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = nil
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -336,7 +348,10 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = IdentityConstants.Default.ZERO_ADVERTISING_ID
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -365,7 +380,10 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = "test-ad-id"
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -392,7 +410,10 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = "test-ad-id"
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -411,6 +432,42 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(hit.url.absoluteString.contains("d_consent_ic=DSID_20915")) // id namespace should be added
     }
 
+    /// Tests that the ad is is correctly updated when a new value is passed
+    func testSyncIdentifiersAdIDIsUpdatedFromValidToEmpty_EdgeIsRegistered() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = "test-ad-id"
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // Edge extension registered
+            return true
+        })
+        state.lastValidConfig = configSharedState
+
+        // verify
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // not hit queued since Edge is registered
+    }
+
+    /// Tests that the ad is is correctly updated when a new value is passed
+    func testSyncIdentifiersAdIDIsUpdatedFromValidToZeroString_EdgeIsRegistered() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = "test-ad-id"
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // Edge extension registered
+            return true
+        })
+        state.lastValidConfig = configSharedState
+
+        // test
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // not hit queued since Edge is registered
+    }
+
     /// When we currently have a nil ad id and update to an empty ad id we should sync with the device consent flag set to 0
     func testSyncIdentifiersAdIDIsUpdatedFromZerosToEmpty() {
         // setup
@@ -421,7 +478,10 @@ class IdentityStateTests: XCTestCase {
         props.advertisingIdentifier = IdentityConstants.Default.ZERO_ADVERTISING_ID
         props.ecid = ECID()
         props.lastSync = Date()
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -449,7 +509,10 @@ class IdentityStateTests: XCTestCase {
         props.advertisingIdentifier = "test-ad-id"
         props.ecid = ECID()
         props.lastSync = Date()
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -475,7 +538,10 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
         var props = IdentityProperties()
         props.advertisingIdentifier = IdentityConstants.Default.ZERO_ADVERTISING_ID
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -505,7 +571,10 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.locationHint = "locHinty"
         props.blob = "blobby"
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -530,7 +599,10 @@ class IdentityStateTests: XCTestCase {
         props.ecid = ECID() // visitor ID is null initially and set for the first time in
         // shouldSync(). Mimic a second call to shouldSync by setting the ecid
         props.lastSync = Date() // set last sync to now
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         state.lastValidConfig = configSharedState
 
         // test
@@ -614,7 +686,10 @@ class IdentityStateTests: XCTestCase {
         let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: nil)
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
 
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
@@ -647,7 +722,10 @@ class IdentityStateTests: XCTestCase {
         let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
 
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
@@ -679,7 +757,10 @@ class IdentityStateTests: XCTestCase {
         let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: "err message", optOutList: nil)
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
 
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
@@ -711,7 +792,10 @@ class IdentityStateTests: XCTestCase {
         let hit = IdentityHit.fakeHit()
         let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
 
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
@@ -741,7 +825,10 @@ class IdentityStateTests: XCTestCase {
         props.lastSync = Date()
         props.privacyStatus = .optedOut
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
 
         // test
         state.handleHitResponse(hit: IdentityHit.fakeHit(), response: nil, eventDispatcher: { _ in
@@ -764,7 +851,10 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .unknown
         props.ecid = ECID()
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
         // test
@@ -786,7 +876,10 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .unknown
         props.ecid = ECID()
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue])
 
         // test
@@ -809,7 +902,10 @@ class IdentityStateTests: XCTestCase {
         props.privacyStatus = .unknown
         props.ecid = ECID()
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
 
         // test
@@ -832,7 +928,10 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
@@ -858,7 +957,10 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
-        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager, isEdgeRegistered: { () -> Bool in
+            // no Edge extension registered
+            return false
+        })
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]

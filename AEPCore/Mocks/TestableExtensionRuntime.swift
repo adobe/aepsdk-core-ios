@@ -23,6 +23,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var createdXdmSharedStates: [[String: Any]?] = []
     public var mockedSharedStates: [String: SharedStateResult] = [:]
     public var mockedXdmSharedStates: [String: SharedStateResult] = [:]
+    public var mockedRegisteredExtensions: [String] = []
 
     public init() {}
 
@@ -73,6 +74,10 @@ public class TestableExtensionRuntime: ExtensionRuntime {
             return mockedXdmSharedStates["\(extensionName)-\(id)"] ?? mockedXdmSharedStates["\(extensionName)"]
         }
         return mockedXdmSharedStates["\(extensionName)"]
+    }
+
+    public func isExtensionRegistered(extensionName: String) -> Bool {
+        return mockedRegisteredExtensions.contains(extensionName)
     }
 
     public func startEvents() {}
@@ -136,6 +141,12 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         dispatchedEvents = []
         createdSharedStates = []
         createdXdmSharedStates = []
+    }
+
+    /// Simulates a list of extensions names to be mocked as registered.
+    /// - Parameter registeredExtensions: A list of shared state names for extensions that should be marked as registered
+    public func simulateRegisteredExtensions(registeredExtensions: [String]) {
+        mockedRegisteredExtensions = registeredExtensions
     }
 }
 

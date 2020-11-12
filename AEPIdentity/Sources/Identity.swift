@@ -37,7 +37,7 @@ import Foundation
 
         let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let pushIdManager = PushIDManager(dataStore: dataStore, eventDispatcher: dispatch(event:))
-        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager)
+        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager, isEdgeRegistered: isEdgeRegistered)
     }
 
     public func onRegistered() {
@@ -223,5 +223,10 @@ import Foundation
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 
         return privacyStatus == .optedOut
+    }
+
+    /// - Returns: Returns true if the Edge extension is registered, false otherwise
+    private func isEdgeRegistered() -> Bool {
+        return isExtensionRegistered(extensionName: IdentityConstants.SharedStateKeys.EDGE)
     }
 }

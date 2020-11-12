@@ -268,6 +268,13 @@ final class EventHub {
         Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(data as AnyObject)")
     }
 
+    /// Determines if there exists a registered extension with `extensionName`
+    /// - Parameter extensionName: The name of the extension to be looked up
+    /// - Returns: Returns true if this extension is currently registered with the `EventHub`, otherwise false
+    func isExtensionRegistered(extensionName: String) -> Bool {
+        return registeredExtensions.first(where: {$0.value.sharedStateName == extensionName}) != nil
+    }
+
     // MARK: - Private
 
     /// Gets the appropriate `SharedState` for the provided `extensionName` and `event`
