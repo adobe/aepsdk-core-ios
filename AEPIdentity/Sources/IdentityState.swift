@@ -18,7 +18,6 @@ class IdentityState {
     private let LOG_TAG = "IdentityState"
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
-    private var isEdgeRegistered: () -> Bool
     private(set) var hasBooted = false
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
@@ -32,12 +31,10 @@ class IdentityState {
     /// - Parameter identityProperties: identity properties
     /// - Parameter hitQueue: hit queue for the Identity extension
     /// - Parameter pushIdManager: a push id manager
-    /// - Parameter isEdgeRegistered: a closure which resolves if the edge extension is registered or not
-    init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable, isEdgeRegistered: @escaping () -> Bool) {
+    init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable) {
         self.identityProperties = identityProperties
         self.hitQueue = hitQueue
         self.pushIdManager = pushIdManager
-        self.isEdgeRegistered = isEdgeRegistered
     }
 
     /// Completes init for the Identity extension if we can force sync and determines if we need to share state
@@ -131,10 +128,7 @@ class IdentityState {
 
         // valid config: check if there's a need to sync. Don't if we're already up to date.
         if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
-            // if the Edge extension is registered do not queue hits
-            if !isEdgeRegistered() {
-                queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, addConsentFlag: shouldAddConsentFlag)
-            }
+            queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, addConsentFlag: shouldAddConsentFlag)
         } else {
             Log.debug(label: LOG_TAG, "Ignored an ID sync request because no new IDs to sync after the last request.")
         }

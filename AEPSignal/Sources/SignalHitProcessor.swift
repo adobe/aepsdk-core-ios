@@ -51,6 +51,10 @@ class SignalHitProcessor: HitProcessing {
         }
     }
 
+    func shouldQueue(entity: DataEntity) -> Bool {
+        return true
+    }
+
     // MARK: - Helpers
 
     /// Handles the network response after a hit has been sent to the server

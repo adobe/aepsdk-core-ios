@@ -17,14 +17,17 @@ class IdentityHitProcessor: HitProcessing {
 
     let retryInterval = TimeInterval(30)
     private let responseHandler: (IdentityHit, Data?) -> Void
+    private var isEdgeRegistered: () -> Bool
     private var networkService: Networking {
         return ServiceProvider.shared.networkService
     }
 
     /// Creates a new `IdentityHitProcessor` where the `responseHandler` will be invoked after each successful processing of a hit
     /// - Parameter responseHandler: a function to be invoked with the `DataEntity` for a hit and the response data for that hit
-    init(responseHandler: @escaping (IdentityHit, Data?) -> Void) {
+    /// - Parameter isEdgeRegistered: a closure which resolves if the edge extension is registered or not
+    init(responseHandler: @escaping (IdentityHit, Data?) -> Void, isEdgeRegistered: @escaping () -> Bool) {
         self.responseHandler = responseHandler
+        self.isEdgeRegistered = isEdgeRegistered
     }
 
     // MARK: HitProcessing
@@ -42,6 +45,11 @@ class IdentityHitProcessor: HitProcessing {
         networkService.connectAsync(networkRequest: networkRequest) { connection in
             self.handleNetworkResponse(hit: identityHit, connection: connection, completion: completion)
         }
+    }
+
+    func shouldQueue(entity: DataEntity) -> Bool {
+        // only queue hits if Edge is not registered
+        return !isEdgeRegistered()
     }
 
     // MARK: Helpers

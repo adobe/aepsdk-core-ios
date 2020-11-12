@@ -26,6 +26,8 @@ class IdentityHitProcessorTests: XCTestCase {
         ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
         hitProcessor = IdentityHitProcessor(responseHandler: { [weak self] hit, data in
             self?.responseCallbackArgs.append((hit, data))
+        }, isEdgeRegistered: { () -> Bool in
+            return false
         })
     }
 

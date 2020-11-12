@@ -30,6 +30,7 @@ public class PersistentHitQueue: HitQueuing {
 
     @discardableResult
     public func queue(entity: DataEntity) -> Bool {
+        guard processor.shouldQueue(entity: entity) else { return false }
         let result = dataQueue.add(dataEntity: entity)
         processNextHit()
         return result

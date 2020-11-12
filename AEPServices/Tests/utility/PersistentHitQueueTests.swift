@@ -72,6 +72,21 @@ class PersistentHitQueueTests: XCTestCase {
         XCTAssertTrue(result) // queuing hit should be successful
     }
 
+    /// Tests that when the hit processor should not queue the hit that the hit is not queued
+    func testProcessesHitShouldNotQueue() {
+        // setup
+        hitProcessor = MockHitProcessor(shouldQueue: false)
+        hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
+        let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+
+        // test
+        let result = hitQueue.queue(entity: entity)
+
+        // verify
+        XCTAssertNil(hitQueue.dataQueue.peek()) // no hit should be in the queue
+        XCTAssertFalse(result) // queuing hit should have failed
+    }
+
     /// Tests that multiple hits are processed and the data queue is empty
     func testProcessesHits() {
         // setup
@@ -171,12 +186,21 @@ class PersistentHitQueueTests: XCTestCase {
 
 class MockHitProcessor: HitProcessing {
     var retryInterval: TimeInterval = 1
-
     let processedHits = ThreadSafeArray<DataEntity>()
+
+    public var shouldQueue = false
+
+    public init(shouldQueue: Bool = true) {
+        self.shouldQueue = shouldQueue
+    }
 
     func processHit(entity: DataEntity, completion: (Bool) -> Void) {
         processedHits.append(entity)
         completion(true)
+    }
+
+    func shouldQueue(entity: DataEntity) -> Bool {
+        return shouldQueue
     }
 }
 
@@ -204,5 +228,9 @@ class MockHitIntermittentProcessor: HitProcessing {
             failedHits.insert(entity.uniqueIdentifier)
             completion(false)
         }
+    }
+
+    func shouldQueue(entity: DataEntity) -> Bool {
+        return true
     }
 }

@@ -21,4 +21,9 @@ public protocol HitProcessing: class {
     ///   - entity: The `DataEntity` to be processed
     ///   - completion: a closure to be invoked with `true` if processing was successful and should not be retried, false if processing the hit should be retried
     func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void)
+
+    /// Determines if this hit should be queued
+    /// - Parameter entity: Hit to be queued
+    /// - Returns: True if the hit should be queued, false if the hit should be ignored
+    func shouldQueue(entity: DataEntity) -> Bool
 }

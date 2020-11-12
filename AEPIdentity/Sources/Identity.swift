@@ -33,11 +33,11 @@ import Foundation
             return
         }
 
-        let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(hit:responseData:)))
+        let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(hit:responseData:), isEdgeRegistered: isEdgeRegistered))
 
         let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let pushIdManager = PushIDManager(dataStore: dataStore, eventDispatcher: dispatch(event:))
-        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager, isEdgeRegistered: isEdgeRegistered)
+        state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager)
     }
 
     public func onRegistered() {

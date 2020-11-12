@@ -14,10 +14,17 @@ import Foundation
 
 public class MockHitProcessor: HitProcessing {
     public var retryInterval: TimeInterval = 30
+    public var shouldQueue = false
 
-    public init() {}
+    public init(shouldQueue: Bool = true) {
+        self.shouldQueue = shouldQueue
+    }
 
     public func processHit(entity _: DataEntity, completion: @escaping (Bool) -> Void) {
         completion(true)
+    }
+
+    public func shouldQueue(entity: DataEntity) -> Bool {
+        return shouldQueue
     }
 }
