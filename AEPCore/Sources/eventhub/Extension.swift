@@ -114,6 +114,39 @@ public extension Extension {
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return runtime.getSharedState(extensionName: extensionName, event: event, barrier: true)
     }
+ 
+    // MARK: - XDM Shared State
+ 
+    /// Creates a new XDM SharedState for this extension.
+    /// The data passed to this API needs to be mapped to known XDM mixins; if an extension uses multiple mixins, the current data for all of them should be provided when the XDM shared state is set.
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
+    /// - Parameters:
+    ///   - data: Data for the `SharedState`
+    ///   - event: `Event` for which the `SharedState` should be versioned
+    func createXDMSharedState(data: [String: Any], event: Event?) {
+        runtime.createXDMSharedState(data: data, event: event)
+    }
+
+    /// Creates a pending XDM `SharedState` versioned at `event`
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
+    /// - Parameter event: `Event` for which the `SharedState` should be versioned
+    /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
+    func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
+        return runtime.createPendingXDMSharedState(event: event)
+    }
+
+    /// Gets the XDM SharedState data for a specified extension. If this extension populates multiple mixins in their shared state, all the data will be returned at once and it can be accessed using path discovery.
+    /// - Parameters:
+    ///   - extensionName: An extension name whose `SharedState` will be returned
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+    /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
+    func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+        return runtime.getXDMSharedState(extensionName: extensionName, event: event)
+    }
 
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
     /// Should be overridden by any extension that wants to control it's own event flow on a per event basis.
