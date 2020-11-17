@@ -114,9 +114,9 @@ public extension Extension {
     func getSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
         return runtime.getSharedState(extensionName: extensionName, event: event, barrier: true)
     }
- 
+
     // MARK: - XDM Shared State
- 
+
     /// Creates a new XDM SharedState for this extension.
     /// The data passed to this API needs to be mapped to known XDM mixins; if an extension uses multiple mixins, the current data for all of them should be provided when the XDM shared state is set.
     /// If `event` is nil, one of two behaviors will be observed:
