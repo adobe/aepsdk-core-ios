@@ -145,17 +145,14 @@ class IdentityState {
     ///   - response: the response data if any
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    ///   - createXDMSharedState: a function which when invoked creates a XDM shared state for the Identity extension
-    func handleHitResponse(hit: IdentityHit, response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void,
-                           createXDMSharedState: ([String: Any], Event?) -> Void) {
+    func handleHitResponse(hit: IdentityHit, response: Data?, eventDispatcher: (Event) -> Void, createSharedState: ([String: Any], Event?) -> Void) {
         // regardless of response, update last sync time
         identityProperties.lastSync = Date()
 
         // check privacy here in case the status changed while response was in-flight
         if identityProperties.privacyStatus != .optedOut {
             // update properties
-            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState,
-                                  createXDMSharedState: createXDMSharedState, event: hit.event)
+            handleNetworkResponse(response: response, eventDispatcher: eventDispatcher, createSharedState: createSharedState, event: hit.event)
 
             // save
             identityProperties.saveToPersistence()
@@ -323,10 +320,8 @@ class IdentityState {
     ///   - response: the network response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    ///   - createXDMSharedState: a function which when invoked creates a XDM shared state for the Identity extension
     ///   - event: The event responsible for the network response
-    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: (([String: Any], Event?) -> Void),
-                                       createXDMSharedState: (([String: Any], Event?) -> Void), event: Event) {
+    private func handleNetworkResponse(response: Data?, eventDispatcher: (Event) -> Void, createSharedState: (([String: Any], Event?) -> Void), event: Event) {
         guard let data = response, let identityResponse = try? JSONDecoder().decode(IdentityHitResponse.self, from: data) else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Failed to decode Identity hit response")
             return
@@ -349,7 +344,6 @@ class IdentityState {
             identityProperties.ecid = identityProperties.ecid ?? ECID()
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
             createSharedState(identityProperties.toEventData(), event)
-            createXDMSharedState(identityProperties.toXDMData(), event)
             return
         }
 
@@ -361,7 +355,6 @@ class IdentityState {
             identityProperties.ttl = identityResponse.ttl ?? IdentityConstants.Default.TTL
             if shouldShareState {
                 createSharedState(identityProperties.toEventData(), event)
-                createXDMSharedState(identityProperties.toXDMData(), event)
             }
         }
     }

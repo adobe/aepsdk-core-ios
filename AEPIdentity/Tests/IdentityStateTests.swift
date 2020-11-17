@@ -607,8 +607,6 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated since the blob/hint are updated.")
         sharedStateExpectation.assertForOverFulfill = true
-        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should be updated since the blob/hint are updated.")
-        xdmSharedStateExpectation.assertForOverFulfill = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -624,8 +622,6 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }, createXDMSharedState: { _, _ in
-            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -644,8 +640,6 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated")
         sharedStateExpectation.isInverted = true
-        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated")
-        xdmSharedStateExpectation.isInverted = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -660,8 +654,6 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }, createXDMSharedState: { _, _ in
-            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -680,8 +672,6 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated")
         sharedStateExpectation.isInverted = true
-        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated")
-        xdmSharedStateExpectation.isInverted = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -696,8 +686,6 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }, createXDMSharedState: { _, _ in
-            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -716,8 +704,6 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.assertForOverFulfill = true
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated as we are opted-out")
         sharedStateExpectation.isInverted = true
-        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated as we are opted-out")
-        xdmSharedStateExpectation.isInverted = true
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -732,8 +718,6 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }, createXDMSharedState: { _, _ in
-            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -752,9 +736,6 @@ class IdentityStateTests: XCTestCase {
         dispatchedEventExpectation.expectedFulfillmentCount = 2
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated as the response was empty")
         sharedStateExpectation.isInverted = true
-        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should not be updated as the response was empty")
-        xdmSharedStateExpectation.isInverted = true
-
 
         var props = IdentityProperties()
         props.lastSync = Date()
@@ -767,8 +748,6 @@ class IdentityStateTests: XCTestCase {
             dispatchedEventExpectation.fulfill()
         }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }, createXDMSharedState: { _, _ in
-            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
