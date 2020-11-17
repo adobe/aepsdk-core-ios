@@ -148,6 +148,20 @@ final class EventHub {
         responseEventListeners.append(responseListenerContainer!)
     }
 
+    /// Registers an `EventListener` which will be invoked whenever a event with matched type and source is dispatched
+    /// - Parameters:
+    ///   - type: An `String` indicates the event type the current listener is listening for
+    ///   - source: An `String` indicates the event source the current listener is listening for
+    ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives a event with matched typd and source
+    func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
+        // use the event hub placeholder extension to hold all the listeners register from the public API
+        guard let eventHubExtension = registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value else {
+            Log.warning(label: self.LOG_TAG, "Error registering event listener")
+            return
+        }
+        eventHubExtension.registerListener(type: type, source: source, listener: listener)
+    }
+
     /// Creates a new `SharedState` for the extension with provided data, versioned at `event`
     /// If `event` is nil, one of two behaviors will be observed:
     /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
