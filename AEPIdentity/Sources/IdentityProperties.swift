@@ -75,7 +75,8 @@ struct IdentityProperties: Codable {
 
         for customerId in customerIds ?? [] {
             guard let type = customerId.type, let id = customerId.identifier else { continue }
-            identityMap.addItem(namespace: type, id: id, authenticationState: customerId.authenticationState, primary: false)
+            let xdmAuthState = XDMAuthenticationState.authStateFromMobileAuthState(authState: customerId.authenticationState)
+            identityMap.addItem(namespace: type, id: id, authenticationState: xdmAuthState, primary: false)
         }
 
         return [IdentityConstants.XDM.Keys.IDENTITY_MAP: identityMap.asDictionary() as Any]

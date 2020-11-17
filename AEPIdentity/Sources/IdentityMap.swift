@@ -42,10 +42,10 @@ struct IdentityMap: Equatable {
     ///   - primary: Indicates if this identity is the preferred identity. It is used as a hint to help systems better organize how identities are queried.
     mutating func addItem(namespace: String,
                           id: String,
-                          authenticationState: MobileVisitorAuthenticationState? = nil,
+                          authenticationState: XDMAuthenticationState? = nil,
                           primary: Bool? = nil) {
         let item = IdentityItem(id: id,
-                                authenticationState: XDMAuthenticationState.authStateFromMobileAuthState(authState: authenticationState), primary: primary)
+                                authenticationState: authenticationState, primary: primary)
 
         if var namespaceItems = items[namespace] {
             if let index = namespaceItems.firstIndex(of: item) {

@@ -22,7 +22,7 @@ class IdentityMapTests: XCTestCase {
     // MARK: getItemsFor tests
     func testGetItemsFor() {
         var identityMap = IdentityMap()
-        identityMap.addItem(namespace: "space", id: "id", authenticationState: MobileVisitorAuthenticationState.unknown, primary: false)
+        identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.ambiguous, primary: false)
 
         let spaceItems = identityMap.getItemsFor(namespace: "space")
         XCTAssertNotNil(spaceItems)
@@ -37,9 +37,9 @@ class IdentityMapTests: XCTestCase {
 
     func testAddItems() {
         var identityMap = IdentityMap()
-        identityMap.addItem(namespace: "space", id: "id", authenticationState: MobileVisitorAuthenticationState.unknown, primary: false)
+        identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.ambiguous, primary: false)
         identityMap.addItem(namespace: "email", id: "example@adobe.com")
-        identityMap.addItem(namespace: "space", id: "custom", authenticationState: MobileVisitorAuthenticationState.unknown, primary: true)
+        identityMap.addItem(namespace: "space", id: "custom", authenticationState: XDMAuthenticationState.ambiguous, primary: true)
 
         guard let spaceItems = identityMap.getItemsFor(namespace: "space") else {
             XCTFail("Namespace 'space' is nil but expected not nil.")
@@ -65,8 +65,8 @@ class IdentityMapTests: XCTestCase {
 
     func testAddItems_overwrite() {
         var identityMap = IdentityMap()
-        identityMap.addItem(namespace: "space", id: "id", authenticationState: MobileVisitorAuthenticationState.unknown, primary: false)
-        identityMap.addItem(namespace: "space", id: "id", authenticationState: MobileVisitorAuthenticationState.authenticated)
+        identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.ambiguous, primary: false)
+        identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.authenticated)
 
         guard let spaceItems = identityMap.getItemsFor(namespace: "space") else {
             XCTFail("Namespace 'space' is nil but expected not nil.")
@@ -82,7 +82,7 @@ class IdentityMapTests: XCTestCase {
     // MARK: encoder tests
     func testEncode_oneItem() {
         var identityMap = IdentityMap()
-        identityMap.addItem(namespace: "space", id: "id", authenticationState: MobileVisitorAuthenticationState.unknown, primary: false)
+        identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.ambiguous, primary: false)
 
         let encodedIdentityMap = try! JSONEncoder().encode(identityMap)
         let decodedIdentityMap = try! JSONDecoder().decode(IdentityMap.self, from: encodedIdentityMap)
@@ -93,7 +93,7 @@ class IdentityMapTests: XCTestCase {
 
     func testEncode_twoItems() {
         var identityMap = IdentityMap()
-        identityMap.addItem(namespace: "space", id: "id", authenticationState: MobileVisitorAuthenticationState.unknown, primary: false)
+        identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.ambiguous, primary: false)
         identityMap.addItem(namespace: "A", id: "123")
 
         let encodedIdentityMap = try! JSONEncoder().encode(identityMap)
@@ -105,7 +105,7 @@ class IdentityMapTests: XCTestCase {
 
     func testEncode_twoItemsSameNamespace() {
         var identityMap = IdentityMap()
-        identityMap.addItem(namespace: "space", id: "id", authenticationState: MobileVisitorAuthenticationState.unknown, primary: false)
+        identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.ambiguous, primary: false)
         identityMap.addItem(namespace: "space", id: "123")
 
         let encodedIdentityMap = try! JSONEncoder().encode(identityMap)
