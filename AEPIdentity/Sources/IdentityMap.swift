@@ -9,6 +9,8 @@
 // OF ANY KIND, either express or implied. See the License for the specific language
 // governing permissions and limitations under the License.
 //
+
+import AEPServices
 import Foundation
 
 enum XDMAuthenticationState: String, Codable {
@@ -32,6 +34,7 @@ enum XDMAuthenticationState: String, Codable {
 /// Within each namespace, the identity is unique. The values of the map are an array, meaning that more than one identity of each namespace may be carried.
 struct IdentityMap: Equatable {
     private var items: [String: [IdentityItem]] = [:]
+    private let LOG_TAG = "IdentityMap"
 
     /// Adds an `IdentityItem` to this map. If an item is added which shares the same `namespace` and `id` as an item
     /// already in the map, then the new item replaces the existing item.
@@ -44,6 +47,11 @@ struct IdentityMap: Equatable {
                           id: String,
                           authenticationState: XDMAuthenticationState? = nil,
                           primary: Bool? = nil) {
+        guard !namespace.isEmpty, !id.isEmpty else {
+            // cannot have empty namespace and id
+            Log.debug(label: "\(LOG_TAG): addItem", "Dropping identity item, namespace or id is empty.")
+            return
+        }
         let item = IdentityItem(id: id,
                                 authenticationState: authenticationState, primary: primary)
 
