@@ -297,7 +297,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.dispatch(event: expectedEvent2)
 
         // verify
-        wait(for: [responseExpectation], timeout: 1.0)
+        wait(for: [responseExpectation], timeout: 2.0)
     }
 
     /// Tests that the event listeners listening for same events can all receives the events
