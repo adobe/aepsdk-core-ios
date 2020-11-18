@@ -276,7 +276,7 @@ class MobileCoreTests: XCTestCase {
         // verify
         wait(for: [responseExpectation], timeout: 1.0)
     }
-    
+
     /// Tests that the event listener only receive the events it is registered for
     func testRegisterEventListener() {
         // setup
@@ -316,7 +316,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
             responseExpectation1.fulfill()
         }
-        
+
         MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
             responseExpectation2.fulfill()
         }
@@ -328,7 +328,7 @@ class MobileCoreTests: XCTestCase {
         // verify
         wait(for: [responseExpectation1,responseExpectation2], timeout: 1.0)
     }
-    
+
     // MARK: setWrapperType(...) tests
 
     /// No wrapper tag should be appended when the setWrapperType API is never invoked

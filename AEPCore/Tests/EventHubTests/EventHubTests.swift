@@ -216,7 +216,7 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [expectation, expectation1], timeout: 1)
     }
-    
+
     func testEventHubTestTegisterEventListener() {
         // setup
         let expectation = XCTestExpectation(description: "Listener is invoked exactly once")
@@ -234,7 +234,7 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1)
     }
-    
+
     func testEventHubTestTegisterEventListenerUnMatchedEvent() {
         // setup
         let expectation = XCTestExpectation(description: "Listener is not invoked")
