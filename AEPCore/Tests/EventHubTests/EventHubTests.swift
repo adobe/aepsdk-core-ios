@@ -1117,7 +1117,7 @@ class EventHubTests: XCTestCase {
     }
 
     /// Tests that isExtensionsRegistered returns the correct value for an extension that is registered, then unregistered
-    func testIsExtensionRegisteredRoundTrip() {
+    func testIsExtensionRegisteredReturnsTrueThenFalseAfterUnregistration() {
         // setup
         eventHub.start()
         let expectation = XCTestExpectation(description: "MockExtension is unregistered")

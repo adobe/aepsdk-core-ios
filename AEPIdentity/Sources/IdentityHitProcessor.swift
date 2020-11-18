@@ -49,7 +49,11 @@ class IdentityHitProcessor: HitProcessing {
 
     func shouldQueue(entity: DataEntity) -> Bool {
         // only queue hits if Edge is not registered
-        return !isEdgeRegistered()
+        let shouldQueue = isEdgeRegistered()
+        if !shouldQueue {
+            Log.debug(label: "\(LOG_TAG):shouldQueue", "Dropping hit with id: '\(entity.uniqueIdentifier)' because Edge is present.")
+        }
+        return !shouldQueue
     }
 
     // MARK: Helpers
