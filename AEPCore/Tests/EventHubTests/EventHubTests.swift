@@ -216,6 +216,42 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [expectation, expectation1], timeout: 1)
     }
+    
+    func testEventHubTestTegisterEventListener() {
+        // setup
+        let expectation = XCTestExpectation(description: "Listener is invoked exactly once")
+        expectation.assertForOverFulfill = true
+        let event = Event(name: "Test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+
+        // test
+        eventHub.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
+            expectation.fulfill()
+        }
+
+        eventHub.start()
+        eventHub.dispatch(event: event)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    func testEventHubTestTegisterEventListenerUnMatchedEvent() {
+        // setup
+        let expectation = XCTestExpectation(description: "Listener is not invoked")
+        expectation.isInverted = true
+        let event = Event(name: "Test", type: "wrong", source: "wrong", data: nil)
+
+        // test
+        eventHub.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
+            expectation.fulfill()
+        }
+
+        eventHub.start()
+        eventHub.dispatch(event: event)
+
+        // verify
+        wait(for: [expectation], timeout: 0.5)
+    }
 
     func testEventHubTestResponseListener() {
         // setup

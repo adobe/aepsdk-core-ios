@@ -154,12 +154,15 @@ final class EventHub {
     ///   - source: An `String` indicates the event source the current listener is listening for
     ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives a event with matched typd and source
     func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
-        // use the event hub placeholder extension to hold all the listeners register from the public API
-        guard let eventHubExtension = registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value else {
-            Log.warning(label: self.LOG_TAG, "Error registering event listener")
-            return
+        
+        eventHubQueue.async {
+            // use the event hub placeholder extension to hold all the listeners register from the public API
+            guard let eventHubExtension = self.registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value else {
+                Log.warning(label: self.LOG_TAG, "Error registering event listener")
+                return
+            }
+            eventHubExtension.registerListener(type: type, source: source, listener: listener)
         }
-        eventHubExtension.registerListener(type: type, source: source, listener: listener)
     }
 
     /// Creates a new `SharedState` for the extension with provided data, versioned at `event`

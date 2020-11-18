@@ -94,7 +94,7 @@ public final class MobileCore: NSObject {
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
     @objc(dispatch:responseCallback:)
     public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> Void) {
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 2) { event in
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { event in
             responseCallback(event)
         }
 

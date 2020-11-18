@@ -276,7 +276,59 @@ class MobileCoreTests: XCTestCase {
         // verify
         wait(for: [responseExpectation], timeout: 1.0)
     }
+    
+    /// Tests that the event listener only receive the events it is registered for
+    func testRegisterEventListener() {
+        // setup
+        let expectedEvent1 = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let expectedEvent2 = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let unexpectedEvent = Event(name: "test", type: "wrong", source: "wrong", data: nil)
+        let responseExpectation = XCTestExpectation(description: "Should receive the event")
+        responseExpectation.expectedFulfillmentCount = 2
+        EventHub.shared.start()
 
+        // test
+        MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
+            responseExpectation.fulfill()
+        }
+        // dispatch the events
+        MobileCore.dispatch(event: expectedEvent1)
+        MobileCore.dispatch(event: unexpectedEvent)
+        MobileCore.dispatch(event: expectedEvent2)
+
+        // verify
+        wait(for: [responseExpectation], timeout: 1.0)
+    }
+
+    /// Tests that the event listeners listening for same events can all receives the events
+    func testRegisterEventListenerMultipleLisenersForSameEvents() {
+        // setup
+        let expectedEvent1 = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let expectedEvent2 = Event(name: "test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let unexpectedEvent = Event(name: "test", type: "wrong", source: "wrong", data: nil)
+        let responseExpectation1 = XCTestExpectation(description: "Should receive the events")
+        responseExpectation1.expectedFulfillmentCount = 2
+        let responseExpectation2 = XCTestExpectation(description: "Should receive the events")
+        responseExpectation2.expectedFulfillmentCount = 2
+        EventHub.shared.start()
+
+        // test
+        MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
+            responseExpectation1.fulfill()
+        }
+        
+        MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
+            responseExpectation2.fulfill()
+        }
+        // dispatch the events
+        MobileCore.dispatch(event: expectedEvent1)
+        MobileCore.dispatch(event: unexpectedEvent)
+        MobileCore.dispatch(event: expectedEvent2)
+
+        // verify
+        wait(for: [responseExpectation1,responseExpectation2], timeout: 1.0)
+    }
+    
     // MARK: setWrapperType(...) tests
 
     /// No wrapper tag should be appended when the setWrapperType API is never invoked
