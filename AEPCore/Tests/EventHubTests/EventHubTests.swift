@@ -252,7 +252,7 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 0.5)
     }
-    
+
     func testEventHubTestRegisterEventListenerWhenEventHubPlaceholderExtensionIsNotExist() {
         // setup
         let expectation = XCTestExpectation(description: "Listener is not invoked")
@@ -260,7 +260,7 @@ class EventHubTests: XCTestCase {
         let event = Event(name: "Test", type: EventType.analytics, source: EventSource.requestContent, data: nil)
 
         eventHub.unregisterExtension(EventHubPlaceholderExtension.self){_ in }
-        
+
         // test
         eventHub.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
             expectation.fulfill()
