@@ -17,7 +17,6 @@ import Foundation
 ///    - `DataEntity` objects inside this queue will be persisted in SQLite database automatically
 ///    - the database operations is performed in series
 class SQLiteDataQueue: DataQueue {
-
     public let databaseName: String
     public let databaseFilePath: FileManager.SearchPathDirectory
     public static let TABLE_NAME: String = "TB_AEP_DATA_ENTITY"
@@ -72,11 +71,12 @@ class SQLiteDataQueue: DataQueue {
         }
     }
 
-    func peek() -> DataEntity? {
-        if isClosed { return nil}
+    func peek(n: Int) -> [DataEntity]? {
+        guard n > 0 else { return nil }
+        if isClosed { return nil }
         return serialQueue.sync {
             let queryRowStatement = """
-            SELECT min(id),uniqueIdentifier,timestamp,data FROM \(SQLiteDataQueue.TABLE_NAME);
+            SELECT id,uniqueIdentifier,timestamp,data FROM \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n);
             """
             guard let connection = connect() else {
                 return nil
@@ -84,30 +84,22 @@ class SQLiteDataQueue: DataQueue {
             defer {
                 disconnect(database: connection)
             }
-            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement), let firstRow = result.first else {
+            guard let result = SQLiteWrapper.query(database: connection, sql: queryRowStatement) else {
                 Log.trace(label: LOG_PREFIX, "Query returned no records: \(queryRowStatement).")
                 return nil
             }
 
-            guard let uniqueIdentifier = firstRow[TB_KEY_UNIQUE_IDENTIFIER], let dateString = firstRow[TB_KEY_TIMESTAMP], let dataString = firstRow[TB_KEY_DATA] else {
-                Log.trace(label: LOG_PREFIX, "Database record did not have valid data: \(queryRowStatement).")
-                return nil
-            }
-            guard let dateInt64 = Int64(dateString) else {
-                Log.trace(label: LOG_PREFIX, "Database record had an invalid dateString: \(dateString).")
-                return nil
-            }
-            let date = Date(milliseconds: dateInt64)
-            guard !dataString.isEmpty else {
-                return DataEntity(uniqueIdentifier: uniqueIdentifier, timestamp: date, data: nil)
-            }
-            let data = dataString.data(using: .utf8)
-            return DataEntity(uniqueIdentifier: uniqueIdentifier, timestamp: date, data: data)
+            let entities = result.map({entityFromSQLRow(row: $0)}).compactMap {$0}
+            return entities
         }
     }
 
-    func remove() -> Bool {
-        if isClosed { return false}
+    func peek() -> DataEntity? {
+        return peek(n: 1)?.first
+    }
+
+    func remove(n: Int) -> Bool {
+        if isClosed { return false }
         return serialQueue.sync {
             guard let connection = connect() else {
                 return false
@@ -116,7 +108,7 @@ class SQLiteDataQueue: DataQueue {
                 disconnect(database: connection)
             }
             let deleteRowStatement = """
-            DELETE FROM \(SQLiteDataQueue.TABLE_NAME) order by id limit 1;
+            DELETE FROM \(SQLiteDataQueue.TABLE_NAME) order by id limit \(n);
             """
             guard SQLiteWrapper.execute(database: connection, sql: deleteRowStatement) else {
                 Log.warning(label: LOG_PREFIX, "Failed to delete oldest record from database: \(self.databaseName).")
@@ -124,6 +116,10 @@ class SQLiteDataQueue: DataQueue {
             }
             return true
         }
+    }
+
+    func remove() -> Bool {
+        return remove(n: 1)
     }
 
     func clear() -> Bool {
@@ -148,7 +144,7 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func count() -> Int {
-        if isClosed { return 0}
+        if isClosed { return 0 }
         return serialQueue.sync {
             let queryRowStatement = """
             SELECT count(id) FROM \(SQLiteDataQueue.TABLE_NAME);
@@ -216,6 +212,24 @@ class SQLiteDataQueue: DataQueue {
 
             return result
         }
+    }
+
+    private func entityFromSQLRow(row: [String: String]) -> DataEntity? {
+        guard let uniqueIdentifier = row[TB_KEY_UNIQUE_IDENTIFIER], let dateString = row[TB_KEY_TIMESTAMP], let dataString = row[TB_KEY_DATA] else {
+            Log.trace(label: LOG_PREFIX, "Database record did not have valid data.")
+            return nil
+        }
+        guard let dateInt64 = Int64(dateString) else {
+            Log.trace(label: LOG_PREFIX, "Database record had an invalid dateString: \(dateString).")
+            return nil
+        }
+        let date = Date(milliseconds: dateInt64)
+        guard !dataString.isEmpty else {
+            return DataEntity(uniqueIdentifier: uniqueIdentifier, timestamp: date, data: nil)
+        }
+        let data = dataString.data(using: .utf8)
+
+        return DataEntity(uniqueIdentifier: uniqueIdentifier, timestamp: date, data: data)
     }
 }
 

@@ -13,7 +13,6 @@
 import Foundation
 
 public class MockDataQueue: DataQueue {
-
     let queue = ThreadSafeArray<DataEntity>()
 
     public init() {}
@@ -25,6 +24,18 @@ public class MockDataQueue: DataQueue {
 
     public func peek() -> DataEntity? {
         return queue.shallowCopy.first
+    }
+
+    public func peek(n: Int) -> [DataEntity]? {
+        return Array(queue.shallowCopy[0..<n])
+    }
+
+    public func remove(n: Int) -> Bool {
+        guard let results = peek(n: n) else { return true }
+        for result in results {
+            _ = queue.filterRemove { $0.uniqueIdentifier == result.uniqueIdentifier }
+        }
+        return true
     }
 
     public func remove() -> Bool {
