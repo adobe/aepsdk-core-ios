@@ -430,7 +430,7 @@ class DataQueueTests: XCTestCase {
     }
 
     /// remove()
-    func testPopDataEntityFromEmptyQueue() throws {
+    func testRemoveDataEntityFromEmptyQueue() throws {
         // Given
 
         let queue = DataQueueService().getDataQueue(label: fileName)!
