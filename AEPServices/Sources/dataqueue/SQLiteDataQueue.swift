@@ -99,6 +99,7 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func remove(n: Int) -> Bool {
+        guard n > 0 else { return false }
         if isClosed { return false }
         return serialQueue.sync {
             guard let connection = connect() else {
