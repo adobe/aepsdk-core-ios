@@ -22,7 +22,6 @@ public class EventSource: NSObject {
     public static let requestIdentity = "com.adobe.eventSource.requestIdentity"
     public static let requestProfile = "com.adobe.eventSource.requestProfile"
     public static let requestReset = "com.adobe.eventSource.requestReset"
-    public static let notification = "com.adobe.eventSource.notification"
     public static let responseContent = "com.adobe.eventSource.responseContent"
     public static let responseIdentity = "com.adobe.eventSource.responseIdentity"
     public static let responseProfile = "com.adobe.eventSource.responseProfile"

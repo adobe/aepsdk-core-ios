@@ -20,9 +20,5 @@ import Foundation
     case callbackTimeout = 1
     case callbackNil = 2
     case none = 3
-    case serverError = 4
-    case networkError = 5
-    case invalidRequest = 6
-    case invalidResponse = 7
     case errorExtensionNotInitialized = 11
 }
