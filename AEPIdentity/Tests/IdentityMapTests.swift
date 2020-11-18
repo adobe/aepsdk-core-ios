@@ -63,6 +63,39 @@ class IdentityMapTests: XCTestCase {
         XCTAssertEqual("example@adobe.com", emailItems[0].id)
     }
 
+    func testAddItems_emptyNamespace() {
+        var identityMap = IdentityMap()
+        identityMap.addItem(namespace: "", id: "example@adobe.com")
+
+        guard let _ = identityMap.getItemsFor(namespace: "email") else {
+            return
+        }
+
+        XCTFail("Namespace 'email' is not nil but expected nil.")
+    }
+
+    func testAddItems_emptyIdentifier() {
+        var identityMap = IdentityMap()
+        identityMap.addItem(namespace: "email", id: "")
+
+        guard let _ = identityMap.getItemsFor(namespace: "email") else {
+            return
+        }
+
+        XCTFail("Namespace 'email' is not nil but expected nil.")
+    }
+
+    func testAddItems_emptyNamespace_andEmptyId() {
+        var identityMap = IdentityMap()
+        identityMap.addItem(namespace: "", id: "")
+
+        guard let _ = identityMap.getItemsFor(namespace: "email") else {
+            return
+        }
+
+        XCTFail("Namespace 'email' is not nil but expected nil.")
+    }
+
     func testAddItems_overwrite() {
         var identityMap = IdentityMap()
         identityMap.addItem(namespace: "space", id: "id", authenticationState: XDMAuthenticationState.ambiguous, primary: false)
