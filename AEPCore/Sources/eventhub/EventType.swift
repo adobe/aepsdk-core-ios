@@ -39,5 +39,6 @@ public class EventType: NSObject {
     public static let genericIdentity = "com.adobe.eventType.generic.identity"
     public static let genericPii = "com.adobe.eventType.generic.pii"
     public static let genericData = "com.adobe.eventType.generic.data"
+    public static let edge = "com.adobe.eventType.edge"
     public static let wildcard = "com.adobe.eventType._wildcard_"
 }
