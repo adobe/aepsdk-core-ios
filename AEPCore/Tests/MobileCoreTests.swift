@@ -326,7 +326,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.dispatch(event: expectedEvent2)
 
         // verify
-        wait(for: [responseExpectation1,responseExpectation2], timeout: 1.0)
+        wait(for: [responseExpectation1,responseExpectation2], timeout: 2.0)
     }
 
     // MARK: setWrapperType(...) tests
