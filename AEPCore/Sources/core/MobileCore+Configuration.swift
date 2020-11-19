@@ -76,17 +76,17 @@ public extension MobileCore {
     /// Get a JSON string containing all of the user's identities known by the SDK  and calls a handler upon completion.
     /// - Parameter completion: a closure that is invoked with a `String?` containing the SDK identities in JSON format and an `AEPError` if the request failed
     @objc(getSdkIdentities:)
-    static func getSdkIdentities(completion: @escaping (String?, AEPError) -> Void) {
+    static func getSdkIdentities(completion: @escaping (String?, Error?) -> Void) {
         let event = Event(name: CoreConstants.EventNames.GET_SDK_IDENTITIES, type: EventType.configuration, source: EventSource.requestIdentity, data: nil)
 
         EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { responseEvent in
             guard let responseEvent = responseEvent else {
-                completion(nil, .callbackTimeout)
+                completion(nil, AEPError.callbackTimeout)
                 return
             }
 
             guard let identities = responseEvent.data?[CoreConstants.Keys.ALL_IDENTIFIERS] as? String else {
-                completion(nil, .unexpected)
+                completion(nil, AEPError.unexpected)
                 return
             }
 

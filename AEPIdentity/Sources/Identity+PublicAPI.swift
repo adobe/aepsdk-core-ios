@@ -18,7 +18,7 @@ import Foundation
     /// - Parameters:
     ///   - url: URL to which the visitor info needs to be appended. Returned as is if it is nil or empty.
     ///   - completion: closure which will be invoked once the updated url is available, along with an error if any occurred
-    static func appendTo(url: URL?, completion: @escaping (URL?, AEPError) -> Void) {
+    static func appendTo(url: URL?, completion: @escaping (URL?, Error?) -> Void) {
         let data = [IdentityConstants.EventDataKeys.BASE_URL: url?.absoluteString ?? ""]
         let event = Event(name: IdentityConstants.EventNames.IDENTITY_REQUEST_IDENTITY,
                           type: EventType.identity,
@@ -27,12 +27,12 @@ import Foundation
 
         MobileCore.dispatch(event: event) { responseEvent in
             guard let responseEvent = responseEvent else {
-                completion(nil, .callbackTimeout)
+                completion(nil, AEPError.callbackTimeout)
                 return
             }
 
             guard let updatedUrlStr = responseEvent.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String else {
-                completion(nil, .unexpected)
+                completion(nil, AEPError.unexpected)
                 return
             }
             completion(URL(string: updatedUrlStr), .none)
@@ -42,7 +42,7 @@ import Foundation
     /// Returns all customer identifiers which were previously synced with the Adobe Experience Cloud.
     /// - Parameter completion: closure which will be invoked once the customer identifiers are available.
     @objc(getIdentifiers:)
-    static func getIdentifiers(completion: @escaping ([Identifiable]?, AEPError) -> Void) {
+    static func getIdentifiers(completion: @escaping ([Identifiable]?, Error?) -> Void) {
         let event = Event(name: IdentityConstants.EventNames.IDENTITY_REQUEST_IDENTITY,
                           type: EventType.identity,
                           source: EventSource.requestIdentity,
@@ -50,12 +50,12 @@ import Foundation
 
         MobileCore.dispatch(event: event) { responseEvent in
             guard let responseEvent = responseEvent else {
-                completion(nil, .callbackTimeout)
+                completion(nil, AEPError.callbackTimeout)
                 return
             }
 
             guard let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable] else {
-                completion(nil, .unexpected)
+                completion(nil, AEPError.unexpected)
                 return
             }
 
@@ -117,7 +117,7 @@ import Foundation
     /// Gets Visitor ID Service identifiers in URL query string form for consumption in hybrid mobile apps.
     /// - Parameter completion: closure invoked with a value containing the visitor identifiers as a query string upon completion of the service request
     @objc(getUrlVariables:)
-    static func getUrlVariables(completion: @escaping (String?, AEPError) -> Void) {
+    static func getUrlVariables(completion: @escaping (String?, Error?) -> Void) {
         let event = Event(name: IdentityConstants.EventNames.IDENTITY_REQUEST_IDENTITY,
                           type: EventType.identity,
                           source: EventSource.requestIdentity,
@@ -125,7 +125,7 @@ import Foundation
 
         MobileCore.dispatch(event: event) { responseEvent in
             guard let responseEvent = responseEvent else {
-                completion(nil, .callbackTimeout)
+                completion(nil, AEPError.callbackTimeout)
                 return
             }
 
