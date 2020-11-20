@@ -22,9 +22,16 @@ import Foundation
     /// Retrieves the head of this `DataQueue`, else return nil if the `DataQueue` is empty
     func peek() -> DataEntity?
 
+    /// Retrieves the first `n` entries in this `DataQueue`, else return nil if the `DataQueue` is empty
+    func peek(n: Int) -> [DataEntity]?
+
     /// Removes the head of this `DataQueue`
     @discardableResult
     func remove() -> Bool
+
+    /// Removes the first `n` entities in this `DataQueue`
+    @discardableResult
+    func remove(n: Int) -> Bool
 
     /// Removes all stored `DataEntity` object
     @discardableResult

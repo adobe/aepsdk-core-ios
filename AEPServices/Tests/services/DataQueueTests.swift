@@ -126,6 +126,144 @@ class DataQueueTests: XCTestCase {
         XCTAssertEqual(eventObj.name, events[0].name)
     }
 
+    /// peek(n)
+    func testPeekAllDataEntityFromQueue() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        var events: [EventEntity] = []
+        for i in 1 ... 3 {
+            let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
+            events.append(event)
+            let data = try JSONEncoder().encode(event)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
+            _ = queue.add(dataEntity: entity)
+        }
+
+        // When
+        let results = queue.peek(n: 3)!
+
+        // Then
+        let sql = """
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
+        """
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        let row = SQLiteWrapper.query(database: connection, sql: sql)!
+
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+        }
+
+        XCTAssertEqual(3, results.count)
+        XCTAssertEqual(3, row.count)
+        XCTAssertEqual(results.first?.uniqueIdentifier, row[0]["uniqueIdentifier"])
+        XCTAssertEqual(results[1].uniqueIdentifier, row[1]["uniqueIdentifier"])
+        XCTAssertEqual(results.last?.uniqueIdentifier, row[2]["uniqueIdentifier"])
+        let eventObj = try JSONDecoder().decode(EventEntity.self, from: (results.first?.data!)!)
+        XCTAssertEqual(eventObj.id, events[0].id)
+        XCTAssertEqual(eventObj.timestamp, events[0].timestamp)
+        XCTAssertEqual(eventObj.name, events[0].name)
+
+        let eventObj1 = try JSONDecoder().decode(EventEntity.self, from: results[1].data!)
+        XCTAssertEqual(eventObj1.id, events[1].id)
+        XCTAssertEqual(eventObj1.timestamp, events[1].timestamp)
+        XCTAssertEqual(eventObj1.name, events[1].name)
+
+        let eventObj2 = try JSONDecoder().decode(EventEntity.self, from: (results.last?.data!)!)
+        XCTAssertEqual(eventObj2.id, events[2].id)
+        XCTAssertEqual(eventObj2.timestamp, events[2].timestamp)
+        XCTAssertEqual(eventObj2.name, events[2].name)
+    }
+
+    /// peek(n)
+    func testPeekAllPlusOneDataEntityFromQueue() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        var events: [EventEntity] = []
+        for i in 1 ... 3 {
+            let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
+            events.append(event)
+            let data = try JSONEncoder().encode(event)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
+            _ = queue.add(dataEntity: entity)
+        }
+
+        // When
+        let results = queue.peek(n: 4)!
+
+        // Then
+        let sql = """
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
+        """
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        let row = SQLiteWrapper.query(database: connection, sql: sql)!
+
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+        }
+
+        XCTAssertEqual(3, results.count)
+        XCTAssertEqual(3, row.count)
+        XCTAssertEqual(results.first?.uniqueIdentifier, row[0]["uniqueIdentifier"])
+        XCTAssertEqual(results[1].uniqueIdentifier, row[1]["uniqueIdentifier"])
+        XCTAssertEqual(results.last?.uniqueIdentifier, row[2]["uniqueIdentifier"])
+        let eventObj = try JSONDecoder().decode(EventEntity.self, from: (results.first?.data!)!)
+        XCTAssertEqual(eventObj.id, events[0].id)
+        XCTAssertEqual(eventObj.timestamp, events[0].timestamp)
+        XCTAssertEqual(eventObj.name, events[0].name)
+
+        let eventObj1 = try JSONDecoder().decode(EventEntity.self, from: results[1].data!)
+        XCTAssertEqual(eventObj1.id, events[1].id)
+        XCTAssertEqual(eventObj1.timestamp, events[1].timestamp)
+        XCTAssertEqual(eventObj1.name, events[1].name)
+
+        let eventObj2 = try JSONDecoder().decode(EventEntity.self, from: (results.last?.data!)!)
+        XCTAssertEqual(eventObj2.id, events[2].id)
+        XCTAssertEqual(eventObj2.timestamp, events[2].timestamp)
+        XCTAssertEqual(eventObj2.name, events[2].name)
+    }
+
+    /// peek(n)
+    func testPeekFewDataEntityFromQueue() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        var events: [EventEntity] = []
+        for i in 1 ... 3 {
+            let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
+            events.append(event)
+            let data = try JSONEncoder().encode(event)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
+            _ = queue.add(dataEntity: entity)
+        }
+
+        // When
+        let results = queue.peek(n: 2)!
+
+        // Then
+        let sql = """
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
+        """
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        let row = SQLiteWrapper.query(database: connection, sql: sql)!
+
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+        }
+
+        XCTAssertEqual(2, results.count)
+        XCTAssertEqual(3, row.count)
+        XCTAssertEqual(results.first?.uniqueIdentifier, row[0]["uniqueIdentifier"])
+        XCTAssertEqual(results.last?.uniqueIdentifier, row[1]["uniqueIdentifier"])
+        let eventObj = try JSONDecoder().decode(EventEntity.self, from: (results.first?.data!)!)
+        XCTAssertEqual(eventObj.id, events[0].id)
+        XCTAssertEqual(eventObj.timestamp, events[0].timestamp)
+        XCTAssertEqual(eventObj.name, events[0].name)
+
+        let eventObj1 = try JSONDecoder().decode(EventEntity.self, from: results[1].data!)
+        XCTAssertEqual(eventObj1.id, events[1].id)
+        XCTAssertEqual(eventObj1.timestamp, events[1].timestamp)
+        XCTAssertEqual(eventObj1.name, events[1].name)
+    }
+
     /// peek()
     func testPeekDataEntityWithoutData() throws {
         // Given
@@ -165,8 +303,8 @@ class DataQueueTests: XCTestCase {
         XCTAssertNil(queue.peek())
     }
 
-    /// pop()
-    func testPopDataEntityFromQueue() throws {
+    /// remove()
+    func testRemoveDataEntityFromQueue() throws {
         // Given
         let queue = DataQueueService().getDataQueue(label: fileName)!
         var events: [EventEntity] = []
@@ -197,8 +335,102 @@ class DataQueueTests: XCTestCase {
         XCTAssertTrue(result)
     }
 
-    /// pop()
-    func testPopDataEntityFromEmptyQueue() throws {
+    /// remove(n)
+    func testRemoveAllDataEntityFromQueue() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        var events: [EventEntity] = []
+        for i in 1 ... 3 {
+            let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
+            events.append(event)
+            let data = try JSONEncoder().encode(event)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
+            _ = queue.add(dataEntity: entity)
+        }
+
+        // When
+        let result = queue.remove(n: 3)
+
+        // Then
+        let sql = """
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
+        """
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        let row = SQLiteWrapper.query(database: connection, sql: sql)!
+
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+        }
+
+        XCTAssertTrue(result)
+        XCTAssertTrue(row.isEmpty)
+    }
+
+    /// remove(n)
+    func testRemoveAllPlusOneDataEntityFromQueue() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        var events: [EventEntity] = []
+        for i in 1 ... 3 {
+            let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
+            events.append(event)
+            let data = try JSONEncoder().encode(event)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
+            _ = queue.add(dataEntity: entity)
+        }
+
+        // When
+        let result = queue.remove(n: 4)
+
+        // Then
+        let sql = """
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
+        """
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        let row = SQLiteWrapper.query(database: connection, sql: sql)!
+
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+        }
+
+        XCTAssertTrue(result)
+        XCTAssertTrue(row.isEmpty)
+    }
+
+    /// remove(n)
+    func testRemoveSomeDataEntityFromQueue() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        var events: [EventEntity] = []
+        for i in 1 ... 3 {
+            let event = EventEntity(id: UUID(), timestamp: Date(), name: "event00\(i)")
+            events.append(event)
+            let data = try JSONEncoder().encode(event)
+            let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
+            _ = queue.add(dataEntity: entity)
+        }
+
+        // When
+        let result = queue.remove(n: 2)
+
+        // Then
+        let sql = """
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
+        """
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        let row = SQLiteWrapper.query(database: connection, sql: sql)!
+
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+        }
+
+        XCTAssertTrue(result)
+        XCTAssertEqual(1, row.count)
+        XCTAssertEqual("3", row[0]["id"])
+    }
+
+    /// remove()
+    func testRemoveDataEntityFromEmptyQueue() throws {
         // Given
 
         let queue = DataQueueService().getDataQueue(label: fileName)!
