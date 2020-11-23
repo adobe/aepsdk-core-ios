@@ -324,7 +324,7 @@ final class EventHub {
         guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value else { return }
         guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
-        dispatch(event: createSharedStateEvent(extensionName: extensionName))
+        dispatch(event: createSharedStateEvent(extensionName: container.sharedStateName))
     }
 
     /// Creates a template `Event` for `SharedState` of the provided `extensionName`
