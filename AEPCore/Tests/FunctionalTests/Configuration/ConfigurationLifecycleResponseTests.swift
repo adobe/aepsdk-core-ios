@@ -79,5 +79,38 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
 
         mockSystemInfoService.property = nil
     }
+    
+    /// Tests that app id is loaded from manifest on normal startup after being persisted
+    func testHandleValidAppidFromManifestPersisted() {
+        let mockSystemInfoService = MockSystemInfoService()
+        mockSystemInfoService.property = "testappid"
+        ServiceProvider.shared.systemInfoService = mockSystemInfoService
+
+        let lifecycleEvent = Event(name: "Lifecycle response content", type: EventType.lifecycle, source: EventSource.responseContent, data: nil)
+
+        // test
+        mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        mockRuntime.simulateComingEvents(lifecycleEvent)
+
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+        XCTAssertEqual(EventSource.requestContent, mockRuntime.firstEvent?.source)
+        XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
+
+        mockSystemInfoService.property = nil
+
+        // reboot
+        mockRuntime = TestableExtensionRuntime()
+        mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        configuration = Configuration(runtime: mockRuntime)
+        configuration.onRegistered()
+
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+        XCTAssertEqual(EventSource.requestContent, mockRuntime.firstEvent?.source)
+        XCTAssertEqual("testappid", mockRuntime.firstEvent?.data?["config.appId"] as? String)
+    }
 
 }
