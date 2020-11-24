@@ -79,7 +79,7 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
 
         mockSystemInfoService.property = nil
     }
-    
+
     /// Tests that app id is loaded from manifest on normal startup after being persisted
     func testHandleValidAppidFromManifestPersisted() {
         let mockSystemInfoService = MockSystemInfoService()
