@@ -703,6 +703,18 @@ class EventHubTests: XCTestCase {
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
 
+    /// Tests that a registered extension can publish shared state and case is ignored
+    func testGetSharedStateCaseInsensitive() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME.uppercased(), data: SharedStateTestHelper.ONE, event: nil)
+
+        // verify
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME.lowercased(), nil, "one")
+    }
+
     /// Tests that a registered extension can publish shared state versioned at an event
     func testGetSharedStateSimpleWithEvent() {
         // setup
@@ -932,6 +944,31 @@ class EventHubTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1)
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+    }
+
+    /// Tests that we can create and resolve a pending shared state and case is ignored
+    func testCreatePendingAndResolvePendingSimpleCaseInsensitive() {
+        // setup
+        let expectation = XCTestExpectation(description: "Pending shared state resolved correctly")
+        expectation.assertForOverFulfill = true
+        eventHub.start()
+
+        let event = Event(name: "test", type: EventType.acquisition, source: EventSource.requestContent, data: nil)
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String == EventHubTests.MOCK_EXTENSION_NAME {
+                expectation.fulfill()
+            }
+        }
+        eventHub.dispatch(event: event)
+
+        // test
+        let pendingResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME.uppercased(), event: event)
+        pendingResolver(SharedStateTestHelper.ONE)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME.lowercased(), nil, "one")
     }
 
     /// Tests that we can create and resolve a pending XDM shared state

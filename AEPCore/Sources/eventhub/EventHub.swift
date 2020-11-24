@@ -156,7 +156,7 @@ final class EventHub {
     func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
         eventHubQueue.async {
             // use the event hub placeholder extension to hold all the listeners registered from the public API
-            guard let eventHubExtension = self.registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value else {
+            guard let eventHubExtension = self.registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(EventHubConstants.NAME) == .orderedSame })?.value else {
                 Log.warning(label: self.LOG_TAG, "Error registering event listener")
                 return
             }
@@ -220,7 +220,7 @@ final class EventHub {
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         return eventHubQueue.sync {
-            guard let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
+            guard let container = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
                 Log.warning(label: LOG_TAG, "Unable to retrieve shared state for \(extensionName). No such extension is registered.")
                 return nil
             }
@@ -273,7 +273,7 @@ final class EventHub {
         let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: EventHubConstants.VERSION_NUMBER,
                                    EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
 
-        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName == EventHubConstants.NAME })?.value.sharedState else {
+        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(EventHubConstants.NAME) == .orderedSame })?.value.sharedState else {
             Log.warning(label: LOG_TAG, "Extension not registered with EventHub")
             return
         }
@@ -294,7 +294,7 @@ final class EventHub {
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: A `(SharedState, Int)?` containing the state for the provided extension and its version number
     private func versionSharedState(extensionName: String, event: Event?, sharedStateType: SharedStateType = .standard) -> (SharedState, Int)? {
-        guard let extensionContainer = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else {
+        guard let extensionContainer = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value else {
             Log.error(label: LOG_TAG, "Extension \(extensionName) not registered with EventHub")
             return nil
         }
@@ -321,10 +321,10 @@ final class EventHub {
     ///   - data: A `[String: Any]?` containing data to add to the pending state prior to it being dispatched
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?, sharedStateType: SharedStateType = .standard) {
-        guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName == extensionName })?.value else { return }
+        guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value else { return }
         guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
-        dispatch(event: createSharedStateEvent(extensionName: extensionName))
+        dispatch(event: createSharedStateEvent(extensionName: container.sharedStateName))
     }
 
     /// Creates a template `Event` for `SharedState` of the provided `extensionName`
