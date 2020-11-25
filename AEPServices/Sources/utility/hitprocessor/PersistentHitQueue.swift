@@ -63,9 +63,8 @@ public class PersistentHitQueue: HitQueuing {
             guard !self.suspended else { return }
             guard let hit = self.dataQueue.peek() else { return } // nothing left in the queue, stop processing
 
-            
             let semaphore = DispatchSemaphore(value: 0)
-            self.processor.processHit(entity: hit, completion: { [weak self] success in                
+            self.processor.processHit(entity: hit, completion: { [weak self] success in
                 if success {
                     // successful processing of hit, remove it from the queue, move to next hit
                     _ = self?.dataQueue.remove()
@@ -76,7 +75,7 @@ public class PersistentHitQueue: HitQueuing {
                         self?.processNextHit()
                     }
                 }
-                
+
                 semaphore.signal()
             })
             semaphore.wait()
