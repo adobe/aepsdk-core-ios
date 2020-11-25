@@ -25,6 +25,9 @@ class ExtensionContainer {
     /// The `SharedState` associated with the extension
     var sharedState: SharedState?
 
+    /// The XDM `SharedState` associated with the extension
+    var xdmSharedState: SharedState?
+
     var sharedStateName: String = "invalidSharedStateName"
 
     /// The extension's dispatch queue
@@ -55,10 +58,23 @@ class ExtensionContainer {
             }
 
             self.sharedState = SharedState(unwrappedExtension.name)
+            self.xdmSharedState = SharedState("xdm.\(unwrappedExtension.name)")
             self.sharedStateName = unwrappedExtension.name
             unwrappedExtension.onRegistered()
             self.eventOrderer.start()
             completion(nil)
+        }
+    }
+
+    /// Returns the corresponding `SharedState` for the given `SharedStateType`
+    /// - Parameter type: type of shared state to be retrieved
+    /// - Returns: The `SharedState` instance mapped to `type`
+    func sharedState(for type: SharedStateType) -> SharedState? {
+        switch type {
+        case .standard:
+            return sharedState
+        case .xdm:
+            return xdmSharedState
         }
     }
 }
@@ -94,6 +110,18 @@ extension ExtensionContainer: ExtensionRuntime {
 
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
+    }
+
+    func createXDMSharedState(data: [String: Any], event: Event?) {
+        EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, event: event, sharedStateType: .xdm)
+    }
+
+    func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
+        return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event, sharedStateType: .xdm)
+    }
+
+    func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
+        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, sharedStateType: .xdm)
     }
 
     func startEvents() {

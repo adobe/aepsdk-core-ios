@@ -72,6 +72,15 @@ public final class MobileCore: NSObject {
         }
     }
 
+    /// Fetches a list of registered extensions along with their respective versions
+    /// - Returns: list of registered extensions along with their respective versions
+    @objc
+    public static func getRegisteredExtensions() -> String {
+        let registeredExtensions = EventHub.shared.getSharedState(extensionName: EventHubConstants.NAME, event: nil)?.value
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: registeredExtensions ?? [:], options: .prettyPrinted) else { return "{}" }
+        return String(data: jsonData, encoding: .utf8) ?? "{}"
+    }
+
     /// Dispatches an `Event` through the `EventHub`
     /// - Parameter event: The `Event` to be dispatched
     @objc(dispatch:)
@@ -90,6 +99,16 @@ public final class MobileCore: NSObject {
         }
 
         EventHub.shared.dispatch(event: event)
+    }
+
+    /// Registers an `EventListener` which will be invoked whenever a event with matched type and source is dispatched
+    /// - Parameters:
+    ///   - type: A `String` indicating the event type the current listener is listening for
+    ///   - source: A `String` indicating the event source the current listener is listening for
+    ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives a event with matched type and source
+    @objc(registerEventListenerWithType:source:listener:)
+    public static func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
+        EventHub.shared.registerEventListener(type: type, source: source, listener: listener)
     }
 
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.

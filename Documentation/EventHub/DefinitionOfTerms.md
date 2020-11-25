@@ -64,6 +64,13 @@ A **Shared State** that has been created, but not yet been populated by the **Ex
 A mechanism that allows **Extensions** to share state data with other Extensions. Any data existing in a shared state is valid  until it is either overwritten or removed by the owning extension. Shared states are owned by the **Event Hub**, but maintained by the Extension that owns them.
 
 --------------------------------------------------------------------------------
+
+### XDM Shared State
+
+A mechanism that allows **Extensions** to share state XDM compliant data with other Extensions. XDM shared states allow the Edge extension to collect XDM data from various mobile extensions when needed and allow for the creation of XDM data elements to be used in Launch rules.
+
+--------------------------------------------------------------------------------
+
 ### Shared State Resolver
 
 A `typealias` of `([String: Any]?) -> Void`. A Shared State Resolver is used when an **Extension** knows it will need to create a **Shared State** for a specific event, but it doesn't yet have the data that it needs to share. Once the extension has completed its work, it calls the shared state resolver with the necessary data. Shared State Resolvers are used in conjunction with **Pending Shared States**.

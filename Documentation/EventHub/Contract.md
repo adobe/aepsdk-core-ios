@@ -2,9 +2,9 @@
 
 ### EventHub:
 - EventHub itself is not accessible, interact with it by calling the methods from the `MobileCore` class or the Extension's API.
-- When initializing the EventHub, the set of the initial extension classes need to be passed to it. 
+- When initializing the EventHub, the set of the initial extension classes need to be passed to it.
 - Once all the initial extensions's `onRegistered()` have finished, the EventHub is considered booted and it begins to distribute events to every extension.
-- Currently, dynamically adding or removing of extensions is not supported. 
+- Currently, dynamically adding or removing of extensions is not supported.
 
 In the following docs, assume the events come in the following order:
 
@@ -28,7 +28,8 @@ E1 → E2 → E3 → .... → EN1 → EN2 → EN3 → EN4 → .......
 
 ### Shared State:
 
-- Each extension has its own shared state, identified by the extensions's name.
+- Each extension has its own standard shared state, identified by the extensions's name.
+- Each extension has its own XDM shared state, identified by the extensions's name.
 - An extension can set the shared state for EN2 after setting shared state for EN1.
 - Once an extension has set the shared state for EN2, it will not be allowed to set the shared state for EN1.
 - `nil` is returned when getting a shared state for an extension which is not registered.

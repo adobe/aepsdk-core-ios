@@ -12,17 +12,8 @@
 
 import Foundation
 
-/// An enum which describes different errors from the AEP SDK can return
-@objc public enum AEPError: Int, Error {
-    public typealias RawValue = Int
-
-    case unexpected = 0
-    case callbackTimeout = 1
-    case callbackNil = 2
-    case none = 3
-    case serverError = 4
-    case networkError = 5
-    case invalidRequest = 6
-    case invalidResponse = 7
-    case errorExtensionNotInitialized = 11
+/// Represents the `SharedState` types in `EventHub` that can be used by an extension to share data with other extensions and for rules execution
+enum SharedStateType {
+    case standard // regular data, the key names and structure can be defined by each extension
+    case xdm // data mapped on XDM mixins populated by an extension
 }

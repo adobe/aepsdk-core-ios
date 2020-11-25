@@ -81,7 +81,7 @@ MobileCore.registerExtension(Lifecycle.self) {
 }];
 ```
 
-##### Ungegistering a single extension:
+##### Unregistering a single extension:
 
 ###### Swift
 
@@ -97,6 +97,20 @@ MobileCore.unregisterExtension(Lifecycle.self) {
 [AEPMobileCore unregisterExtension:AEPMobileLifecycle.class completion:^{
     // handle completion
 }];
+```
+
+##### Getting a list of registered extensions:
+
+###### Swift
+
+```swift
+let registered = MobileCore.getRegisteredExtensions()
+```
+
+###### Objective-C
+
+```objective-c
+NSString *registered = [AEPMobileCore getRegisteredExtensions];
 ```
 
 ##### Configuring the SDK with an app id:
@@ -400,4 +414,3 @@ MobileCore.collectPii(data: data)
 NSDictionary *data = @{@"testKey": @"testVal"}
 [AEPMobileCore collectPii:data];
 ```
-
