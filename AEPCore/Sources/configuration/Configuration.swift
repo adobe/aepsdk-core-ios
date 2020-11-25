@@ -47,7 +47,7 @@ class Configuration: Extension {
         registerListener(type: EventType.lifecycle, source: EventSource.responseContent, listener: receiveLifecycleResponse(event:))
 
         // If we have an appId stored in persistence, kick off the configureWithAppId event
-        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
+        if let appId = appIdManager.loadAppIdFromManifest(), !appId.isEmpty {
             dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
         }
 
