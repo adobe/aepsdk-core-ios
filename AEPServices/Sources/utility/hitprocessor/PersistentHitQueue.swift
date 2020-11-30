@@ -17,7 +17,9 @@ public class PersistentHitQueue: HitQueuing {
     let dataQueue: DataQueue
 
     private static let DEFAULT_RETRY_INTERVAL = TimeInterval(30)
-    private var suspended = true
+    private var suspended = true // indicates if the queue has been suspended
+    private var isWaiting = false // indicates if the queue is currently waiting for network respsonse or next retry
+    private var hitsToRemove = 0 // number of hits need to be removed
     private let queue = DispatchQueue(label: "com.adobe.mobile.persistenthitqueue")
 
     /// Creates a new `HitQueue` with the underlying `DataQueue` which is used to persist hits
@@ -60,25 +62,33 @@ public class PersistentHitQueue: HitQueuing {
     /// A recursive function for processing hits, it will continue processing all the hits until none are left in the data queue
     private func processNextHit() {
         queue.async {
+            if self.hitsToRemove > 0 {
+                self.dataQueue.remove(n: self.hitsToRemove)
+                self.hitsToRemove = 0
+            }
+
             guard !self.suspended else { return }
+            guard !self.isWaiting else { return }
             guard let hit = self.dataQueue.peek() else { return } // nothing left in the queue, stop processing
 
-            let semaphore = DispatchSemaphore(value: 0)
+            self.isWaiting = true
+
             self.processor.processHit(entity: hit, completion: { [weak self] success in
                 if success {
-                    // successful processing of hit, remove it from the queue, move to next hit
-                    _ = self?.dataQueue.remove()
+                    // successful processing of hit, unblock the current queue, increment hitsToRemove
+                    self?.queue.async {
+                        self?.hitsToRemove += 1
+                        self?.isWaiting = false
+                    }
                     self?.processNextHit()
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
-                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
+                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {                        
+                        self?.isWaiting = false
                         self?.processNextHit()
                     }
                 }
-
-                semaphore.signal()
             })
-            semaphore.wait()
         }
     }
 }
