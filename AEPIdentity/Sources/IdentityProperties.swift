@@ -63,6 +63,25 @@ struct IdentityProperties: Codable {
         return eventData
     }
 
+    /// Converts `IdentityProperties` into an XDM data representation
+    /// - Returns: A dictionary representing this `IdentityProperties` in XDM data format
+    func toXDMData() -> [String: Any] {
+        var identityMap = IdentityMap()
+
+        // Add ECID
+        if let ecidString = ecid?.ecidString {
+            identityMap.addItem(namespace: IdentityConstants.XDM.Keys.ECID, id: ecidString)
+        }
+
+        for customerId in customerIds ?? [] {
+            guard let type = customerId.type, let id = customerId.identifier else { continue }
+            let xdmAuthState = XDMAuthenticationState.authStateFromMobileAuthState(authState: customerId.authenticationState)
+            identityMap.addItem(namespace: type, id: id, authenticationState: xdmAuthState, primary: false)
+        }
+
+        return [IdentityConstants.XDM.Keys.IDENTITY_MAP: identityMap.asDictionary() as Any]
+    }
+
     /// Populates the fields with values stored in the Identity data store
     mutating func loadFromPersistence() {
         let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
