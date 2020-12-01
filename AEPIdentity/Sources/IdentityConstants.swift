@@ -111,7 +111,7 @@ enum IdentityConstants {
     enum Edge {
         static let FRIENDLY_NAME = "Edge"
     }
-  
+
     enum XDM {
         enum Keys {
             static let IDENTITY_MAP = "identityMap"
