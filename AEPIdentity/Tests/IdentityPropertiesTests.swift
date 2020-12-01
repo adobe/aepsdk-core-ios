@@ -139,4 +139,43 @@ class IdentityPropertiesTests: XCTestCase {
         // can't guarantee order of IDs
         XCTAssertTrue(newIds == properties.customerIds || newIds.reversed() == properties.customerIds)
     }
+
+    /// When all properties all nil, the XDM data should have an empty top level identity map
+    func testToXDMDataEmpty() {
+        // setup
+        let properties = IdentityProperties()
+
+        // test
+        let xdmData = properties.toXDMData()
+        let identityMap = xdmData["identityMap"] as? [String: Any]
+
+        // verify
+        XCTAssertTrue(identityMap?.isEmpty ?? false)
+    }
+
+    /// Test that XDM data is populated correctly when all properties are non-nil
+    func testToXDMDataFull() {
+        // setup
+        var properties = IdentityProperties()
+        properties.ecid = ECID()
+        properties.advertisingIdentifier = "test-ad-id"
+        properties.pushIdentifier = "test-push-id"
+        properties.blob = "test-blob"
+        properties.locationHint = "test-location-hint"
+        properties.customerIds = [CustomIdentity(origin: "test-origin", type: "test-type", identifier: "test-identifier", authenticationState: .authenticated)]
+        properties.lastSync = Date()
+
+        // test
+        let xdmData = properties.toXDMData()
+        let identityMapDict = xdmData["identityMap"] as? [String: Any]
+        let identityMapData = try! JSONSerialization.data(withJSONObject: identityMapDict ?? [:], options: [])
+        let identityMap = try! JSONDecoder().decode(IdentityMap.self, from: identityMapData)
+
+        let ecidItem = identityMap.getItemsFor(namespace: "ECID")?.first
+        let customIdItem = identityMap.getItemsFor(namespace: "test-type")?.first
+
+        // verify
+        XCTAssertEqual(properties.ecid!.ecidString, ecidItem?.id)
+        XCTAssertEqual(properties.customerIds?.first?.identifier, customIdItem?.id)
+    }
 }

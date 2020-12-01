@@ -620,9 +620,9 @@ class IdentityStateTests: XCTestCase {
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
             XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -652,9 +652,9 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -684,9 +684,9 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -716,9 +716,9 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -746,9 +746,9 @@ class IdentityStateTests: XCTestCase {
         // test
         state.handleHitResponse(hit: IdentityHit.fakeHit(), response: nil, eventDispatcher: { _ in
             dispatchedEventExpectation.fulfill()
-        }) { _, _ in
+        }, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
-        }
+        })
 
         // verify
         wait(for: [dispatchedEventExpectation], timeout: 1)
@@ -770,6 +770,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (data, event) in
             XCTFail("Shared state should not be updated")
+        }, createXDMSharedState: { _,_ in
+            XCTFail("XDM Shared state should not be updated")
         })
 
         // verify
@@ -792,6 +794,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (_, _) in
             XCTFail("Shared state should not be updated")
+        }, createXDMSharedState: { _,_ in
+            XCTFail("XDM Shared state should not be updated")
         })
 
         // verify
@@ -805,6 +809,7 @@ class IdentityStateTests: XCTestCase {
     func testProcessPrivacyChangeToOptOut() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should be updated once")
         var props = IdentityProperties()
         props.privacyStatus = .unknown
         props.ecid = ECID()
@@ -815,6 +820,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (data, event) in
             sharedStateExpectation.fulfill()
+        }, createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -829,6 +836,7 @@ class IdentityStateTests: XCTestCase {
     func testProcessPrivacyChangeFromOptOutToOptIn() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        let xdmSharedStateExpectation = XCTestExpectation(description: "XDM Shared state should be updated once")
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
@@ -842,6 +850,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { (_, _) in
             sharedStateExpectation.fulfill()
+        }, createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
@@ -855,6 +865,7 @@ class IdentityStateTests: XCTestCase {
     func testProcessPrivacyChangeFromOptOutToUnknown() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
+        let xdmSharedStateExpectation = XCTestExpectation(description: "Force sync should cause XDM shared state to be updated")
         var props = IdentityProperties()
         props.privacyStatus = .optedOut
 
@@ -868,6 +879,8 @@ class IdentityStateTests: XCTestCase {
         // test
         state.processPrivacyChange(event: event, createSharedState: { _, _ in
             sharedStateExpectation.fulfill()
+        }, createXDMSharedState: { _, _ in
+            xdmSharedStateExpectation.fulfill()
         })
 
         // verify
