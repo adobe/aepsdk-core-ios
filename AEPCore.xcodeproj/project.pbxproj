@@ -46,6 +46,7 @@
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */; };
+		21D1E3742576E58F00C7CB81 /* EdgeIdentityIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D1E3732576E58F00C7CB81 /* EdgeIdentityIntegrationTests.swift */; };
 		21F79AB724E704C5003204C3 /* IDParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AB624E704C5003204C3 /* IDParser.swift */; };
 		21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABA24E70CDC003204C3 /* IDParsing.swift */; };
 		21F79ABF24E71B03003204C3 /* IDParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABD24E7144F003204C3 /* IDParserTests.swift */; };
@@ -582,6 +583,7 @@
 		21CAC0DF2422917600C11388 /* AEPCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0E62422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5MigratorTests.swift; sourceTree = "<group>"; };
+		21D1E3732576E58F00C7CB81 /* EdgeIdentityIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeIdentityIntegrationTests.swift; sourceTree = "<group>"; };
 		21F79AB624E704C5003204C3 /* IDParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParser.swift; sourceTree = "<group>"; };
 		21F79ABA24E70CDC003204C3 /* IDParsing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParsing.swift; sourceTree = "<group>"; };
 		21F79ABD24E7144F003204C3 /* IDParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParserTests.swift; sourceTree = "<group>"; };
@@ -1546,6 +1548,7 @@
 				3FF829432507E9C900483C74 /* resources */,
 				3F42570F24F4754F005D4006 /* TestableNetworkService.swift */,
 				3F4256FE24F474F4005D4006 /* IdentityIntegrationTests.swift */,
+				21D1E3732576E58F00C7CB81 /* EdgeIdentityIntegrationTests.swift */,
 				3F42570024F474F4005D4006 /* Info.plist */,
 				3F2F12BF24F6D66C00600CB4 /* TestHelpers.swift */,
 				3F5F9ED02502D34500C8A0B4 /* ConfigurationIntegrationTests.swift */,
@@ -2627,6 +2630,7 @@
 				3F4256FF24F474F4005D4006 /* IdentityIntegrationTests.swift in Sources */,
 				3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */,
 				3F2F12C024F6D66C00600CB4 /* TestHelpers.swift in Sources */,
+				21D1E3742576E58F00C7CB81 /* EdgeIdentityIntegrationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

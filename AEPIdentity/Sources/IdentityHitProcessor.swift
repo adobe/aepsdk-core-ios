@@ -51,7 +51,7 @@ class IdentityHitProcessor: HitProcessing {
         // only queue hits if Edge is not registered
         let shouldQueue = isEdgeRegistered()
         if !shouldQueue {
-            Log.debug(label: "\(LOG_TAG):shouldQueue", "Dropping hit with id: '\(entity.uniqueIdentifier)' because Edge is present.")
+            Log.debug(label: "\(LOG_TAG):shouldQueue", "AEP Edge is enabled, sending identifiers in XDM format to the Edge extension.")
         }
         return !shouldQueue
     }

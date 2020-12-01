@@ -37,16 +37,13 @@ class IdentityIntegrationTests: XCTestCase {
             unregisterExpectation.fulfill()
         }
         wait(for: [unregisterExpectation], timeout: 2)
+
     }
 
-    func initExtensionsAndWait(registerMockEdge: Bool = false) {
+    func initExtensionsAndWait() {
         let initExpectation = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(.trace)
-        var extensions = [Identity.self, Lifecycle.self, Signal.self] as! [Extension.Type]
-        if registerMockEdge {
-            extensions = [Identity.self, Lifecycle.self, Signal.self, MockEdgeExtension.self] as! [Extension.Type]
-        }
-        MobileCore.registerExtensions(extensions) {
+        MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
         wait(for: [initExpectation], timeout: 1)
@@ -56,29 +53,6 @@ class IdentityIntegrationTests: XCTestCase {
         initExtensionsAndWait()
 
         let requestExpectation = XCTestExpectation(description: "syncIdentifiers request")
-        let mockNetworkService = TestableNetworkService()
-        ServiceProvider.shared.networkService = mockNetworkService
-        mockNetworkService.mock { request in
-            if request.url.absoluteString.contains("d_cid_ic=id1%2501value1%25010") {
-                XCTAssertTrue(request.url.absoluteString.contains("https://test.com/id"))
-                XCTAssertTrue(request.url.absoluteString.contains("d_orgid=orgid"))
-                requestExpectation.fulfill()
-            }
-            return nil
-        }
-
-        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        Identity.syncIdentifiers(identifiers: ["id1": "value1"])
-
-        wait(for: [requestExpectation], timeout: 1)
-    }
-
-    /// No network request should be made since the Edge extension is registered
-    func testSyncIdentifiersEdgeIsRegistered() {
-        initExtensionsAndWait(registerMockEdge: true)
-
-        let requestExpectation = XCTestExpectation(description: "syncIdentifiers request")
-        requestExpectation.isInverted = true
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
@@ -215,28 +189,4 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [requestExpectation], timeout: 2)
     }
 
-}
-
-@objc private class MockEdgeExtension: NSObject, Extension {
-    var name = "com.adobe.edge"
-
-    var friendlyName = "Edge"
-
-    static var extensionVersion = "1.0.0-test"
-
-    var metadata: [String : String]?
-
-    var runtime: ExtensionRuntime
-
-    func onRegistered() {}
-
-    func onUnregistered() {}
-
-    required init?(runtime: ExtensionRuntime) {
-        self.runtime = runtime
-    }
-
-    func readyForEvent(_ event: Event) -> Bool {
-        return true
-    }
 }
