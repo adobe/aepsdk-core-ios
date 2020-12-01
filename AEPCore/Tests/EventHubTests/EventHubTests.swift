@@ -1094,45 +1094,4 @@ class EventHubTests: XCTestCase {
         // verify
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one", .xdm)
     }
-
-    // MARK: isExtensionRegistered() Tests
-
-    /// Ensures that false is returned when an non-registered extension is passed in
-    func testIsExtensionRegisteredInvalid() {
-        // setup
-        eventHub.start()
-
-        // test & verify
-        XCTAssertFalse(eventHub.isExtensionRegistered(extensionName: "com.adobe.test.extension"))
-    }
-
-    /// Ensures that true is returned when a registered extension name is passed in
-    func testIsExtensionRegisteredValid() {
-        // setup
-        eventHub.start()
-
-        // test & verify
-        // MockExtension is registred in setup()
-        XCTAssertTrue(eventHub.isExtensionRegistered(extensionName: MockExtension(runtime: TestableExtensionRuntime()).name))
-    }
-
-    /// Tests that isExtensionsRegistered returns the correct value for an extension that is registered, then unregistered
-    func testIsExtensionRegisteredReturnsTrueThenFalseAfterUnregistration() {
-        // setup
-        eventHub.start()
-        let expectation = XCTestExpectation(description: "MockExtension is unregistered")
-
-        // test & verify
-        // MockExtension is registred in setup()
-        XCTAssertTrue(eventHub.isExtensionRegistered(extensionName: MockExtension(runtime: TestableExtensionRuntime()).name))
-
-        // unregistered MockExtension
-        eventHub.unregisterExtension(MockExtension.self) { (error) in
-            XCTAssertNil(error)
-            XCTAssertFalse(self.eventHub.isExtensionRegistered(extensionName: MockExtension(runtime: TestableExtensionRuntime()).name))
-            expectation.fulfill()
-        }
-
-        wait(for: [expectation], timeout: 0.5)
-    }
 }

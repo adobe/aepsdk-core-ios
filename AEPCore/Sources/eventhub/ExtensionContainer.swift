@@ -124,10 +124,6 @@ extension ExtensionContainer: ExtensionRuntime {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, sharedStateType: .xdm)
     }
 
-    func isExtensionRegistered(extensionName: String) -> Bool {
-        return EventHub.shared.isExtensionRegistered(extensionName: extensionName)
-    }
-
     func startEvents() {
         eventOrderer.start()
     }

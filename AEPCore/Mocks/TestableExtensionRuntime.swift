@@ -76,10 +76,6 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         return mockedXdmSharedStates["\(extensionName)"]
     }
 
-    public func isExtensionRegistered(extensionName: String) -> Bool {
-        return mockedRegisteredExtensions.contains(extensionName)
-    }
-
     public func startEvents() {}
 
     public func stopEvents() {}

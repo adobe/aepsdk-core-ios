@@ -71,10 +71,6 @@ class TestableExtensionRuntime: ExtensionRuntime {
         return otherXDMSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
 
-    public func isExtensionRegistered(extensionName: String) -> Bool {
-        return mockedRegisteredExtensions.contains(extensionName)
-    }
-
     func simulateSharedState(extensionName: String, event: Event?, data: (value: [String: Any]?, status: SharedStateStatus)) {
         otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: data.value)
     }

@@ -115,13 +115,6 @@ public extension Extension {
         return runtime.getSharedState(extensionName: extensionName, event: event, barrier: true)
     }
 
-    /// Determines if there exists a registered extension with `extensionName`
-    /// - Parameter extensionName: The name of the extension to be looked up
-    /// - Returns: Returns true if this extension is currently registered with the `EventHub`, otherwise false
-    func isExtensionRegistered(extensionName: String) -> Bool {
-        return runtime.isExtensionRegistered(extensionName: extensionName)
-    }
-
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
     /// Should be overridden by any extension that wants to control it's own event flow on a per event basis.
     /// - Parameter event: `Event` that will be processed next

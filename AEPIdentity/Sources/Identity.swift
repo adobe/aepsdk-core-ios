@@ -227,6 +227,8 @@ import Foundation
 
     /// - Returns: Returns true if the Edge extension is registered, false otherwise
     private func isEdgeRegistered() -> Bool {
-        return isExtensionRegistered(extensionName: IdentityConstants.SharedStateKeys.EDGE)
+        guard let eventHubSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.EVENT_HUB, event: nil)?.value else { return false }
+        guard let registeredExtensions = eventHubSharedState[IdentityConstants.SharedStateKeys.EventHub.EXTENSIONS] as? [String: Any] else { return false }
+        return registeredExtensions.keys.contains(IdentityConstants.Edge.FRIENDLY_NAME)
     }
 }
