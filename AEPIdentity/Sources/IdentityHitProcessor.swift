@@ -18,6 +18,7 @@ class IdentityHitProcessor: HitProcessing {
     let retryInterval = TimeInterval(30)
     private let responseHandler: (IdentityHit, Data?) -> Void
     private var isEdgeRegistered: () -> Bool
+    private var edgeRegistered = false
     private var networkService: Networking {
         return ServiceProvider.shared.networkService
     }
@@ -48,12 +49,14 @@ class IdentityHitProcessor: HitProcessing {
     }
 
     func shouldQueue(entity: DataEntity) -> Bool {
+        if edgeRegistered { return false } // minor optimization to reduce calls to getSharedState
+
         // only queue hits if Edge is not registered
-        let shouldQueue = isEdgeRegistered()
-        if !shouldQueue {
+        edgeRegistered = isEdgeRegistered()
+        if !edgeRegistered {
             Log.debug(label: "\(LOG_TAG):shouldQueue", "AEP Edge is enabled, sending identifiers in XDM format to the Edge extension.")
         }
-        return !shouldQueue
+        return !edgeRegistered
     }
 
     // MARK: Helpers
