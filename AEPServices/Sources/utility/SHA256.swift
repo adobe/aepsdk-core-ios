@@ -14,6 +14,22 @@ import Foundation
 
 // Ref: https://stackoverflow.com/questions/25388747/sha256-in-swift
 public struct SHA256 {
+    /// Hashes `str` with SHA256
+    /// - Parameter str: string to be hash
+    /// - Returns: the hashed string
+    public static func hash(_ str: String?) -> String? {
+        guard let str = str else { return nil }
+        if str.isEmpty {
+            return ""
+        }
+
+        if let stringData = str.data(using: .utf8) {
+            return hexStringFromData(input: digest(input: stringData as NSData))
+        }
+
+        return nil
+    }
+
     /// Converts data into a string hex representation
     /// - Parameter input: the input data
     /// - Returns: the data represented as a hex string, returns an empty string if `input` is nil or empty
@@ -28,5 +44,12 @@ public struct SHA256 {
         }
 
         return hexString
+    }
+
+    private static func digest(input: NSData) -> NSData {
+        let digestLength = Int(CC_SHA256_DIGEST_LENGTH)
+        var hash = [UInt8](repeating: 0, count: digestLength)
+        CC_SHA256(input.bytes, UInt32(input.length), &hash)
+        return NSData(bytes: hash, length: digestLength)
     }
 }
