@@ -124,8 +124,7 @@ public final class MobileCore: NSObject {
     /// - Parameter deviceToken: the device token for push notifications
     @objc(setPushIdentifier:)
     public static func setPushIdentifier(_ deviceToken: Data?) {
-        let hexString = SHA256.hexStringFromData(input: deviceToken as NSData?)
-        let data = [CoreConstants.Keys.PUSH_IDENTIFIER: hexString]
+        let data = [CoreConstants.Keys.PUSH_IDENTIFIER: deviceToken?.hexDescription ?? ""]
         let event = Event(name: CoreConstants.EventNames.SET_PUSH_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
         MobileCore.dispatch(event: event)
     }

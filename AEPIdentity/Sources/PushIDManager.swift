@@ -73,7 +73,7 @@ struct PushIDManager: PushIDManageable {
     // MARK: Private APIs
 
     /// Compares the provided newPushId against the one in data store (if exists)
-    /// - Parameter newPushId: the new push identifier as a string, not hashed yet
+    /// - Parameter newPushId: the new push identifier as a string
     /// - Returns: true if the provided push id does not match the existing one
     private mutating func pushIdHasChanged(newPushId: String) -> Bool {
         var properties = IdentityProperties()
