@@ -80,7 +80,7 @@ class PushIDManagerTests: XCTestCase {
         // setup
         let existingPushId = "existingPushID"
         var existingProps = IdentityProperties()
-        existingProps.pushIdentifier = SHA256.hash(existingPushId)
+        existingProps.pushIdentifier = existingPushId
         existingProps.saveToPersistence()
         pushEnabled = true
 
@@ -123,7 +123,7 @@ class PushIDManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
-        XCTAssertEqual(props.pushIdentifier, SHA256.hash(testPushId)) // push id in datastore should have been updated
+        XCTAssertEqual(props.pushIdentifier, testPushId) // push id in datastore should have been updated
         XCTAssertTrue(pushEnabled) // push should have been enabled
     }
 
@@ -147,7 +147,7 @@ class PushIDManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
-        XCTAssertEqual(props.pushIdentifier, SHA256.hash(testPushId))
+        XCTAssertEqual(props.pushIdentifier, testPushId)
         XCTAssertTrue(pushEnabled) // push should have remained enabled
     }
 
@@ -176,7 +176,7 @@ class PushIDManagerTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         var props = IdentityProperties()
         props.loadFromPersistence()
-        XCTAssertEqual(props.pushIdentifier, SHA256.hash(testPushId))
+        XCTAssertEqual(props.pushIdentifier, testPushId)
         XCTAssertTrue(pushEnabled) // push should have been enabled
     }
 
