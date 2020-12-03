@@ -14,6 +14,27 @@
 import Foundation
 
 class MockSystemInfoService: SystemInfoService {
+
+    public var deviceType: DeviceType = .PHONE
+    public func getDeviceType() -> DeviceType {
+        return deviceType
+    }
+
+    public var appId:String?
+    public func getApplicationBundleId() -> String? {
+        return appId
+    }
+
+    public var appVersion:String?
+    public func getApplicationVersion() -> String? {
+        return appVersion
+    }
+
+    public var orientation: DeviceOrientation = .LANDSCAPE
+    public func getCurrentOrientation() -> DeviceOrientation {
+        return orientation
+    }
+
     var property: String?
     func getProperty(for _: String) -> String? {
         return property
