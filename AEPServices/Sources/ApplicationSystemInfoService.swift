@@ -145,8 +145,6 @@ class ApplicationSystemInfoService: SystemInfoService {
             return .TV
         case .carPlay:
             return .CARPLAY
-        case .mac:
-            return .MAC
         case .unspecified:
             return .UNKNOWN
         default:
