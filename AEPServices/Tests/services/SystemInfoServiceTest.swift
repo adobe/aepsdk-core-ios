@@ -119,4 +119,24 @@ class SystemInfoServiceTest: XCTestCase {
         XCTAssertEqual(displayInfo.heightPixels, testDisplayInfo.height)
         XCTAssertEqual(displayInfo.widthPixels, testDisplayInfo.width)
     }
+
+    func testGetDeviceType() {
+        let type = systemInfoService.getDeviceType()
+        XCTAssertEqual(DeviceType.PHONE,type)
+    }
+
+    func testGetApplicationBundleId() {
+        let id = systemInfoService.getApplicationBundleId()
+        XCTAssertNotNil(id)
+    }
+
+    func testGetApplicationVersionString() {
+        let version = systemInfoService.getApplicationVersion()
+        XCTAssertNotNil(version)
+    }
+
+    func testGetCurrentOrientation () {
+        let orientation = systemInfoService.getCurrentOrientation()
+        XCTAssertEqual(DeviceOrientation.UNKNOWN,orientation)
+    }
 }
