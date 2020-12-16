@@ -13,26 +13,26 @@
 
 import Foundation
 
-public class FullScreenMessage : FullScreenMessageUiInterface {
-    var fullScreenMessageHandler: FullScreenUIHandler? = nil
-    
+public class FullScreenMessage: FullScreenMessageUiInterface {
+    var fullScreenMessageHandler: FullScreenUIHandler?
+
     static func createFullscreenMessage(html: String, _ listener: FullscreenListenerInterface, _ messageMonnitor: MessageMonitor, _ isLocalImageUsed: Bool) -> FullScreenMessage? {
         let newMessage: FullScreenMessage = FullScreenMessage()
         return newMessage
     }
-    
+
     func initMessage(html: String, _ listener: FullscreenListenerInterface, _ messageMonnitor: MessageMonitor, _ isLocalImageUsed: Bool) {
         fullScreenMessageHandler = FullScreenUIHandler(payload: html, message: self, listener: listener, monitor: messageMonnitor, isLocalImageUsed: isLocalImageUsed )
     }
-    
+
     public func show() {
         fullScreenMessageHandler?.show()
     }
-    
+
     public func openUrl(url: String) {
         fullScreenMessageHandler?.openUrl(url: url)
     }
-    
+
     public func remove() {
         fullScreenMessageHandler?.dismiss()
     }

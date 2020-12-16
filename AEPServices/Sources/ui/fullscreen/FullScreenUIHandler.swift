@@ -18,38 +18,38 @@ func ADBOrientationIsPortrait() -> Bool {
     UIApplication.shared.statusBarOrientation.isPortrait
 }
 
-class FullScreenUIHandler : NSObject, WKNavigationDelegate {
-    
+class FullScreenUIHandler: NSObject, WKNavigationDelegate {
+
     var LOG_TAG = "FullScreenUIHandler"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
     private let TEMP_FILE_NAME = "temp"
-    
+
     var isLocalImageUsed = false
     var payload: String
     var message: FullScreenMessageUiInterface?
     var listener: FullscreenListenerInterface?
     var monitor: MessageMonitor
     var webView: UIView!
-    
-    init(payload: String, message: FullScreenMessageUiInterface, listener : FullscreenListenerInterface, monitor: MessageMonitor, isLocalImageUsed: Bool) {
+
+    init(payload: String, message: FullScreenMessageUiInterface, listener: FullscreenListenerInterface, monitor: MessageMonitor, isLocalImageUsed: Bool) {
         self.payload = payload
         self.message = message
         self.listener = listener
         self.monitor = monitor
         self.isLocalImageUsed = isLocalImageUsed
     }
-    
+
     func show() {
         if monitor.isDisplayed() {
             return
         }
-        
+
         DispatchQueue.main.async {
             self.monitor.displayed()
             guard var newFrame: CGRect = self.calcFullScreenFrame() else { return }
             newFrame.origin.y = newFrame.size.height
-            if (newFrame.size.width > 0.0 && newFrame.size.height > 0.0) {
+            if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
                 let webViewConfiguration = WKWebViewConfiguration()
                 webViewConfiguration.allowsInlineMediaPlayback = true
                 webViewConfiguration.mediaTypesRequiringUserActionForPlayback = []
@@ -64,7 +64,7 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
                     wkWebView.scrollView.contentInsetAdjustmentBehavior = .never
                 }
                 var useTempHTML = false
-                guard var cacheFolder : URL = self.getCacheDirectoryPath() else {
+                guard var cacheFolder: URL = self.getCacheDirectoryPath() else {
                     return
                 }
                 cacheFolder.appendPathComponent(self.DOWNLOAD_CACHE)
@@ -72,7 +72,7 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
                 cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
                 cacheFolder.appendPathComponent(self.HTML_EXTENSION)
                 let tempHTMLFilePath = cacheFolder.absoluteString
-                if (!self.isLocalImageUsed) {
+                if !self.isLocalImageUsed {
                     do {
                         try self.payload.write(toFile: tempHTMLFilePath, atomically: true, encoding: .utf8)
                         useTempHTML = true
@@ -83,14 +83,13 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
                 // load the HTML string on WKWebview. If we are using the cached images, then use
                 // loadFileURL:allowingReadAccessToURL: to load the html from local file, which will give us the correct
                 // permission to read cached files
-                if (useTempHTML) {
-                    wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFilePath) , allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolderString))
+                if useTempHTML {
+                    wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFilePath), allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolderString))
                 } else {
                     wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
                 let keyWindow = self.getKeyWindow()
                 keyWindow?.addSubview(wkWebView)
-                
                 UIView.animate(withDuration: 0.3, animations: {
                     var webViewFrame = wkWebView.frame
                     webViewFrame.origin.y = 0
@@ -98,24 +97,23 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
                 }, completion: nil)
             }
         }
-        
         self.listener?.onShow(message: self.message)
     }
-    
+
     func dismiss() {
         DispatchQueue.main.async {
             self.monitor.dismissed()
             self.dismissWithAnimation(animate: true)
             self.listener?.onDismiss(message: self.message)
             self.message = nil
-            guard var cacheFolder : URL = self.getCacheDirectoryPath() else {
+            guard var cacheFolder: URL = self.getCacheDirectoryPath() else {
                 return
             }
             cacheFolder.appendPathComponent(self.DOWNLOAD_CACHE)
             cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
             cacheFolder.appendPathComponent(self.HTML_EXTENSION)
             let tempHTMLFilePath = cacheFolder.absoluteString
-            
+
             do {
                 try FileManager.default.removeItem(atPath: tempHTMLFilePath)
             } catch {
@@ -123,29 +121,29 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
             }
         }
     }
-    
+
     func openUrl(url: String) {
-        if (!url.isEmpty) {
+        if !url.isEmpty {
             guard let urlObj: URL = URL.init(string: url) else {
                 return
             }
             UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
         }
     }
-    
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if (self.listener != nil) {
+        if self.listener != nil {
             guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self.message, url: navigationAction.request.url?.absoluteString) else {
                 decisionHandler(.allow)
                 return
             }
             decisionHandler(shouldOpenUrl ? .allow : .cancel)
-            
+
         } else {
             decisionHandler(.allow)
         }
     }
-    
+
     func calcFullScreenFrame() -> CGRect? {
         var newFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
         // x is always 0
@@ -154,11 +152,10 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
         let keyWindow = getKeyWindow()
         guard let screenBounds: CGSize = keyWindow?.frame.size else { return nil }
         newFrame.size = screenBounds
-        
         newFrame.origin.y = 0
         return newFrame
     }
-    
+
     func getKeyWindow() -> UIWindow? {
         var keyWindow = UIApplication.shared.keyWindow
 
@@ -168,20 +165,24 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
 
         return keyWindow
     }
-    
+
     // Get user's cache directory path
     func getCacheDirectoryPath() -> URL? {
         let paths = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask)
-        if (paths.isEmpty) {
+        if paths.isEmpty {
             return nil
         }
         let root = paths[0]
-        if (!FileManager.default.fileExists(atPath: root.absoluteString)) {
-            try! FileManager.default.createDirectory(atPath: root.absoluteString, withIntermediateDirectories: true, attributes: nil)
+        if !FileManager.default.fileExists(atPath: root.absoluteString) {
+//            do {
+//                FileManager.default.createDirectory(atPath: root.absoluteString, withIntermediateDirectories: true, attributes: nil)
+//            }catch let error as NSError {
+//                // handle error
+//              }
         }
         return root
     }
-    
+
     func dismissWithAnimation(animate: Bool) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: animate ? 0.3: 0, animations: {
@@ -190,7 +191,7 @@ class FullScreenUIHandler : NSObject, WKNavigationDelegate {
                 }
                 newFrame.origin.y = newFrame.size.height
                 self.webView.frame = newFrame
-            }) { (finished) in
+            }) { _ in
                 self.webView.removeFromSuperview()
                 self.webView = nil
             }
