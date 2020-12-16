@@ -169,16 +169,14 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
     // Get user's cache directory path
     func getCacheDirectoryPath() -> URL? {
         let paths = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask)
-        if paths.isEmpty {
+        if (paths.isEmpty) {
             return nil
         }
         let root = paths[0]
-        if !FileManager.default.fileExists(atPath: root.absoluteString) {
-//            do {
-//                FileManager.default.createDirectory(atPath: root.absoluteString, withIntermediateDirectories: true, attributes: nil)
-//            }catch let error as NSError {
-//                // handle error
-//              }
+        var dir: ObjCBool = false
+        
+        if (!FileManager.default.fileExists(atPath: root.path, isDirectory: &dir) && !dir.boolValue) {
+            try! FileManager.default.createDirectory(atPath: root.path, withIntermediateDirectories: true, attributes: nil)
         }
         return root
     }
