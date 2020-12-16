@@ -13,7 +13,7 @@
 import Foundation
 
 public protocol FullscreenListenerInterface {
-    func onShow(message: FullScreenMessageUiInterface)
-    func OnDismiss(message: FullScreenMessageUiInterface)
-    func OverrideUrlLoad(message: FullScreenMessageUiInterface, url : String)
+    func onShow(message: FullScreenMessageUiInterface?)
+    func onDismiss(message: FullScreenMessageUiInterface?)
+    func overrideUrlLoad(message: FullScreenMessageUiInterface?, url : String?) -> Bool
 }
