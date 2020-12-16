@@ -2903,6 +2903,7 @@
 				3F0397C724BE5FF30019F095 /* CacheExpiry.swift in Sources */,
 				3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */,
 				3F0397FC24BE60910019F095 /* OperationOrderer.swift in Sources */,
+				921EE1D3257A337D00A119FA /* UIServiceInterface.swift in Sources */,
 				3F0397D324BE5FF30019F095 /* SQLiteDataQueue.swift in Sources */,
 				3F0397C324BE5FF30019F095 /* Caching.swift in Sources */,
 				923972B325AD844E0056A3E5 /* UIApplication+Window.swift in Sources */,
@@ -2941,6 +2942,7 @@
 				3F0397C824BE5FF30019F095 /* ServiceProvider.swift in Sources */,
 				2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */,
 				3F0397F724BE60910019F095 /* ZipArchive.swift in Sources */,
+				921EE1F0257A338100A119FA /* UIService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
