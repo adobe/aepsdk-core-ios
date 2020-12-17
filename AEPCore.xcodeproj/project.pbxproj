@@ -303,6 +303,7 @@
 		78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */; };
 		921EE1D3257A337D00A119FA /* UIServiceInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921EE199257A287A00A119FA /* UIServiceInterface.swift */; };
 		921EE1F0257A338100A119FA /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921EE189257A284800A119FA /* UIService.swift */; };
+		92490BE7258BE23A00762B04 /* UIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92490BE6258BE23A00762B04 /* UIServiceTests.swift */; };
 		92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */; };
 		92EEA58025885C6900DBA3EE /* FullScreenMessageUiInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA57F25885C6900DBA3EE /* FullScreenMessageUiInterface.swift */; };
 		92EEA59E25885CD600DBA3EE /* FullScreenUIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA59D25885CD600DBA3EE /* FullScreenUIHandler.swift */; };
@@ -853,6 +854,7 @@
 		78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIDTests.swift; sourceTree = "<group>"; };
 		921EE189257A284800A119FA /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
 		921EE199257A287A00A119FA /* UIServiceInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServiceInterface.swift; sourceTree = "<group>"; };
+		92490BE6258BE23A00762B04 /* UIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServiceTests.swift; sourceTree = "<group>"; };
 		92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessage.swift; sourceTree = "<group>"; };
 		92EEA57F25885C6900DBA3EE /* FullScreenMessageUiInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenMessageUiInterface.swift; sourceTree = "<group>"; };
 		92EEA59D25885CD600DBA3EE /* FullScreenUIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenUIHandler.swift; sourceTree = "<group>"; };
@@ -1416,6 +1418,7 @@
 				78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */,
 				3F03980524BE61520019F095 /* URLServiceTest.swift */,
 				3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */,
+				92490BE6258BE23A00762B04 /* UIServiceTests.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -2633,6 +2636,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F03981624BE61520019F095 /* SystemInfoServiceTest.swift in Sources */,
+				92490BE7258BE23A00762B04 /* UIServiceTests.swift in Sources */,
 				249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */,
 				3F03981E24BE61520019F095 /* DataQueueTests.swift in Sources */,
 				3F03981524BE61520019F095 /* UnzipperTest.swift in Sources */,
