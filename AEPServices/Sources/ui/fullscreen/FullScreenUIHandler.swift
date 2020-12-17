@@ -73,20 +73,18 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
                 
                 // save the HTML payload to a local file if the cached image is being used
                 var useTempHTML = false
-                var cacheFolderString: String?
-                var tempHTMLFilePath: String?
-                var cacheFolder: URL? = self.fileManager.getCacheDirectoryPath()
+                var cacheFolderURL: URL?
+                var tempHTMLFile: URL?
+                let cacheFolder: URL? = self.fileManager.getCacheDirectoryPath()
                 if (cacheFolder != nil) {
-                    cacheFolder?.appendPathComponent(self.DOWNLOAD_CACHE)
-                    cacheFolderString = cacheFolder?.absoluteString
-                    cacheFolder?.appendPathComponent(self.TEMP_FILE_NAME)
-                    cacheFolder?.appendPathComponent(self.HTML_EXTENSION)
-                    tempHTMLFilePath = cacheFolder?.absoluteString
+                    cacheFolderURL = cacheFolder?.appendingPathComponent(self.DOWNLOAD_CACHE)
+                    tempHTMLFile = cacheFolderURL?.appendingPathComponent(self.TEMP_FILE_NAME).appendingPathExtension(self.HTML_EXTENSION)
                     if !self.isLocalImageUsed {
                         /* AMSDK-8942: The ACS extension saves downloaded remote image files in the cache. We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp.html and pass that file URL to loadFileURL.
                          */
                         do {
-                            try self.payload.write(toFile: tempHTMLFilePath ?? "", atomically: true, encoding: .utf8)
+                            try FileManager.default.createDirectory(atPath: cacheFolderURL!.path, withIntermediateDirectories: true, attributes: nil)
+                            try self.payload.write(toFile: tempHTMLFile!.path, atomically: true, encoding: .utf8)
                             useTempHTML = true
                         } catch {
                             Log.debug(label: self.LOG_PREFIX, "Failed to save the temporary HTML file for fullscreen message \(error)")
@@ -97,8 +95,8 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
                 // load the HTML string on WKWebview. If we are using the cached images, then use
                 // loadFileURL:allowingReadAccessToURL: to load the html from local file, which will give us the correct
                 // permission to read cached files
-                if useTempHTML && tempHTMLFilePath != nil && cacheFolderString != nil {
-                    wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFilePath!), allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolderString!))
+                if useTempHTML {
+                    wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFile?.path ?? ""), allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolder?.path ?? ""))
                 } else {
                     wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
