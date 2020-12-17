@@ -116,7 +116,7 @@ public class ServiceProvider {
             return defaultLoggingService
         }
     }
-    
+
     public var uiService: UIServiceInterface {
         get {
             return queue.sync {

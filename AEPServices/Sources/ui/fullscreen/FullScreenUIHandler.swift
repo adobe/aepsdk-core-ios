@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -20,17 +20,17 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
     private let TEMP_FILE_NAME = "temp"
-    
+
     let fileManager = FileManager()
 
     var isLocalImageUsed = false
     var payload: String
-    var message: FullScreenMessageUiInterface?
+    let message: FullScreenMessageUiInterface
     var listener: FullscreenListenerInterface?
     var monitor: MessageMonitor
     var webView: UIView!
 
-    init(payload: String, message: FullScreenMessageUiInterface, listener: FullscreenListenerInterface, monitor: MessageMonitor, isLocalImageUsed: Bool) {
+    init(payload: String, message: FullScreenMessageUiInterface, listener: FullscreenListenerInterface?, monitor: MessageMonitor, isLocalImageUsed: Bool) {
         self.payload = payload
         self.message = message
         self.listener = listener
@@ -49,12 +49,12 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
         DispatchQueue.main.async {
             // Change message monitor to display
             self.monitor.displayed()
-            
+
             guard var newFrame: CGRect = self.calcFullScreenFrame() else { return }
             newFrame.origin.y = newFrame.size.height
             if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
                 let webViewConfiguration = WKWebViewConfiguration()
-                
+
                 //Fix for media playback.
                 webViewConfiguration.allowsInlineMediaPlayback = true // Plays Media inline
                 webViewConfiguration.mediaTypesRequiringUserActionForPlayback = []
@@ -65,18 +65,18 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
                 wkWebView.backgroundColor = UIColor.clear
                 wkWebView.isOpaque = false
                 wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                
+
                 // Fix for iPhone X to display content edge-to-edge
                 if #available(iOS 11, *) {
                     wkWebView.scrollView.contentInsetAdjustmentBehavior = .never
                 }
-                
+
                 // save the HTML payload to a local file if the cached image is being used
                 var useTempHTML = false
                 var cacheFolderURL: URL?
                 var tempHTMLFile: URL?
                 let cacheFolder: URL? = self.fileManager.getCacheDirectoryPath()
-                if (cacheFolder != nil) {
+                if cacheFolder != nil {
                     cacheFolderURL = cacheFolder?.appendingPathComponent(self.DOWNLOAD_CACHE)
                     tempHTMLFile = cacheFolderURL?.appendingPathComponent(self.TEMP_FILE_NAME).appendingPathExtension(self.HTML_EXTENSION)
                     if !self.isLocalImageUsed {
@@ -100,7 +100,7 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
                 } else {
                     wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
-                
+
                 let keyWindow = self.getKeyWindow()
                 keyWindow?.addSubview(wkWebView)
                 UIView.animate(withDuration: 0.3, animations: {
@@ -119,8 +119,7 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
             self.monitor.dismissed()
             self.dismissWithAnimation(animate: true)
             self.listener?.onDismiss(message: self.message)
-            self.message = nil
-            
+
             // remove the temporary html if it exists
             guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {
                 return
@@ -173,7 +172,7 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
         let keyWindow = getKeyWindow()
         guard let screenBounds: CGSize = keyWindow?.frame.size else { return nil }
         newFrame.size = screenBounds
-        
+
         // y is dependant on visibility and height
         newFrame.origin.y = 0
         return newFrame

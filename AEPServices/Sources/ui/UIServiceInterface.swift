@@ -14,7 +14,7 @@ import Foundation
 
 /// Interface for displaying alerts, local notifications, and fullscreen web views
 public protocol UIServiceInterface {
-    
+
     /// Creates a fullscreen message.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
     /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
@@ -23,8 +23,8 @@ public protocol UIServiceInterface {
     /// @param html               String html content to be displayed with the message
     /// @param fullscreenListener FullscreenListener listener for fullscreen message events
     /// @return FullScreenMessageUiInterface object if the html is valid, null otherwise
-    func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface) -> FullScreenMessageUiInterface?
-    
+    func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface?) -> FullScreenMessageUiInterface?
+
     /// Creates a fullscreen message.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
     /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
@@ -34,8 +34,8 @@ public protocol UIServiceInterface {
     /// @param fullscreenListener FullscreenListener listener for fullscreen message events
     /// @param isLocalImageUsed   If true, an image from the app bundle will be used for the fullscreen message.
     /// @return FullScreenMessageUiInterface object if the html is valid, null otherwise
-    func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface?
-    
+    func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface?, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface?
+
     /// Returns true if there is another message displayed at this time, false otherwise.
     /// The status is collected from the platform messages monitor and it applies if either
     /// an alert message or a full screen message is displayed at some point.
