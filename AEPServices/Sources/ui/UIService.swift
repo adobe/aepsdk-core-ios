@@ -21,11 +21,13 @@ public class UIService: NSObject, UIServiceInterface {
     
     public func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface) -> FullScreenMessageUiInterface? {
         let fullscreenMessage = FullScreenMessage.createFullscreenMessage(html: html, fullscreenListener, messageMonitor, false)
+        fullscreenMessage?.initMessage(html: html, fullscreenListener, messageMonitor, false)
         return fullscreenMessage
     }
     
     public func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface? {
         let fullscreenMessage = FullScreenMessage.createFullscreenMessage(html: html, fullscreenListener, messageMonitor, isLocalImageUsed)
+        fullscreenMessage?.initMessage(html: html, fullscreenListener, messageMonitor, isLocalImageUsed)
         return fullscreenMessage
     }
     
