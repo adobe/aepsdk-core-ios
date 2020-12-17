@@ -19,12 +19,12 @@ public class UIService: NSObject, UIServiceInterface {
         self.messageMonitor = MessageMonitor()
     }
     
-    public func createFullscreenMessage(html: String, fullscreenMessageListener: FullscreenListenerInterface) -> FullScreenMessageUiInterface? {
+    public func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface) -> FullScreenMessageUiInterface? {
         let fullscreenMessage = FullScreenMessage.createFullscreenMessage(html: html, fullscreenMessageListener, messageMonitor, false)
         return fullscreenMessage
     }
     
-    public func createFullscreenMessage(html: String, fullscreenMessageListener: FullscreenListenerInterface, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface? {
+    public func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface? {
         let fullscreenMessage = FullScreenMessage.createFullscreenMessage(html: html, fullscreenMessageListener, messageMonitor, isLocalImageUsed)
         return fullscreenMessage
     }

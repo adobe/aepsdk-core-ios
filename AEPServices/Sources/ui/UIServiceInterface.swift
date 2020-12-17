@@ -12,7 +12,27 @@
 
 import Foundation
 
+/// Interface for displaying alerts, local notifications, and fullscreen web views
 public protocol UIServiceInterface {
-    func createFullscreenMessage(html: String, fullscreenMessageListener: FullscreenListenerInterface) -> FullScreenMessageUiInterface?
-    func createFullscreenMessage(html: String, fullscreenMessageListener: FullscreenListenerInterface, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface?
+    
+    /// Creates a fullscreen message.
+    /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
+    /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
+    /// Treat all calls to this API with caution and make sure input is vetted for safety somewhere.
+    ///
+    /// @param html               String html content to be displayed with the message
+    /// @param fullscreenListener FullscreenListener listener for fullscreen message events
+    /// @return FullScreenMessageUiInterface object if the html is valid, null otherwise
+    func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface) -> FullScreenMessageUiInterface?
+    
+    /// Creates a fullscreen message.
+    /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
+    /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
+    /// Treat all calls to this API with caution and make sure input is vetted for safety somewhere.
+    ///
+    /// @param html               String html content to be displayed with the message
+    /// @param fullscreenListener FullscreenListener listener for fullscreen message events
+    /// @param isLocalImageUsed   If true, an image from the app bundle will be used for the fullscreen message.
+    /// @return FullScreenMessageUiInterface object if the html is valid, null otherwise
+    func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface?
 }

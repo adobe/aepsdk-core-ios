@@ -14,12 +14,22 @@ import Foundation
 
 public class FullScreenMessage: FullScreenMessageUiInterface {
     var fullScreenMessageHandler: FullScreenUIHandler?
+    
+    /// @private constructor
+    /// @see CreateFullscreenMessage method for construction
+    private init() {}
 
     static func createFullscreenMessage(html: String, _ listener: FullscreenListenerInterface, _ messageMonnitor: MessageMonitor, _ isLocalImageUsed: Bool) -> FullScreenMessage? {
         let newMessage: FullScreenMessage = FullScreenMessage()
         return newMessage
     }
 
+    /// Initializes the platform message handler after the full screen message instance was created.
+    /// Note: we cannot do this step is done in the constructor, as the instance for FullscreenMessage is not created at that time
+    /// @param html - html content that will be loaded on message show
+    /// @param listener - listener which will be called on message show/dismiss/openUrl
+    /// @param messageMonnitor - MessageMonitor object which determines whether any display is already present
+    /// @param isLocalImageUsed If true, an image from the app bundle will be used for the fullscreen message.
     func initMessage(html: String, _ listener: FullscreenListenerInterface, _ messageMonnitor: MessageMonitor, _ isLocalImageUsed: Bool) {
         fullScreenMessageHandler = FullScreenUIHandler(payload: html, message: self, listener: listener, monitor: messageMonnitor, isLocalImageUsed: isLocalImageUsed )
     }

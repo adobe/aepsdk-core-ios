@@ -12,8 +12,16 @@
 
 import Foundation
 
+/// UI service interface defining a fullscreen message
 public protocol FullScreenMessageUiInterface {
+    
+    /// Display the fullscreen message
     func show()
+    
+    /// Open a url from this message
+    /// @param url String the url to open
     func openUrl(url: String)
+    
+    /// Remove the fullscreen message from view.
     func remove()
 }

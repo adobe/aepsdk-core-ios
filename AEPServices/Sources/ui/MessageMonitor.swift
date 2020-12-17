@@ -11,9 +11,9 @@
  */
 
 
-/*
- This class is used to monitor if an UI message is displayed at some point in time,
- currently this applies for full screen and alert messages.
+
+///This class is used to monitor if an UI message is displayed at some point in time,
+///currently this applies for full screen and alert messages.
  The status will be exposed to the core through the UIService.
  @see UIHandling.isMessageDisplayed()
  */
