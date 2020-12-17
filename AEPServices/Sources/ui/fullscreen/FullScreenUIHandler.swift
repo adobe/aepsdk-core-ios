@@ -14,16 +14,14 @@ import Foundation
 import UIKit
 import WebKit
 
-func ADBOrientationIsPortrait() -> Bool {
-    UIApplication.shared.statusBarOrientation.isPortrait
-}
-
 class FullScreenUIHandler: NSObject, WKNavigationDelegate {
 
-    var LOG_TAG = "FullScreenUIHandler"
+    private let LOG_PREFIX = "FullScreenUIHandler"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
     private let TEMP_FILE_NAME = "temp"
+    
+    let fileManager = FileManager()
 
     var isLocalImageUsed = false
     var payload: String
@@ -40,18 +38,25 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
         self.isLocalImageUsed = isLocalImageUsed
     }
 
+    /// Show the message, and call the OnShow() on the listener. Will only show the message if no other
+    /// fullscreen message is showing as of then.
     func show() {
         if monitor.isDisplayed() {
+            Log.debug(label: self.LOG_PREFIX, "Full screen message couldn't be displayed, another message is displayed at this time")
             return
         }
 
         DispatchQueue.main.async {
+            // Change message monitor to display
             self.monitor.displayed()
+            
             guard var newFrame: CGRect = self.calcFullScreenFrame() else { return }
             newFrame.origin.y = newFrame.size.height
             if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
                 let webViewConfiguration = WKWebViewConfiguration()
-                webViewConfiguration.allowsInlineMediaPlayback = true
+                
+                //Fix for media playback.
+                webViewConfiguration.allowsInlineMediaPlayback = true // Plays Media inline
                 webViewConfiguration.mediaTypesRequiringUserActionForPlayback = []
                 let wkWebView = WKWebView(frame: newFrame, configuration: webViewConfiguration)
                 self.webView = wkWebView
@@ -60,34 +65,44 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
                 wkWebView.backgroundColor = UIColor.clear
                 wkWebView.isOpaque = false
                 wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                
+                // Fix for iPhone X to display content edge-to-edge
                 if #available(iOS 11, *) {
                     wkWebView.scrollView.contentInsetAdjustmentBehavior = .never
                 }
+                
+                // save the HTML payload to a local file if the cached image is being used
                 var useTempHTML = false
-                guard var cacheFolder: URL = self.getCacheDirectoryPath() else {
-                    return
-                }
-                cacheFolder.appendPathComponent(self.DOWNLOAD_CACHE)
-                let cacheFolderString = cacheFolder.absoluteString
-                cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
-                cacheFolder.appendPathComponent(self.HTML_EXTENSION)
-                let tempHTMLFilePath = cacheFolder.absoluteString
-                if !self.isLocalImageUsed {
-                    do {
-                        try self.payload.write(toFile: tempHTMLFilePath, atomically: true, encoding: .utf8)
-                        useTempHTML = true
-                    } catch {
-                        // LOG
+                var cacheFolderString: String?
+                var tempHTMLFilePath: String?
+                var cacheFolder: URL? = self.fileManager.getCacheDirectoryPath()
+                if (cacheFolder != nil) {
+                    cacheFolder?.appendPathComponent(self.DOWNLOAD_CACHE)
+                    cacheFolderString = cacheFolder?.absoluteString
+                    cacheFolder?.appendPathComponent(self.TEMP_FILE_NAME)
+                    cacheFolder?.appendPathComponent(self.HTML_EXTENSION)
+                    tempHTMLFilePath = cacheFolder?.absoluteString
+                    if !self.isLocalImageUsed {
+                        /* AMSDK-8942: The ACS extension saves downloaded remote image files in the cache. We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp.html and pass that file URL to loadFileURL.
+                         */
+                        do {
+                            try self.payload.write(toFile: tempHTMLFilePath ?? "", atomically: true, encoding: .utf8)
+                            useTempHTML = true
+                        } catch {
+                            Log.debug(label: self.LOG_PREFIX, "Failed to save the temporary HTML file for fullscreen message \(error)")
+                            return
+                        }
                     }
                 }
                 // load the HTML string on WKWebview. If we are using the cached images, then use
                 // loadFileURL:allowingReadAccessToURL: to load the html from local file, which will give us the correct
                 // permission to read cached files
-                if useTempHTML {
-                    wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFilePath), allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolderString))
+                if useTempHTML && tempHTMLFilePath != nil && cacheFolderString != nil {
+                    wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFilePath!), allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolderString!))
                 } else {
                     wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
+                
                 let keyWindow = self.getKeyWindow()
                 keyWindow?.addSubview(wkWebView)
                 UIView.animate(withDuration: 0.3, animations: {
@@ -100,13 +115,16 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
         self.listener?.onShow(message: self.message)
     }
 
+    /// Dismiss the message, and call the OnDismiss() on the listener.
     func dismiss() {
         DispatchQueue.main.async {
             self.monitor.dismissed()
             self.dismissWithAnimation(animate: true)
             self.listener?.onDismiss(message: self.message)
             self.message = nil
-            guard var cacheFolder: URL = self.getCacheDirectoryPath() else {
+            
+            // remove the temporary html if it exists
+            guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {
                 return
             }
             cacheFolder.appendPathComponent(self.DOWNLOAD_CACHE)
@@ -117,11 +135,12 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
             do {
                 try FileManager.default.removeItem(atPath: tempHTMLFilePath)
             } catch {
-                // LOG
+                Log.debug(label: self.LOG_PREFIX, "Unable to dismiss \(error)")
             }
         }
     }
 
+    /// Opens the resource at the URL specified.
     func openUrl(url: String) {
         if !url.isEmpty {
             guard let urlObj: URL = URL.init(string: url) else {
@@ -131,6 +150,7 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
         }
     }
 
+    // MARK: WKWebview delegatesou
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if self.listener != nil {
             guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self.message, url: navigationAction.request.url?.absoluteString) else {
@@ -140,10 +160,13 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
             decisionHandler(shouldOpenUrl ? .allow : .cancel)
 
         } else {
+            // if the API user doesn't provide any listner ( self.listener == nil ),
+            // set WKNavigationActionPolicyAllow as a default behaviour.
             decisionHandler(.allow)
         }
     }
 
+    // MARK: web layout helpers
     func calcFullScreenFrame() -> CGRect? {
         var newFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
         // x is always 0
@@ -152,6 +175,8 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
         let keyWindow = getKeyWindow()
         guard let screenBounds: CGSize = keyWindow?.frame.size else { return nil }
         newFrame.size = screenBounds
+        
+        // y is dependant on visibility and height
         newFrame.origin.y = 0
         return newFrame
     }
@@ -164,21 +189,6 @@ class FullScreenUIHandler: NSObject, WKNavigationDelegate {
         }
 
         return keyWindow
-    }
-
-    // Get user's cache directory path
-    func getCacheDirectoryPath() -> URL? {
-        let paths = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask)
-        if (paths.isEmpty) {
-            return nil
-        }
-        let root = paths[0]
-        var dir: ObjCBool = false
-        
-        if (!FileManager.default.fileExists(atPath: root.path, isDirectory: &dir) && !dir.boolValue) {
-            try! FileManager.default.createDirectory(atPath: root.path, withIntermediateDirectories: true, attributes: nil)
-        }
-        return root
     }
 
     func dismissWithAnimation(animate: Bool) {
