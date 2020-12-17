@@ -12,7 +12,7 @@
 
 import Foundation
 
-public class FullScreenMessage: FullScreenMessageUiInterface {
+public class FullScreenMessage {
     var fullScreenMessageHandler: FullScreenUIHandler?
     
     /// @private constructor
@@ -33,6 +33,10 @@ public class FullScreenMessage: FullScreenMessageUiInterface {
     func initMessage(html: String, _ listener: FullscreenListenerInterface, _ messageMonnitor: MessageMonitor, _ isLocalImageUsed: Bool) {
         fullScreenMessageHandler = FullScreenUIHandler(payload: html, message: self, listener: listener, monitor: messageMonnitor, isLocalImageUsed: isLocalImageUsed )
     }
+}
+
+//MARK: - Protocol Methods
+extension FullScreenMessage : FullScreenMessageUiInterface {
 
     public func show() {
         fullScreenMessageHandler?.show()
