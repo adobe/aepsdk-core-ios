@@ -35,4 +35,9 @@ public protocol UIServiceInterface {
     /// @param isLocalImageUsed   If true, an image from the app bundle will be used for the fullscreen message.
     /// @return FullScreenMessageUiInterface object if the html is valid, null otherwise
     func createFullscreenMessage(html: String, fullscreenListener: FullscreenListenerInterface, isLocalImageUsed: Bool) -> FullScreenMessageUiInterface?
+    
+    /// Returns true if there is another message displayed at this time, false otherwise.
+    /// The status is collected from the platform messages monitor and it applies if either
+    /// an alert message or a full screen message is displayed at some point.
+    func isMessageDisplayed() -> Bool
 }

@@ -10,43 +10,34 @@
  governing permissions and limitations under the License.
  */
 
-
+import Foundation
 
 ///This class is used to monitor if an UI message is displayed at some point in time,
 ///currently this applies for full screen and alert messages.
- The status will be exposed to the core through the UIService.
- @see UIHandling.isMessageDisplayed()
- */
-
-import Foundation
-
+///The status will be exposed to the core through the UIService.
+///@see UIService.isMessageDisplayed()
 public class MessageMonitor {
 
     private var isMessageDisplayed = false
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")
 
-    /*
-     Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
-     in the same time.
-     */
+    /// Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
+    /// in the same time.
     func displayed() {
         messageQueue.async {
             self.isMessageDisplayed = true
         }
     }
 
-    /*
-     Sets the isMessageDisplayed flag on false enabling other messages to be displayed
-     */
+    
+    /// Sets the isMessageDisplayed flag on false enabling other messages to be displayed
     func dismissed() {
         messageQueue.async {
             self.isMessageDisplayed = false
         }
     }
 
-    /*
-     Returns current status of the isMessageDisplayed flag
-     */
+    /// Returns current status of the isMessageDisplayed flag
     func isDisplayed() -> Bool {
         return messageQueue.sync {
             isMessageDisplayed
