@@ -29,7 +29,6 @@ public class MessageMonitor {
         }
     }
 
-
     /// Sets the isMessageDisplayed flag on false enabling other messages to be displayed
     func dismissed() {
         messageQueue.async {
