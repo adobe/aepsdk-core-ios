@@ -55,12 +55,12 @@ class IdentityHitProcessor: HitProcessing {
         let urlString = "\(String(describing: hit.url.host))\(String(describing: hit.url.path))"
         if connection.responseCode == 200 {
             // hit sent successfully
-            Log.debug(label: "\(LOG_TAG):\(#function)", "Identity hit request with url \(urlString) sent successfully")
+            Log.debug(label: "\(LOG_TAG):\(#function)", "Identity hit request with url \(hit.url.absoluteString) sent successfully")
             responseHandler(hit, connection.data)
             completion(true)
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
-            Log.warning(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url \(urlString) failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1)")
+            Log.debug(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url \(hit.url.absoluteString) failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1)")
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
