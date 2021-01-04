@@ -91,10 +91,11 @@ public final class MobileCore: NSObject {
     /// Dispatches an `Event` through the `EventHub` and invokes a closure with the response `Event`.
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
+    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
     ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
-    @objc(dispatch:responseCallback:)
-    public static func dispatch(event: Event, responseCallback: @escaping (Event?) -> Void) {
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: 1) { event in
+    @objc(dispatch:timeout:responseCallback:)
+    public static func dispatch(event: Event, timeout: TimeInterval = 1, responseCallback: @escaping (Event?) -> Void) {
+        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: timeout) { event in
             responseCallback(event)
         }
 
