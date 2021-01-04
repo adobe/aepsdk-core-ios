@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import WebKit
 
 /// UI service interface defining a fullscreen message
 public protocol FullScreenMessageUiInterface {

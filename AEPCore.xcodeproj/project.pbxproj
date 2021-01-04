@@ -306,7 +306,6 @@
 		92490BE7258BE23A00762B04 /* UIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92490BE6258BE23A00762B04 /* UIServiceTests.swift */; };
 		92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */; };
 		92EEA58025885C6900DBA3EE /* FullScreenMessageUiInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA57F25885C6900DBA3EE /* FullScreenMessageUiInterface.swift */; };
-		92EEA59E25885CD600DBA3EE /* FullScreenUIHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA59D25885CD600DBA3EE /* FullScreenUIHandler.swift */; };
 		92EEA5F6258933A600DBA3EE /* FullscreenListenerInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA5F5258933A600DBA3EE /* FullscreenListenerInterface.swift */; };
 		92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitor.swift */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
@@ -857,7 +856,6 @@
 		92490BE6258BE23A00762B04 /* UIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServiceTests.swift; sourceTree = "<group>"; };
 		92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessage.swift; sourceTree = "<group>"; };
 		92EEA57F25885C6900DBA3EE /* FullScreenMessageUiInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenMessageUiInterface.swift; sourceTree = "<group>"; };
-		92EEA59D25885CD600DBA3EE /* FullScreenUIHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenUIHandler.swift; sourceTree = "<group>"; };
 		92EEA5F5258933A600DBA3EE /* FullscreenListenerInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenListenerInterface.swift; sourceTree = "<group>"; };
 		92EEA6052589343700DBA3EE /* MessageMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitor.swift; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
@@ -1737,7 +1735,6 @@
 			isa = PBXGroup;
 			children = (
 				92EEA5F5258933A600DBA3EE /* FullscreenListenerInterface.swift */,
-				92EEA59D25885CD600DBA3EE /* FullScreenUIHandler.swift */,
 				92EEA57F25885C6900DBA3EE /* FullScreenMessageUiInterface.swift */,
 				92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */,
 			);
@@ -2601,7 +2598,6 @@
 				92EEA58025885C6900DBA3EE /* FullScreenMessageUiInterface.swift in Sources */,
 				3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */,
 				3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */,
-				92EEA59E25885CD600DBA3EE /* FullScreenUIHandler.swift in Sources */,
 				3F0397DA24BE5FF30019F095 /* NamedCollectionProcessing.swift in Sources */,
 				92EEA5F6258933A600DBA3EE /* FullscreenListenerInterface.swift in Sources */,
 				3F0397FE24BE60910019F095 /* URLEncoder.swift in Sources */,
