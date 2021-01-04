@@ -134,6 +134,37 @@ class ApplicationSystemInfoService: SystemInfoService {
         let displayInfo = NativeDisplayInformation()
         return (displayInfo.widthPixels, displayInfo.heightPixels)
     }
+
+    func getDeviceType() -> DeviceType {
+        switch UIDevice.current.userInterfaceIdiom {
+        case .phone:
+            return .PHONE
+        case .pad:
+            return .PAD
+        case .tv:
+            return .TV
+        case .carPlay:
+            return .CARPLAY
+        case .unspecified:
+            return .UNKNOWN
+        default:
+            return .UNKNOWN
+        }
+    }
+
+    func getApplicationBundleId() -> String? {
+        return Bundle.main.bundleIdentifier
+    }
+
+    func getApplicationVersion() -> String? {
+        return Bundle.main.infoDictionary?["CFBundleVersion"] as? String
+    }
+
+    func getCurrentOrientation() -> DeviceOrientation {
+        if UIDevice.current.orientation.isPortrait {return .PORTRAIT}
+        if UIDevice.current.orientation.isLandscape {return .LANDSCAPE}
+        return .UNKNOWN
+    }
 }
 
 struct NativeDisplayInformation {

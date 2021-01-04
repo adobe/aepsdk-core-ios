@@ -78,4 +78,34 @@ public protocol SystemInfoService {
     /// Returns the currently selected / active locale name (as set by the user on the system).
     /// - Return: `String` representation of the locale name
     func getActiveLocaleName() -> String
+
+    /// Returns the device type
+    /// - Return: `DeviceType` the type of the Apple device
+    func getDeviceType() -> DeviceType
+
+    /// Returns the application bundleId.
+    /// - Return: `String` Application bundle id
+    func getApplicationBundleId() -> String?
+
+    /// Returns the application version.
+    /// - Return: `String` Application version
+    func getApplicationVersion() -> String?
+
+    /// Returns the current orientation of the device
+    /// - Return: `DeviceOrientation` the current orientation of the device
+    func getCurrentOrientation() -> DeviceOrientation
+}
+
+public enum DeviceType {
+    case PHONE
+    case PAD
+    case TV
+    case CARPLAY
+    case UNKNOWN
+}
+
+public enum DeviceOrientation {
+    case PORTRAIT
+    case LANDSCAPE
+    case UNKNOWN
 }
