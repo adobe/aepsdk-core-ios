@@ -13,19 +13,19 @@
 import Foundation
 
 /// Fullscreen message event listener
-public protocol FullscreenListenerInterface {
+public protocol FullscreenMessaging {
 
     /// Invoked when the fullscreen message is displayed
     /// @param message FullScreenMessageUiInterface message that is being displayed
-    func onShow(message: FullScreenMessageUiInterface?)
+    func onShow(message: Messaging?)
 
     /// Invoked when the fullscreen message is dismissed
     /// @param message FullScreenMessageUiInterface message that is being dismissed
-    func onDismiss(message: FullScreenMessageUiInterface?)
+    func onDismiss(message: Messaging?)
 
     /// Invoked when the fullscreen message is attempting to load a url
     /// @param message FullScreenMessageUiInterface message that is attempting to load the url
     /// @param url     String the url being loaded by the message
     /// @return True if the core wants to handle the URL (and not the fullscreen message view implementation)
-    func overrideUrlLoad(message: FullScreenMessageUiInterface?, url: String?) -> Bool
+    func overrideUrlLoad(message: Messaging?, url: String?) -> Bool
 }

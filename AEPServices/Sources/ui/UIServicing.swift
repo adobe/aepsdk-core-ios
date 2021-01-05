@@ -11,18 +11,15 @@
  */
 
 import Foundation
-import WebKit
 
-/// UI service interface defining a fullscreen message
-public protocol FullScreenMessageUiInterface {
+/// Interface for displaying alerts, local notifications, and fullscreen web views
+public protocol UIServicing {
 
-    /// Display the fullscreen message
-    func show()
+    /// Display the message
+    /// @param message - Messaging message that needs to be shown
+    func show(message: Messaging)
 
-    /// Open a url from this message
-    /// @param url String the url to open
-    func openUrl(url: String)
-
-    /// Remove the fullscreen message from view.
-    func remove()
+    /// Dismiss the message
+    /// @param message - Messaging message that needs to be dismissed
+    func dismiss(message: Messaging)
 }

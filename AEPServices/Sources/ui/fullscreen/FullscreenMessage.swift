@@ -14,33 +14,29 @@ import Foundation
 import UIKit
 import WebKit
 
-public class FullScreenMessage : NSObject, WKNavigationDelegate {
-    private let LOG_PREFIX = "FullScreenUIHandler"
+public class FullScreenMessage: NSObject, WKNavigationDelegate {
+    private let LOG_PREFIX = "FullScreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
     private let TEMP_FILE_NAME = "temp"
-    
+
     let fileManager = FileManager()
 
     var isLocalImageUsed = false
     var payload: String
-    let message: FullScreenMessageUiInterface
-    var listener: FullscreenListenerInterface?
-    var monitor: MessageMonitor
+    var listener: FullscreenMessaging?
     var webView: UIView!
 
-    init(payload: String, message: FullScreenMessageUiInterface, listener: FullscreenListenerInterface?, monitor: MessageMonitor, isLocalImageUsed: Bool) {
+    init(payload: String, listener: FullscreenMessaging?, isLocalImageUsed: Bool) {
         self.payload = payload
-        self.message = message
         self.listener = listener
-        self.monitor = monitor
         self.isLocalImageUsed = isLocalImageUsed
     }
-    
+
     // MARK: WKWebview delegatesou
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if self.listener != nil {
-            guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self.message, url: navigationAction.request.url?.absoluteString) else {
+            guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self, url: navigationAction.request.url?.absoluteString) else {
                 decisionHandler(.allow)
                 return
             }
@@ -95,17 +91,10 @@ public class FullScreenMessage : NSObject, WKNavigationDelegate {
 }
 
 // MARK: - Protocol Methods
-extension FullScreenMessage: FullScreenMessageUiInterface {
+extension FullScreenMessage: Messaging {
 
     public func show() {
-        if monitor.isDisplayed() {
-            Log.debug(label: self.LOG_PREFIX, "Full screen message couldn't be displayed, another message is displayed at this time")
-            return
-        }
-
         DispatchQueue.main.async {
-            // Change message monitor to display
-            self.monitor.displayed()
 
             guard var newFrame: CGRect = self.calcFullScreenFrame() else { return }
             newFrame.origin.y = newFrame.size.height
@@ -167,7 +156,7 @@ extension FullScreenMessage: FullScreenMessageUiInterface {
                 }, completion: nil)
             }
         }
-        self.listener?.onShow(message: self.message)
+        self.listener?.onShow(message: self)
     }
 
     public func openUrl(url: String) {
@@ -181,9 +170,8 @@ extension FullScreenMessage: FullScreenMessageUiInterface {
 
     public func remove() {
         DispatchQueue.main.async {
-            self.monitor.dismissed()
             self.dismissWithAnimation(animate: true)
-            self.listener?.onDismiss(message: self.message)
+            self.listener?.onDismiss(message: self)
 
             // remove the temporary html if it exists
             guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {

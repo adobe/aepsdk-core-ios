@@ -66,16 +66,16 @@ class UIServiceTests : XCTestCase {
         reset()
     }
 
-    class MockFullscreenListener: FullscreenListenerInterface {
-        func onShow(message: FullScreenMessageUiInterface?) {
+    class MockFullscreenListener: FullscreenMessaging {
+        func onShow(message: Messaging?) {
             UIServiceTests.onShowCall = true
         }
 
-        func onDismiss(message: FullScreenMessageUiInterface?) {
+        func onDismiss(message: Messaging?) {
             UIServiceTests.onDismissCall = true
         }
 
-        func overrideUrlLoad(message: FullScreenMessageUiInterface?, url: String?) -> Bool {
+        func overrideUrlLoad(message: Messaging?, url: String?) -> Bool {
             return true
         }
     }
