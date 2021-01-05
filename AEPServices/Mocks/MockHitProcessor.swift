@@ -14,7 +14,7 @@ import Foundation
 
 public class MockHitProcessor: HitProcessing {
     public init() {}
-    
+
     public func retryInterval(for entity: DataEntity) -> TimeInterval {
         return TimeInterval(30)
     }
