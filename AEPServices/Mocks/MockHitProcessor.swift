@@ -13,10 +13,11 @@
 import Foundation
 
 public class MockHitProcessor: HitProcessing {
-    public var retryInterval: TimeInterval = 30
-
     public init() {}
-
+    
+    public func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return TimeInterval(30)
+    }
     public func processHit(entity _: DataEntity, completion: @escaping (Bool) -> Void) {
         completion(true)
     }
