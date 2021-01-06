@@ -15,7 +15,6 @@ import Foundation
 class IdentityHitProcessor: HitProcessing {
     private let LOG_TAG = "IdentityHitProcessor"
 
-    let retryInterval = TimeInterval(30)
     private let responseHandler: (IdentityHit, Data?) -> Void
     private var networkService: Networking {
         return ServiceProvider.shared.networkService
@@ -28,6 +27,10 @@ class IdentityHitProcessor: HitProcessing {
     }
 
     // MARK: HitProcessing
+
+    func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return TimeInterval(30)
+    }
 
     func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void) {
         guard let data = entity.data, let identityHit = try? JSONDecoder().decode(IdentityHit.self, from: data) else {
