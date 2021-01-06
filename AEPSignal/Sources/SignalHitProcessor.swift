@@ -22,7 +22,9 @@ class SignalHitProcessor: HitProcessing {
 
     // MARK: - HitProcessing
 
-    let retryInterval = TimeInterval(30)
+    func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return TimeInterval(30)
+    }
 
     func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void) {
         guard let data = entity.data, let signalHit = try? JSONDecoder().decode(SignalHit.self, from: data) else {
