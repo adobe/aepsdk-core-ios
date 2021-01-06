@@ -59,17 +59,18 @@ class SignalHitProcessor: HitProcessing {
     ///   - connection: the connection returned after we make the network request
     ///   - completion: a completion block to invoke after we have handled the network response with true for success and false for failure (retry)
     private func handleNetworkResponse(hit: SignalHit, connection: HttpConnection, completion: @escaping (Bool) -> Void) {
+        let urlString = "\(String(describing: hit.url.host))\(String(describing: hit.url.path))"
         if connection.responseCode == 200 {
             // hit sent successfully
             Log.debug(label: LOG_TAG, "Signal request successfully sent: \(hit.url.absoluteString) sent successfully")
             completion(true)
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
-            Log.warning(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(hit.url.absoluteString)")
+            Log.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(hit.url.absoluteString)")
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
-            Log.warning(label: LOG_TAG, "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(hit.url.absoluteString)")
+            Log.warning(label: LOG_TAG, "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(urlString)")
             completion(true)
         }
     }
