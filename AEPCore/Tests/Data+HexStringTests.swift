@@ -26,7 +26,7 @@ class Data_HexStringTests: XCTestCase {
         // verify
         XCTAssertEqual(expected, converted)
     }
-    
+
     /// Tests that the string is properly encoded for longer strings
     func testHexStringFromDataHappyLong() {
         // setup
