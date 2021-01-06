@@ -50,7 +50,7 @@ class UIService: UIServicing {
     /// Displays the message if no other message is currently visible
     /// - Parameters:
     ///     - message: Messaging message which needs to be displayed
-    public func show(message: Messaging) {
+    public func show(message: UIMessaging) {
         if isMessageDisplayed {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
             return
@@ -64,7 +64,7 @@ class UIService: UIServicing {
     /// Dimiss the message if the message is currently visible
     /// - Parameters:
     ///     - message: Messaging message which needs to be dimissed
-    public func dismiss(message: Messaging) {
+    public func dismiss(message: UIMessaging) {
         if isMessageDisplayed {
             dismiss()
             message.remove()

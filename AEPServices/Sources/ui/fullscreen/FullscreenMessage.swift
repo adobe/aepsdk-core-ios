@@ -91,7 +91,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
 }
 
 // MARK: - Protocol Methods
-extension FullscreenMessage: Messaging {
+extension FullscreenMessage: UIMessaging {
 
     public func show() {
         DispatchQueue.main.async {

@@ -11,19 +11,21 @@
  */
 
 import Foundation
-import WebKit
 
-/// UI service interface defining a fullscreen message
-@objc(AEPMessaging) public protocol Messaging {
+/// UI Message delegate used to listen for the
+@objc(AEPGlobalUIMessaging) public protocol GlobalUIMessaging {
 
-    /// Display the fullscreen message
-    func show()
-
-    /// Open a url from this message
+    /// Invoked when the any message is displayed
     /// - Parameters:
-    /// - url: String the url to open
-    func openUrl(url: String)
+    ///     - message: UIMessaging message that is being displayed
+    func onShow(message: UIMessaging?)
 
-    /// Remove the fullscreen message from view.
-    func remove()
+    /// Invoked when the any message is dismissed
+    /// - Parameters:
+    ///     - message: UIMessaging message that is being dismissed
+    func onDismiss(message: UIMessaging?)
+
+    /// Used to find whether messages should be shown or not
+    /// - Returns: true if message needs to be shown else false
+    func showMessage() -> Bool
 }

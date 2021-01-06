@@ -12,16 +12,17 @@
 
 import Foundation
 
-/// Interface for displaying alerts, local notifications, and fullscreen web views
-public protocol UIServicing {
+/// UI service interface defining a fullscreen message
+@objc(AEPUIMessaging) public protocol UIMessaging {
 
-    /// Display the message
-    /// - Parameters:
-    ///     - message: Messaging message that needs to be shown
-    func show(message: UIMessaging)
+    /// Display the fullscreen message
+    func show()
 
-    /// Dismiss the message
+    /// Open a url from this message
     /// - Parameters:
-    ///     - message: Messaging message that needs to be dismissed
-    func dismiss(message: UIMessaging)
+    /// - url: String the url to open
+    func openUrl(url: String)
+
+    /// Remove the fullscreen message from view.
+    func remove()
 }

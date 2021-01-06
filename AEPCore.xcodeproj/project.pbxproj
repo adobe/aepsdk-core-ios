@@ -302,9 +302,10 @@
 		78AA4EC92513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */; };
 		78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */; };
 		921EE1D3257A337D00A119FA /* UIServicing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921EE199257A287A00A119FA /* UIServicing.swift */; };
+		9239714025A6380A0056A3E5 /* GlobalUIMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9239713F25A6380A0056A3E5 /* GlobalUIMessaging.swift */; };
 		92490BE7258BE23A00762B04 /* UIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92490BE6258BE23A00762B04 /* UIServiceTests.swift */; };
 		92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */; };
-		92EEA58025885C6900DBA3EE /* Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA57F25885C6900DBA3EE /* Messaging.swift */; };
+		92EEA58025885C6900DBA3EE /* UIMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA57F25885C6900DBA3EE /* UIMessaging.swift */; };
 		92EEA5F6258933A600DBA3EE /* FullscreenMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA5F5258933A600DBA3EE /* FullscreenMessaging.swift */; };
 		92EEA6062589343700DBA3EE /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* UIService.swift */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
@@ -851,9 +852,10 @@
 		78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPrivacyStatusTests.swift; sourceTree = "<group>"; };
 		78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIDTests.swift; sourceTree = "<group>"; };
 		921EE199257A287A00A119FA /* UIServicing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServicing.swift; sourceTree = "<group>"; };
+		9239713F25A6380A0056A3E5 /* GlobalUIMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalUIMessaging.swift; sourceTree = "<group>"; };
 		92490BE6258BE23A00762B04 /* UIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServiceTests.swift; sourceTree = "<group>"; };
 		92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessage.swift; sourceTree = "<group>"; };
-		92EEA57F25885C6900DBA3EE /* Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messaging.swift; sourceTree = "<group>"; };
+		92EEA57F25885C6900DBA3EE /* UIMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIMessaging.swift; sourceTree = "<group>"; };
 		92EEA5F5258933A600DBA3EE /* FullscreenMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessaging.swift; sourceTree = "<group>"; };
 		92EEA6052589343700DBA3EE /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
@@ -1723,8 +1725,9 @@
 			children = (
 				92EEA64D258956FE00DBA3EE /* fullscreen */,
 				921EE199257A287A00A119FA /* UIServicing.swift */,
-				92EEA57F25885C6900DBA3EE /* Messaging.swift */,
+				92EEA57F25885C6900DBA3EE /* UIMessaging.swift */,
 				92EEA6052589343700DBA3EE /* UIService.swift */,
+				9239713F25A6380A0056A3E5 /* GlobalUIMessaging.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -2574,6 +2577,7 @@
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
 				92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */,
 				3F0397FB24BE60910019F095 /* ThreadSafeArray.swift in Sources */,
+				9239714025A6380A0056A3E5 /* GlobalUIMessaging.swift in Sources */,
 				3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */,
 				3F0397CC24BE5FF30019F095 /* NetworkService.swift in Sources */,
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
@@ -2592,7 +2596,7 @@
 				3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */,
 				3F0397DB24BE5FF30019F095 /* NamedCollectionDataStore.swift in Sources */,
 				2107F02E24C9FF88002935CF /* SHA256.swift in Sources */,
-				92EEA58025885C6900DBA3EE /* Messaging.swift in Sources */,
+				92EEA58025885C6900DBA3EE /* UIMessaging.swift in Sources */,
 				3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */,
 				3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */,
 				3F0397DA24BE5FF30019F095 /* NamedCollectionProcessing.swift in Sources */,

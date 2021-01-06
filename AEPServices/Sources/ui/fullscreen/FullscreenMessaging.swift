@@ -17,18 +17,18 @@ import Foundation
 
     /// Invoked when the fullscreen message is displayed
     /// - Parameters:
-    ///     - message: Messaging message that is being displayed
-    func onShow(message: Messaging?)
+    ///     - message: UIMessaging message that is being displayed
+    func onShow(message: UIMessaging?)
 
     /// Invoked when the fullscreen message is dismissed
     /// - Parameters:
-    ///     - message: Messaging message that is being dismissed
-    func onDismiss(message: Messaging?)
+    ///     - message: UIMessaging message that is being dismissed
+    func onDismiss(message: UIMessaging?)
 
     /// Invoked when the fullscreen message is attempting to load a url
     /// - Parameters:
-    ///     - message: Messaging message that is attempting to load the url
+    ///     - message: UIMessaging message that is attempting to load the url
     ///     - url:     String the url being loaded by the message
     /// - Returns: True if the core wants to handle the URL (and not the fullscreen message view implementation)
-    func overrideUrlLoad(message: Messaging?, url: String?) -> Bool
+    func overrideUrlLoad(message: UIMessaging?, url: String?) -> Bool
 }
