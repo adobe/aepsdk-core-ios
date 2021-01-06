@@ -16,10 +16,12 @@ import Foundation
 public protocol UIServicing {
 
     /// Display the message
-    /// @param message - Messaging message that needs to be shown
+    /// - Parameters:
+    ///     - message: Messaging message that needs to be shown
     func show(message: Messaging)
 
     /// Dismiss the message
-    /// @param message - Messaging message that needs to be dismissed
+    /// - Parameters:
+    ///     - message: Messaging message that needs to be dismissed
     func dismiss(message: Messaging)
 }

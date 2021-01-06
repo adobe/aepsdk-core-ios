@@ -42,6 +42,7 @@ class UIServiceTests : XCTestCase {
     func test_CreateFullscreenMessage_whenIsLocalImageTrue() {
         let uiService = UIService()
         let message = uiService.createFullscreenMessage(html: mockHtml, fullscreenListener: MockFullscreenListener(), isLocalImageUsed: true)
+        uiService
         XCTAssertNotNil(message)
     }
 
@@ -53,7 +54,7 @@ class UIServiceTests : XCTestCase {
 
     func test_isMessageDisplayed_DefaultIsFalse() {
         let uiService = UIService()
-        let isDisplayed = uiService.isMessageDisplayed()
+        let isDisplayed = uiService.isMessageDisplayed
         XCTAssertFalse(isDisplayed)
     }
 

@@ -12,51 +12,64 @@
 
 import Foundation
 
-/// This class is used to monitor if an UI message is displayed at some point in time,
-/// currently this applies for full screen and alert messages.
-/// The status will be exposed through the UIService.
-/// @see UIService.isMessageDisplayed()
-public class UIService: UIServicing {
+/// This class is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
+/// The status is exposed through isMessageDisplayed.
+class UIService: UIServicing {
     private let LOG_PREFIX = "UIService"
-    private var isMessageDisplayed = false
+    private(set) var isMessageDisplayed: Bool {
+        get {
+            return messageQueue.sync {
+                self.isMessageDisplayed
+            }
+        }
+        set(value) {
+            self.isMessageDisplayed = value
+        }
+    }
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")
+
+    init() {
+        isMessageDisplayed = false
+    }
 
     /// Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
     /// in the same time.
-    func displayed() {
+    func display() {
         messageQueue.async {
             self.isMessageDisplayed = true
         }
     }
 
     /// Sets the isMessageDisplayed flag on false enabling other messages to be displayed
-    func dismissed() {
+    func dismiss() {
         messageQueue.async {
             self.isMessageDisplayed = false
         }
     }
 
-    /// Returns current status of the isMessageDisplayed flag
-    func isDisplayed() -> Bool {
-        return messageQueue.sync {
-            isMessageDisplayed
-        }
-    }
-
+    /// Displays the message if no other message is currently visible
+    /// - Parameters:
+    ///     - message: Messaging message which needs to be displayed
     public func show(message: Messaging) {
-        if isDisplayed() {
-            Log.debug(label: LOG_PREFIX, "message couldn't be displayed, another message is displayed at this time")
+        if isMessageDisplayed {
+            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
             return
         }
         // Change message monitor to display
-        displayed()
+        display()
 
         message.show()
     }
 
+    /// Dimiss the message if the message is currently visible
+    /// - Parameters:
+    ///     - message: Messaging message which needs to be dimissed
     public func dismiss(message: Messaging) {
-        if isDisplayed() {
+        if isMessageDisplayed {
+            dismiss()
             message.remove()
+        } else {
+            Log.debug(label: LOG_PREFIX, "Message failed to be dismissed, nothing is currently displayed.")
         }
     }
 }

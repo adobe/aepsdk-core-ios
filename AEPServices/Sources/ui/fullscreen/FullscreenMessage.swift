@@ -14,8 +14,8 @@ import Foundation
 import UIKit
 import WebKit
 
-public class FullScreenMessage: NSObject, WKNavigationDelegate {
-    private let LOG_PREFIX = "FullScreenMessage"
+public class FullscreenMessage: NSObject, WKNavigationDelegate {
+    private let LOG_PREFIX = "FullscreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
     private let TEMP_FILE_NAME = "temp"
@@ -50,7 +50,7 @@ public class FullScreenMessage: NSObject, WKNavigationDelegate {
     }
 
     // MARK: web layout helpers
-    func calcFullScreenFrame() -> CGRect? {
+    func calcFullscreenFrame() -> CGRect? {
         var newFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
         // x is always 0
         newFrame.origin.x = 0
@@ -77,7 +77,7 @@ public class FullScreenMessage: NSObject, WKNavigationDelegate {
     func dismissWithAnimation(animate: Bool) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: animate ? 0.3: 0, animations: {
-                guard var newFrame: CGRect = self.calcFullScreenFrame() else {
+                guard var newFrame: CGRect = self.calcFullscreenFrame() else {
                     return
                 }
                 newFrame.origin.y = newFrame.size.height
@@ -91,12 +91,12 @@ public class FullScreenMessage: NSObject, WKNavigationDelegate {
 }
 
 // MARK: - Protocol Methods
-extension FullScreenMessage: Messaging {
+extension FullscreenMessage: Messaging {
 
     public func show() {
         DispatchQueue.main.async {
 
-            guard var newFrame: CGRect = self.calcFullScreenFrame() else { return }
+            guard var newFrame: CGRect = self.calcFullscreenFrame() else { return }
             newFrame.origin.y = newFrame.size.height
             if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
                 let webViewConfiguration = WKWebViewConfiguration()
@@ -160,12 +160,10 @@ extension FullScreenMessage: Messaging {
     }
 
     public func openUrl(url: String) {
-        if !url.isEmpty {
-            guard let urlObj: URL = URL.init(string: url) else {
-                return
-            }
-            UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
+        guard let urlObj = URL(string: url) else {
+            return
         }
+        UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
     }
 
     public func remove() {

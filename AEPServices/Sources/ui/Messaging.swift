@@ -14,13 +14,14 @@ import Foundation
 import WebKit
 
 /// UI service interface defining a fullscreen message
-public protocol Messaging {
+@objc(AEPMessaging) public protocol Messaging {
 
     /// Display the fullscreen message
     func show()
 
     /// Open a url from this message
-    /// @param url String the url to open
+    /// - Parameters:
+    /// - url: String the url to open
     func openUrl(url: String)
 
     /// Remove the fullscreen message from view.
