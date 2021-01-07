@@ -292,6 +292,7 @@
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296C2509942300483C74 /* rules_signal.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296A2509942200483C74 /* rules_signal.zip */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
+		787505E025A67BE200E5203E /* TestZipSlip.zip in Resources */ = {isa = PBXBuildFile; fileRef = 787505DF25A67BE200E5203E /* TestZipSlip.zip */; };
 		78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */; };
 		78AA4EBC2502E42400205AE9 /* TestCorruptFile.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78AA4EBB2502E42400205AE9 /* TestCorruptFile.zip */; };
 		78AA4EBE2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip in Resources */ = {isa = PBXBuildFile; fileRef = 78AA4EBD2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip */; };
@@ -835,6 +836,7 @@
 		3FF829682509937100483C74 /* SignalIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalIntegrationTests.swift; sourceTree = "<group>"; };
 		3FF8296A2509942200483C74 /* rules_signal.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_signal.zip; sourceTree = "<group>"; };
 		3FF8296B2509942300483C74 /* rules_signal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_signal.json; sourceTree = "<group>"; };
+		787505DF25A67BE200E5203E /* TestZipSlip.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestZipSlip.zip; sourceTree = "<group>"; };
 		78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZipArchiveTest.swift; sourceTree = "<group>"; };
 		78AA4EBB2502E42400205AE9 /* TestCorruptFile.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestCorruptFile.zip; sourceTree = "<group>"; };
 		78AA4EBD2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestInvalidCompressionMethod.zip; sourceTree = "<group>"; };
@@ -1430,6 +1432,7 @@
 				78AA4EBB2502E42400205AE9 /* TestCorruptFile.zip */,
 				78AA4EBD2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip */,
 				78AA4EC1250AB55800205AE9 /* TestLarge.zip */,
+				787505DF25A67BE200E5203E /* TestZipSlip.zip */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -2199,6 +2202,7 @@
 				3F03983824BE62AA0019F095 /* TestRules.zip in Resources */,
 				3F03983B24BE62AA0019F095 /* TestConfig.json in Resources */,
 				3F03983A24BE62AA0019F095 /* ADBMobileConfig.json in Resources */,
+				787505E025A67BE200E5203E /* TestZipSlip.zip in Resources */,
 				78AA4EBC2502E42400205AE9 /* TestCorruptFile.zip in Resources */,
 				78AA4EC2250AB55800205AE9 /* TestLarge.zip in Resources */,
 				78AA4EBE2502F4AF00205AE9 /* TestInvalidCompressionMethod.zip in Resources */,

@@ -12,14 +12,13 @@
 @testable import AEPServices
 import XCTest
 
-
-// TODO: - Add more robust testing. Also make sure to make use of the new return type for the unzip api in the tests
 class FileUnzipperTest: XCTestCase {
     let unzipper = FileUnzipper()
     let testDataFileName = "TestRules"
     let testLargeFileName = "TestLarge"
     let testCorruptFileName = "TestCorruptFile"
     let testInvalidCompressionMethodFileName = "TestInvalidCompressionMethod"
+    let testZipSlipFileName = "TestZipSlip"
 
     enum TestFileNames: String {
         case testDataSubFolderRulesName = "rules"
@@ -38,19 +37,11 @@ class FileUnzipperTest: XCTestCase {
         return tempZipDirectory
     }()
 
-    override func setUp() {
-        do {
-            let fileManager = FileManager()
-            guard let path = FileUnzipperTest.bundle.url(forResource: testDataFileName, withExtension: "zip")?.deletingLastPathComponent().appendingPathComponent(testDataFileName) else {
-                return
-            }
-            try fileManager.removeItem(at: path)
-        } catch {
-            return
-        }
-    }
-
+    ///
+    /// Test a simple unzip of a sample zip file which holds a rules.txt file
+    ///
     func testUnzippingRulesSuccessSimple() {
+        removeResourceWith(name: testDataFileName)
         guard let sourceURL = getResourceURLWith(name: testDataFileName) else {
             XCTFail()
             return
@@ -60,7 +51,11 @@ class FileUnzipperTest: XCTestCase {
         XCTAssertFalse(unzippedItems.isEmpty)
     }
 
+    ///
+    /// Test to make sure that when unzipping the archive, the correct entries are found at the destination
+    ///
     func testUnzippingRulesSuccessFilesExist() {
+        removeResourceWith(name: testDataFileName)
         let fileManager = FileManager()
         guard let sourceURL = getResourceURLWith(name: testDataFileName) else {
             XCTFail()
@@ -108,6 +103,9 @@ class FileUnzipperTest: XCTestCase {
         XCTAssert(imageFileExists)
     }
 
+    ///
+    /// Test to make sure correct behavior when unzipping a file which doesn't exist
+    ///
     func testUnzippingRulesDoesntExist() {
         let testFileName = "doesntExist"
         let testFileExt = ".zip"
@@ -117,6 +115,9 @@ class FileUnzipperTest: XCTestCase {
         XCTAssertTrue(unzippedItems.isEmpty)
     }
 
+    ///
+    /// Test that correct errors are thrown when extracting a corrupt file
+    ///
     func testExtractCorruptFile() {
         guard let sourceUrl = getResourceURLWith(name: testCorruptFileName) else {
             XCTFail()
@@ -148,6 +149,9 @@ class FileUnzipperTest: XCTestCase {
         }
     }
 
+    ///
+    /// Test that correct error is thrown when invalid compression method is used for zip file
+    ///
     func testExtractInvalidCompressionMethod() {
         guard let sourceUrl = getResourceURLWith(name: testInvalidCompressionMethodFileName) else {
             XCTFail()
@@ -172,6 +176,9 @@ class FileUnzipperTest: XCTestCase {
         }
     }
 
+    ///
+    /// Test large unzip file performance
+    ///
     func testLargeUnzipPerformance() {
         guard let sourceUrl = getResourceURLWith(name: testLargeFileName) else {
             XCTFail()
@@ -194,8 +201,11 @@ class FileUnzipperTest: XCTestCase {
         }
     }
 
+    ///
+    /// Test small unzip file performance
+    ///
     func testSmallUnzipPerformance() {
-
+        removeResourceWith(name: testDataFileName)
         guard let sourceURL = getResourceURLWith(name: testDataFileName) else {
             XCTFail()
             return
@@ -206,9 +216,36 @@ class FileUnzipperTest: XCTestCase {
             XCTAssertFalse(unzippedItems.isEmpty)
         }
     }
+    
+    ///
+    /// Test Zip Slip attempt does not succeed
+    ///
+    func testZipSlipCatch() {
+        removeResourceWith(name: testZipSlipFileName)
+        guard let sourceURL = getResourceURLWith(name: testZipSlipFileName) else {
+            XCTFail()
+            return
+        }
+        
+        let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testZipSlipFileName)
+        let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
+        XCTAssertTrue(unzippedItems.isEmpty)
+    }
 
     // MARK: - Helpers
-    func getResourceURLWith(name: String) -> URL? {
+    private func getResourceURLWith(name: String) -> URL? {
         return FileUnzipperTest.bundle.url(forResource: name, withExtension: "zip")
+    }
+    
+    private func removeResourceWith(name: String) {
+        do {
+            let fileManager = FileManager()
+            guard let path = FileUnzipperTest.bundle.url(forResource: name, withExtension: "zip")?.deletingLastPathComponent().appendingPathComponent(name) else {
+                return
+            }
+            try fileManager.removeItem(at: path)
+        } catch {
+            return
+        }
     }
 }
