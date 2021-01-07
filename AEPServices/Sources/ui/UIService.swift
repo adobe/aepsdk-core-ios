@@ -21,7 +21,7 @@ class UIService: UIServicing {
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")
 
     // Current message which is being displayed
-    private var currentMessage: UIMessaging?
+    var currentMessage: UIMessaging?
 
     /// Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
     /// in the same time.
@@ -54,7 +54,7 @@ class UIService: UIServicing {
         displayMessage()
 
         // Assiging the currentMessage
-        currentMessage = message
+        self.currentMessage = message
 
         // Notifiying global listeners
         globalUIMessagingListener?.onShow(message: message)
@@ -75,7 +75,7 @@ class UIService: UIServicing {
             currentMessage?.remove()
 
             // Assiging the currentMessage
-            currentMessage = nil
+            self.currentMessage = nil
         } else {
             Log.debug(label: LOG_PREFIX, "Message failed to be dismissed, nothing is currently displayed.")
         }

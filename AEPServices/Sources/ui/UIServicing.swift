@@ -14,6 +14,8 @@ import Foundation
 
 /// Interface for displaying alerts, local notifications, and fullscreen web views
 public protocol UIServicing {
+    var currentMessage: UIMessaging? { get }
+
     /// Displays the message if no other message is currently visible
     /// - Parameters:
     ///     - message: Messaging message which needs to be displayed
