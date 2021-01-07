@@ -170,9 +170,12 @@ class PersistentHitQueueTests: XCTestCase {
 }
 
 class MockHitProcessor: HitProcessing {
-    var retryInterval: TimeInterval = 1
 
     let processedHits = ThreadSafeArray<DataEntity>()
+
+    func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return TimeInterval(1)
+    }
 
     func processHit(entity: DataEntity, completion: (Bool) -> Void) {
         processedHits.append(entity)
@@ -181,10 +184,12 @@ class MockHitProcessor: HitProcessing {
 }
 
 class MockHitIntermittentProcessor: HitProcessing {
-    var retryInterval: TimeInterval = 0
-
     let processedHits = ThreadSafeArray<DataEntity>()
     var failedHits = Set<String>()
+
+    func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return TimeInterval(0)
+    }
 
     // 50% of hits need to be processed twice, other 50% process successfully the first time
     func processHit(entity: DataEntity, completion: (Bool) -> Void) {
