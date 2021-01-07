@@ -59,6 +59,7 @@
 		24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24543A1324E1DAFC002D8D9A /* MockURLService.swift */; };
 		24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
+		2462374025A78D4100056EB9 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 2462373F25A78D4100056EB9 /* AEPRulesEngine */; };
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
@@ -151,7 +152,6 @@
 		3F16762824F031A00041B970 /* EventHubContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762724F031A00041B970 /* EventHubContractTests.swift */; };
 		3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762924F032C60041B970 /* ContractExtensionOne.swift */; };
 		3F16762C24F032E60041B970 /* ContractExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762B24F032E60041B970 /* ContractExtensionTwo.swift */; };
-		3F1D71DD253DF0E900A11D84 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 3F1D71DC253DF0E900A11D84 /* AEPRulesEngine */; };
 		3F2F12BB24F6D07E00600CB4 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */; };
 		3F2F12BC24F6D07E00600CB4 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */; };
 		3F2F12BD24F6D07E00600CB4 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
@@ -876,7 +876,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3F1D71DD253DF0E900A11D84 /* AEPRulesEngine in Frameworks */,
+				2462374025A78D4100056EB9 /* AEPRulesEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1785,7 +1785,7 @@
 			);
 			name = AEPCore;
 			packageProductDependencies = (
-				3F1D71DC253DF0E900A11D84 /* AEPRulesEngine */,
+				2462373F25A78D4100056EB9 /* AEPRulesEngine */,
 			);
 			productName = AEPCore;
 			productReference = 21CAC0D62422917600C11388 /* AEPCore.framework */;
@@ -2108,7 +2108,7 @@
 			);
 			mainGroup = 21CAC0CC2422917600C11388;
 			packageReferences = (
-				3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
+				2462373E25A78D4100056EB9 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
 			);
 			productRefGroup = 21CAC0D72422917600C11388 /* Products */;
 			projectDirPath = "";
@@ -3806,6 +3806,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2462373E25A78D4100056EB9 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
@@ -3817,9 +3825,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		3F1D71DC253DF0E900A11D84 /* AEPRulesEngine */ = {
+		2462373F25A78D4100056EB9 /* AEPRulesEngine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
+			package = 2462373E25A78D4100056EB9 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
 			productName = AEPRulesEngine;
 		};
 		3F1D71EC253DF0FC00A11D84 /* AEPRulesEngine */ = {

@@ -3,9 +3,9 @@
     "pins": [
       {
         "package": "AEPRulesEngine",
-        "repositoryURL": "https://github.com/adobe/aepsdk-rulesengine-ios.git",
+        "repositoryURL": "https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git",
         "state": {
-          "branch": "dev",
+          "branch": "cleanup",
           "revision": "0feb3174c8f835ecd2f79889d060ba088d9022aa",
           "version": null
         }
