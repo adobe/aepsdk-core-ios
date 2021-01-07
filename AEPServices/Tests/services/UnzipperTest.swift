@@ -216,7 +216,7 @@ class FileUnzipperTest: XCTestCase {
             XCTAssertFalse(unzippedItems.isEmpty)
         }
     }
-    
+
     ///
     /// Test Zip Slip attempt does not succeed
     ///
@@ -226,7 +226,7 @@ class FileUnzipperTest: XCTestCase {
             XCTFail()
             return
         }
-        
+
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testZipSlipFileName)
         let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
         XCTAssertTrue(unzippedItems.isEmpty)
@@ -236,7 +236,7 @@ class FileUnzipperTest: XCTestCase {
     private func getResourceURLWith(name: String) -> URL? {
         return FileUnzipperTest.bundle.url(forResource: name, withExtension: "zip")
     }
-    
+
     private func removeResourceWith(name: String) {
         do {
             let fileManager = FileManager()
