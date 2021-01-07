@@ -19,10 +19,8 @@ public protocol UIServicing {
     ///     - message: Messaging message which needs to be displayed
     func show(message: UIMessaging)
 
-    /// Dimiss the message if the message is currently visible
-    /// - Parameters:
-    ///     - message: Messaging message which needs to be dimissed
-    func dismiss(message: UIMessaging)
+    /// Dimiss the current visible message
+    func dismiss()
 
     /// Sets the GlobalUIMessaging listener
     /// - Parameters:
