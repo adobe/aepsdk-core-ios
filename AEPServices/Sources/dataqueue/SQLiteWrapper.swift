@@ -126,4 +126,15 @@ internal struct SQLiteWrapper {
         }
         return false
     }
+
+    /// Check table has 0 rows
+    /// - Parameters:
+    ///   - database: the database connection
+    ///   - tableName: the database name
+    /// - Returns: True, if the database is empty, otherwise false
+    static func tableIsEmpty(database: OpaquePointer, tableName: String) -> Bool {
+        let sql = "SELECT COUNT(*) FROM \(tableName)"
+        let res = query(database: database, sql: sql)?.first?["COUNT(*)"]
+        return res == "0"
+    }
 }
