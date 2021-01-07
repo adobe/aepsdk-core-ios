@@ -28,41 +28,36 @@ class UIServiceTests : XCTestCase {
     }
 
     func test_CreateFullscreenMessage_whenValidMessage() {
-        let uiService = UIService()
-        let message = uiService.createFullscreenMessage(html: mockHtml, fullscreenListener: MockFullscreenListener())
+        let message = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener())
         XCTAssertNotNil(message)
     }
 
     func test_CreateFullscreenMessage_whenListenerIsNil() {
-        let uiService = UIService()
-        let message = uiService.createFullscreenMessage(html: mockHtml, fullscreenListener: nil)
+        let message = FullscreenMessage(payload: mockHtml, listener: nil)
         XCTAssertNotNil(message)
     }
 
     func test_CreateFullscreenMessage_whenIsLocalImageTrue() {
-        let uiService = UIService()
-        let message = uiService.createFullscreenMessage(html: mockHtml, fullscreenListener: MockFullscreenListener(), isLocalImageUsed: true)
-        uiService
+        let message = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: true)
         XCTAssertNotNil(message)
     }
 
     func test_CreateFullscreenMessage_whenIsLocalImageFalse() {
-        let uiService = UIService()
-        let message = uiService.createFullscreenMessage(html: mockHtml, fullscreenListener: MockFullscreenListener(), isLocalImageUsed: true)
+        let message = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false)
         XCTAssertNotNil(message)
     }
 
     func test_isMessageDisplayed_DefaultIsFalse() {
         let uiService = UIService()
-        let isDisplayed = uiService.isMessageDisplayed
+        let isDisplayed = uiService.isMessageDisplayed()
         XCTAssertFalse(isDisplayed)
     }
 
     func test_ListenerOnShow_IsCalled() {
         let uiService = UIService()
-        let message = uiService.createFullscreenMessage(html: mockHtml, fullscreenListener: MockFullscreenListener(), isLocalImageUsed: true)
+        let message = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: true)
         XCTAssertNotNil(message)
-        message?.show()
+        uiService.show(message: message)
         XCTAssertTrue(UIServiceTests.onShowCall)
         reset()
     }

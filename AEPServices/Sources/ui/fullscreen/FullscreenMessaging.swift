@@ -14,7 +14,6 @@ import Foundation
 
 /// Fullscreen message lifecycle event listener
 @objc(AEPFullscreenMessaging) public protocol FullscreenMessaging {
-
     /// Invoked when the fullscreen message is displayed
     /// - Parameters:
     ///     - message: UIMessaging message that is being displayed

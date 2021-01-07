@@ -41,7 +41,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
     }
-    
+
     /// Creates `FullscreenMessage` instance with the payload provided.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
     /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
