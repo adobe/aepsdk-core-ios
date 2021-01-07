@@ -27,7 +27,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     var listener: FullscreenMessaging?
     var webView: UIView!
 
-    init(payload: String, listener: FullscreenMessaging?, isLocalImageUsed: Bool) {
+    public init(payload: String, listener: FullscreenMessaging?, isLocalImageUsed: Bool) {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed

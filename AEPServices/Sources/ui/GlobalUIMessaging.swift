@@ -12,7 +12,7 @@
 
 import Foundation
 
-/// UI Message delegate used to listen for the
+/// Global UI Message delegate which used to listen for the message visibility updates
 @objc(AEPGlobalUIMessaging) public protocol GlobalUIMessaging {
 
     /// Invoked when the any message is displayed

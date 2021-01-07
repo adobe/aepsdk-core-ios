@@ -16,60 +16,69 @@ import Foundation
 /// The status is exposed through isMessageDisplayed.
 class UIService: UIServicing {
     private let LOG_PREFIX = "UIService"
-    private(set) var isMessageDisplayed: Bool {
-        get {
-            return messageQueue.sync {
-                self.isMessageDisplayed
-            }
-        }
-        set(value) {
-            self.isMessageDisplayed = value
-        }
-    }
+    private var isMsgDisplayed = false
+    private var globalUIMessagingListener: GlobalUIMessaging?
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")
-
-    init() {
-        isMessageDisplayed = false
-    }
 
     /// Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
     /// in the same time.
     func display() {
         messageQueue.async {
-            self.isMessageDisplayed = true
+            self.isMsgDisplayed = true
         }
     }
 
     /// Sets the isMessageDisplayed flag on false enabling other messages to be displayed
     func dismiss() {
         messageQueue.async {
-            self.isMessageDisplayed = false
+            self.isMsgDisplayed = false
         }
     }
 
-    /// Displays the message if no other message is currently visible
-    /// - Parameters:
-    ///     - message: Messaging message which needs to be displayed
     public func show(message: UIMessaging) {
-        if isMessageDisplayed {
+        if isMessageDisplayed() {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
             return
         }
+
+        // Determine whether the message should be shown or not based on global ui messaging listener
+        if globalUIMessagingListener?.showMessage() == false {
+            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, globalUIMessaging#showMessage states the message should not be displayed.")
+            return
+        }
+
         // Change message monitor to display
         display()
 
+        // Notifiying global listeners
+        globalUIMessagingListener?.onShow(message: message)
+
+        // Show message
         message.show()
     }
 
-    /// Dimiss the message if the message is currently visible
-    /// - Parameters:
-    ///     - message: Messaging message which needs to be dimissed
     public func dismiss(message: UIMessaging) {
-        if isMessageDisplayed {
+        if isMessageDisplayed() {
+            // Change message monitor to dismiss
             dismiss()
+
+            // Notifiying global listeners
+            globalUIMessagingListener?.onDismiss(message: message)
+
+            // Remove the message
             message.remove()
         } else {
             Log.debug(label: LOG_PREFIX, "Message failed to be dismissed, nothing is currently displayed.")
+        }
+    }
+    
+    public func setGlobalUIMessagingListener(listener: GlobalUIMessaging?) {
+        self.globalUIMessagingListener = listener
+    }
+    
+    public func isMessageDisplayed() -> Bool {
+        return messageQueue.sync {
+            self.isMsgDisplayed
         }
     }
 }

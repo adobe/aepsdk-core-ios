@@ -14,14 +14,21 @@ import Foundation
 
 /// Interface for displaying alerts, local notifications, and fullscreen web views
 public protocol UIServicing {
-
-    /// Display the message
+    /// Displays the message if no other message is currently visible
     /// - Parameters:
-    ///     - message: Messaging message that needs to be shown
+    ///     - message: Messaging message which needs to be displayed
     func show(message: UIMessaging)
 
-    /// Dismiss the message
+    /// Dimiss the message if the message is currently visible
     /// - Parameters:
-    ///     - message: Messaging message that needs to be dismissed
+    ///     - message: Messaging message which needs to be dimissed
     func dismiss(message: UIMessaging)
+
+    /// Sets the GlobalUIMessaging listener
+    /// - Parameters:
+    ///     - listener: GlobalUIMessaging listener which is used to listen for message visibility updates
+    func setGlobalUIMessagingListener(listener: GlobalUIMessaging?)
+
+    /// - Returns: True if the message is being displayed else false
+    func isMessageDisplayed() -> Bool
 }
