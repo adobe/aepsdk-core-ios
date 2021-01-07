@@ -458,12 +458,14 @@ class DataQueueTests: XCTestCase {
         XCTAssertTrue(result)
         let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
         let tableExist = SQLiteWrapper.tableExists(database: connection, tableName: SQLiteDataQueue.TABLE_NAME)
+        let tableEmpty = SQLiteWrapper.tableIsEmpty(database: connection, tableName: SQLiteDataQueue.TABLE_NAME)
 
         defer {
             _ = SQLiteWrapper.disconnect(database: connection)
         }
 
-        XCTAssertFalse(tableExist)
+        XCTAssertTrue(tableExist)
+        XCTAssertTrue(tableEmpty)
     }
 
     /// count()

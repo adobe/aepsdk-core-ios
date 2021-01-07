@@ -127,7 +127,7 @@ class SQLiteDataQueue: DataQueue {
         if isClosed { return false}
         return serialQueue.sync {
             let dropTableStatement = """
-            DROP TABLE IF EXISTS \(SQLiteDataQueue.TABLE_NAME);
+            DELETE FROM \(SQLiteDataQueue.TABLE_NAME);
             """
             guard let connection = connect() else {
                 return false
@@ -136,7 +136,7 @@ class SQLiteDataQueue: DataQueue {
                 disconnect(database: connection)
             }
             guard SQLiteWrapper.execute(database: connection, sql: dropTableStatement) else {
-                Log.warning(label: LOG_PREFIX, "Failed to drop table '\(SQLiteDataQueue.TABLE_NAME)' in database: \(self.databaseName).")
+                Log.warning(label: LOG_PREFIX, "Failed to clear table '\(SQLiteDataQueue.TABLE_NAME)' in database: \(self.databaseName).")
                 return false
             }
 
