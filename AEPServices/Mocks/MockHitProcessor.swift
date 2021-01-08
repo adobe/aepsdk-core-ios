@@ -13,7 +13,11 @@
 import Foundation
 
 public class MockHitProcessor: HitProcessing {
-    public init() {}
+    public var batchLimit: Int
+
+    public init() {
+        self.batchLimit = 0
+    }
 
     public func retryInterval(for entity: DataEntity) -> TimeInterval {
         return TimeInterval(30)
