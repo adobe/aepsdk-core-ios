@@ -44,6 +44,12 @@ public class PersistentHitQueue: HitQueuing {
         processNextHit()
     }
 
+    // Processes the queued hits ignoring the batchLimit
+    public func forceProcessing() {
+        queue.async { self.suspended = false }
+        processNextHit(ignoreBatchLimit: true)
+    }
+
     public func suspend() {
         queue.async { self.suspended = true }
     }
@@ -63,9 +69,10 @@ public class PersistentHitQueue: HitQueuing {
     }
 
     /// A recursive function for processing hits, it will continue processing all the hits until none are left in the data queue
-    private func processNextHit() {
+    /// - Parameter ignoreBatchLimit: a `Bool` flag to determine batching hits
+    private func processNextHit(ignoreBatchLimit: Bool = false) {
         queue.async {
-            if self.batching {
+            if self.batching && !ignoreBatchLimit {
                 if self.dataQueue.count() >= self.processor.batchLimit && self.currentBatchSize == 0 {
                     self.currentBatchSize = self.processor.batchLimit // number of hits to be processed from the queue
                 }
@@ -85,11 +92,11 @@ public class PersistentHitQueue: HitQueuing {
                         self?.currentBatchSize -= 1
                     }
 
-                    self?.processNextHit()
+                    self?.processNextHit(ignoreBatchLimit: ignoreBatchLimit)
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
                     self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval(for: hit) ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
-                        self?.processNextHit()
+                        self?.processNextHit(ignoreBatchLimit: ignoreBatchLimit)
                     }
                 }
 

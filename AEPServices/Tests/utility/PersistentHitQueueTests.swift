@@ -27,6 +27,8 @@ class PersistentHitQueueTests: XCTestCase {
         hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
     }
 
+    /// setup hitProcessor with batchLimit
+    /// - Parameter batchLimit: `Int` spcifies the number of hits to be batched
     func setUpWith(batchLimit: Int) {
         hitProcessor = MockHitProcessor()
         hitProcessor.batchLimit = batchLimit
@@ -47,6 +49,7 @@ class PersistentHitQueueTests: XCTestCase {
         XCTAssertTrue(result) // queuing hit should be successful
     }
 
+    /// Tests that when the queue is in a suspended state that we store the hit in the data queue and do not invoke the processor
     func testDoesntProcessByDefaultWithBatchLimit() {
         // setup
         setUpWith(batchLimit: 5)
@@ -76,6 +79,7 @@ class PersistentHitQueueTests: XCTestCase {
         XCTAssertTrue(result) // queuing hit should be successful
     }
 
+    /// Tests that when the queue is in a suspended state that we store the hit in the data queue and do not invoke the processor
     func testClearQueueWithBatchLimit() {
         // setup
         setUpWith(batchLimit: 5)
@@ -124,8 +128,8 @@ class PersistentHitQueueTests: XCTestCase {
         sleep(1)
 
         // verify
-        XCTAssertNotNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
-        XCTAssertNil(processedHits.first) // mock hit processor should have been invoked with the data entity
+        XCTAssertNotNil(hitQueue.dataQueue.peek()) // some hits should still be in the queue
+        XCTAssertNil(processedHits.first) // mock hit processor should not have been invoked with the data entity
         XCTAssertTrue(result) // queuing hit should be successful
 
         let result1 = hitQueue.queue(entity: entity1)
@@ -141,7 +145,7 @@ class PersistentHitQueueTests: XCTestCase {
         sleep(1)
 
         // verify
-        XCTAssertEqual(hitQueue.dataQueue.count(), 0) // hit should no longer be in the queue as its been processed
+        XCTAssertEqual(hitQueue.dataQueue.count(), 0) // no hits should be present in the queue
         XCTAssertEqual(processedHits[0], entity) // mock hit processor should have been invoked with the data entity
         XCTAssertEqual(processedHits[1], entity1) // mock hit processor should have been invoked with the data entity
         XCTAssertEqual(processedHits[2], entity2) // mock hit processor should have been invoked with the data entity
@@ -220,8 +224,8 @@ class PersistentHitQueueTests: XCTestCase {
         sleep(1)
 
         // verify
-        XCTAssertNotNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
-        XCTAssertEqual(90, processedHits.count) // all 100 hits should have been processed
+        XCTAssertNotNil(hitQueue.dataQueue.peek()) // some hits should still be in the queue
+        XCTAssertEqual(90, processedHits.count) // 90 hits should have been processed
     }
 
     /// Tests that not all hits are processed when we suspend the queue
@@ -254,8 +258,8 @@ class PersistentHitQueueTests: XCTestCase {
         sleep(1)
 
         // verify
-        XCTAssertNotNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
-        XCTAssertNotEqual(100, processedHits.count) // all 100 hits should have been processed
+        XCTAssertNotNil(hitQueue.dataQueue.peek()) // some hits should still be in the queue
+        XCTAssertNotEqual(100, processedHits.count) // we should have not processed all 100 hits by the time we have suspended
     }
 
     /// Tests that not all hits are processed when we suspend the queue, but then when we resume processing the remaining hits are processed
@@ -370,6 +374,133 @@ class PersistentHitQueueTests: XCTestCase {
         let intermittentProcessor = hitQueue.processor as? MockHitIntermittentProcessor
         XCTAssertEqual(100, intermittentProcessor?.processedHits.count) // all hits should be eventually processed
         XCTAssertFalse(intermittentProcessor?.failedHits.isEmpty ?? true) // some of the hits should have failed
+    }
+
+    /// Tests that when the queue is not in a suspended state and ignoreBatchLimit is set to true but batchLimit is 0
+    func testForceProcessing() {
+        // setup
+        let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+
+        // test
+        let result = hitQueue.queue(entity: entity)
+        hitQueue.forceProcessing()
+        sleep(1)
+
+        // verify
+        XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
+        XCTAssertEqual(processedHits.first, entity) // mock hit processor should have been invoked with the data entity
+        XCTAssertTrue(result) // queuing hit should be successful
+    }
+
+    /// Tests that when the queue is not in a suspended state and ignoreBatchLimit is set that the hits are processed immediately ignoring batchLimit
+    func testForceProcessingWithBatchLimit() {
+        // setup
+        setUpWith(batchLimit: 5)
+        let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+
+        // test
+        let result = hitQueue.queue(entity: entity)
+        hitQueue.forceProcessing()
+        sleep(1)
+
+        // force processing should ignore batch limit
+        // verify
+        XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
+        XCTAssertEqual(processedHits.first, entity) // mock hit processor should have been invoked with the data entity
+        XCTAssertTrue(result) // queuing hit should be successful
+    }
+
+    /// Tests that when the queue is not in a suspended state and ignoreBatchLimit is set that the hits are processed immediately ignoring batchLimit and when ignoreBatchLimit is reset we see the queue following batchLimit
+    func testForceProcessingWithBatchLimitReset() {
+        // setup
+        setUpWith(batchLimit: 5)
+        let entity = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+        let entity1 = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+        let entity2 = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+        let entity3 = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+        let entity4 = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+        let entity5 = DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil)
+
+
+        // test
+        let result = hitQueue.queue(entity: entity)
+        hitQueue.forceProcessing()
+        sleep(1)
+
+        // force processing should ignore batch limit
+        // verify
+        XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
+        XCTAssertEqual(processedHits.first, entity) // mock hit processor should have been invoked with the data entity
+        XCTAssertTrue(result) // queuing hit should be successful
+
+        hitQueue.beginProcessing()
+
+        let result1 = hitQueue.queue(entity: entity1)
+
+        // verify that the ignoreBatchLimit is reset and bathLimit is enforced again
+        XCTAssertTrue(result1)
+        hitQueue.beginProcessing()
+        sleep(1)
+        XCTAssertNotNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
+
+        let result2 = hitQueue.queue(entity: entity2)
+        XCTAssertTrue(result2)
+        let result3 = hitQueue.queue(entity: entity3)
+        XCTAssertTrue(result3)
+        let result4 = hitQueue.queue(entity: entity4)
+        XCTAssertTrue(result4)
+        let result5 = hitQueue.queue(entity: entity5)
+        XCTAssertTrue(result5)
+
+        hitQueue.beginProcessing()
+        sleep(1)
+
+        // verify
+        XCTAssertEqual(hitQueue.dataQueue.count(), 0) // hit should no longer be in the queue as its been processed
+        XCTAssertEqual(processedHits[0], entity) // mock hit processor should have been invoked with the data entity
+        XCTAssertEqual(processedHits[1], entity1) // mock hit processor should have been invoked with the data entity
+        XCTAssertEqual(processedHits[2], entity2) // mock hit processor should have been invoked with the data entity
+        XCTAssertEqual(processedHits[3], entity3) // mock hit processor should have been invoked with the data entity
+        XCTAssertEqual(processedHits[4], entity4) // mock hit processor should have been invoked with the data entity
+    }
+
+    /// Tests that not all hits are processed when we suspend the queue even when the batchLimit is reached
+    func testForceProcessingManyWithSuspend() {
+        // test
+        for _ in 0 ..< 100 {
+            hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
+        }
+        hitQueue.forceProcessing()
+        hitQueue.suspend()
+        sleep(1)
+
+        // verify
+        XCTAssertNotNil(hitQueue.dataQueue.peek()) // some hits should still be in the queue
+        XCTAssertNotEqual(100, processedHits.count) // we should have not processed all 100 hits by the time we have suspended
+    }
+
+    /// Tests that not all hits are processed when we suspend the queue, but then when we resume processing the remaining hits are processed
+    func testForceProcessingManyWithSuspendThenResume() {
+        // test
+        for _ in 0 ..< 100 {
+            hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
+        }
+
+        hitQueue.forceProcessing()
+        hitQueue.suspend()
+        sleep(1)
+
+        // verify pt. 1
+        XCTAssertNotNil(hitQueue.dataQueue.peek()) // some hits should still be in the queue
+        XCTAssertNotEqual(100, processedHits.count) // we should have not processed all 100 hits by the time we have suspended
+
+        // resume processing
+        hitQueue.forceProcessing()
+        sleep(1)
+
+        // verify pt. 2
+        XCTAssertNil(hitQueue.dataQueue.peek()) // hit should no longer be in the queue as its been processed
+        XCTAssertEqual(100, processedHits.count) // now all hits should have been sent to the hit processor
     }
 }
 
