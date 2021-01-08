@@ -10,23 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-import AEPServices
 import Foundation
 
-public extension HitQueuing {
-    /// Based on `status` determines if we should continue processing hits or if we should suspend processing and clear hits
-    /// - Parameter status: the current privacy status
-    func handlePrivacyChange(status: PrivacyStatus) {
-        switch status {
-        case .optedIn:
-            beginProcessing()
-        case .optedOut:
-            suspend()
-            clear()
-        case .unknown:
-            suspend()
-        @unknown default:
-            suspend()
-        }
+extension Data {
+
+    /// Returns a hex representation of the data
+    var hexDescription: String {
+        return reduce("") {$0 + String(format: "%02x", $1)}
     }
 }

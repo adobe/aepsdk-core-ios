@@ -48,7 +48,7 @@ struct PushIDManager: PushIDManageable {
     }
 
     mutating func updatePushId(pushId: String?) {
-        if !pushIdHasChanged(newPushId: pushId) {
+        if !pushIdHasChanged(newPushId: pushId ?? "") {
             // Provided push token matches existing push token. Push settings will not be re-sent to Analytics
             Log.debug(label: "\(LOG_TAG):\(#function)", "Ignored push token \(pushId ?? "") as it matches the existing token, the push notification status will not be re-sent to Analytics.")
             return
@@ -57,7 +57,7 @@ struct PushIDManager: PushIDManageable {
         // push ID has changed, update it in local storage
         var properties = IdentityProperties()
         properties.loadFromPersistence()
-        properties.pushIdentifier = SHA256.hash(pushId)
+        properties.pushIdentifier = pushId
         properties.saveToPersistence()
 
         if pushId?.isEmpty ?? true, !pushEnabled {
@@ -73,18 +73,17 @@ struct PushIDManager: PushIDManageable {
     // MARK: Private APIs
 
     /// Compares the provided newPushId against the one in data store (if exists)
-    /// - Parameter newPushId: the new push identifier as a string, not hashed yet
+    /// - Parameter newPushId: the new push identifier as a string
     /// - Returns: true if the provided push id does not match the existing one
-    private mutating func pushIdHasChanged(newPushId: String?) -> Bool {
+    private mutating func pushIdHasChanged(newPushId: String) -> Bool {
         var properties = IdentityProperties()
         properties.loadFromPersistence()
 
         let existingPushId = properties.pushIdentifier ?? ""
-        let newHashedId = SHA256.hash(newPushId) ?? ""
-        let pushIdsMatch = existingPushId == newHashedId
+        let pushIdsMatch = existingPushId == newPushId
 
         // process the update only if the value changed or if this is not the first time setting the push token to null
-        if (pushIdsMatch && !newHashedId.isEmpty) || (pushIdsMatch && analyticsSynced) {
+        if (pushIdsMatch && !newPushId.isEmpty) || (pushIdsMatch && analyticsSynced) {
             return false
         }
 

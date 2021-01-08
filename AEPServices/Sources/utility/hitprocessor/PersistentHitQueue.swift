@@ -71,7 +71,7 @@ public class PersistentHitQueue: HitQueuing {
                     self?.processNextHit()
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
-                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
+                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval(for: hit) ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
                         self?.processNextHit()
                     }
                 }
