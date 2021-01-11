@@ -141,7 +141,6 @@ class PersistentHitQueueTests: XCTestCase {
         let result4 = hitQueue.queue(entity: entity4)
         XCTAssertTrue(result4)
 
-        hitQueue.beginProcessing()
         sleep(1)
 
         // verify
@@ -200,7 +199,6 @@ class PersistentHitQueueTests: XCTestCase {
         for _ in 0 ..< 100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        hitQueue.beginProcessing()
 
         sleep(1)
 
@@ -219,7 +217,6 @@ class PersistentHitQueueTests: XCTestCase {
         for _ in 0 ..< 97 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        hitQueue.beginProcessing()
 
         sleep(1)
 
@@ -235,7 +232,6 @@ class PersistentHitQueueTests: XCTestCase {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
 
-        hitQueue.beginProcessing()
         hitQueue.suspend()
         sleep(1)
 
@@ -253,7 +249,7 @@ class PersistentHitQueueTests: XCTestCase {
         for _ in 0 ..< 100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        hitQueue.beginProcessing()
+
         hitQueue.suspend()
         sleep(1)
 
@@ -269,7 +265,6 @@ class PersistentHitQueueTests: XCTestCase {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
 
-        hitQueue.beginProcessing()
         hitQueue.suspend()
         sleep(1)
 
@@ -294,7 +289,7 @@ class PersistentHitQueueTests: XCTestCase {
         for _ in 0 ..< 100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        hitQueue.beginProcessing()
+
         hitQueue.suspend()
         sleep(1)
 
@@ -319,7 +314,7 @@ class PersistentHitQueueTests: XCTestCase {
         for _ in 0 ..< 97 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
-        hitQueue.beginProcessing()
+
         hitQueue.suspend()
         sleep(1)
 
@@ -433,7 +428,7 @@ class PersistentHitQueueTests: XCTestCase {
         XCTAssertEqual(processedHits.first, entity) // mock hit processor should have been invoked with the data entity
         XCTAssertTrue(result) // queuing hit should be successful
 
-        hitQueue.beginProcessing()
+        hitQueue.beginProcessing() // Should enable batching agains
 
         let result1 = hitQueue.queue(entity: entity1)
 
@@ -452,7 +447,6 @@ class PersistentHitQueueTests: XCTestCase {
         let result5 = hitQueue.queue(entity: entity5)
         XCTAssertTrue(result5)
 
-        hitQueue.beginProcessing()
         sleep(1)
 
         // verify

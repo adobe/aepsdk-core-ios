@@ -25,7 +25,6 @@ public class PersistentHitQueue: HitQueuing {
     /// Creates a new `HitQueue` with the underlying `DataQueue` which is used to persist hits
     /// - Parameter dataQueue: a `DataQueue` used to persist hits
     /// - Parameter processor: a `HitProcessing` used to process hits
-    /// - Parameter batchLimit: an `Int` used to set minimum number of queued hits to start processing hits
     public init(dataQueue: DataQueue, processor: HitProcessing) {
         self.dataQueue = dataQueue
         self.processor = processor
@@ -73,10 +72,14 @@ public class PersistentHitQueue: HitQueuing {
     private func processNextHit(ignoreBatchLimit: Bool = false) {
         queue.async {
             if self.batching && !ignoreBatchLimit {
+                // check if number of queued hits > batchLimit and currently we are not processing a batch of hits
                 if self.dataQueue.count() >= self.processor.batchLimit && self.currentBatchSize == 0 {
-                    self.currentBatchSize = self.processor.batchLimit // number of hits to be processed from the queue
+                    // There is no batch being processed currently so set the currentBatchSize to batchLimit
+                    self.currentBatchSize = self.processor.batchLimit
                 }
-                guard self.currentBatchSize > 0 else { return } // only start processing when number of queued hits >= batchLimit
+
+                // Only process hits if number of queued hits >= batchLimit
+                guard self.currentBatchSize > 0 else { return }
             }
 
             guard !self.suspended else { return }
@@ -89,6 +92,7 @@ public class PersistentHitQueue: HitQueuing {
                     _ = self?.dataQueue.remove()
 
                     if self?.batching ?? false {
+                        // Successfully processed hit, so update the currentBatchSize to reflect remaining number of hits to be processed
                         self?.currentBatchSize -= 1
                     }
 

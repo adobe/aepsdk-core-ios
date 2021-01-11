@@ -14,7 +14,7 @@ import Foundation
 /// A class of types who provide the functionality for processing hits
 public protocol HitProcessing: class {
 
-    /// batchLimit: `Int` spcifies the number of hits to be batched
+    /// batchLimit: an `Int`  specifies the number of hits to be batched to start processing hits
     var batchLimit: Int { get set}
 
     /// Determines the interval at which a hit should be retried
