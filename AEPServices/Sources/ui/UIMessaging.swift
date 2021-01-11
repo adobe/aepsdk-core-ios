@@ -12,10 +12,10 @@
 
 import Foundation
 
-/// UI service interface defining a fullscreen message
+/// UI service interface defining a message
 @objc(AEPUIMessaging) public protocol UIMessaging {
 
-    /// Display the message
+    /// Displays the message in the current view.
     func show()
 
     /// Remove the message from view.
