@@ -19,7 +19,5 @@ import Foundation
     func show()
 
     /// Remove the message from view.
-    func remove()
-    
-    /// Crrate extension here so we ca keep the common stuff for fullscreen and alert here.
+    func dismiss()
 }

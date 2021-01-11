@@ -26,9 +26,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     var payload: String
     var listener: FullscreenMessaging?
     var webView: UIView!
-    
-    var messageMonitor: MessageMonitor
-    
+
     /// Creates `FullscreenMessage` instance with the payload provided.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
     /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
@@ -54,10 +52,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
-        self.messageMonitor = ServiceProvider.shared.messageMonitor
     }
-
-    
 
     // MARK: WKWebview delegatesou
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -128,16 +123,10 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
 extension FullscreenMessage: UIMessaging {
 
     public func show() {
-        if messageMonitor.isMessageDisplayed() {
-            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
+        if ServiceProvider.shared.messageMonitor.show(message: self) ==  false {
             return
         }
-        
-        if messageMonitor.globalUIMessagingListener?.showMessage() == false {
-            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, globalUIMessaging#showMessage states the message should not be displayed.")
-            return
-        }
-                
+
         DispatchQueue.main.async {
 
             guard var newFrame: CGRect = self.calcFullscreenFrame() else { return }
@@ -203,10 +192,12 @@ extension FullscreenMessage: UIMessaging {
         self.listener?.onShow(message: self)
     }
 
-    public func remove() {
+    public func dismiss() {
         DispatchQueue.main.async {
-            self.messageMonitor.dismiss()
-            
+            if ServiceProvider.shared.messageMonitor.dismiss(message: self) ==  false {
+                return
+            }
+
             self.dismissWithAnimation(animate: true)
             self.listener?.onDismiss(message: self)
 
