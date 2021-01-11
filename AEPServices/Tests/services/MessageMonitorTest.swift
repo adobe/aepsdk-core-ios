@@ -16,15 +16,15 @@ import XCTest
 
 
 
-class UIServiceTests : XCTestCase {
+class MessageMonitorTest : XCTestCase {
 
     let mockHtml = "somehtml"
     static var onShowCall = false
     static var onDismissCall = false
 
     func reset() {
-        UIServiceTests.onShowCall = false
-        UIServiceTests.onDismissCall = false
+        MessageMonitorTest.onShowCall = false
+        MessageMonitorTest.onDismissCall = false
     }
 
     func test_CreateFullscreenMessage_whenValidMessage() {
@@ -48,27 +48,26 @@ class UIServiceTests : XCTestCase {
     }
 
     func test_isMessageDisplayed_DefaultIsFalse() {
-        let uiService = MessageMonitor()
-        let isDisplayed = uiService.isMessageDisplayed()
+        let messageMonitor = MessageMonitor()
+        let isDisplayed = messageMonitor.isMessageDisplayed()
         XCTAssertFalse(isDisplayed)
     }
 
     func test_ListenerOnShow_IsCalled() {
-        let uiService = MessageMonitor()
         let message = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: true)
+        message.show()
         XCTAssertNotNil(message)
-        uiService.show(message: message)
-        XCTAssertTrue(UIServiceTests.onShowCall)
+        XCTAssertTrue(MessageMonitorTest.onShowCall)
         reset()
     }
 
     class MockFullscreenListener: FullscreenMessaging {
         func onShow(message: UIMessaging?) {
-            UIServiceTests.onShowCall = true
+            MessageMonitorTest.onShowCall = true
         }
 
         func onDismiss(message: UIMessaging?) {
-            UIServiceTests.onDismissCall = true
+            MessageMonitorTest.onDismissCall = true
         }
 
         func overrideUrlLoad(message: UIMessaging?, url: String?) -> Bool {
