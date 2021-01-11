@@ -27,7 +27,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     var listener: FullscreenMessaging?
     var webView: UIView!
     
-    var messageMonitor: UIServicing
+    var messageMonitor: MessageMonitor
     
     /// Creates `FullscreenMessage` instance with the payload provided.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
@@ -54,7 +54,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
-        self.messageMonitor = ServiceProvider.shared.uiService
+        self.messageMonitor = ServiceProvider.shared.messageMonitor
     }
 
     
@@ -205,7 +205,7 @@ extension FullscreenMessage: UIMessaging {
 
     public func remove() {
         DispatchQueue.main.async {
-            self.messageMonitor?.dismiss()
+            self.messageMonitor.dismiss()
             
             self.dismissWithAnimation(animate: true)
             self.listener?.onDismiss(message: self)

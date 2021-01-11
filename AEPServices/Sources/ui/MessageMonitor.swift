@@ -14,8 +14,8 @@ import Foundation
 
 /// This class is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
 /// The status is exposed through isMessageDisplayed.
-class MessageMonitor: UIServicing {
-    private let LOG_PREFIX = "UIService"
+public class MessageMonitor {
+    private let LOG_PREFIX = "MessageMonitor"
     private var isMsgDisplayed = false
     var globalUIMessagingListener: GlobalUIMessaging?
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")

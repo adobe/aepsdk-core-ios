@@ -113,7 +113,7 @@ public class ServiceProvider {
         }
     }
 
-    public var uiService: UIServicing {
+    public var messageMonitor: MessageMonitor {
         get {
             return queue.sync {
                 return defaultMessageMonitor
