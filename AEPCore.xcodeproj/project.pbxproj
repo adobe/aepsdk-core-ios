@@ -303,11 +303,12 @@
 		78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */; };
 		921EE1D3257A337D00A119FA /* UIServicing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 921EE199257A287A00A119FA /* UIServicing.swift */; };
 		9239714025A6380A0056A3E5 /* GlobalUIMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9239713F25A6380A0056A3E5 /* GlobalUIMessaging.swift */; };
+		923971AC25A7F3920056A3E5 /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923971AB25A7F3920056A3E5 /* AlertMessage.swift */; };
 		92490BE7258BE23A00762B04 /* UIServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92490BE6258BE23A00762B04 /* UIServiceTests.swift */; };
 		92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */; };
 		92EEA58025885C6900DBA3EE /* UIMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA57F25885C6900DBA3EE /* UIMessaging.swift */; };
 		92EEA5F6258933A600DBA3EE /* FullscreenMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA5F5258933A600DBA3EE /* FullscreenMessaging.swift */; };
-		92EEA6062589343700DBA3EE /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* UIService.swift */; };
+		92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitor.swift */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
@@ -853,11 +854,12 @@
 		78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIDTests.swift; sourceTree = "<group>"; };
 		921EE199257A287A00A119FA /* UIServicing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServicing.swift; sourceTree = "<group>"; };
 		9239713F25A6380A0056A3E5 /* GlobalUIMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalUIMessaging.swift; sourceTree = "<group>"; };
+		923971AB25A7F3920056A3E5 /* AlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
 		92490BE6258BE23A00762B04 /* UIServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServiceTests.swift; sourceTree = "<group>"; };
 		92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessage.swift; sourceTree = "<group>"; };
 		92EEA57F25885C6900DBA3EE /* UIMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIMessaging.swift; sourceTree = "<group>"; };
 		92EEA5F5258933A600DBA3EE /* FullscreenMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessaging.swift; sourceTree = "<group>"; };
-		92EEA6052589343700DBA3EE /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
+		92EEA6052589343700DBA3EE /* MessageMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitor.swift; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -1723,13 +1725,22 @@
 		921EE17A2579E89E00A119FA /* ui */ = {
 			isa = PBXGroup;
 			children = (
+				923971A925A7F3770056A3E5 /* alert */,
 				92EEA64D258956FE00DBA3EE /* fullscreen */,
-				921EE199257A287A00A119FA /* UIServicing.swift */,
 				92EEA57F25885C6900DBA3EE /* UIMessaging.swift */,
-				92EEA6052589343700DBA3EE /* UIService.swift */,
+				921EE199257A287A00A119FA /* UIServicing.swift */,
+				92EEA6052589343700DBA3EE /* MessageMonitor.swift */,
 				9239713F25A6380A0056A3E5 /* GlobalUIMessaging.swift */,
 			);
 			path = ui;
+			sourceTree = "<group>";
+		};
+		923971A925A7F3770056A3E5 /* alert */ = {
+			isa = PBXGroup;
+			children = (
+				923971AB25A7F3920056A3E5 /* AlertMessage.swift */,
+			);
+			path = alert;
 			sourceTree = "<group>";
 		};
 		92EEA64D258956FE00DBA3EE /* fullscreen */ = {
@@ -2581,6 +2592,7 @@
 				3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */,
 				3F0397CC24BE5FF30019F095 /* NetworkService.swift in Sources */,
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
+				923971AC25A7F3920056A3E5 /* AlertMessage.swift in Sources */,
 				3F0397D724BE5FF30019F095 /* DataQueueService.swift in Sources */,
 				3F0397F324BE60910019F095 /* PersistentHitQueue.swift in Sources */,
 				3F0397CD24BE5FF30019F095 /* NetworkServiceConstants.swift in Sources */,
@@ -2607,7 +2619,7 @@
 				3F0397D824BE5FF30019F095 /* DataQueuing.swift in Sources */,
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
-				92EEA6062589343700DBA3EE /* UIService.swift in Sources */,
+				92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
 				3F0397D524BE5FF30019F095 /* DataQueue.swift in Sources */,
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,

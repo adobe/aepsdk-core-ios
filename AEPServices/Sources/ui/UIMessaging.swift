@@ -15,14 +15,11 @@ import Foundation
 /// UI service interface defining a fullscreen message
 @objc(AEPUIMessaging) public protocol UIMessaging {
 
-    /// Display the fullscreen message
+    /// Display the message
     func show()
 
-    /// Open a url from this message
-    /// - Parameters:
-    /// - url: String the url to open
-    func openUrl(url: String)
-
-    /// Remove the fullscreen message from view.
+    /// Remove the message from view.
     func remove()
+    
+    /// Crrate extension here so we ca keep the common stuff for fullscreen and alert here.
 }

@@ -26,6 +26,20 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     var payload: String
     var listener: FullscreenMessaging?
     var webView: UIView!
+    
+    var messageMonitor: UIServicing
+    
+    /// Creates `FullscreenMessage` instance with the payload provided.
+    /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
+    /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
+    /// Treat all calls to this API with caution and make sure input is vetted for safety somewhere.
+    ///
+    /// - Parameters:
+    ///     - payload: String html content to be displayed with the message
+    ///     - listener: `FullscreenMessaging` listener to listening the message lifecycle.
+    public convenience init(payload: String, listener: FullscreenMessaging?) {
+        self.init(payload: payload, listener: listener, isLocalImageUsed: false)
+    }
 
     /// Creates `FullscreenMessage` instance with the payload provided.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
@@ -40,21 +54,10 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
+        self.messageMonitor = ServiceProvider.shared.uiService
     }
 
-    /// Creates `FullscreenMessage` instance with the payload provided.
-    /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
-    /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
-    /// Treat all calls to this API with caution and make sure input is vetted for safety somewhere.
-    ///
-    /// - Parameters:
-    ///     - payload: String html content to be displayed with the message
-    ///     - listener: `FullscreenMessaging` listener to listening the message lifecycle.
-    public init(payload: String, listener: FullscreenMessaging?) {
-        self.payload = payload
-        self.listener = listener
-        self.isLocalImageUsed = false
-    }
+    
 
     // MARK: WKWebview delegatesou
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -111,12 +114,30 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
             }
         }
     }
+
+    /// Open a url from this message
+    func openUrl(url: String) {
+        guard let urlObj = URL(string: url) else {
+            return
+        }
+        UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
+    }
 }
 
 // MARK: - Protocol Methods
 extension FullscreenMessage: UIMessaging {
 
     public func show() {
+        if messageMonitor.isMessageDisplayed() {
+            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
+            return
+        }
+        
+        if messageMonitor.globalUIMessagingListener?.showMessage() == false {
+            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, globalUIMessaging#showMessage states the message should not be displayed.")
+            return
+        }
+                
         DispatchQueue.main.async {
 
             guard var newFrame: CGRect = self.calcFullscreenFrame() else { return }
@@ -182,15 +203,10 @@ extension FullscreenMessage: UIMessaging {
         self.listener?.onShow(message: self)
     }
 
-    public func openUrl(url: String) {
-        guard let urlObj = URL(string: url) else {
-            return
-        }
-        UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
-    }
-
     public func remove() {
         DispatchQueue.main.async {
+            self.messageMonitor?.dismiss()
+            
             self.dismissWithAnimation(animate: true)
             self.listener?.onDismiss(message: self)
 

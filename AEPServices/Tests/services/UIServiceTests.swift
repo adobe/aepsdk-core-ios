@@ -48,13 +48,13 @@ class UIServiceTests : XCTestCase {
     }
 
     func test_isMessageDisplayed_DefaultIsFalse() {
-        let uiService = UIService()
+        let uiService = MessageMonitor()
         let isDisplayed = uiService.isMessageDisplayed()
         XCTAssertFalse(isDisplayed)
     }
 
     func test_ListenerOnShow_IsCalled() {
-        let uiService = UIService()
+        let uiService = MessageMonitor()
         let message = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: true)
         XCTAssertNotNil(message)
         uiService.show(message: message)
