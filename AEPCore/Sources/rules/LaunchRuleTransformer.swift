@@ -18,13 +18,13 @@ import Foundation
 class LaunchRuleTransformer {
 
     static func createTransforming() -> Transforming {
-        let transform = Transform()
+        let transform = Transformer()
         addConsequnceTransform(to: transform)
         addTypeTransform(to: transform)
         return transform
     }
 
-    private static func addConsequnceTransform(to transform: Transform) {
+    private static func addConsequnceTransform(to transform: Transformer) {
         transform.register(name: RulesConstants.Transform.URL_ENCODING_FUNCTION_IN_RULES, transformation: { value in
             if let valueString = value as? String {
                 return URLEncoder.encode(value: valueString)
@@ -33,7 +33,7 @@ class LaunchRuleTransformer {
         })
     }
 
-    private static func addTypeTransform(to transform: Transform) {
+    private static func addTypeTransform(to transform: Transformer) {
         transform.register(name: RulesConstants.Transform.TRANSFORM_TO_INT, transformation: { value in
             switch value {
             case is String:
