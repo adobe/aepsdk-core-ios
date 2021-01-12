@@ -65,7 +65,7 @@ class JSONRulesParserTests: XCTestCase {
         XCTAssertTrue(levelThreeGroupAnd.operands[0] is ComparisonExpression<String, String>)
         let levelFourMatcherEQ = levelThreeGroupAnd.operands[0] as! ComparisonExpression<String, String>
         XCTAssertEqual("equals", levelFourMatcherEQ.operationName)
-        XCTAssertEqual("<Value:com.adobe.eventType.lifecycle>", levelFourMatcherEQ.rhs.description)
+        XCTAssertEqual("<Value: com.adobe.eventType.lifecycle>", levelFourMatcherEQ.rhs.description)
     }
 
     func testGenerateLaunchRulesEmpty() {
