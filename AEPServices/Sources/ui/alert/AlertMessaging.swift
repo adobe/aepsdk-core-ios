@@ -12,12 +12,17 @@
 
 import Foundation
 
-/// UI service interface defining a message
-@objc(AEPUIMessaging) public protocol UIMessaging {
+/// Fullscreen message lifecycle event listener
+@objc(AEPAlertMessaging) public protocol AlertMessaging {
+    /// Invoked on positive button clicks
+    func OnPositiveResponse()
 
-    /// Displays the message in the current view.
-    func show()
+    /// Invoked on negative button clicks
+    func OnNegativeResponse()
+    
+    /// Invoked when the alert message is displayed
+    func onShow()
 
-    /// Remove the message from view.
-    func dismiss()
+    /// Invoked when the alert message is dismissed
+    func onDismiss()
 }

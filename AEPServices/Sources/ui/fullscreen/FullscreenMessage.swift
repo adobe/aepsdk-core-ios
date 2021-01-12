@@ -76,23 +76,13 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         // x is always 0
         newFrame.origin.x = 0
         // for fullscreen, width and height are both full screen
-        let keyWindow = getKeyWindow()
+        let keyWindow = UIApplication.shared.getKeyWindow()
         guard let screenBounds: CGSize = keyWindow?.frame.size else { return nil }
         newFrame.size = screenBounds
 
         // y is dependant on visibility and height
         newFrame.origin.y = 0
         return newFrame
-    }
-
-    func getKeyWindow() -> UIWindow? {
-        var keyWindow = UIApplication.shared.keyWindow
-
-        if keyWindow == nil {
-            keyWindow = UIApplication.shared.windows.first
-        }
-
-        return keyWindow
     }
 
     func dismissWithAnimation(animate: Bool) {
@@ -120,10 +110,10 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
 }
 
 // MARK: - Protocol Methods
-extension FullscreenMessage: UIMessaging {
+extension FullscreenMessage {
 
     public func show() {
-        if ServiceProvider.shared.messageMonitor.show(message: self) ==  false {
+        if ServiceProvider.shared.messageMonitor.show() ==  false {
             return
         }
 
@@ -180,7 +170,7 @@ extension FullscreenMessage: UIMessaging {
                     wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
 
-                let keyWindow = self.getKeyWindow()
+                let keyWindow = UIApplication.shared.getKeyWindow()
                 keyWindow?.addSubview(wkWebView)
                 UIView.animate(withDuration: 0.3, animations: {
                     var webViewFrame = wkWebView.frame
@@ -189,17 +179,17 @@ extension FullscreenMessage: UIMessaging {
                 }, completion: nil)
             }
         }
-        self.listener?.onShow(message: self)
+        self.listener?.onShow()
     }
 
     public func dismiss() {
         DispatchQueue.main.async {
-            if ServiceProvider.shared.messageMonitor.dismiss(message: self) ==  false {
+            if ServiceProvider.shared.messageMonitor.dismiss() ==  false {
                 return
             }
 
             self.dismissWithAnimation(animate: true)
-            self.listener?.onDismiss(message: self)
+            self.listener?.onDismiss()
 
             // remove the temporary html if it exists
             guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {

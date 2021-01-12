@@ -48,7 +48,7 @@ public class MessageMonitor {
     }
 
     /// Check if any message is being displayed already or if the message should be shown based on `GlobalUIMessagingListener`
-    internal func show(message: UIMessaging) -> Bool {
+    internal func show() -> Bool {
         if isMessageDisplayed() {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
             return false
@@ -63,13 +63,13 @@ public class MessageMonitor {
         displayMessage()
 
         // Notifiying global listeners
-        globalUIMessagingListener?.onShow(message: message)
+        globalUIMessagingListener?.onShow()
 
         return true
     }
 
     /// Check if the message is being displayed and call invoke the appropriate listeners
-    internal func dismiss(message: UIMessaging) -> Bool {
+    internal func dismiss() -> Bool {
         if !isMessageDisplayed() {
             Log.debug(label: self.LOG_PREFIX, "Message failed to be dismissed, nothing is currently displayed.")
             return false
@@ -79,7 +79,7 @@ public class MessageMonitor {
         dismissMessage()
 
         // Notifiying global listeners
-        globalUIMessagingListener?.onDismiss(message: message)
+        globalUIMessagingListener?.onDismiss()
 
         return true
     }
