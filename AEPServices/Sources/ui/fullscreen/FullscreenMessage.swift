@@ -65,18 +65,8 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
             guard var newFrame: CGRect = self.calcFullscreenFrame() else { return }
             newFrame.origin.y = newFrame.size.height
             if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
-                let webViewConfiguration = WKWebViewConfiguration()
 
-                //Fix for media playback.
-                webViewConfiguration.allowsInlineMediaPlayback = true // Plays Media inline
-                webViewConfiguration.mediaTypesRequiringUserActionForPlayback = []
-                let wkWebView = WKWebView(frame: newFrame, configuration: webViewConfiguration)
-                self.webView = wkWebView
-                wkWebView.navigationDelegate = self
-                wkWebView.scrollView.bounces = false
-                wkWebView.backgroundColor = UIColor.clear
-                wkWebView.isOpaque = false
-                wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                let wkWebView = self.getConfiguredWebview(newFrame: newFrame)
 
                 // Fix for iPhone X to display content edge-to-edge
                 if #available(iOS 11, *) {
@@ -100,7 +90,6 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
                             useTempHTML = true
                         } catch {
                             Log.debug(label: self.LOG_PREFIX, "Failed to save the temporary HTML file for fullscreen message \(error)")
-                            return
                         }
                     }
                 }
@@ -166,9 +155,27 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
             decisionHandler(.allow)
         }
     }
+    
+    private func getConfiguredWebview(newFrame: CGRect) -> WKWebView {
+        let webViewConfiguration = WKWebViewConfiguration()
+
+        //Fix for media playback.
+        webViewConfiguration.allowsInlineMediaPlayback = true // Plays Media inline
+        webViewConfiguration.mediaTypesRequiringUserActionForPlayback = []
+        let wkWebView = WKWebView(frame: newFrame, configuration: webViewConfiguration)
+        wkWebView.navigationDelegate = self
+        wkWebView.scrollView.bounces = false
+        wkWebView.backgroundColor = UIColor.clear
+        wkWebView.isOpaque = false
+        wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        self.webView = wkWebView
+        
+        return wkWebView
+    }
 
     // MARK: web layout helpers
-    func calcFullscreenFrame() -> CGRect? {
+    private func calcFullscreenFrame() -> CGRect? {
         var newFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
         // x is always 0
         newFrame.origin.x = 0
@@ -182,7 +189,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         return newFrame
     }
 
-    func dismissWithAnimation(animate: Bool) {
+    private func dismissWithAnimation(animate: Bool) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: animate ? 0.3: 0, animations: {
                 guard var newFrame: CGRect = self.calcFullscreenFrame() else {
@@ -198,7 +205,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     }
 
     /// Open a url from this message
-    func openUrl(url: String) {
+    private func openUrl(url: String) {
         guard let urlObj = URL(string: url) else {
             return
         }
