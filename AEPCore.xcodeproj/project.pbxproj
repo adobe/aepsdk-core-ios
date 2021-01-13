@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -25,6 +25,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		15ED334CDE4CEC33FE6803C9 /* Pods_AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F865852EC4747B6B3502B3F2 /* Pods_AEPCore.framework */; };
 		2107F02624C9FDFE002935CF /* PushIDManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02524C9FDFE002935CF /* PushIDManageable.swift */; };
 		2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02724C9FE1B002935CF /* PushIDManager.swift */; };
 		2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02924C9FF46002935CF /* PushIDManagerTests.swift */; };
@@ -59,7 +60,6 @@
 		24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24543A1324E1DAFC002D8D9A /* MockURLService.swift */; };
 		24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
-		2462374025A78D4100056EB9 /* AEPRulesEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 2462373F25A78D4100056EB9 /* AEPRulesEngine */; };
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
@@ -328,6 +328,7 @@
 		BBA512BB24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512BA24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json */; };
 		BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */; };
 		BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */; };
+		F62C271CF3E232498CFB249E /* Pods_AEPCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F982A5E0C4BC278E7F2A07E6 /* Pods_AEPCoreTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -587,6 +588,7 @@
 		21F79ABD24E7144F003204C3 /* IDParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParserTests.swift; sourceTree = "<group>"; };
 		21F79AC024E72204003204C3 /* V4MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4MigratorTests.swift; sourceTree = "<group>"; };
 		21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPublicAPITests.swift; sourceTree = "<group>"; };
+		23E044E5863A7F60812FCA09 /* Pods-AEPCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		24543A1324E1DAFC002D8D9A /* MockURLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLService.swift; path = AEPServices/Mocks/MockURLService.swift; sourceTree = SOURCE_ROOT; };
@@ -610,6 +612,7 @@
 		24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+Tracking.swift"; sourceTree = "<group>"; };
 		24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TrackingTests.swift"; sourceTree = "<group>"; };
 		24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyStatus.swift"; sourceTree = "<group>"; };
+		379EA00DE567DCA654F85A63 /* Pods-AEPCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.release.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.release.xcconfig"; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03978F24BE5DD30019F095 /* AEPServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F03979624BE5DD30019F095 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -846,6 +849,7 @@
 		78AA4EC52513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationLifecycleResponseTests.swift; sourceTree = "<group>"; };
 		78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPrivacyStatusTests.swift; sourceTree = "<group>"; };
 		78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIDTests.swift; sourceTree = "<group>"; };
+		B81B947600B51187020B8749 /* Pods-AEPCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -871,6 +875,9 @@
 		BBA512BA24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testModifyData_invalidJson.json; sourceTree = "<group>"; };
 		BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+FlattenTests.swift"; sourceTree = "<group>"; };
 		BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenFinderTests.swift; sourceTree = "<group>"; };
+		C63ECCE4276B2C8008629BA4 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
+		F865852EC4747B6B3502B3F2 /* Pods_AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F982A5E0C4BC278E7F2A07E6 /* Pods_AEPCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -878,7 +885,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2462374025A78D4100056EB9 /* AEPRulesEngine in Frameworks */,
+				15ED334CDE4CEC33FE6803C9 /* Pods_AEPCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -890,6 +897,7 @@
 				3FE6DDBC24C62DA80065EA05 /* AEPServicesMocks.framework in Frameworks */,
 				3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */,
 				21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */,
+				F62C271CF3E232498CFB249E /* Pods_AEPCoreTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1009,6 +1017,7 @@
 				3F03983E24BE635D0019F095 /* Frameworks */,
 				21CAC0D72422917600C11388 /* Products */,
 				2499461B24E5E67700D3F7B2 /* Package.swift */,
+				D55C2031330CD537E59C7255 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1439,6 +1448,8 @@
 		3F03983E24BE635D0019F095 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F865852EC4747B6B3502B3F2 /* Pods_AEPCore.framework */,
+				F982A5E0C4BC278E7F2A07E6 /* Pods_AEPCoreTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1707,6 +1718,18 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		D55C2031330CD537E59C7255 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C63ECCE4276B2C8008629BA4 /* Pods-AEPCore.debug.xcconfig */,
+				379EA00DE567DCA654F85A63 /* Pods-AEPCore.release.xcconfig */,
+				B81B947600B51187020B8749 /* Pods-AEPCoreTests.debug.xcconfig */,
+				23E044E5863A7F60812FCA09 /* Pods-AEPCoreTests.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1774,6 +1797,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 21CAC0EA2422917600C11388 /* Build configuration list for PBXNativeTarget "AEPCore" */;
 			buildPhases = (
+				A6E302F129D01BD7D79F9F2D /* [CP] Check Pods Manifest.lock */,
 				21CAC0D12422917600C11388 /* Headers */,
 				21CAC0D22422917600C11388 /* Sources */,
 				21CAC0D42422917600C11388 /* Resources */,
@@ -1783,13 +1807,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				3F1D71ED253DF0FC00A11D84 /* PBXTargetDependency */,
 				3F03983D24BE63570019F095 /* PBXTargetDependency */,
 			);
 			name = AEPCore;
-			packageProductDependencies = (
-				2462373F25A78D4100056EB9 /* AEPRulesEngine */,
-			);
 			productName = AEPCore;
 			productReference = 21CAC0D62422917600C11388 /* AEPCore.framework */;
 			productType = "com.apple.product-type.framework";
@@ -1798,9 +1818,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 21CAC0ED2422917600C11388 /* Build configuration list for PBXNativeTarget "AEPCoreTests" */;
 			buildPhases = (
+				6F38BACEB7D30266077F0714 /* [CP] Check Pods Manifest.lock */,
 				21CAC0DB2422917600C11388 /* Sources */,
 				21CAC0DC2422917600C11388 /* Frameworks */,
 				21CAC0DD2422917600C11388 /* Resources */,
+				6E75E48097F6DE8DD748423B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2110,9 +2132,6 @@
 				Base,
 			);
 			mainGroup = 21CAC0CC2422917600C11388;
-			packageReferences = (
-				2462373E25A78D4100056EB9 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */,
-			);
 			productRefGroup = 21CAC0D72422917600C11388 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2286,6 +2305,67 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ${PROJECT_DIR}/AEPIntegrationTests/resources\nzip -r rules_lifecycle.zip rules_lifecycle.json\nzip -r rules_signal.zip rules_signal.json\nzip -r rules_pii.zip rules_pii.json\n\n";
+		};
+		6E75E48097F6DE8DD748423B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6F38BACEB7D30266077F0714 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AEPCoreTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6E302F129D01BD7D79F9F2D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AEPCore-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 		BB6812FF24E19B55007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2794,10 +2874,6 @@
 			target = 3F03978624BE5DD30019F095 /* AEPServices */;
 			targetProxy = 3F03984024BE65120019F095 /* PBXContainerItemProxy */;
 		};
-		3F1D71ED253DF0FC00A11D84 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 3F1D71EC253DF0FC00A11D84 /* AEPRulesEngine */;
-		};
 		3F39152624CA34CA00B58C3E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 21CAC0D52422917600C11388 /* AEPCore */;
@@ -3037,6 +3113,7 @@
 		};
 		21CAC0EB2422917600C11388 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C63ECCE4276B2C8008629BA4 /* Pods-AEPCore.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -3066,6 +3143,7 @@
 		};
 		21CAC0EC2422917600C11388 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 379EA00DE567DCA654F85A63 /* Pods-AEPCore.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -3094,6 +3172,7 @@
 		};
 		21CAC0EE2422917600C11388 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B81B947600B51187020B8749 /* Pods-AEPCoreTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
@@ -3117,6 +3196,7 @@
 		};
 		21CAC0EF2422917600C11388 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 23E044E5863A7F60812FCA09 /* Pods-AEPCoreTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
@@ -3808,38 +3888,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		2462373E25A78D4100056EB9 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/adobe/aepsdk-rulesengine-ios.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		2462373F25A78D4100056EB9 /* AEPRulesEngine */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2462373E25A78D4100056EB9 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
-			productName = AEPRulesEngine;
-		};
-		3F1D71EC253DF0FC00A11D84 /* AEPRulesEngine */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 3F1D71DB253DF0E900A11D84 /* XCRemoteSwiftPackageReference "aepsdk-rulesengine-ios" */;
-			productName = AEPRulesEngine;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 21CAC0CD2422917600C11388 /* Project object */;
 }
