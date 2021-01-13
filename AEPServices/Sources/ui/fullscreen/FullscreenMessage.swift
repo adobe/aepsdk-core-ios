@@ -155,7 +155,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
             decisionHandler(.allow)
         }
     }
-    
+
     private func getConfiguredWebview(newFrame: CGRect) -> WKWebView {
         let webViewConfiguration = WKWebViewConfiguration()
 
@@ -168,9 +168,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         wkWebView.backgroundColor = UIColor.clear
         wkWebView.isOpaque = false
         wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
+
         self.webView = wkWebView
-        
+
         return wkWebView
     }
 

@@ -14,8 +14,6 @@ import Foundation
 @testable import AEPServices
 import XCTest
 
-
-
 class MessageMonitorTest : XCTestCase {
 
     let mockHtml = "somehtml"
@@ -62,15 +60,15 @@ class MessageMonitorTest : XCTestCase {
     }
 
     class MockFullscreenListener: FullscreenMessaging {
-        func onShow(message: UIMessaging?) {
+        func onShow() {
             MessageMonitorTest.onShowCall = true
         }
 
-        func onDismiss(message: UIMessaging?) {
+        func onDismiss() {
             MessageMonitorTest.onDismissCall = true
         }
 
-        func overrideUrlLoad(message: UIMessaging?, url: String?) -> Bool {
+        func overrideUrlLoad(message: FullscreenMessage?, url: String?) -> Bool {
             return true
         }
     }
