@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 import WebKit
 
+@objc(AEPFullscreenMessage)
 public class FullscreenMessage: NSObject, WKNavigationDelegate {
     private let LOG_PREFIX = "FullscreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
@@ -53,64 +54,6 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
     }
-
-    // MARK: WKWebview delegatesou
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if self.listener != nil {
-            guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self, url: navigationAction.request.url?.absoluteString) else {
-                decisionHandler(.allow)
-                return
-            }
-            decisionHandler(shouldOpenUrl ? .allow : .cancel)
-
-        } else {
-            // if the API user doesn't provide any listner ( self.listener == nil ),
-            // set WKNavigationActionPolicyAllow as a default behaviour.
-            decisionHandler(.allow)
-        }
-    }
-
-    // MARK: web layout helpers
-    func calcFullscreenFrame() -> CGRect? {
-        var newFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
-        // x is always 0
-        newFrame.origin.x = 0
-        // for fullscreen, width and height are both full screen
-        let keyWindow = UIApplication.shared.getKeyWindow()
-        guard let screenBounds: CGSize = keyWindow?.frame.size else { return nil }
-        newFrame.size = screenBounds
-
-        // y is dependant on visibility and height
-        newFrame.origin.y = 0
-        return newFrame
-    }
-
-    func dismissWithAnimation(animate: Bool) {
-        DispatchQueue.main.async {
-            UIView.animate(withDuration: animate ? 0.3: 0, animations: {
-                guard var newFrame: CGRect = self.calcFullscreenFrame() else {
-                    return
-                }
-                newFrame.origin.y = newFrame.size.height
-                self.webView.frame = newFrame
-            }) { _ in
-                self.webView.removeFromSuperview()
-                self.webView = nil
-            }
-        }
-    }
-
-    /// Open a url from this message
-    func openUrl(url: String) {
-        guard let urlObj = URL(string: url) else {
-            return
-        }
-        UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
-    }
-}
-
-// MARK: - Protocol Methods
-extension FullscreenMessage {
 
     public func show() {
         if ServiceProvider.shared.messageMonitor.show() ==  false {
@@ -206,5 +149,59 @@ extension FullscreenMessage {
                 Log.debug(label: self.LOG_PREFIX, "Unable to dismiss \(error)")
             }
         }
+    }
+
+    // MARK: WKWebview delegatesou
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if self.listener != nil {
+            guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self, url: navigationAction.request.url?.absoluteString) else {
+                decisionHandler(.allow)
+                return
+            }
+            decisionHandler(shouldOpenUrl ? .allow : .cancel)
+
+        } else {
+            // if the API user doesn't provide any listner ( self.listener == nil ),
+            // set WKNavigationActionPolicyAllow as a default behaviour.
+            decisionHandler(.allow)
+        }
+    }
+
+    // MARK: web layout helpers
+    func calcFullscreenFrame() -> CGRect? {
+        var newFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        // x is always 0
+        newFrame.origin.x = 0
+        // for fullscreen, width and height are both full screen
+        let keyWindow = UIApplication.shared.getKeyWindow()
+        guard let screenBounds: CGSize = keyWindow?.frame.size else { return nil }
+        newFrame.size = screenBounds
+
+        // y is dependant on visibility and height
+        newFrame.origin.y = 0
+        return newFrame
+    }
+
+    func dismissWithAnimation(animate: Bool) {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: animate ? 0.3: 0, animations: {
+                guard var newFrame: CGRect = self.calcFullscreenFrame() else {
+                    return
+                }
+                newFrame.origin.y = newFrame.size.height
+                self.webView.frame = newFrame
+            }) { _ in
+                self.webView.removeFromSuperview()
+                self.webView = nil
+            }
+        }
+    }
+
+    /// Open a url from this message
+    func openUrl(url: String) {
+        guard let urlObj = URL(string: url) else {
+            return
+        }
+        UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
     }
 }

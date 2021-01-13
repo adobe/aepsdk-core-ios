@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public extension UIApplication {    
+public extension UIApplication {
     func getKeyWindow() -> UIWindow? {
         keyWindow ?? windows.first
     }

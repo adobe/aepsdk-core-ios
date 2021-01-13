@@ -14,15 +14,16 @@ import Foundation
 import UIKit
 import WebKit
 
+@objc(AEPAlertMessage)
 public class AlertMessage: NSObject {
     private let LOG_PREFIX = "AlertMessage"
-        
+
     private let title: String
     private let message: String
     private let positiveButtonLabel: String?
     private let negativeButtonLabel: String?
     private var listener: AlertMessaging?
-    
+
     init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessaging?) {
         self.title = title
         self.message = message
@@ -30,23 +31,23 @@ public class AlertMessage: NSObject {
         self.negativeButtonLabel = negativeButtonLabel
         self.listener = listener
     }
-    
+
     public func show() {
         if ServiceProvider.shared.messageMonitor.show() == false {
             return
         }
-        
+
         DispatchQueue.main.async {
             let alert = UIAlertController.init(title: self.title, message: self.message, preferredStyle: .alert)
-            
+
             if let positiveButton = self.positiveButtonLabel, !positiveButton.isEmpty {
-                alert.addAction(UIAlertAction.init(title: positiveButton, style: .default, handler: { (UIAlertAction) in
+                alert.addAction(UIAlertAction.init(title: positiveButton, style: .default, handler: { (_) in
                     self.listener?.OnPositiveResponse()
                     self.dismiss()
                 }))
             }
-            if let negativeButton = self.negativeButtonLabel, !negativeButton.isEmpty  {
-                alert.addAction(UIAlertAction.init(title: negativeButton, style: .cancel, handler: { (UIAlertAction) in
+            if let negativeButton = self.negativeButtonLabel, !negativeButton.isEmpty {
+                alert.addAction(UIAlertAction.init(title: negativeButton, style: .cancel, handler: { (_) in
                     self.listener?.OnNegativeResponse()
                     self.dismiss()
                 }))
@@ -60,19 +61,17 @@ public class AlertMessage: NSObject {
                     bestViewController.present(alert, animated: true) {
                         self.listener?.onShow()
                     }
-                }
-                else {
+                } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
                     ServiceProvider.shared.messageMonitor.dismissMessage()
                 }
-            }
-            else{
+            } else {
                 Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. KeyWindow is null.")
                 ServiceProvider.shared.messageMonitor.dismissMessage()
             }
         }
     }
-    
+
     /// Returns the topmost view controlller that will be used to present Alert View Controller.
     /// - Parameter viewController: The root view controller of Window.
     /// - Throws: throws any Error that occurs while iterating view hierarchy.
@@ -85,7 +84,7 @@ public class AlertMessage: NSObject {
             // Return right hand side
             if !svc.viewControllers.isEmpty, let lastViewController = svc.viewControllers.last {
                 return findBestViewController(viewController: lastViewController)
-            } else{
+            } else {
                 return viewController
             }
 
@@ -93,7 +92,7 @@ public class AlertMessage: NSObject {
             // Return top view
             if !nvc.viewControllers.isEmpty, let topViewController = nvc.topViewController {
                 return findBestViewController(viewController: topViewController)
-            } else{
+            } else {
                 return viewController
             }
 
@@ -101,14 +100,14 @@ public class AlertMessage: NSObject {
             // Return visible view
             if let selectedViewController = tbc.selectedViewController {
                 return findBestViewController(viewController: selectedViewController)
-            } else{
+            } else {
                 return viewController
             }
         } else if viewController.isKind(of: UIPageViewController.self), let pvc = viewController as? UIPageViewController {
             // Return visible view
             if let pageViewController = pvc.viewControllers?[0] {
                 return findBestViewController(viewController: pageViewController)
-            } else{
+            } else {
                 return viewController
             }
         } else {
@@ -116,7 +115,7 @@ public class AlertMessage: NSObject {
             return viewController
         }
     }
-    
+
     private func dismiss() {
         if ServiceProvider.shared.messageMonitor.dismiss() == false {
             return

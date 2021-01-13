@@ -19,7 +19,7 @@ import Foundation
 
     /// Invoked on negative button clicks
     func OnNegativeResponse()
-    
+
     /// Invoked when the alert message is displayed
     func onShow()
 
