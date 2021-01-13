@@ -43,7 +43,7 @@ integration-test:
 	@echo "######################################################################"
 	@echo "### Integration Testing iOS"
 	@echo "######################################################################"
-	xcodebuild test -project $(PROJECT_NAME).xcworkspace -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
 
 archive:
 	xcodebuild archive -workspace AEPCore.xcworkspace -scheme AEP-All -archivePath "./build/ios.xcarchive" -sdk iphoneos -destination="iOS" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
