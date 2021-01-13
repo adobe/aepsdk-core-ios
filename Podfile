@@ -14,3 +14,19 @@ end
 target 'AEPCoreTests' do
     pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
 end
+
+target 'AEPSignalTests' do
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+end
+
+target 'AEPLifecycleTests' do
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+end
+
+target 'AEPIdentityTests' do
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+end
+
+target 'AEPIntegrationTests' do
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+end
