@@ -1,0 +1,102 @@
+name: Release
+
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'tag/version'     
+        required: true
+        default: '1.0.0'
+
+jobs:
+  release_rules_engine:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+    
+    - name: Install jq
+      run: brew install jq
+
+    - name: Check version in Podspec
+      run: |
+        set -eo pipefail
+        echo Target version: ${{ github.event.inputs.tag }}
+        make check-version VERSION=${{ github.event.inputs.tag }}
+    # "release-drafter" action docs -> https://github.com/marketplace/actions/release-drafter
+    - name: SPM integration test
+      run: |
+        set -eo pipefail
+        echo SPM integration test starts:
+        make test-SPM-integration
+    - name: podspec file verification
+      run: |
+        set -eo pipefail
+        echo podspec file verification starts:
+        make test-podspec
+    - uses: release-drafter/release-drafter@v5
+      with:
+        name: v${{ github.event.inputs.tag }}
+        tag: ${{ github.event.inputs.tag }}
+        version: ${{ github.event.inputs.tag }}
+        publish: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish Pods - AEPService
+      run: |
+        set -eo pipefail
+        gem install cocoapods
+        pod lib lint AEPServices.podspec  --allow-warnings --swift-version=5.1
+        pod trunk push AEPServices.podspec --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Sleep for 3 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '3s'
+
+    - name: Publish Pods - AEPCore
+      run: |
+        set -eo pipefail
+        gem install cocoapods
+        pod lib lint AEPCore.podspec  --allow-warnings --swift-version=5.1
+        pod trunk push AEPCore.podspec --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Sleep for 3 seconds
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '3s'
+    
+    - name: Publish Pods - AEPIdentity
+      run: |
+        set -eo pipefail
+        gem install cocoapods
+        pod lib lint AEPIdentity.podspec  --allow-warnings --swift-version=5.1
+        pod trunk push AEPIdentity.podspec --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}   
+    
+    - name: Publish Pods - AEPLifecycle
+      run: |
+        set -eo pipefail
+        gem install cocoapods
+        pod lib lint AEPLifecycle.podspec  --allow-warnings --swift-version=5.1
+        pod trunk push AEPLifecycle.podspec --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Publish Pods - AEPSignal
+      run: |
+        set -eo pipefail
+        gem install cocoapods
+        pod lib lint AEPSignal.podspec  --allow-warnings --swift-version=5.1
+        pod trunk push AEPSignal.podspec --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        

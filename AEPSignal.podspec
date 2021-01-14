@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "AEPSignal"
-  s.version          = "3.0.0-beta.2"
+  s.version          = "3.0.0-beta.3"
   s.summary          = "Signal extension for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
                         The AEPSignal extension provides the support for Postback/PII/Open URL actions triggered by Core rules engine.
