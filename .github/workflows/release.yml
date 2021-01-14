@@ -10,7 +10,7 @@ on:
         default: '1.0.0'
       
       action_verification:
-        description: 'build verification ("no" to skip)'     
+        description: 'Pod/SPM verification ("no" to skip)'     
         required: true
         default: 'yes' 
       
@@ -65,7 +65,7 @@ jobs:
         make check-version VERSION=${{ github.event.inputs.tag }}
 
     - name: SPM integration test
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
+      if: ${{ github.event.inputs.action_verification == 'yes' }}
       run: |
         set -eo pipefail
         echo SPM integration test starts:
@@ -79,7 +79,7 @@ jobs:
         make test-podspec 
         
     - uses: release-drafter/release-drafter@v5
-      if: ${{ github.event.inputs.action_verification == 'yes' }}
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
         name: v${{ github.event.inputs.tag }}
         tag: ${{ github.event.inputs.tag }}
