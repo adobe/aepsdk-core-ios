@@ -9,22 +9,13 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+
 import Foundation
 
-/// Constant values used throughout `EventHub`
-enum EventHubConstants {
-    static let STATE_CHANGE = "STATE_CHANGE_EVENT"
-    static let NAME = "com.adobe.module.eventhub"
-    static let FRIENDLY_NAME = "EventHub"
-    static let VERSION_NUMBER = "3.0.0-beta.3"
+extension Data {
 
-    enum EventDataKeys {
-        static let VERSION = "version"
-        static let EXTENSIONS = "extensions"
-        static let METADATA = "metadata"
-
-        enum Configuration {
-            static let EVENT_STATE_OWNER = "stateowner"
-        }
+    /// Returns a hex representation of the data
+    var hexDescription: String {
+        return reduce("") {$0 + String(format: "%02x", $1)}
     }
 }

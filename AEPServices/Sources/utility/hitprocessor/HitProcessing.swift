@@ -13,8 +13,13 @@ import Foundation
 
 /// A class of types who provide the functionality for processing hits
 public protocol HitProcessing: class {
-    /// Defines the interval at which hits should be retried if failed
-    var retryInterval: TimeInterval { get }
+
+    /// batchLimit: an `Int`  specifies the number of hits to be batched to start processing hits
+    var batchLimit: Int { get set}
+
+    /// Determines the interval at which a hit should be retried
+    /// - Parameter entity: The hit whose retry interval is to be computed
+    func retryInterval(for entity: DataEntity) -> TimeInterval
 
     /// Function that is invoked with a `DataEntity` and provides functionality for processing the hit
     /// - Parameters:

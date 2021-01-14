@@ -19,6 +19,8 @@ public class PersistentHitQueue: HitQueuing {
     private static let DEFAULT_RETRY_INTERVAL = TimeInterval(30)
     private var suspended = true
     private let queue = DispatchQueue(label: "com.adobe.mobile.persistenthitqueue")
+    private var currentBatchSize = 0
+    private var batching = false
 
     /// Creates a new `HitQueue` with the underlying `DataQueue` which is used to persist hits
     /// - Parameter dataQueue: a `DataQueue` used to persist hits
@@ -37,7 +39,14 @@ public class PersistentHitQueue: HitQueuing {
 
     public func beginProcessing() {
         queue.async { self.suspended = false }
+        batching = self.processor.batchLimit > 0
         processNextHit()
+    }
+
+    // Processes the queued hits ignoring the batchLimit
+    public func forceProcessing() {
+        queue.async { self.suspended = false }
+        processNextHit(ignoreBatchLimit: true)
     }
 
     public func suspend() {
@@ -46,6 +55,7 @@ public class PersistentHitQueue: HitQueuing {
 
     public func clear() {
         _ = dataQueue.clear()
+        self.currentBatchSize = 0
     }
 
     public func count() -> Int {
@@ -58,8 +68,20 @@ public class PersistentHitQueue: HitQueuing {
     }
 
     /// A recursive function for processing hits, it will continue processing all the hits until none are left in the data queue
-    private func processNextHit() {
+    /// - Parameter ignoreBatchLimit: a `Bool` flag to determine batching hits
+    private func processNextHit(ignoreBatchLimit: Bool = false) {
         queue.async {
+            if self.batching && !ignoreBatchLimit {
+                // check if number of queued hits > batchLimit and currently we are not processing a batch of hits
+                if self.dataQueue.count() >= self.processor.batchLimit && self.currentBatchSize == 0 {
+                    // There is no batch being processed currently so set the currentBatchSize to batchLimit
+                    self.currentBatchSize = self.processor.batchLimit
+                }
+
+                // Only process hits if number of queued hits >= batchLimit
+                guard self.currentBatchSize > 0 else { return }
+            }
+
             guard !self.suspended else { return }
             guard let hit = self.dataQueue.peek() else { return } // nothing left in the queue, stop processing
 
@@ -68,11 +90,17 @@ public class PersistentHitQueue: HitQueuing {
                 if success {
                     // successful processing of hit, remove it from the queue, move to next hit
                     _ = self?.dataQueue.remove()
-                    self?.processNextHit()
+
+                    if self?.batching ?? false {
+                        // Successfully processed hit, so update the currentBatchSize to reflect remaining number of hits to be processed
+                        self?.currentBatchSize -= 1
+                    }
+
+                    self?.processNextHit(ignoreBatchLimit: ignoreBatchLimit)
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
-                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
-                        self?.processNextHit()
+                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval(for: hit) ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
+                        self?.processNextHit(ignoreBatchLimit: ignoreBatchLimit)
                     }
                 }
 
