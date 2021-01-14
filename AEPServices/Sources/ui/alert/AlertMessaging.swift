@@ -15,10 +15,10 @@ import Foundation
 /// Fullscreen message lifecycle event listener
 @objc(AEPAlertMessaging) public protocol AlertMessaging {
     /// Invoked on positive button clicks
-    func OnPositiveResponse()
+    func onPositiveResponse()
 
     /// Invoked on negative button clicks
-    func OnNegativeResponse()
+    func onNegativeResponxse()
 
     /// Invoked when the alert message is displayed
     func onShow()

@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 import WebKit
 
+/// This class is used to create and display fullscreen messages on the currentt view.
 @objc(AEPFullscreenMessage)
 public class FullscreenMessage: NSObject, WKNavigationDelegate {
     private let LOG_PREFIX = "FullscreenMessage"
@@ -26,7 +27,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     var isLocalImageUsed = false
     var payload: String
     var listener: FullscreenMessaging?
-    var webView: UIView!
+    var webView: UIView?
 
     /// Creates `FullscreenMessage` instance with the payload provided.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
@@ -56,12 +57,11 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     }
 
     public func show() {
-        if ServiceProvider.shared.messageMonitor.show() ==  false {
+        if ServiceProvider.shared.messageMonitorService.show() ==  false {
             return
         }
 
         DispatchQueue.main.async {
-
             guard var newFrame: CGRect = self.calcFullscreenFrame() else { return }
             newFrame.origin.y = newFrame.size.height
             if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
@@ -85,8 +85,8 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
                         /* AMSDK-8942: The ACS extension saves downloaded remote image files in the cache. We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp.html and pass that file URL to loadFileURL.
                          */
                         do {
-                            try FileManager.default.createDirectory(atPath: cacheFolderURL!.path, withIntermediateDirectories: true, attributes: nil)
-                            try self.payload.write(toFile: tempHTMLFile!.path, atomically: true, encoding: .utf8)
+                            try FileManager.default.createDirectory(atPath: cacheFolderURL?.path ?? "", withIntermediateDirectories: true, attributes: nil)
+                            try self.payload.write(toFile: tempHTMLFile?.path ?? "", atomically: true, encoding: .utf8)
                             useTempHTML = true
                         } catch {
                             Log.debug(label: self.LOG_PREFIX, "Failed to save the temporary HTML file for fullscreen message \(error)")
@@ -109,19 +109,24 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
                     webViewFrame.origin.y = 0
                     wkWebView.frame = webViewFrame
                 }, completion: nil)
+                
+                // Notifiying global listeners
+                self.listener?.onShow()
+                ServiceProvider.shared.messageMonitorService.globalUIMessagingListener?.onShow()
             }
         }
-        self.listener?.onShow()
     }
 
     public func dismiss() {
         DispatchQueue.main.async {
-            if ServiceProvider.shared.messageMonitor.dismiss() ==  false {
+            if ServiceProvider.shared.messageMonitorService.dismiss() ==  false {
                 return
             }
 
             self.dismissWithAnimation(animate: true)
+            // Notifiying all listeners
             self.listener?.onDismiss()
+            ServiceProvider.shared.messageMonitorService.globalUIMessagingListener?.onDismiss()
 
             // remove the temporary html if it exists
             guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {
@@ -140,7 +145,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         }
     }
 
-    // MARK: WKWebview delegatesou
+    // MARK: WKWebview delegate
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if self.listener != nil {
             guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self, url: navigationAction.request.url?.absoluteString) else {
@@ -168,7 +173,6 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
         wkWebView.backgroundColor = UIColor.clear
         wkWebView.isOpaque = false
         wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
         self.webView = wkWebView
 
         return wkWebView
@@ -196,9 +200,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
                     return
                 }
                 newFrame.origin.y = newFrame.size.height
-                self.webView.frame = newFrame
+                self.webView?.frame = newFrame
             }) { _ in
-                self.webView.removeFromSuperview()
+                self.webView?.removeFromSuperview()
                 self.webView = nil
             }
         }

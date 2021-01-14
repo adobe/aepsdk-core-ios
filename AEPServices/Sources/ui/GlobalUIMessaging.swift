@@ -27,5 +27,5 @@ import Foundation
 
     /// Used to find whether messages should be shown or not
     /// - Returns: true if message needs to be shown else false
-    func showMessage() -> Bool
+    func shouldShowMessage() -> Bool
 }

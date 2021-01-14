@@ -14,7 +14,7 @@ import Foundation
 
 /// This class is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
 /// The status is exposed through isMessageDisplayed.
-public class MessageMonitor {
+public class MessageMonitorService {
     private let LOG_PREFIX = "MessageMonitor"
     private var isMsgDisplayed = false
     internal var globalUIMessagingListener: GlobalUIMessaging?
@@ -54,16 +54,13 @@ public class MessageMonitor {
             return false
         }
 
-        if ServiceProvider.shared.messageMonitor.globalUIMessagingListener?.showMessage() == false {
+        if globalUIMessagingListener?.shouldShowMessage() == false {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, globalUIMessaging#showMessage states the message should not be displayed.")
             return false
         }
 
         // Change message monitor to display
         displayMessage()
-
-        // Notifiying global listeners
-        globalUIMessagingListener?.onShow()
 
         return true
     }
@@ -77,9 +74,6 @@ public class MessageMonitor {
 
         // Change message visibility to dismiss
         dismissMessage()
-
-        // Notifiying global listeners
-        globalUIMessagingListener?.onDismiss()
 
         return true
     }

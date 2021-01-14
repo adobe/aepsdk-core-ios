@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 import WebKit
 
+/// Tthis class is used to create and display alert messages with custom title, message and buttons on the current view
 @objc(AEPAlertMessage)
 public class AlertMessage: NSObject {
     private let LOG_PREFIX = "AlertMessage"
@@ -33,7 +34,7 @@ public class AlertMessage: NSObject {
     }
 
     public func show() {
-        if ServiceProvider.shared.messageMonitor.show() == false {
+        if ServiceProvider.shared.messageMonitorService.show() == false {
             return
         }
 
@@ -42,13 +43,13 @@ public class AlertMessage: NSObject {
 
             if let positiveButton = self.positiveButtonLabel, !positiveButton.isEmpty {
                 alert.addAction(UIAlertAction.init(title: positiveButton, style: .default, handler: { (_) in
-                    self.listener?.OnPositiveResponse()
+                    self.listener?.onPositiveResponse()
                     self.dismiss()
                 }))
             }
             if let negativeButton = self.negativeButtonLabel, !negativeButton.isEmpty {
                 alert.addAction(UIAlertAction.init(title: negativeButton, style: .cancel, handler: { (_) in
-                    self.listener?.OnNegativeResponse()
+                    self.listener?.onNegativeResponxse()
                     self.dismiss()
                 }))
             }
@@ -63,11 +64,11 @@ public class AlertMessage: NSObject {
                     }
                 } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
-                    ServiceProvider.shared.messageMonitor.dismissMessage()
+                    ServiceProvider.shared.messageMonitorService.dismissMessage()
                 }
             } else {
                 Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. KeyWindow is null.")
-                ServiceProvider.shared.messageMonitor.dismissMessage()
+                ServiceProvider.shared.messageMonitorService.dismissMessage()
             }
         }
     }
@@ -117,7 +118,7 @@ public class AlertMessage: NSObject {
     }
 
     private func dismiss() {
-        if ServiceProvider.shared.messageMonitor.dismiss() == false {
+        if ServiceProvider.shared.messageMonitorService.dismiss() == false {
             return
         }
         self.listener?.onDismiss()
