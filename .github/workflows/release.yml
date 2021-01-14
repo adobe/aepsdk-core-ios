@@ -44,11 +44,11 @@ jobs:
     - name: Install jq
       run: brew install jq
 
-    - name: Check version in Podspec
-      run: |
-        set -eo pipefail
-        echo Target version: ${{ github.event.inputs.tag }}
-        make check-version VERSION=${{ github.event.inputs.tag }}
+#     - name: Check version in Podspec
+#       run: |
+#         set -eo pipefail
+#         echo Target version: ${{ github.event.inputs.tag }}
+#         make check-version VERSION=${{ github.event.inputs.tag }}
         
     - uses: release-drafter/release-drafter@v5
       if: ${{ github.event.inputs.action_tag == 'yes' }}
