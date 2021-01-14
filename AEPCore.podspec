@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
-  s.dependency 'AEPRulesEngine'
-  s.dependency 'AEPServices'
+  s.dependency 'AEPRulesEngine', '1.0.0-beta.2'
+  s.dependency 'AEPServices', '3.0.0-beta.3'
 
   s.source_files          = 'AEPCore/Sources/**/*.swift'
 
