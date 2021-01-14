@@ -20,17 +20,14 @@ class AlertMessageTests : XCTestCase {
     static let mockMessage = "mockMessage"
     static let mockPositiveLabel = "mockPositiveLabel"
     static let mockNegativeLabel = "mockNegativeLabel"
-    
-    
     var alertMessage : AlertMessage?
     static var expectation: XCTestExpectation?
-    
     var rootViewController: UIViewController!
-    
+
     override func setUp() {
         alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: MockListener())
     }
-    
+
     func test_init_whenListenerIsNil() {
         alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: nil)
         XCTAssertNotNil(alertMessage)
@@ -39,14 +36,11 @@ class AlertMessageTests : XCTestCase {
     func test_init_whenListenerIsPresent() {
         XCTAssertNotNil(alertMessage)
     }
-    
+
     class MockListener: AlertMessaging {
         func onPositiveResponse(message: AlertMessage?) {}
-        
         func onNegativeResponse(message: AlertMessage?) {}
-        
         func onShow(message: AlertMessage?) {}
-        
         func onDismiss(message: AlertMessage?) {}
     }
 }
