@@ -8,6 +8,30 @@ on:
         description: 'tag/version'     
         required: true
         default: '1.0.0'
+      action_tag:
+        description: 'create tag (leave it blank to skip)'     
+        required: false
+        default: 'yes'
+      release_AEPService:
+        description: 'release AEPService'
+        required: false
+        default: 'AEPService'
+      release_AEPCore:
+        description: 'release AEPCore'
+        required: false
+        default: 'AEPCore'
+      release_AEPIdentity:
+        description: 'release AEPIdentity'
+        required: false
+        default: 'AEPIdentity'
+      release_AEPLifecycle:
+        description: 'release AEPLifecycle'
+        required: false
+        default: 'AEPLifecycle'
+      release_AEPSignal:
+        description: 'release AEPSignal'
+        required: false
+        default: 'AEPSignal'
 
 jobs:
   release_rules_engine:
@@ -25,18 +49,9 @@ jobs:
         set -eo pipefail
         echo Target version: ${{ github.event.inputs.tag }}
         make check-version VERSION=${{ github.event.inputs.tag }}
-    # "release-drafter" action docs -> https://github.com/marketplace/actions/release-drafter
-    - name: SPM integration test
-      run: |
-        set -eo pipefail
-        echo SPM integration test starts:
-        make test-SPM-integration
-    - name: podspec file verification
-      run: |
-        set -eo pipefail
-        echo podspec file verification starts:
-        make test-podspec
+        
     - uses: release-drafter/release-drafter@v5
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
         name: v${{ github.event.inputs.tag }}
         tag: ${{ github.event.inputs.tag }}
@@ -45,58 +60,50 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Publish Pods - AEPService
-      run: |
-        set -eo pipefail
-        gem install cocoapods
-        pod lib lint AEPServices.podspec  --allow-warnings --swift-version=5.1
-        pod trunk push AEPServices.podspec --allow-warnings
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+#     - name: Publish Pods - AEPService
+#       run: |
+#         set -eo pipefail
+#         gem install cocoapods
+#         pod lib lint AEPServices.podspec  --allow-warnings --swift-version=5.1
+#         pod trunk push AEPServices.podspec --allow-warnings
+#         pod repo update
+#       env:
+#         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
-    - name: Sleep for 3 seconds
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '3s'
-
-    - name: Publish Pods - AEPCore
-      run: |
-        set -eo pipefail
-        gem install cocoapods
-        pod lib lint AEPCore.podspec  --allow-warnings --swift-version=5.1
-        pod trunk push AEPCore.podspec --allow-warnings
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-
-    - name: Sleep for 3 seconds
-      uses: jakejarvis/wait-action@master
-      with:
-        time: '3s'
+#     - name: Publish Pods - AEPCore
+#       run: |
+#         set -eo pipefail
+#         gem install cocoapods
+#         pod lib lint AEPCore.podspec  --allow-warnings --swift-version=5.1
+#         pod trunk push AEPCore.podspec --allow-warnings
+#         pod repo update
+#       env:
+#         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
     
-    - name: Publish Pods - AEPIdentity
-      run: |
-        set -eo pipefail
-        gem install cocoapods
-        pod lib lint AEPIdentity.podspec  --allow-warnings --swift-version=5.1
-        pod trunk push AEPIdentity.podspec --allow-warnings
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}   
+#     - name: Publish Pods - AEPIdentity
+#       run: |
+#         set -eo pipefail
+#         gem install cocoapods
+#         pod lib lint AEPIdentity.podspec  --allow-warnings --swift-version=5.1
+#         pod trunk push AEPIdentity.podspec --allow-warnings
+#       env:
+#         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}   
     
-    - name: Publish Pods - AEPLifecycle
-      run: |
-        set -eo pipefail
-        gem install cocoapods
-        pod lib lint AEPLifecycle.podspec  --allow-warnings --swift-version=5.1
-        pod trunk push AEPLifecycle.podspec --allow-warnings
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+#     - name: Publish Pods - AEPLifecycle
+#       run: |
+#         set -eo pipefail
+#         gem install cocoapods
+#         pod lib lint AEPLifecycle.podspec  --allow-warnings --swift-version=5.1
+#         pod trunk push AEPLifecycle.podspec --allow-warnings
+#       env:
+#         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
-    - name: Publish Pods - AEPSignal
-      run: |
-        set -eo pipefail
-        gem install cocoapods
-        pod lib lint AEPSignal.podspec  --allow-warnings --swift-version=5.1
-        pod trunk push AEPSignal.podspec --allow-warnings
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+#     - name: Publish Pods - AEPSignal
+#       run: |
+#         set -eo pipefail
+#         gem install cocoapods
+#         pod lib lint AEPSignal.podspec  --allow-warnings --swift-version=5.1
+#         pod trunk push AEPSignal.podspec --allow-warnings
+#       env:
+#         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
         
