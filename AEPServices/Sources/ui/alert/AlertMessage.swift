@@ -43,13 +43,13 @@ public class AlertMessage: NSObject {
 
             if let positiveButton = self.positiveButtonLabel, !positiveButton.isEmpty {
                 alert.addAction(UIAlertAction.init(title: positiveButton, style: .default, handler: { (_) in
-                    self.listener?.onPositiveResponse()
+                    self.listener?.onPositiveResponse(message: self)
                     self.dismiss()
                 }))
             }
             if let negativeButton = self.negativeButtonLabel, !negativeButton.isEmpty {
                 alert.addAction(UIAlertAction.init(title: negativeButton, style: .cancel, handler: { (_) in
-                    self.listener?.onNegativeResponxse()
+                    self.listener?.onNegativeResponse(message: self)
                     self.dismiss()
                 }))
             }
@@ -60,7 +60,7 @@ public class AlertMessage: NSObject {
 
                 if bestViewController.isViewLoaded {
                     bestViewController.present(alert, animated: true) {
-                        self.listener?.onShow()
+                        self.listener?.onShow(message: self)
                     }
                 } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
@@ -121,6 +121,6 @@ public class AlertMessage: NSObject {
         if ServiceProvider.shared.messageMonitorService.dismiss() == false {
             return
         }
-        self.listener?.onDismiss()
+        self.listener?.onDismiss(message: self)
     }
 }

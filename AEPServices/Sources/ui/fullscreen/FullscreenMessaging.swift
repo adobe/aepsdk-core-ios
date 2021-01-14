@@ -15,10 +15,14 @@ import Foundation
 /// Fullscreen message lifecycle event listener
 @objc(AEPFullscreenMessaging) public protocol FullscreenMessaging {
     /// Invoked when the fullscreen message is displayed
-    func onShow()
+    /// - Parameters:
+    ///     - message: Fullscreen message which is currently shown
+    func onShow(message: FullscreenMessage?)
 
     /// Invoked when the fullscreen message is dismissed
-    func onDismiss()
+    /// - Parameters:
+    ///     - message: Fullscreen message which is dismissed
+    func onDismiss(message: FullscreenMessage?)
 
     /// Invoked when the fullscreen message is attempting to load a url
     /// - Parameters:

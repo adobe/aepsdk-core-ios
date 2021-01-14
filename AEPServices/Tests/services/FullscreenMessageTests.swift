@@ -54,12 +54,12 @@ class FullscreenMessageTests : XCTestCase {
     }
     
     class MockFullscreenListener: FullscreenMessaging {
-        func onShow() {
+        func onShow(message: FullscreenMessage?) {
             FullscreenMessageTests.onShowFullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }
-
-        func onDismiss() {
+        
+        func onDismiss(message: FullscreenMessage?) {
             FullscreenMessageTests.onDismissullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }

@@ -109,9 +109,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
                     webViewFrame.origin.y = 0
                     wkWebView.frame = webViewFrame
                 }, completion: nil)
-                
+
                 // Notifiying global listeners
-                self.listener?.onShow()
+                self.listener?.onShow(message: self)
                 ServiceProvider.shared.messageMonitorService.globalUIMessagingListener?.onShow()
             }
         }
@@ -125,7 +125,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
 
             self.dismissWithAnimation(animate: true)
             // Notifiying all listeners
-            self.listener?.onDismiss()
+            self.listener?.onDismiss(message: self)
             ServiceProvider.shared.messageMonitorService.globalUIMessagingListener?.onDismiss()
 
             // remove the temporary html if it exists

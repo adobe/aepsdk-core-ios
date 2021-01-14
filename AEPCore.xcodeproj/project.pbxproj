@@ -306,6 +306,7 @@
 		923972A325AD26190056A3E5 /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923972A225AD26190056A3E5 /* AlertMessage.swift */; };
 		923972B325AD844E0056A3E5 /* UIApplication+Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923972B225AD844E0056A3E5 /* UIApplication+Window.swift */; };
 		923973CD25AF92140056A3E5 /* FullscreenMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */; };
+		923973DD25AFCEF20056A3E5 /* AlertMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923973DC25AFCEF20056A3E5 /* AlertMessageTests.swift */; };
 		92490BE7258BE23A00762B04 /* MessageMonitorServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */; };
 		92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */; };
 		92EEA5F6258933A600DBA3EE /* FullscreenMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA5F5258933A600DBA3EE /* FullscreenMessaging.swift */; };
@@ -858,6 +859,7 @@
 		923972A225AD26190056A3E5 /* AlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
 		923972B225AD844E0056A3E5 /* UIApplication+Window.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Window.swift"; sourceTree = "<group>"; };
 		923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessageTests.swift; sourceTree = "<group>"; };
+		923973DC25AFCEF20056A3E5 /* AlertMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessageTests.swift; sourceTree = "<group>"; };
 		92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitorServiceTest.swift; sourceTree = "<group>"; };
 		92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessage.swift; sourceTree = "<group>"; };
 		92EEA5F5258933A600DBA3EE /* FullscreenMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessaging.swift; sourceTree = "<group>"; };
@@ -1422,6 +1424,7 @@
 				3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */,
 				92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */,
 				923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */,
+				923973DC25AFCEF20056A3E5 /* AlertMessageTests.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -2647,6 +2650,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F03981624BE61520019F095 /* SystemInfoServiceTest.swift in Sources */,
+				923973DD25AFCEF20056A3E5 /* AlertMessageTests.swift in Sources */,
 				92490BE7258BE23A00762B04 /* MessageMonitorServiceTest.swift in Sources */,
 				249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */,
 				3F03981E24BE61520019F095 /* DataQueueTests.swift in Sources */,
