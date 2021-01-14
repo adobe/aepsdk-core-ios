@@ -11,27 +11,27 @@ on:
       action_tag:
         description: 'create tag ("no" to skip)'     
         required: true
-        default: ''
+        default: 'yes'
       release_AEPService:
         description: 'release AEPService ("no" to skip)'
-        required: false
-        default: 'AEPService'
+        required: true
+        default: 'yes'
       release_AEPCore:
-        description: 'release AEPCore'
-        required: false
-        default: 'AEPCore'
+        description: 'release AEPCore ("no" to skip)'
+        required: true
+        default: 'yes'
       release_AEPIdentity:
-        description: 'release AEPIdentity'
-        required: false
-        default: 'AEPIdentity'
+        description: 'release AEPIdentity ("no" to skip)'
+        required: true
+        default: 'yes'
       release_AEPLifecycle:
-        description: 'release AEPLifecycle'
-        required: false
-        default: 'AEPLifecycle'
+        description: 'release AEPLifecycle ("no" to skip)'
+        required: true
+        default: 'yes'
       release_AEPSignal:
-        description: 'release AEPSignal'
-        required: false
-        default: 'AEPSignal'
+        description: 'release AEPSignal ("no" to skip)'
+        required: true
+        default: 'yes'
 
 jobs:
   release_rules_engine:
@@ -49,6 +49,18 @@ jobs:
         set -eo pipefail
         echo Target version: ${{ github.event.inputs.tag }}
         make check-version VERSION=${{ github.event.inputs.tag }}
+
+    - name: SPM integration test
+      run: |
+        set -eo pipefail
+        echo SPM integration test starts:
+        make test-SPM-integration
+    
+    - name: podspec file verification
+      run: |
+        set -eo pipefail
+        echo podspec file verification starts:
+        make test-podspec 
         
     - uses: release-drafter/release-drafter@v5
       if: ${{ github.event.inputs.action_tag == 'yes' }}
@@ -61,6 +73,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish Pods - AEPService
+      if: ${{ github.event.inputs.release_AEPService == 'yes' }}
       run: |
         set -eo pipefail
         gem install cocoapods
@@ -71,6 +84,7 @@ jobs:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
     - name: Publish Pods - AEPCore
+      if: ${{ github.event.inputs.release_AEPCore == 'yes' }}
       run: |
         set -eo pipefail
         gem install cocoapods
@@ -81,6 +95,7 @@ jobs:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
     
     - name: Publish Pods - AEPIdentity
+      if: ${{ github.event.inputs.release_AEPIdentity == 'yes' }}
       run: |
         set -eo pipefail
         gem install cocoapods
@@ -90,6 +105,7 @@ jobs:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}   
     
     - name: Publish Pods - AEPLifecycle
+      if: ${{ github.event.inputs.release_AEPLifecycle == 'yes' }}
       run: |
         set -eo pipefail
         gem install cocoapods
@@ -99,6 +115,7 @@ jobs:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
     - name: Publish Pods - AEPSignal
+      if: ${{ github.event.inputs.release_AEPSignal == 'yes' }}
       run: |
         set -eo pipefail
         gem install cocoapods
