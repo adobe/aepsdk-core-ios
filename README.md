@@ -17,10 +17,10 @@ By using the Beta, you hereby acknowledge that the Beta is provided "as is" with
 
 `AEPCore`, `AEPService`, `AEPIdentity` represent the core Adobe Experience Platform SDK that are required for every app implementation. The core extensions contain a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
 
-`AEPSignal` representd the Adobe Experience Platform SDK `Signal` extension that allows marketers to send a "signal" to their apps through the Experience Platform SDKs.
+`AEPSignal` represents the Adobe Experience Platform SDK `Signal` extension that allows marketers to send a "signal" to their apps through the Experience Platform SDKs.
 
 
-`AEPLifecycle` representd the Adobe Experience Platform SDK `Lifecycle` extension that provides out-of-the-box, application lifecycle information about your app user. 
+`AEPLifecycle` represents the Adobe Experience Platform SDK `Lifecycle` extension that provides out-of-the-box, application lifecycle information about your app user. 
 ## Requirements
 - Xcode 11.x
 - Swift 5.x
