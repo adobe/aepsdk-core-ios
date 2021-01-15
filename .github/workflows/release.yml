@@ -9,11 +9,6 @@ on:
         required: true
         default: '1.0.0'
       
-      action_verification:
-        description: 'Pod/SPM verification ("no" to skip)'     
-        required: true
-        default: 'yes' 
-      
       action_tag:
         description: 'create tag ("no" to skip)'     
         required: true
@@ -65,14 +60,14 @@ jobs:
         make check-version VERSION=${{ github.event.inputs.tag }}
 
     - name: SPM integration test
-      if: ${{ github.event.inputs.action_verification == 'yes' }}
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       run: |
         set -eo pipefail
         echo SPM integration test starts:
         make test-SPM-integration
     
     - name: podspec file verification
-      if: ${{ github.event.inputs.action_verification == 'yes' }}
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       run: |
         set -eo pipefail
         echo podspec file verification starts:
