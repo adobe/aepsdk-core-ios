@@ -113,6 +113,20 @@ let registered = MobileCore.getRegisteredExtensions()
 NSString *registered = [AEPMobileCore getRegisteredExtensions];
 ```
 
+##### Registering an event listener
+
+```swift
+MobileCore.registerEventListener(type: type, source: source, listener: { event in
+   // handle event 
+})
+```
+
+```objective-c
+[AEPMobileCore registerEventListenerWithType: type source: source listener:^(AEPEvent * _Nonnull event) {
+   // handle event
+}];
+```
+
 ##### Configuring the SDK with an app id:
 
 ###### Swift
@@ -176,13 +190,13 @@ NSDictionary *updatedConfig = @{ @"analytics.rsids": @"your-rsids"};
 ###### Swift
 
 ```swift
-MobileCore.setPrivacy(status: .optedOut)
+MobileCore.setPrivacyStatus(.optedOut)
 ```
 
 ###### Objective-C
 
 ```objective-c
-[AEPMobileCore setPrivacy:AEPPrivacyStatusOptedOut];
+[AEPMobileCore setPrivacyStatus:AEPPrivacyStatusOptedOut];
 ```
 
 ##### Reading the privacy status:
@@ -219,7 +233,7 @@ MobileCore.getPrivacyStatus { (privacyStatus) in
 ###### Swift
 
 ```swift
-MobileCore.setLogLevel(level: .trace)
+MobileCore.setLogLevel(.trace)
 ```
 
 ###### Objective-C
@@ -291,13 +305,29 @@ AEPEvent *event = [[AEPEvent alloc] initWithName:@"My Event" type:AEPEventType.c
     // handle responseEvent
 }];
 ```
+##### Dispatching an `Event` with a timeout:
+
+###### Swift
+
+```swift
+let event = Event(name: "My Event", type: EventType.custom, source: EventType.custom, data: ["exampleKey": "exampleVal"])
+MobileCore.dispatch(event: event, timeout: 2) { (responseEvent) in
+    // handle responseEvent
+}```
+
+```objective-c
+AEPEvent *event = [[AEPEvent alloc] initWithName:@"My Event" type:AEPEventType.custom source:AEPEventType.custom data:@{@"exampleKey": @"exampleVal"}];
+[AEPMobileCore dispatch:event timeout: 2 responseCallback:^(AEPEvent * _Nullable responseEvent) {
+    // handle responseEvent
+}];
+```
 
 ##### Setting the advertising identifier:
 
 ###### Swift
 
 ```swift
-MobileCore.setAdvertisingIdentifier(adId: "my-ad-id")
+MobileCore.setAdvertisingIdentifier("my-ad-id")
 ```
 
 ###### Objective-C
@@ -312,7 +342,7 @@ MobileCore.setAdvertisingIdentifier(adId: "my-ad-id")
 
 ```swift
 // Set the deviceToken that the APNS has assigned to the device
-MobileCore.setPushIdentifier(deviceToken: deviceToken)
+MobileCore.setPushIdentifier(deviceToken)
 ```
 
 ###### Objective-C
@@ -340,7 +370,7 @@ MobileCore.setPushIdentifier(deviceToken: deviceToken)
 ###### Swift
 
 ```swift
-MobileCore.setWrapperType(type: .flutter)
+MobileCore.setWrapperType(.flutter)
 ```
 
 ###### Objective-C
@@ -356,7 +386,7 @@ MobileCore.setWrapperType(type: .flutter)
 ###### Swift
 
 ```swift
-MobileCore.setAppGroup(group: "your-app-group")
+MobileCore.setAppGroup("your-app-group")
 ```
 
 ###### Objective-C
@@ -378,7 +408,7 @@ MobileCore.getSdkIdentities { (ids, error) in
 ###### Objective-C
 
 ```objective-c
-[AEPMobileCore getSdkIdentities:^(NSString * _Nullable ids, enum AEPError error) {
+[AEPMobileCore getSdkIdentities:^(NSString * _Nullable ids, NSError* _Nullable error) {
     // handle completion
 }];
 ```
@@ -389,7 +419,7 @@ MobileCore.getSdkIdentities { (ids, error) in
 
 ```swift
 let messageInfo = ["testKey": "testVal"]
-MobileCore.collectMessageInfo(messageInfo: messageInfo)
+MobileCore.collectMessageInfo(messageInfo)
 ```
 
 ###### Objective-C
@@ -405,7 +435,7 @@ NSDictionary *messageInfo = @{@"testKey": @"testVal"}
 
 ```swift
 let data = ["testKey": "testVal"]
-MobileCore.collectPii(data: data)
+MobileCore.collectPii(data)
 ```
 
 ###### Objective-C
