@@ -1,4 +1,4 @@
-# AEPCore
+# AEP SDK Core Extensions
 
 <!--
 on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPCore)
@@ -15,8 +15,12 @@ By using the Beta, you hereby acknowledge that the Beta is provided "as is" with
 
 ## About this project
 
-The Mobile Core represents the core Adobe Experience Platform SDK that is required for every app implementation. The core contains a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, Rules Engine, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
+`AEPCore`, `AEPService`, `AEPIdentity` represent the core Adobe Experience Platform SDK that are required for every app implementation. The core extensions contain a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
 
+`AEPSignal` represent the Adobe Experience Platform SDK `Signal` extension that allows marketers to send a "signal" to their apps through the Experience Platform SDKs.
+
+
+`AEPLifecycle` represent the Adobe Experience Platform SDK `Lifecycle` extension that provides out-of-the-box, application lifecycle information about your app user. 
 ## Requirements
 - Xcode 11.x
 - Swift 5.x
