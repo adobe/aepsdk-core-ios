@@ -115,11 +115,15 @@ NSString *registered = [AEPMobileCore getRegisteredExtensions];
 
 ##### Registering an event listener
 
+###### Swift
+
 ```swift
 MobileCore.registerEventListener(type: type, source: source, listener: { event in
    // handle event 
 })
 ```
+
+###### Objective-C
 
 ```objective-c
 [AEPMobileCore registerEventListenerWithType: type source: source listener:^(AEPEvent * _Nonnull event) {
@@ -313,7 +317,10 @@ AEPEvent *event = [[AEPEvent alloc] initWithName:@"My Event" type:AEPEventType.c
 let event = Event(name: "My Event", type: EventType.custom, source: EventType.custom, data: ["exampleKey": "exampleVal"])
 MobileCore.dispatch(event: event, timeout: 2) { (responseEvent) in
     // handle responseEvent
-}```
+}
+```
+
+###### Objective-C
 
 ```objective-c
 AEPEvent *event = [[AEPEvent alloc] initWithName:@"My Event" type:AEPEventType.custom source:AEPEventType.custom data:@{@"exampleKey": @"exampleVal"}];
