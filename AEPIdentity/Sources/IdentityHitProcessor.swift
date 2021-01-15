@@ -27,7 +27,6 @@ class IdentityHitProcessor: HitProcessing {
     }
 
     // MARK: HitProcessing
-    var batchLimit = 0
 
     func retryInterval(for entity: DataEntity) -> TimeInterval {
         return TimeInterval(30)
