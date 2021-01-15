@@ -1,4 +1,4 @@
-# Adobe Experience Platform SDK
+# Adobe Experience Platform Core SDK
 
 <!--
 on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPCore)
@@ -15,7 +15,7 @@ By using the Beta, you hereby acknowledge that the Beta is provided "as is" with
 
 ## About this project
 
-`AEPCore`, `AEPService`, `AEPIdentity` represent the core Adobe Experience Platform SDK that are required for every app implementation. The core extensions contain a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
+`AEPCore`, `AEPService`, `AEPIdentity` represent the core Adobe Experience Platform SDK extensions that are required for every app implementation. The core extensions contain a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
 
 `AEPSignal` represents the Adobe Experience Platform SDK `Signal` extension that allows marketers to send a "signal" to their apps through the Experience Platform SDKs.
 
