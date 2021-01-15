@@ -28,6 +28,7 @@ target 'YOUR_TARGET_NAME' do
     pod 'AEPCore'
     pod 'AEPLifecycle'
     pod 'AEPIdentity'
+    pod 'AEPSignal'
 end
 
 # for extension development, include AEPCore and its dependencies
