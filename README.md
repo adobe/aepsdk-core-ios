@@ -1,4 +1,4 @@
-# AEP SDK Core Extensions
+# Adobe Experience Platform SDK
 
 <!--
 on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPCore)
