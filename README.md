@@ -12,8 +12,8 @@ on [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&lab
 The Mobile Core represents the core Adobe Experience Platform SDK that is required for every app implementation. The core contains a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, Rules Engine, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
 
 ## Requirements
-- Xcode 11.x
-- Swift 5.x
+- Xcode 11.0 (or newer)
+- Swift 5.1 (or newer)
 
 ## Installation
 These are currently the supported installation options:
@@ -25,18 +25,14 @@ use_frameworks!
 
 # for app development, include all the following pods
 target 'YOUR_TARGET_NAME' do
-    pod 'AEPServices', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPCore', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPLifecycle', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPIdentity', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+    pod 'AEPCore'
+    pod 'AEPLifecycle'
+    pod 'AEPIdentity'
 end
 
 # for extension development, include AEPCore and its dependencies
 target 'YOUR_TARGET_NAME' do
-    pod 'AEPCore', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPServices', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+    pod 'AEPCore'
 end
 ```
 
