@@ -28,6 +28,8 @@ class RulesEngineNativeLogging: AEPRulesEngine.Logging {
             return .debug
         case .trace:
             return .trace
+        @unknown default:
+            return .error
         }
     }
 
