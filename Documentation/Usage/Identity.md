@@ -65,7 +65,7 @@ Identity.getIdentifiers { (ids, error) in
 ###### Swift
 
 ```swift
-Identity.getExperienceCloudId { (exCloudId) in
+Identity.getExperienceCloudId { (exCloudId, error) in
     // handle completion
 }
 ```
@@ -73,7 +73,7 @@ Identity.getExperienceCloudId { (exCloudId) in
 ###### Objective-C
 
 ```objective-c
-[AEPMobileIdentity getExperienceCloudId:^(NSString * _Nullable exCloudId) {
+[AEPMobileIdentity getExperienceCloudId:^(NSString * _Nullable exCloudId, NSError * error) {
    // handle completion
 }];
 ```
