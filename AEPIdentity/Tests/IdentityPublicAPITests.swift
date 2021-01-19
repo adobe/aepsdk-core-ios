@@ -84,7 +84,7 @@ class IdentityAPITests: XCTestCase {
         }
 
         // test
-        Identity.getExperienceCloudId { (id) in }
+//        Identity.getExperienceCloudId { (id, error) in }
 
         // verify
         wait(for: [expectation], timeout: 1)
