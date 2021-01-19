@@ -23,7 +23,6 @@ target '$PROJECT_NAME' do
   pod 'AEPLifecycle', :path => '../AEPLifecycle.podspec'
   pod 'AEPServices', :path => '../AEPServices.podspec'
   pod 'AEPSignal', :path => '../AEPSignal.podspec'
-  pod 'AEPRulesEngine', '1.0.0-beta.2'
 end
 " >>Podfile
 

@@ -58,6 +58,10 @@ jobs:
         set -eo pipefail
         echo Target version: ${{ github.event.inputs.tag }}
         make check-version VERSION=${{ github.event.inputs.tag }}
+    
+    - name: Pod repo update
+      run: | 
+        pod repo update
 
     - name: SPM integration test
       if: ${{ github.event.inputs.action_tag == 'yes' }}
@@ -82,8 +86,6 @@ jobs:
         publish: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      #  pod lib lint AEPServices.podspec  --allow-warnings --swift-version=5.1
 
     - name: Publish Pods - AEPServices
       if: ${{ github.event.inputs.release_AEPServices == 'yes' }}
