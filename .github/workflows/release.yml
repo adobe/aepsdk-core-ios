@@ -58,6 +58,10 @@ jobs:
         set -eo pipefail
         echo Target version: ${{ github.event.inputs.tag }}
         make check-version VERSION=${{ github.event.inputs.tag }}
+    
+    - name: Pod repo update
+      run: | 
+        pod repo update
 
     - name: SPM integration test
       if: ${{ github.event.inputs.action_tag == 'yes' }}
