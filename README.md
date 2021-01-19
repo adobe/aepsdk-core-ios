@@ -1,4 +1,4 @@
-# AEPCore
+# Adobe Experience Platform Core SDK
 
 [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPCore)
 [![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPServices)
@@ -10,19 +10,23 @@
 [![CircleCI](https://img.shields.io/circleci/project/github/adobe/aepsdk-core-ios/master.svg?logo=circleci)](https://circleci.com/gh/adobe/workflows/aepsdk-core-ios)
 [![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-core-ios/main.svg?logo=codecov)](https://codecov.io/gh/adobe/aepsdk-core-ios/branch/main)
 
-## BETA ACKNOWLEDGEMENT
-
-AEPCore is currently in Beta. Use of this code is by invitation only and not otherwise supported by Adobe. Please contact your Adobe Customer Success Manager to learn more.
-
-By using the Beta, you hereby acknowledge that the Beta is provided "as is" without warranty of any kind. Adobe shall have no obligation to maintain, correct, update, change, modify or otherwise support the Beta. You are advised to use caution and not to rely in any way on the correct functioning or performance of such Beta and/or accompanying materials.
-
 ## About this project
 
-The Mobile Core represents the core Adobe Experience Platform SDK that is required for every app implementation. The core contains a common set of functionality and frameworks, such as  Experience Cloud Identity services, data event hub, Rules Engine, reusable networking, disk access routines, and so on, which are required by all Adobe and third-party extensions.
+The `AEPCore`, `AEPServices`, and `AEPIdentity` extensions represent the foundation of the Adobe Experience Platform SDK - every app using the SDK must include them. These modules contain a common set of functionality and services which are required by all SDK extensions.
+
+`AEPCore` contains implementation of the Event Hub. The Event Hub is the mechanism used for delivering events between the app and the SDK. The Event Hub is also used for sharing data between extensions.
+
+`AEPServices` provides several reusable implementations needed for platform support, including networking, disk access, and database management.
+
+`AEPIdentity` implements the integration with Adobe Experience Platform Identity services.
+
+`AEPSignal` represents the Adobe Experience Platform SDK's `Signal` extension that allows marketers to send a "signal" to their apps to send data to external destinations or to open URLs. 
+
+`AEPLifecycle` represents the Adobe Experience Platform SDK's `Lifecycle` extension that helps collect application Lifecycle metrics such as, application install or upgrade information, application launch and session information, device information, and any additional context data provided by the application developer. 
 
 ## Requirements
-- Xcode 11.x
-- Swift 5.x
+- Xcode 11.0 (or newer)
+- Swift 5.1 (or newer)
 
 ## Installation
 These are currently the supported installation options:
@@ -34,18 +38,15 @@ use_frameworks!
 
 # for app development, include all the following pods
 target 'YOUR_TARGET_NAME' do
-    pod 'AEPServices', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPCore', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPLifecycle', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPIdentity', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+    pod 'AEPCore'
+    pod 'AEPLifecycle'
+    pod 'AEPIdentity'
+    pod 'AEPSignal'
 end
 
 # for extension development, include AEPCore and its dependencies
 target 'YOUR_TARGET_NAME' do
-    pod 'AEPCore', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPServices', :git => 'https://github.com/adobe/aepsdk-core-ios.git', :branch => 'main'
-    pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+    pod 'AEPCore'
 end
 ```
 
@@ -63,13 +64,7 @@ To add the AEPCore Package to your application, from the Xcode menu select:
 
 Enter the URL for the AEPCore package repository: `https://github.com/adobe/aepsdk-core-ios.git`.
 
-When prompted, make sure you change the branch to `main`. (Once the repo is public, we will reference specific tags/versions instead of a branch)
-
-There are three options for selecting your dependencies as identified by the *suffix* of the library name:
-
-- "Dynamic" - the library will be linked dynamically
-- "Static" - the library will be linked statically
-- *(none)* - (default) SPM will determine whether the library will be linked dynamically or statically
+When prompted, input a specific version or a range of versions, and choose all the `AEP*` libraries.
 
 Alternatively, if your project has a `Package.swift` file, you can add AEPCore directly to your dependencies:
 
