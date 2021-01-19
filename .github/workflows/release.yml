@@ -14,8 +14,8 @@ on:
         required: true
         default: 'yes'
         
-      release_AEPService:
-        description: 'release AEPService ("no" to skip)'
+      release_AEPServices:
+        description: 'release AEPServices ("no" to skip)'
         required: true
         default: 'yes'
         
@@ -84,8 +84,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       #  pod lib lint AEPServices.podspec  --allow-warnings --swift-version=5.1
-    - name: Publish Pods - AEPService
-      if: ${{ github.event.inputs.release_AEPService == 'yes' }}
+
+    - name: Publish Pods - AEPServices
+      if: ${{ github.event.inputs.release_AEPServices == 'yes' }}
       run: |
         set -eo pipefail
         pod trunk push AEPServices.podspec --allow-warnings --synchronous --swift-version=5.1
