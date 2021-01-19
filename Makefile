@@ -119,15 +119,15 @@ version-source-code:
 	(echo "AEPLifecycle - ${BLUE}$(shell cat ./AEPLifecycle/Sources/LifecycleConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
 	(echo "AEPSignal - ${BLUE}$(shell cat ./AEPSignal/Sources/SignalConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
 
-# make check-version VERSION=3.0.0-beta.3
+# make check-version VERSION=3.0.0
 check-version:
-	(sh ./script/version.sh $(VERSION))
+	(sh ./Script/version.sh $(VERSION))
 
 test-SPM-integration:
-	(sh ./script/test-SPM.sh)
+	(sh ./Script/test-SPM.sh)
 
 test-podspec:
-	(sh ./script/test-podspec.sh)
+	(sh ./Script/test-podspec.sh)
 
 pod-lint:
 	(pod lib lint --allow-warnings --verbose --swift-version=5.1)

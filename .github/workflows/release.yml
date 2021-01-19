@@ -83,8 +83,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      #  pod lib lint AEPServices.podspec  --allow-warnings --swift-version=5.1
-
     - name: Publish Pods - AEPServices
       if: ${{ github.event.inputs.release_AEPServices == 'yes' }}
       run: |
