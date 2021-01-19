@@ -9,18 +9,13 @@ on:
         required: true
         default: '1.0.0'
       
-      action_verification:
-        description: 'Pod/SPM verification ("no" to skip)'     
-        required: true
-        default: 'yes' 
-      
       action_tag:
         description: 'create tag ("no" to skip)'     
         required: true
         default: 'yes'
         
-      release_AEPService:
-        description: 'release AEPService ("no" to skip)'
+      release_AEPServices:
+        description: 'release AEPServices ("no" to skip)'
         required: true
         default: 'yes'
         
@@ -63,16 +58,20 @@ jobs:
         set -eo pipefail
         echo Target version: ${{ github.event.inputs.tag }}
         make check-version VERSION=${{ github.event.inputs.tag }}
+    
+    - name: Pod repo update
+      run: | 
+        pod repo update
 
     - name: SPM integration test
-      if: ${{ github.event.inputs.action_verification == 'yes' }}
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       run: |
         set -eo pipefail
         echo SPM integration test starts:
         make test-SPM-integration
     
     - name: podspec file verification
-      if: ${{ github.event.inputs.action_verification == 'yes' }}
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       run: |
         set -eo pipefail
         echo podspec file verification starts:
@@ -88,9 +87,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      #  pod lib lint AEPServices.podspec  --allow-warnings --swift-version=5.1
-    - name: Publish Pods - AEPService
-      if: ${{ github.event.inputs.release_AEPService == 'yes' }}
+    - name: Publish Pods - AEPServices
+      if: ${{ github.event.inputs.release_AEPServices == 'yes' }}
       run: |
         set -eo pipefail
         pod trunk push AEPServices.podspec --allow-warnings --synchronous --swift-version=5.1

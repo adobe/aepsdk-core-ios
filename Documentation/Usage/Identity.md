@@ -19,7 +19,7 @@ Identity.appendTo(url: URL(string: "yourUrl.com")) { (url, error) in
 ###### Objective-C
 
 ```objective-c
-[AEPMobileIdentity appendToUrl:[NSURL URLWithString:@"yourUrl.com"] completion:^(NSURL * _Nullable url, enum AEPError error) {
+[AEPMobileIdentity appendToUrl:[NSURL URLWithString:@"yourUrl.com"] completion:^(NSURL * _Nullable url, NSError * error) {
     // handle completion
 }];
 ```
@@ -37,7 +37,7 @@ Identity.getUrlVariables { (vars, error) in
 ###### Objective-C
 
 ```objective-c
-[AEPMobileIdentity getUrlVariables:^(NSString * _Nullable vars, enum AEPError error) {
+[AEPMobileIdentity getUrlVariables:^(NSString * _Nullable vars, NSError * error) {
     // handle completion
 }];
 ```
@@ -55,7 +55,7 @@ Identity.getIdentifiers { (ids, error) in
 ###### Objective-C
 
 ```objective-c
-[AEPMobileIdentity getIdentifiers:^(NSArray<id<AEPIdentifiable>> * _Nullable ids, enum AEPError error) {
+[AEPMobileIdentity getIdentifiers:^(NSArray<id<AEPIdentifiable>> * _Nullable ids, NSError * error) {
     // handle completion
 }];
 ```
@@ -65,7 +65,7 @@ Identity.getIdentifiers { (ids, error) in
 ###### Swift
 
 ```swift
-Identity.getExperienceCloudId { (exCloudId) in
+Identity.getExperienceCloudId { (exCloudId, error) in
     // handle completion
 }
 ```
@@ -73,7 +73,7 @@ Identity.getExperienceCloudId { (exCloudId) in
 ###### Objective-C
 
 ```objective-c
-[AEPMobileIdentity getExperienceCloudId:^(NSString * _Nullable exCloudId) {
+[AEPMobileIdentity getExperienceCloudId:^(NSString * _Nullable exCloudId, NSError * error) {
    // handle completion
 }];
 ```
