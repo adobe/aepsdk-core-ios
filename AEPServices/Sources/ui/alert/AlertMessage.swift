@@ -16,7 +16,7 @@ import WebKit
 
 /// This class is used to create and display alert messages with custom title, message and buttons on the current view
 @objc(AEPAlertMessage)
-public class AlertMessage: NSObject {
+public class AlertMessage: NSObject, UIMessaging {
     private let LOG_PREFIX = "AlertMessage"
 
     private let title: String
@@ -28,7 +28,7 @@ public class AlertMessage: NSObject {
     private var messageService: MessageMonitorServicing {
        return ServiceProvider.shared.messageMonitorService
     }
-    
+
     private var messagingDelegate: MessagingDelegate? {
        return ServiceProvider.shared.messagingDelegate
     }
@@ -42,7 +42,7 @@ public class AlertMessage: NSObject {
     }
 
     public func show() {
-        if messageService.show() == false {
+        if messageService.show(message: self) == false {
             return
         }
 
@@ -69,7 +69,7 @@ public class AlertMessage: NSObject {
                 if bestViewController.isViewLoaded {
                     bestViewController.present(alert, animated: true) {
                         self.listener?.onShow(message: self)
-                        self.messagingDelegate?.onShow()
+                        self.messagingDelegate?.onShow(message: self)
                     }
                 } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
@@ -131,6 +131,6 @@ public class AlertMessage: NSObject {
             return
         }
         self.listener?.onDismiss(message: self)
-        self.messagingDelegate?.onDismiss()
+        self.messagingDelegate?.onDismiss(message: self)
     }
 }

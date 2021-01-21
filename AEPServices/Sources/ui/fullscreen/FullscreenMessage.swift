@@ -16,7 +16,7 @@ import WebKit
 
 /// This class is used to create and display fullscreen messages on the currentt view.
 @objc(AEPFullscreenMessage)
-public class FullscreenMessage: NSObject, WKNavigationDelegate {
+public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     private let LOG_PREFIX = "FullscreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
@@ -65,12 +65,15 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     }
 
     public func show() {
-        if messageService.show() ==  false {
+        if messageService.show(message: self) ==  false {
             return
         }
 
         DispatchQueue.main.async {
-            guard var newFrame: CGRect = self.calcFullscreenFrame() else { return }
+            guard var newFrame: CGRect = self.calcFullscreenFrame() else {
+                Log.debug(label: self.LOG_PREFIX, "Failed to show the fullscreen message, newly created frame is nil.")
+                return
+            }
             newFrame.origin.y = newFrame.size.height
             if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
 
@@ -120,7 +123,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
 
                 // Notifiying global listeners
                 self.listener?.onShow(message: self)
-                self.messagingDelegate?.onShow()
+                self.messagingDelegate?.onShow(message: self)
             }
         }
     }
@@ -134,7 +137,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
             self.dismissWithAnimation(animate: true)
             // Notifiying all listeners
             self.listener?.onDismiss(message: self)
-            self.messagingDelegate?.onDismiss()
+            self.messagingDelegate?.onDismiss(message: self)
 
             // remove the temporary html if it exists
             guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {

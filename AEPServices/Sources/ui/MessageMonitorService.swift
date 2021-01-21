@@ -35,13 +35,13 @@ class MessageMonitorService: MessageMonitorServicing {
         }
     }
 
-    internal func show() -> Bool {
+    internal func show(message: UIMessaging) -> Bool {
         if isMessageDisplayed() {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
             return false
         }
 
-        if ServiceProvider.shared.messagingDelegate?.shouldShowMessage() == false {
+        if ServiceProvider.shared.messagingDelegate?.shouldShowMessage(message: message) == false {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, MessagingDelegate#showMessage states the message should not be displayed.")
             return false
         }

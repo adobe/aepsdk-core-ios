@@ -13,6 +13,7 @@
 import Foundation
 @testable import AEPServices
 import XCTest
+import AEPCore
 
 class MessageMonitorServiceTest : XCTestCase {
     
@@ -22,22 +23,16 @@ class MessageMonitorServiceTest : XCTestCase {
     static var onDismissCall = false
     static var shouldShowMessageCall = false
     var mockMessageMonitorService: MessageMonitorService?
+    var messageDelegate : MessagingDelegate?
+    var message: UIMessaging = FullscreenMessage(payload: "", listener: nil)
 
     override func setUp() {
         MessageMonitorServiceTest.onShowCall = false
         MessageMonitorServiceTest.onDismissCall = false
         MessageMonitorServiceTest.mockShouldShow = true
         mockMessageMonitorService = MessageMonitorService()
-        mockMessageMonitorService?.setGlobalUIMessagingListener(listener: MockGlobalUIMessagingListener())
-    }
-    
-    func test_setGlobalUIMessagingListener_whenValidGlobalListeners() {
-        XCTAssertNotNil(mockMessageMonitorService?.globalUIMessagingListener)
-    }
-    
-    func test_setGlobalUIMessagingListener_whenNilGlobalListeners() {
-        mockMessageMonitorService?.setGlobalUIMessagingListener(listener: nil)
-        XCTAssertNil(mockMessageMonitorService?.globalUIMessagingListener)
+        messageDelegate = MockGlobalUIMessagingListener()
+        MobileCore.messagingDelegate = messageDelegate
     }
     
     func test_isMessageDisplayed_DefaultIsFalse() {
@@ -59,18 +54,18 @@ class MessageMonitorServiceTest : XCTestCase {
     
     func test_show_whenMessageAlreadyDisplayed() {
         mockMessageMonitorService?.displayMessage()
-        XCTAssertTrue(mockMessageMonitorService?.show() == false)
+        XCTAssertTrue(mockMessageMonitorService?.show(message: message) == false)
     }
 
     func test_show_withShouldShowMessageTrue() {
-        XCTAssertTrue(mockMessageMonitorService?.show() == true)
+        XCTAssertTrue(mockMessageMonitorService?.show(message: message) == true)
         let display : Bool = mockMessageMonitorService?.isMessageDisplayed() == true
         XCTAssertTrue(display)
     }
     
     func test_show_withShouldShowMessageFalse() {
         MessageMonitorServiceTest.mockShouldShow = false
-        XCTAssertTrue(mockMessageMonitorService?.show() == false)
+        XCTAssertTrue(mockMessageMonitorService?.show(message: message) == false)
         let display : Bool = mockMessageMonitorService?.isMessageDisplayed() == false
         XCTAssertTrue(display)
     }
@@ -80,16 +75,16 @@ class MessageMonitorServiceTest : XCTestCase {
         XCTAssertTrue(mockMessageMonitorService?.dismiss() == false)
     }
     
-    class MockGlobalUIMessagingListener : GlobalMessagingDelegate {
-        func onShow() {
+    class MockGlobalUIMessagingListener : MessagingDelegate {
+        func onShow(message: UIMessaging?) {
             onShowCall = true
         }
         
-        func onDismiss() {
+        func onDismiss(message: UIMessaging?) {
             onDismissCall = true
         }
         
-        func shouldShowMessage() -> Bool {
+        func shouldShowMessage(message: UIMessaging?) -> Bool {
             shouldShowMessageCall = true
             return MessageMonitorServiceTest.mockShouldShow
         }

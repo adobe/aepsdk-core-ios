@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPServices
 import XCTest
 import UIKit
+import AEPCore
 
 class AlertMessageTests : XCTestCase {
     static let mockTitle = "mockTitle"
@@ -23,9 +24,15 @@ class AlertMessageTests : XCTestCase {
     var alertMessage : AlertMessage?
     static var expectation: XCTestExpectation?
     var rootViewController: UIViewController!
+    
+    var mockListener: AlertMessaging?
+    var messageDelegate : MessagingDelegate?
 
     override func setUp() {
-        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: MockListener())
+        mockListener = MockListener()
+        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: mockListener)
+        messageDelegate = MockGlobalUIMessagingListener()
+        MobileCore.messagingDelegate = messageDelegate
     }
 
     func test_init_whenListenerIsNil() {
@@ -36,11 +43,26 @@ class AlertMessageTests : XCTestCase {
     func test_init_whenListenerIsPresent() {
         XCTAssertNotNil(alertMessage)
     }
+    
+    func test_show() {
+        ServiceProvider.shared.messageMonitorService.dismissMessage()
+        alertMessage?.show()
+    }
 
     class MockListener: AlertMessaging {
         func onPositiveResponse(message: AlertMessage?) {}
         func onNegativeResponse(message: AlertMessage?) {}
         func onShow(message: AlertMessage?) {}
         func onDismiss(message: AlertMessage?) {}
+    }
+    
+    class MockGlobalUIMessagingListener : MessagingDelegate {
+        func onShow(message: UIMessaging?) {}
+        
+        func onDismiss(message: UIMessaging?) {}
+        
+        func shouldShowMessage(message: UIMessaging?) -> Bool {
+            return MessageMonitorServiceTest.mockShouldShow
+        }
     }
 }

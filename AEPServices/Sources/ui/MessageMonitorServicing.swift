@@ -12,7 +12,7 @@
 
 import Foundation
 
-/// This class is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
+/// This protocol is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
 /// The status is exposed through isMessageDisplayed.
 internal protocol MessageMonitorServicing {
     /// - Returns: True if the message is being displayed else false
@@ -27,8 +27,9 @@ internal protocol MessageMonitorServicing {
     func dismissMessage()
 
     /// Check if any message is being displayed already or if the message should be shown based on `MessagingDelegate`
+    /// - Parameters:UIMessaging message which needs to be shown
     /// - Returns: True if message needs to be shown false otherwise
-    func show() -> Bool
+    func show(message: UIMessaging) -> Bool
 
     // Check if the message is being displayed and call invoke the appropriate listeners
     /// - Returns: True if message needs to be dismissed false otherwise
