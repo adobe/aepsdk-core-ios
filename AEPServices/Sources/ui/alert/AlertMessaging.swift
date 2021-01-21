@@ -17,20 +17,24 @@ import Foundation
     /// Invoked on positive button clicks
     /// - Parameters:
     ///     - message: Alert message which is currently shown
+    @objc(onPositiveResponseWithAlertMessage:)
     func onPositiveResponse(message: AlertMessage?)
 
     /// Invoked on negative button clicks
     /// - Parameters:
     ///     - message: Alert message which is currently shown
+    @objc(onNegativeResponseWithAlertMessage:)
     func onNegativeResponse(message: AlertMessage?)
 
     /// Invoked when the alert message is displayed
     /// - Parameters:
     ///     - message: Alert message which is currently shown
+    @objc(onShowWithAlertMessage:)
     func onShow(message: AlertMessage?)
 
     /// Invoked when the alert message is dismissed
     /// - Parameters:
     ///     - message: Alert message which is currently dismissed
+    @objc(onDismissWithAlertMessage:)
     func onDismiss(message: AlertMessage?)
 }

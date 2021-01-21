@@ -17,29 +17,24 @@ class MessageMonitorService: MessageMonitorServicing {
     private var isMsgDisplayed = false
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")
 
-    /// - Returns: True if the message is being displayed else false
     internal func isMessageDisplayed() -> Bool {
         return messageQueue.sync {
             self.isMsgDisplayed
         }
     }
 
-    /// Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
-    /// in the same time.
     internal func displayMessage() {
         messageQueue.async {
             self.isMsgDisplayed = true
         }
     }
 
-    /// Sets the isMessageDisplayed flag on false enabling other messages to be displayed
     internal func dismissMessage() {
         messageQueue.async {
             self.isMsgDisplayed = false
         }
     }
 
-    /// Check if any message is being displayed already or if the message should be shown based on `MessagingDelegate`
     internal func show() -> Bool {
         if isMessageDisplayed() {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
@@ -57,7 +52,6 @@ class MessageMonitorService: MessageMonitorServicing {
         return true
     }
 
-    /// Check if the message is being displayed and call invoke the appropriate listeners
     internal func dismiss() -> Bool {
         if !isMessageDisplayed() {
             Log.debug(label: self.LOG_PREFIX, "Message failed to be dismissed, nothing is currently displayed.")

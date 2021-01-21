@@ -28,8 +28,12 @@ public class AlertMessage: NSObject {
     private var messageService: MessageMonitorServicing {
        return ServiceProvider.shared.messageMonitorService
     }
+    
+    private var messagingDelegate: MessagingDelegate? {
+       return ServiceProvider.shared.messagingDelegate
+    }
 
-    init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessaging?) {
+    public init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessaging?) {
         self.title = title
         self.message = message
         self.positiveButtonLabel = positiveButtonLabel
@@ -65,6 +69,7 @@ public class AlertMessage: NSObject {
                 if bestViewController.isViewLoaded {
                     bestViewController.present(alert, animated: true) {
                         self.listener?.onShow(message: self)
+                        self.messagingDelegate?.onShow()
                     }
                 } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
@@ -126,5 +131,6 @@ public class AlertMessage: NSObject {
             return
         }
         self.listener?.onDismiss(message: self)
+        self.messagingDelegate?.onDismiss()
     }
 }
