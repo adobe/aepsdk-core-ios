@@ -52,6 +52,12 @@ class FullscreenMessageTests : XCTestCase {
         wait(for: [FullscreenMessageTests.expectation!], timeout: 10.0)
         XCTAssertTrue(FullscreenMessageTests.onDismissullscreenMessagingCall)
     }
+    
+    func test_show() {
+        ServiceProvider.shared.messageMonitorService.dismissMessage()
+        fullscreenMessage?.show()
+        XCTAssertTrue(ServiceProvider.shared.messageMonitorService.isMessageDisplayed())
+    }
 
     class MockFullscreenListener: FullscreenMessaging {
         func onShow(message: FullscreenMessage?) {
