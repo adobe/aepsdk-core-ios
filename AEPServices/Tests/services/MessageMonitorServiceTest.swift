@@ -80,7 +80,7 @@ class MessageMonitorServiceTest : XCTestCase {
         XCTAssertTrue(mockMessageMonitorService?.dismiss() == false)
     }
     
-    class MockGlobalUIMessagingListener : GlobalUIMessaging {
+    class MockGlobalUIMessagingListener : GlobalMessagingDelegate {
         func onShow() {
             onShowCall = true
         }

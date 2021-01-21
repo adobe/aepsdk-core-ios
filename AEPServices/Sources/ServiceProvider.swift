@@ -15,6 +15,9 @@ import Foundation
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
+    /// MessagingDelegate which is used to listen for message visibility updates.
+    public weak var messagingDelegate: MessagingDelegate?
+
     // Provide thread safety on the getters and setters
     private let queue = DispatchQueue(label: "ServiceProvider.barrierQueue")
 
@@ -113,7 +116,7 @@ public class ServiceProvider {
         }
     }
 
-    public var messageMonitorService: MessageMonitorService {
+    var messageMonitorService: MessageMonitorServicing {
         get {
             return queue.sync {
                 return defaultMessageMonitorService

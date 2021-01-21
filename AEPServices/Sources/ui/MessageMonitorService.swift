@@ -12,21 +12,13 @@
 
 import Foundation
 
-/// This class is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
-/// The status is exposed through isMessageDisplayed.
-public class MessageMonitorService {
+class MessageMonitorService: MessageMonitorServicing {
     private let LOG_PREFIX = "MessageMonitor"
     private var isMsgDisplayed = false
-    internal var globalUIMessagingListener: GlobalUIMessaging?
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")
 
-    /// GlobalUIMessaging listener which is used to listen for message visibility updates.
-    public func setGlobalUIMessagingListener(listener: GlobalUIMessaging?) {
-        self.globalUIMessagingListener = listener
-    }
-
     /// - Returns: True if the message is being displayed else false
-    public func isMessageDisplayed() -> Bool {
+    internal func isMessageDisplayed() -> Bool {
         return messageQueue.sync {
             self.isMsgDisplayed
         }
@@ -47,15 +39,15 @@ public class MessageMonitorService {
         }
     }
 
-    /// Check if any message is being displayed already or if the message should be shown based on `GlobalUIMessagingListener`
+    /// Check if any message is being displayed already or if the message should be shown based on `MessagingDelegate`
     internal func show() -> Bool {
         if isMessageDisplayed() {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
             return false
         }
 
-        if globalUIMessagingListener?.shouldShowMessage() == false {
-            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, globalUIMessaging#showMessage states the message should not be displayed.")
+        if ServiceProvider.shared.messagingDelegate?.shouldShowMessage() == false {
+            Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, MessagingDelegate#showMessage states the message should not be displayed.")
             return false
         }
 

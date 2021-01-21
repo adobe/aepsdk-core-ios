@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 import WebKit
 
-/// Tthis class is used to create and display alert messages with custom title, message and buttons on the current view
+/// This class is used to create and display alert messages with custom title, message and buttons on the current view
 @objc(AEPAlertMessage)
 public class AlertMessage: NSObject {
     private let LOG_PREFIX = "AlertMessage"
@@ -25,6 +25,10 @@ public class AlertMessage: NSObject {
     private let negativeButtonLabel: String?
     private var listener: AlertMessaging?
 
+    private var messageService: MessageMonitorServicing {
+       return ServiceProvider.shared.messageMonitorService
+    }
+
     init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessaging?) {
         self.title = title
         self.message = message
@@ -34,7 +38,7 @@ public class AlertMessage: NSObject {
     }
 
     public func show() {
-        if ServiceProvider.shared.messageMonitorService.show() == false {
+        if messageService.show() == false {
             return
         }
 
@@ -64,11 +68,11 @@ public class AlertMessage: NSObject {
                     }
                 } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
-                    ServiceProvider.shared.messageMonitorService.dismissMessage()
+                    self.messageService.dismissMessage()
                 }
             } else {
                 Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. KeyWindow is null.")
-                ServiceProvider.shared.messageMonitorService.dismissMessage()
+                self.messageService.dismissMessage()
             }
         }
     }
@@ -118,7 +122,7 @@ public class AlertMessage: NSObject {
     }
 
     private func dismiss() {
-        if ServiceProvider.shared.messageMonitorService.dismiss() == false {
+        if messageService.dismiss() == false {
             return
         }
         self.listener?.onDismiss(message: self)

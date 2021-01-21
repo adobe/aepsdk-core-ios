@@ -12,8 +12,8 @@
 
 import Foundation
 
-/// Global UI Message delegate which is used to listen for current message lifecycle events
-@objc(AEPGlobalUIMessaging) public protocol GlobalUIMessaging {
+/// UI Message delegate which is used to listen for current message lifecycle events
+@objc(AEPMessagingDelegate) public protocol MessagingDelegate {
 
     /// Invoked when the any message is displayed
     /// - Parameters:

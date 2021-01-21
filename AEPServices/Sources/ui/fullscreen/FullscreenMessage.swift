@@ -29,6 +29,14 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     var listener: FullscreenMessaging?
     var webView: UIView?
 
+    private var messageService: MessageMonitorServicing {
+       return ServiceProvider.shared.messageMonitorService
+    }
+
+    private var messagingDelegate: MessagingDelegate? {
+       return ServiceProvider.shared.messagingDelegate
+    }
+
     /// Creates `FullscreenMessage` instance with the payload provided.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
     /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
@@ -57,7 +65,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
     }
 
     public func show() {
-        if ServiceProvider.shared.messageMonitorService.show() ==  false {
+        if messageService.show() ==  false {
             return
         }
 
@@ -112,21 +120,21 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate {
 
                 // Notifiying global listeners
                 self.listener?.onShow(message: self)
-                ServiceProvider.shared.messageMonitorService.globalUIMessagingListener?.onShow()
+                self.messagingDelegate?.onShow()
             }
         }
     }
 
     public func dismiss() {
         DispatchQueue.main.async {
-            if ServiceProvider.shared.messageMonitorService.dismiss() ==  false {
+            if self.messageService.dismiss() ==  false {
                 return
             }
 
             self.dismissWithAnimation(animate: true)
             // Notifiying all listeners
             self.listener?.onDismiss(message: self)
-            ServiceProvider.shared.messageMonitorService.globalUIMessagingListener?.onDismiss()
+            self.messagingDelegate?.onDismiss()
 
             // remove the temporary html if it exists
             guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {
