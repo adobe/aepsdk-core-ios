@@ -18,30 +18,13 @@ import Foundation
 public struct DefaultHeadersFormatter {
 
     typealias httpHeaderConstants = HttpConnectionConstants.Header
-    ///
-    /// Returns the default headers for connection: Accept-Language(locale), Content-Type, User-Agent
-    /// - Parameters:
-    ///     - locale: Active locale from platform
-    ///     - contentType: The custom content type string
-    /// - Returns: headers as dictionary
-    ///
-    public static func getHeadersFor(locale: String, contentType: String = "") -> [String: String] {
-        var headers: [String: String] = [:]
-        if !locale.isEmpty {
-            headers[httpHeaderConstants.HTTP_HEADER_KEY_ACCEPT_LANGUAGE] = getFormattedLocale(unformattedLocale: locale)
-        }
-
-        headers[httpHeaderConstants.HTTP_HEADER_KEY_CONTENT_TYPE] = contentType.isEmpty ? httpHeaderConstants.HTTP_HEADER_CONTENT_TYPE_WWW_FORM_URLENCODED : contentType
-
-        return headers
-    }
 
     ///
     /// Gets the formatted locale
     /// - Parameter unformattedLocale: The unformatted locale as a string
     /// - Returns: The formatted locale as a string or nil if not able to format it.
     ///
-    private static func getFormattedLocale(unformattedLocale: String) -> String? {
+    public static func getFormattedLocale(unformattedLocale: String) -> String {
 //        "^"                                // beginning of line
 //        "([a-zA-Z]{2,3})"                      // language (required) (match group 1)
 //        "(?:(?:-|_)[a-zA-Z]{3})?"           // extlang (optional)
@@ -52,7 +35,7 @@ public struct DefaultHeadersFormatter {
         let pattern = #"^([a-zA-Z]{2,3})(?:(?:-|_)[a-zA-Z]{3})?(?:(?:-|_)[a-zA-Z]{4})?(?:(?:-|_)([a-zA-Z]{2}|[0-9]{3}))?(?:(?:\.|-|_).*)?$"#
 
         guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
-            return nil
+            return unformattedLocale
         }
 
         let localeRange = NSRange(unformattedLocale.startIndex ..< unformattedLocale.endIndex, in: unformattedLocale)

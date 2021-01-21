@@ -292,7 +292,7 @@
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296C2509942300483C74 /* rules_signal.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296A2509942200483C74 /* rules_signal.zip */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
-		786C000525B8EE2100F26D34 /* NetworkConnectionUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C000425B8EE2100F26D34 /* NetworkConnectionUtil.swift */; };
+		786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */; };
 		786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */; };
 		786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */; };
 		787505E025A67BE200E5203E /* TestZipSlip.zip in Resources */ = {isa = PBXBuildFile; fileRef = 787505DF25A67BE200E5203E /* TestZipSlip.zip */; };
@@ -851,7 +851,7 @@
 		3FF8296B2509942300483C74 /* rules_signal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_signal.json; sourceTree = "<group>"; };
 		42E2B003910D73C12B88CC06 /* Pods_AEPIdentityTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIdentityTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E248A93FA9CBDD50605A356 /* Pods-AEPIntegrationTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.release.xcconfig"; sourceTree = "<group>"; };
-		786C000425B8EE2100F26D34 /* NetworkConnectionUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkConnectionUtil.swift; sourceTree = "<group>"; };
+		786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatter.swift; sourceTree = "<group>"; };
 		786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpConnectionConstants.swift; sourceTree = "<group>"; };
 		786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatterTests.swift; sourceTree = "<group>"; };
 		787505DF25A67BE200E5203E /* TestZipSlip.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = TestZipSlip.zip; sourceTree = "<group>"; };
@@ -1355,7 +1355,7 @@
 				3F0397AB24BE5FF30019F095 /* NetworkService.swift */,
 				3F0397AC24BE5FF30019F095 /* NetworkServiceConstants.swift */,
 				3F0397AE24BE5FF30019F095 /* Networking.swift */,
-				786C000425B8EE2100F26D34 /* NetworkConnectionUtil.swift */,
+				786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */,
 				786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */,
 			);
 			path = network;
@@ -2825,7 +2825,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F0397CE24BE5FF30019F095 /* LoggingService.swift in Sources */,
-				786C000525B8EE2100F26D34 /* NetworkConnectionUtil.swift in Sources */,
+				786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,

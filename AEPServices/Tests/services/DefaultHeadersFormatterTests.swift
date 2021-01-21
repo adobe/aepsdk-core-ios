@@ -49,21 +49,15 @@ class DefaultHeadersFormatterTest: XCTestCase {
                 return
             }
 
-            let formattedLocale = DefaultHeadersFormatter.getHeadersFor(locale: v)
+            let formattedLocale = DefaultHeadersFormatter.getFormattedLocale(unformattedLocale: v)
 
-            XCTAssertEqual(k, formattedLocale[HttpConnectionConstants.Header.HTTP_HEADER_KEY_ACCEPT_LANGUAGE])
+            XCTAssertEqual(k, formattedLocale)
         }
     }
 
     func testEmptyLocale() {
-        let formattedLocale = DefaultHeadersFormatter.getHeadersFor(locale: "")
-        XCTAssertNil(formattedLocale[HttpConnectionConstants.Header.HTTP_HEADER_KEY_ACCEPT_LANGUAGE])
-    }
-
-    func testEmptyContentType() {
-        let formatted = DefaultHeadersFormatter.getHeadersFor(locale: "", contentType: "")
-        XCTAssertEqual(HttpConnectionConstants.Header.HTTP_HEADER_CONTENT_TYPE_WWW_FORM_URLENCODED, formatted[HttpConnectionConstants.Header.HTTP_HEADER_KEY_CONTENT_TYPE])
-
+        let formattedLocale = DefaultHeadersFormatter.getFormattedLocale(unformattedLocale: "")
+        XCTAssertEqual("en-US", formattedLocale)
     }
 }
 
