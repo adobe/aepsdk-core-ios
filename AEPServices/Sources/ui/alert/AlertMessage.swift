@@ -26,11 +26,11 @@ public class AlertMessage: NSObject, UIMessaging {
     private var listener: AlertMessaging?
 
     private var messageService: MessageMonitorServicing {
-       return ServiceProvider.shared.messageMonitorService
+        return ServiceProvider.shared.messageMonitorService
     }
 
     private var messagingDelegate: MessagingDelegate? {
-       return ServiceProvider.shared.messagingDelegate
+        return ServiceProvider.shared.messagingDelegate
     }
 
     public init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessaging?) {

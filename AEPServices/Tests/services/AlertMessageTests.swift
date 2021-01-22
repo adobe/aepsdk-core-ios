@@ -24,7 +24,7 @@ class AlertMessageTests : XCTestCase {
     var alertMessage : AlertMessage?
     static var expectation: XCTestExpectation?
     var rootViewController: UIViewController!
-    
+
     var mockListener: AlertMessaging?
     var messageDelegate : MessagingDelegate?
 
@@ -43,7 +43,7 @@ class AlertMessageTests : XCTestCase {
     func test_init_whenListenerIsPresent() {
         XCTAssertNotNil(alertMessage)
     }
-    
+
     func test_show() {
         ServiceProvider.shared.messageMonitorService.dismissMessage()
         alertMessage?.show()
@@ -55,12 +55,12 @@ class AlertMessageTests : XCTestCase {
         func onShow(message: AlertMessage?) {}
         func onDismiss(message: AlertMessage?) {}
     }
-    
+
     class MockGlobalUIMessagingListener : MessagingDelegate {
         func onShow(message: UIMessaging?) {}
-        
+
         func onDismiss(message: UIMessaging?) {}
-        
+
         func shouldShowMessage(message: UIMessaging?) -> Bool {
             return MessageMonitorServiceTest.mockShouldShow
         }

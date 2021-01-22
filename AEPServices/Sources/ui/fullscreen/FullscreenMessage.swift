@@ -30,11 +30,11 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     var webView: UIView?
 
     private var messageService: MessageMonitorServicing {
-       return ServiceProvider.shared.messageMonitorService
+        return ServiceProvider.shared.messageMonitorService
     }
 
     private var messagingDelegate: MessagingDelegate? {
-       return ServiceProvider.shared.messagingDelegate
+        return ServiceProvider.shared.messagingDelegate
     }
 
     /// Creates `FullscreenMessage` instance with the payload provided.
