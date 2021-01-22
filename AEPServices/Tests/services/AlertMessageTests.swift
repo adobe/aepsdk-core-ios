@@ -14,7 +14,6 @@ import Foundation
 @testable import AEPServices
 import XCTest
 import UIKit
-import AEPCore
 
 class AlertMessageTests : XCTestCase {
     static let mockTitle = "mockTitle"
@@ -32,7 +31,7 @@ class AlertMessageTests : XCTestCase {
         mockListener = MockListener()
         alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: mockListener)
         messageDelegate = MockGlobalUIMessagingListener()
-        MobileCore.messagingDelegate = messageDelegate
+        ServiceProvider.shared.messagingDelegate = messageDelegate
     }
 
     func test_init_whenListenerIsNil() {
