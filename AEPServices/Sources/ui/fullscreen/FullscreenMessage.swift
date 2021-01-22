@@ -93,8 +93,10 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
                     cacheFolderURL = cacheFolder?.appendingPathComponent(self.DOWNLOAD_CACHE)
                     tempHTMLFile = cacheFolderURL?.appendingPathComponent(self.TEMP_FILE_NAME).appendingPathExtension(self.HTML_EXTENSION)
                     if !self.isLocalImageUsed {
-                        /* AMSDK-8942: The ACS extension saves downloaded remote image files in the cache. We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp.html and pass that file URL to loadFileURL.
-                         */
+                        // We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL
+                        // expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the
+                        // payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp.html and pass that file
+                        // URL to loadFileURL.
                         do {
                             try FileManager.default.createDirectory(atPath: cacheFolderURL?.path ?? "", withIntermediateDirectories: true, attributes: nil)
                             try self.payload.write(toFile: tempHTMLFile?.path ?? "", atomically: true, encoding: .utf8)
@@ -217,13 +219,5 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
                 self.webView = nil
             }
         }
-    }
-
-    /// Open a url from this message
-    private func openUrl(url: String) {
-        guard let urlObj = URL(string: url) else {
-            return
-        }
-        UIApplication.shared.open(urlObj, options: [:], completionHandler: nil)
     }
 }
