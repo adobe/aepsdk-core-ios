@@ -17,14 +17,12 @@ import Foundation
 ///
 public struct DefaultHeadersFormatter {
 
-    typealias httpHeaderConstants = HttpConnectionConstants.Header
-
     ///
     /// Gets the formatted locale
     /// - Parameter unformattedLocale: The unformatted locale as a string
     /// - Returns: The formatted locale as a string or nil if not able to format it.
     ///
-    public static func getFormattedLocale(unformattedLocale: String) -> String {
+    public static func formatLocale(_ unformattedLocale: String) -> String {
 //        "^"                                // beginning of line
 //        "([a-zA-Z]{2,3})"                      // language (required) (match group 1)
 //        "(?:(?:-|_)[a-zA-Z]{3})?"           // extlang (optional)

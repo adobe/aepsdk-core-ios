@@ -49,14 +49,14 @@ class DefaultHeadersFormatterTest: XCTestCase {
                 return
             }
 
-            let formattedLocale = DefaultHeadersFormatter.getFormattedLocale(unformattedLocale: v)
+            let formattedLocale = DefaultHeadersFormatter.formatLocale(v)
 
             XCTAssertEqual(k, formattedLocale)
         }
     }
 
     func testEmptyLocale() {
-        let formattedLocale = DefaultHeadersFormatter.getFormattedLocale(unformattedLocale: "")
+        let formattedLocale = DefaultHeadersFormatter.formatLocale("")
         XCTAssertEqual("en-US", formattedLocale)
     }
 }

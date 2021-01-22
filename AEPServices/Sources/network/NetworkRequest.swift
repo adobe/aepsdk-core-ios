@@ -40,7 +40,7 @@ import Foundation
 
         let systemInfoService = ServiceProvider.shared.systemInfoService
         let defaultHeaders = [NetworkRequest.REQUEST_HEADER_KEY_USER_AGENT: systemInfoService.getDefaultUserAgent(),
-                              HttpConnectionConstants.Header.HTTP_HEADER_KEY_ACCEPT_LANGUAGE: DefaultHeadersFormatter.getFormattedLocale(unformattedLocale: systemInfoService.getActiveLocaleName())]
+                              HttpConnectionConstants.Header.HTTP_HEADER_KEY_ACCEPT_LANGUAGE: DefaultHeadersFormatter.formatLocale(systemInfoService.getActiveLocaleName())]
         self.httpHeaders = defaultHeaders.merging(httpHeaders) { _, new in new } // add in default headers and apply `httpHeaders` on top
 
         self.connectTimeout = connectTimeout
