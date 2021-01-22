@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -23,7 +23,7 @@ public class AlertMessage: NSObject, UIMessaging {
     private let message: String
     private let positiveButtonLabel: String?
     private let negativeButtonLabel: String?
-    private var listener: AlertMessaging?
+    private var listener: AlertMessageDelegate?
 
     private var messageService: MessageMonitorServicing {
         return ServiceProvider.shared.messageMonitorService
@@ -33,7 +33,7 @@ public class AlertMessage: NSObject, UIMessaging {
         return ServiceProvider.shared.messagingDelegate
     }
 
-    public init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessaging?) {
+    public init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) {
         self.title = title
         self.message = message
         self.positiveButtonLabel = positiveButtonLabel

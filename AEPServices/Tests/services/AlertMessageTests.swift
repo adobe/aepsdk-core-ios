@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -24,7 +24,7 @@ class AlertMessageTests : XCTestCase {
     static var expectation: XCTestExpectation?
     var rootViewController: UIViewController!
 
-    var mockListener: AlertMessaging?
+    var mockListener: AlertMessageDelegate?
     var messageDelegate : MessagingDelegate?
 
     override func setUp() {
@@ -48,7 +48,7 @@ class AlertMessageTests : XCTestCase {
         alertMessage?.show()
     }
 
-    class MockListener: AlertMessaging {
+    class MockListener: AlertMessageDelegate {
         func onPositiveResponse(message: AlertMessage?) {}
         func onNegativeResponse(message: AlertMessage?) {}
         func onShow(message: AlertMessage?) {}

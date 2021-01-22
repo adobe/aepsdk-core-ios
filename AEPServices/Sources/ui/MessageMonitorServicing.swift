@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -14,7 +14,7 @@ import Foundation
 
 /// This protocol is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
 /// The status is exposed through isMessageDisplayed.
-internal protocol MessageMonitorServicing {
+protocol MessageMonitorServicing {
     /// - Returns: True if the message is being displayed else false
     func isMessageDisplayed() -> Bool
 

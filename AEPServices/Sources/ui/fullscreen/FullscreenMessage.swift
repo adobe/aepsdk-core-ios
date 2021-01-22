@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -26,7 +26,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
 
     var isLocalImageUsed = false
     var payload: String
-    var listener: FullscreenMessaging?
+    var listener: FullscreenDelegate?
     var webView: UIView?
 
     private var messageService: MessageMonitorServicing {
@@ -44,8 +44,8 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     ///
     /// - Parameters:
     ///     - payload: String html content to be displayed with the message
-    ///     - listener: `FullscreenMessaging` listener to listening the message lifecycle.
-    public convenience init(payload: String, listener: FullscreenMessaging?) {
+    ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
+    public convenience init(payload: String, listener: FullscreenDelegate?) {
         self.init(payload: payload, listener: listener, isLocalImageUsed: false)
     }
 
@@ -56,9 +56,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     ///
     /// - Parameters:
     ///     - payload: String html content to be displayed with the message
-    ///     - listener: `FullscreenMessaging` listener to listening the message lifecycle.
+    ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
     ///     - isLocalImageUsed: If true, an image from the app bundle will be used for the fullscreen message.
-    public init(payload: String, listener: FullscreenMessaging?, isLocalImageUsed: Bool) {
+    public init(payload: String, listener: FullscreenDelegate?, isLocalImageUsed: Bool) {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed

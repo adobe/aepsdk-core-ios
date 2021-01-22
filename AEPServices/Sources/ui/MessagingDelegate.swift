@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -18,16 +18,16 @@ import Foundation
     /// Invoked when the any message is displayed
     /// - Parameters:
     ///     - message: UIMessaging message that is being displayed
-    func onShow(message: UIMessaging?)
+    func onShow(message: UIMessaging)
 
     /// Invoked when the any message is dismissed
     /// - Parameters:
     ///     - message: UIMessaging message that is being dismissed
-    func onDismiss(message: UIMessaging?)
+    func onDismiss(message: UIMessaging)
 
     /// Used to find whether messages should be shown or not
     /// - Parameters:
     ///     - message: UIMessaging message that is about to get displayed
     /// - Returns: true if the message should be shown else false
-    func shouldShowMessage(message: UIMessaging?) -> Bool
+    func shouldShowMessage(message: UIMessaging) -> Bool
 }
