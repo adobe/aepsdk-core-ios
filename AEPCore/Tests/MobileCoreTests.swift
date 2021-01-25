@@ -192,7 +192,7 @@ class MobileCoreTests: XCTestCase {
               "version" : "0.0.1"
             },
             "Configuration" : {
-              "version" : "3.0.0-beta.2"
+              "version" : "3.0.0"
             },
             "mockExtensionTwo" : {
               "metadata" : {
@@ -201,7 +201,7 @@ class MobileCoreTests: XCTestCase {
               "version" : "0.0.1"
             }
           },
-          "version" : "3.0.0-beta.2"
+          "version" : "3.0.0"
         }
         """
         let expectedDict = jsonStrToDict(jsonStr: expected)

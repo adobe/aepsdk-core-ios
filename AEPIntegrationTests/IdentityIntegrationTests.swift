@@ -127,8 +127,9 @@ class IdentityIntegrationTests: XCTestCase {
 
         let urlExpectation = XCTestExpectation(description: "getExperienceCloudId callback")
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        Identity.getExperienceCloudId { ecid in
+        Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
+            XCTAssertNil(error)
             urlExpectation.fulfill()
         }
         wait(for: [urlExpectation], timeout: 1)

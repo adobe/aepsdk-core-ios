@@ -111,7 +111,8 @@ class NetworkServiceTests: XCTestCase {
 
     func testConnectAsync_initiatesConnection_whenValidNetworkRequest() {
         let mockUserAgent = "mock-user-agent"
-        let mockLocaleName = "mock-locale-name"
+        // The formatted locale name default
+        let mockLocaleName = "en-US"
         systemInfoService?.defaultUserAgent = mockUserAgent
         systemInfoService?.activeLocaleName = mockLocaleName
         let expectation = XCTestExpectation(description: "Completion handler called")

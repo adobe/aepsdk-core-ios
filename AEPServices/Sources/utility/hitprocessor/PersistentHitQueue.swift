@@ -68,6 +68,7 @@ public class PersistentHitQueue: HitQueuing {
                 if success {
                     // successful processing of hit, remove it from the queue, move to next hit
                     _ = self?.dataQueue.remove()
+
                     self?.processNextHit()
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
