@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -11,17 +11,10 @@
  */
 
 import Foundation
+import UIKit
 
-/// UI service interface defining a fullscreen message
-public protocol FullScreenMessageUiInterface {
-
-    /// Display the fullscreen message
-    func show()
-
-    /// Open a url from this message
-    /// @param url String the url to open
-    func openUrl(url: String)
-
-    /// Remove the fullscreen message from view.
-    func remove()
+internal extension UIApplication {
+    func getKeyWindow() -> UIWindow? {
+        keyWindow ?? windows.first
+    }
 }
