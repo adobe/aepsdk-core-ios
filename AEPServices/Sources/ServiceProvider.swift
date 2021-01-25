@@ -33,8 +33,7 @@ public class ServiceProvider {
     private var overrideURLService: URLOpening?
     private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
-    private var overrideFullscreenUIService: UIServiceInterface?
-    private var defaultFullscreenUIService = UIService()
+    private var defaultMessageMonitorService = MessageMonitorService()
 
     // Don't allow init of ServiceProvider outside the class
     private init() {}
@@ -117,15 +116,10 @@ public class ServiceProvider {
         }
     }
 
-    public var uiService: UIServiceInterface {
+    var messageMonitorService: MessageMonitorServicing {
         get {
             return queue.sync {
-                return overrideFullscreenUIService ?? defaultFullscreenUIService
-            }
-        }
-        set {
-            queue.async {
-                self.overrideFullscreenUIService = newValue
+                return defaultMessageMonitorService
             }
         }
     }
@@ -146,13 +140,12 @@ public class ServiceProvider {
         defaultCacheService = DiskCacheService()
         defaultURLService = URLService()
         defaultLoggingService = LoggingService()
-        defaultFullscreenUIService = UIService()
+        defaultMessageMonitorService = MessageMonitorService()
 
         overrideSystemInfoService = nil
         overrideKeyValueService = nil
         overrideNetworkService = nil
         overrideCacheService = nil
         overrideURLService = nil
-        overrideFullscreenUIService = nil
     }
 }
