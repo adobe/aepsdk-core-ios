@@ -53,7 +53,7 @@ class FullscreenMessageTests : XCTestCase {
         XCTAssertTrue(FullscreenMessageTests.onDismissullscreenMessagingCall)
     }
 
-    class MockFullscreenListener: FullscreenDelegate {
+    class MockFullscreenListener: FullscreenMessageDelegate {
         func onShow(message: FullscreenMessage?) {
             FullscreenMessageTests.onShowFullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()

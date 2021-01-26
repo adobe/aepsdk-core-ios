@@ -18,13 +18,13 @@ import Foundation
     /// - Parameters:
     ///     - message: Fullscreen message which is currently shown
     @objc(onShowFullscreenMessage:)
-    func onShow(message: FullscreenMessage?)
+    func onShow(message: FullscreenMessage)
 
     /// Invoked when the fullscreen message is dismissed
     /// - Parameters:
     ///     - message: Fullscreen message which is dismissed
     @objc(onDismissFullscreenMessage:)
-    func onDismiss(message: FullscreenMessage?)
+    func onDismiss(message: FullscreenMessage)
 
     /// Invoked when the fullscreen message is attempting to load a url
     /// - Parameters:
@@ -32,5 +32,5 @@ import Foundation
     ///     - url:     String the url being loaded by the message
     /// - Returns: True if the core wants to handle the URL (and not the fullscreen message view implementation)
     @objc(overrideUrlLoadFullscreenMessage:url:)
-    func overrideUrlLoad(message: FullscreenMessage?, url: String?) -> Bool
+    func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
 }
