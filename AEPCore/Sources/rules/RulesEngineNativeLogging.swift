@@ -14,11 +14,11 @@ import AEPServices
 import Foundation
 @_implementationOnly import AEPRulesEngine
 
-class RulesEngineNativeLogging: RulesEngineLogging {
-    /// Converts `RulesEngineLogLevel` to Core `LogLevel`
-    /// - Parameter logLevel: a `RulesEngineLogLevel` object
-    /// - Returns: a `LogLevel` object
-    private func convert(_ logLevel: RulesEngineLogLevel) -> LogLevel {
+class RulesEngineNativeLogging: AEPRulesEngine.Logging {
+    /// Converts RulesEngine `LogLevel` to Core `LogLevel`
+    /// - Parameter logLevel: a RulesEngine `LogLevel` object
+    /// - Returns: a Core `LogLevel` object
+    private func convert(_ logLevel: AEPRulesEngine.LogLevel) -> AEPServices.LogLevel {
         switch logLevel {
         case .error:
             return .error
@@ -28,10 +28,12 @@ class RulesEngineNativeLogging: RulesEngineLogging {
             return .debug
         case .trace:
             return .trace
+        @unknown default:
+            return .error
         }
     }
 
-    func log(level: RulesEngineLogLevel, label: String, message: String) {
+    func log(level: AEPRulesEngine.LogLevel, label: String, message: String) {
         if Log.logFilter >= convert(level) {
             ServiceProvider.shared.loggingService.log(level: convert(level), label: label, message: message)
         }

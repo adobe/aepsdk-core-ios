@@ -68,10 +68,11 @@ public class PersistentHitQueue: HitQueuing {
                 if success {
                     // successful processing of hit, remove it from the queue, move to next hit
                     _ = self?.dataQueue.remove()
+
                     self?.processNextHit()
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
-                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
+                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval(for: hit) ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
                         self?.processNextHit()
                     }
                 }

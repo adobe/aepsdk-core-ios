@@ -1,0 +1,131 @@
+name: Release
+
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'tag/version'     
+        required: true
+        default: '1.0.0'
+      
+      action_tag:
+        description: 'create tag ("no" to skip)'     
+        required: true
+        default: 'yes'
+        
+      release_AEPServices:
+        description: 'release AEPServices ("no" to skip)'
+        required: true
+        default: 'yes'
+        
+      release_AEPCore:
+        description: 'release AEPCore ("no" to skip)'
+        required: true
+        default: 'yes'
+        
+      release_AEPIdentity:
+        description: 'release AEPIdentity ("no" to skip)'
+        required: true
+        default: 'yes'
+        
+      release_AEPLifecycle:
+        description: 'release AEPLifecycle ("no" to skip)'
+        required: true
+        default: 'yes'
+        
+      release_AEPSignal:
+        description: 'release AEPSignal ("no" to skip)'
+        required: true
+        default: 'yes'
+
+jobs:
+  release_rules_engine:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+    
+    - name: Install jq
+      run: brew install jq
+    
+    - name: Install cocoapods
+      run: gem install cocoapods
+
+    - name: Check version in Podspec
+      run: |
+        set -eo pipefail
+        echo Target version: ${{ github.event.inputs.tag }}
+        make check-version VERSION=${{ github.event.inputs.tag }}
+    
+    - name: Pod repo update
+      run: | 
+        pod repo update
+
+    - name: SPM integration test
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
+      run: |
+        set -eo pipefail
+        echo SPM integration test starts:
+        make test-SPM-integration
+    
+    - name: podspec file verification
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
+      run: |
+        set -eo pipefail
+        echo podspec file verification starts:
+        make test-podspec 
+        
+    - uses: release-drafter/release-drafter@v5
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
+      with:
+        name: v${{ github.event.inputs.tag }}
+        tag: ${{ github.event.inputs.tag }}
+        version: ${{ github.event.inputs.tag }}
+        publish: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Publish Pods - AEPServices
+      if: ${{ github.event.inputs.release_AEPServices == 'yes' }}
+      run: |
+        set -eo pipefail
+        pod trunk push AEPServices.podspec --allow-warnings --synchronous --swift-version=5.1
+        pod repo update
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Publish Pods - AEPCore
+      if: ${{ github.event.inputs.release_AEPCore == 'yes' }}
+      run: |
+        set -eo pipefail
+        pod trunk push AEPCore.podspec --allow-warnings --synchronous --swift-version=5.1
+        pod repo update
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+    
+    - name: Publish Pods - AEPIdentity
+      if: ${{ github.event.inputs.release_AEPIdentity == 'yes' }}
+      run: |
+        set -eo pipefail
+        pod trunk push AEPIdentity.podspec --allow-warnings --synchronous --swift-version=5.1
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}   
+    
+    - name: Publish Pods - AEPLifecycle
+      if: ${{ github.event.inputs.release_AEPLifecycle == 'yes' }}
+      run: |
+        set -eo pipefail
+        pod trunk push AEPLifecycle.podspec --allow-warnings --synchronous --swift-version=5.1
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Publish Pods - AEPSignal
+      if: ${{ github.event.inputs.release_AEPSignal == 'yes' }}
+      run: |
+        set -eo pipefail
+        pod trunk push AEPSignal.podspec --allow-warnings --synchronous --swift-version=5.1
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        

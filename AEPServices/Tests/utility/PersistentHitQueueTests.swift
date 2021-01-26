@@ -116,7 +116,6 @@ class PersistentHitQueueTests: XCTestCase {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
 
-        hitQueue.beginProcessing()
         hitQueue.suspend()
         sleep(1)
 
@@ -125,14 +124,13 @@ class PersistentHitQueueTests: XCTestCase {
         XCTAssertNotEqual(100, processedHits.count) // we should have not processed all 100 hits by the time we have suspended
     }
 
-    /// Tests that not all hits are processed when we suspend the queue, but then when we resume processing that the remaining hits a processed
+    /// Tests that not all hits are processed when we suspend the queue, but then when we resume processing the remaining hits are processed
     func testProcessesHitsManyWithSuspendThenResume() {
         // test
         for _ in 0 ..< 100 {
             hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
         }
 
-        hitQueue.beginProcessing()
         hitQueue.suspend()
         sleep(1)
 
@@ -170,9 +168,11 @@ class PersistentHitQueueTests: XCTestCase {
 }
 
 class MockHitProcessor: HitProcessing {
-    var retryInterval: TimeInterval = 1
-
     let processedHits = ThreadSafeArray<DataEntity>()
+
+    func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return TimeInterval(1)
+    }
 
     func processHit(entity: DataEntity, completion: (Bool) -> Void) {
         processedHits.append(entity)
@@ -181,10 +181,12 @@ class MockHitProcessor: HitProcessing {
 }
 
 class MockHitIntermittentProcessor: HitProcessing {
-    var retryInterval: TimeInterval = 0
-
     let processedHits = ThreadSafeArray<DataEntity>()
     var failedHits = Set<String>()
+
+    func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return TimeInterval(0)
+    }
 
     // 50% of hits need to be processed twice, other 50% process successfully the first time
     func processHit(entity: DataEntity, completion: (Bool) -> Void) {

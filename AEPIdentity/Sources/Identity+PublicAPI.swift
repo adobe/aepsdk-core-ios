@@ -66,15 +66,24 @@ import Foundation
     /// Returns the Experience Cloud ID.
     /// - Parameter completion: closure which will be invoked once Experience Cloud ID is available.
     @objc(getExperienceCloudId:)
-    static func getExperienceCloudId(completion: @escaping (String?) -> Void) {
+    static func getExperienceCloudId(completion: @escaping (String?, Error?) -> Void) {
         let event = Event(name: IdentityConstants.EventNames.IDENTITY_REQUEST_IDENTITY,
                           type: EventType.identity,
                           source: EventSource.requestIdentity,
                           data: nil)
 
         MobileCore.dispatch(event: event) { responseEvent in
-            let experienceCloudId = responseEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String
-            completion(experienceCloudId)
+            guard let responseEvent = responseEvent else {
+                completion(nil, AEPError.callbackTimeout)
+                return
+            }
+
+            guard let experienceCloudId = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String else {
+                completion(nil, AEPError.unexpected)
+                return
+            }
+
+            completion(experienceCloudId, .none)
         }
     }
 
