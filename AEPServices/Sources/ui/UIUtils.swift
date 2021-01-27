@@ -15,7 +15,7 @@ import UIKit
 
 class UIUtils {
     internal static func getFrame() -> (frame: CGRect?, screenBounds: CGSize?)? {
-        var newFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        var newFrame = CGRect.zero
         // x is always 0
         newFrame.origin.x = 0
         // for fullscreen, width and height are both full screen

@@ -12,11 +12,19 @@
 
 import Foundation
 
-/// Fullscreen message lifecycle event listener
+/// Floating button lifecycle event listener
 @objc(AEPFloatingButtonDelegate) public protocol FloatingButtonDelegate {
     /// Invoked when the floating button is tapped
     func onTapDetected()
 
     /// Invoked when the floating button is dragged on the screen
     func onPanDetected()
+
+    /// Invoked when the floating button is displayed
+    @objc(onShowWithFloatingButton)
+    func onShow()
+
+    /// Invoked when the floating button is removed
+    @objc(onDismissWithFloatingButton)
+    func onDismiss()
 }
