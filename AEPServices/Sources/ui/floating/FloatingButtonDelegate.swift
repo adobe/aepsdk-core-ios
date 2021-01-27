@@ -13,7 +13,7 @@
 import Foundation
 
 /// Fullscreen message lifecycle event listener
-@objc(AEPFloatingButtonListening) public protocol FloatingButtonListening {
+@objc(AEPFloatingButtonDelegate) public protocol FloatingButtonDelegate {
     /// Invoked when the floating button is tapped
     func onTapDetected()
 

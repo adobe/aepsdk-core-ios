@@ -49,18 +49,18 @@ class AlertMessageTests : XCTestCase {
     }
 
     class MockListener: AlertMessageDelegate {
-        func onPositiveResponse(message: AlertMessage?) {}
-        func onNegativeResponse(message: AlertMessage?) {}
-        func onShow(message: AlertMessage?) {}
-        func onDismiss(message: AlertMessage?) {}
+        func onPositiveResponse(message: AlertMessage) {}
+        func onNegativeResponse(message: AlertMessage) {}
+        func onShow(message: AlertMessage) {}
+        func onDismiss(message: AlertMessage) {}
     }
 
     class MockGlobalUIMessagingListener : MessagingDelegate {
-        func onShow(message: UIMessaging?) {}
+        func onShow(message: UIMessaging) {}
 
-        func onDismiss(message: UIMessaging?) {}
+        func onDismiss(message: UIMessaging) {}
 
-        func shouldShowMessage(message: UIMessaging?) -> Bool {
+        func shouldShowMessage(message: UIMessaging) -> Bool {
             return MessageMonitorServiceTest.mockShouldShow
         }
     }

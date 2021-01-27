@@ -54,17 +54,17 @@ class FullscreenMessageTests : XCTestCase {
     }
 
     class MockFullscreenListener: FullscreenMessageDelegate {
-        func onShow(message: FullscreenMessage?) {
+        func onShow(message: FullscreenMessage) {
             FullscreenMessageTests.onShowFullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }
 
-        func onDismiss(message: FullscreenMessage?) {
+        func onDismiss(message: FullscreenMessage) {
             FullscreenMessageTests.onDismissullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }
 
-        func overrideUrlLoad(message: FullscreenMessage?, url: String?) -> Bool {
+        func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool {
             return true
         }
     }

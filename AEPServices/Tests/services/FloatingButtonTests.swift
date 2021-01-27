@@ -16,43 +16,37 @@ import XCTest
 import UIKit
 
 class FloatingButtonTests : XCTestCase {
-    static let mockTitle = "mockTitle"
-    static let mockMessage = "mockMessage"
-    static let mockPositiveLabel = "mockPositiveLabel"
-    static let mockNegativeLabel = "mockNegativeLabel"
-    var alertMessage : AlertMessage?
-    static var expectation: XCTestExpectation?
-    var rootViewController: UIViewController!
 
-    var mockListener: AlertMessageDelegate?
-    var messageDelegate : MessagingDelegate?
+    var mockListener: FloatingButtonDelegate?
+    var floatingButton : FloatingButton?
 
     override func setUp() {
         mockListener = MockListener()
-        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: mockListener)
-        messageDelegate = MockGlobalUIMessagingListener()
-        ServiceProvider.shared.messagingDelegate = messageDelegate
     }
 
     func test_init_whenListenerIsNil() {
-        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: nil)
-        XCTAssertNotNil(alertMessage)
+        floatingButton = FloatingButton(listener: nil)
+        XCTAssertNotNil(floatingButton)
     }
 
     func test_init_whenListenerIsPresent() {
-        XCTAssertNotNil(alertMessage)
+        floatingButton = FloatingButton(listener: mockListener)
+        XCTAssertNotNil(floatingButton)
     }
 
-    func test_show() {
-        ServiceProvider.shared.messageMonitorService.dismissMessage()
-        alertMessage?.show()
+    func test_display() {
+        floatingButton = FloatingButton(listener: mockListener)
+        XCTAssertNoThrow(floatingButton?.display())
+    }
+
+    func test_remove() {
+        floatingButton = FloatingButton(listener: mockListener)
+        XCTAssertNoThrow(floatingButton?.remove())
     }
 
     class MockListener: FloatingButtonDelegate {
-        func onPositiveResponse(message: AlertMessage?) {}
-        func onNegativeResponse(message: AlertMessage?) {}
-        func onShow(message: AlertMessage?) {}
-        func onDismiss(message: AlertMessage?) {}
+        func onTapDetected() {}
+        func onPanDetected() {}
     }
 }
 

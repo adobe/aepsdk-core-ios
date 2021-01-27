@@ -16,7 +16,9 @@ import UIKit
 /// This class is used to create a floating button
 @objc(AEPFloatingButton)
 public class FloatingButton: NSObject {
-    
+
+    private let LOG_PREFIX = "FloatingButton"
+
     private let PREVIEW_BUTTON_WIDTH = 60
     private let PREVIEW_BUTTON_HEIGHT = 60
 
@@ -25,9 +27,9 @@ public class FloatingButton: NSObject {
     private var timer: Timer?
     private var buttonImageView: UIImageView?
 
-    private var listener: FloatingButtonListening?
+    private var listener: FloatingButtonDelegate?
 
-    public init(listener: FloatingButtonListening?) {
+    public init(listener: FloatingButtonDelegate?) {
         self.listener = listener
     }
 
@@ -35,20 +37,20 @@ public class FloatingButton: NSObject {
     public func display() {
         DispatchQueue.main.async {
             if !self.initFloatingButton() {
+                Log.debug(label: self.LOG_PREFIX, "Floating button couldn't be displayed, failed to create floating button.")
                 return
             }
-            
+
             if self.timer != nil {
                 self.timer?.invalidate()
                 self.timer = nil
             }
-            
+
             self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.bringFloatingButtonToFront), userInfo: nil, repeats: true)
-            
             NotificationCenter.default.addObserver(self, selector: #selector(self.handleDeviceRotation), name: UIDevice.orientationDidChangeNotification, object: nil)
         }
     }
-    
+
     /// Remove the floating button from the screen
     public func remove() {
         DispatchQueue.main.async {
@@ -60,13 +62,14 @@ public class FloatingButton: NSObject {
 
     private func initFloatingButton() -> Bool {
         guard let newFrame: CGRect = getImageFrame() else {
-            // todo add LOG
+            Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, failed to create a new frame.")
             return false
         }
         self.buttonImageView = UIImageView(frame: newFrame)
 
         // color
         guard let imageData: Data = Data.init(base64Encoded: UIUtils.ENCODED_BACKGROUND_PNG, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters) else {
+            Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, background image for button is nil.")
             return false
         }
         let image = UIImage(data: imageData)
@@ -101,6 +104,7 @@ public class FloatingButton: NSObject {
             keyWindow?.addSubview(buttonImageView)
             keyWindow?.bringSubviewToFront(buttonImageView)
             guard let screenBounds = keyWindow?.frame.size else {
+                Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, screenbound is nil.")
                 return false
             }
             UIView.animate(withDuration: 0.3, animations: {
@@ -111,16 +115,16 @@ public class FloatingButton: NSObject {
         }
         return true
     }
-    
+
     @objc private func panWasRecognized(recognizer: UIPanGestureRecognizer) {
         DispatchQueue.main.async {
             guard let draggedView: UIView = self.panner?.view else {
-                // todo add LOG
+                Log.debug(label: self.LOG_PREFIX, "Floating button couldn't be displayed, dragged view is nil.")
                 return
             }
-            
+
             guard let offset = self.panner?.translation(in: draggedView.superview) else {
-                // todo add LOG
+                Log.debug(label: self.LOG_PREFIX, "Floating button couldn't be displayed, offset is nil.")
                 return
             }
             let center = draggedView.center
@@ -132,13 +136,13 @@ public class FloatingButton: NSObject {
             self.listener?.onPanDetected()
         }
     }
-    
+
     @objc private func tapDetected(recognizer: UITapGestureRecognizer) {
         DispatchQueue.main.async {
             self.listener?.onTapDetected()
         }
     }
-    
+
     @objc private func bringFloatingButtonToFront(timer: Timer) {
         DispatchQueue.main.async {
             let keyWindow = UIApplication.shared.getKeyWindow()
@@ -147,24 +151,24 @@ public class FloatingButton: NSObject {
             }
         }
     }
-    
+
     @objc private func handleDeviceRotation(notification: Notification) {
         DispatchQueue.main.async {
             guard let newFrame: CGRect = self.getImageFrame() else {
-                // todo add LOG
+                Log.debug(label: self.LOG_PREFIX, "Floating button couldn't be displayed, dragged view is nil.")
                 return
             }
             self.buttonImageView?.frame = newFrame
         }
     }
-        
+
     private func getImageFrame() -> CGRect? {
         let frameTuple = UIUtils.getFrame()
         guard var newFrame: CGRect = frameTuple?.frame else { return nil }
         guard let screenBounds: CGSize = frameTuple?.screenBounds else { return nil }
-        
+
         newFrame = CGRect(x: (Int(screenBounds.width) - PREVIEW_BUTTON_WIDTH) - 30 / 2, y: (Int(screenBounds.height) - PREVIEW_BUTTON_HEIGHT) / 2, width: PREVIEW_BUTTON_WIDTH, height: PREVIEW_BUTTON_HEIGHT)
-        
+
         return newFrame
     }
 }
