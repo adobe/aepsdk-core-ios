@@ -124,14 +124,6 @@ public class ServiceProvider {
         }
     }
 
-    var messageMonitorService: MessageMonitorServicing {
-        get {
-            return queue.sync {
-                return defaultMessageMonitorService
-            }
-        }
-    }
-
     internal func reset() {
         defaultSystemInfoService = ApplicationSystemInfoService()
         defaultKeyValueService = UserDefaultsNamedCollection()

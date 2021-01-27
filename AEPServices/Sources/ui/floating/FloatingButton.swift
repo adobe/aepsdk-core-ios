@@ -169,9 +169,11 @@ public class FloatingButton: NSObject {
     private func getImageFrame() -> CGRect? {
         let frameTuple = UIUtils.getFrame()
         guard var newFrame: CGRect = frameTuple?.frame else { return nil }
-        guard let screenBounds: CGSize = frameTuple?.screenBounds else { return nil }
+        let size: CGSize? = newFrame.size
 
-        newFrame = CGRect(x: (Int(screenBounds.width) - PREVIEW_BUTTON_WIDTH) - 30 / 2, y: (Int(screenBounds.height) - PREVIEW_BUTTON_HEIGHT) / 2, width: PREVIEW_BUTTON_WIDTH, height: PREVIEW_BUTTON_HEIGHT)
+        if let screenBounds: CGSize = size {
+            newFrame = CGRect(x: (Int(screenBounds.width) - PREVIEW_BUTTON_WIDTH) - 30 / 2, y: (Int(screenBounds.height) - PREVIEW_BUTTON_HEIGHT) / 2, width: PREVIEW_BUTTON_WIDTH, height: PREVIEW_BUTTON_HEIGHT)
+        }
 
         return newFrame
     }

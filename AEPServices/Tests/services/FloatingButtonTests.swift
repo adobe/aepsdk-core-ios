@@ -45,6 +45,8 @@ class FloatingButtonTests : XCTestCase {
     }
 
     class MockListener: FloatingButtonDelegate {
+        func onShow() {}
+        func onDismiss() {}
         func onTapDetected() {}
         func onPanDetected() {}
     }

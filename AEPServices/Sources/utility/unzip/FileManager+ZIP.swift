@@ -54,27 +54,6 @@ extension FileManager {
         return root
     }
 
-    /// Get user's cache directory path
-    /// - Return: Cache path URL
-    func getCacheDirectoryPath() -> URL? {
-        let paths = FileManager.default.urls(for: .cachesDirectory, in: .allDomainsMask)
-        if paths.isEmpty {
-            return nil
-        }
-        let root = paths[0]
-        var dir: ObjCBool = false
-
-        do {
-            if !FileManager.default.fileExists(atPath: root.path, isDirectory: &dir) && !dir.boolValue {
-                try FileManager.default.createDirectory(atPath: root.path, withIntermediateDirectories: true, attributes: nil)
-            }
-        } catch {
-            Log.debug(label: "FileManager", "Error while retrieving the cache directory path.")
-            return nil
-        }
-        return root
-    }
-
     ///
     /// Returns the File attributes for the given ZipEntry
     /// - Parameter entry: The ZipEntry to get the attributes for

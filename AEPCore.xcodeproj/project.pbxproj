@@ -2935,7 +2935,6 @@
 				3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */,
 				786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */,
 				3F0397DB24BE5FF30019F095 /* NamedCollectionDataStore.swift in Sources */,
-				2107F02E24C9FF88002935CF /* SHA256.swift in Sources */,
 				3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */,
 				3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */,
 				92F06BFC25B8F1FE004C1700 /* MessageMonitorServicing.swift in Sources */,
