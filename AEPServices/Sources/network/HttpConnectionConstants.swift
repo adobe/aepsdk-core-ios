@@ -14,20 +14,20 @@ import Foundation
 
 public enum HttpConnectionConstants {
     public enum ResponseCodes {
-        static let HTTP_OK = 200
-        static let HTTP_NOT_FOUND = 404
-        static let HTTP_CLIENT_TIMEOUT = 408
-        static let HTTP_REQUESTED_RANGE_NOT_SATISFIABLE = 416
-        static let HTTP_GATEWAY_TIMEOUT = 504
-        static let HTTP_UNAVAILABLE = 503
+        public static let HTTP_OK = 200
+        public static let HTTP_NOT_FOUND = 404
+        public static let HTTP_CLIENT_TIMEOUT = 408
+        public static let HTTP_REQUESTED_RANGE_NOT_SATISFIABLE = 416
+        public static let HTTP_GATEWAY_TIMEOUT = 504
+        public static let HTTP_UNAVAILABLE = 503
     }
 
     public enum Header {
-        static let HTTP_HEADER_KEY_CONTENT_TYPE = "Content-Type"
-        static let HTTP_HEADER_KEY_ACCEPT_LANGUAGE = "Accept-Language"
-        static let HTTP_HEADER_KEY_ACCEPT = "Accept"
-        static let HTTP_HEADER_CONTENT_TYPE_JSON_APPLICATION = "application/json"
-        static let HTTP_HEADER_CONTENT_TYPE_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"
-        static let HTTP_HEADER_ACCEPT_TEXT_HTML = "text/html"
+        public static let HTTP_HEADER_KEY_CONTENT_TYPE = "Content-Type"
+        public static let HTTP_HEADER_KEY_ACCEPT_LANGUAGE = "Accept-Language"
+        public static let HTTP_HEADER_KEY_ACCEPT = "Accept"
+        public static let HTTP_HEADER_CONTENT_TYPE_JSON_APPLICATION = "application/json"
+        public static let HTTP_HEADER_CONTENT_TYPE_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded"
+        public static let HTTP_HEADER_ACCEPT_TEXT_HTML = "text/html"
     }
 }
