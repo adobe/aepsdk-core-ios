@@ -32,6 +32,7 @@ class IdentityState {
     /// - Parameter pushIdManager: a push id manager
     init(identityProperties: IdentityProperties, hitQueue: HitQueuing, pushIdManager: PushIDManageable) {
         self.identityProperties = identityProperties
+        self.identityProperties.loadFromPersistence()
         self.hitQueue = hitQueue
         self.pushIdManager = pushIdManager
     }
