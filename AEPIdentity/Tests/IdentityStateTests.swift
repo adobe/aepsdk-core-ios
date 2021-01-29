@@ -49,7 +49,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is create due to force sync
     func testBootupIfReadyWithOptInPrivacyReturnsTrue() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
         let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
@@ -63,7 +63,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the properties are updated, and the hit queue processes the change
     func testBootupIfReadyWithOptOutPrivacyReturnsTrue() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
         let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
@@ -77,7 +77,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created from the force sync
     func testBootupIfReadyWithUnknownPrivacyReturnsFalse() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
         let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
