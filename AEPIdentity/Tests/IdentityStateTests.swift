@@ -327,7 +327,7 @@ class IdentityStateTests: XCTestCase {
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
     }
-    
+
     /// Tests that the ad id is correctly updated when a new (all zero) value is passed (ad id changed from nil to all zero value), hit is successfully queued and device_consent is set to 0.
     func testSyncIdentifiersAdIDIsUpdatedFromNilToZero() {
         // setup
@@ -354,7 +354,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
         XCTAssertTrue(hit.url.absoluteString.contains("d_consent_ic=DSID_20915")) // id namespace should be added
     }
-    
+
     /// Tests that the ad id is correctly updated when a new (empty) value is passed (ad id changed from nil to empty), hit is successfully queued and device_consent is set to 0.
     func testSyncIdentifiersAdIDIsUpdatedFromNilToEmpty() {
         // setup
