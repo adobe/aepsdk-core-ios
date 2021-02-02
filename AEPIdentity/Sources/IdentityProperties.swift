@@ -51,7 +51,9 @@ struct IdentityProperties: Codable {
     func toEventData() -> [String: Any] {
         var eventData = [String: Any]()
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] = ecid?.ecidString
-        eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = advertisingIdentifier
+        if let adId = advertisingIdentifier, !adId.isEmpty {
+            eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = advertisingIdentifier
+        }
         eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = pushIdentifier
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] = locationHint
