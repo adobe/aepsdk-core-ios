@@ -51,9 +51,7 @@ struct IdentityProperties: Codable {
     func toEventData() -> [String: Any] {
         var eventData = [String: Any]()
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] = ecid?.ecidString
-        if let adId = advertisingIdentifier, !adId.isEmpty {
-            eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = advertisingIdentifier
-        }
+        eventData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] = advertisingIdentifier
         eventData[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER] = pushIdentifier
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB] = blob
         eventData[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT] = locationHint
@@ -62,7 +60,13 @@ struct IdentityProperties: Codable {
         }
         eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync?.timeIntervalSince1970
 
-        return eventData
+        return eventData.filter { (_, value) -> Bool in
+            // Remove any empty strings from the dictionary
+            if value is String, let value = value as? String {
+                return !value.isEmpty
+            }
+            return true
+        }
     }
 
     /// Populates the fields with values stored in the Identity data store
