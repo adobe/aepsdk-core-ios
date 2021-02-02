@@ -75,15 +75,15 @@ class MessageMonitorServiceTest : XCTestCase {
     }
 
     class MockGlobalUIMessagingListener : MessagingDelegate {
-        func onShow(message: UIMessaging?) {
+        func onShow(message: UIMessaging) {
             onShowCall = true
         }
 
-        func onDismiss(message: UIMessaging?) {
+        func onDismiss(message: UIMessaging) {
             onDismissCall = true
         }
 
-        func shouldShowMessage(message: UIMessaging?) -> Bool {
+        func shouldShowMessage(message: UIMessaging) -> Bool {
             shouldShowMessageCall = true
             return MessageMonitorServiceTest.mockShouldShow
         }

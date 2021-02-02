@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPServices
 import XCTest
 import UIKit
+import AEPServicesMocks
 
 class AlertMessageTests : XCTestCase {
     static let mockTitle = "mockTitle"
@@ -23,6 +24,7 @@ class AlertMessageTests : XCTestCase {
     var alertMessage : AlertMessage?
     static var expectation: XCTestExpectation?
     var rootViewController: UIViewController!
+    var mockUIService: UIService?
 
     var mockListener: AlertMessageDelegate?
     var messageDelegate : MessagingDelegate?
@@ -32,6 +34,8 @@ class AlertMessageTests : XCTestCase {
         alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: mockListener)
         messageDelegate = MockGlobalUIMessagingListener()
         ServiceProvider.shared.messagingDelegate = messageDelegate
+        mockUIService = MockUIService()
+        ServiceProvider.shared.uiService = mockUIService!
     }
 
     func test_init_whenListenerIsNil() {
@@ -45,22 +49,22 @@ class AlertMessageTests : XCTestCase {
 
     func test_show() {
         ServiceProvider.shared.messageMonitorService.dismissMessage()
-        alertMessage?.show()
+        XCTAssertNoThrow(alertMessage?.show())
     }
 
     class MockListener: AlertMessageDelegate {
-        func onPositiveResponse(message: AlertMessage?) {}
-        func onNegativeResponse(message: AlertMessage?) {}
-        func onShow(message: AlertMessage?) {}
-        func onDismiss(message: AlertMessage?) {}
+        func onPositiveResponse(message: AlertMessage) {}
+        func onNegativeResponse(message: AlertMessage) {}
+        func onShow(message: AlertMessage) {}
+        func onDismiss(message: AlertMessage) {}
     }
 
     class MockGlobalUIMessagingListener : MessagingDelegate {
-        func onShow(message: UIMessaging?) {}
+        func onShow(message: UIMessaging) {}
 
-        func onDismiss(message: UIMessaging?) {}
+        func onDismiss(message: UIMessaging) {}
 
-        func shouldShowMessage(message: UIMessaging?) -> Bool {
+        func shouldShowMessage(message: UIMessaging) -> Bool {
             return MessageMonitorServiceTest.mockShouldShow
         }
     }
