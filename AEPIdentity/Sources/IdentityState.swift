@@ -269,7 +269,11 @@ class IdentityState {
     /// - Returns: A tuple indicating if the ad id has changed, and if the consent flag should be added
     private func shouldUpdateAdId(newAdID: String?) -> (adIdChanged: Bool, addConsentFlag: Bool) {
         guard let newAdID = newAdID else { return (false, false) }
-        let existingAdId = identityProperties.advertisingIdentifier ?? ""
+        guard let existingAdId = identityProperties.advertisingIdentifier else {
+            // existing is nil but new is not, update with new and update consent
+            // covers first call case where existing ad ID is not set and new ad ID is empty/all zeros
+            return (true, true)
+        }
 
         // did the advertising identifier change?
         if (!newAdID.isEmpty && newAdID != existingAdId)
