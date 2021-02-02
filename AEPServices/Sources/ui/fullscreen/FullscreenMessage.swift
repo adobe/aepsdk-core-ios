@@ -70,7 +70,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
         }
 
         DispatchQueue.main.async {
-            guard var newFrame: CGRect = UIUtils.getFrame()?.frame else {
+            guard var newFrame: CGRect = ServiceProvider.shared.uiService.getFrame() else {
                 Log.debug(label: self.LOG_PREFIX, "Failed to show the fullscreen message, newly created frame is nil.")
                 return
             }
@@ -194,7 +194,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     private func dismissWithAnimation(animate: Bool) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: animate ? 0.3: 0, animations: {
-                guard var newFrame: CGRect = UIUtils.getFrame()?.frame else {
+                guard var newFrame: CGRect = ServiceProvider.shared.uiService.getFrame() else {
                     return
                 }
                 newFrame.origin.y = newFrame.size.height

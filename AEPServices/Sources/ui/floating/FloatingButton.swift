@@ -69,7 +69,7 @@ public class FloatingButton: NSObject {
         self.buttonImageView = UIImageView(frame: newFrame)
 
         // color
-        guard let imageData: Data = Data.init(base64Encoded: UIUtils.ENCODED_BACKGROUND_PNG, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters) else {
+        guard let imageData: Data = Data.init(base64Encoded: ServiceProvider.shared.uiService.ENCODED_BACKGROUND_PNG, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters) else {
             Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, background image for button is nil.")
             return false
         }
@@ -79,7 +79,7 @@ public class FloatingButton: NSObject {
         // other properties
         self.buttonImageView?.contentMode = .scaleAspectFit
         self.buttonImageView?.isOpaque = true
-        //self.buttonImageView?.backgroundColor = .clear
+        self.buttonImageView?.backgroundColor = .clear
         self.buttonImageView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         // gesture
@@ -167,8 +167,7 @@ public class FloatingButton: NSObject {
     }
 
     private func getImageFrame() -> CGRect? {
-        let frameTuple = UIUtils.getFrame()
-        guard var newFrame: CGRect = frameTuple?.frame else { return nil }
+        guard var newFrame: CGRect = ServiceProvider.shared.uiService.getFrame() else { return nil }
         let size: CGSize? = newFrame.size
 
         if let screenBounds: CGSize = size {

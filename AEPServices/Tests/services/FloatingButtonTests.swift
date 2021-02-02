@@ -14,14 +14,18 @@ import Foundation
 @testable import AEPServices
 import XCTest
 import UIKit
+import AEPServicesMocks
 
 class FloatingButtonTests : XCTestCase {
 
     var mockListener: FloatingButtonDelegate?
     var floatingButton : FloatingButton?
+    var mockUIService: UIService?
 
     override func setUp() {
         mockListener = MockListener()
+        mockUIService = MockUIService()
+        ServiceProvider.shared.uiService = mockUIService!
     }
 
     func test_init_whenListenerIsNil() {

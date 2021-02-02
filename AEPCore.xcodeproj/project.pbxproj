@@ -305,7 +305,9 @@
 		78AA4EC62513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EC52513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift */; };
 		78AA4EC92513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */; };
 		78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */; };
-		923547EB25BF9C6600BEA9A3 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923547EA25BF9C6600BEA9A3 /* UIUtils.swift */; };
+		92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B3E25C9C1A7007BE140 /* UIService.swift */; };
+		92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
+		923547EB25BF9C6600BEA9A3 /* AEPUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */; };
 		923547FC25BFF18200BEA9A3 /* FloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923547FB25BFF18200BEA9A3 /* FloatingButton.swift */; };
 		9235481A25BFF19800BEA9A3 /* FloatingButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9235481925BFF19800BEA9A3 /* FloatingButtonDelegate.swift */; };
 		9239714025A6380A0056A3E5 /* MessagingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */; };
@@ -880,7 +882,10 @@
 		78AA4EC52513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationLifecycleResponseTests.swift; sourceTree = "<group>"; };
 		78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPrivacyStatusTests.swift; sourceTree = "<group>"; };
 		78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIDTests.swift; sourceTree = "<group>"; };
-		923547EA25BF9C6600BEA9A3 /* UIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
+		89F79E25B71BEC12CCD2D22E /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		92027B3E25C9C1A7007BE140 /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
+		92027B9825C9EAF2007BE140 /* MockUIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIService.swift; sourceTree = "<group>"; };
+		923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AEPUIService.swift; sourceTree = "<group>"; };
 		923547FB25BFF18200BEA9A3 /* FloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButton.swift; sourceTree = "<group>"; };
 		9235481925BFF19800BEA9A3 /* FloatingButtonDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonDelegate.swift; sourceTree = "<group>"; };
 		9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingDelegate.swift; sourceTree = "<group>"; };
@@ -896,7 +901,6 @@
 		92EEA6052589343700DBA3EE /* MessageMonitorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitorService.swift; sourceTree = "<group>"; };
 		92F06BFB25B8F1FE004C1700 /* MessageMonitorServicing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitorServicing.swift; sourceTree = "<group>"; };
 		92F06D0325BA33F3004C1700 /* UIMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIMessaging.swift; sourceTree = "<group>"; };
-		89F79E25B71BEC12CCD2D22E /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		96BE464331BD2F2538F7BDCF /* Pods-AEPIdentityTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9AD1C8FAF7E8C192A4441902 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
 		B81B947600B51187020B8749 /* Pods-AEPCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1305,6 +1309,7 @@
 				2467E43C24CB54B70022F6BE /* MockUnzipper.swift */,
 				24543A1324E1DAFC002D8D9A /* MockURLService.swift */,
 				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
+				92027B9825C9EAF2007BE140 /* MockUIService.swift */,
 			);
 			name = Mocks;
 			path = AEPServices/Mocks;
@@ -1799,7 +1804,8 @@
 				92F06BFB25B8F1FE004C1700 /* MessageMonitorServicing.swift */,
 				9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */,
 				923972B225AD844E0056A3E5 /* UIApplication+Window.swift */,
-				923547EA25BF9C6600BEA9A3 /* UIUtils.swift */,
+				923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */,
+				92027B3E25C9C1A7007BE140 /* UIService.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -1829,7 +1835,7 @@
 				92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */,
 			);
 			path = fullscreen;
-      sourceTree = "<group>";
+			sourceTree = "<group>";
 		};
 		D55C2031330CD537E59C7255 /* Pods */ = {
 			isa = PBXGroup;
@@ -2904,7 +2910,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				923547EB25BF9C6600BEA9A3 /* UIUtils.swift in Sources */,
+				923547EB25BF9C6600BEA9A3 /* AEPUIService.swift in Sources */,
 				3F0397CE24BE5FF30019F095 /* LoggingService.swift in Sources */,
 				786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
@@ -2925,6 +2931,7 @@
 				3F0397C724BE5FF30019F095 /* CacheExpiry.swift in Sources */,
 				3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */,
 				3F0397FC24BE60910019F095 /* OperationOrderer.swift in Sources */,
+				92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */,
 				923547FC25BFF18200BEA9A3 /* FloatingButton.swift in Sources */,
 				3F0397D324BE5FF30019F095 /* SQLiteDataQueue.swift in Sources */,
 				3F0397C324BE5FF30019F095 /* Caching.swift in Sources */,
@@ -2983,7 +2990,6 @@
 				3F03982724BE61520019F095 /* ThreadSafeDictionaryTests.swift in Sources */,
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
 				923973CD25AF92140056A3E5 /* FullscreenMessageTests.swift in Sources */,
-				2107F03024C9FFB2002935CF /* SHA256Tests.swift in Sources */,
 				78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */,
 				3F03981924BE61520019F095 /* URLServiceTest.swift in Sources */,
 				3F03982324BE61520019F095 /* PersistentHitQueueTests.swift in Sources */,
@@ -3025,6 +3031,7 @@
 				3FE6DDF724C62F620065EA05 /* MockDataQueue.swift in Sources */,
 				215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */,
 				3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */,
+				92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */,
 				3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */,
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
 				24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */,

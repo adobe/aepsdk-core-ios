@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPServices
 import XCTest
 import UIKit
+import AEPServicesMocks
 
 class FullscreenMessageTests : XCTestCase {
     let mockHtml = "somehtml"
@@ -21,6 +22,7 @@ class FullscreenMessageTests : XCTestCase {
     static var onDismissullscreenMessagingCall = false
     var fullscreenMessage : FullscreenMessage?
     static var expectation: XCTestExpectation?
+    var mockUIService: UIService?
 
     var rootViewController: UIViewController!
 
@@ -28,6 +30,8 @@ class FullscreenMessageTests : XCTestCase {
         FullscreenMessageTests.onShowFullscreenMessagingCall = false
         FullscreenMessageTests.onDismissullscreenMessagingCall = false
         fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener())
+        mockUIService = MockUIService()
+        ServiceProvider.shared.uiService = mockUIService!
     }
 
     func test_init_whenListenerIsNil() {
@@ -51,6 +55,11 @@ class FullscreenMessageTests : XCTestCase {
         fullscreenMessage?.dismiss()
         wait(for: [FullscreenMessageTests.expectation!], timeout: 10.0)
         XCTAssertTrue(FullscreenMessageTests.onDismissullscreenMessagingCall)
+    }
+
+    func test_show() {
+        ServiceProvider.shared.messageMonitorService.dismissMessage()
+        XCTAssertNoThrow(fullscreenMessage?.show())
     }
 
     class MockFullscreenListener: FullscreenMessageDelegate {
