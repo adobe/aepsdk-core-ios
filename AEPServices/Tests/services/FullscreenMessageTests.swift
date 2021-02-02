@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPServices
 import XCTest
 import UIKit
+import AEPServicesMocks
 
 class FullscreenMessageTests : XCTestCase {
     let mockHtml = "somehtml"
@@ -21,6 +22,7 @@ class FullscreenMessageTests : XCTestCase {
     static var onDismissullscreenMessagingCall = false
     var fullscreenMessage : FullscreenMessage?
     static var expectation: XCTestExpectation?
+    var mockUIService: UIService?
 
     var rootViewController: UIViewController!
 
@@ -28,6 +30,8 @@ class FullscreenMessageTests : XCTestCase {
         FullscreenMessageTests.onShowFullscreenMessagingCall = false
         FullscreenMessageTests.onDismissullscreenMessagingCall = false
         fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener())
+        mockUIService = MockUIService()
+        ServiceProvider.shared.uiService = mockUIService!
     }
 
     func test_init_whenListenerIsNil() {
@@ -53,18 +57,23 @@ class FullscreenMessageTests : XCTestCase {
         XCTAssertTrue(FullscreenMessageTests.onDismissullscreenMessagingCall)
     }
 
-    class MockFullscreenListener: FullscreenDelegate {
-        func onShow(message: FullscreenMessage?) {
+    func test_show() {
+        ServiceProvider.shared.messageMonitorService.dismissMessage()
+        XCTAssertNoThrow(fullscreenMessage?.show())
+    }
+
+    class MockFullscreenListener: FullscreenMessageDelegate {
+        func onShow(message: FullscreenMessage) {
             FullscreenMessageTests.onShowFullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }
 
-        func onDismiss(message: FullscreenMessage?) {
+        func onDismiss(message: FullscreenMessage) {
             FullscreenMessageTests.onDismissullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }
 
-        func overrideUrlLoad(message: FullscreenMessage?, url: String?) -> Bool {
+        func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool {
             return true
         }
     }

@@ -34,6 +34,8 @@ public class ServiceProvider {
     private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
     private var defaultMessageMonitorService = MessageMonitorService()
+    private var overrideUIService: UIService?
+    private var defaultUIService = AEPUIService()
 
     // Don't allow init of ServiceProvider outside the class
     private init() {}
@@ -124,6 +126,19 @@ public class ServiceProvider {
         }
     }
 
+    public var uiService: UIService {
+        get {
+            return queue.sync {
+                return overrideUIService ?? defaultUIService
+            }
+        }
+        set {
+            queue.async {
+                self.overrideUIService = newValue
+            }
+        }
+    }
+
     internal func reset() {
         defaultSystemInfoService = ApplicationSystemInfoService()
         defaultKeyValueService = UserDefaultsNamedCollection()
@@ -133,11 +148,13 @@ public class ServiceProvider {
         defaultURLService = URLService()
         defaultLoggingService = LoggingService()
         defaultMessageMonitorService = MessageMonitorService()
+        defaultUIService = AEPUIService()
 
         overrideSystemInfoService = nil
         overrideKeyValueService = nil
         overrideNetworkService = nil
         overrideCacheService = nil
         overrideURLService = nil
+        overrideUIService = nil
     }
 }

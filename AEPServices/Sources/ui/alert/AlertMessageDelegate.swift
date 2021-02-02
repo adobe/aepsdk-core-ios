@@ -13,28 +13,28 @@
 import Foundation
 
 /// Fullscreen message lifecycle event listener
-@objc(AEPAlertMessaging) public protocol AlertMessageDelegate {
+@objc(AEPAlertMessageDelegate) public protocol AlertMessageDelegate {
     /// Invoked on positive button clicks
     /// - Parameters:
     ///     - message: Alert message which is currently shown
     @objc(onPositiveResponseWithAlertMessage:)
-    func onPositiveResponse(message: AlertMessage?)
+    func onPositiveResponse(message: AlertMessage)
 
     /// Invoked on negative button clicks
     /// - Parameters:
     ///     - message: Alert message which is currently shown
     @objc(onNegativeResponseWithAlertMessage:)
-    func onNegativeResponse(message: AlertMessage?)
+    func onNegativeResponse(message: AlertMessage)
 
     /// Invoked when the alert message is displayed
     /// - Parameters:
     ///     - message: Alert message which is currently shown
     @objc(onShowWithAlertMessage:)
-    func onShow(message: AlertMessage?)
+    func onShow(message: AlertMessage)
 
     /// Invoked when the alert message is dismissed
     /// - Parameters:
     ///     - message: Alert message which is currently dismissed
     @objc(onDismissWithAlertMessage:)
-    func onDismiss(message: AlertMessage?)
+    func onDismiss(message: AlertMessage)
 }
