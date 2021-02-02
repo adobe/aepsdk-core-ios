@@ -50,7 +50,7 @@ class IdentityPropertiesTests: XCTestCase {
         XCTAssertNotNil(eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]])
         XCTAssertEqual(properties.lastSync?.timeIntervalSince1970, eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] as? TimeInterval)
     }
-    
+
     /// Tests that when ad id is empty it is not included in the event data
     func testToEventDataDoesNotIncludeEmptyValues() {
         // setup
