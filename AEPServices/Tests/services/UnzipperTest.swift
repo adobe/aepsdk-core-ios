@@ -231,7 +231,7 @@ class FileUnzipperTest: XCTestCase {
         let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
         XCTAssertTrue(unzippedItems.isEmpty)
     }
-    
+
 
     func testIsValidUrlWithInvalidUrl() {
         let invalidUrl1 = URL(string: "/var/mobile/Containers/Data/Application/A87F42D1-3EFE-4F4D-A22D-233F184684BB/Library/Caches/com.adobe.edge/../../../")

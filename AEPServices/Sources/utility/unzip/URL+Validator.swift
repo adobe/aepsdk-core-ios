@@ -18,7 +18,7 @@ extension URL {
         if self.absoluteString.contains("../") {
             return false
         }
-        
+
         return true
     }
 }
