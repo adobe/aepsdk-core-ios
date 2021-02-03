@@ -45,7 +45,7 @@ public class FileUnzipper: Unzipping {
             entryNames.append(path)
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
             // Validate path for entry
-            if !destinationEntryURL.isValidUrl() {
+            if !destinationEntryURL.isSafeUrl() {
                 Log.error(label: LOG_PREFIX, "The zip file contained an invalid path. Verify that your zip file is formatted correctly and has not been tampered with.")
                 return []
             }

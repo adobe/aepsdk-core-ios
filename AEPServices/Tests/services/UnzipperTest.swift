@@ -237,9 +237,9 @@ class FileUnzipperTest: XCTestCase {
         let invalidUrl1 = URL(string: "/var/mobile/Containers/Data/Application/A87F42D1-3EFE-4F4D-A22D-233F184684BB/Library/Caches/com.adobe.edge/../../../")
         let invalidUrl2 = URL(string: "/var/../mobile/Containers/Data/Application/A87F42D1-3EFE-4F4D-A22D-233F184684BB/Library/Caches/com.adobe.edge/")
         let validUrl1 = URL(string: "/var/mobile/Containers/Data/Application/A87F42D1-3EFE-4F4D-A22D-233F184684BB/Library/Caches/com.adobe.edge/")
-        XCTAssertFalse(invalidUrl1!.isValidUrl())
-        XCTAssertFalse(invalidUrl2!.isValidUrl())
-        XCTAssertTrue(validUrl1!.isValidUrl())
+        XCTAssertFalse(invalidUrl1!.isSafeUrl())
+        XCTAssertFalse(invalidUrl2!.isSafeUrl())
+        XCTAssertTrue(validUrl1!.isSafeUrl())
     }
 
     // MARK: - Helpers

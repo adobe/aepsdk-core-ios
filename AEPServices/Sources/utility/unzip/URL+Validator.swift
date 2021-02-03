@@ -14,7 +14,7 @@ extension URL {
     ///
     /// Validates a URL against a Zip Slip attack. Simply checks if there is any sort of traversal attempted in the url
     /// - Returns: True if valid, false if invalid
-    func isValidUrl() -> Bool {
+    func isSafeUrl() -> Bool {
         if self.absoluteString.contains("../") {
             return false
         }
