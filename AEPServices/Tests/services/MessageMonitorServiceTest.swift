@@ -23,7 +23,7 @@ class MessageMonitorServiceTest : XCTestCase {
     static var shouldShowMessageCall = false
     var mockMessageMonitorService: MessageMonitorService?
     var messageDelegate : MessagingDelegate?
-    var message: UIMessaging = FullscreenMessage(payload: "", listener: nil)
+    var message: UIDisplayer = FullscreenMessage(payload: "", listener: nil)
 
     override func setUp() {
         MessageMonitorServiceTest.onShowCall = false
@@ -75,15 +75,15 @@ class MessageMonitorServiceTest : XCTestCase {
     }
 
     class MockGlobalUIMessagingListener : MessagingDelegate {
-        func onShow(message: UIMessaging) {
+        func onShow(message: UIDisplayer) {
             onShowCall = true
         }
 
-        func onDismiss(message: UIMessaging) {
+        func onDismiss(message: UIDisplayer) {
             onDismissCall = true
         }
 
-        func shouldShowMessage(message: UIMessaging) -> Bool {
+        func shouldShowMessage(message: UIDisplayer) -> Bool {
             shouldShowMessageCall = true
             return MessageMonitorServiceTest.mockShouldShow
         }

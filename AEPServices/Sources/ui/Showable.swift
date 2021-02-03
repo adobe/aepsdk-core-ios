@@ -13,7 +13,8 @@
 import Foundation
 
 /// UI message used to show the message
-@objc(AEPUIMessaging) public protocol UIMessaging {
+@objc(AEPShowable)
+public protocol Showable {
 
     /// Display the message on the screen
     func show()

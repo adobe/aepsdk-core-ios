@@ -305,6 +305,10 @@
 		78AA4EC62513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EC52513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift */; };
 		78AA4EC92513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */; };
 		78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */; };
+		78B36A7825CA0D7700D6D25F /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36A7725CA0D7700D6D25F /* UIUtils.swift */; };
+		78B36A9625CA1C2D00D6D25F /* Dismissable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36A9525CA1C2D00D6D25F /* Dismissable.swift */; };
+		78B36AB425CA1FCE00D6D25F /* FullscreenPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */; };
+		78B36AEE25CA210E00D6D25F /* FloatingButtonPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */; };
 		92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B3E25C9C1A7007BE140 /* UIService.swift */; };
 		92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
 		923547EB25BF9C6600BEA9A3 /* AEPUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */; };
@@ -322,7 +326,7 @@
 		92EEA5F6258933A600DBA3EE /* FullscreenMessageDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA5F5258933A600DBA3EE /* FullscreenMessageDelegate.swift */; };
 		92EEA6062589343700DBA3EE /* MessageMonitorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitorService.swift */; };
 		92F06BFC25B8F1FE004C1700 /* MessageMonitorServicing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitorServicing.swift */; };
-		92F06D0425BA33F4004C1700 /* UIMessaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* UIMessaging.swift */; };
+		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		A72E12E73A89C07875FF52B0 /* Pods_AEPIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89F79E25B71BEC12CCD2D22E /* Pods_AEPIntegrationTests.framework */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
@@ -882,6 +886,10 @@
 		78AA4EC52513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationLifecycleResponseTests.swift; sourceTree = "<group>"; };
 		78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPrivacyStatusTests.swift; sourceTree = "<group>"; };
 		78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIDTests.swift; sourceTree = "<group>"; };
+		78B36A7725CA0D7700D6D25F /* UIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
+		78B36A9525CA1C2D00D6D25F /* Dismissable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dismissable.swift; sourceTree = "<group>"; };
+		78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenPresentable.swift; sourceTree = "<group>"; };
+		78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPresentable.swift; sourceTree = "<group>"; };
 		89F79E25B71BEC12CCD2D22E /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92027B3E25C9C1A7007BE140 /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
 		92027B9825C9EAF2007BE140 /* MockUIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIService.swift; sourceTree = "<group>"; };
@@ -900,7 +908,7 @@
 		92EEA5F5258933A600DBA3EE /* FullscreenMessageDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenMessageDelegate.swift; sourceTree = "<group>"; };
 		92EEA6052589343700DBA3EE /* MessageMonitorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitorService.swift; sourceTree = "<group>"; };
 		92F06BFB25B8F1FE004C1700 /* MessageMonitorServicing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitorServicing.swift; sourceTree = "<group>"; };
-		92F06D0325BA33F3004C1700 /* UIMessaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIMessaging.swift; sourceTree = "<group>"; };
+		92F06D0325BA33F3004C1700 /* Showable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showable.swift; sourceTree = "<group>"; };
 		96BE464331BD2F2538F7BDCF /* Pods-AEPIdentityTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9AD1C8FAF7E8C192A4441902 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
 		B81B947600B51187020B8749 /* Pods-AEPCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1497,6 +1505,7 @@
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
+				78B36A7725CA0D7700D6D25F /* UIUtils.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1800,7 +1809,8 @@
 				9239726625ACF1340056A3E5 /* alert */,
 				92EEA64D258956FE00DBA3EE /* fullscreen */,
 				92EEA6052589343700DBA3EE /* MessageMonitorService.swift */,
-				92F06D0325BA33F3004C1700 /* UIMessaging.swift */,
+				92F06D0325BA33F3004C1700 /* Showable.swift */,
+				78B36A9525CA1C2D00D6D25F /* Dismissable.swift */,
 				92F06BFB25B8F1FE004C1700 /* MessageMonitorServicing.swift */,
 				9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */,
 				923972B225AD844E0056A3E5 /* UIApplication+Window.swift */,
@@ -1815,6 +1825,7 @@
 			children = (
 				923547FB25BFF18200BEA9A3 /* FloatingButton.swift */,
 				9235481925BFF19800BEA9A3 /* FloatingButtonDelegate.swift */,
+				78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */,
 			);
 			path = floating;
 			sourceTree = "<group>";
@@ -1831,6 +1842,7 @@
 		92EEA64D258956FE00DBA3EE /* fullscreen */ = {
 			isa = PBXGroup;
 			children = (
+				78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */,
 				92EEA5F5258933A600DBA3EE /* FullscreenMessageDelegate.swift */,
 				92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */,
 			);
@@ -2915,6 +2927,7 @@
 				786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				9239728525ACF1490056A3E5 /* AlertMessageDelegate.swift in Sources */,
+				78B36A9625CA1C2D00D6D25F /* Dismissable.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
 				92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */,
@@ -2932,9 +2945,11 @@
 				3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */,
 				3F0397FC24BE60910019F095 /* OperationOrderer.swift in Sources */,
 				92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */,
+				78B36AEE25CA210E00D6D25F /* FloatingButtonPresentable.swift in Sources */,
 				923547FC25BFF18200BEA9A3 /* FloatingButton.swift in Sources */,
 				3F0397D324BE5FF30019F095 /* SQLiteDataQueue.swift in Sources */,
 				3F0397C324BE5FF30019F095 /* Caching.swift in Sources */,
+				78B36A7825CA0D7700D6D25F /* UIUtils.swift in Sources */,
 				923972B325AD844E0056A3E5 /* UIApplication+Window.swift in Sources */,
 				3F0397F924BE60910019F095 /* FileManager+ZIP.swift in Sources */,
 				3F0397FD24BE60910019F095 /* ThreadSafeDictionary.swift in Sources */,
@@ -2945,6 +2960,7 @@
 				3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */,
 				3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */,
 				92F06BFC25B8F1FE004C1700 /* MessageMonitorServicing.swift in Sources */,
+				78B36AB425CA1FCE00D6D25F /* FullscreenPresentable.swift in Sources */,
 				3F0397DA24BE5FF30019F095 /* NamedCollectionProcessing.swift in Sources */,
 				92EEA5F6258933A600DBA3EE /* FullscreenMessageDelegate.swift in Sources */,
 				3F0397FE24BE60910019F095 /* URLEncoder.swift in Sources */,
@@ -2955,7 +2971,7 @@
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
 				92EEA6062589343700DBA3EE /* MessageMonitorService.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
-				92F06D0425BA33F4004C1700 /* UIMessaging.swift in Sources */,
+				92F06D0425BA33F4004C1700 /* Showable.swift in Sources */,
 				3F0397D524BE5FF30019F095 /* DataQueue.swift in Sources */,
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,

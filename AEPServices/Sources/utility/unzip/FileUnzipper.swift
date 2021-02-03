@@ -75,6 +75,6 @@ public class FileUnzipper: Unzipping {
     /// - Parameter url: The url to canonicalize
     /// - Returns: The canonicalized url
     private func canonicalize(_ url: URL) -> URL {
-        url.standardizedFileURL.resolvingSymlinksInPath()
+        url.standardized.resolvingSymlinksInPath()
     }
 }

@@ -16,7 +16,7 @@ import WebKit
 
 /// This class is used to create and display alert messages with custom title, message and buttons on the current view
 @objc(AEPAlertMessage)
-public class AlertMessage: NSObject, UIMessaging {
+public class AlertMessage: NSObject, Showable {
     private let LOG_PREFIX = "AlertMessage"
 
     private let title: String
@@ -33,7 +33,7 @@ public class AlertMessage: NSObject, UIMessaging {
         return ServiceProvider.shared.messagingDelegate
     }
 
-    public init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) {
+    init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) {
         self.title = title
         self.message = message
         self.positiveButtonLabel = positiveButtonLabel

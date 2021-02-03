@@ -60,11 +60,11 @@ class AlertMessageTests : XCTestCase {
     }
 
     class MockGlobalUIMessagingListener : MessagingDelegate {
-        func onShow(message: UIMessaging) {}
+        func onShow(message: UIDisplayer) {}
 
-        func onDismiss(message: UIMessaging) {}
+        func onDismiss(message: UIDisplayer) {}
 
-        func shouldShowMessage(message: UIMessaging) -> Bool {
+        func shouldShowMessage(message: UIDisplayer) -> Bool {
             return MessageMonitorServiceTest.mockShouldShow
         }
     }

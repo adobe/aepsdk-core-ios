@@ -11,14 +11,8 @@
  */
 
 import Foundation
-import UIKit
 
-/// Util functions required by UI elements
-public protocol UIService {
-    
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool?) -> Showable
-    
-    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButton
-    
-    func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> Showable
+@objc(AEPDismissable)
+public protocol Dismissable {
+    func dismiss()
 }

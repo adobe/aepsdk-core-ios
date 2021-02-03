@@ -14,9 +14,10 @@ import Foundation
 import UIKit
 import WebKit
 
-/// This class is used to create and display fullscreen messages on the currentt view.
+/// This class is used to create and display fullscreen messages on the current view.
 @objc(AEPFullscreenMessage)
-public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
+public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresentable {
+    
     private let LOG_PREFIX = "FullscreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
@@ -45,7 +46,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     /// - Parameters:
     ///     - payload: String html content to be displayed with the message
     ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
-    public convenience init(payload: String, listener: FullscreenMessageDelegate?) {
+    convenience init(payload: String, listener: FullscreenMessageDelegate?) {
         self.init(payload: payload, listener: listener, isLocalImageUsed: false)
     }
 
@@ -58,7 +59,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     ///     - payload: String html content to be displayed with the message
     ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
     ///     - isLocalImageUsed: If true, an image from the app bundle will be used for the fullscreen message.
-    public init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) {
+    init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
@@ -70,7 +71,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
         }
 
         DispatchQueue.main.async {
-            guard var newFrame: CGRect = ServiceProvider.shared.uiService.getFrame() else {
+            guard var newFrame: CGRect = UIUtils.getFrame() else {
                 Log.debug(label: self.LOG_PREFIX, "Failed to show the fullscreen message, newly created frame is nil.")
                 return
             }
@@ -194,7 +195,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, UIMessaging {
     private func dismissWithAnimation(animate: Bool) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: animate ? 0.3: 0, animations: {
-                guard var newFrame: CGRect = ServiceProvider.shared.uiService.getFrame() else {
+                guard var newFrame: CGRect = UIUtils.getFrame() else {
                     return
                 }
                 newFrame.origin.y = newFrame.size.height

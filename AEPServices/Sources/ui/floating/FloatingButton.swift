@@ -15,7 +15,7 @@ import UIKit
 
 /// This class is used to create a floating button
 @objc(AEPFloatingButton)
-public class FloatingButton: NSObject {
+public class FloatingButton: NSObject, FloatingButtonPresentable {
 
     private let LOG_PREFIX = "FloatingButton"
 
@@ -29,12 +29,12 @@ public class FloatingButton: NSObject {
 
     private var listener: FloatingButtonDelegate?
 
-    public init(listener: FloatingButtonDelegate?) {
+    init(listener: FloatingButtonDelegate?) {
         self.listener = listener
     }
 
     /// Display the floating button on the screen
-    public func display() {
+    public func show() {
         DispatchQueue.main.async {
             if !self.initFloatingButton() {
                 Log.debug(label: self.LOG_PREFIX, "Floating button couldn't be displayed, failed to create floating button.")
@@ -52,7 +52,7 @@ public class FloatingButton: NSObject {
     }
 
     /// Remove the floating button from the screen
-    public func remove() {
+    public func dismiss() {
         DispatchQueue.main.async {
             NotificationCenter.default.removeObserver(self)
             self.buttonImageView?.removeFromSuperview()
@@ -69,7 +69,7 @@ public class FloatingButton: NSObject {
         self.buttonImageView = UIImageView(frame: newFrame)
 
         // color
-        guard let imageData: Data = Data.init(base64Encoded: ServiceProvider.shared.uiService.ENCODED_BACKGROUND_PNG, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters) else {
+        guard let imageData: Data = Data.init(base64Encoded: UIUtils.ENCODED_BACKGROUND_PNG, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters) else {
             Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, background image for button is nil.")
             return false
         }
@@ -167,7 +167,7 @@ public class FloatingButton: NSObject {
     }
 
     private func getImageFrame() -> CGRect? {
-        guard var newFrame: CGRect = ServiceProvider.shared.uiService.getFrame() else { return nil }
+        guard var newFrame: CGRect = UIUtils.getFrame() else { return nil }
         let size: CGSize? = newFrame.size
 
         if let screenBounds: CGSize = size {
