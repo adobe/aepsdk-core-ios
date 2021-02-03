@@ -45,7 +45,7 @@ public class FileUnzipper: Unzipping {
             entryNames.append(path)
             let destinationEntryURL = destinationURL.appendingPathComponent(path)
             // Validate path for entry
-            if !isValidPath(destinationEntryURL, destination: destinationURL) {
+            if !destinationEntryURL.isValidUrl() {
                 Log.error(label: LOG_PREFIX, "The zip file contained an invalid path. Verify that your zip file is formatted correctly and has not been tampered with.")
                 return []
             }
@@ -57,24 +57,5 @@ public class FileUnzipper: Unzipping {
         }
 
         return entryNames
-    }
-    ///
-    /// Validates the entryUrl path
-    /// - Parameters:
-    ///     - entryUrl: The url for the entry being extracted from the archive
-    ///     - destination: The destination url for the entry being extracted
-    /// - Returns: True if valid, false if invalid
-    private func isValidPath(_ entryUrl: URL, destination: URL) -> Bool {
-        let destinationComponents = canonicalize(destination).pathComponents
-        let entryComponents = canonicalize(entryUrl).pathComponents
-        return destinationComponents.count < entryComponents.count && !zip(destinationComponents, entryComponents).contains(where: !=)
-    }
-
-    ///
-    /// Canonicalizes the Url by standardizing as a file url and resolving symlinks in the path
-    /// - Parameter url: The url to canonicalize
-    /// - Returns: The canonicalized url
-    private func canonicalize(_ url: URL) -> URL {
-        url.standardizedFileURL.resolvingSymlinksInPath()
     }
 }
