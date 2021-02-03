@@ -1298,6 +1298,7 @@
 				3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */,
 				3F0397C024BE5FF30019F095 /* URLOpening.swift */,
 				3F0397C124BE5FF30019F095 /* URLService.swift */,
+				78B36A7725CA0D7700D6D25F /* UIUtils.swift */,
 			);
 			name = Sources;
 			path = AEPServices/Sources;
@@ -1507,7 +1508,6 @@
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
-				78B36A7725CA0D7700D6D25F /* UIUtils.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
