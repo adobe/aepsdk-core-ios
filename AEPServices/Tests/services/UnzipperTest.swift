@@ -220,7 +220,7 @@ class FileUnzipperTest: XCTestCase {
     ///
     /// Test Zip Slip attempt does not succeed
     ///
-    func testZipSlipCatch() {
+    func testZipSlipCatchWithExploitedZip() {
         removeResourceWith(name: testZipSlipFileName)
         guard let sourceURL = getResourceURLWith(name: testZipSlipFileName) else {
             XCTFail()
@@ -230,6 +230,16 @@ class FileUnzipperTest: XCTestCase {
         let destinationURL = sourceURL.deletingLastPathComponent().appendingPathComponent(testZipSlipFileName)
         let unzippedItems = unzipper.unzipItem(at: sourceURL, to: destinationURL)
         XCTAssertTrue(unzippedItems.isEmpty)
+    }
+
+
+    func testIsValidUrlWithInvalidUrl() {
+        let invalidUrl1 = URL(string: "/var/mobile/Containers/Data/Application/A87F42D1-3EFE-4F4D-A22D-233F184684BB/Library/Caches/com.adobe.edge/../../../")
+        let invalidUrl2 = URL(string: "/var/../mobile/Containers/Data/Application/A87F42D1-3EFE-4F4D-A22D-233F184684BB/Library/Caches/com.adobe.edge/")
+        let validUrl1 = URL(string: "/var/mobile/Containers/Data/Application/A87F42D1-3EFE-4F4D-A22D-233F184684BB/Library/Caches/com.adobe.edge/")
+        XCTAssertFalse(invalidUrl1!.isSafeUrl())
+        XCTAssertFalse(invalidUrl2!.isSafeUrl())
+        XCTAssertTrue(validUrl1!.isSafeUrl())
     }
 
     // MARK: - Helpers
@@ -249,3 +259,5 @@ class FileUnzipperTest: XCTestCase {
         }
     }
 }
+
+
