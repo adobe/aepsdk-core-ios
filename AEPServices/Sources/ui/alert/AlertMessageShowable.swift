@@ -13,6 +13,6 @@
 import Foundation
 
 ///
-/// Represents a FloatingButton UI element which is both `Showable` and `Dismissable`
+/// Represents an AlertMessage UI element which is `Showable`
 ///
-public protocol FloatingButtonPresentable: Showable, Dismissable {}
+public protocol AlertMessageShowable: Showable {}

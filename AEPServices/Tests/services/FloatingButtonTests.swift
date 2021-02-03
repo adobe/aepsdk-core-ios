@@ -40,12 +40,12 @@ class FloatingButtonTests : XCTestCase {
 
     func test_display() {
         floatingButton = FloatingButton(listener: mockListener)
-        XCTAssertNoThrow(floatingButton?.display())
+        XCTAssertNoThrow(floatingButton?.show())
     }
 
     func test_remove() {
         floatingButton = FloatingButton(listener: mockListener)
-        XCTAssertNoThrow(floatingButton?.remove())
+        XCTAssertNoThrow(floatingButton?.dismiss())
     }
 
     class MockListener: FloatingButtonDelegate {

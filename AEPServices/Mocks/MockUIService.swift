@@ -16,23 +16,25 @@ import UIKit
 
 public class MockUIService: UIService {
     
+    public init() {}
+    
     var createFullscreenMessageCalled = false
-    var fullscreenMessage: UIDisplayer?
-    public func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool?) -> UIDisplayer {
+    var fullscreenMessage: FullscreenPresentable?
+    public func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool?) -> FullscreenPresentable {
         createFullscreenMessageCalled = true
         return fullscreenMessage ?? FullscreenMessage(payload: payload, listener: listener)
     }
     
     var createFloatingButtonCalled = false
-    var floatingButton: FloatingButton?
-    public func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButton {
+    var floatingButton: FloatingButtonPresentable?
+    public func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
         createFloatingButtonCalled = true
         return floatingButton ?? createFloatingButton(listener: listener)
     }
     
     var createAlertMessageCalled = false
-    var alertMessage: UIDisplayer?
-    public func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> UIDisplayer {
+    var alertMessage: AlertMessageShowable?
+    public func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> AlertMessageShowable {
         createAlertMessageCalled = true
         return alertMessage ?? AlertMessage(title: title, message: message, positiveButtonLabel: positiveButtonLabel, negativeButtonLabel: negativeButtonLabel, listener: listener)
     }

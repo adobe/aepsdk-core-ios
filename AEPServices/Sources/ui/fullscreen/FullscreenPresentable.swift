@@ -12,4 +12,7 @@
 
 import Foundation
 
+///
+/// Represents a Fullscreen UI element which is both `Showable` and `Dismissable`
+///
 public protocol FullscreenPresentable: Showable, Dismissable {}

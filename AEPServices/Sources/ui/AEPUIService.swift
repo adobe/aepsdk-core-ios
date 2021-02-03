@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 
 class AEPUIService: UIService {
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool? = nil) -> Showable {
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool? = nil) -> FullscreenPresentable {
         guard let isLocalImageUsed = isLocalImageUsed else {
             return FullscreenMessage(payload: payload, listener: listener)
         }
@@ -22,11 +22,11 @@ class AEPUIService: UIService {
         return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed)
     }
 
-    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButton {
+    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
         return FloatingButton(listener: listener)
     }
 
-    func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> Showable {
+    func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> AlertMessageShowable {
         return AlertMessage(title: title, message: message, positiveButtonLabel: positiveButtonLabel, negativeButtonLabel: negativeButtonLabel, listener: listener)
     }
 }

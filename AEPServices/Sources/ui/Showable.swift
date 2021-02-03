@@ -12,10 +12,14 @@
 
 import Foundation
 
-/// UI message used to show the message
+///
+/// Represents a UI element which can be shown
+///
 @objc(AEPShowable)
 public protocol Showable {
 
-    /// Display the message on the screen
+    ///
+    /// Displays the UI element
+    ///
     func show()
 }

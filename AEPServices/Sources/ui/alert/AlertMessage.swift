@@ -16,7 +16,7 @@ import WebKit
 
 /// This class is used to create and display alert messages with custom title, message and buttons on the current view
 @objc(AEPAlertMessage)
-public class AlertMessage: NSObject, Showable {
+public class AlertMessage: NSObject, AlertMessageShowable {
     private let LOG_PREFIX = "AlertMessage"
 
     private let title: String

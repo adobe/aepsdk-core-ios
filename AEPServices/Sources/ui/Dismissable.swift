@@ -12,7 +12,14 @@
 
 import Foundation
 
+///
+/// Represents a UI element which can be dismissed
+///
 @objc(AEPDismissable)
 public protocol Dismissable {
+
+    ///
+    /// Dismisses the UI element
+    ///
     func dismiss()
 }
