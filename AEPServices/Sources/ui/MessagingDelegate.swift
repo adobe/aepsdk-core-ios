@@ -18,16 +18,16 @@ import Foundation
     /// Invoked when the any message is displayed
     /// - Parameters:
     ///     - message: UIMessaging message that is being displayed
-    func onShow(message: UIMessaging)
+    func onShow(message: Showable)
 
     /// Invoked when the any message is dismissed
     /// - Parameters:
     ///     - message: UIMessaging message that is being dismissed
-    func onDismiss(message: UIMessaging)
+    func onDismiss(message: Showable)
 
     /// Used to find whether messages should be shown or not
     /// - Parameters:
     ///     - message: UIMessaging message that is about to get displayed
     /// - Returns: true if the message should be shown else false
-    func shouldShowMessage(message: UIMessaging) -> Bool
+    func shouldShowMessage(message: Showable) -> Bool
 }

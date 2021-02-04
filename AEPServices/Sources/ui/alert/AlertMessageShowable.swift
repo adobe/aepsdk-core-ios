@@ -12,9 +12,8 @@
 
 import Foundation
 
-/// UI message used to show the message
-@objc(AEPUIMessaging) public protocol UIMessaging {
-
-    /// Display the message on the screen
-    func show()
-}
+///
+/// Represents an AlertMessage UI element which is `Showable`
+///
+@objc(AEPAlertMessageShowable)
+public protocol AlertMessageShowable: Showable {}

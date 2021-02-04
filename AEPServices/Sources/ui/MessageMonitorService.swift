@@ -35,7 +35,7 @@ class MessageMonitorService: MessageMonitorServicing {
         }
     }
 
-    internal func show(message: UIMessaging) -> Bool {
+    internal func show(message: Showable) -> Bool {
         if isMessageDisplayed() {
             Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
             return false

@@ -29,13 +29,13 @@ class FullscreenMessageTests : XCTestCase {
     override func setUp() {
         FullscreenMessageTests.onShowFullscreenMessagingCall = false
         FullscreenMessageTests.onDismissullscreenMessagingCall = false
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener())
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false)
         mockUIService = MockUIService()
         ServiceProvider.shared.uiService = mockUIService!
     }
 
     func test_init_whenListenerIsNil() {
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: nil)
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: nil, isLocalImageUsed: false)
         XCTAssertNotNil(fullscreenMessage)
     }
 

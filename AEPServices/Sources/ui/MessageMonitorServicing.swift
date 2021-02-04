@@ -29,7 +29,7 @@ protocol MessageMonitorServicing {
     /// Check if any message is being displayed already or if the message should be shown based on `MessagingDelegate`
     /// - Parameters:UIMessaging message which needs to be shown
     /// - Returns: True if message needs to be shown false otherwise
-    func show(message: UIMessaging) -> Bool
+    func show(message: Showable) -> Bool
 
     // Check if the message is being displayed and call invoke the appropriate listeners
     /// - Returns: True if message needs to be dismissed false otherwise
