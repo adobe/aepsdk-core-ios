@@ -20,9 +20,9 @@ public class MockUIService: UIService {
     
     var createFullscreenMessageCalled = false
     var fullscreenMessage: FullscreenPresentable?
-    public func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool?) -> FullscreenPresentable {
+    public func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable {
         createFullscreenMessageCalled = true
-        return fullscreenMessage ?? FullscreenMessage(payload: payload, listener: listener)
+        return fullscreenMessage ?? FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed)
     }
     
     var createFloatingButtonCalled = false

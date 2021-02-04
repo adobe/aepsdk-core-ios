@@ -23,7 +23,7 @@ class MessageMonitorServiceTest : XCTestCase {
     static var shouldShowMessageCall = false
     var mockMessageMonitorService: MessageMonitorService?
     var messageDelegate : MessagingDelegate?
-    var message: FullscreenPresentable = FullscreenMessage(payload: "", listener: nil)
+    var message: FullscreenPresentable = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false)
 
     override func setUp() {
         MessageMonitorServiceTest.onShowCall = false
