@@ -14,11 +14,7 @@ import Foundation
 import UIKit
 
 class AEPUIService: UIService {
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool? = nil) -> FullscreenPresentable {
-        guard let isLocalImageUsed = isLocalImageUsed else {
-            return FullscreenMessage(payload: payload, listener: listener)
-        }
-
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
         return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed)
     }
 

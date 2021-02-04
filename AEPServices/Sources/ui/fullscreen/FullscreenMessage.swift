@@ -46,18 +46,6 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     /// - Parameters:
     ///     - payload: String html content to be displayed with the message
     ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
-    convenience init(payload: String, listener: FullscreenMessageDelegate?) {
-        self.init(payload: payload, listener: listener, isLocalImageUsed: false)
-    }
-
-    /// Creates `FullscreenMessage` instance with the payload provided.
-    /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
-    /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
-    /// Treat all calls to this API with caution and make sure input is vetted for safety somewhere.
-    ///
-    /// - Parameters:
-    ///     - payload: String html content to be displayed with the message
-    ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
     ///     - isLocalImageUsed: If true, an image from the app bundle will be used for the fullscreen message.
     init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) {
         self.payload = payload

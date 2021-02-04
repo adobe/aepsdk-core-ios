@@ -25,7 +25,7 @@ public protocol UIService {
     ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
     ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
     /// - Returns: A `FullscreenPresentable` implementation
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool?) -> FullscreenPresentable
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
 
     ///
     /// Creates a `FloatinButtonPresentable`
