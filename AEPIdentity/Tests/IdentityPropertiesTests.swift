@@ -51,6 +51,21 @@ class IdentityPropertiesTests: XCTestCase {
         XCTAssertEqual(properties.lastSync?.timeIntervalSince1970, eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] as? TimeInterval)
     }
 
+    /// Tests that when ad id is empty it is not included in the event data
+    func testToEventDataDoesNotIncludeEmptyValues() {
+        // setup
+        var properties = IdentityProperties()
+        properties.ecid = ECID()
+        properties.advertisingIdentifier = ""
+
+        // test
+        let eventData = properties.toEventData()
+
+        // verify
+        XCTAssertEqual(1, eventData.count)
+        XCTAssertEqual(properties.ecid?.ecidString, eventData[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
+    }
+
     /// Tests that when the existing customer ids and new customer ids are empty that it remains empty
     func testMergeAndCleanCustomerIdsBothEmpty() {
         // setup
