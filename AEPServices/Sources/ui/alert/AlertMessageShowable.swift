@@ -15,4 +15,5 @@ import Foundation
 ///
 /// Represents an AlertMessage UI element which is `Showable`
 ///
+@objc(AEPAlertMessageShowable)
 public protocol AlertMessageShowable: Showable {}

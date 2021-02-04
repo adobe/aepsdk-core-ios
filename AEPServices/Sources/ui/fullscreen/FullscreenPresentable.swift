@@ -13,6 +13,7 @@
 import Foundation
 
 ///
-/// Represents a Fullscreen UI element which is both `Showable` and `Dismissable`
+/// Represents a Fullscreen UI element which is both `Showable` and `Dismissible`
 ///
-public protocol FullscreenPresentable: Showable, Dismissable {}
+@objc(AEPFullscreenPresentable)
+public protocol FullscreenPresentable: Showable, Dismissible {}

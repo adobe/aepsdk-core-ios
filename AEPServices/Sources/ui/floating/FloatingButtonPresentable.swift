@@ -13,6 +13,7 @@
 import Foundation
 
 ///
-/// Represents a FloatingButton UI element which is both `Showable` and `Dismissable`
+/// Represents a FloatingButton UI element which is both `Showable` and `Dismissible`
 ///
-public protocol FloatingButtonPresentable: Showable, Dismissable {}
+@objc(AEPFloatingButtonPresentable)
+public protocol FloatingButtonPresentable: Showable, Dismissible {}

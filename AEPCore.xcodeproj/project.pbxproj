@@ -307,7 +307,7 @@
 		78AA4EC92513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */; };
 		78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */; };
 		78B36A7825CA0D7700D6D25F /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36A7725CA0D7700D6D25F /* UIUtils.swift */; };
-		78B36A9625CA1C2D00D6D25F /* Dismissable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36A9525CA1C2D00D6D25F /* Dismissable.swift */; };
+		78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36A9525CA1C2D00D6D25F /* Dismissible.swift */; };
 		78B36AB425CA1FCE00D6D25F /* FullscreenPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */; };
 		78B36AEE25CA210E00D6D25F /* FloatingButtonPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */; };
 		92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B3E25C9C1A7007BE140 /* UIService.swift */; };
@@ -889,7 +889,7 @@
 		78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationPrivacyStatusTests.swift; sourceTree = "<group>"; };
 		78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationAppIDTests.swift; sourceTree = "<group>"; };
 		78B36A7725CA0D7700D6D25F /* UIUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
-		78B36A9525CA1C2D00D6D25F /* Dismissable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dismissable.swift; sourceTree = "<group>"; };
+		78B36A9525CA1C2D00D6D25F /* Dismissible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dismissible.swift; sourceTree = "<group>"; };
 		78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenPresentable.swift; sourceTree = "<group>"; };
 		78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPresentable.swift; sourceTree = "<group>"; };
 		89F79E25B71BEC12CCD2D22E /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1812,7 +1812,7 @@
 				92EEA64D258956FE00DBA3EE /* fullscreen */,
 				92EEA6052589343700DBA3EE /* MessageMonitorService.swift */,
 				92F06D0325BA33F3004C1700 /* Showable.swift */,
-				78B36A9525CA1C2D00D6D25F /* Dismissable.swift */,
+				78B36A9525CA1C2D00D6D25F /* Dismissible.swift */,
 				92F06BFB25B8F1FE004C1700 /* MessageMonitorServicing.swift */,
 				9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */,
 				923972B225AD844E0056A3E5 /* UIApplication+Window.swift */,
@@ -2930,7 +2930,7 @@
 				786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				9239728525ACF1490056A3E5 /* AlertMessageDelegate.swift in Sources */,
-				78B36A9625CA1C2D00D6D25F /* Dismissable.swift in Sources */,
+				78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
 				92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */,

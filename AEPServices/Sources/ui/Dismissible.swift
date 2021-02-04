@@ -15,8 +15,8 @@ import Foundation
 ///
 /// Represents a UI element which can be dismissed
 ///
-@objc(AEPDismissable)
-public protocol Dismissable {
+@objc(AEPDismissible)
+public protocol Dismissible {
 
     ///
     /// Dismisses the UI element
