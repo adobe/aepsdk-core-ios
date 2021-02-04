@@ -53,14 +53,14 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
 
     public func show() {
         if messageMonitor.show(message: self) ==  false {
-            self.listener?.onShowFailed()
+            self.listener?.onShowFailure()
             return
         }
 
         DispatchQueue.main.async {
             guard var newFrame: CGRect = UIUtils.getFrame() else {
                 Log.debug(label: self.LOG_PREFIX, "Failed to show the fullscreen message, newly created frame is nil.")
-                self.listener?.onShowFailed()
+                self.listener?.onShowFailure()
                 return
             }
             newFrame.origin.y = newFrame.size.height

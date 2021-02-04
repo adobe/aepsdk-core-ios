@@ -41,5 +41,5 @@ import Foundation
     ///
     /// Invoked when the alert failed to be displayed
     ///
-    func onShowFailed()
+    func onShowFailure()
 }

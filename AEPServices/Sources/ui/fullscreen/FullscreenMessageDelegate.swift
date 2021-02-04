@@ -37,5 +37,5 @@ import Foundation
     ///
     /// Invoked when the FullscreenMessage failed to be displayed
     ///
-    func onShowFailed()
+    func onShowFailure()
 }

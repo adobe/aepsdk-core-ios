@@ -69,7 +69,7 @@ class AlertMessageTests : XCTestCase {
         func onNegativeResponse(message: AlertMessage) {}
         func onShow(message: AlertMessage) {}
         func onDismiss(message: AlertMessage) {}
-        func onShowFailed() {
+        func onShowFailure() {
             AlertMessageTests.onShowFailedCall = true
             AlertMessageTests.expectation?.fulfill()
         }

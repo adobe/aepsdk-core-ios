@@ -89,7 +89,7 @@ class FullscreenMessageTests : XCTestCase {
             return true
         }
 
-        func onShowFailed() {
+        func onShowFailure() {
             FullscreenMessageTests.onShowFailedCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }

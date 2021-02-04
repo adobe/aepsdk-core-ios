@@ -41,7 +41,7 @@ public class AlertMessage: NSObject, AlertMessageShowable {
 
     public func show() {
         if messageMonitor.show(message: self) == false {
-            listener?.onShowFailed()
+            listener?.onShowFailure()
             return
         }
 
@@ -72,12 +72,12 @@ public class AlertMessage: NSObject, AlertMessageShowable {
                     }
                 } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
-                    self.listener?.onShowFailed()
+                    self.listener?.onShowFailure()
                     self.messageMonitor.dismissMessage()
                 }
             } else {
                 Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. KeyWindow is null.")
-                self.listener?.onShowFailed()
+                self.listener?.onShowFailure()
                 self.messageMonitor.dismissMessage()
             }
         }
