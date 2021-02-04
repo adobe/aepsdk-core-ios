@@ -29,10 +29,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     var payload: String
     var listener: FullscreenMessageDelegate?
     var webView: UIView?
-
-    private var messageService: MessageMonitorServicing {
-        return ServiceProvider.shared.messageMonitorService
-    }
+    private var messageMonitor: MessageMonitoring
 
     private var messagingDelegate: MessagingDelegate? {
         return ServiceProvider.shared.messagingDelegate
@@ -47,20 +44,23 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     ///     - payload: String html content to be displayed with the message
     ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
     ///     - isLocalImageUsed: If true, an image from the app bundle will be used for the fullscreen message.
-    init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) {
+    init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool, messageMonitor: MessageMonitoring) {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
+        self.messageMonitor = messageMonitor
     }
 
     public func show() {
-        if messageService.show(message: self) ==  false {
+        if messageMonitor.show(message: self) ==  false {
+            self.listener?.onShowFailed()
             return
         }
 
         DispatchQueue.main.async {
             guard var newFrame: CGRect = UIUtils.getFrame() else {
                 Log.debug(label: self.LOG_PREFIX, "Failed to show the fullscreen message, newly created frame is nil.")
+                self.listener?.onShowFailed()
                 return
             }
             newFrame.origin.y = newFrame.size.height
@@ -121,7 +121,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
 
     public func dismiss() {
         DispatchQueue.main.async {
-            if self.messageService.dismiss() ==  false {
+            if self.messageMonitor.dismiss() ==  false {
                 return
             }
 

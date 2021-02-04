@@ -14,7 +14,7 @@ import Foundation
 
 /// This protocol is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
 /// The status is exposed through isMessageDisplayed.
-protocol MessageMonitorServicing {
+protocol MessageMonitoring {
     /// - Returns: True if the message is being displayed else false
     func isMessageDisplayed() -> Bool
 

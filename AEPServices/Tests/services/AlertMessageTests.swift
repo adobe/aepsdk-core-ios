@@ -28,10 +28,14 @@ class AlertMessageTests : XCTestCase {
 
     var mockListener: AlertMessageDelegate?
     var messageDelegate : MessagingDelegate?
+    
+    var messageMonitor = MessageMonitor()
 
+    static var onShowFailedCall = false
+    
     override func setUp() {
         mockListener = MockListener()
-        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: mockListener)
+        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: mockListener, messageMonitor: messageMonitor)
         messageDelegate = MockGlobalUIMessagingListener()
         ServiceProvider.shared.messagingDelegate = messageDelegate
         mockUIService = MockUIService()
@@ -39,7 +43,7 @@ class AlertMessageTests : XCTestCase {
     }
 
     func test_init_whenListenerIsNil() {
-        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: nil)
+        alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: nil, messageMonitor: messageMonitor)
         XCTAssertNotNil(alertMessage)
     }
 
@@ -48,8 +52,16 @@ class AlertMessageTests : XCTestCase {
     }
 
     func test_show() {
-        ServiceProvider.shared.messageMonitorService.dismissMessage()
+        messageMonitor.dismissMessage()
         XCTAssertNoThrow(alertMessage?.show())
+    }
+    
+    func testShowFailed() {
+        AlertMessageTests.expectation = XCTestExpectation(description: "Testing show failed")
+        alertMessage = AlertMessage(title: "", message: "", positiveButtonLabel: "", negativeButtonLabel: "", listener: mockListener, messageMonitor: messageMonitor)
+        alertMessage?.show()
+        wait(for: [AlertMessageTests.expectation!], timeout: 1.0)
+        XCTAssertTrue(AlertMessageTests.onShowFailedCall)
     }
 
     class MockListener: AlertMessageDelegate {
@@ -57,6 +69,10 @@ class AlertMessageTests : XCTestCase {
         func onNegativeResponse(message: AlertMessage) {}
         func onShow(message: AlertMessage) {}
         func onDismiss(message: AlertMessage) {}
+        func onShowFailed() {
+            AlertMessageTests.onShowFailedCall = true
+            AlertMessageTests.expectation?.fulfill()
+        }
     }
 
     class MockGlobalUIMessagingListener : MessagingDelegate {
