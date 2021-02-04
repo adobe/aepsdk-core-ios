@@ -14,9 +14,9 @@ import Foundation
 import UIKit
 
 class AEPUIService: UIService {
-    
+
     private var messageMonitor = MessageMonitor()
-    
+
     func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
         return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor)
     }

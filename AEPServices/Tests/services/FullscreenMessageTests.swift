@@ -26,7 +26,7 @@ class FullscreenMessageTests : XCTestCase {
     var mockUIService: UIService?
 
     var rootViewController: UIViewController!
-    
+
     var messageMonitor = MessageMonitor()
 
     override func setUp() {
@@ -64,14 +64,14 @@ class FullscreenMessageTests : XCTestCase {
         messageMonitor.dismissMessage()
         XCTAssertNoThrow(fullscreenMessage?.show())
     }
-    
+
     func test_showFailed() {
         FullscreenMessageTests.expectation = XCTestExpectation(description: "Testing show failed")
         fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false, messageMonitor: messageMonitor)
         fullscreenMessage?.show()
         wait(for: [FullscreenMessageTests.expectation!], timeout: 1.0)
         XCTAssertTrue(FullscreenMessageTests.onShowFailedCall)
-        
+
     }
 
     class MockFullscreenListener: FullscreenMessageDelegate {
@@ -88,7 +88,7 @@ class FullscreenMessageTests : XCTestCase {
         func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool {
             return true
         }
-        
+
         func onShowFailed() {
             FullscreenMessageTests.onShowFailedCall = true
             FullscreenMessageTests.expectation?.fulfill()

@@ -28,11 +28,11 @@ class AlertMessageTests : XCTestCase {
 
     var mockListener: AlertMessageDelegate?
     var messageDelegate : MessagingDelegate?
-    
+
     var messageMonitor = MessageMonitor()
 
     static var onShowFailedCall = false
-    
+
     override func setUp() {
         mockListener = MockListener()
         alertMessage = AlertMessage(title: AlertMessageTests.mockTitle, message: AlertMessageTests.mockMessage, positiveButtonLabel: AlertMessageTests.mockPositiveLabel, negativeButtonLabel: AlertMessageTests.mockNegativeLabel, listener: mockListener, messageMonitor: messageMonitor)
@@ -55,7 +55,7 @@ class AlertMessageTests : XCTestCase {
         messageMonitor.dismissMessage()
         XCTAssertNoThrow(alertMessage?.show())
     }
-    
+
     func testShowFailed() {
         AlertMessageTests.expectation = XCTestExpectation(description: "Testing show failed")
         alertMessage = AlertMessage(title: "", message: "", positiveButtonLabel: "", negativeButtonLabel: "", listener: mockListener, messageMonitor: messageMonitor)
