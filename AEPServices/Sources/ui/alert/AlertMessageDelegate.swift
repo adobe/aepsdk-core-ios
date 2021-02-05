@@ -37,4 +37,9 @@ import Foundation
     ///     - message: Alert message which is currently dismissed
     @objc(onDismissWithAlertMessage:)
     func onDismiss(message: AlertMessage)
+
+    ///
+    /// Invoked when the alert failed to be displayed
+    ///
+    func onShowFailure()
 }

@@ -24,25 +24,24 @@ public class AlertMessage: NSObject, AlertMessageShowable {
     private let positiveButtonLabel: String?
     private let negativeButtonLabel: String?
     private var listener: AlertMessageDelegate?
-
-    private var messageService: MessageMonitorServicing {
-        return ServiceProvider.shared.messageMonitorService
-    }
+    private var messageMonitor: MessageMonitoring
 
     private var messagingDelegate: MessagingDelegate? {
         return ServiceProvider.shared.messagingDelegate
     }
 
-    init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) {
+    init(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?, messageMonitor: MessageMonitoring) {
         self.title = title
         self.message = message
         self.positiveButtonLabel = positiveButtonLabel
         self.negativeButtonLabel = negativeButtonLabel
         self.listener = listener
+        self.messageMonitor = messageMonitor
     }
 
     public func show() {
-        if messageService.show(message: self) == false {
+        if messageMonitor.show(message: self) == false {
+            listener?.onShowFailure()
             return
         }
 
@@ -73,11 +72,13 @@ public class AlertMessage: NSObject, AlertMessageShowable {
                     }
                 } else {
                     Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. ViewController is not loaded.")
-                    self.messageService.dismissMessage()
+                    self.listener?.onShowFailure()
+                    self.messageMonitor.dismissMessage()
                 }
             } else {
                 Log.warning(label: "\(self.LOG_PREFIX):\(#function)", "Unable to show Alert. KeyWindow is null.")
-                self.messageService.dismissMessage()
+                self.listener?.onShowFailure()
+                self.messageMonitor.dismissMessage()
             }
         }
     }
@@ -127,7 +128,7 @@ public class AlertMessage: NSObject, AlertMessageShowable {
     }
 
     private func dismiss() {
-        if messageService.dismiss() == false {
+        if messageMonitor.dismiss() == false {
             return
         }
         self.listener?.onDismiss(message: self)

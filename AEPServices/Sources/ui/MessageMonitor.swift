@@ -12,7 +12,7 @@
 
 import Foundation
 
-class MessageMonitorService: MessageMonitorServicing {
+class MessageMonitor: MessageMonitoring {
     private let LOG_PREFIX = "MessageMonitor"
     private var isMsgDisplayed = false
     private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")

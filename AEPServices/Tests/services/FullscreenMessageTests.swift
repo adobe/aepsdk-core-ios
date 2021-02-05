@@ -20,46 +20,58 @@ class FullscreenMessageTests : XCTestCase {
     let mockHtml = "somehtml"
     static var onShowFullscreenMessagingCall = false
     static var onDismissullscreenMessagingCall = false
+    static var onShowFailedCall = false
     var fullscreenMessage : FullscreenMessage?
     static var expectation: XCTestExpectation?
     var mockUIService: UIService?
 
     var rootViewController: UIViewController!
 
+    var messageMonitor = MessageMonitor()
+
     override func setUp() {
         FullscreenMessageTests.onShowFullscreenMessagingCall = false
         FullscreenMessageTests.onDismissullscreenMessagingCall = false
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false)
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false, messageMonitor: messageMonitor)
         mockUIService = MockUIService()
         ServiceProvider.shared.uiService = mockUIService!
     }
 
     func test_init_whenListenerIsNil() {
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: nil, isLocalImageUsed: false)
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: nil, isLocalImageUsed: false, messageMonitor: messageMonitor)
         XCTAssertNotNil(fullscreenMessage)
     }
 
     func test_init_whenIsLocalImageTrue() {
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: true)
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: true, messageMonitor: messageMonitor)
         XCTAssertNotNil(fullscreenMessage)
     }
 
     func test_init_whenIsLocalImageFalse() {
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false)
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false, messageMonitor: messageMonitor)
         XCTAssertNotNil(fullscreenMessage)
     }
 
     func test_dismiss() {
         FullscreenMessageTests.expectation = XCTestExpectation(description: "Testing Dismiss")
-        ServiceProvider.shared.messageMonitorService.displayMessage()
+        messageMonitor.displayMessage()
         fullscreenMessage?.dismiss()
         wait(for: [FullscreenMessageTests.expectation!], timeout: 10.0)
         XCTAssertTrue(FullscreenMessageTests.onDismissullscreenMessagingCall)
     }
 
     func test_show() {
-        ServiceProvider.shared.messageMonitorService.dismissMessage()
+        messageMonitor.dismissMessage()
         XCTAssertNoThrow(fullscreenMessage?.show())
+    }
+
+    func test_showFailed() {
+        FullscreenMessageTests.expectation = XCTestExpectation(description: "Testing show failed")
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false, messageMonitor: messageMonitor)
+        fullscreenMessage?.show()
+        wait(for: [FullscreenMessageTests.expectation!], timeout: 1.0)
+        XCTAssertTrue(FullscreenMessageTests.onShowFailedCall)
+
     }
 
     class MockFullscreenListener: FullscreenMessageDelegate {
@@ -75,6 +87,11 @@ class FullscreenMessageTests : XCTestCase {
 
         func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool {
             return true
+        }
+
+        func onShowFailure() {
+            FullscreenMessageTests.onShowFailedCall = true
+            FullscreenMessageTests.expectation?.fulfill()
         }
     }
 }

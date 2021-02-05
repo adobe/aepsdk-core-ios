@@ -33,4 +33,9 @@ import Foundation
     /// - Returns: True if the core wants to handle the URL (and not the fullscreen message view implementation)
     @objc(overrideUrlLoadFullscreenMessage:url:)
     func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
+
+    ///
+    /// Invoked when the FullscreenMessage failed to be displayed
+    ///
+    func onShowFailure()
 }
