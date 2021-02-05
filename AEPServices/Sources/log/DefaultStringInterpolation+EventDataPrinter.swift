@@ -16,7 +16,7 @@ public extension DefaultStringInterpolation {
     mutating func appendInterpolation(prettyEventData value: [String: Any]) {
         guard JSONSerialization.isValidJSONObject(value),
               let data = try? JSONSerialization.data(withJSONObject: value, options: .prettyPrinted),
-              let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else {
+              let prettyPrintedString = String(data: data, encoding: String.Encoding.utf8) else {
             appendInterpolation(value as AnyObject)
             return
         }
