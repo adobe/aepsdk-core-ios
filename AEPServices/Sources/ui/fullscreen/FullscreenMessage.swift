@@ -166,7 +166,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     private func getConfiguredWebview(newFrame: CGRect) -> WKWebView {
         let webViewConfiguration = WKWebViewConfiguration()
 
-        //Fix for media playback.
+        // Fix for media playback.
         webViewConfiguration.allowsInlineMediaPlayback = true // Plays Media inline
         webViewConfiguration.mediaTypesRequiringUserActionForPlayback = []
         let wkWebView = WKWebView(frame: newFrame, configuration: webViewConfiguration)
