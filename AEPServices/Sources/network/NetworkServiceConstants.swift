@@ -19,7 +19,7 @@ public struct NetworkServiceConstants {
         public static let IF_MODIFIED_SINCE = "If-Modified-Since"
         public static let IF_NONE_MATCH = "If-None-Match"
         public static let LAST_MODIFIED = "Last-Modified"
-        public static let ETAG = "Etag"
+        public static let ETAG = "ETag"
         public static let CONTENT_TYPE = "Content-Type"
     }
 
