@@ -166,16 +166,4 @@ class TokenFinderTests: XCTestCase {
         }
         XCTFail("Expected nil return")
     }
-
-    func testA(){
-        var dict = [String: Any]()
-        dict = [
-            "a": "13435454",
-            "b":[
-                "b1": 1235566,
-                "b2": "dfdfdfd"
-            ]
-        ]
-        print("ss - \(prettyEventData: dict)")
-    }
 }
