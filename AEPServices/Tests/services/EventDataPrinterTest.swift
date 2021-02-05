@@ -35,6 +35,7 @@ class EventDataPrinterTest: XCTestCase {
         """
         print(output)
         print(expected)
+        XCTAssert(output.contains("13435454;"))
     }
     func testPrintEventData_with_prettyFormat() throws {
         var dict = [String: Any]()
@@ -57,6 +58,7 @@ class EventDataPrinterTest: XCTestCase {
         """
         print(output)
         print(expected)
+        XCTAssert(output.contains("\"13435454\""))
     }
 }
 
