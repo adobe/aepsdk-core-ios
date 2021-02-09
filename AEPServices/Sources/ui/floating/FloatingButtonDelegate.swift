@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -12,8 +12,19 @@
 
 import Foundation
 
-/// Represents the `SharedState` types in `EventHub` that can be used by an extension to share data with other extensions and for rules execution
-enum SharedStateType: String {
-    case standard = "standard" // regular data, the key names and structure can be defined by each extension
-    case xdm = "XDM" // data mapped on XDM mixins populated by an extension
+/// Floating button lifecycle event listener
+@objc(AEPFloatingButtonDelegate) public protocol FloatingButtonDelegate {
+    /// Invoked when the floating button is tapped
+    func onTapDetected()
+
+    /// Invoked when the floating button is dragged on the screen
+    func onPanDetected()
+
+    /// Invoked when the floating button is displayed
+    @objc(onShowWithFloatingButton)
+    func onShow()
+
+    /// Invoked when the floating button is removed
+    @objc(onDismissWithFloatingButton)
+    func onDismiss()
 }

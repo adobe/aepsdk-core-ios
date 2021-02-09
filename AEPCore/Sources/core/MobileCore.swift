@@ -26,6 +26,12 @@ public final class MobileCore: NSObject {
         return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
 
+    @objc public static var messagingDelegate: MessagingDelegate? {
+        @available(*, unavailable)
+        get { ServiceProvider.shared.messagingDelegate }
+        set { ServiceProvider.shared.messagingDelegate = newValue }
+    }
+
     private static var wrapperType = WrapperType.none
 
     /// Pending extensions to be registered for legacy support

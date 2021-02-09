@@ -15,6 +15,9 @@ import Foundation
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
+    /// MessagingDelegate which is used to listen for message visibility updates.
+    public weak var messagingDelegate: MessagingDelegate?
+
     // Provide thread safety on the getters and setters
     private let queue = DispatchQueue(label: "ServiceProvider.barrierQueue")
 
@@ -30,6 +33,8 @@ public class ServiceProvider {
     private var overrideURLService: URLOpening?
     private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
+    private var overrideUIService: UIService?
+    private var defaultUIService = AEPUIService()
 
     // Don't allow init of ServiceProvider outside the class
     private init() {}
@@ -112,6 +117,19 @@ public class ServiceProvider {
         }
     }
 
+    public var uiService: UIService {
+        get {
+            return queue.sync {
+                return overrideUIService ?? defaultUIService
+            }
+        }
+        set {
+            queue.async {
+                self.overrideUIService = newValue
+            }
+        }
+    }
+
     internal func reset() {
         defaultSystemInfoService = ApplicationSystemInfoService()
         defaultKeyValueService = UserDefaultsNamedCollection()
@@ -120,11 +138,13 @@ public class ServiceProvider {
         defaultCacheService = DiskCacheService()
         defaultURLService = URLService()
         defaultLoggingService = LoggingService()
+        defaultUIService = AEPUIService()
 
         overrideSystemInfoService = nil
         overrideKeyValueService = nil
         overrideNetworkService = nil
         overrideCacheService = nil
         overrideURLService = nil
+        overrideUIService = nil
     }
 }

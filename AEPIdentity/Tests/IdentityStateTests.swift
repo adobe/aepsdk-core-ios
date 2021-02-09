@@ -49,7 +49,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is create due to force sync
     func testBootupIfReadyWithOptInPrivacyReturnsTrue() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
         let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
@@ -63,7 +63,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the properties are updated, and the hit queue processes the change
     func testBootupIfReadyWithOptOutPrivacyReturnsTrue() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
         let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
@@ -77,7 +77,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created from the force sync
     func testBootupIfReadyWithUnknownPrivacyReturnsFalse() {
         // setup
-        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
         // test
         let result = state.bootupIfReady(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
@@ -183,8 +183,8 @@ class IdentityStateTests: XCTestCase {
         let eventData = state.syncIdentifiers(event: event)
 
         // verify
-        XCTAssertEqual(3, eventData!.count)
-        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertEqual(2, eventData!.count)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
@@ -235,8 +235,8 @@ class IdentityStateTests: XCTestCase {
         let eventData = state.syncIdentifiers(event: event)
 
         // verify
-        XCTAssertEqual(3, eventData!.count)
-        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertEqual(2, eventData!.count)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
@@ -328,6 +328,60 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(hit.url.absoluteString.contains("device_consent=1")) // device flag should be added
     }
 
+    /// Tests that the ad id is correctly updated when a new (all zero) value is passed (ad id changed from nil to all zero value), hit is successfully queued and device_consent is set to 0.
+    func testSyncIdentifiersAdIDIsUpdatedFromNilToZero() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = nil
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state.lastValidConfig = configSharedState
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: IdentityConstants.Default.ZERO_ADVERTISING_ID]
+        let event = Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
+        let eventData = state.syncIdentifiers(event: event)
+
+        // verify
+        XCTAssertEqual(1, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+        let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
+        XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
+        XCTAssertTrue(hit.url.absoluteString.contains("d_consent_ic=DSID_20915")) // id namespace should be added
+    }
+
+    /// Tests that the ad id is correctly updated when a new (empty) value is passed (ad id changed from nil to empty), hit is successfully queued and device_consent is set to 0.
+    func testSyncIdentifiersAdIDIsUpdatedFromNilToEmpty() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.advertisingIdentifier = nil
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state.lastValidConfig = configSharedState
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER: ""]
+        let event = Event(name: "Fake Sync Event", type: EventType.genericIdentity, source: EventSource.requestReset, data: data)
+        let eventData = state.syncIdentifiers(event: event)
+
+        // verify
+        XCTAssertEqual(1, eventData!.count)
+        XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+        let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
+        XCTAssertTrue(hit.url.absoluteString.contains("device_consent=0")) // device flag should be added
+        XCTAssertTrue(hit.url.absoluteString.contains("d_consent_ic=DSID_20915")) // id namespace should be added
+    }
+
     /// Tests that the ad is is correctly updated when a new value is passed
     func testSyncIdentifiersAdIDIsUpdatedFromZeroString() {
         // setup
@@ -374,9 +428,9 @@ class IdentityStateTests: XCTestCase {
         let eventData = state.syncIdentifiers(event: event)
 
         // verify
-        XCTAssertEqual(2, eventData!.count)
+        XCTAssertEqual(1, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
@@ -401,9 +455,9 @@ class IdentityStateTests: XCTestCase {
         let eventData = state.syncIdentifiers(event: event)
 
         // verify
-        XCTAssertEqual(2, eventData!.count)
+        XCTAssertEqual(1, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
@@ -430,9 +484,9 @@ class IdentityStateTests: XCTestCase {
         let eventData = state.syncIdentifiers(event: event)
 
         // verify
-        XCTAssertEqual(3, eventData!.count)
+        XCTAssertEqual(2, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
@@ -458,9 +512,9 @@ class IdentityStateTests: XCTestCase {
         let eventData = state.syncIdentifiers(event: event)
 
         // verify
-        XCTAssertEqual(3, eventData!.count)
+        XCTAssertEqual(2, eventData!.count)
         XCTAssertNotNil(eventData![IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual("", eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER] as? String)
+        XCTAssertNil(eventData![IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER])
         XCTAssertNil(eventData![IdentityConstants.EventDataKeys.VISITOR_IDS_LIST])
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
