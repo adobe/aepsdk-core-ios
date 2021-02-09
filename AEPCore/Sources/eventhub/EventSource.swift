@@ -29,4 +29,5 @@ public class EventSource: NSObject {
     public static let notification = "com.adobe.eventSource.notification"
     public static let consentUpdate = "com.adobe.eventSource.consentUpdate"
     public static let wildcard = "com.adobe.eventSource._wildcard_"
+    public static let requestConsent = "com.adobe.eventSource.requestConsent"
 }
