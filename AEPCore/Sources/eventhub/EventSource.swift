@@ -30,5 +30,6 @@ public class EventSource: NSObject {
     public static let notification = "com.adobe.eventSource.notification"
     public static let updateConsent = "com.adobe.eventSource.updateConsent"
     public static let updateIdentity = "com.adobe.eventSource.updateIdentity"
+    public static let removeIdentity = "com.adobe.eventSource.removeIdentity"
     public static let wildcard = "com.adobe.eventSource._wildcard_"
 }
