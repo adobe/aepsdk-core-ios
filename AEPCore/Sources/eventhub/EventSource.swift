@@ -18,7 +18,6 @@ import Foundation
 public class EventSource: NSObject {
     public static let none = "com.adobe.eventSource.none"
     public static let os = "com.adobe.eventSource.os"
-    public static let requestConsent = "com.adobe.eventSource.requestConsent"
     public static let requestContent = "com.adobe.eventSource.requestContent"
     public static let requestIdentity = "com.adobe.eventSource.requestIdentity"
     public static let requestProfile = "com.adobe.eventSource.requestProfile"
