@@ -24,7 +24,7 @@ public class CustomIdentity: Identifiable, Codable {
     ///   - type: Type of the identifier
     ///   - identifier: The identifier
     ///   - authenticationState: Authentication state for the identifier
-    init(origin: String?, type: String?, identifier: String?, authenticationState: MobileVisitorAuthenticationState) {
+    public init(origin: String?, type: String?, identifier: String?, authenticationState: MobileVisitorAuthenticationState) {
         self.origin = origin
         self.type = type
         self.identifier = identifier
