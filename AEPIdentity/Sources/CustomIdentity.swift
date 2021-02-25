@@ -32,10 +32,10 @@ public class CustomIdentity: Identifiable, Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case origin = "id.origin"
-        case type = "id.type"
+        case origin = "id_origin"
+        case type = "id_type"
         case identifier = "id"
-        case authenticationState = "authentication.state"
+        case authenticationState = "authentication_state"
     }
 }
 
