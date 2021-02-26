@@ -9,7 +9,6 @@
  governing permissions and limitations under the License.
  */
 
-
 extension URL {
     ///
     /// Validates a URL against a Zip Slip attack. Simply checks if there is any sort of traversal attempted in the url
