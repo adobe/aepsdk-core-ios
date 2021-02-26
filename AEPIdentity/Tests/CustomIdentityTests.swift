@@ -208,28 +208,6 @@ class CustomIdentityTests: XCTestCase {
         XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
     }
     
-    // MARK: Migration test
-    
-    func testCustomIdentityKeysMigrated_AllPropertiesPresent() {
-        // setup
-        // old json format with incorrect keys
-        let oldFormattedCustomIdentity = """
-        {
-           "id.type":"test-type",
-           "id":"test-id",
-           "id.origin":"test-origin",
-           "authentication.state":1
-        }
-        """.data(using: .utf8)!
-        
-        let migratedCustomId = try! JSONDecoder().decode(CustomIdentity.self, from: oldFormattedCustomIdentity)
-        
-        XCTAssertEqual("test-type", migratedCustomId.type)
-        XCTAssertEqual("test-id", migratedCustomId.identifier)
-        XCTAssertEqual("test-origin", migratedCustomId.origin)
-        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, migratedCustomId.authenticationState)
-    }
-    
     // MARK: Equatable tests
     
     /// CustomIdentity's with same types are considered equal
