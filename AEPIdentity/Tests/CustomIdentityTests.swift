@@ -14,6 +14,224 @@ import XCTest
 
 class CustomIdentityTests: XCTestCase {
 
+    // MARK: Codable tests
+    
+    func testCustomIdentityEmptyString_DecodingReturnsNil() {
+        // setup
+        let customIdentityJson = ""
+        
+        // test decoding
+        let decodedCustomId = try? JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertNil(decodedCustomId)
+    }
+    
+    func testCustomIdentityEmptyJson_DecodingReturnsNil() {
+        // setup
+        let customIdentityJson = """
+        {
+        }
+        """
+        
+        // test decoding
+        let decodedCustomId = try? JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertNil(decodedCustomId)
+    }
+    
+    func testCustomIdentityInvalidJson_DecodingReturnsNil() {
+        // setup
+        let customIdentityJson = """
+        {
+           "not-a-real-key": "some-value"
+        }
+        """
+        
+        // test decoding
+        let decodedCustomId = try? JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertNil(decodedCustomId)
+    }
+    
+    func testCustomIdentityAllProperties_EncodesAndDecodesWithExtraneousKey() {
+        // setup
+        let customIdentityJson = """
+        {
+          "id_type" : "test-type",
+          "id" : "test-id",
+          "id_origin" : "test-origin",
+          "authentication_state" : 1,
+          "not-a-real-key": "some-value"
+        }
+        """
+        
+        let expectedCustomIdentityJson = """
+        {
+          "id_type" : "test-type",
+          "id" : "test-id",
+          "id_origin" : "test-origin",
+          "authentication_state" : 1
+        }
+        """
+        
+        // test decoding
+        let decodedCustomId = try! JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertEqual("test-type", decodedCustomId.type)
+        XCTAssertEqual("test-id", decodedCustomId.identifier)
+        XCTAssertEqual("test-origin", decodedCustomId.origin)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, decodedCustomId.authenticationState)
+        
+        // test encoding
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let encoded = try! encoder.encode(decodedCustomId)
+        
+        // verify encoding
+        XCTAssertEqual(expectedCustomIdentityJson, String(data: encoded, encoding: .utf8))
+    }
+    
+    func testCustomIdentityAllProperties_EncodesAndDecodes() {
+        // setup
+        let customIdentityJson = """
+        {
+          "id_type" : "test-type",
+          "id" : "test-id",
+          "id_origin" : "test-origin",
+          "authentication_state" : 1
+        }
+        """
+        
+        // test decoding
+        let decodedCustomId = try! JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertEqual("test-type", decodedCustomId.type)
+        XCTAssertEqual("test-id", decodedCustomId.identifier)
+        XCTAssertEqual("test-origin", decodedCustomId.origin)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, decodedCustomId.authenticationState)
+        
+        // test encoding
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let encoded = try! encoder.encode(decodedCustomId)
+        
+        // verify encoding
+        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+    }
+    
+    func testCustomIdentityMissingType_EncodesAndDecodes() {
+        // setup
+        let customIdentityJson = """
+        {
+          "id" : "test-id",
+          "authentication_state" : 1,
+          "id_origin" : "test-origin"
+        }
+        """
+        
+        // test decoding
+        let decodedCustomId = try! JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertNil(decodedCustomId.type)
+        XCTAssertEqual("test-id", decodedCustomId.identifier)
+        XCTAssertEqual("test-origin", decodedCustomId.origin)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, decodedCustomId.authenticationState)
+        
+        // test encoding
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let encoded = try! encoder.encode(decodedCustomId)
+        
+        // verify encoding
+        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+    }
+    
+    func testCustomIdentityMissingId_EncodesAndDecodes() {
+        // setup
+        let customIdentityJson = """
+        {
+          "id_type" : "test-type",
+          "authentication_state" : 1,
+          "id_origin" : "test-origin"
+        }
+        """
+        
+        // test decoding
+        let decodedCustomId = try! JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertEqual("test-type", decodedCustomId.type)
+        XCTAssertNil(decodedCustomId.identifier)
+        XCTAssertEqual("test-origin", decodedCustomId.origin)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, decodedCustomId.authenticationState)
+        
+        // test encoding
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let encoded = try! encoder.encode(decodedCustomId)
+        
+        // verify encoding
+        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+    }
+    
+    func testCustomIdentityMissingOrigin_EncodesAndDecodes() {
+        // setup
+        let customIdentityJson = """
+        {
+          "id_type" : "test-type",
+          "id" : "test-id",
+          "authentication_state" : 1
+        }
+        """
+        
+        // test decoding
+        let decodedCustomId = try! JSONDecoder().decode(CustomIdentity.self, from: customIdentityJson.data(using: .utf8)!)
+        
+        // verify decoding
+        XCTAssertEqual("test-type", decodedCustomId.type)
+        XCTAssertEqual("test-id", decodedCustomId.identifier)
+        XCTAssertNil(decodedCustomId.origin)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, decodedCustomId.authenticationState)
+        
+        // test encoding
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let encoded = try! encoder.encode(decodedCustomId)
+        
+        // verify encoding
+        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+    }
+    
+    // MARK: Migration test
+    
+    func testCustomIdentityKeysMigrated_AllPropertiesPresent() {
+        // setup
+        // old json format with incorrect keys
+        let oldFormattedCustomIdentity = """
+        {
+           "id.type":"test-type",
+           "id":"test-id",
+           "id.origin":"test-origin",
+           "authentication.state":1
+        }
+        """.data(using: .utf8)!
+        
+        let migratedCustomId = try! JSONDecoder().decode(CustomIdentity.self, from: oldFormattedCustomIdentity)
+        
+        XCTAssertEqual("test-type", migratedCustomId.type)
+        XCTAssertEqual("test-id", migratedCustomId.identifier)
+        XCTAssertEqual("test-origin", migratedCustomId.origin)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, migratedCustomId.authenticationState)
+    }
+    
+    // MARK: Equatable tests
+    
     /// CustomIdentity's with same types are considered equal
     func testCustomIdentityAreEqual() {
         // setup

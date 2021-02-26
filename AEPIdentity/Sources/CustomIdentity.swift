@@ -37,6 +37,33 @@ public class CustomIdentity: Identifiable, Codable {
         case identifier = "id"
         case authenticationState = "authentication_state"
     }
+
+    /// These only exist to support the case where a `CustomIdentity` may have been saved with incorrect keys in a previous SDK version
+    /// https://github.com/adobe/aepsdk-core-ios/issues/433
+    private enum MigrationCodingKeys: String, CodingKey {
+        case origin = "id.origin"
+        case type = "id.type"
+        case identifier = "id"
+        case authenticationState = "authentication.state"
+    }
+
+    public required init(from decoder: Decoder) throws {
+        do {
+            // Attempt to decode using the correct keys
+            let values = try decoder.container(keyedBy: CodingKeys.self)
+            origin = try? values.decode(String.self, forKey: .origin)
+            type = try? values.decode(String.self, forKey: .type)
+            identifier = try? values.decode(String.self, forKey: .identifier)
+            authenticationState = try values.decode(MobileVisitorAuthenticationState.self, forKey: .authenticationState)
+        } catch _ {
+            // Decoding failed using correct keys, attempt to decode using migration keys
+            let values = try decoder.container(keyedBy: MigrationCodingKeys.self)
+            origin = try? values.decode(String.self, forKey: .origin)
+            type = try? values.decode(String.self, forKey: .type)
+            identifier = try? values.decode(String.self, forKey: .identifier)
+            authenticationState = try values.decode(MobileVisitorAuthenticationState.self, forKey: .authenticationState)
+        }
+    }
 }
 
 extension CustomIdentity: Equatable {
