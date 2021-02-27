@@ -24,8 +24,4 @@ class AEPUIService: UIService {
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
         return FloatingButton(listener: listener)
     }
-
-    func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> AlertMessageShowable {
-        return AlertMessage(title: title, message: message, positiveButtonLabel: positiveButtonLabel, negativeButtonLabel: negativeButtonLabel, listener: listener, messageMonitor: messageMonitor)
-    }
 }

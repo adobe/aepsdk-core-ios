@@ -1,22 +1,16 @@
 PODS:
-  - AEPRulesEngine (1.0.0-beta.2)
+  - AEPRulesEngine (1.0.0)
 
 DEPENDENCIES:
-  - AEPRulesEngine (from `https://github.com/adobe/aepsdk-rulesengine-ios.git`, branch `main`)
+  - AEPRulesEngine
 
-EXTERNAL SOURCES:
-  AEPRulesEngine:
-    :branch: main
-    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
-
-CHECKOUT OPTIONS:
-  AEPRulesEngine:
-    :commit: 151df7075de461c492c192a43eefa582cd7311df
-    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
+SPEC REPOS:
+  trunk:
+    - AEPRulesEngine
 
 SPEC CHECKSUMS:
-  AEPRulesEngine: bc77ec533b584fd353b616063601d4d8c9401089
+  AEPRulesEngine: 8bbc694fce6900cd33b2496c7d4b33ee2eeffc46
 
-PODFILE CHECKSUM: 2f62254a30b50ed814c4364b36843ce9076bb9be
+PODFILE CHECKSUM: 31a9899de6250afde3d420f3c919cf16beb8dc75
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.0
