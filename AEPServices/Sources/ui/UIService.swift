@@ -33,14 +33,4 @@ public protocol UIService {
     ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
     /// - Returns: A `FloatingButtonPresentable` implementation
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
-
-    ///
-    /// Creates an `AlertMessageShowable`
-    /// - Parameters:
-    ///     - title: The title of the alert message as a `String`
-    ///     - message: The message of the alert message as a `String`
-    ///     - positiveButtonLabel: The positive button label text as a `String?`
-    ///     - negativeButtonLabel: The negative button label text as a `String?`
-    /// - Returns: An `AlertMessageShowable` implementation
-    func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> AlertMessageShowable
 }

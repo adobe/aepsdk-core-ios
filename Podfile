@@ -8,25 +8,25 @@ workspace 'AEPCore'
 project 'AEPCore.xcodeproj'
 
 target 'AEPCore' do
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine'
 end
 
 target 'AEPCoreTests' do
-    pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+    pod 'AEPRulesEngine'
 end
 
 target 'AEPSignalTests' do
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine'
 end
 
 target 'AEPLifecycleTests' do
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine'
 end
 
 target 'AEPIdentityTests' do
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine'
 end
 
 target 'AEPIntegrationTests' do
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine'
 end
