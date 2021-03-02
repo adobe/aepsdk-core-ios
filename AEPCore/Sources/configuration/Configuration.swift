@@ -81,7 +81,7 @@ class Configuration: Extension {
         if event.isUpdateConfigEvent {
             processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
         } else if event.isGetConfigEvent {
-            dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
+            dispatchConfigurationResponse(data: configState.environmentAwareConfiguration)
         } else if let appId = event.appId {
             processConfigureWith(appId: appId, event: event, sharedStateResolver: createPendingSharedState(event: event))
         } else if let filePath = event.filePath {
@@ -193,11 +193,10 @@ class Configuration: Extension {
 
     /// Dispatches a configuration response content event with corresponding data
     /// - Parameters:
-    ///   - triggerEvent: The `Event` to which the newly dispatched `Event` is responding
     ///   - data: Optional data to be attached to the event
-    private func dispatchConfigurationResponse(triggerEvent: Event, data: [String: Any]?) {
-        let responseEvent = triggerEvent.createResponseEvent(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
-        dispatch(event: responseEvent)
+    private func dispatchConfigurationResponse(data: [String: Any]?) {
+        let event = Event(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
+        dispatch(event: event)
     }
 
     /// Dispatches a configuration request content event with corresponding data
@@ -219,7 +218,7 @@ class Configuration: Extension {
         // Update the shared state with the new configuration
         sharedStateResolver(config)
         // Dispatch a Configuration Response Content event with the new configuration.
-        dispatchConfigurationResponse(triggerEvent: event, data: config)
+        dispatchConfigurationResponse(data: config)
         // notify the rules engine about the change of config
         notifyRulesEngine(newConfiguration: config)
     }

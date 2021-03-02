@@ -44,7 +44,7 @@ class ConfigurationPrivacyStatusTests: XCTestCase {
         XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
         XCTAssertEqual(EventSource.responseContent, mockRuntime.firstEvent?.source)
         XCTAssertEqual(0, mockRuntime.firstEvent?.data?.count)
-        XCTAssertEqual(event.id, mockRuntime.firstEvent?.responseID)
+        XCTAssertNil(mockRuntime.firstEvent?.responseID)
     }
     
     /// Happy path for get privacy status
@@ -62,10 +62,10 @@ class ConfigurationPrivacyStatusTests: XCTestCase {
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.firstEvent?.data?.count)
         XCTAssertEqual("optedOut", mockRuntime.firstEvent?.data?["global.privacy"] as? String)
-        XCTAssertEqual(getPrivacyStatusEvent.id, mockRuntime.firstEvent?.responseID)
+        XCTAssertNil(mockRuntime.firstEvent?.responseID)
     }
     
-    /// Tests that the privacy status is stored in persistance
+    /// Tests that the privacy status is stored in persistence
     func testPrivacyStatusIsStoredInPersistance() {
         // setup
         let configUpdateEvent = ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["global.privacy": "optedIn"])
@@ -80,7 +80,7 @@ class ConfigurationPrivacyStatusTests: XCTestCase {
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.firstEvent?.data?.count)
         XCTAssertEqual("optedIn", mockRuntime.firstEvent?.data?["global.privacy"] as? String)
-        XCTAssertEqual(getPrivacyStatusEvent.id, mockRuntime.firstEvent?.responseID)
+        XCTAssertNil(mockRuntime.firstEvent?.responseID)
         
         // reboot
         mockRuntime = TestableExtensionRuntime()
@@ -110,7 +110,7 @@ class ConfigurationPrivacyStatusTests: XCTestCase {
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
         XCTAssertEqual("optedOut", mockRuntime.firstEvent?.data?["global.privacy"] as? String)
-        XCTAssertEqual(getPrivacyStatusEvent.id, mockRuntime.firstEvent?.responseID)
+        XCTAssertNil(mockRuntime.firstEvent?.responseID)
     }
     
     func createGetPrivacyStatusEvent() -> Event {
