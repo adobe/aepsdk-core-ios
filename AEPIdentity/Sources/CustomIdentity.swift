@@ -12,7 +12,7 @@
 import Foundation
 
 /// CustomIdentity contains identifier origin, identifier type, identifier value and authentication state.
-public class CustomIdentity: Identifiable, Codable {
+class CustomIdentity: Identifiable, Codable {
     public var origin: String?
     public var type: String?
     public var identifier: String?
