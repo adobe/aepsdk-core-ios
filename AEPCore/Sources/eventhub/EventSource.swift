@@ -27,6 +27,8 @@ public class EventSource: NSObject {
     public static let responseProfile = "com.adobe.eventSource.responseProfile"
     public static let sharedState = "com.adobe.eventSource.sharedState"
     public static let notification = "com.adobe.eventSource.notification"
-    public static let consentUpdate = "com.adobe.eventSource.consentUpdate"
+    public static let updateConsent = "com.adobe.eventSource.updateConsent"
+    public static let updateIdentity = "com.adobe.eventSource.updateIdentity"
+    public static let removeIdentity = "com.adobe.eventSource.removeIdentity"
     public static let wildcard = "com.adobe.eventSource._wildcard_"
 }

@@ -18,11 +18,13 @@ public class MockUIService: UIService {
     
     public init() {}
     
+    var mockMessageMonitor: MessageMonitoring?
+    
     var createFullscreenMessageCalled = false
     var fullscreenMessage: FullscreenPresentable?
     public func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable {
         createFullscreenMessageCalled = true
-        return fullscreenMessage ?? FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed)
+        return fullscreenMessage ?? FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: mockMessageMonitor ?? MessageMonitor())
     }
     
     var createFloatingButtonCalled = false
@@ -30,14 +32,6 @@ public class MockUIService: UIService {
     public func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
         createFloatingButtonCalled = true
         return floatingButton ?? createFloatingButton(listener: listener)
-    }
-    
-    var createAlertMessageCalled = false
-    var alertMessage: AlertMessageShowable?
-    public func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> AlertMessageShowable {
-        createAlertMessageCalled = true
-        return alertMessage ?? AlertMessage(title: title, message: message, positiveButtonLabel: positiveButtonLabel, negativeButtonLabel: negativeButtonLabel, listener: listener)
-    }
-    
+    }   
     
 }

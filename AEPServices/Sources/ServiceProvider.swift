@@ -33,7 +33,6 @@ public class ServiceProvider {
     private var overrideURLService: URLOpening?
     private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
-    private var defaultMessageMonitorService = MessageMonitorService()
     private var overrideUIService: UIService?
     private var defaultUIService = AEPUIService()
 
@@ -118,14 +117,6 @@ public class ServiceProvider {
         }
     }
 
-    var messageMonitorService: MessageMonitorServicing {
-        get {
-            return queue.sync {
-                return defaultMessageMonitorService
-            }
-        }
-    }
-
     public var uiService: UIService {
         get {
             return queue.sync {
@@ -147,7 +138,6 @@ public class ServiceProvider {
         defaultCacheService = DiskCacheService()
         defaultURLService = URLService()
         defaultLoggingService = LoggingService()
-        defaultMessageMonitorService = MessageMonitorService()
         defaultUIService = AEPUIService()
 
         overrideSystemInfoService = nil

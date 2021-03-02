@@ -14,15 +14,14 @@ import Foundation
 import UIKit
 
 class AEPUIService: UIService {
+
+    private var messageMonitor = MessageMonitor()
+
     func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
-        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed)
+        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor)
     }
 
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
         return FloatingButton(listener: listener)
-    }
-
-    func createAlertMessage(title: String, message: String, positiveButtonLabel: String?, negativeButtonLabel: String?, listener: AlertMessageDelegate?) -> AlertMessageShowable {
-        return AlertMessage(title: title, message: message, positiveButtonLabel: positiveButtonLabel, negativeButtonLabel: negativeButtonLabel, listener: listener)
     }
 }
