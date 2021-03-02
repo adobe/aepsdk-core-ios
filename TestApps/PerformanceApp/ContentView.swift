@@ -86,7 +86,7 @@ struct ContentView: View {
 //                        MobileCore.dispatch(event: Event(name: "test event", type: type, source: source, data:
 //                                                            ["key":"value_\(n)"]))
 //                    }
-                    
+
                 }) {
                     Text("Evaluate Rules")
                         .frame(minWidth: 0, maxWidth: .infinity)

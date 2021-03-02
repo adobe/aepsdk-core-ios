@@ -115,7 +115,7 @@ public final class MobileCore: NSObject {
     ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives an event with matched type and source.
     @objc(registerEventListenerWithType:source:listener:)
     public static func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
-        EventHub.shared.registerEventListener(type: type, source: source){ event in
+        EventHub.shared.registerEventListener(type: type, source: source) { event in
             DispatchQueue.global(qos: .default).async {
                 listener(event)
             }
