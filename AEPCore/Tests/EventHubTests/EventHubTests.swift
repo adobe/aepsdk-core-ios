@@ -273,6 +273,54 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 0.5)
     }
 
+    func testEventHubTestRegisterEventListenerNotInvokedForPairedResponseEvent() {
+        // setup
+        let expectation = XCTestExpectation(description: "Listener is not invoked for paired response event")
+        expectation.expectedFulfillmentCount = 1
+        expectation.assertForOverFulfill = true
+        let requestEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let responseEvent = Event(name: "testResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+        let pairedResponseEvent = requestEvent.createResponseEvent(name: "testPairedResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+
+        // test
+        eventHub.registerEventListener(type: EventType.analytics, source: EventSource.responseContent) { event in
+            XCTAssertEqual(EventSource.responseContent, event.source)
+            XCTAssertNil(event.responseID)
+            expectation.fulfill()
+        }
+
+        eventHub.start()
+        eventHub.dispatch(event: responseEvent)
+        eventHub.dispatch(event: pairedResponseEvent)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testEventHubTestRegisterEventListenerWildcardCalledForAllEvents() {
+        // setup
+        let expectation = XCTestExpectation(description: "Wildcard Listener is invoked for all events")
+        expectation.assertForOverFulfill = true
+        expectation.expectedFulfillmentCount = 2
+        let requestEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let responseEvent = Event(name: "testResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+        let pairedResponseEvent = requestEvent.createResponseEvent(name: "testPairedResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+
+        // test
+        eventHub.registerEventListener(type: EventType.wildcard, source: EventSource.wildcard) { event in
+            if event.source == EventSource.responseContent {
+                expectation.fulfill()
+            }
+        }
+
+        eventHub.start()
+        eventHub.dispatch(event: responseEvent)
+        eventHub.dispatch(event: pairedResponseEvent)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+
     func testEventHubTestResponseListener() {
         // setup
         let expectation = XCTestExpectation(description: "Response listener is invoked exactly once")
