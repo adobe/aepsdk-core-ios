@@ -483,7 +483,7 @@ class MobileCoreTests: XCTestCase {
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
     }
-    
+
     // MARK: collectLaunchInfo(...) tests
 
     /// When launch info is empty no event should be dispatched
