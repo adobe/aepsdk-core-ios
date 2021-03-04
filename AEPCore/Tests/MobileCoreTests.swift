@@ -483,6 +483,78 @@ class MobileCoreTests: XCTestCase {
         // verify
         wait(for: [eventExpectation], timeout: 1.0)
     }
+    
+    // MARK: collectLaunchInfo(...) tests
+
+    /// When launch info is empty no event should be dispatched
+    func testCollectLaunchInfoEmpty() {
+        // setup
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should NOT receive an event")
+        eventExpectation.assertForOverFulfill = true
+        eventExpectation.isInverted = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericData, source: EventSource.os) { event in
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectLaunchInfo([:])
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
+
+    /// When message info is not empty we should dispatch an event
+    func testCollectLaunchInfoWithData() {
+        // setup
+        let launchInfo = [
+            "key_str":"stringValue",
+            "adb_deeplink":"abc://myawesomeapp?some=param&some=other_param",
+            "adb_m_id":"awesomePushMessage",
+            "adb_m_l_id":"happyBirthdayNotification"
+        ] as [String : String]
+
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should receive the event when dispatched through the event hub")
+        eventExpectation.assertForOverFulfill = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericData, source: EventSource.os) { event in
+            XCTAssertEqual(event.data as! [String: String], [
+                "key_str":"stringValue",
+                "deeplink":"abc://myawesomeapp?some=param&some=other_param",
+                "pushmessageid":"awesomePushMessage",
+                "notificationid":"happyBirthdayNotification"
+            ])
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectLaunchInfo(launchInfo)
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
 
     // MARK: collectPii(...) tests
 

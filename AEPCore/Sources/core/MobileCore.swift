@@ -171,6 +171,19 @@ public final class MobileCore: NSObject {
         MobileCore.dispatch(event: event)
     }
 
+    /// For scenarios where the app is launched as a result of push message or deep link click-throughs
+    /// - Parameter userInfo: Dictionary of data relevant to the expected use case
+    @objc(collectLaunchInfo:)
+    public static func collectLaunchInfo(_ userInfo: [String: Any]) {
+        guard !userInfo.isEmpty else {
+            Log.trace(label: LOG_TAG, "collectLaunchInfo - data was empty, no event was dispatched")
+            return
+        }
+        let event = Event(name: CoreConstants.EventNames.COLLECT_DATA, type: EventType.genericData, source: EventSource.os,
+                          data: DataMarshaller().marshalLaunchInfo(userInfo))
+        MobileCore.dispatch(event: event)
+    }
+
     /// Submits a generic PII collection request event with type `generic.pii`.
     /// - Parameter data: a dictionary containing PII data
     @objc(collectPii:)
