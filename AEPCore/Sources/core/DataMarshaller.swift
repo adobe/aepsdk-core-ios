@@ -13,9 +13,18 @@
 import Foundation
 
 class DataMarshaller {
+
+    /*
+     Legacy Keys:
+     These are used to properly grab a value from another service, or from a provider outside
+     of the SDK. For our purposes, we will, if necessary, convert the legacy key into one that
+     conforms with the naming convention used in for our EventData keys in V5
+     */
     private static let LEGACY_PUSH_MESSAGE_ID = "adb_m_id"
     private static let LEGACY_LOCAL_NOTIFICATION_ID = "adb_m_l_id"
     private static let LEGACY_DEEPLINK_URL = "adb_deeplink"
+
+    // generic names for the core
     private static let PUSH_MESSAGE_ID_KEY = "pushmessageid"
     private static let LOCAL_NOTIFICATION_ID_KEY = "notificationid"
     private static let DEEPLINK_KEY = "deeplink"
@@ -23,6 +32,10 @@ class DataMarshaller {
     init() {
     }
 
+    /// Marshal the application context available at launch time into a generic Dictionary.
+    ///
+    /// - Parameter userInfo: dictionary of context data available at launch time
+    /// - Returns: `Dictionary` containing the processed keys from the received user info
     func marshalLaunchInfo(_ userInfo: [String: Any]) -> [String: Any] {
         guard !userInfo.isEmpty else {
             return userInfo
