@@ -45,7 +45,7 @@ public class Event: NSObject, Codable {
                 "  name: \(name)\n" +
                 "  type: \(type)\n" +
                 "  source: \(source)\n" +
-                "  data: \(data as AnyObject)\n" +
+                "  data: \(EventDataPrinter.prettify(data))\n" +
                 "  timestamp: \(timestamp.description)\n" +
                 "  responseId: \(String(describing: responseID?.uuidString))\n" +
                 "]"

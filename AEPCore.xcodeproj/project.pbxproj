@@ -340,6 +340,8 @@
 		BB3E86E024F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */; };
 		BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */; };
 		BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */; };
+		BB5B3FDC25F14872003C0FB2 /* EventDataPrinterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5B3FDB25F14872003C0FB2 /* EventDataPrinterTests.swift */; };
+		BBA1E99625F144A200999DD2 /* EventDataPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E99525F144A200999DD2 /* EventDataPrinter.swift */; };
 		BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */; };
 		BBA5129B24F477550030DAD1 /* rules_testMatcherNe.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */; };
 		BBA5129D24F4899B0030DAD1 /* rules_testMatcherGt.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129C24F4899B0030DAD1 /* rules_testMatcherGt.json */; };
@@ -918,6 +920,8 @@
 		BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testMatcherWithDifferentTypesOfParameters.json; sourceTree = "<group>"; };
 		BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IdentityPublicAPITests.swift; path = AEPIdentity/Tests/IdentityPublicAPITests.swift; sourceTree = SOURCE_ROOT; };
 		BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngineTests.swift; sourceTree = "<group>"; };
+		BB5B3FDB25F14872003C0FB2 /* EventDataPrinterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDataPrinterTests.swift; sourceTree = "<group>"; };
+		BBA1E99525F144A200999DD2 /* EventDataPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDataPrinter.swift; sourceTree = "<group>"; };
 		BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testGroupLogicalOperators.json; sourceTree = "<group>"; };
 		BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNe.json; sourceTree = "<group>"; };
 		BBA5129C24F4899B0030DAD1 /* rules_testMatcherGt.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherGt.json; sourceTree = "<group>"; };
@@ -1439,6 +1443,7 @@
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
+				BBA1E99525F144A200999DD2 /* EventDataPrinter.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1502,6 +1507,7 @@
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
+				BB5B3FDB25F14872003C0FB2 /* EventDataPrinterTests.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -2688,7 +2694,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
 		BB68130624E19C2E007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2914,6 +2920,7 @@
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
+				BBA1E99625F144A200999DD2 /* EventDataPrinter.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
 				92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */,
 				3F0397FB24BE60910019F095 /* ThreadSafeArray.swift in Sources */,
@@ -3004,6 +3011,7 @@
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
 				3F03982024BE61520019F095 /* LogLevelTest.swift in Sources */,
 				3F03981A24BE61520019F095 /* DiskCacheServiceTests.swift in Sources */,
+				BB5B3FDC25F14872003C0FB2 /* EventDataPrinterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
