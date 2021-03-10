@@ -38,7 +38,7 @@ struct IDParser: IDParsing {
             if currentCustomerIdOrigin.isEmpty || currentCustomerIdValue.isEmpty {
                 continue
             }
-            
+
             let originValue = currentCustomerIdOrigin.components(separatedBy: "=")[0]
 
             let idValueComponents = currentCustomerIdValue.components(separatedBy: CID_DELIMITER)
