@@ -13,6 +13,7 @@ end
 
 target 'AEPCoreTests' do
     pod 'AEPRulesEngine'
+    pod 'AEPIdentity'
 end
 
 target 'AEPSignalTests' do
