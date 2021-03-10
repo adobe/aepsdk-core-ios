@@ -115,7 +115,7 @@ struct V5Migrator {
 
         // save values
         let identityDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Identity.DATASTORE_NAME)
-        let identityPropsData = try? JSONSerialization.data(withJSONObject: identityPropsDict)
+        let identityPropsData = AnyCodable.from(dictionary: identityPropsDict as [String: Any])
         identityDataStore.setObject(key: V5MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES, value: identityPropsData)
         identityDataStore.set(key: V5MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
