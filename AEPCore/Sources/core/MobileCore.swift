@@ -180,7 +180,7 @@ public final class MobileCore: NSObject {
             return
         }
         let event = Event(name: CoreConstants.EventNames.COLLECT_DATA, type: EventType.genericData, source: EventSource.os,
-                          data: DataMarshaller().marshalLaunchInfo(userInfo))
+                          data: DataMarshaller.marshalLaunchInfo(userInfo))
         MobileCore.dispatch(event: event)
     }
 

@@ -36,18 +36,18 @@ class DataMarshaller {
     ///
     /// - Parameter userInfo: dictionary of context data available at launch time
     /// - Returns: `Dictionary` containing the processed keys from the received user info
-    func marshalLaunchInfo(_ userInfo: [String: Any]) -> [String: Any] {
+    static func marshalLaunchInfo(_ userInfo: [String: Any]) -> [String: Any] {
         guard !userInfo.isEmpty else {
             return userInfo
         }
         var userInfoCopy = userInfo
-        replaceKey(&userInfoCopy, fromKey: DataMarshaller.LEGACY_PUSH_MESSAGE_ID, newKey: DataMarshaller.PUSH_MESSAGE_ID_KEY)
-        replaceKey(&userInfoCopy, fromKey: DataMarshaller.LEGACY_LOCAL_NOTIFICATION_ID, newKey: DataMarshaller.LOCAL_NOTIFICATION_ID_KEY)
-        replaceKey(&userInfoCopy, fromKey: DataMarshaller.LEGACY_DEEPLINK_URL, newKey: DataMarshaller.DEEPLINK_KEY)
+        DataMarshaller.replaceKey(&userInfoCopy, fromKey: DataMarshaller.LEGACY_PUSH_MESSAGE_ID, newKey: DataMarshaller.PUSH_MESSAGE_ID_KEY)
+        DataMarshaller.replaceKey(&userInfoCopy, fromKey: DataMarshaller.LEGACY_LOCAL_NOTIFICATION_ID, newKey: DataMarshaller.LOCAL_NOTIFICATION_ID_KEY)
+        DataMarshaller.replaceKey(&userInfoCopy, fromKey: DataMarshaller.LEGACY_DEEPLINK_URL, newKey: DataMarshaller.DEEPLINK_KEY)
         return userInfoCopy
     }
 
-    private func replaceKey(_ dictionary: inout [String: Any], fromKey key: String, newKey: String) {
+    private static func replaceKey(_ dictionary: inout [String: Any], fromKey key: String, newKey: String) {
         if let value = dictionary.removeValue(forKey: key) {
             if let stringValue = value as? String, stringValue.isEmpty {
                 return

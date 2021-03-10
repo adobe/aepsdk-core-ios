@@ -18,53 +18,45 @@ import XCTest
 class DataMarshallerTests: XCTestCase {
     
     func test_marshalLaunchInfo_deeplink(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo(["adb_deeplink":"abc://myawesomeapp?some=param&some=other_param"])
+        let dictionary = DataMarshaller.marshalLaunchInfo(["adb_deeplink":"abc://myawesomeapp?some=param&some=other_param"])
         XCTAssertEqual(1, dictionary.count)
         XCTAssertEqual("abc://myawesomeapp?some=param&some=other_param", dictionary["deeplink"] as? String)
     }
     
     func test_marshalLaunchInfo_deeplink_empty_value(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo(["adb_deeplink":""])
+        let dictionary = DataMarshaller.marshalLaunchInfo(["adb_deeplink":""])
         XCTAssertEqual(0, dictionary.count)
     }
     
     func test_marshalLaunchInfo_PushNotification(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo(["adb_m_id":"awesomePushMessage"])
+        let dictionary = DataMarshaller.marshalLaunchInfo(["adb_m_id":"awesomePushMessage"])
         XCTAssertEqual(1, dictionary.count)
         XCTAssertEqual("awesomePushMessage", dictionary["pushmessageid"] as? String)
     }
     
     func test_marshalLaunchInfo_PushNotification_empty_value(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo(["adb_m_id":""])
+        let dictionary = DataMarshaller.marshalLaunchInfo(["adb_m_id":""])
         XCTAssertEqual(0, dictionary.count)
     }
     
     func test_marshalLaunchInfo_LocalNotification(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo(["adb_m_l_id":"happyBirthdayNotification"])
+        let dictionary = DataMarshaller.marshalLaunchInfo(["adb_m_l_id":"happyBirthdayNotification"])
         XCTAssertEqual(1, dictionary.count)
         XCTAssertEqual("happyBirthdayNotification", dictionary["notificationid"] as? String)
     }
     
     func test_marshalLaunchInfo_LocalNotification_empty_value(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo(["adb_m_l_id":""])
+        let dictionary = DataMarshaller.marshalLaunchInfo(["adb_m_l_id":""])
         XCTAssertEqual(0, dictionary.count)
     }
     
     func test_marshalLaunchInfo_EmptyDictionary(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo([:])
+        let dictionary = DataMarshaller.marshalLaunchInfo([:])
         XCTAssertEqual(0, dictionary.count)
     }
     
     func test_marshalLaunchInfo_OtherKeys(){
-        let dataMarshaller = DataMarshaller()
-        let dictionary = dataMarshaller.marshalLaunchInfo([
+        let dictionary = DataMarshaller.marshalLaunchInfo([
             "key_str":"stringValue",
             "key_int":99,
             "key_double":0.99,
