@@ -1,29 +1,16 @@
 PODS:
-  - AEPCore (3.0.0):
-    - AEPRulesEngine (= 1.0.0)
-    - AEPServices (= 3.0.0)
-  - AEPIdentity (3.0.0):
-    - AEPCore (= 3.0.0)
   - AEPRulesEngine (1.0.0)
-  - AEPServices (3.0.0)
 
 DEPENDENCIES:
-  - AEPIdentity
   - AEPRulesEngine
 
 SPEC REPOS:
   trunk:
-    - AEPCore
-    - AEPIdentity
     - AEPRulesEngine
-    - AEPServices
 
 SPEC CHECKSUMS:
-  AEPCore: 9ced1f1fddcbfd61517461e548e36aee740bf7c8
-  AEPIdentity: 79c57508bbabc8c2cf7f90e2baed15b03f4e97e6
   AEPRulesEngine: 8bbc694fce6900cd33b2496c7d4b33ee2eeffc46
-  AEPServices: 21ea64149483fdfbd5f88f546b9f5ad7d4987400
 
-PODFILE CHECKSUM: d2651e946754cea5eb1075fd9e65164af411f977
+PODFILE CHECKSUM: 31a9899de6250afde3d420f3c919cf16beb8dc75
 
 COCOAPODS: 1.10.1
