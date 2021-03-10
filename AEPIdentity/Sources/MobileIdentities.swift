@@ -85,9 +85,9 @@ struct MobileIdentities: Codable {
         // TODO: Target
 
         return identityStatus != .pending &&
-               configurationStatus != .pending &&
-               analyticsStatus != .pending &&
-               audienceStatus != .pending
+            configurationStatus != .pending &&
+            analyticsStatus != .pending &&
+            audienceStatus != .pending
     }
 
     // MARK: Private APIs

@@ -164,7 +164,7 @@ class MobileIdentitiesTests: XCTestCase {
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"test-ecid\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}]}"
         XCTAssertEqual(expected, identifiers)
     }
-    
+
     /// Tests that when analytics provides shared state that we include analytics identities in getAllIdentifiers
     func testGetAllIdentifiersOnlyAnalytics() {
         // setup
@@ -187,7 +187,7 @@ class MobileIdentitiesTests: XCTestCase {
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"AVID\",\"value\":\"test-aid\",\"type\":\"integrationCode\"},{\"namespace\":\"vid\",\"value\":\"test-vid\",\"type\":\"analytics\"}]}]}"
         XCTAssertEqual(expected, identifiers)
     }
-    
+
     /// Tests that when audience provides shared state that we include audience identities in getAllIdentifiers
     func testGetAllIdentifiersOnlyAudience() {
         // setup
