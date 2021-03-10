@@ -343,11 +343,11 @@ class V4MigratorTests: XCTestCase {
 
         // test
         V4Migrator(idParser: IDParser()).migrate()
-        
+
         // verify
         var identityProperties = IdentityProperties()
         identityProperties.loadFromPersistence()
-        
+
         XCTAssertEqual("identityECID", identityProperties.ecid?.ecidString)
         XCTAssertEqual(30, identityProperties.ttl)
         XCTAssertEqual("blob", identityProperties.blob)
