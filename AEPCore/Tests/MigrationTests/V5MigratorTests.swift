@@ -13,6 +13,7 @@ import XCTest
 @testable import AEPCore
 import AEPServicesMocks
 import AEPServices
+@testable import AEPIdentity
 
 private struct MockIDParser: IDParsing {
     func convertStringToIds(idString: String?) -> [[String : Any]] {
@@ -309,5 +310,31 @@ class V5MigratorTests: XCTestCase {
         XCTAssertEqual("optunknown", storedConfig?["global.privacy"]?.stringValue)
     }
 
+    func testExistingV5IdentityData() {
+        let mockDate = Date()
+        v5Defaults.set(mockDate.timeIntervalSince1970, forKey: "Adobe.AdobeMobile_Lifecycle.InstallDate")
+        v5Defaults.set("identityECID", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID")
+        v5Defaults.set("&d_cid_ic=type%01id%011", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_VISITORID_IDS")
+        v5Defaults.set(1234, forKey: "Adobe.visitorIDServiceDataStore.ADBMOBILE_VISITORID_TTL")
+        v5Defaults.set("blob", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID_BLOB")
+        v5Defaults.set("hint", forKey: "Adobe.visitorIDServiceDataStore.ADOBEMOBILE_PERSISTED_MID_HINT")
+
+        // test
+        V5Migrator(idParser: IDParser()).migrate()
+        
+        // verify
+        var identityProperties = IdentityProperties()
+        identityProperties.loadFromPersistence()
+        
+        XCTAssertEqual("identityECID", identityProperties.ecid?.ecidString)
+        XCTAssertEqual(30, identityProperties.ttl)
+        XCTAssertEqual("blob", identityProperties.blob)
+        XCTAssertEqual("hint", identityProperties.locationHint)
+        XCTAssertEqual(1, identityProperties.customerIds?.count)
+        XCTAssertEqual("id", identityProperties.customerIds?[0].identifier)
+        XCTAssertEqual("type", identityProperties.customerIds?[0].type)
+        XCTAssertEqual("d_cid_ic", identityProperties.customerIds?[0].origin)
+        XCTAssertEqual(1, identityProperties.customerIds?[0].authenticationState.rawValue)
+    }
 
 }

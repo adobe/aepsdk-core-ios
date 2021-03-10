@@ -38,6 +38,8 @@ struct IDParser: IDParsing {
             if currentCustomerIdOrigin.isEmpty || currentCustomerIdValue.isEmpty {
                 continue
             }
+            
+            let originValue = currentCustomerIdOrigin.components(separatedBy: "=")[0]
 
             let idValueComponents = currentCustomerIdValue.components(separatedBy: CID_DELIMITER)
 
@@ -46,7 +48,7 @@ struct IDParser: IDParsing {
                 continue
             }
 
-            let IdDict = ["origin": currentCustomerIdOrigin, "type": idValueComponents[0], "id": idValueComponents[1], "authenticationState": Int(idValueComponents[2]) ?? 0] as [String: Any]
+            let IdDict = ["id_origin": originValue, "id_type": idValueComponents[0], "id": idValueComponents[1], "authentication_state": Int(idValueComponents[2]) ?? 0] as [String: Any]
             ids.append(IdDict)
         }
 

@@ -50,8 +50,8 @@ enum V4MigrationConstants {
         static let V4_PUSH_TOKEN = "ADBMOBILE_KEY_PUSH_TOKEN"
 
         enum DataStoreKeys {
-            static let IDENTITY_PROPERTIES = "identitiesproperties"
-            static let PUSH_ENABLED = "ADOBEMOBILE_PUSH_ENABLED"
+            static let IDENTITY_PROPERTIES = "identity.properties"
+            static let PUSH_ENABLED = "push.enabled"
         }
     }
 
