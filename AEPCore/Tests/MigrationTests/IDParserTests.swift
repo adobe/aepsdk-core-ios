@@ -36,17 +36,17 @@ class IDParserTests: XCTestCase {
         // verify
         var matches = 0
         for id in parsedIds {
-            if id["type"] as? String == "loginidhash" {
+            if id["id_type"] as? String == "loginidhash" {
                 XCTAssertEqual("97717", id["id"] as? String)
-                XCTAssertEqual(0, id["authenticationState"] as? Int)
+                XCTAssertEqual(0, id["authentication_state"] as? Int)
                 matches += 1
-            } else if id["type"] as? String == "xboxlivehash" {
+            } else if id["id_type"] as? String == "xboxlivehash" {
                 XCTAssertEqual("1629158955", id["id"] as? String)
-                XCTAssertEqual(1, id["authenticationState"] as? Int)
+                XCTAssertEqual(1, id["authentication_state"] as? Int)
                 matches += 1
-            } else if id["type"] as? String == "psnidhash" {
+            } else if id["id_type"] as? String == "psnidhash" {
                 XCTAssertEqual("1144032295", id["id"] as? String)
-                XCTAssertEqual(2, id["authenticationState"] as? Int)
+                XCTAssertEqual(2, id["authentication_state"] as? Int)
                 matches += 1
             }
         }
@@ -67,13 +67,13 @@ class IDParserTests: XCTestCase {
         // verify
         var matches = 0
         for id in parsedIds {
-            if id["type"] as? String == "loginidhash" {
+            if id["id_type"] as? String == "loginidhash" {
                 XCTAssertEqual("97717", id["id"] as? String)
-                XCTAssertEqual(0, id["authenticationState"] as? Int)
+                XCTAssertEqual(0, id["authentication_state"] as? Int)
                 matches += 1
-            } else if id["type"] as? String == "psnidhash" {
+            } else if id["id_type"] as? String == "psnidhash" {
                 XCTAssertEqual("1144032295", id["id"] as? String)
-                XCTAssertEqual(2, id["authenticationState"] as? Int)
+                XCTAssertEqual(2, id["authentication_state"] as? Int)
                 matches += 1
             }
         }

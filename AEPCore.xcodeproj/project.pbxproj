@@ -585,6 +585,13 @@
 			remoteGlobalIDString = 3FF8170924D89B160064DFA1;
 			remoteInfo = AEPCoreMocks;
 		};
+		BFE8A20725F98F60006C4AAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DE2E24C642330065EA05;
+			remoteInfo = AEPIdentity;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -1957,6 +1964,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BFE8A20825F98F60006C4AAF /* PBXTargetDependency */,
 				3FF8171B24D89B8A0064DFA1 /* PBXTargetDependency */,
 				3FE6DDBE24C62DAB0065EA05 /* PBXTargetDependency */,
 				3F03984124BE65120019F095 /* PBXTargetDependency */,
@@ -3302,6 +3310,11 @@
 			isa = PBXTargetDependency;
 			target = 3FF8170924D89B160064DFA1 /* AEPCoreMocks */;
 			targetProxy = 3FF8172124D8ABF20064DFA1 /* PBXContainerItemProxy */;
+		};
+		BFE8A20825F98F60006C4AAF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FE6DE2E24C642330065EA05 /* AEPIdentity */;
+			targetProxy = BFE8A20725F98F60006C4AAF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
