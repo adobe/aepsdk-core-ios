@@ -340,8 +340,8 @@
 		BB3E86E024F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */; };
 		BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */; };
 		BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */; };
-		BB5B3FDC25F14872003C0FB2 /* EventDataPrinterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5B3FDB25F14872003C0FB2 /* EventDataPrinterTests.swift */; };
-		BBA1E99625F144A200999DD2 /* EventDataPrinter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E99525F144A200999DD2 /* EventDataPrinter.swift */; };
+		BBA1E96825F0506B00999DD2 /* DataMarshaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */; };
+		BBA1E97825F099D000999DD2 /* DataMarshallerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */; };
 		BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */; };
 		BBA5129B24F477550030DAD1 /* rules_testMatcherNe.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */; };
 		BBA5129D24F4899B0030DAD1 /* rules_testMatcherGt.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129C24F4899B0030DAD1 /* rules_testMatcherGt.json */; };
@@ -584,6 +584,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3FF8170924D89B160064DFA1;
 			remoteInfo = AEPCoreMocks;
+		};
+		BFE8A20725F98F60006C4AAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FE6DE2E24C642330065EA05;
+			remoteInfo = AEPIdentity;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -920,8 +927,8 @@
 		BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testMatcherWithDifferentTypesOfParameters.json; sourceTree = "<group>"; };
 		BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IdentityPublicAPITests.swift; path = AEPIdentity/Tests/IdentityPublicAPITests.swift; sourceTree = SOURCE_ROOT; };
 		BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngineTests.swift; sourceTree = "<group>"; };
-		BB5B3FDB25F14872003C0FB2 /* EventDataPrinterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDataPrinterTests.swift; sourceTree = "<group>"; };
-		BBA1E99525F144A200999DD2 /* EventDataPrinter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDataPrinter.swift; sourceTree = "<group>"; };
+		BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMarshaller.swift; sourceTree = "<group>"; };
+		BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMarshallerTests.swift; sourceTree = "<group>"; };
 		BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testGroupLogicalOperators.json; sourceTree = "<group>"; };
 		BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNe.json; sourceTree = "<group>"; };
 		BBA5129C24F4899B0030DAD1 /* rules_testMatcherGt.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherGt.json; sourceTree = "<group>"; };
@@ -1172,6 +1179,7 @@
 				3F3951E824CA096100F7325B /* MobileCoreTests.swift */,
 				216A15D7257818E900D43848 /* Data+HexStringTests.swift */,
 				21CAC0E62422917600C11388 /* Info.plist */,
+				BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */,
 			);
 			name = Tests;
 			path = AEPCore/Tests;
@@ -1443,7 +1451,6 @@
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
-				BBA1E99525F144A200999DD2 /* EventDataPrinter.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1507,7 +1514,6 @@
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
-				BB5B3FDB25F14872003C0FB2 /* EventDataPrinterTests.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1673,6 +1679,7 @@
 				24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */,
 				213F8A0324D8DC5A0003B8AF /* WrapperType.swift */,
 				216A15C7257818B200D43848 /* Data+HexString.swift */,
+				BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1957,6 +1964,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BFE8A20825F98F60006C4AAF /* PBXTargetDependency */,
 				3FF8171B24D89B8A0064DFA1 /* PBXTargetDependency */,
 				3FE6DDBE24C62DAB0065EA05 /* PBXTargetDependency */,
 				3F03984124BE65120019F095 /* PBXTargetDependency */,
@@ -2694,7 +2702,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\nif which swiftformat >/dev/null; then\n   swiftformat .\nelse\necho \"error: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		BB68130624E19C2E007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2819,6 +2827,7 @@
 				3FB66ACA24CA004400502CAF /* MobileCore+Lifecycle.swift in Sources */,
 				3FB66AE624CA004400502CAF /* ConfigurationDownloader.swift in Sources */,
 				213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */,
+				BBA1E96825F0506B00999DD2 /* DataMarshaller.swift in Sources */,
 				3FB66ACF24CA004400502CAF /* Event.swift in Sources */,
 				3FB66ACE24CA004400502CAF /* ExtensionContainer.swift in Sources */,
 				21F79AB724E704C5003204C3 /* IDParser.swift in Sources */,
@@ -2869,6 +2878,7 @@
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
 				BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */,
+				BBA1E97825F099D000999DD2 /* DataMarshallerTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
 				78AA4EC62513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift in Sources */,
@@ -2920,7 +2930,6 @@
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
-				BBA1E99625F144A200999DD2 /* EventDataPrinter.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
 				92EEA57025885C1C00DBA3EE /* FullscreenMessage.swift in Sources */,
 				3F0397FB24BE60910019F095 /* ThreadSafeArray.swift in Sources */,
@@ -3011,7 +3020,6 @@
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
 				3F03982024BE61520019F095 /* LogLevelTest.swift in Sources */,
 				3F03981A24BE61520019F095 /* DiskCacheServiceTests.swift in Sources */,
-				BB5B3FDC25F14872003C0FB2 /* EventDataPrinterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3302,6 +3310,11 @@
 			isa = PBXTargetDependency;
 			target = 3FF8170924D89B160064DFA1 /* AEPCoreMocks */;
 			targetProxy = 3FF8172124D8ABF20064DFA1 /* PBXContainerItemProxy */;
+		};
+		BFE8A20825F98F60006C4AAF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FE6DE2E24C642330065EA05 /* AEPIdentity */;
+			targetProxy = BFE8A20725F98F60006C4AAF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

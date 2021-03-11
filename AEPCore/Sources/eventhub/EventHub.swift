@@ -214,7 +214,7 @@ final class EventHub {
     /// Retrieves the `SharedState` for a specific extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the latest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the earliest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
