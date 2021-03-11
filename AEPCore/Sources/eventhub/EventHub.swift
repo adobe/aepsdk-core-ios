@@ -181,7 +181,7 @@ final class EventHub {
 
             sharedState.set(version: version, data: data)
             self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName))
-            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(EventDataPrinter.prettify(data))")
+            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
         }
     }
 
@@ -206,7 +206,7 @@ final class EventHub {
 
             return { [weak self] data in
                 self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data, sharedStateType: sharedStateType)
-                Log.debug(label: self?.LOG_TAG ?? "EventHub", "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(EventDataPrinter.prettify(data))")
+                Log.debug(label: self?.LOG_TAG ?? "EventHub", "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(PrettyDictionary.prettify(data))")
             }
         }
     }
@@ -281,7 +281,7 @@ final class EventHub {
         let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
         sharedState.set(version: version, data: data)
         dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME))
-        Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(EventDataPrinter.prettify(data))")
+        Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
     }
 
     // MARK: - Private

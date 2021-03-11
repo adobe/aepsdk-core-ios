@@ -11,7 +11,7 @@
 
 import Foundation
 
-public enum EventDataPrinter {
+public enum PrettyDictionary {
 
     /// Converts an event data dictionary to a prettified JSON string
     ///

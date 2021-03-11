@@ -340,6 +340,7 @@
 		BB3E86E024F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */; };
 		BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */; };
 		BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */; };
+		BB8D436225F99CDD0046E230 /* PrettyDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */; };
 		BBA1E96825F0506B00999DD2 /* DataMarshaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */; };
 		BBA1E97825F099D000999DD2 /* DataMarshallerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */; };
 		BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */; };
@@ -927,6 +928,7 @@
 		BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testMatcherWithDifferentTypesOfParameters.json; sourceTree = "<group>"; };
 		BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IdentityPublicAPITests.swift; path = AEPIdentity/Tests/IdentityPublicAPITests.swift; sourceTree = SOURCE_ROOT; };
 		BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngineTests.swift; sourceTree = "<group>"; };
+		BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyDictionary.swift; sourceTree = "<group>"; };
 		BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMarshaller.swift; sourceTree = "<group>"; };
 		BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMarshallerTests.swift; sourceTree = "<group>"; };
 		BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testGroupLogicalOperators.json; sourceTree = "<group>"; };
@@ -1448,6 +1450,7 @@
 				3F0397E624BE60910019F095 /* AtomicCounter.swift */,
 				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
 				3F0397EE24BE60910019F095 /* OperationOrderer.swift */,
+				BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */,
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
 				3F0397EF24BE60910019F095 /* ThreadSafeDictionary.swift */,
 				3F0397F024BE60910019F095 /* URLEncoder.swift */,
@@ -2936,6 +2939,7 @@
 				9239714025A6380A0056A3E5 /* MessagingDelegate.swift in Sources */,
 				3F0397DF24BE5FF30019F095 /* URLOpening.swift in Sources */,
 				3F0397CC24BE5FF30019F095 /* NetworkService.swift in Sources */,
+				BB8D436225F99CDD0046E230 /* PrettyDictionary.swift in Sources */,
 				9235481A25BFF19800BEA9A3 /* FloatingButtonDelegate.swift in Sources */,
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
 				3F0397D724BE5FF30019F095 /* DataQueueService.swift in Sources */,
