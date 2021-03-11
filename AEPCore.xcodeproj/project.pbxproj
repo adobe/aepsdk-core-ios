@@ -341,6 +341,7 @@
 		BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */; };
 		BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */; };
 		BB8D436225F99CDD0046E230 /* PrettyDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */; };
+		BB8D437225F99DFF0046E230 /* PrettyDictionaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8D437125F99DFF0046E230 /* PrettyDictionaryTests.swift */; };
 		BBA1E96825F0506B00999DD2 /* DataMarshaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */; };
 		BBA1E97825F099D000999DD2 /* DataMarshallerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */; };
 		BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */; };
@@ -929,6 +930,7 @@
 		BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IdentityPublicAPITests.swift; path = AEPIdentity/Tests/IdentityPublicAPITests.swift; sourceTree = SOURCE_ROOT; };
 		BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngineTests.swift; sourceTree = "<group>"; };
 		BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyDictionary.swift; sourceTree = "<group>"; };
+		BB8D437125F99DFF0046E230 /* PrettyDictionaryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrettyDictionaryTests.swift; sourceTree = "<group>"; };
 		BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMarshaller.swift; sourceTree = "<group>"; };
 		BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataMarshallerTests.swift; sourceTree = "<group>"; };
 		BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testGroupLogicalOperators.json; sourceTree = "<group>"; };
@@ -1515,6 +1517,7 @@
 				3F03980F24BE61520019F095 /* OperationOrdererTests.swift */,
 				3F03981024BE61520019F095 /* PersistentHitQueueTests.swift */,
 				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
+				BB8D437125F99DFF0046E230 /* PrettyDictionaryTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
 			);
@@ -3008,6 +3011,7 @@
 				3F03982224BE61520019F095 /* OperationOrdererTests.swift in Sources */,
 				3F03982124BE61520019F095 /* NamedCollectionDataStoreTest.swift in Sources */,
 				3F03982724BE61520019F095 /* ThreadSafeDictionaryTests.swift in Sources */,
+				BB8D437225F99DFF0046E230 /* PrettyDictionaryTests.swift in Sources */,
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
 				923973CD25AF92140056A3E5 /* FullscreenMessageTests.swift in Sources */,
 				78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */,

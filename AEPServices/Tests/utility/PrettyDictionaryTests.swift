@@ -14,7 +14,7 @@ import Foundation
 @testable import AEPServices
 import XCTest
 
-class EventDataPrinterTest: XCTestCase {
+class PrettyDictionaryTests: XCTestCase {
 
     func testPrintEventData_as_AnyObject() throws {
         var eventData = [String: Any]()
@@ -25,7 +25,7 @@ class EventDataPrinterTest: XCTestCase {
                 "b2": LogLevel.debug
             ]
         ]
-        let output = "\(EventDataPrinter.prettify(eventData))"
+        let output = "\(PrettyDictionary.prettify(eventData))"
         let expected = """
         {
             a = 13435454;
@@ -50,7 +50,7 @@ class EventDataPrinterTest: XCTestCase {
                 "b2": "12.45"
             ]
         ]
-        let output = "\(EventDataPrinter.prettify(eventData))"
+        let output = "\(PrettyDictionary.prettify(eventData))"
         let expected = """
         {
           "a" : "13435454",
@@ -67,7 +67,7 @@ class EventDataPrinterTest: XCTestCase {
     }
 
     func testPrintEventData_with_nil_data() throws {
-        let output = "\(EventDataPrinter.prettify(nil))"
+        let output = "\(PrettyDictionary.prettify(nil))"
         XCTAssertTrue(output.isEmpty)
     }
 }
