@@ -15,16 +15,16 @@ public enum PrettyDictionary {
 
     /// Converts an event data dictionary to a prettified JSON string
     ///
-    /// - Parameter eventData: `Dictionary` to be prettified
+    /// - Parameter dictionary: `Dictionary` to be prettified
     /// - Returns: `JSON` string
-    public static func prettify(_ eventData: [String: Any]?) -> String {
-        guard let eventData = eventData else {
+    public static func prettify(_ dictionary: [String: Any]?) -> String {
+        guard let dictionary = dictionary else {
             return ""
         }
-        guard JSONSerialization.isValidJSONObject(eventData),
-              let data = try? JSONSerialization.data(withJSONObject: eventData, options: .prettyPrinted),
+        guard JSONSerialization.isValidJSONObject(dictionary),
+              let data = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted),
               let prettyPrintedString = String(data: data, encoding: String.Encoding.utf8) else {
-            return " \(eventData as AnyObject)"
+            return " \(dictionary as AnyObject)"
         }
         return prettyPrintedString
     }
