@@ -13,7 +13,7 @@ import Foundation
 
 public enum PrettyDictionary {
 
-    /// Converts an event data dictionary to a prettified JSON string
+    /// Converts a String-Any dictionary to a prettified JSON string
     ///
     /// - Parameter dictionary: `Dictionary` to be prettified
     /// - Returns: `JSON` string
