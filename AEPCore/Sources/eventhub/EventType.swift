@@ -24,7 +24,7 @@ public class EventType: NSObject {
     public static let custom = "com.adobe.eventType.custom"
     public static let hub = "com.adobe.eventType.hub"
     public static let identity = "com.adobe.eventType.identity"
-    public static let identityEdge = "com.adobe.eventType.identityEdge"
+    public static let edgeIdentity = "com.adobe.eventType.edgeIdentity"
     public static let lifecycle = "com.adobe.eventType.lifecycle"
     public static let location = "com.adobe.eventType.location"
     public static let pii = "com.adobe.eventType.pii"
