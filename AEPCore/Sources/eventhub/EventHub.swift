@@ -350,6 +350,6 @@ final class EventHub {
 private extension Extension {
     /// Returns the name of the class for the Extension
     static var typeName: String {
-        return String(describing: self)
+        return String(reflecting: self)
     }
 }
