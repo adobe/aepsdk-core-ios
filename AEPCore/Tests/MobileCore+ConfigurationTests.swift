@@ -152,7 +152,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1)
     }
-    
+
     /// Tests that resetIdentities dispatches an generic identity event
     func testResetIdentities() {
         // setup
