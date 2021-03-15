@@ -153,7 +153,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
     
-    /// Tests that resetIdentities dispatches an identity edge reset request event
+    /// Tests that resetIdentities dispatches an generic identity event
     func testResetIdentities() {
         // setup
         let expectation = XCTestExpectation(description: "resetIdentities should dispatch an event")
