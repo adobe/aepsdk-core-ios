@@ -99,7 +99,7 @@ public extension MobileCore {
     /// Clears all identifiers from the SDK and generates a new Experience Cloud ID (ECID).
     @objc(resetIdentities)
     static func resetIdentities() {
-        let event = Event(name: CoreConstants.EventNames.REQUEST_RESET,
+        let event = Event(name: CoreConstants.EventNames.REQUEST_IDENTITIES_RESET,
                           type: EventType.genericIdentity,
                           source: EventSource.requestReset,
                           data: nil)
