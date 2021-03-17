@@ -28,4 +28,5 @@ public class EventSource: NSObject {
     public static let sharedState = "com.adobe.eventSource.sharedState"
     public static let notification = "com.adobe.eventSource.notification"
     public static let wildcard = "com.adobe.eventSource._wildcard_"
+    public static let resetComplete = "com.adobe.eventSource.resetComplete"
 }
