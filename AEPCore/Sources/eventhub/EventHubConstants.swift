@@ -22,7 +22,7 @@ enum EventHubConstants {
         static let VERSION = "version"
         static let EXTENSIONS = "extensions"
         static let METADATA = "metadata"
-        static let FRIENDLY_NAME = "friendly.name"
+        static let FRIENDLY_NAME = "friendlyName"
 
         enum Configuration {
             static let EVENT_STATE_OWNER = "stateowner"

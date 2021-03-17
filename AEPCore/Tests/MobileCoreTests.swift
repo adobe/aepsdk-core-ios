@@ -189,18 +189,18 @@ class MobileCoreTests: XCTestCase {
         {
             "com.adobe.mockExtension" : {
               "version" : "0.0.1",
-              "friendly.name" : "mockExtension"
+              "friendlyName" : "mockExtension"
             },
             "com.adobe.module.configuration" : {
               "version" : "3.0.0",
-              "friendly.name" : "Configuration"
+              "friendlyName" : "Configuration"
             },
             "com.adobe.mockExtensionTwo" : {
               "metadata" : {
                 "testMetaKey" : "testMetaVal"
               },
               "version" : "0.0.1",
-              "friendly.name" : "mockExtensionTwo"
+              "friendlyName" : "mockExtensionTwo"
             }
         }
         """
