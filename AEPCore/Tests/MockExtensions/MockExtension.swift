@@ -15,7 +15,7 @@ import Foundation
 @testable import AEPCore
 
 class MockExtension: Extension {
-    var name = "mockExtension"
+    var name = "com.adobe.mockExtension"
     var friendlyName = "mockExtension"
     static var extensionVersion = "0.0.1"
     var metadata: [String: String]?

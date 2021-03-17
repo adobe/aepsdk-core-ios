@@ -187,21 +187,21 @@ class MobileCoreTests: XCTestCase {
 
         let expected = """
         {
-          "extensions" : {
-            "mockExtension" : {
-              "version" : "0.0.1"
+            "com.adobe.mockExtension" : {
+              "version" : "0.0.1",
+              "friendlyName" : "mockExtension"
             },
-            "Configuration" : {
-              "version" : "3.0.0"
+            "com.adobe.module.configuration" : {
+              "version" : "3.0.0",
+              "friendlyName" : "Configuration"
             },
-            "mockExtensionTwo" : {
+            "com.adobe.mockExtensionTwo" : {
               "metadata" : {
                 "testMetaKey" : "testMetaVal"
               },
-              "version" : "0.0.1"
+              "version" : "0.0.1",
+              "friendlyName" : "mockExtensionTwo"
             }
-          },
-          "version" : "3.0.0"
         }
         """
         let expectedDict = jsonStrToDict(jsonStr: expected)
@@ -209,7 +209,7 @@ class MobileCoreTests: XCTestCase {
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self], {
             let registered = MobileCore.getRegisteredExtensions()
-            let registeredDict = self.jsonStrToDict(jsonStr: registered)
+            let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
             let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
             XCTAssertTrue(equal)
             expectation.fulfill()

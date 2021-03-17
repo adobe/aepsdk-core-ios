@@ -262,10 +262,12 @@ final class EventHub {
             where val.sharedStateName != EventHubConstants.NAME {
             if let exten = val.exten {
                 let version = type(of: exten).extensionVersion
-                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
+                extensionsInfo[exten.name] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                              EventHubConstants.EventDataKeys.FRIENDLY_NAME: exten.friendlyName]
                 if let metadata = exten.metadata, !metadata.isEmpty {
-                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
-                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
+                    extensionsInfo[exten.name] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                                  EventHubConstants.EventDataKeys.METADATA: metadata,
+                                                  EventHubConstants.EventDataKeys.FRIENDLY_NAME: exten.friendlyName]
                 }
             }
         }
