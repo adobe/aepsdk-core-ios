@@ -74,7 +74,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         }
         return mockedXdmSharedStates["\(extensionName)"]
     }
-    
+
     public func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         return getXDMSharedState(extensionName: extensionName, event: event)
     }
