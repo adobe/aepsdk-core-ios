@@ -74,13 +74,13 @@ enum V4MigrationConstants {
         static let V4_LAUNCHES_AFTER_UPGRADE  = "OMCK4"
 
         enum DataStoreKeys {
-            static let INSTALL_DATE = "InstallDate"
-            static let LAST_LAUNCH_DATE = "LastDateUsed"
-            static let UPGRADE_DATE = "UpgradeDate"
-            static let LAUNCHES_SINCE_UPGRADE = "LaunchesAfterUpgrade"
-            static let PERSISTED_CONTEXT = "PersistedContext"
-            static let LIFECYCLE_DATA = "LifecycleData"
-            static let LAST_VERSION = "LastVersion"
+            static let INSTALL_DATE = "install.date"
+            static let LAST_LAUNCH_DATE = "last.date.used"
+            static let UPGRADE_DATE = "upgrade.date"
+            static let LAUNCHES_SINCE_UPGRADE = "launches.after.upgrade"
+            static let PERSISTED_CONTEXT = "persisted.context"
+            static let LIFECYCLE_DATA = "lifecycle.data"
+            static let LAST_VERSION = "last.version"
         }
     }
 }
