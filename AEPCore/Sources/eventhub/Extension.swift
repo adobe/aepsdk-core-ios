@@ -143,9 +143,10 @@ public extension Extension {
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+    ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
-    func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult? {
-        return runtime.getXDMSharedState(extensionName: extensionName, event: event)
+    func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false) -> SharedStateResult? {
+        return runtime.getXDMSharedState(extensionName: extensionName, event: event, barrier: barrier)
     }
 
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`
