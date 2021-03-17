@@ -93,4 +93,12 @@ public protocol ExtensionRuntime {
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
     /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult?
+    
+    /// Gets the XDM SharedState data for a specified extension. If this extension populates multiple mixins in their shared state, all the data will be returned at once and it can be accessed using path discovery.
+    /// - Parameters:
+    ///   - extensionName: An extension name whose `SharedState` will be returned
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+    ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+    /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
+    func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult?
 }
