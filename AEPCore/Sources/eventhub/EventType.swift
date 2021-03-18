@@ -24,6 +24,7 @@ public class EventType: NSObject {
     public static let custom = "com.adobe.eventType.custom"
     public static let hub = "com.adobe.eventType.hub"
     public static let identity = "com.adobe.eventType.identity"
+    public static let edgeIdentity = "com.adobe.eventType.edgeIdentity"
     public static let lifecycle = "com.adobe.eventType.lifecycle"
     public static let location = "com.adobe.eventType.location"
     public static let pii = "com.adobe.eventType.pii"
@@ -40,5 +41,6 @@ public class EventType: NSObject {
     public static let genericPii = "com.adobe.eventType.generic.pii"
     public static let genericData = "com.adobe.eventType.generic.data"
     public static let edge = "com.adobe.eventType.edge"
+    public static let edgeConsent = "com.adobe.eventType.edgeConsent"
     public static let wildcard = "com.adobe.eventType._wildcard_"
 }

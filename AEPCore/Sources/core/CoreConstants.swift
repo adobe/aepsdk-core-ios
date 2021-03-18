@@ -39,6 +39,7 @@ enum CoreConstants {
         static let REFRESH_RULES = "Refresh Rules"
         static let SET_PUSH_IDENTIFIER = "SetPushIdentifier"
         static let SET_ADVERTISING_IDENTIFIER = "SetAdvertisingIdentifier"
+        static let RESET_IDENTITIES_REQUEST = "Reset Identities Request"
     }
 
     enum Keys {

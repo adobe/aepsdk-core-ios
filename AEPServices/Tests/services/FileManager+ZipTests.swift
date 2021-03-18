@@ -69,4 +69,12 @@ class FileManagerZipTests: XCTestCase {
         permissions = FileManager.permissions(for: UInt32(0), osType: .msdos, entryType: .directory)
         XCTAssert(permissions == FileUnzipperConstants.defaultDirectoryPermissions)
     }
+
+    func testGetCacheDirectoryPath() {
+        let fileManager = FileManager()
+        guard let url = fileManager.getCacheDirectoryPath() else {
+            XCTFail("Failed to read central directory structure."); return
+        }
+        XCTAssertNotNil(url)
+    }
 }

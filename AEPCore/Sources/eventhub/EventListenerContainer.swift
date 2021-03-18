@@ -44,8 +44,8 @@ struct EventListenerContainer: Equatable {
     /// - Parameter event: An `Event` being dispatched by the `EventHub`
     /// - Returns: True if `listener` should be notified of `event`
     func shouldNotify(_ event: Event) -> Bool {
-        if let listenerTriggerId = triggerEventId {
-            return listenerTriggerId == event.responseID
+        if event.responseID != nil {
+            return event.responseID == triggerEventId || self.isWildcard
         }
 
         return (event.type == type || type == EventType.wildcard)
@@ -61,5 +61,9 @@ internal extension EventListenerContainer {
     ///     - timeout: `DispatchWorkItem` to be invoked if the event is not received in time
     init(listener: @escaping EventResponseListener, triggerEventId: UUID, timeout: DispatchWorkItem?) {
         self.init(listener: listener, type: nil, source: nil, triggerEventId: triggerEventId, timeoutTask: timeout)
+    }
+
+    var isWildcard: Bool {
+        return self.source == EventSource.wildcard && self.type == EventType.wildcard
     }
 }

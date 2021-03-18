@@ -12,7 +12,7 @@
 import Foundation
 
 /// CustomIdentity contains identifier origin, identifier type, identifier value and authentication state.
-public class CustomIdentity: Identifiable, Codable {
+class CustomIdentity: Identifiable, Codable {
     public var origin: String?
     public var type: String?
     public var identifier: String?
@@ -32,10 +32,10 @@ public class CustomIdentity: Identifiable, Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case origin = "id.origin"
-        case type = "id.type"
+        case origin = "id_origin"
+        case type = "id_type"
         case identifier = "id"
-        case authenticationState = "authentication.state"
+        case authenticationState = "authentication_state"
     }
 }
 

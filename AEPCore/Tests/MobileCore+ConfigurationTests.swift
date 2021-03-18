@@ -152,4 +152,20 @@ class MobileCore_ConfigurationTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1)
     }
+
+    /// Tests that resetIdentities dispatches an generic identity event
+    func testResetIdentities() {
+        // setup
+        let expectation = XCTestExpectation(description: "resetIdentities should dispatch an event")
+        expectation.assertForOverFulfill = true
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestReset) { _ in
+            expectation.fulfill()
+        }
+
+        // test
+        MobileCore.resetIdentities()
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
 }

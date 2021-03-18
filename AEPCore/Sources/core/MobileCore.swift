@@ -26,6 +26,12 @@ public final class MobileCore: NSObject {
         return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
 
+    @objc public static var messagingDelegate: MessagingDelegate? {
+        @available(*, unavailable)
+        get { ServiceProvider.shared.messagingDelegate }
+        set { ServiceProvider.shared.messagingDelegate = newValue }
+    }
+
     private static var wrapperType = WrapperType.none
 
     /// Pending extensions to be registered for legacy support
@@ -102,14 +108,18 @@ public final class MobileCore: NSObject {
         EventHub.shared.dispatch(event: event)
     }
 
-    /// Registers an `EventListener` which will be invoked whenever a event with matched type and source is dispatched
+    /// Registers an `EventListener` to perform on the global system queue (Qos = .default) which will be invoked whenever an event with matched type and source is dispatched.
     /// - Parameters:
     ///   - type: A `String` indicating the event type the current listener is listening for
     ///   - source: A `String` indicating the event source the current listener is listening for
-    ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives a event with matched type and source
+    ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives an event with matched type and source.
     @objc(registerEventListenerWithType:source:listener:)
     public static func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
-        EventHub.shared.registerEventListener(type: type, source: source, listener: listener)
+        EventHub.shared.registerEventListener(type: type, source: source) { event in
+            DispatchQueue.global(qos: .default).async {
+                listener(event)
+            }
+        }
     }
 
     /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
@@ -162,6 +172,19 @@ public final class MobileCore: NSObject {
         }
 
         let event = Event(name: CoreConstants.EventNames.COLLECT_DATA, type: EventType.genericData, source: EventSource.os, data: messageInfo)
+        MobileCore.dispatch(event: event)
+    }
+
+    /// For scenarios where the app is launched as a result of push message or deep link click-throughs
+    /// - Parameter userInfo: Dictionary of data relevant to the expected use case
+    @objc(collectLaunchInfo:)
+    public static func collectLaunchInfo(_ userInfo: [String: Any]) {
+        guard !userInfo.isEmpty else {
+            Log.trace(label: LOG_TAG, "collectLaunchInfo - data was empty, no event was dispatched")
+            return
+        }
+        let event = Event(name: CoreConstants.EventNames.COLLECT_DATA, type: EventType.genericData, source: EventSource.os,
+                          data: DataMarshaller.marshalLaunchInfo(userInfo))
         MobileCore.dispatch(event: event)
     }
 
