@@ -14,15 +14,15 @@ import AEPCore
 import Foundation
 
 class MockLegacyExtension: NSObject {
-    
+
     // mock "registerExtension" function
     static var invokedRegisterExtension = false
     @objc public static func registerExtension() {
         invokedRegisterExtension = true
     }
-    
+
     public static func reset() {
         invokedRegisterExtension = false
     }
-    
+
 }

@@ -45,7 +45,7 @@ class MobileCoreTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1)
     }
-    
+
     func testRegisterExtensionsLegacy() {
         let expectation = XCTestExpectation(description: "registration completed in timely fashion")
         expectation.assertForOverFulfill = true
