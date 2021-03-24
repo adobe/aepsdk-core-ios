@@ -152,7 +152,10 @@ import Foundation
     /// If the flag is false, the Identity extension will send an opt-out hit to the configured Identity server.
     /// - Parameter event: The event coming from the Audience Manager extension
     private func handleAudienceResponse(event: Event) {
-        if let optOutHitSent = event.data?[IdentityConstants.Audience.OPTED_OUT_HIT_SENT] as? Bool, optOutHitSent == true { return }
+        if event.optOutHitSent {
+            Log.debug(label: "\(name):\(#function)", "An opt-out request will not be sent as the  Audience Manager extension has successfully sent it.")
+            return
+        }
         // Identity Extension will send the opt out request because the Audience Extension did not
         sendOptOutRequest(event: event)
     }
@@ -228,6 +231,7 @@ import Foundation
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
             guard let ecid = state?.identityProperties.ecid else { return }
             let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.Default.SERVER
+            Log.debug(label: "\(name):\(#function)", "Sending an opt-out request to \(server).")
             ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, ecid: ecid, experienceCloudServer: server)
         }
     }
