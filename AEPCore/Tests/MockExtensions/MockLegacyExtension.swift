@@ -26,3 +26,8 @@ class MockLegacyExtension: NSObject {
     }
 
 }
+
+@objc(ACPBridgeExtension)
+class ACPBridgeExtension: NSObject {
+    // pretend the compat layer is present
+}
