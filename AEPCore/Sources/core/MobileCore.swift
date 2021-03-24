@@ -46,13 +46,13 @@ public final class MobileCore: NSObject {
         V4Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v4 if needed
         V5Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v5 if needed
 
-        // Invoke registerExtension on nonNativeExtensions
-        let nonNativeExtensions = extensions.filter {!($0.self is Extension.Type)} // All extensions that do not conform to `Extension`
+        // Invoke registerExtension on legacy extensions
+        let legacyExtensions = extensions.filter {!($0.self is Extension.Type)} // All extensions that do not conform to `Extension`
         let registerSelector = Selector(("registerExtension"))
 
-        for nonNativeExtension in nonNativeExtensions
-            where nonNativeExtension.responds(to: registerSelector) {
-                nonNativeExtension.perform(registerSelector)
+        for legacyExtension in legacyExtensions
+            where legacyExtension.responds(to: registerSelector) {
+            legacyExtension.perform(registerSelector)
         }
 
         // Register native extensions
