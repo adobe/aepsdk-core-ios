@@ -40,38 +40,33 @@ public final class MobileCore: NSObject {
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
-    public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
+    @objc(registerExtensions:completion:)
+    public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (() -> Void)? = nil) {
         let idParser = IDParser()
         V4Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v4 if needed
         V5Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v5 if needed
 
-        let registeredCounter = AtomicCounter()
-        let allExtensions = [Configuration.self] + extensions
-
-        allExtensions.forEach {
-            EventHub.shared.registerExtension($0) { _ in
-                if registeredCounter.incrementAndGet() == allExtensions.count {
-                    EventHub.shared.start()
-                    completion?()
-                }
-            }
-        }
-    }
-    
-    @objc(registerExtensions:completion:)
-    public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (() -> Void)? = nil) {
-        let nonNativeExtensions = extensions.filter {!($0.self is Extension.Type)} // All extensions that conform to `Extension`
-        
         // Invoke registerExtension on nonNativeExtensions
+        let nonNativeExtensions = extensions.filter {!($0.self is Extension.Type)} // All extensions that do not conform to `Extension`
         let registerSelector = Selector(("registerExtension"))
+
         for nonNativeExtension in nonNativeExtensions
             where nonNativeExtension.responds(to: registerSelector) {
                 nonNativeExtension.perform(registerSelector)
         }
-        
-        // Then register each native extension as normal
-        if let nativeExtensions = extensions.filter({$0.self is Extension.Type}) as? [Extension.Type] {
-            registerExtensions(nativeExtensions, completion)
+
+        // Register native extensions
+        let registeredCounter = AtomicCounter()
+        let allExtensions = [Configuration.self] + extensions
+        let nativeExtensions = allExtensions.filter({$0.self is Extension.Type}) as? [Extension.Type] ?? []
+
+        nativeExtensions.forEach {
+            EventHub.shared.registerExtension($0) { _ in
+                if registeredCounter.incrementAndGet() == nativeExtensions.count {
+                    EventHub.shared.start()
+                    completion?()
+                }
+            }
         }
     }
 
