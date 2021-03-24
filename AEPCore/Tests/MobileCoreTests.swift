@@ -22,6 +22,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
+        MockLegacyExtension.reset()
     }
 
     private func registerMockExtension<T: Extension>(_ type: T.Type) {
@@ -39,10 +40,24 @@ class MobileCoreTests: XCTestCase {
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
         // test
-        MobileCore.registerExtensions([MockExtension.self])
+        MobileCore.registerExtensions([MockExtension.self, Configuration.self])
 
         // verify
         wait(for: [expectation], timeout: 1)
+    }
+    
+    func testRegisterExtensionsLegacy() {
+        let expectation = XCTestExpectation(description: "registration completed in timely fashion")
+        expectation.assertForOverFulfill = true
+
+        // test
+        MobileCore.registerExtensions([MockLegacyExtension.self, NotAnExtension.self]) {
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+        XCTAssertTrue(MockLegacyExtension.invokedRegisterExtension)
     }
 
     /// Tests that a single extension can be registered

@@ -62,7 +62,7 @@ class EventHubContractTest: XCTestCase {
 
     }
 
-    /// Tests the start callback gets called after all the extension finish registriation
+    /// Tests the start callback gets called after all the extension finish registration
     func testStartCallbackCalledAfterRegistrationComplete() {
         // setup
         let extensionOneRegisteredExpectation = XCTestExpectation(description: "Extension one onRegistered is invoked")

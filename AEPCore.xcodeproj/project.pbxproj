@@ -30,6 +30,8 @@
 		2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02724C9FE1B002935CF /* PushIDManager.swift */; };
 		2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02924C9FF46002935CF /* PushIDManagerTests.swift */; };
 		2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02B24C9FF62002935CF /* MockPushIDManager.swift */; };
+		2130A59D260AB448005DBA0F /* MockLegacyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */; };
+		2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130A5BA260AB582005DBA0F /* NotAnExtension.swift */; };
 		21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21377D4024E3383E004BAC01 /* V4Migrator.swift */; };
 		213F8A0424D8DC5A0003B8AF /* WrapperType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 213F8A0324D8DC5A0003B8AF /* WrapperType.swift */; };
 		214154A825186734005CEB80 /* CustomIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214154A725186734005CEB80 /* CustomIdentityTests.swift */; };
@@ -602,6 +604,8 @@
 		2107F02724C9FE1B002935CF /* PushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManager.swift; sourceTree = "<group>"; };
 		2107F02924C9FF46002935CF /* PushIDManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManagerTests.swift; sourceTree = "<group>"; };
 		2107F02B24C9FF62002935CF /* MockPushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPushIDManager.swift; sourceTree = "<group>"; };
+		2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLegacyExtension.swift; sourceTree = "<group>"; };
+		2130A5BA260AB582005DBA0F /* NotAnExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotAnExtension.swift; sourceTree = "<group>"; };
 		21377D4024E3383E004BAC01 /* V4Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4Migrator.swift; sourceTree = "<group>"; };
 		213F8A0324D8DC5A0003B8AF /* WrapperType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperType.swift; sourceTree = "<group>"; };
 		214154A725186734005CEB80 /* CustomIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIdentityTests.swift; sourceTree = "<group>"; };
@@ -1620,6 +1624,8 @@
 				3F3951F424CA096100F7325B /* SlowMockExtension.swift */,
 				3F3951F524CA096100F7325B /* MockExtension.swift */,
 				3F3951F624CA096100F7325B /* MockExtensionTwo.swift */,
+				2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */,
+				2130A5BA260AB582005DBA0F /* NotAnExtension.swift */,
 			);
 			path = MockExtensions;
 			sourceTree = "<group>";
@@ -2894,11 +2900,13 @@
 				3F39153324CB7E2400B58C3E /* MobileCore+IdentityTests.swift in Sources */,
 				3F39521024CA096100F7325B /* SlowMockExtension.swift in Sources */,
 				3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */,
+				2130A59D260AB448005DBA0F /* MockLegacyExtension.swift in Sources */,
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
 				78AA4EC42513AD2000205AE9 /* ConfigurationFileInPathTests.swift in Sources */,
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
+				2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */,
 				24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */,
 				3FB5F7D024D2848900F0F6DF /* ConfigurationUpdateTests.swift in Sources */,
 			);

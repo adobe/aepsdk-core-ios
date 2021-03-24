@@ -40,7 +40,6 @@ public final class MobileCore: NSObject {
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
-    @objc(registerExtensions:completion:)
     public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
         let idParser = IDParser()
         V4Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v4 if needed
@@ -56,6 +55,23 @@ public final class MobileCore: NSObject {
                     completion?()
                 }
             }
+        }
+    }
+    
+    @objc(registerExtensions:completion:)
+    public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (() -> Void)? = nil) {
+        let nonNativeExtensions = extensions.filter {!($0.self is Extension.Type)} // All extensions that conform to `Extension`
+        
+        // Invoke registerExtension on nonNativeExtensions
+        let registerSelector = Selector(("registerExtension"))
+        for nonNativeExtension in nonNativeExtensions
+            where nonNativeExtension.responds(to: registerSelector) {
+                nonNativeExtension.perform(registerSelector)
+        }
+        
+        // Then register each native extension as normal
+        if let nativeExtensions = extensions.filter({$0.self is Extension.Type}) as? [Extension.Type] {
+            registerExtensions(nativeExtensions, completion)
         }
     }
 
