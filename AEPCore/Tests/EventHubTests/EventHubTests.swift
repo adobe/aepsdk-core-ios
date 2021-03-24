@@ -922,6 +922,21 @@ class EventHubTests: XCTestCase {
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
     }
 
+    func testGetSharedStateUnversionedEventVersionsAtLatest() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+        let event1 = Event(name: "test1", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event1)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
+
+        // verify
+        let unversionedEvent = Event(name: "test2", type: EventType.custom, source: EventSource.none, data: nil)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, unversionedEvent, "two")
+    }
+
     /// Tests that events are associated with current shared state when updated rapidly
     func testGetSharedStateUsesCorrectVersionManyEvents() {
         // setup
