@@ -22,8 +22,8 @@ public enum PrettyDictionary {
             return ""
         }
         guard JSONSerialization.isValidJSONObject(dictionary),
-            let data = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted),
-            let prettyPrintedString = String(data: data, encoding: String.Encoding.utf8) else {
+              let data = try? JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted),
+              let prettyPrintedString = String(data: data, encoding: String.Encoding.utf8) else {
             return " \(dictionary as AnyObject)"
         }
         return prettyPrintedString

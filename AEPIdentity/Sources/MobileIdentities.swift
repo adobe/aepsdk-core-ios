@@ -184,8 +184,8 @@ struct MobileIdentities: Codable {
     /// - Returns: a `UserID` where the namespace is value, value is identifier, and type is integrationCode
     private static func dictToUserID(dict: [String: Any]) -> UserID? {
         guard let type = dict[CustomIdentity.CodingKeys.type.rawValue] as? String,
-            let identifier = dict[CustomIdentity.CodingKeys.identifier.rawValue] as? String,
-            !identifier.isEmpty else { return nil }
+              let identifier = dict[CustomIdentity.CodingKeys.identifier.rawValue] as? String,
+              !identifier.isEmpty else { return nil }
         return UserID(namespace: type, value: identifier, type: MobileIdentities.INTEGRATION_CODE)
     }
 }
