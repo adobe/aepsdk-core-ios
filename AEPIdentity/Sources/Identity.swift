@@ -21,6 +21,7 @@ import Foundation
     public static let extensionVersion = IdentityConstants.EXTENSION_VERSION
     public let metadata: [String: String]? = nil
     private(set) var state: IdentityState?
+    private let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
 
     // MARK: Extension
 
@@ -34,8 +35,6 @@ import Foundation
         }
 
         let hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: IdentityHitProcessor(responseHandler: handleNetworkResponse(hit:responseData:)))
-
-        let dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         let pushIdManager = PushIDManager(dataStore: dataStore, eventDispatcher: dispatch(event:))
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: hitQueue, pushIdManager: pushIdManager)
     }
@@ -45,6 +44,7 @@ import Foundation
         registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
         registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
+        registerListener(type: EventType.analytics, source: EventSource.responseIdentity, listener: handleAnalyticsResponseIdentity)
     }
 
     public func onUnregistered() {
@@ -145,6 +145,32 @@ import Foundation
                                                       source: EventSource.responseIdentity,
                                                       data: eventData as [String: Any])
         dispatch(event: responseEvent)
+    }
+    /// Handles the analytics response event
+    /// - Parameter event: the analytics response event
+    private func handleAnalyticsResponseIdentity(event: Event) {
+        guard let aid = event.data?[IdentityConstants.Analytics.ANALYTICS_ID] as? String, !aid.isEmpty else {
+            Log.error(label: "\(name):\(#function)", "Analytics Id is not found or empty")
+            return
+        }
+        if dataStore.contains(key: IdentityConstants.DataStoreKeys.AID_SYNCED_KEY) {
+            return
+        } else { dataStore.set(key: IdentityConstants.DataStoreKeys.AID_SYNCED_KEY, value: true)
+        }
+        let identifiers: [String: String] = [IdentityConstants.EventDataKeys.ANALYTICS_ID: aid]
+        let syncData: [String: Any] = [
+            IdentityConstants.EventDataKeys.IDENTIFIERS: identifiers,
+            IdentityConstants.EventDataKeys.FORCE_SYNC: false,
+            IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true,
+            IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown.rawValue,
+        ]
+
+        let avidEvent = Event(name: IdentityConstants.EventNames.AVID_SYNC_EVENT,
+                              type: EventType.identity,
+                              source: EventSource.requestIdentity,
+                              data: syncData)
+        Log.debug(label: "\(name):\(#function)", "Dispatching AVID sync event with data: \n\(syncData as AnyObject)")
+        dispatch(event: avidEvent)
     }
 
     // MARK: Event Handlers
