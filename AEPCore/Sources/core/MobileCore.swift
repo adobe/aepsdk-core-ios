@@ -52,9 +52,8 @@ public final class MobileCore: NSObject {
 
         for legacyExtension in legacyExtensions
             where legacyExtension.responds(to: registerSelector) {
-            if NSClassFromString("ACPBridgeExtension") != nil {
-                legacyExtension.perform(registerSelector)
-            } else {
+            legacyExtension.perform(registerSelector)
+            if NSClassFromString("ACPBridgeExtension") == nil {
                 Log.error(label: LOG_TAG, "Attempting to register a legacy extension \(legacyExtension) without the compatibility layer present. Can be included via github.com/adobe/aepsdk-compatibility-ios")
             }
         }
