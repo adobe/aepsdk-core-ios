@@ -35,6 +35,7 @@ enum IdentityConstants {
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
         static let ALL_IDENTIFIERS = "config.allidentifiers"
         static let UPDATE_CONFIG = "config.update"
+        static let AAM_CONFIG_SERVER = "audience.server"
     }
 
     enum EventNames {
@@ -108,5 +109,6 @@ enum IdentityConstants {
         static let DPID = "dpid"
         static let DPUUID = "dpuuid"
         static let UUID = "uuid"
+        static let OPTED_OUT_HIT_SENT = "optedouthitsent"
     }
 }
