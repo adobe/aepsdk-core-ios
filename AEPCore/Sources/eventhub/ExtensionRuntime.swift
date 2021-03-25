@@ -62,7 +62,7 @@ public protocol ExtensionRuntime {
     /// Gets the `SharedState` data for a specified extension    
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version or latest if not yet versioned. If event is nil will return the earliest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version or latest if not yet versioned. If event is nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult?

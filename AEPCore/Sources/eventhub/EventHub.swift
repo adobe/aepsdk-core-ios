@@ -214,7 +214,7 @@ final class EventHub {
     /// Retrieves the `SharedState` for a specific extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version or latest if not yet versioned. If event is nil will return the earliest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version or latest if not yet versioned. If event is nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
@@ -225,7 +225,7 @@ final class EventHub {
                 return nil
             }
 
-            var version = 0 // default to version 0 if event nil
+            var version = Int.max // default to version max if event nil
             if let event = event {
                 // default to latest version if event is non-nil but not yet versioned
                 version = eventNumberMap[event.id] ?? Int.max
@@ -235,7 +235,8 @@ final class EventHub {
 
             let stateProviderLastVersion = eventNumberFor(event: container.lastProcessedEvent)
             // shared state is still considered pending if barrier is used and the state provider has not processed past the previous event
-            if barrier && stateProviderLastVersion < version - 1 && result.status == .set {
+            let hasProcessedEvent = event == nil ? true : stateProviderLastVersion > version - 1
+            if barrier && !hasProcessedEvent && result.status == .set {
                 return SharedStateResult(status: .pending, value: result.value)
             }
 
