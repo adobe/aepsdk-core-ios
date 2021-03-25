@@ -14,7 +14,7 @@ import AEPServices
 import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
-class Configuration: Extension {
+class Configuration: NSObject, Extension {
     let runtime: ExtensionRuntime
     let name = ConfigurationConstants.EXTENSION_NAME
     let friendlyName = ConfigurationConstants.FRIENDLY_NAME

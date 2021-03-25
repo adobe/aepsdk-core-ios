@@ -14,7 +14,7 @@ import Foundation
 
 @testable import AEPCore
 
-class ContractExtensionOne: Extension {
+class ContractExtensionOne: NSObject, Extension {
     var name = "com.adobe.ContractExtensionOne"
     var friendlyName = "ContractExtensionOne"
     static var extensionVersion = "0.0.1"
