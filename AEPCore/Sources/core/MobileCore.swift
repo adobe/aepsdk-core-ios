@@ -41,17 +41,32 @@ public final class MobileCore: NSObject {
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
     @objc(registerExtensions:completion:)
-    public static func registerExtensions(_ extensions: [Extension.Type], _ completion: (() -> Void)? = nil) {
+    public static func registerExtensions(_ extensions: [NSObject.Type], _ completion: (() -> Void)? = nil) {
         let idParser = IDParser()
         V4Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v4 if needed
         V5Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v5 if needed
 
+        // Invoke registerExtension on legacy extensions
+        let legacyExtensions = extensions.filter {!($0.self is Extension.Type)} // All extensions that do not conform to `Extension`
+        let registerSelector = Selector(("registerExtension"))
+
+        if NSClassFromString("ACPBridgeExtension") == nil && !legacyExtensions.isEmpty {
+            Log.error(label: LOG_TAG, "Attempting to register legacy extensions without the compatibility layer present. Can be included via github.com/adobe/aepsdk-compatibility-ios")
+        } else {
+            for legacyExtension in legacyExtensions
+                where legacyExtension.responds(to: registerSelector) {
+                legacyExtension.perform(registerSelector)
+            }
+        }
+
+        // Register native extensions
         let registeredCounter = AtomicCounter()
         let allExtensions = [Configuration.self] + extensions
+        let nativeExtensions = allExtensions.filter({$0.self is Extension.Type}) as? [Extension.Type] ?? []
 
-        allExtensions.forEach {
+        nativeExtensions.forEach {
             EventHub.shared.registerExtension($0) { _ in
-                if registeredCounter.incrementAndGet() == allExtensions.count {
+                if registeredCounter.incrementAndGet() == nativeExtensions.count {
                     EventHub.shared.start()
                     completion?()
                 }

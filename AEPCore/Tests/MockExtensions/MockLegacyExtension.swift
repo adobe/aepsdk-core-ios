@@ -10,26 +10,24 @@
  governing permissions and limitations under the License.
  */
 
+import AEPCore
 import Foundation
 
-@testable import AEPCore
+class MockLegacyExtension: NSObject {
 
-class SlowMockExtension: NSObject, Extension {
-    var name = "slowMockExtension"
-    var friendlyName = "slowMockExtension"
-    static var extensionVersion = "0.0.1"
-    var metadata: [String: String]?
-
-    let runtime: ExtensionRuntime
-
-    required init(runtime: ExtensionRuntime) {
-        self.runtime = runtime
-        sleep(20) // simulate an extension doing heavy work in constructor
+    // mock "registerExtension" function
+    static var invokedRegisterExtension = false
+    @objc public static func registerExtension() {
+        invokedRegisterExtension = true
     }
 
-    func onRegistered() {}
-    func onUnregistered() {}
-    func readyForEvent(_: Event) -> Bool {
-        return true
+    public static func reset() {
+        invokedRegisterExtension = false
     }
+
+}
+
+@objc(ACPBridgeExtension)
+class ACPBridgeExtension: NSObject {
+    // pretend the compat layer is present
 }
