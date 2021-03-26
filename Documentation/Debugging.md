@@ -6,7 +6,7 @@ The AEP SDK offers an extension to quickly inspect, validate, debug data collect
 
 #### Install Compatibility Layer
 
-The Assurance extension requires the backward-compatible layer. Instructions on installing the backward compatible layer can be found [here](./Migration/Migration_Install.md).
+The Assurance extension requires the backward-compatible layer. Instructions on installing the backward compatible layer can be found [here](./Migration/ACP-Migration.md).
 
 #### Add Assurance to your app
 
