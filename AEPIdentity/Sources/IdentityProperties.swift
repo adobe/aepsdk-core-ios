@@ -46,6 +46,9 @@ struct IdentityProperties: Codable {
     /// The current privacy status provided by the Configuration extension, defaults to `unknown`
     var privacyStatus = PrivacyStatus.unknown
 
+    /// The aid synced status for handle analytics response event, set defaults to `false`
+    var isAidSynced: Bool? = false
+
     /// Converts `IdentityProperties` into an event data representation
     /// - Returns: A dictionary representing this `IdentityProperties`
     func toEventData() -> [String: Any] {

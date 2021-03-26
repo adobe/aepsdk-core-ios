@@ -67,4 +67,9 @@ extension Event {
     var optOutHitSent: Bool {
         return data?[IdentityConstants.Audience.OPTED_OUT_HIT_SENT] as? Bool ?? false
     }
+
+    /// Reads the Analytics id if present in event data
+    var aid: String? {
+        return data?[IdentityConstants.Analytics.ANALYTICS_ID] as? String
+    }
 }
