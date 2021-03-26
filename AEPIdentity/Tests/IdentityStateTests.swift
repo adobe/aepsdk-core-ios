@@ -876,6 +876,117 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(mockHitQueue.calledSuspend) // we should have suspended the hit queue
         XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should change to opt in
     }
+
+    // MARK: HandleAnalyticsResponse(...)
+    /// When aid sycned is false, we dispatch an event, set it to true and save to persistence
+    func testHandleAnalyticsResponseAidSyncedFalse() {
+        // setup
+        let dispatchedEventExpectation = XCTestExpectation(description: "one event should be dispatched")
+        dispatchedEventExpectation.expectedFulfillmentCount = 1 // 1 identity events
+        dispatchedEventExpectation.assertForOverFulfill = true
+        state.identityProperties.isAidSynced = false
+        XCTAssertTrue(state.identityProperties.isAidSynced == false)
+        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "aid" ] as [String: Any]
+
+        let event = Event(name: "Test Analytics Response Event", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+
+        //test
+        state.handleAnalyticsResponse(event: event, eventDispatcher: { event in
+            XCTAssertEqual(IdentityConstants.EventNames.AVID_SYNC_EVENT, event.name)
+            let identifierValue = [IdentityConstants.EventDataKeys.ANALYTICS_ID: "aid" ] as [String: String]
+            XCTAssertEqual(identifierValue, event.data?[IdentityConstants.EventDataKeys.IDENTIFIERS]as? [String: String] )
+            XCTAssertEqual(false, event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC]as? Bool)
+            XCTAssertEqual(true, event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT]as? Bool)
+            XCTAssertEqual(0, event.data?[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE]as? Int)
+            dispatchedEventExpectation.fulfill()
+        })
+
+        // verify
+        wait(for: [dispatchedEventExpectation], timeout: 1)
+        XCTAssertTrue(state.identityProperties.isAidSynced == true)
+        XCTAssertEqual(1,mockDataStore.dict.count) // identity properties should have been saved to persistence
+    }
+
+    /// when aid synced is true, we don't dispatch event and don't save it to persistence
+    func testHandleAnalyticsResponseAidSyncedTrue() {
+        // setup
+        let dispatchedEventExpectation = XCTestExpectation(description: "no event should be dispatched")
+        dispatchedEventExpectation.assertForOverFulfill = true
+        state.identityProperties.isAidSynced = true
+        XCTAssertTrue(state.identityProperties.isAidSynced == true)
+        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "aid" ] as [String: Any]
+        let event = Event(name: "Test Analytics Response Event", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+
+        //test
+        state.handleAnalyticsResponse(event: event, eventDispatcher: { _ in
+            dispatchedEventExpectation.fulfill()
+        })
+
+        // verify
+        XCTAssertTrue(state.identityProperties.isAidSynced == true)
+        XCTAssertEqual(0, mockDataStore.dict.count) // identity properties should not be saved to persistence
+    }
+
+    /// We set aid synced to false when privacy is opt out.
+    func testAidSyncedFalseAfterPrivacyOptOut() {
+        // setup
+        state.identityProperties.isAidSynced = true
+        XCTAssertTrue(state.identityProperties.isAidSynced == true)
+
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        var props = IdentityProperties()
+        props.privacyStatus = .unknown
+        props.ecid = ECID()
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
+
+        // test
+        state.processPrivacyChange(event: event, createSharedState: { (data, event) in
+            sharedStateExpectation.fulfill()
+        })
+
+        // verify
+        XCTAssertTrue(state.identityProperties.isAidSynced == false)
+        XCTAssertEqual(1, mockDataStore.dict.count) // identity properties should not be saved to persistence
+    }
+
+    /// We set aid synced to false when privacy is opt out, call handle analytics response, it set back to true
+    func testAidSyncedScenario() {
+        // setup
+        state.identityProperties.isAidSynced = true
+        XCTAssertTrue(state.identityProperties.isAidSynced == true)
+
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        var props = IdentityProperties()
+        props.privacyStatus = .unknown
+        props.ecid = ECID()
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        let event = Event(name: "Test event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue])
+
+        state.processPrivacyChange(event: event, createSharedState: { (data, event) in
+            sharedStateExpectation.fulfill()
+        })
+        //opt out, aid synced set to false
+        XCTAssertTrue(state.identityProperties.isAidSynced == false)
+
+        let dispatchedEventExpectation = XCTestExpectation(description: "one event should be dispatched")
+        dispatchedEventExpectation.expectedFulfillmentCount = 1
+        dispatchedEventExpectation.assertForOverFulfill = true
+
+        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "aid" ] as [String: Any]
+        let repsonseEvent = Event(name: "Test Analytics Response Event", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+
+        //test
+        state.handleAnalyticsResponse(event: repsonseEvent, eventDispatcher: { _ in
+            dispatchedEventExpectation.fulfill()
+        })
+
+        // verify
+        XCTAssertTrue(state.identityProperties.isAidSynced == true)
+        XCTAssertEqual(1, mockDataStore.dict.count) // identity properties should not be saved to persistence
+    }
 }
 
 private extension Event {

@@ -228,8 +228,7 @@ class IdentityState {
             identityProperties.blob = nil
             identityProperties.locationHint = nil
             identityProperties.customerIds?.removeAll()
-
-            // TODO: Clear AID from analytics
+            identityProperties.isAidSynced = false
             identityProperties.pushIdentifier = nil
             pushIdManager.updatePushId(pushId: nil)
             identityProperties.saveToPersistence()
@@ -250,6 +249,37 @@ class IdentityState {
     /// - Parameter newConfig: The new configuration to replace the current last valid config
     func updateLastValidConfig(newConfig: [String: Any]) {
         lastValidConfig = newConfig
+    }
+
+    /// Invoke each time when we receive Analytics Response event
+    /// - Parameters:
+    ///   - event: the event from Analytics Respsonse
+    ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
+    func handleAnalyticsResponse(event: Event, eventDispatcher: (Event) -> Void) {
+        guard let aid = event.data?[IdentityConstants.Analytics.ANALYTICS_ID] as? String, !aid.isEmpty else {
+            Log.debug(label: "\(LOG_TAG):\(#function)", "Analytics Tracking ID is not found or empty")
+            return
+        }
+
+        if !identityProperties.isAidSynced {
+            // dispatch events
+            let identifiers: [String: String] = [IdentityConstants.EventDataKeys.ANALYTICS_ID: aid]
+            let syncData: [String: Any] = [
+                IdentityConstants.EventDataKeys.IDENTIFIERS: identifiers,
+                IdentityConstants.EventDataKeys.FORCE_SYNC: false,
+                IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true,
+                IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown.rawValue,
+            ]
+
+            let avidEvent = Event(name: IdentityConstants.EventNames.AVID_SYNC_EVENT,
+                                  type: EventType.identity,
+                                  source: EventSource.requestIdentity,
+                                  data: syncData)
+            eventDispatcher(avidEvent)
+            identityProperties.isAidSynced = true
+            // save properties
+            identityProperties.saveToPersistence()
+        }
     }
 
     // MARK: Private APIs

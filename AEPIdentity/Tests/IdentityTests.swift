@@ -18,14 +18,12 @@ import XCTest
 class IdentityTests: XCTestCase {
     var identity: Identity!
     var mockRuntime: TestableExtensionRuntime!
-    var dataStore: NamedCollectionDataStore!
 
     override func setUp() {
         ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
-        dataStore = NamedCollectionDataStore(name: IdentityConstants.DATASTORE_NAME)
         identity.onRegistered()
     }
 
@@ -327,5 +325,68 @@ class IdentityTests: XCTestCase {
         // verify no network request is sent
         let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit shouldn't have been sent
+    }
+
+    /// Tests that when receives a valid analytics event and response identity event source that we dispatch an Avid Sync event
+    func testAnalyticsResponseIdentityHappy() {
+        // setup
+        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "aid" ] as [String: Any]
+        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
+        XCTAssertNotNil(actualEvent)
+        XCTAssertNotNil(actualEvent?.id)
+        XCTAssertEqual(IdentityConstants.EventNames.AVID_SYNC_EVENT, actualEvent?.name)
+        XCTAssertEqual(EventType.identity, actualEvent?.type)
+        let identifierValue = [IdentityConstants.EventDataKeys.ANALYTICS_ID: "aid" ] as [String: String]
+        XCTAssertEqual(identifierValue, actualEvent?.data?[IdentityConstants.EventDataKeys.IDENTIFIERS]as? [String: String] )
+        XCTAssertEqual(false, actualEvent?.data?[IdentityConstants.EventDataKeys.FORCE_SYNC]as? Bool)
+        XCTAssertEqual(true, actualEvent?.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT]as? Bool)
+        XCTAssertEqual(0, actualEvent?.data?[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE]as? Int)
+    }
+
+    /// Tests Handle Analytics Response Identity with empty aid that we don't dispatch an event
+    func testAnalyticsResponseIdentityWithEmptyAid() {
+        // setup
+        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "" ] as [String: Any]
+        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
+        XCTAssertNil(actualEvent)
+    }
+
+    /// Tests Handle Analytics Response Identity with no aid key that we don't dispatch an event
+    func testAnalyticsResponseIdentityWithNoAid() {
+        // setup
+        let eventData = ["key": "aid" ] as [String: Any]
+        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
+        XCTAssertNil(actualEvent)
+    }
+
+    /// Tests Handle Analytics Response Identity with no event data that we don't dispatch an event
+    func testAnalyticsResponseIdentityWithNoEventData() {
+        // setup
+        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: nil)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
+        XCTAssertNil(actualEvent)
     }
 }

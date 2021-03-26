@@ -73,7 +73,6 @@ enum IdentityConstants {
         static let IDENTITY_PROPERTIES = "identity.properties"
         static let PUSH_ENABLED = "push.enabled"
         static let ANALYTICS_PUSH_SYNC = "analytics.push.sync"
-        static let AID_SYNCED_KEY = "aid.synced"
     }
 
     enum URLKeys {
