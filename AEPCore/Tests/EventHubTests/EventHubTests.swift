@@ -905,10 +905,10 @@ class EventHubTests: XCTestCase {
         eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
 
         // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
     }
 
-    func testGetSharedStateNilEventVersionsAtZero() {
+    func testGetSharedStateNilEventVersionsAtLatest() {
         // setup
         eventHub.start()
 
@@ -919,7 +919,31 @@ class EventHubTests: XCTestCase {
         eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
 
         // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
+    }
+
+    func testGetSharedStateUnversionedEventVersionsAtLatest() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+        let event1 = Event(name: "test1", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event1)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
+
+        // verify
+        let unversionedEvent = Event(name: "unversioned", type: EventType.custom, source: EventSource.none, data: nil)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, unversionedEvent, "two")
+
+        // test pt. 2
+        let event2 = Event(name: "test2", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event2)
+
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.THREE, event: event2)
+
+        // verify pt. 2
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, unversionedEvent, "three")
     }
 
     /// Tests that events are associated with current shared state when updated rapidly
@@ -1142,6 +1166,7 @@ class EventHubTests: XCTestCase {
 
         eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
             if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String == EventHubTests.MOCK_EXTENSION_NAME {
+                XCTAssertEqual(self.eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
                 expectation.fulfill()
             }
         }
@@ -1152,7 +1177,6 @@ class EventHubTests: XCTestCase {
 
         // verify
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
     }
 
     func testCreatePendingSharedStateNilEvent() {
