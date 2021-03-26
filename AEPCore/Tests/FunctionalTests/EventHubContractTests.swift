@@ -28,7 +28,7 @@ class EventHubContractTest: XCTestCase {
     }
 
 
-    // MARK: - EventHub Registriation
+    // MARK: - EventHub Registration
 
     /// Tests init is called before onRegister
     func testInitThenOnRegister() {
@@ -62,7 +62,7 @@ class EventHubContractTest: XCTestCase {
 
     }
 
-    /// Tests the start callback gets called after all the extension finish registriation
+    /// Tests the start callback gets called after all the extension finish registration
     func testStartCallbackCalledAfterRegistrationComplete() {
         // setup
         let extensionOneRegisteredExpectation = XCTestExpectation(description: "Extension one onRegistered is invoked")
@@ -88,7 +88,7 @@ class EventHubContractTest: XCTestCase {
 
     }
 
-    /// Tests the registration of extensions running on separat threads
+    /// Tests the registration of extensions running on separate threads
     func testExtensionRegistrationRunningOnSeparateThreads() {
         // setup
         let startExpectation = XCTestExpectation(description: "Start callback is invoked")

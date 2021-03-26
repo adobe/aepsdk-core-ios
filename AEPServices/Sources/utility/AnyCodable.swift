@@ -248,8 +248,11 @@ extension AnyCodable: Equatable {
 
 // MARK: Codable Helpers
 extension Encodable {
-    public func asDictionary() -> [String: Any]? {
-        guard let data = try? JSONEncoder().encode(self) else { return nil }
+    public func asDictionary(dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate
+    ) -> [String: Any]? {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = dateEncodingStrategy
+        guard let data = try? encoder.encode(self) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }

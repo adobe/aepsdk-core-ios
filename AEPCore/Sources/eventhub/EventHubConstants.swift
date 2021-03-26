@@ -16,12 +16,13 @@ enum EventHubConstants {
     static let STATE_CHANGE = "STATE_CHANGE_EVENT"
     static let NAME = "com.adobe.module.eventhub"
     static let FRIENDLY_NAME = "EventHub"
-    static let VERSION_NUMBER = "3.0.0"
+    static let VERSION_NUMBER = "3.1.0"
 
     enum EventDataKeys {
         static let VERSION = "version"
         static let EXTENSIONS = "extensions"
         static let METADATA = "metadata"
+        static let FRIENDLY_NAME = "friendlyName"
 
         enum Configuration {
             static let EVENT_STATE_OWNER = "stateowner"

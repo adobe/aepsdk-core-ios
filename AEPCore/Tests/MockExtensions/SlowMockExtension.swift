@@ -14,7 +14,7 @@ import Foundation
 
 @testable import AEPCore
 
-class SlowMockExtension: Extension {
+class SlowMockExtension: NSObject, Extension {
     var name = "slowMockExtension"
     var friendlyName = "slowMockExtension"
     static var extensionVersion = "0.0.1"

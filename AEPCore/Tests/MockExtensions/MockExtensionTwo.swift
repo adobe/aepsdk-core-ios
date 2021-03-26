@@ -14,8 +14,8 @@ import Foundation
 
 @testable import AEPCore
 
-class MockExtensionTwo: Extension {
-    var name = "mockExtensionTwo"
+class MockExtensionTwo: NSObject, Extension {
+    var name = "com.adobe.mockExtensionTwo"
     var friendlyName = "mockExtensionTwo"
     static var extensionVersion = "0.0.1"
     var metadata: [String: String]? = ["testMetaKey": "testMetaVal"]

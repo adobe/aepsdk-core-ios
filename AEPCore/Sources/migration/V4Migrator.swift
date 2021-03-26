@@ -122,7 +122,7 @@ struct V4Migrator {
 
         // save values
         let identityDataStore = NamedCollectionDataStore(name: V4MigrationConstants.Identity.DATASTORE_NAME)
-        let identityPropsData = try? JSONSerialization.data(withJSONObject: identityPropsDict)
+        let identityPropsData = AnyCodable.from(dictionary: identityPropsDict as [String: Any])
         identityDataStore.setObject(key: V4MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES, value: identityPropsData)
         identityDataStore.set(key: V4MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
