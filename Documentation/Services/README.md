@@ -2,7 +2,7 @@
 
 ## Contents
 - [Overview](#overview)
--  [`ServiceProvider`](#-serviceprovider-)
+-  [`ServiceProvider`](#serviceprovider)
 - [Implementing a Service](#implementing-a-service)
 - [Overriding a Service](#overriding-a-service)
 - [Provided Services](#provided-services)

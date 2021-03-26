@@ -67,6 +67,26 @@ struct ContentView: View {
                             usleep(100)
                         }
                     }
+//                    let type = "test.type"
+//                    let source = "test.source"
+//                    MobileCore.registerEventListener(type: type, source: source){event in
+//                        while (true){
+//                            print("sleep for 2 seconds.")
+//                            sleep(2)
+//                        }
+//                    }
+//                    MobileCore.registerEventListener(type: type, source: source){event in
+//                        if let dataValue = event.data?["key"] as? String {
+//                            print("==== \(dataValue)")
+//                        }else{
+//                            print("==== data key not exists")
+//                        }
+//                    }
+//                    for n in 0..<10{
+//                        MobileCore.dispatch(event: Event(name: "test event", type: type, source: source, data:
+//                                                            ["key":"value_\(n)"]))
+//                    }
+
                 }) {
                     Text("Evaluate Rules")
                         .frame(minWidth: 0, maxWidth: .infinity)

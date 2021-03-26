@@ -233,7 +233,7 @@ class IdentityTests: XCTestCase {
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
     }
 
-    /// Tests that when the the event does not contain an org id that we do not update the last valid config
+    /// Tests that when the event does not contain an org id that we do not update the last valid config
     func testConfigurationResponseEventNoOrgId() {
         // setup
         var props = IdentityProperties()
@@ -256,82 +256,76 @@ class IdentityTests: XCTestCase {
         XCTAssertNil(identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have NOT been updated with the org id
     }
 
-    /// Tests that when receives a valid analytics event and response identity event source that we dispatch an Avid Sync event
-    func testAnalyticsResponseIdentityHappy() {
+    /// Tests that when the event contains an AAM server then no opt out request is sent
+    func testConfigurationResponseEventOptOutWhenAamServerIsConfigured() {
         // setup
-        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "aid" ] as [String: Any]
-        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+        var props = IdentityProperties()
+        props.ecid = ECID()
+        props.saveToPersistence()
+        identity = Identity(runtime: mockRuntime)
+        identity.onRegistered()
+
+        let testOrgId = "testOrgId"
+        let data = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId, IdentityConstants.Configuration.AAM_CONFIG_SERVER: "testServer.com"] as [String: Any]
+        let event = Event(name: "Test Configuration response", type: EventType.configuration, source: EventSource.responseContent, data: data)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (data, .set))
+        let _ = identity.readyForEvent(event)
 
         // test
         mockRuntime.simulateComingEvent(event: event)
 
-        // verify
-        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
-        XCTAssertNotNil(actualEvent)
-        XCTAssertNotNil(actualEvent?.id)
-        XCTAssertEqual(IdentityConstants.EventNames.AVID_SYNC_EVENT, actualEvent?.name)
-        XCTAssertEqual(EventType.identity, actualEvent?.type)
-        let identifierValue = [IdentityConstants.EventDataKeys.ANALYTICS_ID: "aid" ] as [String: String]
-        XCTAssertEqual(identifierValue, actualEvent?.data?[IdentityConstants.EventDataKeys.IDENTIFIERS]as? [String: String] )
-        XCTAssertEqual(false, actualEvent?.data?[IdentityConstants.EventDataKeys.FORCE_SYNC]as? Bool)
-        XCTAssertEqual(true, actualEvent?.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT]as? Bool)
-        XCTAssertEqual(0, actualEvent?.data?[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE]as? Int)
-        XCTAssertEqual(true, dataStore.getBool(key: IdentityConstants.DataStoreKeys.AID_SYNCED_KEY))
+        // verify no network request is sent because there is an AAM server configured
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit shouldn't have been sent
+        XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
+        XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
     }
 
-    /// Tests Handle Analytics Response Identity with empty aid that we don't dispatch an event
-    func testAnalyticsResponseIdentityWithEmptyAid() {
+    /// Tests that when the event contains opt out hit sent == false then the Identity Extension sends an opt out request
+    func testAudienceResponseEventOptOutHitSentIsFalse() {
         // setup
-        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "" ] as [String: Any]
-        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+        var props = IdentityProperties()
+        props.ecid = ECID()
+        props.saveToPersistence()
+        identity = Identity(runtime: mockRuntime)
+        identity.onRegistered()
+
+        let testOrgId = "testOrgId"
+        let configData = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId, IdentityConstants.Configuration.AAM_CONFIG_SERVER: "testServer.com"] as [String: Any]
+        let audienceResponseEventData = [IdentityConstants.Audience.OPTED_OUT_HIT_SENT: false]
+        let event = Event(name: "Test Audience response", type: EventType.audienceManager, source: EventSource.responseContent, data: audienceResponseEventData)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (configData, .set))
+        let _ = identity.readyForEvent(event)
 
         // test
         mockRuntime.simulateComingEvent(event: event)
 
-        // verify
-        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
-        XCTAssertNil(actualEvent)
+        // verify network request is sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertTrue(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have been sent
     }
 
-    /// Tests Handle Analytics Response Identity with no aid key that we don't dispatch an event
-    func testAnalyticsResponseIdentityWithNoAid() {
+    /// Tests that when the event contains opt out hit sent == true then the Identity Extension does not send an opt out request
+    func testAudienceResponseEventOptOutHitSentIsTrue() {
         // setup
-        let eventData = ["key": "aid" ] as [String: Any]
-        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
+        var props = IdentityProperties()
+        props.ecid = ECID()
+        props.saveToPersistence()
+        identity = Identity(runtime: mockRuntime)
+        identity.onRegistered()
+
+        let testOrgId = "testOrgId"
+        let configData = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId, IdentityConstants.Configuration.AAM_CONFIG_SERVER: "testServer.com"] as [String: Any]
+        let audienceResponseEventData = [IdentityConstants.Audience.OPTED_OUT_HIT_SENT: true]
+        let event = Event(name: "Test Audience response", type: EventType.audienceManager, source: EventSource.responseContent, data: audienceResponseEventData)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (configData, .set))
+        let _ = identity.readyForEvent(event)
 
         // test
         mockRuntime.simulateComingEvent(event: event)
 
-        // verify
-        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
-        XCTAssertNil(actualEvent)
-    }
-
-    /// Tests Handle Analytics Response Identity with no event data that we don't dispatch an event
-    func testAnalyticsResponseIdentityWithNoEventData() {
-        // setup
-        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: nil)
-
-        // test
-        mockRuntime.simulateComingEvent(event: event)
-
-        // verify
-        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
-        XCTAssertNil(actualEvent)
-    }
-
-    /// Tests Handle Analytics Response Identity already contains aid sync key that we don't dispatch an event
-    func testAnalyticsResponseIdentityWithDataStoreAlreadyHaveAidSyncedKey() {
-        // setup
-        let eventData = [IdentityConstants.Analytics.ANALYTICS_ID: "aid" ] as [String: Any]
-        let event = Event(name: "Test Analytics Response Identity", type: EventType.analytics, source: EventSource.responseIdentity, data: eventData)
-        dataStore.set(key: IdentityConstants.DataStoreKeys.AID_SYNCED_KEY, value: true)
-
-        // test
-        mockRuntime.simulateComingEvent(event: event)
-
-        // verify
-        let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
-        XCTAssertNil(actualEvent)
+        // verify no network request is sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit shouldn't have been sent
     }
 }

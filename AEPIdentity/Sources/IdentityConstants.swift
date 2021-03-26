@@ -25,6 +25,8 @@ enum IdentityConstants {
 
     enum SharedStateKeys {
         static let CONFIGURATION = "com.adobe.module.configuration"
+        static let ANALYTICS = "com.adobe.module.analytics"
+        static let AUDIENCE = "com.adobe.module.audience"
     }
 
     enum Configuration {
@@ -33,6 +35,7 @@ enum IdentityConstants {
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
         static let ALL_IDENTIFIERS = "config.allidentifiers"
         static let UPDATE_CONFIG = "config.update"
+        static let AAM_CONFIG_SERVER = "audience.server"
     }
 
     enum EventNames {
@@ -103,5 +106,12 @@ enum IdentityConstants {
         static let EVENT_PUSH_STATUS = "a.push.optin"
         static let PUSH_ID_ENABLED_ACTION_NAME = "Push"
         static let TRACK_INTERNAL = "trackinternal"
+    }
+
+    enum Audience {
+        static let DPID = "dpid"
+        static let DPUUID = "dpuuid"
+        static let UUID = "uuid"
+        static let OPTED_OUT_HIT_SENT = "optedouthitsent"
     }
 }

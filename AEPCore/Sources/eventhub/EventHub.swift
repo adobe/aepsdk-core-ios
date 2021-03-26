@@ -175,13 +175,13 @@ final class EventHub {
     func createSharedState(extensionName: String, data: [String: Any]?, event: Event?, sharedStateType: SharedStateType = .standard) {
         eventHubQueue.async {
             guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) else {
-                Log.warning(label: self.LOG_TAG, "Error creating shared state for \(extensionName)")
+                Log.warning(label: self.LOG_TAG, "Error creating \(sharedStateType.rawValue) shared state for \(extensionName)")
                 return
             }
 
             sharedState.set(version: version, data: data)
             self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName))
-            Log.debug(label: self.LOG_TAG, "Shared state created for \(extensionName) with version \(version) and data: \n\(data as AnyObject)")
+            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
         }
     }
 
@@ -201,12 +201,12 @@ final class EventHub {
             if let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) {
                 pendingVersion = version
                 sharedState.addPending(version: version)
-                Log.debug(label: LOG_TAG, "Pending shared state created for \(extensionName) with version \(version)")
+                Log.debug(label: LOG_TAG, "Pending \(sharedStateType.rawValue) shared state created for \(extensionName) with version \(version)")
             }
 
             return { [weak self] data in
                 self?.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data, sharedStateType: sharedStateType)
-                Log.debug(label: self?.LOG_TAG ?? "EventHub", "Pending shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(data as AnyObject)")
+                Log.debug(label: self?.LOG_TAG ?? "EventHub", "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(PrettyDictionary.prettify(data))")
             }
         }
     }
@@ -214,14 +214,14 @@ final class EventHub {
     /// Retrieves the `SharedState` for a specific extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the latest `SharedState`
+    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version. If nil will return the earliest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         return eventHubQueue.sync {
             guard let container = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
-                Log.warning(label: LOG_TAG, "Unable to retrieve shared state for \(extensionName). No such extension is registered.")
+                Log.warning(label: LOG_TAG, "Unable to retrieve \(sharedStateType.rawValue) shared state for \(extensionName). No such extension is registered.")
                 return nil
             }
 
@@ -262,10 +262,12 @@ final class EventHub {
             where val.sharedStateName != EventHubConstants.NAME {
             if let exten = val.exten {
                 let version = type(of: exten).extensionVersion
-                extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version]
+                extensionsInfo[exten.name] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                              EventHubConstants.EventDataKeys.FRIENDLY_NAME: exten.friendlyName]
                 if let metadata = exten.metadata, !metadata.isEmpty {
-                    extensionsInfo[exten.friendlyName] = [EventHubConstants.EventDataKeys.VERSION: version,
-                                                          EventHubConstants.EventDataKeys.METADATA: metadata]
+                    extensionsInfo[exten.name] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                                  EventHubConstants.EventDataKeys.METADATA: metadata,
+                                                  EventHubConstants.EventDataKeys.FRIENDLY_NAME: exten.friendlyName]
                 }
             }
         }
@@ -281,7 +283,7 @@ final class EventHub {
         let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
         sharedState.set(version: version, data: data)
         dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME))
-        Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(data as AnyObject)")
+        Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
     }
 
     // MARK: - Private
@@ -350,6 +352,6 @@ final class EventHub {
 private extension Extension {
     /// Returns the name of the class for the Extension
     static var typeName: String {
-        return String(describing: self)
+        return String(reflecting: self)
     }
 }

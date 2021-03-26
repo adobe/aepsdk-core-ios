@@ -14,7 +14,7 @@ import AEPServices
 import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
-class Configuration: Extension {
+class Configuration: NSObject, Extension {
     let runtime: ExtensionRuntime
     let name = ConfigurationConstants.EXTENSION_NAME
     let friendlyName = ConfigurationConstants.FRIENDLY_NAME
@@ -81,7 +81,7 @@ class Configuration: Extension {
         if event.isUpdateConfigEvent {
             processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
         } else if event.isGetConfigEvent {
-            dispatchConfigurationResponse(triggerEvent: event, data: configState.environmentAwareConfiguration)
+            dispatchConfigurationResponse(requestEvent: event, data: configState.environmentAwareConfiguration)
         } else if let appId = event.appId {
             processConfigureWith(appId: appId, event: event, sharedStateResolver: createPendingSharedState(event: event))
         } else if let filePath = event.filePath {
@@ -122,7 +122,7 @@ class Configuration: Extension {
 
         configState.updateWith(programmaticConfig: updatedConfig)
         // Create shared state and dispatch configuration response content
-        publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
+        publishCurrentConfig(sharedStateResolver: sharedStateResolver)
     }
 
     /// Interacts with the `ConfigurationState` to download the configuration associated with `appId`
@@ -155,7 +155,7 @@ class Configuration: Extension {
         stopEvents()
         configState.updateWith(appId: appId) { [weak self] config in
             if let _ = config {
-                self?.publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
+                self?.publishCurrentConfig(sharedStateResolver: sharedStateResolver)
                 self?.startEvents()
             } else {
                 // If downloading config failed try again later
@@ -182,7 +182,7 @@ class Configuration: Extension {
         }
 
         if configState.updateWith(filePath: filePath) {
-            publishCurrentConfig(event: event, sharedStateResolver: sharedStateResolver)
+            publishCurrentConfig(sharedStateResolver: sharedStateResolver)
         } else {
             // loading from bundled config failed, resolve shared state with current config without dispatching a config response event
             sharedStateResolver(configState.environmentAwareConfiguration)
@@ -193,11 +193,20 @@ class Configuration: Extension {
 
     /// Dispatches a configuration response content event with corresponding data
     /// - Parameters:
-    ///   - triggerEvent: The `Event` to which the newly dispatched `Event` is responding
+    ///   - requestEvent: The `Event` to which the newly dispatched `Event` is responding, null if this is a generic response
     ///   - data: Optional data to be attached to the event
-    private func dispatchConfigurationResponse(triggerEvent: Event, data: [String: Any]?) {
-        let responseEvent = triggerEvent.createResponseEvent(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
+    private func dispatchConfigurationResponse(requestEvent: Event?, data: [String: Any]?) {
+        if let requestEvent = requestEvent {
+            let pairedResponseEvent = requestEvent.createResponseEvent(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
+            dispatch(event: pairedResponseEvent)
+            return
+        }
+
+        // send a generic event if this is not the response to a getter
+        let responseEvent = Event(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
         dispatch(event: responseEvent)
+        return
+
     }
 
     /// Dispatches a configuration request content event with corresponding data
@@ -212,14 +221,13 @@ class Configuration: Extension {
 
     /// Shares state with the current configuration and dispatches a configuration response event with the current configuration
     /// - Parameters:
-    ///   - event: The event at which this configuration should be published at
     ///   - sharedStateResolver: a closure which is resolved with the current configuration
-    private func publishCurrentConfig(event: Event, sharedStateResolver: SharedStateResolver) {
+    private func publishCurrentConfig(sharedStateResolver: SharedStateResolver) {
         let config = configState.environmentAwareConfiguration
         // Update the shared state with the new configuration
         sharedStateResolver(config)
         // Dispatch a Configuration Response Content event with the new configuration.
-        dispatchConfigurationResponse(triggerEvent: event, data: config)
+        dispatchConfigurationResponse(requestEvent: nil, data: config)
         // notify the rules engine about the change of config
         notifyRulesEngine(newConfiguration: config)
     }

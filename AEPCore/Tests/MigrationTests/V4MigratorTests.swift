@@ -13,6 +13,7 @@ import XCTest
 @testable import AEPCore
 import AEPServicesMocks
 import AEPServices
+@testable import AEPIdentity
 
 private struct MockIDParser: IDParsing {
     func convertStringToIds(idString: String?) -> [[String : Any]] {
@@ -330,5 +331,31 @@ class V4MigratorTests: XCTestCase {
         XCTAssertEqual("optunknown", storedConfig?["global.privacy"]?.stringValue)
     }
 
+    func testExistingV4IdentityData() {
+        // setup
+        let mockDate = Date()
+        v4Defaults.set("&d_cid_ic=type%01id%011", forKey: V4MigrationConstants.Identity.V4_IDS)
+        v4Defaults.set("identityECID", forKey: V4MigrationConstants.Identity.V4_ECID)
+        v4Defaults.set(1234, forKey: V4MigrationConstants.Identity.V4_TTL)
+        v4Defaults.set("blob", forKey: V4MigrationConstants.Identity.V4_BLOB)
+        v4Defaults.set("hint", forKey: V4MigrationConstants.Identity.V4_HINT)
+        v4Defaults.set(mockDate, forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE)
 
+        // test
+        V4Migrator(idParser: IDParser()).migrate()
+
+        // verify
+        var identityProperties = IdentityProperties()
+        identityProperties.loadFromPersistence()
+
+        XCTAssertEqual("identityECID", identityProperties.ecid?.ecidString)
+        XCTAssertEqual(30, identityProperties.ttl)
+        XCTAssertEqual("blob", identityProperties.blob)
+        XCTAssertEqual("hint", identityProperties.locationHint)
+        XCTAssertEqual(1, identityProperties.customerIds?.count)
+        XCTAssertEqual("id", identityProperties.customerIds?[0].identifier)
+        XCTAssertEqual("type", identityProperties.customerIds?[0].type)
+        XCTAssertEqual("d_cid_ic", identityProperties.customerIds?[0].origin)
+        XCTAssertEqual(1, identityProperties.customerIds?[0].authenticationState.rawValue)
+    }
 }

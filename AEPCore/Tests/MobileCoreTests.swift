@@ -22,6 +22,7 @@ class MobileCoreTests: XCTestCase {
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
+        MockLegacyExtension.reset()
     }
 
     private func registerMockExtension<T: Extension>(_ type: T.Type) {
@@ -39,10 +40,24 @@ class MobileCoreTests: XCTestCase {
         expectation.assertForOverFulfill = true
         MockExtension.registrationClosure = { expectation.fulfill() }
         // test
-        MobileCore.registerExtensions([MockExtension.self])
+        MobileCore.registerExtensions([MockExtension.self, Configuration.self])
 
         // verify
         wait(for: [expectation], timeout: 1)
+    }
+
+    func testRegisterExtensionsLegacy() {
+        let expectation = XCTestExpectation(description: "registration completed in timely fashion")
+        expectation.assertForOverFulfill = true
+
+        // test
+        MobileCore.registerExtensions([MockLegacyExtension.self, NotAnExtension.self]) {
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+        XCTAssertTrue(MockLegacyExtension.invokedRegisterExtension)
     }
 
     /// Tests that a single extension can be registered
@@ -187,21 +202,21 @@ class MobileCoreTests: XCTestCase {
 
         let expected = """
         {
-          "extensions" : {
-            "mockExtension" : {
-              "version" : "0.0.1"
+            "com.adobe.mockExtension" : {
+              "version" : "0.0.1",
+              "friendlyName" : "mockExtension"
             },
-            "Configuration" : {
-              "version" : "3.0.0"
+            "com.adobe.module.configuration" : {
+              "version" : "3.0.0",
+              "friendlyName" : "Configuration"
             },
-            "mockExtensionTwo" : {
+            "com.adobe.mockExtensionTwo" : {
               "metadata" : {
                 "testMetaKey" : "testMetaVal"
               },
-              "version" : "0.0.1"
+              "version" : "0.0.1",
+              "friendlyName" : "mockExtensionTwo"
             }
-          },
-          "version" : "3.0.0"
         }
         """
         let expectedDict = jsonStrToDict(jsonStr: expected)
@@ -209,7 +224,7 @@ class MobileCoreTests: XCTestCase {
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self], {
             let registered = MobileCore.getRegisteredExtensions()
-            let registeredDict = self.jsonStrToDict(jsonStr: registered)
+            let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
             let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
             XCTAssertTrue(equal)
             expectation.fulfill()
@@ -479,6 +494,78 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.collectMessageInfo(messageInfo)
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
+
+    // MARK: collectLaunchInfo(...) tests
+
+    /// When launch info is empty no event should be dispatched
+    func testCollectLaunchInfoEmpty() {
+        // setup
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should NOT receive an event")
+        eventExpectation.assertForOverFulfill = true
+        eventExpectation.isInverted = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericData, source: EventSource.os) { event in
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectLaunchInfo([:])
+
+        // verify
+        wait(for: [eventExpectation], timeout: 1.0)
+    }
+
+    /// When message info is not empty we should dispatch an event
+    func testCollectLaunchInfoWithData() {
+        // setup
+        let launchInfo = [
+            "key_str":"stringValue",
+            "adb_deeplink":"abc://myawesomeapp?some=param&some=other_param",
+            "adb_m_id":"awesomePushMessage",
+            "adb_m_l_id":"happyBirthdayNotification"
+        ] as [String : String]
+
+        let registerExpectation = XCTestExpectation(description: "MockExtension should register successfully")
+        registerExpectation.assertForOverFulfill = true
+        let eventExpectation = XCTestExpectation(description: "Should receive the event when dispatched through the event hub")
+        eventExpectation.assertForOverFulfill = true
+
+        EventHub.shared.registerExtension(MockExtension.self) { _ in
+            registerExpectation.fulfill()
+        }
+
+        wait(for: [registerExpectation], timeout: 1.0)
+
+        // register listener after registration
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericData, source: EventSource.os) { event in
+            XCTAssertEqual(event.data as! [String: String], [
+                "key_str":"stringValue",
+                "deeplink":"abc://myawesomeapp?some=param&some=other_param",
+                "pushmessageid":"awesomePushMessage",
+                "notificationid":"happyBirthdayNotification"
+            ])
+            eventExpectation.fulfill()
+        }
+
+        EventHub.shared.start()
+
+        // test
+        MobileCore.collectLaunchInfo(launchInfo)
 
         // verify
         wait(for: [eventExpectation], timeout: 1.0)

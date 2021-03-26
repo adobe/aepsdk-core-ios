@@ -49,7 +49,8 @@ class IdentityState {
         identityProperties.loadFromPersistence()
 
         // Load privacy status
-        identityProperties.privacyStatus = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        let privacyStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? PrivacyStatus.unknown.rawValue
+        identityProperties.privacyStatus = PrivacyStatus(rawValue: privacyStr) ?? .unknown
 
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
