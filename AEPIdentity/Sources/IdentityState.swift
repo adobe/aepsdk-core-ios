@@ -261,7 +261,7 @@ class IdentityState {
             return
         }
 
-        if !identityProperties.isAidSynced {
+        if !(identityProperties.isAidSynced ?? false) {
             // dispatch events
             let identifiers: [String: String] = [IdentityConstants.EventDataKeys.ANALYTICS_ID: aid]
             let syncData: [String: Any] = [
