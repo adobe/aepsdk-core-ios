@@ -251,12 +251,12 @@ class IdentityState {
         lastValidConfig = newConfig
     }
 
-    /// Invoke each time when we receive Analytics Response event
+    /// Invoked each time when we receive Analytics Response event
     /// - Parameters:
     ///   - event: the event from Analytics Respsonse
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     func handleAnalyticsResponse(event: Event, eventDispatcher: (Event) -> Void) {
-        guard let aid = event.data?[IdentityConstants.Analytics.ANALYTICS_ID] as? String, !aid.isEmpty else {
+        guard let aid = event.aid, !aid.isEmpty else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Analytics Tracking ID is not found or empty")
             return
         }
@@ -271,14 +271,15 @@ class IdentityState {
                 IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown.rawValue,
             ]
 
+            identityProperties.isAidSynced = true
+            // save properties
+            identityProperties.saveToPersistence()
+
             let avidEvent = Event(name: IdentityConstants.EventNames.AVID_SYNC_EVENT,
                                   type: EventType.identity,
                                   source: EventSource.requestIdentity,
                                   data: syncData)
             eventDispatcher(avidEvent)
-            identityProperties.isAidSynced = true
-            // save properties
-            identityProperties.saveToPersistence()
         }
     }
 
