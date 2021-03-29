@@ -47,6 +47,7 @@ enum IdentityConstants {
         static let IDENTITY_RESPONSE_CONTENT_ONE_TIME = "IDENTITY_RESPONSE_CONTENT_ONE_TIME"
         static let IDENTITY_URL_VARIABLES = "IDENTITY_URL_VARIABLES"
         static let UPDATED_IDENTITY_RESPONSE = "UPDATED_IDENTITY_RESPONSE"
+        static let AVID_SYNC_EVENT = "AVID Sync"
     }
 
     enum EventDataKeys {
@@ -65,6 +66,7 @@ enum IdentityConstants {
         static let VISITOR_ID_LOCATION_HINT = "locationhint"
         static let VISITOR_IDS_LAST_SYNC = "lastsync"
         static let MCPNS_DPID = "20920"
+        static let ANALYTICS_ID = "AVID"
     }
 
     enum DataStoreKeys {

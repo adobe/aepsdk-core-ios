@@ -45,6 +45,7 @@ import Foundation
         registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
         registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
+        registerListener(type: EventType.analytics, source: EventSource.responseIdentity, listener: handleAnalyticsResponseIdentity)
         registerListener(type: EventType.audienceManager, source: EventSource.responseContent, listener: handleAudienceResponse(event:))
     }
 
@@ -146,6 +147,11 @@ import Foundation
                                                       source: EventSource.responseIdentity,
                                                       data: eventData as [String: Any])
         dispatch(event: responseEvent)
+    }
+    /// Handles the analytics response event and dispatch an "AVID Sync" event
+    /// - Parameter event: the analytics response event
+    private func handleAnalyticsResponseIdentity(event: Event) {
+        state?.handleAnalyticsResponse(event: event, eventDispatcher: dispatch(event:))
     }
 
     /// Handles Audience Response Content events containing a flag which signals if the opt-out hit was sent by the Audience Extension.
