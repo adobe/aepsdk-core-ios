@@ -56,7 +56,7 @@ public struct AnyCodable: Codable {
         self.value = value ?? ()
     }
 
-    public static func from(dictionary: [String: Any]?) -> [String: AnyCodable]? {
+    public static func from(dictionary: [String: Any?]?) -> [String: AnyCodable]? {
         guard let unwrappedDict = dictionary else { return nil }
 
         var newDict: [String: AnyCodable] = [:]
