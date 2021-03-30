@@ -14,7 +14,7 @@ import Foundation
 
 /// A type erasing struct that can allow for dynamic `Codable` types
 public struct AnyCodable: Codable {
-    public let value: Any?
+    public let value: Any
 
     public var stringValue: String? {
         return value as? String
@@ -53,7 +53,7 @@ public struct AnyCodable: Codable {
     }
 
     public init(_ value: Any?) {
-        self.value = value
+        self.value = value ?? ()
     }
 
     public static func from(dictionary: [String: Any]?) -> [String: AnyCodable]? {
@@ -73,7 +73,7 @@ public struct AnyCodable: Codable {
 
     public static func toAnyDictionary(dictionary: [String: AnyCodable]?) -> [String: Any]? {
         guard let unwrappedDict = dictionary else { return nil }
-        return unwrappedDict.filter { $0.value != nil }.mapValues { $0.value! }
+        return unwrappedDict.filter { $0.value != nil }.mapValues { $0.value }
     }
 
     // MARK: - Decodable
@@ -109,12 +109,9 @@ public struct AnyCodable: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
-        guard value != nil else {
-            try container.encodeNil()
-            return
-        }
-
         switch value {
+        case is Void:
+            try container.encodeNil()
         case let num as NSNumber:
             try encode(nsNumber: num, into: &container)
         case let string as String:
