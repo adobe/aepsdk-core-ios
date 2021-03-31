@@ -153,10 +153,10 @@ class AnyCodableTests: XCTestCase {
 
         XCTAssertEqual(encodedJSONObject, expectedJSONObject)
     }
-    
+
     func testInitWithNil() {
         let nilAny = AnyCodable(nil)
-        
+
         XCTAssertNil(nilAny.value)
     }
 }
