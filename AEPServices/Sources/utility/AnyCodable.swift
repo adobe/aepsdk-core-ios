@@ -14,7 +14,11 @@ import Foundation
 
 /// A type erasing struct that can allow for dynamic `Codable` types
 public struct AnyCodable: Codable {
-    public let value: Any
+    public var value: Any? {
+        return _value is NSNull ? nil : _value
+    }
+
+    private let _value: Any
 
     public var stringValue: String? {
         return value as? String
@@ -53,7 +57,7 @@ public struct AnyCodable: Codable {
     }
 
     public init(_ value: Any?) {
-        self.value = value ?? ()
+        self._value = value ?? NSNull()
     }
 
     public static func from(dictionary: [String: Any?]?) -> [String: AnyCodable]? {
@@ -73,7 +77,7 @@ public struct AnyCodable: Codable {
 
     public static func toAnyDictionary(dictionary: [String: AnyCodable]?) -> [String: Any]? {
         guard let unwrappedDict = dictionary else { return nil }
-        return unwrappedDict.filter { $0.value != nil }.mapValues { $0.value }
+        return unwrappedDict.filter { $0.value != nil }.mapValues { $0.value! }
     }
 
     // MARK: - Decodable
@@ -109,7 +113,9 @@ public struct AnyCodable: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
-        switch value {
+        switch _value {
+        case is NSNull:
+            try container.encodeNil()
         case is Void:
             try container.encodeNil()
         case let num as NSNumber:
@@ -133,7 +139,7 @@ public struct AnyCodable: Codable {
         case let dictionary as [String: Any?]:
             try container.encode(dictionary.mapValues { AnyCodable($0) })
         default:
-            print("AnyCodable - encode: Failed to encode \(String(describing: value))")
+            print("AnyCodable - encode: Failed to encode \(String(describing: _value))")
         }
     }
 

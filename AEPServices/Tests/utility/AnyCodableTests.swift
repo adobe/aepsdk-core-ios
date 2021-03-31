@@ -83,6 +83,7 @@ class AnyCodableTests: XCTestCase {
             "intKey1": 1,
             "intKey2": 0,
             "intKey3": AnyCodable(NSNumber(0)),
+            "nullKey": nil
         ]
 
         let json = try JSONEncoder().encode(dictionary)
@@ -96,7 +97,8 @@ class AnyCodableTests: XCTestCase {
             "intKey": 123,
             "intKey1": 1,
             "intKey2": 0,
-            "intKey3": 0
+            "intKey3": 0,
+            "nullKey": null
         }
         """.data(using: .utf8)!
         let expectedJSONObject = try JSONSerialization.jsonObject(with: expected, options: []) as! NSDictionary
@@ -150,5 +152,11 @@ class AnyCodableTests: XCTestCase {
         let expectedJSONObject = try JSONSerialization.jsonObject(with: expected, options: []) as! NSDictionary
 
         XCTAssertEqual(encodedJSONObject, expectedJSONObject)
+    }
+    
+    func testInitWithNil() {
+        let nilAny = AnyCodable(nil)
+        
+        XCTAssertNil(nilAny.value)
     }
 }
