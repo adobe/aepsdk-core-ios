@@ -142,19 +142,19 @@ struct V4Migrator {
 
     /// Migrates the v4 Lifecycle values into the v5 Lifecycle data store
     private func migrateLifecycleLocalStorage() {
-        let installDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE) as? Date
+        let installDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE) as? NSDate
         let lastVersion = v4Defaults.string(forKey: V4MigrationConstants.Lifecycle.V4_LAST_VERSION)
-        let lastUsedDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE) as? Date
+        let lastUsedDate = v4Defaults.object(forKey: V4MigrationConstants.Lifecycle.V4_LAST_USED_DATE) as? NSDate
         let launches = v4Defaults.integer(forKey: V4MigrationConstants.Lifecycle.V4_LAUNCHES)
         let successfulClose = v4Defaults.bool(forKey: V4MigrationConstants.Lifecycle.V4_SUCCESSFUL_CLOSE)
 
         let lifecycleDataStore = NamedCollectionDataStore(name: V4MigrationConstants.Lifecycle.DATASTORE_NAME)
-        lifecycleDataStore.setObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: installDate)
+        lifecycleDataStore.setObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.INSTALL_DATE, value: installDate as Date?)
         lifecycleDataStore.set(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_VERSION, value: lastVersion)
-        lifecycleDataStore.setObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: lastUsedDate)
+        lifecycleDataStore.setObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: lastUsedDate as Date?)
 
         let persistedDict = ["launches": launches, "successfulClose": successfulClose] as [String: Any]
-        let persistedData = try? JSONSerialization.data(withJSONObject: persistedDict)
+        let persistedData = AnyCodable.from(dictionary: persistedDict)
         lifecycleDataStore.setObject(key: V4MigrationConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT, value: persistedData)
 
         v4Defaults.removeObject(forKey: V4MigrationConstants.Lifecycle.V4_INSTALL_DATE)
