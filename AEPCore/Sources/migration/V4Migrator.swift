@@ -208,7 +208,7 @@ struct V4Migrator {
         v4Defaults.removeObject(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
     }
 
-    /// Migrates the v4 Identity values to v5 Analtyics data store
+    /// Migrates the v4 Identity values to v5 Analytics data store
     private func migrateVisitorIdLocalStorage() {
         // TODO: Implement when implementing the Analytics extension
     }
