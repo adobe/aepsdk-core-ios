@@ -64,7 +64,7 @@ public struct AnyCodable: Codable {
         guard let unwrappedDict = dictionary else { return nil }
 
         var newDict: [String: AnyCodable] = [:]
-        for (key, val) in unwrappedDict where val != nil {
+        for (key, val) in unwrappedDict {
             if let anyCodableVal = val as? AnyCodable {
                 newDict[key] = anyCodableVal
             } else {
