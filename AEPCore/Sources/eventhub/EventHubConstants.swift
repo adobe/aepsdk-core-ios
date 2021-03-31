@@ -13,7 +13,8 @@ import Foundation
 
 /// Constant values used throughout `EventHub`
 enum EventHubConstants {
-    static let STATE_CHANGE = "STATE_CHANGE_EVENT"
+    static let STATE_CHANGE = "Shared state change"
+    static let XDM_STATE_CHANGE = "Shared state change (XDM)"
     static let NAME = "com.adobe.module.eventhub"
     static let FRIENDLY_NAME = "EventHub"
     static let VERSION_NUMBER = "3.1.0"

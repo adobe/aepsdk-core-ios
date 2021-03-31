@@ -124,7 +124,7 @@ class EventHubContractTest: XCTestCase {
         let sharedStateEventExpectation = XCTestExpectation(description: "Event Hub shared stated event is received")
         ContractExtensionOne.eventReceivedClosure = { event in
             switch event.name{
-            case "STATE_CHANGE_EVENT":
+            case "Shared state change":
                 sharedStateEventExpectation.fulfill()
             default:
                 XCTAssertFalse(true)
@@ -156,7 +156,7 @@ class EventHubContractTest: XCTestCase {
                 firstEventExpectation.fulfill()
             case "second":
                 secondEventExpectation.fulfill()
-            case "STATE_CHANGE_EVENT":
+            case "Shared state change":
                 sharedStateEventExpectation.fulfill()
             default:
                 XCTAssertFalse(true)

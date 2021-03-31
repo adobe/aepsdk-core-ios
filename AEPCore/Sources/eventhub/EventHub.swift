@@ -180,7 +180,7 @@ final class EventHub {
             }
 
             sharedState.set(version: version, data: data)
-            self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName))
+            self.dispatch(event: self.createSharedStateEvent(extensionName: extensionName, sharedStatetype: sharedStateType))
             Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
         }
     }
@@ -284,7 +284,7 @@ final class EventHub {
 
         let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
         sharedState.set(version: version, data: data)
-        dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME))
+        dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
         Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
     }
 
@@ -328,14 +328,15 @@ final class EventHub {
         guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value else { return }
         guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
-        dispatch(event: createSharedStateEvent(extensionName: container.sharedStateName))
+        dispatch(event: createSharedStateEvent(extensionName: container.sharedStateName, sharedStatetype: sharedStateType))
     }
 
     /// Creates a template `Event` for `SharedState` of the provided `extensionName`
     /// - Parameter extensionName: A `String` containing the name of the extension
     /// - Returns: An empty `SharedState` `Event` for the provided `extensionName`
-    private func createSharedStateEvent(extensionName: String) -> Event {
-        return Event(name: EventHubConstants.STATE_CHANGE, type: EventType.hub, source: EventSource.sharedState,
+    private func createSharedStateEvent(extensionName: String, sharedStatetype: SharedStateType) -> Event {
+        let eventName = sharedStatetype == .standard ? EventHubConstants.STATE_CHANGE : EventHubConstants.XDM_STATE_CHANGE
+        return Event(name: eventName, type: EventType.hub, source: EventSource.sharedState,
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
     }
 
