@@ -14,8 +14,8 @@ import Foundation
 
 /// NetworkRequest struct to be used by the NetworkService and the HttpConnectionPerformer when initiating network calls
 @objc(AEPNetworkRequest) public class NetworkRequest: NSObject {
+
     private static let REQUEST_HEADER_KEY_USER_AGENT = "User-Agent"
-    private static let REQUEST_HEADER_KEY_LANGUAGE = "Accept-Language"
 
     public let url: URL
     public let httpMethod: HttpMethod
@@ -40,7 +40,7 @@ import Foundation
 
         let systemInfoService = ServiceProvider.shared.systemInfoService
         let defaultHeaders = [NetworkRequest.REQUEST_HEADER_KEY_USER_AGENT: systemInfoService.getDefaultUserAgent(),
-                              NetworkRequest.REQUEST_HEADER_KEY_LANGUAGE: systemInfoService.getActiveLocaleName()]
+                              HttpConnectionConstants.Header.HTTP_HEADER_KEY_ACCEPT_LANGUAGE: DefaultHeadersFormatter.formatLocale(systemInfoService.getActiveLocaleName())]
         self.httpHeaders = defaultHeaders.merging(httpHeaders) { _, new in new } // add in default headers and apply `httpHeaders` on top
 
         self.connectTimeout = connectTimeout

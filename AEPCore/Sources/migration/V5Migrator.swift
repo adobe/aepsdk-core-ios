@@ -115,7 +115,7 @@ struct V5Migrator {
 
         // save values
         let identityDataStore = NamedCollectionDataStore(name: V5MigrationConstants.Identity.DATASTORE_NAME)
-        let identityPropsData = try? JSONSerialization.data(withJSONObject: identityPropsDict)
+        let identityPropsData = AnyCodable.from(dictionary: identityPropsDict)
         identityDataStore.setObject(key: V5MigrationConstants.Identity.DataStoreKeys.IDENTITY_PROPERTIES, value: identityPropsData)
         identityDataStore.set(key: V5MigrationConstants.Identity.DataStoreKeys.PUSH_ENABLED, value: pushEnabled)
 
@@ -149,7 +149,7 @@ struct V5Migrator {
         lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.LAST_LAUNCH_DATE, value: Date(timeIntervalSince1970: lastUsedDateInterval))
 
         let persistedDict = ["launches": launches, "successfulClose": successfulClose, "osVersion": osVersion, "appId": appId] as [String: Any?]
-        let persistedData = try? JSONSerialization.data(withJSONObject: persistedDict)
+        let persistedData = AnyCodable.from(dictionary: persistedDict)
         lifecycleDataStore.setObject(key: V5MigrationConstants.Lifecycle.DataStoreKeys.PERSISTED_CONTEXT, value: persistedData)
 
         v5Defaults.removeObject(forKey: keyWithPrefix(datastoreName: V5MigrationConstants.Lifecycle.LEGACY_DATASTORE_NAME, key: V5MigrationConstants.Lifecycle.INSTALL_DATE))

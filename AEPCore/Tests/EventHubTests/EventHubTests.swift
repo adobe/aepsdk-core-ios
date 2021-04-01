@@ -16,7 +16,7 @@ import XCTest
 @testable import AEPCoreMocks
 
 class EventHubTests: XCTestCase {
-    private static let MOCK_EXTENSION_NAME = "mockExtension"
+    private static let MOCK_EXTENSION_NAME = "com.adobe.mockExtension"
 
     var eventHub: EventHub!
 
@@ -271,6 +271,54 @@ class EventHubTests: XCTestCase {
 
         // verify
         wait(for: [expectation], timeout: 0.5)
+    }
+
+    func testEventHubTestRegisterEventListenerNotInvokedForPairedResponseEvent() {
+        // setup
+        let expectation = XCTestExpectation(description: "Listener is not invoked for paired response event")
+        expectation.expectedFulfillmentCount = 1
+        expectation.assertForOverFulfill = true
+        let requestEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let responseEvent = Event(name: "testResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+        let pairedResponseEvent = requestEvent.createResponseEvent(name: "testPairedResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+
+        // test
+        eventHub.registerEventListener(type: EventType.analytics, source: EventSource.responseContent) { event in
+            XCTAssertEqual(EventSource.responseContent, event.source)
+            XCTAssertNil(event.responseID)
+            expectation.fulfill()
+        }
+
+        eventHub.start()
+        eventHub.dispatch(event: responseEvent)
+        eventHub.dispatch(event: pairedResponseEvent)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testEventHubTestRegisterEventListenerWildcardCalledForAllEvents() {
+        // setup
+        let expectation = XCTestExpectation(description: "Wildcard Listener is invoked for all events")
+        expectation.assertForOverFulfill = true
+        expectation.expectedFulfillmentCount = 2
+        let requestEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let responseEvent = Event(name: "testResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+        let pairedResponseEvent = requestEvent.createResponseEvent(name: "testPairedResponseEvent1", type: EventType.analytics, source: EventSource.responseContent, data: nil)
+
+        // test
+        eventHub.registerEventListener(type: EventType.wildcard, source: EventSource.wildcard) { event in
+            if event.source == EventSource.responseContent {
+                expectation.fulfill()
+            }
+        }
+
+        eventHub.start()
+        eventHub.dispatch(event: responseEvent)
+        eventHub.dispatch(event: pairedResponseEvent)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
     }
 
     func testEventHubTestResponseListener() {
@@ -551,8 +599,8 @@ class EventHubTests: XCTestCase {
 
         let coreVersion = sharedState?[EventHubConstants.EventDataKeys.VERSION] as! String
         let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
-        let mockDetails = registeredExtensions?[mockExtension.friendlyName] as? [String: String]
-        let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.friendlyName] as? [String: Any]
+        let mockDetails = registeredExtensions?[mockExtension.name] as? [String: String]
+        let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.name] as? [String: Any]
 
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
         XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
@@ -583,7 +631,7 @@ class EventHubTests: XCTestCase {
 
         let coreVersion = sharedState?[EventHubConstants.EventDataKeys.VERSION] as! String
         let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
-        let mockDetails = registeredExtensions?[mockExtension.friendlyName] as? [String: String]
+        let mockDetails = registeredExtensions?[mockExtension.name] as? [String: String]
 
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
         XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
@@ -857,10 +905,10 @@ class EventHubTests: XCTestCase {
         eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: nil)
 
         // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
     }
 
-    func testGetSharedStateNilEventVersionsAtZero() {
+    func testGetSharedStateNilEventVersionsAtLatest() {
         // setup
         eventHub.start()
 
@@ -871,7 +919,31 @@ class EventHubTests: XCTestCase {
         eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
 
         // verify
-        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "one")
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, nil, "two")
+    }
+
+    func testGetSharedStateUnversionedEventVersionsAtLatest() {
+        // setup
+        eventHub.start()
+
+        // test
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+        let event1 = Event(name: "test1", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event1)
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.TWO, event: event1)
+
+        // verify
+        let unversionedEvent = Event(name: "unversioned", type: EventType.custom, source: EventSource.none, data: nil)
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, unversionedEvent, "two")
+
+        // test pt. 2
+        let event2 = Event(name: "test2", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: event2)
+
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.THREE, event: event2)
+
+        // verify pt. 2
+        validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, unversionedEvent, "three")
     }
 
     /// Tests that events are associated with current shared state when updated rapidly
@@ -955,8 +1027,8 @@ class EventHubTests: XCTestCase {
 
         let event = Event(name: "test", type: EventType.acquisition, source: EventSource.requestContent, data: nil)
         eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
-            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
             if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String == EventHubTests.MOCK_EXTENSION_NAME {
+                XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
                 expectation.fulfill()
             }
         }
@@ -980,8 +1052,8 @@ class EventHubTests: XCTestCase {
 
         let event = Event(name: "test", type: EventType.acquisition, source: EventSource.requestContent, data: nil)
         eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
-            XCTAssertEqual(event.name, EventHubConstants.STATE_CHANGE)
             if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String == EventHubTests.MOCK_EXTENSION_NAME {
+                XCTAssertEqual(event.name, EventHubConstants.XDM_STATE_CHANGE)
                 expectation.fulfill()
             }
         }
@@ -1094,6 +1166,7 @@ class EventHubTests: XCTestCase {
 
         eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
             if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as! String == EventHubTests.MOCK_EXTENSION_NAME {
+                XCTAssertEqual(self.eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
                 expectation.fulfill()
             }
         }
@@ -1104,7 +1177,6 @@ class EventHubTests: XCTestCase {
 
         // verify
         wait(for: [expectation], timeout: 1)
-        XCTAssertEqual(eventHub.getSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: nil)?.status, SharedStateStatus.set)
     }
 
     func testCreatePendingSharedStateNilEvent() {

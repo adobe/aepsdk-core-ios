@@ -62,4 +62,14 @@ extension Event {
     var urlVariables: Bool {
         return data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? Bool ?? false
     }
+
+    /// Reads the Audience Manager opt-out sent flag, returns false if not present
+    var optOutHitSent: Bool {
+        return data?[IdentityConstants.Audience.OPTED_OUT_HIT_SENT] as? Bool ?? false
+    }
+
+    /// Reads the Analytics id if present in event data
+    var aid: String? {
+        return data?[IdentityConstants.Analytics.ANALYTICS_ID] as? String
+    }
 }

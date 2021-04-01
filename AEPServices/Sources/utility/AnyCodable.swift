@@ -14,7 +14,11 @@ import Foundation
 
 /// A type erasing struct that can allow for dynamic `Codable` types
 public struct AnyCodable: Codable {
-    public let value: Any?
+    public var value: Any? {
+        return _value is NSNull ? nil : _value
+    }
+
+    private let _value: Any
 
     public var stringValue: String? {
         return value as? String
@@ -53,10 +57,10 @@ public struct AnyCodable: Codable {
     }
 
     public init(_ value: Any?) {
-        self.value = value
+        self._value = value ?? NSNull()
     }
 
-    public static func from(dictionary: [String: Any]?) -> [String: AnyCodable]? {
+    public static func from(dictionary: [String: Any?]?) -> [String: AnyCodable]? {
         guard let unwrappedDict = dictionary else { return nil }
 
         var newDict: [String: AnyCodable] = [:]
@@ -109,12 +113,11 @@ public struct AnyCodable: Codable {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
-        guard value != nil else {
+        switch _value {
+        case is NSNull:
             try container.encodeNil()
-            return
-        }
-
-        switch value {
+        case is Void:
+            try container.encodeNil()
         case let num as NSNumber:
             try encode(nsNumber: num, into: &container)
         case let string as String:
@@ -136,7 +139,7 @@ public struct AnyCodable: Codable {
         case let dictionary as [String: Any?]:
             try container.encode(dictionary.mapValues { AnyCodable($0) })
         default:
-            print("AnyCodable - encode: Failed to encode \(String(describing: value))")
+            print("AnyCodable - encode: Failed to encode \(String(describing: _value))")
         }
     }
 
@@ -248,8 +251,11 @@ extension AnyCodable: Equatable {
 
 // MARK: Codable Helpers
 extension Encodable {
-    public func asDictionary() -> [String: Any]? {
-        guard let data = try? JSONEncoder().encode(self) else { return nil }
+    public func asDictionary(dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate
+    ) -> [String: Any]? {
+        let encoder = JSONEncoder()
+        encoder.dateEncodingStrategy = dateEncodingStrategy
+        guard let data = try? encoder.encode(self) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }

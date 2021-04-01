@@ -49,7 +49,8 @@ class IdentityState {
         identityProperties.loadFromPersistence()
 
         // Load privacy status
-        identityProperties.privacyStatus = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? PrivacyStatus ?? PrivacyStatus.unknown
+        let privacyStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? PrivacyStatus.unknown.rawValue
+        identityProperties.privacyStatus = PrivacyStatus(rawValue: privacyStr) ?? .unknown
 
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
@@ -227,8 +228,7 @@ class IdentityState {
             identityProperties.blob = nil
             identityProperties.locationHint = nil
             identityProperties.customerIds?.removeAll()
-
-            // TODO: Clear AID from analytics
+            identityProperties.isAidSynced = false
             identityProperties.pushIdentifier = nil
             pushIdManager.updatePushId(pushId: nil)
             identityProperties.saveToPersistence()
@@ -249,6 +249,38 @@ class IdentityState {
     /// - Parameter newConfig: The new configuration to replace the current last valid config
     func updateLastValidConfig(newConfig: [String: Any]) {
         lastValidConfig = newConfig
+    }
+
+    /// Invoked each time when we receive Analytics Response event
+    /// - Parameters:
+    ///   - event: the event from Analytics Respsonse
+    ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
+    func handleAnalyticsResponse(event: Event, eventDispatcher: (Event) -> Void) {
+        guard let aid = event.aid, !aid.isEmpty else {
+            Log.debug(label: "\(LOG_TAG):\(#function)", "Analytics Tracking ID is not found or empty")
+            return
+        }
+
+        if !(identityProperties.isAidSynced ?? false) {
+            // dispatch events
+            let identifiers: [String: String] = [IdentityConstants.EventDataKeys.ANALYTICS_ID: aid]
+            let syncData: [String: Any] = [
+                IdentityConstants.EventDataKeys.IDENTIFIERS: identifiers,
+                IdentityConstants.EventDataKeys.FORCE_SYNC: false,
+                IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true,
+                IdentityConstants.EventDataKeys.AUTHENTICATION_STATE: MobileVisitorAuthenticationState.unknown.rawValue,
+            ]
+
+            identityProperties.isAidSynced = true
+            // save properties
+            identityProperties.saveToPersistence()
+
+            let avidEvent = Event(name: IdentityConstants.EventNames.AVID_SYNC_EVENT,
+                                  type: EventType.identity,
+                                  source: EventSource.requestIdentity,
+                                  data: syncData)
+            eventDispatcher(avidEvent)
+        }
     }
 
     // MARK: Private APIs

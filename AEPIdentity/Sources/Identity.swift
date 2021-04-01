@@ -45,6 +45,8 @@ import Foundation
         registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: handleIdentityRequest)
         registerListener(type: EventType.configuration, source: EventSource.requestIdentity, listener: receiveConfigurationIdentity(event:))
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
+        registerListener(type: EventType.analytics, source: EventSource.responseIdentity, listener: handleAnalyticsResponseIdentity)
+        registerListener(type: EventType.audienceManager, source: EventSource.responseContent, listener: handleAudienceResponse(event:))
     }
 
     public func onUnregistered() {
@@ -146,6 +148,23 @@ import Foundation
                                                       data: eventData as [String: Any])
         dispatch(event: responseEvent)
     }
+    /// Handles the analytics response event and dispatch an "AVID Sync" event
+    /// - Parameter event: the analytics response event
+    private func handleAnalyticsResponseIdentity(event: Event) {
+        state?.handleAnalyticsResponse(event: event, eventDispatcher: dispatch(event:))
+    }
+
+    /// Handles Audience Response Content events containing a flag which signals if the opt-out hit was sent by the Audience Extension.
+    /// If the flag is false, the Identity extension will send an opt-out hit to the configured Identity server.
+    /// - Parameter event: The event coming from the Audience Manager extension
+    private func handleAudienceResponse(event: Event) {
+        if event.optOutHitSent {
+            Log.debug(label: "\(name):\(#function)", "An opt-out request will not be sent as the  Audience Manager extension has successfully sent it.")
+            return
+        }
+        // Identity Extension will send the opt out request because the Audience Extension did not
+        sendOptOutRequest(event: event)
+    }
 
     // MARK: Event Handlers
 
@@ -198,10 +217,18 @@ import Foundation
         state?.handleHitResponse(hit: hit, response: responseData, eventDispatcher: dispatch(event:), createSharedState: createSharedState(data:event:))
     }
 
-    /// Sends an opt-out network request if the current privacy status is opt-out
+    /// Determines if an opt-out network request should be sent
     /// - Parameter event: the event responsible for sending this opt-out hit
     private func handleOptOut(event: Event) {
-        // TODO: Check if AAM will handle the opt-out hit
+        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
+        // If the AAM server is configured let AAM handle opt out, else we send the opt out hit
+        if configSharedState[IdentityConstants.Configuration.AAM_CONFIG_SERVER] != nil { return }
+        sendOptOutRequest(event: event)
+    }
+
+    /// Sends an opt-out network request if the current privacy status is opt-out
+    /// - Parameter event: the event responsible for sending this opt-out hit
+    private func sendOptOutRequest(event: Event) {
         guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
         let privacyStatusStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
@@ -210,6 +237,7 @@ import Foundation
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
             guard let ecid = state?.identityProperties.ecid else { return }
             let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.Default.SERVER
+            Log.debug(label: "\(name):\(#function)", "Sending an opt-out request to \(server).")
             ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, ecid: ecid, experienceCloudServer: server)
         }
     }

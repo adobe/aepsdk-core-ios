@@ -46,6 +46,9 @@ struct IdentityProperties: Codable {
     /// The current privacy status provided by the Configuration extension, defaults to `unknown`
     var privacyStatus = PrivacyStatus.unknown
 
+    /// The aid synced status for handle analytics response event, set defaults to `false`
+    var isAidSynced: Bool? = false
+
     /// Converts `IdentityProperties` into an event data representation
     /// - Returns: A dictionary representing this `IdentityProperties`
     func toEventData() -> [String: Any] {
@@ -60,7 +63,13 @@ struct IdentityProperties: Codable {
         }
         eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC] = lastSync?.timeIntervalSince1970
 
-        return eventData
+        return eventData.filter { (_, value) -> Bool in
+            // Remove any empty strings from the dictionary
+            if value is String, let value = value as? String {
+                return !value.isEmpty
+            }
+            return true
+        }
     }
 
     /// Populates the fields with values stored in the Identity data store

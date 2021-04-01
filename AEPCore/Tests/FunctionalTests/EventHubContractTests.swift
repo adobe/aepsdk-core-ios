@@ -28,7 +28,7 @@ class EventHubContractTest: XCTestCase {
     }
 
 
-    // MARK: - EventHub Registriation
+    // MARK: - EventHub Registration
 
     /// Tests init is called before onRegister
     func testInitThenOnRegister() {
@@ -62,7 +62,7 @@ class EventHubContractTest: XCTestCase {
 
     }
 
-    /// Tests the start callback gets called after all the extension finish registriation
+    /// Tests the start callback gets called after all the extension finish registration
     func testStartCallbackCalledAfterRegistrationComplete() {
         // setup
         let extensionOneRegisteredExpectation = XCTestExpectation(description: "Extension one onRegistered is invoked")
@@ -88,7 +88,7 @@ class EventHubContractTest: XCTestCase {
 
     }
 
-    /// Tests the registration of extensions running on separat threads
+    /// Tests the registration of extensions running on separate threads
     func testExtensionRegistrationRunningOnSeparateThreads() {
         // setup
         let startExpectation = XCTestExpectation(description: "Start callback is invoked")
@@ -124,7 +124,7 @@ class EventHubContractTest: XCTestCase {
         let sharedStateEventExpectation = XCTestExpectation(description: "Event Hub shared stated event is received")
         ContractExtensionOne.eventReceivedClosure = { event in
             switch event.name{
-            case "STATE_CHANGE_EVENT":
+            case "Shared state change":
                 sharedStateEventExpectation.fulfill()
             default:
                 XCTAssertFalse(true)
@@ -156,7 +156,7 @@ class EventHubContractTest: XCTestCase {
                 firstEventExpectation.fulfill()
             case "second":
                 secondEventExpectation.fulfill()
-            case "STATE_CHANGE_EVENT":
+            case "Shared state change":
                 sharedStateEventExpectation.fulfill()
             default:
                 XCTAssertFalse(true)

@@ -13,7 +13,7 @@ import Foundation
 
 enum CoreConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
-    static let EXTENSION_VERSION = "3.0.0"
+    static let EXTENSION_VERSION = "3.1.0"
     static let DATA_STORE_NAME = EXTENSION_NAME
 
     static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
@@ -39,6 +39,7 @@ enum CoreConstants {
         static let REFRESH_RULES = "Refresh Rules"
         static let SET_PUSH_IDENTIFIER = "SetPushIdentifier"
         static let SET_ADVERTISING_IDENTIFIER = "SetAdvertisingIdentifier"
+        static let RESET_IDENTITIES_REQUEST = "Reset Identities Request"
     }
 
     enum Keys {

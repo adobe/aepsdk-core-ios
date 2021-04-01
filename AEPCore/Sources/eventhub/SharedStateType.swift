@@ -13,7 +13,7 @@
 import Foundation
 
 /// Represents the `SharedState` types in `EventHub` that can be used by an extension to share data with other extensions and for rules execution
-enum SharedStateType {
-    case standard // regular data, the key names and structure can be defined by each extension
-    case xdm // data mapped on XDM mixins populated by an extension
+enum SharedStateType: String {
+    case standard = "standard" // regular data, the key names and structure can be defined by each extension
+    case xdm = "XDM" // data mapped on XDM mixins populated by an extension
 }
