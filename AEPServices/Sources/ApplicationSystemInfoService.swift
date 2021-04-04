@@ -82,15 +82,15 @@ class ApplicationSystemInfoService: SystemInfoService {
         #if targetEnvironment(macCatalyst)
             return "unknown"
         #else
-        let networkInfo = CTTelephonyNetworkInfo()
-        let carrier: CTCarrier?
-        if #available(iOS 12, *) {
-            carrier = networkInfo.serviceSubscriberCellularProviders?.first?.value
-        } else {
-            carrier = networkInfo.subscriberCellularProvider
-        }
+            let networkInfo = CTTelephonyNetworkInfo()
+            let carrier: CTCarrier?
+            if #available(iOS 12, *) {
+                carrier = networkInfo.serviceSubscriberCellularProviders?.first?.value
+            } else {
+                carrier = networkInfo.subscriberCellularProvider
+            }
 
-        return carrier?.carrierName
+            return carrier?.carrierName
         #endif
     }
 
