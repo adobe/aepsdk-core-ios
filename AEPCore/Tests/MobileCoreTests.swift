@@ -230,7 +230,7 @@ class MobileCoreTests: XCTestCase {
                     let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
                     XCTAssertTrue(equal)
                     expectation.fulfill()
-                    
+
                 }
             }
         })
