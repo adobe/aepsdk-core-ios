@@ -19,4 +19,5 @@ public final class AtomicCounter {
     public func incrementAndGet() -> Int {
         return Int(OSAtomicIncrement32(&count))
     }
+
 }
