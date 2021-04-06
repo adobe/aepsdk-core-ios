@@ -131,3 +131,10 @@ test-podspec:
 
 pod-lint:
 	(pod lib lint --allow-warnings --verbose --swift-version=5.1)
+
+
+# make bump-versions from='3\.1\.0' to=3.1.1
+bump-versions:
+	(LC_ALL=C find . -type f -name 'project.pbxproj' -exec sed -i '' 's/$(from)/$(to)/' {} +)
+	(LC_ALL=C find . -type f -name '*.swift' -exec sed -i '' 's/$(from)/$(to)/' {} +)	
+	(LC_ALL=C find . -type f -name '*.podspec' -exec sed -i '' 's/$(from)/$(to)/' {} +)
