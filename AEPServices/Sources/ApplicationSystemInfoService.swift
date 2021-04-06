@@ -79,15 +79,19 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getMobileCarrierName() -> String? {
-        let networkInfo = CTTelephonyNetworkInfo()
-        let carrier: CTCarrier?
-        if #available(iOS 12, *) {
-            carrier = networkInfo.serviceSubscriberCellularProviders?.first?.value
-        } else {
-            carrier = networkInfo.subscriberCellularProvider
-        }
+        #if targetEnvironment(macCatalyst)
+            return "unknown"
+        #else
+            let networkInfo = CTTelephonyNetworkInfo()
+            let carrier: CTCarrier?
+            if #available(iOS 12, *) {
+                carrier = networkInfo.serviceSubscriberCellularProviders?.first?.value
+            } else {
+                carrier = networkInfo.subscriberCellularProvider
+            }
 
-        return carrier?.carrierName
+            return carrier?.carrierName
+        #endif
     }
 
     func getRunMode() -> String {
