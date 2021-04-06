@@ -223,6 +223,7 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self], {
+            sleep(UInt32(0.5))
             let registered = MobileCore.getRegisteredExtensions()
             let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
             let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
