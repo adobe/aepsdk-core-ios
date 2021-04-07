@@ -295,6 +295,13 @@ final class EventHub {
         }
     }
 
+    func shutdown() {
+        eventQueue.stopAndWait()
+        for ext in registeredExtensions.shallowCopy.values {
+            ext.shutdown()
+        }
+    }
+
     // MARK: - Private
 
     /// Gets the appropriate `SharedState` for the provided `extensionName` and `event`

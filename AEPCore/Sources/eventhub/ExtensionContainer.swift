@@ -131,6 +131,10 @@ extension ExtensionContainer: ExtensionRuntime {
     func stopEvents() {
         eventOrderer.stop()
     }
+
+    func shutdown() {
+        eventOrderer.stopAndWait()
+    }
 }
 
 // MARK: - ExtensionContainer private extension

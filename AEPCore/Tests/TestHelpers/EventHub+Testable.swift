@@ -15,6 +15,7 @@ import Foundation
 
 extension EventHub {
     static func reset() {
+        shared.shutdown()
         shared = EventHub()
     }
 }
