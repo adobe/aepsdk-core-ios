@@ -298,6 +298,7 @@ final class EventHub {
     func shutdown() {
         eventQueue.stopAndWait()
         for ext in registeredExtensions.shallowCopy.values {
+            ext.unregisterExtension()
             ext.shutdown()
         }
     }
