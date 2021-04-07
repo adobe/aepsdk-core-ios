@@ -250,7 +250,9 @@ final class EventHub {
     /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
     /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
     func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
-        return registeredExtensions[type.typeName]
+        return eventHubQueue.sync {
+            return registeredExtensions[type.typeName]
+        }
     }
 
     /// Register a event preprocessor
