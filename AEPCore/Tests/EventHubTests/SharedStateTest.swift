@@ -24,6 +24,7 @@ class SharedStateTest: XCTestCase {
 
     override func setUp() {
         sharedState = SharedState()
+        MobileCore.setLogLevel(.trace)
     }
 
     override func tearDown() {}
@@ -161,27 +162,5 @@ class SharedStateTest: XCTestCase {
 
         // verify
         XCTAssertFalse(sharedState.isEmpty)
-    }
-
-    func testAddPerformance() {
-        // This is an example of a performance test case.
-        measure {
-            for version in 1 ... 1000 {
-                sharedState.set(version: version, data: SharedStateTestHelper.ZERO)
-            }
-            // Put the code you want to measure the time of here.
-        }
-    }
-
-    func testResolvePerformance() {
-        measure {
-            for version in 1 ... 1000 {
-                sharedState.set(version: version, data: SharedStateTestHelper.ZERO)
-            }
-
-            for version in 1 ... 1000 {
-                _ = sharedState.resolve(version: version)
-            }
-        }
     }
 }
