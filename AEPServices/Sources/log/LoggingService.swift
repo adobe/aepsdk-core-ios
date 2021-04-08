@@ -41,7 +41,7 @@ class LoggingService: Logging {
         case .warning:
             return .error
         case .debug:
-            return .info
+            return .debug
         case .trace:
             return .info
         }
