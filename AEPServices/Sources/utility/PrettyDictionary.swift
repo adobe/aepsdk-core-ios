@@ -17,7 +17,7 @@ public enum PrettyDictionary {
     ///
     /// - Parameter dictionary: `Dictionary` to be prettified
     /// - Returns: `JSON` string
-    public static func prettify(_ dictionary: [String: Any]?) -> String {
+    public static func prettify(_ dictionary: [String: Any?]?) -> String {
         guard let dictionary = dictionary else {
             return ""
         }
