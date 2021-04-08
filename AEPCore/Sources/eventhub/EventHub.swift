@@ -29,6 +29,7 @@ final class EventHub {
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
+    private var started = false // true if the `EventHub` is started, false otherwise. Should only be accessed from within the `eventHubQueue`
 
     #if DEBUG
         public internal(set) static var shared = EventHub()
@@ -72,6 +73,7 @@ final class EventHub {
     /// When this API is invoked the `EventHub` will begin processing `Event`s
     func start() {
         eventHubQueue.async {
+            self.started = true
             self.eventQueue.start()
             self.shareEventHubSharedState() // share state of all registered extensions
             Log.debug(label: self.LOG_TAG, "Event Hub successfully started")
@@ -259,33 +261,36 @@ final class EventHub {
 
     /// Shares a shared state for the `EventHub` with data containing all the registered extensions
     func shareEventHubSharedState() {
-        var extensionsInfo = [String: [String: Any]]()
-        for (_, val) in registeredExtensions.shallowCopy
-            where val.sharedStateName != EventHubConstants.NAME {
-            if let exten = val.exten {
-                let version = type(of: exten).extensionVersion
-                extensionsInfo[exten.name] = [EventHubConstants.EventDataKeys.VERSION: version,
-                                              EventHubConstants.EventDataKeys.FRIENDLY_NAME: exten.friendlyName]
-                if let metadata = exten.metadata, !metadata.isEmpty {
+        eventHubQueue.async {
+            guard self.started else { return } // only publish shared state if `EventHub` is started
+            var extensionsInfo = [String: [String: Any]]()
+            for (_, val) in self.registeredExtensions.shallowCopy
+                where val.sharedStateName != EventHubConstants.NAME {
+                if let exten = val.exten {
+                    let version = type(of: exten).extensionVersion
                     extensionsInfo[exten.name] = [EventHubConstants.EventDataKeys.VERSION: version,
-                                                  EventHubConstants.EventDataKeys.METADATA: metadata,
                                                   EventHubConstants.EventDataKeys.FRIENDLY_NAME: exten.friendlyName]
+                    if let metadata = exten.metadata, !metadata.isEmpty {
+                        extensionsInfo[exten.name] = [EventHubConstants.EventDataKeys.VERSION: version,
+                                                      EventHubConstants.EventDataKeys.METADATA: metadata,
+                                                      EventHubConstants.EventDataKeys.FRIENDLY_NAME: exten.friendlyName]
+                    }
                 }
             }
+
+            let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: EventHubConstants.VERSION_NUMBER,
+                                       EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
+
+            guard let sharedState = self.registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(EventHubConstants.NAME) == .orderedSame })?.value.sharedState else {
+                Log.warning(label: self.LOG_TAG, "Extension not registered with EventHub")
+                return
+            }
+
+            let version = sharedState.resolve(version: 0).value == nil ? 0 : self.eventNumberCounter.incrementAndGet()
+            sharedState.set(version: version, data: data)
+            self.dispatch(event: self.createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
+            Log.debug(label: self.LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
         }
-
-        let data: [String: Any] = [EventHubConstants.EventDataKeys.VERSION: EventHubConstants.VERSION_NUMBER,
-                                   EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
-
-        guard let sharedState = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(EventHubConstants.NAME) == .orderedSame })?.value.sharedState else {
-            Log.warning(label: LOG_TAG, "Extension not registered with EventHub")
-            return
-        }
-
-        let version = sharedState.resolve(version: 0).value == nil ? 0 : eventNumberCounter.incrementAndGet()
-        sharedState.set(version: version, data: data)
-        dispatch(event: createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
-        Log.debug(label: LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
     }
 
     // MARK: - Private
