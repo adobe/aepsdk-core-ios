@@ -207,7 +207,7 @@ class MobileCoreTests: XCTestCase {
               "friendlyName" : "mockExtension"
             },
             "com.adobe.module.configuration" : {
-              "version" : "3.1.0",
+              "version" : "3.1.1",
               "friendlyName" : "Configuration"
             },
             "com.adobe.mockExtensionTwo" : {
@@ -223,15 +223,20 @@ class MobileCoreTests: XCTestCase {
 
         // test
         MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self], {
-            let registered = MobileCore.getRegisteredExtensions()
-            let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
-            let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
-            XCTAssertTrue(equal)
-            expectation.fulfill()
+            EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+                if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME {
+                    let registered = MobileCore.getRegisteredExtensions()
+                    let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
+                    let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
+                    XCTAssertTrue(equal)
+                    expectation.fulfill()
+
+                }
+            }
         })
 
         // verify
-        wait(for: [expectation], timeout: 0.25)
+        wait(for: [expectation], timeout: 1)
     }
 
     private func jsonStrToDict(jsonStr: String) -> [String: Any]? {

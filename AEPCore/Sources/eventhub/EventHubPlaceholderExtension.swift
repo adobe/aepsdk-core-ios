@@ -13,7 +13,7 @@
 import Foundation
 
 /// An `Extension` for `EventHub`. This serves no purpose other than to allow `EventHub` to share state.
-class EventHubPlaceholderExtension: Extension {
+class EventHubPlaceholderExtension: NSObject, Extension {
     let name = EventHubConstants.NAME
     let friendlyName = EventHubConstants.FRIENDLY_NAME
     static let extensionVersion = EventHubConstants.VERSION_NUMBER

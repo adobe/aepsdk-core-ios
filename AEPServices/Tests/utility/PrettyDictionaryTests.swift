@@ -41,6 +41,33 @@ class PrettyDictionaryTests: XCTestCase {
         XCTAssert(output.contains("AEPServices.LogLevel"))
     }
 
+    func testPrintEventData_as_AnyObjectWithNil() throws {
+        var eventData = [String: Any?]()
+        eventData = [
+            "a": "13435454",
+            "b":[
+                "b1": 1235566,
+                "b2": LogLevel.debug
+            ],
+            "c": nil
+        ]
+        let output = "\(PrettyDictionary.prettify(eventData))"
+        let expected = """
+        {
+            a = 13435454;
+            b = {
+                b1 = 1235566;
+                b2 = "AEPServices.LogLevel";
+            };
+        }
+        """
+        print(output)
+        print(expected)
+        XCTAssert(output.contains("13435454;"))
+        XCTAssert(output.contains("AEPServices.LogLevel"))
+        XCTAssert(output.contains("null"))
+    }
+
     func testPrintEventData_with_prettifiedJsonString() throws {
         var eventData = [String: Any]()
         eventData = [

@@ -608,6 +608,40 @@ class EventHubTests: XCTestCase {
         XCTAssertEqual(mockExtensionTwo.metadata, mockDetailsTwo?[EventHubConstants.EventDataKeys.METADATA] as? [String: String])
     }
 
+    func testEventHubShareEventHubStateBeforeStart() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should NOT be shared by event hub")
+        sharedStateExpectation.isInverted = true // shared state should not be published by event hub before start
+
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME { sharedStateExpectation.fulfill() }
+        }
+
+        // test
+        eventHub.shareEventHubSharedState()
+
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 1)
+    }
+
+    func testEventHubShareEventHubStateAfterStart() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub")
+        sharedStateExpectation.assertForOverFulfill = true
+        sharedStateExpectation.expectedFulfillmentCount = 2 // one from the start call and one from shareEventHubSharedState
+
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME { sharedStateExpectation.fulfill() }
+        }
+
+        // test
+        eventHub.start()
+        eventHub.shareEventHubSharedState()
+
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 1)
+    }
+
     func testEventHubRegisterAndUnregisterExtensionSharesState() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be shared by event hub once")
