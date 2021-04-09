@@ -302,6 +302,9 @@ final class EventHub {
             ext.unregisterExtension()
             ext.shutdown()
         }
+        eventHubQueue.sync {
+            // wait
+        }
     }
 
     // MARK: - Private

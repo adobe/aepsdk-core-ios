@@ -18,7 +18,7 @@ import XCTest
 class MobileCoreTests: XCTestCase {
     override func setUp() {
         MobileCore.setWrapperType(.none) // reset wrapper type before each test
-        MobileCore.setLogLevel(.error) // reset log level to error before each test
+        MobileCore.setLogLevel(.trace) // reset log level to error before each test
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
@@ -317,7 +317,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.dispatch(event: expectedEvent2)
 
         // verify
-        wait(for: [responseExpectation], timeout: 2.0)
+        wait(for: [responseExpectation], timeout: 3.0)
     }
 
     /// Tests that the event listeners listening for same events can all receives the events
@@ -346,7 +346,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.dispatch(event: expectedEvent2)
 
         // verify
-        wait(for: [responseExpectation1,responseExpectation2], timeout: 2.0)
+        wait(for: [responseExpectation1,responseExpectation2], timeout: 3.0)
     }
 
     // MARK: setWrapperType(...) tests
