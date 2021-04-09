@@ -18,7 +18,7 @@ import XCTest
 class MobileCoreTests: XCTestCase {
     override func setUp() {
         MobileCore.setWrapperType(.none) // reset wrapper type before each test
-        MobileCore.setLogLevel(.trace) // reset log level to error before each test
+        MobileCore.setLogLevel(.error) // reset log level to error before each test
         EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
@@ -305,7 +305,7 @@ class MobileCoreTests: XCTestCase {
         let unexpectedEvent = Event(name: "test", type: "wrong", source: "wrong", data: nil)
         let responseExpectation = XCTestExpectation(description: "Should receive the event")
         responseExpectation.expectedFulfillmentCount = 2
-        EventHub.shared.start()
+        MobileCore.registerExtensions([])
 
         // test
         MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
@@ -330,7 +330,7 @@ class MobileCoreTests: XCTestCase {
         responseExpectation1.expectedFulfillmentCount = 2
         let responseExpectation2 = XCTestExpectation(description: "Should receive the events")
         responseExpectation2.expectedFulfillmentCount = 2
-        EventHub.shared.start()
+        MobileCore.registerExtensions([])
 
         // test
         MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
