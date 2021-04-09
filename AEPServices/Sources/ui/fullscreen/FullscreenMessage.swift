@@ -136,11 +136,16 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
             }
             cacheFolder.appendPathComponent(self.DOWNLOAD_CACHE)
             cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
-            cacheFolder.appendPathComponent(self.HTML_EXTENSION)
+            cacheFolder.appendPathExtension(self.HTML_EXTENSION)
             let tempHTMLFilePath = cacheFolder.absoluteString
+            
+            guard let tempHTMLFilePathUrl = URL(string: tempHTMLFilePath) else {
+                Log.debug(label: self.LOG_PREFIX, "Unable to dismiss, error converting temp path \(tempHTMLFilePath) to URL")
+                return
+            }
 
             do {
-                try FileManager.default.removeItem(atPath: tempHTMLFilePath)
+                try FileManager.default.removeItem(at: tempHTMLFilePathUrl)
             } catch {
                 Log.debug(label: self.LOG_PREFIX, "Unable to dismiss \(error)")
             }
