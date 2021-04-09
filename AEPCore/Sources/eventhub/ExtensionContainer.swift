@@ -133,7 +133,7 @@ extension ExtensionContainer: ExtensionRuntime {
     }
 
     func shutdown() {
-        eventOrderer.stopAndWait()
+        eventOrderer.waitToStop()
     }
 }
 

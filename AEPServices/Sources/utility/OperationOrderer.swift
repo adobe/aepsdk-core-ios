@@ -106,7 +106,7 @@ public class OperationOrderer<T> {
 
     /// Puts queue in inactive state and wait for that to take effect
     /// - Note: This is not an immediate stop, already queued items may continue to be handled.
-    public func stopAndWait() {
+    public func waitToStop() {
         queue.sync {
             self.active = false
         }
