@@ -138,7 +138,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
             cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
             cacheFolder.appendPathExtension(self.HTML_EXTENSION)
             let tempHTMLFilePath = cacheFolder.absoluteString
-            
+
             guard let tempHTMLFilePathUrl = URL(string: tempHTMLFilePath) else {
                 Log.debug(label: self.LOG_PREFIX, "Unable to dismiss, error converting temp path \(tempHTMLFilePath) to URL")
                 return
