@@ -24,7 +24,6 @@ class SharedStateTest: XCTestCase {
 
     override func setUp() {
         sharedState = SharedState()
-        MobileCore.setLogLevel(.trace)
     }
 
     override func tearDown() {}
