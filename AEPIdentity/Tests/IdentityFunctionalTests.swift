@@ -30,6 +30,10 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
     }
 
+    override func tearDown() {
+        identity.onUnregistered()
+    }
+
     // MARK: syncIdentifiers(...) tests
 
     /// Tests that a sync event dispatches a shared state update

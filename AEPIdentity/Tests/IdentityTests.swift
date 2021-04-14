@@ -27,6 +27,10 @@ class IdentityTests: XCTestCase {
         identity.onRegistered()
     }
 
+    override func tearDown() {
+        identity.onUnregistered()
+    }
+
     /// Tests that when identity receives a identity request identity event with the base url that we dispatch a response event with the updated url
     func testIdentityRequestAppendUrlHappy() {
         // setup

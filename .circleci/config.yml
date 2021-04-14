@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run:
           name: Install realm/SwiftLint
-          command: brew install swiftlint
+          command: brew update-reset && brew install swiftlint
       - run: 
           name: Swift Linting
           command: swiftlint lint

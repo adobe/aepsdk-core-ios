@@ -305,7 +305,7 @@ class MobileCoreTests: XCTestCase {
         let unexpectedEvent = Event(name: "test", type: "wrong", source: "wrong", data: nil)
         let responseExpectation = XCTestExpectation(description: "Should receive the event")
         responseExpectation.expectedFulfillmentCount = 2
-        EventHub.shared.start()
+        MobileCore.registerExtensions([])
 
         // test
         MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
@@ -317,7 +317,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.dispatch(event: expectedEvent2)
 
         // verify
-        wait(for: [responseExpectation], timeout: 2.0)
+        wait(for: [responseExpectation], timeout: 3.0)
     }
 
     /// Tests that the event listeners listening for same events can all receives the events
@@ -330,7 +330,7 @@ class MobileCoreTests: XCTestCase {
         responseExpectation1.expectedFulfillmentCount = 2
         let responseExpectation2 = XCTestExpectation(description: "Should receive the events")
         responseExpectation2.expectedFulfillmentCount = 2
-        EventHub.shared.start()
+        MobileCore.registerExtensions([])
 
         // test
         MobileCore.registerEventListener(type: EventType.analytics, source: EventSource.requestContent) { event in
@@ -346,7 +346,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.dispatch(event: expectedEvent2)
 
         // verify
-        wait(for: [responseExpectation1,responseExpectation2], timeout: 2.0)
+        wait(for: [responseExpectation1,responseExpectation2], timeout: 3.0)
     }
 
     // MARK: setWrapperType(...) tests
