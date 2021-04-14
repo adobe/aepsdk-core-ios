@@ -6,8 +6,5 @@ The Signal extension handles three types of event - postback, PII and open url. 
 
 ![Signal Workflow](https://lucid.app/publicSegments/view/f88e1486-28b6-4f41-988d-0bb8b13a64c2/image.png)
 
-
-
 ## Rules Engine
-For PII request, it can be triggered by either the public `AEPCore.collectPii` method or by the rules engine with launch UI rules. For postback and open url requests, they are mostly triggered by the rules engine.
-For more infomation about rules engine, refer to [link].
+All the postback, PII and open url requests are triggered by the rules engine which is configured with launch UI rules. For more infomation about rules engine, refer to [link].
