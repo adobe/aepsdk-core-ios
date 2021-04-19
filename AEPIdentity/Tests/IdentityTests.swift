@@ -393,4 +393,22 @@ class IdentityTests: XCTestCase {
         let actualEvent = mockRuntime.dispatchedEvents.first(where: { $0.source == EventSource.requestIdentity })
         XCTAssertNil(actualEvent)
     }
+
+    func testReadyForEventBootupInvalidThenValidConfig() {
+        // set initial config to invalid
+        let firstEvent = Event(name: "test-event", type: "test-type", source: "test-source", data: nil)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: firstEvent, data: (["invalid": "config"], .set))
+
+        // expect false, due to invalid config
+        XCTAssertFalse(identity.readyForEvent(firstEvent))
+
+        // update to valid config
+        let secondEvent = Event(name: "test-event", type: "test-type", source: "test-source", data: nil)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: secondEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        // expect false due to boot being executed
+        XCTAssertFalse(identity.readyForEvent(firstEvent))
+        // expect true since identity has booted
+        XCTAssertTrue(identity.readyForEvent(firstEvent))
+    }
 }
