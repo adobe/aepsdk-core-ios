@@ -134,7 +134,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
         wait(for: [urlExpectation], timeout: 1)
     }
-    
+
     func testGetExperienceCloudIdInvalidConfigThenValid() {
         MobileCore.updateConfigurationWith(configDict: ["invalid": "config"])
         initExtensionsAndWait()
