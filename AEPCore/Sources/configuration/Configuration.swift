@@ -59,7 +59,7 @@ class Configuration: NSObject, Extension {
             createSharedState(data: config, event: nil)
             // notify rules engine to load cached rules
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
-                rulesEngine.loadCachedRules(for: rulesURLString)
+                rulesEngine.replaceRulesWithCache(from: rulesURLString)
             }
         }
     }
@@ -236,7 +236,7 @@ class Configuration: NSObject, Extension {
     /// - Parameter newConfiguration: the current config
     private func notifyRulesEngine(newConfiguration: [String: Any]) {
         if let rulesURLString = newConfiguration[ConfigurationConstants.Keys.RULES_URL] as? String {
-            rulesEngine.loadRemoteRules(from: rulesURLString)
+            rulesEngine.replaceRules(from: rulesURLString)
         }
     }
 

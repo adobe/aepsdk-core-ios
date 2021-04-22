@@ -36,7 +36,6 @@ public class LaunchRulesEngine {
 
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
-    let rulesDownloader: RulesDownloader
 
     public init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
@@ -45,17 +44,12 @@ public class LaunchRulesEngine {
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
         rulesEngine = RulesEngine(evaluator: evaluator, transformer: transform)
+        waitingEvents = [Event]()
         // you can enable the log when debugging rules engine
 //        if RulesEngineLog.logging == nil {
 //            RulesEngineLog.logging = RulesEngineNativeLogging()
 //        }
-        rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
-        /// Uses this flag to decide if we need to cache incoming events
-        if dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
-            waitingEvents = [Event]()
-            dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
-        }
     }
 
     /// Register a `RulesTracer`
@@ -64,51 +58,13 @@ public class LaunchRulesEngine {
         rulesEngine.trace(with: tracer)
     }
 
-    public func setRules(_ rules: [LaunchRule]) {
+    public func replaceRules(with rules: [LaunchRule]) {
         rulesQueue.async {
             self.rulesEngine.clearRules()
             self.rulesEngine.addRules(rules: rules)
             Log.debug(label: self.LOG_TAG, "(\(self.name)) : Rules loaded (count: \(rules.count))")
         }
         self.sendReprocessEventsRequest()
-    }
-
-    /// Downloads the rules from the remote server
-    /// - Parameter urlString: the url of the remote rules
-    public func loadRemoteRules(from urlString: String) {
-        guard let url = URL(string: urlString) else {
-            Log.warning(label: LOG_TAG, "(\(self.name)) : Invalid rules url: \(urlString)")
-            return
-        }
-        rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
-            guard let data = data else {
-                return
-            }
-
-            guard let rules = JSONRulesParser.parse(data) else {
-                return
-            }
-
-            self.setRules(rules)
-        }
-    }
-
-    /// Reads the cached rules
-    /// - Parameter urlString: the url of the remote rules
-    public func loadCachedRules(for urlString: String) {
-        guard let url = URL(string: urlString) else {
-            Log.warning(label: LOG_TAG, "(\(self.name)) : Invalid rules url: \(urlString)")
-            return
-        }
-        guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else {
-            return
-        }
-
-        guard let rules = JSONRulesParser.parse(data) else {
-            return
-        }
-
-        setRules(rules)
     }
 
     /// Evaluates all the current rules against the supplied `Event`.
@@ -188,9 +144,9 @@ public class LaunchRulesEngine {
     ///   - consequence: the `Consequence` instance may contain tokens
     ///   - data: a `Traversable` collection with tokens and related values
     /// - Returns: a new instance of `Consequence`
-    internal func replaceToken(for consequence: Consequence, data: Traversable) -> Consequence {
+    internal func replaceToken(for consequence: RuleConsequence, data: Traversable) -> RuleConsequence {
         let dict = replaceToken(in: consequence.detailDict, data: data)
-        return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
+        return RuleConsequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }
 
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
@@ -221,7 +177,7 @@ public class LaunchRulesEngine {
     /// Generate a consequence event with provided consequence data
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
-    private func generateConsequenceEvent(consequence: Consequence) -> Event? {
+    private func generateConsequenceEvent(consequence: RuleConsequence) -> Event? {
         var dict: [String: Any] = [:]
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.detailDict
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
