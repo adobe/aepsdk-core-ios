@@ -11,25 +11,19 @@
  */
 
 import Foundation
-import AEPRulesEngine
 
-/// A `Rule` type represents the functions defined by Launch UI
-public struct LaunchRule: Rule {
-    public let condition: Evaluable
-    public let consequences: [Consequence]
-
-    init(condition: Evaluable, consequences: [Consequence]) {
-        self.condition = condition
-        self.consequences = consequences
+/// Constant values used throughout Rules Engine
+enum RulesConstants {
+    static let LOG_MODULE_PREFIX = "Launch Rules Engine"
+    static let DATA_STORE_PREFIX = "com.adobe.module.rulesengine"
+    enum Keys {
+        static let APP_HAS_LAUNCHED = "config.app.has.launched"
     }
-}
-
-public struct Consequence {
-    let id: String
-    let type: String
-    var detailDict: [String: Any?]
-
-    var eventData: [String: Any?]? {
-        return detailDict["eventdata"] as? [String: Any?]
+    enum Transform {
+        static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
+        static let TRANSFORM_TO_INT = "int"
+        static let TRANSFORM_TO_DOUBLE = "double"
+        static let TRANSFORM_TO_STRING = "string"
+        static let TRANSFORM_TO_BOOL = "bool"
     }
 }

@@ -15,7 +15,7 @@ import XCTest
 
 @testable import AEPCore
 import AEPServices
-@testable @_implementationOnly import AEPRulesEngine
+@testable import AEPRulesEngine
 
 class JSONRulesParserTests: XCTestCase {
     private let EMPTY_JSON_RULE = """

@@ -12,11 +12,11 @@
 
 import AEPServices
 import Foundation
-import AEPRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 /// A rules engine for Launch rules
-public class LaunchRulesEngine {
-    private let LOG_TAG = RulesConstants.LOG_MODULE_PREFIX
+class LaunchRulesEngine {
+    private let LOG_TAG = "\(RulesConstants.LOG_MODULE_PREFIX) - LaunchRulesEngine"
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
@@ -30,17 +30,16 @@ public class LaunchRulesEngine {
     private let transform: Transforming
     private let name: String
     private let extensionRuntime: ExtensionRuntime
-    private let rulesQueue: DispatchQueue
-    private var waitingEvents: [Event]?
+    private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
+    private var cachedEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
 
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
     let rulesDownloader: RulesDownloader
 
-    public init(name: String, extensionRuntime: ExtensionRuntime) {
+    init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
-        rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.\(name)")
         transform = LaunchRuleTransformer.createTransforming()
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
@@ -53,7 +52,7 @@ public class LaunchRulesEngine {
         self.extensionRuntime = extensionRuntime
         /// Uses this flag to decide if we need to cache incoming events
         if dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
-            waitingEvents = [Event]()
+            cachedEvents = [Event]()
             dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
         }
     }
@@ -64,20 +63,11 @@ public class LaunchRulesEngine {
         rulesEngine.trace(with: tracer)
     }
 
-    public func setRules(_ rules: [LaunchRule]) {
-        rulesQueue.async {
-            self.rulesEngine.clearRules()
-            self.rulesEngine.addRules(rules: rules)
-            Log.debug(label: self.LOG_TAG, "(\(self.name)) : Rules loaded (count: \(rules.count))")
-        }
-        self.sendReprocessEventsRequest()
-    }
-
     /// Downloads the rules from the remote server
     /// - Parameter urlString: the url of the remote rules
-    public func loadRemoteRules(from urlString: String) {
+    func loadRemoteRules(from urlString: String) {
         guard let url = URL(string: urlString) else {
-            Log.warning(label: LOG_TAG, "(\(self.name)) : Invalid rules url: \(urlString)")
+            Log.warning(label: LOG_TAG, "Invalid rules ulr: \(urlString)")
             return
         }
         rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
@@ -88,16 +78,20 @@ public class LaunchRulesEngine {
             guard let rules = JSONRulesParser.parse(data) else {
                 return
             }
-
-            self.setRules(rules)
+            self.rulesQueue.sync {
+                self.rulesEngine.clearRules()
+                self.rulesEngine.addRules(rules: rules)
+                Log.debug(label: self.LOG_TAG, "Rules load from remote (count: \(rules.count))")
+            }
+            self.sendReprocessEventsRequest()
         }
     }
 
     /// Reads the cached rules
     /// - Parameter urlString: the url of the remote rules
-    public func loadCachedRules(for urlString: String) {
+    func loadCachedRules(for urlString: String) {
         guard let url = URL(string: urlString) else {
-            Log.warning(label: LOG_TAG, "(\(self.name)) : Invalid rules url: \(urlString)")
+            Log.warning(label: LOG_TAG, "Invalid rules ulr: \(urlString)")
             return
         }
         guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else {
@@ -108,7 +102,12 @@ public class LaunchRulesEngine {
             return
         }
 
-        setRules(rules)
+        rulesQueue.async {
+            self.rulesEngine.clearRules()
+            self.rulesEngine.addRules(rules: rules)
+            Log.debug(label: self.LOG_TAG, "Rules load from cache (count: \(rules.count))")
+        }
+        sendReprocessEventsRequest()
     }
 
     /// Evaluates all the current rules against the supplied `Event`.
@@ -116,24 +115,23 @@ public class LaunchRulesEngine {
     ///   - event: the `Event` against which to evaluate the rules
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
-    public func process(event: Event) -> Event {
+    func process(event: Event) -> Event {
         rulesQueue.sync {
-            // if our waitingEvents array is nil, we know we have rules registered and can skip to evaluation
-            guard let currentWaitingEvents = waitingEvents else {
-                return evaluateRules(for: event)
-            }
-
-            // check if this is an event to kick processing of waitingEvents
-            // otherwise, add the event to waitingEvents
-            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
-                for currentEvent in currentWaitingEvents {
-                    _ = evaluateRules(for: currentEvent)
-                }
-                waitingEvents = nil
-            } else {
-                waitingEvents?.append(event)
-            }
+            appendOrClearCachedEvents(event: event)
             return evaluateRules(for: event)
+        }
+    }
+
+    private func appendOrClearCachedEvents(event: Event) {
+        if let events = cachedEvents {
+            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+                for e in events {
+                    _ = evaluateRules(for: e)
+                }
+                cachedEvents = nil
+            } else {
+                cachedEvents?.append(event)
+            }
         }
     }
 
@@ -151,29 +149,29 @@ public class LaunchRulesEngine {
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
                     guard let from = consequenceWithConcreteValue.eventData else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
+                        Log.error(label: LOG_TAG, "Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
                     guard let to = eventData else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
+                        Log.error(label: LOG_TAG, "Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
                         continue
                     }
-                    Log.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data with \(PrettyDictionary.prettify(from))\n")
+                    Log.trace(label: LOG_TAG, "Attaching event data with \(PrettyDictionary.prettify(from))\n")
                     eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     guard let from = consequenceWithConcreteValue.eventData else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
+                        Log.error(label: LOG_TAG, "Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
                     guard let to = eventData else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
+                        Log.error(label: LOG_TAG, "Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
                         continue
                     }
-                    Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data with \(PrettyDictionary.prettify(from))\n")
+                    Log.trace(label: LOG_TAG, "Modifying event data with \(PrettyDictionary.prettify(from))\n")
                     eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
-                        Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
+                        Log.trace(label: LOG_TAG, "Generating new consequence event \(event)")
                         extensionRuntime.dispatch(event: event)
                     }
                 }
@@ -188,7 +186,7 @@ public class LaunchRulesEngine {
     ///   - consequence: the `Consequence` instance may contain tokens
     ///   - data: a `Traversable` collection with tokens and related values
     /// - Returns: a new instance of `Consequence`
-    internal func replaceToken(for consequence: Consequence, data: Traversable) -> Consequence {
+    func replaceToken(for consequence: Consequence, data: Traversable) -> Consequence {
         let dict = replaceToken(in: consequence.detailDict, data: data)
         return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
     }

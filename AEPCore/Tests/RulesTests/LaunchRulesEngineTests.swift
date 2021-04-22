@@ -15,7 +15,7 @@ import XCTest
 @testable import AEPCore
 @testable import AEPCoreMocks
 import AEPServices
-@testable @_implementationOnly import AEPRulesEngine
+@testable import AEPRulesEngine
 
 class LaunchRulesEngineTests: XCTestCase {
     override func setUp() {

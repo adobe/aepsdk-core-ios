@@ -12,7 +12,7 @@
 
 import AEPServices
 import Foundation
-import AEPRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 extension String {
     /// Returns the first index of the character in this `String`

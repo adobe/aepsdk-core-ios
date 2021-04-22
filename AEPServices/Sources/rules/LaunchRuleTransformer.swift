@@ -12,7 +12,7 @@
 
 import AEPServices
 import Foundation
-import AEPRulesEngine
+@_implementationOnly import AEPRulesEngine
 
 /// generate the `Transforming` instance used by Launch Rules Engine
 class LaunchRuleTransformer {
