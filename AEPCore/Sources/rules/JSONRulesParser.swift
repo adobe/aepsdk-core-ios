@@ -46,7 +46,7 @@ struct JSONRuleRoot: Codable {
                 var consequences = [RuleConsequence]()
                 for consequence in launchRule.consequences {
                     if let id = consequence.id, let type = consequence.type, let dict = consequence.detailDict {
-                        consequences.append(RuleConsequence(id: id, type: type, detailDict: dict))
+                        consequences.append(RuleConsequence(id: id, type: type, details: dict))
                     }
                 }
                 let rule = LaunchRule(condition: conditionExpression, consequences: consequences)

@@ -156,7 +156,7 @@
 		3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762924F032C60041B970 /* ContractExtensionOne.swift */; };
 		3F16762C24F032E60041B970 /* ContractExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F16762B24F032E60041B970 /* ContractExtensionTwo.swift */; };
 		3F278C4D262E1FAB00E955E5 /* CachedRules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F278C4C262E1FAB00E955E5 /* CachedRules.swift */; };
-		3F2B1DA62631E7FE0030F50B /* LaunchRuleConsequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2B1DA52631E7FE0030F50B /* LaunchRuleConsequence.swift */; };
+		3F2B1DA62631E7FE0030F50B /* RuleConsequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2B1DA52631E7FE0030F50B /* RuleConsequence.swift */; };
 		3F2B1DC5263221580030F50B /* LaunchRulesEngine+Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F2B1DC4263221580030F50B /* LaunchRulesEngine+Downloader.swift */; };
 		3F2F12BB24F6D07E00600CB4 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */; };
 		3F2F12BC24F6D07E00600CB4 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */; };
@@ -739,7 +739,7 @@
 		3F16762924F032C60041B970 /* ContractExtensionOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractExtensionOne.swift; sourceTree = "<group>"; };
 		3F16762B24F032E60041B970 /* ContractExtensionTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContractExtensionTwo.swift; sourceTree = "<group>"; };
 		3F278C4C262E1FAB00E955E5 /* CachedRules.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachedRules.swift; sourceTree = "<group>"; };
-		3F2B1DA52631E7FE0030F50B /* LaunchRuleConsequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchRuleConsequence.swift; sourceTree = "<group>"; };
+		3F2B1DA52631E7FE0030F50B /* RuleConsequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleConsequence.swift; sourceTree = "<group>"; };
 		3F2B1DC4263221580030F50B /* LaunchRulesEngine+Downloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LaunchRulesEngine+Downloader.swift"; sourceTree = "<group>"; };
 		3F2F12BF24F6D66C00600CB4 /* TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelpers.swift; sourceTree = "<group>"; };
 		3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONRulesParserTests.swift; sourceTree = "<group>"; };
@@ -1729,7 +1729,7 @@
 				3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */,
 				3FB66AB824CA004400502CAF /* JSONRulesParser.swift */,
 				3FB66AB424CA004400502CAF /* LaunchRule.swift */,
-				3F2B1DA52631E7FE0030F50B /* LaunchRuleConsequence.swift */,
+				3F2B1DA52631E7FE0030F50B /* RuleConsequence.swift */,
 				3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */,
 				3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */,
 				3F2B1DC4263221580030F50B /* LaunchRulesEngine+Downloader.swift */,
@@ -2839,7 +2839,7 @@
 				BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
-				3F2B1DA62631E7FE0030F50B /* LaunchRuleConsequence.swift in Sources */,
+				3F2B1DA62631E7FE0030F50B /* RuleConsequence.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
 				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,
 				21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */,

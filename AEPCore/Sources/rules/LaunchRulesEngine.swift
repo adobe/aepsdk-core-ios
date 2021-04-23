@@ -37,6 +37,10 @@ public class LaunchRulesEngine {
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
 
+    /// Creates a new rules engine instance
+    /// - Parameters:
+    ///   - name: the unique name for the current instance
+    ///   - extensionRuntime: the `extensionRuntime`
     public init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
         rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.\(name)")
@@ -58,11 +62,13 @@ public class LaunchRulesEngine {
         rulesEngine.trace(with: tracer)
     }
 
+    /// Set a new set of rules, the new rules replace the current rules. A RulesEngine Reset event will be dispatched to trigger the reprocess for the waiting events.
+    /// - Parameter rules: the array of new `LaunchRule`
     public func replaceRules(with rules: [LaunchRule]) {
         rulesQueue.async {
             self.rulesEngine.clearRules()
             self.rulesEngine.addRules(rules: rules)
-            Log.debug(label: self.LOG_TAG, "(\(self.name)) : Rules loaded (count: \(rules.count))")
+            Log.debug(label: self.LOG_TAG, "Successfully loaded \(rules.count) rule(s) into the (\(self.name)) rules engine.")
         }
         self.sendReprocessEventsRequest()
     }
@@ -81,7 +87,7 @@ public class LaunchRulesEngine {
 
             // check if this is an event to kick processing of waitingEvents
             // otherwise, add the event to waitingEvents
-            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+            if (event.data?[RulesConstants.Keys.RULES_ENGINE_NAME] as? String) == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
                 for currentEvent in currentWaitingEvents {
                     _ = evaluateRules(for: currentEvent)
                 }
@@ -145,8 +151,8 @@ public class LaunchRulesEngine {
     ///   - data: a `Traversable` collection with tokens and related values
     /// - Returns: a new instance of `Consequence`
     internal func replaceToken(for consequence: RuleConsequence, data: Traversable) -> RuleConsequence {
-        let dict = replaceToken(in: consequence.detailDict, data: data)
-        return RuleConsequence(id: consequence.id, type: consequence.type, detailDict: dict)
+        let dict = replaceToken(in: consequence.details, data: data)
+        return RuleConsequence(id: consequence.id, type: consequence.type, details: dict)
     }
 
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
@@ -171,7 +177,7 @@ public class LaunchRulesEngine {
     }
 
     private func sendReprocessEventsRequest() {
-        extensionRuntime.dispatch(event: Event(name: name, type: EventType.rulesEngine, source: EventSource.requestReset, data: nil))
+        extensionRuntime.dispatch(event: Event(name: name, type: EventType.rulesEngine, source: EventSource.requestReset, data: [RulesConstants.Keys.RULES_ENGINE_NAME: name]))
     }
 
     /// Generate a consequence event with provided consequence data
@@ -179,7 +185,7 @@ public class LaunchRulesEngine {
     /// - Returns: a consequence `Event`
     private func generateConsequenceEvent(consequence: RuleConsequence) -> Event? {
         var dict: [String: Any] = [:]
-        dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.detailDict
+        dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.details
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
         return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
