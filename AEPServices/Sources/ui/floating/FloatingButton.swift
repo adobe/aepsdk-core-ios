@@ -54,7 +54,9 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
     /// Remove the floating button from the screen
     public func dismiss() {
         DispatchQueue.main.async {
+            // swiftlint:disable notification_center_detachment
             NotificationCenter.default.removeObserver(self)
+            // swiftlint:enable notification_center_detachment
             self.buttonImageView?.removeFromSuperview()
             self.buttonImageView = nil
             self.listener?.onDismiss()

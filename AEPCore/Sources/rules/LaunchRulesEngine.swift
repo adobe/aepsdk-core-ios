@@ -12,11 +12,11 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import AEPRulesEngine
+import AEPRulesEngine
 
 /// A rules engine for Launch rules
-class LaunchRulesEngine {
-    private let LOG_TAG = "\(RulesConstants.LOG_MODULE_PREFIX) - LaunchRulesEngine"
+public class LaunchRulesEngine {
+    private let LOG_TAG = RulesConstants.LOG_MODULE_PREFIX
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
@@ -30,31 +30,30 @@ class LaunchRulesEngine {
     private let transform: Transforming
     private let name: String
     private let extensionRuntime: ExtensionRuntime
-    private let rulesQueue = DispatchQueue(label: "com.adobe.launch.rulesengine.process")
-    private var cachedEvents: [Event]?
+    private let rulesQueue: DispatchQueue
+    private var waitingEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
 
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
-    let rulesDownloader: RulesDownloader
 
-    init(name: String, extensionRuntime: ExtensionRuntime) {
+    /// Creates a new rules engine instance
+    /// - Parameters:
+    ///   - name: the unique name for the current instance
+    ///   - extensionRuntime: the `extensionRuntime`
+    public init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
+        rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.\(name)")
         transform = LaunchRuleTransformer.createTransforming()
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
         rulesEngine = RulesEngine(evaluator: evaluator, transformer: transform)
+        waitingEvents = [Event]()
         // you can enable the log when debugging rules engine
 //        if RulesEngineLog.logging == nil {
 //            RulesEngineLog.logging = RulesEngineNativeLogging()
 //        }
-        rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         self.extensionRuntime = extensionRuntime
-        /// Uses this flag to decide if we need to cache incoming events
-        if dataStore.getBool(key: RulesConstants.Keys.APP_HAS_LAUNCHED) == nil {
-            cachedEvents = [Event]()
-            dataStore.set(key: RulesConstants.Keys.APP_HAS_LAUNCHED, value: true)
-        }
     }
 
     /// Register a `RulesTracer`
@@ -63,51 +62,15 @@ class LaunchRulesEngine {
         rulesEngine.trace(with: tracer)
     }
 
-    /// Downloads the rules from the remote server
-    /// - Parameter urlString: the url of the remote rules
-    func loadRemoteRules(from urlString: String) {
-        guard let url = URL(string: urlString) else {
-            Log.warning(label: LOG_TAG, "Invalid rules ulr: \(urlString)")
-            return
-        }
-        rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
-            guard let data = data else {
-                return
-            }
-
-            guard let rules = JSONRulesParser.parse(data) else {
-                return
-            }
-            self.rulesQueue.sync {
-                self.rulesEngine.clearRules()
-                self.rulesEngine.addRules(rules: rules)
-                Log.debug(label: self.LOG_TAG, "Rules load from remote (count: \(rules.count))")
-            }
-            self.sendReprocessEventsRequest()
-        }
-    }
-
-    /// Reads the cached rules
-    /// - Parameter urlString: the url of the remote rules
-    func loadCachedRules(for urlString: String) {
-        guard let url = URL(string: urlString) else {
-            Log.warning(label: LOG_TAG, "Invalid rules ulr: \(urlString)")
-            return
-        }
-        guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url) else {
-            return
-        }
-
-        guard let rules = JSONRulesParser.parse(data) else {
-            return
-        }
-
+    /// Set a new set of rules, the new rules replace the current rules. A RulesEngine Reset event will be dispatched to trigger the reprocess for the waiting events.
+    /// - Parameter rules: the array of new `LaunchRule`
+    public func replaceRules(with rules: [LaunchRule]) {
         rulesQueue.async {
             self.rulesEngine.clearRules()
             self.rulesEngine.addRules(rules: rules)
-            Log.debug(label: self.LOG_TAG, "Rules load from cache (count: \(rules.count))")
+            Log.debug(label: self.LOG_TAG, "Successfully loaded \(rules.count) rule(s) into the (\(self.name)) rules engine.")
         }
-        sendReprocessEventsRequest()
+        self.sendReprocessEventsRequest()
     }
 
     /// Evaluates all the current rules against the supplied `Event`.
@@ -115,23 +78,24 @@ class LaunchRulesEngine {
     ///   - event: the `Event` against which to evaluate the rules
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
-    func process(event: Event) -> Event {
+    public func process(event: Event) -> Event {
         rulesQueue.sync {
-            appendOrClearCachedEvents(event: event)
-            return evaluateRules(for: event)
-        }
-    }
-
-    private func appendOrClearCachedEvents(event: Event) {
-        if let events = cachedEvents {
-            if event.name == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
-                for e in events {
-                    _ = evaluateRules(for: e)
-                }
-                cachedEvents = nil
-            } else {
-                cachedEvents?.append(event)
+            // if our waitingEvents array is nil, we know we have rules registered and can skip to evaluation
+            guard let currentWaitingEvents = waitingEvents else {
+                return evaluateRules(for: event)
             }
+
+            // check if this is an event to kick processing of waitingEvents
+            // otherwise, add the event to waitingEvents
+            if (event.data?[RulesConstants.Keys.RULES_ENGINE_NAME] as? String) == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+                for currentEvent in currentWaitingEvents {
+                    _ = evaluateRules(for: currentEvent)
+                }
+                waitingEvents = nil
+            } else {
+                waitingEvents?.append(event)
+            }
+            return evaluateRules(for: event)
         }
     }
 
@@ -149,29 +113,29 @@ class LaunchRulesEngine {
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
                     guard let from = consequenceWithConcreteValue.eventData else {
-                        Log.error(label: LOG_TAG, "Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
                     guard let to = eventData else {
-                        Log.error(label: LOG_TAG, "Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
                         continue
                     }
-                    Log.trace(label: LOG_TAG, "Attaching event data with \(PrettyDictionary.prettify(from))\n")
+                    Log.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data with \(PrettyDictionary.prettify(from))\n")
                     eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     guard let from = consequenceWithConcreteValue.eventData else {
-                        Log.error(label: LOG_TAG, "Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
                     guard let to = eventData else {
-                        Log.error(label: LOG_TAG, "Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
                         continue
                     }
-                    Log.trace(label: LOG_TAG, "Modifying event data with \(PrettyDictionary.prettify(from))\n")
+                    Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data with \(PrettyDictionary.prettify(from))\n")
                     eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
-                        Log.trace(label: LOG_TAG, "Generating new consequence event \(event)")
+                        Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
                         extensionRuntime.dispatch(event: event)
                     }
                 }
@@ -186,9 +150,9 @@ class LaunchRulesEngine {
     ///   - consequence: the `Consequence` instance may contain tokens
     ///   - data: a `Traversable` collection with tokens and related values
     /// - Returns: a new instance of `Consequence`
-    func replaceToken(for consequence: Consequence, data: Traversable) -> Consequence {
-        let dict = replaceToken(in: consequence.detailDict, data: data)
-        return Consequence(id: consequence.id, type: consequence.type, detailDict: dict)
+    internal func replaceToken(for consequence: RuleConsequence, data: Traversable) -> RuleConsequence {
+        let dict = replaceToken(in: consequence.details, data: data)
+        return RuleConsequence(id: consequence.id, type: consequence.type, details: dict)
     }
 
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
@@ -213,15 +177,15 @@ class LaunchRulesEngine {
     }
 
     private func sendReprocessEventsRequest() {
-        extensionRuntime.dispatch(event: Event(name: name, type: EventType.rulesEngine, source: EventSource.requestReset, data: nil))
+        extensionRuntime.dispatch(event: Event(name: name, type: EventType.rulesEngine, source: EventSource.requestReset, data: [RulesConstants.Keys.RULES_ENGINE_NAME: name]))
     }
 
     /// Generate a consequence event with provided consequence data
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
-    private func generateConsequenceEvent(consequence: Consequence) -> Event? {
+    private func generateConsequenceEvent(consequence: RuleConsequence) -> Event? {
         var dict: [String: Any] = [:]
-        dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.detailDict
+        dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.details
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
         return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])

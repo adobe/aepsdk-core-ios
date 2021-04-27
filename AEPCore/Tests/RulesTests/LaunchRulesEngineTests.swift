@@ -15,7 +15,7 @@ import XCTest
 @testable import AEPCore
 @testable import AEPCoreMocks
 import AEPServices
-@testable @_implementationOnly import AEPRulesEngine
+@testable import AEPRulesEngine
 
 class LaunchRulesEngineTests: XCTestCase {
     override func setUp() {
@@ -46,7 +46,7 @@ class LaunchRulesEngineTests: XCTestCase {
         let result = rulesEngine.replaceToken(for: (rules?[0].consequences[0])!, data: tokens)
         // http://adobe.com/device=abc
 
-        let urlString = result.detailDict["url"] as! String
+        let urlString = result.details["url"] as! String
         XCTAssertEqual("http://adobe.com/device=abc", urlString)
     }
 }
