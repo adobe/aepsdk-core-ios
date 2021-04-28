@@ -38,6 +38,23 @@ class NetworkServiceTests: XCTestCase {
     }
 
     // MARK: NetworkService tests
+    func testCreateURLSession(){
+        let defaultNetworkService = NetworkService()
+        let networkRequest1 = NetworkRequest(url: URL(string: "https://www.adobe.com")!, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.01, readTimeout: 0.01)
+        let networkRequest2 = NetworkRequest(url: URL(string: "https://www.adobe.com/test/123")!, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.01, readTimeout: 0.01)
+        let networkRequest3 = NetworkRequest(url: URL(string: "https://www.adobe.com/test?abc=def")!, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.01, readTimeout: 0.01)
+
+        let networkRequestDifferentDomain = NetworkRequest(url: URL(string: "https://www.google.com/test?abc=def")!, httpMethod: HttpMethod.post, connectPayload: testBody, httpHeaders: ["Accept": "text/html"], connectTimeout: 0.01, readTimeout: 0.01)
+
+        let session1 = defaultNetworkService.createURLSession(networkRequest: networkRequest1)
+        let session2 = defaultNetworkService.createURLSession(networkRequest: networkRequest2)
+        let session3 = defaultNetworkService.createURLSession(networkRequest: networkRequest3)
+        let session_different = defaultNetworkService.createURLSession(networkRequest: networkRequestDifferentDomain)
+        XCTAssertEqual(session1, session2)
+        XCTAssertEqual(session2, session3)
+        XCTAssertNotEqual(session1, session_different)
+    }
+
 
     func testConnectAsync_returnsError_whenIncompleteUrl() {
         let defaultNetworkService = NetworkService()
