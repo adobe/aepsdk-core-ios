@@ -12,15 +12,15 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import AEPRulesEngine
+import AEPRulesEngine
 
-class JSONRulesParser {
+public class JSONRulesParser {
     fileprivate static let LOG_LABEL = "JSONRulesParser"
 
     /// Parses the json rules to objects
     /// - Parameter data: data of json rules
     /// - Returns: an array of `LaunchRule`
-    static func parse(_ data: Data) -> [LaunchRule]? {
+    static public func parse(_ data: Data) -> [LaunchRule]? {
         let jsonDecoder = JSONDecoder()
         do {
             let root = try jsonDecoder.decode(JSONRuleRoot.self, from: data)
@@ -43,10 +43,10 @@ struct JSONRuleRoot: Codable {
         var result = [LaunchRule]()
         for launchRule in rules {
             if let conditionExpression = launchRule.condition.convert() {
-                var consequences = [Consequence]()
+                var consequences = [RuleConsequence]()
                 for consequence in launchRule.consequences {
                     if let id = consequence.id, let type = consequence.type, let dict = consequence.detailDict {
-                        consequences.append(Consequence(id: id, type: type, detailDict: dict))
+                        consequences.append(RuleConsequence(id: id, type: type, details: dict))
                     }
                 }
                 let rule = LaunchRule(condition: conditionExpression, consequences: consequences)

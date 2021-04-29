@@ -48,7 +48,7 @@ class NetworkService: Networking {
     /// Check if a session is already created for the specified URL, readTimeout, connectTimeout or create a new one with a new `URLSessionConfiguration`
     /// - Parameter networkRequest: current network request
     func createURLSession(networkRequest: NetworkRequest) -> URLSession {
-        let sessionId = "\(networkRequest.url.absoluteString)\(networkRequest.readTimeout)\(networkRequest.connectTimeout)"
+        let sessionId = "\(networkRequest.url.host ?? "")\(networkRequest.readTimeout)\(networkRequest.connectTimeout)"
         guard let session = sessions[sessionId] else {
             // Create config for an ephemeral NSURLSession with specified timeouts
             let config = URLSessionConfiguration.ephemeral
