@@ -52,7 +52,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
 
         /// When:
-        rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
+        rulesEngine.replaceRules(from: "http://test.com/rules.url")
         let processedEvent = rulesEngine.process(event: event)
 
         /// Then:
@@ -72,11 +72,11 @@ class RulesEngineFunctionalTests: XCTestCase {
         let mockNetworkService = TestableNetworkService()
         mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
-        rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
+        rulesEngine.replaceRules(from: "http://test.com/rules.url")
         rulesEngine.rulesEngine.clearRules()
 
         /// When:
-        rulesEngine.loadCachedRules(for: "http://test.com/rules.url")
+        rulesEngine.replaceRulesWithCache(from: "http://test.com/rules.url")
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
         let processedEvent = rulesEngine.process(event: event)
 
@@ -105,7 +105,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
 
         /// When:
-        rulesEngine.loadRemoteRules(from: "http://test.com/rules.url")
+        rulesEngine.replaceRules(from: "http://test.com/rules.url")
         /// Then:
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         /// When:

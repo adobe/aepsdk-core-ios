@@ -15,7 +15,7 @@ import Foundation
 // MARK: - Extension protocol
 /// An object which can be registered with the `EventHub`
 @objc(AEPExtension)
-public protocol Extension where Self: NSObject {
+public protocol Extension {
     /// Name of the extension
     var name: String { get }
 

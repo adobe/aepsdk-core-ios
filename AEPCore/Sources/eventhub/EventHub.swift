@@ -250,7 +250,9 @@ final class EventHub {
     /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
     /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
     func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
-        return registeredExtensions[type.typeName]
+        return eventHubQueue.sync {
+            return registeredExtensions[type.typeName]
+        }
     }
 
     /// Register a event preprocessor
@@ -290,6 +292,21 @@ final class EventHub {
             sharedState.set(version: version, data: data)
             self.dispatch(event: self.createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
             Log.debug(label: self.LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
+        }
+    }
+
+    /// shut down the event hub, wait for the event queue to stop and unregister all the extensions
+    func shutdown() {
+        eventQueue.waitToStop()
+        eventHubQueue.sync {
+            for ext in registeredExtensions.shallowCopy.values {
+                ext.unregisterExtension()
+                ext.shutdown()
+            }
+        }
+        eventHubQueue.sync {
+            // just wait
+            registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventHub.registeredExtensions.queue")
         }
     }
 

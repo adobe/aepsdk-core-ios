@@ -11,25 +11,15 @@
  */
 
 import Foundation
-@_implementationOnly import AEPRulesEngine
+import AEPRulesEngine
 
 /// A `Rule` type represents the functions defined by Launch UI
-struct LaunchRule: Rule {
+public struct LaunchRule: Rule {
     public let condition: Evaluable
-    public let consequences: [Consequence]
+    public let consequences: [RuleConsequence]
 
-    init(condition: Evaluable, consequences: [Consequence]) {
+    init(condition: Evaluable, consequences: [RuleConsequence]) {
         self.condition = condition
         self.consequences = consequences
-    }
-}
-
-struct Consequence {
-    let id: String
-    let type: String
-    var detailDict: [String: Any?]
-
-    var eventData: [String: Any?]? {
-        return detailDict["eventdata"] as? [String: Any?]
     }
 }

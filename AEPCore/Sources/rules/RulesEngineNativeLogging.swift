@@ -12,7 +12,7 @@
 
 import AEPServices
 import Foundation
-@_implementationOnly import AEPRulesEngine
+import AEPRulesEngine
 
 class RulesEngineNativeLogging: AEPRulesEngine.Logging {
     /// Converts RulesEngine `LogLevel` to Core `LogLevel`

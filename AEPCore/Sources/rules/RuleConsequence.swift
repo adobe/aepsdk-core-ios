@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -11,19 +11,14 @@
  */
 
 import Foundation
+import AEPRulesEngine
 
-/// Constant values used throughout Rules Engine
-enum RulesConstants {
-    static let LOG_MODULE_PREFIX = "Launch Rules Engine"
-    static let DATA_STORE_PREFIX = "com.adobe.module.rulesengine"
-    enum Keys {
-        static let RULES_ENGINE_NAME = "name"
-    }
-    enum Transform {
-        static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
-        static let TRANSFORM_TO_INT = "int"
-        static let TRANSFORM_TO_DOUBLE = "double"
-        static let TRANSFORM_TO_STRING = "string"
-        static let TRANSFORM_TO_BOOL = "bool"
+public struct RuleConsequence {
+    let id: String
+    let type: String
+    var details: [String: Any?]
+
+    var eventData: [String: Any?]? {
+        return details["eventdata"] as? [String: Any?]
     }
 }
