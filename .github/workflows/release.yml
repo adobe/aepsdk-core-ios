@@ -77,8 +77,8 @@ jobs:
         echo podspec file verification starts:
         make test-podspec 
         
-#https://github.com/release-drafter/release-drafter/commit/f5c64c103493b28e791fd746dee3c86520c304a9
-    - uses: release-drafter/release-drafter@f5c64c103493b28e791fd746dee3c86520c304a9
+#https://github.com/release-drafter/release-drafter/commit/fe52e97d262833ae07d05efaf1a239df3f1b5cd4
+    - uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4
       if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
         name: v${{ github.event.inputs.tag }}
