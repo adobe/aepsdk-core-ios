@@ -1,5 +1,5 @@
 PODS:
-  - AEPRulesEngine (1.0.0)
+  - AEPRulesEngine (1.0.1)
 
 DEPENDENCIES:
   - AEPRulesEngine
@@ -9,7 +9,7 @@ SPEC REPOS:
     - AEPRulesEngine
 
 SPEC CHECKSUMS:
-  AEPRulesEngine: 8bbc694fce6900cd33b2496c7d4b33ee2eeffc46
+  AEPRulesEngine: 5075ed294026a12e37bd26fe260f74604d205354
 
 PODFILE CHECKSUM: 31a9899de6250afde3d420f3c919cf16beb8dc75
 

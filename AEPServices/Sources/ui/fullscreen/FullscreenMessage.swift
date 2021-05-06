@@ -28,7 +28,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     var isLocalImageUsed = false
     var payload: String
     var listener: FullscreenMessageDelegate?
-    var webView: UIView?
+    public private(set) var webView: UIView?
     private var messageMonitor: MessageMonitoring
 
     private var messagingDelegate: MessagingDelegate? {
