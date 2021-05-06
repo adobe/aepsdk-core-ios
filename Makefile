@@ -5,6 +5,7 @@ AEPSERVICES_TARGET_NAME = AEPServices
 AEPLIFECYCLE_TARGET_NAME = AEPLifecycle
 AEPIDENTITY_TARGET_NAME = AEPIdentity
 AEPSIGNAL_TARGET_NAME = AEPSignal
+AEPRULESENGINE_TARGET_NAME = AEPRulesEngine
 AEPINTEGRATION_TEST_TARGET_NAME = AEPIntegrationTests
 
 SIMULATOR_ARCHIVE_PATH = ./build/ios_simulator.xcarchive/Products/Library/Frameworks/
@@ -53,6 +54,7 @@ integration-test:
 
 # Targets - archive
 
+
 archive:
 	xcodebuild archive -workspace AEPCore.xcworkspace -scheme AEP-All -archivePath "./build/ios.xcarchive" -sdk iphoneos -destination="iOS" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 	xcodebuild archive -workspace AEPCore.xcworkspace -scheme AEP-All -archivePath "./build/ios_simulator.xcarchive" -sdk iphonesimulator -destination="iOS Simulator" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
@@ -61,8 +63,21 @@ archive:
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework -output ./build/$(AEPLIFECYCLE_TARGET_NAME).xcframework
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPIDENTITY_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPIDENTITY_TARGET_NAME).framework -output ./build/$(AEPIDENTITY_TARGET_NAME).xcframework
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSIGNAL_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPSIGNAL_TARGET_NAME).framework -output ./build/$(AEPSIGNAL_TARGET_NAME).xcframework
-	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)AEPRulesEngine.framework -framework $(IOS_ARCHIVE_PATH)AEPRulesEngine.framework -output ./build/AEPRulesEngine.xcframework
+	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -output ./build/$(AEPRULESENGINE_TARGET_NAME).xcframework
 
+zip:
+	cd build && zip -r -X $(AEPCORE_TARGET_NAME).xcframework.zip $(AEPCORE_TARGET_NAME).xcframework/
+	cd build && zip -r -X $(AEPSERVICES_TARGET_NAME).xcframework.zip $(AEPSERVICES_TARGET_NAME).xcframework/
+	cd build && zip -r -X $(AEPLIFECYCLE_TARGET_NAME).xcframework.zip $(AEPLIFECYCLE_TARGET_NAME).xcframework/
+	cd build && zip -r -X $(AEPIDENTITY_TARGET_NAME).xcframework.zip $(AEPIDENTITY_TARGET_NAME).xcframework/
+	cd build && zip -r -X $(AEPSIGNAL_TARGET_NAME).xcframework.zip $(AEPSIGNAL_TARGET_NAME).xcframework/
+	cd build && zip -r -X $(AEPRULESENGINE_TARGET_NAME).xcframework.zip $(AEPRULESENGINE_TARGET_NAME).xcframework/
+	swift package compute-checksum build/$(AEPCORE_TARGET_NAME).xcframework.zip
+	swift package compute-checksum build/$(AEPSERVICES_TARGET_NAME).xcframework.zip
+	swift package compute-checksum build/$(AEPLIFECYCLE_TARGET_NAME).xcframework.zip
+	swift package compute-checksum build/$(AEPIDENTITY_TARGET_NAME).xcframework.zip
+	swift package compute-checksum build/$(AEPSIGNAL_TARGET_NAME).xcframework.zip
+	swift package compute-checksum build/$(AEPRULESENGINE_TARGET_NAME).xcframework.zip
 # Targets - CI steps
 
 clean:
