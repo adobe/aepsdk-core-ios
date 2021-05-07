@@ -48,6 +48,7 @@ enum IdentityConstants {
         static let IDENTITY_URL_VARIABLES = "IDENTITY_URL_VARIABLES"
         static let UPDATED_IDENTITY_RESPONSE = "UPDATED_IDENTITY_RESPONSE"
         static let AVID_SYNC_EVENT = "AVID Sync"
+        static let RESET_IDENTITIES_COMPLETE = "Identity Reset Identities Complete"
     }
 
     enum EventDataKeys {

@@ -269,4 +269,32 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual("new-org-id", identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String)
         XCTAssertEqual("test-val", identity.state?.lastValidConfig["test-key"] as? String)
     }
+
+    // MARK: handleRequestReset(...) tests
+
+    /// Tests that when Identity gets a reset request that it resets the persisted identifiers and dispatches complete event
+    func testHandleRequestReset() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        identity.state?.lastValidConfig = configSharedState
+
+        let previousEcid = ECID()
+        identity.state?.identityProperties.ecid = previousEcid
+
+        let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
+
+        // test
+        mockRuntime.simulateComingEvent(event: resetEvent)
+
+        // verify
+        XCTAssertNotEqual(previousEcid.ecidString, identity.state?.identityProperties.ecid?.ecidString)
+        let sharedState = mockRuntime.createdSharedStates.first!
+        XCTAssertEqual(identity.state?.identityProperties.ecid?.ecidString, sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first!
+        XCTAssertEqual(EventType.edgeIdentity, dispatchedEvent.type)
+        XCTAssertEqual(EventSource.resetComplete, dispatchedEvent.source)
+    }
 }

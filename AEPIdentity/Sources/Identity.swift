@@ -47,6 +47,7 @@ import Foundation
         registerListener(type: EventType.configuration, source: EventSource.responseContent, listener: handleConfigurationResponse)
         registerListener(type: EventType.analytics, source: EventSource.responseIdentity, listener: handleAnalyticsResponseIdentity)
         registerListener(type: EventType.audienceManager, source: EventSource.responseContent, listener: handleAudienceResponse(event:))
+        registerListener(type: EventType.genericIdentity, source: EventSource.requestReset, listener: handleRequestReset)
     }
 
     public func onUnregistered() {
@@ -165,6 +166,14 @@ import Foundation
         }
         // Identity Extension will send the opt out request because the Audience Extension did not
         sendOptOutRequest(event: event)
+    }
+
+    /// Handles `EventType.edgeIdentity` request reset events.
+    /// - Parameter event: the identity request reset event
+    private func handleRequestReset(event: Event) {
+        state?.resetIdentifiers(event: event,
+                                createSharedState: createSharedState(data:event:),
+                                eventDispatcher: dispatch(event:))
     }
 
     // MARK: Event Handlers

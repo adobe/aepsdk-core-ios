@@ -283,6 +283,31 @@ class IdentityState {
         }
     }
 
+    /// Clears all identities and regenerates a new ECID value.
+    /// Saves identities to persistence and creates a new shared state and dispatches a new` resetComplete` event after operation completes.
+    /// - Parameters:
+    ///   - event: event which triggered the reset call
+    ///   - createSharedState: function which creates new shared states
+    ///   - eventDispatcher: function which dispatches a new `Event`
+    func resetIdentifiers(event: Event,
+                          createSharedState: ([String: Any], Event) -> Void,
+                          eventDispatcher: (Event) -> Void) {
+        // clear the properties
+        identityProperties = IdentityProperties()
+
+        // this will see that ECID is nil, generate a new ECID, and do a force sync, then save the properties to persistence.
+        if syncIdentifiers(event: event) != nil {
+            createSharedState(identityProperties.toEventData(), event)
+        }
+        
+        // dispatch reset complete event
+        let event = Event(name: IdentityConstants.EventNames.RESET_IDENTITIES_COMPLETE,
+                          type: EventType.edgeIdentity,
+                          source: EventSource.resetComplete,
+                          data: nil)
+        eventDispatcher(event)
+    }
+
     // MARK: Private APIs
 
     /// Inspects the current configuration to determine if a sync can be made, this is determined by if a valid org id is present and if the privacy is not set to opted-out

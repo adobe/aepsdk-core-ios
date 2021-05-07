@@ -987,6 +987,39 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(state.identityProperties.isAidSynced == true)
         XCTAssertEqual(1, mockDataStore.dict.count) // identity properties should not be saved to persistence
     }
+
+    func testResetIdentities() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        let eventExpectation = XCTestExpectation(description: "Reset complete event should be dispatched")
+
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        state.lastValidConfig = configSharedState
+        let startingEcid = ECID()
+        state.identityProperties.ecid = startingEcid
+        state.identityProperties.advertisingIdentifier = "test-ad-id"
+
+        let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
+
+        // test
+        state.resetIdentifiers(event: resetEvent) { (sharedStateData, event) in
+            // verify ECID has changed
+            XCTAssertNotEqual(sharedStateData[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
+            XCTAssertNil(sharedStateData[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
+            sharedStateExpectation.fulfill()
+        } eventDispatcher: { (dispatchedEvent) in
+            // verify reset complete event
+            XCTAssertEqual(EventType.edgeIdentity, dispatchedEvent.type)
+            XCTAssertEqual(EventSource.resetComplete, dispatchedEvent.source)
+            eventExpectation.fulfill()
+        }
+
+        // verify
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+        wait(for: [sharedStateExpectation, eventExpectation], timeout: 0.5)
+    }
 }
 
 private extension Event {
