@@ -14,11 +14,11 @@ import Foundation
 import AEPRulesEngine
 
 public struct RuleConsequence {
-    let id: String
-    let type: String
-    var details: [String: Any?]
+    public let id: String
+    public let type: String
+    public var details: [String: Any?]
 
-    var eventData: [String: Any?]? {
+    public var eventData: [String: Any?]? {
         return details["eventdata"] as? [String: Any?]
     }
 }
