@@ -299,7 +299,7 @@ class IdentityState {
         if syncIdentifiers(event: event) != nil {
             createSharedState(identityProperties.toEventData(), event)
         }
-        
+
         // dispatch reset complete event
         let event = Event(name: IdentityConstants.EventNames.RESET_IDENTITIES_COMPLETE,
                           type: EventType.identity,
