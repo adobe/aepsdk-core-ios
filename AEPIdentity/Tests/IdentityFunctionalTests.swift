@@ -294,7 +294,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual(identity.state?.identityProperties.ecid?.ecidString, sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
 
         let dispatchedEvent = mockRuntime.dispatchedEvents.first!
-        XCTAssertEqual(EventType.edgeIdentity, dispatchedEvent.type)
+        XCTAssertEqual(EventType.identity, dispatchedEvent.type)
         XCTAssertEqual(EventSource.resetComplete, dispatchedEvent.source)
     }
 }

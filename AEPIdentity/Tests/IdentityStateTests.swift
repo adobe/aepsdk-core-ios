@@ -1011,7 +1011,7 @@ class IdentityStateTests: XCTestCase {
             sharedStateExpectation.fulfill()
         } eventDispatcher: { (dispatchedEvent) in
             // verify reset complete event
-            XCTAssertEqual(EventType.edgeIdentity, dispatchedEvent.type)
+            XCTAssertEqual(EventType.identity, dispatchedEvent.type)
             XCTAssertEqual(EventSource.resetComplete, dispatchedEvent.source)
             eventExpectation.fulfill()
         }
