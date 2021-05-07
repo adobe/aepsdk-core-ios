@@ -1004,12 +1004,12 @@ class IdentityStateTests: XCTestCase {
         let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
 
         // test
-        state.resetIdentifiers(event: resetEvent) { data, _ in
+        state.resetIdentifiers(event: resetEvent, createSharedState: { (data, _) in
             // verify ECID has changed
             XCTAssertNotEqual(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
             XCTAssertNil(data[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
             sharedStateExpectation.fulfill()
-        } eventDispatcher: { event in
+        }) { (event) in
             // verify reset complete event
             XCTAssertEqual(EventType.identity, event.type)
             XCTAssertEqual(EventSource.resetComplete, event.source)
