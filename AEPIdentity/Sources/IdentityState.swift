@@ -295,8 +295,7 @@ class IdentityState {
         // clear the properties
         identityProperties = IdentityProperties()
         pushIdManager.updatePushId(pushId: nil)
-        identityProperties.ecid = ECID()
-        // do a force sync, then save the properties to persistence.
+        // do a force sync to generate ECID, then save the properties to persistence.
         _ = syncIdentifiers(event: event)
         createSharedState(identityProperties.toEventData(), event)
 

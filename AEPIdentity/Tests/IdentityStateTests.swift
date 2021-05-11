@@ -1039,8 +1039,8 @@ class IdentityStateTests: XCTestCase {
 
         // test
         state.resetIdentifiers(event: resetEvent, createSharedState: { (data, _) in
-            // verify ECID has changed
-            XCTAssertNotNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
+            // verify ECID has not been regenerated
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
             XCTAssertNotEqual(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
             XCTAssertNil(data[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
             sharedStateExpectation.fulfill()
