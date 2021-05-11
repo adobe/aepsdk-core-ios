@@ -21,4 +21,10 @@ public struct RuleConsequence {
     public var eventData: [String: Any?]? {
         return details["eventdata"] as? [String: Any?]
     }
+
+    public init(id: String, type: String, details: [String: Any?]) {
+        self.id = id
+        self.type = type
+        self.details = details
+    }
 }
