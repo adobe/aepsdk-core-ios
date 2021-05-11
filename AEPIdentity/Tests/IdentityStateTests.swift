@@ -1019,7 +1019,7 @@ class IdentityStateTests: XCTestCase {
     func testResetIdentitiesOptedOut() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
-
+        sharedStateExpectation.isInverted = true
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue] as [String: Any]
@@ -1032,10 +1032,6 @@ class IdentityStateTests: XCTestCase {
 
         // test
         state.resetIdentifiers(event: resetEvent, createSharedState: { (data, _) in
-            // verify ECID has not been regenerated
-            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
-            XCTAssertNotEqual(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
-            XCTAssertNil(data[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
             sharedStateExpectation.fulfill()
         })
 

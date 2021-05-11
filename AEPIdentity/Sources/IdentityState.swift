@@ -290,12 +290,14 @@ class IdentityState {
     ///   - createSharedState: function which creates new shared states
     func resetIdentifiers(event: Event,
                           createSharedState: ([String: Any], Event) -> Void) {
+        guard identityProperties.privacyStatus != .optedOut else { return }
         // clear the properties
         identityProperties = IdentityProperties()
         pushIdManager.updatePushId(pushId: nil)
         // do a force sync to generate ECID, then save the properties to persistence.
-        _ = syncIdentifiers(event: event)
-        createSharedState(identityProperties.toEventData(), event)
+        if let data = syncIdentifiers(event: event) {
+            createSharedState(data, event)
+        }
     }
 
     // MARK: Private APIs
