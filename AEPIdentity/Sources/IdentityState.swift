@@ -294,11 +294,11 @@ class IdentityState {
                           eventDispatcher: (Event) -> Void) {
         // clear the properties
         identityProperties = IdentityProperties()
-
-        // this will see that ECID is nil, generate a new ECID, and do a force sync, then save the properties to persistence.
-        if syncIdentifiers(event: event) != nil {
-            createSharedState(identityProperties.toEventData(), event)
-        }
+        pushIdManager.updatePushId(pushId: nil)
+        identityProperties.ecid = ECID()
+        // do a force sync, then save the properties to persistence.
+        _ = syncIdentifiers(event: event)
+        createSharedState(identityProperties.toEventData(), event)
 
         // dispatch reset complete event
         let event = Event(name: IdentityConstants.EventNames.RESET_IDENTITIES_COMPLETE,
