@@ -292,9 +292,5 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotEqual(previousEcid.ecidString, identity.state?.identityProperties.ecid?.ecidString)
         let sharedState = mockRuntime.createdSharedStates.first!
         XCTAssertEqual(identity.state?.identityProperties.ecid?.ecidString, sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
-
-        let dispatchedEvent = mockRuntime.dispatchedEvents.last!
-        XCTAssertEqual(EventType.identity, dispatchedEvent.type)
-        XCTAssertEqual(EventSource.resetComplete, dispatchedEvent.source)
     }
 }
