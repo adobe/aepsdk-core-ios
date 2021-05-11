@@ -288,23 +288,14 @@ class IdentityState {
     /// - Parameters:
     ///   - event: event which triggered the reset call
     ///   - createSharedState: function which creates new shared states
-    ///   - eventDispatcher: function which dispatches a new `Event`
     func resetIdentifiers(event: Event,
-                          createSharedState: ([String: Any], Event) -> Void,
-                          eventDispatcher: (Event) -> Void) {
+                          createSharedState: ([String: Any], Event) -> Void) {
         // clear the properties
         identityProperties = IdentityProperties()
         pushIdManager.updatePushId(pushId: nil)
         // do a force sync to generate ECID, then save the properties to persistence.
         _ = syncIdentifiers(event: event)
         createSharedState(identityProperties.toEventData(), event)
-
-        // dispatch reset complete event
-        let event = Event(name: IdentityConstants.EventNames.RESET_IDENTITIES_COMPLETE,
-                          type: EventType.identity,
-                          source: EventSource.resetComplete,
-                          data: nil)
-        eventDispatcher(event)
     }
 
     // MARK: Private APIs

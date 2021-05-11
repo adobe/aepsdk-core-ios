@@ -991,7 +991,6 @@ class IdentityStateTests: XCTestCase {
     func testResetIdentities() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
-        let eventExpectation = XCTestExpectation(description: "Reset complete event should be dispatched")
 
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -1010,22 +1009,16 @@ class IdentityStateTests: XCTestCase {
             XCTAssertNotEqual(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
             XCTAssertNil(data[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
             sharedStateExpectation.fulfill()
-        }) { (event) in
-            // verify reset complete event
-            XCTAssertEqual(EventType.identity, event.type)
-            XCTAssertEqual(EventSource.resetComplete, event.source)
-            eventExpectation.fulfill()
-        }
+        })
 
         // verify
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
-        wait(for: [sharedStateExpectation, eventExpectation], timeout: 0.5)
+        wait(for: [sharedStateExpectation], timeout: 0.5)
     }
 
     func testResetIdentitiesOptedOut() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
-        let eventExpectation = XCTestExpectation(description: "Reset complete event should be dispatched")
 
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -1044,16 +1037,11 @@ class IdentityStateTests: XCTestCase {
             XCTAssertNotEqual(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
             XCTAssertNil(data[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
             sharedStateExpectation.fulfill()
-        }) { (event) in
-            // verify reset complete event
-            XCTAssertEqual(EventType.identity, event.type)
-            XCTAssertEqual(EventSource.resetComplete, event.source)
-            eventExpectation.fulfill()
-        }
+        })
 
         // verify
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
-        wait(for: [sharedStateExpectation, eventExpectation], timeout: 0.5)
+        wait(for: [sharedStateExpectation], timeout: 0.5)
     }
 }
 

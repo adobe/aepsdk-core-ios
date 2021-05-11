@@ -172,8 +172,7 @@ import Foundation
     /// - Parameter event: the identity request reset event
     private func handleRequestReset(event: Event) {
         state?.resetIdentifiers(event: event,
-                                createSharedState: createSharedState(data:event:),
-                                eventDispatcher: dispatch(event:))
+                                createSharedState: createSharedState(data:event:))
     }
 
     // MARK: Event Handlers
