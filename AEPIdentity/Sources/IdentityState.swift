@@ -284,7 +284,7 @@ class IdentityState {
     }
 
     /// Clears all identities and regenerates a new ECID value.
-    /// Saves identities to persistence and creates a new shared state and dispatches a new` resetComplete` event after operation completes.
+    /// Saves identities to persistence and creates a new shared state.
     /// - Parameters:
     ///   - event: event which triggered the reset call
     ///   - createSharedState: function which creates new shared states
@@ -292,8 +292,15 @@ class IdentityState {
                           createSharedState: ([String: Any], Event) -> Void) {
         guard identityProperties.privacyStatus != .optedOut else { return }
         // clear the properties
-        identityProperties = IdentityProperties()
+        identityProperties.ecid = nil
+        identityProperties.advertisingIdentifier = nil
+        identityProperties.blob = nil
+        identityProperties.locationHint = nil
+        identityProperties.customerIds?.removeAll()
+        identityProperties.isAidSynced = false
+        identityProperties.pushIdentifier = nil
         pushIdManager.updatePushId(pushId: nil)
+        
         // do a force sync to generate ECID, then save the properties to persistence.
         if let data = syncIdentifiers(event: event) {
             createSharedState(data, event)

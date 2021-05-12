@@ -272,7 +272,7 @@ class IdentityFunctionalTests: XCTestCase {
 
     // MARK: handleRequestReset(...) tests
 
-    /// Tests that when Identity gets a reset request that it resets the persisted identifiers and dispatches complete event
+    /// Tests that when Identity gets a reset request that it resets the persisted identifiers and does not dispatch a complete event
     func testHandleRequestReset() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
