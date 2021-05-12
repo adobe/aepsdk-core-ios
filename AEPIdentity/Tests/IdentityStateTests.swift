@@ -633,6 +633,42 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have been updated
     }
 
+    /// Tests that when a non-opt out response is handled with a non-matching ECID that we don't update the last sync and other identity properties, along with dispatching two identity events
+    func testHandleHitResponseMismatchECID() {
+        // setup
+        let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
+        dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
+        dispatchedEventExpectation.assertForOverFulfill = true
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated since the blob/hint are updated.")
+        sharedStateExpectation.assertForOverFulfill = true
+        sharedStateExpectation.isInverted = true
+
+        var props = IdentityProperties()
+        props.lastSync = Date()
+        props.privacyStatus = .optedIn
+        props.ecid = ECID()
+        let hit = IdentityHit.fakeHit()
+        // use different ECID
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: ECID().ecidString, error: nil, optOutList: nil)
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+
+        // test
+        state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
+            XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
+            dispatchedEventExpectation.fulfill()
+        }) { _, _ in
+            sharedStateExpectation.fulfill()
+        }
+
+        // verify
+        wait(for: [dispatchedEventExpectation], timeout: 1)
+        XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
+        XCTAssertNotEqual(hitResponse.blob, state.identityProperties.blob) // blob should have not been updated
+        XCTAssertNotEqual("\(String(describing: hitResponse.hint!))", state.identityProperties.locationHint) // locationHint should have not been updated
+        XCTAssertNotEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have not been updated
+    }
+
     /// When the opt-out list in the response is not empty that we dispatch a configuration event setting the privacy to opt out
     func testHandleHitResponseOptOutList() {
         // setup
