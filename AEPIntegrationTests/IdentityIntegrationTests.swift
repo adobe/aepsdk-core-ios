@@ -204,4 +204,45 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [requestExpectation], timeout: 2)
     }
 
+    /// Tests that when we set the identifiers, adId, pushId, then reset that we generate a new ECID and clear the existing ids
+    func testResetIdentities() {
+        initExtensionsAndWait()
+
+        let requestExpectation = XCTestExpectation(description: "advertising identifier sync request")
+        requestExpectation.expectedFulfillmentCount = 5 // bootup, syncId, setAdId, setPushId, reset
+        requestExpectation.assertForOverFulfill = true
+        let mockNetworkService = TestableNetworkService()
+        ServiceProvider.shared.networkService = mockNetworkService
+
+        let counter = AtomicCounter()
+
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+
+        Identity.getExperienceCloudId { (firstEcid, _) in
+            mockNetworkService.mock { request in
+                if counter.incrementAndGet() == 5 {
+                    // assert new ECID
+                    Identity.getExperienceCloudId { (secondEcid, _) in
+                        XCTAssertNotEqual(firstEcid, secondEcid)
+                        XCTAssertTrue(request.url.absoluteString.contains(secondEcid!))
+                        XCTAssertFalse(request.url.absoluteString.contains(firstEcid!))
+                        XCTAssertFalse(request.url.absoluteString.contains("d_cid_ic=DSID_20915%2501adid%25011")) // ad  id cleared
+                        XCTAssertFalse(request.url.absoluteString.contains("test-id")) // identifiers should have been cleared
+                        XCTAssertFalse(request.url.absoluteString.contains("d_cid=20920%25013935313632353862363233306166646439336366306364303762386464383435")) // push id cleared
+                    }
+                }
+                requestExpectation.fulfill()
+                return nil
+            }
+
+            MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+            Identity.syncIdentifier(identifierType: "test-type", identifier: "test-id", authenticationState: .authenticated)
+            MobileCore.setAdvertisingIdentifier("adid")
+            MobileCore.setPushIdentifier("9516258b6230afdd93cf0cd07b8dd845".data(using: .utf8))
+            MobileCore.resetIdentities()
+        }
+
+        wait(for: [requestExpectation], timeout: 2)
+    }
+
 }
