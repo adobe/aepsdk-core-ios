@@ -1024,9 +1024,6 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue] as [String: Any]
         state.lastValidConfig = configSharedState
-        let startingEcid = ECID()
-        state.identityProperties.ecid = startingEcid
-        state.identityProperties.advertisingIdentifier = "test-ad-id"
 
         let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
 
