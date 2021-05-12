@@ -611,8 +611,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: nil)
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: nil, optOutList: nil)
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -644,8 +645,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: nil, optOutList: ["optOut"])
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -676,8 +678,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: "err message", optOutList: nil)
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: "err message", optOutList: nil)
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -708,8 +711,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedOut
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: nil, optOutList: ["optOut"])
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -1066,7 +1070,7 @@ private extension IdentityHit {
 }
 
 private extension IdentityHitResponse {
-    static func fakeHitResponse(error: String?, optOutList: [String]?) -> IdentityHitResponse {
-        return IdentityHitResponse(blob: "response-test-blob", ecid: "response-test-ecid", hint: 6, error: error, ttl: 3000, optOutList: optOutList)
+    static func fakeHitResponse(ecid: String, error: String?, optOutList: [String]?) -> IdentityHitResponse {
+        return IdentityHitResponse(blob: "response-test-blob", ecid: ecid, hint: 6, error: error, ttl: 3000, optOutList: optOutList)
     }
 }

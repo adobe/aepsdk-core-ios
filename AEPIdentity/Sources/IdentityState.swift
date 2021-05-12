@@ -400,7 +400,8 @@ class IdentityState {
             return
         }
 
-        if let ecid = identityResponse.ecid, !ecid.isEmpty {
+        // only update stored properties if the ECID in the response matches what we have locally
+        if let ecid = identityResponse.ecid, !ecid.isEmpty, ecid == identityProperties.ecid?.ecidString {
             let stringHint: String? = identityResponse.hint == nil ? nil : "\(String(describing: identityResponse.hint!))"
             let shouldShareState = identityResponse.blob != identityProperties.blob || stringHint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
