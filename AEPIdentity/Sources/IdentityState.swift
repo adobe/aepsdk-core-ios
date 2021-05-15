@@ -299,7 +299,6 @@ class IdentityState {
         identityProperties.customerIds?.removeAll()
         identityProperties.isAidSynced = false
         identityProperties.pushIdentifier = nil
-        pushIdManager.updatePushId(pushId: nil)
 
         // do a force sync to generate ECID, then save the properties to persistence.
         if let data = syncIdentifiers(event: event) {
