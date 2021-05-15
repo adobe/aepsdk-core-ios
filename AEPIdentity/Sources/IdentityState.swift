@@ -409,6 +409,8 @@ class IdentityState {
             if shouldShareState {
                 createSharedState(identityProperties.toEventData(), event)
             }
+        } else {
+            Log.trace(label: LOG_TAG, "Ignoring response for ECID: \(String(describing: identityResponse.ecid)) as it is either nil or does not match the ECID we have stored locally (\(String(describing: identityProperties.ecid?.ecidString)))")
         }
     }
 }
