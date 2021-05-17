@@ -110,7 +110,7 @@ public class MockSystemInfoService: SystemInfoService {
     public func getDisplayInformation() -> (width: Int, height: Int) {
         return displayInformation
     }
-    
+
     public var deviceModelNumber: String = ""
     public func getDeviceModelNumber() -> String {
         return deviceModelNumber

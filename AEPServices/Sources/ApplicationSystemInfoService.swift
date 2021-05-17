@@ -169,7 +169,7 @@ class ApplicationSystemInfoService: SystemInfoService {
         if UIDevice.current.orientation.isLandscape {return .LANDSCAPE}
         return .UNKNOWN
     }
-    
+
     func getDeviceModelNumber() -> String {
         var size = 0
         sysctlbyname("hw.model", nil, &size, nil, 0)

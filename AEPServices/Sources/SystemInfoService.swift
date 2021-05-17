@@ -94,7 +94,7 @@ public protocol SystemInfoService {
     /// Returns the current orientation of the device
     /// - Return: `DeviceOrientation` the current orientation of the device
     func getCurrentOrientation() -> DeviceOrientation
-    
+
     /// Returns the current device model number
     /// - Return: `String` representation of the current model number of the device
     func getDeviceModelNumber() -> String
