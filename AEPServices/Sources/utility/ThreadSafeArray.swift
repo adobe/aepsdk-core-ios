@@ -35,6 +35,17 @@ public final class ThreadSafeArray<T> {
             self.array.removeAll()
         }
     }
+    
+    /// Removes and returns the first element of the thread safe array.
+    /// Return nil if the array is empty
+    public func removeFirst() -> T? {
+        queue.sync {
+            if (!array.isEmpty) {
+                return self.array.removeFirst()
+            }
+            return nil
+        }
+    }
 
     /// Returns if the array is empty or not
     public var isEmpty: Bool {

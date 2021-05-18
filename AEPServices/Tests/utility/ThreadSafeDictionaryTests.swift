@@ -36,6 +36,7 @@ class ThreadSafeDictionaryTests: XCTestCase {
 
         // verify
         XCTAssert(threadSafeDict.count == count / 4)
+        XCTAssert(threadSafeDict.keys.count == count / 4)
     }
 
     /// Tests many queues that concurrently write and read to the dictionary
