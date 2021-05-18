@@ -209,7 +209,7 @@ class IdentityIntegrationTests: XCTestCase {
         initExtensionsAndWait()
 
         let requestExpectation = XCTestExpectation(description: "advertising identifier sync request")
-        requestExpectation.expectedFulfillmentCount = 5 // bootup, syncId, setAdId, setPushId, reset
+        requestExpectation.expectedFulfillmentCount = 5 // bootup, syncId, setAdId, reset
         requestExpectation.assertForOverFulfill = true
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
@@ -220,7 +220,7 @@ class IdentityIntegrationTests: XCTestCase {
 
         Identity.getExperienceCloudId { (firstEcid, _) in
             mockNetworkService.mock { request in
-                if counter.incrementAndGet() == 5 {
+                if counter.incrementAndGet() == requestExpectation.expectedFulfillmentCount {
                     // assert new ECID
                     Identity.getExperienceCloudId { (secondEcid, _) in
                         XCTAssertNotEqual(firstEcid, secondEcid)
