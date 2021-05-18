@@ -28,7 +28,7 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     public var count: Int {
         return queue.sync { return self.dictionary.keys.count }
     }
-    
+
     /// A collection containing just the keys of the dictionary.
     public var keys: [K] {
         return queue.sync { return Array(self.dictionary.keys) }
