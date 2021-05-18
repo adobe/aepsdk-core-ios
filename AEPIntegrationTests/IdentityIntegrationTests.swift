@@ -243,7 +243,7 @@ class IdentityIntegrationTests: XCTestCase {
             MobileCore.resetIdentities()
         }
 
-        wait(for: [requestExpectation], timeout: 5)
+        wait(for: [requestExpectation], timeout: 15)
     }
 
 }
