@@ -36,7 +36,6 @@ class ThreadSafeDictionaryTests: XCTestCase {
 
         // verify
         XCTAssert(threadSafeDict.count == count / 4)
-        XCTAssert(threadSafeDict.keys.count == count / 4)
     }
 
     /// Tests many queues that concurrently write and read to the dictionary
@@ -138,6 +137,20 @@ class ThreadSafeDictionaryTests: XCTestCase {
         testDictionary.shallowCopy.values.forEach {
             XCTAssertEqual(testDictionary[$0], $0)
         }
+    }
+    
+    func testGetKeys() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+        
+        // get keys on empty dictionary
+        XCTAssertEqual(testDictionary.keys,[])
+        
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+        
+        XCTAssertEqual(testDictionary.keys.count, count)
     }
 
     private func dispatchSyncWithDict(i: Int) {
