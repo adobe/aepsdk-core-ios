@@ -301,7 +301,7 @@ class IdentityState {
         identityProperties.pushIdentifier = nil
         pushIdManager.resetPersistedFlags()
         hitQueue.clear() // clear hit queue
-        
+
         // do a force sync to generate ECID, then save the properties to persistence.
         if let data = syncIdentifiers(event: event) {
             createSharedState(data, event)

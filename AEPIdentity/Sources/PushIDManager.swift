@@ -69,7 +69,7 @@ struct PushIDManager: PushIDManageable {
             updatePushStatusAndSendAnalyticsEvent(enabled: true)
         }
     }
-    
+
     mutating func resetPersistedFlags() {
         pushEnabled = false
         analyticsSynced = false

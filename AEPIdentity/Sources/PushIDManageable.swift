@@ -24,7 +24,7 @@ protocol PushIDManageable {
     /// Updates the push identifier
     /// - Parameter pushId: the new push identifier
     mutating func updatePushId(pushId: String?)
-    
+
     /// Resets persisted push flags to false
     mutating func resetPersistedFlags()
 }

@@ -27,10 +27,10 @@ class MockPushIDManager: PushIDManageable {
         calledUpdatePushId = true
         calledUpdatePushIdWithArg = pushId
     }
-    
+
     var calledResetPersistedFlags = false
     func resetPersistedFlags() {
         calledResetPersistedFlags = true
     }
-    
+
 }
