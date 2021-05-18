@@ -211,7 +211,7 @@ class IdentityIntegrationTests: XCTestCase {
         let requestExpectation = XCTestExpectation(description: "advertising identifier sync request")
         requestExpectation.expectedFulfillmentCount = 5
         requestExpectation.assertForOverFulfill = true
-        
+
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         let counter = AtomicCounter()
