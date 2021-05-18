@@ -239,4 +239,22 @@ class PushIDManagerTests: XCTestCase {
         XCTAssertNotEqual(existingProps.pushIdentifier, props.pushIdentifier)
         XCTAssertFalse(pushEnabled)
     }
+    
+    func testResetPersistedFlags() {
+        // setup
+        ServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.PUSH_ENABLED, value: true)
+        ServiceProvider.shared.namedKeyValueService.set(collectionName: "TestCollection", key: IdentityConstants.DataStoreKeys.ANALYTICS_PUSH_SYNC, value: true)
+        
+        pushIdManager = PushIDManager(dataStore: NamedCollectionDataStore(name: "TestCollection"), eventDispatcher: { event in
+        })
+        
+        // test
+        pushIdManager.resetPersistedFlags()
+        
+        // verify
+        XCTAssertFalse(ServiceProvider.shared.namedKeyValueService.get(collectionName: "TestCollection",
+                                                                       key: IdentityConstants.DataStoreKeys.PUSH_ENABLED) as! Bool)
+        XCTAssertFalse(ServiceProvider.shared.namedKeyValueService.get(collectionName: "TestCollection",
+                                                                       key: IdentityConstants.DataStoreKeys.ANALYTICS_PUSH_SYNC) as! Bool)
+    }
 }

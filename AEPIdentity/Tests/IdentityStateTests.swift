@@ -1052,7 +1052,8 @@ class IdentityStateTests: XCTestCase {
         })
 
         // verify
-        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty) // hit should be queued in the hit queue
+        XCTAssertTrue(mockHitQueue.calledClear)
+        XCTAssertTrue(mockPushIdManager.calledResetPersistedFlags)
         wait(for: [sharedStateExpectation], timeout: 0.5)
     }
 
