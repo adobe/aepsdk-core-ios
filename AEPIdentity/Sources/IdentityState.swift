@@ -283,6 +283,31 @@ class IdentityState {
         }
     }
 
+    /// Clears all identities and regenerates a new ECID value.
+    /// Saves identities to persistence and creates a new shared state.
+    /// - Parameters:
+    ///   - event: event which triggered the reset call
+    ///   - createSharedState: function which creates new shared states
+    func resetIdentifiers(event: Event,
+                          createSharedState: ([String: Any], Event) -> Void) {
+        guard identityProperties.privacyStatus != .optedOut else { return }
+        // clear the properties
+        identityProperties.ecid = nil
+        identityProperties.advertisingIdentifier = nil
+        identityProperties.blob = nil
+        identityProperties.locationHint = nil
+        identityProperties.customerIds?.removeAll()
+        identityProperties.isAidSynced = false
+        identityProperties.pushIdentifier = nil
+        pushIdManager.resetPersistedFlags()
+        hitQueue.clear() // clear hit queue
+
+        // do a force sync to generate ECID, then save the properties to persistence.
+        if let data = syncIdentifiers(event: event) {
+            createSharedState(data, event)
+        }
+    }
+
     // MARK: Private APIs
 
     /// Inspects the current configuration to determine if a sync can be made, this is determined by if a valid org id is present and if the privacy is not set to opted-out
@@ -376,7 +401,8 @@ class IdentityState {
             return
         }
 
-        if let ecid = identityResponse.ecid, !ecid.isEmpty {
+        // only update stored properties if the ECID in the response matches what we have locally
+        if let ecid = identityResponse.ecid, !ecid.isEmpty, ecid == identityProperties.ecid?.ecidString {
             let stringHint: String? = identityResponse.hint == nil ? nil : "\(String(describing: identityResponse.hint!))"
             let shouldShareState = identityResponse.blob != identityProperties.blob || stringHint != identityProperties.locationHint
             identityProperties.blob = identityResponse.blob
@@ -385,6 +411,8 @@ class IdentityState {
             if shouldShareState {
                 createSharedState(identityProperties.toEventData(), event)
             }
+        } else {
+            Log.trace(label: LOG_TAG, "Ignoring response for ECID: \(String(describing: identityResponse.ecid)) as it is either nil or does not match the ECID we have stored locally (\(String(describing: identityProperties.ecid?.ecidString)))")
         }
     }
 }

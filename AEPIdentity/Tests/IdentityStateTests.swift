@@ -611,8 +611,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: nil)
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: nil, optOutList: nil)
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -632,6 +633,43 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have been updated
     }
 
+    /// Tests that when a non-opt out response is handled with a non-matching ECID that we don't update the last sync and other identity properties, along with dispatching two identity events.
+    /// This situation can usually happen if a network response is handled at the same time as the resetIdentities request.
+    func testHandleHitResponseMismatchECID() {
+        // setup
+        let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
+        dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
+        dispatchedEventExpectation.assertForOverFulfill = true
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated since the blob/hint are updated.")
+        sharedStateExpectation.assertForOverFulfill = true
+        sharedStateExpectation.isInverted = true
+
+        var props = IdentityProperties()
+        props.lastSync = Date()
+        props.privacyStatus = .optedIn
+        props.ecid = ECID()
+        let hit = IdentityHit.fakeHit()
+        // use different ECID
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: ECID().ecidString, error: nil, optOutList: nil)
+
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+
+        // test
+        state.handleHitResponse(hit: hit, response: try! JSONEncoder().encode(hitResponse), eventDispatcher: { event in
+            XCTAssertEqual(state.identityProperties.toEventData().count, event.data?.count) // event should contain the identity properties in the event data
+            dispatchedEventExpectation.fulfill()
+        }) { _, _ in
+            sharedStateExpectation.fulfill()
+        }
+
+        // verify
+        wait(for: [dispatchedEventExpectation], timeout: 1)
+        XCTAssertNotEqual(props.lastSync, state.identityProperties.lastSync) // sync should be updated regardless of response
+        XCTAssertNotEqual(hitResponse.blob, state.identityProperties.blob) // blob should have not been updated
+        XCTAssertNotEqual("\(String(describing: hitResponse.hint!))", state.identityProperties.locationHint) // locationHint should have not been updated
+        XCTAssertNotEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have not been updated
+    }
+
     /// When the opt-out list in the response is not empty that we dispatch a configuration event setting the privacy to opt out
     func testHandleHitResponseOptOutList() {
         // setup
@@ -644,8 +682,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: nil, optOutList: ["optOut"])
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -676,8 +715,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedIn
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: "err message", optOutList: nil)
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: "err message", optOutList: nil)
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -708,8 +748,9 @@ class IdentityStateTests: XCTestCase {
         var props = IdentityProperties()
         props.lastSync = Date()
         props.privacyStatus = .optedOut
+        props.ecid = ECID()
         let hit = IdentityHit.fakeHit()
-        let hitResponse = IdentityHitResponse.fakeHitResponse(error: nil, optOutList: ["optOut"])
+        let hitResponse = IdentityHitResponse.fakeHitResponse(ecid: props.ecid!.ecidString, error: nil, optOutList: ["optOut"])
 
         state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
 
@@ -987,6 +1028,66 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(state.identityProperties.isAidSynced == true)
         XCTAssertEqual(1, mockDataStore.dict.count) // identity properties should not be saved to persistence
     }
+
+    func testResetIdentities() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        state.lastValidConfig = configSharedState
+        let startingEcid = ECID()
+        state.identityProperties.ecid = startingEcid
+        state.identityProperties.advertisingIdentifier = "test-ad-id"
+        state.identityProperties.blob = "test-blob"
+        state.identityProperties.locationHint = "test-hint"
+        state.identityProperties.customerIds = [CustomIdentity(origin: "test-origin", type: "test-typ", identifier: "test-type", authenticationState: .loggedOut)]
+        state.identityProperties.isAidSynced = true
+        state.identityProperties.pushIdentifier = "test-push-id"
+        state.identityProperties.lastSync = Date()
+
+        let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
+
+        // test
+        state.resetIdentifiers(event: resetEvent, createSharedState: { (data, _) in
+            // verify ECID has changed
+            XCTAssertNotNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
+            XCTAssertNotEqual(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER]) // push id should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB]) // blob should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT]) // hint should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST]) // id list should have been cleared
+            XCTAssertNotNil(data[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC]) // last sync still present
+
+            sharedStateExpectation.fulfill()
+        })
+
+        // verify
+        XCTAssertTrue(mockHitQueue.calledClear)
+        XCTAssertTrue(mockPushIdManager.calledResetPersistedFlags)
+        wait(for: [sharedStateExpectation], timeout: 0.5)
+    }
+
+    func testResetIdentitiesOptedOut() {
+        // setup
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated once")
+        sharedStateExpectation.isInverted = true
+        state.identityProperties.privacyStatus = .optedOut
+        let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
+
+        // test
+        state.resetIdentifiers(event: resetEvent, createSharedState: { (data, _) in
+            sharedStateExpectation.fulfill()
+        })
+
+        // verify
+        XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+        XCTAssertFalse(mockHitQueue.calledClear)
+        XCTAssertFalse(mockPushIdManager.calledResetPersistedFlags)
+        wait(for: [sharedStateExpectation], timeout: 0.5)
+    }
 }
 
 private extension Event {
@@ -1017,7 +1118,7 @@ private extension IdentityHit {
 }
 
 private extension IdentityHitResponse {
-    static func fakeHitResponse(error: String?, optOutList: [String]?) -> IdentityHitResponse {
-        return IdentityHitResponse(blob: "response-test-blob", ecid: "response-test-ecid", hint: 6, error: error, ttl: 3000, optOutList: optOutList)
+    static func fakeHitResponse(ecid: String, error: String?, optOutList: [String]?) -> IdentityHitResponse {
+        return IdentityHitResponse(blob: "response-test-blob", ecid: ecid, hint: 6, error: error, ttl: 3000, optOutList: optOutList)
     }
 }
