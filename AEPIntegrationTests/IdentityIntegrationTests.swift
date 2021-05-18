@@ -237,14 +237,13 @@ class IdentityIntegrationTests: XCTestCase {
                 return nil
             }
 
-            MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
             Identity.syncIdentifier(identifierType: "test-type", identifier: "test-id", authenticationState: .authenticated)
             MobileCore.setAdvertisingIdentifier("adid")
             MobileCore.setPushIdentifier("9516258b6230afdd93cf0cd07b8dd845".data(using: .utf8))
             MobileCore.resetIdentities()
         }
 
-        wait(for: [requestExpectation], timeout: 2)
+        wait(for: [requestExpectation], timeout: 5)
     }
 
 }
