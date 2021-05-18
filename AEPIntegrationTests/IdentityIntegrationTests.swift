@@ -246,7 +246,7 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.setPushIdentifier("9516258b6230afdd93cf0cd07b8dd845".data(using: .utf8))
         MobileCore.resetIdentities()
 
-        wait(for: [requestExpectation], timeout: 5)
+        wait(for: [requestExpectation], timeout: 15)
     }
 
 }
