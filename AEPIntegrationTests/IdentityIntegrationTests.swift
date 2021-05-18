@@ -209,11 +209,11 @@ class IdentityIntegrationTests: XCTestCase {
         initExtensionsAndWait()
 
         let requestExpectation = XCTestExpectation(description: "advertising identifier sync request")
-        requestExpectation.expectedFulfillmentCount = 5 // bootup, syncId, setAdId, reset
+        requestExpectation.expectedFulfillmentCount = 5
         requestExpectation.assertForOverFulfill = true
+        
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
-
         let counter = AtomicCounter()
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
@@ -229,9 +229,11 @@ class IdentityIntegrationTests: XCTestCase {
                         XCTAssertFalse(request.url.absoluteString.contains("d_cid_ic=DSID_20915%2501adid%25011")) // ad  id cleared
                         XCTAssertFalse(request.url.absoluteString.contains("test-id")) // identifiers should have been cleared
                         XCTAssertFalse(request.url.absoluteString.contains("d_cid=20920%25013935313632353862363233306166646439336366306364303762386464383435")) // push id cleared
+                        requestExpectation.fulfill()
                     }
+                } else {
+                    requestExpectation.fulfill()
                 }
-                requestExpectation.fulfill()
                 return nil
             }
 
