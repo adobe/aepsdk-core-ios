@@ -282,6 +282,7 @@ class IdentityFunctionalTests: XCTestCase {
 
         let previousEcid = ECID()
         identity.state?.identityProperties.ecid = previousEcid
+        identity.state?.identityProperties.lastSync = Date()
 
         let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
 
@@ -292,5 +293,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotEqual(previousEcid.ecidString, identity.state?.identityProperties.ecid?.ecidString)
         let sharedState = mockRuntime.createdSharedStates.first!
         XCTAssertEqual(identity.state?.identityProperties.ecid?.ecidString, sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
+        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC])
     }
 }

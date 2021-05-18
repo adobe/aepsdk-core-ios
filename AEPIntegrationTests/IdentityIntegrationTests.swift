@@ -213,34 +213,45 @@ class IdentityIntegrationTests: XCTestCase {
         props.saveToPersistence()
 
         initExtensionsAndWait()
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        waitForBootupHit()
 
-        let requestExpectation = XCTestExpectation(description: "identity hits go out")
-        requestExpectation.expectedFulfillmentCount = 2
-        requestExpectation.assertForOverFulfill = true
+        let resetHitExpectation = XCTestExpectation(description: "new sync from reset identities")
+        resetHitExpectation.assertForOverFulfill = true
 
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
 
-        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-
-        let counter = AtomicCounter()
         mockNetworkService.mock { request in
-            if counter.incrementAndGet() == requestExpectation.expectedFulfillmentCount {
-                // assert new ECID on last hit
-                props.loadFromPersistence()
-                XCTAssertNotEqual(firstEcid.ecidString, props.ecid?.ecidString)
-                XCTAssertTrue(request.url.absoluteString.contains(props.ecid!.ecidString))
-                XCTAssertFalse(request.url.absoluteString.contains(firstEcid.ecidString))
-            }
+            // assert new ECID on last hit
+            props.loadFromPersistence()
+            XCTAssertNotEqual(firstEcid.ecidString, props.ecid?.ecidString)
+            XCTAssertTrue(request.url.absoluteString.contains(props.ecid!.ecidString))
+            XCTAssertFalse(request.url.absoluteString.contains(firstEcid.ecidString))
 
-            requestExpectation.fulfill()
+            resetHitExpectation.fulfill()
             return nil
         }
 
         // test
         MobileCore.resetIdentities()
 
-        wait(for: [requestExpectation], timeout: 15)
+        wait(for: [resetHitExpectation], timeout: 15)
+    }
+
+    private func waitForBootupHit() {
+        let bootupExpectation = XCTestExpectation(description: "bootup hit goes out")
+
+        let mockNetworkService = TestableNetworkService()
+        ServiceProvider.shared.networkService = mockNetworkService
+
+        mockNetworkService.mock { request in
+            mockNetworkService.resolvers.removeAll()
+            bootupExpectation.fulfill()
+            return nil
+        }
+
+        wait(for: [bootupExpectation], timeout: 2)
     }
 
 }

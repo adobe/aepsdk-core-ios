@@ -633,7 +633,8 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(hitResponse.ttl, state.identityProperties.ttl) // ttl should have been updated
     }
 
-    /// Tests that when a non-opt out response is handled with a non-matching ECID that we don't update the last sync and other identity properties, along with dispatching two identity events
+    /// Tests that when a non-opt out response is handled with a non-matching ECID that we don't update the last sync and other identity properties, along with dispatching two identity events.
+    /// This situation can usually happen if a network response is handled at the same time as the resetIdentities request.
     func testHandleHitResponseMismatchECID() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
@@ -1039,6 +1040,12 @@ class IdentityStateTests: XCTestCase {
         let startingEcid = ECID()
         state.identityProperties.ecid = startingEcid
         state.identityProperties.advertisingIdentifier = "test-ad-id"
+        state.identityProperties.blob = "test-blob"
+        state.identityProperties.locationHint = "test-hint"
+        state.identityProperties.customerIds = [CustomIdentity(origin: "test-origin", type: "test-typ", identifier: "test-type", authenticationState: .loggedOut)]
+        state.identityProperties.isAidSynced = true
+        state.identityProperties.pushIdentifier = "test-push-id"
+        state.identityProperties.lastSync = Date()
 
         let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
 
@@ -1048,6 +1055,12 @@ class IdentityStateTests: XCTestCase {
             XCTAssertNotNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
             XCTAssertNotEqual(data[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String, startingEcid.ecidString)
             XCTAssertNil(data[IdentityConstants.EventDataKeys.ADVERTISING_IDENTIFIER]) // ad id should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.PUSH_IDENTIFIER]) // push id should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_BLOB]) // blob should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_ID_LOCATION_HINT]) // hint should have been cleared
+            XCTAssertNil(data[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST]) // id list should have been cleared
+            XCTAssertNotNil(data[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC]) // last sync still present
+
             sharedStateExpectation.fulfill()
         })
 
@@ -1059,13 +1072,9 @@ class IdentityStateTests: XCTestCase {
 
     func testResetIdentitiesOptedOut() {
         // setup
-        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated once")
         sharedStateExpectation.isInverted = true
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
-                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
-                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue] as [String: Any]
-        state.lastValidConfig = configSharedState
-
+        state.identityProperties.privacyStatus = .optedOut
         let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
 
         // test
@@ -1075,6 +1084,8 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
+        XCTAssertFalse(mockHitQueue.calledClear)
+        XCTAssertFalse(mockPushIdManager.calledResetPersistedFlags)
         wait(for: [sharedStateExpectation], timeout: 0.5)
     }
 }
