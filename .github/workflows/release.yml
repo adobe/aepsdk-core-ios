@@ -40,7 +40,7 @@ on:
         default: 'yes'
 
 jobs:
-  release_rules_engine:
+  release_core_bundle:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -77,7 +77,8 @@ jobs:
         echo podspec file verification starts:
         make test-podspec 
         
-    - uses: release-drafter/release-drafter@v5
+#https://github.com/release-drafter/release-drafter/commit/fe52e97d262833ae07d05efaf1a239df3f1b5cd4
+    - uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4
       if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
         name: v${{ github.event.inputs.tag }}
