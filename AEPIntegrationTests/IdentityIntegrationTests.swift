@@ -12,7 +12,7 @@
 import XCTest
 @testable import AEPCore
 @testable import AEPServices
-import AEPIdentity
+@testable import AEPIdentity
 import AEPLifecycle
 import AEPSignal
 
@@ -202,6 +202,56 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setAdvertisingIdentifier("adid")
         wait(for: [requestExpectation], timeout: 2)
+    }
+
+    /// Tests that when we reset the identities we generate a new ECID and send it out
+    func testResetIdentities() {
+        // set first ecid
+        var props = IdentityProperties()
+        let firstEcid = ECID()
+        props.ecid = firstEcid
+        props.saveToPersistence()
+
+        initExtensionsAndWait()
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        waitForBootupHit()
+
+        let resetHitExpectation = XCTestExpectation(description: "new sync from reset identities")
+        resetHitExpectation.assertForOverFulfill = true
+
+        let mockNetworkService = TestableNetworkService()
+        ServiceProvider.shared.networkService = mockNetworkService
+
+        mockNetworkService.mock { request in
+            // assert new ECID on last hit
+            props.loadFromPersistence()
+            XCTAssertNotEqual(firstEcid.ecidString, props.ecid?.ecidString)
+            XCTAssertTrue(request.url.absoluteString.contains(props.ecid!.ecidString))
+            XCTAssertFalse(request.url.absoluteString.contains(firstEcid.ecidString))
+
+            resetHitExpectation.fulfill()
+            return nil
+        }
+
+        // test
+        MobileCore.resetIdentities()
+
+        wait(for: [resetHitExpectation], timeout: 15)
+    }
+
+    private func waitForBootupHit() {
+        let bootupExpectation = XCTestExpectation(description: "bootup hit goes out")
+
+        let mockNetworkService = TestableNetworkService()
+        ServiceProvider.shared.networkService = mockNetworkService
+
+        mockNetworkService.mock { request in
+            mockNetworkService.resolvers.removeAll()
+            bootupExpectation.fulfill()
+            return nil
+        }
+
+        wait(for: [bootupExpectation], timeout: 2)
     }
 
 }
