@@ -138,18 +138,18 @@ class ThreadSafeDictionaryTests: XCTestCase {
             XCTAssertEqual(testDictionary[$0], $0)
         }
     }
-    
+
     func testGetKeys() {
         let count = 100
         let testDictionary = ThreadSafeDictionary<Int, Int>()
-        
+
         // get keys on empty dictionary
         XCTAssertEqual(testDictionary.keys,[])
-        
+
         for i in 0 ..< count {
             testDictionary[i] = i
         }
-        
+
         XCTAssertEqual(testDictionary.keys.count, count)
     }
 
