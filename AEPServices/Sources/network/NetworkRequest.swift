@@ -19,7 +19,7 @@ import Foundation
 
     public let url: URL
     public let httpMethod: HttpMethod
-    public let connectPayload: String
+    public let connectPayload: Data
     public let httpHeaders: [String: String]
     public let connectTimeout: TimeInterval
     public let readTimeout: TimeInterval
@@ -36,7 +36,30 @@ import Foundation
     public init(url: URL, httpMethod: HttpMethod = HttpMethod.get, connectPayload: String = "", httpHeaders: [String: String] = [:], connectTimeout: TimeInterval = 5, readTimeout: TimeInterval = 5) {
         self.url = url
         self.httpMethod = httpMethod
-        self.connectPayload = connectPayload
+        self.connectPayload = connectPayload.data(using: .utf8) ?? Data()
+
+        let systemInfoService = ServiceProvider.shared.systemInfoService
+        let defaultHeaders = [NetworkRequest.REQUEST_HEADER_KEY_USER_AGENT: systemInfoService.getDefaultUserAgent(),
+                              HttpConnectionConstants.Header.HTTP_HEADER_KEY_ACCEPT_LANGUAGE: DefaultHeadersFormatter.formatLocale(systemInfoService.getActiveLocaleName())]
+        self.httpHeaders = defaultHeaders.merging(httpHeaders) { _, new in new } // add in default headers and apply `httpHeaders` on top
+
+        self.connectTimeout = connectTimeout
+        self.readTimeout = readTimeout
+    }
+
+    /// Initialize the `NetworkRequest` to post data.
+    /// This network request defaults to http post 
+    /// - Parameters:
+    ///   - url: URL used to initiate the network connection, should use https scheme
+    ///   - connectPayload: the body of the network request as a String; this parameter is ignored for GET requests
+    ///   - httpHeaders: optional HTTP headers for the request
+    ///   - connectTimeout: optional connect timeout value in seconds; default is 5 seconds
+    ///   - readTimeout: optional read timeout value in seconds, used to wait for a read to finish after a successful connect, default is 5 seconds
+    /// - Returns: an initialized `NetworkRequest` object
+    public init(url: URL, connectPayloadData: Data = Data(), httpHeaders: [String: String] = [:], connectTimeout: TimeInterval = 5, readTimeout: TimeInterval = 5) {
+        self.url = url
+        self.httpMethod = .post
+        self.connectPayload = connectPayloadData
 
         let systemInfoService = ServiceProvider.shared.systemInfoService
         let defaultHeaders = [NetworkRequest.REQUEST_HEADER_KEY_USER_AGENT: systemInfoService.getDefaultUserAgent(),
