@@ -48,10 +48,10 @@ import Foundation
     }
 
     /// Initialize the `NetworkRequest` to post data.
-    /// This network request defaults to http post 
+    /// The instance created from this initializer default to making http post network call.
     /// - Parameters:
     ///   - url: URL used to initiate the network connection, should use https scheme
-    ///   - connectPayload: the body of the network request as a String; this parameter is ignored for GET requests
+    ///   - connectPayloadData: the body of the network request as a String; this parameter is ignored for GET requests
     ///   - httpHeaders: optional HTTP headers for the request
     ///   - connectTimeout: optional connect timeout value in seconds; default is 5 seconds
     ///   - readTimeout: optional read timeout value in seconds, used to wait for a read to finish after a successful connect, default is 5 seconds
