@@ -97,7 +97,8 @@ class JSONCondition: Codable {
             }
             return nil
         case .matcher:
-            if let key = definition.key, let matcher = definition.matcher, let values = definition.values {
+            let values = definition.values ?? []
+            if let key = definition.key, let matcher = definition.matcher {
                 if values.count == 0 {
                     return convert(key: key, matcher: matcher, anyCodable: "")
                 }
