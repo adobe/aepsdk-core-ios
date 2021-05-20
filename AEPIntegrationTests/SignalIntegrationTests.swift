@@ -88,7 +88,7 @@ class SignalIntegrationTests: XCTestCase {
             if request.url.absoluteString.starts(with: "https://www.signal.com") {
                 XCTAssertEqual("https://www.signal.com?name=testPostRequest", request.url.absoluteString)
                 XCTAssertEqual(HttpMethod.post, request.httpMethod)
-                XCTAssertEqual("name=testPostRequest", request.connectPayload)
+                XCTAssertEqual("name=testPostRequest", String(decoding: request.connectPayload, as: UTF8.self))
                 XCTAssertEqual("zip", request.httpHeaders["Content-Type"])
                 XCTAssertEqual(2, request.connectTimeout)
                 XCTAssertEqual(2, request.readTimeout)

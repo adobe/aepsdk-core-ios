@@ -72,7 +72,7 @@ class NetworkService: Networking {
         request.httpMethod = networkRequest.httpMethod.toString()
 
         if !networkRequest.connectPayload.isEmpty, networkRequest.httpMethod == .post {
-            request.httpBody = networkRequest.connectPayload.data(using: .utf8)
+            request.httpBody = networkRequest.connectPayload
         }
 
         for (key, val) in networkRequest.httpHeaders {
