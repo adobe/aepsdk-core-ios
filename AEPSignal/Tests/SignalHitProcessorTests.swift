@@ -71,7 +71,7 @@ class SignalHitProcessorTests: XCTestCase {
             throw SignalHitProcessingError.invalidNetworkRequest
         }
         XCTAssertEqual(testUrl, sentRequest.url)
-        XCTAssertEqual(testPostBody, sentRequest.connectPayload)
+        XCTAssertEqual(testPostBody, String(decoding: sentRequest.connectPayload, as: UTF8.self))
         XCTAssertEqual(HttpMethod.post, sentRequest.httpMethod)
         XCTAssertEqual(testContentType, sentRequest.httpHeaders[NetworkServiceConstants.Headers.CONTENT_TYPE])
         XCTAssertEqual(testTimeout, sentRequest.connectTimeout)
@@ -101,7 +101,7 @@ class SignalHitProcessorTests: XCTestCase {
             throw SignalHitProcessingError.invalidNetworkRequest
         }
         XCTAssertEqual(testUrl, sentRequest.url)
-        XCTAssertEqual("", sentRequest.connectPayload)
+        XCTAssertEqual("", String(decoding: sentRequest.connectPayload, as: UTF8.self))
         XCTAssertEqual(HttpMethod.get, sentRequest.httpMethod)
         XCTAssertNil(sentRequest.httpHeaders[NetworkServiceConstants.Headers.CONTENT_TYPE])
         XCTAssertEqual(testTimeout, sentRequest.connectTimeout)

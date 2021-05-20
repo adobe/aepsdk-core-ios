@@ -52,7 +52,7 @@ import Foundation
     /// - Returns: an initialized `NetworkRequest` object
     public init(url: URL, httpMethod: HttpMethod = HttpMethod.get, connectPayloadData: Data, httpHeaders: [String: String] = [:], connectTimeout: TimeInterval = 5, readTimeout: TimeInterval = 5) {
         self.url = url
-        self.httpMethod = .post
+        self.httpMethod = httpMethod
         self.connectPayload = connectPayloadData
 
         let systemInfoService = ServiceProvider.shared.systemInfoService
