@@ -63,13 +63,9 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
         }
     }
 
-    /// Set the Image for the floating button.
-    /// The size of the floating button is 60x60 (width x height), provide the image data accordingly
-    /// - Parameters:
-    ///     - imageData : The `Data` representation of a UIImage
     public func setButtonImage(imageData: Data) {
+        let image = UIImage(data: imageData)
         DispatchQueue.main.async {
-            let image = UIImage(data: imageData)
             self.buttonImageView?.image = image
         }
     }
