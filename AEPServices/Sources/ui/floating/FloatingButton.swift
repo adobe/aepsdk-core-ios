@@ -63,6 +63,13 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
         }
     }
 
+    public func setButtonImage(imageData: Data) {
+        let image = UIImage(data: imageData)
+        DispatchQueue.main.async {
+            self.buttonImageView?.image = image
+        }
+    }
+
     private func initFloatingButton() -> Bool {
         guard let newFrame: CGRect = getImageFrame() else {
             Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, failed to create a new frame.")

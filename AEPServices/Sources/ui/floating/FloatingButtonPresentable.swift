@@ -16,4 +16,11 @@ import Foundation
 /// Represents a FloatingButton UI element which is both `Showable` and `Dismissible`
 ///
 @objc(AEPFloatingButtonPresentable)
-public protocol FloatingButtonPresentable: Showable, Dismissible {}
+public protocol FloatingButtonPresentable: Showable, Dismissible {
+
+    /// Set the Image for the floating button.
+    /// The size of the floating button is 60x60 (width x height), provide the image data accordingly
+    /// - Parameters:
+    ///     - imageData : The `Data` representation of a UIImage
+    func setButtonImage(imageData: Data)
+}
