@@ -30,6 +30,15 @@
 		2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02724C9FE1B002935CF /* PushIDManager.swift */; };
 		2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02924C9FF46002935CF /* PushIDManagerTests.swift */; };
 		2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02B24C9FF62002935CF /* MockPushIDManager.swift */; };
+		2124807A265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248079265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift */; };
+		21248099265D589E006CF300 /* XDMDeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248098265D589E006CF300 /* XDMDeviceType.swift */; };
+		212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480A8265D591A006CF300 /* XDMEnvironmentType.swift */; };
+		212480D7265D59F9006CF300 /* XDMLifecycleApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480D6265D59F9006CF300 /* XDMLifecycleApplication.swift */; };
+		212480E7265D5A4E006CF300 /* XDMFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480E6265D5A4E006CF300 /* XDMFormatters.swift */; };
+		212480F7265D5A7A006CF300 /* XDMCloseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480F6265D5A7A006CF300 /* XDMCloseType.swift */; };
+		21248107265D5BC3006CF300 /* XDMLifecycleDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248106265D5BC3006CF300 /* XDMLifecycleDevice.swift */; };
+		21248117265D5E1C006CF300 /* XDMLifecycleEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248116265D5E1C006CF300 /* XDMLifecycleEnvironment.swift */; };
+		21248127265D606A006CF300 /* XDMMobileLifecycleDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */; };
 		2130A59D260AB448005DBA0F /* MockLegacyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */; };
 		2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130A5BA260AB582005DBA0F /* NotAnExtension.swift */; };
 		21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21377D4024E3383E004BAC01 /* V4Migrator.swift */; };
@@ -46,6 +55,14 @@
 		218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */; };
 		218E01C024C7595000BEC470 /* HitQueuing+PrivacyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */; };
 		21A6737325434AE600A7E906 /* SharedStateType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A6737225434AE600A7E906 /* SharedStateType.swift */; };
+		21BA2E0D265D8DB70011207C /* XDMDeviceTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */; };
+		21BA2E1D265D8E480011207C /* XDMEnvironmentTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */; };
+		21BA2E2D265D8EC60011207C /* XDMLifecycleApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E2C265D8EC60011207C /* XDMLifecycleApplicationTests.swift */; };
+		21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */; };
+		21BA2E4D265D91830011207C /* XDMLifecycleDeviceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E4C265D91830011207C /* XDMLifecycleDeviceTests.swift */; };
+		21BA2E6B265D946F0011207C /* XDMLifecycleEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMLifecycleEnvironmentTests.swift */; };
+		21BA2E89265D96150011207C /* XDMMobileLifecycleDetailsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */; };
+		21BA2EA9265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2EA8265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */; };
@@ -606,6 +623,15 @@
 		2107F02724C9FE1B002935CF /* PushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManager.swift; sourceTree = "<group>"; };
 		2107F02924C9FF46002935CF /* PushIDManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManagerTests.swift; sourceTree = "<group>"; };
 		2107F02B24C9FF62002935CF /* MockPushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPushIDManager.swift; sourceTree = "<group>"; };
+		21248079265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleMetricsBuilder.swift; sourceTree = "<group>"; };
+		21248098265D589E006CF300 /* XDMDeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDeviceType.swift; sourceTree = "<group>"; };
+		212480A8265D591A006CF300 /* XDMEnvironmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironmentType.swift; sourceTree = "<group>"; };
+		212480D6265D59F9006CF300 /* XDMLifecycleApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleApplication.swift; sourceTree = "<group>"; };
+		212480E6265D5A4E006CF300 /* XDMFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMFormatters.swift; sourceTree = "<group>"; };
+		212480F6265D5A7A006CF300 /* XDMCloseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMCloseType.swift; sourceTree = "<group>"; };
+		21248106265D5BC3006CF300 /* XDMLifecycleDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleDevice.swift; sourceTree = "<group>"; };
+		21248116265D5E1C006CF300 /* XDMLifecycleEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleEnvironment.swift; sourceTree = "<group>"; };
+		21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMMobileLifecycleDetails.swift; sourceTree = "<group>"; };
 		2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLegacyExtension.swift; sourceTree = "<group>"; };
 		2130A5BA260AB582005DBA0F /* NotAnExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotAnExtension.swift; sourceTree = "<group>"; };
 		21377D4024E3383E004BAC01 /* V4Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4Migrator.swift; sourceTree = "<group>"; };
@@ -622,6 +648,14 @@
 		218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V5MigrationConstants.swift; sourceTree = "<group>"; };
 		218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyTests.swift"; sourceTree = "<group>"; };
 		21A6737225434AE600A7E906 /* SharedStateType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateType.swift; sourceTree = "<group>"; };
+		21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDeviceTypeTests.swift; sourceTree = "<group>"; };
+		21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironmentTypeTests.swift; sourceTree = "<group>"; };
+		21BA2E2C265D8EC60011207C /* XDMLifecycleApplicationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleApplicationTests.swift; sourceTree = "<group>"; };
+		21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMCloseTypeTests.swift; sourceTree = "<group>"; };
+		21BA2E4C265D91830011207C /* XDMLifecycleDeviceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleDeviceTests.swift; sourceTree = "<group>"; };
+		21BA2E6A265D946F0011207C /* XDMLifecycleEnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleEnvironmentTests.swift; sourceTree = "<group>"; };
+		21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMMobileLifecycleDetailsTests.swift; sourceTree = "<group>"; };
+		21BA2EA8265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleMetricsBuilderTests.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1081,6 +1115,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		21248097265D5889006CF300 /* XDM */ = {
+			isa = PBXGroup;
+			children = (
+				21248079265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift */,
+				21248098265D589E006CF300 /* XDMDeviceType.swift */,
+				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
+				212480D6265D59F9006CF300 /* XDMLifecycleApplication.swift */,
+				212480F6265D5A7A006CF300 /* XDMCloseType.swift */,
+				21248106265D5BC3006CF300 /* XDMLifecycleDevice.swift */,
+				21248116265D5E1C006CF300 /* XDMLifecycleEnvironment.swift */,
+				21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */,
+				212480E6265D5A4E006CF300 /* XDMFormatters.swift */,
+			);
+			path = XDM;
+			sourceTree = "<group>";
+		};
 		21377D3F24E33830004BAC01 /* migration */ = {
 			isa = PBXGroup;
 			children = (
@@ -1264,6 +1314,14 @@
 				3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */,
 				3FE6DDFE24C630DE0065EA05 /* LifecycleSessionTests.swift */,
 				3FE6DDFD24C630DE0065EA05 /* LifecycleStateTests.swift */,
+				21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */,
+				21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */,
+				21BA2E2C265D8EC60011207C /* XDMLifecycleApplicationTests.swift */,
+				21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */,
+				21BA2E4C265D91830011207C /* XDMLifecycleDeviceTests.swift */,
+				21BA2E6A265D946F0011207C /* XDMLifecycleEnvironmentTests.swift */,
+				21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */,
+				21BA2EA8265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift */,
 			);
 			name = Tests;
 			path = AEPLifecycle/Tests;
@@ -1282,6 +1340,7 @@
 				3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */,
 				3FE6DE1624C631100065EA05 /* LifecycleSession.swift */,
 				3FE6DE0624C630EA0065EA05 /* LifecycleState.swift */,
+				21248097265D5889006CF300 /* XDM */,
 			);
 			name = Sources;
 			path = AEPLifecycle/Sources;
@@ -3083,13 +3142,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				212480F7265D5A7A006CF300 /* XDMCloseType.swift in Sources */,
 				3FE6DE0F24C630EB0065EA05 /* LifecycleMetrics.swift in Sources */,
+				21248099265D589E006CF300 /* XDMDeviceType.swift in Sources */,
 				3FE6DE1424C630EB0065EA05 /* LifecycleConstants.swift in Sources */,
+				21248117265D5E1C006CF300 /* XDMLifecycleEnvironment.swift in Sources */,
 				3FE6DE1724C631100065EA05 /* LifecycleSession.swift in Sources */,
 				3FE6DE1024C630EB0065EA05 /* Event+Lifecycle.swift in Sources */,
+				2124807A265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift in Sources */,
+				212480D7265D59F9006CF300 /* XDMLifecycleApplication.swift in Sources */,
 				3FE6DE1224C630EB0065EA05 /* Lifecycle.swift in Sources */,
 				3FE6DE1324C630EB0065EA05 /* LifecycleContextData.swift in Sources */,
 				3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */,
+				21248127265D606A006CF300 /* XDMMobileLifecycleDetails.swift in Sources */,
+				21248107265D5BC3006CF300 /* XDMLifecycleDevice.swift in Sources */,
+				212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */,
+				212480E7265D5A4E006CF300 /* XDMFormatters.swift in Sources */,
 				3FE6DE0E24C630EB0065EA05 /* LifecycleState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3098,8 +3166,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21BA2E89265D96150011207C /* XDMMobileLifecycleDetailsTests.swift in Sources */,
+				21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */,
+				21BA2E0D265D8DB70011207C /* XDMDeviceTypeTests.swift in Sources */,
+				21BA2E6B265D946F0011207C /* XDMLifecycleEnvironmentTests.swift in Sources */,
+				21BA2EA9265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift in Sources */,
 				3FE6DE0324C630DF0065EA05 /* LifecycleFunctionalTests.swift in Sources */,
 				3FE6DE0224C630DF0065EA05 /* LifecycleMetricsTests.swift in Sources */,
+				21BA2E2D265D8EC60011207C /* XDMLifecycleApplicationTests.swift in Sources */,
+				21BA2E4D265D91830011207C /* XDMLifecycleDeviceTests.swift in Sources */,
+				21BA2E1D265D8E480011207C /* XDMEnvironmentTypeTests.swift in Sources */,
 				3FE6DE0424C630DF0065EA05 /* LifecycleStateTests.swift in Sources */,
 				3FE6DE0024C630DF0065EA05 /* LifecycleContextDataTests.swift in Sources */,
 				3FE6DDFF24C630DF0065EA05 /* LifecycleMetricsBuilderTests.swift in Sources */,

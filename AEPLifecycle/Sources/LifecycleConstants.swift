@@ -66,4 +66,9 @@ enum LifecycleConstants {
             static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
         }
     }
+
+    enum XDM {
+        static let EVENT_TYPE_APP_LAUNCH = "application.launch"
+        static let EVENT_TYPE_APP_CLOSE = "application.close"
+    }
 }

@@ -88,6 +88,13 @@ struct LifecycleState {
 
         // Update lifecycle context data and persist lifecycle info into local storage
         lifecycleContextData = lifecycleData
+
+        let xdmMetricsBuilder = XDMLifecycleMetricsBuilder(startDate: date)
+            .addAppLaunchData(isInstall: isInstall(), isUpgrade: isUpgrade())
+            .addAppCloseData(previousAppId: sessionContainer?.appId, previousSessionInfo: previousSessionInfo)
+            .addEnvironmentData()
+            .addDeviceData()
+
         persistLifecycleContextData(startDate: date)
 
         return previousSessionInfo
