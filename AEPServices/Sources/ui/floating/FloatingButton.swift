@@ -19,13 +19,15 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
 
     private let LOG_PREFIX = "FloatingButton"
 
-    private let PREVIEW_BUTTON_WIDTH = 60
-    private let PREVIEW_BUTTON_HEIGHT = 60
+    internal static let BUTTON_TOP_MARGIN = 40
+    internal static let PREVIEW_BUTTON_WIDTH = 60
+    internal static let PREVIEW_BUTTON_HEIGHT = 60
 
     private var singleTap: UITapGestureRecognizer?
     private var panner: UIPanGestureRecognizer?
     private var timer: Timer?
     private var buttonImageView: UIImageView?
+    private var buttonPosition: FloatingButtonPosition = .center
 
     private var listener: FloatingButtonDelegate?
 
@@ -68,6 +70,10 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
         DispatchQueue.main.async {
             self.buttonImageView?.image = image
         }
+    }
+
+    public func setInitialPosition(position: FloatingButtonPosition) {
+        buttonPosition = position
     }
 
     private func initFloatingButton() -> Bool {
@@ -113,14 +119,12 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
         if let buttonImageView = self.buttonImageView {
             keyWindow?.addSubview(buttonImageView)
             keyWindow?.bringSubviewToFront(buttonImageView)
-            guard let screenBounds = keyWindow?.frame.size else {
-                Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, screenbound is nil.")
-                return false
-            }
-            UIView.animate(withDuration: 0.3, animations: {
-                var finalFrame = buttonImageView.frame
-                finalFrame.origin.x = (screenBounds.width - CGFloat(self.PREVIEW_BUTTON_WIDTH)) / 2
-                buttonImageView.frame = finalFrame
+
+            // set the initial position for animation
+            buttonImageView.frame.origin.x = buttonImageView.frame.origin.x + CGFloat(FloatingButton.PREVIEW_BUTTON_WIDTH)
+            // animate the x-axis of the button to its original position
+            UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
+                buttonImageView.frame.origin.x = buttonImageView.frame.origin.x - CGFloat(FloatingButton.PREVIEW_BUTTON_WIDTH)
             }, completion: nil)
 
             // Notifiying global listeners
@@ -180,7 +184,7 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
         let size: CGSize? = newFrame.size
 
         if let screenBounds: CGSize = size {
-            newFrame = CGRect(x: (Int(screenBounds.width) - PREVIEW_BUTTON_WIDTH) - 30 / 2, y: (Int(screenBounds.height) - PREVIEW_BUTTON_HEIGHT) / 2, width: PREVIEW_BUTTON_WIDTH, height: PREVIEW_BUTTON_HEIGHT)
+            newFrame = buttonPosition.frame(screenBounds: screenBounds)
         }
 
         return newFrame
