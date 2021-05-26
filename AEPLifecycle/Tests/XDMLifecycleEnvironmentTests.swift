@@ -21,7 +21,7 @@ class XDMLifecycleEnvironmentTests: XCTestCase {
         // setup
         var env = XDMLifecycleEnvironment()
         env.operatingSystem = "test-os"
-        env.language = "en-US"
+        env.language = XDMLifecycleLanguage(language: "en-US")
         env.carrier = "test-carrier"
         env.operatingSystemVersion = "test-os-version"
         env.operatingSystem = "test-os-name"

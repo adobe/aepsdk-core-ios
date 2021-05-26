@@ -23,7 +23,7 @@ class XDMLifecycleApplicationTests: XCTestCase {
         mockSystemInfoService.appVersion = "test-version"
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
-    
+
     // MARK: Encodable Tests
     func testEncodeXDMLifecycleApplication() throws {
         // setup

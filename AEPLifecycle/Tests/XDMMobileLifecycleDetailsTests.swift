@@ -29,7 +29,7 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
         lifecycleDetails.application?.isUpgrade = true
         lifecycleDetails.environment = XDMLifecycleEnvironment()
         lifecycleDetails.environment?.operatingSystem = "test-os"
-        lifecycleDetails.environment?.language = "en-US"
+        lifecycleDetails.environment?.language = XDMLifecycleLanguage(language: "en-US")
         lifecycleDetails.environment?.carrier = "test-carrier"
         lifecycleDetails.environment?.operatingSystemVersion = "test-os-version"
         lifecycleDetails.environment?.operatingSystem = "test-os-name"
@@ -40,7 +40,7 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
         lifecycleDetails.device?.screenHeight = 200
         lifecycleDetails.device?.screenWidth = 100
         lifecycleDetails.device?.type = .mobile
-        
+
 
         // test
         let encoder = JSONEncoder()

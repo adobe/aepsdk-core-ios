@@ -39,6 +39,7 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         mockSystemInfoService.orientation = .PORTRAIT
         mockSystemInfoService.deviceType = .PHONE
         mockSystemInfoService.activeLocaleName = "en_US"
+        mockSystemInfoService.runMode = "Application"
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
     
@@ -149,9 +150,9 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
     func testBuildXDMAppCloseEventDataReturnsCorrectDataWhenIsCloseCrashEvent() {
         let actualAppCloseData = XDMLifecycleMetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
-                                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-                                pauseDate: Date(timeIntervalSince1970: 1483864129), // pause: Sunday, January 8, 2017 8:28:49 AM GMT (before start, simulate incorrect app close)
-                                isCrash: true)).buildXDMAppCloseEventData()
+                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
+                pauseDate: Date(timeIntervalSince1970: 1483864129), // pause: Sunday, January 8, 2017 8:28:49 AM GMT (before start, simulate incorrect app close)
+                isCrash: true)).buildXDMAppCloseEventData()
         
         // verify
         let application = [
@@ -173,9 +174,9 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         // new start: Monday January 9, 2017 12:38:20 PM GMT
         let actualAppCloseData = XDMLifecycleMetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
-                                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-                                pauseDate: Date(timeIntervalSince1970: 0), // simulate Lifecycle pause not implemented
-                                isCrash: true)).buildXDMAppCloseEventData()
+                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
+                pauseDate: Date(timeIntervalSince1970: 0), // simulate Lifecycle pause not implemented
+                isCrash: true)).buildXDMAppCloseEventData()
         
         // verify
         let application = [
@@ -196,9 +197,9 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
     func testBuildXDMAppCloseEventDataReturnsCorrectDataWhenIsCloseCorrectSession() {
         let actualAppCloseData = XDMLifecycleMetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
-                                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-                                pauseDate: Date(timeIntervalSince1970: 1483864390), // pause: Sunday, January 8, 2017 8:33:10 AM GMT
-                                isCrash: false)).buildXDMAppCloseEventData()
+                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
+                pauseDate: Date(timeIntervalSince1970: 1483864390), // pause: Sunday, January 8, 2017 8:33:10 AM GMT
+                isCrash: false)).buildXDMAppCloseEventData()
         
         // verify
         let application = [

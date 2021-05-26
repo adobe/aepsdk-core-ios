@@ -113,7 +113,7 @@ class XDMLifecycleMetricsBuilder {
         xdmEnvironmentInfo?.type = XDMEnvironmentType.from(runMode: systemInfoService.getRunMode())
         xdmEnvironmentInfo?.operatingSystem = systemInfoService.getOperatingSystemName()
         xdmEnvironmentInfo?.operatingSystemVersion = systemInfoService.getOperatingSystemVersion()
-        xdmEnvironmentInfo?.language = systemInfoService.getFormattedLocale()
+        xdmEnvironmentInfo?.language = XDMLifecycleLanguage(language: systemInfoService.getFormattedLocale())
 
         return self
     }

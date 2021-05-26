@@ -18,9 +18,24 @@ struct XDMLifecycleEnvironment: Encodable {
     init() {}
 
     var carrier: String?
-    var language: String?
+    var language: XDMLifecycleLanguage?
     var operatingSystemVendor: String?
     var operatingSystem: String?
     var operatingSystemVersion: String?
     var type: XDMEnvironmentType?
+
+    enum CodingKeys: String, CodingKey {
+        case carrier
+        case language = "_dc"
+        case operatingSystemVendor
+        case operatingSystem
+        case operatingSystemVersion
+        case type
+    }
+
+}
+
+/// Helper struct to encode the language properly in the `XDMLifecycleEnvironment`
+struct XDMLifecycleLanguage: Encodable {
+    let language: String?
 }
