@@ -52,7 +52,7 @@ class FloatingButtonTests : XCTestCase {
         floatingButton = FloatingButton(listener: mockListener)
         XCTAssertNoThrow(floatingButton?.setButtonImage(imageData: Data()))
     }
-    
+
     func test_setInitialPosition() {
         floatingButton = FloatingButton(listener: mockListener)
         XCTAssertNoThrow(floatingButton?.setInitialPosition(position: .center))
