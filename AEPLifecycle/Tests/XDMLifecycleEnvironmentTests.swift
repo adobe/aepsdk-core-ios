@@ -36,11 +36,13 @@ class XDMLifecycleEnvironmentTests: XCTestCase {
         // verify
         let expected = """
         {
-          "language" : "en-US",
           "operatingSystemVersion" : "test-os-version",
           "carrier" : "test-carrier",
           "operatingSystem" : "test-os-name",
-          "type" : "application"
+          "type" : "application",
+          "_dc" : {
+            "language" : "en-US"
+          }
         }
         """
 

@@ -41,22 +41,23 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
         lifecycleDetails.device?.screenWidth = 100
         lifecycleDetails.device?.type = .mobile
 
-
         // test
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
         let data = try XCTUnwrap(encoder.encode(lifecycleDetails))
         let dataStr = try XCTUnwrap(String(data: data, encoding: .utf8))
-        print(dataStr)
+
         // verify
         let expected = """
         {
           "environment" : {
-            "language" : "en-US",
             "operatingSystemVersion" : "test-os-version",
             "carrier" : "test-carrier",
             "operatingSystem" : "test-os-name",
-            "type" : "application"
+            "type" : "application",
+            "_dc" : {
+              "language" : "en-US"
+            }
           },
           "device" : {
             "manufacturer" : "apple",
