@@ -48,6 +48,11 @@ class FloatingButtonTests : XCTestCase {
         XCTAssertNoThrow(floatingButton?.dismiss())
     }
 
+    func test_setButtonImage() {
+        floatingButton = FloatingButton(listener: mockListener)
+        XCTAssertNoThrow(floatingButton?.setButtonImage(imageData: Data()))
+    }
+
     class MockListener: FloatingButtonDelegate {
         func onShow() {}
         func onDismiss() {}
