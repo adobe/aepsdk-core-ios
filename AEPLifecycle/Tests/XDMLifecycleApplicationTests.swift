@@ -30,7 +30,7 @@ class XDMLifecycleApplicationTests: XCTestCase {
         buildAndSetMockInfoService()
 
         var application = XDMLifecycleApplication()
-        application.installDate = Date(timeIntervalSince1970: 1619827200)
+        application.installDate = Date(timeIntervalSince1970: 1619827190)
         application.isInstall = true
         application.sessionLength = 424394
         application.isLaunch = true
