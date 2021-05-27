@@ -72,7 +72,7 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
         }
     }
 
-    public func setInitialPosition(position: FloatingButtonPosition) {
+    public func setInitial(position: FloatingButtonPosition) {
         buttonPosition = position
     }
 
@@ -121,13 +121,13 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
             keyWindow?.bringSubviewToFront(buttonImageView)
 
             // set the initial position for animation
-            buttonImageView.frame.origin.x = buttonImageView.frame.origin.x + CGFloat(FloatingButton.PREVIEW_BUTTON_WIDTH)
+            buttonImageView.frame.origin.x += CGFloat(FloatingButton.PREVIEW_BUTTON_WIDTH)
             // animate the x-axis of the button to its original position
             UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseIn, animations: {
-                buttonImageView.frame.origin.x = buttonImageView.frame.origin.x - CGFloat(FloatingButton.PREVIEW_BUTTON_WIDTH)
+                buttonImageView.frame.origin.x -= CGFloat(FloatingButton.PREVIEW_BUTTON_WIDTH)
             }, completion: nil)
 
-            // Notifiying global listeners
+            // Notifying global listeners
             self.listener?.onShow()
         }
         return true

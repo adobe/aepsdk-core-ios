@@ -29,5 +29,5 @@ public protocol FloatingButtonPresentable: Showable, Dismissible {
     /// Call this method before calling `floatingButton.show()` to set the position of the floating button when it appears.
     /// - Parameters:
     ///     - position : The `FloatingButtonPosition` defining the initial position of the floating button.
-    func setInitialPosition(position: FloatingButtonPosition)
+    func setInitial(position: FloatingButtonPosition)
 }
