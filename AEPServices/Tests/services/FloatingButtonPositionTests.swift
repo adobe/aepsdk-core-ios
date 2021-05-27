@@ -37,24 +37,24 @@ class FloatingButtonPositionTests : XCTestCase {
     
     func test_PositionTopRight_Frame() {
         // test
-        let centerFrame = FloatingButtonPosition.topRight.frame(screenBounds: screenBounds)
+        let topRightFrame = FloatingButtonPosition.topRight.frame(screenBounds: screenBounds)
         
         // verify the the button positions to the topRight of the screen
-        XCTAssertEqual(40, centerFrame.origin.x)
-        XCTAssertEqual(40, centerFrame.origin.y)
-        XCTAssertEqual(60, centerFrame.size.width)
-        XCTAssertEqual(60, centerFrame.size.height)
+        XCTAssertEqual(40, topRightFrame.origin.x)
+        XCTAssertEqual(40, topRightFrame.origin.y)
+        XCTAssertEqual(60, topRightFrame.size.width)
+        XCTAssertEqual(60, topRightFrame.size.height)
     }
         
     func test_PositionTopLeft_Frame() {
         // test
-        let centerFrame = FloatingButtonPosition.topLeft.frame(screenBounds: screenBounds)
+        let topLeftFrame = FloatingButtonPosition.topLeft.frame(screenBounds: screenBounds)
         
         // verify the the button positions to the topLeft of the screen
-        XCTAssertEqual(0, centerFrame.origin.x)
-        XCTAssertEqual(40, centerFrame.origin.y)
-        XCTAssertEqual(60, centerFrame.size.width)
-        XCTAssertEqual(60, centerFrame.size.height)
+        XCTAssertEqual(0, topLeftFrame.origin.x)
+        XCTAssertEqual(40, topLeftFrame.origin.y)
+        XCTAssertEqual(60, topLeftFrame.size.width)
+        XCTAssertEqual(60, topLeftFrame.size.height)
     }
 
 }
