@@ -51,9 +51,24 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
         self.messageMonitor = messageMonitor
     }
 
+    public func hide() {
+        DispatchQueue.main.async {
+            if self.messageMonitor.dismiss() ==  false {
+                return
+            }
+            self.dismissWithAnimation(animate: true, shouldDeallocateWebView: false)
+        }
+    }
+
     public func show() {
         if messageMonitor.show(message: self) ==  false {
             self.listener?.onShowFailure()
+            return
+        }
+
+        // If the webView is already allocated, then reshow them
+        if let webView = webView as? WKWebView {
+            displayWithAnimation(webView: webView)
             return
         }
 
@@ -66,7 +81,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
             newFrame.origin.y = newFrame.size.height
             if newFrame.size.width > 0.0 && newFrame.size.height > 0.0 {
 
-                let wkWebView = self.getConfiguredWebview(newFrame: newFrame)
+                let wkWebView = self.getConfiguredWebView(newFrame: newFrame)
 
                 // Fix for iPhone X to display content edge-to-edge
                 if #available(iOS 11, *) {
@@ -95,7 +110,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
                         }
                     }
                 }
-                // load the HTML string on WKWebview. If we are using the cached images, then use
+                // load the HTML string on WKWebView. If we are using the cached images, then use
                 // loadFileURL:allowingReadAccessToURL: to load the html from local file, which will give us the correct
                 // permission to read cached files
                 if useTempHTML {
@@ -104,15 +119,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
                     wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
 
-                let keyWindow = UIApplication.shared.getKeyWindow()
-                keyWindow?.addSubview(wkWebView)
-                UIView.animate(withDuration: 0.3, animations: {
-                    var webViewFrame = wkWebView.frame
-                    webViewFrame.origin.y = 0
-                    wkWebView.frame = webViewFrame
-                }, completion: nil)
+                self.displayWithAnimation(webView: wkWebView)
 
-                // Notifiying global listeners
+                // Notifying global listeners
                 self.listener?.onShow(message: self)
                 self.messagingDelegate?.onShow(message: self)
             }
@@ -125,8 +134,8 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
                 return
             }
 
-            self.dismissWithAnimation(animate: true)
-            // Notifiying all listeners
+            self.dismissWithAnimation(animate: true, shouldDeallocateWebView: true)
+            // Notifying all listeners
             self.listener?.onDismiss(message: self)
             self.messagingDelegate?.onDismiss(message: self)
 
@@ -152,7 +161,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
         }
     }
 
-    // MARK: WKWebview delegate
+    // MARK: WKWebView delegate
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if self.listener != nil {
             guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self, url: navigationAction.request.url?.absoluteString) else {
@@ -162,13 +171,13 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
             decisionHandler(shouldOpenUrl ? .allow : .cancel)
 
         } else {
-            // if the API user doesn't provide any listner ( self.listener == nil ),
-            // set WKNavigationActionPolicyAllow as a default behaviour.
+            // if the API user doesn't provide any listener ( self.listener == nil ),
+            // set WKNavigationActionPolicyAllow as a default behavior.
             decisionHandler(.allow)
         }
     }
 
-    private func getConfiguredWebview(newFrame: CGRect) -> WKWebView {
+    private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
         let webViewConfiguration = WKWebViewConfiguration()
 
         // Fix for media playback.
@@ -185,7 +194,19 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
         return wkWebView
     }
 
-    private func dismissWithAnimation(animate: Bool) {
+    private func displayWithAnimation(webView: WKWebView) {
+        DispatchQueue.main.async {
+            let keyWindow = UIApplication.shared.getKeyWindow()
+            keyWindow?.addSubview(webView)
+            UIView.animate(withDuration: 0.3, animations: {
+                var webViewFrame = webView.frame
+                webViewFrame.origin.y = 0
+                webView.frame = webViewFrame
+            }, completion: nil)
+        }
+    }
+
+    private func dismissWithAnimation(animate: Bool, shouldDeallocateWebView: Bool) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: animate ? 0.3: 0, animations: {
                 guard var newFrame: CGRect = UIUtils.getFrame() else {
@@ -195,7 +216,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
                 self.webView?.frame = newFrame
             }) { _ in
                 self.webView?.removeFromSuperview()
-                self.webView = nil
+                if shouldDeallocateWebView {
+                    self.webView = nil
+                }
             }
         }
     }
