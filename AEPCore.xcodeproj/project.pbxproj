@@ -333,6 +333,7 @@
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		B2F223F8573D6B132F285AD7 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6A7B39F8D2A807344E7098B /* Pods_AEPLifecycleTests.framework */; };
+		B6D6A019265EC9D8005042BE /* FloatingButtonPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */; };
 		B87CF27D61573F409CEDF5E9 /* Pods_AEPSignalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451696B755E6DEB6897A8892 /* Pods_AEPSignalTests.framework */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
@@ -927,6 +928,7 @@
 		9444FBB20EFFE94F7726A49F /* Pods_AEPCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A63AA3E0DA8692271AC7C724 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
 		B414FF5745B34BC95CF624DC /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPosition.swift; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -1852,6 +1854,7 @@
 				923547FB25BFF18200BEA9A3 /* FloatingButton.swift */,
 				9235481925BFF19800BEA9A3 /* FloatingButtonDelegate.swift */,
 				78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */,
+				B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */,
 			);
 			path = floating;
 			sourceTree = "<group>";
@@ -2988,6 +2991,7 @@
 				92EEA5F6258933A600DBA3EE /* FullscreenMessageDelegate.swift in Sources */,
 				3F0397FE24BE60910019F095 /* URLEncoder.swift in Sources */,
 				7814B23325CB455200841429 /* URL+Validator.swift in Sources */,
+				B6D6A019265EC9D8005042BE /* FloatingButtonPosition.swift in Sources */,
 				3F0397FF24BE60910019F095 /* AnyCodable.swift in Sources */,
 				3F0397D124BE5FF30019F095 /* HttpConnection.swift in Sources */,
 				3F0397D824BE5FF30019F095 /* DataQueuing.swift in Sources */,

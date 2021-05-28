@@ -23,4 +23,11 @@ public protocol FloatingButtonPresentable: Showable, Dismissible {
     /// - Parameters:
     ///     - imageData : The `Data` representation of a UIImage
     func setButtonImage(imageData: Data)
+
+    /// Set the initial position of floating button.
+    /// By default the initial position is set to `FloatingButtonPosition.center`.
+    /// Call this method before calling `floatingButton.show()` to set the position of the floating button when it appears.
+    /// - Parameters:
+    ///     - position : The `FloatingButtonPosition` defining the initial position of the floating button.
+    func setInitial(position: FloatingButtonPosition)
 }
