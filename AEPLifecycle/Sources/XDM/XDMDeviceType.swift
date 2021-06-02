@@ -23,7 +23,7 @@ enum XDMDeviceType: String, Encodable {
     /// Creates a new `DeviceType` from the already known `AEPServices.DeviceType`
     /// - Parameter servicesDeviceType: a `AEPServices.DeviceType` value
     /// - Returns: The `servicesDeviceType` mapped to an `XDMDeviceType`, defaults to `.mobile` if no mappings found
-    static func from(servicesDeviceType: AEPServices.DeviceType) -> XDMDeviceType? {
+    static func from(servicesDeviceType: AEPServices.DeviceType) -> XDMDeviceType {
         switch servicesDeviceType {
         case .PHONE:
             return .mobile
