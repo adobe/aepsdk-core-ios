@@ -92,6 +92,7 @@ class XDMLifecycleMetricsBuilder {
     func addAppCloseData(previousAppId: String?, previousSessionInfo: LifecycleSessionInfo) -> XDMLifecycleMetricsBuilder {
         xdmApplicationInfoClose = XDMApplication()
 
+        // TODO: MOB-14453
         xdmApplicationInfoClose?.version = previousAppId
         xdmApplicationInfoClose?.isClose = true
         xdmApplicationInfoClose?.closeType = previousSessionInfo.isCrash ? .unknown : .close
