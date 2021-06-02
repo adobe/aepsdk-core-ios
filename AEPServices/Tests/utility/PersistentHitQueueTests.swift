@@ -150,20 +150,27 @@ class PersistentHitQueueTests: XCTestCase {
     func testProcessesHitsManyWithIntermittentProcessor() {
         hitProcessor = MockHitIntermittentProcessor()
         hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
-
+        let hitCount = 100
+        
         // test
-        for _ in 0 ..< 100 {
-            hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
+        hitQueue.beginProcessing()
+        for i in 0 ..< hitCount {
+            hitQueue.queue(entity: DataEntity(uniqueIdentifier: "\(i)", timestamp: Date(), data: nil))
         }
 
-        hitQueue.beginProcessing()
-        sleep(1)
+        sleep(100)
 
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hits should no longer be in the queue as its been processed
         let intermittentProcessor = hitQueue.processor as? MockHitIntermittentProcessor
-        XCTAssertEqual(100, intermittentProcessor?.processedHits.count) // all hits should be eventually processed
+        XCTAssertEqual(hitCount, intermittentProcessor?.processedHits.count) // all hits should be eventually processed
         XCTAssertFalse(intermittentProcessor?.failedHits.isEmpty ?? true) // some of the hits should have failed
+        
+        // verify hits processed in-order
+        for i in 0 ..< hitCount {
+            let hit = intermittentProcessor?.processedHits.shallowCopy[i]
+            XCTAssertEqual("\(i)", hit?.uniqueIdentifier)
+        }
     }
 }
 
@@ -185,7 +192,7 @@ class MockHitIntermittentProcessor: HitProcessing {
     var failedHits = Set<String>()
 
     func retryInterval(for entity: DataEntity) -> TimeInterval {
-        return TimeInterval(0)
+        return TimeInterval(2)
     }
 
     // 50% of hits need to be processed twice, other 50% process successfully the first time
@@ -197,9 +204,7 @@ class MockHitIntermittentProcessor: HitProcessing {
             return
         }
 
-        let shouldRetry = entity.uniqueIdentifier.hashValue % 2 == 0 // retry 50% of hits
-
-        if !shouldRetry {
+        if !Bool.random() { // retry ~50% of hits
             processedHits.append(entity)
             completion(true)
         } else {
