@@ -13,8 +13,8 @@
 import AEPServices
 import Foundation
 
-/// Represents an XDM Lifecycle Application schema
-struct XDMLifecycleApplication {
+/// Represents an XDM Application schema
+struct XDMApplication {
     init() {}
 
     var closeType: XDMCloseType?
@@ -42,7 +42,7 @@ struct XDMLifecycleApplication {
     }
 }
 
-extension XDMLifecycleApplication: Encodable {
+extension XDMApplication: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         if let unwrapped = closeType { try container.encode(unwrapped, forKey: .closeType) }

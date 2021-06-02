@@ -14,7 +14,7 @@ import AEPServices
 import AEPServicesMocks
 import XCTest
 
-class XDMLifecycleApplicationTests: XCTestCase {
+class XDMApplicationTests: XCTestCase {
 
     private func buildAndSetMockInfoService() {
         let mockSystemInfoService = MockSystemInfoService()
@@ -29,7 +29,7 @@ class XDMLifecycleApplicationTests: XCTestCase {
         // setup
         buildAndSetMockInfoService()
 
-        var application = XDMLifecycleApplication()
+        var application = XDMApplication()
         application.installDate = Date(timeIntervalSince1970: 1619827190)
         application.isInstall = true
         application.sessionLength = 424394

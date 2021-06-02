@@ -17,10 +17,10 @@ import AEPServices
 class XDMLifecycleMetricsBuilder {
     private let LOG_TAG = "XDMLifecycleMetricsBuilder"
     private let startDate: Date
-    private var xdmApplicationInfoClose: XDMLifecycleApplication?
-    private var xdmApplicationInfoLaunch: XDMLifecycleApplication?
-    private var xdmDeviceInfo: XDMLifecycleDevice?
-    private var xdmEnvironmentInfo: XDMLifecycleEnvironment?
+    private var xdmApplicationInfoClose: XDMApplication?
+    private var xdmApplicationInfoLaunch: XDMApplication?
+    private var xdmDeviceInfo: XDMDevice?
+    private var xdmEnvironmentInfo: XDMEnvironment?
 
     private var systemInfoService: SystemInfoService {
         return ServiceProvider.shared.systemInfoService
@@ -65,7 +65,7 @@ class XDMLifecycleMetricsBuilder {
     ///   - isUpgrade: indicates if this is an app upgrade
     /// - Returns: this `XDMLifecycleMetricsBuilder` instance
     func addAppLaunchData(isInstall: Bool, isUpgrade: Bool) -> XDMLifecycleMetricsBuilder {
-        xdmApplicationInfoLaunch = XDMLifecycleApplication()
+        xdmApplicationInfoLaunch = XDMApplication()
         xdmApplicationInfoLaunch?.isLaunch = true
 
         if isInstall {
@@ -90,7 +90,7 @@ class XDMLifecycleMetricsBuilder {
     ///   - previousSessionInfo: previous session information to be attached to the close event
     /// - Returns: this `XDMLifecycleMetricsBuilder` instance
     func addAppCloseData(previousAppId: String?, previousSessionInfo: LifecycleSessionInfo) -> XDMLifecycleMetricsBuilder {
-        xdmApplicationInfoClose = XDMLifecycleApplication()
+        xdmApplicationInfoClose = XDMApplication()
 
         xdmApplicationInfoClose?.version = previousAppId
         xdmApplicationInfoClose?.isClose = true
@@ -107,7 +107,7 @@ class XDMLifecycleMetricsBuilder {
     /// Adds information related to the running environment, see `XDMLifecycleEnvironment`
     /// - Returns: this `XDMLifecycleMetricsBuilder` instance
     func addEnvironmentData() -> XDMLifecycleMetricsBuilder {
-        xdmEnvironmentInfo = XDMLifecycleEnvironment()
+        xdmEnvironmentInfo = XDMEnvironment()
 
         xdmEnvironmentInfo?.carrier = systemInfoService.getMobileCarrierName()
         xdmEnvironmentInfo?.type = XDMEnvironmentType.from(runMode: systemInfoService.getRunMode())
@@ -121,7 +121,7 @@ class XDMLifecycleMetricsBuilder {
     /// Adds information related to the running environment, see `XDMLifecycleEnvironment`
     /// - Returns: this `XDMLifecycleMetricsBuilder` instance
     func addDeviceData() -> XDMLifecycleMetricsBuilder {
-        xdmDeviceInfo = XDMLifecycleDevice()
+        xdmDeviceInfo = XDMDevice()
 
         let displayInfo = systemInfoService.getDisplayInformation()
         xdmDeviceInfo?.screenWidth = Int64(displayInfo.width)

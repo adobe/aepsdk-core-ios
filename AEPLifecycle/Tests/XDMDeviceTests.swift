@@ -9,44 +9,50 @@
 // OF ANY KIND, either express or implied. See the License for the specific language
 // governing permissions and limitations under the License.
 //
-
 @testable import AEPLifecycle
+import AEPServices
+import AEPServicesMocks
 import XCTest
 
-class XDMLifecycleEnvironmentTests: XCTestCase {
+class XDMDeviceTests: XCTestCase {
 
-    // MARK: Encodable tests
+    private func buildAndSetMockInfoService() {
+        let mockSystemInfoService = MockSystemInfoService()
+        mockSystemInfoService.deviceName = "test-device-name"
+        mockSystemInfoService.displayInformation = (100, 200)
+        mockSystemInfoService.deviceType = .PHONE
+        ServiceProvider.shared.systemInfoService = mockSystemInfoService
+    }
+
+    // MARK: Encodable Tests
 
     func testEncodeEnvironment() throws {
         // setup
-        var env = XDMLifecycleEnvironment()
-        env.operatingSystem = "test-os"
-        env.language = XDMLifecycleLanguage(language: "en-US")
-        env.carrier = "test-carrier"
-        env.operatingSystemVersion = "test-os-version"
-        env.operatingSystem = "test-os-name"
-        env.type = XDMEnvironmentType.application
+        buildAndSetMockInfoService()
+        var device = XDMDevice()
+        device.model = "test-device-name"
+        device.manufacturer = "apple"
+        device.screenHeight = 200
+        device.screenWidth = 100
+        device.type = .mobile
 
         // test
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
-        let data = try XCTUnwrap(encoder.encode(env))
+        let data = try XCTUnwrap(encoder.encode(device))
         let dataStr = try XCTUnwrap(String(data: data, encoding: .utf8))
 
         // verify
         let expected = """
         {
-          "operatingSystemVersion" : "test-os-version",
-          "carrier" : "test-carrier",
-          "operatingSystem" : "test-os-name",
-          "type" : "application",
-          "_dc" : {
-            "language" : "en-US"
-          }
+          "manufacturer" : "apple",
+          "model" : "test-device-name",
+          "screenHeight" : 200,
+          "screenWidth" : 100,
+          "type" : "mobile"
         }
         """
 
         XCTAssertEqual(expected, dataStr)
     }
-
 }

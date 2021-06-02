@@ -13,27 +13,14 @@
 import AEPServices
 import Foundation
 
-/// Represents the Environment schema
-struct XDMEnvironment: Encodable {
+/// Represents an XDM Device schema
+struct XDMDevice: Encodable {
     init() {}
 
-    var carrier: String?
-    var language: XDMLifecycleLanguage?
-    var operatingSystem: String?
-    var operatingSystemVersion: String?
-    var type: XDMEnvironmentType?
-
-    enum CodingKeys: String, CodingKey {
-        case carrier
-        case language = "_dc"
-        case operatingSystem
-        case operatingSystemVersion
-        case type
-    }
-
-}
-
-/// Helper struct to encode the language properly in the `XDMLifecycleEnvironment`
-struct XDMLifecycleLanguage: Encodable {
-    let language: String?
+    var manufacturer: String?
+    var model: String?
+    var modelNumber: String?
+    var screenHeight: Int64?
+    var screenWidth: Int64?
+    var type: XDMDeviceType?
 }

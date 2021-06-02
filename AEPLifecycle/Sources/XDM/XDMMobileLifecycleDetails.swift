@@ -16,9 +16,9 @@ import Foundation
 struct XDMMobileLifecycleDetails {
     init() {}
 
-    var application: XDMLifecycleApplication?
-    var device: XDMLifecycleDevice?
-    var environment: XDMLifecycleEnvironment?
+    var application: XDMApplication?
+    var device: XDMDevice?
+    var environment: XDMEnvironment?
     var eventType: String?
     var timestamp: Date?
 
