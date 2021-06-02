@@ -20,7 +20,6 @@ class XDMLifecycleDeviceTests: XCTestCase {
         let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.deviceName = "test-device-name"
         mockSystemInfoService.displayInformation = (100, 200)
-        mockSystemInfoService.orientation = .PORTRAIT
         mockSystemInfoService.deviceType = .PHONE
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
