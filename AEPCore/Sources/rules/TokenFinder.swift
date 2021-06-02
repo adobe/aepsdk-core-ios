@@ -64,7 +64,7 @@ class TokenFinder: Traversable {
         case TOKEN_KEY_EVENT_SOURCE:
             return event.source
         case TOKEN_KEY_TIMESTAMP_UNIX:
-            return now.getUnixTimeInSeconds()
+            return Int(truncatingIfNeeded: now.getUnixTimeInSeconds())
         case TOKEN_KEY_TIMESTAMP_ISO8601_NO_COLON:
             return now.getISO8601DateNoColon()
         case TOKEN_KEY_TIMESTAMP_ISO8601:
