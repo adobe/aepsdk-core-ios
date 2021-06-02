@@ -14,11 +14,7 @@ import Foundation
 
 /// Represents an XDM environment type
 enum XDMEnvironmentType: String, Encodable {
-    case browser
     case application
-    case iot
-    case external
-    case widget
 
     /// Creates an `XDMEnvironmentType` from a run mode `String`
     /// - Parameter runMode: The current run mode for the system as described by the `SystemInfoService`

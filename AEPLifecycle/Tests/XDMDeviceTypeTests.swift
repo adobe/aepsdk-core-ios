@@ -52,16 +52,4 @@ class XDMDeviceTypeTests: XCTestCase {
         XCTAssertEqual("\"tablet\"", dataStr)
     }
 
-    func testEncodeTVScreens() throws {
-        // setup
-        let device = XDMDeviceType.tvScreens
-
-        // test
-        let data = try XCTUnwrap(JSONEncoder().encode(device))
-        let dataStr = try XCTUnwrap(String(data: data, encoding: .utf8))
-
-        // verify
-        XCTAssertEqual("\"tv screens\"", dataStr)
-    }
-
 }

@@ -15,10 +15,8 @@ import Foundation
 
 /// Represents an XDM device type, currently only supported values are mobile and tablet.
 enum XDMDeviceType: String, Encodable {
-    case mobile = "mobile"
-    case tablet = "tablet"
-    case desktop = "desktop"
-    case tvScreens = "tv screens"
+    case mobile
+    case tablet
 
     /// Creates a new `DeviceType` from the already known `AEPServices.DeviceType`
     /// - Parameter servicesDeviceType: a `AEPServices.DeviceType` value
