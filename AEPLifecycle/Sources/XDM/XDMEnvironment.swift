@@ -33,7 +33,7 @@ struct XDMEnvironment: Encodable {
 
 }
 
-/// Helper struct to encode the language properly in the `XDMLifecycleEnvironment`
+/// Helper struct to encode the language properly in the `XDMEnvironment`
 struct XDMLifecycleLanguage: Encodable {
     let language: String?
 }

@@ -25,7 +25,7 @@ class XDMApplicationTests: XCTestCase {
     }
 
     // MARK: Encodable Tests
-    func testEncodeXDMLifecycleApplication() throws {
+    func testEncodeXDMApplication() throws {
         // setup
         buildAndSetMockInfoService()
 
