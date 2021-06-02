@@ -235,7 +235,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         }
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
-    
+
     // Matcher: gt (Greater Than - Int vs Int64)
     func testMatcherGtForIntTypes() {
         /// Given:
