@@ -24,7 +24,8 @@ enum XDMEnvironmentType: String, Encodable {
     /// - Parameter runMode: The current run mode for the system as described by the `SystemInfoService`
     /// - Returns: The matching `XDMEnvironmentType` for the run mode, nil if no matches found
     static func from(runMode: String?) -> XDMEnvironmentType? {
-        if runMode == "Application" {
+        guard let runMode = runMode else { return nil }
+        if runMode.caseInsensitiveCompare("Application") == .orderedSame {
             return .application
         }
 
