@@ -11,7 +11,7 @@
 //
 import Foundation
 
-/// Represents an XDM Close Type
+/// The type of the close event. A value of 'close' indicates the application signaled the close event.
 enum XDMCloseType: String, Encodable {
     case close
     case unknown
