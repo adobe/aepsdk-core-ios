@@ -48,7 +48,7 @@ class XDMLifecycleMetricsBuilder {
 
     /// Builds the data required for the XDM Application Close event, including `XDMLifecycleApplication`
     /// - Returns: App close event data in dictionary format
-    func buildXDMAppCloseEventData() -> [String: Any]? {
+    func buildAppCloseXDMEventData() -> [String: Any]? {
         var appLaunchXDMData = XDMMobileLifecycleDetails()
         appLaunchXDMData.application = xdmApplicationInfoClose
         appLaunchXDMData.eventType = LifecycleConstants.XDM.EVENT_TYPE_APP_CLOSE

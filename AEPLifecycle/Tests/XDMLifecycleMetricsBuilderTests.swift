@@ -152,7 +152,7 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
                 startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
                 pauseDate: Date(timeIntervalSince1970: 1483864129), // pause: Sunday, January 8, 2017 8:28:49 AM GMT (before start, simulate incorrect app close)
-                isCrash: true)).buildXDMAppCloseEventData()
+                isCrash: true)).buildAppCloseXDMEventData()
         
         // verify
         let application = [
@@ -176,7 +176,7 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
                 startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
                 pauseDate: Date(timeIntervalSince1970: 0), // simulate Lifecycle pause not implemented
-                isCrash: true)).buildXDMAppCloseEventData()
+                isCrash: true)).buildAppCloseXDMEventData()
         
         // verify
         let application = [
@@ -199,7 +199,7 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
                 startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
                 pauseDate: Date(timeIntervalSince1970: 1483864390), // pause: Sunday, January 8, 2017 8:33:10 AM GMT
-                isCrash: false)).buildXDMAppCloseEventData()
+                isCrash: false)).buildAppCloseXDMEventData()
         
         // verify
         let application = [
