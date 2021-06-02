@@ -50,7 +50,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
         self.isLocalImageUsed = isLocalImageUsed
         self.messageMonitor = messageMonitor
     }
-    
+
     /// Call this API to hide the fullscreen message.
     /// This API hides the fullscreen message with an animation, but it keeps alive its webView for future reappearances.
     /// Invoking show on a hidden fullscreen message, will display the fullscreen message in the existing state (i.e webView is not re-rendered)
