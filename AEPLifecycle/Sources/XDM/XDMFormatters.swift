@@ -13,7 +13,7 @@
 import Foundation
 
 /// Helper functions for XDM formatting
-public enum XDMFormatters {
+enum XDMFormatters {
 
     /// Serialize the given Date to a string formatted to an ISO 8601 date-time as defined in
     /// <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339, section 5.6</a>
@@ -22,7 +22,7 @@ public enum XDMFormatters {
     ///   - Date: A timestamp and it must not be null
     /// - Returns: The timestamp formatted to a string in the format of 'yyyy-MM-dd'T'HH:mm:ssXXX',
     ///            or an empty string if Date  is null
-    public static func dateToISO8601String(from: Date?) -> String? {
+    static func dateToISO8601String(from: Date?) -> String? {
         if let unwrapped = from {
             return unwrapped.asISO8601String()
         } else {
@@ -37,7 +37,7 @@ public enum XDMFormatters {
     ///   - Date:  A timestamp and it must not be null
     /// - Returns: The timestamp formatted to a string in the format of 'yyyy-MM-dd',
     ///            or an empty string if Date  is null
-    public static func dateToFullDateString(from: Date?) -> String? {
+    static func dateToFullDateString(from: Date?) -> String? {
         if let unwrapped = from {
             return unwrapped.asFullDate()
         } else {
