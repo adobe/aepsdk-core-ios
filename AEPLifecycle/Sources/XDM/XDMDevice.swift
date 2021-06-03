@@ -16,22 +16,22 @@ import Foundation
 /// Represents an XDM Device schema
 struct XDMDevice: Encodable {
     init() {}
-    
+
     /// Manufacturer of the device
     var manufacturer: String?
-    
+
     /// Model of the device
     var model: String?
-    
+
     /// Model number of the device
     var modelNumber: String?
-    
+
     /// Screen height of the device
     var screenHeight: Int64?
-    
+
     /// Screen width of the device
     var screenWidth: Int64?
-    
+
     /// Device type as represented as a `XDMDeviceType`
     var type: XDMDeviceType?
 }

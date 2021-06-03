@@ -16,19 +16,19 @@ import Foundation
 /// Represents the Environment schema
 struct XDMEnvironment: Encodable {
     init() {}
-    
+
     /// A mobile network carrier or MNO, also known as a wireless service provider.
     var carrier: String?
-    
+
     /// The language of the environment to represent the user's linguistic, geographical, or cultural preferences for data presentation.
     var language: XDMLifecycleLanguage?
-    
+
     /// The name of the operating system used when the observation was made.
     var operatingSystem: String?
-    
+
     /// The full version identifier for the operating system used when the observation was made.
     var operatingSystemVersion: String?
-    
+
     /// The type of the application environment.
     var type: XDMEnvironmentType?
 

@@ -15,19 +15,19 @@ import Foundation
 /// Represents XDM Mobile Lifecycle Details
 struct XDMMobileLifecycleDetails {
     init() {}
-    
+
     /// Application for the Lifecycle details
     var application: XDMApplication?
-    
+
     /// Device for the Lifecycle details
     var device: XDMDevice?
-    
+
     /// Environment for the Lifecycle details
     var environment: XDMEnvironment?
-    
+
     /// Event type for the Lifecycle details
     var eventType: String?
-    
+
     /// Timestamp of the Lifecycle details
     var timestamp: Date?
 

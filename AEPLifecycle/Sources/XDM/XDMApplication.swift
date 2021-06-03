@@ -16,34 +16,34 @@ import Foundation
 /// Represents an XDM Application schema
 struct XDMApplication {
     init() {}
-    
+
     /// Close type of the application
     var closeType: XDMCloseType?
-    
+
     /// Identifier of the application
     var id: String?
-    
+
     /// Install date of the application
     var installDate: Date?
-    
+
     /// Indicates of this is a close event
     var isClose: Bool?
-    
+
     /// Indicates of this is a install event
     var isInstall: Bool?
-    
+
     /// Indicates of this is a launch event
     var isLaunch: Bool?
-    
+
     /// Indicates of this is a update event
     var isUpgrade: Bool?
-    
+
     /// Name of the application
     var name: String?
-    
+
     /// Session length of this launch
     var sessionLength: Int64?
-    
+
     /// Version of the application
     var version: String?
 
