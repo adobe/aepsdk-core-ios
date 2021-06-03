@@ -183,7 +183,7 @@ class LifecycleMetricsBuilder {
 
         lifecycleMetrics.deviceResolution = getResolution()
         lifecycleMetrics.operatingSystem = "\(systemInfoService.getOperatingSystemName()) \(systemInfoService.getOperatingSystemVersion())"
-        lifecycleMetrics.locale = getLocale()
+        lifecycleMetrics.locale = systemInfoService.getFormattedLocale()
         lifecycleMetrics.runMode = systemInfoService.getRunMode()
 
         return self
@@ -207,11 +207,13 @@ class LifecycleMetricsBuilder {
         let displayInfo = systemInfoService.getDisplayInformation()
         return "\(displayInfo.width)x\(displayInfo.height)"
     }
+}
 
+extension SystemInfoService {
     /// Gets the formatted locale
     /// - Return: `String` formatted locale
-    private func getLocale() -> String {
-        let locale = systemInfoService.getActiveLocaleName()
+    func getFormattedLocale() -> String {
+        let locale = getActiveLocaleName()
         return locale.replacingOccurrences(of: "_", with: "-")
     }
 }
