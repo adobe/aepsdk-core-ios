@@ -36,7 +36,6 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         mockSystemInfoService.deviceName = "test-device-name"
         mockSystemInfoService.deviceModelNumber = "test-device-model"
         mockSystemInfoService.displayInformation = (100, 200)
-        mockSystemInfoService.orientation = .PORTRAIT
         mockSystemInfoService.deviceType = .PHONE
         mockSystemInfoService.activeLocaleName = "en_US"
         mockSystemInfoService.runMode = "Application"
