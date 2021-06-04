@@ -27,7 +27,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
 
     var isLocalImageUsed = false
     var payload: String
-    var listener: FullscreenMessageDelegate?
+    weak var listener: FullscreenMessageDelegate?
     public private(set) var webView: UIView?
     private var messageMonitor: MessageMonitoring
     private var loadingNavigation: WKNavigation?
@@ -186,9 +186,7 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     /// Delegate method invoked when the webView navigation is complete.
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if navigation == self.loadingNavigation {
-            if let funcBlock = self.listener?.webViewDidFinishLoading {
-                funcBlock()
-            }
+            self.listener?.webViewDidFinishInitialLoading?(webView: webView)
         }
     }
 
