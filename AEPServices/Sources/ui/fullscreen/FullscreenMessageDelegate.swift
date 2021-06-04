@@ -36,6 +36,7 @@ import WebKit
     func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
 
     /// Invoked when the fullscreen message finished loading its first content on the webView.
+    /// - Parameter webView - the `WKWebView` instance that completed loading its initial content.
     @objc(webViewDidFinishInitialLoading:)
     optional func webViewDidFinishInitialLoading(webView: WKWebView)
 
