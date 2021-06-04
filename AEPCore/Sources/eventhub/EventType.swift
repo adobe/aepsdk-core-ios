@@ -42,5 +42,6 @@ public class EventType: NSObject {
     public static let genericData = "com.adobe.eventType.generic.data"
     public static let edge = "com.adobe.eventType.edge"
     public static let edgeConsent = "com.adobe.eventType.edgeConsent"
+    public static let optimize = "com.adobe.eventType.optimize"
     public static let wildcard = "com.adobe.eventType._wildcard_"
 }
