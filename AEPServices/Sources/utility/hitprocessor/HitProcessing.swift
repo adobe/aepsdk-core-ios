@@ -12,7 +12,7 @@
 import Foundation
 
 /// A class of types who provide the functionality for processing hits
-public protocol HitProcessing: class {
+public protocol HitProcessing {
 
     /// Determines the interval at which a hit should be retried
     /// - Parameter entity: The hit whose retry interval is to be computed

@@ -19,7 +19,7 @@ import AEPServicesMocks
 class FullscreenMessageTests : XCTestCase {
     let mockHtml = "somehtml"
     static var onShowFullscreenMessagingCall = false
-    static var onDismissullscreenMessagingCall = false
+    static var onDismissFullscreenMessagingCall = false
     static var onShowFailedCall = false
     var fullscreenMessage : FullscreenMessage?
     static var expectation: XCTestExpectation?
@@ -28,11 +28,12 @@ class FullscreenMessageTests : XCTestCase {
     var rootViewController: UIViewController!
 
     var messageMonitor = MessageMonitor()
+    var fullscreenListener = MockFullscreenListener()
 
     override func setUp() {
         FullscreenMessageTests.onShowFullscreenMessagingCall = false
-        FullscreenMessageTests.onDismissullscreenMessagingCall = false
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false, messageMonitor: messageMonitor)
+        FullscreenMessageTests.onDismissFullscreenMessagingCall = false
+        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: fullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor)
         mockUIService = MockUIService()
         ServiceProvider.shared.uiService = mockUIService!
     }
@@ -53,25 +54,24 @@ class FullscreenMessageTests : XCTestCase {
     }
 
     func test_dismiss() {
-        FullscreenMessageTests.expectation = XCTestExpectation(description: "Testing Dismiss")
+        FullscreenMessageTests.expectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
         messageMonitor.displayMessage()
         fullscreenMessage?.dismiss()
         wait(for: [FullscreenMessageTests.expectation!], timeout: 10.0)
-        XCTAssertTrue(FullscreenMessageTests.onDismissullscreenMessagingCall)
+        XCTAssertTrue(FullscreenMessageTests.onDismissFullscreenMessagingCall)
     }
 
     func test_show() {
+        FullscreenMessageTests.expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
         messageMonitor.dismissMessage()
         XCTAssertNoThrow(fullscreenMessage?.show())
     }
 
     func test_showFailed() {
         FullscreenMessageTests.expectation = XCTestExpectation(description: "Testing show failed")
-        fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: MockFullscreenListener(), isLocalImageUsed: false, messageMonitor: messageMonitor)
         fullscreenMessage?.show()
         wait(for: [FullscreenMessageTests.expectation!], timeout: 1.0)
         XCTAssertTrue(FullscreenMessageTests.onShowFailedCall)
-
     }
 
     class MockFullscreenListener: FullscreenMessageDelegate {
@@ -81,7 +81,7 @@ class FullscreenMessageTests : XCTestCase {
         }
 
         func onDismiss(message: FullscreenMessage) {
-            FullscreenMessageTests.onDismissullscreenMessagingCall = true
+            FullscreenMessageTests.onDismissFullscreenMessagingCall = true
             FullscreenMessageTests.expectation?.fulfill()
         }
 

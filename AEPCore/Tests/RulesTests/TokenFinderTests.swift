@@ -118,11 +118,11 @@ class TokenFinderTests: XCTestCase {
         formatter_ISO8601NoColon.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ"
 
         /// When: retrieve token `~timestampz`, `~timestampp` & `~timestampu`
-        guard let date_ISO8601_string = tokenFinder.get(key: "~timestampp") as? String, let date_ISO8601 = formatter_ISO8601.date(from: date_ISO8601_string), let date_ISO8601NoColon_string = tokenFinder.get(key: "~timestampz") as? String, let date_ISO8601NoColon = formatter_ISO8601NoColon.date(from: date_ISO8601NoColon_string), let date_UNIX_Int64 = tokenFinder.get(key: "~timestampu") as? Int64 else {
+        guard let date_ISO8601_string = tokenFinder.get(key: "~timestampp") as? String, let date_ISO8601 = formatter_ISO8601.date(from: date_ISO8601_string), let date_ISO8601NoColon_string = tokenFinder.get(key: "~timestampz") as? String, let date_ISO8601NoColon = formatter_ISO8601NoColon.date(from: date_ISO8601NoColon_string), let date_UNIX_Int = tokenFinder.get(key: "~timestampu") as? Int else {
             XCTFail("Expected no-nil timestamp")
             return
         }
-        let date_UNIX = Date(timeIntervalSince1970: TimeInterval(date_UNIX_Int64))
+        let date_UNIX = Date(timeIntervalSince1970: TimeInterval(date_UNIX_Int))
         /// Then: return same timestamp with different format
         XCTAssertEqual(date_ISO8601, date_ISO8601NoColon)
         XCTAssertEqual(date_ISO8601, date_UNIX)

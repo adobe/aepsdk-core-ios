@@ -23,7 +23,7 @@ struct UIUtils {
         guard let screenBounds: CGSize = keyWindow?.frame.size else { return nil }
         newFrame.size = screenBounds
 
-        // y is dependant on visibility and height
+        // y is dependent on visibility and height
         newFrame.origin.y = 0
         return newFrame
     }

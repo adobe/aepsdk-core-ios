@@ -154,6 +154,29 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertEqual(testUrl, mockSession.calledWithUrlRequest?.url)
     }
 
+    func testConnectAsync_initiatesConnection_whenValidNetworkRequest_withData() {
+        // setup
+        let sampleData = "sampleData".data(using: .utf8)!
+        let expectation = XCTestExpectation(description: "Completion handler called")
+
+        // test
+        let testUrl = URL(string: "https://test.com")!
+        let networkRequest = NetworkRequest(url: testUrl, httpMethod: .post, connectPayloadData: sampleData, connectTimeout: 2.0, readTimeout: 2.0)
+        networkStub.connectAsync(networkRequest: networkRequest, completionHandler: { connection in
+            XCTAssertEqual(jsonData, connection.data) // jsonData is the data returned from MockSession
+            XCTAssertNil(connection.response)
+            XCTAssertNil(connection.error)
+            expectation.fulfill()
+        })
+
+        // verify
+        wait(for: [expectation], timeout: 1.0)
+        XCTAssertTrue(mockSession.dataTaskWithCompletionHandlerCalled)
+        XCTAssertEqual(sampleData, mockSession.calledWithUrlRequest?.httpBody) // makes the network call with the same data provided in network request
+        XCTAssertEqual("POST", mockSession.calledWithUrlRequest?.httpMethod)
+        XCTAssertEqual(testUrl, mockSession.calledWithUrlRequest?.url)
+    }
+
     func testConnectAsync_returnsTimeoutError_whenConnectionTimesOut() {
         let defaultNetworkService = NetworkService()
         let expectation = XCTestExpectation(description: "Completion handler called")

@@ -22,7 +22,7 @@ public final class ThreadSafeArray<T> {
         queue = DispatchQueue(label: identifier)
     }
 
-    /// Appends a new element safetly to the array
+    /// Appends a new element to the thread safe array
     public func append(_ newElement: T) {
         queue.async {
             self.array.append(newElement)
@@ -33,6 +33,17 @@ public final class ThreadSafeArray<T> {
     public func clear() {
         queue.async {
             self.array.removeAll()
+        }
+    }
+
+    /// Removes and returns the first element of the thread safe array.
+    /// Returns nil if the array is empty
+    public func removeFirst() -> T? {
+        queue.sync {
+            if array.isEmpty {
+                return nil
+            }
+            return self.array.removeFirst()
         }
     }
 
