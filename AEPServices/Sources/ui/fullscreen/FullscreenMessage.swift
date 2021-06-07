@@ -27,9 +27,10 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
 
     var isLocalImageUsed = false
     var payload: String
-    var listener: FullscreenMessageDelegate?
+    weak var listener: FullscreenMessageDelegate?
     public private(set) var webView: UIView?
     private var messageMonitor: MessageMonitoring
+    private var loadingNavigation: WKNavigation?
 
     private var messagingDelegate: MessagingDelegate? {
         return ServiceProvider.shared.messagingDelegate
@@ -119,9 +120,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
                 // loadFileURL:allowingReadAccessToURL: to load the html from local file, which will give us the correct
                 // permission to read cached files
                 if useTempHTML {
-                    wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFile?.path ?? ""), allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolder?.path ?? ""))
+                    self.loadingNavigation = wkWebView.loadFileURL(URL.init(fileURLWithPath: tempHTMLFile?.path ?? ""), allowingReadAccessTo: URL.init(fileURLWithPath: cacheFolder?.path ?? ""))
                 } else {
-                    wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
+                    self.loadingNavigation = wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
 
                 self.displayWithAnimation(webView: wkWebView)
@@ -179,6 +180,13 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
             // if the API user doesn't provide any listener ( self.listener == nil ),
             // set WKNavigationActionPolicyAllow as a default behavior.
             decisionHandler(.allow)
+        }
+    }
+
+    /// Delegate method invoked when the webView navigation is complete.
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if navigation == self.loadingNavigation {
+            self.listener?.webViewDidFinishInitialLoading?(webView: webView)
         }
     }
 
