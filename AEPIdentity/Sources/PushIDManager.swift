@@ -70,6 +70,11 @@ struct PushIDManager: PushIDManageable {
         }
     }
 
+    mutating func resetPersistedFlags() {
+        pushEnabled = false
+        analyticsSynced = false
+    }
+
     // MARK: Private APIs
 
     /// Compares the provided newPushId against the one in data store (if exists)

@@ -198,6 +198,29 @@ class ThreadSafeArrayTests: XCTestCase {
         XCTAssertEqual(tsArray.count, 0)
     }
 
+
+    // Tests that removes first item from an array
+    func testRemoveFirst() {
+        let tsArray = ThreadSafeArray<String>()
+
+        // test removeFirst on empty array
+        XCTAssertNil(tsArray.removeFirst())
+
+        // setup
+        tsArray.append("One")
+        tsArray.append("Two")
+
+        // test
+        XCTAssertEqual(tsArray.removeFirst(), "One")
+        XCTAssertEqual(tsArray.count, 1)
+
+        // test
+        XCTAssertEqual(tsArray.removeFirst(), "Two")
+        XCTAssertEqual(tsArray.count, 0)
+
+
+    }
+
     // Tests that the .shallowCopy functionality doesn't deadlock against the backing array
     func testShallowCopyNoDeadlock() {
         let count = 1000

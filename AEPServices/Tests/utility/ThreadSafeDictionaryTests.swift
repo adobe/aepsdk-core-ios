@@ -139,6 +139,20 @@ class ThreadSafeDictionaryTests: XCTestCase {
         }
     }
 
+    func testGetKeys() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+
+        // get keys on empty dictionary
+        XCTAssertEqual(testDictionary.keys,[])
+
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+
+        XCTAssertEqual(testDictionary.keys.count, count)
+    }
+
     private func dispatchSyncWithDict(i: Int) {
         dispatchQueueSerial.sync {
             self.threadSafeDict?[0] = i
