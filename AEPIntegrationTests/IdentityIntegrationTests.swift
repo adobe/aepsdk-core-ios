@@ -56,7 +56,7 @@ class IdentityIntegrationTests: XCTestCase {
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
-            if request.url.absoluteString.contains("d_cid_ic=id1%2501value1%25010") {
+            if request.url.absoluteString.contains("d_cid_ic=id1%2501value1%25011") {
                 XCTAssertTrue(request.url.absoluteString.contains("https://test.com/id"))
                 XCTAssertTrue(request.url.absoluteString.contains("d_orgid=orgid"))
                 requestExpectation.fulfill()
@@ -65,7 +65,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        Identity.syncIdentifiers(identifiers: ["id1": "value1"])
+        Identity.syncIdentifiers(identifiers: ["id1": "value1"], authenticationState: .authenticated)
 
         wait(for: [requestExpectation], timeout: 1)
     }
