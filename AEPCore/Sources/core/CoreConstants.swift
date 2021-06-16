@@ -13,7 +13,7 @@ import Foundation
 
 enum CoreConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
-    static let EXTENSION_VERSION = "3.2.0"
+    static let EXTENSION_VERSION = "3.2.1"
     static let DATA_STORE_NAME = EXTENSION_NAME
 
     static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
