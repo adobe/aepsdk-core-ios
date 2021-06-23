@@ -70,7 +70,7 @@ Alternatively, if your project has a `Package.swift` file, you can add AEPCore d
 
 ```
 dependencies: [
-    .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .branch("main"))
+    .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .upToNextMajor(from: "3.0.0"))
 ]
 ```
 
