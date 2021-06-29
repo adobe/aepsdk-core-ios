@@ -45,7 +45,7 @@ class URL_IdentityTests: XCTestCase {
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
     }
-    
+
     /// Tests that one custom id is encoded properly into the URL and is not double encoded
     func testIdentityHitURLOneCustomIdWithSpecialCharacter() {
         // setup
@@ -95,7 +95,7 @@ class URL_IdentityTests: XCTestCase {
         // verify
         XCTAssertEqual(expectedUrl, url?.absoluteString)
     }
-    
+
     /// Tests that one dpid is encoded into the URL correctly and is not double encoded
     func testIdentityHitURLOneDpidWithSpecialCharacter() {
         // setup
