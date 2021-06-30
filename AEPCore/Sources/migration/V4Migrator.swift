@@ -38,12 +38,6 @@ struct V4Migrator {
             migrateConfigurationLocalStorage()
             Log.debug(label: LOG_TAG, "Full migration of NSUserDefaults successful.")
         }
-
-        if visitorIdNeedsMigration() {
-            Log.debug(label: LOG_TAG, "Migrating Adobe SDK v4 Identity to Analytics NSUserDefaults for use with Adobe SDK v5.")
-            migrateVisitorIdLocalStorage()
-            Log.debug(label: LOG_TAG, "Full migration of Identity to Analytics NSUserDefaults successful.")
-        }
     }
 
     // MARK: - Private APIs
@@ -60,13 +54,6 @@ struct V4Migrator {
         return v4Defaults.object(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS) != nil
     }
 
-    /// Determines if a migration from Identity to Analytics is needed
-    /// - Returns: True if a `vid` value exists that needs to migrate from Identity to Analytics
-    private func visitorIdNeedsMigration() -> Bool {
-        // TODO: Implement when implementing the Analytics extension
-        return false
-    }
-
     /// Migrates local storage for each of the extensions
     private func migrateLocalStorage() {
         // Mobile Services
@@ -77,11 +64,6 @@ struct V4Migrator {
 
         // Lifecycle
         migrateLifecycleLocalStorage()
-
-        // TODO: Target
-        // TODO: Acquisition
-        // TODO: Analytics
-        // TODO: Audience Manager
     }
 
     /// Migrates the v4 Mobile Services values into the v5 Mobile Services data store
@@ -206,11 +188,6 @@ struct V4Migrator {
         }
 
         v4Defaults.removeObject(forKey: V4MigrationConstants.Configuration.V4_PRIVACY_STATUS)
-    }
-
-    /// Migrates the v4 Identity values to v5 Analytics data store
-    private func migrateVisitorIdLocalStorage() {
-        // TODO: Implement when implementing the Analytics extension
     }
 
 }
