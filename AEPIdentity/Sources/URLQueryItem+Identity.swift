@@ -16,14 +16,14 @@ extension URLQueryItem {
     /// Creates a `URLQueryItem` configured with a `Identifiable`
     /// - Parameter identifier: The `Identifiable` to be encoded into the `URLQueryItem`
     init(identifier: Identifiable) {
-        var queryString = URLEncoder.encode(value: identifier.type ?? "")
+        let cidDelimiter: String = (IdentityConstants.CID_DELIMITER.removingPercentEncoding ?? IdentityConstants.CID_DELIMITER)
 
-        let encodedId = URLEncoder.encode(value: identifier.identifier ?? "")
-        if !encodedId.isEmpty {
-            queryString += IdentityConstants.CID_DELIMITER + encodedId
+        var queryString = identifier.type ?? ""
+        if let identifier = identifier.identifier, !identifier.isEmpty {
+            queryString += cidDelimiter + identifier
         }
 
-        queryString += "\(IdentityConstants.CID_DELIMITER)\(identifier.authenticationState.rawValue)"
+        queryString += "\(cidDelimiter)\(identifier.authenticationState.rawValue)"
         self = URLQueryItem(name: IdentityConstants.VISITOR_ID_PARAMETER_KEY_CUSTOMER, value: queryString)
     }
 
@@ -32,9 +32,8 @@ extension URLQueryItem {
     ///   - dpidKey: dpid key
     ///   - dpidValue: dpid value
     init(dpidKey: String, dpidValue: String) {
-        let encodedKey = URLEncoder.encode(value: dpidKey)
-        let encodedValue = URLEncoder.encode(value: dpidValue)
-        let queryString = "\(encodedKey)\(IdentityConstants.CID_DELIMITER)\(encodedValue)"
+        let cidDelimiter: String = (IdentityConstants.CID_DELIMITER.removingPercentEncoding ?? IdentityConstants.CID_DELIMITER)
+        let queryString = "\(dpidKey)\(cidDelimiter)\(dpidValue)"
 
         self = URLQueryItem(name: "d_cid", value: queryString)
     }
