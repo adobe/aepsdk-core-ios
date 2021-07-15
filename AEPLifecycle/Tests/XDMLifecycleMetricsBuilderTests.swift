@@ -49,7 +49,6 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         
         // verify
         let application = [
-            "installDate": "2017-01-08",
             "name": "test-app-name",
             "version": "test-version",
             "isInstall": true,

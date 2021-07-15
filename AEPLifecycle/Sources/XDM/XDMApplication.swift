@@ -23,9 +23,6 @@ struct XDMApplication {
     /// Identifier of the application
     var id: String?
 
-    /// Install date of the application
-    var installDate: Date?
-
     /// Indicates of this is a close event
     var isClose: Bool?
 
@@ -50,7 +47,6 @@ struct XDMApplication {
     enum CodingKeys: String, CodingKey {
         case closeType
         case id
-        case installDate
         case isClose
         case isInstall
         case isLaunch
@@ -66,7 +62,6 @@ extension XDMApplication: Encodable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         if let unwrapped = closeType { try container.encode(unwrapped, forKey: .closeType) }
         if let unwrapped = id { try container.encode(unwrapped, forKey: .id) }
-        if let unwrapped = XDMFormatters.dateToFullDateString(from: installDate) { try container.encode(unwrapped, forKey: .installDate) }
         if let unwrapped = isClose { try container.encode(unwrapped, forKey: .isClose) }
         if let unwrapped = isInstall { try container.encode(unwrapped, forKey: .isInstall) }
         if let unwrapped = isLaunch { try container.encode(unwrapped, forKey: .isLaunch) }

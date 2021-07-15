@@ -70,7 +70,6 @@ class XDMLifecycleMetricsBuilder {
 
         if isInstall {
             xdmApplicationInfoLaunch?.isInstall = true
-            xdmApplicationInfoLaunch?.installDate = startDate
         }
 
         if isUpgrade {

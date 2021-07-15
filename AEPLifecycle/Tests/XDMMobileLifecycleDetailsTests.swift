@@ -22,7 +22,6 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
         lifecycleDetails.timestamp = Date(timeIntervalSince1970: 1619827190)
         lifecycleDetails.eventType = "test-event-type"
         lifecycleDetails.application = XDMApplication()
-        lifecycleDetails.application?.installDate = Date(timeIntervalSince1970: 1619827190)
         lifecycleDetails.application?.isInstall = true
         lifecycleDetails.application?.sessionLength = 424394
         lifecycleDetails.application?.isLaunch = true
@@ -67,11 +66,10 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
             "type" : "mobile"
           },
           "application" : {
-            "sessionLength" : 424394,
-            "isInstall" : true,
             "isLaunch" : true,
             "isUpgrade" : true,
-            "installDate" : "2021-04-30"
+            "isInstall" : true,
+            "sessionLength" : 424394
           },
           "eventType" : "test-event-type",
           "timestamp" : "2021-04-30T23:59:50Z"
