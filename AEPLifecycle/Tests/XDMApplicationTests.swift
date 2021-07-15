@@ -30,7 +30,6 @@ class XDMApplicationTests: XCTestCase {
         buildAndSetMockInfoService()
 
         var application = XDMApplication()
-        application.installDate = Date(timeIntervalSince1970: 1619827190)
         application.isInstall = true
         application.sessionLength = 424394
         application.isLaunch = true
@@ -45,11 +44,10 @@ class XDMApplicationTests: XCTestCase {
         // verify
         let expected = """
         {
-          "sessionLength" : 424394,
-          "isInstall" : true,
           "isLaunch" : true,
           "isUpgrade" : true,
-          "installDate" : "2021-04-30"
+          "isInstall" : true,
+          "sessionLength" : 424394
         }
         """
 

@@ -29,33 +29,10 @@ enum XDMFormatters {
             return nil
         }
     }
-
-    /// Serialize the given Date to a string formatted to an ISO 8601 date as defined in
-    /// <a href="https://tools.ietf.org/html/rfc3339#section-5.6">RFC 3339, section 5.6</a>
-    /// For example, 2017-09-26
-    /// - Parameters:
-    ///   - Date:  A timestamp and it must not be null
-    /// - Returns: The timestamp formatted to a string in the format of 'yyyy-MM-dd',
-    ///            or an empty string if Date  is null
-    static func dateToFullDateString(from: Date?) -> String? {
-        if let unwrapped = from {
-            return unwrapped.asFullDate()
-        } else {
-            return nil
-        }
-    }
 }
 
 private extension Date {
     func asISO8601String() -> String {
         return ISO8601DateFormatter().string(from: self)
-    }
-
-    func asFullDate() -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.calendar = Calendar(identifier: .gregorian)
-        return formatter.string(from: self)
     }
 }
