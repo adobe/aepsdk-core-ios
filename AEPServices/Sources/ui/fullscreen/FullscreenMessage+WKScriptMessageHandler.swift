@@ -16,9 +16,9 @@ import WebKit
 // MARK: - WKScriptMessageHandler
 extension FullscreenMessage: WKScriptMessageHandler {
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == jsDismissAction {
-            print("message dismissed from \(message.body)")
-            dismissWithAnimation(animate: true)
+        if let handler = scriptHandlers[message.name] {
+            Log.debug(label: LOG_PREFIX, "Calling javascript handler for \(message.name) with content \(message.body).")
+            handler(message.body)
         }
     }
 }

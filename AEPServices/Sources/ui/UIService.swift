@@ -18,7 +18,7 @@ import UIKit
 ///
 @objc
 public protocol UIService {
-    
+
     /// Creates a `FullscreenPresentable`
     /// - Parameters:
     ///     - payload: The payload used in the FullscreenPresentable as a string
@@ -27,7 +27,7 @@ public protocol UIService {
     /// - Returns: A `FullscreenPresentable` implementation
     @objc
     func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
-    
+
     /// Creates a `FullscreenPresentable`
     /// - Parameters:
     ///     - payload: The payload used in the FullscreenPresentable as a string
@@ -37,7 +37,7 @@ public protocol UIService {
     /// - Returns: A `FullscreenPresentable` implementation
     @objc
     optional func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool, parent: Any?) -> FullscreenPresentable
-    
+
     /// Creates a `FloatingButtonPresentable`
     /// - Parameters:
     ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`

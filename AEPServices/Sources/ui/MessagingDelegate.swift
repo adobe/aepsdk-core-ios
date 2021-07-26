@@ -34,7 +34,7 @@ public protocol MessagingDelegate {
     /// - Returns: true if the message should be shown else false
     @objc
     func shouldShowMessage(message: Showable) -> Bool
-    
+
     /// Called when `message` loads a URL
     /// - Parameters:
     ///     - url: the `URL` being loaded by the `message`

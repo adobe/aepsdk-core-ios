@@ -23,22 +23,22 @@ extension FullscreenMessage: WKNavigationDelegate {
             decisionHandler(.allow)
             return
         }
-        
+
         var navigation: WKNavigationActionPolicy = .allow
-        
+
         if self.listener != nil {
             let navigateNormally = self.listener?.overrideUrlLoad(message: self, url: urlToLoad.absoluteString) ?? true
-            
+
             navigation = navigateNormally ? .allow : .cancel
-            
+
             if navigation == .cancel {
                 self.messagingDelegate?.urlLoaded?(urlToLoad, byMessage: self)
             }
         }
-        
+
         decisionHandler(navigation)
     }
-    
+
     /// Delegate method invoked when the webView navigation is complete.
     public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if navigation == self.loadingNavigation {

@@ -20,12 +20,12 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
 
     /// Assignable in the constructor, `parent` is a reference to the object that owns this `FullscreenMessage` object
     public var parent: Any?
-    
+
     /// Native functions that can be called from javascript
     /// See `addHandler:forScriptMessage:`
     var scriptHandlers: [String: (Any?) -> Void] = [:]
-        
-    private let LOG_PREFIX = "FullscreenMessage"
+
+    let LOG_PREFIX = "FullscreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
     private let TEMP_FILE_NAME = "temp"
@@ -37,7 +37,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     weak var listener: FullscreenMessageDelegate?
     public private(set) var webView: UIView?
     private var messageMonitor: MessageMonitoring
-    
+
     var loadingNavigation: WKNavigation?
     var messagingDelegate: MessagingDelegate? {
         return ServiceProvider.shared.messagingDelegate
@@ -179,16 +179,23 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     /// Adds an entry to `scriptHandlers` for the provided message name.
     /// Handlers can be invoked from javascript in the message via
     /// - Parameters:
-    ///   - handler: a method
-    ///
-    public func addHandler(_ handler: (Any?) -> Void, forScriptMessage name: String) {
-        
+    ///   - name: the name of the message being passed from javascript
+    ///   - handler: a method to be called when the javascript message is passed    
+    public func handleMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
+        scriptHandlers[name] = handler
     }
-    
+
     // MARK: - private methods
-    
+
     private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
         let webViewConfiguration = WKWebViewConfiguration()
+
+        // load javascript handlers
+        let contentController = WKUserContentController()
+        scriptHandlers.forEach {
+            contentController.add(self, name: $0.key)
+        }
+        webViewConfiguration.userContentController = contentController
 
         // Fix for media playback.
         webViewConfiguration.allowsInlineMediaPlayback = true // Plays Media inline
