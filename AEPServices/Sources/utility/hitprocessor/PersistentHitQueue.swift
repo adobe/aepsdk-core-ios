@@ -73,6 +73,7 @@ public class PersistentHitQueue: HitQueuing {
                     } else {
                         // deleting the hit from the database failed
                         // need to delete the database to try and recover
+                        Log.warning(label: "PersistentHitQueue", "An unexpected error occurred while attempting to delete a record from the database. Data processing will be paused.")
                     }
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
