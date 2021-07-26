@@ -181,7 +181,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     /// - Parameters:
     ///   - name: the name of the message being passed from javascript
     ///   - handler: a method to be called when the javascript message is passed    
-    public func handleMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
+    public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
         scriptHandlers[name] = handler
     }
 
