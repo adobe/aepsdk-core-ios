@@ -16,8 +16,15 @@ import WebKit
 
 /// This class is used to create and display fullscreen messages on the current view.
 @objc(AEPFullscreenMessage)
-public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresentable {
+public class FullscreenMessage: NSObject, FullscreenPresentable {
 
+    /// Assignable in the constructor, `parent` is a reference to the object that owns this `FullscreenMessage` object
+    public var parent: Any?
+    
+    /// Native functions that can be called from javascript
+    /// See `addHandler:forScriptMessage:`
+    var scriptHandlers: [String: (Any?) -> Void] = [:]
+        
     private let LOG_PREFIX = "FullscreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
@@ -30,9 +37,9 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     weak var listener: FullscreenMessageDelegate?
     public private(set) var webView: UIView?
     private var messageMonitor: MessageMonitoring
-    private var loadingNavigation: WKNavigation?
-
-    private var messagingDelegate: MessagingDelegate? {
+    
+    var loadingNavigation: WKNavigation?
+    var messagingDelegate: MessagingDelegate? {
         return ServiceProvider.shared.messagingDelegate
     }
 
@@ -45,11 +52,13 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
     ///     - payload: String html content to be displayed with the message
     ///     - listener: `FullscreenMessageDelegate` listener to listening the message lifecycle.
     ///     - isLocalImageUsed: If true, an image from the app bundle will be used for the fullscreen message.
-    init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool, messageMonitor: MessageMonitoring) {
+    ///     - parent: The object that will own the newly created message
+    init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool, messageMonitor: MessageMonitoring, parent: Any? = nil) {
         self.payload = payload
         self.listener = listener
         self.isLocalImageUsed = isLocalImageUsed
         self.messageMonitor = messageMonitor
+        self.parent = parent
     }
 
     /// Call this API to hide the fullscreen message.
@@ -167,29 +176,17 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
         }
     }
 
-    // MARK: WKWebView delegate
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if self.listener != nil {
-            guard let shouldOpenUrl = self.listener?.overrideUrlLoad(message: self, url: navigationAction.request.url?.absoluteString) else {
-                decisionHandler(.allow)
-                return
-            }
-            decisionHandler(shouldOpenUrl ? .allow : .cancel)
-
-        } else {
-            // if the API user doesn't provide any listener ( self.listener == nil ),
-            // set WKNavigationActionPolicyAllow as a default behavior.
-            decisionHandler(.allow)
-        }
+    /// Adds an entry to `scriptHandlers` for the provided message name.
+    /// Handlers can be invoked from javascript in the message via
+    /// - Parameters:
+    ///   - handler: a method
+    ///
+    public func addHandler(_ handler: (Any?) -> Void, forScriptMessage name: String) {
+        
     }
-
-    /// Delegate method invoked when the webView navigation is complete.
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if navigation == self.loadingNavigation {
-            self.listener?.webViewDidFinishInitialLoading?(webView: webView)
-        }
-    }
-
+    
+    // MARK: - private methods
+    
     private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
         let webViewConfiguration = WKWebViewConfiguration()
 
