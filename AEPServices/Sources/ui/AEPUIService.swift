@@ -18,7 +18,11 @@ class AEPUIService: UIService {
     private var messageMonitor = MessageMonitor()
 
     func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
-        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor)
+        return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, parent: nil)
+    }
+
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, parent: Any? = nil) -> FullscreenPresentable {
+        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, parent: parent)
     }
 
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {

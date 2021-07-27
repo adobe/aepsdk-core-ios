@@ -16,21 +16,32 @@ import UIKit
 ///
 /// UIService for creating UI elements
 ///
+@objc
 public protocol UIService {
 
-    ///
     /// Creates a `FullscreenPresentable`
     /// - Parameters:
     ///     - payload: The payload used in the FullscreenPresentable as a string
     ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
     ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
     /// - Returns: A `FullscreenPresentable` implementation
+    @objc
     func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
 
-    ///
-    /// Creates a `FloatinButtonPresentable`
+    /// Creates a `FullscreenPresentable`
+    /// - Parameters:
+    ///     - payload: The payload used in the FullscreenPresentable as a string
+    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
+    ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
+    ///     - parent: The object that will own the newly created message
+    /// - Returns: A `FullscreenPresentable` implementation
+    @objc
+    optional func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool, parent: Any?) -> FullscreenPresentable
+
+    /// Creates a `FloatingButtonPresentable`
     /// - Parameters:
     ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
     /// - Returns: A `FloatingButtonPresentable` implementation
+    @objc
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
 }

@@ -76,6 +76,8 @@
 		24CF602B2538AC79006473BA /* MobileCore+Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */; };
 		24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */; };
 		24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */; };
+		24D9D52E26AB788D002A441A /* FullscreenMessage+WKNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */; };
+		24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */; };
 		344CB8028DA7A7F0F44E65F4 /* Pods_AEPIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B414FF5745B34BC95CF624DC /* Pods_AEPIntegrationTests.framework */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
@@ -659,6 +661,8 @@
 		24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+Tracking.swift"; sourceTree = "<group>"; };
 		24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TrackingTests.swift"; sourceTree = "<group>"; };
 		24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyStatus.swift"; sourceTree = "<group>"; };
+		24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKNavigationDelegate.swift"; sourceTree = "<group>"; };
+		24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKScriptMessageHandler.swift"; sourceTree = "<group>"; };
 		2CDAE3FD5AB17A2ABC44C648 /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		379EA00DE567DCA654F85A63 /* Pods-AEPCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.release.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.release.xcconfig"; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1870,6 +1874,8 @@
 			children = (
 				92EEA5F5258933A600DBA3EE /* FullscreenMessageDelegate.swift */,
 				92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */,
+				24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */,
+				24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */,
 				78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */,
 			);
 			path = fullscreen;
@@ -2959,6 +2965,7 @@
 				923547EB25BF9C6600BEA9A3 /* AEPUIService.swift in Sources */,
 				3F0397CE24BE5FF30019F095 /* LoggingService.swift in Sources */,
 				786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */,
+				24D9D52E26AB788D002A441A /* FullscreenMessage+WKNavigationDelegate.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
 				78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
@@ -2973,6 +2980,7 @@
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
 				3F0397D724BE5FF30019F095 /* DataQueueService.swift in Sources */,
 				3F0397F324BE60910019F095 /* PersistentHitQueue.swift in Sources */,
+				24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */,
 				3F0397CD24BE5FF30019F095 /* NetworkServiceConstants.swift in Sources */,
 				3F0397C724BE5FF30019F095 /* CacheExpiry.swift in Sources */,
 				3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */,
