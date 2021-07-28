@@ -18,6 +18,7 @@ public class PersistentHitQueue: HitQueuing {
 
     private static let DEFAULT_RETRY_INTERVAL = TimeInterval(30)
     private var suspended = true
+    private var isTaskScheduled = false
     private let queue = DispatchQueue(label: "com.adobe.mobile.persistenthitqueue")
 
     /// Creates a new `HitQueue` with the underlying `DataQueue` which is used to persist hits
@@ -60,8 +61,14 @@ public class PersistentHitQueue: HitQueuing {
     /// A recursive function for processing hits, it will continue processing all the hits until none are left in the data queue
     private func processNextHit() {
         queue.async {
-            guard !self.suspended else { return }
-            guard let hit = self.dataQueue.peek() else { return } // nothing left in the queue, stop processing
+            guard !self.suspended, !self.isTaskScheduled else { return }
+
+            self.isTaskScheduled = true
+
+            guard let hit = self.dataQueue.peek() else {
+                self.isTaskScheduled = false
+                return
+            } // nothing left in the queue, stop processing
 
             let semaphore = DispatchSemaphore(value: 0)
             self.processor.processHit(entity: hit, completion: { [weak self] success in
@@ -69,6 +76,7 @@ public class PersistentHitQueue: HitQueuing {
                     // successful processing of hit
                     // attempt to remove it from the queue and process next hit if successful
                     if self?.dataQueue.remove() ?? false {
+                        self?.isTaskScheduled = false
                         self?.processNextHit()
                     } else {
                         // deleting the hit from the database failed
@@ -78,6 +86,7 @@ public class PersistentHitQueue: HitQueuing {
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
                     self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval(for: hit) ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
+                        self?.isTaskScheduled = false
                         self?.processNextHit()
                     }
                 }
