@@ -148,22 +148,79 @@ class PersistentHitQueueTests: XCTestCase {
 
     /// Tests that hits are retried properly and do not block the queue
     func testProcessesHitsManyWithIntermittentProcessor() {
-        hitProcessor = MockHitIntermittentProcessor()
+        let hitCount = 50
+        hitProcessor = MockHitIntermittentProcessor(hitCount: hitCount)
         hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
 
         // test
-        for _ in 0 ..< 100 {
-            hitQueue.queue(entity: DataEntity(uniqueIdentifier: UUID().uuidString, timestamp: Date(), data: nil))
+        hitQueue.beginProcessing()
+        for i in 0 ..< hitCount {
+            hitQueue.queue(entity: DataEntity(uniqueIdentifier: "\(i)", timestamp: Date(), data: nil))
         }
 
-        hitQueue.beginProcessing()
-        sleep(1)
+        let intermittentProcessor = hitQueue.processor as? MockHitIntermittentProcessor
+        wait(for: [intermittentProcessor!.expectation], timeout: 100)
 
         // verify
         XCTAssertNil(hitQueue.dataQueue.peek()) // hits should no longer be in the queue as its been processed
-        let intermittentProcessor = hitQueue.processor as? MockHitIntermittentProcessor
-        XCTAssertEqual(100, intermittentProcessor?.processedHits.count) // all hits should be eventually processed
+        XCTAssertEqual(hitCount, intermittentProcessor?.processedHits.count) // All hits should be eventually processed
         XCTAssertFalse(intermittentProcessor?.failedHits.isEmpty ?? true) // some of the hits should have failed
+
+        // verify hits processed in-order
+        for i in 0 ..< (intermittentProcessor?.processedHits.count)! {
+            let hit = intermittentProcessor?.processedHits.shallowCopy[i]
+            XCTAssertEqual("\(i)", hit?.uniqueIdentifier)
+        }
+    }
+
+    /// Tests that hits are retried in an efficiently and orderly manner
+    func testHitRetryOrdering() {
+        let entity1 = DataEntity(uniqueIdentifier: "dataEntity1", timestamp: Date(), data: nil)
+        let entity2 = DataEntity(uniqueIdentifier: "dataEntity2", timestamp: Date(), data: nil)
+        let entity3 = DataEntity(uniqueIdentifier: "dataEntity3", timestamp: Date(), data: nil)
+
+        hitProcessor = ControllableHitProcessor()
+        hitQueue = PersistentHitQueue(dataQueue: MockDataQueue(), processor: hitProcessor)
+
+        guard let mockHitProcessor = hitProcessor as? ControllableHitProcessor else {
+            XCTFail()
+            return
+        }
+
+        mockHitProcessor.hitResult = false // retry hits
+        hitQueue.beginProcessing()
+        hitQueue.queue(entity: entity1)
+        hitQueue.queue(entity: entity2)
+        hitQueue.queue(entity: entity3)
+
+        // Sleep 0.1 seconds, which is less than the retry interval of 1 sec, then set hit result to success
+        Thread.sleep(forTimeInterval: 0.1)
+        mockHitProcessor.hitResult = true // set hit result to success (no retry)
+        // Sleep to allow retry interval to pass and data queue to get processed and emptied
+        Thread.sleep(forTimeInterval: 2)
+
+        let expectedProcessingOrder = [
+            entity1.uniqueIdentifier,
+            entity1.uniqueIdentifier, // entity 1 should be the only one retried
+            entity2.uniqueIdentifier,
+            entity3.uniqueIdentifier]
+
+        XCTAssertNil(hitQueue.dataQueue.peek()) // hits should no longer be in the queue as its been processed
+        XCTAssertEqual(expectedProcessingOrder, mockHitProcessor.processedHits.shallowCopy.map({$0.uniqueIdentifier}))
+    }
+}
+
+class ControllableHitProcessor: HitProcessing {
+    let processedHits = ThreadSafeArray<DataEntity>()
+    var hitResult = true
+
+    func retryInterval(for entity: DataEntity) -> TimeInterval {
+        return 1
+    }
+
+    func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void) {
+        processedHits.append(entity)
+        completion(hitResult)
     }
 }
 
@@ -183,24 +240,36 @@ class MockHitProcessor: HitProcessing {
 class MockHitIntermittentProcessor: HitProcessing {
     let processedHits = ThreadSafeArray<DataEntity>()
     var failedHits = Set<String>()
+    let expectation = XCTestExpectation(description: "Hit fulfillment count")
+
+    let processingOrder = ThreadSafeArray<String>()
+
+    /// Creates a new `MockHitIntermittentProcessor`
+    /// - Parameter hitCount: Number of hits this processor is expected to process
+    init(hitCount: Int) {
+        expectation.expectedFulfillmentCount = hitCount
+        expectation.assertForOverFulfill = true
+    }
 
     func retryInterval(for entity: DataEntity) -> TimeInterval {
-        return TimeInterval(0)
+        return TimeInterval(2)
     }
 
     // 50% of hits need to be processed twice, other 50% process successfully the first time
     func processHit(entity: DataEntity, completion: (Bool) -> Void) {
+        processingOrder.append(entity.uniqueIdentifier)
+
         // check if we've already "failed" at processing this hit
         if failedHits.contains(entity.uniqueIdentifier) {
             processedHits.append(entity)
+            expectation.fulfill()
             completion(true)
             return
         }
 
-        let shouldRetry = entity.uniqueIdentifier.hashValue % 2 == 0 // retry 50% of hits
-
-        if !shouldRetry {
+        if !Bool.random() { // retry ~50% of hits
             processedHits.append(entity)
+            expectation.fulfill()
             completion(true)
         } else {
             failedHits.insert(entity.uniqueIdentifier)
