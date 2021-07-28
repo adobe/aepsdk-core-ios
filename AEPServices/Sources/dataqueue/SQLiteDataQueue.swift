@@ -109,7 +109,8 @@ class SQLiteDataQueue: DataQueue {
                 disconnect(database: connection)
             }
             let deleteRowStatement = """
-            DELETE FROM \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n);
+            DELETE FROM \(SQLiteDataQueue.TABLE_NAME) WHERE id IN
+                (SELECT id from \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n));
             """
             guard SQLiteWrapper.execute(database: connection, sql: deleteRowStatement) else {
                 Log.warning(label: LOG_PREFIX, "Failed to delete oldest record from database: \(self.databaseName).")

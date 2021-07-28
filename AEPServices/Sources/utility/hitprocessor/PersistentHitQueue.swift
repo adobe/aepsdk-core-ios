@@ -66,10 +66,15 @@ public class PersistentHitQueue: HitQueuing {
             let semaphore = DispatchSemaphore(value: 0)
             self.processor.processHit(entity: hit, completion: { [weak self] success in
                 if success {
-                    // successful processing of hit, remove it from the queue, move to next hit
-                    _ = self?.dataQueue.remove()
-
-                    self?.processNextHit()
+                    // successful processing of hit
+                    // attempt to remove it from the queue and process next hit if successful
+                    if self?.dataQueue.remove() ?? false {
+                        self?.processNextHit()
+                    } else {
+                        // deleting the hit from the database failed
+                        // need to delete the database to try and recover
+                        Log.warning(label: "PersistentHitQueue", "An unexpected error occurred while attempting to delete a record from the database. Data processing will be paused.")
+                    }
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
                     self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval(for: hit) ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
