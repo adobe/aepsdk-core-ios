@@ -30,6 +30,7 @@ struct LifecycleState {
     #endif
 
     private var lifecycleSession: LifecycleSession
+    private var xdmMetricsBuilder: XDMLifecycleMetricsBuilder?
 
     /// Creates a new `LifecycleState` with the given `NamedCollectionDataStore`
     /// - Parameter dataStore: The Lifecycle extension's data store
@@ -56,7 +57,7 @@ struct LifecycleState {
     ///   - adId: The advertising identifier provided by the identity extension
     ///   - sessionTimeout: The session timeout for this start event, defaults to 300 seconds
     /// - Returns: The previous session info if exists, otherwise nil
-    mutating func start(date: Date, additionalContextData: [String: Any]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT), dispatchApplicationLaunchEvent: @escaping ([String: Any], [String: Any]) -> Void) -> LifecycleSessionInfo? {
+    mutating func start(date: Date, additionalContextData: [String: Any]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT), dispatchApplicationLaunchEvent: ((_ xdm: [String: Any], _ data: [String: Any]) -> Void)? = nil) -> LifecycleSessionInfo? {
         let sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
         // Build default LifecycleMetrics
         let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()
@@ -89,13 +90,13 @@ struct LifecycleState {
         // Update lifecycle context data and persist lifecycle info into local storage
         lifecycleContextData = lifecycleData
 
-        let xdmMetricsBuilder = XDMLifecycleMetricsBuilder(startDate: date)
+        xdmMetricsBuilder = XDMLifecycleMetricsBuilder(startDate: date)
             .addAppLaunchData(isInstall: isInstall(), isUpgrade: isUpgrade())
             .addAppCloseData(previousAppId: sessionContainer?.appId, previousSessionInfo: previousSessionInfo)
             .addEnvironmentData()
             .addDeviceData()
 
-        dispatchApplicationLaunchEvent(xdmMetricsBuilder.buildXDMAppLaunchEventData() ?? [:], additionalContextData ?? [:])
+        dispatchApplicationLaunchEvent?(xdmMetricsBuilder?.buildXDMAppLaunchEventData() ?? [:], additionalContextData ?? [:])
 
         persistLifecycleContextData(startDate: date)
 
@@ -104,8 +105,9 @@ struct LifecycleState {
 
     /// Pauses the current lifecycle session
     /// - Parameter pauseDate: date at which the pause event occurred
-    mutating func pause(pauseDate: Date, dispatchApplicationCloseEvent: @escaping ([String: Any]) -> Void ) {
+    mutating func pause(pauseDate: Date, dispatchApplicationCloseEvent: ((_ xdm: [String: Any]) -> Void)? = nil ) {
         lifecycleSession.pause(pauseDate: pauseDate)
+        dispatchApplicationCloseEvent?(xdmMetricsBuilder?.buildAppCloseXDMEventData() ?? [:])
     }
 
     /// Gets the current context data stored in memory, if none in memory will check data store, if not present will return nil
