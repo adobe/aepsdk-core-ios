@@ -56,7 +56,7 @@ struct LifecycleState {
     ///   - adId: The advertising identifier provided by the identity extension
     ///   - sessionTimeout: The session timeout for this start event, defaults to 300 seconds
     /// - Returns: The previous session info if exists, otherwise nil
-    mutating func start(date: Date, additionalContextData: [String: Any]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)) -> LifecycleSessionInfo? {
+    mutating func start(date: Date, additionalContextData: [String: Any]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT), dispatchApplicationLaunchEvent: @escaping ([String: Any], [String: Any]) -> Void) -> LifecycleSessionInfo? {
         let sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
         // Build default LifecycleMetrics
         let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()
@@ -95,6 +95,8 @@ struct LifecycleState {
             .addEnvironmentData()
             .addDeviceData()
 
+        dispatchApplicationLaunchEvent(xdmMetricsBuilder.buildXDMAppLaunchEventData() ?? [:], additionalContextData ?? [:])
+
         persistLifecycleContextData(startDate: date)
 
         return previousSessionInfo
@@ -102,7 +104,7 @@ struct LifecycleState {
 
     /// Pauses the current lifecycle session
     /// - Parameter pauseDate: date at which the pause event occurred
-    mutating func pause(pauseDate: Date) {
+    mutating func pause(pauseDate: Date, dispatchApplicationCloseEvent: @escaping ([String: Any]) -> Void ) {
         lifecycleSession.pause(pauseDate: pauseDate)
     }
 

@@ -31,6 +31,8 @@ enum LifecycleConstants {
 
     enum EventNames {
         static let LIFECYCLE_START = "LifecycleStart"
+        static let APPLICATION_LAUNCH = "Lifecycle Application Launch"
+        static let APPLICATION_CLOSE = "Lifecycle Application Close"
     }
 
     enum EventDataKeys {
@@ -48,6 +50,8 @@ enum LifecycleConstants {
         static let PREVIOUS_SESSION_START_TIMESTAMP = "previoussessionstarttimestampmillis"
         static let PREVIOUS_SESSION_PAUSE_TIMESTAMP = "previoussessionpausetimestampmillis"
         static let CONFIG_SESSION_TIMEOUT = "lifecycle.sessionTimeout"
+        static let XDM = "xdm"
+        static let DATA = "data"
     }
 
     enum DataStoreKeys {

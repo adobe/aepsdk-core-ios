@@ -68,7 +68,7 @@ public class Lifecycle: NSObject, Extension {
             start(event: event, configurationSharedState: configurationSharedState)
         } else if event.isLifecyclePauseEvent {
             Log.debug(label: LifecycleConstants.LOG_TAG, "Pausing lifecycle.")
-            lifecycleState.pause(pauseDate: event.timestamp)
+            lifecycleState.pause(pauseDate: event.timestamp, dispatchApplicationCloseEvent: dispatchApplicationClose(xdm:))
         }
     }
 
@@ -82,7 +82,7 @@ public class Lifecycle: NSObject, Extension {
         let prevSessionInfo = lifecycleState.start(date: event.timestamp,
                                                    additionalContextData: event.additionalData,
                                                    adId: getAdvertisingIdentifier(event: event),
-                                                   sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value))
+                                                   sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value), dispatchApplicationLaunchEvent: dispatchApplicationLaunch(xdm:data:))
         updateSharedState(event: event, data: lifecycleState.getContextData()?.toEventData() ?? [:])
 
         if let prevSessionInfo = prevSessionInfo {
@@ -134,6 +134,32 @@ public class Lifecycle: NSObject, Extension {
                                data: eventData)
         Log.trace(label: LifecycleConstants.LOG_TAG, "Dispatching lifecycle start event with data: \n\(PrettyDictionary.prettify(eventData))")
         dispatch(event: startEvent)
+    }
+
+    /// Dispatches a Lifecycle application launch event with appropriate event data
+    /// - Parameters:
+    ///   - xdm: xdm data for the application launch event
+    ///   - data: current Lifecycle context data
+    private func dispatchApplicationLaunch(xdm: [String: Any], data: [String: Any]) {
+        let eventData: [String: Any] = [
+            LifecycleConstants.EventDataKeys.XDM: xdm,
+            LifecycleConstants.EventDataKeys.DATA: data
+        ]
+
+        let applicationLaunchEvent = Event(name: LifecycleConstants.EventNames.APPLICATION_LAUNCH, type: EventType.lifecycle, source: EventSource.applicationLaunch, data: eventData)
+        dispatch(event: applicationLaunchEvent)
+    }
+
+    /// Dispatches a Lifecycle application close event with appropriate event data
+    /// - Parameters:
+    ///   - xdm: xdm data for the application close event
+    private func dispatchApplicationClose(xdm: [String: Any]) {
+        let eventData: [String: Any] = [
+            LifecycleConstants.EventDataKeys.XDM: xdm
+        ]
+
+        let applicationCloseEvent = Event(name: LifecycleConstants.EventNames.APPLICATION_CLOSE, type: EventType.lifecycle, source: EventSource.applicationClose, data: eventData)
+        dispatch(event: applicationCloseEvent)
     }
 
     /// Reads the session timeout from the configuration shared state, if not found returns the default session timeout
