@@ -33,10 +33,13 @@ public protocol UIService {
     ///     - payload: The payload used in the FullscreenPresentable as a string
     ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
     ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
-    ///     - parent: The object that will own the newly created message
+    ///     - settings: The `MessageSettings` that define construction, behavior and ownership of the newly created message
     /// - Returns: A `FullscreenPresentable` implementation
     @objc
-    optional func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool, parent: Any?) -> FullscreenPresentable
+    optional func createFullscreenMessage(payload: String,
+                                          listener: FullscreenMessageDelegate?,
+                                          isLocalImageUsed: Bool,
+                                          settings: MessageSettings?) -> FullscreenPresentable
 
     /// Creates a `FloatingButtonPresentable`
     /// - Parameters:

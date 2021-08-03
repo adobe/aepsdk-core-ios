@@ -73,6 +73,9 @@
 		24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */; };
 		24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */; };
 		24B4937A24DA18BE00AA38D9 /* SignalHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937924DA18BE00AA38D9 /* SignalHit.swift */; };
+		24C5E14D26B8B00B005BEA72 /* MessageSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */; };
+		24C5E15D26B990CB005BEA72 /* MessageGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E15C26B990CB005BEA72 /* MessageGesture.swift */; };
+		24C5E17B26B999E4005BEA72 /* MessageAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */; };
 		24CF602B2538AC79006473BA /* MobileCore+Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */; };
 		24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */; };
 		24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */; };
@@ -658,6 +661,9 @@
 		24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Signal.swift"; sourceTree = "<group>"; };
 		24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessor.swift; sourceTree = "<group>"; };
 		24B4937924DA18BE00AA38D9 /* SignalHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHit.swift; sourceTree = "<group>"; };
+		24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettings.swift; sourceTree = "<group>"; };
+		24C5E15C26B990CB005BEA72 /* MessageGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGesture.swift; sourceTree = "<group>"; };
+		24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAlignment.swift; sourceTree = "<group>"; };
 		24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+Tracking.swift"; sourceTree = "<group>"; };
 		24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TrackingTests.swift"; sourceTree = "<group>"; };
 		24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyStatus.swift"; sourceTree = "<group>"; };
@@ -1846,13 +1852,16 @@
 			children = (
 				923547FA25BFF16900BEA9A3 /* floating */,
 				92EEA64D258956FE00DBA3EE /* fullscreen */,
+				923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */,
+				78B36A9525CA1C2D00D6D25F /* Dismissible.swift */,
+				24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */,
+				24C5E15C26B990CB005BEA72 /* MessageGesture.swift */,
 				92EEA6052589343700DBA3EE /* MessageMonitor.swift */,
 				92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */,
-				92F06D0325BA33F3004C1700 /* Showable.swift */,
-				78B36A9525CA1C2D00D6D25F /* Dismissible.swift */,
+				24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */,
 				9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */,
+				92F06D0325BA33F3004C1700 /* Showable.swift */,
 				923972B225AD844E0056A3E5 /* UIApplication+Window.swift */,
-				923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */,
 				92027B3E25C9C1A7007BE140 /* UIService.swift */,
 			);
 			path = ui;
@@ -2990,6 +2999,7 @@
 				923547FC25BFF18200BEA9A3 /* FloatingButton.swift in Sources */,
 				3F0397D324BE5FF30019F095 /* SQLiteDataQueue.swift in Sources */,
 				3F0397C324BE5FF30019F095 /* Caching.swift in Sources */,
+				24C5E17B26B999E4005BEA72 /* MessageAlignment.swift in Sources */,
 				78B36A7825CA0D7700D6D25F /* UIUtils.swift in Sources */,
 				923972B325AD844E0056A3E5 /* UIApplication+Window.swift in Sources */,
 				3F0397F924BE60910019F095 /* FileManager+ZIP.swift in Sources */,
@@ -2997,6 +3007,8 @@
 				3F0397F824BE60910019F095 /* ZipEntry.swift in Sources */,
 				3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */,
 				786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */,
+				24C5E15D26B990CB005BEA72 /* MessageGesture.swift in Sources */,
+				24C5E14D26B8B00B005BEA72 /* MessageSettings.swift in Sources */,
 				3F0397DB24BE5FF30019F095 /* NamedCollectionDataStore.swift in Sources */,
 				3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */,
 				3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */,
