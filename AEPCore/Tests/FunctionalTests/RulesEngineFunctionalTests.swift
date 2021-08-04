@@ -605,7 +605,7 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         XCTAssertTrue(lifecycleContextData["launches"] == nil)
     }
-    
+
     func testDispatchEvent_copy() {
         /// Given: a launch rule to dispatch an event which copies the triggering event data
 
@@ -623,22 +623,22 @@ class RulesEngineFunctionalTests: XCTestCase {
                           type: EventType.lifecycle,
                           source: EventSource.applicationLaunch,
                           data: ["xdm": "test data"])
-        
+
         let processedEvent = rulesEngine.process(event: event)
 
         /// Then: One consequence event will be dispatched
 
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents[0]
-        
+
         XCTAssertEqual(EventType.edge, dispatchedEvent.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
         XCTAssertEqual(event.data as? [String : String], dispatchedEvent.data as? [String : String])
-        
+
         // verify original event is unchanged
         XCTAssertEqual(event, processedEvent)
     }
-    
+
     func testDispatchEvent_copyNoEventData() {
         /// Given: a launch rule to dispatch an event which copies the triggering event data, but none is given
 
@@ -656,22 +656,22 @@ class RulesEngineFunctionalTests: XCTestCase {
                           type: EventType.lifecycle,
                           source: EventSource.applicationLaunch,
                           data: nil)
-        
+
         let processedEvent = rulesEngine.process(event: event)
 
         /// Then: One consequence event will be dispatched
 
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents[0]
-        
+
         XCTAssertEqual(EventType.edge, dispatchedEvent.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
         XCTAssertNil(dispatchedEvent.data)
-        
+
         // verify original event is unchanged
         XCTAssertEqual(event, processedEvent)
     }
-    
+
     func testDispatchEvent_newData() {
         /// Given: a launch rule to dispatch an event which adds new event data
 
@@ -701,18 +701,18 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents[0]
-        
+
         XCTAssertEqual(EventType.edge, dispatchedEvent.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
         XCTAssertEqual(3, dispatchedEvent.data?.count)
         XCTAssertEqual("value", dispatchedEvent.data?["key"] as? String)
         XCTAssertEqual("subvalue", dispatchedEvent.data?["key.subkey"] as? String)
         XCTAssertEqual("2", dispatchedEvent.data?["launches"] as? String)
-        
+
         // verify original event is unchanged
         XCTAssertEqual(event, processedEvent)
     }
-    
+
     func testDispatchEvent_newNoData() {
         /// Given: a launch rule to dispatch an event which adds new event event data, but none is configured
 
@@ -736,7 +736,7 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents[0]
-        
+
         XCTAssertEqual(EventType.edge, dispatchedEvent.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
         XCTAssertNil(dispatchedEvent.data)
@@ -797,7 +797,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         // verify original event is unchanged
         XCTAssertEqual(event, processedEvent)
     }
-    
+
     func testDispatchEvent_noType() {
         /// Given: a launch rule to dispatch an event with no type specified in details
 
@@ -823,7 +823,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         // verify original event is unchanged
         XCTAssertEqual(event, processedEvent)
     }
-    
+
     func testDispatchEvent_noSource() {
         /// Given: a launch rule to dispatch an event with no source specified in details
 

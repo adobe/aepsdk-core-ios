@@ -150,19 +150,17 @@ public class LaunchRulesEngine {
                         Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'eventdataaction' is missing from 'details'")
                         continue
                     }
-                    
-                    var dispatchEventData:[String:Any]?
-                    if (action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_COPY) {
+
+                    var dispatchEventData: [String: Any]?
+                    if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_COPY {
                         dispatchEventData = eventData // copy event data from triggering event
-                    }
-                    else if (action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW) {
-                        dispatchEventData = consequenceWithConcreteValue.eventData as? [String : Any]
-                    }
-                    else {
+                    } else if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW {
+                        dispatchEventData = consequenceWithConcreteValue.eventData?.compactMapValues { $0 }
+                    } else {
                         Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, unsupported 'eventdataaction', expected values copy/new")
                         continue
                     }
-                    
+
                     let dispatchEvent = Event(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
                                               type: type,
                                               source: source,
