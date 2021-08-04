@@ -20,12 +20,16 @@ public class LaunchRulesEngine {
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
+    private static let CONSEQUENCE_DISPATCH_EVENT_NAME = "Dispatch Consequence Result"
     private static let CONSEQUENCE_EVENT_DATA_KEY_ID = "id"
     private static let CONSEQUENCE_EVENT_DATA_KEY_TYPE = "type"
     private static let CONSEQUENCE_EVENT_DATA_KEY_DETAIL = "detail"
     private static let CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE = "triggeredconsequence"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
+    private static let CONSEQUENCE_TYPE_DISPATCH = "dispatch"
+    private static let CONSEQUENCE_DETAIL_ACTION_COPY = "copy"
+    private static let CONSEQUENCE_DETAIL_ACTION_NEW = "new"
 
     private let transform: Transforming
     private let name: String
@@ -133,6 +137,38 @@ public class LaunchRulesEngine {
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data with \(PrettyDictionary.prettify(from))\n")
                     eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
+                case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
+                    guard let type = consequenceWithConcreteValue.eventType else {
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'type' is missing from 'details'")
+                        continue
+                    }
+                    guard let source = consequenceWithConcreteValue.eventSource else {
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'source' is missing from 'details'")
+                        continue
+                    }
+                    guard let action = consequenceWithConcreteValue.eventDataAction else {
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'eventdataaction' is missing from 'details'")
+                        continue
+                    }
+                    
+                    var dispatchEventData:[String:Any]?
+                    if (action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_COPY) {
+                        dispatchEventData = eventData // copy event data from triggering event
+                    }
+                    else if (action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW) {
+                        dispatchEventData = (consequenceWithConcreteValue.eventData ?? [:]) as [String : Any]
+                    }
+                    else {
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, unsupported 'eventdataaction', expected values copy/new")
+                        continue
+                    }
+                    
+                    let dispatchEvent = Event(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
+                                              type: type,
+                                              source: source,
+                                              data: dispatchEventData)
+                    Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(event)")
+                    extensionRuntime.dispatch(event: dispatchEvent)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
