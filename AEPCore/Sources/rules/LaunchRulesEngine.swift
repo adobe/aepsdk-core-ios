@@ -156,7 +156,7 @@ public class LaunchRulesEngine {
                         dispatchEventData = eventData // copy event data from triggering event
                     }
                     else if (action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW) {
-                        dispatchEventData = (consequenceWithConcreteValue.eventData ?? [:]) as [String : Any]
+                        dispatchEventData = consequenceWithConcreteValue.eventData as? [String : Any]
                     }
                     else {
                         Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, unsupported 'eventdataaction', expected values copy/new")
