@@ -19,7 +19,7 @@ public enum MessageGesture: Int {
     case swipeLeft = 2
     case swipeRight = 3
     case backgroundTap = 4
-    
+
     /// Converts a `String` to its respective `MessageGesture`
     /// If `string` is not a valid `MessageGesture`, calling this method will return `nil`
     /// - Parameter string: a `String` representation of a `MessageGesture`

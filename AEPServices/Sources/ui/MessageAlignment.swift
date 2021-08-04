@@ -19,7 +19,7 @@ public enum MessageAlignment: Int {
     case right = 2
     case top = 3
     case bottom = 4
-    
+
     /// Converts a `String` to its respective `MessageAlignment`
     /// If `string` is not a valid `MessageAlignment`, calling this method will return `.center`
     /// - Parameter string: a `String` representation of a `MessageAlignment`

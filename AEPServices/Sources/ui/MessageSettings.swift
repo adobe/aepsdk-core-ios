@@ -25,51 +25,51 @@ public class MessageSettings: NSObject {
     public private(set) var uiTakeover: Bool = true
     public private(set) var animate: Bool = true
     public private(set) var gestures: [MessageGesture: URL]?
-    
+
     public init(parent: Any? = nil) {
         self.parent = parent
     }
-    
+
     public func setWidth(_ width: Int?) -> MessageSettings {
         self.width = width
         return self
     }
-    
+
     public func setHeight(_ height: Int?) -> MessageSettings {
         self.height = height
         return self
     }
-    
+
     public func setVerticalAlign(_ vAlign: MessageAlignment) -> MessageSettings {
         self.verticalAlign = vAlign
         return self
     }
-    
+
     public func setHorizontalAlign(_ hAlign: MessageAlignment) -> MessageSettings {
         self.horizontalAlign = hAlign
         return self
     }
-    
+
     public func setVerticalInset(_ vInset: Int?) -> MessageSettings {
         self.verticalInset = vInset
         return self
     }
-    
+
     public func setHorizontalInset(_ hInset: Int?) -> MessageSettings {
         self.horizontalInset = hInset
         return self
     }
-    
+
     public func setUiTakeover(_ uiTakeover: Bool) -> MessageSettings {
         self.uiTakeover = uiTakeover
         return self
     }
-    
+
     public func setAnimate(_ animate: Bool) -> MessageSettings {
         self.animate = animate
         return self
     }
-    
+
     public func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
         self.gestures = gestures
         return self
