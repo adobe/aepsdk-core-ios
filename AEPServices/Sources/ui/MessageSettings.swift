@@ -15,62 +15,62 @@ import UIKit
 
 @objc(AEPMessageSettings)
 public class MessageSettings: NSObject {
-    let parent: Any?
-    private(set) var width: Int?
-    private(set) var height: Int?
-    private(set) var verticalAlign: MessageAlignment = .center
-    private(set) var verticalInset: Int?
-    private(set) var horizontalAlign: MessageAlignment = .center
-    private(set) var horizontalInset: Int?
-    private(set) var uiTakeover: Bool = true
-    private(set) var animate: Bool = true
-    private(set) var gestures: [MessageGesture: URL]?
+    public let parent: Any?
+    public private(set) var width: Int?
+    public private(set) var height: Int?
+    public private(set) var verticalAlign: MessageAlignment = .center
+    public private(set) var verticalInset: Int?
+    public private(set) var horizontalAlign: MessageAlignment = .center
+    public private(set) var horizontalInset: Int?
+    public private(set) var uiTakeover: Bool = true
+    public private(set) var animate: Bool = true
+    public private(set) var gestures: [MessageGesture: URL]?
     
-    init(parent: Any? = nil) {
+    public init(parent: Any? = nil) {
         self.parent = parent
     }
     
-    func setWidth(_ width: Int?) -> MessageSettings {
+    public func setWidth(_ width: Int?) -> MessageSettings {
         self.width = width
         return self
     }
     
-    func setHeight(_ height: Int?) -> MessageSettings {
+    public func setHeight(_ height: Int?) -> MessageSettings {
         self.height = height
         return self
     }
     
-    func setVerticalAlign(_ vAlign: MessageAlignment) -> MessageSettings {
+    public func setVerticalAlign(_ vAlign: MessageAlignment) -> MessageSettings {
         self.verticalAlign = vAlign
         return self
     }
     
-    func setHorizontalAlign(_ hAlign: MessageAlignment) -> MessageSettings {
+    public func setHorizontalAlign(_ hAlign: MessageAlignment) -> MessageSettings {
         self.horizontalAlign = hAlign
         return self
     }
     
-    func setVerticalInset(_ vInset: Int?) -> MessageSettings {
+    public func setVerticalInset(_ vInset: Int?) -> MessageSettings {
         self.verticalInset = vInset
         return self
     }
     
-    func setHorizontalInset(_ hInset: Int?) -> MessageSettings {
+    public func setHorizontalInset(_ hInset: Int?) -> MessageSettings {
         self.horizontalInset = hInset
         return self
     }
     
-    func setUiTakeover(_ uiTakeover: Bool) -> MessageSettings {
+    public func setUiTakeover(_ uiTakeover: Bool) -> MessageSettings {
         self.uiTakeover = uiTakeover
         return self
     }
     
-    func setAnimate(_ animate: Bool) -> MessageSettings {
+    public func setAnimate(_ animate: Bool) -> MessageSettings {
         self.animate = animate
         return self
     }
     
-    func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
+    public func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
         self.gestures = gestures
         return self
     }
