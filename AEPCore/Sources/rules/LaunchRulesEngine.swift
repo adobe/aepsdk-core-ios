@@ -266,6 +266,7 @@ public class LaunchRulesEngine {
     }
 }
 
+/// Extend RuleConsequence with helper methods for processing Dispatch Consequence events.
 extension RuleConsequence {
     public var eventSource: String? {
         return details["source"] as? String
