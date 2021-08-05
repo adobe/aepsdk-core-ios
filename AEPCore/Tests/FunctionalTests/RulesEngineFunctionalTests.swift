@@ -850,6 +850,83 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual(event, processedEvent)
     }
 
+    func testDispatchEvent_chainedDispatchEvents() {
+        /// Given: a launch rule to dispatch an event with the same type and source which triggered the consequence
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventChain")
+
+        let event = Event(name: "Edge Request",
+                          type: EventType.edge,
+                          source: EventSource.requestContent,
+                          data: ["xdm": "test data"])
+
+        // Process original event; dispatch chain count = 0
+        _ = rulesEngine.process(event: event)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        var dispatchedEvent = mockRuntime.dispatchedEvents[0]
+        mockRuntime.dispatchedEvents.removeAll()
+
+        // Process dispatched event; dispatch chain count = 1
+        _ = rulesEngine.process(event: dispatchedEvent)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        dispatchedEvent = mockRuntime.dispatchedEvents[0]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process dispatched event; dispatch chain count = 2
+        // Expect dispatch to fail as max allowed chained events is 1
+        _ = rulesEngine.process(event: dispatchedEvent)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
+    
+    func testDispatchEvent_interleavedChainedDispatchEvents() {
+        /// Given: a launch rule to dispatch an event with the same type and source which triggered the consequence
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventChain")
+
+        let eventLaunch = Event(name: "Application Launch",
+                                type: EventType.lifecycle,
+                                source: EventSource.applicationLaunch,
+                                data: ["xdm": "test data"])
+        
+        let eventEdgeRequest = Event(name: "Edge Request",
+                                     type: EventType.edge,
+                                     source: EventSource.requestContent,
+                                     data: ["xdm": "test data"])
+
+        // Process original event; dispatch chain count = 0
+        _ = rulesEngine.process(event: eventEdgeRequest)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        var dispatchedEvent1 = mockRuntime.dispatchedEvents[0]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process launch event
+        _ = rulesEngine.process(event: eventLaunch)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        var dispatchedEvent2 = mockRuntime.dispatchedEvents[0]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process first dispatched event; dispatch chain count = 1
+        _ = rulesEngine.process(event: dispatchedEvent1)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        dispatchedEvent1 = mockRuntime.dispatchedEvents[0]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process first dispatched event; dispatch chain count = 2
+        // Expect dispatch to fail as max allowed chained events is 1
+        _ = rulesEngine.process(event: dispatchedEvent1)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        
+        // // Process second dispatched event; dispatch chain count = 1
+        _ = rulesEngine.process(event: dispatchedEvent2)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        dispatchedEvent2 = mockRuntime.dispatchedEvents[0]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process second dispatched event; dispatch chain count = 2
+        // Expect dispatch to fail as max allowed chained events is 1
+        _ = rulesEngine.process(event: dispatchedEvent2)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
 
     // MARK: - Transforming tests
     // test that the data can be transformed to the correct type
