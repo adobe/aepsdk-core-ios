@@ -37,6 +37,7 @@ public class LaunchRulesEngine {
     private let rulesQueue: DispatchQueue
     private var waitingEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
+    private var dispatchChainedEventsCount: [UUID: Int] = [:]
 
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
@@ -104,6 +105,7 @@ public class LaunchRulesEngine {
     }
 
     private func evaluateRules(for event: Event) -> Event {
+        let dispatchChainCount = dispatchChainedEventsCount.removeValue(forKey: event.id)
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         var matchedRules: [LaunchRule]?
         matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
@@ -128,11 +130,18 @@ public class LaunchRulesEngine {
                     eventData = modifiedEventData
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
+                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount > 1 {
+                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, the event has exceeded it's limit of trigged consequences, \(event)")
+                        continue
+                    }
                     guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: eventData)  else {
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
                     extensionRuntime.dispatch(event: dispatchEvent)
+                    
+                    // Keep track of dispatch consequence events to prevent trigging of infinite dispatch consequences
+                    dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
 
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
