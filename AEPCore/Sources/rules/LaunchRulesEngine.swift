@@ -265,3 +265,17 @@ public class LaunchRulesEngine {
         return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
     }
 }
+
+extension RuleConsequence {
+    public var eventSource: String? {
+        return details["source"] as? String
+    }
+
+    public var eventType: String? {
+        return details["type"] as? String
+    }
+
+    public var eventDataAction: String? {
+        return details["eventdataaction"] as? String
+    }
+}
