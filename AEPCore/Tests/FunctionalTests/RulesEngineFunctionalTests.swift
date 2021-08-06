@@ -874,6 +874,37 @@ class RulesEngineFunctionalTests: XCTestCase {
     func testDispatchEvent_chainedDispatchEvents() {
         /// Given: a launch rule to dispatch an event with the same type and source which triggered the consequence
 
+        //    ---------- dispatch event rule condition ----------
+        //        "conditions": [
+        //        {
+        //          "type": "matcher",
+        //          "definition": {
+        //            "key": "~type",
+        //            "matcher": "eq",
+        //            "values": [
+        //              "com.adobe.eventType.edge"
+        //            ]
+        //          }
+        //        },
+        //        {
+        //          "type": "matcher",
+        //          "definition": {
+        //            "key": "~source",
+        //            "matcher": "eq",
+        //            "values": [
+        //              "com.adobe.eventSource.requestContent"
+        //            ]
+        //          }
+        //        }
+        //      ]
+        //    ---------- dispatch event rule consequence ----------
+        //        "detail": {
+        //           "type" : "com.adobe.eventType.edge",
+        //           "source" : "com.adobe.eventSource.requestContent",
+        //           "eventdataaction" : "copy"
+        //         }
+        //    --------------------------------------
+        
         resetRulesEngine(withNewRules: "rules_testDispatchEventChain")
 
         let event = Event(name: "Edge Request",
@@ -900,19 +931,83 @@ class RulesEngineFunctionalTests: XCTestCase {
     }
     
     func testDispatchEvent_interleavedChainedDispatchEvents() {
-        /// Given: a launch rule to dispatch an event with the same type and source which triggered the consequence
+        /// Given: two launch rules with the same consequence but different event triggers
 
-        resetRulesEngine(withNewRules: "rules_testDispatchEventChain")
-
-        let eventLaunch = Event(name: "Application Launch",
-                                type: EventType.lifecycle,
-                                source: EventSource.applicationLaunch,
-                                data: ["xdm": "test data"])
+        //    ---------- dispatch event rule 1 condition ----------
+        //        "conditions": [
+        //        {
+        //          "type": "matcher",
+        //          "definition": {
+        //            "key": "~type",
+        //            "matcher": "eq",
+        //            "values": [
+        //              "com.adobe.eventType.edge"
+        //            ]
+        //          }
+        //        },
+        //        {
+        //          "type": "matcher",
+        //          "definition": {
+        //            "key": "~source",
+        //            "matcher": "eq",
+        //            "values": [
+        //              "com.adobe.eventSource.requestContent"
+        //            ]
+        //          }
+        //        }
+        //      ]
+        //    ---------- dispatch event rule 1 consequence ----------
+        //        "detail": {
+        //           "type" : "com.adobe.eventType.edge",
+        //           "source" : "com.adobe.eventSource.requestContent",
+        //           "eventdataaction" : "copy"
+        //         }
+        //    --------------------------------------
         
+        //    ---------- dispatch event rule 2 condition ----------
+        //        "conditions": [
+        //       {
+        //         "type": "matcher",
+        //         "definition": {
+        //           "key": "~type",
+        //           "matcher": "eq",
+        //           "values": [
+        //             "com.adobe.eventType.lifecycle"
+        //           ]
+        //         }
+        //       },
+        //       {
+        //         "type": "matcher",
+        //         "definition": {
+        //           "key": "~source",
+        //           "matcher": "eq",
+        //           "values": [
+        //             "com.adobe.eventSource.applicationLaunch"
+        //           ]
+        //         }
+        //       }
+        //     ]
+        //    ---------- dispatch event rule 2 consequence ----------
+        //        "detail": {
+        //           "type" : "com.adobe.eventType.edge",
+        //           "source" : "com.adobe.eventSource.requestContent",
+        //           "eventdataaction" : "copy"
+        //         }
+        //    --------------------------------------
+        
+        resetRulesEngine(withNewRules: "rules_testDispatchEventChain")
+        
+        /// Then: dispatch event to trigger rule 1
         let eventEdgeRequest = Event(name: "Edge Request",
                                      type: EventType.edge,
                                      source: EventSource.requestContent,
                                      data: ["xdm": "test data"])
+        
+        /// Then: dispatch event to trigger rule 2
+        let eventLaunch = Event(name: "Application Launch",
+                                type: EventType.lifecycle,
+                                source: EventSource.applicationLaunch,
+                                data: ["xdm": "test data"])
 
         // Process original event; dispatch chain count = 0
         _ = rulesEngine.process(event: eventEdgeRequest)
@@ -947,6 +1042,118 @@ class RulesEngineFunctionalTests: XCTestCase {
         // Expect dispatch to fail as max allowed chained events is 1
         _ = rulesEngine.process(event: dispatchedEvent2)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
+    
+    func testDispatchEvent_processedEventMatchesMultipleDispatchConsequences() {
+        /// Given: two launch rules with the same consequence but different conditions
+
+        //    ---------- dispatch event rule 1 condition ----------
+        //        "conditions": [
+        //        {
+        //          "type": "matcher",
+        //          "definition": {
+        //            "key": "~type",
+        //            "matcher": "eq",
+        //            "values": [
+        //              "com.adobe.eventType.edge"
+        //            ]
+        //          }
+        //        },
+        //        {
+        //          "type": "matcher",
+        //          "definition": {
+        //            "key": "~source",
+        //            "matcher": "eq",
+        //            "values": [
+        //              "com.adobe.eventSource.requestContent"
+        //            ]
+        //          }
+        //        }
+        //      ]
+        //    ---------- dispatch event rule 1 consequence ----------
+        //        "detail": {
+        //           "type" : "com.adobe.eventType.edge",
+        //           "source" : "com.adobe.eventSource.requestContent",
+        //           "eventdataaction" : "copy"
+        //         }
+        //    --------------------------------------
+        
+        //    ---------- dispatch event rule 2 condition ----------
+        //        "conditions": [
+        //          {
+        //            "type": "matcher",
+        //            "definition": {
+        //              "key": "dispatch",
+        //              "matcher": "eq",
+        //              "values": [
+        //                "yes"
+        //              ]
+        //            }
+        //          }
+        //        ]
+        //    ---------- dispatch event rule 2 consequence ----------
+        //        "detail": {
+        //           "type" : "com.adobe.eventType.edge",
+        //           "source" : "com.adobe.eventSource.requestContent",
+        //           "eventdataaction" : "copy"
+        //         }
+        //    --------------------------------------
+        
+        resetRulesEngine(withNewRules: "rules_testDispatchEventChain")
+        
+        /// Then:  dispatch event which will trigger two launch rules
+        
+        let event = Event(name: "Edge Request",
+                          type: EventType.edge,
+                          source: EventSource.requestContent,
+                          data: ["dispatch": "yes"])
+
+        // Process original event, expect 2 dispatched events
+        _ = rulesEngine.process(event: event)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent1 = mockRuntime.dispatchedEvents[0]
+        let dispatchedEvent2 = mockRuntime.dispatchedEvents[1]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process dispatched event 1, expect 2 dispatch events
+        // chain count = 1
+        _ = rulesEngine.process(event: dispatchedEvent1)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent11 = mockRuntime.dispatchedEvents[0]
+        let dispatchedEvent12 = mockRuntime.dispatchedEvents[1]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process dispatched event 2, expect 2 dispatch events
+        // chain count = 1
+        _ = rulesEngine.process(event: dispatchedEvent2)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent21 = mockRuntime.dispatchedEvents[0]
+        let dispatchedEvent22 = mockRuntime.dispatchedEvents[1]
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process dispatched event 1.1, expect 0 dispatch events
+        // chain count = 2 which is > 1
+        _ = rulesEngine.process(event: dispatchedEvent11)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process dispatched event 1.2, expect 0 dispatch events
+        // chain count = 2 which is > 1
+        _ = rulesEngine.process(event: dispatchedEvent12)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process dispatched event 2.1, expect 0 dispatch events
+        // chain count = 2 which is > 1
+        _ = rulesEngine.process(event: dispatchedEvent21)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        mockRuntime.dispatchedEvents.removeAll()
+        
+        // Process dispatched event 2.2, expect 0 dispatch events
+        // chain count = 2 which is > 1
+        _ = rulesEngine.process(event: dispatchedEvent22)
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        mockRuntime.dispatchedEvents.removeAll()
     }
 
     // MARK: - Transforming tests

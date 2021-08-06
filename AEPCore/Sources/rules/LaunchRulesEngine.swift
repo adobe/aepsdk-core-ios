@@ -30,6 +30,8 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_TYPE_DISPATCH = "dispatch"
     private static let CONSEQUENCE_DETAIL_ACTION_COPY = "copy"
     private static let CONSEQUENCE_DETAIL_ACTION_NEW = "new"
+    /// Do not process Dispatch consequence if chained event count is greater than max
+    private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
 
     private let transform: Transforming
     private let name: String
@@ -130,8 +132,8 @@ public class LaunchRulesEngine {
                     eventData = modifiedEventData
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
-                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount > 1 {
-                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, the event has exceeded it's limit of trigged consequences, \(event)")
+                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount > LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
+                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, max dispatch consequences met for this event, \(event)")
                         continue
                     }
                     guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: eventData)  else {
@@ -139,7 +141,7 @@ public class LaunchRulesEngine {
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
                     extensionRuntime.dispatch(event: dispatchEvent)
-                    
+
                     // Keep track of dispatch consequence events to prevent trigging of infinite dispatch consequences
                     dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
 

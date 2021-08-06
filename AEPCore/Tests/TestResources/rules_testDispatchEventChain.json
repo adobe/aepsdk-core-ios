@@ -114,6 +114,45 @@
           }
         }
       ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "dispatch",
+                      "matcher": "eq",
+                      "values": [
+                        "yes"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "48181acd22b3edaebc8a447868a7df7ce629920a",
+          "type": "dispatch",
+          "detail": {
+            "type" : "com.adobe.eventType.edge",
+            "source" : "com.adobe.eventSource.requestContent",
+            "eventdataaction" : "copy"
+          }
+        }
+      ]
     }
   ]
 }
