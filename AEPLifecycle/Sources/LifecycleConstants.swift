@@ -22,6 +22,7 @@ enum LifecycleConstants {
     static let PAUSE = "pause"
     static let MAX_SESSION_LENGTH_SECONDS = 86400.0 * 7.0 // 7 days
     static let DEFAULT_LIFECYCLE_TIMEOUT = 300 // 5 min
+    static let CACHE_TIMEOUT_SECONDS = 2
 
     static let LOG_TAG = "Lifecycle"
 
@@ -58,6 +59,9 @@ enum LifecycleConstants {
         static let PERSISTED_CONTEXT = "persisted.context"
         static let LIFECYCLE_DATA = "lifecycle.data"
         static let LAST_VERSION = "last.version"
+        static let APP_START_TIMESTAMP_SEC = "AppStartTimestamp"
+        static let APP_PAUSE_TIMESTAMP_SEC = "AppPauseTimestamp"
+        static let APP_CLOSE_TIMESTAMP_SEC = "AppCloseTimestamp"
     }
 
     enum Identity {

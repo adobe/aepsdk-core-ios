@@ -17,6 +17,7 @@ import Foundation
 @objc(AEPMobileLifecycle)
 public class Lifecycle: NSObject, Extension {
     private var lifecycleState: LifecycleState
+    private var dataStoreCache: LifecycleDataStoreCache
 
     // MARK: Extension
 
@@ -30,13 +31,16 @@ public class Lifecycle: NSObject, Extension {
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
+        let lifecycleDataStore = NamedCollectionDataStore(name: name)
+        lifecycleState = LifecycleState(dataStore: lifecycleDataStore)
+        dataStoreCache = LifecycleDataStoreCache(dataStore: lifecycleDataStore)
         super.init()
     }
 
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
     public func onRegistered() {
         registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent, listener: receiveLifecycleRequest(event:))
+        registerListener(type: EventType.wildcard, source: EventSource.wildcard, listener: updateLastKnownTimestamp(event:))
 
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String: Any], event: nil)
@@ -54,6 +58,13 @@ public class Lifecycle: NSObject, Extension {
     }
 
     // MARK: Event Listeners
+
+    /// Invoked when any event is dispatched by the `EventHub`
+    /// Updates the last known event timestamp in cache and if needed in persistence
+    /// - Parameter event: any event to be processed.
+    private func updateLastKnownTimestamp(event: Event) {
+        dataStoreCache.setLastKnownTimeStamp(ts: event.timestamp.timeIntervalSince1970)
+    }
 
     /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`
     /// - Parameter event: the generic lifecycle event
