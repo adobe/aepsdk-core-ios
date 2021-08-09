@@ -38,12 +38,6 @@ struct V5Migrator {
             migrateConfigurationLocalStorage()
             Log.debug(label: LOG_TAG, "Full migration of NSUserDefaults successful.")
         }
-
-        if visitorIdNeedsMigration() {
-            Log.debug(label: LOG_TAG, "Migrating Adobe SDK v5 Identity to Analytics NSUserDefaults for use with Adobe SDK Swift v5.")
-            migrateVisitorIdLocalStorage()
-            Log.debug(label: LOG_TAG, "Full migration of Identity to Analytics NSUserDefaults successful.")
-        }
     }
 
     // MARK: - Private APIs
@@ -64,7 +58,7 @@ struct V5Migrator {
     }
 
     /// Gets overridden config from existing c++ V5 implementation
-    /// - Returns: an optional dictionary of existing overriden config values
+    /// - Returns: an optional dictionary of existing overridden config values
     private func getV5OverriddenConfig() -> [String: Any]? {
         let overriddenConfigKey = keyWithPrefix(datastoreName: V5MigrationConstants.Configuration.LEGACY_DATASTORE_NAME,
                                                 key: V5MigrationConstants.Configuration.OVERRIDDEN_CONFIG)
@@ -74,13 +68,6 @@ struct V5Migrator {
         return config
     }
 
-    /// Determine whether we need to migrate vid from Identity to Analytics
-    /// - Returns: True if we need to migrate the vid from Identity to Analytics
-    private func visitorIdNeedsMigration() -> Bool {
-        // TODO: Implement when implementing the Analytics extension
-        return false
-    }
-
     /// Migrates local storage for each extension
     private func migrateLocalStorage() {
         // Identity
@@ -88,11 +75,6 @@ struct V5Migrator {
 
         // Lifecycle
         migrateLifecycleLocalStorage()
-
-        // TODO: Target
-        // TODO: Acquisition
-        // TODO: Analytics
-        // TODO: Audience Manager
     }
 
     /// Migrates the c++ V5 Identity values into the Swift V5 Identity data store
@@ -182,11 +164,6 @@ struct V5Migrator {
         configDataStore.setObject(key: V5MigrationConstants.Configuration.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG, value: legacyV5OverriddenConfig)
         let overriddenConfigKey = keyWithPrefix(datastoreName: V5MigrationConstants.Configuration.LEGACY_DATASTORE_NAME, key: V5MigrationConstants.Configuration.OVERRIDDEN_CONFIG)
         v5Defaults.removeObject(forKey: overriddenConfigKey)
-    }
-
-    /// Migrates the c++ V5 Identity values to Swift V5 Analtyics data store
-    private func migrateVisitorIdLocalStorage() {
-        // TODO: Implement when implementing the Analytics extension
     }
 
     /// Appends the datastore name and the key to create the key to be used in user defaults

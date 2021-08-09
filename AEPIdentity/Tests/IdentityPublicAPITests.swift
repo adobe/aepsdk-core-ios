@@ -34,7 +34,7 @@ class IdentityAPITests: XCTestCase {
 
     private func assertSyncEvent(event: Event, identifiers: [String: String]?, authState: MobileVisitorAuthenticationState) {
         XCTAssertEqual(identifiers, event.data?[IdentityConstants.EventDataKeys.IDENTIFIERS] as? [String: String])
-        XCTAssertEqual(authState.rawValue, event.data?[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] as? Int)
+        XCTAssertEqual(authState, event.data?[IdentityConstants.EventDataKeys.AUTHENTICATION_STATE] as? MobileVisitorAuthenticationState)
         XCTAssertFalse(event.data?[IdentityConstants.EventDataKeys.FORCE_SYNC] as? Bool ?? true)
         XCTAssertTrue(event.data?[IdentityConstants.EventDataKeys.IS_SYNC_EVENT] as? Bool ?? false)
     }
