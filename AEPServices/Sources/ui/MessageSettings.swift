@@ -23,8 +23,9 @@ public class MessageSettings: NSObject {
     public private(set) var horizontalAlign: MessageAlignment = .center
     public private(set) var horizontalInset: Int?
     public private(set) var uiTakeover: Bool = true
-    public private(set) var animate: Bool = true
     public private(set) var gestures: [MessageGesture: URL]?
+    public private(set) var dismissAnimation: MessageAnimation?
+    public private(set) var displayAnimation: MessageAnimation?
 
     public init(parent: Any? = nil) {
         self.parent = parent
@@ -65,13 +66,18 @@ public class MessageSettings: NSObject {
         return self
     }
 
-    public func setAnimate(_ animate: Bool) -> MessageSettings {
-        self.animate = animate
+    public func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
+        self.gestures = gestures
         return self
     }
 
-    public func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
-        self.gestures = gestures
+    public func setDisplayAnimation(_ animation: MessageAnimation) -> MessageSettings {
+        self.displayAnimation = animation
+        return self
+    }
+
+    public func setDismissAnimation(_ animation: MessageAnimation) -> MessageSettings {
+        self.dismissAnimation = animation
         return self
     }
 }

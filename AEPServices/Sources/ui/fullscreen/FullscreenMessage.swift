@@ -18,17 +18,17 @@ import WebKit
 @objc(AEPFullscreenMessage)
 public class FullscreenMessage: NSObject, FullscreenPresentable {
 
+    let LOG_PREFIX = "FullscreenMessage"
+    private let DOWNLOAD_CACHE = "adbdownloadcache"
+    private let HTML_EXTENSION = "html"
+    private let TEMP_FILE_NAME = "temp"
+
     /// Assignable in the constructor, `settings` control the layout and behavior of the message
     public var settings: MessageSettings?
 
     /// Native functions that can be called from javascript
     /// See `addHandler:forScriptMessage:`
     var scriptHandlers: [String: (Any?) -> Void] = [:]
-
-    let LOG_PREFIX = "FullscreenMessage"
-    private let DOWNLOAD_CACHE = "adbdownloadcache"
-    private let HTML_EXTENSION = "html"
-    private let TEMP_FILE_NAME = "temp"
 
     let fileManager = FileManager()
 
@@ -105,7 +105,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
 
         DispatchQueue.main.async {
             // create the webview
-            let wkWebView = self.getConfiguredWebView(newFrame: self.getFrame())
+            let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
 
             // save the HTML payload to a local file if the cached image is being used
             var useTempHTML = false
@@ -235,45 +235,32 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     private func displayWithAnimation(webView: WKWebView) {
         DispatchQueue.main.async {
             let keyWindow = UIApplication.shared.getKeyWindow()
-            keyWindow?.addSubview(webView)
-            let newY = webView.frame.origin.y - self.screenHeight
-            UIView.animate(withDuration: 0.3, animations: {
-                webView.frame.origin.y = newY
-            }, completion: nil)
+
+            if self.settings?.displayAnimation != nil {
+                keyWindow?.addSubview(webView)
+                UIView.animate(withDuration: 0.3, animations: {
+                    webView.frame = self.frameWhenVisible
+                })
+            } else {
+                webView.frame = self.frameWhenVisible
+                keyWindow?.addSubview(webView)
+            }
         }
     }
 
     private func dismissWithAnimation(animate: Bool, shouldDeallocateWebView: Bool) {
         DispatchQueue.main.async {
-            UIView.animate(withDuration: animate ? 0.3: 0, animations: {
-                guard var webviewFrame = self.webView?.frame else {
-                    return
-                }
-                webviewFrame.origin.y += self.screenHeight
-                self.webView?.frame = webviewFrame
-            }) { _ in
-                self.webView?.removeFromSuperview()
-                if shouldDeallocateWebView {
-                    self.webView = nil
-                }
+            if self.settings?.dismissAnimation != nil {
+                UIView.animate(withDuration: animate ? 0.3: 0, animations: {
+                    self.webView?.frame = self.frameAfterDismiss
+                })
+            }
+
+            self.webView?.removeFromSuperview()
+            if shouldDeallocateWebView {
+                self.webView = nil
             }
         }
-    }
-
-    /// Generates the correct frame for the webview based on `messageSettings`.
-    ///
-    /// Frame generation uses calculate variables `originX`, `originY`, `width`, and `height`.
-    ///
-    /// - Returns: a frame with the correct dimensions and origins based on `messageSettings`.
-    private func getFrame() -> CGRect {
-        var frame = CGRect(x: originX, y: originY, width: width, height: height)
-
-        // add a one screen buffer if we're going to animate
-        if let s = settings, s.animate {
-            frame.origin.y += screenHeight
-        }
-
-        return frame
     }
 
     // returns the width of the screen, measured in points
@@ -375,5 +362,55 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
 
         // handle center alignment, y is (screen height - message height) / 2
         return (screenHeight - height) / 2
+    }
+
+    /// calculated frames are used for animation
+    /// frameWhenVisible is the frame when the message is visible to the user
+    private var frameWhenVisible: CGRect {
+        return CGRect(x: originX, y: originY, width: width, height: height)
+    }
+
+    /// frameBeforeShow considers displayAnimation and positions the message appropriately
+    private var frameBeforeShow: CGRect {
+        guard let displayAnimation = settings?.displayAnimation else {
+            return frameWhenVisible
+        }
+
+        switch displayAnimation {
+        case .top:
+            return CGRect(x: originX, y: -(originY + height), width: width, height: height)
+        case .bottom:
+            return CGRect(x: originX, y: originY + height, width: width, height: height)
+        case .right:
+            return CGRect(x: originX + width, y: originY, width: width, height: height)
+        case .left:
+            return CGRect(x: -(originX + width), y: originY, width: width, height: height)
+        case .center:
+            return CGRect(x: screenWidth * 0.5, y: screenHeight * 0.5, width: 0, height: 0)
+        default:
+            return frameWhenVisible
+        }
+    }
+
+    /// frameAfterDismiss considers dismissAnimation and positions the message appropriately
+    private var frameAfterDismiss: CGRect {
+        guard let dismissAnimation = settings?.dismissAnimation else {
+            return frameWhenVisible
+        }
+
+        switch dismissAnimation {
+        case .top:
+            return CGRect(x: originX, y: -(originY + height), width: width, height: height)
+        case .bottom:
+            return CGRect(x: originX, y: originY + height, width: width, height: height)
+        case .right:
+            return CGRect(x: originX + width, y: originY, width: width, height: height)
+        case .left:
+            return CGRect(x: -(originX + width), y: originY, width: width, height: height)
+        case .center:
+            return CGRect(x: screenWidth * 0.5, y: screenHeight * 0.5, width: 0, height: 0)
+        default:
+            return frameWhenVisible
+        }
     }
 }
