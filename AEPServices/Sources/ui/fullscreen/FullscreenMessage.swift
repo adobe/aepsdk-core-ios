@@ -233,6 +233,9 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             if let gestures = settings.gestures {
                 for gesture in gestures {
                     let gestureRecognizer = MessageGestureRecognizer(gesture: gesture.key, dismissAnimation: settings.dismissAnimation, url: gesture.value, target: self, action: #selector(handleGesture(_:)))
+                    if let direction = gestureRecognizer.swipeDirection {
+                        gestureRecognizer.direction = direction
+                    }
                     wkWebView.addGestureRecognizer(gestureRecognizer)
                 }
             }

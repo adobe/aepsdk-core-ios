@@ -13,11 +13,11 @@
 import Foundation
 import UIKit
 
-class MessageGestureRecognizer: UIGestureRecognizer {
+class MessageGestureRecognizer: UISwipeGestureRecognizer {
     var gesture: MessageGesture?
     var dismissAnimation: MessageAnimation?
     var actionUrl: URL?
-    private var swipeDirection: UISwipeGestureRecognizer.Direction? {
+    var swipeDirection: UISwipeGestureRecognizer.Direction? {
         switch gesture {
         case .swipeUp:
             return .up
@@ -28,12 +28,12 @@ class MessageGestureRecognizer: UIGestureRecognizer {
         case .swipeRight:
             return .right
         case .backgroundTap:
-            return .none
+            return nil
         default:
-            return .none
+            return nil
         }
     }
-
+    
     init(gesture: MessageGesture?, dismissAnimation: MessageAnimation?,
          url: URL?, target: Any?, action: Selector?) {
         super.init(target: target, action: action)
@@ -41,13 +41,13 @@ class MessageGestureRecognizer: UIGestureRecognizer {
         self.gesture = gesture
         self.dismissAnimation = dismissAnimation
         self.actionUrl = url
-
+        
         // TODO: how to handle background tap
         if swipeDirection == nil {
             // if swipeDirection is nil, do a background tap recognizer
         }
     }
-
+    
     static func messageGestureRecognizer(fromString name: String, dismissAnimation: MessageAnimation?, url: URL?,
                                          target: Any?, action: Selector?) -> MessageGestureRecognizer {
         switch name {
