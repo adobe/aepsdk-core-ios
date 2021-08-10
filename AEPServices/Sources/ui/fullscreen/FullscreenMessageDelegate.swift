@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import WebKit
 
 /// Fullscreen message lifecycle event listener
 @objc(AEPFullscreenMessageDelegate) public protocol FullscreenMessageDelegate {
@@ -33,6 +34,11 @@ import Foundation
     /// - Returns: True if the core wants to handle the URL (and not the fullscreen message view implementation)
     @objc(overrideUrlLoadFullscreenMessage:url:)
     func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
+
+    /// Invoked when the fullscreen message finished loading its first content on the webView.
+    /// - Parameter webView - the `WKWebView` instance that completed loading its initial content.
+    @objc(webViewDidFinishInitialLoading:)
+    optional func webViewDidFinishInitialLoading(webView: WKWebView)
 
     ///
     /// Invoked when the FullscreenMessage failed to be displayed

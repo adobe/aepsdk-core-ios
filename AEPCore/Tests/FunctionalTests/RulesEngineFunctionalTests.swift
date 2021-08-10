@@ -236,6 +236,27 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
 
+    // Matcher: gt (Greater Than - Int vs Int64)
+    func testMatcherGtForIntTypes() {
+        /// Given:
+        resetRulesEngine(withNewRules: "rules_testMatcherGt_2_types")
+        let event = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
+                          data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 2]], status: .set))
+        /// When:
+        _ = rulesEngine.process(event: event)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
     // Matcher: ge (Greater Than or Equals)
     func testMatcherGe() {
         /// Given:

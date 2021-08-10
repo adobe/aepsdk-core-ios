@@ -351,6 +351,7 @@
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		B2F223F8573D6B132F285AD7 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6A7B39F8D2A807344E7098B /* Pods_AEPLifecycleTests.framework */; };
 		B6D6A019265EC9D8005042BE /* FloatingButtonPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */; };
+		B6D6A02D26601279005042BE /* FloatingButtonPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */; };
 		B87CF27D61573F409CEDF5E9 /* Pods_AEPSignalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451696B755E6DEB6897A8892 /* Pods_AEPSignalTests.framework */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
@@ -358,6 +359,7 @@
 		BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
 		BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */; };
 		BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0E397124FD56100050C181 /* RulesEngineNativeLogging.swift */; };
+		BB244F7D2666DBAE00F427BC /* rules_testMatcherGt_2_types.json in Resources */ = {isa = PBXBuildFile; fileRef = BB244F7C2666DBAE00F427BC /* rules_testMatcherGt_2_types.json */; };
 		BB3E86DE24F86B6700E39C53 /* rules_testUrlenc.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */; };
 		BB3E86E024F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */; };
 		BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */ = {isa = PBXBuildFile; fileRef = BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */; };
@@ -970,11 +972,13 @@
 		A63AA3E0DA8692271AC7C724 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
 		B414FF5745B34BC95CF624DC /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPosition.swift; sourceTree = "<group>"; };
+		B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPositionTests.swift; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
 		BB00E26C24D9BF6C00C578C1 /* URLUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtility.swift; sourceTree = "<group>"; };
 		BB0E397124FD56100050C181 /* RulesEngineNativeLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineNativeLogging.swift; sourceTree = "<group>"; };
+		BB244F7C2666DBAE00F427BC /* rules_testMatcherGt_2_types.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testMatcherGt_2_types.json; sourceTree = "<group>"; };
 		BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testUrlenc.json; sourceTree = "<group>"; };
 		BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testUrlenc_invalidFnName.json; sourceTree = "<group>"; };
 		BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testMatcherWithDifferentTypesOfParameters.json; sourceTree = "<group>"; };
@@ -1587,6 +1591,7 @@
 				92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */,
 				923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */,
 				786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */,
+				B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */,
 				92867D6425C0B56400E32CDC /* FloatingButtonTests.swift */,
 			);
 			path = services;
@@ -1683,6 +1688,9 @@
 				BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */,
 				BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */,
 				BBA512A424F4A1790030DAD1 /* rules_testMatcherCo.json */,
+				BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */,
+				BBA5129C24F4899B0030DAD1 /* rules_testMatcherGt.json */,
+				BB244F7C2666DBAE00F427BC /* rules_testMatcherGt_2_types.json */,
 				BBA5129E24F4A14C0030DAD1 /* rules_testMatcherGe.json */,
 				BBA5129C24F4899B0030DAD1 /* rules_testMatcherGt.json */,
 				BBA512A224F4A16A0030DAD1 /* rules_testMatcherLe.json */,
@@ -2441,6 +2449,7 @@
 				BBA5129B24F477550030DAD1 /* rules_testMatcherNe.json in Resources */,
 				BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */,
 				BBA5129F24F4A14C0030DAD1 /* rules_testMatcherGe.json in Resources */,
+				BB244F7D2666DBAE00F427BC /* rules_testMatcherGt_2_types.json in Resources */,
 				BBA512B724F6C4D90030DAD1 /* rules_testAttachData_invalidJson.json in Resources */,
 				3F5D45FD25190E8D0040E298 /* rules_testTransform.json in Resources */,
 				BBA512B324F5CF380030DAD1 /* rules_testAttachData.json in Resources */,
@@ -3114,6 +3123,7 @@
 				249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */,
 				3F03981E24BE61520019F095 /* DataQueueTests.swift in Sources */,
 				3F03981524BE61520019F095 /* UnzipperTest.swift in Sources */,
+				B6D6A02D26601279005042BE /* FloatingButtonPositionTests.swift in Sources */,
 				3F03982424BE61520019F095 /* AnyCodableTests.swift in Sources */,
 				3F03982224BE61520019F095 /* OperationOrdererTests.swift in Sources */,
 				3F03982124BE61520019F095 /* NamedCollectionDataStoreTest.swift in Sources */,
@@ -3594,7 +3604,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3624,7 +3634,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3698,7 +3708,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3726,7 +3736,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3793,7 +3803,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3820,7 +3830,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3940,7 +3950,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3967,7 +3977,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3993,7 +4003,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4020,7 +4030,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4089,7 +4099,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4116,7 +4126,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4185,7 +4195,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4212,7 +4222,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.1.3;
+				MARKETING_VERSION = 3.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
