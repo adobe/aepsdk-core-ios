@@ -29,13 +29,13 @@ public class Event: NSObject, Codable {
     @objc public let source: String
 
     /// Optional data associated with this event
-    @objc public internal(set) var data: [String: Any]?
+    @objc public private(set) var data: [String: Any]?
 
     /// Date this event was created
     @objc public private(set) var timestamp = Date()
 
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
-    @objc public let responseID: UUID?
+    @objc public private(set) var responseID: UUID?
 
     /// Event description used for logging
     @objc override public var description: String {
@@ -89,6 +89,16 @@ public class Event: NSObject, Codable {
         return Event(name: name, type: type, source: source, data: data, requestEvent: self)
     }
 
+    /// Clones the current `Event` with updated data
+    /// - Parameters:
+    ///   - data: Any associated data with this `Event`
+    internal func copyWithNewData(data: [String: Any]?) -> Event {
+        let newEvent = Event(name: self.name, type: self.type, source: self.source, data: data)
+        newEvent.id = self.id
+        newEvent.timestamp = self.timestamp
+        newEvent.responseID = self.responseID
+        return newEvent
+    }
     // MARK: - Codable
 
     enum CodingKeys: String, CodingKey {

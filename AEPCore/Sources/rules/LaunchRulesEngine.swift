@@ -106,7 +106,8 @@ public class LaunchRulesEngine {
         guard let matchedRulesUnwrapped = matchedRules else {
             return event
         }
-        var eventData = event.data
+
+        var processedEvent = event
         for rule in matchedRulesUnwrapped {
             for consequence in rule.consequences {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
@@ -116,23 +117,25 @@ public class LaunchRulesEngine {
                         Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
-                    guard let to = eventData else {
+                    guard let to = processedEvent.data else {
                         Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data with \(PrettyDictionary.prettify(from))\n")
-                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
+                    let eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
+                    processedEvent = processedEvent.copyWithNewData(data: eventData)
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
                     guard let from = consequenceWithConcreteValue.eventData else {
                         Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
                         continue
                     }
-                    guard let to = eventData else {
+                    guard let to = processedEvent.data else {
                         Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data with \(PrettyDictionary.prettify(from))\n")
-                    eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
+                    let eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
+                    processedEvent = processedEvent.copyWithNewData(data: eventData)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
@@ -141,8 +144,8 @@ public class LaunchRulesEngine {
                 }
             }
         }
-        event.data = eventData
-        return event
+
+        return processedEvent
     }
 
     /// Replace tokens inside the provided consequence with the right value
