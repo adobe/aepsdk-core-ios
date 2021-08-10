@@ -1687,6 +1687,7 @@
 				BF4A6F2426BB4A1B00612434 /* rules_testDispatchEventNoSource.json */,
 				BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */,
 				BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */,
+				BBA512A424F4A1790030DAD1 /* rules_testMatcherCo.json */,
 				BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */,
 				BBA5129C24F4899B0030DAD1 /* rules_testMatcherGt.json */,
 				BB244F7C2666DBAE00F427BC /* rules_testMatcherGt_2_types.json */,
