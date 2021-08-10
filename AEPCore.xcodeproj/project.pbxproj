@@ -65,6 +65,7 @@
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		246FD07426BDEC7A00FD130B /* MessageGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */; };
 		246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07926C1939800FD130B /* MessageAnimation.swift */; };
+		246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
 		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
@@ -651,6 +652,7 @@
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
 		246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureRecognizer.swift; sourceTree = "<group>"; };
 		246FD07926C1939800FD130B /* MessageAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimation.swift; sourceTree = "<group>"; };
+		246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculation.swift"; sourceTree = "<group>"; };
 		247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+SignalTests.swift"; sourceTree = "<group>"; };
 		249498E0254A0C910045E392 /* Date+FormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+FormatTests.swift"; sourceTree = "<group>"; };
 		2499461B24E5E67700D3F7B2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -1889,6 +1891,7 @@
 			children = (
 				92EEA5F5258933A600DBA3EE /* FullscreenMessageDelegate.swift */,
 				92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */,
+				246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */,
 				24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */,
 				24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */,
 				78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */,
@@ -2751,7 +2754,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  #swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		BB68130624E19C2E007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2999,6 +3002,7 @@
 				24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */,
 				3F0397CD24BE5FF30019F095 /* NetworkServiceConstants.swift in Sources */,
 				3F0397C724BE5FF30019F095 /* CacheExpiry.swift in Sources */,
+				246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */,
 				3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */,
 				3F0397FC24BE60910019F095 /* OperationOrderer.swift in Sources */,
 				92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */,
