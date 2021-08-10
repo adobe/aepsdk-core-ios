@@ -30,13 +30,13 @@ extension FullscreenMessage {
         
         switch displayAnimation {
         case .top:
-            return CGRect(x: originX, y: -(originY + height), width: width, height: height)
+            return CGRect(x: originX, y: -(height + originY), width: width, height: height)
         case .bottom:
-            return CGRect(x: originX, y: originY + height, width: width, height: height)
+            return CGRect(x: originX, y: screenHeight, width: width, height: height)
         case .right:
-            return CGRect(x: originX + width, y: originY, width: width, height: height)
+            return CGRect(x: screenWidth, y: originY, width: width, height: height)
         case .left:
-            return CGRect(x: -(originX + width), y: originY, width: width, height: height)
+            return CGRect(x: -(screenWidth + originX), y: originY, width: width, height: height)
         case .center:
             return CGRect(x: screenWidth * 0.5, y: screenHeight * 0.5, width: 0, height: 0)
         default:
@@ -52,13 +52,13 @@ extension FullscreenMessage {
         
         switch dismissAnimation {
         case .top:
-            return CGRect(x: originX, y: -(originY + height), width: width, height: height)
+            return CGRect(x: originX, y: -(height + originY), width: width, height: height)
         case .bottom:
-            return CGRect(x: originX, y: originY + height, width: width, height: height)
+            return CGRect(x: originX, y: screenHeight, width: width, height: height)
         case .right:
-            return CGRect(x: originX + width, y: originY, width: width, height: height)
+            return CGRect(x: screenWidth, y: originY, width: width, height: height)
         case .left:
-            return CGRect(x: -(originX + width), y: originY, width: width, height: height)
+            return CGRect(x: -(screenWidth + originX), y: originY, width: width, height: height)
         case .center:
             return CGRect(x: screenWidth * 0.5, y: screenHeight * 0.5, width: 0, height: 0)
         default:

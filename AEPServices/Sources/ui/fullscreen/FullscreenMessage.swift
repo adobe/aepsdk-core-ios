@@ -262,9 +262,12 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             let keyWindow = UIApplication.shared.getKeyWindow()
             
             if let animation = self.settings?.displayAnimation, animation != .none {
+                let isFade = animation == .fade
+                webView.alpha = isFade ? 0.0 : 1.0
                 keyWindow?.addSubview(webView)
                 UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
                     webView.frame = self.frameWhenVisible
+                    webView.alpha = 1.0
                 })
             } else {
                 webView.frame = self.frameWhenVisible
@@ -278,6 +281,9 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             if let animation = self.settings?.dismissAnimation, animation != .none {
                 UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
                     self.webView?.frame = self.frameAfterDismiss
+                    if animation == .fade {
+                        self.webView?.alpha = 0.0
+                    }
                 }) { _ in
                     self.webView?.removeFromSuperview()
                     if shouldDeallocateWebView {
