@@ -1,5 +1,5 @@
 /*
- Copyright 2020 Adobe. All rights reserved.
+ Copyright 2021 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -17,30 +17,25 @@ import Foundation
 class LifecycleDataStoreCache {
 
     static let LOG_TAG = "LifecycleDataStoreCache"
-    private var closeTimeStampSec = TimeInterval()
-    private var lastClosePersistedTimeStampSec = TimeInterval()
-
-    #if DEBUG
-        var dataStore: NamedCollectionDataStore
-    #else
-        private(set) var dataStore: NamedCollectionDataStore
-    #endif
+    private var closeTimestampSec = TimeInterval()
+    private var lastClosePersistedTimestampSec = TimeInterval()
+    private(set) var dataStore: NamedCollectionDataStore
 
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
-        self.lastClosePersistedTimeStampSec = dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC, fallback: 0.0) ?? TimeInterval()
-        if lastClosePersistedTimeStampSec > TimeInterval() {
-            self.closeTimeStampSec = lastClosePersistedTimeStampSec + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
+        self.lastClosePersistedTimestampSec = dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC) ?? TimeInterval()
+        if lastClosePersistedTimestampSec > TimeInterval() {
+            self.closeTimestampSec = lastClosePersistedTimestampSec + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
         }
     }
 
     /// The last known close timestamp value to be updated in cache and, if needed, in persistence as well.
     /// The write will execute after `LifecycleConstants.CACHE_TIMEOUT_SECONDS` since last update.
     /// - Parameter ts: current timestamp (seconds)
-    func setLastKnownTimeStamp(ts: TimeInterval) {
-        if (ts - lastClosePersistedTimeStampSec) >= TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS) {
+    func setLastKnownTimestamp(ts: TimeInterval) {
+        if (ts - lastClosePersistedTimestampSec) >= TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS) {
             dataStore.set(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC, value: ts)
-            lastClosePersistedTimeStampSec = ts
+            lastClosePersistedTimestampSec = ts
         }
     }
 
@@ -50,7 +45,7 @@ class LifecycleDataStoreCache {
     ///
     /// - Returns: the last known close timestamp value or 0.0 if not found, for example on first launch
     func getCloseTimestampSec() -> TimeInterval {
-        return closeTimeStampSec
+        return closeTimestampSec
     }
 
     /// Updates the last app start timestamp in persistence.
