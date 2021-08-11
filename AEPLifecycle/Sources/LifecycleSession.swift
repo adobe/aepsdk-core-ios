@@ -145,4 +145,12 @@ struct LifecycleSessionInfo {
 
     /// Flag indicating whether this session crashed or not
     let isCrash: Bool
+
+    /// Computes the session length in seconds, nil if session length is invalid due to `startDate` and `pauseDate`
+    var sessionLength: TimeInterval? {
+        guard let startDate = startDate, let pauseDate = pauseDate else { return nil }
+        let sessionLength = pauseDate.timeIntervalSince1970 - startDate.timeIntervalSince1970
+
+        return sessionLength > 0 ? sessionLength : nil
+    }
 }

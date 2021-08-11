@@ -627,6 +627,250 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertTrue(lifecycleContextData["launches"] == nil)
     }
 
+    func testDispatchEvent_copy() {
+        /// Given: a launch rule to dispatch an event which copies the triggering event data
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "type" : "com.adobe.eventType.edge",
+        //          "source" : "com.adobe.eventSource.requestContent",
+        //          "eventdataaction" : "copy"
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventCopy")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: ["xdm": "test data"])
+
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: One consequence event will be dispatched
+
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
+
+        XCTAssertEqual(EventType.edge, dispatchedEvent.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
+        XCTAssertEqual(event.data as? [String : String], dispatchedEvent.data as? [String : String])
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testDispatchEvent_copyNoEventData() {
+        /// Given: a launch rule to dispatch an event which copies the triggering event data, but none is given
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "type" : "com.adobe.eventType.edge",
+        //          "source" : "com.adobe.eventSource.requestContent",
+        //          "eventdataaction" : "copy"
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventCopy")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: nil)
+
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: One consequence event will be dispatched
+
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
+
+        XCTAssertEqual(EventType.edge, dispatchedEvent.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
+        XCTAssertNil(dispatchedEvent.data)
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testDispatchEvent_newData() {
+        /// Given: a launch rule to dispatch an event which adds new event data
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "type" : "com.adobe.eventType.edge",
+        //          "source" : "com.adobe.eventSource.requestContent",
+        //          "eventdataaction" : "new",
+        //          "eventdata" : {
+        //            "key" : "value",
+        //            "key.subkey" : "subvalue",
+        //            "launches": "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.launches%}",
+        //          }
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventNewData")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: ["xdm": "test data"])
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["launches": 2]], status: .set))
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: One consequence event will be dispatched
+
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
+
+        XCTAssertEqual(EventType.edge, dispatchedEvent.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
+        XCTAssertEqual(3, dispatchedEvent.data?.count)
+        XCTAssertEqual("value", dispatchedEvent.data?["key"] as? String)
+        XCTAssertEqual("subvalue", dispatchedEvent.data?["key.subkey"] as? String)
+        XCTAssertEqual("2", dispatchedEvent.data?["launches"] as? String)
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testDispatchEvent_newNoData() {
+        /// Given: a launch rule to dispatch an event which adds new event event data, but none is configured
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "type" : "com.adobe.eventType.edge",
+        //          "source" : "com.adobe.eventSource.requestContent",
+        //          "eventdataaction" : "new",
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventNewNoData")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: ["xdm": "test data"])
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: One consequence event will be dispatched
+
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
+
+        XCTAssertEqual(EventType.edge, dispatchedEvent.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent.source)
+        XCTAssertNil(dispatchedEvent.data)
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testDispatchEvent_invalidAction() {
+        /// Given: a launch rule to dispatch an event with invalid action
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "type" : "com.adobe.eventType.edge",
+        //          "source" : "com.adobe.eventSource.requestContent",
+        //          "eventdataaction" : "invalid",
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventInvalidAction")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: ["xdm": "test data"])
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: No consequence event will be dispatched
+
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testDispatchEvent_noAction() {
+        /// Given: a launch rule to dispatch an event with no action specified in details
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "type" : "com.adobe.eventType.edge",
+        //          "source" : "com.adobe.eventSource.requestContent"
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventNoAction")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: ["xdm": "test data"])
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: No consequence event will be dispatched
+
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testDispatchEvent_noType() {
+        /// Given: a launch rule to dispatch an event with no type specified in details
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "source" : "com.adobe.eventSource.requestContent",
+        //          "eventdataaction" : "copy"
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventNoType")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: ["xdm": "test data"])
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: No consequence event will be dispatched
+
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
+    func testDispatchEvent_noSource() {
+        /// Given: a launch rule to dispatch an event with no source specified in details
+
+        //    ---------- dispatch event rule ----------
+        //        "detail": {
+        //          "type" : "com.adobe.eventType.edge",
+        //          "eventdataaction" : "copy"
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testDispatchEventNoSource")
+
+        let event = Event(name: "Application Launch",
+                          type: EventType.lifecycle,
+                          source: EventSource.applicationLaunch,
+                          data: ["xdm": "test data"])
+        let processedEvent = rulesEngine.process(event: event)
+
+        /// Then: No consequence event will be dispatched
+
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // verify original event is unchanged
+        XCTAssertEqual(event, processedEvent)
+    }
+
 
     // MARK: - Transforming tests
     // test that the data can be transformed to the correct type
