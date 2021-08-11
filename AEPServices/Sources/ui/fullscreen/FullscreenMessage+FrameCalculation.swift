@@ -65,17 +65,17 @@ extension FullscreenMessage {
             return frameWhenVisible
         }
     }
-    
-    // MARK: - private vars
-    
+
     // returns the width of the screen, measured in points
-    private var screenWidth: CGFloat {
+    var screenWidth: CGFloat {
         return UIScreen.main.bounds.width
     }
     
-    private var screenHeight: CGFloat {
+    var screenHeight: CGFloat {
         return UIScreen.main.bounds.height
     }
+    
+    // MARK: - private vars
     
     // width in settings represents a percentage of the screen.
     // e.g. - 80 = 80% of the screen width

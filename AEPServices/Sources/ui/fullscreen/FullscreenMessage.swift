@@ -37,6 +37,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     var payload: String
     weak var listener: FullscreenMessageDelegate?
     public private(set) var webView: UIView?
+    private var transparentBackgroundView: UIView?
     private var messageMonitor: MessageMonitoring
     
     var loadingNavigation: WKNavigation?
@@ -228,16 +229,25 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             wkWebView.scrollView.contentInsetAdjustmentBehavior = .never
         }
         
+        // if this is a ui takeover, add an invisible view over under the webview
+        if let takeover = settings?.uiTakeover, takeover {
+            transparentBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            transparentBackgroundView?.alpha = 0
+            let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+            transparentBackgroundView?.addGestureRecognizer(tap)
+        }
+        
         // add gesture recognizers
-        if let settings = self.settings {
-            if let gestures = settings.gestures {
-                for gesture in gestures {
-                    let gestureRecognizer = MessageGestureRecognizer(gesture: gesture.key, dismissAnimation: settings.dismissAnimation, url: gesture.value, target: self, action: #selector(handleGesture(_:)))
-                    if let direction = gestureRecognizer.swipeDirection {
-                        gestureRecognizer.direction = direction
-                    }
-                    wkWebView.addGestureRecognizer(gestureRecognizer)
+        if let gestures = settings?.gestures {
+            // if gestures are supported, we need to disable scrolling in the webview
+            wkWebView.scrollView.isScrollEnabled = false
+            // loop through and add gesture recognizers
+            for gesture in gestures {
+                let gestureRecognizer = MessageGestureRecognizer(gesture: gesture.key, dismissAnimation: settings?.dismissAnimation, url: gesture.value, target: self, action: #selector(handleGesture(_:)))
+                if let direction = gestureRecognizer.swipeDirection {
+                    gestureRecognizer.direction = direction
                 }
+                wkWebView.addGestureRecognizer(gestureRecognizer)
             }
         }
         
@@ -257,6 +267,10 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
         }
     }
     
+    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        dismissWithAnimation(shouldDeallocateWebView: true)
+    }
+    
     private func displayWithAnimation(webView: WKWebView) {
         DispatchQueue.main.async {
             let keyWindow = UIApplication.shared.getKeyWindow()
@@ -264,7 +278,12 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             if let animation = self.settings?.displayAnimation, animation != .none {
                 let isFade = animation == .fade
                 webView.alpha = isFade ? 0.0 : 1.0
-                keyWindow?.addSubview(webView)
+                if let bgView = self.transparentBackgroundView {
+                    bgView.addSubview(webView)
+                    keyWindow?.addSubview(bgView)
+                } else {
+                    keyWindow?.addSubview(webView)
+                }
                 UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
                     webView.frame = self.frameWhenVisible
                     webView.alpha = 1.0
@@ -285,7 +304,11 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                         self.webView?.alpha = 0.0
                     }
                 }) { _ in
-                    self.webView?.removeFromSuperview()
+                    if let bgView = self.transparentBackgroundView {
+                        bgView.removeFromSuperview()
+                    } else {
+                        self.webView?.removeFromSuperview()
+                    }
                     if shouldDeallocateWebView {
                         self.webView = nil
                     } else {
@@ -293,7 +316,11 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                     }
                 }
             } else {
-                self.webView?.removeFromSuperview()
+                if let bgView = self.transparentBackgroundView {
+                    bgView.removeFromSuperview()
+                } else {
+                    self.webView?.removeFromSuperview()
+                }
                 if shouldDeallocateWebView {
                     self.webView = nil
                 } else {
