@@ -48,7 +48,7 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
         let mockNetworkService = TestableNetworkService()
-        mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
+        mockNetworkService.mockResponse = (data: expectedData, response: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
 
@@ -71,7 +71,7 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
         let mockNetworkService = TestableNetworkService()
-        mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
+        mockNetworkService.mockResponse = (data: expectedData, response: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
         rulesEngine.replaceRules(from: "http://test.com/rules.url")
         rulesEngine.rulesEngine.clearRules()
@@ -96,7 +96,7 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         let httpResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
         let mockNetworkService = TestableNetworkService()
-        mockNetworkService.mockRespsonse = (data: expectedData, respsonse: httpResponse, error: nil)
+        mockNetworkService.mockResponse = (data: expectedData, response: httpResponse, error: nil)
         ServiceProvider.shared.networkService = mockNetworkService
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
         /// When:

@@ -14,7 +14,7 @@ import AEPServices
 import Foundation
 
 public class TestableNetworkService: Networking {
-    public var mockRespsonse: (data: Data?, respsonse: HTTPURLResponse?, error: Error?)?
+    public var mockResponse: (data: Data?, response: HTTPURLResponse?, error: Error?)?
     public var requests: [NetworkRequest] = []
 
     public init() {}
@@ -22,7 +22,7 @@ public class TestableNetworkService: Networking {
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
         requests.append(networkRequest)
 
-        let httpConnection = HttpConnection(data: mockRespsonse?.data, response: mockRespsonse?.respsonse, error: mockRespsonse?.error)
+        let httpConnection = HttpConnection(data: mockResponse?.data, response: mockResponse?.response, error: mockResponse?.error)
         completionHandler!(httpConnection)
     }
 }
