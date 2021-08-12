@@ -24,6 +24,7 @@ class RulesEngineFunctionalTests: XCTestCase {
     var rulesEngine: LaunchRulesEngine!
 
     override func setUp() {
+        continueAfterFailure = false
         UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         Log.logFilter = .trace
@@ -915,16 +916,10 @@ class RulesEngineFunctionalTests: XCTestCase {
         // Process original event; dispatch chain count = 0
         _ = rulesEngine.process(event: event)
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-        var dispatchedEvent = mockRuntime.dispatchedEvents[0]
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
         mockRuntime.dispatchedEvents.removeAll()
 
         // Process dispatched event; dispatch chain count = 1
-        _ = rulesEngine.process(event: dispatchedEvent)
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-        dispatchedEvent = mockRuntime.dispatchedEvents[0]
-        mockRuntime.dispatchedEvents.removeAll()
-        
-        // Process dispatched event; dispatch chain count = 2
         // Expect dispatch to fail as max allowed chained events is 1
         _ = rulesEngine.process(event: dispatchedEvent)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
@@ -1012,33 +1007,21 @@ class RulesEngineFunctionalTests: XCTestCase {
         // Process original event; dispatch chain count = 0
         _ = rulesEngine.process(event: eventEdgeRequest)
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-        var dispatchedEvent1 = mockRuntime.dispatchedEvents[0]
+        let dispatchedEvent1 = mockRuntime.dispatchedEvents[0]
         mockRuntime.dispatchedEvents.removeAll()
         
         // Process launch event
         _ = rulesEngine.process(event: eventLaunch)
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-        var dispatchedEvent2 = mockRuntime.dispatchedEvents[0]
+        let dispatchedEvent2 = mockRuntime.dispatchedEvents[0]
         mockRuntime.dispatchedEvents.removeAll()
         
         // Process first dispatched event; dispatch chain count = 1
-        _ = rulesEngine.process(event: dispatchedEvent1)
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-        dispatchedEvent1 = mockRuntime.dispatchedEvents[0]
-        mockRuntime.dispatchedEvents.removeAll()
-        
-        // Process first dispatched event; dispatch chain count = 2
         // Expect dispatch to fail as max allowed chained events is 1
         _ = rulesEngine.process(event: dispatchedEvent1)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         
         // // Process second dispatched event; dispatch chain count = 1
-        _ = rulesEngine.process(event: dispatchedEvent2)
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
-        dispatchedEvent2 = mockRuntime.dispatchedEvents[0]
-        mockRuntime.dispatchedEvents.removeAll()
-        
-        // Process second dispatched event; dispatch chain count = 2
         // Expect dispatch to fail as max allowed chained events is 1
         _ = rulesEngine.process(event: dispatchedEvent2)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
@@ -1115,43 +1098,15 @@ class RulesEngineFunctionalTests: XCTestCase {
         let dispatchedEvent2 = mockRuntime.dispatchedEvents[1]
         mockRuntime.dispatchedEvents.removeAll()
         
-        // Process dispatched event 1, expect 2 dispatch events
-        // chain count = 1
+        // Process dispatched event 1, expect 0 dispatch events
+        // chain count = 1, which is max chained events
         _ = rulesEngine.process(event: dispatchedEvent1)
-        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
-        let dispatchedEvent11 = mockRuntime.dispatchedEvents[0]
-        let dispatchedEvent12 = mockRuntime.dispatchedEvents[1]
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         mockRuntime.dispatchedEvents.removeAll()
         
-        // Process dispatched event 2, expect 2 dispatch events
-        // chain count = 1
+        // Process dispatched event 2, expect 0 dispatch events
+        // chain count = 1, which is max chained events
         _ = rulesEngine.process(event: dispatchedEvent2)
-        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
-        let dispatchedEvent21 = mockRuntime.dispatchedEvents[0]
-        let dispatchedEvent22 = mockRuntime.dispatchedEvents[1]
-        mockRuntime.dispatchedEvents.removeAll()
-        
-        // Process dispatched event 1.1, expect 0 dispatch events
-        // chain count = 2 which is > 1
-        _ = rulesEngine.process(event: dispatchedEvent11)
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-        mockRuntime.dispatchedEvents.removeAll()
-        
-        // Process dispatched event 1.2, expect 0 dispatch events
-        // chain count = 2 which is > 1
-        _ = rulesEngine.process(event: dispatchedEvent12)
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-        mockRuntime.dispatchedEvents.removeAll()
-        
-        // Process dispatched event 2.1, expect 0 dispatch events
-        // chain count = 2 which is > 1
-        _ = rulesEngine.process(event: dispatchedEvent21)
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-        mockRuntime.dispatchedEvents.removeAll()
-        
-        // Process dispatched event 2.2, expect 0 dispatch events
-        // chain count = 2 which is > 1
-        _ = rulesEngine.process(event: dispatchedEvent22)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         mockRuntime.dispatchedEvents.removeAll()
     }

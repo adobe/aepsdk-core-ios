@@ -132,7 +132,7 @@ public class LaunchRulesEngine {
                     eventData = modifiedEventData
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
-                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount > LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
+                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, max dispatch consequences met for this event, \(event)")
                         continue
                     }
