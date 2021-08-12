@@ -332,6 +332,7 @@
 		92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitor.swift */; };
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
+		ACD255AD26C21A9B00532B1E /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255AC26C21A9B00532B1E /* EventTests.swift */; };
 		B2F223F8573D6B132F285AD7 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6A7B39F8D2A807344E7098B /* Pods_AEPLifecycleTests.framework */; };
 		B6D6A019265EC9D8005042BE /* FloatingButtonPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */; };
 		B6D6A02D26601279005042BE /* FloatingButtonPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */; };
@@ -929,6 +930,7 @@
 		92F06D0325BA33F3004C1700 /* Showable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showable.swift; sourceTree = "<group>"; };
 		9444FBB20EFFE94F7726A49F /* Pods_AEPCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A63AA3E0DA8692271AC7C724 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
+		ACD255AC26C21A9B00532B1E /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		B414FF5745B34BC95CF624DC /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPosition.swift; sourceTree = "<group>"; };
 		B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPositionTests.swift; sourceTree = "<group>"; };
@@ -1592,6 +1594,7 @@
 		3F3951E924CA096100F7325B /* EventHubTests */ = {
 			isa = PBXGroup;
 			children = (
+				ACD255AC26C21A9B00532B1E /* EventTests.swift */,
 				3F3951EB24CA096100F7325B /* EventHubTests.swift */,
 				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
 			);
@@ -2896,6 +2899,7 @@
 				78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */,
 				3F16762824F031A00041B970 /* EventHubContractTests.swift in Sources */,
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
+				ACD255AD26C21A9B00532B1E /* EventTests.swift in Sources */,
 				3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */,
