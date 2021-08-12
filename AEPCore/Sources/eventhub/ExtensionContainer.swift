@@ -33,17 +33,34 @@ class ExtensionContainer {
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
 
+    /// The extension container's queue to allow multi threaded access to its members.
+    private let containerQueue: DispatchQueue
+
     /// Operation Orderer queue of `Event` objects for this extension
     let eventOrderer: OperationOrderer<Event>
 
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
 
-    /// The last `Event` that was processed by this extension, nil if no events have been processed
-    var lastProcessedEvent: Event?
+    private var _lastProcessedEvent: Event?
 
-    init(_ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
+    /// The last `Event` that was processed by this extension, nil if no events have been processed
+    var lastProcessedEvent: Event? {
+        get {
+            containerQueue.sync {
+                return _lastProcessedEvent
+            }
+        }
+        set {
+            containerQueue.sync {
+                _lastProcessedEvent = newValue
+            }
+        }
+    }
+
+    init(_ name: String, _ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
         extensionQueue = queue
+        self.containerQueue = DispatchQueue(label: "\(name).containerqueue")
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
