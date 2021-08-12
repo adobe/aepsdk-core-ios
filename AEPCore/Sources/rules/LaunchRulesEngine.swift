@@ -132,9 +132,17 @@ public class LaunchRulesEngine {
                     eventData = modifiedEventData
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
-                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
-                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, max dispatch consequences met for this event, \(event)")
-                        continue
+
+                    if let unwrappedDispatchCount = dispatchChainCount {
+                        // Keep track of triggering event in edge case of event being dispatched multiple times
+                        // This only applies to events created from this dispatch consequence, hence the check
+                        // for a null 'dispatchChainCount' prior to adding back to dictionary
+                        dispatchChainedEventsCount[event.id] = LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT
+
+                        if unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
+                            Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, max dispatch consequences met for this event, \(event)")
+                            continue
+                        }
                     }
                     guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: eventData)  else {
                         continue
