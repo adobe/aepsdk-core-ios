@@ -36,11 +36,11 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.unregisterExtension(Signal.self) {
             unregisterExpectation.fulfill()
         }
-        
+
         MobileCore.unregisterExtension(Lifecycle.self) {
             unregisterExpectation.fulfill()
         }
-        
+
         wait(for: [unregisterExpectation], timeout: 3)
 
     }
