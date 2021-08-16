@@ -13,9 +13,13 @@
 import Foundation
 import AEPServices
 
-/// XDMLifecycleMetricsBuilder collects metrics in XDM format, to be sent as two XDM events for mobile application launch and application close.
-class XDMLifecycleMetricsBuilder {
-    private let LOG_TAG = "XDMLifecycleMetricsBuilder"
+/// LifecycleV2MetricsBuilder collects metrics in XDM format, to be sent as two XDM events for mobile application launch and application close.
+/// Refer to the Mobile App Lifecycle Details field group, which includes:
+///  - XDM Environment datatype
+///  - XMD Device datatype
+///  - XDM Application datatype
+class LifecycleV2MetricsBuilder {
+    private let LOG_TAG = "LifecycleV2MetricsBuilder"
     private let startDate: Date
     private var xdmApplicationInfoClose: XDMApplication?
     private var xdmApplicationInfoLaunch: XDMApplication?
@@ -35,8 +39,8 @@ class XDMLifecycleMetricsBuilder {
     /// Builds the data required for the XDM Application Launch event, including `XDMApplication`
     /// `XDMEnvironment` and `XDMDevice` info.
     /// - Returns: App launch event data in dictionary format
-    func buildXDMAppLaunchEventData() -> [String: Any]? {
-        var appLaunchXDMData = XDMMobileLifecycleDetails()
+    func buildAppLaunchXDMData() -> [String: Any]? {
+        var appLaunchXDMData = XDMLifecycleMobileDetails()
         appLaunchXDMData.application = xdmApplicationInfoLaunch
         appLaunchXDMData.device = xdmDeviceInfo
         appLaunchXDMData.environment = xdmEnvironmentInfo
@@ -48,8 +52,8 @@ class XDMLifecycleMetricsBuilder {
 
     /// Builds the data required for the XDM Application Close event, including `XDMApplication`
     /// - Returns: App close event data in dictionary format
-    func buildAppCloseXDMEventData() -> [String: Any]? {
-        var appLaunchXDMData = XDMMobileLifecycleDetails()
+    func buildAppCloseXDMData() -> [String: Any]? {
+        var appLaunchXDMData = XDMLifecycleMobileDetails()
         appLaunchXDMData.application = xdmApplicationInfoClose
         appLaunchXDMData.eventType = LifecycleConstants.XDM.EVENT_TYPE_APP_CLOSE
         appLaunchXDMData.timestamp = startDate
@@ -63,8 +67,8 @@ class XDMLifecycleMetricsBuilder {
     /// - Parameters:
     ///   - isInstall: indicates if this is an app install
     ///   - isUpgrade: indicates if this is an app upgrade
-    /// - Returns: this `XDMLifecycleMetricsBuilder` instance
-    func addAppLaunchData(isInstall: Bool, isUpgrade: Bool) -> XDMLifecycleMetricsBuilder {
+    /// - Returns: this `LifecycleV2MetricsBuilder` instance
+    func addAppLaunchData(isInstall: Bool, isUpgrade: Bool) -> LifecycleV2MetricsBuilder {
         xdmApplicationInfoLaunch = XDMApplication()
         xdmApplicationInfoLaunch?.isLaunch = true
 
@@ -87,8 +91,8 @@ class XDMLifecycleMetricsBuilder {
     /// - Parameters:
     ///   - previousAppId: application version from the previous session when the close happened
     ///   - previousSessionInfo: previous session information to be attached to the close event
-    /// - Returns: this `XDMLifecycleMetricsBuilder` instance
-    func addAppCloseData(previousAppId: String?, previousSessionInfo: LifecycleSessionInfo) -> XDMLifecycleMetricsBuilder {
+    /// - Returns: this `LifecycleV2MetricsBuilder` instance
+    func addAppCloseData(previousAppId: String?, previousSessionInfo: LifecycleSessionInfo) -> LifecycleV2MetricsBuilder {
         xdmApplicationInfoClose = XDMApplication()
 
         // TODO: MOB-14453
@@ -105,8 +109,8 @@ class XDMLifecycleMetricsBuilder {
     }
 
     /// Adds information related to the running environment, see `XDMEnvironment`
-    /// - Returns: this `XDMLifecycleMetricsBuilder` instance
-    func addEnvironmentData() -> XDMLifecycleMetricsBuilder {
+    /// - Returns: this `LifecycleV2MetricsBuilder` instance
+    func addEnvironmentData() -> LifecycleV2MetricsBuilder {
         xdmEnvironmentInfo = XDMEnvironment()
 
         xdmEnvironmentInfo?.carrier = systemInfoService.getMobileCarrierName()
@@ -119,8 +123,8 @@ class XDMLifecycleMetricsBuilder {
     }
 
     /// Adds information related to the running environment, see `XDMEnvironment`
-    /// - Returns: this `XDMLifecycleMetricsBuilder` instance
-    func addDeviceData() -> XDMLifecycleMetricsBuilder {
+    /// - Returns: this `LifecycleV2MetricsBuilder` instance
+    func addDeviceData() -> LifecycleV2MetricsBuilder {
         xdmDeviceInfo = XDMDevice()
 
         let displayInfo = systemInfoService.getDisplayInformation()

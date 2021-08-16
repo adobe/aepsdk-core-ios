@@ -12,8 +12,8 @@
 
 import Foundation
 
-/// Represents XDM Mobile Lifecycle Details
-struct XDMMobileLifecycleDetails {
+/// Represents XDM Lifecycle Mobile Details
+struct XDMLifecycleMobileDetails {
     init() {}
 
     /// Application for the Lifecycle details
@@ -40,7 +40,7 @@ struct XDMMobileLifecycleDetails {
     }
 }
 
-extension XDMMobileLifecycleDetails: Encodable {
+extension XDMLifecycleMobileDetails: Encodable {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         if let unwrapped = application { try container.encode(unwrapped, forKey: .application) }

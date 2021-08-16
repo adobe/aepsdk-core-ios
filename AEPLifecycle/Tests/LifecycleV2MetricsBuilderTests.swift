@@ -16,7 +16,7 @@ import AEPServices
 import AEPServicesMocks
 import XCTest
 
-class XDMLifecycleMetricsBuilderTests: XCTestCase {
+class LifecycleV2MetricsBuilderTests: XCTestCase {
     
     let startDate = Date(timeIntervalSince1970: 1483889568)
     
@@ -42,10 +42,10 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
     
-    func testBuildXDMAppLaunchEventDataReturnsCorrectDataWhenIsInstall() {
-        let actualAppLaunchData = XDMLifecycleMetricsBuilder(startDate: startDate)
+    func testBuildAppLaunchXDMDataReturnsCorrectDataWhenIsInstall() {
+        let actualAppLaunchData = LifecycleV2MetricsBuilder(startDate: startDate)
             .addAppLaunchData(isInstall: true, isUpgrade: false)
-            .buildXDMAppLaunchEventData()
+            .buildAppLaunchXDMData()
         
         // verify
         let application = [
@@ -63,10 +63,10 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
     
-    func testBuildXDMAppLaunchEventDataReturnsCorrectDataWhenIsUpgradeEvent() {
-        let actualAppLaunchData = XDMLifecycleMetricsBuilder(startDate: startDate)
+    func testBuildAppLaunchXDMDataReturnsCorrectDataWhenIsUpgradeEvent() {
+        let actualAppLaunchData = LifecycleV2MetricsBuilder(startDate: startDate)
             .addAppLaunchData(isInstall: false, isUpgrade: true)
-            .buildXDMAppLaunchEventData()
+            .buildAppLaunchXDMData()
         
         // verify
         let application = [
@@ -84,10 +84,10 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
     
-    func testBuildXDMAppLaunchEventDataReturnsCorrectDataWhenIsLaunch() {
-        let actualAppLaunchData = XDMLifecycleMetricsBuilder(startDate: startDate)
+    func testBuildAppLaunchXDMDataReturnsCorrectDataWhenIsLaunch() {
+        let actualAppLaunchData = LifecycleV2MetricsBuilder(startDate: startDate)
             .addAppLaunchData(isInstall: false, isUpgrade: false)
-            .buildXDMAppLaunchEventData()
+            .buildAppLaunchXDMData()
         
         // verify
         let application = [
@@ -104,9 +104,9 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
     
-    func testBuildXDMAppLaunchEventDataReturnsCorrectDataWhenEnvironmentData() {
-        let actualAppLaunchData = XDMLifecycleMetricsBuilder(startDate: startDate)
-            .addEnvironmentData().buildXDMAppLaunchEventData()
+    func testBuildAppLaunchXDMDataReturnsCorrectDataWhenEnvironmentData() {
+        let actualAppLaunchData = LifecycleV2MetricsBuilder(startDate: startDate)
+            .addEnvironmentData().buildAppLaunchXDMData()
         
         // verify
         let environment = [
@@ -124,9 +124,9 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
     
-    func testBuildXDMAppLaunchEventDataReturnsCorrectDataWhenDeviceData() {
-        let actualAppLaunchData = XDMLifecycleMetricsBuilder(startDate: startDate)
-            .addDeviceData().buildXDMAppLaunchEventData()
+    func testBuildAppLaunchXDMDataReturnsCorrectDataWhenDeviceData() {
+        let actualAppLaunchData = LifecycleV2MetricsBuilder(startDate: startDate)
+            .addDeviceData().buildAppLaunchXDMData()
         
         // verify
         let device = [
@@ -145,12 +145,12 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
     
-    func testBuildXDMAppCloseEventDataReturnsCorrectDataWhenIsCloseCrashEvent() {
-        let actualAppCloseData = XDMLifecycleMetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
+    func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseCrashEvent() {
+        let actualAppCloseData = LifecycleV2MetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
                 startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
                 pauseDate: Date(timeIntervalSince1970: 1483864129), // pause: Sunday, January 8, 2017 8:28:49 AM GMT (before start, simulate incorrect app close)
-                isCrash: true)).buildAppCloseXDMEventData()
+                isCrash: true)).buildAppCloseXDMData()
         
         // verify
         let application = [
@@ -168,13 +168,13 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
     }
     
-    func testBuildXDMAppCloseEventDataReturnsCorrectDataWhenIsCloseIncorrectLifecycleImplementation() {
+    func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseIncorrectLifecycleImplementation() {
         // new start: Monday January 9, 2017 12:38:20 PM GMT
-        let actualAppCloseData = XDMLifecycleMetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
+        let actualAppCloseData = LifecycleV2MetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
                 startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
                 pauseDate: Date(timeIntervalSince1970: 0), // simulate Lifecycle pause not implemented
-                isCrash: true)).buildAppCloseXDMEventData()
+                isCrash: true)).buildAppCloseXDMData()
         
         // verify
         let application = [
@@ -192,12 +192,12 @@ class XDMLifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
     }
     
-    func testBuildXDMAppCloseEventDataReturnsCorrectDataWhenIsCloseCorrectSession() {
-        let actualAppCloseData = XDMLifecycleMetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
+    func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseCorrectSession() {
+        let actualAppCloseData = LifecycleV2MetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
             .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
                 startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
                 pauseDate: Date(timeIntervalSince1970: 1483864390), // pause: Sunday, January 8, 2017 8:33:10 AM GMT
-                isCrash: false)).buildAppCloseXDMEventData()
+                isCrash: false)).buildAppCloseXDMData()
         
         // verify
         let application = [

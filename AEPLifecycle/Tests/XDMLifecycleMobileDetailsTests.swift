@@ -13,12 +13,12 @@
 @testable import AEPLifecycle
 import XCTest
 
-class XDMMobileLifecycleDetailsTests: XCTestCase {
+class XDMLifecycleMobileDetailsTests: XCTestCase {
 
     // MARK: Encodable Tests
 
     func testEncodeLifecycleDetails() throws {
-        var lifecycleDetails = XDMMobileLifecycleDetails()
+        var lifecycleDetails = XDMLifecycleMobileDetails()
         lifecycleDetails.timestamp = Date(timeIntervalSince1970: 1619827190)
         lifecycleDetails.eventType = "test-event-type"
         lifecycleDetails.application = XDMApplication()

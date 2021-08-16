@@ -12,7 +12,7 @@
 import AEPServices
 import Foundation
 
-/// A type for managing Lifecycle sessions
+/// A type for managing Lifecycle sessions for standard, non-XDM scenarios.
 struct LifecycleSession {
     let dataStore: NamedCollectionDataStore
 
