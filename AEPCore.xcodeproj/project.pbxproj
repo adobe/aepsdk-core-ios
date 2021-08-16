@@ -391,6 +391,8 @@
 		BF4A6F2726BB4A1B00612434 /* rules_testDispatchEventInvalidAction.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2326BB4A1A00612434 /* rules_testDispatchEventInvalidAction.json */; };
 		BF4A6F2826BB4A1B00612434 /* rules_testDispatchEventNoSource.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2426BB4A1B00612434 /* rules_testDispatchEventNoSource.json */; };
 		BF4A6F2926BB4A1B00612434 /* rules_testDispatchEventNoType.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */; };
+		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
+		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1012,6 +1014,8 @@
 		BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testDispatchEventNoType.json; sourceTree = "<group>"; };
 		C63E76D9752A3702439C65D2 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C63ECCE4276B2C8008629BA4 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
+		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
+		D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2Constants.swift; sourceTree = "<group>"; };
 		D6A7B39F8D2A807344E7098B /* Pods_AEPLifecycleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPLifecycleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E405C4A9B041F4542C3601A5 /* Pods_AEPIdentityTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIdentityTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E09A90FFDA252F2F0ABA0E /* Pods-AEPIdentityTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1942,15 +1946,17 @@
 		D42C989A26CAE18D002E3184 /* LifecycleV2 */ = {
 			isa = PBXGroup;
 			children = (
+				D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */,
+				D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */,
 				21248079265D569D006CF300 /* LifecycleV2MetricsBuilder.swift */,
-				21248098265D589E006CF300 /* XDMDeviceType.swift */,
-				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
 				212480D6265D59F9006CF300 /* XDMApplication.swift */,
 				212480F6265D5A7A006CF300 /* XDMCloseType.swift */,
 				21248106265D5BC3006CF300 /* XDMDevice.swift */,
+				21248098265D589E006CF300 /* XDMDeviceType.swift */,
 				21248116265D5E1C006CF300 /* XDMEnvironment.swift */,
-				21248126265D606A006CF300 /* XDMLifecycleMobileDetails.swift */,
+				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
 				212480E6265D5A4E006CF300 /* XDMFormatters.swift */,
+				21248126265D606A006CF300 /* XDMLifecycleMobileDetails.swift */,
 			);
 			path = LifecycleV2;
 			sourceTree = "<group>";
@@ -3194,7 +3200,9 @@
 				3FE6DE1224C630EB0065EA05 /* Lifecycle.swift in Sources */,
 				3FE6DE1324C630EB0065EA05 /* LifecycleContextData.swift in Sources */,
 				3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */,
+				D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */,
 				21248127265D606A006CF300 /* XDMLifecycleMobileDetails.swift in Sources */,
+				D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */,
 				21248107265D5BC3006CF300 /* XDMDevice.swift in Sources */,
 				212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */,
 				212480E7265D5A4E006CF300 /* XDMFormatters.swift in Sources */,

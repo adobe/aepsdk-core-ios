@@ -44,7 +44,7 @@ class LifecycleV2MetricsBuilder {
         appLaunchXDMData.application = xdmApplicationInfoLaunch
         appLaunchXDMData.device = xdmDeviceInfo
         appLaunchXDMData.environment = xdmEnvironmentInfo
-        appLaunchXDMData.eventType = LifecycleConstants.XDM.EVENT_TYPE_APP_LAUNCH
+        appLaunchXDMData.eventType = LifecycleV2Constants.EventType.APP_LAUNCH
         appLaunchXDMData.timestamp = startDate
 
         return appLaunchXDMData.asDictionary()
@@ -55,7 +55,7 @@ class LifecycleV2MetricsBuilder {
     func buildAppCloseXDMData() -> [String: Any]? {
         var appLaunchXDMData = XDMLifecycleMobileDetails()
         appLaunchXDMData.application = xdmApplicationInfoClose
-        appLaunchXDMData.eventType = LifecycleConstants.XDM.EVENT_TYPE_APP_CLOSE
+        appLaunchXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
         appLaunchXDMData.timestamp = startDate
 
         // TODO: MOB-14370 backdate timestamp
