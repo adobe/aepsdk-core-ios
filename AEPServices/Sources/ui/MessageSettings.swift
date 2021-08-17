@@ -13,71 +13,102 @@
 import Foundation
 import UIKit
 
+///
+/// The `MessageSettings` class defines how a message should be constructed, how and where it should be displayed,
+/// and how the user can interact with it.
+///
+/// `MessageSettings` uses a builder pattern for construction. The `parent` can only be set during initialization.
+///
 @objc(AEPMessageSettings)
+@objcMembers
 public class MessageSettings: NSObject {
+    /// Object that owns the message created using these settings.
     public let parent: Any?
+    
+    /// Width of the view in which the message is displayed. Represented in percentage of the total screen width.
     public private(set) var width: Int?
+    
+    /// Height of the view in which the message is displayed. Represented in percentage of the total screen height.
     public private(set) var height: Int?
-    public private(set) var verticalAlign: MessageAlignment = .center
+    
+    /// Defines the vertical alignment of the message.  See `MessageAlignment`.
+    public private(set) var verticalAlign: MessageAlignment?
+    
+    /// Defines the vertical inset respective to the `verticalAlign`. Represented in percentage of the total screen height.
     public private(set) var verticalInset: Int?
-    public private(set) var horizontalAlign: MessageAlignment = .center
+    
+    /// Defines the horizontal alignment of the message.  See `MessageAlignment`.
+    public private(set) var horizontalAlign: MessageAlignment?
+    
+    /// Defines the horizontal inset respective to the `horizontalAlign`. Represented in percentage of the total screen width.
     public private(set) var horizontalInset: Int?
-    public private(set) var uiTakeover: Bool = true
+    
+    /// If true, a displayed message will prevent the user from other UI interactions
+    public private(set) var uiTakeover: Bool?
+    
+    /// A mapping of gestures and their associated behaviors.
+    /// The URL will be executed as javascript in the message's underlying webview.
+    /// See `MessageGesture`
     public private(set) var gestures: [MessageGesture: URL]?
+    
+    /// Defines the animation to be used when the message is displayed. See `MessageAnimation`.
     public private(set) var dismissAnimation: MessageAnimation?
+    
+    /// Defines the animation to be used when the message is dismissed. See `MessageAnimation`.
     public private(set) var displayAnimation: MessageAnimation?
 
+    
     public init(parent: Any? = nil) {
         self.parent = parent
     }
-
-    public func setWidth(_ width: Int?) -> MessageSettings {
+    
+    @discardableResult public func setWidth(_ width: Int?) -> MessageSettings {
         self.width = width
         return self
     }
 
-    public func setHeight(_ height: Int?) -> MessageSettings {
+    @discardableResult public func setHeight(_ height: Int?) -> MessageSettings {
         self.height = height
         return self
     }
 
-    public func setVerticalAlign(_ vAlign: MessageAlignment) -> MessageSettings {
-        self.verticalAlign = vAlign
+    @discardableResult public func setVerticalAlign(_ vAlign: MessageAlignment?) -> MessageSettings {
+        self.verticalAlign = vAlign ?? .center
         return self
     }
 
-    public func setHorizontalAlign(_ hAlign: MessageAlignment) -> MessageSettings {
-        self.horizontalAlign = hAlign
+    @discardableResult public func setHorizontalAlign(_ hAlign: MessageAlignment?) -> MessageSettings {
+        self.horizontalAlign = hAlign ?? .center
         return self
     }
 
-    public func setVerticalInset(_ vInset: Int?) -> MessageSettings {
+    @discardableResult public func setVerticalInset(_ vInset: Int?) -> MessageSettings {
         self.verticalInset = vInset
         return self
     }
 
-    public func setHorizontalInset(_ hInset: Int?) -> MessageSettings {
+    @discardableResult public func setHorizontalInset(_ hInset: Int?) -> MessageSettings {
         self.horizontalInset = hInset
         return self
     }
 
-    public func setUiTakeover(_ uiTakeover: Bool) -> MessageSettings {
-        self.uiTakeover = uiTakeover
+    @discardableResult public func setUiTakeover(_ uiTakeover: Bool?) -> MessageSettings {
+        self.uiTakeover = uiTakeover ?? false
         return self
     }
 
-    public func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
+    @discardableResult public func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
         self.gestures = gestures
         return self
     }
 
-    public func setDisplayAnimation(_ animation: MessageAnimation) -> MessageSettings {
-        self.displayAnimation = animation
+    @discardableResult public func setDisplayAnimation(_ animation: MessageAnimation?) -> MessageSettings {
+        self.displayAnimation = animation ?? MessageAnimation.none
         return self
     }
 
-    public func setDismissAnimation(_ animation: MessageAnimation) -> MessageSettings {
-        self.dismissAnimation = animation
+    @discardableResult public func setDismissAnimation(_ animation: MessageAnimation?) -> MessageSettings {
+        self.dismissAnimation = animation ?? MessageAnimation.none
         return self
     }
 }

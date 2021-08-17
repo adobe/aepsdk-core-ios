@@ -66,6 +66,7 @@
 		246FD07426BDEC7A00FD130B /* MessageGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */; };
 		246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07926C1939800FD130B /* MessageAnimation.swift */; };
 		246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */; };
+		246FD07E26CB002F00FD130B /* MessageSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
 		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
@@ -653,6 +654,7 @@
 		246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureRecognizer.swift; sourceTree = "<group>"; };
 		246FD07926C1939800FD130B /* MessageAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimation.swift; sourceTree = "<group>"; };
 		246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculation.swift"; sourceTree = "<group>"; };
+		246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettingsTests.swift; sourceTree = "<group>"; };
 		247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+SignalTests.swift"; sourceTree = "<group>"; };
 		249498E0254A0C910045E392 /* Date+FormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+FormatTests.swift"; sourceTree = "<group>"; };
 		2499461B24E5E67700D3F7B2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -1520,22 +1522,23 @@
 				3F03980424BE61520019F095 /* DataQueueServiceTests.swift */,
 				3F03980324BE61520019F095 /* DataQueueService+Testable.swift */,
 				3F03980A24BE61520019F095 /* DataQueueTests.swift */,
+				786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */,
 				3F03980624BE61520019F095 /* DiskCacheServiceTests.swift */,
+				78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */,
+				92867D6425C0B56400E32CDC /* FloatingButtonTests.swift */,
+				B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */,
+				923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */,
 				3F03980C24BE61520019F095 /* LogLevelTest.swift */,
+				92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */,
+				246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */,
 				3F03980D24BE61520019F095 /* NamedCollectionDataStoreTest.swift */,
 				3F03980B24BE61520019F095 /* NetworkServiceTests.swift */,
 				3F03980824BE61520019F095 /* SQLiteWrapperTests.swift */,
 				3F03980224BE61520019F095 /* SystemInfoServiceTest.swift */,
 				3F03980124BE61520019F095 /* UnzipperTest.swift */,
-				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
-				78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */,
 				3F03980524BE61520019F095 /* URLServiceTest.swift */,
 				3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */,
-				92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */,
-				923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */,
-				786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */,
-				B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */,
-				92867D6425C0B56400E32CDC /* FloatingButtonTests.swift */,
+				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -3087,6 +3090,7 @@
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
 				3F03982024BE61520019F095 /* LogLevelTest.swift in Sources */,
+				246FD07E26CB002F00FD130B /* MessageSettingsTests.swift in Sources */,
 				3F03981A24BE61520019F095 /* DiskCacheServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
