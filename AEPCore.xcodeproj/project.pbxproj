@@ -1322,14 +1322,14 @@
 				3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */,
 				3FE6DDFE24C630DE0065EA05 /* LifecycleSessionTests.swift */,
 				3FE6DDFD24C630DE0065EA05 /* LifecycleStateTests.swift */,
-				21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */,
-				21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */,
+				21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */,
 				21BA2E2C265D8EC60011207C /* XDMApplicationTests.swift */,
 				21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */,
 				21BA2E4C265D91830011207C /* XDMDeviceTests.swift */,
+				21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */,
 				21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */,
+				21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */,
 				21BA2E88265D96150011207C /* XDMLifecycleMobileDetailsTests.swift */,
-				21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */,
 			);
 			name = Tests;
 			path = AEPLifecycle/Tests;
