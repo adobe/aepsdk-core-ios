@@ -24,44 +24,43 @@ import UIKit
 public class MessageSettings: NSObject {
     /// Object that owns the message created using these settings.
     public let parent: Any?
-    
+
     /// Width of the view in which the message is displayed. Represented in percentage of the total screen width.
     public private(set) var width: Int?
-    
+
     /// Height of the view in which the message is displayed. Represented in percentage of the total screen height.
     public private(set) var height: Int?
-    
+
     /// Defines the vertical alignment of the message.  See `MessageAlignment`.
-    public private(set) var verticalAlign: MessageAlignment?
-    
+    public private(set) var verticalAlign: MessageAlignment?
+
     /// Defines the vertical inset respective to the `verticalAlign`. Represented in percentage of the total screen height.
     public private(set) var verticalInset: Int?
-    
+
     /// Defines the horizontal alignment of the message.  See `MessageAlignment`.
     public private(set) var horizontalAlign: MessageAlignment?
-    
+
     /// Defines the horizontal inset respective to the `horizontalAlign`. Represented in percentage of the total screen width.
     public private(set) var horizontalInset: Int?
-    
+
     /// If true, a displayed message will prevent the user from other UI interactions
     public private(set) var uiTakeover: Bool?
-    
+
     /// A mapping of gestures and their associated behaviors.
     /// The URL will be executed as javascript in the message's underlying webview.
     /// See `MessageGesture`
     public private(set) var gestures: [MessageGesture: URL]?
-    
+
     /// Defines the animation to be used when the message is displayed. See `MessageAnimation`.
     public private(set) var dismissAnimation: MessageAnimation?
-    
+
     /// Defines the animation to be used when the message is dismissed. See `MessageAnimation`.
     public private(set) var displayAnimation: MessageAnimation?
 
-    
     public init(parent: Any? = nil) {
         self.parent = parent
     }
-    
+
     @discardableResult public func setWidth(_ width: Int?) -> MessageSettings {
         self.width = width
         return self

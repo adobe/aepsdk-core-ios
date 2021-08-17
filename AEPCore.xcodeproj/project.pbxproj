@@ -2774,7 +2774,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  #swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		BB68130724E19C32007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;

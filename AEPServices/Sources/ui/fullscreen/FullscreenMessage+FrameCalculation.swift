@@ -15,19 +15,19 @@ import UIKit
 
 extension FullscreenMessage {
     // MARK: - internal vars
-    
+
     /// calculated frames are used for animation
     /// frameWhenVisible is the frame when the message is visible to the user
     var frameWhenVisible: CGRect {
         return CGRect(x: originX, y: originY, width: width, height: height)
     }
-    
+
     /// frameBeforeShow considers displayAnimation and positions the message appropriately
     var frameBeforeShow: CGRect {
         guard let displayAnimation = settings?.displayAnimation else {
             return frameWhenVisible
         }
-        
+
         switch displayAnimation {
         case .top:
             return CGRect(x: originX, y: -(height + originY), width: width, height: height)
@@ -43,13 +43,13 @@ extension FullscreenMessage {
             return frameWhenVisible
         }
     }
-    
+
     /// frameAfterDismiss considers dismissAnimation and positions the message appropriately
     var frameAfterDismiss: CGRect {
         guard let dismissAnimation = settings?.dismissAnimation else {
             return frameWhenVisible
         }
-        
+
         switch dismissAnimation {
         case .top:
             return CGRect(x: originX, y: -(height + originY), width: width, height: height)
@@ -70,13 +70,13 @@ extension FullscreenMessage {
     var screenWidth: CGFloat {
         return UIScreen.main.bounds.width
     }
-    
+
     var screenHeight: CGFloat {
         return UIScreen.main.bounds.height
     }
-    
+
     // MARK: - private vars
-    
+
     // width in settings represents a percentage of the screen.
     // e.g. - 80 = 80% of the screen width
     // default value is full screen width
@@ -84,10 +84,10 @@ extension FullscreenMessage {
         if let settingsWidth = settings?.width {
             return screenWidth * CGFloat(settingsWidth) / 100
         }
-        
+
         return screenWidth
     }
-    
+
     // height in settings represents a percentage of the screen.
     // e.g. - 80 = 80% of the screen height
     // default value is full screen height
@@ -95,10 +95,10 @@ extension FullscreenMessage {
         if let settingsHeight = settings?.height {
             return screenHeight * CGFloat(settingsHeight) / 100
         }
-        
+
         return screenHeight
     }
-    
+
     // x origin is calculated by settings values of horizontal alignment and horizontal inset
     // if horizontal alignment is center, horizontal inset is ignored and x is calculated so that the message will be
     // centered according to its width
@@ -109,7 +109,7 @@ extension FullscreenMessage {
         guard let settings = settings else {
             return 0
         }
-        
+
         if settings.horizontalAlign == .left {
             // check for an inset, otherwise left alignment means return 0
             if let hInset = settings.horizontalInset {
@@ -129,11 +129,11 @@ extension FullscreenMessage {
                 return screenWidth - width
             }
         }
-        
+
         // handle center alignment, x is (screen width - message width) / 2
         return (screenWidth - width) / 2
     }
-    
+
     // y origin is calculated by settings values of vertical alignment and vertical inset
     // if vertical alignment is center, vertical inset is ignored and y is calculated so that the message will be
     // centered according to its height
@@ -144,7 +144,7 @@ extension FullscreenMessage {
         guard let settings = settings else {
             return 0
         }
-        
+
         if settings.verticalAlign == .top {
             // check for an inset, otherwise top alignment means return 0
             if let vInset = settings.verticalInset {
@@ -164,7 +164,7 @@ extension FullscreenMessage {
                 return screenHeight - height
             }
         }
-        
+
         // handle center alignment, y is (screen height - message height) / 2
         return (screenHeight - height) / 2
     }
