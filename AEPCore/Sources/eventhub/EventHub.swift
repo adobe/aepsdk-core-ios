@@ -141,13 +141,13 @@ final class EventHub {
     ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         let triggerEventId = triggerEvent.id
-        let responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEventId, timeout: DispatchWorkItem { [weak self, triggerEventId] in
+        let timeoutTask = DispatchWorkItem { [weak self, triggerEventId] in
             listener(nil)
             _ = self?.responseEventListeners.filterRemove { $0.triggerEventId == triggerEventId }
-        })
-
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + timeout, execute: responseListenerContainer.timeoutTask!)
+        }
+        let responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEventId, timeout: timeoutTask)
         responseEventListeners.append(responseListenerContainer)
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + timeout, execute: timeoutTask)
     }
 
     /// Registers an `EventListener` which will be invoked whenever a event with matched type and source is dispatched
