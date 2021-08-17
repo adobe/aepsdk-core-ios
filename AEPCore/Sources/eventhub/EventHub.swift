@@ -140,14 +140,14 @@ final class EventHub {
     ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
     ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
-        var responseListenerContainer: EventListenerContainer? // initialized here so we can use in timeout block
-        responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEvent.id, timeout: DispatchWorkItem { [weak self] in
+        let triggerEventId = triggerEvent.id
+        let responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEventId, timeout: DispatchWorkItem { [weak self, triggerEventId] in
             listener(nil)
-            _ = self?.responseEventListeners.filterRemove { $0 == responseListenerContainer }
+            _ = self?.responseEventListeners.filterRemove { $0.triggerEventId == triggerEventId }
         })
 
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + timeout, execute: responseListenerContainer!.timeoutTask!)
-        responseEventListeners.append(responseListenerContainer!)
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + timeout, execute: responseListenerContainer.timeoutTask!)
+        responseEventListeners.append(responseListenerContainer)
     }
 
     /// Registers an `EventListener` which will be invoked whenever a event with matched type and source is dispatched
