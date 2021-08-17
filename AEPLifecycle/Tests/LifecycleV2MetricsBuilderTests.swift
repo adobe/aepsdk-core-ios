@@ -147,18 +147,15 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseCrashEvent() {
         let actualAppCloseData = LifecycleV2MetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
-            .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
-                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-                pauseDate: Date(timeIntervalSince1970: 1483864129), // pause: Sunday, January 8, 2017 8:28:49 AM GMT (before start, simulate incorrect app close)
-                isCrash: true)).buildAppCloseXDMData()
+            .addAppCloseData(
+                launchDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
+                closeDate: Date(timeIntervalSince1970: 1483864129), // pause: Sunday, January 8, 2017 8:28:49 AM GMT (before start, simulate incorrect app close)
+                isCloseUnknown: true).buildAppCloseXDMData()
         
         // verify
         let application = [
-            "name": "test-app-name",
-            "version": "1.10",
             "isClose": true,
-            "closeType": "unknown",
-            "id": "test-app-id"
+            "closeType": "unknown"
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -171,18 +168,15 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseIncorrectLifecycleImplementation() {
         // new start: Monday January 9, 2017 12:38:20 PM GMT
         let actualAppCloseData = LifecycleV2MetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
-            .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
-                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-                pauseDate: Date(timeIntervalSince1970: 0), // simulate Lifecycle pause not implemented
-                isCrash: true)).buildAppCloseXDMData()
+            .addAppCloseData(
+                launchDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
+                closeDate: Date(timeIntervalSince1970: 0), // simulate Lifecycle pause not implemented
+                isCloseUnknown: true).buildAppCloseXDMData()
         
         // verify
         let application = [
-            "name": "test-app-name",
-            "version": "1.10",
             "isClose": true,
-            "closeType": "unknown",
-            "id": "test-app-id"
+            "closeType": "unknown"
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -194,19 +188,15 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseCorrectSession() {
         let actualAppCloseData = LifecycleV2MetricsBuilder(startDate: Date(timeIntervalSince1970: 1483965500))
-            .addAppCloseData(previousAppId: "1.10", previousSessionInfo: LifecycleSessionInfo(
-                startDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-                pauseDate: Date(timeIntervalSince1970: 1483864390), // pause: Sunday, January 8, 2017 8:33:10 AM GMT
-                isCrash: false)).buildAppCloseXDMData()
+            .addAppCloseData(
+                launchDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
+                closeDate: Date(timeIntervalSince1970: 1483864390), // pause: Sunday, January 8, 2017 8:33:10 AM GMT
+                isCloseUnknown: false).buildAppCloseXDMData()
         
         // verify
         let application = [
-            "name": "test-app-name",
-            "version": "1.10",
             "isClose": true,
-            "closeType": "close",
-            "id": "test-app-id",
-            "sessionLength": 22
+            "closeType": "close"
         ] as [String : Any]
         
         let expected = ["application": application,

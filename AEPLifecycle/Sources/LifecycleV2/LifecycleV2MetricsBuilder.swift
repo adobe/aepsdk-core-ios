@@ -87,23 +87,19 @@ class LifecycleV2MetricsBuilder {
         return self
     }
 
-    /// Adds general application information as well as details related to the type of close event
+    /// Builds the data required for the XDM Application Close event, including `XDMApplication`.
+    ///
     /// - Parameters:
-    ///   - previousAppId: application version from the previous session when the close happened
-    ///   - previousSessionInfo: previous session information to be attached to the close event
+    ///   - launchDate: the app launch timestamp
+    ///   - closeDate: the app close timestamp
+    ///   - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: this `LifecycleV2MetricsBuilder` instance
-    func addAppCloseData(previousAppId: String?, previousSessionInfo: LifecycleSessionInfo) -> LifecycleV2MetricsBuilder {
+    func addAppCloseData(launchDate: Date, closeDate: Date, isCloseUnknown: Bool) -> LifecycleV2MetricsBuilder {
         xdmApplicationInfoClose = XDMApplication()
 
-        // TODO: MOB-14453
-        xdmApplicationInfoClose?.version = previousAppId
+        // TODO: MOB-14878 compute session info
         xdmApplicationInfoClose?.isClose = true
-        xdmApplicationInfoClose?.closeType = previousSessionInfo.isCrash ? .unknown : .close
-        if let sessionLength = previousSessionInfo.sessionLength {
-            xdmApplicationInfoClose?.sessionLength = Int64(sessionLength)
-        }
-        xdmApplicationInfoClose?.name = systemInfoService.getApplicationName()
-        xdmApplicationInfoClose?.id = systemInfoService.getApplicationBundleId()
+        xdmApplicationInfoClose?.closeType = isCloseUnknown ? .unknown : .close
 
         return self
     }
