@@ -67,9 +67,7 @@ class LifecycleV2MetricsBuilder {
 
         if isInstall {
             xdmApplicationInfoLaunch.isInstall = true
-        }
-
-        if isUpgrade {
+        } else if isUpgrade {
             xdmApplicationInfoLaunch.isUpgrade = true
         }
 

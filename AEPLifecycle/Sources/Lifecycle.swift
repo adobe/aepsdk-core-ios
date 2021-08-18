@@ -161,7 +161,7 @@ public class Lifecycle: NSObject, Extension {
         return TimeInterval(sessionTimeoutInt)
     }
 
-    /// Returns true if there is not install date stored in the data store
+    /// - Returns: true if there is no install date stored in the data store
     private func isInstall() -> Bool {
         let dataStore = NamedCollectionDataStore(name: name)
         return !dataStore.contains(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE)
