@@ -129,7 +129,7 @@ podspec-local-dependency-version:
 	(echo " -AEPCore: $(shell pod ipc spec AEPSignal.podspec | jq '.dependencies.AEPCore[0]'| tr -d '"')")
 
 version-source-code:
-	(echo "AEPCore - ${BLUE}$(shell cat ./AEPCore/Sources/core/CoreConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
+	(echo "AEPCore - ${BLUE}$(shell cat ./AEPCore/Sources/configuration/ConfigurationConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
 	(echo "AEPIdentity - ${BLUE}$(shell cat ./AEPIdentity/Sources/IdentityConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
 	(echo "AEPLifecycle - ${BLUE}$(shell cat ./AEPLifecycle/Sources/LifecycleConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
 	(echo "AEPSignal - ${BLUE}$(shell cat ./AEPSignal/Sources/SignalConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
