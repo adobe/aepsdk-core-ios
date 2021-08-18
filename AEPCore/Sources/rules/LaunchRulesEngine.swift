@@ -140,7 +140,7 @@ public class LaunchRulesEngine {
                         dispatchChainedEventsCount[event.id] = LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT
 
                         if unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
-                            Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, max dispatch consequences met for this event, \(event)")
+                            Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
                             continue
                         }
                     }
