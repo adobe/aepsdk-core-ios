@@ -60,7 +60,6 @@
 		21BA2E2D265D8EC60011207C /* XDMApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E2C265D8EC60011207C /* XDMApplicationTests.swift */; };
 		21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */; };
 		21BA2E4D265D91830011207C /* XDMDeviceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E4C265D91830011207C /* XDMDeviceTests.swift */; };
-		21BA2E6B265D946F0011207C /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
 		21BA2E89265D96150011207C /* XDMLifecycleMobileDetailsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E88265D96150011207C /* XDMLifecycleMobileDetailsTests.swift */; };
 		21BA2EA9265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
@@ -393,6 +392,7 @@
 		BF4A6F2926BB4A1B00612434 /* rules_testDispatchEventNoType.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
 		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
+		D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -3217,9 +3217,9 @@
 				21BA2E89265D96150011207C /* XDMLifecycleMobileDetailsTests.swift in Sources */,
 				21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */,
 				21BA2E0D265D8DB70011207C /* XDMDeviceTypeTests.swift in Sources */,
-				21BA2E6B265D946F0011207C /* XDMEnvironmentTests.swift in Sources */,
 				21BA2EA9265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift in Sources */,
 				3FE6DE0324C630DF0065EA05 /* LifecycleFunctionalTests.swift in Sources */,
+				D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */,
 				3FE6DE0224C630DF0065EA05 /* LifecycleMetricsTests.swift in Sources */,
 				21BA2E2D265D8EC60011207C /* XDMApplicationTests.swift in Sources */,
 				21BA2E4D265D91830011207C /* XDMDeviceTests.swift in Sources */,
