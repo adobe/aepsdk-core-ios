@@ -56,7 +56,7 @@ class LifecycleV2 {
     private func isUpgrade() -> Bool {
         if let currentAppVersion = systemInfoService.getApplicationVersion(),
            let previousAppVersion = dataStore.getString(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION) {
-            return previousAppVersion != currentAppVersion
+                return previousAppVersion != currentAppVersion
         }
 
         return false

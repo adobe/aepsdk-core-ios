@@ -82,19 +82,19 @@ public class Lifecycle: NSObject, Extension {
     ///   - event: the lifecycle start event
     ///   - configurationSharedState: the current configuration shared state
     private func startApplicationLifecycle(event: Event, configurationSharedState: SharedStateResult) {
-        let isInstall = isInstall()
+        let install = isInstall()
         let prevSessionInfo = lifecycleState.start(date: event.timestamp,
                                                    additionalContextData: event.additionalData,
                                                    adId: getAdvertisingIdentifier(event: event),
                                                    sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value),
-                                                   isInstall: isInstall)
+                                                   isInstall: install)
         updateSharedState(event: event, data: lifecycleState.getContextData()?.toEventData() ?? [:])
 
         if let prevSessionInfo = prevSessionInfo {
             dispatchSessionStart(date: event.timestamp, contextData: lifecycleState.getContextData(), previousStartDate: prevSessionInfo.startDate, previousPauseDate: prevSessionInfo.pauseDate)
         }
 
-        lifecycleV2.start(date: event.timestamp, additionalData: event.additionalData, isInstall: isInstall)
+        lifecycleV2.start(date: event.timestamp, additionalData: event.additionalData, isInstall: install)
     }
 
     /// Pause the lifecycle session for standard and XDM workflows
