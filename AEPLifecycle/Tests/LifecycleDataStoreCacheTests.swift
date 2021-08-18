@@ -85,7 +85,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
         let expectedTS = currTimestamp + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
         
         //test
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(1))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(1))
         
         XCTAssertEqual(expectedTS, lifecycleDataStoreCache.getCloseTimestampSec())
         // should not update persistence
@@ -100,7 +100,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
         let expectedTS = currTimestamp + TimeInterval(3) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
         
         //test
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(3))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(3))
         
         // verify that datastore is updated
         XCTAssertEqual(currTimestamp + TimeInterval(3), getAppCloseTSFromPersitence())
@@ -119,12 +119,12 @@ class LifecycleDataStoreCacheTests: XCTestCase {
         XCTAssertEqual(expectedTS, lifecycleDataStoreCache.getCloseTimestampSec())
         
         //test
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(1))
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(2))
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(3))
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(4))
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(5))
-        lifecycleDataStoreCache.setLastKnownTimestamp(ts: currTimestamp + TimeInterval(6))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(1))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(2))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(3))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(4))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(5))
+        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(6))
         
         // verify that datastore is updated
         XCTAssertEqual(currTimestamp + TimeInterval(6), getAppCloseTSFromPersitence())
@@ -132,7 +132,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     
     func testSetAppStartTS() {
         //setup
-        lifecycleDataStoreCache.setAppStartTimestamp(ts: currTimestamp)
+        lifecycleDataStoreCache.setAppStartTimestamp(currTimestamp)
         
         //test
         XCTAssertEqual(currTimestamp, getAppStartTSFromPersitence())
@@ -145,7 +145,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     func testGetAppStartTS() {
         //setup
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        lifecycleDataStoreCache.setAppStartTimestamp(ts: currTimestamp)
+        lifecycleDataStoreCache.setAppStartTimestamp(currTimestamp)
         
         //test
         XCTAssertEqual(currTimestamp, lifecycleDataStoreCache.getAppStartTimestampSec())
@@ -153,7 +153,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     
     func testSetAppPauseTS() {
         //setup
-        lifecycleDataStoreCache.setAppPauseTimestamp(ts: currTimestamp)
+        lifecycleDataStoreCache.setAppPauseTimestamp(currTimestamp)
         
         //test
         XCTAssertEqual(currTimestamp, getAppPauseTSFromPersitence())
@@ -166,7 +166,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     func testGetAppPauseTS() {
         //setup
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        lifecycleDataStoreCache.setAppPauseTimestamp(ts: currTimestamp)
+        lifecycleDataStoreCache.setAppPauseTimestamp(currTimestamp)
         
         //test
         XCTAssertEqual(currTimestamp, lifecycleDataStoreCache.getAppPauseTimestampSec())
