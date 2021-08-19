@@ -30,6 +30,8 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_TYPE_DISPATCH = "dispatch"
     private static let CONSEQUENCE_DETAIL_ACTION_COPY = "copy"
     private static let CONSEQUENCE_DETAIL_ACTION_NEW = "new"
+    /// Do not process Dispatch consequence if chained event count is greater than max
+    private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
 
     private let transform: Transforming
     private let name: String
@@ -37,6 +39,7 @@ public class LaunchRulesEngine {
     private let rulesQueue: DispatchQueue
     private var waitingEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
+    private var dispatchChainedEventsCount: [UUID: Int] = [:]
 
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
@@ -104,6 +107,7 @@ public class LaunchRulesEngine {
     }
 
     private func evaluateRules(for event: Event) -> Event {
+        let dispatchChainCount = dispatchChainedEventsCount.removeValue(forKey: event.id)
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         var matchedRules: [LaunchRule]?
         matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
@@ -128,11 +132,19 @@ public class LaunchRulesEngine {
                     eventData = modifiedEventData
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
+
+                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
+                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
+                        continue
+                    }
                     guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: eventData)  else {
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
                     extensionRuntime.dispatch(event: dispatchEvent)
+
+                    // Keep track of dispatch consequence events to prevent triggering of infinite dispatch consequences
+                    dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
 
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {

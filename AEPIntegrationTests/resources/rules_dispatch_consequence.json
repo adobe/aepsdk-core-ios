@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~type",
+                      "matcher": "eq",
+                      "values": [
+                        "test.type.trigger"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~source",
+                      "matcher": "eq",
+                      "values": [
+                        "test.source.trigger"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "48181acd22b3edaebc8a447868a7df7ce629920a",
+          "type": "dispatch",
+          "detail": {
+            "type" : "test.type.consequence",
+            "source" : "test.source.consequence",
+            "eventdataaction" : "copy"
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "dispatch",
+                      "matcher": "eq",
+                      "values": [
+                        "yes"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "48181acd22b3edaebc8a447868a7df7ce629920a",
+          "type": "dispatch",
+          "detail": {
+            "type" : "test.type.consequence",
+            "source" : "test.source.consequence",
+            "eventdataaction" : "copy"
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~type",
+                      "matcher": "eq",
+                      "values": [
+                        "test.type.consequence"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~source",
+                      "matcher": "eq",
+                      "values": [
+                        "test.source.consequence"
+                      ]
+                      }
+                    },
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "chain",
+                      "matcher": "eq",
+                      "values": [
+                        "yes"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "48181acd22b3edaebc8a447868a7df7ce629920a",
+          "type": "dispatch",
+          "detail": {
+            "type" : "test.type.consequence.2",
+            "source" : "test.source.consequence.2",
+            "eventdataaction" : "copy"
+          }
+        }
+      ]
+    },
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "group",
+              "definition": {
+                "logic": "and",
+                "conditions": [
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~type",
+                      "matcher": "eq",
+                      "values": [
+                        "test.type.consequence.2"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "~source",
+                      "matcher": "eq",
+                      "values": [
+                        "test.source.consequence.2"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "matcher",
+                    "definition": {
+                      "key": "chain",
+                      "matcher": "eq",
+                      "values": [
+                        "yes"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "48181acd22b3edaebc8a447868a7df7ce629920a",
+          "type": "dispatch",
+          "detail": {
+            "type" : "test.type.consequence.3",
+            "source" : "test.source.consequence.3",
+            "eventdataaction" : "copy"
+          }
+        }
+      ]
+    }
+  ]
+}
+

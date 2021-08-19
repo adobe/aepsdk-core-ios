@@ -390,6 +390,10 @@
 		BF4A6F2726BB4A1B00612434 /* rules_testDispatchEventInvalidAction.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2326BB4A1A00612434 /* rules_testDispatchEventInvalidAction.json */; };
 		BF4A6F2826BB4A1B00612434 /* rules_testDispatchEventNoSource.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2426BB4A1B00612434 /* rules_testDispatchEventNoSource.json */; };
 		BF4A6F2926BB4A1B00612434 /* rules_testDispatchEventNoType.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */; };
+		BF4A6F8D26BBAE6500612434 /* rules_testDispatchEventChain.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F8C26BBAE6500612434 /* rules_testDispatchEventChain.json */; };
+		BF4A709E26CCCF5500612434 /* RulesEngineIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */; };
+		BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */; };
+		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
 		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
 		D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
@@ -1012,6 +1016,10 @@
 		BF4A6F2326BB4A1A00612434 /* rules_testDispatchEventInvalidAction.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testDispatchEventInvalidAction.json; sourceTree = "<group>"; };
 		BF4A6F2426BB4A1B00612434 /* rules_testDispatchEventNoSource.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testDispatchEventNoSource.json; sourceTree = "<group>"; };
 		BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testDispatchEventNoType.json; sourceTree = "<group>"; };
+		BF4A6F8C26BBAE6500612434 /* rules_testDispatchEventChain.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testDispatchEventChain.json; sourceTree = "<group>"; };
+		BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineIntegrationTests.swift; sourceTree = "<group>"; };
+		BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_dispatch_consequence.json; sourceTree = "<group>"; };
+		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		C63E76D9752A3702439C65D2 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C63ECCE4276B2C8008629BA4 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
 		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
@@ -1669,6 +1677,7 @@
 				BBA512B124F5CF380030DAD1 /* rules_testAttachData.json */,
 				BF4A6EB726BB3B9D00612434 /* rules_testDispatchEventCopy.json */,
 				BF4A6F2326BB4A1A00612434 /* rules_testDispatchEventInvalidAction.json */,
+				BF4A6F8C26BBAE6500612434 /* rules_testDispatchEventChain.json */,
 				BF4A6EE626BB47FE00612434 /* rules_testDispatchEventNewData.json */,
 				BF4A6F0426BB48A200612434 /* rules_testDispatchEventNewNoData.json */,
 				BF4A6F2226BB4A1A00612434 /* rules_testDispatchEventNoAction.json */,
@@ -1745,6 +1754,7 @@
 				3F5F9ED02502D34500C8A0B4 /* ConfigurationIntegrationTests.swift */,
 				3FF829462507EBE400483C74 /* LifecycleIntegrationTests.swift */,
 				3FF829682509937100483C74 /* SignalIntegrationTests.swift */,
+				BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */,
 			);
 			path = AEPIntegrationTests;
 			sourceTree = "<group>";
@@ -1885,10 +1895,12 @@
 				3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */,
 				3FF829482507F8AA00483C74 /* rules_lifecycle.json */,
 				3FF8294B2507FB3800483C74 /* rules_lifecycle.zip */,
-				3FF8296B2509942300483C74 /* rules_signal.json */,
-				3FF8296A2509942200483C74 /* rules_signal.zip */,
 				3FEEA0DB2522436E007EC317 /* rules_pii.json */,
 				3FEEA0DC2522436E007EC317 /* rules_pii.zip */,
+				BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */,
+				BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */,
+				3FF8296B2509942300483C74 /* rules_signal.json */,
+				3FF8296A2509942200483C74 /* rules_signal.zip */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -2454,6 +2466,7 @@
 				BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */,
 				BBA5129F24F4A14C0030DAD1 /* rules_testMatcherGe.json in Resources */,
 				BB244F7D2666DBAE00F427BC /* rules_testMatcherGt_2_types.json in Resources */,
+				BF4A6F8D26BBAE6500612434 /* rules_testDispatchEventChain.json in Resources */,
 				BBA512B724F6C4D90030DAD1 /* rules_testAttachData_invalidJson.json in Resources */,
 				3F5D45FD25190E8D0040E298 /* rules_testTransform.json in Resources */,
 				BBA512B324F5CF380030DAD1 /* rules_testAttachData.json in Resources */,
@@ -2505,6 +2518,8 @@
 				3FF8296C2509942300483C74 /* rules_signal.zip in Resources */,
 				3FF8296D2509942300483C74 /* rules_signal.json in Resources */,
 				3FEEA0DE2522436E007EC317 /* rules_pii.zip in Resources */,
+				BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */,
+				BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */,
 				3FF8294C2507FB3800483C74 /* rules_lifecycle.zip in Resources */,
 				3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */,
 			);
@@ -3158,6 +3173,7 @@
 			files = (
 				3F42571024F4754F005D4006 /* TestableNetworkService.swift in Sources */,
 				3F5F9ED12502D34500C8A0B4 /* ConfigurationIntegrationTests.swift in Sources */,
+				BF4A709E26CCCF5500612434 /* RulesEngineIntegrationTests.swift in Sources */,
 				3FF829472507EBE400483C74 /* LifecycleIntegrationTests.swift in Sources */,
 				3F4256FF24F474F4005D4006 /* IdentityIntegrationTests.swift in Sources */,
 				3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */,

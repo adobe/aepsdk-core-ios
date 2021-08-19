@@ -18,7 +18,7 @@ import AEPSignal
 
 class SignalIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()
-    let defaultSucsessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
+    let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
     override func setUp() {
         UserDefaults.clear()
@@ -67,7 +67,7 @@ class SignalIntegrationTests: XCTestCase {
                 XCTAssertEqual("https://www.signal.com?name=testGetRequest", request.url.absoluteString)
                 XCTAssertEqual(HttpMethod.get, request.httpMethod)
                 requestExpectation.fulfill()
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -93,7 +93,7 @@ class SignalIntegrationTests: XCTestCase {
                 XCTAssertEqual(2, request.connectTimeout)
                 XCTAssertEqual(2, request.readTimeout)
                 requestExpectation.fulfill()
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -114,7 +114,7 @@ class SignalIntegrationTests: XCTestCase {
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.signal.com") {
                 requestExpectation.fulfill()
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -136,7 +136,7 @@ class SignalIntegrationTests: XCTestCase {
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.pii.com?name=aep") {
                 requestExpectation.fulfill()
-                return (data: nil, respsonse: self.defaultSucsessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -153,7 +153,7 @@ class SignalIntegrationTests: XCTestCase {
             if request.url.absoluteString.starts(with: "https://rules.com/") {
                 let filePath = Bundle(for: type(of: self)).url(forResource: localRulesName, withExtension: ".zip")
                 let data = try? Data(contentsOf: filePath!)
-                return (data: data, respsonse: response, error: nil)
+                return (data: data, response: response, error: nil)
             }
             return nil
         }

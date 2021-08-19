@@ -71,7 +71,7 @@ class LifecycleIntegrationTests: XCTestCase {
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
                 lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=InstallEvent"))
-                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -105,7 +105,7 @@ class LifecycleIntegrationTests: XCTestCase {
                 lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=&"))
                 XCTAssertTrue(request.url.absoluteString.contains("launchevent=LaunchEvent"))
-                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -139,7 +139,7 @@ class LifecycleIntegrationTests: XCTestCase {
                 XCTAssertTrue(request.url.absoluteString.contains("installevent=&"))
                 XCTAssertTrue(request.url.absoluteString.contains("launchevent=LaunchEvent"))
                 XCTAssertTrue(request.url.absoluteString.contains("crashevent=CrashEvent"))
-                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -165,7 +165,7 @@ class LifecycleIntegrationTests: XCTestCase {
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
                 lifecycleExpectation.fulfill()
                 XCTAssertTrue(request.url.absoluteString.contains("key=value"))
-                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -198,7 +198,7 @@ class LifecycleIntegrationTests: XCTestCase {
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://www.lifecycle.com") {
                 lifecycleExpectation.fulfill()
-                return (data: nil, respsonse: self.defaultSuccessResponse, error: nil)
+                return (data: nil, response: self.defaultSuccessResponse, error: nil)
             }
             return nil
         }
@@ -216,13 +216,13 @@ class LifecycleIntegrationTests: XCTestCase {
         mockNetworkService.mock { request in
             if request.url.absoluteString.starts(with: "https://assets.adobedtm.com") {
                 configExpectation.fulfill()
-                return (data: configData, respsonse: response, error: nil)
+                return (data: configData, response: response, error: nil)
             }
             if request.url.absoluteString.starts(with: "https://rules.com/") {
                 let filePath = Bundle(for: type(of: self)).url(forResource: localRulesName, withExtension: ".zip")
                 let data = try? Data(contentsOf: filePath!)
                 rulesExpectation.fulfill()
-                return (data: data, respsonse: response, error: nil)
+                return (data: data, response: response, error: nil)
             }
             return nil
         }
