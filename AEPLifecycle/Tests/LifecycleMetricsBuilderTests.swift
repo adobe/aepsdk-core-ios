@@ -44,8 +44,6 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.monthlyEngagedEvent, true)
         XCTAssertEqual(metrics?.installEvent, true)
         XCTAssertEqual(metrics?.installDate, date)
-        XCTAssertTrue((dataStore?.setObjectCalled)!)
-        XCTAssertEqual(dataStore?.setObjectValues[0] as? Date, date)
     }
 
     // Tests add launch data when last launch is in the same month as current launch

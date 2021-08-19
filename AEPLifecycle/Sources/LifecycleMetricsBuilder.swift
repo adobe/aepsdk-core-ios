@@ -50,7 +50,6 @@ class LifecycleMetricsBuilder {
         lifecycleMetrics.monthlyEngagedEvent = true
         lifecycleMetrics.installEvent = true
         lifecycleMetrics.installDate = date
-        dataStore.setObject(key: KEYS.INSTALL_DATE, value: date)
         return self
     }
 

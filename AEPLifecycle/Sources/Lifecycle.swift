@@ -95,6 +95,10 @@ public class Lifecycle: NSObject, Extension {
         }
 
         lifecycleV2.start(date: event.timestamp, additionalData: event.additionalData, isInstall: install)
+
+        if install {
+            persistInstallDate(event.timestamp)
+        }
     }
 
     /// Pause the lifecycle session for standard and XDM workflows
@@ -165,5 +169,12 @@ public class Lifecycle: NSObject, Extension {
     private func isInstall() -> Bool {
         let dataStore = NamedCollectionDataStore(name: name)
         return !dataStore.contains(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE)
+    }
+
+    /// Persists the application install date
+    /// - Parameter date: install date
+    private func persistInstallDate(_ date: Date) {
+        let dataStore = NamedCollectionDataStore(name: name)
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, value: date)
     }
 }
