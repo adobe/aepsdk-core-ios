@@ -21,8 +21,9 @@ class LifecycleV2DataStoreCache {
 
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
-        if let persistedCloseDate = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE) as Date? {
-            self.closeDate = Date(timeIntervalSince1970: (persistedCloseDate.timeIntervalSince1970) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS))
+        if let persistedCloseDate = dataStore.getObject(key: LifecycleV2Constants.DataStoreKeys.APP_CLOSE_DATE) as Date? {
+            self.lastClosePersistedDate = Date(timeIntervalSince1970: persistedCloseDate.timeIntervalSince1970)
+            self.closeDate = Date(timeIntervalSince1970: (persistedCloseDate.timeIntervalSince1970) + LifecycleV2Constants.CACHE_TIMEOUT_SECONDS)
         }
     }
 
@@ -30,8 +31,8 @@ class LifecycleV2DataStoreCache {
     /// The write will execute after `LifecycleConstants.CACHE_TIMEOUT_SECONDS` since last update.
     /// - Parameter date: current date
     func setLastKnownDate(_ date: Date) {
-        if (date.timeIntervalSince1970 - (lastClosePersistedDate?.timeIntervalSince1970 ?? 0.0)) >= TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS) {
-            dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE, value: date)
+        if (date.timeIntervalSince1970 - (lastClosePersistedDate?.timeIntervalSince1970 ?? 0.0)) >= LifecycleV2Constants.CACHE_TIMEOUT_SECONDS {
+            dataStore.setObject(key: LifecycleV2Constants.DataStoreKeys.APP_CLOSE_DATE, value: date)
             lastClosePersistedDate = date
         }
     }
@@ -49,27 +50,27 @@ class LifecycleV2DataStoreCache {
     ///
     /// - Parameter date: start date
     func setAppStartDate(_ date: Date) {
-        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_START_DATE, value: date)
+        dataStore.setObject(key: LifecycleV2Constants.DataStoreKeys.APP_START_DATE, value: date)
     }
 
     /// Reads the last app start date from persistence and returns the value.
     ///
     /// - Returns: the app start Date or nil if not found
     func getAppStartDate() -> Date? {
-        return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_START_DATE)
+        return dataStore.getObject(key: LifecycleV2Constants.DataStoreKeys.APP_START_DATE)
     }
 
     /// Updates the last app pause date in persistence.
     ///
     /// - Parameter date: pause date
     func setAppPauseDate(_ date: Date) {
-        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_DATE, value: date)
+        dataStore.setObject(key: LifecycleV2Constants.DataStoreKeys.APP_PAUSE_DATE, value: date)
     }
 
     /// Reads the last app pause date from persistence and returns the value.
     ///
     /// - Returns: the app pause date or nil if not found
     func getAppPauseDate() -> Date? {
-        return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_DATE)
+        return dataStore.getObject(key: LifecycleV2Constants.DataStoreKeys.APP_PAUSE_DATE)
     }
 }
