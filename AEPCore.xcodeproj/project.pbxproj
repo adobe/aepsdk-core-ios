@@ -30,7 +30,7 @@
 		2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02724C9FE1B002935CF /* PushIDManager.swift */; };
 		2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02924C9FF46002935CF /* PushIDManagerTests.swift */; };
 		2107F02C24C9FF62002935CF /* MockPushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02B24C9FF62002935CF /* MockPushIDManager.swift */; };
-		2124807A265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248079265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift */; };
+		2124807A265D569D006CF300 /* LifecycleV2MetricsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248079265D569D006CF300 /* LifecycleV2MetricsBuilder.swift */; };
 		21248099265D589E006CF300 /* XDMDeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248098265D589E006CF300 /* XDMDeviceType.swift */; };
 		212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480A8265D591A006CF300 /* XDMEnvironmentType.swift */; };
 		212480D7265D59F9006CF300 /* XDMApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480D6265D59F9006CF300 /* XDMApplication.swift */; };
@@ -60,9 +60,8 @@
 		21BA2E2D265D8EC60011207C /* XDMApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E2C265D8EC60011207C /* XDMApplicationTests.swift */; };
 		21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */; };
 		21BA2E4D265D91830011207C /* XDMDeviceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E4C265D91830011207C /* XDMDeviceTests.swift */; };
-		21BA2E6B265D946F0011207C /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
 		21BA2E89265D96150011207C /* XDMMobileLifecycleDetailsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */; };
-		21BA2EA9265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2EA8265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift */; };
+		21BA2EA9265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */; };
@@ -395,6 +394,9 @@
 		BF4A709E26CCCF5500612434 /* RulesEngineIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */; };
 		BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */; };
 		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
+		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
+		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
+		D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -637,7 +639,7 @@
 		2107F02724C9FE1B002935CF /* PushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManager.swift; sourceTree = "<group>"; };
 		2107F02924C9FF46002935CF /* PushIDManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushIDManagerTests.swift; sourceTree = "<group>"; };
 		2107F02B24C9FF62002935CF /* MockPushIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPushIDManager.swift; sourceTree = "<group>"; };
-		21248079265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleMetricsBuilder.swift; sourceTree = "<group>"; };
+		21248079265D569D006CF300 /* LifecycleV2MetricsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2MetricsBuilder.swift; sourceTree = "<group>"; };
 		21248098265D589E006CF300 /* XDMDeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDeviceType.swift; sourceTree = "<group>"; };
 		212480A8265D591A006CF300 /* XDMEnvironmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironmentType.swift; sourceTree = "<group>"; };
 		212480D6265D59F9006CF300 /* XDMApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMApplication.swift; sourceTree = "<group>"; };
@@ -669,7 +671,7 @@
 		21BA2E4C265D91830011207C /* XDMDeviceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDeviceTests.swift; sourceTree = "<group>"; };
 		21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironmentTests.swift; sourceTree = "<group>"; };
 		21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMMobileLifecycleDetailsTests.swift; sourceTree = "<group>"; };
-		21BA2EA8265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleMetricsBuilderTests.swift; sourceTree = "<group>"; };
+		21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2MetricsBuilderTests.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
 		21CAC0DA2422917600C11388 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1020,6 +1022,8 @@
 		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		C63E76D9752A3702439C65D2 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C63ECCE4276B2C8008629BA4 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
+		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
+		D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2Constants.swift; sourceTree = "<group>"; };
 		D6A7B39F8D2A807344E7098B /* Pods_AEPLifecycleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPLifecycleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E405C4A9B041F4542C3601A5 /* Pods_AEPIdentityTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIdentityTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8E09A90FFDA252F2F0ABA0E /* Pods-AEPIdentityTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -1143,22 +1147,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		21248097265D5889006CF300 /* XDM */ = {
-			isa = PBXGroup;
-			children = (
-				21248079265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift */,
-				21248098265D589E006CF300 /* XDMDeviceType.swift */,
-				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
-				212480D6265D59F9006CF300 /* XDMApplication.swift */,
-				212480F6265D5A7A006CF300 /* XDMCloseType.swift */,
-				21248106265D5BC3006CF300 /* XDMDevice.swift */,
-				21248116265D5E1C006CF300 /* XDMEnvironment.swift */,
-				21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */,
-				212480E6265D5A4E006CF300 /* XDMFormatters.swift */,
-			);
-			path = XDM;
-			sourceTree = "<group>";
-		};
 		21377D3F24E33830004BAC01 /* migration */ = {
 			isa = PBXGroup;
 			children = (
@@ -1342,14 +1330,14 @@
 				3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */,
 				3FE6DDFE24C630DE0065EA05 /* LifecycleSessionTests.swift */,
 				3FE6DDFD24C630DE0065EA05 /* LifecycleStateTests.swift */,
-				21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */,
-				21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */,
+				21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */,
 				21BA2E2C265D8EC60011207C /* XDMApplicationTests.swift */,
 				21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */,
 				21BA2E4C265D91830011207C /* XDMDeviceTests.swift */,
+				21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */,
 				21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */,
+				21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */,
 				21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */,
-				21BA2EA8265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift */,
 			);
 			name = Tests;
 			path = AEPLifecycle/Tests;
@@ -1358,6 +1346,7 @@
 		24B4934624D23AB200AA38D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D42C989A26CAE18D002E3184 /* LifecycleV2 */,
 				3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */,
 				3FE6DE0824C630EB0065EA05 /* Event+Lifecycle.swift */,
 				3FE6DDD424C62EE60065EA05 /* Info.plist */,
@@ -1368,7 +1357,6 @@
 				3FE6DE0D24C630EB0065EA05 /* LifecycleMetricsBuilder.swift */,
 				3FE6DE1624C631100065EA05 /* LifecycleSession.swift */,
 				3FE6DE0624C630EA0065EA05 /* LifecycleState.swift */,
-				21248097265D5889006CF300 /* XDM */,
 			);
 			name = Sources;
 			path = AEPLifecycle/Sources;
@@ -1965,6 +1953,24 @@
 				78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */,
 			);
 			path = fullscreen;
+			sourceTree = "<group>";
+		};
+		D42C989A26CAE18D002E3184 /* LifecycleV2 */ = {
+			isa = PBXGroup;
+			children = (
+				D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */,
+				D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */,
+				21248079265D569D006CF300 /* LifecycleV2MetricsBuilder.swift */,
+				212480D6265D59F9006CF300 /* XDMApplication.swift */,
+				212480F6265D5A7A006CF300 /* XDMCloseType.swift */,
+				21248106265D5BC3006CF300 /* XDMDevice.swift */,
+				21248098265D589E006CF300 /* XDMDeviceType.swift */,
+				21248116265D5E1C006CF300 /* XDMEnvironment.swift */,
+				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
+				212480E6265D5A4E006CF300 /* XDMFormatters.swift */,
+				21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */,
+			);
+			path = LifecycleV2;
 			sourceTree = "<group>";
 		};
 		D55C2031330CD537E59C7255 /* Pods */ = {
@@ -3205,12 +3211,14 @@
 				21248117265D5E1C006CF300 /* XDMEnvironment.swift in Sources */,
 				3FE6DE1724C631100065EA05 /* LifecycleSession.swift in Sources */,
 				3FE6DE1024C630EB0065EA05 /* Event+Lifecycle.swift in Sources */,
-				2124807A265D569D006CF300 /* XDMLifecycleMetricsBuilder.swift in Sources */,
+				2124807A265D569D006CF300 /* LifecycleV2MetricsBuilder.swift in Sources */,
 				212480D7265D59F9006CF300 /* XDMApplication.swift in Sources */,
 				3FE6DE1224C630EB0065EA05 /* Lifecycle.swift in Sources */,
 				3FE6DE1324C630EB0065EA05 /* LifecycleContextData.swift in Sources */,
 				3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */,
+				D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */,
 				21248127265D606A006CF300 /* XDMMobileLifecycleDetails.swift in Sources */,
+				D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */,
 				21248107265D5BC3006CF300 /* XDMDevice.swift in Sources */,
 				212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */,
 				212480E7265D5A4E006CF300 /* XDMFormatters.swift in Sources */,
@@ -3225,9 +3233,9 @@
 				21BA2E89265D96150011207C /* XDMMobileLifecycleDetailsTests.swift in Sources */,
 				21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */,
 				21BA2E0D265D8DB70011207C /* XDMDeviceTypeTests.swift in Sources */,
-				21BA2E6B265D946F0011207C /* XDMEnvironmentTests.swift in Sources */,
-				21BA2EA9265D98C80011207C /* XDMLifecycleMetricsBuilderTests.swift in Sources */,
+				21BA2EA9265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift in Sources */,
 				3FE6DE0324C630DF0065EA05 /* LifecycleFunctionalTests.swift in Sources */,
+				D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */,
 				3FE6DE0224C630DF0065EA05 /* LifecycleMetricsTests.swift in Sources */,
 				21BA2E2D265D8EC60011207C /* XDMApplicationTests.swift in Sources */,
 				21BA2E4D265D91830011207C /* XDMDeviceTests.swift in Sources */,

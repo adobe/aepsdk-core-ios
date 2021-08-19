@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -12,7 +13,7 @@
 import AEPServices
 import Foundation
 
-/// A type for managing Lifecycle sessions
+/// A type for managing Lifecycle sessions for standard, non-XDM scenarios.
 struct LifecycleSession {
     let dataStore: NamedCollectionDataStore
 
@@ -145,12 +146,4 @@ struct LifecycleSessionInfo {
 
     /// Flag indicating whether this session crashed or not
     let isCrash: Bool
-
-    /// Computes the session length in seconds, nil if session length is invalid due to `startDate` and `pauseDate`
-    var sessionLength: TimeInterval? {
-        guard let startDate = startDate, let pauseDate = pauseDate else { return nil }
-        let sessionLength = pauseDate.timeIntervalSince1970 - startDate.timeIntervalSince1970
-
-        return sessionLength > 0 ? sessionLength : nil
-    }
 }
