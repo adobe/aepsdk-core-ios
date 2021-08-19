@@ -13,7 +13,7 @@ import SwiftUI
 import AEPCore
 import AEPAssurance
 
-struct ContentView: View {
+struct AssuranceView: View {
     @State private var assuranceSessionUrl:String = ""
     
     var body: some View {
@@ -40,6 +40,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        AssuranceView()
     }
 }
