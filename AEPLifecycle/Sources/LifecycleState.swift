@@ -56,6 +56,7 @@ struct LifecycleState {
     ///   - additionalContextData: additional context data for this start event
     ///   - adId: The advertising identifier provided by the identity extension
     ///   - sessionTimeout: The session timeout for this start event, defaults to 300 seconds
+    ///   - isInstall: Indicates whether this is an application install scenario
     /// - Returns: The previous session info if exists, otherwise nil
     mutating func start(date: Date,
                         additionalContextData: [String: Any]?,

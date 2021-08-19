@@ -38,7 +38,7 @@
 		212480F7265D5A7A006CF300 /* XDMCloseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480F6265D5A7A006CF300 /* XDMCloseType.swift */; };
 		21248107265D5BC3006CF300 /* XDMDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248106265D5BC3006CF300 /* XDMDevice.swift */; };
 		21248117265D5E1C006CF300 /* XDMEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248116265D5E1C006CF300 /* XDMEnvironment.swift */; };
-		21248127265D606A006CF300 /* XDMLifecycleMobileDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248126265D606A006CF300 /* XDMLifecycleMobileDetails.swift */; };
+		21248127265D606A006CF300 /* XDMMobileLifecycleDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */; };
 		2130A59D260AB448005DBA0F /* MockLegacyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */; };
 		2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2130A5BA260AB582005DBA0F /* NotAnExtension.swift */; };
 		21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21377D4024E3383E004BAC01 /* V4Migrator.swift */; };
@@ -60,7 +60,7 @@
 		21BA2E2D265D8EC60011207C /* XDMApplicationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E2C265D8EC60011207C /* XDMApplicationTests.swift */; };
 		21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */; };
 		21BA2E4D265D91830011207C /* XDMDeviceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E4C265D91830011207C /* XDMDeviceTests.swift */; };
-		21BA2E89265D96150011207C /* XDMLifecycleMobileDetailsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E88265D96150011207C /* XDMLifecycleMobileDetailsTests.swift */; };
+		21BA2E89265D96150011207C /* XDMMobileLifecycleDetailsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */; };
 		21BA2EA9265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */; };
 		21CAC0E02422917600C11388 /* AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CAC0D62422917600C11388 /* AEPCore.framework */; };
 		21CAC0E72422917600C11388 /* AEPCore.h in Headers */ = {isa = PBXBuildFile; fileRef = 21CAC0D92422917600C11388 /* AEPCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -643,7 +643,7 @@
 		212480F6265D5A7A006CF300 /* XDMCloseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMCloseType.swift; sourceTree = "<group>"; };
 		21248106265D5BC3006CF300 /* XDMDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDevice.swift; sourceTree = "<group>"; };
 		21248116265D5E1C006CF300 /* XDMEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironment.swift; sourceTree = "<group>"; };
-		21248126265D606A006CF300 /* XDMLifecycleMobileDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleMobileDetails.swift; sourceTree = "<group>"; };
+		21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMMobileLifecycleDetails.swift; sourceTree = "<group>"; };
 		2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLegacyExtension.swift; sourceTree = "<group>"; };
 		2130A5BA260AB582005DBA0F /* NotAnExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotAnExtension.swift; sourceTree = "<group>"; };
 		21377D4024E3383E004BAC01 /* V4Migrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4Migrator.swift; sourceTree = "<group>"; };
@@ -666,7 +666,7 @@
 		21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMCloseTypeTests.swift; sourceTree = "<group>"; };
 		21BA2E4C265D91830011207C /* XDMDeviceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDeviceTests.swift; sourceTree = "<group>"; };
 		21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironmentTests.swift; sourceTree = "<group>"; };
-		21BA2E88265D96150011207C /* XDMLifecycleMobileDetailsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMLifecycleMobileDetailsTests.swift; sourceTree = "<group>"; };
+		21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMMobileLifecycleDetailsTests.swift; sourceTree = "<group>"; };
 		21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2MetricsBuilderTests.swift; sourceTree = "<group>"; };
 		21CAC0D62422917600C11388 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		21CAC0D92422917600C11388 /* AEPCore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPCore.h; sourceTree = "<group>"; };
@@ -1329,7 +1329,7 @@
 				21BA2E0C265D8DB70011207C /* XDMDeviceTypeTests.swift */,
 				21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */,
 				21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */,
-				21BA2E88265D96150011207C /* XDMLifecycleMobileDetailsTests.swift */,
+				21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */,
 			);
 			name = Tests;
 			path = AEPLifecycle/Tests;
@@ -1956,7 +1956,7 @@
 				21248116265D5E1C006CF300 /* XDMEnvironment.swift */,
 				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
 				212480E6265D5A4E006CF300 /* XDMFormatters.swift */,
-				21248126265D606A006CF300 /* XDMLifecycleMobileDetails.swift */,
+				21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */,
 			);
 			path = LifecycleV2;
 			sourceTree = "<group>";
@@ -3201,7 +3201,7 @@
 				3FE6DE1324C630EB0065EA05 /* LifecycleContextData.swift in Sources */,
 				3FE6DE1524C630EB0065EA05 /* LifecycleMetricsBuilder.swift in Sources */,
 				D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */,
-				21248127265D606A006CF300 /* XDMLifecycleMobileDetails.swift in Sources */,
+				21248127265D606A006CF300 /* XDMMobileLifecycleDetails.swift in Sources */,
 				D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */,
 				21248107265D5BC3006CF300 /* XDMDevice.swift in Sources */,
 				212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */,
@@ -3214,7 +3214,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21BA2E89265D96150011207C /* XDMLifecycleMobileDetailsTests.swift in Sources */,
+				21BA2E89265D96150011207C /* XDMMobileLifecycleDetailsTests.swift in Sources */,
 				21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */,
 				21BA2E0D265D8DB70011207C /* XDMDeviceTypeTests.swift in Sources */,
 				21BA2EA9265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift in Sources */,

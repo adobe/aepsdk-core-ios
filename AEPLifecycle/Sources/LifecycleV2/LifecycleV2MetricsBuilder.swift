@@ -30,7 +30,7 @@ class LifecycleV2MetricsBuilder {
     /// `XDMEnvironment` and `XDMDevice` info.
     /// - Returns: App launch event data in dictionary format
     func buildAppLaunchXDMData(launchDate: Date, isInstall: Bool, isUpgrade: Bool) -> [String: Any]? {
-        var appLaunchXDMData = XDMLifecycleMobileDetails()
+        var appLaunchXDMData = XDMMobileLifecycleDetails()
         appLaunchXDMData.application = computeAppLaunchData(isInstall: isInstall, isUpgrade: isUpgrade)
         appLaunchXDMData.device = computeDeviceData()
         appLaunchXDMData.environment = computeEnvironmentData()
@@ -47,7 +47,7 @@ class LifecycleV2MetricsBuilder {
     ///    - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: App close event data in dictionary format
     func buildAppCloseXDMData(launchDate: Date, closeDate: Date, isCloseUnknown: Bool) -> [String: Any]? {
-        var appCloseXDMData = XDMLifecycleMobileDetails()
+        var appCloseXDMData = XDMMobileLifecycleDetails()
         appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: closeDate, isCloseUnknown: isCloseUnknown)
         appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
         appCloseXDMData.timestamp = closeDate
@@ -127,7 +127,7 @@ class LifecycleV2MetricsBuilder {
     /// Returns information related to the device. This data is computed once, when it is first used, then
     /// returned from cache.
     /// - Returns: the `XDMDevice` info
-    func computeDeviceData() -> XDMDevice? {
+    private func computeDeviceData() -> XDMDevice? {
         if let xdmDeviceInfo = xdmDeviceInfo {
             return xdmDeviceInfo
         }
