@@ -393,8 +393,8 @@
 		BF4A6F2926BB4A1B00612434 /* rules_testDispatchEventNoType.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */; };
 		BF4A6F8D26BBAE6500612434 /* rules_testDispatchEventChain.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A6F8C26BBAE6500612434 /* rules_testDispatchEventChain.json */; };
 		BF4A709E26CCCF5500612434 /* RulesEngineIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */; };
-		BF4A70AE26CCD27900612434 /* rules_rules.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_rules.json */; };
-		BF4A70BE26CCD30800612434 /* rules_rules.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_rules.zip */; };
+		BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */; };
+		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1016,8 +1016,8 @@
 		BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testDispatchEventNoType.json; sourceTree = "<group>"; };
 		BF4A6F8C26BBAE6500612434 /* rules_testDispatchEventChain.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testDispatchEventChain.json; sourceTree = "<group>"; };
 		BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineIntegrationTests.swift; sourceTree = "<group>"; };
-		BF4A70AD26CCD27900612434 /* rules_rules.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_rules.json; sourceTree = "<group>"; };
-		BF4A70BD26CCD30800612434 /* rules_rules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_rules.zip; sourceTree = "<group>"; };
+		BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_dispatch_consequence.json; sourceTree = "<group>"; };
+		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		C63E76D9752A3702439C65D2 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C63ECCE4276B2C8008629BA4 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
 		D6A7B39F8D2A807344E7098B /* Pods_AEPLifecycleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPLifecycleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1909,8 +1909,8 @@
 				3FF8294B2507FB3800483C74 /* rules_lifecycle.zip */,
 				3FEEA0DB2522436E007EC317 /* rules_pii.json */,
 				3FEEA0DC2522436E007EC317 /* rules_pii.zip */,
-				BF4A70AD26CCD27900612434 /* rules_rules.json */,
-				BF4A70BD26CCD30800612434 /* rules_rules.zip */,
+				BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */,
+				BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */,
 				3FF8296B2509942300483C74 /* rules_signal.json */,
 				3FF8296A2509942200483C74 /* rules_signal.zip */,
 			);
@@ -2512,8 +2512,8 @@
 				3FF8296C2509942300483C74 /* rules_signal.zip in Resources */,
 				3FF8296D2509942300483C74 /* rules_signal.json in Resources */,
 				3FEEA0DE2522436E007EC317 /* rules_pii.zip in Resources */,
-				BF4A70BE26CCD30800612434 /* rules_rules.zip in Resources */,
-				BF4A70AE26CCD27900612434 /* rules_rules.json in Resources */,
+				BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */,
+				BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */,
 				3FF8294C2507FB3800483C74 /* rules_lifecycle.zip in Resources */,
 				3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */,
 			);

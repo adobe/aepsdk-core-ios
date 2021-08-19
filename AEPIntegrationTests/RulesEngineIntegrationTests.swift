@@ -46,7 +46,7 @@ class RulesEngineIntegrationTests: XCTestCase {
           "rules.url" : "https://rules.com/rules.zip"
         }
         """.data(using: .utf8)
-        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_rules")
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_dispatch_consequence")
         
         let expectation = XCTestExpectation(description: "validate dispatched events")
         expectation.assertForOverFulfill = true
@@ -76,7 +76,7 @@ class RulesEngineIntegrationTests: XCTestCase {
           "rules.url" : "https://rules.com/rules.zip"
         }
         """.data(using: .utf8)
-        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_rules")
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_dispatch_consequence")
         
         let expectation = XCTestExpectation(description: "validate dispatched events")
         expectation.expectedFulfillmentCount = 2
@@ -108,7 +108,7 @@ class RulesEngineIntegrationTests: XCTestCase {
           "rules.url" : "https://rules.com/rules.zip"
         }
         """.data(using: .utf8)
-        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_rules")
+        mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_dispatch_consequence")
         
         let expectation1 = XCTestExpectation(description: "validate dispatched consequence 1")
         expectation1.assertForOverFulfill = true
