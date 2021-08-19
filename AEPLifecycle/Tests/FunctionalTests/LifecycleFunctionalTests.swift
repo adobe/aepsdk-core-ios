@@ -142,7 +142,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("DailyEngUserEvent", lifecycleData?["dailyenguserevent"] as? String)
         XCTAssertEqual("7/27/2020", lifecycleData?["installdate"] as? String)
         XCTAssertEqual("1", lifecycleData?["launches"] as? String)
-        
+
         // persistance
         let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
         XCTAssertEqual(date.timeIntervalSince1970, storedInstallDate?.timeIntervalSince1970)
@@ -305,7 +305,7 @@ class LifecycleFunctionalTests: XCTestCase {
         let sharedState = mockRuntimeSession2.createdSharedStates[1]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
         XCTAssertEqual("UpgradeEvent", lifecycleData?["upgradeevent"] as? String)
-        
+
         // persistance
         let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
         XCTAssertEqual(startEvent1.timestamp.timeIntervalSince1970, storedInstallDate?.timeIntervalSince1970)
