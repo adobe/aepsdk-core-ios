@@ -41,6 +41,7 @@
 		7808811326C5D19100F5A665 /* AEPLifecycle in Frameworks */ = {isa = PBXBuildFile; productRef = 7808811226C5D19100F5A665 /* AEPLifecycle */; };
 		7808811526C5D19100F5A665 /* AEPServices in Frameworks */ = {isa = PBXBuildFile; productRef = 7808811426C5D19100F5A665 /* AEPServices */; };
 		7808811726C5D19100F5A665 /* AEPSignal in Frameworks */ = {isa = PBXBuildFile; productRef = 7808811626C5D19100F5A665 /* AEPSignal */; };
+		780881AD26CEF4F900F5A665 /* AEPAssurance in Frameworks */ = {isa = PBXBuildFile; productRef = 780881AC26CEF4F900F5A665 /* AEPAssurance */; };
 		BBF55F53251E494D00CAAC53 /* E2ETestingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */; };
 		BBF5EE282512BA0B0003265F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE272512BA0B0003265F /* AppDelegate.swift */; };
 		BBF5EE2A2512BA0B0003265F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE292512BA0B0003265F /* SceneDelegate.swift */; };
@@ -178,6 +179,7 @@
 				7808811526C5D19100F5A665 /* AEPServices in Frameworks */,
 				7808811126C5D19100F5A665 /* AEPIdentity in Frameworks */,
 				7808811326C5D19100F5A665 /* AEPLifecycle in Frameworks */,
+				780881AD26CEF4F900F5A665 /* AEPAssurance in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,6 +407,7 @@
 				7808811226C5D19100F5A665 /* AEPLifecycle */,
 				7808811426C5D19100F5A665 /* AEPServices */,
 				7808811626C5D19100F5A665 /* AEPSignal */,
+				780881AC26CEF4F900F5A665 /* AEPAssurance */,
 			);
 			productName = TestApp_Swift;
 			productReference = 780880D026C5CE6800F5A665 /* TestApp_Swift.app */;
@@ -512,6 +515,9 @@
 				Base,
 			);
 			mainGroup = 3F912D9324E1A75C00E2AC84;
+			packageReferences = (
+				780881AB26CEF4F900F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */,
+			);
 			productRefGroup = 3F912D9D24E1A75C00E2AC84 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1135,6 +1141,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		780881AB26CEF4F900F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adobe/aepsdk-assurance-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		780880FA26C5D16800F5A665 /* AEPCore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -1195,6 +1212,11 @@
 		7808811626C5D19100F5A665 /* AEPSignal */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AEPSignal;
+		};
+		780881AC26CEF4F900F5A665 /* AEPAssurance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 780881AB26CEF4F900F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */;
+			productName = AEPAssurance;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

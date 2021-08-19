@@ -10,11 +10,31 @@ governing permissions and limitations under the License.
 */
 
 import SwiftUI
+import AEPCore
+import AEPAssurance
 
 struct ContentView: View {
+    @State private var assuranceSessionUrl:String = ""
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        VStack(alignment: HorizontalAlignment.leading, spacing: 12) {
+            TextField("Copy Assurance Session URL to here", text: $assuranceSessionUrl)
+            HStack {
+                Button(action: {
+                    // replace the url with the valid one generated on Assurance UI
+                    if let url = URL(string: self.assuranceSessionUrl) {
+                        Assurance.startSession(url: url)
+                    }
+                }){
+                    Text("Connect")
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray)
+                        .foregroundColor(.white)
+                        .font(.caption)
+                }.cornerRadius(5)
+            }
+        }.padding()
     }
 }
 

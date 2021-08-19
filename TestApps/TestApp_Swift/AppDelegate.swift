@@ -15,6 +15,7 @@ import AEPServices
 import AEPLifecycle
 import AEPSignal
 import AEPIdentity
+import AEPAssurance
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -26,7 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appState = application.applicationState
         let extensions = [AEPIdentity.Identity.self,
                           Lifecycle.self,
-                          Signal.self]
+                          Signal.self,
+                          Assurance.self]
         
         MobileCore.registerExtensions(extensions, {
             MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
