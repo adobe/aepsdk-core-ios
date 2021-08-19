@@ -63,7 +63,7 @@ public class Lifecycle: NSObject, Extension {
     /// Updates the last known event timestamp in cache and if needed in persistence
     /// - Parameter event: any event to be processed.
     private func updateLastKnownTimestamp(event: Event) {
-        dataStoreCache.setLastKnownTimestamp(event.timestamp.timeIntervalSince1970)
+        dataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: event.timestamp.timeIntervalSince1970))
     }
 
     /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`

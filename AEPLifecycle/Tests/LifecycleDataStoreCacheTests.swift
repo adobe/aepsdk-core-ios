@@ -14,161 +14,168 @@ import AEPServices
 import XCTest
 
 class LifecycleDataStoreCacheTests: XCTestCase {
-    
+
     var dataStore = NamedCollectionDataStore(name: "LifecycleDataStoreCacheTests")
     var lifecycleDataStoreCache: LifecycleDataStoreCache!
-    var currTimestamp = TimeInterval()
+    var currDate: Date!
+    var currTimestamp: TimeInterval!
 
     override func setUp() {
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        currTimestamp = Date().timeIntervalSince1970
+        currDate = Date()
+        currTimestamp = currDate.timeIntervalSince1970
+
     }
-    
+
     override func tearDown() {
-        dataStore.remove(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC)
-        dataStore.remove(key: LifecycleConstants.DataStoreKeys.APP_START_TIMESTAMP_SEC)
-        dataStore.remove(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_TIMESTAMP_SEC)
+        dataStore.remove(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE)
+        dataStore.remove(key: LifecycleConstants.DataStoreKeys.APP_START_DATE)
+        dataStore.remove(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_DATE)
     }
-    
-    func persistAppCloseTS(ts: TimeInterval) {
-        dataStore.set(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC, value: ts)
+
+    func persistAppCloseDate(_ date: Date) {
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE, value: date)
     }
-    
-    func persistAppStartTS(ts: TimeInterval) {
-        dataStore.set(key: LifecycleConstants.DataStoreKeys.APP_START_TIMESTAMP_SEC, value: ts)
+
+    func persistAppStartDate(_ date: Date) {
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_START_DATE, value: date)
     }
-    
-    func persistAppPauseTS(ts: TimeInterval) {
-        dataStore.set(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_TIMESTAMP_SEC, value: ts)
+
+    func persistAppPauseDate(_ date: Date) {
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_DATE, value: date)
     }
-    
-    func getAppCloseTSFromPersitence() -> TimeInterval {
-        return dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC) ?? TimeInterval()
+
+    func getAppCloseDateFromPersitence() -> Date? {
+        return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE)
     }
-    
-    func getAppStartTSFromPersitence() -> TimeInterval {
-        return dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_START_TIMESTAMP_SEC) ?? TimeInterval()
+
+    func getAppStartDateFromPersitence() -> Date? {
+        return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_START_DATE)
     }
-    
-    func getAppPauseTSFromPersitence() -> TimeInterval {
-        return dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_TIMESTAMP_SEC) ?? TimeInterval()
+
+    func getAppPauseDateFromPersitence() -> Date? {
+        return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_DATE)
     }
-    
+
     /// Tests
-    func testGetAppCloseTS_NotSet() {
-        XCTAssertEqual(0.0, lifecycleDataStoreCache.getCloseTimestampSec())
+    func testGetAppCloseDate_NotSet() {
+        XCTAssertNil(lifecycleDataStoreCache.getCloseDate())
     }
-    
-    func testGetAppCloseTS_UpdatedAfterDataStoreInstanceIsCreated() {
+
+    func testGetAppCloseDate_UpdatedAfterDataStoreInstanceIsCreated() {
         //setup
-        persistAppCloseTS(ts: currTimestamp)
-        
+        persistAppCloseDate(currDate)
+
         //test
-        XCTAssertEqual(0.0, lifecycleDataStoreCache.getCloseTimestampSec())
+        XCTAssertNil(lifecycleDataStoreCache.getCloseDate())
     }
-    
-    func testConstructor_getAppCloseTS_WithPreviouslyPersistedValuePlusTimeout() {
+
+    func testConstructor_getAppCloseDate_WithPreviouslyPersistedValuePlusTimeout() {
         //setup
-        persistAppCloseTS(ts: currTimestamp)
+        persistAppCloseDate(currDate)
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        
+
         //test
         let expectedTS = currTimestamp + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
-        XCTAssertEqual(expectedTS, lifecycleDataStoreCache.getCloseTimestampSec())
+        let expectedDate = Date(timeIntervalSince1970: expectedTS)
+        XCTAssertEqual(expectedTS, lifecycleDataStoreCache.getCloseDate()?.timeIntervalSince1970)
+        XCTAssertEqual(expectedDate, lifecycleDataStoreCache.getCloseDate())
     }
-    
-    func testSetLastKnownTS_DifferenceLessThanCacheTimeoutSinceLastUpdate_WillNotUpdateValueInPersitence() {
+
+    func testSetLastKnownDate_DifferenceLessThanCacheTimeoutSinceLastUpdate_WillNotUpdateValueInPersitence() {
         //setup
-        persistAppCloseTS(ts: currTimestamp)
+        persistAppCloseDate(currDate)
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        
+
         let expectedTS = currTimestamp + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
-        
+
         //test
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(1))
-        
-        XCTAssertEqual(expectedTS, lifecycleDataStoreCache.getCloseTimestampSec())
+        let newTS =  currTimestamp + TimeInterval(1)
+        lifecycleDataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: newTS))
+
+        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), lifecycleDataStoreCache.getCloseDate())
         // should not update persistence
-        XCTAssertEqual(currTimestamp, getAppCloseTSFromPersitence())
+        XCTAssertEqual(currDate, getAppCloseDateFromPersitence())
     }
-    
-    func testSetLastKnownTS_DifferenceMoreThanCacheTimeoutSinceLastUpdate_WillUpdateValueInPersitenceAndReflectInNextLaunch() {
+
+    func testSetLastKnownDate_DifferenceMoreThanCacheTimeoutSinceLastUpdate_WillUpdateValueInPersitenceAndReflectInNextLaunch() {
         //setup
-        persistAppCloseTS(ts: currTimestamp)
+        persistAppCloseDate(currDate)
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        
+
         let expectedTS = currTimestamp + TimeInterval(3) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
-        
+
         //test
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(3))
-        
+        let newTS = currTimestamp + TimeInterval(3)
+        lifecycleDataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: newTS))
+
         // verify that datastore is updated
-        XCTAssertEqual(currTimestamp + TimeInterval(3), getAppCloseTSFromPersitence())
-        
+        let expectedDataStoreCloseTs = currTimestamp + TimeInterval(3)
+        XCTAssertEqual(Date(timeIntervalSince1970: expectedDataStoreCloseTs), getAppCloseDateFromPersitence())
+
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
         // verify the closeTimeStamp value in next launch
-        XCTAssertEqual(expectedTS, lifecycleDataStoreCache.getCloseTimestampSec())
+        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), lifecycleDataStoreCache.getCloseDate())
     }
-    
-    func testSetLastKnownTS_ConsecutiveUpdates() {
+
+    func testSetLastKnownDate_ConsecutiveUpdates() {
         //setup
-        persistAppCloseTS(ts: currTimestamp)
+        persistAppCloseDate(currDate)
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        
+
         let expectedTS = currTimestamp + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
-        XCTAssertEqual(expectedTS, lifecycleDataStoreCache.getCloseTimestampSec())
-        
+        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), lifecycleDataStoreCache.getCloseDate())
+
         //test
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(1))
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(2))
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(3))
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(4))
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(5))
-        lifecycleDataStoreCache.setLastKnownTimestamp(currTimestamp + TimeInterval(6))
-        
+        for i in 1...7 {
+            let ts = currTimestamp + TimeInterval(i)
+            lifecycleDataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: ts))
+        }
+
         // verify that datastore is updated
-        XCTAssertEqual(currTimestamp + TimeInterval(6), getAppCloseTSFromPersitence())
+        let expectedTS2 = currTimestamp + TimeInterval(6)
+        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS2), getAppCloseDateFromPersitence())
     }
-    
-    func testSetAppStartTS() {
+
+    func testSetAppStartDate() {
         //setup
-        lifecycleDataStoreCache.setAppStartTimestamp(currTimestamp)
-        
+        lifecycleDataStoreCache.setAppStartDate(currDate)
+
         //test
-        XCTAssertEqual(currTimestamp, getAppStartTSFromPersitence())
+        XCTAssertEqual(currDate, getAppStartDateFromPersitence())
     }
-    
-    func testGetAppStartTS_NotSet() {
-        XCTAssertEqual(0.0, lifecycleDataStoreCache.getAppStartTimestampSec())
+
+    func testGetAppStartDate_NotSet() {
+        XCTAssertNil(lifecycleDataStoreCache.getAppStartDate())
     }
-    
-    func testGetAppStartTS() {
-        //setup
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        lifecycleDataStoreCache.setAppStartTimestamp(currTimestamp)
-        
-        //test
-        XCTAssertEqual(currTimestamp, lifecycleDataStoreCache.getAppStartTimestampSec())
-    }
-    
-    func testSetAppPauseTS() {
-        //setup
-        lifecycleDataStoreCache.setAppPauseTimestamp(currTimestamp)
-        
-        //test
-        XCTAssertEqual(currTimestamp, getAppPauseTSFromPersitence())
-    }
-    
-    func testGetAppPauseTS_NotSet() {
-        XCTAssertEqual(0.0, lifecycleDataStoreCache.getAppPauseTimestampSec())
-    }
-    
-    func testGetAppPauseTS() {
+
+    func testGetAppStartDate() {
         //setup
         lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
-        lifecycleDataStoreCache.setAppPauseTimestamp(currTimestamp)
-        
+        lifecycleDataStoreCache.setAppStartDate(currDate)
+
         //test
-        XCTAssertEqual(currTimestamp, lifecycleDataStoreCache.getAppPauseTimestampSec())
+        XCTAssertEqual(currDate, lifecycleDataStoreCache.getAppStartDate())
+    }
+
+    func testSetAppPauseDate() {
+        //setup
+        lifecycleDataStoreCache.setAppPauseDate(currDate)
+
+        //test
+        XCTAssertEqual(currDate, getAppPauseDateFromPersitence())
+    }
+
+    func testGetAppPauseDate_NotSet() {
+        XCTAssertNil(lifecycleDataStoreCache.getAppPauseDate())
+    }
+
+    func testGetAppPauseDate() {
+        //setup
+        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache.setAppPauseDate(currDate)
+
+        //test
+        XCTAssertEqual(currDate, lifecycleDataStoreCache.getAppPauseDate())
     }
 }

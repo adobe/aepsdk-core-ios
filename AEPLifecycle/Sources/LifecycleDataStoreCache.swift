@@ -12,65 +12,66 @@
 import AEPServices
 import Foundation
 
-/// Lifecycle DataStore Cache layer for persisting the timestamp values required for Lifecycle session computation in XDM,
-/// including close timestamp to be used for app close time approximation, start and pause timestamps.
+/// Lifecycle DataStore Cache layer for persisting the date values required for Lifecycle session computation in XDM,
+/// including close date to be used for app close time approximation, start and pause dates.
 class LifecycleDataStoreCache {
-    private var closeTimestampSec = TimeInterval()
-    private var lastClosePersistedTimestampSec = TimeInterval()
+    private var closeDate: Date?
+    private var lastClosePersistedDate: Date?
     private(set) var dataStore: NamedCollectionDataStore
 
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
-        self.lastClosePersistedTimestampSec = dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC) ?? 0
-        if lastClosePersistedTimestampSec > 0 {
-            self.closeTimestampSec = lastClosePersistedTimestampSec + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
+        self.lastClosePersistedDate = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE)
+        if lastClosePersistedDate != nil {
+            let closeTS = (lastClosePersistedDate?.timeIntervalSince1970 ?? 0.0) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
+            self.closeDate = Date(timeIntervalSince1970: closeTS)
         }
     }
 
     /// The last known close timestamp value to be updated in cache and, if needed, in persistence as well.
     /// The write will execute after `LifecycleConstants.CACHE_TIMEOUT_SECONDS` since last update.
-    /// - Parameter timestamp: current timestamp (seconds)
-    func setLastKnownTimestamp(_ timestamp: TimeInterval) {
-        if (timestamp - lastClosePersistedTimestampSec) >= TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS) {
-            dataStore.set(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_TIMESTAMP_SEC, value: timestamp)
-            lastClosePersistedTimestampSec = timestamp
+    /// - Parameter date: current date
+    func setLastKnownDate(_ date: Date) {
+        if (date.timeIntervalSince1970 - (lastClosePersistedDate?.timeIntervalSince1970 ?? 0.0)) >= TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS) {
+            dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE, value: date)
+            lastClosePersistedDate = date
         }
     }
 
-    /// Returns the approximated app close timestamp in seconds. This value is loaded from persistence when
+    /// Returns the approximated app close date. This value is loaded from persistence when
     /// `LifeCycleDataStoreCache` is initialized it includes the ` LifecycleConstants.CACHE_TIMEOUT_SECONDS`
     /// the eventuality when the application was closed before the last commit was executed.
     ///
-    /// - Returns: the last known close timestamp value or 0.0 if not found, for example on first launch
-    func getCloseTimestampSec() -> TimeInterval {
-        return closeTimestampSec
+    /// - Returns: the last known close date value or nil if not found, for example on first launch
+    func getCloseDate() -> Date? {
+        return closeDate
     }
 
-    /// Updates the last app start timestamp in persistence.
+    /// Updates the last app start date in persistence.
     ///
-    /// - Parameter timestamp: start timestamp (seconds)
-    func setAppStartTimestamp(_ timestamp: TimeInterval) {
-        dataStore.set(key: LifecycleConstants.DataStoreKeys.APP_START_TIMESTAMP_SEC, value: timestamp)
+    /// - Parameter date: start date
+    func setAppStartDate(_ date: Date) {
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_START_DATE, value: date)
     }
 
-    /// Reads the last app start timestamp from persistence and returns the value.
+    /// Reads the last app start date from persistence and returns the value.
     ///
-    /// - Returns: the app start timestamp (seconds) or 0.0 if not found
-    func getAppStartTimestampSec() -> TimeInterval {
-        return dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_START_TIMESTAMP_SEC) ?? 0
+    /// - Returns: the app start Date or nil if not found
+    func getAppStartDate() -> Date? {
+        return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_START_DATE)
     }
 
     /// Updates the last app pause timestamp in persistence.
     ///
-    /// - Parameter timestamp: pause timestamp (seconds)
-    func setAppPauseTimestamp(_ timestamp: TimeInterval) {
-        dataStore.set(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_TIMESTAMP_SEC, value: timestamp)
+    /// - Parameter date: pause date
+    func setAppPauseDate(_ date: Date) {
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_DATE, value: date)
     }
 
-    /// Reads the last app pause timestamp from persistence and returns the value.
+    /// Reads the last app pause date from persistence and returns the value.
     ///
-    /// - Returns: the app pause timestamp (seconds) or 0.0 if not found
-    func getAppPauseTimestampSec() -> TimeInterval {
-        return dataStore.getDouble(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_TIMESTAMP_SEC) ?? 0
+    /// - Returns: the app pause date or nil if not found
+    func getAppPauseDate() -> Date? {
+        return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_PAUSE_DATE)
     }
 }
