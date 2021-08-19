@@ -10,30 +10,30 @@
 // governing permissions and limitations under the License.
 //
 
-import AEPServices
-import Foundation
-
-/// Represents the Environment schema
-struct XDMEnvironment: Encodable {
-    init() {}
-
-    var carrier: String?
-    var language: XDMLifecycleLanguage?
-    var operatingSystem: String?
-    var operatingSystemVersion: String?
-    var type: XDMEnvironmentType?
-
-    enum CodingKeys: String, CodingKey {
-        case carrier
-        case language = "_dc"
-        case operatingSystem
-        case operatingSystemVersion
-        case type
-    }
-
-}
-
-/// Helper struct to encode the language properly in the `XDMLifecycleEnvironment`
-struct XDMLifecycleLanguage: Encodable {
-    let language: String?
-}
+//import AEPServices
+//import Foundation
+//
+///// Represents the Environment schema
+//struct XDMEnvironment: Encodable {
+//    init() {}
+//
+//    var carrier: String?
+//    var language: XDMLifecycleLanguage?
+//    var operatingSystem: String?
+//    var operatingSystemVersion: String?
+//    var type: XDMEnvironmentType?
+//
+//    enum CodingKeys: String, CodingKey {
+//        case carrier
+//        case language = "_dc"
+//        case operatingSystem
+//        case operatingSystemVersion
+//        case type
+//    }
+//
+//}
+//
+///// Helper struct to encode the language properly in the `XDMLifecycleEnvironment`
+//struct XDMLifecycleLanguage: Encodable {
+//    let language: String?
+//}
