@@ -14,21 +14,19 @@ import Foundation
 
 /// Lifecycle DataStore Cache layer for persisting the date values required for Lifecycle session computation in XDM,
 /// including close date to be used for app close time approximation, start and pause dates.
-class LifecycleDataStoreCache {
+class LifecycleV2DataStoreCache {
     private var closeDate: Date?
     private var lastClosePersistedDate: Date?
-    private(set) var dataStore: NamedCollectionDataStore
+    private let dataStore: NamedCollectionDataStore
 
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
-        self.lastClosePersistedDate = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE)
-        if let unwrappedLastClosePersistedDate = lastClosePersistedDate {
-            let closeTS = (unwrappedLastClosePersistedDate.timeIntervalSince1970) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
-            self.closeDate = Date(timeIntervalSince1970: closeTS)
+        if let persistedCloseDate = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE) as Date? {
+            self.closeDate = Date(timeIntervalSince1970: (persistedCloseDate.timeIntervalSince1970) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS))
         }
     }
 
-    /// The last known close timestamp value to be updated in cache and, if needed, in persistence as well.
+    /// The last known close date value to be updated in cache and, if needed, in persistence as well.
     /// The write will execute after `LifecycleConstants.CACHE_TIMEOUT_SECONDS` since last update.
     /// - Parameter date: current date
     func setLastKnownDate(_ date: Date) {
@@ -61,7 +59,7 @@ class LifecycleDataStoreCache {
         return dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_START_DATE)
     }
 
-    /// Updates the last app pause timestamp in persistence.
+    /// Updates the last app pause date in persistence.
     ///
     /// - Parameter date: pause date
     func setAppPauseDate(_ date: Date) {

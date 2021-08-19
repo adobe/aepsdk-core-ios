@@ -18,6 +18,7 @@ import Foundation
 /// usually consumed by the Edge Network and related extensions
 class LifecycleV2 {
     private let dataStore: NamedCollectionDataStore
+    private var dataStoreCache: LifecycleV2DataStoreCache
     private var systemInfoService: SystemInfoService {
         ServiceProvider.shared.systemInfoService
     }
@@ -27,6 +28,13 @@ class LifecycleV2 {
     /// - Parameter dataStore: The `NamedCollectionDataStore` used for reading and writing data to persistence
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
+        dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
+    }
+
+    /// Updates the last known event timestamp in cache and if needed in persistence
+    /// - Parameter event: any event to be processed.
+    func updateLastKnownTimestamp(event: Event) {
+        dataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: event.timestamp.timeIntervalSince1970))
     }
 
     /// Handles the start use-case as application launch XDM event. If a previous abnormal close was detected,

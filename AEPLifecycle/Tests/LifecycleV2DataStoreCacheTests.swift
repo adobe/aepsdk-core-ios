@@ -13,15 +13,15 @@
 import AEPServices
 import XCTest
 
-class LifecycleDataStoreCacheTests: XCTestCase {
+class LifecycleV2DataStoreCacheTests: XCTestCase {
 
     var dataStore = NamedCollectionDataStore(name: "LifecycleDataStoreCacheTests")
-    var lifecycleDataStoreCache: LifecycleDataStoreCache!
+    var lifecycleDataStoreCache: LifecycleV2DataStoreCache!
     var currDate: Date!
     var currTimestamp: TimeInterval!
 
     override func setUp() {
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
         currDate = Date()
         currTimestamp = currDate.timeIntervalSince1970
 
@@ -73,7 +73,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     func testConstructor_getAppCloseDate_WithPreviouslyPersistedValuePlusTimeout() {
         //setup
         persistAppCloseDate(currDate)
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
 
         //test
         let expectedTS = currTimestamp + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
@@ -85,7 +85,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     func testSetLastKnownDate_DifferenceLessThanCacheTimeoutSinceLastUpdate_WillNotUpdateValueInPersitence() {
         //setup
         persistAppCloseDate(currDate)
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
 
         let expectedTS = currTimestamp + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
 
@@ -101,7 +101,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     func testSetLastKnownDate_DifferenceMoreThanCacheTimeoutSinceLastUpdate_WillUpdateValueInPersitenceAndReflectInNextLaunch() {
         //setup
         persistAppCloseDate(currDate)
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
 
         let expectedTS = currTimestamp + TimeInterval(3) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
 
@@ -113,7 +113,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
         let expectedDataStoreCloseTs = currTimestamp + TimeInterval(3)
         XCTAssertEqual(Date(timeIntervalSince1970: expectedDataStoreCloseTs), getAppCloseDateFromPersitence())
 
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
         // verify the closeTimeStamp value in next launch
         XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), lifecycleDataStoreCache.getCloseDate())
     }
@@ -121,7 +121,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
     func testSetLastKnownDate_ConsecutiveUpdates() {
         //setup
         persistAppCloseDate(currDate)
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
 
         let expectedTS = currTimestamp + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
         XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), lifecycleDataStoreCache.getCloseDate())
@@ -151,7 +151,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
 
     func testGetAppStartDate() {
         //setup
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
         lifecycleDataStoreCache.setAppStartDate(currDate)
 
         //test
@@ -172,7 +172,7 @@ class LifecycleDataStoreCacheTests: XCTestCase {
 
     func testGetAppPauseDate() {
         //setup
-        lifecycleDataStoreCache = LifecycleDataStoreCache(dataStore: dataStore)
+        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
         lifecycleDataStoreCache.setAppPauseDate(currDate)
 
         //test
