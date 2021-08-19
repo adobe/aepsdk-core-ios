@@ -22,8 +22,8 @@ class LifecycleDataStoreCache {
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
         self.lastClosePersistedDate = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.APP_CLOSE_DATE)
-        if lastClosePersistedDate != nil {
-            let closeTS = (lastClosePersistedDate?.timeIntervalSince1970 ?? 0.0) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
+        if let unwrappedLastClosePersistedDate = lastClosePersistedDate {
+            let closeTS = (unwrappedLastClosePersistedDate.timeIntervalSince1970) + TimeInterval(LifecycleConstants.CACHE_TIMEOUT_SECONDS)
             self.closeDate = Date(timeIntervalSince1970: closeTS)
         }
     }
