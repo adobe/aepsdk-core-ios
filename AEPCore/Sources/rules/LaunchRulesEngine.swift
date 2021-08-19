@@ -143,7 +143,7 @@ public class LaunchRulesEngine {
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
                     extensionRuntime.dispatch(event: dispatchEvent)
 
-                    // Keep track of dispatch consequence events to prevent trigging of infinite dispatch consequences
+                    // Keep track of dispatch consequence events to prevent triggering of infinite dispatch consequences
                     dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
 
                 default:
