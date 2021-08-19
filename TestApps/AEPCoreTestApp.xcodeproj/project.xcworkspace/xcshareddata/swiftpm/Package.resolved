@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "AEPAssurance",
+        "repositoryURL": "https://github.com/adobe/aepsdk-assurance-ios.git",
+        "state": {
+          "branch": null,
+          "revision": "97e6818ae59d3e03e87d90129cabed2421615aaf",
+          "version": "3.0.0"
+        }
+      },
+      {
         "package": "AEPRulesEngine",
         "repositoryURL": "https://github.com/adobe/aepsdk-rulesengine-ios.git",
         "state": {
