@@ -1041,7 +1041,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         // Expect dispatch to fail as max allowed chained events is 1
         _ = rulesEngine.process(event: dispatchedEvent)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-        
+
         // Process same dispatch event again due to re-dispatch (edge case)
         // Expect event to be treated as original event with chain count = 0
         _ = rulesEngine.process(event: dispatchedEvent)
