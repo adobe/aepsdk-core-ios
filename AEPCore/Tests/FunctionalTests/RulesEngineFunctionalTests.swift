@@ -1041,11 +1041,19 @@ class RulesEngineFunctionalTests: XCTestCase {
         // Expect dispatch to fail as max allowed chained events is 1
         _ = rulesEngine.process(event: dispatchedEvent)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-
+        
         // Process same dispatch event again due to re-dispatch (edge case)
-        // Expect dispatch to fail as event and process count is remembered
+        // Expect event to be treated as original event with chain count = 0
         _ = rulesEngine.process(event: dispatchedEvent)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent2 = mockRuntime.dispatchedEvents[0]
+        mockRuntime.dispatchedEvents.removeAll()
+
+        // Process second dispatched event; dispatch chain count = 1
+        // Expect dispatch to fail as max allowed chained events is 1
+        _ = rulesEngine.process(event: dispatchedEvent2)
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
     }
 
     func testDispatchEvent_interleavedChainedDispatchEvents() {
