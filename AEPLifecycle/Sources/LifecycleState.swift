@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -55,19 +56,26 @@ struct LifecycleState {
     ///   - additionalContextData: additional context data for this start event
     ///   - adId: The advertising identifier provided by the identity extension
     ///   - sessionTimeout: The session timeout for this start event, defaults to 300 seconds
+    ///   - isInstall: Indicates whether this is an application install scenario
     /// - Returns: The previous session info if exists, otherwise nil
-    mutating func start(date: Date, additionalContextData: [String: Any]?, adId: String?, sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT)) -> LifecycleSessionInfo? {
+    mutating func start(date: Date,
+                        additionalContextData: [String: Any]?,
+                        adId: String?,
+                        sessionTimeout: TimeInterval = TimeInterval(LifecycleConstants.DEFAULT_LIFECYCLE_TIMEOUT),
+                        isInstall: Bool) -> LifecycleSessionInfo? {
         let sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
         // Build default LifecycleMetrics
         let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()
         let defaultMetrics = metricsBuilder.build()
-        applyApplicationUpgrade(appId: defaultMetrics.appId)
+        if !isInstall {
+            applyApplicationUpgrade(appId: defaultMetrics.appId)
+        }
 
         guard let previousSessionInfo = lifecycleSession.start(date: date, sessionTimeout: sessionTimeout, coreMetrics: defaultMetrics) else { return nil }
 
         var lifecycleData = LifecycleContextData()
 
-        if isInstall() {
+        if isInstall {
             metricsBuilder.addInstallData().addLaunchEventData()
         } else {
             // upgrade and launch hits
@@ -89,12 +97,6 @@ struct LifecycleState {
         // Update lifecycle context data and persist lifecycle info into local storage
         lifecycleContextData = lifecycleData
 
-        let xdmMetricsBuilder = XDMLifecycleMetricsBuilder(startDate: date)
-            .addAppLaunchData(isInstall: isInstall(), isUpgrade: isUpgrade())
-            .addAppCloseData(previousAppId: sessionContainer?.appId, previousSessionInfo: previousSessionInfo)
-            .addEnvironmentData()
-            .addDeviceData()
-
         persistLifecycleContextData(startDate: date)
 
         return previousSessionInfo
@@ -114,8 +116,8 @@ struct LifecycleState {
     /// Updates the application identifier in the in-memory lifecycle context data
     /// - Parameter appId: the application identifier
     mutating func applyApplicationUpgrade(appId: String?) {
-        // early out if this isn't an upgrade or if it is an install
-        if isInstall() || !isUpgrade() { return }
+        // early out if this isn't an upgrade
+        if !isUpgrade() { return }
 
         // get a map of lifecycle data in shared preferences or memory
         guard var lifecycleData = getContextData() else { return }
@@ -134,11 +136,6 @@ struct LifecycleState {
     }
 
     // MARK: Private APIs
-
-    /// Returns true if there is not install date stored in the data store
-    private func isInstall() -> Bool {
-        return !dataStore.contains(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE)
-    }
 
     /// Returns true if the current app version does not equal the app version stored in the data store
     private func isUpgrade() -> Bool {
