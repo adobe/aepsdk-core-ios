@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -43,8 +43,34 @@ public class MessageSettings: NSObject {
     /// Defines the horizontal inset respective to the `horizontalAlign`. Represented in percentage of the total screen width.
     public private(set) var horizontalInset: Int?
 
-    /// If true, a displayed message will prevent the user from other UI interactions
+    /// If true, a displayed message will prevent the user from other UI interactions.
     public private(set) var uiTakeover: Bool?
+
+    /// Combines `backdropColor` and `backdropOpacity` to create a UIColor to be used as a background in uiTakeover messages.
+    public var backdrop: UIColor {
+        let opacity = CGFloat(backdropOpacity ?? 0.0)
+
+        guard let colorString = backdropColor else {
+            return UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: opacity)
+        }
+
+        var colorInt: UInt64 = 0
+        Scanner(string: colorString).scanHexInt64(&colorInt)
+
+        let components = (
+            red: CGFloat((colorInt >> 16) & 0xFF) / 255.0,
+            green: CGFloat((colorInt >> 08) & 0xFF) / 255.0,
+            blue: CGFloat((colorInt >> 00) & 0xFF) / 255.0
+        )
+
+        return UIColor(red: components.red, green: components.green, blue: components.blue, alpha: opacity)
+    }
+
+    /// Defines the color of the backdrop shown when a uiTakeover message is displayed.
+    private var backdropColor: String?
+
+    /// Defines the opacity of the backdrop shown when a uiTakeover message is displayed.
+    private var backdropOpacity: Float?
 
     /// A mapping of gestures and their associated behaviors.
     /// The URL will be executed as javascript in the message's underlying webview.
@@ -93,6 +119,16 @@ public class MessageSettings: NSObject {
 
     @discardableResult public func setUiTakeover(_ uiTakeover: Bool?) -> MessageSettings {
         self.uiTakeover = uiTakeover ?? false
+        return self
+    }
+
+    @discardableResult public func setBackdropColor(_ color: String?) -> MessageSettings {
+        self.backdropColor = color
+        return self
+    }
+
+    @discardableResult public func setBackdropOpacity(_ opacity: Float?) -> MessageSettings {
+        self.backdropOpacity = opacity
         return self
     }
 

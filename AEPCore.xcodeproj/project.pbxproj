@@ -67,6 +67,12 @@
 		246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07926C1939800FD130B /* MessageAnimation.swift */; };
 		246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */; };
 		246FD07E26CB002F00FD130B /* MessageSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */; };
+		246FD08026CC520500FD130B /* MessageAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07F26CC520500FD130B /* MessageAlignmentTests.swift */; };
+		246FD08226CC521E00FD130B /* MessageAnimationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08126CC521E00FD130B /* MessageAnimationTests.swift */; };
+		246FD08426CC523F00FD130B /* MessageGestureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08326CC523F00FD130B /* MessageGestureTests.swift */; };
+		246FD08626CC529800FD130B /* MessageGestureRecognizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08526CC529800FD130B /* MessageGestureRecognizerTests.swift */; };
+		246FD08826CC52F200FD130B /* MessagingDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08726CC52F200FD130B /* MessagingDelegateTests.swift */; };
+		246FD08A26CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
 		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
@@ -655,6 +661,12 @@
 		246FD07926C1939800FD130B /* MessageAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimation.swift; sourceTree = "<group>"; };
 		246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculation.swift"; sourceTree = "<group>"; };
 		246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettingsTests.swift; sourceTree = "<group>"; };
+		246FD07F26CC520500FD130B /* MessageAlignmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAlignmentTests.swift; sourceTree = "<group>"; };
+		246FD08126CC521E00FD130B /* MessageAnimationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimationTests.swift; sourceTree = "<group>"; };
+		246FD08326CC523F00FD130B /* MessageGestureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureTests.swift; sourceTree = "<group>"; };
+		246FD08526CC529800FD130B /* MessageGestureRecognizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureRecognizerTests.swift; sourceTree = "<group>"; };
+		246FD08726CC52F200FD130B /* MessagingDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingDelegateTests.swift; sourceTree = "<group>"; };
+		246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculationTests.swift"; sourceTree = "<group>"; };
 		247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+SignalTests.swift"; sourceTree = "<group>"; };
 		249498E0254A0C910045E392 /* Date+FormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+FormatTests.swift"; sourceTree = "<group>"; };
 		2499461B24E5E67700D3F7B2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
@@ -1528,9 +1540,15 @@
 				92867D6425C0B56400E32CDC /* FloatingButtonTests.swift */,
 				B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */,
 				923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */,
+				246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */,
 				3F03980C24BE61520019F095 /* LogLevelTest.swift */,
+				246FD07F26CC520500FD130B /* MessageAlignmentTests.swift */,
+				246FD08126CC521E00FD130B /* MessageAnimationTests.swift */,
+				246FD08326CC523F00FD130B /* MessageGestureTests.swift */,
+				246FD08526CC529800FD130B /* MessageGestureRecognizerTests.swift */,
 				92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */,
 				246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */,
+				246FD08726CC52F200FD130B /* MessagingDelegateTests.swift */,
 				3F03980D24BE61520019F095 /* NamedCollectionDataStoreTest.swift */,
 				3F03980B24BE61520019F095 /* NetworkServiceTests.swift */,
 				3F03980824BE61520019F095 /* SQLiteWrapperTests.swift */,
@@ -3074,19 +3092,25 @@
 				3F03982224BE61520019F095 /* OperationOrdererTests.swift in Sources */,
 				3F03982124BE61520019F095 /* NamedCollectionDataStoreTest.swift in Sources */,
 				3F03982724BE61520019F095 /* ThreadSafeDictionaryTests.swift in Sources */,
+				246FD08A26CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift in Sources */,
 				BB8D437225F99DFF0046E230 /* PrettyDictionaryTests.swift in Sources */,
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
 				923973CD25AF92140056A3E5 /* FullscreenMessageTests.swift in Sources */,
 				78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */,
+				246FD08426CC523F00FD130B /* MessageGestureTests.swift in Sources */,
 				3F03981924BE61520019F095 /* URLServiceTest.swift in Sources */,
 				3F03982324BE61520019F095 /* PersistentHitQueueTests.swift in Sources */,
 				3F03981724BE61520019F095 /* DataQueueService+Testable.swift in Sources */,
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */,
 				786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */,
+				246FD08626CC529800FD130B /* MessageGestureRecognizerTests.swift in Sources */,
 				78AA4EC02509731B00205AE9 /* FileManager+ZipTests.swift in Sources */,
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
+				246FD08826CC52F200FD130B /* MessagingDelegateTests.swift in Sources */,
+				246FD08026CC520500FD130B /* MessageAlignmentTests.swift in Sources */,
 				92867D6525C0B56400E32CDC /* FloatingButtonTests.swift in Sources */,
+				246FD08226CC521E00FD130B /* MessageAnimationTests.swift in Sources */,
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
 				3F03982024BE61520019F095 /* LogLevelTest.swift in Sources */,

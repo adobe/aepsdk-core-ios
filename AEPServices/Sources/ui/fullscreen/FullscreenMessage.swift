@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -193,6 +193,11 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     ///   - name: the name of the message being passed from javascript
     ///   - handler: a method to be called when the javascript message is passed
     public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
+        // don't add the handler if it's already been added
+        guard scriptHandlers[name] == nil else {
+            return
+        }
+
         // if the webview has already been created, we need to add the script handler to existing content controller
         if let webView = webView as? WKWebView {
             webView.configuration.userContentController.add(self, name: name)

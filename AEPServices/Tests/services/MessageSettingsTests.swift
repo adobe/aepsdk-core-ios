@@ -104,6 +104,48 @@ class MessageSettingsTests: XCTestCase {
         XCTAssertEqual(false, settings.uiTakeover, "false should be default value for ui takeover.")
     }
     
+    func testBackdropColor() throws {
+        let expectedColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
+        settings.setBackdropColor("000000")
+        XCTAssertEqual(expectedColor, settings.backdrop)
+    }
+    
+    func testBackdropRed() throws {
+        let expectedColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0)
+        settings.setBackdropColor("FF0000")
+        XCTAssertEqual(expectedColor, settings.backdrop)
+    }
+    
+    func testBackdropGreen() throws {
+        let expectedColor = UIColor(red: 0, green: 1, blue: 0, alpha: 0)
+        settings.setBackdropColor("00FF00")
+        XCTAssertEqual(expectedColor, settings.backdrop)
+    }
+    
+    func testBackdropBlue() throws {
+        let expectedColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0)
+        settings.setBackdropColor("0000FF")
+        XCTAssertEqual(expectedColor, settings.backdrop)
+    }
+    
+    func testBackdropColorNil() throws {
+        let expectedColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+        settings.setBackdropColor(nil)
+        XCTAssertEqual(expectedColor, settings.backdrop)
+    }
+    
+    func testBackdropOpacity() throws {
+        let expectedColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
+        settings.setBackdropOpacity(0.5)
+        XCTAssertEqual(expectedColor, settings.backdrop)
+    }
+    
+    func testBackdropOpacityNil() throws {
+        let expectedColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+        settings.setBackdropOpacity(nil)
+        XCTAssertEqual(expectedColor, settings.backdrop)
+    }
+    
     func testGestures() throws {
         let gestures: [MessageGesture: URL] = [
             .swipeUp: URL(string: "https://stuff")!,
