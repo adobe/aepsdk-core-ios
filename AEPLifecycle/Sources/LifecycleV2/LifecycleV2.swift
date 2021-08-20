@@ -31,10 +31,10 @@ class LifecycleV2 {
         dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
     }
 
-    /// Updates the last known event timestamp in cache and if needed in persistence
+    /// Updates the last known event date in cache and if needed in persistence
     /// - Parameter event: any event to be processed.
-    func updateLastKnownTimestamp(event: Event) {
-        dataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: event.timestamp.timeIntervalSince1970))
+    func updateLastKnownTime(event: Event) {
+        dataStoreCache.setLastKnownDate(event.timestamp)
     }
 
     /// Handles the start use-case as application launch XDM event. If a previous abnormal close was detected,

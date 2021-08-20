@@ -39,7 +39,7 @@ public class Lifecycle: NSObject, Extension {
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
     public func onRegistered() {
         registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent, listener: receiveLifecycleRequest(event:))
-        registerListener(type: EventType.wildcard, source: EventSource.wildcard, listener: updateLastKnownTimestamp(event:))
+        registerListener(type: EventType.wildcard, source: EventSource.wildcard, listener: updateLastKnownTime(event:))
 
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String: Any], event: nil)
@@ -59,10 +59,10 @@ public class Lifecycle: NSObject, Extension {
     // MARK: Event Listeners
 
     /// Invoked when any event is dispatched by the `EventHub`
-    /// Updates the last known event timestamp in cache and if needed in persistence
+    /// Updates the last known event date in cache and if needed in persistence
     /// - Parameter event: any event to be processed.
-    private func updateLastKnownTimestamp(event: Event) {
-        lifecycleV2.updateLastKnownTimestamp(event: event)
+    private func updateLastKnownTime(event: Event) {
+        lifecycleV2.updateLastKnownTime(event: event)
     }
 
     /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`
