@@ -15,19 +15,22 @@ import XCTest
 
 class LifecycleV2DataStoreCacheTests: XCTestCase {
 
-    var dataStore = NamedCollectionDataStore(name: "LifecycleV2DataStoreCacheTests")
+    var dataStore: NamedCollectionDataStore!
     var lifecycleDataStoreCache: LifecycleV2DataStoreCache!
     var currDate: Date!
     var currTimestamp: TimeInterval!
 
     override func setUp() {
+        dataStore = NamedCollectionDataStore(name: "LifecycleV2DataStoreCacheTests")
+        clearDataStore()
+
         lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
         currDate = Date()
         currTimestamp = currDate.timeIntervalSince1970
 
     }
 
-    override func tearDown() {
+    func clearDataStore() {
         dataStore.remove(key: LifecycleV2Constants.DataStoreKeys.APP_CLOSE_DATE)
         dataStore.remove(key: LifecycleV2Constants.DataStoreKeys.APP_START_DATE)
         dataStore.remove(key: LifecycleV2Constants.DataStoreKeys.APP_PAUSE_DATE)
@@ -84,16 +87,14 @@ class LifecycleV2DataStoreCacheTests: XCTestCase {
 
     func testSetLastKnownDate_DifferenceLessThanCacheTimeoutSinceLastUpdate_WillNotUpdateValueInPersitence() {
         //setup
-        persistAppCloseDate(currDate)
-        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
-
-        let expectedTS = currTimestamp + LifecycleV2Constants.CACHE_TIMEOUT_SECONDS
+        lifecycleDataStoreCache.setLastKnownDate(currDate)
 
         //test
         let newTS =  currTimestamp + TimeInterval(1)
         lifecycleDataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: newTS))
 
-        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), lifecycleDataStoreCache.getCloseDate())
+        // Close date will be available only if the previous session had persisted it.
+        XCTAssertNil(lifecycleDataStoreCache.getCloseDate())
         // should not update persistence
         XCTAssertEqual(currDate, getAppCloseDateFromPersitence())
     }
@@ -120,21 +121,17 @@ class LifecycleV2DataStoreCacheTests: XCTestCase {
 
     func testSetLastKnownDate_ConsecutiveUpdates() {
         //setup
-        persistAppCloseDate(currDate)
-        lifecycleDataStoreCache = LifecycleV2DataStoreCache(dataStore: dataStore)
-
-        let expectedTS = currTimestamp + LifecycleV2Constants.CACHE_TIMEOUT_SECONDS
-        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), lifecycleDataStoreCache.getCloseDate())
+        XCTAssertNil(lifecycleDataStoreCache.getCloseDate())
 
         //test
-        for i in 1...7 {
+        for i in 1...6 {
             let ts = currTimestamp + TimeInterval(i)
             lifecycleDataStoreCache.setLastKnownDate(Date(timeIntervalSince1970: ts))
         }
 
         // verify that datastore is updated
-        let expectedTS2 = currTimestamp + TimeInterval(6)
-        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS2), getAppCloseDateFromPersitence())
+        let expectedTS = currTimestamp + TimeInterval(5)
+        XCTAssertEqual(Date(timeIntervalSince1970: expectedTS), getAppCloseDateFromPersitence())
     }
 
     func testSetAppStartDate() {
