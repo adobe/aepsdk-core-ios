@@ -14,6 +14,11 @@ import Foundation
 
 /// Constants for `LifecycleV2`
 enum LifecycleV2Constants {
+    static let EXTENSION_NAME = "com.adobe.module.lifecycle"
+    static let LOG_TAG = "Lifecycle"
+
+    static let STATE_UPDATE_TIMEOUT_SEC = TimeInterval(2)
+
     enum EventType {
         static let APP_LAUNCH = "application.launch"
         static let APP_CLOSE = "application.close"
