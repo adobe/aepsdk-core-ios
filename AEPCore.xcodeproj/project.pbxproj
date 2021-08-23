@@ -86,6 +86,10 @@
 		24C5E14D26B8B00B005BEA72 /* MessageSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */; };
 		24C5E15D26B990CB005BEA72 /* MessageGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E15C26B990CB005BEA72 /* MessageGesture.swift */; };
 		24C5E17B26B999E4005BEA72 /* MessageAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */; };
+		24CE74AB26D401ED008F9EFD /* MockFullscreenListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */; };
+		24CE74AD26D40239008F9EFD /* MockMessagingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */; };
+		24CE74AF26D40278008F9EFD /* MockWKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */; };
+		24CE74B126D40483008F9EFD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24CE74B026D40483008F9EFD /* XCTest.framework */; };
 		24CF602B2538AC79006473BA /* MobileCore+Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */; };
 		24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */; };
 		24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */; };
@@ -684,6 +688,10 @@
 		24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettings.swift; sourceTree = "<group>"; };
 		24C5E15C26B990CB005BEA72 /* MessageGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGesture.swift; sourceTree = "<group>"; };
 		24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAlignment.swift; sourceTree = "<group>"; };
+		24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFullscreenListener.swift; sourceTree = "<group>"; };
+		24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMessagingDelegate.swift; sourceTree = "<group>"; };
+		24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWKScriptMessage.swift; sourceTree = "<group>"; };
+		24CE74B026D40483008F9EFD /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+Tracking.swift"; sourceTree = "<group>"; };
 		24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TrackingTests.swift"; sourceTree = "<group>"; };
 		24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyStatus.swift"; sourceTree = "<group>"; };
@@ -1071,6 +1079,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24CE74B126D40483008F9EFD /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1366,8 +1375,10 @@
 				3FE6DDEF24C62F610065EA05 /* MockDataQueue.swift */,
 				3FE6DDEB24C62F610065EA05 /* MockDataStore.swift */,
 				2467E43B24CB54B70022F6BE /* MockDiskCache.swift */,
+				24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */,
 				215C859C24C6492800CCCD26 /* MockHitProcessor.swift */,
 				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
+				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
 				3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */,
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
 				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
@@ -1375,6 +1386,7 @@
 				24543A1324E1DAFC002D8D9A /* MockURLService.swift */,
 				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
 				92027B9825C9EAF2007BE140 /* MockUIService.swift */,
+				24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */,
 			);
 			name = Mocks;
 			path = AEPServices/Mocks;
@@ -1594,6 +1606,7 @@
 		3F03983E24BE635D0019F095 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				24CE74B026D40483008F9EFD /* XCTest.framework */,
 				F865852EC4747B6B3502B3F2 /* Pods_AEPCore.framework */,
 				9444FBB20EFFE94F7726A49F /* Pods_AEPCoreTests.framework */,
 				E405C4A9B041F4542C3601A5 /* Pods_AEPIdentityTests.framework */,
@@ -3137,12 +3150,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */,
+				24CE74AD26D40239008F9EFD /* MockMessagingDelegate.swift in Sources */,
 				24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */,
 				3FE6DDF524C62F620065EA05 /* MockURLSession.swift in Sources */,
+				24CE74AF26D40278008F9EFD /* MockWKScriptMessage.swift in Sources */,
 				24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */,
 				3FE6DDF724C62F620065EA05 /* MockDataQueue.swift in Sources */,
 				215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */,
 				3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */,
+				24CE74AB26D401ED008F9EFD /* MockFullscreenListener.swift in Sources */,
 				92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */,
 				3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */,
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
@@ -3604,6 +3620,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
@@ -3628,6 +3645,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
@@ -3705,6 +3723,7 @@
 			baseConfigurationReference = 2CDAE3FD5AB17A2ABC44C648 /* Pods-AEPSignalTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -3725,6 +3744,7 @@
 			baseConfigurationReference = 5D1BE819F888BC60FA9EF4D9 /* Pods-AEPSignalTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -3797,6 +3817,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
@@ -3817,6 +3838,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
@@ -3853,6 +3875,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C63E76D9752A3702439C65D2 /* Pods-AEPIntegrationTests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
@@ -3872,6 +3895,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 07B3B58B0EF54A0DC0AC35B7 /* Pods-AEPIntegrationTests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
@@ -3890,6 +3914,7 @@
 		3FE6DDAF24C62C090065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -3917,6 +3942,7 @@
 		3FE6DDB024C62C090065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -3998,6 +4024,7 @@
 			baseConfigurationReference = 827E1C4407C473147AAC09CE /* Pods-AEPLifecycleTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
@@ -4020,6 +4047,7 @@
 			baseConfigurationReference = A63AA3E0DA8692271AC7C724 /* Pods-AEPLifecycleTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
@@ -4094,6 +4122,7 @@
 			baseConfigurationReference = 8A7122292E08E53BDBC0A336 /* Pods-AEPIdentityTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
@@ -4116,6 +4145,7 @@
 			baseConfigurationReference = E8E09A90FFDA252F2F0ABA0E /* Pods-AEPIdentityTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
@@ -4135,6 +4165,7 @@
 		3FF8171024D89B160064DFA1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4162,6 +4193,7 @@
 		3FF8171124D89B160064DFA1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;

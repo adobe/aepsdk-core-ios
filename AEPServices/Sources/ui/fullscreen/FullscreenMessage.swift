@@ -36,9 +36,9 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     var isLocalImageUsed = false
     var payload: String
     weak var listener: FullscreenMessageDelegate?
-    public private(set) var webView: UIView?
-    private var transparentBackgroundView: UIView?
-    private var messageMonitor: MessageMonitoring
+    public internal(set) var webView: UIView?
+    private(set) var transparentBackgroundView: UIView?
+    private(set) var messageMonitor: MessageMonitoring
 
     var loadingNavigation: WKNavigation?
     var messagingDelegate: MessagingDelegate? {
@@ -89,23 +89,23 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     ///     a. if yes, show the message and exit the function
     ///     b. if no, call onShowFailure of the listener and exit the function
     public func show() {
-        // check if the webview has already been created
-        if let webview = webView as? WKWebView {
-            // it has, determine if the monitor wants to show the message
-            guard messageMonitor.show(message: self) else {
-                listener?.onShowFailure()
+        DispatchQueue.main.async {
+            // check if the webview has already been created
+            if let webview = self.webView as? WKWebView {
+                // it has, determine if the monitor wants to show the message
+                guard self.messageMonitor.show(message: self) else {
+                    self.listener?.onShowFailure()
+                    return
+                }
+                
+                // notify global listeners
+                self.listener?.onShow(message: self)
+                self.messagingDelegate?.onShow(message: self)
+                
+                self.displayWithAnimation(webView: webview)
                 return
             }
-
-            // notify global listeners
-            self.listener?.onShow(message: self)
-            self.messagingDelegate?.onShow(message: self)
-
-            displayWithAnimation(webView: webview)
-            return
-        }
-
-        DispatchQueue.main.async {
+            
             // create the webview
             let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
 
