@@ -32,8 +32,5 @@ target 'AEPIntegrationTests' do
 end
 
 target 'TestApp' do
-  pod 'AEPLifecycle'
-  pod 'AEPIdentity'
-  pod 'AEPSignal'
   pod 'AEPAssurance'
 end
