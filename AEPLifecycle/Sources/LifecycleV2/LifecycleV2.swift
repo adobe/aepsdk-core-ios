@@ -20,6 +20,7 @@ class LifecycleV2 {
     private let dataStore: NamedCollectionDataStore
     private let stateManager: LifecycleV2StateManager
 
+    private var dataStoreCache: LifecycleV2DataStoreCache
     private var systemInfoService: SystemInfoService {
         ServiceProvider.shared.systemInfoService
     }
@@ -31,6 +32,13 @@ class LifecycleV2 {
         self.dataStore = dataStore
         let dispatchQueue = DispatchQueue(label: "\(LifecycleV2Constants.EXTENSION_NAME)")
         self.stateManager = LifecycleV2StateManager(dispatchQueue: dispatchQueue)
+        dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
+    }
+
+    /// Updates the last known event date in cache and if needed in persistence
+    /// - Parameter event: any event to be processed.
+    func updateLastKnownTime(event: Event) {
+        dataStoreCache.setLastKnownDate(event.timestamp)
     }
 
     /// Handles the start use-case as application launch XDM event. If a previous abnormal close was detected,

@@ -19,6 +19,8 @@ enum LifecycleV2Constants {
 
     static let STATE_UPDATE_TIMEOUT_SEC = TimeInterval(2)
 
+    static let CACHE_TIMEOUT_SECONDS = TimeInterval(2)
+
     enum EventType {
         static let APP_LAUNCH = "application.launch"
         static let APP_CLOSE = "application.close"
@@ -27,5 +29,8 @@ enum LifecycleV2Constants {
     /// The values in this section need to be prefixed with v2 to avoid any conflicts with the dataStore keys from standard `Lifecycle` extension
     enum DataStoreKeys {
         static let LAST_APP_VERSION = "v2.last.app.version"
+        static let APP_START_DATE = "v2.app.start.date"
+        static let APP_PAUSE_DATE = "v2.app.pause.date"
+        static let APP_CLOSE_DATE = "v2.app.close.date"
     }
 }
