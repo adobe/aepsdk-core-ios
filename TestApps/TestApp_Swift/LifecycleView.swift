@@ -43,7 +43,7 @@ struct LifecycleView: View {
                     .foregroundColor(.white)
                     .font(.caption)
             }.cornerRadius(5)
-            
+
         }.padding()
     }
 }
