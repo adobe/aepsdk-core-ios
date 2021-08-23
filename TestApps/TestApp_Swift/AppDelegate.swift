@@ -24,17 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let appState = application.applicationState
-        let extensions = [AEPIdentity.Identity.self,
+        MobileCore.setLogLevel(.trace)
+        let extensions = [Identity.self,
                           Lifecycle.self,
                           Signal.self,
                           Assurance.self]
 
         MobileCore.registerExtensions(extensions, {
             MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
-            if appState != .background {
-                MobileCore.lifecycleStart(additionalContextData: ["contextDataKey": "contextDataVal"])
-            }
         })
         return true
     }

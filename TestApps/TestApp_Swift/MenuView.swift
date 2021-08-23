@@ -23,6 +23,10 @@ struct MenuView: View {
                     NavigationLink(destination: IdentityView().navigationBarTitle("Identity")) {
                         Text("Identity")
                     }
+                    
+                    NavigationLink(destination: LifecycleView().navigationBarTitle("Lifecycle")) {
+                        Text("Lifecycle")
+                    }
                 }
 
                 Section(header: Text("Validation")) {

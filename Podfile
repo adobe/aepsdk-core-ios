@@ -30,3 +30,10 @@ end
 target 'AEPIntegrationTests' do
   pod 'AEPRulesEngine'
 end
+
+target 'TestApp' do
+  pod 'AEPLifecycle'
+  pod 'AEPIdentity'
+  pod 'AEPSignal'
+  pod 'AEPAssurance'
+end

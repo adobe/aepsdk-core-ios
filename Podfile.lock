@@ -1,16 +1,45 @@
 PODS:
+  - AEPAssurance (3.0.0):
+    - AEPCore (>= 3.1.0)
+    - AEPServices (>= 3.1.0)
+  - AEPCore (3.2.4):
+    - AEPRulesEngine (= 1.0.1)
+    - AEPServices (= 3.2.4)
+  - AEPIdentity (3.2.4):
+    - AEPCore (= 3.2.4)
+  - AEPLifecycle (3.2.4):
+    - AEPCore (= 3.2.4)
   - AEPRulesEngine (1.0.1)
+  - AEPServices (3.2.4)
+  - AEPSignal (3.2.4):
+    - AEPCore (= 3.2.4)
 
 DEPENDENCIES:
+  - AEPAssurance
+  - AEPIdentity
+  - AEPLifecycle
   - AEPRulesEngine
+  - AEPSignal
 
 SPEC REPOS:
   trunk:
+    - AEPAssurance
+    - AEPCore
+    - AEPIdentity
+    - AEPLifecycle
     - AEPRulesEngine
+    - AEPServices
+    - AEPSignal
 
 SPEC CHECKSUMS:
+  AEPAssurance: 18068627111e366a851dc2166239f22b665101bd
+  AEPCore: 517f1375860222a12c6226c50d0782e51d27abf2
+  AEPIdentity: 6580a2a0359931cb7e32be934341df7d86ca73ed
+  AEPLifecycle: d822d28e71d201debfcbfc0f1c60cdee61412925
   AEPRulesEngine: 5075ed294026a12e37bd26fe260f74604d205354
+  AEPServices: ffa6f91c0799f0a8651d89978a4b2a3d024ee6c4
+  AEPSignal: 0be73545905731da4768d5ece48faf29b2cae764
 
-PODFILE CHECKSUM: 31a9899de6250afde3d420f3c919cf16beb8dc75
+PODFILE CHECKSUM: b97fa01594afe0d60b2307a5033f1a8aaec9e68e
 
 COCOAPODS: 1.10.1
