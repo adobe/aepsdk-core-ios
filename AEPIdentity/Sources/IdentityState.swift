@@ -253,7 +253,7 @@ class IdentityState {
 
     /// Invoked each time when we receive Analytics Response event
     /// - Parameters:
-    ///   - event: the event from Analytics Respsonse
+    ///   - event: the event from Analytics Response
     ///   - eventDispatcher: a function which when invoked dispatches an `Event` to the `EventHub`
     func handleAnalyticsResponse(event: Event, eventDispatcher: (Event) -> Void) {
         guard let aid = event.aid, !aid.isEmpty else {

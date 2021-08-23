@@ -139,7 +139,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         mockNetworkService.mock { request in
             initExpectation.fulfill()
             XCTAssertEqual("https://assets.adobedtm.com/\(appId).json", request.url.absoluteString)
-            return (data: data, respsonse: response, error: nil)
+            return (data: data, response: response, error: nil)
         }
         MobileCore.configureWith(appId: appId)
         wait(for: [initExpectation], timeout: 2)
