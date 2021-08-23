@@ -20,12 +20,6 @@
 		3FB58F8F252CE33B009C1358 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F8E252CE33B009C1358 /* Assets.xcassets */; };
 		3FB58F92252CE33B009C1358 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3FB58F90252CE33B009C1358 /* LaunchScreen.storyboard */; };
 		3FB58FA7252CFFD4009C1358 /* MyExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB58FA6252CFFD4009C1358 /* MyExtension.swift */; };
-		780880D326C5CE6800F5A665 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780880D226C5CE6800F5A665 /* AppDelegate.swift */; };
-		780880D526C5CE6800F5A665 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780880D426C5CE6800F5A665 /* SceneDelegate.swift */; };
-		780880D726C5CE6800F5A665 /* AssuranceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780880D626C5CE6800F5A665 /* AssuranceView.swift */; };
-		780880D926C5CE6E00F5A665 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 780880D826C5CE6E00F5A665 /* Assets.xcassets */; };
-		780880DC26C5CE6E00F5A665 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 780880DB26C5CE6E00F5A665 /* Preview Assets.xcassets */; };
-		780880DF26C5CE6E00F5A665 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 780880DD26C5CE6E00F5A665 /* LaunchScreen.storyboard */; };
 		780880FB26C5D16800F5A665 /* AEPCore in Frameworks */ = {isa = PBXBuildFile; productRef = 780880FA26C5D16800F5A665 /* AEPCore */; };
 		780880FD26C5D16800F5A665 /* AEPIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 780880FC26C5D16800F5A665 /* AEPIdentity */; };
 		780880FF26C5D16800F5A665 /* AEPLifecycle in Frameworks */ = {isa = PBXBuildFile; productRef = 780880FE26C5D16800F5A665 /* AEPLifecycle */; };
@@ -36,15 +30,6 @@
 		7808810926C5D17E00F5A665 /* AEPLifecycle in Frameworks */ = {isa = PBXBuildFile; productRef = 7808810826C5D17E00F5A665 /* AEPLifecycle */; };
 		7808810B26C5D17E00F5A665 /* AEPServices in Frameworks */ = {isa = PBXBuildFile; productRef = 7808810A26C5D17E00F5A665 /* AEPServices */; };
 		7808810D26C5D17E00F5A665 /* AEPSignal in Frameworks */ = {isa = PBXBuildFile; productRef = 7808810C26C5D17E00F5A665 /* AEPSignal */; };
-		7808810F26C5D19100F5A665 /* AEPCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7808810E26C5D19100F5A665 /* AEPCore */; };
-		7808811126C5D19100F5A665 /* AEPIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 7808811026C5D19100F5A665 /* AEPIdentity */; };
-		7808811326C5D19100F5A665 /* AEPLifecycle in Frameworks */ = {isa = PBXBuildFile; productRef = 7808811226C5D19100F5A665 /* AEPLifecycle */; };
-		7808811526C5D19100F5A665 /* AEPServices in Frameworks */ = {isa = PBXBuildFile; productRef = 7808811426C5D19100F5A665 /* AEPServices */; };
-		7808811726C5D19100F5A665 /* AEPSignal in Frameworks */ = {isa = PBXBuildFile; productRef = 7808811626C5D19100F5A665 /* AEPSignal */; };
-		780881AD26CEF4F900F5A665 /* AEPAssurance in Frameworks */ = {isa = PBXBuildFile; productRef = 780881AC26CEF4F900F5A665 /* AEPAssurance */; };
-		780881B226CF041A00F5A665 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780881B126CF041900F5A665 /* MenuView.swift */; };
-		780881BF26CF069B00F5A665 /* CoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780881BE26CF069B00F5A665 /* CoreView.swift */; };
-		780881CA26CF06EE00F5A665 /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780881C926CF06EE00F5A665 /* IdentityView.swift */; };
 		BBF55F53251E494D00CAAC53 /* E2ETestingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */; };
 		BBF5EE282512BA0B0003265F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE272512BA0B0003265F /* AppDelegate.swift */; };
 		BBF5EE2A2512BA0B0003265F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE292512BA0B0003265F /* SceneDelegate.swift */; };
@@ -127,7 +112,6 @@
 		3FB58F91252CE33B009C1358 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3FB58F93252CE33B009C1358 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FB58FA6252CFFD4009C1358 /* MyExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyExtension.swift; sourceTree = "<group>"; };
-		780880D026C5CE6800F5A665 /* TestApp_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		780880D226C5CE6800F5A665 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		780880D426C5CE6800F5A665 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		780880D626C5CE6800F5A665 /* AssuranceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssuranceView.swift; sourceTree = "<group>"; };
@@ -173,19 +157,6 @@
 				7808810B26C5D17E00F5A665 /* AEPServices in Frameworks */,
 				7808810726C5D17E00F5A665 /* AEPIdentity in Frameworks */,
 				7808810926C5D17E00F5A665 /* AEPLifecycle in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		780880CD26C5CE6800F5A665 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				7808810F26C5D19100F5A665 /* AEPCore in Frameworks */,
-				7808811726C5D19100F5A665 /* AEPSignal in Frameworks */,
-				7808811526C5D19100F5A665 /* AEPServices in Frameworks */,
-				7808811126C5D19100F5A665 /* AEPIdentity in Frameworks */,
-				7808811326C5D19100F5A665 /* AEPLifecycle in Frameworks */,
-				780881AD26CEF4F900F5A665 /* AEPAssurance in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,7 +211,6 @@
 				BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */,
 				3FAD091025267460000D207D /* TestApp_Objc.app */,
 				3FB58F83252CE33A009C1358 /* E2E_Swift.app */,
-				780880D026C5CE6800F5A665 /* TestApp_Swift.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -397,31 +367,6 @@
 			productReference = 3FB58F83252CE33A009C1358 /* E2E_Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
-		780880CF26C5CE6800F5A665 /* TestApp_Swift */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 780880E326C5CE6E00F5A665 /* Build configuration list for PBXNativeTarget "TestApp_Swift" */;
-			buildPhases = (
-				780880CC26C5CE6800F5A665 /* Sources */,
-				780880CD26C5CE6800F5A665 /* Frameworks */,
-				780880CE26C5CE6800F5A665 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = TestApp_Swift;
-			packageProductDependencies = (
-				7808810E26C5D19100F5A665 /* AEPCore */,
-				7808811026C5D19100F5A665 /* AEPIdentity */,
-				7808811226C5D19100F5A665 /* AEPLifecycle */,
-				7808811426C5D19100F5A665 /* AEPServices */,
-				7808811626C5D19100F5A665 /* AEPSignal */,
-				780881AC26CEF4F900F5A665 /* AEPAssurance */,
-			);
-			productName = TestApp_Swift;
-			productReference = 780880D026C5CE6800F5A665 /* TestApp_Swift.app */;
-			productType = "com.apple.product-type.application";
-		};
 		BBF55F4D251E494D00CAAC53 /* E2E_SwiftUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2E_SwiftUITests" */;
@@ -499,9 +444,6 @@
 					3FB58F82252CE33A009C1358 = {
 						CreatedOnToolsVersion = 11.3.1;
 					};
-					780880CF26C5CE6800F5A665 = {
-						CreatedOnToolsVersion = 12.3;
-					};
 					BBF55F4D251E494D00CAAC53 = {
 						CreatedOnToolsVersion = 12.0;
 						TestTargetID = 3FB58F82252CE33A009C1358;
@@ -525,7 +467,6 @@
 			);
 			mainGroup = 3F912D9324E1A75C00E2AC84;
 			packageReferences = (
-				780881AB26CEF4F900F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */,
 			);
 			productRefGroup = 3F912D9D24E1A75C00E2AC84 /* Products */;
 			projectDirPath = "";
@@ -536,7 +477,6 @@
 				3FB58F82252CE33A009C1358 /* E2E_Swift */,
 				BBF55F4D251E494D00CAAC53 /* E2E_SwiftUITests */,
 				3FAD090F25267460000D207D /* TestApp_Objc */,
-				780880CF26C5CE6800F5A665 /* TestApp_Swift */,
 			);
 		};
 /* End PBXProject section */
@@ -559,16 +499,6 @@
 				3FB58F92252CE33B009C1358 /* LaunchScreen.storyboard in Resources */,
 				3FB58F8F252CE33B009C1358 /* Assets.xcassets in Resources */,
 				3FB58F8D252CE33A009C1358 /* Main.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		780880CE26C5CE6800F5A665 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				780880DF26C5CE6E00F5A665 /* LaunchScreen.storyboard in Resources */,
-				780880DC26C5CE6E00F5A665 /* Preview Assets.xcassets in Resources */,
-				780880D926C5CE6E00F5A665 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,19 +547,6 @@
 				3FB58F8A252CE33A009C1358 /* ViewController.swift in Sources */,
 				3FB58F86252CE33A009C1358 /* AppDelegate.swift in Sources */,
 				3FB58FA7252CFFD4009C1358 /* MyExtension.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		780880CC26C5CE6800F5A665 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				780881BF26CF069B00F5A665 /* CoreView.swift in Sources */,
-				780880D326C5CE6800F5A665 /* AppDelegate.swift in Sources */,
-				780881B226CF041A00F5A665 /* MenuView.swift in Sources */,
-				780880D526C5CE6800F5A665 /* SceneDelegate.swift in Sources */,
-				780881CA26CF06EE00F5A665 /* IdentityView.swift in Sources */,
-				780880D726C5CE6800F5A665 /* AssuranceView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,52 +830,6 @@
 			};
 			name = Release;
 		};
-		780880E126C5CE6E00F5A665 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
-				DEVELOPMENT_TEAM = FKGEE875K4;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = TestApp_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		780880E226C5CE6E00F5A665 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
-				DEVELOPMENT_TEAM = FKGEE875K4;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = TestApp_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		BBF55F59251E494D00CAAC53 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1115,15 +986,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		780880E326C5CE6E00F5A665 /* Build configuration list for PBXNativeTarget "TestApp_Swift" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				780880E126C5CE6E00F5A665 /* Debug */,
-				780880E226C5CE6E00F5A665 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		BBF55F66251E494D00CAAC53 /* Build configuration list for PBXNativeTarget "E2E_SwiftUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1152,17 +1014,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		780881AB26CEF4F900F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/adobe/aepsdk-assurance-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		780880FA26C5D16800F5A665 /* AEPCore */ = {
@@ -1204,31 +1055,6 @@
 		7808810C26C5D17E00F5A665 /* AEPSignal */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AEPSignal;
-		};
-		7808810E26C5D19100F5A665 /* AEPCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AEPCore;
-		};
-		7808811026C5D19100F5A665 /* AEPIdentity */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AEPIdentity;
-		};
-		7808811226C5D19100F5A665 /* AEPLifecycle */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AEPLifecycle;
-		};
-		7808811426C5D19100F5A665 /* AEPServices */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AEPServices;
-		};
-		7808811626C5D19100F5A665 /* AEPSignal */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AEPSignal;
-		};
-		780881AC26CEF4F900F5A665 /* AEPAssurance */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 780881AB26CEF4F900F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */;
-			productName = AEPAssurance;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
