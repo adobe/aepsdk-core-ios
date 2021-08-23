@@ -97,15 +97,15 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                     self.listener?.onShowFailure()
                     return
                 }
-                
+
                 // notify global listeners
                 self.listener?.onShow(message: self)
                 self.messagingDelegate?.onShow(message: self)
-                
+
                 self.displayWithAnimation(webView: webview)
                 return
             }
-            
+
             // create the webview
             let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
 
