@@ -23,13 +23,12 @@ class LifecycleV2StateManager {
         case PAUSE = "pause"
     }
 
-    private let dispatchQueue: DispatchQueue
+    private let dispatchQueue = DispatchQueue(label: "\(LifecycleConstants.EXTENSION_NAME).stateManager")
     private var scheduledPauseTask: DispatchWorkItem?
     private var cancellablePauseCallback: ((Bool) -> Void)?
     private var currentState: State?
 
-    init(dispatchQueue: DispatchQueue) {
-        self.dispatchQueue = dispatchQueue
+    init() {
         self.scheduledPauseTask = nil
         self.cancellablePauseCallback = nil
         self.currentState = nil
@@ -41,7 +40,7 @@ class LifecycleV2StateManager {
     ///     a) If pause task is currently scheduled, it cancels the pause task and updates current state to `start`
     ///     b) If pause task is currently not scheduled, it updates the current state to `start` if previous state was different
     /// If this is a `pause` update then
-    ///     a) If pause task is currently scheduled, it cancels and reschedules the pause task after `LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC` sec
+    ///     a) If pause task is currently scheduled, it cancels and reschedules the pause task after `LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC` sec, so the last pause update takes into effect
     ///     b) If pause task is currently not scheduled, it updates the current state to `pause` if previous state was different
     ///     
     /// - Parameters:
@@ -53,11 +52,11 @@ class LifecycleV2StateManager {
             if self.scheduledPauseTask != nil {
                 switch state {
                 case .START:
-                    Log.trace(label: LifecycleV2Constants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->start state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, ignoring.")
+                    Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->start state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, ignoring.")
                     self.cancelPauseTask()
                     callback(false)
                 case .PAUSE:
-                    Log.trace(label: LifecycleV2Constants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->pause state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, rescheduling.")
+                    Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->pause state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, rescheduling.")
                     self.cancelPauseTask()
                     self.schedulePauseTask(callback: callback)
                 }
@@ -66,18 +65,18 @@ class LifecycleV2StateManager {
             }
 
             if self.currentState == state {
-                Log.trace(label: LifecycleV2Constants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received consecutive \(state) state update, ignoring.")
+                Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received consecutive \(state) state update, ignoring.")
                 callback(false)
                 return
             }
 
             switch state {
             case .START:
-                Log.trace(label: LifecycleV2Constants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new start state, updating.")
+                Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new start state, updating.")
                 self.currentState = state
                 callback(true)
             case .PAUSE:
-                Log.trace(label: LifecycleV2Constants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new pause state, waiting for \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec before updating.")
+                Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new pause state, waiting for \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec before updating.")
                 self.schedulePauseTask(callback: callback)
             }
         }
@@ -95,17 +94,17 @@ class LifecycleV2StateManager {
             callback(true)
         }
 
-        scheduledPauseTask = task
         cancellablePauseCallback = callback
+        scheduledPauseTask = task
         dispatchQueue.asyncAfter(deadline: .now() + LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC, execute: task)
     }
 
     /// Cancels any scheduled pause task
     private func cancelPauseTask() {
-        cancellablePauseCallback?(false)
-
         scheduledPauseTask?.cancel()
         scheduledPauseTask = nil
+
+        cancellablePauseCallback?(false)
     }
 
 }

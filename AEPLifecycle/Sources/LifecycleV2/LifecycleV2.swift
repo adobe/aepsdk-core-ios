@@ -18,9 +18,9 @@ import Foundation
 /// usually consumed by the Edge Network and related extensions
 class LifecycleV2 {
     private let dataStore: NamedCollectionDataStore
+    private let dataStoreCache: LifecycleV2DataStoreCache
     private let stateManager: LifecycleV2StateManager
 
-    private var dataStoreCache: LifecycleV2DataStoreCache
     private var systemInfoService: SystemInfoService {
         ServiceProvider.shared.systemInfoService
     }
@@ -30,9 +30,8 @@ class LifecycleV2 {
     /// - Parameter dataStore: The `NamedCollectionDataStore` used for reading and writing data to persistence
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
-        let dispatchQueue = DispatchQueue(label: "\(LifecycleV2Constants.EXTENSION_NAME)")
-        self.stateManager = LifecycleV2StateManager(dispatchQueue: dispatchQueue)
-        dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
+        self.stateManager = LifecycleV2StateManager()
+        self.dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
     }
 
     /// Updates the last known event date in cache and if needed in persistence

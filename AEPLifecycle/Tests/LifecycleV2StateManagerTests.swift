@@ -22,9 +22,8 @@ class LifecycleV2StateManagerTests: XCTestCase {
 
     var stateManager: LifecycleV2StateManager!
     
-    override func setUp() {
-        let dispatchQueue = DispatchQueue(label: "LifecycleV2StateManagerTests.queue")
-        stateManager = LifecycleV2StateManager(dispatchQueue: dispatchQueue)
+    override func setUp() {        
+        stateManager = LifecycleV2StateManager()
     }
     
     func testUpdateStateUpdatesOnceWithConsecutiveStarts() {
