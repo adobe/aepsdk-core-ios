@@ -22,6 +22,7 @@ class LifecycleFunctionalTests: XCTestCase {
     var mockSystemInfoService: MockSystemInfoService!
     var mockRuntime: TestableExtensionRuntime!
     var lifecycle: Lifecycle!
+    var dataStore: NamedCollectionDataStore!
 
     var expectedOSValue: String {
         return "\(mockSystemInfoService.getOperatingSystemName()) \(mockSystemInfoService.getOperatingSystemVersion())"
@@ -29,6 +30,7 @@ class LifecycleFunctionalTests: XCTestCase {
 
     override func setUp() {
         setupMockSystemInfoService()
+        dataStore = NamedCollectionDataStore(name: "com.adobe.module.lifecycle")
         mockRuntime = TestableExtensionRuntime()
         lifecycle = Lifecycle(runtime: mockRuntime)
         lifecycle.onRegistered()
@@ -65,12 +67,11 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(createStartEvent())
 
         // verify
-        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
         // event data
-        // Lifecycle application launch event at dispatchedEvents[0]
-        let dispatchedEvent = mockRuntime.dispatchedEvents[1]
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
         XCTAssertEqual(mockSystemInfoService.mobileCarrierName, dispatchedEvent.lifecycleContextData["carriername"] as? String)
         XCTAssertEqual("100x100", dispatchedEvent.lifecycleContextData["resolution"] as? String)
         XCTAssertEqual(mockSystemInfoService.runMode, dispatchedEvent.lifecycleContextData["runmode"] as? String)
@@ -109,10 +110,10 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(event)
 
         // verify
-        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
-        let dispatchedEvent = mockRuntime.dispatchedEvents[1]
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
         XCTAssertEqual(0, dispatchedEvent.data?["previoussessionstarttimestampmillis"] as? Double)
         XCTAssertEqual(0, dispatchedEvent.data?["previoussessionpausetimestampmillis"] as? Double)
         XCTAssertEqual(86400.0 * 7.0, dispatchedEvent.data?["maxsessionlength"] as? Double)
@@ -141,6 +142,10 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("DailyEngUserEvent", lifecycleData?["dailyenguserevent"] as? String)
         XCTAssertEqual("7/27/2020", lifecycleData?["installdate"] as? String)
         XCTAssertEqual("1", lifecycleData?["launches"] as? String)
+
+        // persistance
+        let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
+        XCTAssertEqual(date.timeIntervalSince1970, storedInstallDate?.timeIntervalSince1970)
     }
 
     /// Tests additional data
@@ -154,10 +159,10 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(event)
 
         // verify
-        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
-        let dispatchedEvent = mockRuntime.dispatchedEvents[1]
+        let dispatchedEvent = mockRuntime.dispatchedEvents[0]
         XCTAssertEqual("testVal", dispatchedEvent.lifecycleContextData["testKey"] as? String)
     }
 
@@ -174,7 +179,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent1, pauseEvent, startEvent2)
 
         // verify
-        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch, lifecycleStart, application close
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count) //application launch, lifecycleStart, application close
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
 
         XCTAssertEqual(mockRuntime.createdSharedStates[0]?.count, mockRuntime.createdSharedStates[1]?.count)
@@ -193,10 +198,10 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent1, pauseEvent, startEvent2)
 
         // verify
-        XCTAssertEqual(5, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
-        let dispatchedLifecycleStartEvent1 = mockRuntime.dispatchedEvents[1]
-        let dispatchedLifecycleStartEvent2 = mockRuntime.dispatchedEvents[4]
+        let dispatchedLifecycleStartEvent1 = mockRuntime.dispatchedEvents[0]
+        let dispatchedLifecycleStartEvent2 = mockRuntime.dispatchedEvents[1]
 
 
         XCTAssertEqual("1", (dispatchedLifecycleStartEvent1.data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
@@ -229,8 +234,8 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntimeSession2.simulateComingEvents(createStartEvent())
 
         // verify
-        XCTAssertEqual(2, mockRuntimeSession2.dispatchedEvents.count)
-        XCTAssertEqual("CrashEvent", (mockRuntimeSession2.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["crashevent"] as? String)
+        XCTAssertEqual(1, mockRuntimeSession2.dispatchedEvents.count)
+        XCTAssertEqual("CrashEvent", (mockRuntimeSession2.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["crashevent"] as? String)
     }
 
     /// Tests  start then pause after max session length
@@ -246,9 +251,9 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent1, pauseEvent, startEvent2)
 
         // verify
-        XCTAssertEqual(5, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
-        XCTAssertEqual("10000000", (mockRuntime.dispatchedEvents[4].data?["lifecyclecontextdata"] as? [String: Any])?["ignoredsessionlength"] as? String)
+        XCTAssertEqual("10000000", (mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["ignoredsessionlength"] as? String)
 
         let sharedState = mockRuntime.createdSharedStates[1]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
@@ -268,9 +273,9 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent1, pauseEvent, startEvent2)
 
         // verify
-        XCTAssertEqual(5, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
-        XCTAssertEqual("100", (mockRuntime.dispatchedEvents[4].data?["lifecyclecontextdata"] as? [String: Any])?["prevsessionlength"] as? String)
+        XCTAssertEqual("100", (mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["prevsessionlength"] as? String)
 
         let sharedState = mockRuntime.createdSharedStates[1]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
@@ -282,7 +287,7 @@ class LifecycleFunctionalTests: XCTestCase {
         // setup
         let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
         let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 40))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 86400)) // next day
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -299,11 +304,18 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntimeSession2.simulateComingEvents(startEvent2)
 
         // verify
-        XCTAssertEqual("UpgradeEvent", (mockRuntimeSession2.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["upgradeevent"] as? String)
+        XCTAssertEqual("UpgradeEvent", (mockRuntimeSession2.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["upgradeevent"] as? String)
 
         let sharedState = mockRuntimeSession2.createdSharedStates[1]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
         XCTAssertEqual("UpgradeEvent", lifecycleData?["upgradeevent"] as? String)
+
+        // persistance
+        let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
+        XCTAssertEqual(startEvent1.timestamp.timeIntervalSince1970, storedInstallDate?.timeIntervalSince1970)
+        let storedUpgradeDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.UPGRADE_DATE, fallback: nil)
+        XCTAssertEqual(startEvent2.timestamp.timeIntervalSince1970, storedUpgradeDate?.timeIntervalSince1970)
+        XCTAssertNotEqual(storedInstallDate, storedUpgradeDate)
     }
 
     /// Tests dailyUserEvent when the new launch happens in the same day
@@ -321,7 +333,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent2)
 
         // verify
-        XCTAssertNil((mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["dailyenguserevent"])
+        XCTAssertNil((mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["dailyenguserevent"])
         let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
         XCTAssertNil(lifecycleData?["dailyenguserevent"])
     }
@@ -341,7 +353,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent2)
 
         // verify
-        XCTAssertEqual("DailyEngUserEvent", (mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["dailyenguserevent"] as? String)
+        XCTAssertEqual("DailyEngUserEvent", (mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["dailyenguserevent"] as? String)
         let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
         XCTAssertEqual("DailyEngUserEvent", lifecycleData?["dailyenguserevent"] as? String)
     }
@@ -361,7 +373,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent2)
 
         // verify
-        XCTAssertNil((mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"])
+        XCTAssertNil((mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"])
         let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
         XCTAssertNil(lifecycleData?["monthlyenguserevent"])
     }
@@ -381,7 +393,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent2)
 
         // verify
-        XCTAssertEqual("MonthlyEngUserEvent", (mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"] as? String)
+        XCTAssertEqual("MonthlyEngUserEvent", (mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["monthlyenguserevent"] as? String)
         let lifecycleData = mockRuntime.createdSharedStates[0]?["lifecyclecontextdata"] as? [String: Any]
         XCTAssertEqual("MonthlyEngUserEvent", lifecycleData?["monthlyenguserevent"] as? String)
     }

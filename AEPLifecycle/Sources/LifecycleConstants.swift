@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -15,7 +16,7 @@ import Foundation
 enum LifecycleConstants {
     static let EXTENSION_NAME = "com.adobe.module.lifecycle"
     static let FRIENDLY_NAME = "Lifecycle"
-    static let EXTENSION_VERSION = "3.1.3"
+    static let EXTENSION_VERSION = "3.2.3"
     static let DATA_STORE_NAME = LifecycleConstants.EXTENSION_NAME
 
     static let START = "start"
@@ -69,10 +70,5 @@ enum LifecycleConstants {
         enum EventDataKeys {
             static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
         }
-    }
-
-    enum XDM {
-        static let EVENT_TYPE_APP_LAUNCH = "application.launch"
-        static let EVENT_TYPE_APP_CLOSE = "application.close"
     }
 }

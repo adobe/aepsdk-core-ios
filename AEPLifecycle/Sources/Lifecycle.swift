@@ -17,6 +17,7 @@ import Foundation
 @objc(AEPMobileLifecycle)
 public class Lifecycle: NSObject, Extension {
     private var lifecycleState: LifecycleState
+    private var lifecycleV2: LifecycleV2
 
     // MARK: Extension
 
@@ -31,12 +32,14 @@ public class Lifecycle: NSObject, Extension {
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
+        lifecycleV2 = LifecycleV2(dataStore: NamedCollectionDataStore(name: name))
         super.init()
     }
 
     /// Invoked when the `EventHub` has successfully registered the Lifecycle extension.
     public func onRegistered() {
         registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent, listener: receiveLifecycleRequest(event:))
+        registerListener(type: EventType.wildcard, source: EventSource.wildcard, listener: updateLastKnownTime(event:))
 
         let sharedStateData = [LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: lifecycleState.computeBootData().toEventData()]
         createSharedState(data: sharedStateData as [String: Any], event: nil)
@@ -55,6 +58,13 @@ public class Lifecycle: NSObject, Extension {
 
     // MARK: Event Listeners
 
+    /// Invoked when any event is dispatched by the `EventHub`
+    /// Updates the last known event date in cache and if needed in persistence
+    /// - Parameter event: any event to be processed.
+    private func updateLastKnownTime(event: Event) {
+        lifecycleV2.updateLastKnownTime(event: event)
+    }
+
     /// Invoked when an event of type generic lifecycle and source request content is dispatched by the `EventHub`
     /// - Parameter event: the generic lifecycle event
     private func receiveLifecycleRequest(event: Event) {
@@ -65,29 +75,46 @@ public class Lifecycle: NSObject, Extension {
 
         if event.isLifecycleStartEvent {
             Log.debug(label: LifecycleConstants.LOG_TAG, "Starting lifecycle.")
-            start(event: event, configurationSharedState: configurationSharedState)
+            startApplicationLifecycle(event: event, configurationSharedState: configurationSharedState)
         } else if event.isLifecyclePauseEvent {
             Log.debug(label: LifecycleConstants.LOG_TAG, "Pausing lifecycle.")
-            lifecycleState.pause(pauseDate: event.timestamp, dispatchApplicationCloseEvent: dispatchApplicationClose(xdm:))
+            pauseApplicationLifecycle(event: event)
         }
     }
 
     // MARK: Helpers
 
+    /// Start the lifecycle session for standard and XDM workflows
     /// Invokes the start business logic and dispatches any shared state and lifecycle response events required
     /// - Parameters:
     ///   - event: the lifecycle start event
     ///   - configurationSharedState: the current configuration shared state
-    private func start(event: Event, configurationSharedState: SharedStateResult) {
+    private func startApplicationLifecycle(event: Event, configurationSharedState: SharedStateResult) {
+        let install = isInstall()
         let prevSessionInfo = lifecycleState.start(date: event.timestamp,
                                                    additionalContextData: event.additionalData,
                                                    adId: getAdvertisingIdentifier(event: event),
-                                                   sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value), dispatchApplicationLaunchEvent: dispatchApplicationLaunch(xdm:data:))
+                                                   sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value),
+                                                   isInstall: install)
         updateSharedState(event: event, data: lifecycleState.getContextData()?.toEventData() ?? [:])
 
         if let prevSessionInfo = prevSessionInfo {
             dispatchSessionStart(date: event.timestamp, contextData: lifecycleState.getContextData(), previousStartDate: prevSessionInfo.startDate, previousPauseDate: prevSessionInfo.pauseDate)
         }
+
+        lifecycleV2.start(date: event.timestamp, additionalData: event.additionalData, isInstall: install)
+
+        if install {
+            persistInstallDate(event.timestamp)
+        }
+    }
+
+    /// Pause the lifecycle session for standard and XDM workflows
+    /// - Parameters:
+    ///   - event: the lifecycle pause event
+    private func pauseApplicationLifecycle(event: Event) {
+        lifecycleState.pause(pauseDate: event.timestamp)
+        lifecycleV2.pause(pauseDate: event.timestamp)
     }
 
     /// Attempts to read the advertising identifier from Identity shared state
@@ -170,5 +197,18 @@ public class Lifecycle: NSObject, Extension {
         }
 
         return TimeInterval(sessionTimeoutInt)
+    }
+
+    /// - Returns: true if there is no install date stored in the data store
+    private func isInstall() -> Bool {
+        let dataStore = NamedCollectionDataStore(name: name)
+        return !dataStore.contains(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE)
+    }
+
+    /// Persists the application install date
+    /// - Parameter date: install date
+    private func persistInstallDate(_ date: Date) {
+        let dataStore = NamedCollectionDataStore(name: name)
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, value: date)
     }
 }

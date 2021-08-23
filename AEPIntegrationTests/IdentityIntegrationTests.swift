@@ -28,7 +28,7 @@ class IdentityIntegrationTests: XCTestCase {
     override func tearDown() {
 
         let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
-        unregisterExpectation.expectedFulfillmentCount = 2
+        unregisterExpectation.expectedFulfillmentCount = 3
         MobileCore.unregisterExtension(Identity.self) {
             unregisterExpectation.fulfill()
         }
@@ -36,7 +36,12 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.unregisterExtension(Signal.self) {
             unregisterExpectation.fulfill()
         }
-        wait(for: [unregisterExpectation], timeout: 2)
+
+        MobileCore.unregisterExtension(Lifecycle.self) {
+            unregisterExpectation.fulfill()
+        }
+
+        wait(for: [unregisterExpectation], timeout: 3)
 
     }
 
@@ -56,7 +61,7 @@ class IdentityIntegrationTests: XCTestCase {
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
-            if request.url.absoluteString.contains("d_cid_ic=id1%2501value1%25010") {
+            if request.url.absoluteString.contains("d_cid_ic=id1%01value1%011") {
                 XCTAssertTrue(request.url.absoluteString.contains("https://test.com/id"))
                 XCTAssertTrue(request.url.absoluteString.contains("d_orgid=orgid"))
                 requestExpectation.fulfill()
@@ -65,7 +70,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        Identity.syncIdentifiers(identifiers: ["id1": "value1"])
+        Identity.syncIdentifiers(identifiers: ["id1": "value1"], authenticationState: .authenticated)
 
         wait(for: [requestExpectation], timeout: 1)
     }
@@ -78,7 +83,7 @@ class IdentityIntegrationTests: XCTestCase {
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
-            if request.url.absoluteString.contains("d_cid_ic=id1%2501value1%25010") {
+            if request.url.absoluteString.contains("d_cid_ic=id1%01value1%010") {
                 requestExpectation.fulfill()
             }
             return nil
@@ -87,7 +92,7 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedout"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
 
-        wait(for: [requestExpectation], timeout: 1)
+        wait(for: [requestExpectation], timeout: 2)
     }
 
     func testGetUrlVariables() {
@@ -173,7 +178,7 @@ class IdentityIntegrationTests: XCTestCase {
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
             if request.url.absoluteString.contains("20920") {
-                XCTAssertTrue(request.url.absoluteString.contains("d_cid=20920%25013935313632353862363233306166646439336366306364303762386464383435"))
+                XCTAssertTrue(request.url.absoluteString.contains("d_cid=20920%013935313632353862363233306166646439336366306364303762386464383435"))
                 requestExpectation.fulfill()
             }
             return nil
@@ -193,7 +198,7 @@ class IdentityIntegrationTests: XCTestCase {
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in
             if request.url.absoluteString.contains("20915") {
-                XCTAssertTrue(request.url.absoluteString.contains("d_cid_ic=DSID_20915%2501adid%25011"))
+                XCTAssertTrue(request.url.absoluteString.contains("d_cid_ic=DSID_20915%01adid%011"))
                 requestExpectation.fulfill()
             }
             return nil
