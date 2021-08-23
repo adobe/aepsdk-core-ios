@@ -15,6 +15,7 @@ import Foundation
 /// Constants for `LifecycleV2`
 enum LifecycleV2Constants {
 
+    static let STATE_UPDATE_TIMEOUT_SEC = TimeInterval(2)
     static let CACHE_TIMEOUT_SECONDS = TimeInterval(2)
 
     enum EventType {

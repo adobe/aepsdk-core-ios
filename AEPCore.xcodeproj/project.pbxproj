@@ -350,6 +350,8 @@
 		92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitor.swift */; };
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
+		ACD255AF26CE353000532B1E /* LifecycleV2StateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */; };
+		ACD255B126CE51EA00532B1E /* LifecycleV2StateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255B026CE51EA00532B1E /* LifecycleV2StateManagerTests.swift */; };
 		B2F223F8573D6B132F285AD7 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6A7B39F8D2A807344E7098B /* Pods_AEPLifecycleTests.framework */; };
 		B6D6A019265EC9D8005042BE /* FloatingButtonPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */; };
 		B6D6A02D26601279005042BE /* FloatingButtonPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */; };
@@ -980,6 +982,8 @@
 		92F06D0325BA33F3004C1700 /* Showable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showable.swift; sourceTree = "<group>"; };
 		9444FBB20EFFE94F7726A49F /* Pods_AEPCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A63AA3E0DA8692271AC7C724 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
+		ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2StateManager.swift; sourceTree = "<group>"; };
+		ACD255B026CE51EA00532B1E /* LifecycleV2StateManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2StateManagerTests.swift; sourceTree = "<group>"; };
 		B414FF5745B34BC95CF624DC /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPosition.swift; sourceTree = "<group>"; };
 		B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPositionTests.swift; sourceTree = "<group>"; };
@@ -1335,6 +1339,7 @@
 				3FE6DDFE24C630DE0065EA05 /* LifecycleSessionTests.swift */,
 				3FE6DDFD24C630DE0065EA05 /* LifecycleStateTests.swift */,
 				21BA2EA8265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift */,
+				ACD255B026CE51EA00532B1E /* LifecycleV2StateManagerTests.swift */,
 				2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */,
 				21BA2E2C265D8EC60011207C /* XDMApplicationTests.swift */,
 				21BA2E3C265D91440011207C /* XDMCloseTypeTests.swift */,
@@ -1967,6 +1972,7 @@
 				D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */,
 				D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */,
 				21248079265D569D006CF300 /* LifecycleV2MetricsBuilder.swift */,
+				ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */,
 				212480D6265D59F9006CF300 /* XDMApplication.swift */,
 				212480F6265D5A7A006CF300 /* XDMCloseType.swift */,
 				21248106265D5BC3006CF300 /* XDMDevice.swift */,
@@ -3215,6 +3221,7 @@
 				21248099265D589E006CF300 /* XDMDeviceType.swift in Sources */,
 				3FE6DE1424C630EB0065EA05 /* LifecycleConstants.swift in Sources */,
 				21248117265D5E1C006CF300 /* XDMEnvironment.swift in Sources */,
+				ACD255AF26CE353000532B1E /* LifecycleV2StateManager.swift in Sources */,
 				3FE6DE1724C631100065EA05 /* LifecycleSession.swift in Sources */,
 				3FE6DE1024C630EB0065EA05 /* Event+Lifecycle.swift in Sources */,
 				2124807A265D569D006CF300 /* LifecycleV2MetricsBuilder.swift in Sources */,
@@ -3239,6 +3246,7 @@
 			files = (
 				21BA2E89265D96150011207C /* XDMMobileLifecycleDetailsTests.swift in Sources */,
 				21BA2E3D265D91440011207C /* XDMCloseTypeTests.swift in Sources */,
+				ACD255B126CE51EA00532B1E /* LifecycleV2StateManagerTests.swift in Sources */,
 				21BA2E0D265D8DB70011207C /* XDMDeviceTypeTests.swift in Sources */,
 				21BA2EA9265D98C80011207C /* LifecycleV2MetricsBuilderTests.swift in Sources */,
 				3FE6DE0324C630DF0065EA05 /* LifecycleFunctionalTests.swift in Sources */,

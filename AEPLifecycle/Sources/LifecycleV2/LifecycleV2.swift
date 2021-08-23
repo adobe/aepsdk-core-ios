@@ -18,7 +18,9 @@ import Foundation
 /// usually consumed by the Edge Network and related extensions
 class LifecycleV2 {
     private let dataStore: NamedCollectionDataStore
-    private var dataStoreCache: LifecycleV2DataStoreCache
+    private let dataStoreCache: LifecycleV2DataStoreCache
+    private let stateManager: LifecycleV2StateManager
+
     private var systemInfoService: SystemInfoService {
         ServiceProvider.shared.systemInfoService
     }
@@ -28,7 +30,8 @@ class LifecycleV2 {
     /// - Parameter dataStore: The `NamedCollectionDataStore` used for reading and writing data to persistence
     init(dataStore: NamedCollectionDataStore) {
         self.dataStore = dataStore
-        dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
+        self.stateManager = LifecycleV2StateManager()
+        self.dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
     }
 
     /// Updates the last known event date in cache and if needed in persistence
@@ -47,16 +50,24 @@ class LifecycleV2 {
     func start(date: Date,
                additionalData: [String: Any]?,
                isInstall: Bool) {
-        // todo: MOB-14878 create launch application event and if needed the close event
-        persistAppVersion()
-
+        stateManager.update(state: .START) { [weak self] (updated: Bool) in
+            guard let self = self else { return }
+            guard updated else { return }
+            // todo: MOB-14878 create launch application event and if needed the close event
+            self.persistAppVersion()
+        }
     }
 
     /// Handles the pause use-case as application close XDM event.
     ///
     /// - Parameter pauseDate: Date at which the pause event occurred
     func pause(pauseDate: Date) {
-        // todo: MOB-14878 create close application event
+        stateManager.update(state: .PAUSE) { [weak self] (updated: Bool) in
+            guard let self = self else { return }
+            guard updated else { return }
+
+            // todo: MOB-14878 create close application event
+        }
 
     }
 
