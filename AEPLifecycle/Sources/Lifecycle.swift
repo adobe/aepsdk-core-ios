@@ -31,7 +31,9 @@ public class Lifecycle: NSObject, Extension {
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+        // Handle the classic lifecycle workflow
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
+        // Handle the edge workflow to compute the application launch/close XDM metrics
         lifecycleV2 = LifecycleV2(dataStore: NamedCollectionDataStore(name: name), dispatch: MobileCore.dispatch(event:))
         super.init()
     }

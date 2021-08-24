@@ -19,6 +19,7 @@ import AEPServices
 ///  - XMD Device datatype
 ///  - XDM Application datatype
 class LifecycleV2MetricsBuilder {
+    private static let CLASS_NAME = "LifecycleV2MetricsBuilder"
     private var xdmDeviceInfo: XDMDevice?
     private var xdmEnvironmentInfo: XDMEnvironment?
 
@@ -29,13 +30,17 @@ class LifecycleV2MetricsBuilder {
     /// Builds the data required for the XDM Application Launch event, including `XDMApplication`
     /// `XDMEnvironment` and `XDMDevice` info.
     /// - Returns: App launch event data in dictionary format
-    func buildAppLaunchXDMData(launchDate: Date, isInstall: Bool, isUpgrade: Bool) -> [String: Any]? {
+    func buildAppLaunchXDMData(launchDate: Date?, isInstall: Bool, isUpgrade: Bool) -> [String: Any]? {
+        guard let unwrappedLaunchDate = launchDate else {
+            Log.trace(label: LifecycleConstants.LOG_TAG, "[\(Self.CLASS_NAME)<\(#function)>] - Exiting as start date is nil.")
+            return nil
+        }
         var appLaunchXDMData = XDMMobileLifecycleDetails()
         appLaunchXDMData.application = computeAppLaunchData(isInstall: isInstall, isUpgrade: isUpgrade)
         appLaunchXDMData.device = computeDeviceData()
         appLaunchXDMData.environment = computeEnvironmentData()
         appLaunchXDMData.eventType = LifecycleV2Constants.EventType.APP_LAUNCH
-        appLaunchXDMData.timestamp = launchDate
+        appLaunchXDMData.timestamp = unwrappedLaunchDate
 
         return appLaunchXDMData.asDictionary()
     }
@@ -44,14 +49,21 @@ class LifecycleV2MetricsBuilder {
     /// - Parameters:
     ///    - launchDate: the app launch timestamp
     ///    - closeDate: the app close timestamp
+    ///    - fallbackCloseDate:the date to be used as xdm.timestamp for the Close event when `closeDate` is nil
     ///    - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: App close event data in dictionary format
-    func buildAppCloseXDMData(launchDate: Date, closeDate: Date, isCloseUnknown: Bool) -> [String: Any]? {
+    func buildAppCloseXDMData(launchDate: Date?, closeDate: Date?, fallbackCloseDate: Date, isCloseUnknown: Bool) -> [String: Any]? {
+        guard let unwrappedLaunchDate = launchDate else {
+            Log.trace(label: LifecycleConstants.LOG_TAG, "[\(Self.CLASS_NAME)<\(#function)>] - Exiting as start date is nil.")
+            return nil
+        }
+
+        let unwrapperdCloseDate = closeDate ?? fallbackCloseDate
         var appCloseXDMData = XDMMobileLifecycleDetails()
-        appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: closeDate, isCloseUnknown: isCloseUnknown)
+
+        appCloseXDMData.application = computeAppCloseData(launchDate: unwrappedLaunchDate, closeDate: unwrapperdCloseDate, isCloseUnknown: isCloseUnknown)
         appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
         appCloseXDMData.timestamp = closeDate
-        // TODO: MOB-14878 use close/fallback close timestamp
 
         return appCloseXDMData.asDictionary()
     }

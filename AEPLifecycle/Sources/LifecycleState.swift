@@ -104,7 +104,7 @@ struct LifecycleState {
 
     /// Pauses the current lifecycle session
     /// - Parameter pauseDate: date at which the pause event occurred
-    mutating func pause(pauseDate: Date, dispatchApplicationCloseEvent: ((_ xdm: [String: Any]) -> Void)? = nil ) {
+    mutating func pause(pauseDate: Date) {
         lifecycleSession.pause(pauseDate: pauseDate)
     }
 
