@@ -45,12 +45,12 @@
 		7808892626D5793700F5A665 /* AEPLifecycle in Frameworks */ = {isa = PBXBuildFile; productRef = 7808892526D5793700F5A665 /* AEPLifecycle */; };
 		7808892826D5793700F5A665 /* AEPServices in Frameworks */ = {isa = PBXBuildFile; productRef = 7808892726D5793700F5A665 /* AEPServices */; };
 		7808892A26D5793700F5A665 /* AEPSignal in Frameworks */ = {isa = PBXBuildFile; productRef = 7808892926D5793700F5A665 /* AEPSignal */; };
-		7808893026D57A1A00F5A665 /* AEPAssurance in Frameworks */ = {isa = PBXBuildFile; productRef = 7808892F26D57A1A00F5A665 /* AEPAssurance */; };
 		7808893526D57BF300F5A665 /* AEPCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7808893426D57BF300F5A665 /* AEPCore */; };
 		7808893726D57BF300F5A665 /* AEPIdentity in Frameworks */ = {isa = PBXBuildFile; productRef = 7808893626D57BF300F5A665 /* AEPIdentity */; };
 		7808893926D57BF300F5A665 /* AEPLifecycle in Frameworks */ = {isa = PBXBuildFile; productRef = 7808893826D57BF300F5A665 /* AEPLifecycle */; };
 		7808893B26D57BF300F5A665 /* AEPServices in Frameworks */ = {isa = PBXBuildFile; productRef = 7808893A26D57BF300F5A665 /* AEPServices */; };
 		7808893D26D57BF300F5A665 /* AEPSignal in Frameworks */ = {isa = PBXBuildFile; productRef = 7808893C26D57BF300F5A665 /* AEPSignal */; };
+		7808899226D596E100F5A665 /* AEPAssurance in Frameworks */ = {isa = PBXBuildFile; productRef = 7808899126D596E100F5A665 /* AEPAssurance */; };
 		BBF55F53251E494D00CAAC53 /* E2ETestingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */; };
 		BBF5EE282512BA0B0003265F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE272512BA0B0003265F /* AppDelegate.swift */; };
 		BBF5EE2A2512BA0B0003265F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE292512BA0B0003265F /* SceneDelegate.swift */; };
@@ -197,7 +197,7 @@
 				7808892826D5793700F5A665 /* AEPServices in Frameworks */,
 				7808892426D5793700F5A665 /* AEPIdentity in Frameworks */,
 				7808892626D5793700F5A665 /* AEPLifecycle in Frameworks */,
-				7808893026D57A1A00F5A665 /* AEPAssurance in Frameworks */,
+				7808899226D596E100F5A665 /* AEPAssurance in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,7 +444,7 @@
 				7808892526D5793700F5A665 /* AEPLifecycle */,
 				7808892726D5793700F5A665 /* AEPServices */,
 				7808892926D5793700F5A665 /* AEPSignal */,
-				7808892F26D57A1A00F5A665 /* AEPAssurance */,
+				7808899126D596E100F5A665 /* AEPAssurance */,
 			);
 			productName = TestApp_Swift;
 			productReference = 7808888026D56E8700F5A665 /* TestApp_Swift.app */;
@@ -554,7 +554,7 @@
 			);
 			mainGroup = 3F912D9324E1A75C00E2AC84;
 			packageReferences = (
-				7808892E26D57A1A00F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */,
+				7808899026D596E100F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */,
 			);
 			productRefGroup = 3F912D9D24E1A75C00E2AC84 /* Products */;
 			projectDirPath = "";
@@ -1185,12 +1185,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		7808892E26D57A1A00F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */ = {
+		7808899026D596E100F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/adobe/aepsdk-assurance-ios";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1256,11 +1256,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = AEPSignal;
 		};
-		7808892F26D57A1A00F5A665 /* AEPAssurance */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7808892E26D57A1A00F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */;
-			productName = AEPAssurance;
-		};
 		7808893426D57BF300F5A665 /* AEPCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AEPCore;
@@ -1280,6 +1275,11 @@
 		7808893C26D57BF300F5A665 /* AEPSignal */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AEPSignal;
+		};
+		7808899126D596E100F5A665 /* AEPAssurance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7808899026D596E100F5A665 /* XCRemoteSwiftPackageReference "aepsdk-assurance-ios" */;
+			productName = AEPAssurance;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

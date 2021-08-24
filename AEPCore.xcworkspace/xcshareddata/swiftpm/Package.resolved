@@ -5,9 +5,9 @@
         "package": "AEPAssurance",
         "repositoryURL": "https://github.com/adobe/aepsdk-assurance-ios",
         "state": {
-          "branch": "main",
-          "revision": "bb111041a9c81e2bed6aeff3ce26ee058d774755",
-          "version": null
+          "branch": null,
+          "revision": "97e6818ae59d3e03e87d90129cabed2421615aaf",
+          "version": "3.0.0"
         }
       },
       {
