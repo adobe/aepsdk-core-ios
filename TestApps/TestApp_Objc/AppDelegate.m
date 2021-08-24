@@ -11,11 +11,11 @@ governing permissions and limitations under the License.
 
 
 #import "AppDelegate.h"
-#import <AEPCore/AEPCore.h>
-#import <AEPSignal/AEPSignal.h>
-#import <AEPLifecycle/AEPLifecycle.h>
-#import <AEPIdentity/AEPIdentity.h>
-#import <AEPServices/AEPServices.h>
+@import AEPCore;
+@import AEPSignal;
+@import AEPLifecycle;
+@import AEPIdentity;
+@import AEPServices;
 
 @interface AppDelegate ()
 

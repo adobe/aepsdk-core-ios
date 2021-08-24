@@ -30,7 +30,3 @@ end
 target 'AEPIntegrationTests' do
   pod 'AEPRulesEngine'
 end
-
-target 'TestApp' do
-  pod 'AEPAssurance'
-end
