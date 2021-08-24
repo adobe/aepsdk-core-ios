@@ -58,12 +58,12 @@ class LifecycleV2MetricsBuilder {
             return nil
         }
 
-        let unwrapperdCloseDate = closeDate ?? fallbackCloseDate
+        let unwrappedCloseDate = closeDate ?? fallbackCloseDate
         var appCloseXDMData = XDMMobileLifecycleDetails()
 
-        appCloseXDMData.application = computeAppCloseData(launchDate: unwrappedLaunchDate, closeDate: unwrapperdCloseDate, isCloseUnknown: isCloseUnknown)
+        appCloseXDMData.application = computeAppCloseData(launchDate: unwrappedLaunchDate, closeDate: unwrappedCloseDate, isCloseUnknown: isCloseUnknown)
         appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
-        appCloseXDMData.timestamp = closeDate
+        appCloseXDMData.timestamp = unwrappedCloseDate
 
         return appCloseXDMData.asDictionary()
     }
