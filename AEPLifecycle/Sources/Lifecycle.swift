@@ -32,7 +32,7 @@ public class Lifecycle: NSObject, Extension {
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
-        lifecycleV2 = LifecycleV2(dataStore: NamedCollectionDataStore(name: name))
+        lifecycleV2 = LifecycleV2(dataStore: NamedCollectionDataStore(name: name), dispatch: MobileCore.dispatch(event:))
         super.init()
     }
 
@@ -161,32 +161,6 @@ public class Lifecycle: NSObject, Extension {
                                data: eventData)
         Log.trace(label: LifecycleConstants.LOG_TAG, "Dispatching lifecycle start event with data: \n\(PrettyDictionary.prettify(eventData))")
         dispatch(event: startEvent)
-    }
-
-    /// Dispatches a Lifecycle application launch event with appropriate event data
-    /// - Parameters:
-    ///   - xdm: xdm data for the application launch event
-    ///   - data: current Lifecycle context data
-    private func dispatchApplicationLaunch(xdm: [String: Any], data: [String: Any]) {
-        let eventData: [String: Any] = [
-            LifecycleConstants.EventDataKeys.XDM: xdm,
-            LifecycleConstants.EventDataKeys.DATA: data
-        ]
-
-        let applicationLaunchEvent = Event(name: LifecycleConstants.EventNames.APPLICATION_LAUNCH, type: EventType.lifecycle, source: EventSource.applicationLaunch, data: eventData)
-        dispatch(event: applicationLaunchEvent)
-    }
-
-    /// Dispatches a Lifecycle application close event with appropriate event data
-    /// - Parameters:
-    ///   - xdm: xdm data for the application close event
-    private func dispatchApplicationClose(xdm: [String: Any]) {
-        let eventData: [String: Any] = [
-            LifecycleConstants.EventDataKeys.XDM: xdm
-        ]
-
-        let applicationCloseEvent = Event(name: LifecycleConstants.EventNames.APPLICATION_CLOSE, type: EventType.lifecycle, source: EventSource.applicationClose, data: eventData)
-        dispatch(event: applicationCloseEvent)
     }
 
     /// Reads the session timeout from the configuration shared state, if not found returns the default session timeout
