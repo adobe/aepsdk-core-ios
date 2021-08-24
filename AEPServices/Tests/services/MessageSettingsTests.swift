@@ -107,43 +107,49 @@ class MessageSettingsTests: XCTestCase {
     func testBackdropColor() throws {
         let expectedColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0)
         settings.setBackdropColor("000000")
-        XCTAssertEqual(expectedColor, settings.backdrop)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor())
     }
     
     func testBackdropRed() throws {
         let expectedColor = UIColor(red: 1, green: 0, blue: 0, alpha: 0)
         settings.setBackdropColor("FF0000")
-        XCTAssertEqual(expectedColor, settings.backdrop)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor())
     }
     
     func testBackdropGreen() throws {
         let expectedColor = UIColor(red: 0, green: 1, blue: 0, alpha: 0)
         settings.setBackdropColor("00FF00")
-        XCTAssertEqual(expectedColor, settings.backdrop)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor())
     }
     
     func testBackdropBlue() throws {
         let expectedColor = UIColor(red: 0, green: 0, blue: 1, alpha: 0)
         settings.setBackdropColor("0000FF")
-        XCTAssertEqual(expectedColor, settings.backdrop)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor())
     }
     
     func testBackdropColorNil() throws {
         let expectedColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
         settings.setBackdropColor(nil)
-        XCTAssertEqual(expectedColor, settings.backdrop)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor())
     }
     
     func testBackdropOpacity() throws {
         let expectedColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
         settings.setBackdropOpacity(0.5)
-        XCTAssertEqual(expectedColor, settings.backdrop)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor())
     }
     
     func testBackdropOpacityNil() throws {
         let expectedColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
         settings.setBackdropOpacity(nil)
-        XCTAssertEqual(expectedColor, settings.backdrop)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor())
+    }
+    
+    func testGetBackgroundColorOverrideOpacity() throws {
+        let expectedColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
+        settings.setBackdropOpacity(0.5)
+        XCTAssertEqual(expectedColor, settings.getBackgroundColor(opacity: 0.0))
     }
     
     func testGestures() throws {

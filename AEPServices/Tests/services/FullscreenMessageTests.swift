@@ -102,12 +102,15 @@ class FullscreenMessageTests : XCTestCase {
         expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
         mockFullscreenListener.setExpectation(expectation!)
         mockMessageSettings.setUiTakeover(true)
+        mockMessageSettings.setBackdropColor("000000")
+        mockMessageSettings.setBackdropOpacity(0.3)
         fullscreenMessage?.show()
         wait(for: [expectation!], timeout: 2.0)
         XCTAssertTrue(mockFullscreenListener.onShowCalled)
         XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
         XCTAssertTrue(mockMessagingDelegate.onShowCalled)
         XCTAssertNotNil(fullscreenMessage?.transparentBackgroundView)
+        XCTAssertEqual(fullscreenMessage?.transparentBackgroundView?.backgroundColor, mockMessageSettings.getBackgroundColor())
     }
     
     func testShowWithGestures() {

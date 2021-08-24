@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -17,34 +17,34 @@ import WebKit
 /// This class is used to create and display fullscreen messages on the current view.
 @objc(AEPFullscreenMessage)
 public class FullscreenMessage: NSObject, FullscreenPresentable {
-
+    
     let LOG_PREFIX = "FullscreenMessage"
     private let DOWNLOAD_CACHE = "adbdownloadcache"
     private let HTML_EXTENSION = "html"
     private let TEMP_FILE_NAME = "temp"
     private let ANIMATION_DURATION = 0.3
-
+    
     /// Assignable in the constructor, `settings` control the layout and behavior of the message
     public var settings: MessageSettings?
-
+    
     /// Native functions that can be called from javascript
     /// See `addHandler:forScriptMessage:`
     var scriptHandlers: [String: (Any?) -> Void] = [:]
-
+    
     let fileManager = FileManager()
-
+    
     var isLocalImageUsed = false
     var payload: String
     weak var listener: FullscreenMessageDelegate?
     public internal(set) var webView: UIView?
     private(set) var transparentBackgroundView: UIView?
     private(set) var messageMonitor: MessageMonitoring
-
+    
     var loadingNavigation: WKNavigation?
     var messagingDelegate: MessagingDelegate? {
         return ServiceProvider.shared.messagingDelegate
     }
-
+    
     /// Creates `FullscreenMessage` instance with the payload provided.
     /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
     /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
@@ -62,7 +62,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
         self.messageMonitor = messageMonitor
         self.settings = settings
     }
-
+    
     /// Call this API to hide the fullscreen message.
     /// This API hides the fullscreen message with an animation, but it keeps alive its webView for future reappearances.
     /// Invoking show on a hidden fullscreen message, will display the fullscreen message in the existing state (i.e webView is not re-rendered)
@@ -76,7 +76,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             self.dismissWithAnimation(shouldDeallocateWebView: false)
         }
     }
-
+    
     /// Attempt to create and show the in-app message.
     ///
     /// Order of operations:
@@ -97,18 +97,18 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                     self.listener?.onShowFailure()
                     return
                 }
-
+                
                 // notify global listeners
                 self.listener?.onShow(message: self)
                 self.messagingDelegate?.onShow(message: self)
-
+                
                 self.displayWithAnimation(webView: webview)
                 return
             }
-
+            
             // create the webview
             let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
-
+            
             // save the HTML payload to a local file if the cached image is being used
             var useTempHTML = false
             var cacheFolderURL: URL?
@@ -139,32 +139,32 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             } else {
                 self.loadingNavigation = wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
             }
-
+            
             // only show the message if the monitor allows it
             guard self.messageMonitor.show(message: self) else {
                 self.listener?.onShowFailure()
                 return
             }
-
+            
             // notify global listeners
             self.listener?.onShow(message: self)
             self.messagingDelegate?.onShow(message: self)
-
+            
             self.displayWithAnimation(webView: wkWebView)
         }
     }
-
+    
     public func dismiss() {
         DispatchQueue.main.async {
             if self.messageMonitor.dismiss() ==  false {
                 return
             }
-
+            
             self.dismissWithAnimation(shouldDeallocateWebView: true)
             // Notifying all listeners
             self.listener?.onDismiss(message: self)
             self.messagingDelegate?.onDismiss(message: self)
-
+            
             // remove the temporary html if it exists
             guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {
                 return
@@ -173,12 +173,12 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
             cacheFolder.appendPathExtension(self.HTML_EXTENSION)
             let tempHTMLFilePath = cacheFolder.absoluteString
-
+            
             guard let tempHTMLFilePathUrl = URL(string: tempHTMLFilePath) else {
                 Log.debug(label: self.LOG_PREFIX, "Unable to dismiss, error converting temp path \(tempHTMLFilePath) to URL")
                 return
             }
-
+            
             do {
                 try FileManager.default.removeItem(at: tempHTMLFilePathUrl)
             } catch {
@@ -186,7 +186,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             }
         }
     }
-
+    
     /// Adds an entry to `scriptHandlers` for the provided message name.
     /// Handlers can be invoked from javascript in the message via
     /// - Parameters:
@@ -197,27 +197,27 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
         guard scriptHandlers[name] == nil else {
             return
         }
-
+        
         // if the webview has already been created, we need to add the script handler to existing content controller
         if let webView = webView as? WKWebView {
             webView.configuration.userContentController.add(self, name: name)
         }
-
+        
         scriptHandlers[name] = handler
     }
-
+    
     // MARK: - private methods
-
+    
     private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
         let webViewConfiguration = WKWebViewConfiguration()
-
+        
         // load javascript handlers
         let contentController = WKUserContentController()
         scriptHandlers.forEach {
             contentController.add(self, name: $0.key)
         }
         webViewConfiguration.userContentController = contentController
-
+        
         // Fix for media playback.
         webViewConfiguration.allowsInlineMediaPlayback = true // Plays Media inline
         webViewConfiguration.mediaTypesRequiringUserActionForPlayback = []
@@ -228,19 +228,20 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
         wkWebView.backgroundColor = UIColor.clear
         wkWebView.isOpaque = false
         wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-
+        
         // Fix for iPhone X to display content edge-to-edge
         if #available(iOS 11, *) {
             wkWebView.scrollView.contentInsetAdjustmentBehavior = .never
         }
-
+        
         // if this is a ui takeover, add an invisible view over under the webview
         if let takeover = settings?.uiTakeover, takeover {
             transparentBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            transparentBackgroundView?.backgroundColor = settings?.getBackgroundColor()
             let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
             transparentBackgroundView?.addGestureRecognizer(tap)
         }
-
+        
         // add gesture recognizers
         if let gestures = settings?.gestures {
             // if gestures are supported, we need to disable scrolling in the webview
@@ -254,36 +255,37 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                 wkWebView.addGestureRecognizer(gestureRecognizer)
             }
         }
-
+        
         self.webView = wkWebView
-
+        
         return wkWebView
     }
-
+    
     @objc func handleGesture(_ sender: UIGestureRecognizer? = nil) {
         guard let recognizer = sender as? MessageGestureRecognizer else {
             Log.trace(label: LOG_PREFIX, "Unable to handle message gesture - failed to convert UIGestureRecognizer to MessageGestureRecognizer.")
             return
         }
-
+        
         if let url = recognizer.actionUrl, let wkWebView = webView as? WKWebView {
             wkWebView.evaluateJavaScript("window.location = '\(url.absoluteString)'")
         }
     }
-
+    
     @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
         dismiss()
     }
-
+    
     private func displayWithAnimation(webView: WKWebView) {
         DispatchQueue.main.async {
             let keyWindow = UIApplication.shared.getKeyWindow()
-
+            
             if let animation = self.settings?.displayAnimation, animation != .none {
                 let isFade = animation == .fade
                 webView.alpha = isFade ? 0.0 : 1.0
                 if let bgView = self.transparentBackgroundView {
                     bgView.addSubview(webView)
+                    bgView.backgroundColor = self.settings?.getBackgroundColor(opacity: 0.0)
                     keyWindow?.addSubview(bgView)
                 } else {
                     keyWindow?.addSubview(webView)
@@ -291,6 +293,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                 UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
                     webView.frame = self.frameWhenVisible
                     webView.alpha = 1.0
+                    self.transparentBackgroundView?.backgroundColor = self.settings?.getBackgroundColor()
                 })
             } else {
                 webView.frame = self.frameWhenVisible
@@ -298,7 +301,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             }
         }
     }
-
+    
     private func dismissWithAnimation(shouldDeallocateWebView: Bool) {
         DispatchQueue.main.async {
             if let animation = self.settings?.dismissAnimation, animation != .none {
@@ -306,6 +309,9 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                     self.webView?.frame = self.frameAfterDismiss
                     if animation == .fade {
                         self.webView?.alpha = 0.0
+                    }
+                    if let bgView = self.transparentBackgroundView {
+                        bgView.backgroundColor = self.settings?.getBackgroundColor(opacity: 0.0)
                     }
                 }) { _ in
                     if let bgView = self.transparentBackgroundView {
