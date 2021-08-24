@@ -131,7 +131,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         // verify
         let application = [
             "isClose": true,
-            "closeType": "unknown"
+            "closeType": "unknown",
+            "sessionLength": 0
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -150,7 +151,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         // verify
         let application = [
             "isClose": true,
-            "closeType": "unknown"
+            "closeType": "unknown",
+            "sessionLength": 0
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -169,7 +171,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         // verify
         let application = [
             "isClose": true,
-            "closeType": "close"
+            "closeType": "close",
+            "sessionLength": 22
         ] as [String : Any]
         
         let expected = ["application": application,

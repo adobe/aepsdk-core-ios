@@ -30,17 +30,13 @@ class LifecycleV2MetricsBuilder {
     /// Builds the data required for the XDM Application Launch event, including `XDMApplication`
     /// `XDMEnvironment` and `XDMDevice` info.
     /// - Returns: App launch event data in dictionary format
-    func buildAppLaunchXDMData(launchDate: Date?, isInstall: Bool, isUpgrade: Bool) -> [String: Any]? {
-        guard let unwrappedLaunchDate = launchDate else {
-            Log.trace(label: LifecycleConstants.LOG_TAG, "[\(Self.CLASS_NAME)<\(#function)>] - Exiting as start date is nil.")
-            return nil
-        }
+    func buildAppLaunchXDMData(launchDate: Date, isInstall: Bool, isUpgrade: Bool) -> [String: Any]? {
         var appLaunchXDMData = XDMMobileLifecycleDetails()
         appLaunchXDMData.application = computeAppLaunchData(isInstall: isInstall, isUpgrade: isUpgrade)
         appLaunchXDMData.device = computeDeviceData()
         appLaunchXDMData.environment = computeEnvironmentData()
         appLaunchXDMData.eventType = LifecycleV2Constants.EventType.APP_LAUNCH
-        appLaunchXDMData.timestamp = unwrappedLaunchDate
+        appLaunchXDMData.timestamp = launchDate
 
         return appLaunchXDMData.asDictionary()
     }
@@ -53,15 +49,10 @@ class LifecycleV2MetricsBuilder {
     ///    - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: App close event data in dictionary format
     func buildAppCloseXDMData(launchDate: Date?, closeDate: Date?, fallbackCloseDate: Date, isCloseUnknown: Bool) -> [String: Any]? {
-        guard let unwrappedLaunchDate = launchDate else {
-            Log.trace(label: LifecycleConstants.LOG_TAG, "[\(Self.CLASS_NAME)<\(#function)>] - Exiting as start date is nil.")
-            return nil
-        }
-
         let unwrappedCloseDate = closeDate ?? fallbackCloseDate
         var appCloseXDMData = XDMMobileLifecycleDetails()
 
-        appCloseXDMData.application = computeAppCloseData(launchDate: unwrappedLaunchDate, closeDate: unwrappedCloseDate, isCloseUnknown: isCloseUnknown)
+        appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: unwrappedCloseDate, isCloseUnknown: isCloseUnknown)
         appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
         appCloseXDMData.timestamp = unwrappedCloseDate
 
@@ -99,12 +90,12 @@ class LifecycleV2MetricsBuilder {
     ///   - closeDate: the app close timestamp
     ///   - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: an `XDMApplication` with the close information
-    private func computeAppCloseData(launchDate: Date, closeDate: Date, isCloseUnknown: Bool) -> XDMApplication {
+    private func computeAppCloseData(launchDate: Date?, closeDate: Date, isCloseUnknown: Bool) -> XDMApplication {
         var xdmApplicationInfoClose = XDMApplication()
 
         xdmApplicationInfoClose.isClose = true
         xdmApplicationInfoClose.closeType = isCloseUnknown ? .unknown : .close
-        // TODO: MOB-14878 compute session info
+        xdmApplicationInfoClose.sessionLength = computeSessionLength(launchDate: launchDate, closeDate: closeDate)
 
         return xdmApplicationInfoClose
     }
@@ -155,6 +146,23 @@ class LifecycleV2MetricsBuilder {
         xdmDeviceInfo?.manufacturer = "apple"
 
         return xdmDeviceInfo
+    }
+
+    /// Computes the session length based on the previous app session launch and close date.
+    /// - Parameters:
+    ///   - launchDate: last known app launch date
+    ///   - closeDate: last known app close date
+    /// - Returns: the session length (seconds) or 0 if the session length could not be computed
+    private func computeSessionLength(launchDate: Date?, closeDate: Date?) -> Int64 {
+        var sessionLength: Int64 = 0
+        let launchTS = launchDate?.timeIntervalSince1970 ?? 0
+        let closeTS = closeDate?.timeIntervalSince1970 ?? 0
+
+        if launchTS > 0 && closeTS > 0 {
+            sessionLength = Int64(closeTS - launchTS)
+        }
+
+        return sessionLength > 0 ? sessionLength : 0
     }
 
 }
