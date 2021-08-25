@@ -1,16 +1,34 @@
 PODS:
+  - AEPAssurance (3.0.0):
+    - AEPCore (>= 3.1.0)
+    - AEPServices (>= 3.1.0)
+  - AEPCore (3.2.3):
+    - AEPRulesEngine (= 1.0.1)
+    - AEPServices (= 3.2.3)
   - AEPRulesEngine (1.0.1)
+  - AEPServices (3.2.3)
 
 DEPENDENCIES:
+  - AEPAssurance
+  - AEPCore (from `./`)
   - AEPRulesEngine
 
 SPEC REPOS:
   trunk:
+    - AEPAssurance
     - AEPRulesEngine
+    - AEPServices
+
+EXTERNAL SOURCES:
+  AEPCore:
+    :path: "./"
 
 SPEC CHECKSUMS:
+  AEPAssurance: 18068627111e366a851dc2166239f22b665101bd
+  AEPCore: eaa2a725705c17d2a63c131aa682a21429688ee6
   AEPRulesEngine: 5075ed294026a12e37bd26fe260f74604d205354
+  AEPServices: 29df53822d7708b602ab5789b668734e3b24b6c7
 
-PODFILE CHECKSUM: 31a9899de6250afde3d420f3c919cf16beb8dc75
+PODFILE CHECKSUM: 167070a73198022eff28c1ee00b987d9b119fe55
 
 COCOAPODS: 1.10.1

@@ -5,28 +5,39 @@ platform :ios, '10.0'
 use_frameworks!
 
 workspace 'AEPCore'
-project 'AEPCore.xcodeproj'
 
 target 'AEPCore' do
+  project 'AEPCore.xcodeproj'
   pod 'AEPRulesEngine'
 end
 
 target 'AEPCoreTests' do
-    pod 'AEPRulesEngine'
+  project 'AEPCore.xcodeproj'
+  pod 'AEPRulesEngine'
 end
 
 target 'AEPSignalTests' do
+  project 'AEPCore.xcodeproj'
   pod 'AEPRulesEngine'
 end
 
 target 'AEPLifecycleTests' do
+  project 'AEPCore.xcodeproj'
   pod 'AEPRulesEngine'
 end
 
 target 'AEPIdentityTests' do
+  project 'AEPCore.xcodeproj'
   pod 'AEPRulesEngine'
 end
 
 target 'AEPIntegrationTests' do
+  project 'AEPCore.xcodeproj'
   pod 'AEPRulesEngine'
+end
+
+target 'TestApp_Swift' do
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPAssurance'
+  pod 'AEPCore', :path => './'
 end
