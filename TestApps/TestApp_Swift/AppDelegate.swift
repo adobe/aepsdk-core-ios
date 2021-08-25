@@ -15,7 +15,6 @@ import AEPServices
 import AEPLifecycle
 import AEPSignal
 import AEPIdentity
-import AEPAssurance
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,8 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MobileCore.setLogLevel(.trace)
         let extensions = [Identity.self,
                           Lifecycle.self,
-                          Signal.self,
-                          Assurance.self]
+                          Signal.self]
 
         MobileCore.registerExtensions(extensions, {
             MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)

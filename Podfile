@@ -36,8 +36,25 @@ target 'AEPIntegrationTests' do
   pod 'AEPRulesEngine'
 end
 
+
+# TestApps project dependencies
+
 target 'TestApp_Swift' do
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPAssurance'
-  pod 'AEPCore', :path => './'
+  pod 'AEPRulesEngine'
+end
+
+target 'TestApp_Objc' do
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPRulesEngine'
+end
+
+target 'E2E_Swift' do
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPRulesEngine'
+end
+
+target 'PerformanceApp' do
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPRulesEngine'
 end

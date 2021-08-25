@@ -29,12 +29,6 @@ struct MenuView: View {
                     }
                 }
 
-                Section(header: Text("Validation")) {
-                    NavigationLink(destination: AssuranceView().navigationBarTitle("Assurance")) {
-                        Text("Assurance")
-                    }
-                }
-
             }.navigationBarTitle(Text("Extensions"))
         }
     }
