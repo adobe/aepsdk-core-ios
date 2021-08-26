@@ -24,7 +24,7 @@ class LifecycleV2 {
     private var systemInfoService: SystemInfoService {
         ServiceProvider.shared.systemInfoService
     }
-    private var xdmMetricsBuilder: LifecycleV2MetricsBuilder
+    private let xdmMetricsBuilder: LifecycleV2MetricsBuilder
 
     /// Creates a new `LifecycleV2` with the given `NamedCollectionDataStore`
     ///
