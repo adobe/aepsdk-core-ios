@@ -35,6 +35,8 @@ class LifecycleFunctionalTests: XCTestCase {
         lifecycle = Lifecycle(runtime: mockRuntime)
         lifecycle.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
+        mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }

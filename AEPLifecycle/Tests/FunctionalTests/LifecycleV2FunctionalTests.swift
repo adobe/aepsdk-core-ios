@@ -52,6 +52,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         lifecycle = Lifecycle(runtime: mockRuntime)
         lifecycle.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
@@ -103,11 +104,11 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
 
         // verify
-        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
         // event data
-        let dispatchedLaunchEvent = mockRuntime.dispatchedEvents[1]
+        let dispatchedLaunchEvent = mockRuntime.dispatchedEvents[0]
         let xdm = dispatchedLaunchEvent.data?["xdm"] as? [String:Any] ?? [:]
         let data = dispatchedLaunchEvent.data?["data"] as? [String:String] ?? [:]
 
@@ -140,11 +141,11 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing(interval: 2.5)
 
         // verify
-        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
         // event data
-        let dispatchedCloseEvent = mockRuntime.dispatchedEvents[2]
+        let dispatchedCloseEvent = mockRuntime.dispatchedEvents[1]
         let xdm = dispatchedCloseEvent.data?["xdm"] as? [String:Any] ?? [:]
         XCTAssertEqual("Lifecycle Application Close", dispatchedCloseEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseEvent.type)
@@ -178,11 +179,11 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
 
         // verify
-        XCTAssertEqual(4, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
 
         // event data
-        let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[3]
+        let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
         let xdm = dispatchedUpgradeEvent.data?["xdm"] as? [String:Any] ?? [:]
         XCTAssertEqual("Lifecycle Application Launch", dispatchedUpgradeEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedUpgradeEvent.type)
@@ -215,11 +216,11 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
 
         // verify
-        XCTAssertEqual(4, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
 
         // event data
-        let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[3]
+        let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
         let xdm = dispatchedUpgradeEvent.data?["xdm"] as? [String:Any] ?? [:]
         XCTAssertEqual("Lifecycle Application Launch", dispatchedUpgradeEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedUpgradeEvent.type)
