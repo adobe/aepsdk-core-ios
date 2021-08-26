@@ -69,7 +69,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(createStartEvent())
 
         // verify
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
         // event data
@@ -181,7 +181,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent1, pauseEvent, startEvent2)
 
         // verify
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count) //application launch, lifecycleStart, application close
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
 
         XCTAssertEqual(mockRuntime.createdSharedStates[0]?.count, mockRuntime.createdSharedStates[1]?.count)
@@ -224,6 +224,8 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
 
         let mockRuntimeSession2 = TestableExtensionRuntime()
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
         mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
 
         // test

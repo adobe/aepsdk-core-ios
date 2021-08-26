@@ -33,7 +33,7 @@ public class Lifecycle: NSObject, Extension {
         self.runtime = runtime
         // Handle the classic lifecycle workflow
         lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
-        // Handle the edge workflow to compute the application launch/close XDM metrics
+        // Handle the XDM workflow to compute the application launch/close XDM metrics
         lifecycleV2 = LifecycleV2(dataStore: NamedCollectionDataStore(name: name), dispatch: runtime.dispatch(event:))
         super.init()
     }

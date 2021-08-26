@@ -24,11 +24,7 @@ class LifecycleV2 {
     private var systemInfoService: SystemInfoService {
         ServiceProvider.shared.systemInfoService
     }
-    #if DEBUG
-        var xdmMetricsBuilder: LifecycleV2MetricsBuilder
-    #else
-        private var xdmMetricsBuilder: LifecycleV2MetricsBuilder
-    #endif
+    private var xdmMetricsBuilder: LifecycleV2MetricsBuilder
 
     /// Creates a new `LifecycleV2` with the given `NamedCollectionDataStore`
     ///
@@ -120,13 +116,13 @@ class LifecycleV2 {
     ///   - data: additional free-form context data
     private func dispatchApplicationLaunch(xdm: [String: Any], data: [String: Any]?) {
         var eventData: [String: Any] = [:]
-        eventData[LifecycleConstants.EventDataKeys.XDM] = xdm
+        eventData[LifecycleV2Constants.EventDataKeys.XDM] = xdm
 
         if let freeFormData = data, !freeFormData.isEmpty {
-            eventData[LifecycleConstants.EventDataKeys.DATA] = freeFormData
+            eventData[LifecycleV2Constants.EventDataKeys.DATA] = freeFormData
         }
 
-        let applicationLaunchEvent = Event(name: LifecycleConstants.EventNames.APPLICATION_LAUNCH, type: EventType.lifecycle, source: EventSource.applicationLaunch, data: eventData)
+        let applicationLaunchEvent = Event(name: LifecycleV2Constants.EventNames.APPLICATION_LAUNCH, type: EventType.lifecycle, source: EventSource.applicationLaunch, data: eventData)
         dispatch(applicationLaunchEvent)
     }
 
@@ -135,10 +131,10 @@ class LifecycleV2 {
     ///   - xdm: xdm data for the application close event
     private func dispatchApplicationClose(xdm: [String: Any]) {
         let eventData: [String: Any] = [
-            LifecycleConstants.EventDataKeys.XDM: xdm
+            LifecycleV2Constants.EventDataKeys.XDM: xdm
         ]
 
-        let applicationCloseEvent = Event(name: LifecycleConstants.EventNames.APPLICATION_CLOSE, type: EventType.lifecycle, source: EventSource.applicationClose, data: eventData)
+        let applicationCloseEvent = Event(name: LifecycleV2Constants.EventNames.APPLICATION_CLOSE, type: EventType.lifecycle, source: EventSource.applicationClose, data: eventData)
         dispatch(applicationCloseEvent)
     }
 

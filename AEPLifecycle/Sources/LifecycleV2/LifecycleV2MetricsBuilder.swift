@@ -19,7 +19,6 @@ import AEPServices
 ///  - XMD Device datatype
 ///  - XDM Application datatype
 class LifecycleV2MetricsBuilder {
-    private static let CLASS_NAME = "LifecycleV2MetricsBuilder"
     private var xdmDeviceInfo: XDMDevice?
     private var xdmEnvironmentInfo: XDMEnvironment?
 
@@ -43,17 +42,18 @@ class LifecycleV2MetricsBuilder {
 
     /// Builds the data required for the XDM Application Close event, including `XDMApplication`
     /// - Parameters:
-    ///    - launchDate: the app launch timestamp
-    ///    - closeDate: the app close timestamp
-    ///    - fallbackCloseDate:the date to be used as xdm.timestamp for the Close event when `closeDate` is nil
+    ///    - launchDate: the app launch date
+    ///    - closeDate: the app close date
+    ///    - fallbackCloseDate: the date to be used as xdm.timestamp for the Close event when `closeDate` is nil
     ///    - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: App close event data in dictionary format
     func buildAppCloseXDMData(launchDate: Date?, closeDate: Date?, fallbackCloseDate: Date, isCloseUnknown: Bool) -> [String: Any]? {
-        let unwrappedCloseDate = closeDate ?? fallbackCloseDate
         var appCloseXDMData = XDMMobileLifecycleDetails()
 
-        appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: unwrappedCloseDate, isCloseUnknown: isCloseUnknown)
+        appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: closeDate, isCloseUnknown: isCloseUnknown)
         appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
+
+        let unwrappedCloseDate = closeDate ?? fallbackCloseDate
         appCloseXDMData.timestamp = unwrappedCloseDate
 
         return appCloseXDMData.asDictionary()
@@ -90,7 +90,7 @@ class LifecycleV2MetricsBuilder {
     ///   - closeDate: the app close timestamp
     ///   - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: an `XDMApplication` with the close information
-    private func computeAppCloseData(launchDate: Date?, closeDate: Date, isCloseUnknown: Bool) -> XDMApplication {
+    private func computeAppCloseData(launchDate: Date?, closeDate: Date?, isCloseUnknown: Bool) -> XDMApplication {
         var xdmApplicationInfoClose = XDMApplication()
 
         xdmApplicationInfoClose.isClose = true

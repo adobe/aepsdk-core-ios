@@ -17,7 +17,6 @@ import AEPServicesMocks
 import XCTest
 
 class LifecycleV2MetricsBuilderTests: XCTestCase {
-    
     private let startDate = Date(timeIntervalSince1970: 1483889568)
     private let xdmMetricsBuilder = LifecycleV2MetricsBuilder()
     private let expectedEnvironmentInfo = [
@@ -125,7 +124,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseWithCloseUnknown() {
         let actualAppCloseData = xdmMetricsBuilder.buildAppCloseXDMData(
             launchDate: Date(timeIntervalSince1970: 1483965500), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-            closeDate: Date(timeIntervalSince1970: 1483864390), fallbackCloseDate:  Date(timeIntervalSince1970: 1483864390), // close: Sunday, January 8, 2017 8:33:10 AM GMT
+            closeDate: Date(timeIntervalSince1970: 1483864390), // close: Sunday, January 8, 2017 8:33:10 AM GMT
+            fallbackCloseDate:  Date(timeIntervalSince1970: 1483864390), // fallbackClose: Sunday, January 8, 2017 8:33:10 AM GMT
             isCloseUnknown: true)
         
         // verify
