@@ -72,7 +72,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockSystemInfoService.mobileCarrierName = "test-carrier"
         mockSystemInfoService.applicationName = "test-app-name"
         mockSystemInfoService.applicationBuildNumber = "12345"
-        mockSystemInfoService.applicationVersionNumber = "1.1.1"
+        mockSystemInfoService.applicationVersionNumber = "123"
         mockSystemInfoService.deviceName = "test-device-name"
         mockSystemInfoService.deviceModelNumber = "test-device-model"
         mockSystemInfoService.operatingSystemName = "test-os-name"
@@ -90,7 +90,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.0 (1.1.1)",
+            "version": "1.0.0 (123)",
             "isInstall": true,
             "isLaunch": true
         ] as [String : Any]
@@ -159,7 +159,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.1 (1.1.1)",
+            "version": "1.0.1 (123)",
             "isUpgrade": true,
             "isLaunch": true
         ] as [String : Any]
@@ -199,7 +199,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.0 (1.1.1)",
+            "version": "1.0.0 (123)",
             "isLaunch": true
         ] as [String : Any]
 
@@ -231,15 +231,49 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
 
+    func testLifecycleV2_appCrash() {
+        // setup
+        let expectedApplicationInfo = [
+            "closeType": "unknown",
+            "isClose": true,
+            "sessionLength": 2
+        ] as [String : Any]
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
+
+        let mockRuntimeSession2 = TestableExtensionRuntime()
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
+        mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
+
+        // test
+        // start event, no pause event
+        mockRuntime.simulateComingEvents(createStartEvent())
+        waitForProcessing()
+
+        // simulate a new start
+        let lifecycleSession2 = Lifecycle(runtime: mockRuntimeSession2)
+        lifecycleSession2.onRegistered()
+        mockRuntimeSession2.simulateComingEvents(createStartEvent())
+        waitForProcessing()
+
+        // verify
+        XCTAssertEqual(2, mockRuntimeSession2.dispatchedEvents.count)
+        let dispatchedCloseCrashEvent = mockRuntimeSession2.dispatchedEvents[0]
+        let xdm = dispatchedCloseCrashEvent.data?["xdm"] as? [String:Any] ?? [:]
+        XCTAssertEqual("Lifecycle Application Close", dispatchedCloseCrashEvent.name)
+        XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
+        XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
+        XCTAssertNotNil(xdm["timestamp"] as? String)
+        XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+    }
 
 
-    func createStartEvent(additionalData: [String: Any] = [:]) -> Event {
+    private func createStartEvent(additionalData: [String: Any] = [:]) -> Event {
         let data: [String: Any] = ["action": "start",
                                    "additionalcontextdata": additionalData]
         return Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
     }
 
-    func createPauseEvent() -> Event {
+    private func createPauseEvent() -> Event {
         let data: [String: Any] = ["action": "pause"]
         return Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
     }
