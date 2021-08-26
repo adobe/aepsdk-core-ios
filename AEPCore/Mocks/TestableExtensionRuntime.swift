@@ -23,7 +23,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var createdXdmSharedStates: [[String: Any]?] = []
     public var mockedSharedStates: [String: SharedStateResult] = [:]
     public var mockedXdmSharedStates: [String: SharedStateResult] = [:]
-    public var ignoredEvents:[String: [String]] = [:]
+    public var ignoredEvents = Set<String>()
     public init() {}
 
     // MARK: - ExtensionRuntime methods implementation
@@ -88,7 +88,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     ///  - type: `EventType` of the event to be ignored
     ///  - source: `EventSource` of the event to be ignored
     public func ignoreEvent(type: String, source: String) {
-        ignoredEvents[type, default: []].append(source)
+        ignoredEvents.insert("\(type)-\(source)")
     }
 
     /// Removes all the ignored events.
@@ -99,7 +99,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     /// Determines if the event is to be ignored and not dispatched by event hub
     /// - Parameter event: An `Event`
     private func shouldIgnore(_ event: Event) -> Bool {
-        return ignoredEvents[event.type]?.contains(event.source) ?? false
+        return ignoredEvents.contains("\(event.type)-\(event.source)")
     }
 
     /// Simulate the events that are being sent to event hub, if there is a listener registered for that type of event, that listener will receive the event
