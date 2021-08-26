@@ -50,7 +50,10 @@ public class MessageSettings: NSObject {
     private var backdropColor: String?
 
     /// Defines the opacity of the backdrop shown when a uiTakeover message is displayed.
-    private var backdropOpacity: Float?
+    private var backdropOpacity: CGFloat?
+
+    /// Defines the angle to use when rounding the message's webview.
+    public private(set) var cornerRadius: CGFloat?
 
     /// A mapping of gestures and their associated behaviors.
     /// The URL will be executed as javascript in the message's underlying webview.
@@ -132,8 +135,13 @@ public class MessageSettings: NSObject {
         return self
     }
 
-    @discardableResult public func setBackdropOpacity(_ opacity: Float?) -> MessageSettings {
+    @discardableResult public func setBackdropOpacity(_ opacity: CGFloat?) -> MessageSettings {
         self.backdropOpacity = opacity
+        return self
+    }
+
+    @discardableResult public func setCornerRadius(_ radius: CGFloat?) -> MessageSettings {
+        self.cornerRadius = radius
         return self
     }
 

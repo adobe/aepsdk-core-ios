@@ -111,6 +111,21 @@ class FullscreenMessageTests : XCTestCase {
         XCTAssertTrue(mockMessagingDelegate.onShowCalled)
         XCTAssertNotNil(fullscreenMessage?.transparentBackgroundView)
         XCTAssertEqual(fullscreenMessage?.transparentBackgroundView?.backgroundColor, mockMessageSettings.getBackgroundColor())
+        let webview = fullscreenMessage?.webView as? WKWebView
+        XCTAssertEqual(0.0, webview?.scrollView.layer.cornerRadius)
+    }
+    
+    func testShowWithCornerRadius() {
+        expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+        mockFullscreenListener.setExpectation(expectation!)
+        mockMessageSettings.setCornerRadius(15.0)
+        fullscreenMessage?.show()
+        wait(for: [expectation!], timeout: 2.0)
+        XCTAssertTrue(mockFullscreenListener.onShowCalled)
+        XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+        XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+        let webview = fullscreenMessage?.webView as? WKWebView
+        XCTAssertEqual(15.0, webview?.scrollView.layer.cornerRadius)
     }
     
     func testShowWithGestures() {

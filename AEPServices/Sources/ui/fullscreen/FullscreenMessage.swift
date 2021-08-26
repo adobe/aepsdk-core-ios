@@ -224,7 +224,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
         let wkWebView = WKWebView(frame: newFrame, configuration: webViewConfiguration)
         wkWebView.navigationDelegate = self
         wkWebView.scrollView.bounces = false
-        wkWebView.scrollView.layer.cornerRadius = 15
+        wkWebView.scrollView.layer.cornerRadius = settings?.cornerRadius ?? 0.0
         wkWebView.backgroundColor = UIColor.clear
         wkWebView.isOpaque = false
         wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]

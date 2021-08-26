@@ -152,6 +152,16 @@ class MessageSettingsTests: XCTestCase {
         XCTAssertEqual(expectedColor, settings.getBackgroundColor(opacity: 0.0))
     }
     
+    func testCornerRadius() throws {
+        settings.setCornerRadius(15.0)
+        XCTAssertEqual(15.0, settings.cornerRadius)
+    }
+    
+    func testCornerRadiusNil() throws {
+        settings.setCornerRadius(nil)
+        XCTAssertNil(settings.cornerRadius)
+    }
+    
     func testGestures() throws {
         let gestures: [MessageGesture: URL] = [
             .swipeUp: URL(string: "https://stuff")!,
