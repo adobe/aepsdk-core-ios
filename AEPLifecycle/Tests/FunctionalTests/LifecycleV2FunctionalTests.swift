@@ -109,7 +109,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         let xdm = dispatchedLaunchEvent.data?["xdm"] as? [String:Any] ?? [:]
         let data = dispatchedLaunchEvent.data?["data"] as? [String:String] ?? [:]
 
-        XCTAssertEqual("Lifecycle Application Launch (Foreground)", dispatchedLaunchEvent.name)
+        XCTAssertEqual("Application Launch (Foreground)", dispatchedLaunchEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedLaunchEvent.type)
         XCTAssertEqual(EventSource.applicationLaunch, dispatchedLaunchEvent.source)
         XCTAssertEqual(expectedFreeFormData, data)
@@ -142,7 +142,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         // event data
         let dispatchedCloseEvent = mockRuntime.dispatchedEvents[1]
         let xdm = dispatchedCloseEvent.data?["xdm"] as? [String:Any] ?? [:]
-        XCTAssertEqual("Lifecycle Application Close (Background)", dispatchedCloseEvent.name)
+        XCTAssertEqual("Application Close (Background)", dispatchedCloseEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseEvent.type)
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseEvent.source)
         XCTAssertNotNil(xdm["timestamp"] as? String)
@@ -179,7 +179,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         // event data
         let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
         let xdm = dispatchedUpgradeEvent.data?["xdm"] as? [String:Any] ?? [:]
-        XCTAssertEqual("Lifecycle Application Launch (Foreground)", dispatchedUpgradeEvent.name)
+        XCTAssertEqual("Application Launch (Foreground)", dispatchedUpgradeEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedUpgradeEvent.type)
         XCTAssertEqual(EventSource.applicationLaunch, dispatchedUpgradeEvent.source)
         XCTAssertNotNil(xdm["timestamp"] as? String)
@@ -215,7 +215,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         // event data
         let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
         let xdm = dispatchedUpgradeEvent.data?["xdm"] as? [String:Any] ?? [:]
-        XCTAssertEqual("Lifecycle Application Launch (Foreground)", dispatchedUpgradeEvent.name)
+        XCTAssertEqual("Application Launch (Foreground)", dispatchedUpgradeEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedUpgradeEvent.type)
         XCTAssertEqual(EventSource.applicationLaunch, dispatchedUpgradeEvent.source)
         XCTAssertNotNil(xdm["timestamp"] as? String)
@@ -252,7 +252,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual(2, mockRuntimeSession2.dispatchedEvents.count) //application close (crash), application launch
         let dispatchedCloseCrashEvent = mockRuntimeSession2.dispatchedEvents[0]
         let xdm = dispatchedCloseCrashEvent.data?["xdm"] as? [String:Any] ?? [:]
-        XCTAssertEqual("Lifecycle Application Close (Background)", dispatchedCloseCrashEvent.name)
+        XCTAssertEqual("Application Close (Background)", dispatchedCloseCrashEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
         XCTAssertNotNil(xdm["timestamp"] as? String)
@@ -292,7 +292,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual(2, mockRuntimeSession2.dispatchedEvents.count) //application close (crash), application launch
         let dispatchedCloseCrashEvent = mockRuntimeSession2.dispatchedEvents[0]
         let xdm = dispatchedCloseCrashEvent.data?["xdm"] as? [String:Any] ?? [:]
-        XCTAssertEqual("Lifecycle Application Close (Background)", dispatchedCloseCrashEvent.name)
+        XCTAssertEqual("Application Close (Background)", dispatchedCloseCrashEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
 
