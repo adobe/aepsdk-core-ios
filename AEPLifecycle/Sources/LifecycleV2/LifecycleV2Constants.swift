@@ -24,8 +24,8 @@ enum LifecycleV2Constants {
     }
 
     enum EventNames {
-        static let APPLICATION_LAUNCH = "Lifecycle Application Launch"
-        static let APPLICATION_CLOSE = "Lifecycle Application Close"
+        static let APPLICATION_LAUNCH = "Lifecycle Application Launch (Foreground)"
+        static let APPLICATION_CLOSE = "Lifecycle Application Close (Background)"
     }
 
     enum EventDataKeys {
