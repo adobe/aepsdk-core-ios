@@ -23,7 +23,11 @@ struct LifecycleView: View {
             TextField("Value", text: $additionalDataValue)
             HStack {
                 Button(action: {
-                    MobileCore.lifecycleStart(additionalContextData: [additionalDataKey:additionalDataValue])
+                    if additionalDataKey.isEmpty {
+                        MobileCore.lifecycleStart(additionalContextData: nil)
+                    } else {
+                        MobileCore.lifecycleStart(additionalContextData: [additionalDataKey:additionalDataValue])
+                    }
                 }){
                     Text("Lifecycle Start")
                         .frame(minWidth: 0, maxWidth: .infinity)
