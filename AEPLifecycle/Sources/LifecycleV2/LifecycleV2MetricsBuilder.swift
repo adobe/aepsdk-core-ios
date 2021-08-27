@@ -42,16 +42,17 @@ class LifecycleV2MetricsBuilder {
 
     /// Builds the data required for the XDM Application Close event, including `XDMApplication`
     /// - Parameters:
-    ///    - launchDate: the app launch timestamp
-    ///    - closeDate: the app close timestamp
+    ///    - launchDate: the app launch date
+    ///    - closeDate: the app close date
+    ///    - fallbackCloseDate: the date to be used as xdm.timestamp for the Close event when `closeDate` is nil
     ///    - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: App close event data in dictionary format
-    func buildAppCloseXDMData(launchDate: Date, closeDate: Date, isCloseUnknown: Bool) -> [String: Any]? {
+    func buildAppCloseXDMData(launchDate: Date?, closeDate: Date?, fallbackCloseDate: Date, isCloseUnknown: Bool) -> [String: Any]? {
         var appCloseXDMData = XDMMobileLifecycleDetails()
+
         appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: closeDate, isCloseUnknown: isCloseUnknown)
         appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
-        appCloseXDMData.timestamp = closeDate
-        // TODO: MOB-14878 use close/fallback close timestamp
+        appCloseXDMData.timestamp = closeDate ?? fallbackCloseDate
 
         return appCloseXDMData.asDictionary()
     }
@@ -87,12 +88,12 @@ class LifecycleV2MetricsBuilder {
     ///   - closeDate: the app close timestamp
     ///   - isCloseUnknown: indicates if this is a regular or abnormal close event
     /// - Returns: an `XDMApplication` with the close information
-    private func computeAppCloseData(launchDate: Date, closeDate: Date, isCloseUnknown: Bool) -> XDMApplication {
+    private func computeAppCloseData(launchDate: Date?, closeDate: Date?, isCloseUnknown: Bool) -> XDMApplication {
         var xdmApplicationInfoClose = XDMApplication()
 
         xdmApplicationInfoClose.isClose = true
         xdmApplicationInfoClose.closeType = isCloseUnknown ? .unknown : .close
-        // TODO: MOB-14878 compute session info
+        xdmApplicationInfoClose.sessionLength = computeSessionLength(launchDate: launchDate, closeDate: closeDate)
 
         return xdmApplicationInfoClose
     }
@@ -143,6 +144,23 @@ class LifecycleV2MetricsBuilder {
         xdmDeviceInfo?.manufacturer = "apple"
 
         return xdmDeviceInfo
+    }
+
+    /// Computes the session length based on the previous app session launch and close date.
+    /// - Parameters:
+    ///   - launchDate: last known app launch date
+    ///   - closeDate: last known app close date
+    /// - Returns: the session length (seconds) or 0 if the session length could not be computed
+    private func computeSessionLength(launchDate: Date?, closeDate: Date?) -> Int64 {
+        var sessionLength: Int64 = 0
+        let launchTS = launchDate?.timeIntervalSince1970 ?? 0
+        let closeTS = closeDate?.timeIntervalSince1970 ?? 0
+
+        if launchTS > 0 && closeTS > 0 {
+            sessionLength = Int64(closeTS - launchTS)
+        }
+
+        return sessionLength > 0 ? sessionLength : 0
     }
 
 }
