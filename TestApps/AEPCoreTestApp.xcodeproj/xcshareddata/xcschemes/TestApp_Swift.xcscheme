@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3FAD090F25267460000D207D"
-               BuildableName = "TestApp_Objc.app"
-               BlueprintName = "TestApp_Objc"
+               BlueprintIdentifier = "780880CF26C5CE6800F5A665"
+               BuildableName = "TestApp_Swift.app"
+               BlueprintName = "TestApp_Swift"
                ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,9 +44,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3FAD090F25267460000D207D"
-            BuildableName = "TestApp_Objc.app"
-            BlueprintName = "TestApp_Objc"
+            BlueprintIdentifier = "780880CF26C5CE6800F5A665"
+            BuildableName = "TestApp_Swift.app"
+            BlueprintName = "TestApp_Swift"
             ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -61,9 +61,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3FAD090F25267460000D207D"
-            BuildableName = "TestApp_Objc.app"
-            BlueprintName = "TestApp_Objc"
+            BlueprintIdentifier = "780880CF26C5CE6800F5A665"
+            BuildableName = "TestApp_Swift.app"
+            BlueprintName = "TestApp_Swift"
             ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

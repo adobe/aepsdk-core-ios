@@ -11,11 +11,11 @@ governing permissions and limitations under the License.
 
 
 #import "AppDelegate.h"
-#import <AEPCore/AEPCore.h>
-#import <AEPSignal/AEPSignal.h>
-#import <AEPLifecycle/AEPLifecycle.h>
-#import <AEPIdentity/AEPIdentity.h>
-#import <AEPServices/AEPServices.h>
+@import AEPCore;
+@import AEPSignal;
+@import AEPLifecycle;
+@import AEPIdentity;
+@import AEPServices;
 
 @interface AppDelegate ()
 
@@ -30,7 +30,7 @@ governing permissions and limitations under the License.
      
     [AEPMobileCore registerExtensions:@[AEPMobileLifecycle.class, AEPMobileSignal.class, AEPMobileIdentity.class] completion:^{
         [AEPMobileCore updateConfiguration:@{@"lifecycle.sessionTimeout":@1}];
-        [AEPMobileCore configureWithAppId:@"94f571f308d5/07c3fc1109d1/launch-2f01e36464da-development"];
+        [AEPMobileCore configureWithAppId:@""];
         
     }];
     
