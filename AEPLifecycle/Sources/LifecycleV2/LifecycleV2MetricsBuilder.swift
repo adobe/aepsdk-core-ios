@@ -52,9 +52,7 @@ class LifecycleV2MetricsBuilder {
 
         appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: closeDate, isCloseUnknown: isCloseUnknown)
         appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
-
-        let unwrappedCloseDate = closeDate ?? fallbackCloseDate
-        appCloseXDMData.timestamp = unwrappedCloseDate
+        appCloseXDMData.timestamp = closeDate ?? fallbackCloseDate
 
         return appCloseXDMData.asDictionary()
     }

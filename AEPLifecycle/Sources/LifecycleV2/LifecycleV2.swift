@@ -62,8 +62,12 @@ class LifecycleV2 {
             // detect a possible crash/incorrect start/pause implementation
             if !isInstall && self.isCloseUnknown(prevAppStart: self.dataStoreCache.getAppStartDate(), prevAppPause: self.dataStoreCache.getAppPauseDate()) {
                 // in case of an unknown close situation, use the last known app close event timestamp
+                let previousAppStartDate = self.dataStoreCache.getAppStartDate()
+                let previousAppCloseDate = self.dataStoreCache.getCloseDate()
                 // if no close timestamp was persisted, backdate this event to start timestamp - 1 second
-                if let crashXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: self.dataStoreCache.getAppStartDate(), closeDate: self.dataStoreCache.getCloseDate(), fallbackCloseDate: Date(timeIntervalSince1970: (date.timeIntervalSince1970 - 1)), isCloseUnknown: true) {
+                let computedAppCloseDate = Date(timeIntervalSince1970: (date.timeIntervalSince1970 - 1))
+
+                if let crashXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: previousAppStartDate, closeDate: previousAppCloseDate, fallbackCloseDate: computedAppCloseDate, isCloseUnknown: true) {
                     // dispatch application close event with xdm data
                     self.dispatchApplicationClose(xdm: crashXDM)
                 }
@@ -88,9 +92,12 @@ class LifecycleV2 {
             guard let self = self else { return }
             guard updated else { return }
 
+            // store pause date to persistence
             self.dataStoreCache.setAppPauseDate(pauseDate)
+            // get start date from cache/presistence
+            let startDate = self.dataStoreCache.getAppStartDate()
 
-            if let closeXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: self.dataStoreCache.getAppStartDate(), closeDate: pauseDate, fallbackCloseDate: pauseDate, isCloseUnknown: false) {
+            if let closeXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: startDate, closeDate: pauseDate, fallbackCloseDate: pauseDate, isCloseUnknown: false) {
                 // dispatch application close event with xdm data
                 self.dispatchApplicationClose(xdm: closeXDM)
             }
