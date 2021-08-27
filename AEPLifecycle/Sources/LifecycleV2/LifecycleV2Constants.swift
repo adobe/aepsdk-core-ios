@@ -23,6 +23,16 @@ enum LifecycleV2Constants {
         static let APP_CLOSE = "application.close"
     }
 
+    enum EventNames {
+        static let APPLICATION_LAUNCH = "Application Launch (Foreground)"
+        static let APPLICATION_CLOSE = "Application Close (Background)"
+    }
+
+    enum EventDataKeys {
+        static let XDM = "xdm"
+        static let DATA = "data"
+    }
+
     /// The values in this section need to be prefixed with v2 to avoid any conflicts with the dataStore keys from standard `Lifecycle` extension
     enum DataStoreKeys {
         static let LAST_APP_VERSION = "v2.last.app.version"

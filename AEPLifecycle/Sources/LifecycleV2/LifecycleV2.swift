@@ -20,18 +20,23 @@ class LifecycleV2 {
     private let dataStore: NamedCollectionDataStore
     private let dataStoreCache: LifecycleV2DataStoreCache
     private let stateManager: LifecycleV2StateManager
-
+    private let dispatch: ((_ event: Event) -> Void)
     private var systemInfoService: SystemInfoService {
         ServiceProvider.shared.systemInfoService
     }
+    private let xdmMetricsBuilder: LifecycleV2MetricsBuilder
 
     /// Creates a new `LifecycleV2` with the given `NamedCollectionDataStore`
     ///
-    /// - Parameter dataStore: The `NamedCollectionDataStore` used for reading and writing data to persistence
-    init(dataStore: NamedCollectionDataStore) {
+    /// - Parameters:
+    ///   - dataStore: The `NamedCollectionDataStore` used for reading and writing data to persistence
+    ///   - dispatch: The dispatch closure which is used to dispatch application launch/close events to `EventHub`
+    init(dataStore: NamedCollectionDataStore, dispatch: @escaping (_ event: Event) -> Void) {
         self.dataStore = dataStore
         self.stateManager = LifecycleV2StateManager()
         self.dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
+        self.xdmMetricsBuilder = LifecycleV2MetricsBuilder()
+        self.dispatch = dispatch
     }
 
     /// Updates the last known event date in cache and if needed in persistence
@@ -53,7 +58,28 @@ class LifecycleV2 {
         stateManager.update(state: .START) { [weak self] (updated: Bool) in
             guard let self = self else { return }
             guard updated else { return }
-            // todo: MOB-14878 create launch application event and if needed the close event
+
+            // detect a possible crash/incorrect start/pause implementation
+            if !isInstall && self.isCloseUnknown(prevAppStart: self.dataStoreCache.getAppStartDate(), prevAppPause: self.dataStoreCache.getAppPauseDate()) {
+                // in case of an unknown close situation, use the last known app close event timestamp
+                let previousAppStartDate = self.dataStoreCache.getAppStartDate()
+                let previousAppCloseDate = self.dataStoreCache.getCloseDate()
+                // if no close timestamp was persisted, backdate this event to start timestamp - 1 second
+                let computedAppCloseDate = Date(timeIntervalSince1970: (date.timeIntervalSince1970 - 1))
+
+                if let crashXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: previousAppStartDate, closeDate: previousAppCloseDate, fallbackCloseDate: computedAppCloseDate, isCloseUnknown: true) {
+                    // dispatch application close event with xdm data
+                    self.dispatchApplicationClose(xdm: crashXDM)
+                }
+            }
+
+            self.dataStoreCache.setAppStartDate(date)
+
+            if let launchXDM = self.xdmMetricsBuilder.buildAppLaunchXDMData(launchDate: date, isInstall: isInstall, isUpgrade: self.isUpgrade()) {
+                // dispatch application launch event with xdm data
+                self.dispatchApplicationLaunch(xdm: launchXDM, data: additionalData)
+            }
+
             self.persistAppVersion()
         }
     }
@@ -66,9 +92,57 @@ class LifecycleV2 {
             guard let self = self else { return }
             guard updated else { return }
 
-            // todo: MOB-14878 create close application event
+            // store pause date to persistence
+            self.dataStoreCache.setAppPauseDate(pauseDate)
+            // get start date from cache/presistence
+            let startDate = self.dataStoreCache.getAppStartDate()
+
+            if let closeXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: startDate, closeDate: pauseDate, fallbackCloseDate: pauseDate, isCloseUnknown: false) {
+                // dispatch application close event with xdm data
+                self.dispatchApplicationClose(xdm: closeXDM)
+            }
         }
 
+    }
+    /// Identifies if the previous session ended due to an incorrect implementation or possible app crash.
+    ///
+    /// - Parameters:
+    ///   - prevAppStart: start date from previous session
+    ///   - prevAppPause: pause date from previous session
+    /// - Returns:Bool indicating the status of the previous app close, true if this is considered an unknown close event
+    private func isCloseUnknown(prevAppStart: Date?, prevAppPause: Date?) -> Bool {
+        let prevAppStartTS = prevAppStart?.timeIntervalSince1970 ?? 0
+        let prevAppPauseTS = prevAppPause?.timeIntervalSince1970 ?? 0
+
+        return prevAppStartTS <= 0 || prevAppStartTS > prevAppPauseTS
+    }
+
+    /// Dispatches a Lifecycle application launch event with appropriate event data
+    /// - Parameters:
+    ///   - xdm: xdm data for the application launch event
+    ///   - data: additional free-form context data
+    private func dispatchApplicationLaunch(xdm: [String: Any], data: [String: Any]?) {
+        var eventData: [String: Any] = [:]
+        eventData[LifecycleV2Constants.EventDataKeys.XDM] = xdm
+
+        if let freeFormData = data, !freeFormData.isEmpty {
+            eventData[LifecycleV2Constants.EventDataKeys.DATA] = freeFormData
+        }
+
+        let applicationLaunchEvent = Event(name: LifecycleV2Constants.EventNames.APPLICATION_LAUNCH, type: EventType.lifecycle, source: EventSource.applicationLaunch, data: eventData)
+        dispatch(applicationLaunchEvent)
+    }
+
+    /// Dispatches a Lifecycle application close event with appropriate event data
+    /// - Parameters:
+    ///   - xdm: xdm data for the application close event
+    private func dispatchApplicationClose(xdm: [String: Any]) {
+        let eventData: [String: Any] = [
+            LifecycleV2Constants.EventDataKeys.XDM: xdm
+        ]
+
+        let applicationCloseEvent = Event(name: LifecycleV2Constants.EventNames.APPLICATION_CLOSE, type: EventType.lifecycle, source: EventSource.applicationClose, data: eventData)
+        dispatch(applicationCloseEvent)
     }
 
     /// - Returns: Bool indicating whether the app has been upgraded
