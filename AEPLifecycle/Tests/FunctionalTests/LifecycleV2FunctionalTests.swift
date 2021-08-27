@@ -53,9 +53,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         lifecycle.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
-        for key in UserDefaults.standard.dictionaryRepresentation().keys {
-            UserDefaults.standard.removeObject(forKey: key)
-        }
+        UserDefaults.clear()
     }
 
     func waitForProcessing(interval: TimeInterval = 0.5) {
@@ -85,7 +83,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
     }
 
     /// Tests device related info
-    func testLifecycleV2_appLaunch() {
+    func testLifecycleV2_appInstall() {
         // setup
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
@@ -104,8 +102,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
 
         // verify
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
-        XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count) //application launch
 
         // event data
         let dispatchedLaunchEvent = mockRuntime.dispatchedEvents[0]
@@ -134,15 +131,13 @@ class LifecycleV2FunctionalTests: XCTestCase {
         // test
         // appplication launch install hit
         mockRuntime.simulateComingEvents(createStartEvent())
-        waitForProcessing()
-        sleep(1) // app close after 1 sec
+        waitForProcessing(interval: 1.1) // app close after 1 sec
         // application close
         mockRuntime.simulateComingEvents(createPauseEvent())
         waitForProcessing(interval: 2.5)
 
         // verify
-        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
-        XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch, application close
 
         // event data
         let dispatchedCloseEvent = mockRuntime.dispatchedEvents[1]
@@ -179,8 +174,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
 
         // verify
-        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
-        XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch, application close, application launch
 
         // event data
         let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
@@ -216,8 +210,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
 
         // verify
-        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch and lifecycle start
-        XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch, application close, application launch
 
         // event data
         let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
@@ -238,11 +231,11 @@ class LifecycleV2FunctionalTests: XCTestCase {
             "isClose": true,
             "sessionLength": 2
         ] as [String : Any]
-        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
 
         let mockRuntimeSession2 = TestableExtensionRuntime()
         mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
-        mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
+        mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
 
         // test
         // start event, no pause event
@@ -256,13 +249,57 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
 
         // verify
-        XCTAssertEqual(2, mockRuntimeSession2.dispatchedEvents.count)
+        XCTAssertEqual(2, mockRuntimeSession2.dispatchedEvents.count) //application close (crash), application launch
         let dispatchedCloseCrashEvent = mockRuntimeSession2.dispatchedEvents[0]
         let xdm = dispatchedCloseCrashEvent.data?["xdm"] as? [String:Any] ?? [:]
         XCTAssertEqual("Lifecycle Application Close", dispatchedCloseCrashEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
         XCTAssertNotNil(xdm["timestamp"] as? String)
+        XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+    }
+
+    func testLifecycleV2_appCrash_closeTSMissing() throws {
+        // setup
+        let expectedApplicationInfo = [
+            "closeType": "unknown",
+            "isClose": true,
+            "sessionLength": 0
+        ] as [String : Any]
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
+
+        let mockRuntimeSession2 = TestableExtensionRuntime()
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
+        mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
+
+        // test
+        // start event, no pause event
+        mockRuntime.simulateComingEvents(createStartEvent())
+        waitForProcessing()
+
+        // Remove persisted close date before starting new session
+        dataStore.remove(key: LifecycleV2Constants.DataStoreKeys.APP_CLOSE_DATE)
+        waitForProcessing()
+
+        // simulate a new start
+        let lifecycleSession2 = Lifecycle(runtime: mockRuntimeSession2)
+        lifecycleSession2.onRegistered()
+        let start2Event = createStartEvent()
+        mockRuntimeSession2.simulateComingEvents(start2Event)
+        waitForProcessing()
+
+        // verify
+        XCTAssertEqual(2, mockRuntimeSession2.dispatchedEvents.count) //application close (crash), application launch
+        let dispatchedCloseCrashEvent = mockRuntimeSession2.dispatchedEvents[0]
+        let xdm = dispatchedCloseCrashEvent.data?["xdm"] as? [String:Any] ?? [:]
+        XCTAssertEqual("Lifecycle Application Close", dispatchedCloseCrashEvent.name)
+        XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
+        XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
+
+        let closeDate = xdm["timestamp"] as? String ?? ""
+        let expectedCloseDate = Date(timeIntervalSince1970: start2Event.timestamp.timeIntervalSince1970 - 1).asISO8601String()
+        XCTAssertNotNil(closeDate)
+        XCTAssertEqual(expectedCloseDate, closeDate)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
 
@@ -276,5 +313,11 @@ class LifecycleV2FunctionalTests: XCTestCase {
     private func createPauseEvent() -> Event {
         let data: [String: Any] = ["action": "pause"]
         return Event(name: "Lifecycle Start", type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
+    }
+}
+
+private extension Date {
+    func asISO8601String() -> String {
+        return ISO8601DateFormatter().string(from: self)
     }
 }
