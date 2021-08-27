@@ -22,12 +22,12 @@ BLUE='\033[0;34m'
 # fi
 echo "Target version - ${BLUE}$1${NC}"
 echo "------------------AEPCore-------------------"
-PODSPEC_VERSION_IN_APECore=$(pod ipc spec AEPCore.podspec | jq '.version' | tr -d '"')
-echo "Local podspec version - ${BLUE}${PODSPEC_VERSION_IN_APECore}${NC}"
-SOUCE_CODE_VERSION_IN_APECore=$(cat ./AEPCore/Sources/core/CoreConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')
-echo "Souce code version - ${BLUE}${SOUCE_CODE_VERSION_IN_APECore}${NC}"
+PODSPEC_VERSION_IN_AEPCore=$(pod ipc spec AEPCore.podspec | jq '.version' | tr -d '"')
+echo "Local podspec version - ${BLUE}${PODSPEC_VERSION_IN_AEPCore}${NC}"
+SOUCE_CODE_VERSION_IN_AEPCore=$(cat ./AEPCore/Sources/configuration/ConfigurationConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')
+echo "Souce code version - ${BLUE}${SOUCE_CODE_VERSION_IN_AEPCore}${NC}"
 
-if [[ "$1" == "$PODSPEC_VERSION_IN_APECore" ]] && [[ "$1" == "$SOUCE_CODE_VERSION_IN_APECore" ]]; then
+if [[ "$1" == "$PODSPEC_VERSION_IN_AEPCore" ]] && [[ "$1" == "$SOUCE_CODE_VERSION_IN_AEPCore" ]]; then
     echo "${GREEN}Pass!${NC}"
 else
     echo "${RED}[Error]${NC} Version do not match!"
