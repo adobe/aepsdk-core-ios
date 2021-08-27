@@ -86,12 +86,14 @@ class EventPlusSignalTests: XCTestCase {
     /// validate no consequence type found
     func testNoConsequenceType() throws {
         // setup
-        let event = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
         let triggeredConsequence: [String : Any] = [
             SignalConstants.EventDataKeys.ID : UUID().uuidString,
             SignalConstants.EventDataKeys.DETAIL : [:]
         ]
-        event.data?[SignalConstants.EventDataKeys.TRIGGERED_CONSEQUENCE] = triggeredConsequence
+        let event = Event(name: "Test Rules Engine response",
+                          type: EventType.rulesEngine,
+                          source: EventSource.responseContent,
+                          data: triggeredConsequence)
         
         // verify
         XCTAssertFalse(event.isPostback)
@@ -102,11 +104,13 @@ class EventPlusSignalTests: XCTestCase {
     /// validate no details in triggered consequence
     func testNoDetails() throws {
         // setup
-        let event = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
         let triggeredConsequence: [String : Any] = [
             SignalConstants.EventDataKeys.DETAIL : [:]
         ]
-        event.data?[SignalConstants.EventDataKeys.TRIGGERED_CONSEQUENCE] = triggeredConsequence
+        let event = Event(name: "Test Rules Engine response",
+                          type: EventType.rulesEngine,
+                          source: EventSource.responseContent,
+                          data: triggeredConsequence)
         
         // verify
         XCTAssertNil(event.contentType)

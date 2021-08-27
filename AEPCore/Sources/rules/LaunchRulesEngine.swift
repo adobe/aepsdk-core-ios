@@ -114,22 +114,23 @@ public class LaunchRulesEngine {
         guard let matchedRulesUnwrapped = matchedRules else {
             return event
         }
-        var eventData = event.data
+
+        var processedEvent = event
         for rule in matchedRulesUnwrapped {
             for consequence in rule.consequences {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
-                    guard let attachedEventData = processAttachDataConsequence(consequence: consequenceWithConcreteValue, eventData: eventData) else {
+                    guard let attachedEventData = processAttachDataConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data) else {
                         continue
                     }
-                    eventData = attachedEventData
+                    processedEvent = processedEvent.copyWithNewData(data: attachedEventData)
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
-                    guard let modifiedEventData = processModifyDataConsequence(consequence: consequenceWithConcreteValue, eventData: eventData) else {
+                    guard let modifiedEventData = processModifyDataConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data) else {
                         continue
                     }
-                    eventData = modifiedEventData
+                    processedEvent = processedEvent.copyWithNewData(data: modifiedEventData)
 
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
 
@@ -137,7 +138,7 @@ public class LaunchRulesEngine {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
                         continue
                     }
-                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: eventData)  else {
+                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data)  else {
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
@@ -154,8 +155,8 @@ public class LaunchRulesEngine {
                 }
             }
         }
-        event.data = eventData
-        return event
+
+        return processedEvent
     }
 
     /// Process an attach data consequence event.  Attaches event data from the RuleConsequence to the triggering Event data without overwriting the original
