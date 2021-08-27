@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         MobileCore.registerExtensions(extensions, {
             MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
-            
+
             if appState != .background {
                 MobileCore.lifecycleStart(additionalContextData: nil)
             }
