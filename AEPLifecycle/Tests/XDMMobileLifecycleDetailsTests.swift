@@ -28,7 +28,7 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
         lifecycleDetails.application?.isUpgrade = true
         lifecycleDetails.environment = XDMEnvironment()
         lifecycleDetails.environment?.operatingSystem = "test-os"
-        lifecycleDetails.environment?.language = XDMLifecycleLanguage(language: "en-US")
+        lifecycleDetails.environment?.language = XDMLanguage(language: "en-US")
         lifecycleDetails.environment?.carrier = "test-carrier"
         lifecycleDetails.environment?.operatingSystemVersion = "test-os-version"
         lifecycleDetails.environment?.operatingSystem = "test-os-name"
