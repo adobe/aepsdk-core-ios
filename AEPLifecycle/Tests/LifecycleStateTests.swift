@@ -3,6 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -71,7 +72,7 @@ class LifecycleStateTests: XCTestCase {
         dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: mockAppVersion)
 
         // test
-        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil)
+        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, isInstall: true)
 
         // verify
         let actualContext: LifecyclePersistedContext = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)!
@@ -99,7 +100,7 @@ class LifecycleStateTests: XCTestCase {
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: persistedContext)
 
         // test
-        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil)
+        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, isInstall: false)
 
         // verify
         let actualContextData = lifecycleState.getContextData()
@@ -145,7 +146,7 @@ class LifecycleStateTests: XCTestCase {
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA, value: contextData)
 
         // test
-        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil)
+        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, isInstall: false)
 
         // verify
         let actualContextData = lifecycleState.getContextData()
@@ -163,7 +164,7 @@ class LifecycleStateTests: XCTestCase {
         lifecycleState.lifecycleContextData = contextData
 
         // test
-        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, sessionTimeout: 200)
+        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, sessionTimeout: 200, isInstall: true)
 
         // verify
         let actualContextData = lifecycleState.getContextData()
@@ -208,7 +209,7 @@ class LifecycleStateTests: XCTestCase {
         dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: "1.1.1")
 
         // test
-        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, sessionTimeout: 200)
+        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, sessionTimeout: 200, isInstall: false)
 
         // verify
         let actualContextData = lifecycleState.getContextData()
@@ -234,7 +235,7 @@ class LifecycleStateTests: XCTestCase {
         let adId = "testAdId"
 
         // test
-        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: additionalData, adId: adId, sessionTimeout: 200)
+        let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: additionalData, adId: adId, sessionTimeout: 200, isInstall: false)
 
         // verify
         let actualContextData = lifecycleState.getContextData()
@@ -357,7 +358,7 @@ class LifecycleStateTests: XCTestCase {
     }
 
     /// When appId is present in memory we, it should be present in the context data
-    func testCheckApplicationUpgradeAppUpgradeExistingLifecycleDataInMemeory() {
+    func testCheckApplicationUpgradeAppUpgradeExistingLifecycleDataInMemory() {
         // setup
         let appId = "test-app-id"
         var contextData = LifecycleContextData()

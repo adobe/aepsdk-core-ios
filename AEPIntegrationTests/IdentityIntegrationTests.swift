@@ -28,7 +28,7 @@ class IdentityIntegrationTests: XCTestCase {
     override func tearDown() {
 
         let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
-        unregisterExpectation.expectedFulfillmentCount = 2
+        unregisterExpectation.expectedFulfillmentCount = 3
         MobileCore.unregisterExtension(Identity.self) {
             unregisterExpectation.fulfill()
         }
@@ -36,7 +36,12 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.unregisterExtension(Signal.self) {
             unregisterExpectation.fulfill()
         }
-        wait(for: [unregisterExpectation], timeout: 2)
+
+        MobileCore.unregisterExtension(Lifecycle.self) {
+            unregisterExpectation.fulfill()
+        }
+
+        wait(for: [unregisterExpectation], timeout: 3)
 
     }
 
@@ -87,7 +92,7 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedout"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
 
-        wait(for: [requestExpectation], timeout: 1)
+        wait(for: [requestExpectation], timeout: 2)
     }
 
     func testGetUrlVariables() {

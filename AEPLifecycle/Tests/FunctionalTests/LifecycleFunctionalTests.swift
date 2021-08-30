@@ -22,6 +22,7 @@ class LifecycleFunctionalTests: XCTestCase {
     var mockSystemInfoService: MockSystemInfoService!
     var mockRuntime: TestableExtensionRuntime!
     var lifecycle: Lifecycle!
+    var dataStore: NamedCollectionDataStore!
 
     var expectedOSValue: String {
         return "\(mockSystemInfoService.getOperatingSystemName()) \(mockSystemInfoService.getOperatingSystemVersion())"
@@ -29,13 +30,14 @@ class LifecycleFunctionalTests: XCTestCase {
 
     override func setUp() {
         setupMockSystemInfoService()
+        dataStore = NamedCollectionDataStore(name: "com.adobe.module.lifecycle")
         mockRuntime = TestableExtensionRuntime()
         lifecycle = Lifecycle(runtime: mockRuntime)
         lifecycle.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
-        for key in UserDefaults.standard.dictionaryRepresentation().keys {
-            UserDefaults.standard.removeObject(forKey: key)
-        }
+        mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
+        mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
+        UserDefaults.clear()
     }
 
     private func setupMockSystemInfoService() {
@@ -140,6 +142,10 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("DailyEngUserEvent", lifecycleData?["dailyenguserevent"] as? String)
         XCTAssertEqual("7/27/2020", lifecycleData?["installdate"] as? String)
         XCTAssertEqual("1", lifecycleData?["launches"] as? String)
+
+        // persistance
+        let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
+        XCTAssertEqual(date.timeIntervalSince1970, storedInstallDate?.timeIntervalSince1970)
     }
 
     /// Tests additional data
@@ -194,14 +200,18 @@ class LifecycleFunctionalTests: XCTestCase {
         // verify
         XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
-        XCTAssertEqual("1", (mockRuntime.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
-        XCTAssertEqual("2", (mockRuntime.dispatchedEvents[1].data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
+        let dispatchedLifecycleStartEvent1 = mockRuntime.dispatchedEvents[0]
+        let dispatchedLifecycleStartEvent2 = mockRuntime.dispatchedEvents[1]
 
-        XCTAssertEqual(1_595_909_459, mockRuntime.dispatchedEvents[1].data?["previoussessionstarttimestampmillis"] as? Double)
-        XCTAssertEqual(1_595_909_469, mockRuntime.dispatchedEvents[1].data?["previoussessionpausetimestampmillis"] as? Double)
-        XCTAssertEqual(86400.0 * 7.0, mockRuntime.dispatchedEvents[1].data?["maxsessionlength"] as? Double)
-        XCTAssertEqual(1_595_909_499, mockRuntime.dispatchedEvents[1].data?["starttimestampmillis"] as? Double)
-        XCTAssertEqual("start", mockRuntime.dispatchedEvents[1].data?["sessionevent"] as? String)
+
+        XCTAssertEqual("1", (dispatchedLifecycleStartEvent1.data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
+        XCTAssertEqual("2", (dispatchedLifecycleStartEvent2.data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
+
+        XCTAssertEqual(1_595_909_459, dispatchedLifecycleStartEvent2.data?["previoussessionstarttimestampmillis"] as? Double)
+        XCTAssertEqual(1_595_909_469, dispatchedLifecycleStartEvent2.data?["previoussessionpausetimestampmillis"] as? Double)
+        XCTAssertEqual(86400.0 * 7.0, dispatchedLifecycleStartEvent2.data?["maxsessionlength"] as? Double)
+        XCTAssertEqual(1_595_909_499, dispatchedLifecycleStartEvent2.data?["starttimestampmillis"] as? Double)
+        XCTAssertEqual("start", dispatchedLifecycleStartEvent2.data?["sessionevent"] as? String)
     }
 
     /// Tests crash event when the last session was not gracefully closed
@@ -212,6 +222,8 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
 
         let mockRuntimeSession2 = TestableExtensionRuntime()
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
         mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 1], .set))
 
         // test
@@ -277,7 +289,7 @@ class LifecycleFunctionalTests: XCTestCase {
         // setup
         let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
         let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
-        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 40))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 86400)) // next day
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -299,6 +311,13 @@ class LifecycleFunctionalTests: XCTestCase {
         let sharedState = mockRuntimeSession2.createdSharedStates[1]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
         XCTAssertEqual("UpgradeEvent", lifecycleData?["upgradeevent"] as? String)
+
+        // persistance
+        let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
+        XCTAssertEqual(startEvent1.timestamp.timeIntervalSince1970, storedInstallDate?.timeIntervalSince1970)
+        let storedUpgradeDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.UPGRADE_DATE, fallback: nil)
+        XCTAssertEqual(startEvent2.timestamp.timeIntervalSince1970, storedUpgradeDate?.timeIntervalSince1970)
+        XCTAssertNotEqual(storedInstallDate, storedUpgradeDate)
     }
 
     /// Tests dailyUserEvent when the new launch happens in the same day
