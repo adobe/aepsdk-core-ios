@@ -19,6 +19,7 @@ import AEPServices
 ///  - XMD Device datatype
 ///  - XDM Application datatype
 class LifecycleV2MetricsBuilder {
+
     private var xdmDeviceInfo: XDMDevice?
     private var xdmEnvironmentInfo: XDMEnvironment?
 
@@ -34,7 +35,7 @@ class LifecycleV2MetricsBuilder {
         appLaunchXDMData.application = computeAppLaunchData(isInstall: isInstall, isUpgrade: isUpgrade)
         appLaunchXDMData.device = computeDeviceData()
         appLaunchXDMData.environment = computeEnvironmentData()
-        appLaunchXDMData.eventType = LifecycleV2Constants.EventType.APP_LAUNCH
+        appLaunchXDMData.eventType = LifecycleV2Constants.XDMEventType.APP_LAUNCH
         appLaunchXDMData.timestamp = launchDate
 
         return appLaunchXDMData.asDictionary()
@@ -51,7 +52,7 @@ class LifecycleV2MetricsBuilder {
         var appCloseXDMData = XDMMobileLifecycleDetails()
 
         appCloseXDMData.application = computeAppCloseData(launchDate: launchDate, closeDate: closeDate, isCloseUnknown: isCloseUnknown)
-        appCloseXDMData.eventType = LifecycleV2Constants.EventType.APP_CLOSE
+        appCloseXDMData.eventType = LifecycleV2Constants.XDMEventType.APP_CLOSE
         appCloseXDMData.timestamp = closeDate ?? fallbackCloseDate
 
         return appCloseXDMData.asDictionary()
@@ -120,7 +121,7 @@ class LifecycleV2MetricsBuilder {
         xdmEnvironmentInfo?.type = XDMEnvironmentType.from(runMode: systemInfoService.getRunMode())
         xdmEnvironmentInfo?.operatingSystem = systemInfoService.getOperatingSystemName()
         xdmEnvironmentInfo?.operatingSystemVersion = systemInfoService.getOperatingSystemVersion()
-        xdmEnvironmentInfo?.language = XDMLifecycleLanguage(language: systemInfoService.getFormattedLocale())
+        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getFormattedLocale())
 
         return xdmEnvironmentInfo
     }

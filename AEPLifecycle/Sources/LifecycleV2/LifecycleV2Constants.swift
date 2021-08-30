@@ -18,7 +18,7 @@ enum LifecycleV2Constants {
     static let STATE_UPDATE_TIMEOUT_SEC = TimeInterval(2)
     static let CACHE_TIMEOUT_SECONDS = TimeInterval(2)
 
-    enum EventType {
+    enum XDMEventType {
         static let APP_LAUNCH = "application.launch"
         static let APP_CLOSE = "application.close"
     }
