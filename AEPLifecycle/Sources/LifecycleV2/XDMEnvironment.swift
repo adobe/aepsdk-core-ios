@@ -21,7 +21,7 @@ struct XDMEnvironment: Encodable {
     var carrier: String?
 
     /// The language of the environment to represent the user's linguistic, geographical, or cultural preferences for data presentation.
-    var language: XDMLifecycleLanguage?
+    var language: XDMLanguage?
 
     /// The name of the operating system used when the observation was made.
     var operatingSystem: String?
@@ -39,10 +39,4 @@ struct XDMEnvironment: Encodable {
         case operatingSystemVersion
         case type
     }
-
-}
-
-/// Helper struct to encode the language properly in the `XDMEnvironment`
-struct XDMLifecycleLanguage: Encodable {
-    let language: String?
 }

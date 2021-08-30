@@ -350,6 +350,7 @@
 		92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitor.swift */; };
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
+		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
 		AC4D8D4626D9AC0200A86435 /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4D8D4526D9AC0200A86435 /* EventTests.swift */; };
 		ACD255AF26CE353000532B1E /* LifecycleV2StateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */; };
 		ACD255B126CE51EA00532B1E /* LifecycleV2StateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255B026CE51EA00532B1E /* LifecycleV2StateManagerTests.swift */; };
@@ -990,6 +991,7 @@
 		9DE12D90D1BAF0798BC007AB /* Pods-AEPCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.release.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.release.xcconfig"; sourceTree = "<group>"; };
 		A5F5A65742E1DBDC25CF9F98 /* Pods-AEPIdentityTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA4461A0B65C5DFE219540A5 /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
+		AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDMLanguage.swift; sourceTree = "<group>"; };
 		AC4D8D4526D9AC0200A86435 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		AC838996795DECE800B0A11B /* Pods-AEPIdentityTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.release.xcconfig"; sourceTree = "<group>"; };
 		ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2StateManager.swift; sourceTree = "<group>"; };
@@ -1990,6 +1992,7 @@
 				21248116265D5E1C006CF300 /* XDMEnvironment.swift */,
 				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
 				212480E6265D5A4E006CF300 /* XDMFormatters.swift */,
+				AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */,
 				21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */,
 			);
 			path = LifecycleV2;
@@ -3250,6 +3253,7 @@
 				212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */,
 				212480E7265D5A4E006CF300 /* XDMFormatters.swift in Sources */,
 				3FE6DE0E24C630EB0065EA05 /* LifecycleState.swift in Sources */,
+				AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
