@@ -11,7 +11,7 @@ governing permissions and limitations under the License.
 
 
 #import "ViewController.h"
-#import <AEPCore/AEPCore.h>
+@import AEPCore;
 
 @interface ViewController ()
 
