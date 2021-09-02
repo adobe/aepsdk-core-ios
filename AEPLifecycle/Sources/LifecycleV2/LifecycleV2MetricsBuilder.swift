@@ -102,10 +102,9 @@ class LifecycleV2MetricsBuilder {
     /// Returns the application version in the format appVersion (versionCode). Example: 2.3 (10)
     /// - Returns: the app version as a `String` formatted in the specified format.
     private func getAppVersion() -> String {
-        let appVersion = systemInfoService.getApplicationVersion() ?? ""
+        let appBuildNumber = systemInfoService.getApplicationBuildNumber() ?? ""
         let appVersionNumber = systemInfoService.getApplicationVersionNumber() ?? ""
-
-        return "\(appVersion) (\(appVersionNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
+        return "\(appVersionNumber) (\(appBuildNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     /// Returns information related to the running environment. This data is computed once, when it is first used, then
