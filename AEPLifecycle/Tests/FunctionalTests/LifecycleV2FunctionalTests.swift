@@ -69,8 +69,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockSystemInfoService.runMode = "Application"
         mockSystemInfoService.mobileCarrierName = "test-carrier"
         mockSystemInfoService.applicationName = "test-app-name"
-        mockSystemInfoService.applicationBuildNumber = "12345"
-        mockSystemInfoService.applicationVersionNumber = "123"
+        mockSystemInfoService.applicationBuildNumber = "build-number"
+        mockSystemInfoService.applicationVersionNumber = "version-number"
         mockSystemInfoService.deviceName = "test-device-name"
         mockSystemInfoService.deviceModelNumber = "test-device-model"
         mockSystemInfoService.operatingSystemName = "test-os-name"
@@ -88,7 +88,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.0 (123)",
+            "version": "version-number (build-number)",
             "isInstall": true,
             "isLaunch": true
         ] as [String : Any]
@@ -154,7 +154,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.1 (123)",
+            "version": "version-number (next-build-number)",
             "isUpgrade": true,
             "isLaunch": true
         ] as [String : Any]
@@ -168,7 +168,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing(interval: 2.5)
 
         // Update app version
-        mockSystemInfoService.appVersion = "1.0.1"
+        mockSystemInfoService.applicationBuildNumber = "next-build-number"
         // application launch upgrade hit
         mockRuntime.simulateComingEvents(createStartEvent())
         waitForProcessing()
@@ -193,7 +193,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.0 (123)",
+            "version": "version-number (build-number)",
             "isLaunch": true
         ] as [String : Any]
 
