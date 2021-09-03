@@ -20,12 +20,18 @@ public class LaunchRulesEngine {
     private static let LAUNCH_RULE_TOKEN_LEFT_DELIMITER = "{%"
     private static let LAUNCH_RULE_TOKEN_RIGHT_DELIMITER = "%}"
     private static let CONSEQUENCE_EVENT_NAME = "Rules Consequence Event"
+    private static let CONSEQUENCE_DISPATCH_EVENT_NAME = "Dispatch Consequence Result"
     private static let CONSEQUENCE_EVENT_DATA_KEY_ID = "id"
     private static let CONSEQUENCE_EVENT_DATA_KEY_TYPE = "type"
     private static let CONSEQUENCE_EVENT_DATA_KEY_DETAIL = "detail"
     private static let CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE = "triggeredconsequence"
     private static let CONSEQUENCE_TYPE_ADD = "add"
     private static let CONSEQUENCE_TYPE_MOD = "mod"
+    private static let CONSEQUENCE_TYPE_DISPATCH = "dispatch"
+    private static let CONSEQUENCE_DETAIL_ACTION_COPY = "copy"
+    private static let CONSEQUENCE_DETAIL_ACTION_NEW = "new"
+    /// Do not process Dispatch consequence if chained event count is greater than max
+    private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
 
     private let transform: Transforming
     private let name: String
@@ -33,6 +39,7 @@ public class LaunchRulesEngine {
     private let rulesQueue: DispatchQueue
     private var waitingEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
+    private var dispatchChainedEventsCount: [UUID: Int] = [:]
 
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
@@ -100,6 +107,7 @@ public class LaunchRulesEngine {
     }
 
     private func evaluateRules(for event: Event) -> Event {
+        let dispatchChainCount = dispatchChainedEventsCount.removeValue(forKey: event.id)
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         var matchedRules: [LaunchRule]?
         matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
@@ -113,29 +121,32 @@ public class LaunchRulesEngine {
                 let consequenceWithConcreteValue = replaceToken(for: consequence, data: traversableTokenFinder)
                 switch consequenceWithConcreteValue.type {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_ADD:
-                    guard let from = consequenceWithConcreteValue.eventData else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
+                    guard let attachedEventData = processAttachDataConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data) else {
                         continue
                     }
-                    guard let to = processedEvent.data else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
-                        continue
-                    }
-                    Log.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data with \(PrettyDictionary.prettify(from))\n")
-                    let eventData = EventDataMerger.merging(to: to, from: from, overwrite: false)
-                    processedEvent = processedEvent.copyWithNewData(data: eventData)
+                    processedEvent = processedEvent.copyWithNewData(data: attachedEventData)
+
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_MOD:
-                    guard let from = consequenceWithConcreteValue.eventData else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
+                    guard let modifiedEventData = processModifyDataConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data) else {
                         continue
                     }
-                    guard let to = processedEvent.data else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
+                    processedEvent = processedEvent.copyWithNewData(data: modifiedEventData)
+
+                case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
+
+                    if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
+                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
                         continue
                     }
-                    Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data with \(PrettyDictionary.prettify(from))\n")
-                    let eventData = EventDataMerger.merging(to: to, from: from, overwrite: true)
-                    processedEvent = processedEvent.copyWithNewData(data: eventData)
+                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data)  else {
+                        continue
+                    }
+                    Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
+                    extensionRuntime.dispatch(event: dispatchEvent)
+
+                    // Keep track of dispatch consequence events to prevent triggering of infinite dispatch consequences
+                    dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
+
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
@@ -146,6 +157,79 @@ public class LaunchRulesEngine {
         }
 
         return processedEvent
+    }
+
+    /// Process an attach data consequence event.  Attaches event data from the RuleConsequence to the triggering Event data without overwriting the original
+    /// Event data. If either the event data from the RuleConsequence or the triggering Event data is nil then the processing is aborted.
+    /// - Parameters:
+    ///   - consequence: the RuleConsequence which contains the event data to attach
+    ///   - eventData: the triggering Event data
+    /// - Returns: event data with the RuleConsequence data attached to the triggering Event data, or nil if the processing fails
+    private func processAttachDataConsequence(consequence: RuleConsequence, eventData: [String: Any]?) -> [String: Any]? {
+        guard let from = consequence.eventData else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
+            return nil
+        }
+        guard let to = eventData else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
+            return nil
+        }
+        Log.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data with \(PrettyDictionary.prettify(from))\n")
+        return EventDataMerger.merging(to: to, from: from, overwrite: false)
+    }
+
+    /// Process a modify data consequence event. Modifies the triggering Event data by merging the event data from the RuleConsequence onto it. If either
+    /// the event data from the RuleConsequence or the triggering Event data is nil, then the processing is aborted.
+    /// - Parameters:
+    ///   - consequence: the RuleConsequence which contains the event data to merge
+    ///   - eventData: the triggering Event data to modify
+    /// - Returns: event data with the Event data modified with the RuleConsequence data, or nil if the processing fails
+    private func processModifyDataConsequence(consequence: RuleConsequence, eventData: [String: Any]?) -> [String: Any]? {
+        guard let from = consequence.eventData else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
+            return nil
+        }
+        guard let to = eventData else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
+            return nil
+        }
+        Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data with \(PrettyDictionary.prettify(from))\n")
+        return EventDataMerger.merging(to: to, from: from, overwrite: true)
+    }
+
+    /// Process a dispatch consequence event. Generates a new Event from the details contained within the RuleConsequence.
+    /// - Parameters:
+    ///   - consequence: the RuleConsequence which contains details on the new Event to generate
+    ///   - eventData: the triggering Event data
+    /// - Returns: a new Event to be dispatched to the EventHub, or nil if the processing failed.
+    private func processDispatchConsequence(consequence: RuleConsequence, eventData: [String: Any]?) -> Event? {
+        guard let type = consequence.eventType else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'type' is missing from 'details'")
+            return nil
+        }
+        guard let source = consequence.eventSource else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'source' is missing from 'details'")
+            return nil
+        }
+        guard let action = consequence.eventDataAction else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'eventdataaction' is missing from 'details'")
+            return nil
+        }
+
+        var dispatchEventData: [String: Any]?
+        if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_COPY {
+            dispatchEventData = eventData // copy event data from triggering event
+        } else if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW {
+            dispatchEventData = consequence.eventData?.compactMapValues { $0 }
+        } else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, unsupported 'eventdataaction', expected values copy/new")
+            return nil
+        }
+
+        return Event(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
+                     type: type,
+                     source: source,
+                     data: dispatchEventData)
     }
 
     /// Replace tokens inside the provided consequence with the right value
@@ -192,5 +276,20 @@ public class LaunchRulesEngine {
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
         return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
+    }
+}
+
+/// Extend RuleConsequence with helper methods for processing Dispatch Consequence events.
+extension RuleConsequence {
+    public var eventSource: String? {
+        return details["source"] as? String
+    }
+
+    public var eventType: String? {
+        return details["type"] as? String
+    }
+
+    public var eventDataAction: String? {
+        return details["eventdataaction"] as? String
     }
 }
