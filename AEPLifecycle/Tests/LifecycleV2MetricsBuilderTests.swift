@@ -44,8 +44,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.appId = "test-app-id"
         mockSystemInfoService.applicationName = "test-app-name"
-        mockSystemInfoService.appVersion = "test-version"
-        mockSystemInfoService.applicationVersionNumber = "12345"
+        mockSystemInfoService.applicationBuildNumber = "build-number"
+        mockSystemInfoService.applicationVersionNumber = "version-number"
         mockSystemInfoService.mobileCarrierName = "test-carrier"
         mockSystemInfoService.platformName = "test-platform"
         mockSystemInfoService.operatingSystemName = "test-os-name"
@@ -65,7 +65,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         // verify
         let application = [
             "name": "test-app-name",
-            "version": "test-version (12345)",
+            "version": "version-number (build-number)",
             "isInstall": true,
             "isLaunch": true,
             "id": "test-app-id"
@@ -86,7 +86,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         // verify
         let application = [
             "name": "test-app-name",
-            "version": "test-version (12345)",
+            "version": "version-number (build-number)",
             "isUpgrade": true,
             "isLaunch": true,
             "id": "test-app-id"
@@ -107,7 +107,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         // verify
         let application = [
             "name": "test-app-name",
-            "version": "test-version (12345)",
+            "version": "version-number (build-number)",
             "isLaunch": true,
             "id": "test-app-id"
         ] as [String : Any]

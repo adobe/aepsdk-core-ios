@@ -19,6 +19,9 @@ import XCTest
 
 /// Functional tests for the Lifecycle extension
 class LifecycleV2FunctionalTests: XCTestCase {
+
+    static let PAUSE_UPDATE_TIMEOUT = LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC + 0.20
+
     var mockSystemInfoService: MockSystemInfoService!
     var mockRuntime: TestableExtensionRuntime!
     var lifecycle: Lifecycle!
@@ -69,8 +72,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockSystemInfoService.runMode = "Application"
         mockSystemInfoService.mobileCarrierName = "test-carrier"
         mockSystemInfoService.applicationName = "test-app-name"
-        mockSystemInfoService.applicationBuildNumber = "12345"
-        mockSystemInfoService.applicationVersionNumber = "123"
+        mockSystemInfoService.applicationBuildNumber = "build-number"
+        mockSystemInfoService.applicationVersionNumber = "version-number"
         mockSystemInfoService.deviceName = "test-device-name"
         mockSystemInfoService.deviceModelNumber = "test-device-model"
         mockSystemInfoService.operatingSystemName = "test-os-name"
@@ -88,7 +91,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.0 (123)",
+            "version": "version-number (build-number)",
             "isInstall": true,
             "isLaunch": true
         ] as [String : Any]
@@ -134,7 +137,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing(interval: 1.1) // app close after 1 sec
         // application close
         mockRuntime.simulateComingEvents(createPauseEvent())
-        waitForProcessing(interval: 2.5)
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // verify
         XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch, application close
@@ -154,7 +157,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.1 (123)",
+            "version": "version-number (next-build-number)",
             "isUpgrade": true,
             "isLaunch": true
         ] as [String : Any]
@@ -165,10 +168,10 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
         // application close
         mockRuntime.simulateComingEvents(createPauseEvent())
-        waitForProcessing(interval: 2.5)
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // Update app version
-        mockSystemInfoService.appVersion = "1.0.1"
+        mockSystemInfoService.applicationBuildNumber = "next-build-number"
         // application launch upgrade hit
         mockRuntime.simulateComingEvents(createStartEvent())
         waitForProcessing()
@@ -193,7 +196,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
-            "version": "1.0.0 (123)",
+            "version": "version-number (build-number)",
             "isLaunch": true
         ] as [String : Any]
 
@@ -203,7 +206,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
         // application close
         mockRuntime.simulateComingEvents(createPauseEvent())
-        waitForProcessing(interval: 2.5)
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // application launch upgrade hit
         mockRuntime.simulateComingEvents(createStartEvent())
