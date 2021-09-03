@@ -19,6 +19,9 @@ import XCTest
 
 /// Functional tests for the Lifecycle extension
 class LifecycleV2FunctionalTests: XCTestCase {
+
+    static let PAUSE_UPDATE_TIMEOUT = LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC + 0.20
+
     var mockSystemInfoService: MockSystemInfoService!
     var mockRuntime: TestableExtensionRuntime!
     var lifecycle: Lifecycle!
@@ -134,7 +137,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing(interval: 1.1) // app close after 1 sec
         // application close
         mockRuntime.simulateComingEvents(createPauseEvent())
-        waitForProcessing(interval: 2.5)
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // verify
         XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch, application close
@@ -165,7 +168,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
         // application close
         mockRuntime.simulateComingEvents(createPauseEvent())
-        waitForProcessing(interval: 2.5)
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // Update app version
         mockSystemInfoService.applicationBuildNumber = "next-build-number"
@@ -203,7 +206,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         waitForProcessing()
         // application close
         mockRuntime.simulateComingEvents(createPauseEvent())
-        waitForProcessing(interval: 2.5)
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // application launch upgrade hit
         mockRuntime.simulateComingEvents(createStartEvent())
