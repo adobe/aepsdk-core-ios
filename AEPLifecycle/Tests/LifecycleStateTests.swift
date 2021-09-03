@@ -51,7 +51,7 @@ class LifecycleStateTests: XCTestCase {
         mockSystemInfoService.runMode = "Application"
         mockSystemInfoService.mobileCarrierName = "Test Carrier"
         mockSystemInfoService.applicationName = "Test app name"
-        mockSystemInfoService.applicationBuildNumber = "12345"
+        mockSystemInfoService.applicationBuildNumber = "1.1.1.12345"
         mockSystemInfoService.applicationVersionNumber = "1.1.1"
         mockSystemInfoService.deviceName = "Test device name"
         mockSystemInfoService.operatingSystemName = "Test OS"
@@ -137,7 +137,7 @@ class LifecycleStateTests: XCTestCase {
         persistedContext.pauseDate = currentDateMinusOneSecond
         persistedContext.startDate = currentDateMinusTenMin
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: persistedContext)
-        dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: "1.1.1")
+        dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: "1.1.1.12345")
 
         let expectedAppId = "new-app-id"
         var contextData = LifecycleContextData()
@@ -169,7 +169,7 @@ class LifecycleStateTests: XCTestCase {
         // verify
         let actualContextData = lifecycleState.getContextData()
 
-        XCTAssertEqual("Test app name 1.1.1 (12345)", actualContextData?.lifecycleMetrics.appId)
+        XCTAssertEqual("Test app name 1.1.1 (1.1.1.12345)", actualContextData?.lifecycleMetrics.appId)
         XCTAssertEqual(mockSystemInfoService.getMobileCarrierName(), actualContextData?.lifecycleMetrics.carrierName)
         XCTAssertTrue(actualContextData?.lifecycleMetrics.dailyEngagedEvent ?? false)
         XCTAssertNotNil(actualContextData?.lifecycleMetrics.dayOfTheWeek)
@@ -193,7 +193,7 @@ class LifecycleStateTests: XCTestCase {
     func testStartAppResumeVersionsAreSame() {
         // setup
         let appName = "test app name"
-        let testAppVersion = "1.1.0"
+        let testAppVersion = "1.1.1.12345"
         let expectedAppId = "\(appName) \(testAppVersion)"
 
         var persistedContext = LifecyclePersistedContext()
@@ -206,7 +206,7 @@ class LifecycleStateTests: XCTestCase {
 
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: persistedContext)
         dataStore.setObject(key: LifecycleConstants.DataStoreKeys.LIFECYCLE_DATA, value: contextData)
-        dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: "1.1.1")
+        dataStore.set(key: LifecycleConstants.DataStoreKeys.LAST_VERSION, value: testAppVersion)
 
         // test
         let prevSessionInfo = lifecycleState.start(date: currentDate, additionalContextData: nil, adId: nil, sessionTimeout: 200, isInstall: false)
@@ -219,7 +219,7 @@ class LifecycleStateTests: XCTestCase {
 
     func testStartOverTimeoutAdditionalData() {
         // setup
-        let appVersion = "1.1.1"
+        let appVersion = "1.1.1.12345"
 
         var persistedContext = LifecyclePersistedContext()
         persistedContext.pauseDate = currentDateMinusTenMin

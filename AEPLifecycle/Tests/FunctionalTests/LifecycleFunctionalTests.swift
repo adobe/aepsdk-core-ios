@@ -45,7 +45,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockSystemInfoService.runMode = "Application"
         mockSystemInfoService.mobileCarrierName = "Test Carrier"
         mockSystemInfoService.applicationName = "Test app name"
-        mockSystemInfoService.applicationBuildNumber = "12345"
+        mockSystemInfoService.applicationBuildNumber = "1.1.1.12345"
         mockSystemInfoService.applicationVersionNumber = "1.1.1"
         mockSystemInfoService.deviceName = "Test device name"
         mockSystemInfoService.operatingSystemName = "Test OS"
@@ -77,7 +77,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(mockSystemInfoService.runMode, dispatchedEvent.lifecycleContextData["runmode"] as? String)
         XCTAssertEqual(mockSystemInfoService.activeLocaleName, dispatchedEvent.lifecycleContextData["locale"] as? String)
         XCTAssertEqual(expectedOSValue, dispatchedEvent.lifecycleContextData["osversion"] as? String)
-        XCTAssertEqual("Test app name 1.1.1 (12345)", dispatchedEvent.lifecycleContextData["appid"] as? String)
+        XCTAssertEqual("Test app name 1.1.1 (1.1.1.12345)", dispatchedEvent.lifecycleContextData["appid"] as? String)
         XCTAssertEqual(mockSystemInfoService.deviceName, dispatchedEvent.lifecycleContextData["devicename"] as? String)
 
         // shared state
@@ -88,7 +88,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(mockSystemInfoService.runMode, lifecycleData?["runmode"] as? String)
         XCTAssertEqual(mockSystemInfoService.activeLocaleName, lifecycleData?["locale"] as? String)
         XCTAssertEqual(expectedOSValue, lifecycleData?["osversion"] as? String)
-        XCTAssertEqual("Test app name 1.1.1 (12345)", lifecycleData?["appid"] as? String)
+        XCTAssertEqual("Test app name 1.1.1 (1.1.1.12345)", lifecycleData?["appid"] as? String)
         XCTAssertEqual(mockSystemInfoService.deviceName, lifecycleData?["devicename"] as? String)
     }
 
@@ -300,13 +300,15 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvents(startEvent1, pauseEvent)
 
         // simulate a new start
-        mockSystemInfoService.applicationVersionNumber = "1.2"
+        mockSystemInfoService.applicationBuildNumber = "1.1.1.13000"
         let lifecycleSession2 = Lifecycle(runtime: mockRuntimeSession2)
         lifecycleSession2.onRegistered()
         mockRuntimeSession2.simulateComingEvents(startEvent2)
 
         // verify
-        XCTAssertEqual("UpgradeEvent", (mockRuntimeSession2.dispatchedEvents[0].data?["lifecyclecontextdata"] as? [String: Any])?["upgradeevent"] as? String)
+        let upgradeEvent = mockRuntimeSession2.dispatchedEvents[0]
+        XCTAssertEqual("UpgradeEvent", upgradeEvent.lifecycleContextData["upgradeevent"] as? String)
+        XCTAssertEqual("Test app name 1.1.1 (1.1.1.13000)", upgradeEvent.lifecycleContextData["appid"] as? String)
 
         let sharedState = mockRuntimeSession2.createdSharedStates[1]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]

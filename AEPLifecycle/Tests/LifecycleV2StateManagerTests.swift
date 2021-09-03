@@ -18,8 +18,8 @@ import XCTest
 
 class LifecycleV2StateManagerTests: XCTestCase {
 
-    static let STATE_UPDATE_TIMEOUT_SEC = LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC
-
+    static let PAUSE_UPDATE_TIMEOUT = LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC + 0.20
+    
     var stateManager: LifecycleV2StateManager!
     
     override func setUp() {        
@@ -67,7 +67,7 @@ class LifecycleV2StateManagerTests: XCTestCase {
             stateManager.update(state: .PAUSE, callback: callback)
         }
         
-        wait(for: [expectation], timeout: Self.STATE_UPDATE_TIMEOUT_SEC + 0.25)
+        wait(for: [expectation], timeout: Self.PAUSE_UPDATE_TIMEOUT)
         
         XCTAssertTrue(updates[0])
         XCTAssertTrue(updates[times])
@@ -93,7 +93,7 @@ class LifecycleV2StateManagerTests: XCTestCase {
         stateManager.update(state: .PAUSE, callback: callback)
         stateManager.update(state: .START, callback: callback)
         
-        wait(for: [expectation], timeout: Self.STATE_UPDATE_TIMEOUT_SEC + 0.25)
+        wait(for: [expectation], timeout: Self.PAUSE_UPDATE_TIMEOUT)
         
         XCTAssertTrue(updates[0])
         for i in 1...4 {
@@ -115,7 +115,7 @@ class LifecycleV2StateManagerTests: XCTestCase {
         stateManager.update(state: .START, callback: callback)
         stateManager.update(state: .PAUSE, callback: callback)
         
-        wait(for: [expectation], timeout: Self.STATE_UPDATE_TIMEOUT_SEC + 0.25)
+        wait(for: [expectation], timeout: Self.PAUSE_UPDATE_TIMEOUT)
         
         XCTAssertTrue(updates[0])
         XCTAssertTrue(updates[1])
@@ -126,7 +126,7 @@ class LifecycleV2StateManagerTests: XCTestCase {
         stateManager.update(state: .START, callback: callback)
         stateManager.update(state: .PAUSE, callback: callback)
         
-        wait(for: [expectation], timeout: Self.STATE_UPDATE_TIMEOUT_SEC + 0.25)
+        wait(for: [expectation], timeout: Self.PAUSE_UPDATE_TIMEOUT)
         
         XCTAssertTrue(updates[0])
         XCTAssertTrue(updates[1])
