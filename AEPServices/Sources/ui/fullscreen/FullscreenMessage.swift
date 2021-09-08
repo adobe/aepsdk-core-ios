@@ -193,17 +193,19 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     ///   - name: the name of the message being passed from javascript
     ///   - handler: a method to be called when the javascript message is passed
     public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
-        // don't add the handler if it's already been added
-        guard scriptHandlers[name] == nil else {
-            return
-        }
+        DispatchQueue.main.async {
+            // don't add the handler if it's already been added
+            guard self.scriptHandlers[name] == nil else {
+                return
+            }
 
-        // if the webview has already been created, we need to add the script handler to existing content controller
-        if let webView = webView as? WKWebView {
-            webView.configuration.userContentController.add(self, name: name)
-        }
+            // if the webview has already been created, we need to add the script handler to existing content controller
+            if let webView = self.webView as? WKWebView {
+                webView.configuration.userContentController.add(self, name: name)
+            }
 
-        scriptHandlers[name] = handler
+            self.scriptHandlers[name] = handler
+        }
     }
 
     // MARK: - private methods
@@ -262,13 +264,15 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     }
 
     @objc func handleGesture(_ sender: UIGestureRecognizer? = nil) {
-        guard let recognizer = sender as? MessageGestureRecognizer else {
-            Log.trace(label: LOG_PREFIX, "Unable to handle message gesture - failed to convert UIGestureRecognizer to MessageGestureRecognizer.")
-            return
-        }
+        DispatchQueue.main.async {
+            guard let recognizer = sender as? MessageGestureRecognizer else {
+                Log.trace(label: self.LOG_PREFIX, "Unable to handle message gesture - failed to convert UIGestureRecognizer to MessageGestureRecognizer.")
+                return
+            }
 
-        if let url = recognizer.actionUrl, let wkWebView = webView as? WKWebView {
-            wkWebView.evaluateJavaScript("window.location = '\(url.absoluteString)'")
+            if let url = recognizer.actionUrl, let wkWebView = self.webView as? WKWebView {
+                wkWebView.evaluateJavaScript("window.location = '\(url.absoluteString)'")
+            }
         }
     }
 
