@@ -193,11 +193,15 @@ class FullscreenMessageTests : XCTestCase {
     func testHandleJavascriptMessageHappy() throws {
         expectation = XCTestExpectation(description: "Testing handler is properly set")
         fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
-        XCTAssertEqual(1, fullscreenMessage?.scriptHandlers.count)
-        fullscreenMessage?.scriptHandlers["testScript"]!("content")
-        wait(for: [expectation!], timeout: 2.0)
-        XCTAssertTrue(handlerCalled)
-        XCTAssertEqual("content", handlerContent as? String)
+        
+        // above code runs on mt, dispatch validation on mt
+        DispatchQueue.main.async {
+            XCTAssertEqual(1, self.fullscreenMessage?.scriptHandlers.count)
+            self.fullscreenMessage?.scriptHandlers["testScript"]!("content")
+            self.wait(for: [self.expectation!], timeout: 2.0)
+            XCTAssertTrue(self.handlerCalled)
+            XCTAssertEqual("content", self.handlerContent as? String)
+        }
     }
     
     func testHandleJavascriptMessageWebviewExists() throws {
@@ -205,11 +209,14 @@ class FullscreenMessageTests : XCTestCase {
         fullscreenMessage?.webView = WKWebView()
         fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
         
-        XCTAssertEqual(1, fullscreenMessage?.scriptHandlers.count)
-        fullscreenMessage?.scriptHandlers["testScript"]!("content")
-        wait(for: [expectation!], timeout: 2.0)
-        XCTAssertTrue(handlerCalled)
-        XCTAssertEqual("content", handlerContent as? String)
+        // above code runs on mt, dispatch validation on mt
+        DispatchQueue.main.async {
+            XCTAssertEqual(1, self.fullscreenMessage?.scriptHandlers.count)
+            self.fullscreenMessage?.scriptHandlers["testScript"]!("content")
+            self.wait(for: [self.expectation!], timeout: 2.0)
+            XCTAssertTrue(self.handlerCalled)
+            XCTAssertEqual("content", self.handlerContent as? String)
+        }
     }
     
     func testHandleJavascriptMessageHandlerExistsForName() throws {
@@ -224,10 +231,13 @@ class FullscreenMessageTests : XCTestCase {
         let controller = WKUserContentController()
         let message = MockWKScriptMessage(name: "testScript", body: "body")
         fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
-        fullscreenMessage?.userContentController(controller, didReceive: message)
-        wait(for: [expectation!], timeout: 1.0)
-        XCTAssertTrue(handlerCalled)
-        XCTAssertEqual("body", handlerContent as? String)
+        // above code runs on mt, dispatch validation on mt
+        DispatchQueue.main.async {
+            self.fullscreenMessage?.userContentController(controller, didReceive: message)
+            self.wait(for: [self.expectation!], timeout: 1.0)
+            XCTAssertTrue(self.handlerCalled)
+            XCTAssertEqual("body", self.handlerContent as? String)
+        }
     }
     
     func testUserContentControllerNoMatchingScriptHandler() throws {
