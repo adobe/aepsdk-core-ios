@@ -166,8 +166,9 @@ class SignalTests: XCTestCase {
         let configData = getConfigSharedStateEventData(privacy: .optedIn)
         mockRuntime.simulateSharedState(for: SignalConstants.Configuration.NAME,
                                         data: (configData, .set))
-        let rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
-        rulesEvent.data = updateDetailDict(dict: rulesEvent.data!, withValue: nil, forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
+        var rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
+        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: nil, forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
+        rulesEvent = rulesEvent.copyWithNewData(data: updatedEventData)
         
         // test
         mockRuntime.simulateComingEvents(rulesEvent)
@@ -182,8 +183,10 @@ class SignalTests: XCTestCase {
         let configData = getConfigSharedStateEventData(privacy: .optedIn)
         mockRuntime.simulateSharedState(for: SignalConstants.Configuration.NAME,
                                         data: (configData, .set))
-        let rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.PII)
-        rulesEvent.data = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
+
+        var rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.PII)
+        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
+        rulesEvent = rulesEvent.copyWithNewData(data: updatedEventData)
         
         // test
         mockRuntime.simulateComingEvents(rulesEvent)
@@ -198,9 +201,10 @@ class SignalTests: XCTestCase {
         let configData = getConfigSharedStateEventData(privacy: .optedIn)
         mockRuntime.simulateSharedState(for: SignalConstants.Configuration.NAME,
                                         data: (configData, .set))
-        let rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
-        rulesEvent.data = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com/invalid#@%@%things()#~@!", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
-        
+        var rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
+        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com/invalid#@%@%things()#~@!", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
+        rulesEvent = rulesEvent.copyWithNewData(data: updatedEventData)
+
         // test
         mockRuntime.simulateComingEvents(rulesEvent)
         
@@ -247,8 +251,9 @@ class SignalTests: XCTestCase {
         let configData = getConfigSharedStateEventData(privacy: .optedIn)
         mockRuntime.simulateSharedState(for: SignalConstants.Configuration.NAME,
                                         data: (configData, .set))
-        let rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.OPEN_URL)
-        rulesEvent.data = updateDetailDict(dict: rulesEvent.data!, withValue: nil, forKey: SignalConstants.EventDataKeys.URL)
+        var rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.OPEN_URL)
+        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: nil, forKey: SignalConstants.EventDataKeys.URL)
+        rulesEvent = rulesEvent.copyWithNewData(data: updatedEventData)
         
         // test
         mockRuntime.simulateComingEvents(rulesEvent)
@@ -263,9 +268,10 @@ class SignalTests: XCTestCase {
         let configData = getConfigSharedStateEventData(privacy: .optedIn)
         mockRuntime.simulateSharedState(for: SignalConstants.Configuration.NAME,
                                         data: (configData, .set))
-        let rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.OPEN_URL)
-        rulesEvent.data = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com/invalid#@%@%things()#~@!", forKey: SignalConstants.EventDataKeys.URL)
-        
+        var rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.OPEN_URL)
+        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com/invalid#@%@%things()#~@!", forKey: SignalConstants.EventDataKeys.URL)
+        rulesEvent = rulesEvent.copyWithNewData(data: updatedEventData)
+
         // test
         mockRuntime.simulateComingEvents(rulesEvent)
         

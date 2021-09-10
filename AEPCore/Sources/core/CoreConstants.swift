@@ -12,16 +12,8 @@
 import Foundation
 
 enum CoreConstants {
-    static let EXTENSION_NAME = "com.adobe.module.configuration"
-    static let EXTENSION_VERSION = "3.2.2"
-    static let DATA_STORE_NAME = EXTENSION_NAME
 
-    static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
-    static let CONFIG_BUNDLED_FILE_NAME = "ADBMobileConfig"
-    static let CONFIG_MANIFEST_APPID_KEY = "ADBMobileAppID"
-    static let DOWNLOAD_RETRY_INTERVAL = TimeInterval(5) // 5 seconds
     static let API_TIMEOUT = TimeInterval(1) // 1 second
-    static let ENVIRONMENT_PREFIX_DELIMITER = "__"
 
     enum EventNames {
         static let ANALYTICS_TRACK = "AnalyticsTrack"

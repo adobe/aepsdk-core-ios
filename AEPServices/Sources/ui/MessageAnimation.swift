@@ -12,23 +12,25 @@
 
 import Foundation
 
-/// A MessageAlignment represents the anchor point on a view for a non-fullscreen message.
-@objc (AEPMessageAlignment)
-public enum MessageAlignment: Int {
-    case center = 0
+/// A MessageAnimation represents the type of animation that should be used when displaying or dismissing a message.
+@objc (AEPMessageAnimation)
+public enum MessageAnimation: Int {
+    case none = 0
     case left = 1
     case right = 2
     case top = 3
     case bottom = 4
+    case center = 5
+    case fade = 6
 
-    /// Converts a `String` to its respective `MessageAlignment`
-    /// If `string` is not a valid `MessageAlignment`, calling this method will return `.center`
-    /// - Parameter string: a `String` representation of a `MessageAlignment`
-    /// - Returns: a `MessageAlignment` representing the passed-in `String`
-    public static func fromString(_ string: String) -> MessageAlignment {
+    /// Converts a `String` to its respective `MessageAnimation`
+    /// If `string` is not a valid `MessageAnimation`, calling this method will return `.none`
+    /// - Parameter string: a `String` representation of a `MessageAnimation`
+    /// - Returns: a `MessageAnimation` representing the passed-in `String`
+    public static func fromString(_ string: String) -> MessageAnimation {
         switch string {
-        case "center":
-            return .center
+        case "none":
+            return .none
         case "left":
             return .left
         case "right":
@@ -37,8 +39,12 @@ public enum MessageAlignment: Int {
             return .top
         case "bottom":
             return .bottom
-        default:
+        case "center":
             return .center
+        case "fade":
+            return .fade
+        default:
+            return .none
         }
     }
 }

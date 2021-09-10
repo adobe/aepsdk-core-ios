@@ -3,7 +3,7 @@
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License. You may obtain a copy
  of the License at http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software distributed under
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
@@ -18,6 +18,12 @@ import WebKit
 @objc(AEPFullscreenMessage)
 public class FullscreenMessage: NSObject, FullscreenPresentable {
 
+    let LOG_PREFIX = "FullscreenMessage"
+    private let DOWNLOAD_CACHE = "adbdownloadcache"
+    private let HTML_EXTENSION = "html"
+    private let TEMP_FILE_NAME = "temp"
+    private let ANIMATION_DURATION = 0.3
+
     /// Assignable in the constructor, `settings` control the layout and behavior of the message
     public var settings: MessageSettings?
 
@@ -25,18 +31,14 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     /// See `addHandler:forScriptMessage:`
     var scriptHandlers: [String: (Any?) -> Void] = [:]
 
-    let LOG_PREFIX = "FullscreenMessage"
-    private let DOWNLOAD_CACHE = "adbdownloadcache"
-    private let HTML_EXTENSION = "html"
-    private let TEMP_FILE_NAME = "temp"
-
     let fileManager = FileManager()
 
     var isLocalImageUsed = false
     var payload: String
     weak var listener: FullscreenMessageDelegate?
-    public private(set) var webView: UIView?
-    private var messageMonitor: MessageMonitoring
+    public internal(set) var webView: UIView?
+    private(set) var transparentBackgroundView: UIView?
+    private(set) var messageMonitor: MessageMonitoring
 
     var loadingNavigation: WKNavigation?
     var messagingDelegate: MessagingDelegate? {
@@ -71,7 +73,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             if self.messageMonitor.dismiss() ==  false {
                 return
             }
-            self.dismissWithAnimation(animate: true, shouldDeallocateWebView: false)
+            self.dismissWithAnimation(shouldDeallocateWebView: false)
         }
     }
 
@@ -87,25 +89,25 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     ///     a. if yes, show the message and exit the function
     ///     b. if no, call onShowFailure of the listener and exit the function
     public func show() {
-        // check if the webview has already been created
-        if let webview = webView as? WKWebView {
-            // it has, determine if the monitor wants to show the message
-            guard messageMonitor.show(message: self) else {
-                listener?.onShowFailure()
+        DispatchQueue.main.async {
+            // check if the webview has already been created
+            if let webview = self.webView as? WKWebView {
+                // it has, determine if the monitor wants to show the message
+                guard self.messageMonitor.show(message: self) else {
+                    self.listener?.onShowFailure()
+                    return
+                }
+
+                // notify global listeners
+                self.listener?.onShow(message: self)
+                self.messagingDelegate?.onShow(message: self)
+
+                self.displayWithAnimation(webView: webview)
                 return
             }
 
-            // notify global listeners
-            self.listener?.onShow(message: self)
-            self.messagingDelegate?.onShow(message: self)
-
-            displayWithAnimation(webView: webview)
-            return
-        }
-
-        DispatchQueue.main.async {
             // create the webview
-            let wkWebView = self.getConfiguredWebView(newFrame: self.getFrame())
+            let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
 
             // save the HTML payload to a local file if the cached image is being used
             var useTempHTML = false
@@ -158,7 +160,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                 return
             }
 
-            self.dismissWithAnimation(animate: true, shouldDeallocateWebView: true)
+            self.dismissWithAnimation(shouldDeallocateWebView: true)
             // Notifying all listeners
             self.listener?.onDismiss(message: self)
             self.messagingDelegate?.onDismiss(message: self)
@@ -191,12 +193,19 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     ///   - name: the name of the message being passed from javascript
     ///   - handler: a method to be called when the javascript message is passed
     public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
-        // if the webview has already been created, we need to add the script handler to existing content controller
-        if let webView = webView as? WKWebView {
-            webView.configuration.userContentController.add(self, name: name)
-        }
+        DispatchQueue.main.async {
+            // don't add the handler if it's already been added
+            guard self.scriptHandlers[name] == nil else {
+                return
+            }
 
-        scriptHandlers[name] = handler
+            // if the webview has already been created, we need to add the script handler to existing content controller
+            if let webView = self.webView as? WKWebView {
+                webView.configuration.userContentController.add(self, name: name)
+            }
+
+            self.scriptHandlers[name] = handler
+        }
     }
 
     // MARK: - private methods
@@ -217,7 +226,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
         let wkWebView = WKWebView(frame: newFrame, configuration: webViewConfiguration)
         wkWebView.navigationDelegate = self
         wkWebView.scrollView.bounces = false
-        wkWebView.scrollView.layer.cornerRadius = 15
+        wkWebView.scrollView.layer.cornerRadius = settings?.cornerRadius ?? 0.0
         wkWebView.backgroundColor = UIColor.clear
         wkWebView.isOpaque = false
         wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -227,153 +236,111 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             wkWebView.scrollView.contentInsetAdjustmentBehavior = .never
         }
 
+        // if this is a ui takeover, add an invisible view over under the webview
+        if let takeover = settings?.uiTakeover, takeover {
+            transparentBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+            transparentBackgroundView?.backgroundColor = settings?.getBackgroundColor()
+            let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+            transparentBackgroundView?.addGestureRecognizer(tap)
+        }
+
+        // add gesture recognizers
+        if let gestures = settings?.gestures {
+            // if gestures are supported, we need to disable scrolling in the webview
+            wkWebView.scrollView.isScrollEnabled = false
+            // loop through and add gesture recognizers
+            for gesture in gestures {
+                let gestureRecognizer = MessageGestureRecognizer(gesture: gesture.key, dismissAnimation: settings?.dismissAnimation, url: gesture.value, target: self, action: #selector(handleGesture(_:)))
+                if let direction = gestureRecognizer.swipeDirection {
+                    gestureRecognizer.direction = direction
+                }
+                wkWebView.addGestureRecognizer(gestureRecognizer)
+            }
+        }
+
         self.webView = wkWebView
 
         return wkWebView
     }
 
+    @objc func handleGesture(_ sender: UIGestureRecognizer? = nil) {
+        DispatchQueue.main.async {
+            guard let recognizer = sender as? MessageGestureRecognizer else {
+                Log.trace(label: self.LOG_PREFIX, "Unable to handle message gesture - failed to convert UIGestureRecognizer to MessageGestureRecognizer.")
+                return
+            }
+
+            if let url = recognizer.actionUrl, let wkWebView = self.webView as? WKWebView {
+                wkWebView.evaluateJavaScript("window.location = '\(url.absoluteString)'")
+            }
+        }
+    }
+
+    @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        dismiss()
+    }
+
     private func displayWithAnimation(webView: WKWebView) {
         DispatchQueue.main.async {
             let keyWindow = UIApplication.shared.getKeyWindow()
-            keyWindow?.addSubview(webView)
-            let newY = webView.frame.origin.y - self.screenHeight
-            UIView.animate(withDuration: 0.3, animations: {
-                webView.frame.origin.y = newY
-            }, completion: nil)
+
+            if let animation = self.settings?.displayAnimation, animation != .none {
+                let isFade = animation == .fade
+                webView.alpha = isFade ? 0.0 : 1.0
+                if let bgView = self.transparentBackgroundView {
+                    bgView.addSubview(webView)
+                    bgView.backgroundColor = self.settings?.getBackgroundColor(opacity: 0.0)
+                    keyWindow?.addSubview(bgView)
+                } else {
+                    keyWindow?.addSubview(webView)
+                }
+                UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
+                    webView.frame = self.frameWhenVisible
+                    webView.alpha = 1.0
+                    self.transparentBackgroundView?.backgroundColor = self.settings?.getBackgroundColor()
+                })
+            } else {
+                webView.frame = self.frameWhenVisible
+                keyWindow?.addSubview(webView)
+            }
         }
     }
 
-    private func dismissWithAnimation(animate: Bool, shouldDeallocateWebView: Bool) {
+    private func dismissWithAnimation(shouldDeallocateWebView: Bool) {
         DispatchQueue.main.async {
-            UIView.animate(withDuration: animate ? 0.3: 0, animations: {
-                guard var webviewFrame = self.webView?.frame else {
-                    return
+            if let animation = self.settings?.dismissAnimation, animation != .none {
+                UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
+                    self.webView?.frame = self.frameAfterDismiss
+                    if animation == .fade {
+                        self.webView?.alpha = 0.0
+                    }
+                    if let bgView = self.transparentBackgroundView {
+                        bgView.backgroundColor = self.settings?.getBackgroundColor(opacity: 0.0)
+                    }
+                }) { _ in
+                    if let bgView = self.transparentBackgroundView {
+                        bgView.removeFromSuperview()
+                    } else {
+                        self.webView?.removeFromSuperview()
+                    }
+                    if shouldDeallocateWebView {
+                        self.webView = nil
+                    } else {
+                        self.webView?.frame = self.frameBeforeShow
+                    }
                 }
-                webviewFrame.origin.y += self.screenHeight
-                self.webView?.frame = webviewFrame
-            }) { _ in
-                self.webView?.removeFromSuperview()
+            } else {
+                if let bgView = self.transparentBackgroundView {
+                    bgView.removeFromSuperview()
+                } else {
+                    self.webView?.removeFromSuperview()
+                }
                 if shouldDeallocateWebView {
                     self.webView = nil
+                } else {
+                    self.webView?.frame = self.frameBeforeShow
                 }
             }
         }
-    }
-
-    /// Generates the correct frame for the webview based on `messageSettings`.
-    ///
-    /// Frame generation uses calculate variables `originX`, `originY`, `width`, and `height`.
-    ///
-    /// - Returns: a frame with the correct dimensions and origins based on `messageSettings`.
-    private func getFrame() -> CGRect {
-        var frame = CGRect(x: originX, y: originY, width: width, height: height)
-
-        // add a one screen buffer if we're going to animate
-        if let s = settings, s.animate {
-            frame.origin.y += screenHeight
-        }
-
-        return frame
-    }
-
-    // returns the width of the screen, measured in points
-    private var screenWidth: CGFloat {
-        return UIScreen.main.bounds.width
-    }
-
-    private var screenHeight: CGFloat {
-        return UIScreen.main.bounds.height
-    }
-
-    // width in settings represents a percentage of the screen.
-    // e.g. - 80 = 80% of the screen width
-    // default value is full screen width
-    private var width: CGFloat {
-        if let settingsWidth = settings?.width {
-            return screenWidth * CGFloat(settingsWidth) / 100
-        }
-
-        return screenWidth
-    }
-
-    // height in settings represents a percentage of the screen.
-    // e.g. - 80 = 80% of the screen height
-    // default value is full screen height
-    private var height: CGFloat {
-        if let settingsHeight = settings?.height {
-            return screenHeight * CGFloat(settingsHeight) / 100
-        }
-
-        return screenHeight
-    }
-
-    // x origin is calculated by settings values of horizontal alignment and horizontal inset
-    // if horizontal alignment is center, horizontal inset is ignored and x is calculated so that the message will be
-    // centered according to its width
-    // if horizontal alignment is left or right, the inset will be calculated as a percentage width from the respective
-    // alignment origin
-    private var originX: CGFloat {
-        // default to 0 for x origin if unspecified
-        guard let settings = settings else {
-            return 0
-        }
-
-        if settings.horizontalAlign == .left {
-            // check for an inset, otherwise left alignment means return 0
-            if let hInset = settings.horizontalInset {
-                // since x alignment starts at 0 on the left, this value just needs to be
-                // the percentage value translated to actual points
-                return screenWidth * CGFloat(hInset) / 100
-            } else {
-                return 0
-            }
-        } else if settings.horizontalAlign == .right {
-            // check for an inset
-            if let hInset = settings.horizontalInset {
-                // x alignment here is screen width - message width - inset value converted from percentage to points
-                return screenWidth - width - (screenWidth * CGFloat(hInset) / 100)
-            } else {
-                // no inset, right x alignment means screen width - message width
-                return screenWidth - width
-            }
-        }
-
-        // handle center alignment, x is (screen width - message width) / 2
-        return (screenWidth - width) / 2
-    }
-
-    // y origin is calculated by settings values of vertical alignment and vertical inset
-    // if vertical alignment is center, vertical inset is ignored and y is calculated so that the message will be
-    // centered according to its height
-    // if vertical alignment is top or bottom, the inset will be calculated as a percentage height from the respective
-    // alignment origin
-    private var originY: CGFloat {
-        // default to 0 for y origin if unspecified
-        guard let settings = settings else {
-            return 0
-        }
-
-        if settings.verticalAlign == .top {
-            // check for an inset, otherwise top alignment means return 0
-            if let vInset = settings.verticalInset {
-                // since y alignment starts at 0 on the top, this value just needs to be
-                // the percentage value translated to actual points
-                return screenHeight * CGFloat(vInset) / 100
-            } else {
-                return 0
-            }
-        } else if settings.verticalAlign == .bottom {
-            // check for an inset
-            if let vInset = settings.verticalInset {
-                // y alignment here is screen height - message height - inset value converted from percentage to points
-                return screenHeight - height - (screenHeight * CGFloat(vInset) / 100)
-            } else {
-                // no inset, bottom y alignment means screen height - message height
-                return screenHeight - height
-            }
-        }
-
-        // handle center alignment, y is (screen height - message height) / 2
-        return (screenHeight - height) / 2
     }
 }
