@@ -67,6 +67,17 @@ public class Event: NSObject, Codable {
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
+    @objc
+    public convenience init(name: String, type: String, source: String, data: [String: Any]?) {
+        self.init(name: name, type: type, source: source, data: data, requestEvent: nil)
+    }
+
+    /// Creates a new `Event` with the given parameters
+    /// - Parameters:
+    ///   - name: Name for the `Event`
+    ///   - type: `EventType` for the `Event`
+    ///   - source: `EventSource` for the `Event`
+    ///   - data: Any associated data with this `Event`
     ///   - mask: Defines which properties should be used in creation of the Event's hash
     @objc
     public convenience init(name: String, type: String, source: String, data: [String: Any]?, mask: [String]? = nil) {
