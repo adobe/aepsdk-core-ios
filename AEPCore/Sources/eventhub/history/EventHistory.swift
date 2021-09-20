@@ -23,8 +23,8 @@ public class EventHistory {
         self.db = db
     }
 
-    func recordEvent(_ event: Event, withMask mask: [String], handler: ((Bool) -> Void)? = nil) {
-        guard let hash = event.data?.fnv1a32(mask: mask) else {
+    func recordEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
+        guard let hash = event.data?.fnv1a32(mask: event.mask) else {
             return
         }
 

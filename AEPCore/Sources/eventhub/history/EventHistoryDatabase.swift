@@ -18,7 +18,7 @@ class EventHistoryDatabase {
 
     let dispatchQueue: DispatchQueue
 
-    let dbName = "EventHistory"
+    let dbName = "com.adobe.eventHistory"
     let dbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
 
     let tableName = "Events"
@@ -48,7 +48,7 @@ class EventHistoryDatabase {
 
             let insertStatement = """
             INSERT INTO \(self.tableName) (\(self.columnHash), \(self.columnTimestamp))
-            VALUES (\(hash), \(Date().millisecondsSince1970)
+            VALUES (\(hash), \(Date().millisecondsSince1970))
             """
 
             let result = SQLiteWrapper.execute(database: connection, sql: insertStatement)

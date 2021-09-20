@@ -13,7 +13,13 @@
 import Foundation
 
 extension Dictionary where Key == String, Value == Any {
+    /// flattens the dictionary then calls inner
     func fnv1a32(mask: [String]? = nil) -> UInt32 {
+        return self.flattening().fnv1a32_inner(mask: mask)
+    }
+
+    /// processes the flattened dictionary
+    private func fnv1a32_inner(mask: [String]? = nil) -> UInt32 {
         var alphabeticalKeys: [String]
         // if a mask is provided, only use keys in the provided mask and alphabetize their order
         if let mask = mask {

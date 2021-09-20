@@ -89,8 +89,8 @@ final class EventHub {
                       "Dispatching Event #\(String(describing: self?.eventNumberMap[event.id] ?? 0)) - \(event)")
 
             // record the event in history if it has a mask
-            if let mask = event.mask {
-                self?.eventHistory?.recordEvent(event, withMask: mask)
+            if event.mask != nil {
+                self?.eventHistory?.recordEvent(event)
             }
         }
     }
