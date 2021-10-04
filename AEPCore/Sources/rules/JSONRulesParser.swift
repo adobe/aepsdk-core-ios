@@ -30,6 +30,20 @@ public class JSONRulesParser {
             return nil
         }
     }
+
+    /// Parses the json rules to objects
+    /// - Parameter data: data of json rules
+    /// - Returns: an array of `LaunchRule`
+    static public func parse(_ data: Data, runtime: ExtensionRuntime?) -> [LaunchRule]? {
+        let jsonDecoder = JSONDecoder()
+        do {
+            let root = try jsonDecoder.decode(JSONRuleRoot.self, from: data)
+            return root.convert(runtime)
+        } catch {
+            Log.error(label: JSONRulesParser.LOG_LABEL, "Failed to encode json rules, the error is: \(error)")
+            return nil
+        }
+    }
 }
 
 /// Defines the custom type which is strictly mapped to the json rules's structure, then the Json decoder can easily parse json rules to Swift objects
@@ -39,10 +53,10 @@ struct JSONRuleRoot: Codable {
 
     /// Converts itself to `LaunchRule` objects, which can be used in `AEPRulesEngine`
     /// - Returns: an array of `LaunchRule` objects
-    func convert() -> [LaunchRule] {
+    func convert(_ runtime: ExtensionRuntime? = nil) -> [LaunchRule] {
         var result = [LaunchRule]()
         for launchRule in rules {
-            if let conditionExpression = launchRule.condition.convert() {
+            if let conditionExpression = launchRule.condition.convert(runtime) {
                 var consequences = [RuleConsequence]()
                 for consequence in launchRule.consequences {
                     if let id = consequence.id, let type = consequence.type, let dict = consequence.detailDict {
@@ -65,6 +79,7 @@ struct JSONRule: Codable {
 enum ConditionType: String, Codable {
     case group
     case matcher
+    case historical
 }
 
 class JSONCondition: Codable {
@@ -83,13 +98,13 @@ class JSONCondition: Codable {
 
     var type: ConditionType
     var definition: JSONDefinition
-    func convert() -> Evaluable? {
+    func convert(_ runtime: ExtensionRuntime? = nil) -> Evaluable? {
         switch type {
         case .group:
             if let operationStr = definition.logic, let subConditions = definition.conditions {
                 var operands = [Evaluable]()
                 for subCondition in subConditions {
-                    if let operand = subCondition.convert() {
+                    if let operand = subCondition.convert(runtime) {
                         operands.append(operand)
                     }
                 }
@@ -114,6 +129,55 @@ class JSONCondition: Codable {
                     }
                     return operands.count == 0 ? nil : LogicalExpression(operationName: "or", operands: operands)
                 }
+            }
+            return nil
+        case .historical:
+            guard let events = definition.events,
+                  let matcher = JSONCondition.matcherMapping[definition.matcher ?? ""],
+                  let valueAsInt = definition.value?.intValue,
+                  let runtime = runtime else {
+                return nil
+            }
+            if events.count == 0 {
+                return nil
+            } else if events.count == 1 {
+                var fromDate: Date?
+                var toDate: Date?
+                if let fromTs = definition.from {
+                    fromDate = Date(milliseconds: fromTs)
+                }
+                if let toTs = definition.to {
+                    toDate = Date(milliseconds: toTs)
+                }
+                let searchType = definition.searchType
+                let eventData = events[0]
+
+                let requestEvent = EventHistoryRequest(mask: eventData, from: fromDate, to: toDate)
+
+                let historyOperand = Operand<Int>(function: {
+                    var returnValue: Int = 0
+                    let semaphore = DispatchSemaphore(value: 0)
+                    runtime.getHistoricalEvents([requestEvent], enforceOrder: searchType == "ordered") { results in
+                        if let result = results.first {
+                            returnValue = result.count
+                        }
+                        semaphore.signal()
+                    }
+
+                    semaphore.wait()
+                    return returnValue
+                })
+
+                return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
+            } else if events.count > 1 {
+                let encoder = JSONEncoder()
+                var operands = [Evaluable]()
+                for event in events {
+                    let eventAsJson = try? encoder.encode(event)
+                    let jsonString = String(data: eventAsJson ?? Data(), encoding: .utf8) ?? ""
+                    operands.append(ComparisonExpression(lhs: Operand<String>(mustache: "{{history(\(jsonString))}}"), operationName: matcher, rhs: Operand(stringLiteral: String(valueAsInt))))
+                }
+                return operands.count == 0 ? nil : LogicalExpression(operationName: "or", operands: operands)
             }
             return nil
         }
@@ -163,6 +227,11 @@ struct JSONDefinition: Codable {
     let key: String?
     let matcher: String?
     let values: [AnyCodable]?
+    let events: [[String: AnyCodable]]?
+    let value: AnyCodable?
+    let from: Int64?
+    let to: Int64?
+    let searchType: String?
 }
 
 struct JSONDetail: Codable {

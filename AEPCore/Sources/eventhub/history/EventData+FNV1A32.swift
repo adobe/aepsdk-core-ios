@@ -13,7 +13,17 @@
 import Foundation
 
 extension Dictionary where Key == String, Value == Any {
-    /// flattens the dictionary then calls inner
+    /// Flattens the dictionary then calls `fnv1a32_inner`.
+    ///
+    /// The `mask`, if provided, determines which key-value pairs in the dictionary will be used
+    /// to generate the hash.
+    /// If `mask` is `nil`, all key-value pairs in the dictionary will be used.
+    ///
+    /// The method for generating the hash does not recurse through the dictionary,
+    /// so flattening the dictionary first will ensure there are no nested containers as values.
+    ///
+    /// - Parameter mask: an array of `String`s that will be used to determine which KVPs are in the hash.
+    /// - Returns an unsigned integer hash that represents the requested data in the dictionary.
     func fnv1a32(mask: [String]? = nil) -> UInt32 {
         return self.flattening().fnv1a32_inner(mask: mask)
     }
@@ -31,7 +41,8 @@ extension Dictionary where Key == String, Value == Any {
         var hash: UInt32 = 0
         for i in 0..<alphabeticalKeys.count {
             let key = alphabeticalKeys[i]
-            let kvpString = "\(key):\(self[key] ?? "")"
+            let valueAsString = String(describing: self[key])
+            let kvpString = key + ":" + valueAsString
             hash = kvpString.fnv1a32(hash)
         }
 

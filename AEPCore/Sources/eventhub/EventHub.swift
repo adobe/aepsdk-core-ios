@@ -79,6 +79,9 @@ final class EventHub {
     }
 
     /// Dispatches a new `Event` to the `EventHub`. This `Event` is sent to all listeners who have registered for the `EventType`and `EventSource`
+    ///
+    /// If the `event` has a `mask`, this method will attempt to record the `event` in `eventHistory`.
+    ///
     /// - Parameter event: An `Event` to be dispatched to listeners
     func dispatch(event: Event) {
         eventHubQueue.async { [weak self] in
@@ -90,7 +93,16 @@ final class EventHub {
 
             // record the event in history if it has a mask
             if event.mask != nil {
-                self?.eventHistory?.recordEvent(event)
+                if let history = self?.eventHistory {
+                    history.recordEvent(event) { result in
+                        let message = result ?
+                            "Successfully inserted an Event into EventHistory database" :
+                            "Failed to insert an Event into EventHistory database"
+                        Log.trace(label: self?.LOG_TAG ?? "Event History", message)
+                    }
+                } else {
+                    Log.warning(label: self?.LOG_TAG ?? "Event History", "Unable to access EventHistory database to record an Event.")
+                }
             }
         }
     }
@@ -302,6 +314,17 @@ final class EventHub {
             self.dispatch(event: self.createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
             Log.debug(label: self.LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
         }
+    }
+
+    /// Retrieves a count of historical events matching the provided requests.
+    ///
+    /// - Parameters:
+    ///   - requests: an array of `EventHistoryRequest`s used to generate the hash and timeframe for the event lookup
+    ///   - enforceOrder: if `true`, consecutive lookups will use the oldest timestamp from the previous event as their
+    ///                   from date
+    ///   - handler: contains an `EventHistoryResult` for each provided request
+    func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
+        eventHistory?.getEvents(requests, enforceOrder: enforceOrder, handler: handler)
     }
 
     /// shut down the event hub, wait for the event queue to stop and unregister all the extensions

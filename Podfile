@@ -7,26 +7,34 @@ use_frameworks!
 workspace 'AEPCore'
 project 'AEPCore.xcodeproj'
 
-target 'AEPCore' do
+def rules_main
   pod 'AEPRulesEngine'
+end
+
+def rules_dev
+  pod 'AEPRulesEngine', :git => 'https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.0.2'
+end
+
+target 'AEPCore' do
+  rules_dev
 end
 
 target 'AEPCoreTests' do
-    pod 'AEPRulesEngine'
+  rules_dev
 end
 
 target 'AEPSignalTests' do
-  pod 'AEPRulesEngine'
+  rules_dev
 end
 
 target 'AEPLifecycleTests' do
-  pod 'AEPRulesEngine'
+  rules_dev
 end
 
 target 'AEPIdentityTests' do
-  pod 'AEPRulesEngine'
+  rules_dev
 end
 
 target 'AEPIntegrationTests' do
-  pod 'AEPRulesEngine'
+  rules_dev
 end

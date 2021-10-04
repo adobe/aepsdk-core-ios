@@ -12,13 +12,11 @@
 
 import Foundation
 
-@objc(AEPEventHistoryRequest)
 public class EventHistoryRequest: NSObject {
-    @objc public let mask: [String: Any]
-    @objc public let fromDate: Date?
-    @objc public let toDate: Date?
+    let mask: [String: Any]
+    let fromDate: Date?
+    let toDate: Date?
 
-    @objc
     init(mask: [String: Any], from: Date? = nil, to: Date? = nil) {
         self.mask = mask
         self.fromDate = from

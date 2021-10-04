@@ -17,23 +17,65 @@ import AEPRulesEngine
 /// generate the `Transforming` instance used by Launch Rules Engine
 class LaunchRuleTransformer {
 
-    static func createTransforming() -> Transforming {
-        let transformer = Transformer()
-        addConsequnceTransform(to: transformer)
-        addTypeTransform(to: transformer)
-        return transformer
+    let transformer: Transformer
+    let runtime: ExtensionRuntime
+
+    init(runtime: ExtensionRuntime) {
+        self.transformer = Transformer()
+        self.runtime = runtime
+        addFunctionalTransformations(to: self.transformer)
+        addTypeTransformations(to: self.transformer)
     }
 
-    private static func addConsequnceTransform(to transform: Transformer) {
+    private func addFunctionalTransformations(to transform: Transformer) {
+        // adds the transformer for the url encoding function
         transform.register(name: RulesConstants.Transform.URL_ENCODING_FUNCTION_IN_RULES, transformation: { value in
             if let valueString = value as? String {
                 return URLEncoder.encode(value: valueString)
             }
             return value
         })
+
+        // adds the transformer for querying event history in the database
+//        transform.register(name: RulesConstants.Transform.EVENT_HISTORY_IN_RULES, transformation: { value in
+//            var returnValue = 0
+//            
+//            // value is a JSONHistoricalEvent object represented as a JSON string
+//            guard let eventString = value as? String,
+//                  let event = try? JSONDecoder().decode(JSONHistoricalEvent.self, from: eventString.data(using: .utf8) ?? Data()) else {
+//                return returnValue
+//            }
+//            
+//            // convert array of JSONHistoricalEvent into an array of EventHistoryRequests
+//            let request = EventHistoryRequest(event)
+        ////            let requests = events.map { event in
+        ////                EventHistoryRequest(event)
+        ////            }
+//            
+//            let semaphore = DispatchSemaphore(value: 0)
+//            
+//            self.runtime.getHistoricalEvents([request], enforceOrder: false /* requests.count > 1 */) { results in
+//                if results.count == 1 {
+//                    if let count = results.first?.count {
+//                        returnValue = count
+//                    }
+//                } else if results.count > 1 {
+//                    for result in results {
+//                        returnValue = result.count
+//                        if returnValue == 0 {
+//                            break
+//                        }
+//                    }
+//                }
+//                
+//                semaphore.signal()
+//            }
+//            semaphore.wait()
+//            return returnValue
+//        })
     }
 
-    private static func addTypeTransform(to transform: Transformer) {
+    private func addTypeTransformations(to transform: Transformer) {
         transform.register(name: RulesConstants.Transform.TRANSFORM_TO_INT, transformation: { value in
             switch value {
             case is String:
@@ -80,5 +122,4 @@ class LaunchRuleTransformer {
             return value
         })
     }
-
 }

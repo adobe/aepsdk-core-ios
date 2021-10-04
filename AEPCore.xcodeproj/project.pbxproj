@@ -75,6 +75,7 @@
 		246FD08A26CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
+		24A1FCE72704CE6000D28D26 /* rules_testHistory.json in Resources */ = {isa = PBXBuildFile; fileRef = 24A1FCE62704CE6000D28D26 /* rules_testHistory.json */; };
 		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
 		24B4935D24D4C31100AA38D9 /* SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4935C24D4C31100AA38D9 /* SignalTests.swift */; };
 		24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4935124D4C31100AA38D9 /* AEPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -681,6 +682,7 @@
 		247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+SignalTests.swift"; sourceTree = "<group>"; };
 		249498E0254A0C910045E392 /* Date+FormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+FormatTests.swift"; sourceTree = "<group>"; };
 		2499461B24E5E67700D3F7B2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		24A1FCE62704CE6000D28D26 /* rules_testHistory.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testHistory.json; sourceTree = "<group>"; };
 		24B4934F24D4C31100AA38D9 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24B4935124D4C31100AA38D9 /* AEPSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPSignal.h; sourceTree = "<group>"; };
 		24B4935224D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1704,6 +1706,7 @@
 				BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */,
 				BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */,
 				3F5D45FC25190E8C0040E298 /* rules_testTransform.json */,
+				24A1FCE62704CE6000D28D26 /* rules_testHistory.json */,
 			);
 			path = TestResources;
 			sourceTree = "<group>";
@@ -2436,6 +2439,7 @@
 				BBA512A124F4A15C0030DAD1 /* rules_testMatcherLt.json in Resources */,
 				BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */,
 				3F39520D24CA096100F7325B /* ADBMobileConfig.json in Resources */,
+				24A1FCE72704CE6000D28D26 /* rules_testHistory.json in Resources */,
 				BBA5129D24F4899B0030DAD1 /* rules_testMatcherGt.json in Resources */,
 				3F39520F24CA096100F7325B /* testRulesDownloader.zip in Resources */,
 				3F39520A24CA096100F7325B /* TestRules.zip in Resources */,
