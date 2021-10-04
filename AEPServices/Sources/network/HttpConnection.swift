@@ -46,14 +46,17 @@ public extension HttpConnection {
         return nil
     }
 
-    /// Returns the connection response code for the connection request.
+    /// Returns the connection response code for the connection request. -1 if there is any error from the connection request
     var responseCode: Int? {
-        return response?.statusCode
+        return error != nil ? -1 : response?.statusCode
     }
 
     /// Returns application server response message as string extracted from the `response` property, if available.
     var responseMessage: String? {
         if let code = responseCode {
+            if responseCode == -1 {
+                return error?.localizedDescription
+            }
             return HTTPURLResponse.localizedString(forStatusCode: code)
         }
 
