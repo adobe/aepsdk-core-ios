@@ -205,6 +205,24 @@ class NetworkServiceTests: XCTestCase {
         XCTAssertTrue(mockSession.dataTaskWithCompletionHandlerCalled)
     }
 
+    ///
+    /// Tests that when there is a network error, the HttpConnection response code is -1
+    ///
+    func testNetworkServiceErrorHttpConnectionCode() {
+        // Mock no internet error
+        let mockError = NSError(domain: "NSURLErrorDomain", code: -1001, userInfo: nil)
+        mockSession = MockURLSession(data: nil, urlResponse: nil, error: mockError as Error)
+        let testUrl = URL(string: "https://test.com")!
+        let networkRequest = NetworkRequest(url: testUrl)
+
+        networkStub.connectAsync(networkRequest: networkRequest, completionHandler: { connection in
+            XCTAssertEqual(connection.responseCode, -1)
+            XCTAssertEqual(connection.responseMessage, mockError.localizedDescription)
+        })
+
+
+    }
+
     // MARK: NetworkService overrider tests
 
     func testOverridenConnectAsync_called_whenMultipleRequests() {
