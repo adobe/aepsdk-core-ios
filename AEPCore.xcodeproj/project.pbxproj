@@ -75,6 +75,7 @@
 		246FD08A26CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
+		24A1FCE72704CE6000D28D26 /* rules_testHistory.json in Resources */ = {isa = PBXBuildFile; fileRef = 24A1FCE62704CE6000D28D26 /* rules_testHistory.json */; };
 		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
 		24B4935D24D4C31100AA38D9 /* SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4935C24D4C31100AA38D9 /* SignalTests.swift */; };
 		24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4935124D4C31100AA38D9 /* AEPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -95,6 +96,12 @@
 		24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */; };
 		24D9D52E26AB788D002A441A /* FullscreenMessage+WKNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */; };
 		24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */; };
+		24EDE33126EFB7170068A65F /* EventHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33026EFB7170068A65F /* EventHistory.swift */; };
+		24EDE33326EFB7470068A65F /* EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */; };
+		24EDE33526EFBDD60068A65F /* EventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */; };
+		24EDE33726F10B810068A65F /* EventData+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */; };
+		24EDE33926F10BA10068A65F /* String+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33826F10BA10068A65F /* String+FNV1A32.swift */; };
+		24EDE33B26F39F450068A65F /* EventHistoryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33A26F39F450068A65F /* EventHistoryResult.swift */; };
 		344CB8028DA7A7F0F44E65F4 /* Pods_AEPIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B414FF5745B34BC95CF624DC /* Pods_AEPIntegrationTests.framework */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
@@ -675,6 +682,7 @@
 		247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+SignalTests.swift"; sourceTree = "<group>"; };
 		249498E0254A0C910045E392 /* Date+FormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+FormatTests.swift"; sourceTree = "<group>"; };
 		2499461B24E5E67700D3F7B2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		24A1FCE62704CE6000D28D26 /* rules_testHistory.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testHistory.json; sourceTree = "<group>"; };
 		24B4934F24D4C31100AA38D9 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24B4935124D4C31100AA38D9 /* AEPSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPSignal.h; sourceTree = "<group>"; };
 		24B4935224D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -698,6 +706,12 @@
 		24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyStatus.swift"; sourceTree = "<group>"; };
 		24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKNavigationDelegate.swift"; sourceTree = "<group>"; };
 		24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKScriptMessageHandler.swift"; sourceTree = "<group>"; };
+		24EDE33026EFB7170068A65F /* EventHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistory.swift; sourceTree = "<group>"; };
+		24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryRequest.swift; sourceTree = "<group>"; };
+		24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabase.swift; sourceTree = "<group>"; };
+		24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventData+FNV1A32.swift"; sourceTree = "<group>"; };
+		24EDE33826F10BA10068A65F /* String+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+FNV1A32.swift"; sourceTree = "<group>"; };
+		24EDE33A26F39F450068A65F /* EventHistoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryResult.swift; sourceTree = "<group>"; };
 		2CDAE3FD5AB17A2ABC44C648 /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		379EA00DE567DCA654F85A63 /* Pods-AEPCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.release.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.release.xcconfig"; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1430,6 +1444,19 @@
 			path = AEPSignal/Sources;
 			sourceTree = "<group>";
 		};
+		24EDE32F26EFB7000068A65F /* history */ = {
+			isa = PBXGroup;
+			children = (
+				24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */,
+				24EDE33026EFB7170068A65F /* EventHistory.swift */,
+				24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */,
+				24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */,
+				24EDE33A26F39F450068A65F /* EventHistoryResult.swift */,
+				24EDE33826F10BA10068A65F /* String+FNV1A32.swift */,
+			);
+			path = history;
+			sourceTree = "<group>";
+		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
 			isa = PBXGroup;
 			children = (
@@ -1679,6 +1706,7 @@
 				BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */,
 				BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */,
 				3F5D45FC25190E8C0040E298 /* rules_testTransform.json */,
+				24A1FCE62704CE6000D28D26 /* rules_testHistory.json */,
 			);
 			path = TestResources;
 			sourceTree = "<group>";
@@ -1764,6 +1792,7 @@
 		3FB66AA524CA004400502CAF /* eventhub */ = {
 			isa = PBXGroup;
 			children = (
+				24EDE32F26EFB7000068A65F /* history */,
 				3FB66AAA24CA004400502CAF /* AEPError.swift */,
 				3FB66AA924CA004400502CAF /* Event.swift */,
 				3FB66AAC24CA004400502CAF /* EventHub.swift */,
@@ -2410,6 +2439,7 @@
 				BBA512A124F4A15C0030DAD1 /* rules_testMatcherLt.json in Resources */,
 				BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */,
 				3F39520D24CA096100F7325B /* ADBMobileConfig.json in Resources */,
+				24A1FCE72704CE6000D28D26 /* rules_testHistory.json in Resources */,
 				BBA5129D24F4899B0030DAD1 /* rules_testMatcherGt.json in Resources */,
 				3F39520F24CA096100F7325B /* testRulesDownloader.zip in Resources */,
 				3F39520A24CA096100F7325B /* TestRules.zip in Resources */,
@@ -2893,7 +2923,10 @@
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
 				218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */,
 				3F16761424E1B0630041B970 /* RulesConstants.swift in Sources */,
+				24EDE33726F10B810068A65F /* EventData+FNV1A32.swift in Sources */,
+				24EDE33526EFBDD60068A65F /* EventHistoryDatabase.swift in Sources */,
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
+				24EDE33126EFB7170068A65F /* EventHistory.swift in Sources */,
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */,
@@ -2909,8 +2942,10 @@
 				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
+				24EDE33B26F39F450068A65F /* EventHistoryResult.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				3F2B1DA62631E7FE0030F50B /* RuleConsequence.swift in Sources */,
+				24EDE33326EFB7470068A65F /* EventHistoryRequest.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
 				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,
 				21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */,
@@ -2939,6 +2974,7 @@
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
 				3F5D45F8251903030040E298 /* LaunchRuleTransformer.swift in Sources */,
+				24EDE33926F10BA10068A65F /* String+FNV1A32.swift in Sources */,
 				21A6737325434AE600A7E906 /* SharedStateType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

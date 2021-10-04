@@ -1,16 +1,22 @@
 PODS:
-  - AEPRulesEngine (1.0.1)
+  - AEPRulesEngine (1.1.0)
 
 DEPENDENCIES:
-  - AEPRulesEngine
+  - AEPRulesEngine (from `https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git`, branch `dev-v1.0.2`)
 
-SPEC REPOS:
-  trunk:
-    - AEPRulesEngine
+EXTERNAL SOURCES:
+  AEPRulesEngine:
+    :branch: dev-v1.0.2
+    :git: https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git
+
+CHECKOUT OPTIONS:
+  AEPRulesEngine:
+    :commit: 03ea2ca019e7d620598bc0f6b5113dbd3f6c1482
+    :git: https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git
 
 SPEC CHECKSUMS:
-  AEPRulesEngine: 5075ed294026a12e37bd26fe260f74604d205354
+  AEPRulesEngine: bb2927ed5501ddf9754c66e97f8d2b1cf8e33b19
 
-PODFILE CHECKSUM: 31a9899de6250afde3d420f3c919cf16beb8dc75
+PODFILE CHECKSUM: a5f14edc38c79ed9e50a54b7b02df0b1be4bd6ee
 
 COCOAPODS: 1.10.1
