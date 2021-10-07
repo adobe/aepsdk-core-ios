@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AEPServices
 
 extension Dictionary where Key == String, Value == Any {
     /// Flattens the dictionary then calls `fnv1a32_inner`.
@@ -41,7 +42,14 @@ extension Dictionary where Key == String, Value == Any {
         var hash: UInt32 = 0
         for i in 0..<alphabeticalKeys.count {
             let key = alphabeticalKeys[i]
-            let valueAsString = String(describing: self[key])
+            var valueAsString = ""
+            if let value = self[key] {
+                if let anyCodable = value as? AnyCodable, let codableValue = anyCodable.value {
+                    valueAsString = String(describing: codableValue)
+                } else {
+                    valueAsString = String(describing: value)
+                }
+            }
             let kvpString = key + ":" + valueAsString
             hash = kvpString.fnv1a32(hash)
         }

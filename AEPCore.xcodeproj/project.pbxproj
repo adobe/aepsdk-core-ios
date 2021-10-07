@@ -96,6 +96,8 @@
 		24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */; };
 		24D9D52E26AB788D002A441A /* FullscreenMessage+WKNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */; };
 		24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */; };
+		24E255D5270F406300AB9F07 /* EventData+FNV1A32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */; };
+		24E255D7270F526D00AB9F07 /* String+FNV1A32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */; };
 		24EDE33126EFB7170068A65F /* EventHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33026EFB7170068A65F /* EventHistory.swift */; };
 		24EDE33326EFB7470068A65F /* EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */; };
 		24EDE33526EFBDD60068A65F /* EventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */; };
@@ -706,6 +708,8 @@
 		24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyStatus.swift"; sourceTree = "<group>"; };
 		24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKNavigationDelegate.swift"; sourceTree = "<group>"; };
 		24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKScriptMessageHandler.swift"; sourceTree = "<group>"; };
+		24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventData+FNV1A32Tests.swift"; sourceTree = "<group>"; };
+		24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+FNV1A32Tests.swift"; sourceTree = "<group>"; };
 		24EDE33026EFB7170068A65F /* EventHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistory.swift; sourceTree = "<group>"; };
 		24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryRequest.swift; sourceTree = "<group>"; };
 		24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabase.swift; sourceTree = "<group>"; };
@@ -1444,6 +1448,15 @@
 			path = AEPSignal/Sources;
 			sourceTree = "<group>";
 		};
+		24E255D3270F403A00AB9F07 /* HistoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */,
+				24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */,
+			);
+			path = HistoryTests;
+			sourceTree = "<group>";
+		};
 		24EDE32F26EFB7000068A65F /* history */ = {
 			isa = PBXGroup;
 			children = (
@@ -1671,6 +1684,7 @@
 		3F3951E924CA096100F7325B /* EventHubTests */ = {
 			isa = PBXGroup;
 			children = (
+				24E255D3270F403A00AB9F07 /* HistoryTests */,
 				ACD255AC26C21A9B00532B1E /* EventTests.swift */,
 				3F3951EB24CA096100F7325B /* EventHubTests.swift */,
 				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
@@ -2999,6 +3013,7 @@
 				3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
 				21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */,
+				24E255D5270F406300AB9F07 /* EventData+FNV1A32Tests.swift in Sources */,
 				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				216A15F5257818EF00D43848 /* Data+HexStringTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
@@ -3024,6 +3039,7 @@
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */,
 				24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */,
+				24E255D7270F526D00AB9F07 /* String+FNV1A32Tests.swift in Sources */,
 				3FB5F7D024D2848900F0F6DF /* ConfigurationUpdateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

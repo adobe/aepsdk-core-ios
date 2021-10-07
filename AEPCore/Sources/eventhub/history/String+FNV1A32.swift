@@ -22,7 +22,7 @@ extension String {
         let prime: UInt32 = 16777619
         let offset: UInt32 = 2166136261
 
-        var hash: UInt32 = offset
+        var hash: UInt32 = hash == 0 ? offset : hash
         let chars = Array(self.utf8)
 
         for char in chars {
