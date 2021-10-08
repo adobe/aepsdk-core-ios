@@ -43,9 +43,73 @@ class EventData_FNV1A32Tests: XCTestCase {
         XCTAssertEqual(874166902, result)
     }
     
+    func testDouble() throws {
+        // setup
+        dictionary["key"] = 5.52
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:5.52
+        XCTAssertEqual(1449854826, result)
+    }
+    
     func testBool() throws {
         // setup
         dictionary["key"] = false
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:false
+        XCTAssertEqual(138493769, result)
+    }
+    
+    func testOptionalString() throws {
+        // setup
+        let value: String? = "value"
+        dictionary["key"] = value
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:value
+        XCTAssertEqual(4007910315, result)
+    }
+    
+    func testOptionalInt() throws {
+        // setup
+        let value: Int? = 552
+        dictionary["key"] = value
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:552
+        XCTAssertEqual(874166902, result)
+    }
+    
+    func testOptionalDouble() throws {
+        // setup
+        let value: Double? = 5.52
+        dictionary["key"] = value
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:5.52
+        XCTAssertEqual(1449854826, result)
+    }
+    
+    func testOptionalBool() throws {
+        // setup
+        let value: Bool? = false
+        dictionary["key"] = value
         
         // test
         let result = dictionary.fnv1a32(mask: nil)

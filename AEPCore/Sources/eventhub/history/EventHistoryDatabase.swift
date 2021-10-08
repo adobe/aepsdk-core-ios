@@ -107,8 +107,8 @@ class EventHistoryDatabase {
             SELECT count(*) as count, min(\(self.columnTimestamp)) as "oldest", max(\(self.columnTimestamp)) as "newest"
             FROM \(self.tableName)
             WHERE \(self.columnHash) == \(hash)
-            AND \(self.columnTimestamp) >= \(from?.timeIntervalSince1970 ?? 0)
-            AND \(self.columnTimestamp) <= \(to?.timeIntervalSince1970 ?? Date().timeIntervalSince1970)
+            AND \(self.columnTimestamp) >= \(from?.millisecondsSince1970 ?? 0)
+            AND \(self.columnTimestamp) <= \(to?.millisecondsSince1970 ?? Date().millisecondsSince1970)
             """
 
             // a nil result means there was no query results to be returned
@@ -156,8 +156,8 @@ class EventHistoryDatabase {
             let deleteStatement = """
             DELETE FROM \(self.tableName)
             WHERE \(self.columnHash) == \(hash)
-            AND \(self.columnTimestamp) >= \(from?.timeIntervalSince1970 ?? 0)
-            AND \(self.columnTimestamp) <= \(to?.timeIntervalSince1970 ?? Date().timeIntervalSince1970)
+            AND \(self.columnTimestamp) >= \(from?.millisecondsSince1970 ?? 0)
+            AND \(self.columnTimestamp) <= \(to?.millisecondsSince1970 ?? Date().millisecondsSince1970)
             """
 
             // a nil result means there was no query results to be returned
