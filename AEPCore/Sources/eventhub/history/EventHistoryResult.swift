@@ -12,14 +12,30 @@
 
 import Foundation
 
-@objc(AEPEventHistoryResult)
+/// Passed to handlers by `EventHistory` when Events are requested via `getEvents` API.
+@objc
 public class EventHistoryResult: NSObject {
+    /// The number of occurrences in `EventHistory` of the `EventHistoryRequest` specified.
     @objc public let count: Int
+
+    /// A date representing the oldest occurrence of the event found in `EventHistory`.
+    ///
+    /// If `count` == 0, this value will be nil.
     @objc public let oldestOccurrence: Date?
+
+    /// A date representing the most recent occurrence of the event found in `EventHistory`.
+    ///
+    /// If `count` == 0, this value will be nil.
     @objc public let newestOccurrence: Date?
 
+    /// Creates a new `EventHistoryResult` object.
+    ///
+    /// - Parameters:
+    ///   - count: The number of occurrences in `EventHistory` of the `EventHistoryRequest` specified
+    ///   - oldest: A date representing the oldest occurrence of the event found in `EventHistory`
+    ///   - newest: A date representing the most recent occurrence of the event found in `EventHistory`
     @objc
-    init(count: Int, oldest: Date? = nil, newest: Date? = nil) {
+    internal init(count: Int, oldest: Date? = nil, newest: Date? = nil) {
         self.count = count
         self.oldestOccurrence = oldest
         self.newestOccurrence = newest

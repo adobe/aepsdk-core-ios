@@ -84,6 +84,10 @@
 		24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */; };
 		24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */; };
 		24B4937A24DA18BE00AA38D9 /* SignalHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937924DA18BE00AA38D9 /* SignalHit.swift */; };
+		24B4BE592714F5A40000C3AA /* EventHistoryRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */; };
+		24B4BE5B2714F7730000C3AA /* EventHistoryResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE5A2714F7730000C3AA /* EventHistoryResponseTests.swift */; };
+		24B4BE5D2714F7B30000C3AA /* EventHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */; };
+		24B4BE5F2714F7C80000C3AA /* EventHistoryDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */; };
 		24C5E14D26B8B00B005BEA72 /* MessageSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */; };
 		24C5E15D26B990CB005BEA72 /* MessageGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E15C26B990CB005BEA72 /* MessageGesture.swift */; };
 		24C5E17B26B999E4005BEA72 /* MessageAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */; };
@@ -696,6 +700,10 @@
 		24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Signal.swift"; sourceTree = "<group>"; };
 		24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessor.swift; sourceTree = "<group>"; };
 		24B4937924DA18BE00AA38D9 /* SignalHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHit.swift; sourceTree = "<group>"; };
+		24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryRequestTests.swift; sourceTree = "<group>"; };
+		24B4BE5A2714F7730000C3AA /* EventHistoryResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryResponseTests.swift; sourceTree = "<group>"; };
+		24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryTests.swift; sourceTree = "<group>"; };
+		24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabaseTests.swift; sourceTree = "<group>"; };
 		24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettings.swift; sourceTree = "<group>"; };
 		24C5E15C26B990CB005BEA72 /* MessageGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGesture.swift; sourceTree = "<group>"; };
 		24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAlignment.swift; sourceTree = "<group>"; };
@@ -1452,6 +1460,10 @@
 			isa = PBXGroup;
 			children = (
 				24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */,
+				24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */,
+				24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */,
+				24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */,
+				24B4BE5A2714F7730000C3AA /* EventHistoryResponseTests.swift */,
 				24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */,
 			);
 			path = HistoryTests;
@@ -3000,11 +3012,13 @@
 				BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */,
 				3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */,
 				BBA512B524F5D0CC0030DAD1 /* EventHub+Testable.swift in Sources */,
+				24B4BE592714F5A40000C3AA /* EventHistoryRequestTests.swift in Sources */,
 				78AA4EC92513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift in Sources */,
 				21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */,
 				3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */,
 				3F16762C24F032E60041B970 /* ContractExtensionTwo.swift in Sources */,
 				78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */,
+				24B4BE5D2714F7B30000C3AA /* EventHistoryTests.swift in Sources */,
 				3F16762824F031A00041B970 /* EventHubContractTests.swift in Sources */,
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
 				ACD255AD26C21A9B00532B1E /* EventTests.swift in Sources */,
@@ -3017,11 +3031,13 @@
 				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				216A15F5257818EF00D43848 /* Data+HexStringTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
+				24B4BE5F2714F7C80000C3AA /* EventHistoryDatabaseTests.swift in Sources */,
 				21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
 				BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */,
 				BBA1E97825F099D000999DD2 /* DataMarshallerTests.swift in Sources */,
+				24B4BE5B2714F7730000C3AA /* EventHistoryResponseTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
 				78AA4EC62513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift in Sources */,
