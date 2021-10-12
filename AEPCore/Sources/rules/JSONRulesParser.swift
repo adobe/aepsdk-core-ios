@@ -168,12 +168,20 @@ class JSONCondition: Codable {
             let semaphore = DispatchSemaphore(value: 0)
 
             runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
-                for result in results {
-                    if result.count >= 1 {
+                if searchType == .ordered {
+                    for result in results {
+                        if result.count < 1 {
+                            // quick exit on ordered searches if any result has a count < 1
+                            returnValue = 0
+                            semaphore.signal()
+                            break
+                        } else {
+                            returnValue = 1
+                        }
+                    }
+                } else {
+                    for result in results {
                         returnValue += result.count
-                    } else if searchType == .ordered {
-                        returnValue = 0
-                        break
                     }
                 }
 
