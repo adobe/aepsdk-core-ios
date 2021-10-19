@@ -43,30 +43,18 @@ extension Dictionary where Key == String, Value == Any {
         for i in 0..<alphabeticalKeys.count {
             let key = alphabeticalKeys[i]
             var valueAsString = ""
-            if let value = self[key] {
-                // value should be unwrapped (not optional) at this point, but there is a Swift/Apple bug preventing
-                // the conversion to a non-optional value.  this requires us to force unwrap the values.                
-                switch value.self {
-                case is String:
-                    valueAsString = String(describing: (value as! String))
-                case is Int:
-                    valueAsString = String(describing: (value as! Int))
-                case is Int32:
-                    valueAsString = String(describing: (value as! Int32))
-                case is Int64:
-                    valueAsString = String(describing: (value as! Int64))
-                case is Double:
-                    valueAsString = String(describing: (value as! Double))
-                case is Bool:
-                    valueAsString = String(describing: (value as! Bool))
-                case is AnyCodable:
-                    if let codableValue = (value as? AnyCodable)?.value {
-                        valueAsString = String(describing: codableValue)
-                    }
-                default:
-                    valueAsString = String(describing: value)
+            let value = self[key]
+
+            if value is AnyCodable {
+                if let codableValue = (value as? AnyCodable)?.value {
+                    valueAsString = String(describing: codableValue)
                 }
+            } else if value != nil {
+                valueAsString = String(describing: value!)
+            } else {
+                valueAsString = String(describing: value)
             }
+
             let kvpString = key + ":" + valueAsString
             hash = kvpString.fnv1a32(hash)
         }
