@@ -117,8 +117,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(0, dispatchedEvent.data?["previoussessionstarttimestampmillis"] as? Double)
         XCTAssertEqual(0, dispatchedEvent.data?["previoussessionpausetimestampmillis"] as? Double)
         XCTAssertEqual(86400.0 * 7.0, dispatchedEvent.data?["maxsessionlength"] as? Double)
-        // the value of starttimestampmillis changes based on the time zone
-        XCTAssertNotNil(dispatchedEvent.data?["starttimestampmillis"] as? Double)
+        XCTAssertEqual(date.timeIntervalSince1970, dispatchedEvent.data?["starttimestampmillis"] as? Double)
         XCTAssertEqual("start", dispatchedEvent.data?["sessionevent"] as? String)
 
         XCTAssertEqual("2", dispatchedEvent.lifecycleContextData["dayofweek"] as? String)
@@ -133,7 +132,6 @@ class LifecycleFunctionalTests: XCTestCase {
         // shared state
         let sharedState = mockRuntime.createdSharedStates[0]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
-
         XCTAssertEqual("2", lifecycleData?["dayofweek"] as? String)
         XCTAssertEqual("22", lifecycleData?["hourofday"] as? String)
         XCTAssertEqual("InstallEvent", lifecycleData?["installevent"] as? String)
@@ -142,6 +140,8 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("DailyEngUserEvent", lifecycleData?["dailyenguserevent"] as? String)
         XCTAssertEqual("7/27/2020", lifecycleData?["installdate"] as? String)
         XCTAssertEqual("1", lifecycleData?["launches"] as? String)
+        XCTAssertEqual(86400.0 * 7.0, sharedState?["maxsessionlength"] as? Double)
+        XCTAssertEqual(date.timeIntervalSince1970, sharedState?["starttimestampmillis"] as? Double)
 
         // persistance
         let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
@@ -169,9 +169,9 @@ class LifecycleFunctionalTests: XCTestCase {
     /// Tests simple start then pause, then start again, the second start call should be ignored, shared state will be updated twice
     func testLifecycleStartPauseStart() {
         // setup
-        let startEvent1 = createStartEvent()
-        let pauseEvent = createPauseEvent()
-        let startEvent2 = createStartEvent()
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 10))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 20))
 
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
@@ -182,7 +182,12 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
 
-        XCTAssertEqual(mockRuntime.createdSharedStates[0]?.count, mockRuntime.createdSharedStates[1]?.count)
+        let sharedStateEvent1 = mockRuntime.createdSharedStates[0]
+        let sharedStateEvent2 = mockRuntime.createdSharedStates[1]
+
+        XCTAssertEqual(1_595_909_459, sharedStateEvent1?["starttimestampmillis"] as? Double)
+        // Adjusted start time = 1_595_909_459 + 20 (new start time) - 10 (Pause time)
+        XCTAssertEqual(1_595_909_459 + 10, sharedStateEvent2?["starttimestampmillis"] as? Double)
     }
 
     /// Tests simple start then pause, then start again, the second start call should NOT be ignored
@@ -202,7 +207,8 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
         let dispatchedLifecycleStartEvent1 = mockRuntime.dispatchedEvents[0]
         let dispatchedLifecycleStartEvent2 = mockRuntime.dispatchedEvents[1]
-
+        let sharedStateEvent1 = mockRuntime.createdSharedStates[0]
+        let sharedStateEvent2 = mockRuntime.createdSharedStates[1]
 
         XCTAssertEqual("1", (dispatchedLifecycleStartEvent1.data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
         XCTAssertEqual("2", (dispatchedLifecycleStartEvent2.data?["lifecyclecontextdata"] as? [String: Any])?["launches"] as? String)
@@ -212,6 +218,9 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(86400.0 * 7.0, dispatchedLifecycleStartEvent2.data?["maxsessionlength"] as? Double)
         XCTAssertEqual(1_595_909_499, dispatchedLifecycleStartEvent2.data?["starttimestampmillis"] as? Double)
         XCTAssertEqual("start", dispatchedLifecycleStartEvent2.data?["sessionevent"] as? String)
+
+        XCTAssertEqual(1_595_909_459, sharedStateEvent1?["starttimestampmillis"] as? Double)
+        XCTAssertEqual(1_595_909_499, sharedStateEvent2?["starttimestampmillis"] as? Double)
     }
 
     /// Tests crash event when the last session was not gracefully closed
