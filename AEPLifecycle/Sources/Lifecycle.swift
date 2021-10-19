@@ -98,7 +98,10 @@ public class Lifecycle: NSObject, Extension {
                                                    adId: getAdvertisingIdentifier(event: event),
                                                    sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value),
                                                    isInstall: install)
-        updateSharedState(event: event, data: lifecycleState.getContextData()?.toEventData() ?? [:], startDate: lifecycleState.getSessionStartDate())
+        updateSharedState(event: event,
+                          data: lifecycleState.getContextData()?.toEventData() ?? [:],
+                          startDate: lifecycleState.getSessionStartDate() ?? Date(timeIntervalSince1970: 0)
+        )
 
         if let prevSessionInfo = prevSessionInfo {
             dispatchSessionStart(date: event.timestamp, contextData: lifecycleState.getContextData(), previousStartDate: prevSessionInfo.startDate, previousPauseDate: prevSessionInfo.pauseDate)
@@ -137,10 +140,10 @@ public class Lifecycle: NSObject, Extension {
     ///   - event: the event to version the shared state at
     ///   - data: data for the shared state
     ///   - startDate: start timestamp of the lifecycle session
-    private func updateSharedState(event: Event, data: [String: Any], startDate: Date?) {
+    private func updateSharedState(event: Event, data: [String: Any], startDate: Date) {
         let sharedStateData: [String: Any] = [
             LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: data,
-            LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: startDate?.timeIntervalSince1970 ?? 0.0,
+            LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: startDate.timeIntervalSince1970,
             LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS,
         ]
         createSharedState(data: sharedStateData, event: event)
