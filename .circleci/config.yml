@@ -14,16 +14,18 @@ jobs:
 
   build-and-test:
     macos:
-      xcode: 12.5.1 # Specify the Xcode version to use
+      xcode: 12.0.1 # Specify the Xcode version to use
 
     steps:
       - checkout
+      
       - run:
-          name: Install realm/SwiftLint
-          command: brew update-reset && brew install swiftlint
+          name: Pod install
+          command: pod install
+
       - run: 
           name: Swift Linting
-          command: swiftlint lint
+          command: ./Pods/SwiftLint/swiftlint lint
       - run:
           name: Install nicklockwood/SwiftFormat
           command: brew install swiftformat
@@ -34,10 +36,6 @@ jobs:
       - run:
           name: Pre-start Simulator
           command: xcrun instruments -w "iPhone 8 (13.0) [" || true
-      
-      - run:
-          name: Pod install
-          command: pod install
 
       - run:
           name: Run AEPCore Tests
