@@ -87,10 +87,10 @@ format:
 	swiftformat . --swiftversion 5.1
 
 lint-autocorrect:
-	swiftlint autocorrect
+	./Pods/SwiftLint/swiftlint autocorrect
 
 lint:
-	swiftlint lint
+	./Pods/SwiftLint/swiftlint lint
 
 checkFormat:
 	swiftformat . --lint --swiftversion 5.1
