@@ -6,7 +6,7 @@ use_frameworks!
 
 workspace 'AEPCore'
 
-pod 'SwiftLint', '0.40.0'
+pod 'SwiftLint', '0.44.0'
 
 target 'AEPCore' do
   project 'AEPCore.xcodeproj'
