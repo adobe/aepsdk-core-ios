@@ -19,7 +19,7 @@ import AEPIdentity
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    private let LAUNCH_ENVIRONMENT_FILE_ID = "94f571f308d5/79f56246157c/launch-a3c2e1e3d42e-development"
+    private let LAUNCH_ENVIRONMENT_FILE_ID = ""
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
