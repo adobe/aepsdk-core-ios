@@ -12,6 +12,7 @@
 
 import AEPServices
 import Foundation
+import AEPRulesEngine
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
 class Configuration: NSObject, Extension {
@@ -59,6 +60,7 @@ class Configuration: NSObject, Extension {
             createSharedState(data: config, event: nil)
             // notify rules engine to load cached rules
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
+                Log.trace(label: name, "Reading rules from cache")
                 rulesEngine.replaceRulesWithCache(from: rulesURLString)
             }
         }

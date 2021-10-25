@@ -70,15 +70,18 @@ class RulesDownloaderTests: XCTestCase {
         let testEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
         cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with cached rules")
-        var loadedRulesData: Data?
 
-        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
-            loadedRulesData = loadedRules
-            expectation.fulfill()
+        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { result in
+            switch result {
+            case .success(_):
+                XCTFail("Unexpected success")
+            case .failure(let error):
+                XCTAssertEqual(RulesDownloaderError.notModified, error)
+                expectation.fulfill()
+            }
         })
 
         wait(for: [expectation], timeout: 1)
-        XCTAssertNil(loadedRulesData)
         XCTAssertFalse(mockUnzipper.unzipCalled)
         XCTAssertTrue(cache.getCalled)
         XCTAssertFalse(cache.setCalled)
@@ -87,9 +90,14 @@ class RulesDownloaderTests: XCTestCase {
     func testLoadRulesFromUrlWithError() {
         ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .error)
         let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
-        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
-            XCTAssertNil(loadedRules)
-            expectation.fulfill()
+        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { result in
+            switch result {
+            case .success(_):
+                XCTFail("Unexpected success")
+            case .failure(let error):
+                XCTAssertEqual(RulesDownloaderError.noData, error)
+                expectation.fulfill()
+            }
         })
 
         wait(for: [expectation], timeout: 1)
@@ -101,8 +109,13 @@ class RulesDownloaderTests: XCTestCase {
     func testLoadRulesFromUrlUnzipFail() {
         ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
         let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
-        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
-            XCTAssertNil(loadedRules)
+        rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { result in
+            switch result {
+            case .success(_):
+                XCTFail("Unexpected success")
+            case .failure(let error):
+                XCTAssertEqual(RulesDownloaderError.unableToUnzipRules, error)
+            }
             expectation.fulfill()
         })
         wait(for: [expectation], timeout: 1)
@@ -119,9 +132,14 @@ class RulesDownloaderTests: XCTestCase {
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with rules")
         var rules: Data?
 
-        rulesDownloaderReal.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { loadedRules in
-            rules = loadedRules
-            expectation.fulfill()
+        rulesDownloaderReal.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { result in
+            switch result {
+            case .success(let data):
+                rules = data
+                expectation.fulfill()
+            case .failure(let error):
+                XCTFail("Failed to load rules with error: \(error)")
+            }
         })
 
         wait(for: [expectation], timeout: 1)
