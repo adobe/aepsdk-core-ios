@@ -31,6 +31,18 @@ class EventData_FNV1A32Tests: XCTestCase {
         XCTAssertEqual(4007910315, result)
     }
     
+    func testCharacter() throws {
+        // setup
+        dictionary["key"] = Character("a")
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:a
+        XCTAssertEqual(135500217, result)
+    }
+    
     func testInt() throws {
         // setup
         dictionary["key"] = 552
@@ -41,6 +53,150 @@ class EventData_FNV1A32Tests: XCTestCase {
         // verify
         // key:552
         XCTAssertEqual(874166902, result)
+    }
+    
+    func testInt8() throws {
+        // setup
+        dictionary["key"] = Int8(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testInt16() throws {
+        // setup
+        dictionary["key"] = Int16(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testInt32() throws {
+        // setup
+        dictionary["key"] = Int32(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testInt64() throws {
+        // setup
+        dictionary["key"] = Int64(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testUInt() throws {
+        // setup
+        dictionary["key"] = UInt(552)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:552
+        XCTAssertEqual(874166902, result)
+    }
+    
+    func testUInt8() throws {
+        // setup
+        dictionary["key"] = UInt8(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testUInt16() throws {
+        // setup
+        dictionary["key"] = UInt16(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testUInt32() throws {
+        // setup
+        dictionary["key"] = UInt32(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testUInt64() throws {
+        // setup
+        dictionary["key"] = UInt64(24)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:24
+        XCTAssertEqual(2995581580, result)
+    }
+    
+    func testFloat() throws {
+        // setup
+        dictionary["key"] = Float(5.52)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:5.52
+        XCTAssertEqual(1449854826, result)
+    }
+        
+    func testFloat32() throws {
+        // setup
+        dictionary["key"] = Float32(5.52)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:5.52
+        XCTAssertEqual(1449854826, result)
+    }
+    
+    func testFloat64() throws {
+        // setup
+        dictionary["key"] = Float64(5.52)
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify
+        // key:5.52
+        XCTAssertEqual(1449854826, result)
     }
     
     func testDouble() throws {

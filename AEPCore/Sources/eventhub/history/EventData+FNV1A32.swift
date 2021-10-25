@@ -43,22 +43,56 @@ extension Dictionary where Key == String, Value == Any {
         for i in 0..<alphabeticalKeys.count {
             let key = alphabeticalKeys[i]
             var valueAsString = ""
-            let value = self[key]
-
-            if value is AnyCodable {
-                if let codableValue = (value as? AnyCodable)?.value {
-                    valueAsString = String(describing: codableValue)
+            if let value = self[key] {
+                switch value.self {
+                case is String:
+                    valueAsString = String(describing: (value as! String))
+                case is Character:
+                    valueAsString = String(describing: (value as! Character))
+                case is Int:
+                    valueAsString = String(describing: (value as! Int))
+                case is Int8:
+                    valueAsString = String(describing: (value as! Int8))
+                case is Int16:
+                    valueAsString = String(describing: (value as! Int16))
+                case is Int32:
+                    valueAsString = String(describing: (value as! Int32))
+                case is Int64:
+                    valueAsString = String(describing: (value as! Int64))
+                case is UInt:
+                    valueAsString = String(describing: (value as! UInt))
+                case is UInt8:
+                    valueAsString = String(describing: (value as! UInt8))
+                case is UInt16:
+                    valueAsString = String(describing: (value as! UInt16))
+                case is UInt32:
+                    valueAsString = String(describing: (value as! UInt32))
+                case is UInt64:
+                    valueAsString = String(describing: (value as! UInt64))
+                case is Float:
+                    valueAsString = String(describing: (value as! Float))
+                case is Double:
+                    valueAsString = String(describing: (value as! Double))
+                case is Bool:
+                    valueAsString = String(describing: (value as! Bool))
+                case is AnyCodable:
+                    if let codableValue = (value as? AnyCodable)?.value {
+                        valueAsString = String(describing: codableValue)
+                    }
+                default:
+                    valueAsString = String(describing: value)
                 }
-            } else if value != nil {
-                valueAsString = String(describing: value!)
-            } else {
-                valueAsString = String(describing: value)
             }
 
-            let kvpString = key + ":" + valueAsString
-            hash = kvpString.fnv1a32(hash)
+            if !valueAsString.isEmpty {
+                let kvpString = key + ":" + valueAsString
+                hash = kvpString.fnv1a32(hash)
+            }
         }
 
         return hash
     }
 }
+
+// searching for: 3453402525
+// display hash: 3453402525
