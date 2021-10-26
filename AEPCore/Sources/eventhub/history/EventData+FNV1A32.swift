@@ -29,6 +29,7 @@ extension Dictionary where Key == String, Value == Any {
         return self.flattening().fnv1a32_inner(mask: mask)
     }
 
+    // swiftlint:disable function_body_length
     /// processes the flattened dictionary
     private func fnv1a32_inner(mask: [String]? = nil) -> UInt32 {
         var alphabeticalKeys: [String]
@@ -92,4 +93,5 @@ extension Dictionary where Key == String, Value == Any {
 
         return hash
     }
+    // swiftlint:enable function_body_length
 }
