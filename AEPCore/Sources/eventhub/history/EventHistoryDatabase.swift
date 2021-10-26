@@ -159,12 +159,18 @@ class EventHistoryDatabase {
             """
 
             // a nil result means there was no query results to be returned
-            guard let result = SQLiteWrapper.query(database: connection, sql: deleteStatement) else {
+            guard let _ = SQLiteWrapper.query(database: connection, sql: deleteStatement) else {
                 handler?(0)
                 return
             }
 
-            let count = Int(result.first?.values.first ?? "0") ?? 0
+            // doing "SELECT changes()" after a delete will return the number of records that were deleted
+            guard let recordCount = SQLiteWrapper.query(database: connection, sql: "SELECT changes()") else {
+                handler?(0)
+                return
+            }
+
+            let count = Int(recordCount.first?.values.first ?? "0") ?? 0
             handler?(count)
         }
     }
