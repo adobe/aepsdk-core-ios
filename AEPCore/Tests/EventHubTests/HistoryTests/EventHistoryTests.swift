@@ -10,26 +10,10 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
+import XCTest
 
-/// 32-bit FNV hash
-/// https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function
-///
-/// Online validator - https://md5calc.com/hash/fnv1a32?str=
-///
-extension String {
-    func fnv1a32(_ hash: UInt32) -> UInt32 {
-        let prime: UInt32 = 16777619
-        let offset: UInt32 = 2166136261
+@testable import AEPCore
 
-        var hash: UInt32 = hash == 0 ? offset : hash
-        let chars = Array(self.utf8)
+class EventHistoryTests: XCTestCase {
 
-        for char in chars {
-            hash = hash ^ UInt32(char)
-            hash = hash &* prime
-        }
-
-        return hash
-    }
 }

@@ -11,7 +11,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   AEPRulesEngine:
-    :commit: 03ea2ca019e7d620598bc0f6b5113dbd3f6c1482
+    :commit: ea49b48b0c232412b35e21c6eebca317934f117b
     :git: https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git
 
 SPEC CHECKSUMS:

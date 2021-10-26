@@ -12,12 +12,30 @@
 
 import Foundation
 
+/// Used for selecting or deleting Events from Event History.
+@objc
 public class EventHistoryRequest: NSObject {
-    let mask: [String: Any]
-    let fromDate: Date?
-    let toDate: Date?
+    /// Key-value pairs that will be used to generate the hash when looking up an Event.
+    @objc public let mask: [String: Any]
 
-    init(mask: [String: Any], from: Date? = nil, to: Date? = nil) {
+    /// Date that represents the lower bounds of the date range used when looking up an Event.
+    ///
+    /// If not provided, the lookup will use the beginning of Event History as the lower bounds.
+    @objc public let fromDate: Date?
+
+    /// Date that represents the upper bounds of the date range used when looking up an Event.
+    ///
+    /// If not provided, there will be no upper bound on the date range.
+    @objc public let toDate: Date?
+
+    /// Initialize an `EventHistoryRequest` object.
+    ///
+    /// - Parameters:
+    ///   - mask: Key-value pairs that will be used to generate the hash when looking up an Event
+    ///   - from: Date that represents the lower bounds of the date range used when looking up an Event
+    ///   - to: Date that represents the upper bounds of the date range used when looking up an Event
+    @objc
+    public init(mask: [String: Any], from: Date? = nil, to: Date? = nil) {
         self.mask = mask
         self.fromDate = from
         self.toDate = to

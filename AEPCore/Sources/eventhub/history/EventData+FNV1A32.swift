@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AEPServices
 
 extension Dictionary where Key == String, Value == Any {
     /// Flattens the dictionary then calls `fnv1a32_inner`.
@@ -41,9 +42,52 @@ extension Dictionary where Key == String, Value == Any {
         var hash: UInt32 = 0
         for i in 0..<alphabeticalKeys.count {
             let key = alphabeticalKeys[i]
-            let valueAsString = String(describing: self[key])
-            let kvpString = key + ":" + valueAsString
-            hash = kvpString.fnv1a32(hash)
+            var valueAsString = ""
+            if let value = self[key] {
+                switch value.self {
+                case is String:
+                    valueAsString = String(describing: (value as! String))
+                case is Character:
+                    valueAsString = String(describing: (value as! Character))
+                case is Int:
+                    valueAsString = String(describing: (value as! Int))
+                case is Int8:
+                    valueAsString = String(describing: (value as! Int8))
+                case is Int16:
+                    valueAsString = String(describing: (value as! Int16))
+                case is Int32:
+                    valueAsString = String(describing: (value as! Int32))
+                case is Int64:
+                    valueAsString = String(describing: (value as! Int64))
+                case is UInt:
+                    valueAsString = String(describing: (value as! UInt))
+                case is UInt8:
+                    valueAsString = String(describing: (value as! UInt8))
+                case is UInt16:
+                    valueAsString = String(describing: (value as! UInt16))
+                case is UInt32:
+                    valueAsString = String(describing: (value as! UInt32))
+                case is UInt64:
+                    valueAsString = String(describing: (value as! UInt64))
+                case is Float:
+                    valueAsString = String(describing: (value as! Float))
+                case is Double:
+                    valueAsString = String(describing: (value as! Double))
+                case is Bool:
+                    valueAsString = String(describing: (value as! Bool))
+                case is AnyCodable:
+                    if let codableValue = (value as? AnyCodable)?.value {
+                        valueAsString = String(describing: codableValue)
+                    }
+                default:
+                    valueAsString = String(describing: value)
+                }
+            }
+
+            if !valueAsString.isEmpty {
+                let kvpString = key + ":" + valueAsString
+                hash = kvpString.fnv1a32(hash)
+            }
         }
 
         return hash

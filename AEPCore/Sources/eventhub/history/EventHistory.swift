@@ -58,29 +58,23 @@ class EventHistory {
             for event in requests {
                 let eventHash = event.mask.fnv1a32()
                 let from = previousEventOldestOccurrence ?? event.fromDate
+                let semaphore = DispatchSemaphore(value: 0)
                 db.select(hash: eventHash, from: from, to: event.toDate) { result in
-                    if result.count <= 0 {
-                        // we have no db connection, break and call the handler
-                        handler([])
-                        return
-                    }
-
                     previousEventOldestOccurrence = result.oldestOccurrence
                     results.append(result)
+                    semaphore.signal()
                 }
+                semaphore.wait()
             }
         } else {
             for event in requests {
+                let semaphore = DispatchSemaphore(value: 0)
                 let eventHash = event.mask.fnv1a32()
                 db.select(hash: eventHash, from: event.fromDate, to: event.toDate) { result in
-                    if result.count <= 0 {
-                        // we have no db connection, break and call the handler
-                        handler([])
-                        return
-                    }
-
                     results.append(result)
+                    semaphore.signal()
                 }
+                semaphore.wait()
             }
         }
 

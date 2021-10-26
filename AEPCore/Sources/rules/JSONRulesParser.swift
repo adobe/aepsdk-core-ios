@@ -82,6 +82,11 @@ enum ConditionType: String, Codable {
     case historical
 }
 
+enum EventHistorySearchType: String, Codable {
+    case any
+    case ordered
+}
+
 class JSONCondition: Codable {
     static let matcherMapping = ["eq": "equals",
                                  "ne": "notEquals",
@@ -98,6 +103,7 @@ class JSONCondition: Codable {
 
     var type: ConditionType
     var definition: JSONDefinition
+
     func convert(_ runtime: ExtensionRuntime? = nil) -> Evaluable? {
         switch type {
         case .group:
@@ -132,55 +138,61 @@ class JSONCondition: Codable {
             }
             return nil
         case .historical:
-            guard let events = definition.events,
-                  let matcher = JSONCondition.matcherMapping[definition.matcher ?? ""],
-                  let valueAsInt = definition.value?.intValue,
-                  let runtime = runtime else {
-                return nil
-            }
-            if events.count == 0 {
-                return nil
-            } else if events.count == 1 {
-                var fromDate: Date?
-                var toDate: Date?
-                if let fromTs = definition.from {
-                    fromDate = Date(milliseconds: fromTs)
-                }
-                if let toTs = definition.to {
-                    toDate = Date(milliseconds: toTs)
-                }
-                let searchType = definition.searchType
-                let eventData = events[0]
+            return extractHistoricalCondition(runtime)
+        }
+    }
 
-                let requestEvent = EventHistoryRequest(mask: eventData, from: fromDate, to: toDate)
-
-                let historyOperand = Operand<Int>(function: {
-                    var returnValue: Int = 0
-                    let semaphore = DispatchSemaphore(value: 0)
-                    runtime.getHistoricalEvents([requestEvent], enforceOrder: searchType == "ordered") { results in
-                        if let result = results.first {
-                            returnValue = result.count
-                        }
-                        semaphore.signal()
-                    }
-
-                    semaphore.wait()
-                    return returnValue
-                })
-
-                return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
-            } else if events.count > 1 {
-                let encoder = JSONEncoder()
-                var operands = [Evaluable]()
-                for event in events {
-                    let eventAsJson = try? encoder.encode(event)
-                    let jsonString = String(data: eventAsJson ?? Data(), encoding: .utf8) ?? ""
-                    operands.append(ComparisonExpression(lhs: Operand<String>(mustache: "{{history(\(jsonString))}}"), operationName: matcher, rhs: Operand(stringLiteral: String(valueAsInt))))
-                }
-                return operands.count == 0 ? nil : LogicalExpression(operationName: "or", operands: operands)
-            }
+    func extractHistoricalCondition(_ runtime: ExtensionRuntime?) -> Evaluable? {
+        // ensure we have the required values to process this historical lookup
+        guard let events = definition.events, let matcherString = definition.matcher, let runtime = runtime,
+              let matcher = JSONCondition.matcherMapping[matcherString], let valueAsInt = definition.value?.intValue else {
             return nil
         }
+
+        var fromDate: Date?
+        var toDate: Date?
+        if let fromTs = definition.from {
+            fromDate = Date(milliseconds: fromTs)
+        }
+        if let toTs = definition.to {
+            toDate = Date(milliseconds: toTs)
+        }
+        let searchType = EventHistorySearchType(rawValue: definition.searchType ?? "any")
+
+        let requestEvents = events.map({
+            EventHistoryRequest(mask: $0, from: fromDate, to: toDate)
+        })
+
+        let historyOperand = Operand<Int>(function: {
+            var returnValue: Int = 0
+            let semaphore = DispatchSemaphore(value: 0)
+
+            runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
+                if searchType == .ordered {
+                    for result in results {
+                        if result.count < 1 {
+                            // quick exit on ordered searches if any result has a count < 1
+                            returnValue = 0
+                            semaphore.signal()
+                            break
+                        } else {
+                            returnValue = 1
+                        }
+                    }
+                } else {
+                    for result in results {
+                        returnValue += result.count
+                    }
+                }
+
+                semaphore.signal()
+            }
+
+            semaphore.wait()
+            return returnValue
+        })
+
+        return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
     }
 
     func convert(key: String, matcher: String, anyCodable: AnyCodable) -> Evaluable? {

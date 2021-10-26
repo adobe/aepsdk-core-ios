@@ -89,6 +89,15 @@ class TestableExtensionRuntime: ExtensionRuntime {
         createdSharedStates = []
     }
 
+    public var receivedEventHistoryRequests: [EventHistoryRequest] = []
+    public var receivedEnforceOrder: Bool = false
+    public var mockEventHistoryResults: [EventHistoryResult] = []
+    public func getHistoricalEvents(_ events: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
+        receivedEventHistoryRequests = events
+        receivedEnforceOrder = enforceOrder
+        handler(mockEventHistoryResults)
+    }
+
     func startEvents() {}
 
     func stopEvents() {}

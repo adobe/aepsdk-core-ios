@@ -25,6 +25,8 @@ class EventHistoryDatabase {
     let columnHash = "eventHash"
     let columnTimestamp = "timestamp"
 
+    var connection: OpaquePointer?
+
     /// Default initializer.
     ///
     /// - Returns `nil` if the `DispatchQueue` cannot be initialized.
@@ -33,6 +35,17 @@ class EventHistoryDatabase {
         guard createTable() else {
             Log.warning(label: LOG_PREFIX, "Failed to initialize Event History Database.")
             return nil
+        }
+        guard let dbConnection = connect() else {
+            Log.warning(label: LOG_PREFIX, "Failed to connect to Event History Database.")
+            return nil
+        }
+        self.connection = dbConnection
+    }
+
+    deinit {
+        if let dbConnection = connection {
+            disconnect(database: dbConnection)
         }
     }
 
@@ -48,14 +61,9 @@ class EventHistoryDatabase {
     func insert(hash: UInt32, handler: ((Bool) -> Void)? = nil) {
         dispatchQueue.async {
             // first verify we can get a connection handle
-            guard let connection = self.connect() else {
+            guard let connection = self.connection else {
                 handler?(false)
                 return
-            }
-
-            // make sure the connection is closed in the end
-            defer {
-                self.disconnect(database: connection)
             }
 
             let insertStatement = """
@@ -92,23 +100,18 @@ class EventHistoryDatabase {
     func select(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: @escaping (EventHistoryResult) -> Void) {
         dispatchQueue.sync {
             // first verify we can get a connection handle
-            guard let connection = self.connect() else {
+            guard let connection = self.connection else {
                 Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database.")
                 handler(EventHistoryResult(count: 0))
                 return
-            }
-
-            // make sure the connection is closed in the end
-            defer {
-                self.disconnect(database: connection)
             }
 
             let selectStatement = """
             SELECT count(*) as count, min(\(self.columnTimestamp)) as "oldest", max(\(self.columnTimestamp)) as "newest"
             FROM \(self.tableName)
             WHERE \(self.columnHash) == \(hash)
-            AND \(self.columnTimestamp) >= \(from?.timeIntervalSince1970 ?? 0)
-            AND \(self.columnTimestamp) <= \(to?.timeIntervalSince1970 ?? Date().timeIntervalSince1970)
+            AND \(self.columnTimestamp) >= \(from?.millisecondsSince1970 ?? 0)
+            AND \(self.columnTimestamp) <= \(to?.millisecondsSince1970 ?? Date().millisecondsSince1970)
             """
 
             // a nil result means there was no query results to be returned
@@ -143,21 +146,16 @@ class EventHistoryDatabase {
     func delete(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: ((Int) -> Void)? = nil) {
         dispatchQueue.async {
             // first verify we can get a connection handle
-            guard let connection = self.connect() else {
+            guard let connection = self.connection else {
                 handler?(0)
                 return
-            }
-
-            // make sure the connection is closed in the end
-            defer {
-                self.disconnect(database: connection)
             }
 
             let deleteStatement = """
             DELETE FROM \(self.tableName)
             WHERE \(self.columnHash) == \(hash)
-            AND \(self.columnTimestamp) >= \(from?.timeIntervalSince1970 ?? 0)
-            AND \(self.columnTimestamp) <= \(to?.timeIntervalSince1970 ?? Date().timeIntervalSince1970)
+            AND \(self.columnTimestamp) >= \(from?.millisecondsSince1970 ?? 0)
+            AND \(self.columnTimestamp) <= \(to?.millisecondsSince1970 ?? Date().millisecondsSince1970)
             """
 
             // a nil result means there was no query results to be returned
