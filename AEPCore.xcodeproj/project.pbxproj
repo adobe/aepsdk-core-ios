@@ -63,6 +63,7 @@
 		24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
+		246B19FD2728C1CD0017716A /* MockEventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */; };
 		246FD07426BDEC7A00FD130B /* MessageGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */; };
 		246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07926C1939800FD130B /* MessageAnimation.swift */; };
 		246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */; };
@@ -675,6 +676,7 @@
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
 		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
+		246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventHistoryDatabase.swift; sourceTree = "<group>"; };
 		246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureRecognizer.swift; sourceTree = "<group>"; };
 		246FD07926C1939800FD130B /* MessageAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimation.swift; sourceTree = "<group>"; };
 		246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculation.swift"; sourceTree = "<group>"; };
@@ -1910,10 +1912,11 @@
 			children = (
 				3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */,
 				3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */,
-				3FF8171424D89B500064DFA1 /* Info.plist */,
+				246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */,
 				3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */,
 				3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */,
 				3F08FFA724DBBDD700D34DE3 /* UserDefaults+Clear.swift */,
+				3FF8171424D89B500064DFA1 /* Info.plist */,
 			);
 			name = Mocks;
 			path = AEPCore/Mocks;
@@ -3329,6 +3332,7 @@
 				3F08FFAA24DBBDD700D34DE3 /* TestableNetworkService.swift in Sources */,
 				3FF8171624D89B500064DFA1 /* Event+Timestamp.swift in Sources */,
 				21FE152124F0335E008A82FF /* MockExtension.swift in Sources */,
+				246B19FD2728C1CD0017716A /* MockEventHistoryDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3640,7 +3644,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3670,7 +3673,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3697,7 +3699,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3722,7 +3723,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3746,7 +3746,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3774,7 +3773,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3798,7 +3796,6 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3819,7 +3816,6 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3843,7 +3839,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3870,7 +3865,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3893,7 +3887,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3914,7 +3907,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3950,7 +3942,6 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3970,7 +3961,6 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3995,7 +3985,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4023,7 +4012,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4049,7 +4037,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPLifecycle/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4076,7 +4063,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPLifecycle/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4100,7 +4086,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4123,7 +4108,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4147,7 +4131,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4174,7 +4157,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4198,7 +4180,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4221,7 +4202,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4246,7 +4226,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4274,7 +4253,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
