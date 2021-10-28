@@ -12,20 +12,20 @@
 import AEPServices
 import Foundation
 
-public typealias NetworkRespsonse = (data: Data?, respsonse: HTTPURLResponse?, error: Error?)
-public typealias ReqeustResolver = (NetworkRequest) -> NetworkRespsonse?
+public typealias NetworkResponse = (data: Data?, response: HTTPURLResponse?, error: Error?)
+public typealias RequestResolver = (NetworkRequest) -> NetworkResponse?
 
 public class TestableNetworkService: Networking {
     public var requests: [NetworkRequest] = []
-    public var resolvers: [ReqeustResolver] = []
+    public var resolvers: [RequestResolver] = []
 
     public init() {}
 
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
         requests.append(networkRequest)
         for resolver in resolvers {
-            if let respsone = resolver(networkRequest) {
-                let httpConnection = HttpConnection(data: respsone.data, response: respsone.respsonse, error: respsone.error)
+            if let response = resolver(networkRequest) {
+                let httpConnection = HttpConnection(data: response.data, response: response.response, error: response.error)
                 completionHandler?(httpConnection)
                 return
             }
@@ -34,7 +34,7 @@ public class TestableNetworkService: Networking {
         completionHandler?(HttpConnection(data: nil, response: nil, error: nil))
     }
 
-    public func mock(resolver:@escaping ReqeustResolver) {
+    public func mock(resolver:@escaping RequestResolver) {
         resolvers += [resolver]
     }
 }

@@ -26,6 +26,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var receivedEventHistoryRequests: [EventHistoryRequest] = []
     public var receivedEnforceOrder: Bool = false
     public var mockEventHistoryResults: [EventHistoryResult] = []
+    public var ignoredEvents = Set<String>()
 
     public init() {}
 
@@ -39,6 +40,9 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     }
 
     public func dispatch(event: Event) {
+        if(shouldIgnore(event)) {
+            return
+        }
         dispatchedEvents += [event]
     }
 
@@ -83,6 +87,24 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public func stopEvents() {}
 
     // MARK: - Helper methods
+    /// Ignores the events from being dispatched by event hub.
+    /// - Parameters:
+    ///  - type: `EventType` of the event to be ignored
+    ///  - source: `EventSource` of the event to be ignored
+    public func ignoreEvent(type: String, source: String) {
+        ignoredEvents.insert("\(type)-\(source)")
+    }
+
+    /// Removes all the ignored events.
+    public func resetIgnoredEvents() {
+        ignoredEvents.removeAll()
+    }
+
+    /// Determines if the event is to be ignored and not dispatched by event hub
+    /// - Parameter event: An `Event`
+    private func shouldIgnore(_ event: Event) -> Bool {
+        return ignoredEvents.contains("\(event.type)-\(event.source)")
+    }
 
     /// Simulate the events that are being sent to event hub, if there is a listener registered for that type of event, that listener will receive the event
     /// - Parameters:
