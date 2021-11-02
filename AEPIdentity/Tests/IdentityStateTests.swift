@@ -548,12 +548,42 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: ""] as [String: Any]
 
         // test
-        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        state.syncIdentifiers(event: Event.fakeSyncIDEvent())
 
         // verify
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)
         let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
         XCTAssertTrue(hit.url.absoluteString.contains("dpm.demdex.net"))
+    }
+
+    func testSyncIdentifiersWhenNonStringServerValue() {
+        // setup
+        state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue,
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: 100] as [String: Any]
+
+        // test
+        state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+
+        // verify
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)
+        let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
+        XCTAssertTrue(hit.url.absoluteString.contains("dpm.demdex.net"))
+    }
+
+    func testSyncIdentifiersWhenProperStringServerValue() {
+        // setup
+        state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue,
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "example.com"] as [String: Any]
+
+        // test
+        state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+
+        // verify
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)
+        let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
+        XCTAssertTrue(hit.url.absoluteString.contains("example.com"))
     }
 
     func testSyncIdentifiersWhenPrivacyIsOptIn() {
