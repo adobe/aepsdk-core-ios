@@ -23,5 +23,5 @@ protocol RulesLoader {
     /// - Parameters:
     ///   - appId: Optional app id, if provided the `RulesDownloader` will attempt to download rules with `appId`
     ///   - completion: Invoked with the loaded rules, nil if loading the rules failed. NOTE: Fails if 304 not-modified is returned from the server
-    func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Data?) -> Void)
+    func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Result<Data, RulesDownloaderError>) -> Void)
 }
