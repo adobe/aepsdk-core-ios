@@ -157,13 +157,13 @@ class JSONCondition: Codable {
         if let toTs = definition.to {
             toDate = Date(milliseconds: toTs)
         }
-        let searchType = EventHistorySearchType(rawValue: definition.searchType ?? "any")
+        let searchType = EventHistorySearchType(rawValue: definition.searchType ?? "any") ?? .any
 
         let requestEvents = events.map({
             EventHistoryRequest(mask: $0, from: fromDate, to: toDate)
         })
 
-        let params: [Any] = [runtime, requestEvents, searchType!]
+        let params: [Any] = [runtime, requestEvents, searchType]
         let historyOperand = Operand<Int>(function: getHistoricalEventCount, parameters: params)
 
         return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
