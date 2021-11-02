@@ -75,6 +75,7 @@ class IdentityState {
             lastValidConfig = configurationSharedState
         } else if lastValidConfig.isEmpty {
             // can't process this event, wait for a valid config and retry later
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Cannot sync Identifiers, waiting for valid configuration shared state.")
             return false
         }
 
@@ -200,8 +201,10 @@ class IdentityState {
         let hasDpids = !(dpids?.isEmpty ?? true)
 
         if identityProperties.ecid != nil, !hasIds, !hasDpids, !needResync {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Not syncing identifiers, ECID found in persistence.")
             syncForIds = false
         } else if identityProperties.ecid == nil {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
             identityProperties.ecid = ECID()
         }
 
@@ -349,7 +352,12 @@ class IdentityState {
     ///   - event: event responsible for the hit
     ///   - addConsentFlag: flag indicating if the adId changed
     private func queueHit(identityProperties: IdentityProperties, configSharedState: [String: Any], event: Event, addConsentFlag: Bool) {
-        let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.Default.SERVER
+        var server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? ""
+
+        if server.isEmpty {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Setting to default server url ( \(IdentityConstants.Default.SERVER)), \(IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER) not found in configuration.")
+            server = IdentityConstants.Default.SERVER
+        }
 
         guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, orgId is not present")

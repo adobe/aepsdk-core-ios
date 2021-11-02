@@ -81,6 +81,7 @@ import Foundation
             createSharedState(data: state.identityProperties.toEventData(), event: nil)
         }
 
+        Log.trace(label: "\(name):\(#function)", "Cannot process events yet. Identity is booting up.")
         return false // cannot handle any events until we have booted
 
     }
@@ -206,6 +207,7 @@ import Foundation
     }
 
     private func processIdentifiersRequest(event: Event) {
+        Log.trace(label: "\(name):\(#function)", "Getting  ECID and other synced custom identifiers.")
         let eventData = state?.identityProperties.toEventData()
         let responseEvent = event.createResponseEvent(name: IdentityConstants.EventNames.IDENTITY_RESPONSE_CONTENT_ONE_TIME,
                                                       type: EventType.identity,
@@ -245,8 +247,13 @@ import Foundation
         if privacyStatus == .optedOut {
             guard let orgId = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String else { return }
             guard let ecid = state?.identityProperties.ecid else { return }
-            let server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? IdentityConstants.Default.SERVER
-            Log.debug(label: "\(name):\(#function)", "Sending an opt-out request to \(server).")
+
+            var server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? ""
+            if server.isEmpty {
+                server = IdentityConstants.Default.SERVER
+            }
+
+            Log.debug(label: "\(name):\(#function)", "Sending an opt-out request to (\(server)).")
             ServiceProvider.shared.networkService.sendOptOutRequest(orgId: orgId, ecid: ecid, experienceCloudServer: server)
         }
     }
