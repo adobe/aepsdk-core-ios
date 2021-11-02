@@ -28,7 +28,7 @@ public extension LaunchRulesEngine {
             switch result {
             case .success(let data):
                 guard let rules = JSONRulesParser.parse(data) else {
-                    Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules from data")
+                    Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from URL: \(urlString)")
                     return
                 }
                 self.replaceRules(with: rules)
