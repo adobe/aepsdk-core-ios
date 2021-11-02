@@ -163,36 +163,46 @@ class JSONCondition: Codable {
             EventHistoryRequest(mask: $0, from: fromDate, to: toDate)
         })
 
-        let historyOperand = Operand<Int>(function: {
-            var returnValue: Int = 0
-            let semaphore = DispatchSemaphore(value: 0)
-
-            runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
-                if searchType == .ordered {
-                    for result in results {
-                        if result.count < 1 {
-                            // quick exit on ordered searches if any result has a count < 1
-                            returnValue = 0
-                            semaphore.signal()
-                            break
-                        } else {
-                            returnValue = 1
-                        }
-                    }
-                } else {
-                    for result in results {
-                        returnValue += result.count
-                    }
-                }
-
-                semaphore.signal()
-            }
-
-            semaphore.wait()
-            return returnValue
-        })
+        let params: [Any] = [runtime, requestEvents, searchType!]
+        let historyOperand = Operand<Int>(function: getHistoricalEventCount, parameters: params)
 
         return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
+    }
+
+    func getHistoricalEventCount(parameters: [Any]?) -> Int {
+        guard let params = parameters,
+              let runtime = params[0] as? ExtensionRuntime,
+              let requestEvents = params[1] as? [EventHistoryRequest],
+              let searchType = params[2] as? EventHistorySearchType else {
+            return 0
+        }
+
+        var returnValue: Int = 0
+        let semaphore = DispatchSemaphore(value: 0)
+
+        runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
+            if searchType == .ordered {
+                for result in results {
+                    if result.count < 1 {
+                        // quick exit on ordered searches if any result has a count < 1
+                        returnValue = 0
+                        semaphore.signal()
+                        break
+                    } else {
+                        returnValue = 1
+                    }
+                }
+            } else {
+                for result in results {
+                    returnValue += result.count
+                }
+            }
+
+            semaphore.signal()
+        }
+
+        semaphore.wait()
+        return returnValue
     }
 
     func convert(key: String, matcher: String, anyCodable: AnyCodable) -> Evaluable? {
