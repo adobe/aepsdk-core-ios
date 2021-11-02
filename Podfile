@@ -5,36 +5,67 @@ platform :ios, '10.0'
 use_frameworks!
 
 workspace 'AEPCore'
-project 'AEPCore.xcodeproj'
 
-def rules_main
+pod 'SwiftLint', '0.44.0'
+
+def core_main
+  project 'AEPCore.xcodeproj'
   pod 'AEPRulesEngine'
 end
 
-def rules_dev
-  pod 'AEPRulesEngine', :git => 'https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.0.2'
+def core_dev
+  project 'AEPCore.xcodeproj'
+  pod 'AEPRulesEngine', :git => 'https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
+end
+
+def tests_main
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPRulesEngine'
+end
+
+def tests_dev
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPRulesEngine', :git => 'https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
 end
 
 target 'AEPCore' do
-  rules_dev
+  core_dev
 end
 
 target 'AEPCoreTests' do
-  rules_dev
+  core_dev
 end
 
 target 'AEPSignalTests' do
-  rules_dev
+  core_dev
 end
 
 target 'AEPLifecycleTests' do
-  rules_dev
+  core_dev
 end
 
 target 'AEPIdentityTests' do
-  rules_dev
+  core_dev
 end
 
 target 'AEPIntegrationTests' do
-  rules_dev
+  core_dev
+end
+
+# TestApps project dependencies
+
+target 'TestApp_Swift' do
+  tests_dev
+end
+
+target 'TestApp_Objc' do
+  tests_dev
+end
+
+target 'E2E_Swift' do
+  tests_dev
+end
+
+target 'PerformanceApp' do
+  tests_dev
 end

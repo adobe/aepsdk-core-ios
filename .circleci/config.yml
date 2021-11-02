@@ -14,30 +14,28 @@ jobs:
 
   build-and-test:
     macos:
-      xcode: 11.6.0 # Specify the Xcode version to use
+      xcode: 12.0.1 # Specify the Xcode version to use
 
     steps:
       - checkout
-      - run:
-          name: Install realm/SwiftLint
-          command: brew update-reset && brew install swiftlint
-      - run: 
-          name: Swift Linting
-          command: swiftlint lint
-      - run:
-          name: Install nicklockwood/SwiftFormat
-          command: brew install swiftformat
-      - run: 
-          name: Swift Formating
-          command: swiftformat . --lint --swiftversion 5.2
-      # pre-start the simulator to prevent timeouts
-      - run:
-          name: Pre-start Simulator
-          command: xcrun instruments -w "iPhone 8 (13.0) [" || true
       
       - run:
           name: Pod install
           command: pod install
+
+      - run: 
+          name: Swift Linting
+          command: make lint
+      - run:
+          name: Install nicklockwood/SwiftFormat
+          command: brew install swiftformat
+      - run: 
+          name: Swift Format Check
+          command: make checkFormat
+      # pre-start the simulator to prevent timeouts
+      - run:
+          name: Pre-start Simulator
+          command: xcrun instruments -w "iPhone 8 (13.0) [" || true
 
       - run:
           name: Run AEPCore Tests

@@ -5,6 +5,9 @@
       location = "group:AEPCore.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:TestApps/AEPCoreTestApp.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

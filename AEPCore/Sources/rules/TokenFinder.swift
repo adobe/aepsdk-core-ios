@@ -85,46 +85,6 @@ class TokenFinder: Traversable {
         default:
             if key.starts(with: TOKEN_KEY_SHARED_STATE) {
                 return getValueFromSharedState(key: key)
-            } else if key.starts(with: "~history") {
-                // query database via runtime here
-                var returnValue = 0
-
-                // value is a JSONHistoricalEvent object represented as a JSON string            
-//                guard let eventString = key.substring(from: key.indexOf(char: "{")),
-//                      let event = try? JSONDecoder().decode(JSONHistoricalEvent.self, from: eventString.data(using: .utf8) ?? Data()) else {
-//
-//
-//                          // TODO: store decoded historical events in a lookup table?
-//
-//                          return returnValue
-//                      }
-//
-//                // convert array of JSONHistoricalEvent into an array of EventHistoryRequests
-//                let request = EventHistoryRequest(event)
-//                //            let requests = events.map { event in
-//                //                EventHistoryRequest(event)
-//                //            }
-//
-//                let semaphore = DispatchSemaphore(value: 0)
-//
-//                self.runtime.getHistoricalEvents([request], enforceOrder: false /* requests.count > 1 */) { results in
-//                    if results.count == 1 {
-//                        if let count = results.first?.count {
-//                            returnValue = count
-//                        }
-//                    } else if results.count > 1 {
-//                        for result in results {
-//                            returnValue = result.count
-//                            if returnValue == 0 {
-//                                break
-//                            }
-//                        }
-//                    }
-//
-//                    semaphore.signal()
-//                }
-//                semaphore.wait()
-                return returnValue
             }
 
             return getValueFromEvent(key: key)

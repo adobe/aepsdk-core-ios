@@ -13,7 +13,155 @@
 import XCTest
 
 @testable import AEPCore
+@testable import AEPCoreMocks
 
 class EventHistoryTests: XCTestCase {
 
+    var eventHistory: EventHistory!
+    var mockEventHistoryDatabase: MockEventHistoryDatabase!
+    var mockEvent: Event!
+    var expectedHash: UInt32!
+    
+    override func setUp() {
+        eventHistory = EventHistory()
+        mockEventHistoryDatabase = MockEventHistoryDatabase()
+        eventHistory.db = mockEventHistoryDatabase
+        
+        // hashed string will be "key:valuenumeric:552" - 1254850096
+        expectedHash = 1254850096
+        mockEvent = Event(name: "name", type: "type", source: "source", data: [
+            "key": "value",
+            "key2": "value2",
+            "numeric": 552
+        ], mask: [
+            "key",
+            "numeric"
+        ])
+    }
+    
+    func testRecordEvent() throws {
+        // setup
+        let expectation = XCTestExpectation(description: "handler called")
+        mockEventHistoryDatabase.returnInsert = true
+        let handler: (Bool) -> Void = { result in
+            XCTAssertTrue(result)
+            expectation.fulfill()
+        }
+        
+        // test
+        eventHistory.recordEvent(mockEvent, handler: handler)
+        wait(for: [expectation], timeout: 1)
+        
+        // verify
+        XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
+    }
+    
+    func testRecordEventNoHandler() throws {
+        // setup
+        let expectation = XCTestExpectation(description: "handler called")
+        expectation.isInverted = true
+        mockEventHistoryDatabase.returnInsert = true
+        
+        // test
+        eventHistory.recordEvent(mockEvent)
+        wait(for: [expectation], timeout: 1)
+        
+        // verify
+        XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
+    }
+    
+    func testGetEventsEnforceOrder() throws {
+        // setup
+        let expectation = XCTestExpectation(description: "handler called")
+        let mockCount = 552
+        let mockOldestDate = Date(milliseconds: 12345)
+        let mockNewestDate = Date(milliseconds: 23456)
+        mockEventHistoryDatabase.returnSelect = EventHistoryResult(count: mockCount, oldest: mockOldestDate, newest: mockNewestDate)
+        let handler: ([EventHistoryResult]) -> Void = { results in
+            XCTAssertNotNil(results)
+            XCTAssertEqual(1, results.count)
+            XCTAssertEqual(mockCount, results.first?.count)
+            XCTAssertEqual(mockOldestDate, results.first?.oldestOccurrence)
+            XCTAssertEqual(mockNewestDate, results.first?.newestOccurrence)
+            expectation.fulfill()
+        }
+        let requests = [EventHistoryRequest(mask: ["key": "value", "numeric": 552], from: mockOldestDate, to: mockNewestDate)]
+        
+        // test
+        eventHistory.getEvents(requests, enforceOrder: true, handler: handler)
+        wait(for: [expectation], timeout: 1)
+        
+        // verify
+        XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
+        XCTAssertEqual(mockOldestDate, mockEventHistoryDatabase.paramFrom)
+        XCTAssertEqual(mockNewestDate, mockEventHistoryDatabase.paramTo)
+    }
+    
+    func testGetEventsDoNotEnforceOrder() throws {
+        // setup
+        let expectation = XCTestExpectation(description: "handler called")
+        let mockCount = 552
+        let mockOldestDate = Date(milliseconds: 12345)
+        let mockNewestDate = Date(milliseconds: 23456)
+        mockEventHistoryDatabase.returnSelect = EventHistoryResult(count: mockCount, oldest: mockOldestDate, newest: mockNewestDate)
+        let handler: ([EventHistoryResult]) -> Void = { results in
+            XCTAssertNotNil(results)
+            XCTAssertEqual(1, results.count)
+            XCTAssertEqual(mockCount, results.first?.count)
+            XCTAssertEqual(mockOldestDate, results.first?.oldestOccurrence)
+            XCTAssertEqual(mockNewestDate, results.first?.newestOccurrence)
+            expectation.fulfill()
+        }
+        let requests = [EventHistoryRequest(mask: ["key": "value", "numeric": 552], from: mockOldestDate, to: mockNewestDate)]
+        
+        // test
+        eventHistory.getEvents(requests, enforceOrder: false, handler: handler)
+        wait(for: [expectation], timeout: 1)
+        
+        // verify
+        XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
+        XCTAssertEqual(mockOldestDate, mockEventHistoryDatabase.paramFrom)
+        XCTAssertEqual(mockNewestDate, mockEventHistoryDatabase.paramTo)
+    }
+    
+    func testDeleteEvents() throws {
+        // setup
+        let expectation = XCTestExpectation(description: "handler called")
+        mockEventHistoryDatabase.returnDelete = 234
+        let handler: (Int) -> Void = { result in
+            XCTAssertEqual(234, result)
+            expectation.fulfill()
+        }
+        let mockOldestDate = Date(milliseconds: 12345)
+        let mockNewestDate = Date(milliseconds: 23456)
+        let requests = [EventHistoryRequest(mask: ["key": "value", "numeric": 552], from: mockOldestDate, to: mockNewestDate)]
+        
+        // test
+        eventHistory.deleteEvents(requests, handler: handler)
+        wait(for: [expectation], timeout: 1)
+        
+        // verify
+        XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
+        XCTAssertEqual(mockOldestDate, mockEventHistoryDatabase.paramFrom)
+        XCTAssertEqual(mockNewestDate, mockEventHistoryDatabase.paramTo)
+    }
+    
+    func testDeleteEventsNoHandler() throws {
+        // setup
+        let expectation = XCTestExpectation(description: "handler called")
+        expectation.isInverted = true
+        mockEventHistoryDatabase.returnDelete = 234
+        let mockOldestDate = Date(milliseconds: 12345)
+        let mockNewestDate = Date(milliseconds: 23456)
+        let requests = [EventHistoryRequest(mask: ["key": "value", "numeric": 552], from: mockOldestDate, to: mockNewestDate)]
+        
+        // test
+        eventHistory.deleteEvents(requests)
+        wait(for: [expectation], timeout: 1)
+        
+        // verify
+        XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
+        XCTAssertEqual(mockOldestDate, mockEventHistoryDatabase.paramFrom)
+        XCTAssertEqual(mockNewestDate, mockEventHistoryDatabase.paramTo)
+    }
 }
