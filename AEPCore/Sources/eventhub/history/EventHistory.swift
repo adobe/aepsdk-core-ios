@@ -31,16 +31,18 @@ class EventHistory {
     ///
     /// The hash is generated based on the provided `event`'s data.
     /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
+    /// If the hash value for the provided `event` is `0`, no record will be created in the database.
     ///
     /// - Parameters:
     ///   - event: the `Event` to be recorded in the Event History database.
     ///   - handler: called with a `Bool` indicating a successful database insert.
     func recordEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
-        guard let hash = event.data?.fnv1a32(mask: event.mask) else {
+        guard event.eventHash != 0 else {
+            handler?(false)
             return
         }
 
-        db.insert(hash: hash, handler: handler)
+        db.insert(hash: event.eventHash, handler: handler)
     }
 
     /// Retrieves a count of historical events matching the provided requests.
