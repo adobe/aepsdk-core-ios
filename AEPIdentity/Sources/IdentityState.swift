@@ -44,7 +44,6 @@ class IdentityState {
     func bootupIfReady(configSharedState: [String: Any], event: Event) -> Bool {
         // Only bootup once we can perform the first force sync
         guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else {
-            Log.trace(label: "\(LOG_TAG):\(#function)", "Cannot boot up, not ready for syncIdentifiers.")
             return false
         }
 
@@ -358,7 +357,6 @@ class IdentityState {
         var server = configSharedState[IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER] as? String ?? ""
 
         if server.isEmpty {
-            Log.trace(label: "\(LOG_TAG):\(#function)", "Setting to default server url ( \(IdentityConstants.Default.SERVER)), \(IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER) not found in configuration.")
             server = IdentityConstants.Default.SERVER
         }
 

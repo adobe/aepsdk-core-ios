@@ -81,7 +81,6 @@ import Foundation
             createSharedState(data: state.identityProperties.toEventData(), event: nil)
         }
 
-        Log.trace(label: "\(name):\(#function)", "Cannot process events yet. Identity is booting up.")
         return false // cannot handle any events until we have booted
 
     }
