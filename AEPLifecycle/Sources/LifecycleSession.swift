@@ -111,6 +111,12 @@ struct LifecycleSession {
 
         return sessionContextData
     }
+
+    /// Gets the session start date from data store, if not present will return nil
+    func getPersistedStartDate() -> Date? {
+        let sessionContainer: LifecyclePersistedContext = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT) ?? LifecyclePersistedContext()
+        return sessionContainer.startDate
+    }
 }
 
 /// A container struct to easily serialize lifecycle session context information

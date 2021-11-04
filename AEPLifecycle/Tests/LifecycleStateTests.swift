@@ -346,6 +346,26 @@ class LifecycleStateTests: XCTestCase {
         XCTAssertEqual(actualContextData?.additionalContextData as? [String: String], contextData.additionalContextData as? [String: String])
     }
 
+    // MARK: getSessionStartDate() tests
+    // If persisted date is absent, return nil
+    func testEmptyStartDate() {
+        XCTAssertNil(lifecycleState.getSessionStartDate())
+    }
+
+    /// If present, return persisted session start date
+    func testPersistedStartDate() {
+        // setup
+        var persistedContext = LifecyclePersistedContext()
+        persistedContext.startDate = currentDate
+        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT, value: persistedContext)
+
+        // test
+        let actualStartDate = lifecycleState.getSessionStartDate()
+
+        // verify
+        XCTAssertEqual(actualStartDate, currentDate)
+    }
+
     // MARK: applyApplicationUpgrade(...) tests
 
     /// When context data is empty, it should remain empty after invoking `checkForApplicationUpgrade`
