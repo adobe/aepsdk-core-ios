@@ -98,6 +98,10 @@ public class Lifecycle: NSObject, Extension {
                                                    adId: getAdvertisingIdentifier(event: event),
                                                    sessionTimeout: getSessionTimeoutLength(configurationSharedState: configurationSharedState.value),
                                                    isInstall: install)
+
+        // Republish shared state after handling lifecycle start event as LifecycleState will
+        // 1) Update lifecycle metrics in context data if it detects a new session
+        // 2) Adjust session start timestamp to offset pause duration
         updateSharedState(event: event,
                           data: lifecycleState.getContextData()?.toEventData() ?? [:],
                           startDate: lifecycleState.getSessionStartDate() ?? Date(timeIntervalSince1970: 0)
