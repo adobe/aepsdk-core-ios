@@ -308,8 +308,9 @@ final class EventHub {
     /// - Parameter type: A `WrapperType` denoting the type of wrapper
     func setWrapperType(_ type: WrapperType) {
         eventHubQueue.sync { [weak self] in
-            guard let self = self, !self.started else {
-                Log.warning(label: self?.LOG_TAG ?? "EventHub", "Wrapper type can not be set after EventHub starts processing events")
+            guard let self = self else { return }
+            guard !self.started else {
+                Log.warning(label: self.LOG_TAG, "Wrapper type can not be set after EventHub starts processing events")
                 return
             }
             self.wrapperType = type
