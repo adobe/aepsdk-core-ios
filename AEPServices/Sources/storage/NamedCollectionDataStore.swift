@@ -183,16 +183,10 @@ public class NamedCollectionDataStore {
     }
 
     public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
-        // https://bugs.swift.org/browse/SR-6163
-        // JSON Encoder shipped as part of Swift standard library in iOS versions < 13 fails to encode top level fragments. Persist date as double in iOS versions < 13
-        if T.self == Date.self {
-            guard #available(iOS 13.0, tvOS 13.0, *) else {
-                if let date = getDouble(key: key) {
-                    return Date(timeIntervalSince1970: date) as? T
-                } else {
-                    return fallback
-                }
-            }
+        // We persist date as double in iOS versions < 13.
+        // First attempt reading date as double to see if they were persisted from earlier OS versions.
+        if T.self == Date.self, let date = getDouble(key: key) {
+            return Date(timeIntervalSince1970: date) as? T
         }
 
         if let savedData = get(key: key) as? Data {
