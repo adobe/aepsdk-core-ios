@@ -328,8 +328,8 @@ class IdentityTests: XCTestCase {
 
         // verify network request is sent
         let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host // network request for opt-out hit should have been sent
-        XCTAssertTrue(optOutHitHost!.contains("dpm.demdex.net"))
+        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
     }
 
     /// Tests Identity Extension sends an opt out request to default demdex server when configuration experience.server has invalid non-string value
@@ -353,8 +353,8 @@ class IdentityTests: XCTestCase {
 
         // verify network request is sent
         let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host // network request for opt-out hit should have been sent
-        XCTAssertTrue(optOutHitHost!.contains("dpm.demdex.net"))
+        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
     }
 
     /// Tests Identity Extension sends an opt out request to default demdex server when configuration experience.server has proper non-empty string value
@@ -378,8 +378,8 @@ class IdentityTests: XCTestCase {
 
         // verify network request is sent
         let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host // network request for opt-out hit should have been sent
-        XCTAssertTrue(optOutHitHost!.contains("example.com"))
+        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        XCTAssertTrue(optOutHitHost.contains("example.com"))
     }
 
     /// Tests that when the event contains opt out hit sent == true then the Identity Extension does not send an opt out request
