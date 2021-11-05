@@ -22,6 +22,8 @@ enum EventHubConstants {
     enum EventDataKeys {
         static let VERSION = "version"
         static let EXTENSIONS = "extensions"
+        static let WRAPPER = "wrapper"
+        static let TYPE = "type"
         static let METADATA = "metadata"
         static let FRIENDLY_NAME = "friendlyName"
 
