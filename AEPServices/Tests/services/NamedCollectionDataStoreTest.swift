@@ -385,6 +385,34 @@ class NamedCollectionDataStoreTest: XCTestCase {
         XCTAssertEqual(subscriptResult?.id, val2.id)
     }
 
+    func testGetSetDate() {
+        let date = Date()
+        store?.setObject(key: OBJ_KEY, value: date)
+
+        XCTAssertTrue(mockKeyValueService.setCalled)
+        if #available(iOS 13, tvOS 13, *) {
+            let encodedDate = try? JSONEncoder().encode(date)
+            XCTAssertEqual(mockKeyValueService.setValue as? Data, encodedDate)
+        } else {
+            XCTAssertEqual(mockKeyValueService.setValue as? Double, date.timeIntervalSince1970)
+        }
+    }
+    func testGetDateCodable() {
+        let date = Date()
+        mockKeyValueService.getResult = try? JSONEncoder().encode(date)
+
+        let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
+        XCTAssertEqual(persistedDate, date)
+    }
+
+    func testGetDateDouble() {
+        let date = Date()
+        mockKeyValueService.getResult = date.timeIntervalSince1970
+
+        let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
+        XCTAssertEqual(persistedDate, date)
+    }
+
     func testRemoveEmptyKey() {
         store?.remove(key: "")
         XCTAssertFalse(mockKeyValueService.removeCalled)
