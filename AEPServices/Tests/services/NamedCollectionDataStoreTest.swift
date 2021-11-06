@@ -385,7 +385,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         XCTAssertEqual(subscriptResult?.id, val2.id)
     }
 
-    func testGetSetDate() {
+    func testSetDate() {
         let date = Date()
         store?.setObject(key: OBJ_KEY, value: date)
 
