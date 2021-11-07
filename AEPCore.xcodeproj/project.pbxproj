@@ -2847,7 +2847,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/bin/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, ensure you run pod install\"\nfi\n";
 		};
 		BB68130024E19C06007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2864,7 +2864,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/bin/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, ensure you run pod install\"\nfi\n";
 		};
 		BB68130124E19C10007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2881,7 +2881,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/bin/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, ensure you run pod install\"\nfi\n";
 		};
 		BB68130224E19C15007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2898,7 +2898,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/bin/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, ensure you run pod install\"\nfi\n";
 		};
 		BB68130424E19C23007FDCF7 /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2916,7 +2916,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/bin/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, ensure you run pod install\"\nfi\n";
 		};
 		BB68130624E19C2E007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2933,7 +2933,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/bin/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, ensure you run pod install\"\nfi\n";
 		};
 		BB68130724E19C32007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2950,7 +2950,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which \"${PODS_ROOT}/SwiftLint/bin/swiftlint\" >/dev/null; then\n    ${PODS_ROOT}/SwiftLint/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, ensure you run pod install\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
