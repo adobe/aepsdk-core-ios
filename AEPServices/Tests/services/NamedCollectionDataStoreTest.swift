@@ -404,11 +404,8 @@ class NamedCollectionDataStoreTest: XCTestCase {
             let date = Date()
             mockKeyValueService.getResult = try? JSONEncoder().encode(date)
 
-            if let persistedDate: Date = store?.getObject(key: OBJ_KEY) {
-                XCTAssertEqual(date.timeIntervalSince1970, persistedDate.timeIntervalSince1970, accuracy: Double.ulpOfOne)
-            } else {
-                XCTFail("Unable to read persisted Date")
-            }
+            let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
+            XCTAssertTrue(date.equal(other: persistedDate))
         }
     }
 
@@ -416,11 +413,8 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let date = Date()
         mockKeyValueService.getResult = date.timeIntervalSince1970
 
-        if let persistedDate: Date = store?.getObject(key: OBJ_KEY) {
-            XCTAssertEqual(date.timeIntervalSince1970, persistedDate.timeIntervalSince1970, accuracy: Double.ulpOfOne)
-        } else {
-            XCTFail("Unable to read persisted Date")
-        }
+        let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
+        XCTAssertTrue(date.equal(other: persistedDate))
     }
 
     func testRemoveEmptyKey() {
@@ -492,5 +486,18 @@ struct MockCoding: Codable {
     init(id: Int, name: String) {
         self.id = id
         self.name = name
+    }
+}
+
+
+private extension Date {
+    func equal(other: Date?) -> Bool {
+        guard let other = other else {
+            return false;
+        }
+
+        // As date stores the timestamp in milliseconds, compare double value with accuracy greater than milliseconds.
+        let accuracy = 0.00001;
+        return abs(self.timeIntervalSince1970 - other.timeIntervalSince1970) < accuracy;
     }
 }
