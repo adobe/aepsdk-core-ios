@@ -397,20 +397,30 @@ class NamedCollectionDataStoreTest: XCTestCase {
             XCTAssertEqual(mockKeyValueService.setValue as? Double, date.timeIntervalSince1970)
         }
     }
-    func testGetDateCodable() {
-        let date = Date()
-        mockKeyValueService.getResult = try? JSONEncoder().encode(date)
 
-        let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
-        XCTAssertEqual(persistedDate, date)
+    func testGetDatePersistedAsCodable() {
+        // Date can not be persisted as Codable in iOS versions < 13
+        if #available(iOS 13, tvOS 13, *) {
+            let date = Date()
+            mockKeyValueService.getResult = try? JSONEncoder().encode(date)
+
+            if let persistedDate: Date = store?.getObject(key: OBJ_KEY) {
+                XCTAssertEqual(date.timeIntervalSince1970, persistedDate.timeIntervalSince1970, accuracy: Double.ulpOfOne)
+            } else {
+                XCTFail("Unable to read persisted Date")
+            }
+        }
     }
 
-    func testGetDateDouble() {
+    func testGetDatePersistedAsDouble() {
         let date = Date()
         mockKeyValueService.getResult = date.timeIntervalSince1970
 
-        let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
-        XCTAssertEqual(persistedDate, date)
+        if let persistedDate: Date = store?.getObject(key: OBJ_KEY) {
+            XCTAssertEqual(date.timeIntervalSince1970, persistedDate.timeIntervalSince1970, accuracy: Double.ulpOfOne)
+        } else {
+            XCTFail("Unable to read persisted Date")
+        }
     }
 
     func testRemoveEmptyKey() {
