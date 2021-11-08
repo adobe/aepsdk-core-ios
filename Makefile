@@ -1,4 +1,5 @@
 # Variables
+CURR_DIR := ${CURDIR}
 PROJECT_NAME = AEPCore
 AEPCORE_TARGET_NAME = AEPCore
 AEPSERVICES_TARGET_NAME = AEPServices
@@ -9,12 +10,15 @@ AEPRULESENGINE_TARGET_NAME = AEPRulesEngine
 AEPINTEGRATION_TEST_TARGET_NAME = AEPIntegrationTests
 
 SIMULATOR_ARCHIVE_PATH = ./build/ios_simulator.xcarchive/Products/Library/Frameworks/
+SIMULATOR_ARCHIVE_DSYM_PATH = /build/ios_simulator.xcarchive/dSYMs/
 IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
+IOS_ARCHIVE_DSYM_PATH = /build/ios.xcarchive/dSYMs/
 
 NC='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
+
 
 # Targets - test
 
@@ -58,12 +62,12 @@ integration-test:
 archive:
 	xcodebuild archive -workspace AEPCore.xcworkspace -scheme AEP-All -archivePath "./build/ios.xcarchive" -sdk iphoneos -destination="iOS" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
 	xcodebuild archive -workspace AEPCore.xcworkspace -scheme AEP-All -archivePath "./build/ios_simulator.xcarchive" -sdk iphonesimulator -destination="iOS Simulator" SKIP_INSTALL=NO BUILD_LIBRARIES_FOR_DISTRIBUTION=YES
-	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -output ./build/$(AEPSERVICES_TARGET_NAME).xcframework
-	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPCORE_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPCORE_TARGET_NAME).framework -output ./build/$(AEPCORE_TARGET_NAME).xcframework
-	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework -output ./build/$(AEPLIFECYCLE_TARGET_NAME).xcframework
-	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPIDENTITY_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPIDENTITY_TARGET_NAME).framework -output ./build/$(AEPIDENTITY_TARGET_NAME).xcframework
-	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSIGNAL_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPSIGNAL_TARGET_NAME).framework -output ./build/$(AEPSIGNAL_TARGET_NAME).xcframework
-	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -framework $(IOS_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -output ./build/$(AEPRULESENGINE_TARGET_NAME).xcframework
+	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM -framework $(IOS_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(IOS_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM -output ./build/$(AEPSERVICES_TARGET_NAME).xcframework
+	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPCORE_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPCORE_TARGET_NAME).framework.dSYM -framework $(IOS_ARCHIVE_PATH)$(AEPCORE_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(IOS_ARCHIVE_DSYM_PATH)$(AEPCORE_TARGET_NAME).framework.dSYM -output ./build/$(AEPCORE_TARGET_NAME).xcframework
+	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework.dSYM -framework $(IOS_ARCHIVE_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(IOS_ARCHIVE_DSYM_PATH)$(AEPLIFECYCLE_TARGET_NAME).framework.dSYM -output ./build/$(AEPLIFECYCLE_TARGET_NAME).xcframework
+	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPIDENTITY_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPIDENTITY_TARGET_NAME).framework.dSYM -framework $(IOS_ARCHIVE_PATH)$(AEPIDENTITY_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(IOS_ARCHIVE_DSYM_PATH)$(AEPIDENTITY_TARGET_NAME).framework.dSYM -output ./build/$(AEPIDENTITY_TARGET_NAME).xcframework
+	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSIGNAL_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPSIGNAL_TARGET_NAME).framework.dSYM -framework $(IOS_ARCHIVE_PATH)$(AEPSIGNAL_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(IOS_ARCHIVE_DSYM_PATH)$(AEPSIGNAL_TARGET_NAME).framework.dSYM -output ./build/$(AEPSIGNAL_TARGET_NAME).xcframework
+	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPRULESENGINE_TARGET_NAME).framework.dSYM -framework $(IOS_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -debug-symbols $(CURR_DIR)$(IOS_ARCHIVE_DSYM_PATH)$(AEPRULESENGINE_TARGET_NAME).framework.dSYM -output ./build/$(AEPRULESENGINE_TARGET_NAME).xcframework
 
 zip:
 	cd build && zip -r -X $(AEPCORE_TARGET_NAME).xcframework.zip $(AEPCORE_TARGET_NAME).xcframework/
