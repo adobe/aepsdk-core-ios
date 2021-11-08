@@ -183,8 +183,8 @@ public class NamedCollectionDataStore {
     }
 
     public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
-        // We persist date as double in iOS versions < 13.
-        // First attempt reading date as double to see if they were persisted from earlier OS versions.
+        // setObject persists date as double in iOS versions < 13.
+        // Try reading date as double first to see if they were persisted from earlier OS versions.
         if T.self == Date.self, let date = getDouble(key: key) {
             return Date(timeIntervalSince1970: date) as? T
         }
