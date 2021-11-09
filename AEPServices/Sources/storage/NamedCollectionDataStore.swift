@@ -168,12 +168,27 @@ public class NamedCollectionDataStore {
     }
 
     public func setObject<T: Codable>(key: String, value: T) {
+        // https://bugs.swift.org/browse/SR-6163
+        // JSON Encoder shipped as part of Swift standard library in iOS versions < 13 fails to encode top level fragments. Persist date as double in iOS versions < 13
+        if T.self == Date.self, let value = value as? Date {
+            guard #available(iOS 13.0, tvOS 13.0, *) else {
+                set(key: key, value: value.timeIntervalSince1970)
+                return
+            }
+        }
+
         let encoder = JSONEncoder()
         let encodedValue = try? encoder.encode(value)
         set(key: key, value: encodedValue)
     }
 
     public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
+        // setObject persists date as double in iOS versions < 13.
+        // Try reading date as double first to see if they were persisted from earlier OS versions.
+        if T.self == Date.self, let date = getDouble(key: key) {
+            return Date(timeIntervalSince1970: date) as? T
+        }
+
         if let savedData = get(key: key) as? Data {
             return try? JSONDecoder().decode(T.self, from: savedData)
         }
