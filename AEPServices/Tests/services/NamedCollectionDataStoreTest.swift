@@ -385,6 +385,38 @@ class NamedCollectionDataStoreTest: XCTestCase {
         XCTAssertEqual(subscriptResult?.id, val2.id)
     }
 
+    func testSetDate() {
+        let date = Date()
+        store?.setObject(key: OBJ_KEY, value: date)
+
+        XCTAssertTrue(mockKeyValueService.setCalled)
+        if #available(iOS 13, tvOS 13, *) {
+            let encodedDate = try? JSONEncoder().encode(date)
+            XCTAssertEqual(mockKeyValueService.setValue as? Data, encodedDate)
+        } else {
+            XCTAssertEqual(mockKeyValueService.setValue as? Double, date.timeIntervalSince1970)
+        }
+    }
+
+    func testGetDatePersistedAsCodable() {
+        // Date can not be persisted as Codable in iOS versions < 13
+        if #available(iOS 13, tvOS 13, *) {
+            let date = Date()
+            mockKeyValueService.getResult = try? JSONEncoder().encode(date)
+
+            let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
+            XCTAssertTrue(date.equal(other: persistedDate))
+        }
+    }
+
+    func testGetDatePersistedAsDouble() {
+        let date = Date()
+        mockKeyValueService.getResult = date.timeIntervalSince1970
+
+        let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
+        XCTAssertTrue(date.equal(other: persistedDate))
+    }
+
     func testRemoveEmptyKey() {
         store?.remove(key: "")
         XCTAssertFalse(mockKeyValueService.removeCalled)
@@ -454,5 +486,18 @@ struct MockCoding: Codable {
     init(id: Int, name: String) {
         self.id = id
         self.name = name
+    }
+}
+
+
+private extension Date {
+    func equal(other: Date?) -> Bool {
+        guard let other = other else {
+            return false;
+        }
+
+        // As date stores the timestamp in milliseconds, compare double value with accuracy greater than milliseconds.
+        let accuracy = 0.00001;
+        return abs(self.timeIntervalSince1970 - other.timeIntervalSince1970) < accuracy;
     }
 }

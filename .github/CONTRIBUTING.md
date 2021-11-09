@@ -36,7 +36,7 @@ submitting a pull request!
 ## Style Guide
 
 Code cleanliness and consistency is important. Please review and follow our code 
-[Style Guide](../Documentation/StyleGuide.md) when contributing.
+[Style Guide](../Documentation/Contributing/StyleGuide.md) when contributing.
 
 ## From Contributor To Committer
 

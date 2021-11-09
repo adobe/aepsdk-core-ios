@@ -39,6 +39,7 @@ struct LaunchIDManager {
     /// - Returns: appId loaded from persistence, nil if not present
     func loadAppIdFromPersistence() -> String? {
         if let appId = dataStore.getString(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID) {
+            Log.trace(label: logTag, "Loading App ID from persistence with appId: \(appId)")
             return appId
         }
         Log.trace(label: logTag, "App ID not found in data store")
@@ -50,6 +51,7 @@ struct LaunchIDManager {
     func loadAppIdFromManifest() -> String? {
         if let appId = ServiceProvider.shared.systemInfoService.getProperty(for: ConfigurationConstants.CONFIG_MANIFEST_APPID_KEY) {
             saveAppIdToPersistence(appId: appId)
+            Log.trace(label: logTag, "Loading App ID from manifest with appId: \(appId)")
             return appId
         }
         Log.trace(label: logTag, "App ID not found in manifest")
