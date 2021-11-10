@@ -15,7 +15,7 @@ end
 
 def core_dev
   project 'AEPCore.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
 end
 
 def tests_main
@@ -25,7 +25,7 @@ end
 
 def tests_dev
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/sbenedicadb/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
 end
 
 target 'AEPCore' do

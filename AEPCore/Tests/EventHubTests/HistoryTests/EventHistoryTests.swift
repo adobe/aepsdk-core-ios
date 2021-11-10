@@ -70,6 +70,24 @@ class EventHistoryTests: XCTestCase {
         XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
     }
     
+    func testRecordEventEmptyData() throws {
+        // setup
+        let expectation = XCTestExpectation(description: "handler called")
+        let handler: (Bool) -> Void = { result in
+            XCTAssertFalse(result)
+            expectation.fulfill()
+        }
+        let eventWithNoData = Event(name: "name", type: "type", source: "source", data: nil, mask: ["key"])
+        
+        // test
+        eventHistory.recordEvent(eventWithNoData, handler: handler)
+        wait(for: [expectation], timeout: 1)
+        
+        // verify
+        XCTAssertNil(mockEventHistoryDatabase.paramHash, "database insert method should not be called")
+        
+    }
+    
     func testGetEventsEnforceOrder() throws {
         // setup
         let expectation = XCTestExpectation(description: "handler called")
