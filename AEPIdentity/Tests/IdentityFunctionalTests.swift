@@ -106,6 +106,40 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL])
     }
 
+    /// Tests that appendToUrl dispatches the correct event with the URL in data will wait for Analytics shared state
+    func testAppendToUrl_waitForAnalyticsSharedState() {
+        // setup
+        let expectedUrl = URL(string: "https://www.adobe.com/")
+        let data = [IdentityConstants.EventDataKeys.BASE_URL: expectedUrl?.absoluteString ?? ""]
+        let event = Event(name: "Append to URL", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
+        let hubSharedState = [IdentityConstants.Hub.EXTENSIONS : [IdentityConstants.SharedStateKeys.ANALYTICS : ["friendlyName" : "Analytics", "version" : "3.0.0"]]]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.eventhub", event: event, data: (hubSharedState, .set))
+        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: event, data: (analyticsSharedState, .pending))
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        // response is not dispatched since Analytics shared state is pending
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: event, data: (analyticsSharedState, .set))
+        mockRuntime.simulateComingEvent(event: event)
+
+        // response is dispatched omce Analytics shared state is set
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL])
+    }
+
     /// Tests that appendToUrl does not dispatch an event when no valid config is present
     func testAppendToUrlNoValidConfig() {
         // setup

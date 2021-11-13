@@ -62,6 +62,10 @@ import Foundation
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+        } else if event.type == EventType.identity, event.source == EventSource.requestIdentity {
+            guard getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event)?.status ?? .none != .pending else {
+                return false
+            }
         }
 
         return getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
@@ -180,7 +184,14 @@ import Foundation
     private func processAppendToUrl(baseUrl: String, event: Event) {
         guard let properties = state?.identityProperties else { return }
         guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
-        let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
+
+        let analyticsRegistered = isExtensionRegistered(name: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)
+
+        if analyticsRegistered && getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status == .pending {
+            return
+        }
+
+        let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.value ?? [:]
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with updated url
@@ -266,5 +277,14 @@ import Foundation
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 
         return privacyStatus == .optedOut
+    }
+
+    private func isExtensionRegistered(name: String, event: Event) -> Bool {
+        if let registeredExtensionsWithHub = getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event, barrier: false)?.value,
+           let extensions = registeredExtensionsWithHub[IdentityConstants.Hub.EXTENSIONS] as? [String: Any] {
+            return extensions[IdentityConstants.SharedStateKeys.ANALYTICS] != nil
+        }
+
+        return false
     }
 }

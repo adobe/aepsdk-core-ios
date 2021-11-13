@@ -29,6 +29,11 @@ enum IdentityConstants {
         static let AUDIENCE = "com.adobe.module.audience"
     }
 
+    enum Hub {
+        static let SHARED_OWNER_NAME = "com.adobe.module.eventhub"
+        static let EXTENSIONS = "extensions"
+    }
+
     enum Configuration {
         static let EXPERIENCE_CLOUD_ORGID = "experienceCloud.org"
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
