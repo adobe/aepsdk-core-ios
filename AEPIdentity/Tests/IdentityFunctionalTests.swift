@@ -120,14 +120,12 @@ class IdentityFunctionalTests: XCTestCase {
         let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"]
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: event, data: (analyticsSharedState, .pending))
 
-        // test
-        mockRuntime.simulateComingEvent(event: event)
-
         // verify
-        // response is not dispatched since Analytics shared state is pending
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        // identity is not ready for appendToURL event since Analytics shared state is pending
+        XCTAssertFalse(identity.readyForEvent(event))
 
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: event, data: (analyticsSharedState, .set))
+        XCTAssertTrue(identity.readyForEvent(event))
         mockRuntime.simulateComingEvent(event: event)
 
         // response is dispatched omce Analytics shared state is set
@@ -137,7 +135,8 @@ class IdentityFunctionalTests: XCTestCase {
 
         XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
         XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
-        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL])
+        let updatedURL = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.UPDATED_URL] as? String ?? ""
+        XCTAssertTrue(updatedURL.contains("test-aid"));
     }
 
     /// Tests that appendToUrl does not dispatch an event when no valid config is present

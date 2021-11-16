@@ -62,8 +62,14 @@ import Foundation
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
-        } else if event.type == EventType.identity, event.source == EventSource.requestIdentity {
+        } else if event.type == EventType.identity, event.source == EventSource.requestIdentity, ( event.baseUrl != nil ||  event.urlVariables ) {
+            // wait for hub shared state to get all the extension details
             guard getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event)?.status ?? .none != .pending else {
+                return false
+            }
+
+            // wait for Analytics shared state if Analytics is registered
+            if isExtensionRegistered(name: IdentityConstants.SharedStateKeys.ANALYTICS, event: event) && getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status == .pending {
                 return false
             }
         }
@@ -185,12 +191,6 @@ import Foundation
         guard let properties = state?.identityProperties else { return }
         guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
 
-        let analyticsRegistered = isExtensionRegistered(name: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)
-
-        if analyticsRegistered && getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status == .pending {
-            return
-        }
-
         let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.value ?? [:]
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
@@ -282,7 +282,7 @@ import Foundation
     private func isExtensionRegistered(name: String, event: Event) -> Bool {
         if let registeredExtensionsWithHub = getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event, barrier: false)?.value,
            let extensions = registeredExtensionsWithHub[IdentityConstants.Hub.EXTENSIONS] as? [String: Any] {
-            return extensions[IdentityConstants.SharedStateKeys.ANALYTICS] != nil
+            return extensions[name] != nil
         }
 
         return false
