@@ -107,7 +107,7 @@ class IdentityFunctionalTests: XCTestCase {
     }
 
     /// Tests that appendToUrl dispatches the correct event with the URL in data will wait for Analytics shared state
-    func testAppendToUrl_waitForAnalyticsSharedState() {
+    func testAppendToUrlWaitForAnalyticsSharedState() {
         // setup
         let expectedUrl = URL(string: "https://www.adobe.com/")
         let data = [IdentityConstants.EventDataKeys.BASE_URL: expectedUrl?.absoluteString ?? ""]
@@ -190,6 +190,38 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
         XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
         XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.URL_VARIABLES])
+    }
+
+    /// Tests that appendToUrl dispatches the correct event with the URL in data will wait for Analytics shared state
+    func testGetUrlVariablesWaitForAnalyticsSharedState() {
+        // setup
+        let event = Event(name: "Get URL variables", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
+        let hubSharedState = [IdentityConstants.Hub.EXTENSIONS : [IdentityConstants.SharedStateKeys.ANALYTICS : ["friendlyName" : "Analytics", "version" : "3.0.0"]]]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.eventhub", event: event, data: (hubSharedState, .set))
+        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: event, data: (analyticsSharedState, .pending))
+
+        // verify
+        // identity is not ready for getURLVariables event since Analytics shared state is pending
+        XCTAssertFalse(identity.readyForEvent(event))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: event, data: (analyticsSharedState, .set))
+        XCTAssertTrue(identity.readyForEvent(event))
+        mockRuntime.simulateComingEvent(event: event)
+
+        // response is dispatched omce Analytics shared state is set
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.URL_VARIABLES])
+        let urlVariables = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String ?? ""
+        XCTAssertTrue(urlVariables.contains("test-aid"));
     }
 
     /// Tests that getUrlVariables does not dispatch an event when no valid config is present
