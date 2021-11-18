@@ -63,14 +63,17 @@ import Foundation
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         } else if event.type == EventType.identity, event.source == EventSource.requestIdentity, ( event.baseUrl != nil ||  event.urlVariables ) {
-            // wait for hub shared state to get all the extension details
-            guard getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event)?.status ?? .none != .pending else {
-                return false
-            }
+            // check for hub sharedstate info and analytics registration info only if the Analytics shared state is not already set
+            if getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status != .set {
+                // wait for hub shared state to get all the extension details
+                guard getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event)?.status ?? .none != .pending else {
+                    return false
+                }
 
-            // wait for Analytics shared state if Analytics is registered
-            if isExtensionRegistered(name: IdentityConstants.SharedStateKeys.ANALYTICS, event: event) && getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status == .pending {
-                return false
+                // wait for Analytics shared state if Analytics is registered
+                if isExtensionRegistered(name: IdentityConstants.SharedStateKeys.ANALYTICS, event: event) && getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status == .pending {
+                    return false
+                }
             }
         }
 

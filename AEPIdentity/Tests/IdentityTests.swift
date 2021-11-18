@@ -486,4 +486,44 @@ class IdentityTests: XCTestCase {
         // expect true since identity has booted
         XCTAssertTrue(identity.readyForEvent(firstEvent))
     }
+
+    // analytics shared state not available and hub shared state pending
+    func testReadyForEventIdentifierRequestAppendToUrlWaitForHubSharedState() {
+
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.eventhub", event: appendUrlEvent, data: ([IdentityConstants.Hub.EXTENSIONS : [IdentityConstants.SharedStateKeys.ANALYTICS : ["friendlyName" : "Analytics", "version" : "3.0.0"]]]
+                                                                                                                  , .pending))
+
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent))
+    }
+
+    // hub shared state available and analytics shared state pending
+    func testReadyForEventIdentifierRequestAppendToUrlWaitForAnalyticsSharedState() {
+
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+
+        let hubSharedState = [IdentityConstants.Hub.EXTENSIONS : [IdentityConstants.SharedStateKeys.ANALYTICS : ["friendlyName" : "Analytics", "version" : "3.0.0"]]]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.eventhub", event: appendUrlEvent, data: (hubSharedState, .set))
+        let analyticsSharedState = [IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"]
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: (analyticsSharedState, .pending))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent))
+    }
+
+    // analytics shared state available
+    func testReadyForEventIdentifierRequestAppendToUrlNotWaitForHubSharedState() {
+
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: appendUrlEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
+        XCTAssertTrue(identity.readyForEvent(appendUrlEvent))
+    }
 }
