@@ -491,9 +491,9 @@ class IdentityTests: XCTestCase {
     func testReadyForEventIdentifierRequestAppendToUrlWaitForHubSharedState() {
 
         let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
-        
+
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: appendUrlEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
-        
+
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.eventhub", event: appendUrlEvent, data: ([IdentityConstants.Hub.EXTENSIONS : ["com.adobe.module.analytics" : ["friendlyName" : "Analytics", "version" : "3.0.0"]]], .pending))
 
 
@@ -506,11 +506,11 @@ class IdentityTests: XCTestCase {
     func testReadyForEventIdentifierRequestAppendToUrlWaitForAnalyticsSharedState() {
 
         let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
-        
+
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: appendUrlEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
 
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.eventhub", event: appendUrlEvent, data: ([IdentityConstants.Hub.EXTENSIONS : ["com.adobe.module.analytics" : ["friendlyName" : "Analytics", "version" : "3.0.0"]]], .set))
-        
+
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .pending))
 
         // verify

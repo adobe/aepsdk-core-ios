@@ -21,7 +21,7 @@ class ECIDTests: XCTestCase {
         // verify
         XCTAssertEqual(38, ecid.ecidString.count)
     }
-    
+
     /// Ensures that an ECID has a length of 38
     func testECIDDescriptionCorrectLength() {
         // test
