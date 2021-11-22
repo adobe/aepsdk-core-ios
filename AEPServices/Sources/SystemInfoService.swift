@@ -89,6 +89,8 @@ public protocol SystemInfoService {
 
     /// Returns the application version.
     /// - Return: `String` Application version
+    // TODO: - Include planned deprecation version in message
+    @available(*, deprecated, message: "Please use getApplicationVersionNumber instead")
     func getApplicationVersion() -> String?
 
     /// Returns the current orientation of the device
