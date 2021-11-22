@@ -110,7 +110,7 @@ class MobileCoreTests: XCTestCase {
         MobileCore.registerExtensions([MockExtension.self]) {
             // test
             MobileCore.unregisterExtension(MockExtension.self)
-            
+
             // verify
             self.wait(for: [expectation], timeout: 2)
         }
