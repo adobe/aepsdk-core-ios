@@ -63,17 +63,11 @@ import Foundation
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
         } else if event.type == EventType.identity, event.source == EventSource.requestIdentity, ( event.baseUrl != nil ||  event.urlVariables ) {
-            // check for hub sharedstate info and analytics registration info only if the Analytics shared state is not already set
-            if getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status != .set {
-                // wait for hub shared state to get all the extension details
-                guard getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event)?.status ?? .none != .pending else {
-                    return false
-                }
 
-                // wait for Analytics shared state if Analytics is registered
-                if isExtensionRegistered(name: IdentityConstants.SharedStateKeys.ANALYTICS, event: event) && getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.status == .pending {
-                    return false
-                }
+            // analytics shared state will be null if analytics extension is not registered. Wait for analytics shared only if the status is pending or none
+            if let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event), analyticsSharedState.status != .set {
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Analytics shared state to be set.")
+                return false
             }
         }
 
@@ -280,14 +274,5 @@ import Foundation
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 
         return privacyStatus == .optedOut
-    }
-
-    private func isExtensionRegistered(name: String, event: Event) -> Bool {
-        if let registeredExtensionsWithHub = getSharedState(extensionName: IdentityConstants.Hub.SHARED_OWNER_NAME, event: event, barrier: false)?.value,
-           let extensions = registeredExtensionsWithHub[IdentityConstants.Hub.EXTENSIONS] as? [String: Any] {
-            return extensions[name] != nil
-        }
-
-        return false
     }
 }
