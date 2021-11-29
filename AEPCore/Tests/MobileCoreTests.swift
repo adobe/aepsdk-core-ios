@@ -107,13 +107,14 @@ class MobileCoreTests: XCTestCase {
         let expectation = XCTestExpectation(description: "unregistration completed in timely fashion")
         expectation.assertForOverFulfill = true
         MockExtension.unregistrationClosure = { expectation.fulfill() }
+        // Need to make sure register extensions has completed and wait on that before unregistering and verifying.
+        let semaphore = DispatchSemaphore(value: 0)
         MobileCore.registerExtensions([MockExtension.self]) {
-            // test
-            MobileCore.unregisterExtension(MockExtension.self)
-
-            // verify
-            self.wait(for: [expectation], timeout: 2)
+            semaphore.signal()
         }
+        semaphore.wait()
+        MobileCore.unregisterExtension(MockExtension.self)
+        wait(for: [expectation], timeout: 1)
     }
 
     func testRegisterExtensionsSimpleEventDispatch() {
