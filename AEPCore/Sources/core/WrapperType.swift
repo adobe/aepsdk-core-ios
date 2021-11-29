@@ -58,9 +58,7 @@ import Foundation
             self = .none
         }
     }
-}
 
-extension WrapperType {
     var friendlyName: String {
         switch self {
         case .none:
