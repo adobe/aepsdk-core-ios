@@ -51,11 +51,14 @@ public final class MobileCore: NSObject {
         let registerSelector = Selector(("registerExtension"))
 
         if NSClassFromString("ACPBridgeExtension") == nil && !legacyExtensions.isEmpty {
-            Log.error(label: LOG_TAG, "Attempting to register legacy extensions without the compatibility layer present. Can be included via github.com/adobe/aepsdk-compatibility-ios")
+            Log.error(label: LOG_TAG, "Attempting to register legacy extensions: \(legacyExtensions), without the compatibility layer present. Can be included via github.com/adobe/aepsdk-compatibility-ios")
         } else {
-            for legacyExtension in legacyExtensions
-                where legacyExtension.responds(to: registerSelector) {
-                legacyExtension.perform(registerSelector)
+            for legacyExtension in legacyExtensions {
+                if legacyExtension.responds(to: registerSelector) {
+                    legacyExtension.perform(registerSelector)
+                } else {
+                    Log.error(label: LOG_TAG, "Attempting to register non extension type: \(legacyExtension). If this is due to a naming collision, please use full module name when registering. E.g: AEPAnalytics.Analytics.self")
+                }
             }
         }
 
