@@ -486,4 +486,69 @@ class IdentityTests: XCTestCase {
         // expect true since identity has booted
         XCTAssertTrue(identity.readyForEvent(firstEvent))
     }
+
+    // analytics shared state pending
+    func testReadyForEventIdentifierRequestAppendToUrlWaitForAnalyticsSharedState() {
+
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: appendUrlEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        // verify
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .pending))
+
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .none))
+
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent))
+    }
+
+    // analytics shared state available
+    func testReadyForEventIdentifierRequestAppendToUrlWhenAnalyticsSharedStateIsSet() {
+
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: appendUrlEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
+        XCTAssertTrue(identity.readyForEvent(appendUrlEvent))
+    }
+
+    // analytics shared state pending
+    func testReadyForEventIdentifierRequestGetUrlVariablesForAnalyticsSharedState() {
+        let getUrlVariablesEvent = Event(name: "Test Get URL Variables Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getUrlVariablesEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .pending))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .none))
+
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent))
+    }
+
+    // analytics shared state available
+    func testReadyForEventIdentifierRequestGetUrlVariablesWhenAnalyticsSharedStateIsSet() {
+
+        let getUrlVariablesEvent = Event(name: "Test Get URL Variables Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getUrlVariablesEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
+        XCTAssertTrue(identity.readyForEvent(getUrlVariablesEvent))
+    }
 }

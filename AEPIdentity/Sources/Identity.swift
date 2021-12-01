@@ -62,6 +62,13 @@ import Foundation
             return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+        } else if event.type == EventType.identity, event.source == EventSource.requestIdentity, ( event.baseUrl != nil ||  event.urlVariables ) {
+
+            // analytics shared state will be null if analytics extension is not registered. Wait for analytics shared only if the status is pending or none
+            if let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event), analyticsSharedState.status != .set {
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Analytics shared state to be set.")
+                return false
+            }
         }
 
         return getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
@@ -180,7 +187,8 @@ import Foundation
     private func processAppendToUrl(baseUrl: String, event: Event) {
         guard let properties = state?.identityProperties else { return }
         guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
-        let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
+
+        let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.value ?? [:]
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
         // dispatch identity response event with updated url
