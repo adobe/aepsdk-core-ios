@@ -57,7 +57,7 @@ integration-test:
 	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPINTEGRATION_TEST_TARGET_NAME) -destination 'platform=iOS Simulator,name=iPhone 8' -derivedDataPath build/out -enableCodeCoverage YES
 
 pod-install:
-	pod install
+	pod install --repo-update
 
 # Targets - archive
 
