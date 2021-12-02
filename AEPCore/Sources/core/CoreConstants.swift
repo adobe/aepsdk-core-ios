@@ -72,7 +72,7 @@ enum CoreConstants {
         static let FLUTTER = "flutter"
         static let CORDOVA = "cordova"
         static let UNITY = "unity"
-        static let XAMARIN = "xamerin"
+        static let XAMARIN = "xamarin"
         static let NONE = "none"
     }
     
