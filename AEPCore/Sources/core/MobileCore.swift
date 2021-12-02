@@ -24,7 +24,7 @@ public final class MobileCore: NSObject {
             return ConfigurationConstants.EXTENSION_VERSION
         }
 
-        return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
+        return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.shortName
     }
 
     @objc public static var messagingDelegate: MessagingDelegate? {
@@ -217,5 +217,25 @@ public final class MobileCore: NSObject {
         let eventData = [CoreConstants.Signal.EventDataKeys.CONTEXT_DATA: data]
         let event = Event(name: CoreConstants.EventNames.COLLECT_PII, type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
         MobileCore.dispatch(event: event)
+    }
+}
+
+/// Convenience function to get the single character wrapper type name. 
+extension WrapperType {
+    var shortName: String {
+        switch self {
+        case .none:
+            return CoreConstants.WrapperTypeShortName.NONE
+        case .reactNative:
+            return CoreConstants.WrapperTypeShortName.REACT_NATIVE
+        case .flutter:
+            return CoreConstants.WrapperTypeShortName.FLUTTER
+        case .cordova:
+            return CoreConstants.WrapperTypeShortName.CORDOVA
+        case .unity:
+            return CoreConstants.WrapperTypeShortName.UNITY
+        case .xamarin:
+            return CoreConstants.WrapperTypeShortName.XAMARIN
+        }
     }
 }

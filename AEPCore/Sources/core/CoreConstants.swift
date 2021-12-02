@@ -65,7 +65,19 @@ enum CoreConstants {
         static let OPT_IN = "optedin"
     }
 
+    // Wrapper type names need to be consistent with the values defined in the XDM Implementation Details name enum
+    // https://github.com/adobe/xdm/blob/master/components/datatypes/industry-verticals/implementationdetails.schema.json
     enum WrapperType {
+        static let REACT_NATIVE = "reactnative"
+        static let FLUTTER = "flutter"
+        static let CORDOVA = "cordova"
+        static let UNITY = "unity"
+        static let XAMARIN = "xamerin"
+        static let NONE = "none"
+    }
+    
+    // Deprecated - will be removed in a later version. Currently used in MobileCore.extensionVersion
+    enum WrapperTypeShortName {
         static let REACT_NATIVE = "R"
         static let FLUTTER = "F"
         static let CORDOVA = "C"
