@@ -21,8 +21,13 @@ class ConfigurationAppIDTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var configuration: Configuration!
     
+    var mockDataStore: MockDataStore {
+        return ServiceProvider.shared.namedKeyValueService as! MockDataStore
+    }
+    
     override func setUp() {
         UserDefaults.clear()
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
@@ -49,6 +54,27 @@ class ConfigurationAppIDTests: XCTestCase {
         
         XCTAssertEqual(16, mockRuntime.firstEvent?.data?.count)
         XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
+    }
+    
+    func testConfigureWithAppIdNilAppIdRemovesFromPersistence() {
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
+        ServiceProvider.shared.networkService = mockNetworkService
+        let validAppId = "valid-app-id"
+        let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId)
+        
+        // test
+        mockRuntime.simulateComingEvents(appIdEvent)
+        
+        // Should be in storage
+        XCTAssertEqual(validAppId, mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as? String)
+        
+        let appIdEvent2 = ConfigurationAppIDTests.createConfigAppIdEvent(appId: "")
+        
+        mockRuntime.simulateComingEvents(appIdEvent2)
+        
+        // Should have been removed from storage
+        XCTAssertNil(mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as Any?)
+        
     }
     
     /// Tests that we can re-try network requests, and it will succeed when the network comes back online

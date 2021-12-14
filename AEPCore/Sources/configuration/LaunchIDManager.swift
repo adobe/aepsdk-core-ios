@@ -35,6 +35,11 @@ struct LaunchIDManager {
         dataStore.set(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID, value: appId)
     }
 
+    /// Removes persisted appId from persistence
+    func removeAppIdFromPersistence() {
+        dataStore.remove(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID)
+    }
+
     /// Loads the appId from the data store
     /// - Returns: appId loaded from persistence, nil if not present
     func loadAppIdFromPersistence() -> String? {

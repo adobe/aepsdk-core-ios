@@ -44,7 +44,6 @@ class Configuration: NSObject, Extension {
         registerPreprocessor(rulesEngine.process(event:))
 
         registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
-        registerListener(type: EventType.lifecycle, source: EventSource.responseContent, listener: receiveLifecycleResponse(event:))
 
         // If we have an appId stored in persistence, kick off the configureWithAppId event
         if let appId = appIdManager.loadAppIdFromManifest(), !appId.isEmpty {
@@ -135,6 +134,7 @@ class Configuration: NSObject, Extension {
         guard !appId.isEmpty else {
             // Error: No appId provided or its empty, resolve pending shared state with current config
             Log.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
+            appIdManager.removeAppIdFromPersistence()
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
