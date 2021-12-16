@@ -567,6 +567,10 @@ class EventHubTests: XCTestCase {
      Expected format:
      {
        "version" : "0.0.1",
+       "wrapper" : {
+         "type" : "F",
+         "friendlyName" : "Flutter"
+       }
        "extensions" : {
          "mockExtension" : {
            "version" : "0.0.1"
@@ -588,6 +592,9 @@ class EventHubTests: XCTestCase {
 
         // test
         registerMockExtension(MockExtensionTwo.self)
+
+        let wrapperType = WrapperType.flutter
+        eventHub.setWrapperType(wrapperType)
         eventHub.start()
 
         // verify
@@ -601,11 +608,14 @@ class EventHubTests: XCTestCase {
         let registeredExtensions = sharedState?[EventHubConstants.EventDataKeys.EXTENSIONS] as? [String: Any]
         let mockDetails = registeredExtensions?[mockExtension.name] as? [String: String]
         let mockDetailsTwo = registeredExtensions?[mockExtensionTwo.name] as? [String: Any]
+        let wrapper = sharedState?[EventHubConstants.EventDataKeys.WRAPPER] as? [String: Any]
 
         XCTAssertEqual(ConfigurationConstants.EXTENSION_VERSION, coreVersion) // should contain {version: coreVersion}
         XCTAssertEqual(MockExtension.extensionVersion, mockDetails?[EventHubConstants.EventDataKeys.VERSION])
         XCTAssertEqual(MockExtensionTwo.extensionVersion, mockDetailsTwo?[EventHubConstants.EventDataKeys.VERSION] as? String)
         XCTAssertEqual(mockExtensionTwo.metadata, mockDetailsTwo?[EventHubConstants.EventDataKeys.METADATA] as? [String: String])
+        XCTAssertEqual(wrapperType.rawValue, wrapper?[EventHubConstants.EventDataKeys.TYPE] as? String)
+        XCTAssertEqual(wrapperType.friendlyName, wrapper?[EventHubConstants.EventDataKeys.FRIENDLY_NAME] as? String)
     }
 
     func testEventHubShareEventHubStateBeforeStart() {
@@ -757,6 +767,39 @@ class EventHubTests: XCTestCase {
         var hub: EventHub? = EventHub()
         hub = nil
         XCTAssert(hub == nil)
+    }
+
+    // MARK: WrapperType Tests
+    /// Tests the default value of wrapper type is None
+    func testDefaultWrapperType() {
+        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.none)
+    }
+
+    /// Tests updating the wrapper type before start call.
+    func testUpdateWrapperTypeBeforeStart() {
+        eventHub.setWrapperType(WrapperType.flutter)
+        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
+
+        eventHub.setWrapperType(WrapperType.reactNative)
+        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.reactNative)
+
+        eventHub.setWrapperType(WrapperType.cordova)
+        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.cordova)
+    }
+
+    /// Tests updating the wrapper type after start call.
+    func testUpdateWrapperTypeAfterStart() {
+        eventHub.setWrapperType(WrapperType.flutter)
+        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
+
+        eventHub.start()
+
+        // Updates to wrapper type fail after start() call
+        eventHub.setWrapperType(WrapperType.reactNative)
+        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
+
+        eventHub.setWrapperType(WrapperType.cordova)
+        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
     }
 
     // MARK: SharedState Tests

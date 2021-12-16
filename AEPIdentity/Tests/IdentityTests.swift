@@ -307,6 +307,81 @@ class IdentityTests: XCTestCase {
         XCTAssertTrue(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have been sent
     }
 
+    /// Tests Identity Extension sends an opt out request to default demdex server when configuration experience.server has empty string value
+    func testAudienceResponseEventOptOutHitSentIsFalse_ExperienceServerURLEmpty() {
+        // setup
+        var props = IdentityProperties()
+        props.ecid = ECID()
+        props.saveToPersistence()
+        identity = Identity(runtime: mockRuntime)
+        identity.onRegistered()
+
+        let testOrgId = "testOrgId"
+        let configData = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId, IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: ""] as [String: Any]
+        let audienceResponseEventData = [IdentityConstants.Audience.OPTED_OUT_HIT_SENT: false]
+        let event = Event(name: "Test Audience response", type: EventType.audienceManager, source: EventSource.responseContent, data: audienceResponseEventData)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (configData, .set))
+        let _ = identity.readyForEvent(event)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify network request is sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
+    }
+
+    /// Tests Identity Extension sends an opt out request to default demdex server when configuration experience.server has invalid non-string value
+    func testAudienceResponseEventOptOutHitSentIsFalse_ExperienceServerURLInvalid() {
+        // setup
+        var props = IdentityProperties()
+        props.ecid = ECID()
+        props.saveToPersistence()
+        identity = Identity(runtime: mockRuntime)
+        identity.onRegistered()
+
+        let testOrgId = "testOrgId"
+        let configData = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId, IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: 100] as [String: Any]
+        let audienceResponseEventData = [IdentityConstants.Audience.OPTED_OUT_HIT_SENT: false]
+        let event = Event(name: "Test Audience response", type: EventType.audienceManager, source: EventSource.responseContent, data: audienceResponseEventData)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (configData, .set))
+        let _ = identity.readyForEvent(event)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify network request is sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
+    }
+
+    /// Tests Identity Extension sends an opt out request to default demdex server when configuration experience.server has proper non-empty string value
+    func testAudienceResponseEventOptOutHitSentIsFalse_ExperienceServerValid() {
+        // setup
+        var props = IdentityProperties()
+        props.ecid = ECID()
+        props.saveToPersistence()
+        identity = Identity(runtime: mockRuntime)
+        identity.onRegistered()
+
+        let testOrgId = "testOrgId"
+        let configData = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: testOrgId, IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "example.com"] as [String: Any]
+        let audienceResponseEventData = [IdentityConstants.Audience.OPTED_OUT_HIT_SENT: false]
+        let event = Event(name: "Test Audience response", type: EventType.audienceManager, source: EventSource.responseContent, data: audienceResponseEventData)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, data: (configData, .set))
+        let _ = identity.readyForEvent(event)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify network request is sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        XCTAssertTrue(optOutHitHost.contains("example.com"))
+    }
+
     /// Tests that when the event contains opt out hit sent == true then the Identity Extension does not send an opt out request
     func testAudienceResponseEventOptOutHitSentIsTrue() {
         // setup
@@ -410,5 +485,70 @@ class IdentityTests: XCTestCase {
         XCTAssertFalse(identity.readyForEvent(firstEvent))
         // expect true since identity has booted
         XCTAssertTrue(identity.readyForEvent(firstEvent))
+    }
+
+    // analytics shared state pending
+    func testReadyForEventIdentifierRequestAppendToUrlWaitForAnalyticsSharedState() {
+
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: appendUrlEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        // verify
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .pending))
+
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .none))
+
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent))
+    }
+
+    // analytics shared state available
+    func testReadyForEventIdentifierRequestAppendToUrlWhenAnalyticsSharedStateIsSet() {
+
+        let appendUrlEvent = Event(name: "Test Append URL Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.BASE_URL: "test-url"])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: appendUrlEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
+        XCTAssertTrue(identity.readyForEvent(appendUrlEvent))
+    }
+
+    // analytics shared state pending
+    func testReadyForEventIdentifierRequestGetUrlVariablesForAnalyticsSharedState() {
+        let getUrlVariablesEvent = Event(name: "Test Get URL Variables Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getUrlVariablesEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .pending))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .none))
+
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent))
+    }
+
+    // analytics shared state available
+    func testReadyForEventIdentifierRequestGetUrlVariablesWhenAnalyticsSharedStateIsSet() {
+
+        let getUrlVariablesEvent = Event(name: "Test Get URL Variables Event", type: EventType.identity, source: EventSource.requestIdentity, data: [IdentityConstants.EventDataKeys.URL_VARIABLES: true])
+
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getUrlVariablesEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
+        XCTAssertTrue(identity.readyForEvent(getUrlVariablesEvent))
     }
 }

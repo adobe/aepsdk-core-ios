@@ -23,16 +23,11 @@ struct RulesDownloader: RulesLoader {
         cache = Cache(name: RulesDownloaderConstants.RULES_CACHE_NAME)
     }
 
-    enum RulesDownloaderError: Error {
-        case unableToCreateTempDirectory
-        case unableToStoreDataInTempDirectory
-    }
-
     func loadRulesFromCache(rulesUrl: URL) -> Data? {
         return getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable
     }
 
-    func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Data?) -> Void) {
+    func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Result<Data, RulesDownloaderError>) -> Void) {
         /// 304 - Not Modified support
         var headers = [String: String]()
         if let cachedRules = getCachedRules(rulesUrl: rulesUrl.absoluteString) {
@@ -42,12 +37,12 @@ struct RulesDownloader: RulesLoader {
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
         ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in
             if httpConnection.responseCode == 304 {
-                completion(nil)
+                completion(.failure(.notModified))
                 return
             }
 
             guard let data = httpConnection.data else {
-                completion(nil)
+                completion(.failure(.noData))
                 return
             }
             // Store Zip file in temp directory for unzipping
@@ -55,7 +50,7 @@ struct RulesDownloader: RulesLoader {
             case let .success(url):
                 // Unzip the rules.json from the zip file in the temp directory and get the rules dict from the json file
                 guard let data = self.unzipRules(at: url) else {
-                    completion(nil)
+                    completion(.failure(.unableToUnzipRules))
                     return
                 }
                 let cachedRules = CachedRules(cacheable: data,
@@ -65,11 +60,11 @@ struct RulesDownloader: RulesLoader {
                 if !self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
                     Log.warning(label: "rules downloader", "Unable to cache rules")
                 }
-                completion(data)
+                completion(.success(data))
                 return
             case let .failure(error):
                 Log.warning(label: "rules downloader", error.localizedDescription)
-                completion(nil)
+                completion(.failure(error))
                 return
             }
 
@@ -149,4 +144,20 @@ struct RulesDownloader: RulesLoader {
         }
         return try? JSONDecoder().decode(CachedRules.self, from: cachedEntry.data)
     }
+}
+
+///
+/// Rules downloader error represents the different errors which can happen when downloading rules
+///
+enum RulesDownloaderError: Error {
+    // Unable to create a temp directory for the unzip functionality
+    case unableToCreateTempDirectory
+    // Unable to store data in the temp directory for the unzip functionality
+    case unableToStoreDataInTempDirectory
+    // unable to unzip the rules
+    case unableToUnzipRules
+    // rules were not modified, network request returns no data
+    case notModified
+    // no data returned from the rules download
+    case noData
 }

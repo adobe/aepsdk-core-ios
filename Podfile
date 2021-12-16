@@ -29,43 +29,43 @@ def tests_dev
 end
 
 target 'AEPCore' do
-  core_dev
+  core_main
 end
 
 target 'AEPCoreTests' do
-  core_dev
+  core_main
 end
 
 target 'AEPSignalTests' do
-  core_dev
+  core_main
 end
 
 target 'AEPLifecycleTests' do
-  core_dev
+  core_main
 end
 
 target 'AEPIdentityTests' do
-  core_dev
+  core_main
 end
 
 target 'AEPIntegrationTests' do
-  core_dev
+  core_main
 end
 
 # TestApps project dependencies
 
 target 'TestApp_Swift' do
-  tests_dev
+  tests_main
 end
 
 target 'TestApp_Objc' do
-  tests_dev
+  tests_main
 end
 
 target 'E2E_Swift' do
-  tests_dev
+  tests_main
 end
 
 target 'PerformanceApp' do
-  tests_dev
+  tests_main
 end
