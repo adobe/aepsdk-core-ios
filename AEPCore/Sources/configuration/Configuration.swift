@@ -89,22 +89,6 @@ class Configuration: NSObject, Extension {
         }
     }
 
-    /// Invoked by the `eventQueue` each time a new lifecycle response event is received
-    /// - Parameter event: A lifecycle response event
-    private func receiveLifecycleResponse(event: Event) {
-        // Re-fetch the latest config if appId is present.
-        // Lifecycle does not load bundled/manual configuration if appId is absent.
-        guard let appId = appIdManager.loadAppId(), !appId.isEmpty else {
-            Log.debug(label: name, "Ignoring Lifecycle response event, app id already exists.")
-            return
-        }
-
-        // Dispatch an event with appId to start remote download
-        let data: [String: Any] = [ConfigurationConstants.Keys.JSON_APP_ID: appId,
-                                   ConfigurationConstants.Keys.IS_INTERNAL_EVENT: true]
-        dispatchConfigurationRequest(data: data)
-    }
-
     // MARK: - Event Processors
 
     /// Interacts with the `ConfigurationState` to update the configuration with the new configuration contained in `event`
