@@ -34,13 +34,13 @@ class MobileIdentitiesTests: XCTestCase {
         let customIdOne = CustomIdentity(origin: "origin1", type: "type1", identifier: "id1", authenticationState: .authenticated)
         let customIdTwo = CustomIdentity(origin: "origin2", type: "type2", identifier: "id2", authenticationState: .loggedOut)
         let customIdThree = CustomIdentity(origin: "origin3", type: "DSID_20915", identifier: "test-advertisingId", authenticationState: .loggedOut)
-        
+
         var properties = IdentityProperties()
         properties.ecid = ecid
         properties.customerIds = [customIdOne, customIdTwo, customIdThree]
         properties.advertisingIdentifier = "test-advertisingId"
         properties.pushIdentifier = "test-pushid"
-        
+
         return properties.toEventData()
     }
 

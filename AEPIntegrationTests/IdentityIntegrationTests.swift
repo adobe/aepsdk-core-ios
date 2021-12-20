@@ -169,7 +169,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
         wait(for: [urlExpectation], timeout: 2)
     }
-    
+
     func testGetIdentifiers() {
         initExtensionsAndWait()
 
@@ -189,7 +189,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
         wait(for: [urlExpectation], timeout: 2)
     }
-    
+
     func testGetIdentifiers_returnsEmptyList_whenNoIds() {
         initExtensionsAndWait()
 
