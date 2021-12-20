@@ -179,9 +179,25 @@ class IdentityIntegrationTests: XCTestCase {
         Identity.getIdentifiers { identifiers, error in
             XCTAssertNotNil(identifiers)
             XCTAssertEqual(1, identifiers?.count)
-            XCTAssertEqual("id1", identifiers?[0].identifier)
-            XCTAssertEqual("type1", identifiers?[0].type)
-            XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, identifiers?[0].authenticationState)
+            let customId = identifiers?.first
+            XCTAssertEqual("id1", customId?.identifier)
+            XCTAssertEqual("type1", customId?.type)
+            XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId?.authenticationState)
+            XCTAssertEqual("d_cid_ic", customId?.origin)
+            XCTAssertNil(error)
+            urlExpectation.fulfill()
+        }
+        wait(for: [urlExpectation], timeout: 2)
+    }
+    
+    func testGetIdentifiers_returnsEmptyList_whenNoIds() {
+        initExtensionsAndWait()
+
+        let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.getIdentifiers { identifiers, error in
+            XCTAssertNotNil(identifiers)
+            XCTAssertEqual(true, identifiers?.isEmpty)
             XCTAssertNil(error)
             urlExpectation.fulfill()
         }

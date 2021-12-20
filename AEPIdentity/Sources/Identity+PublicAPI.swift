@@ -53,11 +53,24 @@ import Foundation
                 completion(nil, AEPError.callbackTimeout)
                 return
             }
-
-            guard let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable] else {
+            
+            guard var eventData: [String: Any] = responseEvent.data else {
                 completion(nil, AEPError.unexpected)
                 return
             }
+            
+            // return empty list if no Customer Identifiers in response data
+            if eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] == nil {
+                completion([], nil)
+                return
+            }
+            
+            guard let identifiersDict = eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]] else {
+                completion(nil, AEPError.unexpected)
+                return
+            }
+            
+            let identifiers = identifiersDict.map { CustomIdentity.from(dict: $0) }.compactMap { $0 }
 
             completion(identifiers, .none)
         }
@@ -141,5 +154,19 @@ import Foundation
             let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
             completion(urlVariables, .none)
         }
+    }
+}
+
+extension CustomIdentity {
+    internal static func from(dict: [String: Any]) -> CustomIdentity? {
+            guard let type = dict[CodingKeys.type.rawValue] as? String,
+                  let origin = dict[CodingKeys.origin.rawValue] as? String,
+                  let identifier = dict[CodingKeys.identifier.rawValue] as? String,
+                  let rawState = dict[CodingKeys.authenticationState.rawValue] as? Int,
+                  !identifier.isEmpty else {
+                      return nil
+                  }
+        let state = MobileVisitorAuthenticationState(rawValue: rawState) ?? MobileVisitorAuthenticationState.unknown
+        return CustomIdentity(origin: origin, type: type, identifier: identifier, authenticationState: state)
     }
 }
