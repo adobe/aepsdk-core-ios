@@ -169,6 +169,24 @@ class IdentityIntegrationTests: XCTestCase {
         }
         wait(for: [urlExpectation], timeout: 2)
     }
+    
+    func testGetIdentifiers() {
+        initExtensionsAndWait()
+
+        let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.syncIdentifier(identifierType: "type1", identifier: "id1", authenticationState: .authenticated)
+        Identity.getIdentifiers { identifiers, error in
+            XCTAssertNotNil(identifiers)
+            XCTAssertEqual(1, identifiers?.count)
+            XCTAssertEqual("id1", identifiers?[0].identifier)
+            XCTAssertEqual("type1", identifiers?[0].type)
+            XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, identifiers?[0].authenticationState)
+            XCTAssertNil(error)
+            urlExpectation.fulfill()
+        }
+        wait(for: [urlExpectation], timeout: 2)
+    }
 
     func testSetPushIdentifier() {
         initExtensionsAndWait()
