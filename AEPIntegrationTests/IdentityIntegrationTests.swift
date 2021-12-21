@@ -170,6 +170,40 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [urlExpectation], timeout: 2)
     }
 
+    func testGetIdentifiers() {
+        initExtensionsAndWait()
+
+        let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.syncIdentifier(identifierType: "type1", identifier: "id1", authenticationState: .authenticated)
+        Identity.getIdentifiers { identifiers, error in
+            XCTAssertNotNil(identifiers)
+            XCTAssertEqual(1, identifiers?.count)
+            let customId = identifiers?.first
+            XCTAssertEqual("id1", customId?.identifier)
+            XCTAssertEqual("type1", customId?.type)
+            XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId?.authenticationState)
+            XCTAssertEqual("d_cid_ic", customId?.origin)
+            XCTAssertNil(error)
+            urlExpectation.fulfill()
+        }
+        wait(for: [urlExpectation], timeout: 2)
+    }
+
+    func testGetIdentifiers_returnsEmptyList_whenNoIds() {
+        initExtensionsAndWait()
+
+        let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.getIdentifiers { identifiers, error in
+            XCTAssertNotNil(identifiers)
+            XCTAssertEqual(true, identifiers?.isEmpty)
+            XCTAssertNil(error)
+            urlExpectation.fulfill()
+        }
+        wait(for: [urlExpectation], timeout: 2)
+    }
+
     func testSetPushIdentifier() {
         initExtensionsAndWait()
 
