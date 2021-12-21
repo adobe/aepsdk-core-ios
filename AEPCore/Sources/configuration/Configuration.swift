@@ -123,13 +123,6 @@ class Configuration: NSObject, Extension {
             return
         }
 
-        guard validateForInternalEventAppIdChange(event: event, newAppId: appId) else {
-            // error: app Id update already in-flight, resolve pending shared state with current config
-            Log.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
-            sharedStateResolver(configState.environmentAwareConfiguration)
-            return
-        }
-
         // check if the configuration state has unexpired config associated with appId, if so early exit
         guard !configState.hasUnexpiredConfig(appId: appId) else {
             sharedStateResolver(configState.environmentAwareConfiguration)
@@ -223,25 +216,5 @@ class Configuration: NSObject, Extension {
         if let rulesURLString = newConfiguration[ConfigurationConstants.Keys.RULES_URL] as? String {
             rulesEngine.replaceRules(from: rulesURLString)
         }
-    }
-
-    // MARK: - Helpers
-
-    /// This method validates the appId for the SetAppIDInternalEvent
-    /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
-    /// This method returns true if the persisted appId is same as the appId present in the eventData of internalEvent
-    /// returns true, if the persisted appId is same as the internalEvent appId present in the eventData
-    /// - Parameters:
-    ///   - event: event for the API call
-    ///   - newAppId: appId passed into the API
-    /// - Returns: true if there was a change to appId via the `IS_INTERNAL_EVENT` event
-    private func validateForInternalEventAppIdChange(event: Event, newAppId: String) -> Bool {
-        let isInternalEvent = event.data?[ConfigurationConstants.Keys.IS_INTERNAL_EVENT] as? Bool ?? false
-
-        if isInternalEvent, newAppId != appIdManager.loadAppId() {
-            return false
-        }
-
-        return true
     }
 }

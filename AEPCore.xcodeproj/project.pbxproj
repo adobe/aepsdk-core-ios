@@ -2847,7 +2847,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${PROJECT_DIR}\nif which ./Pods/SwiftLint/swiftlint >/dev/null; then\n  ./Pods/SwiftLint/swiftlint\nelse\n  echo \"error: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "cd ${PROJECT_DIR}\nif which ./Pods/SwiftLint/swiftlint >/dev/null; then\n  ./Pods/SwiftLint/swiftlint\nelse\n  echo \"error: SwiftLint not installed, please run the pod install command from the project root directory.\"\nfi\n";
 		};
 		BB68130024E19C06007FDCF7 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
