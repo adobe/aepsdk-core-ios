@@ -58,4 +58,21 @@ import Foundation
             self = .none
         }
     }
+
+    var friendlyName: String {
+        switch self {
+        case .none:
+            return CoreConstants.WrapperName.NONE
+        case .reactNative:
+            return CoreConstants.WrapperName.REACT_NATIVE
+        case .flutter:
+            return CoreConstants.WrapperName.FLUTTER
+        case .cordova:
+            return CoreConstants.WrapperName.CORDOVA
+        case .unity:
+            return CoreConstants.WrapperName.UNITY
+        case .xamarin:
+            return CoreConstants.WrapperName.XAMARIN
+        }
+    }
 }

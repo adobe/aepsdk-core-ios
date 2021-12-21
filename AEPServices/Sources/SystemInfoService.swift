@@ -87,8 +87,10 @@ public protocol SystemInfoService {
     /// - Return: `String` Application bundle id
     func getApplicationBundleId() -> String?
 
+    // TODO: - Include planned deprecation version in message
     /// Returns the application version.
     /// - Return: `String` Application version
+    @available(*, deprecated, renamed: "getApplicationVersionNumber")
     func getApplicationVersion() -> String?
 
     /// Returns the current orientation of the device

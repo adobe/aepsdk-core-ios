@@ -74,6 +74,15 @@ enum CoreConstants {
         static let NONE = "N"
     }
 
+    enum WrapperName {
+        static let REACT_NATIVE = "React Native"
+        static let FLUTTER = "Flutter"
+        static let CORDOVA = "Cordova"
+        static let UNITY = "Unity"
+        static let XAMARIN = "Xamarin"
+        static let NONE = "None"
+    }
+
     enum Lifecycle {
         static let START = "start"
         static let PAUSE = "pause"

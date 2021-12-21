@@ -80,7 +80,7 @@ Include `AEPCore.xcodeproj` in the targeted Xcode project and link all necessary
 
 ### Binaries
 
-Run `pod install` from the root directory to make sure dependencies are installed first. Then run `make archive` from the root directory to generate `.xcframeworks` for each module under the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
+Run `make archive` from the root directory to generate `.xcframeworks` for each module under the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
 
 ## Documentation
 
