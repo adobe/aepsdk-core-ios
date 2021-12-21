@@ -74,6 +74,110 @@ class IdentityAPITests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
+    func testGetIdentifiers_returnsIdentifiers_whenIdentifiersInResponse() {
+        // setup
+        let expectation = XCTestExpectation(description: "getIdentifiers should dispatch an event")
+        expectation.assertForOverFulfill = true
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.identity, source: EventSource.requestIdentity) { (event) in
+            var props = IdentityProperties()
+            props.customerIds = [CustomIdentity(origin: "test-origin", type: "test-type", identifier: "test-id", authenticationState: .authenticated)]
+            let response = event.createResponseEvent(name: "test-response", type: EventType.identity, source: EventSource.responseContent, data: props.toEventData())
+            EventHub.shared.dispatch(event: response)
+        }
+
+        // test
+        Identity.getIdentifiers { (identifiers, error) in
+            XCTAssertNotNil(identifiers)
+            XCTAssertEqual(1, identifiers?.count)
+            let customId = identifiers?.first
+            XCTAssertEqual("test-id", customId?.identifier)
+            XCTAssertEqual("test-type", customId?.type)
+            XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId?.authenticationState)
+            XCTAssertEqual("test-origin", customId?.origin)
+            XCTAssertNil(error)
+
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testGetIdentifiers_returnsEmptyList_whenNoIdentifiersInResponse() {
+        // setup
+        let expectation = XCTestExpectation(description: "getIdentifiers should dispatch an event")
+        expectation.assertForOverFulfill = true
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.identity, source: EventSource.requestIdentity) { (event) in
+            var props = IdentityProperties()
+            props.ecid = ECID()
+            props.advertisingIdentifier = "adId"
+            let response = event.createResponseEvent(name: "test-response", type: EventType.identity, source: EventSource.responseContent, data: props.toEventData())
+            EventHub.shared.dispatch(event: response)
+        }
+
+        // test
+        Identity.getIdentifiers { (identifiers, error) in
+            XCTAssertNotNil(identifiers)
+            XCTAssertEqual(true, identifiers?.isEmpty)
+            XCTAssertNil(error)
+
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testGetIdentifiers_returnsEmptyList_whenResponseIdentifiersEmpty() {
+        // setup
+        let expectation = XCTestExpectation(description: "getIdentifiers should dispatch an event")
+        expectation.assertForOverFulfill = true
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.identity, source: EventSource.requestIdentity) { (event) in
+            let eventData = [IdentityConstants.EventDataKeys.VISITOR_IDS_LIST: []]
+            let response = event.createResponseEvent(name: "test-response", type: EventType.identity, source: EventSource.responseContent, data: eventData)
+            EventHub.shared.dispatch(event: response)
+        }
+
+        // test
+        Identity.getIdentifiers { (identifiers, error) in
+            XCTAssertNotNil(identifiers)
+            XCTAssertEqual(true, identifiers?.isEmpty)
+            XCTAssertNil(error)
+
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testGetIdentifiers_returnsUnexpectedError_whenIdentifiersInResponseAreWrongFormat() {
+        // setup
+        let expectation = XCTestExpectation(description: "getIdentifiers should dispatch an event")
+        expectation.assertForOverFulfill = true
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.identity, source: EventSource.requestIdentity) { (event) in
+            let eventData = [IdentityConstants.EventDataKeys.VISITOR_IDS_LIST: "Is String but expect Map"]
+            let response = event.createResponseEvent(name: "test-response", type: EventType.identity, source: EventSource.responseContent, data: eventData)
+            EventHub.shared.dispatch(event: response)
+        }
+
+        // test
+        Identity.getIdentifiers { (identifiers, error) in
+            XCTAssertNil(identifiers)
+            XCTAssertNotNil(error)
+            XCTAssertEqual(AEPError.unexpected, error as? AEPError)
+
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+    }
+
     /// Tests that getExperienceCloudId dispatches an identity request identity event
     func testGetExperienceCloudId() {
         // setup
@@ -170,6 +274,48 @@ class IdentityAPITests: XCTestCase {
 
         // verify
         wait(for: [expectation], timeout: 1)
+    }
+
+    func testCustomIdentityFromDictionary_validValues() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": "test-origin",
+            "id": "test-id",
+            "authentication_state": 1
+        ]
+
+        let customId = CustomIdentity.from(dict: dict)
+        XCTAssertEqual("test-id", customId?.identifier)
+        XCTAssertEqual("test-type", customId?.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId?.authenticationState)
+        XCTAssertEqual("test-origin", customId?.origin)
+    }
+
+    func testCustomIdentityFromDictionary_failsIfIdentifierIsEmpty() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": "test-origin",
+            "id": "",
+            "authentication_state": 1
+        ]
+
+        XCTAssertNil(CustomIdentity.from(dict: dict))
+
+    }
+
+    func testCustomIdentityFromDictionary_unknownAuthenticationWhenIncorrectValue() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": "test-origin",
+            "id": "test-id",
+            "authentication_state": 11
+        ]
+
+        let customId = CustomIdentity.from(dict: dict)
+        XCTAssertEqual("test-id", customId?.identifier)
+        XCTAssertEqual("test-type", customId?.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.unknown, customId?.authenticationState)
+        XCTAssertEqual("test-origin", customId?.origin)
     }
 
 }

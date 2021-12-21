@@ -54,7 +54,7 @@ import Foundation
                 return
             }
 
-            guard var eventData: [String: Any] = responseEvent.data else {
+            guard let eventData: [String: Any] = responseEvent.data else {
                 completion(nil, AEPError.unexpected)
                 return
             }
