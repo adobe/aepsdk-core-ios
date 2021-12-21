@@ -56,7 +56,7 @@ class ConfigurationAppIDTests: XCTestCase {
         XCTAssertEqual(16, mockRuntime.firstSharedState?.count)
     }
     
-    func testConfigureWithAppIdNilAppIdRemovesFromPersistence() {
+    func testConfigureWithEmptyAppIdRemovesFromPersistence() {
         let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         ServiceProvider.shared.networkService = mockNetworkService
         let validAppId = "valid-app-id"
