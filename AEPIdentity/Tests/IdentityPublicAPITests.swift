@@ -275,47 +275,4 @@ class IdentityAPITests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1)
     }
-
-    func testCustomIdentityFromDictionary_validValues() {
-        let dict: [String: Any] = [
-            "id_type": "test-type",
-            "id_origin": "test-origin",
-            "id": "test-id",
-            "authentication_state": 1
-        ]
-
-        let customId = CustomIdentity.from(dict: dict)
-        XCTAssertEqual("test-id", customId?.identifier)
-        XCTAssertEqual("test-type", customId?.type)
-        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId?.authenticationState)
-        XCTAssertEqual("test-origin", customId?.origin)
-    }
-
-    func testCustomIdentityFromDictionary_failsIfIdentifierIsEmpty() {
-        let dict: [String: Any] = [
-            "id_type": "test-type",
-            "id_origin": "test-origin",
-            "id": "",
-            "authentication_state": 1
-        ]
-
-        XCTAssertNil(CustomIdentity.from(dict: dict))
-
-    }
-
-    func testCustomIdentityFromDictionary_unknownAuthenticationWhenIncorrectValue() {
-        let dict: [String: Any] = [
-            "id_type": "test-type",
-            "id_origin": "test-origin",
-            "id": "test-id",
-            "authentication_state": 11
-        ]
-
-        let customId = CustomIdentity.from(dict: dict)
-        XCTAssertEqual("test-id", customId?.identifier)
-        XCTAssertEqual("test-type", customId?.type)
-        XCTAssertEqual(MobileVisitorAuthenticationState.unknown, customId?.authenticationState)
-        XCTAssertEqual("test-origin", customId?.origin)
-    }
-
 }

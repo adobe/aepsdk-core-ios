@@ -10,6 +10,7 @@
  */
 
 import AEPCore
+import AEPServices
 import Foundation
 
 /// Defines the public interface for the Identity extension
@@ -66,11 +67,12 @@ import Foundation
             }
 
             guard let identifiersDict = eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]] else {
+                Log.warning(label: "\(IdentityConstants.EXTENSION_NAME):\(#function)", "Failed to retrieve visitor identifiers from event response as object type is not a map.")
                 completion(nil, AEPError.unexpected)
                 return
             }
 
-            let identifiers = identifiersDict.map { CustomIdentity.from(dict: $0) }.compactMap { $0 }
+            let identifiers = identifiersDict.map { CustomIdentity(dict: $0) }.compactMap { $0 }
 
             completion(identifiers, .none)
         }
@@ -154,19 +156,5 @@ import Foundation
             let urlVariables = responseEvent.data?[IdentityConstants.EventDataKeys.URL_VARIABLES] as? String
             completion(urlVariables, .none)
         }
-    }
-}
-
-extension CustomIdentity {
-    internal static func from(dict: [String: Any]) -> CustomIdentity? {
-        guard let type = dict[CodingKeys.type.rawValue] as? String,
-              let origin = dict[CodingKeys.origin.rawValue] as? String,
-              let identifier = dict[CodingKeys.identifier.rawValue] as? String,
-              let rawState = dict[CodingKeys.authenticationState.rawValue] as? Int,
-              !identifier.isEmpty else {
-            return nil
-        }
-        let state = MobileVisitorAuthenticationState(rawValue: rawState) ?? MobileVisitorAuthenticationState.unknown
-        return CustomIdentity(origin: origin, type: type, identifier: identifier, authenticationState: state)
     }
 }
