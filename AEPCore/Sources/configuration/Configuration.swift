@@ -44,7 +44,6 @@ class Configuration: NSObject, Extension {
         registerPreprocessor(rulesEngine.process(event:))
 
         registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
-        registerListener(type: EventType.lifecycle, source: EventSource.responseContent, listener: receiveLifecycleResponse(event:))
 
         // If we have an appId stored in persistence, kick off the configureWithAppId event
         if let appId = appIdManager.loadAppIdFromManifest(), !appId.isEmpty {
@@ -90,22 +89,6 @@ class Configuration: NSObject, Extension {
         }
     }
 
-    /// Invoked by the `eventQueue` each time a new lifecycle response event is received
-    /// - Parameter event: A lifecycle response event
-    private func receiveLifecycleResponse(event: Event) {
-        // Re-fetch the latest config if appId is present.
-        // Lifecycle does not load bundled/manual configuration if appId is absent.
-        guard let appId = appIdManager.loadAppId(), !appId.isEmpty else {
-            Log.debug(label: name, "Ignoring Lifecycle response event, app id already exists.")
-            return
-        }
-
-        // Dispatch an event with appId to start remote download
-        let data: [String: Any] = [ConfigurationConstants.Keys.JSON_APP_ID: appId,
-                                   ConfigurationConstants.Keys.IS_INTERNAL_EVENT: true]
-        dispatchConfigurationRequest(data: data)
-    }
-
     // MARK: - Event Processors
 
     /// Interacts with the `ConfigurationState` to update the configuration with the new configuration contained in `event`
@@ -135,13 +118,7 @@ class Configuration: NSObject, Extension {
         guard !appId.isEmpty else {
             // Error: No appId provided or its empty, resolve pending shared state with current config
             Log.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
-            sharedStateResolver(configState.environmentAwareConfiguration)
-            return
-        }
-
-        guard validateForInternalEventAppIdChange(event: event, newAppId: appId) else {
-            // error: app Id update already in-flight, resolve pending shared state with current config
-            Log.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
+            appIdManager.removeAppIdFromPersistence()
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
@@ -239,25 +216,5 @@ class Configuration: NSObject, Extension {
         if let rulesURLString = newConfiguration[ConfigurationConstants.Keys.RULES_URL] as? String {
             rulesEngine.replaceRules(from: rulesURLString)
         }
-    }
-
-    // MARK: - Helpers
-
-    /// This method validates the appId for the SetAppIDInternalEvent
-    /// The purpose of the SetAppIDInternalEvent is to refresh the existing with the persisted appId
-    /// This method returns true if the persisted appId is same as the appId present in the eventData of internalEvent
-    /// returns true, if the persisted appId is same as the internalEvent appId present in the eventData
-    /// - Parameters:
-    ///   - event: event for the API call
-    ///   - newAppId: appId passed into the API
-    /// - Returns: true if there was a change to appId via the `IS_INTERNAL_EVENT` event
-    private func validateForInternalEventAppIdChange(event: Event, newAppId: String) -> Bool {
-        let isInternalEvent = event.data?[ConfigurationConstants.Keys.IS_INTERNAL_EVENT] as? Bool ?? false
-
-        if isInternalEvent, newAppId != appIdManager.loadAppId() {
-            return false
-        }
-
-        return true
     }
 }

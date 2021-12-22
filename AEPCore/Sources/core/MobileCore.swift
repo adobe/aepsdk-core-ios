@@ -19,6 +19,7 @@ public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
+        let wrapperType = EventHub.shared.getWrapperType()
         if wrapperType == .none {
             return ConfigurationConstants.EXTENSION_VERSION
         }
@@ -31,8 +32,6 @@ public final class MobileCore: NSObject {
         get { ServiceProvider.shared.messagingDelegate }
         set { ServiceProvider.shared.messagingDelegate = newValue }
     }
-
-    private static var wrapperType = WrapperType.none
 
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
@@ -51,11 +50,14 @@ public final class MobileCore: NSObject {
         let registerSelector = Selector(("registerExtension"))
 
         if NSClassFromString("ACPBridgeExtension") == nil && !legacyExtensions.isEmpty {
-            Log.error(label: LOG_TAG, "Attempting to register legacy extensions without the compatibility layer present. Can be included via github.com/adobe/aepsdk-compatibility-ios")
+            Log.error(label: LOG_TAG, "Attempting to register ACP extensions: \(legacyExtensions), without the compatibility layer present. Can be included via github.com/adobe/aepsdk-compatibility-ios")
         } else {
-            for legacyExtension in legacyExtensions
-                where legacyExtension.responds(to: registerSelector) {
-                legacyExtension.perform(registerSelector)
+            for legacyExtension in legacyExtensions {
+                if legacyExtension.responds(to: registerSelector) {
+                    legacyExtension.perform(registerSelector)
+                } else {
+                    Log.error(label: LOG_TAG, "Attempting to register non extension type: \(legacyExtension). If this is due to a naming collision, please use full module name when registering. E.g: AEPAnalytics.Analytics.self")
+                }
             }
         }
 
@@ -159,7 +161,7 @@ public final class MobileCore: NSObject {
     /// - Parameter type: the `WrapperType` corresponding to the current platform
     @objc(setWrapperType:)
     public static func setWrapperType(_ type: WrapperType) {
-        MobileCore.wrapperType = type
+        EventHub.shared.setWrapperType(type)
     }
 
     /// Sets the logging level for the SDK

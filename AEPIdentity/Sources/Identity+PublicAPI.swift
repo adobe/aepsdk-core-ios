@@ -10,6 +10,7 @@
  */
 
 import AEPCore
+import AEPServices
 import Foundation
 
 /// Defines the public interface for the Identity extension
@@ -54,10 +55,24 @@ import Foundation
                 return
             }
 
-            guard let identifiers = responseEvent.data?[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [Identifiable] else {
+            guard let eventData: [String: Any] = responseEvent.data else {
                 completion(nil, AEPError.unexpected)
                 return
             }
+
+            // return empty list if no Customer Identifiers in response data
+            if eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] == nil {
+                completion([], nil)
+                return
+            }
+
+            guard let identifiersDict = eventData[IdentityConstants.EventDataKeys.VISITOR_IDS_LIST] as? [[String: Any]] else {
+                Log.warning(label: "\(IdentityConstants.EXTENSION_NAME):\(#function)", "Failed to retrieve visitor identifiers from event response as object type is not a map.")
+                completion(nil, AEPError.unexpected)
+                return
+            }
+
+            let identifiers = identifiersDict.map { CustomIdentity(dict: $0) }.compactMap { $0 }
 
             completion(identifiers, .none)
         }

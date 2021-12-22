@@ -31,6 +31,14 @@ class CustomIdentity: Identifiable, Codable {
         self.authenticationState = authenticationState
     }
 
+    init(dict: [String: Any]) {
+        self.type = dict[CodingKeys.type.rawValue] as? String
+        self.origin = dict[CodingKeys.origin.rawValue] as? String
+        self.identifier = dict[CodingKeys.identifier.rawValue] as? String
+        let rawState = dict[CodingKeys.authenticationState.rawValue] as? Int
+        self.authenticationState = MobileVisitorAuthenticationState(rawValue: rawState ?? MobileVisitorAuthenticationState.unknown.rawValue) ?? .unknown
+    }
+
     enum CodingKeys: String, CodingKey {
         case origin = "id_origin"
         case type = "id_type"

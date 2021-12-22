@@ -229,4 +229,96 @@ class CustomIdentityTests: XCTestCase {
         // test & verify
         XCTAssertFalse(id1 == id2)
     }
+    
+    // MARK: init(dict:) tests
+    
+    func testCustomIdentity_initFromDictionary() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": "test-origin",
+            "id": "test-id",
+            "authentication_state": 1
+        ]
+
+        let customId = CustomIdentity(dict: dict)
+        XCTAssertEqual("test-id", customId.identifier)
+        XCTAssertEqual("test-type", customId.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId.authenticationState)
+        XCTAssertEqual("test-origin", customId.origin)
+    }
+
+    func testCustomIdentity_initFromDictionary_setStateToUnknown_whenInvalid() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": "test-origin",
+            "id": "test-id",
+            "authentication_state": 11
+        ]
+
+        let customId = CustomIdentity(dict: dict)
+        XCTAssertEqual("test-id", customId.identifier)
+        XCTAssertEqual("test-type", customId.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.unknown, customId.authenticationState)
+        XCTAssertEqual("test-origin", customId.origin)
+    }
+    
+    func testCustomIdentity_initFromDictionary_setStateToUnknown_whenEmpty() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": "test-origin",
+            "id": "test-id"
+        ]
+
+        let customId = CustomIdentity(dict: dict)
+        XCTAssertEqual("test-id", customId.identifier)
+        XCTAssertEqual("test-type", customId.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.unknown, customId.authenticationState)
+        XCTAssertEqual("test-origin", customId.origin)
+    }
+    
+    func testCustomIdentity_initFromDictionary_invalidId_returnsNilId() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": "test-origin",
+            "id": -1, // expected type String
+            "authentication_state": 1
+        ]
+
+        let customId = CustomIdentity(dict: dict)
+        XCTAssertNil(customId.identifier)
+        XCTAssertEqual("test-type", customId.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId.authenticationState)
+        XCTAssertEqual("test-origin", customId.origin)
+    }
+
+    func testCustomIdentity_initFromDictionary_invalidType_returnsNilType() {
+        let dict: [String: Any] = [
+            "id_type": -1, // expected type String
+            "id_origin": "test-origin",
+            "id": "test-id",
+            "authentication_state": 1
+        ]
+
+        let customId = CustomIdentity(dict: dict)
+        XCTAssertEqual("test-id", customId.identifier)
+        XCTAssertNil(customId.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId.authenticationState)
+        XCTAssertEqual("test-origin", customId.origin)
+    }
+    
+    func testCustomIdentity_initFromDictionary_invalidOrigin_returnsNilOrigin() {
+        let dict: [String: Any] = [
+            "id_type": "test-type",
+            "id_origin": -1, // expected type String
+            "id": "test-id",
+            "authentication_state": 1
+        ]
+
+        let customId = CustomIdentity(dict: dict)
+        XCTAssertEqual("test-id", customId.identifier)
+        XCTAssertEqual("test-type", customId.type)
+        XCTAssertEqual(MobileVisitorAuthenticationState.authenticated, customId.authenticationState)
+        XCTAssertNil(customId.origin)
+    }
+
 }

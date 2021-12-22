@@ -102,14 +102,15 @@ public class FullscreenMessage: NSObject, WKNavigationDelegate, FullscreenPresen
                 if cacheFolder != nil {
                     cacheFolderURL = cacheFolder?.appendingPathComponent(self.DOWNLOAD_CACHE)
                     tempHTMLFile = cacheFolderURL?.appendingPathComponent(self.TEMP_FILE_NAME).appendingPathExtension(self.HTML_EXTENSION)
-                    if !self.isLocalImageUsed {
+                    if self.isLocalImageUsed, let file = tempHTMLFile {
                         // We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL
                         // expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the
                         // payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp.html and pass that file
                         // URL to loadFileURL.
                         do {
                             try FileManager.default.createDirectory(atPath: cacheFolderURL?.path ?? "", withIntermediateDirectories: true, attributes: nil)
-                            try self.payload.write(toFile: tempHTMLFile?.path ?? "", atomically: true, encoding: .utf8)
+                            let tempHtml = self.payload.data(using: .utf8, allowLossyConversion: false)
+                            try tempHtml?.write(to: file, options: .noFileProtection)
                             useTempHTML = true
                         } catch {
                             Log.debug(label: self.LOG_PREFIX, "Failed to save the temporary HTML file for fullscreen message \(error)")
