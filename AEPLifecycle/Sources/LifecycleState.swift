@@ -113,6 +113,11 @@ struct LifecycleState {
         return lifecycleContextData ?? previousSessionLifecycleContextData
     }
 
+    /// Gets the current session start date from data store, if not present will return nil
+    func getSessionStartDate() -> Date? {
+        return lifecycleSession.getPersistedStartDate()
+    }
+
     /// Updates the application identifier in the in-memory lifecycle context data
     /// - Parameter appId: the application identifier
     mutating func applyApplicationUpgrade(appId: String?) {

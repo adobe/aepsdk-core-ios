@@ -24,13 +24,22 @@ public extension LaunchRulesEngine {
             return
         }
         let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
-        rulesDownloader.loadRulesFromUrl(rulesUrl: url) { data in
-            guard let data = data, let rules = JSONRulesParser.parse(data, runtime: self.extensionRuntime)  else {
-                Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from url: \(urlString)")
-                return
+        rulesDownloader.loadRulesFromUrl(rulesUrl: url) { result in
+            switch result {
+            case .success(let data):
+                guard let rules = JSONRulesParser.parse(data) else {
+                    Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from URL: \(urlString)")
+                    return
+                }
+                self.replaceRules(with: rules)
+            case .failure(let error):
+                switch error {
+                case .notModified:
+                    Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Rules were not modified, not loading rules from url: \(urlString)")
+                default:
+                    Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from url: \(urlString), with error: \(error.localizedDescription)")
+                }
             }
-
-            self.replaceRules(with: rules)
         }
     }
 
@@ -49,5 +58,4 @@ public extension LaunchRulesEngine {
 
         self.replaceRules(with: rules)
     }
-
 }

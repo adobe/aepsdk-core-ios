@@ -39,7 +39,6 @@ public struct SQLiteWrapper {
             Log.warning(label: LOG_PREFIX, "Failed to open database at \(url.path)")
             return nil
         } else {
-            Log.trace(label: LOG_PREFIX, "Successfully opened connection to database at \(url.path)")
             return database
         }
     }
