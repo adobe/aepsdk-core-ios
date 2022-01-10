@@ -17,10 +17,6 @@ Pod::Spec.new do |s|
   s.swift_version = '5.1'
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
-<<<<<<< HEAD
-  s.dependency 'AEPCore', '>= 3.3.1'
-=======
-  s.dependency 'AEPCore', '3.3.2'
->>>>>>> 3d98cb731cf6e75498a817a87d6a75fd70dae566
+  s.dependency 'AEPCore', '>= 3.3.2'
 
 end
