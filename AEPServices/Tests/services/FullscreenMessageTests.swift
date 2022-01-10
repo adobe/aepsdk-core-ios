@@ -21,6 +21,8 @@ class FullscreenMessageTests : XCTestCase {
     let mockHtml = "somehtml"
     var fullscreenMessage : FullscreenMessage?
     var expectation: XCTestExpectation?
+    var webViewExpectation: XCTestExpectation?
+    var webViewContent: String?
     var mockUIService: UIService?
 
     var rootViewController: UIViewController!
@@ -250,5 +252,61 @@ class FullscreenMessageTests : XCTestCase {
         wait(for: [expectation!], timeout: 1.0)
         XCTAssertFalse(handlerCalled)
         XCTAssertNil(handlerContent)
+    }
+    
+    func testShowHighAsciiChars() {
+        // setup
+        let stringToTest = "áéíóúàèìòùâêîôûäëïöüãõñðçåæ"
+        fullscreenMessage?.payload = "<html>\(stringToTest)</html>"
+        expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+        webViewExpectation = XCTestExpectation(description: "Verifying HTML in webview")
+        mockFullscreenListener.setExpectation(expectation!)
+        messageMonitor.dismissMessage()
+        guard let webview = self.fullscreenMessage?.webView as? WKWebView else {
+            return
+        }
+        webview.navigationDelegate = self
+        
+        // test
+        fullscreenMessage?.show()
+        
+        // verify
+        wait(for: [expectation!], timeout: 2.0)
+        XCTAssertTrue(mockFullscreenListener.onShowCalled)
+        XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+        XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+        wait(for: [webViewExpectation!], timeout: 5.0)
+    }
+    
+    func getHtmlFromMessageWebview(closure: @escaping (String) -> Void) {
+        guard let webview = self.fullscreenMessage?.webView as? WKWebView else {
+            return
+        }
+        
+        webview.evaluateJavaScript("document.documentElement.outerHTML.toString()") { value, error in
+            if error != nil {
+                closure("")
+            }
+            
+            closure(value as? String ?? "")
+        }
+    }
+    
+    func webviewClosure(_ value: String) {
+        webViewContent = value
+        webViewExpectation?.fulfill()
+    }
+}
+
+extension FullscreenMessageTests: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webView.evaluateJavaScript("document.documentElement.outerHTML.toString()") { value, error in
+            guard error == nil, let value = value as? String else {
+                self.webviewClosure("")
+                return
+            }
+            
+            self.webviewClosure(value)
+        }
     }
 }
