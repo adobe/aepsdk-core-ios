@@ -46,6 +46,10 @@ class ConfigurationUpdateTests: XCTestCase {
         configuration.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
     }
+    
+    override func tearDown() {
+        UserDefaults.clear()
+    }
 
     // MARK: update shared state tests
 
