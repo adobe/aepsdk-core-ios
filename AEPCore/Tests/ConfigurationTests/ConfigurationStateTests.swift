@@ -683,4 +683,73 @@ class ConfigurationStateTests: XCTestCase {
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
+
+    // MARK: - Revert Config API Tests
+    func testRevertConfig() {
+        // setup
+        let expectedConfig = ["testKey": "testVal"]
+        let testAppid = "testAppid"
+        let cachedConfig: [String: Any] = ["build.environment": "dev",
+                                           "analytics.rsids": "rsid1,rsid2",
+                                           "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                           "analytics.server": "old-server.com"]
+        putAppIdInPersistence(appId: testAppid)
+        putCachedConfigInPersistence(config: cachedConfig)
+
+        configState.loadInitialConfig()
+
+        // test
+        configState.updateWith(programmaticConfig: expectedConfig)
+
+        // verify
+        XCTAssertEqual(5, configState.currentConfiguration.count)
+        XCTAssertEqual("testVal", configState.currentConfiguration["testKey"] as! String)
+        XCTAssertEqual(1, configState.programmaticConfigInDataStore.count)
+        XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
+
+        if !configState.revertUpdatedConfig() {
+            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
+        }
+
+        XCTAssertEqual(4, configState.currentConfiguration.count)
+        XCTAssertNil(configState.currentConfiguration["testKey"] as? String)
+        XCTAssertEqual(0, configState.programmaticConfigInDataStore.count)
+        XCTAssertNil(configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        XCTAssertEqual(0, (dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG) as [String:AnyCodable]?)?.count)
+    }
+
+    // Tests that updating then reverting then updating the config doesn't have remnants from first update
+    func testUpdateRevertUpdate() {
+        // setup
+        let firstUpdate = ["shouldNotExist": "afterRevert"]
+        let testAppid = "testAppid"
+        let cachedConfig: [String: Any] = ["build.environment": "dev",
+                                           "analytics.rsids": "rsid1,rsid2",
+                                           "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                           "analytics.server": "old-server.com"]
+        let expectedConfig2: [String: String] = ["analytics.server": "new-server.com", "newKey": "newValue"]
+        putAppIdInPersistence(appId: testAppid)
+        putCachedConfigInPersistence(config: cachedConfig)
+
+        configState.loadInitialConfig()
+
+        // test
+        configState.updateWith(programmaticConfig: firstUpdate)
+
+        if !configState.revertUpdatedConfig() {
+            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
+        }
+
+        configState.updateWith(programmaticConfig:  expectedConfig2)
+
+        XCTAssertEqual(5, configState.currentConfiguration.count)
+        XCTAssertNil(configState.currentConfiguration["shouldNotExist"] as? String)
+        XCTAssertEqual(2, configState.programmaticConfigInDataStore.count)
+        XCTAssertNil(configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        let progammaticMapped: [String: String] = configState.programmaticConfigInDataStore.mapValues{$0.stringValue!}
+        XCTAssertEqual(expectedConfig2, progammaticMapped)
+    }
+
+
 }

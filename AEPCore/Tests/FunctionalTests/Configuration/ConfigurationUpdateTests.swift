@@ -20,11 +20,29 @@ import XCTest
 class ConfigurationUpdateTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var configuration: Configuration!
+    let mockDataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
+    private let mockAppid = "mockAppid"
+    private let mockConfig: [String: AnyCodable] = ["global.privacy": "optedin",
+                                                    "lifecycle.sessionTimeout": 300,
+                                                    "rules.url": "https://link.to.rules/test.zip",
+                                                    "analytics.server": "default"]
 
-    override func setUp() {
+    func setUpForUpdate() {
         UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
+        configuration.onRegistered()
+        mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+    }
+
+    func setupWithCachedConfig() {
+        UserDefaults.clear()
+        mockRuntime = TestableExtensionRuntime()
+        configuration = Configuration(runtime: mockRuntime)
+        // Make sure initial config is cached
+        mockDataStore.set(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID, value: mockAppid)
+        let cacheKey = "\(ConfigurationConstants.DataStoreKeys.CONFIG_CACHE_PREFIX)\(mockAppid)"
+        mockDataStore.setObject(key: cacheKey, value: CachedConfiguration(cacheable: mockConfig, lastModified: "test-last-modified", eTag: "test-etag"))
         configuration.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
     }
@@ -34,6 +52,7 @@ class ConfigurationUpdateTests: XCTestCase {
     /// Tests the happy path with for updating the config with a dict
     func testUpdateConfigurationWithDict() {
         // setup
+        setUpForUpdate()
         let configUpdate = ["global.privacy": PrivacyStatus.optedOut.rawValue]
 
         // test
@@ -58,6 +77,7 @@ class ConfigurationUpdateTests: XCTestCase {
     /// Tests the happy path with updating the config multiple times with a same dict
     func testUpdateConfigurationWithDictTwice() {
         // setup
+        setUpForUpdate()
         let configUpdate = ["global.privacy": "optedin"]
 
         // test
@@ -71,6 +91,7 @@ class ConfigurationUpdateTests: XCTestCase {
 
     /// Tests the happy path with updating the config multiple times with a new value
     func testUpdateConfigurationWithDictTwiceWithNewValue() {
+        setUpForUpdate()
         // test
         mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["global.privacy": "optedin"]))
         mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["global.privacy": "optedout"]))
@@ -88,6 +109,7 @@ class ConfigurationUpdateTests: XCTestCase {
 
     /// Tests the happy path with updating the config multiple times with new keys
     func testUpdateConfigurationWithDictWithNewKeys() {
+        setUpForUpdate()
         // test
         mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["global.privacy": "optedin"]))
         mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["analytics.server": "server"]))
@@ -107,6 +129,7 @@ class ConfigurationUpdateTests: XCTestCase {
 
     /// Tests the case where the update dict is empty, and should not dispatch a configuration response content event
     func testUpdateConfigurationWithEmptyDict() {
+        setUpForUpdate()
         // test
         mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: [:]))
 
@@ -116,6 +139,7 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     func testUpdateConfigurationPersistsReboot() {
+        setUpForUpdate()
         // test
         let updateEvent = ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["global.privacy": "optedOut"])
         mockRuntime.simulateComingEvents(updateEvent)
@@ -144,8 +168,140 @@ class ConfigurationUpdateTests: XCTestCase {
         XCTAssertEqual("optedOut", sharedState?["global.privacy"] as? String)
     }
 
+    // Tests that reverting config after some updates will revert any changes to config made in updates
+    func testRevertUpdateConfigWithCachedConfigNoReboot() {
+        setupWithCachedConfig()
+
+        // First update the config with a new value for an existing key
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["analytics.server": "update1"]))
+        // Now update the existing key, and add a new value
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["analytics.server": "update2", "newKey": "newValue"]))
+        // Revert the changes
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createRevertUpdateEvent())
+        // verify
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(3, mockRuntime.createdSharedStates.count)
+
+        XCTAssertEqual(4, mockRuntime.dispatchedEvents[0].data?.count)
+        XCTAssertEqual(5, mockRuntime.dispatchedEvents[1].data?.count)
+        XCTAssertEqual(4, mockRuntime.dispatchedEvents[2].data?.count)
+
+        XCTAssertEqual("update1", mockRuntime.dispatchedEvents[0].data?["analytics.server"] as? String)
+        XCTAssertEqual("update2", mockRuntime.dispatchedEvents[1].data?["analytics.server"] as? String)
+        XCTAssertEqual("newValue", mockRuntime.dispatchedEvents[1].data?["newKey"] as? String)
+        XCTAssertEqual("default", mockRuntime.dispatchedEvents[2].data?["analytics.server"] as? String)
+        // Make sure key added via update is gone
+        XCTAssertNil(mockRuntime.dispatchedEvents[2].data?["newKey"] as? String)
+
+
+        XCTAssertEqual(4, mockRuntime.createdSharedStates[0]?.count)
+        XCTAssertEqual(5, mockRuntime.createdSharedStates[1]?.count)
+        XCTAssertEqual(4, mockRuntime.createdSharedStates[2]?.count)
+        XCTAssertEqual("update1", mockRuntime.createdSharedStates[0]?["analytics.server"] as? String)
+        XCTAssertEqual("update2", mockRuntime.createdSharedStates[1]?["analytics.server"] as? String)
+        XCTAssertEqual("newValue", mockRuntime.createdSharedStates[1]?["newKey"] as? String)
+        XCTAssertEqual("default", mockRuntime.createdSharedStates[2]?["analytics.server"] as? String)
+    }
+
+    // Tests that reverting config after some updates will revert any changes to config made in updates and persists after reboot
+    func testRevertUpdateConfigWithCachedConfigPersistsReboot() {
+        setupWithCachedConfig()
+
+        // First update the config with a new value for an existing key
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["analytics.server": "update1"]))
+        // Now update the existing key, and add a new value
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["analytics.server": "update2", "newKey": "newValue"]))
+        // Revert the changes
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createRevertUpdateEvent())
+        // verify
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(3, mockRuntime.createdSharedStates.count)
+
+        XCTAssertEqual(4, mockRuntime.dispatchedEvents[0].data?.count)
+        XCTAssertEqual(5, mockRuntime.dispatchedEvents[1].data?.count)
+        XCTAssertEqual(4, mockRuntime.dispatchedEvents[2].data?.count)
+
+        XCTAssertEqual("update1", mockRuntime.dispatchedEvents[0].data?["analytics.server"] as? String)
+        XCTAssertEqual("update2", mockRuntime.dispatchedEvents[1].data?["analytics.server"] as? String)
+        XCTAssertEqual("newValue", mockRuntime.dispatchedEvents[1].data?["newKey"] as? String)
+        XCTAssertEqual("default", mockRuntime.dispatchedEvents[2].data?["analytics.server"] as? String)
+        // Make sure key added via update is gone
+        XCTAssertNil(mockRuntime.dispatchedEvents[2].data?["newKey"] as? String)
+
+
+        XCTAssertEqual(4, mockRuntime.createdSharedStates[0]?.count)
+        XCTAssertEqual(5, mockRuntime.createdSharedStates[1]?.count)
+        XCTAssertEqual(4, mockRuntime.createdSharedStates[2]?.count)
+        XCTAssertEqual("update1", mockRuntime.createdSharedStates[0]?["analytics.server"] as? String)
+        XCTAssertEqual("update2", mockRuntime.createdSharedStates[1]?["analytics.server"] as? String)
+        XCTAssertEqual("newValue", mockRuntime.createdSharedStates[1]?["newKey"] as? String)
+        XCTAssertEqual("default", mockRuntime.createdSharedStates[2]?["analytics.server"] as? String)
+
+        // Simulate reboot
+        mockRuntime = TestableExtensionRuntime()
+        mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        configuration = Configuration(runtime: mockRuntime)
+        configuration.onRegistered()
+
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
+
+        let sharedState = mockRuntime.createdSharedStates[0]
+        let event = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual("default", event.data?["analytics.server"] as? String)
+        XCTAssertNil(event.data?["newKey"])
+        XCTAssertEqual("default", sharedState?["analytics.server"] as? String)
+        XCTAssertNil(sharedState?["newKey"])
+    }
+
+    // Tests that updating config, reverting the update and then updating again will not have keys from first update
+    func testUpdateRevertUpdateConfig() {
+        setupWithCachedConfig()
+
+        // First update the config with a new value for an existing key
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["analytics.server": "update1", "shouldNotExist": "afterRevert"]))
+        // Revert the changes
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createRevertUpdateEvent())
+        // Now update the existing key, and add a new value
+        mockRuntime.simulateComingEvents(ConfigurationUpdateTests.createConfigUpdateEvent(configDict: ["analytics.server": "update2", "newKey": "newValue"]))
+
+        // verify
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(3, mockRuntime.createdSharedStates.count)
+
+        XCTAssertEqual(5, mockRuntime.dispatchedEvents[0].data?.count)
+        XCTAssertEqual(4, mockRuntime.dispatchedEvents[1].data?.count)
+        XCTAssertEqual(5, mockRuntime.dispatchedEvents[2].data?.count)
+
+        XCTAssertEqual("update1", mockRuntime.dispatchedEvents[0].data?["analytics.server"] as? String)
+        XCTAssertEqual("afterRevert", mockRuntime.dispatchedEvents[0].data?["shouldNotExist"] as? String)
+        XCTAssertEqual("default", mockRuntime.dispatchedEvents[1].data?["analytics.server"] as? String)
+        XCTAssertNil(mockRuntime.dispatchedEvents[1].data?["shouldNotExist"] as? String)
+        XCTAssertEqual("update2", mockRuntime.dispatchedEvents[2].data?["analytics.server"] as? String)
+        XCTAssertEqual("newValue", mockRuntime.dispatchedEvents[2].data?["newKey"] as? String)
+        XCTAssertNil(mockRuntime.dispatchedEvents[2].data?["shouldNotExist"] as? String)
+
+
+        XCTAssertEqual(5, mockRuntime.createdSharedStates[0]?.count)
+        XCTAssertEqual(4, mockRuntime.createdSharedStates[1]?.count)
+        XCTAssertEqual(5, mockRuntime.createdSharedStates[2]?.count)
+
+        XCTAssertEqual("update1", mockRuntime.createdSharedStates[0]?["analytics.server"] as? String)
+        XCTAssertEqual("afterRevert", mockRuntime.createdSharedStates[0]?["shouldNotExist"] as? String)
+        XCTAssertEqual("default", mockRuntime.createdSharedStates[1]?["analytics.server"] as? String)
+        XCTAssertNil(mockRuntime.createdSharedStates[1]?["shouldNotExist"] as? String)
+        XCTAssertEqual("update2", mockRuntime.createdSharedStates[2]?["analytics.server"] as? String)
+        XCTAssertEqual("newValue", mockRuntime.createdSharedStates[2]?["newKey"] as? String)
+        XCTAssertNil(mockRuntime.createdSharedStates[2]?["shouldNotExist"] as? String)
+    }
+
     static func createConfigUpdateEvent(configDict: [String: Any]) -> Event {
         return Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
                      data: ["config.update": configDict])
+    }
+
+    static func createRevertUpdateEvent() -> Event {
+        return Event(name: CoreConstants.EventNames.REVERT_UPDATED_CONFIGURATION, type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.REVERT_UPDATED_CONFIG: true])
     }
 }

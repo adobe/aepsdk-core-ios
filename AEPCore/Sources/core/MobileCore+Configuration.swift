@@ -48,6 +48,13 @@ public extension MobileCore {
         MobileCore.dispatch(event: event)
     }
 
+    /// Revert the changes made by ``updateConfigurationWith(configDict:)`` to the initial configuration
+    /// provided by either ``configureWith(appId:)`` or ``configureWith(filePath:)``
+    static func revertUpdatedConfiguration() {
+        let event = Event(name: CoreConstants.EventNames.REVERT_UPDATED_CONFIGURATION, type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.REVERT_UPDATED_CONFIG: true])
+        MobileCore.dispatch(event: event)
+    }
+
     /// Sets the `PrivacyStatus` for this SDK. The set privacy status is preserved and applied over any new
     /// configuration changes from calls to configureWithAppId or configureWithFileInPath,
     /// even across application restarts.

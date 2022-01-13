@@ -80,6 +80,8 @@ class Configuration: NSObject, Extension {
     private func receiveConfigurationRequest(event: Event) {
         if event.isUpdateConfigEvent {
             processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
+        } else if event.isRevertConfigEvent {
+            processRevertUpdatedConfig(sharedStateResolver: createPendingSharedState(event: event))
         } else if event.isGetConfigEvent {
             dispatchConfigurationResponse(requestEvent: event, data: configState.environmentAwareConfiguration)
         } else if let appId = event.appId {
@@ -165,6 +167,17 @@ class Configuration: NSObject, Extension {
             // loading from bundled config failed, resolve shared state with current config without dispatching a config response event
             sharedStateResolver(configState.environmentAwareConfiguration)
         }
+    }
+
+    /// Interacts with the `ConfigurationState` to revert the updated configuration to the initial configuration
+    /// - Parameter sharedStateResolver: Shared state resolver that will be invoked with the reverted configuration
+    private func processRevertUpdatedConfig(sharedStateResolver: SharedStateResolver) {
+        if configState.revertUpdatedConfig() {
+            publishCurrentConfig(sharedStateResolver: sharedStateResolver)
+        } else {
+            sharedStateResolver(configState.environmentAwareConfiguration)
+        }
+
     }
 
     // MARK: - Dispatchers

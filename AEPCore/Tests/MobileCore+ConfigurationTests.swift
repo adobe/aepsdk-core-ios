@@ -97,6 +97,23 @@ class MobileCore_ConfigurationTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
+    /// Tests that a configuration request content event is dispatched with the true value for a revert
+    func testRevertUpdateConfiguration() {
+        let expectation = expectation(description: "Revert updated configuration dispatches configuration request content with True")
+
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: { event in
+            if let _ = event.data, let revert = event.data![ConfigurationConstants.Keys.REVERT_CONFIG] as? Bool {
+                XCTAssertEqual(true, revert)
+                expectation.fulfill()
+            }
+        })
+
+        MobileCore.revertUpdatedConfiguration()
+
+        wait(for: [expectation], timeout: 1)
+
+    }
+
     /// Tests that set privacy status dispatches a configuration request content event with the new privacy status
     func testSetPrivacy() {
         // setup

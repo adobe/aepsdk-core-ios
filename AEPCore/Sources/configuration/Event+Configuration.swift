@@ -24,6 +24,11 @@ extension Event {
         return data?[ConfigurationConstants.Keys.RETRIEVE_CONFIG] as? Bool ?? false
     }
 
+    /// Returns true if this `Event` is a revert configuration event, otherwise false
+    var isRevertConfigEvent: Bool {
+        return data?[ConfigurationConstants.Keys.REVERT_CONFIG] != nil
+    }
+
     /// Returns the appId stored in `data` if found, otherwise nil
     var appId: String? {
         return data?[ConfigurationConstants.Keys.JSON_APP_ID] as? String

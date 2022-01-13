@@ -29,6 +29,7 @@ class ConfigurationState {
         return computeEnvironmentConfig()
     }
 
+    /// The persisted programmatic config or an empty config dictionary if none is found
     private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
         get {
             if let storedConfig: [String: AnyCodable] = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG) {
@@ -124,6 +125,25 @@ class ConfigurationState {
         }
 
         replaceConfigurationWith(newConfig: bundledConfig)
+        return true
+    }
+
+    /// Reverts the updated config to the initial cached config. Will not clear programmatic config if the revert fails
+    /// - Returns: True if the configuration was reverted successfully
+    func revertUpdatedConfig() -> Bool {
+        guard let appId = appIdManager.loadAppId() else {
+            Log.warning(label: logTag, "App id unexpectedly nil while reverting updated config")
+            return false
+        }
+        guard let cachedConfig = configDownloader.loadConfigFromCache(appId: appId, dataStore: dataStore) else {
+            Log.warning(label: logTag, "Cached config could not be found while reverting updated config")
+            return false
+        }
+
+        // Clear the programmatic config
+        programmaticConfigInDataStore = [:]
+
+        replaceConfigurationWith(newConfig: cachedConfig)
         return true
     }
 
