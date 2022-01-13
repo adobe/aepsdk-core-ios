@@ -132,11 +132,11 @@ class ConfigurationState {
     /// - Returns: True if the configuration was reverted successfully
     func revertUpdatedConfig() -> Bool {
         guard let appId = appIdManager.loadAppId() else {
-            Log.warning(label: logTag, "App id unexpectedly nil while reverting updated config")
+            Log.error(label: logTag, "App id unexpectedly nil while reverting updated config")
             return false
         }
         guard let cachedConfig = configDownloader.loadConfigFromCache(appId: appId, dataStore: dataStore) else {
-            Log.warning(label: logTag, "Cached config could not be found while reverting updated config")
+            Log.error(label: logTag, "Cached config could not be found while reverting updated config")
             return false
         }
 
