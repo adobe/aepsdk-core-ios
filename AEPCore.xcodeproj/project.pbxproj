@@ -81,6 +81,9 @@
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
 		246B19FD2728C1CD0017716A /* MockEventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */; };
 		246B1A2B272B48A80017716A /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B1A2A272B48A80017716A /* EventTests.swift */; };
+		246EFA062790B20100C76A6B /* rules_signal.zip in Resources */ = {isa = PBXBuildFile; fileRef = 246EFA032790B20000C76A6B /* rules_signal.zip */; };
+		246EFA072790B20100C76A6B /* rules_lifecycle.zip in Resources */ = {isa = PBXBuildFile; fileRef = 246EFA042790B20000C76A6B /* rules_lifecycle.zip */; };
+		246EFA082790B20100C76A6B /* rules_pii.zip in Resources */ = {isa = PBXBuildFile; fileRef = 246EFA052790B20000C76A6B /* rules_pii.zip */; };
 		246FD07426BDEC7A00FD130B /* MessageGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */; };
 		246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07926C1939800FD130B /* MessageAnimation.swift */; };
 		246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */; };
@@ -729,6 +732,9 @@
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
 		246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventHistoryDatabase.swift; sourceTree = "<group>"; };
 		246B1A2A272B48A80017716A /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
+		246EFA032790B20000C76A6B /* rules_signal.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_signal.zip; sourceTree = "<group>"; };
+		246EFA042790B20000C76A6B /* rules_lifecycle.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_lifecycle.zip; sourceTree = "<group>"; };
+		246EFA052790B20000C76A6B /* rules_pii.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_pii.zip; sourceTree = "<group>"; };
 		246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureRecognizer.swift; sourceTree = "<group>"; };
 		246FD07926C1939800FD130B /* MessageAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimation.swift; sourceTree = "<group>"; };
 		246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculation.swift"; sourceTree = "<group>"; };
@@ -2012,6 +2018,9 @@
 		3FF829432507E9C900483C74 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				246EFA042790B20000C76A6B /* rules_lifecycle.zip */,
+				246EFA052790B20000C76A6B /* rules_pii.zip */,
+				246EFA032790B20000C76A6B /* rules_signal.zip */,
 				3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */,
 				3FF829482507F8AA00483C74 /* rules_lifecycle.json */,
 				3FEEA0DB2522436E007EC317 /* rules_pii.json */,
@@ -2658,11 +2667,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				246EFA062790B20100C76A6B /* rules_signal.zip in Resources */,
 				3FEEA0DD2522436E007EC317 /* rules_pii.json in Resources */,
 				3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */,
 				3FF8296D2509942300483C74 /* rules_signal.json in Resources */,
 				BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */,
+				246EFA082790B20100C76A6B /* rules_pii.zip in Resources */,
 				BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */,
+				246EFA072790B20100C76A6B /* rules_lifecycle.zip in Resources */,
 				3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
