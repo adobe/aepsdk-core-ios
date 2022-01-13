@@ -103,7 +103,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: { event in
             if let _ = event.data, let revert = event.data![ConfigurationConstants.Keys.REVERT_CONFIG] as? Bool {
-                XCTAssertEqual(true, revert)
+                XCTAssertTrue(revert)
                 expectation.fulfill()
             }
         })
