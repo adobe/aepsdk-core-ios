@@ -16,7 +16,7 @@ import UIKit
 ///
 /// UIService for creating UI elements
 ///
-@objc
+@objc (AEPUIServiceProtocol)
 public protocol UIService {
 
     /// Creates a `FullscreenPresentable`

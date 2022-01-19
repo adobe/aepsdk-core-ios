@@ -13,7 +13,7 @@
 import Foundation
 
 /// Used for selecting or deleting Events from Event History.
-@objc
+@objc (AEPEventHistoryRequest)
 public class EventHistoryRequest: NSObject {
     /// Key-value pairs that will be used to generate the hash when looking up an Event.
     @objc public let mask: [String: Any]
