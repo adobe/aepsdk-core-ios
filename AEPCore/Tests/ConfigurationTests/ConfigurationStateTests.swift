@@ -751,5 +751,25 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual(expectedConfig2, progammaticMapped)
     }
 
+    // Test reverting without an update makes no change
+    func testRevertWithoutUpdateMakesNoChange() {
+        let testAppid = "testAppid"
+        let cachedConfig: [String: String] = ["build.environment": "dev",
+                                              "analytics.rsids": "rsid1,rsid2",
+                                              "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                              "analytics.server": "old-server.com"]
+        putAppIdInPersistence(appId: testAppid)
+        putCachedConfigInPersistence(config: cachedConfig)
+
+        configState.loadInitialConfig()
+
+        if !configState.revertUpdatedConfig() {
+            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
+        }
+
+        let mappedCurrentConfig: [String: String] = configState.currentConfiguration.mapValues {$0 as! String}
+        XCTAssertEqual(mappedCurrentConfig, cachedConfig)
+    }
+
 
 }
