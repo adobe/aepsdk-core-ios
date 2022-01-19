@@ -13,7 +13,7 @@
 import Foundation
 
 /// Passed to handlers by `EventHistory` when Events are requested via `getEvents` API.
-@objc
+@objc (AEPEventHistoryResult)
 public class EventHistoryResult: NSObject {
     /// The number of occurrences in `EventHistory` of the `EventHistoryRequest` specified.
     @objc public let count: Int
