@@ -708,9 +708,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.value as? String)
         XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
 
-        if !configState.clearConfigUpdates() {
-            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
-        }
+        configState.clearConfigUpdates()
 
         XCTAssertEqual(4, configState.currentConfiguration.count)
         XCTAssertNil(configState.currentConfiguration["testKey"] as? String)
@@ -737,9 +735,7 @@ class ConfigurationStateTests: XCTestCase {
         // test
         configState.updateWith(programmaticConfig: firstUpdate)
 
-        if !configState.clearConfigUpdates() {
-            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
-        }
+        configState.clearConfigUpdates()
 
         configState.updateWith(programmaticConfig:  expectedConfig2)
 
@@ -763,9 +759,7 @@ class ConfigurationStateTests: XCTestCase {
 
         configState.loadInitialConfig()
 
-        if !configState.clearConfigUpdates() {
-            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
-        }
+        configState.clearConfigUpdates()
 
         let mappedCurrentConfig: [String: String] = configState.currentConfiguration.mapValues {$0 as! String}
         XCTAssertEqual(mappedCurrentConfig, cachedConfig)
@@ -786,7 +780,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("new-server.com", configState.currentConfiguration["analytics.server"] as? String)
         XCTAssertEqual("newValue", configState.currentConfiguration["newKey"] as? String)
 
-        XCTAssertTrue(configState.clearConfigUpdates())
+        configState.clearConfigUpdates()
 
         XCTAssertTrue(configState.updateWith(filePath: "validPath"))
         XCTAssertEqual(cachedConfig, configState.currentConfiguration.mapValues{$0 as! String})
@@ -808,9 +802,7 @@ class ConfigurationStateTests: XCTestCase {
         // test
         configState.updateWith(programmaticConfig: firstUpdate)
 
-        if !configState.clearConfigUpdates() {
-            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
-        }
+        configState.clearConfigUpdates()
 
         configState.updateWith(programmaticConfig:  expectedConfig2)
 

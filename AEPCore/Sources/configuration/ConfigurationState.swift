@@ -24,7 +24,7 @@ class ConfigurationState {
     private var appIdDownloadDateMap: [String: Date] = [:]
     private let logTag = "ConfigurationState"
 
-    // The configuration without a merge from programmaticConfig, needed for revert
+    // The configuration without a merge from programmaticConfig, needed for clearing the config
     private(set) var unmergedConfiguration = [String: Any]()
     private(set) var currentConfiguration = [String: Any]()
     var environmentAwareConfiguration: [String: Any] {
@@ -131,14 +131,12 @@ class ConfigurationState {
         return true
     }
 
-    /// Reverts the updated config to the initial cached config. Will not clear programmatic config if the revert fails
-    /// - Returns: True if the configuration was reverted successfully
-    func clearConfigUpdates() -> Bool {
+    /// Clears the programmatic config from the data store and sets the current config to the initial config
+    func clearConfigUpdates() {
         // Clear the programmatic config
         programmaticConfigInDataStore = [:]
 
         replaceConfigurationWith(newConfig: unmergedConfiguration)
-        return true
     }
 
     /// Determines if the configuration associated with `appId` has been downloaded and not expired.

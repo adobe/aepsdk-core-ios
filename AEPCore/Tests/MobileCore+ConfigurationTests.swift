@@ -102,7 +102,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
         let expect = expectation(description: "Revert updated configuration dispatches configuration request content with True")
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: { event in
-            if let _ = event.data, let revert = event.data![ConfigurationConstants.Keys.REVERT_CONFIG] as? Bool {
+            if let _ = event.data, let revert = event.data![ConfigurationConstants.Keys.CLEAR_CONFIG] as? Bool {
                 XCTAssertTrue(revert)
                 expect.fulfill()
             }

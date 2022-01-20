@@ -306,6 +306,6 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     static func createRevertUpdateEvent() -> Event {
-        return Event(name: CoreConstants.EventNames.REVERT_UPDATED_CONFIGURATION, type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.REVERT_UPDATED_CONFIG: true])
+        return Event(name: CoreConstants.EventNames.CLEAR_UPDATED_CONFIGURATION, type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.CLEAR_UPDATED_CONFIG: true])
     }
 }

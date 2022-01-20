@@ -80,7 +80,7 @@ class Configuration: NSObject, Extension {
     private func receiveConfigurationRequest(event: Event) {
         if event.isUpdateConfigEvent {
             processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
-        } else if event.isRevertConfigEvent {
+        } else if event.isClearConfigEvent {
             processClearUpdatedConfig(sharedStateResolver: createPendingSharedState(event: event))
         } else if event.isGetConfigEvent {
             dispatchConfigurationResponse(requestEvent: event, data: configState.environmentAwareConfiguration)
@@ -169,15 +169,11 @@ class Configuration: NSObject, Extension {
         }
     }
 
-    /// Interacts with the `ConfigurationState` to revert the updated configuration to the initial configuration
-    /// - Parameter sharedStateResolver: Shared state resolver that will be invoked with the reverted configuration
+    /// Interacts with the `ConfigurationState` to clear any updates made to configuration after the initially set configuration
+    /// - Parameter sharedStateResolver: Shared state resolver that will be invoked with the initial configuration
     private func processClearUpdatedConfig(sharedStateResolver: SharedStateResolver) {
-        if configState.clearConfigUpdates() {
-            publishCurrentConfig(sharedStateResolver: sharedStateResolver)
-        } else {
-            sharedStateResolver(configState.environmentAwareConfiguration)
-        }
-
+        configState.clearConfigUpdates()
+        publishCurrentConfig(sharedStateResolver: sharedStateResolver)
     }
 
     // MARK: - Dispatchers
