@@ -24,7 +24,7 @@ class ConfigurationState {
     private var appIdDownloadDateMap: [String: Date] = [:]
     private let logTag = "ConfigurationState"
 
-    // The configuration without a merge from programmaticConfig
+    // The configuration without a merge from programmaticConfig, needed for revert
     private(set) var unmergedConfiguration = [String: Any]()
     private(set) var currentConfiguration = [String: Any]()
     var environmentAwareConfiguration: [String: Any] {
