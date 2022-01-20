@@ -33,14 +33,14 @@ public class LaunchRulesEngine {
     /// Do not process Dispatch consequence if chained event count is greater than max
     private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
 
-    private let transform: Transforming
+    private let transformer: Transforming
     private let name: String
-    private let extensionRuntime: ExtensionRuntime
     private let rulesQueue: DispatchQueue
     private var waitingEvents: [Event]?
     private let dataStore: NamedCollectionDataStore
     private var dispatchChainedEventsCount: [UUID: Int] = [:]
 
+    let extensionRuntime: ExtensionRuntime
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
 
@@ -51,10 +51,10 @@ public class LaunchRulesEngine {
     public init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
         rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.\(name)")
-        transform = LaunchRuleTransformer.createTransforming()
+        transformer = LaunchRuleTransformer(runtime: extensionRuntime).transformer
         dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
-        rulesEngine = RulesEngine(evaluator: evaluator, transformer: transform)
+        rulesEngine = RulesEngine(evaluator: evaluator, transformer: transformer)
         waitingEvents = [Event]()
         // you can enable the log when debugging rules engine
 //        if RulesEngineLog.logging == nil {
@@ -85,6 +85,7 @@ public class LaunchRulesEngine {
     ///   - event: the `Event` against which to evaluate the rules
     ///   - sharedStates: the `SharedState`s registered to the `EventHub`
     /// - Returns: the  processed`Event`
+    @discardableResult
     public func process(event: Event) -> Event {
         rulesQueue.sync {
             // if our waitingEvents array is nil, we know we have rules registered and can skip to evaluation
@@ -260,7 +261,7 @@ public class LaunchRulesEngine {
 
     private func replaceToken(for value: String, data: Traversable) -> String {
         let template = Template(templateString: value, tagDelimiterPair: (LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER, LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER))
-        return template.render(data: data, transformers: transform)
+        return template.render(data: data, transformers: transformer)
     }
 
     private func sendReprocessEventsRequest() {

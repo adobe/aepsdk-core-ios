@@ -23,7 +23,11 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var createdXdmSharedStates: [[String: Any]?] = []
     public var mockedSharedStates: [String: SharedStateResult] = [:]
     public var mockedXdmSharedStates: [String: SharedStateResult] = [:]
+    public var receivedEventHistoryRequests: [EventHistoryRequest] = []
+    public var receivedEnforceOrder: Bool = false
+    public var mockEventHistoryResults: [EventHistoryResult] = []
     public var ignoredEvents = Set<String>()
+
     public init() {}
 
     // MARK: - ExtensionRuntime methods implementation
@@ -157,6 +161,12 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         dispatchedEvents = []
         createdSharedStates = []
         createdXdmSharedStates = []
+    }
+
+    public func getHistoricalEvents(_ events: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
+        receivedEventHistoryRequests = events
+        receivedEnforceOrder = enforceOrder
+        handler(mockEventHistoryResults)
     }
 }
 
