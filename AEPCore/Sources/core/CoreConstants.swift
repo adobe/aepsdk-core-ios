@@ -42,7 +42,7 @@ enum CoreConstants {
         static let ADDITIONAL_CONTEXT_DATA = "additionalcontextdata"
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
         static let UPDATE_CONFIG = "config.update"
-        static let CLEAR_UPDATED_CONFIG = "config.clear"
+        static let CLEAR_UPDATED_CONFIG = "config.clearUpdates"
         static let RETRIEVE_CONFIG = "config.getData"
         static let JSON_APP_ID = "config.appId"
         static let JSON_FILE_PATH = "config.filePath"
