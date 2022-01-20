@@ -24,6 +24,8 @@ class ConfigurationState {
     private var appIdDownloadDateMap: [String: Date] = [:]
     private let logTag = "ConfigurationState"
 
+    // The initial configuration set via updateWith(appId:) or updateWith(filePath:)
+    private(set) var initialConfiguration = [String: Any]()
     private(set) var currentConfiguration = [String: Any]()
     var environmentAwareConfiguration: [String: Any] {
         return computeEnvironmentConfig()
@@ -76,7 +78,7 @@ class ConfigurationState {
     /// - Parameter newConfig: The new configuration
     func updateWith(newConfig: [String: Any]) {
         currentConfiguration.merge(newConfig) { _, updated in updated }
-
+        initialConfiguration = currentConfiguration
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
@@ -131,19 +133,10 @@ class ConfigurationState {
     /// Reverts the updated config to the initial cached config. Will not clear programmatic config if the revert fails
     /// - Returns: True if the configuration was reverted successfully
     func revertUpdatedConfig() -> Bool {
-        guard let appId = appIdManager.loadAppId() else {
-            Log.error(label: logTag, "App id unexpectedly nil while reverting updated config")
-            return false
-        }
-        guard let cachedConfig = configDownloader.loadConfigFromCache(appId: appId, dataStore: dataStore) else {
-            Log.error(label: logTag, "Cached config could not be found while reverting updated config")
-            return false
-        }
-
         // Clear the programmatic config
         programmaticConfigInDataStore = [:]
 
-        replaceConfigurationWith(newConfig: cachedConfig)
+        replaceConfigurationWith(newConfig: initialConfiguration)
         return true
     }
 
@@ -205,6 +198,7 @@ class ConfigurationState {
     /// - Parameter newConfig: A configuration to replace the current configuration
     private func replaceConfigurationWith(newConfig: [String: Any]) {
         currentConfiguration = newConfig
+        initialConfiguration = currentConfiguration
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }

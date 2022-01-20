@@ -770,6 +770,57 @@ class ConfigurationStateTests: XCTestCase {
         let mappedCurrentConfig: [String: String] = configState.currentConfiguration.mapValues {$0 as! String}
         XCTAssertEqual(mappedCurrentConfig, cachedConfig)
     }
+    
+    func testConfigureWithFilePathThenUpdateThenRevert() {
+        let cachedConfig: [String: String] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
+                                              "target.clientCode": "yourclientcode",
+                                              "analytics.server": "old-server.com"]
+        configDownloader.configFromPath = cachedConfig // simulate file found
+        
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
+        XCTAssertEqual(cachedConfig, configState.currentConfiguration.mapValues{$0 as! String})
+        
+        configState.updateWith(programmaticConfig: ["analytics.server": "new-server.com", "newKey": "newValue"])
+        
+        XCTAssertEqual(4, configState.currentConfiguration.count)
+        XCTAssertEqual("new-server.com", configState.currentConfiguration["analytics.server"] as? String)
+        XCTAssertEqual("newValue", configState.currentConfiguration["newKey"] as? String)
+        
+        XCTAssertTrue(configState.revertUpdatedConfig())
+        
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
+        XCTAssertEqual(cachedConfig, configState.currentConfiguration.mapValues{$0 as! String})
+    }
+    
+    // Tests that updating then reverting then updating the config doesn't have remnants from first update
+    func testConfigureWithFilePathThenUpdateThenRevertThenUpdate() {
+        // setup
+        let firstUpdate = ["shouldNotExist": "afterRevert"]
+        let cachedConfig: [String: Any] = ["build.environment": "dev",
+                                           "analytics.rsids": "rsid1,rsid2",
+                                           "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                           "analytics.server": "old-server.com"]
+        let expectedConfig2: [String: String] = ["analytics.server": "new-server.com", "newKey": "newValue"]
+        
+        configDownloader.configFromPath = cachedConfig
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
+
+        // test
+        configState.updateWith(programmaticConfig: firstUpdate)
+
+        if !configState.revertUpdatedConfig() {
+            XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
+        }
+
+        configState.updateWith(programmaticConfig:  expectedConfig2)
+
+        XCTAssertEqual(5, configState.currentConfiguration.count)
+        XCTAssertNil(configState.currentConfiguration["shouldNotExist"] as? String)
+        XCTAssertEqual(2, configState.programmaticConfigInDataStore.count)
+        XCTAssertNil(configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        let progammaticMapped: [String: String] = configState.programmaticConfigInDataStore.mapValues{$0.stringValue!}
+        XCTAssertEqual(expectedConfig2, progammaticMapped)
+    }
 
 
 }
