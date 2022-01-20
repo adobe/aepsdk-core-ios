@@ -130,7 +130,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         mockRemoteConfig(for: "appid", with: configData)
         XCTAssertEqual(.optedOut, getPrivacyStatus())
     }
-    
+
     func testClearUpdatedConfig() {
         let configData = """
         {
@@ -143,7 +143,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         MobileCore.clearUpdatedConfiguration()
         XCTAssertEqual(.optedIn, getPrivacyStatus())
     }
-    
+
     func testClearUpdatedConfigFromSetPrivacyStatus() {
         let configData = """
         {
@@ -155,7 +155,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         XCTAssertEqual(.optedOut, getPrivacyStatus())
         MobileCore.clearUpdatedConfiguration()
         XCTAssertEqual(.optedIn, getPrivacyStatus())
-        
+
     }
 
     func mockRemoteConfig(for appId: String, with data: Data?) {
