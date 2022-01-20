@@ -127,7 +127,7 @@ class EventHubContractTest: XCTestCase {
             case "Shared state change":
                 sharedStateEventExpectation.fulfill()
             default:
-                XCTAssertFalse(true)
+                XCTFail("Failed with event: " + event.name)
             }
         }
 
@@ -159,7 +159,7 @@ class EventHubContractTest: XCTestCase {
             case "Shared state change":
                 sharedStateEventExpectation.fulfill()
             default:
-                XCTAssertFalse(true)
+                XCTFail("Failed with event: " + event.name)
             }
         }
 

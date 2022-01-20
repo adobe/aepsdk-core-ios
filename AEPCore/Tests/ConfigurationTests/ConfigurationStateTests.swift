@@ -683,4 +683,136 @@ class ConfigurationStateTests: XCTestCase {
         // verify
         XCTAssertEqual(expected as? [String: String], mappedConfig as? [String: String])
     }
+
+    // MARK: - Revert Config API Tests
+    func testClearConfig() {
+        // setup
+        let expectedConfig = ["testKey": "testVal"]
+        let testAppid = "testAppid"
+        let cachedConfig: [String: Any] = ["build.environment": "dev",
+                                           "analytics.rsids": "rsid1,rsid2",
+                                           "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                           "analytics.server": "old-server.com"]
+        putAppIdInPersistence(appId: testAppid)
+        putCachedConfigInPersistence(config: cachedConfig)
+
+        configState.loadInitialConfig()
+
+        // test
+        configState.updateWith(programmaticConfig: expectedConfig)
+
+        // verify
+        XCTAssertEqual(5, configState.currentConfiguration.count)
+        XCTAssertEqual("testVal", configState.currentConfiguration["testKey"] as! String)
+        XCTAssertEqual(1, configState.programmaticConfigInDataStore.count)
+        XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
+
+        configState.clearConfigUpdates()
+
+        XCTAssertEqual(4, configState.currentConfiguration.count)
+        XCTAssertNil(configState.currentConfiguration["testKey"] as? String)
+        XCTAssertEqual(0, configState.programmaticConfigInDataStore.count)
+        XCTAssertNil(configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        XCTAssertEqual(0, (dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG) as [String:AnyCodable]?)?.count)
+    }
+
+    // Tests that updating then reverting then updating the config doesn't have remnants from first update
+    func testUpdateClearUpdate() {
+        // setup
+        let firstUpdate = ["shouldNotExist": "afterRevert"]
+        let testAppid = "testAppid"
+        let cachedConfig: [String: Any] = ["build.environment": "dev",
+                                           "analytics.rsids": "rsid1,rsid2",
+                                           "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                           "analytics.server": "old-server.com"]
+        let expectedConfig2: [String: String] = ["analytics.server": "new-server.com", "newKey": "newValue"]
+        putAppIdInPersistence(appId: testAppid)
+        putCachedConfigInPersistence(config: cachedConfig)
+
+        configState.loadInitialConfig()
+
+        // test
+        configState.updateWith(programmaticConfig: firstUpdate)
+
+        configState.clearConfigUpdates()
+
+        configState.updateWith(programmaticConfig:  expectedConfig2)
+
+        XCTAssertEqual(5, configState.currentConfiguration.count)
+        XCTAssertNil(configState.currentConfiguration["shouldNotExist"] as? String)
+        XCTAssertEqual(2, configState.programmaticConfigInDataStore.count)
+        XCTAssertNil(configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        let progammaticMapped: [String: String] = configState.programmaticConfigInDataStore.mapValues{$0.stringValue!}
+        XCTAssertEqual(expectedConfig2, progammaticMapped)
+    }
+
+    // Test reverting without an update makes no change
+    func testClearWithoutUpdateMakesNoChange() {
+        let testAppid = "testAppid"
+        let cachedConfig: [String: String] = ["build.environment": "dev",
+                                              "analytics.rsids": "rsid1,rsid2",
+                                              "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                              "analytics.server": "old-server.com"]
+        putAppIdInPersistence(appId: testAppid)
+        putCachedConfigInPersistence(config: cachedConfig)
+
+        configState.loadInitialConfig()
+
+        configState.clearConfigUpdates()
+
+        let mappedCurrentConfig: [String: String] = configState.currentConfiguration.mapValues {$0 as! String}
+        XCTAssertEqual(mappedCurrentConfig, cachedConfig)
+    }
+
+    func testConfigureWithFilePathThenUpdateThenClear() {
+        let cachedConfig: [String: String] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
+                                              "target.clientCode": "yourclientcode",
+                                              "analytics.server": "old-server.com"]
+        configDownloader.configFromPath = cachedConfig // simulate file found
+
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
+        XCTAssertEqual(cachedConfig, configState.currentConfiguration.mapValues{$0 as! String})
+
+        configState.updateWith(programmaticConfig: ["analytics.server": "new-server.com", "newKey": "newValue"])
+
+        XCTAssertEqual(4, configState.currentConfiguration.count)
+        XCTAssertEqual("new-server.com", configState.currentConfiguration["analytics.server"] as? String)
+        XCTAssertEqual("newValue", configState.currentConfiguration["newKey"] as? String)
+
+        configState.clearConfigUpdates()
+
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
+        XCTAssertEqual(cachedConfig, configState.currentConfiguration.mapValues{$0 as! String})
+    }
+
+    // Tests that updating then reverting then updating the config doesn't have remnants from first update
+    func testConfigureWithFilePathThenUpdateThenClearThenUpdate() {
+        // setup
+        let firstUpdate = ["shouldNotExist": "afterRevert"]
+        let cachedConfig: [String: Any] = ["build.environment": "dev",
+                                           "analytics.rsids": "rsid1,rsid2",
+                                           "__dev__analytics.rsids": "devrsid1,devrsid2",
+                                           "analytics.server": "old-server.com"]
+        let expectedConfig2: [String: String] = ["analytics.server": "new-server.com", "newKey": "newValue"]
+
+        configDownloader.configFromPath = cachedConfig
+        XCTAssertTrue(configState.updateWith(filePath: "validPath"))
+
+        // test
+        configState.updateWith(programmaticConfig: firstUpdate)
+
+        configState.clearConfigUpdates()
+
+        configState.updateWith(programmaticConfig:  expectedConfig2)
+
+        XCTAssertEqual(5, configState.currentConfiguration.count)
+        XCTAssertNil(configState.currentConfiguration["shouldNotExist"] as? String)
+        XCTAssertEqual(2, configState.programmaticConfigInDataStore.count)
+        XCTAssertNil(configState.programmaticConfigInDataStore["testKey"]?.value as? String)
+        let progammaticMapped: [String: String] = configState.programmaticConfigInDataStore.mapValues{$0.stringValue!}
+        XCTAssertEqual(expectedConfig2, progammaticMapped)
+    }
+
+
 }

@@ -80,6 +80,8 @@ class Configuration: NSObject, Extension {
     private func receiveConfigurationRequest(event: Event) {
         if event.isUpdateConfigEvent {
             processUpdateConfig(event: event, sharedStateResolver: createPendingSharedState(event: event))
+        } else if event.isClearConfigEvent {
+            processClearUpdatedConfig(sharedStateResolver: createPendingSharedState(event: event))
         } else if event.isGetConfigEvent {
             dispatchConfigurationResponse(requestEvent: event, data: configState.environmentAwareConfiguration)
         } else if let appId = event.appId {
@@ -165,6 +167,13 @@ class Configuration: NSObject, Extension {
             // loading from bundled config failed, resolve shared state with current config without dispatching a config response event
             sharedStateResolver(configState.environmentAwareConfiguration)
         }
+    }
+
+    /// Interacts with the `ConfigurationState` to clear any updates made to configuration after the initially set configuration
+    /// - Parameter sharedStateResolver: Shared state resolver that will be invoked with the initial configuration
+    private func processClearUpdatedConfig(sharedStateResolver: SharedStateResolver) {
+        configState.clearConfigUpdates()
+        publishCurrentConfig(sharedStateResolver: sharedStateResolver)
     }
 
     // MARK: - Dispatchers
