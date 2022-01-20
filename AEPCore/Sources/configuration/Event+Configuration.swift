@@ -26,7 +26,7 @@ extension Event {
 
     /// Returns true if this `Event` is a clear configuration event, otherwise false
     var isClearConfigEvent: Bool {
-        return data?[ConfigurationConstants.Keys.CLEAR_CONFIG] != nil
+        return data?[ConfigurationConstants.Keys.CLEAR_CONFIG] as? Bool ?? false
     }
 
     /// Returns the appId stored in `data` if found, otherwise nil

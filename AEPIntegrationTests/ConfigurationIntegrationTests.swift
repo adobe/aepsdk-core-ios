@@ -130,6 +130,33 @@ class ConfigurationIntegrationTests: XCTestCase {
         mockRemoteConfig(for: "appid", with: configData)
         XCTAssertEqual(.optedOut, getPrivacyStatus())
     }
+    
+    func testClearUpdatedConfig() {
+        let configData = """
+        {
+          "global.privacy": "optedin"
+        }
+        """.data(using: .utf8)
+        mockRemoteConfig(for: "appid", with: configData)
+        MobileCore.updateConfigurationWith(configDict: ["global.privacy": "optedout"])
+        XCTAssertEqual(.optedOut, getPrivacyStatus())
+        MobileCore.clearUpdatedConfiguration()
+        XCTAssertEqual(.optedIn, getPrivacyStatus())
+    }
+    
+    func testClearUpdatedConfigFromSetPrivacyStatus() {
+        let configData = """
+        {
+          "global.privacy": "optedin"
+        }
+        """.data(using: .utf8)
+        mockRemoteConfig(for: "appid", with: configData)
+        MobileCore.setPrivacyStatus(.optedOut)
+        XCTAssertEqual(.optedOut, getPrivacyStatus())
+        MobileCore.clearUpdatedConfiguration()
+        XCTAssertEqual(.optedIn, getPrivacyStatus())
+        
+    }
 
     func mockRemoteConfig(for appId: String, with data: Data?) {
         let initExpectation = XCTestExpectation(description: "load remote configuration")
@@ -157,5 +184,4 @@ class ConfigurationIntegrationTests: XCTestCase {
         return returnedPrivacyStatus
 
     }
-
 }
