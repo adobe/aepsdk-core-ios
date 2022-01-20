@@ -48,9 +48,9 @@ public extension MobileCore {
         MobileCore.dispatch(event: event)
     }
 
-    /// Revert the changes made by ``updateConfigurationWith(configDict:)`` to the initial configuration
+    /// Clears the changes made by ``updateConfigurationWith(configDict:)`` and ``setPrivacyStatus(_:)`` to the initial configuration
     /// provided by either ``configureWith(appId:)`` or ``configureWith(filePath:)``
-    static func revertUpdatedConfiguration() {
+    static func clearUpdatedConfiguration() {
         let event = Event(name: CoreConstants.EventNames.REVERT_UPDATED_CONFIGURATION, type: EventType.configuration, source: EventSource.requestContent, data: [CoreConstants.Keys.REVERT_UPDATED_CONFIG: true])
         MobileCore.dispatch(event: event)
     }

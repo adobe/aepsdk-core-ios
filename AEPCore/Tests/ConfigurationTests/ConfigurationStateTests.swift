@@ -685,7 +685,7 @@ class ConfigurationStateTests: XCTestCase {
     }
 
     // MARK: - Revert Config API Tests
-    func testRevertConfig() {
+    func testClearConfig() {
         // setup
         let expectedConfig = ["testKey": "testVal"]
         let testAppid = "testAppid"
@@ -708,7 +708,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("testVal", configState.programmaticConfigInDataStore["testKey"]?.value as? String)
         XCTAssertEqual(dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG), configState.programmaticConfigInDataStore)
 
-        if !configState.revertUpdatedConfig() {
+        if !configState.clearConfigUpdates() {
             XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
         }
 
@@ -720,7 +720,7 @@ class ConfigurationStateTests: XCTestCase {
     }
 
     // Tests that updating then reverting then updating the config doesn't have remnants from first update
-    func testUpdateRevertUpdate() {
+    func testUpdateClearUpdate() {
         // setup
         let firstUpdate = ["shouldNotExist": "afterRevert"]
         let testAppid = "testAppid"
@@ -737,7 +737,7 @@ class ConfigurationStateTests: XCTestCase {
         // test
         configState.updateWith(programmaticConfig: firstUpdate)
 
-        if !configState.revertUpdatedConfig() {
+        if !configState.clearConfigUpdates() {
             XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
         }
 
@@ -752,7 +752,7 @@ class ConfigurationStateTests: XCTestCase {
     }
 
     // Test reverting without an update makes no change
-    func testRevertWithoutUpdateMakesNoChange() {
+    func testClearWithoutUpdateMakesNoChange() {
         let testAppid = "testAppid"
         let cachedConfig: [String: String] = ["build.environment": "dev",
                                               "analytics.rsids": "rsid1,rsid2",
@@ -763,7 +763,7 @@ class ConfigurationStateTests: XCTestCase {
 
         configState.loadInitialConfig()
 
-        if !configState.revertUpdatedConfig() {
+        if !configState.clearConfigUpdates() {
             XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
         }
 
@@ -771,7 +771,7 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual(mappedCurrentConfig, cachedConfig)
     }
 
-    func testConfigureWithFilePathThenUpdateThenRevert() {
+    func testConfigureWithFilePathThenUpdateThenClear() {
         let cachedConfig: [String: String] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
                                               "target.clientCode": "yourclientcode",
                                               "analytics.server": "old-server.com"]
@@ -786,14 +786,14 @@ class ConfigurationStateTests: XCTestCase {
         XCTAssertEqual("new-server.com", configState.currentConfiguration["analytics.server"] as? String)
         XCTAssertEqual("newValue", configState.currentConfiguration["newKey"] as? String)
 
-        XCTAssertTrue(configState.revertUpdatedConfig())
+        XCTAssertTrue(configState.clearConfigUpdates())
 
         XCTAssertTrue(configState.updateWith(filePath: "validPath"))
         XCTAssertEqual(cachedConfig, configState.currentConfiguration.mapValues{$0 as! String})
     }
 
     // Tests that updating then reverting then updating the config doesn't have remnants from first update
-    func testConfigureWithFilePathThenUpdateThenRevertThenUpdate() {
+    func testConfigureWithFilePathThenUpdateThenClearThenUpdate() {
         // setup
         let firstUpdate = ["shouldNotExist": "afterRevert"]
         let cachedConfig: [String: Any] = ["build.environment": "dev",
@@ -808,7 +808,7 @@ class ConfigurationStateTests: XCTestCase {
         // test
         configState.updateWith(programmaticConfig: firstUpdate)
 
-        if !configState.revertUpdatedConfig() {
+        if !configState.clearConfigUpdates() {
             XCTFail("Revert updated config failed unexpectedly, make sure data store has cached config and appid")
         }
 

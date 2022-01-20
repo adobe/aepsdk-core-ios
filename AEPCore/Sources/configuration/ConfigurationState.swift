@@ -133,7 +133,7 @@ class ConfigurationState {
 
     /// Reverts the updated config to the initial cached config. Will not clear programmatic config if the revert fails
     /// - Returns: True if the configuration was reverted successfully
-    func revertUpdatedConfig() -> Bool {
+    func clearConfigUpdates() -> Bool {
         // Clear the programmatic config
         programmaticConfigInDataStore = [:]
 

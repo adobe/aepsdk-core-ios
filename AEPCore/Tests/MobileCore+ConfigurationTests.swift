@@ -98,7 +98,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
     }
 
     /// Tests that a configuration request content event is dispatched with the true value for a revert
-    func testRevertUpdateConfiguration() {
+    func testClearUpdateConfiguration() {
         let expect = expectation(description: "Revert updated configuration dispatches configuration request content with True")
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: { event in
@@ -108,7 +108,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
             }
         })
 
-        MobileCore.revertUpdatedConfiguration()
+        MobileCore.clearUpdatedConfiguration()
 
         wait(for: [expect], timeout: 1)
 
