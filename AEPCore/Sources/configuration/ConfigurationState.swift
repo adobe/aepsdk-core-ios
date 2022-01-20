@@ -79,7 +79,7 @@ class ConfigurationState {
     func updateWith(newConfig: [String: Any]) {
         unmergedConfiguration = newConfig
         currentConfiguration.merge(newConfig) { _, updated in updated }
-        
+
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
@@ -200,7 +200,7 @@ class ConfigurationState {
     private func replaceConfigurationWith(newConfig: [String: Any]) {
         unmergedConfiguration = newConfig
         currentConfiguration = newConfig
-        
+
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
