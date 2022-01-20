@@ -24,8 +24,8 @@ class ConfigurationState {
     private var appIdDownloadDateMap: [String: Date] = [:]
     private let logTag = "ConfigurationState"
 
-    // The initial configuration set via updateWith(appId:) or updateWith(filePath:)
-    private(set) var initialConfiguration = [String: Any]()
+    // The configuration without a merge from programmaticConfig
+    private(set) var unmergedConfiguration = [String: Any]()
     private(set) var currentConfiguration = [String: Any]()
     var environmentAwareConfiguration: [String: Any] {
         return computeEnvironmentConfig()
@@ -77,8 +77,9 @@ class ConfigurationState {
     /// Merges the current configuration to `newConfig` then applies programmatic configuration on top
     /// - Parameter newConfig: The new configuration
     func updateWith(newConfig: [String: Any]) {
+        unmergedConfiguration = newConfig
         currentConfiguration.merge(newConfig) { _, updated in updated }
-        initialConfiguration = currentConfiguration
+        
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
@@ -136,7 +137,7 @@ class ConfigurationState {
         // Clear the programmatic config
         programmaticConfigInDataStore = [:]
 
-        replaceConfigurationWith(newConfig: initialConfiguration)
+        replaceConfigurationWith(newConfig: unmergedConfiguration)
         return true
     }
 
@@ -197,8 +198,9 @@ class ConfigurationState {
     /// Replaces `currentConfiguration` with `newConfig` and then applies the existing programmatic configuration on-top
     /// - Parameter newConfig: A configuration to replace the current configuration
     private func replaceConfigurationWith(newConfig: [String: Any]) {
+        unmergedConfiguration = newConfig
         currentConfiguration = newConfig
-        initialConfiguration = currentConfiguration
+        
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }
