@@ -51,12 +51,11 @@ public extension LaunchRulesEngine {
             return
         }
         let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
-        guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url), let rules = JSONRulesParser.parse(data)  else {
+        guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url), let rules = JSONRulesParser.parse(data, runtime: extensionRuntime) else {
             Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load cached rules for url: \(urlString)")
             return
         }
 
         self.replaceRules(with: rules)
     }
-
 }
