@@ -24,11 +24,14 @@ class ConfigurationState {
     private var appIdDownloadDateMap: [String: Date] = [:]
     private let logTag = "ConfigurationState"
 
+    // The configuration without a merge from programmaticConfig, needed for clearing the config
+    private(set) var unmergedConfiguration = [String: Any]()
     private(set) var currentConfiguration = [String: Any]()
     var environmentAwareConfiguration: [String: Any] {
         return computeEnvironmentConfig()
     }
 
+    /// The persisted programmatic config or an empty config dictionary if none is found
     private(set) var programmaticConfigInDataStore: [String: AnyCodable] {
         get {
             if let storedConfig: [String: AnyCodable] = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG) {
@@ -74,6 +77,7 @@ class ConfigurationState {
     /// Merges the current configuration to `newConfig` then applies programmatic configuration on top
     /// - Parameter newConfig: The new configuration
     func updateWith(newConfig: [String: Any]) {
+        unmergedConfiguration = newConfig
         currentConfiguration.merge(newConfig) { _, updated in updated }
 
         // Apply any programmatic configuration updates
@@ -125,6 +129,14 @@ class ConfigurationState {
 
         replaceConfigurationWith(newConfig: bundledConfig)
         return true
+    }
+
+    /// Clears the programmatic config from the data store and sets the current config to the initial config
+    func clearConfigUpdates() {
+        // Clear the programmatic config
+        programmaticConfigInDataStore = [:]
+
+        replaceConfigurationWith(newConfig: unmergedConfiguration)
     }
 
     /// Determines if the configuration associated with `appId` has been downloaded and not expired.
@@ -184,7 +196,9 @@ class ConfigurationState {
     /// Replaces `currentConfiguration` with `newConfig` and then applies the existing programmatic configuration on-top
     /// - Parameter newConfig: A configuration to replace the current configuration
     private func replaceConfigurationWith(newConfig: [String: Any]) {
+        unmergedConfiguration = newConfig
         currentConfiguration = newConfig
+
         // Apply any programmatic configuration updates
         currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
     }

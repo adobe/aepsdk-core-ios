@@ -15,7 +15,7 @@ import Foundation
 struct ConfigurationConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
     static let FRIENDLY_NAME = "Configuration"
-    static let EXTENSION_VERSION = "3.3.2"
+    static let EXTENSION_VERSION = "3.4.0"
     static let DATA_STORE_NAME = EXTENSION_NAME
 
     static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
@@ -28,6 +28,7 @@ struct ConfigurationConstants {
         static let GLOBAL_CONFIG_PRIVACY = "global.privacy"
         static let UPDATE_CONFIG = "config.update"
         static let RETRIEVE_CONFIG = "config.getData"
+        static let CLEAR_UPDATED_CONFIG = "config.clearUpdates"
         static let JSON_APP_ID = "config.appId"
         static let JSON_FILE_PATH = "config.filePath"
         static let IS_INTERNAL_EVENT = "config.isinternalevent"

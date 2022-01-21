@@ -94,4 +94,15 @@ public protocol ExtensionRuntime {
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
     /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult?
+
+    // MARK: - Event History
+
+    /// Retrieves a count of historical events matching the provided requests.
+    ///
+    /// - Parameters:
+    ///   - requests: an array of `EventHistoryRequest`s used to generate the hash and timeframe for the event lookup
+    ///   - enforceOrder: if `true`, consecutive lookups will use the oldest timestamp from the previous event as their
+    ///                   from date
+    ///   - handler: contains an `EventHistoryResult` for each provided request
+    func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void)
 }

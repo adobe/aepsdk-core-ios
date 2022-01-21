@@ -1,13 +1,13 @@
 Pod::Spec.new do |s|
   s.name             = "AEPCore"
-  s.version          = "3.3.2"
+  s.version          = "3.4.0"
   s.summary          = "Core library for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
                         The core library provides the foundation for the Adobe Experience Platform SDK.  Having the core library installed is a pre-requisite for any other Adobe Experience Platform SDK extension to work.
                         DESC
   s.homepage         = "https://github.com/adobe/aepsdk-core-ios"
   s.license          = 'Apache V2'
-  s.author       = "Adobe Experience Platform SDK Team"
+  s.author           = "Adobe Experience Platform SDK Team"
   s.source           = { :git => "https://github.com/adobe/aepsdk-core-ios", :tag => s.version.to_s }
 
   s.ios.deployment_target = '10.0'
@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
 
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
-  s.dependency 'AEPRulesEngine', '1.0.1'
-  s.dependency 'AEPServices', '3.3.2'
+  s.dependency 'AEPRulesEngine', '>= 1.1.0'
+  s.dependency 'AEPServices', '>= 3.4.0'
 
   s.source_files          = 'AEPCore/Sources/**/*.swift'
 

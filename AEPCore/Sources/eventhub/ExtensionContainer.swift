@@ -141,6 +141,10 @@ extension ExtensionContainer: ExtensionRuntime {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, sharedStateType: .xdm)
     }
 
+    func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
+        EventHub.shared.getHistoricalEvents(requests, enforceOrder: enforceOrder, handler: handler)
+    }
+
     func startEvents() {
         eventOrderer.start()
     }

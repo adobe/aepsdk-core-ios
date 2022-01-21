@@ -34,4 +34,5 @@ public class EventSource: NSObject {
     public static let resetComplete = "com.adobe.eventSource.resetComplete"
     public static let applicationLaunch = "com.adobe.eventSource.applicationLaunch"
     public static let applicationClose = "com.adobe.eventSource.applicationClose"
+    public static let personalizationDecisions = "personalization:decisions"
 }

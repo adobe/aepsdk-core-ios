@@ -21,6 +21,7 @@ enum RulesConstants {
     }
     enum Transform {
         static let URL_ENCODING_FUNCTION_IN_RULES = "urlenc"
+        static let EVENT_HISTORY_IN_RULES = "history"
         static let TRANSFORM_TO_INT = "int"
         static let TRANSFORM_TO_DOUBLE = "double"
         static let TRANSFORM_TO_STRING = "string"

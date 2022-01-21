@@ -30,6 +30,20 @@ public class JSONRulesParser {
             return nil
         }
     }
+
+    /// Parses the json rules to objects
+    /// - Parameter data: data of json rules
+    /// - Returns: an array of `LaunchRule`
+    static public func parse(_ data: Data, runtime: ExtensionRuntime?) -> [LaunchRule]? {
+        let jsonDecoder = JSONDecoder()
+        do {
+            let root = try jsonDecoder.decode(JSONRuleRoot.self, from: data)
+            return root.convert(runtime)
+        } catch {
+            Log.error(label: JSONRulesParser.LOG_LABEL, "Failed to encode json rules, the error is: \(error)")
+            return nil
+        }
+    }
 }
 
 /// Defines the custom type which is strictly mapped to the json rules's structure, then the Json decoder can easily parse json rules to Swift objects
@@ -39,10 +53,10 @@ struct JSONRuleRoot: Codable {
 
     /// Converts itself to `LaunchRule` objects, which can be used in `AEPRulesEngine`
     /// - Returns: an array of `LaunchRule` objects
-    func convert() -> [LaunchRule] {
+    func convert(_ runtime: ExtensionRuntime? = nil) -> [LaunchRule] {
         var result = [LaunchRule]()
         for launchRule in rules {
-            if let conditionExpression = launchRule.condition.convert() {
+            if let conditionExpression = launchRule.condition.convert(runtime) {
                 var consequences = [RuleConsequence]()
                 for consequence in launchRule.consequences {
                     if let id = consequence.id, let type = consequence.type, let dict = consequence.detailDict {
@@ -65,6 +79,12 @@ struct JSONRule: Codable {
 enum ConditionType: String, Codable {
     case group
     case matcher
+    case historical
+}
+
+enum EventHistorySearchType: String, Codable {
+    case any
+    case ordered
 }
 
 class JSONCondition: Codable {
@@ -83,13 +103,14 @@ class JSONCondition: Codable {
 
     var type: ConditionType
     var definition: JSONDefinition
-    func convert() -> Evaluable? {
+
+    func convert(_ runtime: ExtensionRuntime? = nil) -> Evaluable? {
         switch type {
         case .group:
             if let operationStr = definition.logic, let subConditions = definition.conditions {
                 var operands = [Evaluable]()
                 for subCondition in subConditions {
-                    if let operand = subCondition.convert() {
+                    if let operand = subCondition.convert(runtime) {
                         operands.append(operand)
                     }
                 }
@@ -116,7 +137,72 @@ class JSONCondition: Codable {
                 }
             }
             return nil
+        case .historical:
+            return extractHistoricalCondition(runtime)
         }
+    }
+
+    func extractHistoricalCondition(_ runtime: ExtensionRuntime?) -> Evaluable? {
+        // ensure we have the required values to process this historical lookup
+        guard let events = definition.events, let matcherString = definition.matcher, let runtime = runtime,
+              let matcher = JSONCondition.matcherMapping[matcherString], let valueAsInt = definition.value?.intValue else {
+            return nil
+        }
+
+        var fromDate: Date?
+        var toDate: Date?
+        if let fromTs = definition.from {
+            fromDate = Date(milliseconds: fromTs)
+        }
+        if let toTs = definition.to {
+            toDate = Date(milliseconds: toTs)
+        }
+        let searchType = EventHistorySearchType(rawValue: definition.searchType ?? "any") ?? .any
+
+        let requestEvents = events.map({
+            EventHistoryRequest(mask: $0, from: fromDate, to: toDate)
+        })
+
+        let params: [Any] = [runtime, requestEvents, searchType]
+        let historyOperand = Operand<Int>(function: getHistoricalEventCount, parameters: params)
+
+        return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
+    }
+
+    func getHistoricalEventCount(parameters: [Any]?) -> Int {
+        guard let params = parameters,
+              let runtime = params[0] as? ExtensionRuntime,
+              let requestEvents = params[1] as? [EventHistoryRequest],
+              let searchType = params[2] as? EventHistorySearchType else {
+            return 0
+        }
+
+        var returnValue: Int = 0
+        let semaphore = DispatchSemaphore(value: 0)
+
+        runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
+            if searchType == .ordered {
+                for result in results {
+                    if result.count < 1 {
+                        // quick exit on ordered searches if any result has a count < 1
+                        returnValue = 0
+                        semaphore.signal()
+                        break
+                    } else {
+                        returnValue = 1
+                    }
+                }
+            } else {
+                for result in results {
+                    returnValue += result.count
+                }
+            }
+
+            semaphore.signal()
+        }
+
+        semaphore.wait()
+        return returnValue
     }
 
     func convert(key: String, matcher: String, anyCodable: AnyCodable) -> Evaluable? {
@@ -163,6 +249,11 @@ struct JSONDefinition: Codable {
     let key: String?
     let matcher: String?
     let values: [AnyCodable]?
+    let events: [[String: AnyCodable]]?
+    let value: AnyCodable?
+    let from: Int64?
+    let to: Int64?
+    let searchType: String?
 }
 
 struct JSONDetail: Codable {

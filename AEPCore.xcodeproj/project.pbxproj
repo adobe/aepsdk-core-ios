@@ -79,8 +79,24 @@
 		24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43C24CB54B70022F6BE /* MockUnzipper.swift */; };
 		2467E43A24CA4DE20022F6BE /* Unzipping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43924CA4DE20022F6BE /* Unzipping.swift */; };
+		246B19FD2728C1CD0017716A /* MockEventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */; };
+		246B1A2B272B48A80017716A /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246B1A2A272B48A80017716A /* EventTests.swift */; };
+		246EFA062790B20100C76A6B /* rules_signal.zip in Resources */ = {isa = PBXBuildFile; fileRef = 246EFA032790B20000C76A6B /* rules_signal.zip */; };
+		246EFA072790B20100C76A6B /* rules_lifecycle.zip in Resources */ = {isa = PBXBuildFile; fileRef = 246EFA042790B20000C76A6B /* rules_lifecycle.zip */; };
+		246EFA082790B20100C76A6B /* rules_pii.zip in Resources */ = {isa = PBXBuildFile; fileRef = 246EFA052790B20000C76A6B /* rules_pii.zip */; };
+		246FD07426BDEC7A00FD130B /* MessageGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */; };
+		246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07926C1939800FD130B /* MessageAnimation.swift */; };
+		246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */; };
+		246FD07E26CB002F00FD130B /* MessageSettingsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */; };
+		246FD08026CC520500FD130B /* MessageAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD07F26CC520500FD130B /* MessageAlignmentTests.swift */; };
+		246FD08226CC521E00FD130B /* MessageAnimationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08126CC521E00FD130B /* MessageAnimationTests.swift */; };
+		246FD08426CC523F00FD130B /* MessageGestureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08326CC523F00FD130B /* MessageGestureTests.swift */; };
+		246FD08626CC529800FD130B /* MessageGestureRecognizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08526CC529800FD130B /* MessageGestureRecognizerTests.swift */; };
+		246FD08826CC52F200FD130B /* MessagingDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08726CC52F200FD130B /* MessagingDelegateTests.swift */; };
+		246FD08A26CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */; };
 		247FBD7D24E331A600FA6505 /* Event+SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */; };
 		249498E2254A0C920045E392 /* Date+FormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 249498E0254A0C910045E392 /* Date+FormatTests.swift */; };
+		24A1FCE72704CE6000D28D26 /* rules_testHistory.json in Resources */ = {isa = PBXBuildFile; fileRef = 24A1FCE62704CE6000D28D26 /* rules_testHistory.json */; };
 		24B4935824D4C31100AA38D9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B4934F24D4C31100AA38D9 /* AEPSignal.framework */; };
 		24B4935D24D4C31100AA38D9 /* SignalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4935C24D4C31100AA38D9 /* SignalTests.swift */; };
 		24B4935F24D4C31100AA38D9 /* AEPSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24B4935124D4C31100AA38D9 /* AEPSignal.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -89,9 +105,30 @@
 		24B4937624D8AAAF00AA38D9 /* Event+Signal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */; };
 		24B4937824D8CEAC00AA38D9 /* SignalHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */; };
 		24B4937A24DA18BE00AA38D9 /* SignalHit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4937924DA18BE00AA38D9 /* SignalHit.swift */; };
+		24B4BE592714F5A40000C3AA /* EventHistoryRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */; };
+		24B4BE5B2714F7730000C3AA /* EventHistoryResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE5A2714F7730000C3AA /* EventHistoryResponseTests.swift */; };
+		24B4BE5D2714F7B30000C3AA /* EventHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */; };
+		24B4BE5F2714F7C80000C3AA /* EventHistoryDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */; };
+		24C5E14D26B8B00B005BEA72 /* MessageSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */; };
+		24C5E15D26B990CB005BEA72 /* MessageGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E15C26B990CB005BEA72 /* MessageGesture.swift */; };
+		24C5E17B26B999E4005BEA72 /* MessageAlignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */; };
+		24CE74AB26D401ED008F9EFD /* MockFullscreenListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */; };
+		24CE74AD26D40239008F9EFD /* MockMessagingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */; };
+		24CE74AF26D40278008F9EFD /* MockWKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */; };
+		24CE74B126D40483008F9EFD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24CE74B026D40483008F9EFD /* XCTest.framework */; };
 		24CF602B2538AC79006473BA /* MobileCore+Tracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */; };
 		24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */; };
 		24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */; };
+		24D9D52E26AB788D002A441A /* FullscreenMessage+WKNavigationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */; };
+		24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */; };
+		24E255D5270F406300AB9F07 /* EventData+FNV1A32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */; };
+		24E255D7270F526D00AB9F07 /* String+FNV1A32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */; };
+		24EDE33126EFB7170068A65F /* EventHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33026EFB7170068A65F /* EventHistory.swift */; };
+		24EDE33326EFB7470068A65F /* EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */; };
+		24EDE33526EFBDD60068A65F /* EventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */; };
+		24EDE33726F10B810068A65F /* EventData+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */; };
+		24EDE33926F10BA10068A65F /* String+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33826F10BA10068A65F /* String+FNV1A32.swift */; };
+		24EDE33B26F39F450068A65F /* EventHistoryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33A26F39F450068A65F /* EventHistoryResult.swift */; };
 		2E00098F26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00098E26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift */; };
 		2E36F6CA26C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */; };
 		2EF8B38226BCC69C009D6475 /* LifecycleV2DataStoreCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8B38126BCC69C009D6475 /* LifecycleV2DataStoreCache.swift */; };
@@ -304,7 +341,6 @@
 		3FE6DE8324C643620065EA05 /* IdentityPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */; };
 		3FE6DE8824C643EA0065EA05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */; };
 		3FEEA0DD2522436E007EC317 /* rules_pii.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FEEA0DB2522436E007EC317 /* rules_pii.json */; };
-		3FEEA0DE2522436E007EC317 /* rules_pii.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3FEEA0DC2522436E007EC317 /* rules_pii.zip */; };
 		3FF8171624D89B500064DFA1 /* Event+Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */; };
 		3FF8171724D89B500064DFA1 /* AEPCoreMocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3FF8171924D89B500064DFA1 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */; };
@@ -313,9 +349,7 @@
 		3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */; };
 		3FF829472507EBE400483C74 /* LifecycleIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829462507EBE400483C74 /* LifecycleIntegrationTests.swift */; };
 		3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF829482507F8AA00483C74 /* rules_lifecycle.json */; };
-		3FF8294C2507FB3800483C74 /* rules_lifecycle.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8294B2507FB3800483C74 /* rules_lifecycle.zip */; };
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
-		3FF8296C2509942300483C74 /* rules_signal.zip in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296A2509942200483C74 /* rules_signal.zip */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
 		7814B23325CB455200841429 /* URL+Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7814B23225CB455200841429 /* URL+Validator.swift */; };
 		786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */; };
@@ -351,7 +385,6 @@
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
-		AC4D8D4626D9AC0200A86435 /* EventTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC4D8D4526D9AC0200A86435 /* EventTests.swift */; };
 		ACD255AF26CE353000532B1E /* LifecycleV2StateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */; };
 		ACD255B126CE51EA00532B1E /* LifecycleV2StateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255B026CE51EA00532B1E /* LifecycleV2StateManagerTests.swift */; };
 		B3E6E9762859BEC553298E95 /* Pods_AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */; };
@@ -697,9 +730,25 @@
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
 		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
 		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
+		246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockEventHistoryDatabase.swift; sourceTree = "<group>"; };
+		246B1A2A272B48A80017716A /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
+		246EFA032790B20000C76A6B /* rules_signal.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_signal.zip; sourceTree = "<group>"; };
+		246EFA042790B20000C76A6B /* rules_lifecycle.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_lifecycle.zip; sourceTree = "<group>"; };
+		246EFA052790B20000C76A6B /* rules_pii.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_pii.zip; sourceTree = "<group>"; };
+		246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureRecognizer.swift; sourceTree = "<group>"; };
+		246FD07926C1939800FD130B /* MessageAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimation.swift; sourceTree = "<group>"; };
+		246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculation.swift"; sourceTree = "<group>"; };
+		246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettingsTests.swift; sourceTree = "<group>"; };
+		246FD07F26CC520500FD130B /* MessageAlignmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAlignmentTests.swift; sourceTree = "<group>"; };
+		246FD08126CC521E00FD130B /* MessageAnimationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAnimationTests.swift; sourceTree = "<group>"; };
+		246FD08326CC523F00FD130B /* MessageGestureTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureTests.swift; sourceTree = "<group>"; };
+		246FD08526CC529800FD130B /* MessageGestureRecognizerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGestureRecognizerTests.swift; sourceTree = "<group>"; };
+		246FD08726CC52F200FD130B /* MessagingDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingDelegateTests.swift; sourceTree = "<group>"; };
+		246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+FrameCalculationTests.swift"; sourceTree = "<group>"; };
 		247FBD7C24E331A600FA6505 /* Event+SignalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+SignalTests.swift"; sourceTree = "<group>"; };
 		249498E0254A0C910045E392 /* Date+FormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+FormatTests.swift"; sourceTree = "<group>"; };
 		2499461B24E5E67700D3F7B2 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		24A1FCE62704CE6000D28D26 /* rules_testHistory.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testHistory.json; sourceTree = "<group>"; };
 		24B4934F24D4C31100AA38D9 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		24B4935124D4C31100AA38D9 /* AEPSignal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEPSignal.h; sourceTree = "<group>"; };
 		24B4935224D4C31100AA38D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -711,9 +760,30 @@
 		24B4937524D8AAAF00AA38D9 /* Event+Signal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+Signal.swift"; sourceTree = "<group>"; };
 		24B4937724D8CEAC00AA38D9 /* SignalHitProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessor.swift; sourceTree = "<group>"; };
 		24B4937924DA18BE00AA38D9 /* SignalHit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHit.swift; sourceTree = "<group>"; };
+		24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryRequestTests.swift; sourceTree = "<group>"; };
+		24B4BE5A2714F7730000C3AA /* EventHistoryResponseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryResponseTests.swift; sourceTree = "<group>"; };
+		24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryTests.swift; sourceTree = "<group>"; };
+		24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabaseTests.swift; sourceTree = "<group>"; };
+		24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSettings.swift; sourceTree = "<group>"; };
+		24C5E15C26B990CB005BEA72 /* MessageGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGesture.swift; sourceTree = "<group>"; };
+		24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAlignment.swift; sourceTree = "<group>"; };
+		24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFullscreenListener.swift; sourceTree = "<group>"; };
+		24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMessagingDelegate.swift; sourceTree = "<group>"; };
+		24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockWKScriptMessage.swift; sourceTree = "<group>"; };
+		24CE74B026D40483008F9EFD /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		24CF602A2538AC79006473BA /* MobileCore+Tracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+Tracking.swift"; sourceTree = "<group>"; };
 		24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TrackingTests.swift"; sourceTree = "<group>"; };
 		24D2A3D424DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HitQueuing+PrivacyStatus.swift"; sourceTree = "<group>"; };
+		24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKNavigationDelegate.swift"; sourceTree = "<group>"; };
+		24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FullscreenMessage+WKScriptMessageHandler.swift"; sourceTree = "<group>"; };
+		24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventData+FNV1A32Tests.swift"; sourceTree = "<group>"; };
+		24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+FNV1A32Tests.swift"; sourceTree = "<group>"; };
+		24EDE33026EFB7170068A65F /* EventHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistory.swift; sourceTree = "<group>"; };
+		24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryRequest.swift; sourceTree = "<group>"; };
+		24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabase.swift; sourceTree = "<group>"; };
+		24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventData+FNV1A32.swift"; sourceTree = "<group>"; };
+		24EDE33826F10BA10068A65F /* String+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+FNV1A32.swift"; sourceTree = "<group>"; };
+		24EDE33A26F39F450068A65F /* EventHistoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryResult.swift; sourceTree = "<group>"; };
 		2E00098E26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2FunctionalTests.swift; sourceTree = "<group>"; };
 		2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2DataStoreCacheTests.swift; sourceTree = "<group>"; };
 		2EE8956F25F8D2BD27B6D4D8 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
@@ -935,7 +1005,6 @@
 		3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentityPropertiesTests.swift; sourceTree = "<group>"; };
 		3FE6DE8724C643EA0065EA05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3FEEA0DB2522436E007EC317 /* rules_pii.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_pii.json; sourceTree = "<group>"; };
-		3FEEA0DC2522436E007EC317 /* rules_pii.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_pii.zip; sourceTree = "<group>"; };
 		3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPCoreMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+Timestamp.swift"; path = "AEPCore/Mocks/Event+Timestamp.swift"; sourceTree = SOURCE_ROOT; };
 		3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPCoreMocks.h; path = AEPCore/Mocks/AEPCoreMocks.h; sourceTree = SOURCE_ROOT; };
@@ -944,9 +1013,7 @@
 		3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ADBMobileConfig-OptedOut.json"; sourceTree = "<group>"; };
 		3FF829462507EBE400483C74 /* LifecycleIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleIntegrationTests.swift; sourceTree = "<group>"; };
 		3FF829482507F8AA00483C74 /* rules_lifecycle.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_lifecycle.json; sourceTree = "<group>"; };
-		3FF8294B2507FB3800483C74 /* rules_lifecycle.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_lifecycle.zip; sourceTree = "<group>"; };
 		3FF829682509937100483C74 /* SignalIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalIntegrationTests.swift; sourceTree = "<group>"; };
-		3FF8296A2509942200483C74 /* rules_signal.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_signal.zip; sourceTree = "<group>"; };
 		3FF8296B2509942300483C74 /* rules_signal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_signal.json; sourceTree = "<group>"; };
 		4107BA7054E313DACA0D4EF4 /* Pods-AEPCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		41E5D22C6D72CCCF26904EDE /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1118,6 +1185,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24CE74B126D40483008F9EFD /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1190,6 +1258,7 @@
 				2499461B24E5E67700D3F7B2 /* Package.swift */,
 				D55C2031330CD537E59C7255 /* Pods */,
 				A81444C94E7D96198B417F5A /* Frameworks */,
+				246B1A29272B47810017716A /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1239,6 +1308,15 @@
 				21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */,
 			);
 			path = MigrationTests;
+			sourceTree = "<group>";
+		};
+		246B1A29272B47810017716A /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				AC4D8D4526D9AC0200A86435 /* EventTests.swift */,
+				24CE74B026D40483008F9EFD /* XCTest.framework */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		24B4934124D2310700AA38D9 /* Sources */ = {
@@ -1424,8 +1502,10 @@
 				3FE6DDEF24C62F610065EA05 /* MockDataQueue.swift */,
 				3FE6DDEB24C62F610065EA05 /* MockDataStore.swift */,
 				2467E43B24CB54B70022F6BE /* MockDiskCache.swift */,
+				24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */,
 				215C859C24C6492800CCCD26 /* MockHitProcessor.swift */,
 				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
+				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
 				3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */,
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
 				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
@@ -1433,6 +1513,7 @@
 				24543A1324E1DAFC002D8D9A /* MockURLService.swift */,
 				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
 				92027B9825C9EAF2007BE140 /* MockUIService.swift */,
+				24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */,
 			);
 			name = Mocks;
 			path = AEPServices/Mocks;
@@ -1472,6 +1553,32 @@
 			);
 			name = Sources;
 			path = AEPSignal/Sources;
+			sourceTree = "<group>";
+		};
+		24E255D3270F403A00AB9F07 /* HistoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */,
+				24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */,
+				24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */,
+				24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */,
+				24B4BE5A2714F7730000C3AA /* EventHistoryResponseTests.swift */,
+				24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */,
+			);
+			path = HistoryTests;
+			sourceTree = "<group>";
+		};
+		24EDE32F26EFB7000068A65F /* history */ = {
+			isa = PBXGroup;
+			children = (
+				24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */,
+				24EDE33026EFB7170068A65F /* EventHistory.swift */,
+				24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */,
+				24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */,
+				24EDE33A26F39F450068A65F /* EventHistoryResult.swift */,
+				24EDE33826F10BA10068A65F /* String+FNV1A32.swift */,
+			);
+			path = history;
 			sourceTree = "<group>";
 		};
 		3F03978824BE5DD30019F095 /* AEPServices */ = {
@@ -1592,22 +1699,29 @@
 				3F03980424BE61520019F095 /* DataQueueServiceTests.swift */,
 				3F03980324BE61520019F095 /* DataQueueService+Testable.swift */,
 				3F03980A24BE61520019F095 /* DataQueueTests.swift */,
+				786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */,
 				3F03980624BE61520019F095 /* DiskCacheServiceTests.swift */,
+				78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */,
+				92867D6425C0B56400E32CDC /* FloatingButtonTests.swift */,
+				B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */,
+				923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */,
+				246FD08926CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift */,
 				3F03980C24BE61520019F095 /* LogLevelTest.swift */,
+				246FD07F26CC520500FD130B /* MessageAlignmentTests.swift */,
+				246FD08126CC521E00FD130B /* MessageAnimationTests.swift */,
+				246FD08326CC523F00FD130B /* MessageGestureTests.swift */,
+				246FD08526CC529800FD130B /* MessageGestureRecognizerTests.swift */,
+				92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */,
+				246FD07D26CB002F00FD130B /* MessageSettingsTests.swift */,
+				246FD08726CC52F200FD130B /* MessagingDelegateTests.swift */,
 				3F03980D24BE61520019F095 /* NamedCollectionDataStoreTest.swift */,
 				3F03980B24BE61520019F095 /* NetworkServiceTests.swift */,
 				3F03980824BE61520019F095 /* SQLiteWrapperTests.swift */,
 				3F03980224BE61520019F095 /* SystemInfoServiceTest.swift */,
 				3F03980124BE61520019F095 /* UnzipperTest.swift */,
-				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
-				78AA4EBF2509731A00205AE9 /* FileManager+ZipTests.swift */,
 				3F03980524BE61520019F095 /* URLServiceTest.swift */,
 				3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */,
-				92490BE6258BE23A00762B04 /* MessageMonitorServiceTest.swift */,
-				923973CC25AF92140056A3E5 /* FullscreenMessageTests.swift */,
-				786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */,
-				B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */,
-				92867D6425C0B56400E32CDC /* FloatingButtonTests.swift */,
+				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -1668,7 +1782,8 @@
 		3F3951E924CA096100F7325B /* EventHubTests */ = {
 			isa = PBXGroup;
 			children = (
-				AC4D8D4526D9AC0200A86435 /* EventTests.swift */,
+				24E255D3270F403A00AB9F07 /* HistoryTests */,
+				246B1A2A272B48A80017716A /* EventTests.swift */,
 				3F3951EB24CA096100F7325B /* EventHubTests.swift */,
 				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
 			);
@@ -1705,6 +1820,7 @@
 				BBA512BA24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json */,
 				BBA512B224F5CF380030DAD1 /* rules_testModifyData.json */,
 				3F5D45FC25190E8C0040E298 /* rules_testTransform.json */,
+				24A1FCE62704CE6000D28D26 /* rules_testHistory.json */,
 				BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */,
 				BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */,
 				3F3951F124CA096100F7325B /* TestConfig.json */,
@@ -1797,6 +1913,7 @@
 		3FB66AA524CA004400502CAF /* eventhub */ = {
 			isa = PBXGroup;
 			children = (
+				24EDE32F26EFB7000068A65F /* history */,
 				3FB66AAA24CA004400502CAF /* AEPError.swift */,
 				3FB66AA924CA004400502CAF /* Event.swift */,
 				3FB66AAC24CA004400502CAF /* EventHub.swift */,
@@ -1888,10 +2005,11 @@
 			children = (
 				3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */,
 				3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */,
-				3FF8171424D89B500064DFA1 /* Info.plist */,
+				246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */,
 				3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */,
 				3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */,
 				3F08FFA724DBBDD700D34DE3 /* UserDefaults+Clear.swift */,
+				3FF8171424D89B500064DFA1 /* Info.plist */,
 			);
 			name = Mocks;
 			path = AEPCore/Mocks;
@@ -1900,15 +2018,15 @@
 		3FF829432507E9C900483C74 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				246EFA042790B20000C76A6B /* rules_lifecycle.zip */,
+				246EFA052790B20000C76A6B /* rules_pii.zip */,
+				246EFA032790B20000C76A6B /* rules_signal.zip */,
 				3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */,
 				3FF829482507F8AA00483C74 /* rules_lifecycle.json */,
-				3FF8294B2507FB3800483C74 /* rules_lifecycle.zip */,
 				3FEEA0DB2522436E007EC317 /* rules_pii.json */,
-				3FEEA0DC2522436E007EC317 /* rules_pii.zip */,
 				BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */,
 				BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */,
 				3FF8296B2509942300483C74 /* rules_signal.json */,
-				3FF8296A2509942200483C74 /* rules_signal.zip */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -1930,13 +2048,18 @@
 			children = (
 				923547FA25BFF16900BEA9A3 /* floating */,
 				92EEA64D258956FE00DBA3EE /* fullscreen */,
+				923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */,
+				78B36A9525CA1C2D00D6D25F /* Dismissible.swift */,
+				24C5E17A26B999E4005BEA72 /* MessageAlignment.swift */,
+				246FD07926C1939800FD130B /* MessageAnimation.swift */,
+				24C5E15C26B990CB005BEA72 /* MessageGesture.swift */,
+				246FD07326BDEC7A00FD130B /* MessageGestureRecognizer.swift */,
 				92EEA6052589343700DBA3EE /* MessageMonitor.swift */,
 				92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */,
-				92F06D0325BA33F3004C1700 /* Showable.swift */,
-				78B36A9525CA1C2D00D6D25F /* Dismissible.swift */,
+				24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */,
 				9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */,
+				92F06D0325BA33F3004C1700 /* Showable.swift */,
 				923972B225AD844E0056A3E5 /* UIApplication+Window.swift */,
-				923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */,
 				92027B3E25C9C1A7007BE140 /* UIService.swift */,
 			);
 			path = ui;
@@ -1958,6 +2081,9 @@
 			children = (
 				92EEA5F5258933A600DBA3EE /* FullscreenMessageDelegate.swift */,
 				92EEA56F25885C1C00DBA3EE /* FullscreenMessage.swift */,
+				246FD07B26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift */,
+				24D9D52D26AB788C002A441A /* FullscreenMessage+WKNavigationDelegate.swift */,
+				24D9D54B26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift */,
 				78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */,
 			);
 			path = fullscreen;
@@ -2363,8 +2489,8 @@
 		21CAC0CD2422917600C11388 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1230;
-				LastUpgradeCheck = 1200;
+				LastSwiftUpdateCheck = 1130;
+				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = Adobe;
 				TargetAttributes = {
 					21CAC0D52422917600C11388 = {
@@ -2476,6 +2602,7 @@
 				BBA512A124F4A15C0030DAD1 /* rules_testMatcherLt.json in Resources */,
 				BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */,
 				3F39520D24CA096100F7325B /* ADBMobileConfig.json in Resources */,
+				24A1FCE72704CE6000D28D26 /* rules_testHistory.json in Resources */,
 				BBA5129D24F4899B0030DAD1 /* rules_testMatcherGt.json in Resources */,
 				BF4A6F0526BB48A200612434 /* rules_testDispatchEventNewNoData.json in Resources */,
 				BF4A6F2826BB4A1B00612434 /* rules_testDispatchEventNoSource.json in Resources */,
@@ -2540,14 +2667,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				246EFA062790B20100C76A6B /* rules_signal.zip in Resources */,
 				3FEEA0DD2522436E007EC317 /* rules_pii.json in Resources */,
 				3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */,
-				3FF8296C2509942300483C74 /* rules_signal.zip in Resources */,
 				3FF8296D2509942300483C74 /* rules_signal.json in Resources */,
-				3FEEA0DE2522436E007EC317 /* rules_pii.zip in Resources */,
 				BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */,
+				246EFA082790B20100C76A6B /* rules_pii.zip in Resources */,
 				BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */,
-				3FF8294C2507FB3800483C74 /* rules_lifecycle.zip in Resources */,
+				246EFA072790B20100C76A6B /* rules_lifecycle.zip in Resources */,
 				3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2967,7 +3094,10 @@
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
 				218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */,
 				3F16761424E1B0630041B970 /* RulesConstants.swift in Sources */,
+				24EDE33726F10B810068A65F /* EventData+FNV1A32.swift in Sources */,
+				24EDE33526EFBDD60068A65F /* EventHistoryDatabase.swift in Sources */,
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
+				24EDE33126EFB7170068A65F /* EventHistory.swift in Sources */,
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */,
@@ -2983,8 +3113,10 @@
 				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */,
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
+				24EDE33B26F39F450068A65F /* EventHistoryResult.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				3F2B1DA62631E7FE0030F50B /* RuleConsequence.swift in Sources */,
+				24EDE33326EFB7470068A65F /* EventHistoryRequest.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
 				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,
 				21377D4124E3383E004BAC01 /* V4Migrator.swift in Sources */,
@@ -3013,6 +3145,7 @@
 				3FB66AD024CA004400502CAF /* AEPError.swift in Sources */,
 				3FB66AD424CA004400502CAF /* EventType.swift in Sources */,
 				3F5D45F8251903030040E298 /* LaunchRuleTransformer.swift in Sources */,
+				24EDE33926F10BA10068A65F /* String+FNV1A32.swift in Sources */,
 				21A6737325434AE600A7E906 /* SharedStateType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3024,27 +3157,32 @@
 				BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */,
 				3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */,
 				BBA512B524F5D0CC0030DAD1 /* EventHub+Testable.swift in Sources */,
+				246B1A2B272B48A80017716A /* EventTests.swift in Sources */,
+				24B4BE592714F5A40000C3AA /* EventHistoryRequestTests.swift in Sources */,
 				78AA4EC92513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift in Sources */,
 				21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */,
 				3F08FF9924DA03F000D34DE3 /* RulesEngineFunctionalTests.swift in Sources */,
 				3F16762C24F032E60041B970 /* ContractExtensionTwo.swift in Sources */,
 				78AA4ECB2513AF4200205AE9 /* ConfigurationAppIDTests.swift in Sources */,
+				24B4BE5D2714F7B30000C3AA /* EventHistoryTests.swift in Sources */,
 				3F16762824F031A00041B970 /* EventHubContractTests.swift in Sources */,
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
-				AC4D8D4626D9AC0200A86435 /* EventTests.swift in Sources */,
 				3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */,
 				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
 				21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */,
+				24E255D5270F406300AB9F07 /* EventData+FNV1A32Tests.swift in Sources */,
 				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				216A15F5257818EF00D43848 /* Data+HexStringTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
+				24B4BE5F2714F7C80000C3AA /* EventHistoryDatabaseTests.swift in Sources */,
 				21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
 				BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */,
 				BBA1E97825F099D000999DD2 /* DataMarshallerTests.swift in Sources */,
+				24B4BE5B2714F7730000C3AA /* EventHistoryResponseTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
 				78AA4EC62513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift in Sources */,
@@ -3062,6 +3200,7 @@
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */,
 				24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */,
+				24E255D7270F526D00AB9F07 /* String+FNV1A32Tests.swift in Sources */,
 				3FB5F7D024D2848900F0F6DF /* ConfigurationUpdateTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3095,7 +3234,9 @@
 				923547EB25BF9C6600BEA9A3 /* AEPUIService.swift in Sources */,
 				3F0397CE24BE5FF30019F095 /* LoggingService.swift in Sources */,
 				786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */,
+				24D9D52E26AB788D002A441A /* FullscreenMessage+WKNavigationDelegate.swift in Sources */,
 				3F0397C924BE5FF30019F095 /* Logging.swift in Sources */,
+				246FD07426BDEC7A00FD130B /* MessageGestureRecognizer.swift in Sources */,
 				78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */,
 				3F0397D224BE5FF30019F095 /* NetworkRequest.swift in Sources */,
 				3F0397F224BE60910019F095 /* HitProcessing.swift in Sources */,
@@ -3109,8 +3250,10 @@
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
 				3F0397D724BE5FF30019F095 /* DataQueueService.swift in Sources */,
 				3F0397F324BE60910019F095 /* PersistentHitQueue.swift in Sources */,
+				24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */,
 				3F0397CD24BE5FF30019F095 /* NetworkServiceConstants.swift in Sources */,
 				3F0397C724BE5FF30019F095 /* CacheExpiry.swift in Sources */,
+				246FD07C26C2CDE500FD130B /* FullscreenMessage+FrameCalculation.swift in Sources */,
 				3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */,
 				3F0397FC24BE60910019F095 /* OperationOrderer.swift in Sources */,
 				92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */,
@@ -3118,6 +3261,7 @@
 				923547FC25BFF18200BEA9A3 /* FloatingButton.swift in Sources */,
 				3F0397D324BE5FF30019F095 /* SQLiteDataQueue.swift in Sources */,
 				3F0397C324BE5FF30019F095 /* Caching.swift in Sources */,
+				24C5E17B26B999E4005BEA72 /* MessageAlignment.swift in Sources */,
 				78B36A7825CA0D7700D6D25F /* UIUtils.swift in Sources */,
 				923972B325AD844E0056A3E5 /* UIApplication+Window.swift in Sources */,
 				3F0397F924BE60910019F095 /* FileManager+ZIP.swift in Sources */,
@@ -3125,6 +3269,8 @@
 				3F0397F824BE60910019F095 /* ZipEntry.swift in Sources */,
 				3F0397F424BE60910019F095 /* HitQueuing.swift in Sources */,
 				786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */,
+				24C5E15D26B990CB005BEA72 /* MessageGesture.swift in Sources */,
+				24C5E14D26B8B00B005BEA72 /* MessageSettings.swift in Sources */,
 				3F0397DB24BE5FF30019F095 /* NamedCollectionDataStore.swift in Sources */,
 				3F0397C524BE5FF30019F095 /* CacheEntry.swift in Sources */,
 				3F0397F524BE60910019F095 /* AtomicCounter.swift in Sources */,
@@ -3139,6 +3285,7 @@
 				3F0397D124BE5FF30019F095 /* HttpConnection.swift in Sources */,
 				3F0397D824BE5FF30019F095 /* DataQueuing.swift in Sources */,
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
+				246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */,
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
 				92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
@@ -3175,22 +3322,29 @@
 				3F03982224BE61520019F095 /* OperationOrdererTests.swift in Sources */,
 				3F03982124BE61520019F095 /* NamedCollectionDataStoreTest.swift in Sources */,
 				3F03982724BE61520019F095 /* ThreadSafeDictionaryTests.swift in Sources */,
+				246FD08A26CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift in Sources */,
 				BB8D437225F99DFF0046E230 /* PrettyDictionaryTests.swift in Sources */,
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
 				923973CD25AF92140056A3E5 /* FullscreenMessageTests.swift in Sources */,
 				78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */,
+				246FD08426CC523F00FD130B /* MessageGestureTests.swift in Sources */,
 				3F03981924BE61520019F095 /* URLServiceTest.swift in Sources */,
 				3F03982324BE61520019F095 /* PersistentHitQueueTests.swift in Sources */,
 				3F03981724BE61520019F095 /* DataQueueService+Testable.swift in Sources */,
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */,
 				786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */,
+				246FD08626CC529800FD130B /* MessageGestureRecognizerTests.swift in Sources */,
 				78AA4EC02509731B00205AE9 /* FileManager+ZipTests.swift in Sources */,
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
+				246FD08826CC52F200FD130B /* MessagingDelegateTests.swift in Sources */,
+				246FD08026CC520500FD130B /* MessageAlignmentTests.swift in Sources */,
 				92867D6525C0B56400E32CDC /* FloatingButtonTests.swift in Sources */,
+				246FD08226CC521E00FD130B /* MessageAnimationTests.swift in Sources */,
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
 				3F03982024BE61520019F095 /* LogLevelTest.swift in Sources */,
+				246FD07E26CB002F00FD130B /* MessageSettingsTests.swift in Sources */,
 				3F03981A24BE61520019F095 /* DiskCacheServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3214,12 +3368,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */,
+				24CE74AD26D40239008F9EFD /* MockMessagingDelegate.swift in Sources */,
 				24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */,
 				3FE6DDF524C62F620065EA05 /* MockURLSession.swift in Sources */,
+				24CE74AF26D40278008F9EFD /* MockWKScriptMessage.swift in Sources */,
 				24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */,
 				3FE6DDF724C62F620065EA05 /* MockDataQueue.swift in Sources */,
 				215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */,
 				3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */,
+				24CE74AB26D401ED008F9EFD /* MockFullscreenListener.swift in Sources */,
 				92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */,
 				3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */,
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
@@ -3343,6 +3500,7 @@
 				3F08FFAA24DBBDD700D34DE3 /* TestableNetworkService.swift in Sources */,
 				3FF8171624D89B500064DFA1 /* Event+Timestamp.swift in Sources */,
 				21FE152124F0335E008A82FF /* MockExtension.swift in Sources */,
+				246B19FD2728C1CD0017716A /* MockEventHistoryDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3654,13 +3812,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3684,13 +3841,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3705,11 +3861,11 @@
 			baseConfigurationReference = 3DCBEB2BB8208D5CED73869A /* Pods-AEPCoreTests.debug.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3728,11 +3884,11 @@
 			baseConfigurationReference = 4107BA7054E313DACA0D4EF4 /* Pods-AEPCoreTests.release.xcconfig */;
 			buildSettings = {
 				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3756,13 +3912,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3784,13 +3939,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3806,7 +3960,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3825,7 +3978,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3849,13 +4001,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3876,13 +4027,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3895,10 +4045,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3915,10 +4065,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3951,9 +4101,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3970,9 +4120,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 091EFF44717D7342E6FA45D3 /* Pods-AEPIntegrationTests.release.xcconfig */;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3988,6 +4138,7 @@
 		3FE6DDAF24C62C090065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -3996,13 +4147,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4015,6 +4165,7 @@
 		3FE6DDB024C62C090065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4023,13 +4174,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4049,13 +4199,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPLifecycle/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4076,13 +4225,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPLifecycle/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4098,7 +4246,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4119,7 +4266,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4143,13 +4289,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4170,13 +4315,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4192,7 +4336,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4213,7 +4356,6 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4229,6 +4371,7 @@
 		3FF8171024D89B160064DFA1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4237,13 +4380,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4256,6 +4398,7 @@
 		3FF8171124D89B160064DFA1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4264,13 +4407,12 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.2;
+				MARKETING_VERSION = 3.4.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
