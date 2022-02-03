@@ -25,6 +25,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     private let ANIMATION_DURATION = 0.3
 
     /// Assignable in the constructor, `settings` control the layout and behavior of the message
+    @objc
     public var settings: MessageSettings?
 
     /// Native functions that can be called from javascript
