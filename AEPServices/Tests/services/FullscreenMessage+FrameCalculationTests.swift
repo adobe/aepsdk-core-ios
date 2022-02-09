@@ -15,6 +15,7 @@ import XCTest
 
 class FullscreenMessage_FrameCalculationTests: XCTestCase {
     
+    let ACCURACY = 0.00001
     var message: FullscreenMessage!
     var monitor: MessageMonitoring!
     var noAnimationSettings: MessageSettings!
@@ -38,205 +39,205 @@ class FullscreenMessage_FrameCalculationTests: XCTestCase {
     
     func testNoAnimationFrameWhenVisible() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, 0)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, 0)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, 0, accuracy: ACCURACY)
     }
     
     func testNoAnimationFrameBeforeShow() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
-        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth)
-        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight)
-        XCTAssertEqual(message.frameBeforeShow.origin.x, 0)
-        XCTAssertEqual(message.frameBeforeShow.origin.y, 0)
+        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.y, 0, accuracy: ACCURACY)
     }
     
     func testNoAnimationFrameAfterDismiss() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
-        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth)
-        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight)
-        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0)
-        XCTAssertEqual(message.frameAfterDismiss.origin.y, 0)
+        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.y, 0, accuracy: ACCURACY)
     }
     
     func testTopSettingsFrameWhenVisible() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: topSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, 0)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, screenHeight * 0.05)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, screenHeight * 0.05, accuracy: ACCURACY)
     }
     
     func testTopSettingsFrameBeforeShow() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: topSettings)
-        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth)
-        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameBeforeShow.origin.x, 0)
-        XCTAssertEqual(message.frameBeforeShow.origin.y, -(message.frameWhenVisible.size.height + message.frameWhenVisible.origin.y))
+        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.y, -(message.frameWhenVisible.size.height + message.frameWhenVisible.origin.y), accuracy: ACCURACY)
     }
     
     func testTopSettingsFrameAfterDismiss() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: topSettings)
-        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth)
-        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0)
-        XCTAssertEqual(message.frameAfterDismiss.origin.y, -(message.frameWhenVisible.size.height + message.frameWhenVisible.origin.y))
+        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.y, -(message.frameWhenVisible.size.height + message.frameWhenVisible.origin.y), accuracy: ACCURACY)
     }
     
     func testTopSettingsNoVerticalInsetFrameWhenVisible() throws {
         topSettings.setVerticalInset(nil)
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: topSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, 0)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, 0)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, 0, accuracy: ACCURACY)
     }
     
     func testBotSettingsFrameWhenVisible() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: botSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, 0)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height - (screenHeight * 0.05))
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height - (screenHeight * 0.05), accuracy: ACCURACY)
     }
     
     func testBotSettingsFrameBeforeShow() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: botSettings)
-        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth)
-        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameBeforeShow.origin.x, 0)
-        XCTAssertEqual(message.frameBeforeShow.origin.y, screenHeight)
+        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.y, screenHeight, accuracy: ACCURACY)
     }
     
     func testBotSettingsFrameAfterDismiss() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: botSettings)
-        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth)
-        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0)
-        XCTAssertEqual(message.frameAfterDismiss.origin.y, screenHeight)
+        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.y, screenHeight, accuracy: ACCURACY)
     }
     
     func testBotSettingsNoVerticalInsetFrameWhenVisible() throws {
         botSettings.setVerticalInset(nil)
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: botSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, 0)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height, accuracy: ACCURACY)
     }
     
     func testRightSettingsFrameWhenVisible() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: rightSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, screenWidth - message.frameWhenVisible.size.width - (screenWidth * 0.05) )
-        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, screenWidth - message.frameWhenVisible.size.width - (screenWidth * 0.05) , accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testRightSettingsFrameBeforeShow() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: rightSettings)
-        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameBeforeShow.origin.x, screenWidth)
-        XCTAssertEqual(message.frameBeforeShow.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.x, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testRightSettingsFrameAfterDismiss() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: rightSettings)
-        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameAfterDismiss.origin.x, screenWidth)
-        XCTAssertEqual(message.frameAfterDismiss.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.x, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testRightSettingsNoHorizontalInsetFrameWhenVisible() throws {
         rightSettings.setHorizontalInset(nil)
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: rightSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, screenWidth - message.frameWhenVisible.size.width)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, screenWidth - message.frameWhenVisible.size.width, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testLeftSettingsFrameWhenVisible() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: leftSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, screenWidth * 0.05)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, screenWidth * 0.05, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testLeftSettingsFrameBeforeShow() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: leftSettings)
-        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameBeforeShow.origin.x, -(screenWidth + message.frameWhenVisible.origin.x))
-        XCTAssertEqual(message.frameBeforeShow.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.x, -(screenWidth + message.frameWhenVisible.origin.x), accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testLeftSettingsFrameAfterDismiss() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: leftSettings)
-        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameAfterDismiss.origin.x, -(screenWidth + message.frameWhenVisible.origin.x))
-        XCTAssertEqual(message.frameAfterDismiss.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.x, -(screenWidth + message.frameWhenVisible.origin.x), accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testLeftSettingsNoHorizontalInsetFrameWhenVisible() throws {
         leftSettings.setHorizontalInset(nil)
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: leftSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, 0)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.8, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testCenterSettingsFrameWhenVisible() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: centerSettings)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.5)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, message.frameWhenVisible.size.width * 0.5)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, message.frameWhenVisible.size.width * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, message.frameWhenVisible.size.height * 0.5, accuracy: ACCURACY)
     }
     
     func testCenterSettingsFrameBeforeShow() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: centerSettings)
-        XCTAssertEqual(message.frameBeforeShow.size.width, 0)
-        XCTAssertEqual(message.frameBeforeShow.size.height, 0)
-        XCTAssertEqual(message.frameBeforeShow.origin.x, screenWidth * 0.5)
-        XCTAssertEqual(message.frameBeforeShow.origin.y, screenHeight * 0.5)
+        XCTAssertEqual(message.frameBeforeShow.size.width, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.size.height, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.x, screenWidth * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.y, screenHeight * 0.5, accuracy: ACCURACY)
     }
     
     func testCenterSettingsFrameAfterDismiss() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: centerSettings)
-        XCTAssertEqual(message.frameAfterDismiss.size.width, 0)
-        XCTAssertEqual(message.frameAfterDismiss.size.height, 0)
-        XCTAssertEqual(message.frameAfterDismiss.origin.x, screenWidth * 0.5)
-        XCTAssertEqual(message.frameAfterDismiss.origin.y, screenHeight * 0.5)
+        XCTAssertEqual(message.frameAfterDismiss.size.width, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.size.height, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.x, screenWidth * 0.5, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.y, screenHeight * 0.5, accuracy: ACCURACY)
     }
     
     func testNoMessageSettingsFrameWhenVisible() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor)
-        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth)
-        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight)
-        XCTAssertEqual(message.frameWhenVisible.origin.x, 0)
-        XCTAssertEqual(message.frameWhenVisible.origin.y, 0)
+        XCTAssertEqual(message.frameWhenVisible.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.size.height, screenHeight, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameWhenVisible.origin.y, 0, accuracy: ACCURACY)
     }
     
     func testNoMessageSettingsFrameBeforeShow() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor)
-        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth)
-        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight)
-        XCTAssertEqual(message.frameBeforeShow.origin.x, 0)
-        XCTAssertEqual(message.frameBeforeShow.origin.y, 0)
+        XCTAssertEqual(message.frameBeforeShow.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.size.height, screenHeight, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameBeforeShow.origin.y, 0, accuracy: ACCURACY)
     }
     
     func testNoMessageSettingsFrameAfterDismiss() throws {
         message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor)
-        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth)
-        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight)
-        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0)
-        XCTAssertEqual(message.frameAfterDismiss.origin.y, 0)
+        XCTAssertEqual(message.frameAfterDismiss.size.width, screenWidth, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.size.height, screenHeight, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.x, 0, accuracy: ACCURACY)
+        XCTAssertEqual(message.frameAfterDismiss.origin.y, 0, accuracy: ACCURACY)
     }
 }

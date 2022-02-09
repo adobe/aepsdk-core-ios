@@ -76,6 +76,9 @@ class RulesEngineFunctionalTests: XCTestCase {
         /// When:
         rulesEngine.replaceRulesWithCache(from: "http://test.com/rules.url")
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
+
+        // Multiple async functions are queued. Wait for them to complete before processing event. 
+        waitForProcessing(interval: 0.2)
         let processedEvent = rulesEngine.process(event: defaultEvent)
 
         /// Then:
@@ -1281,4 +1284,13 @@ class RulesEngineFunctionalTests: XCTestCase {
         rulesEngine.rulesEngine.clearRules()
         rulesEngine.rulesEngine.addRules(rules: rules)
     }
+
+    private func waitForProcessing(interval: TimeInterval = 0.5) {
+        let expectation = XCTestExpectation()
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + interval - 0.05) {
+            expectation.fulfill()
+        }
+        wait(for:[expectation], timeout: interval)
+    }
+
 }

@@ -59,9 +59,9 @@ class LifecycleV2FunctionalTests: XCTestCase {
         UserDefaults.clear()
     }
 
-    func waitForProcessing(interval: TimeInterval = 0.5) {
+    private func waitForProcessing(interval: TimeInterval = 0.5) {
         let expectation = XCTestExpectation()
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + interval - 0.1) {
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + interval - 0.05) {
             expectation.fulfill()
         }
         wait(for:[expectation], timeout: interval)

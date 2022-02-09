@@ -39,7 +39,7 @@ class SignalIntegrationTests: XCTestCase {
             unregisterExpectation.fulfill()
         }
         wait(for: [unregisterExpectation], timeout: 2)
-
+        EventHub.shared.shutdown()
     }
 
     func initExtensionsAndWait() {
