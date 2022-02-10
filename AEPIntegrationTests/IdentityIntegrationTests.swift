@@ -42,7 +42,7 @@ class IdentityIntegrationTests: XCTestCase {
         }
 
         wait(for: [unregisterExpectation], timeout: 3)
-
+        EventHub.shared.shutdown()
     }
 
     func initExtensionsAndWait() {
@@ -252,8 +252,7 @@ class IdentityIntegrationTests: XCTestCase {
         props.saveToPersistence()
 
         initExtensionsAndWait()
-        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-        waitForBootupHit()
+        waitForBootupHit(initialConfig: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
 
         let resetHitExpectation = XCTestExpectation(description: "new sync from reset identities")
         resetHitExpectation.assertForOverFulfill = true
@@ -275,10 +274,10 @@ class IdentityIntegrationTests: XCTestCase {
         // test
         MobileCore.resetIdentities()
 
-        wait(for: [resetHitExpectation], timeout: 15)
+        wait(for: [resetHitExpectation], timeout: 2)
     }
 
-    private func waitForBootupHit() {
+    private func waitForBootupHit(initialConfig: [String: String]) {
         let bootupExpectation = XCTestExpectation(description: "bootup hit goes out")
 
         let mockNetworkService = TestableNetworkService()
@@ -290,6 +289,7 @@ class IdentityIntegrationTests: XCTestCase {
             return nil
         }
 
+        MobileCore.updateConfigurationWith(configDict: initialConfig)
         wait(for: [bootupExpectation], timeout: 2)
     }
 

@@ -37,7 +37,7 @@ class ConfigurationIntegrationTests: XCTestCase {
             unregisterExpectation.fulfill()
         }
         wait(for: [unregisterExpectation], timeout: 2)
-
+        EventHub.shared.shutdown()
     }
 
     func resetTestEnv(){
