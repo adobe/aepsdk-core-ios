@@ -108,8 +108,8 @@ class SignalHitProcessorTests: XCTestCase {
         XCTAssertEqual(testTimeout, sentRequest.readTimeout)
     }
     
-    /// a 200 response code should result in removing the hit from the queue
-    func testProcessHit200Response() throws {
+    /// a 2xx response code should result in removing the hit from the queue
+    func testProcessHit2xxResponse() throws {
         // setup
         let entity = SignalHit(url: testUrl, postBody: testPostBody, contentType: testContentType,
                                timeout: testTimeout, event: testEvent)
@@ -151,7 +151,7 @@ class SignalHitProcessorTests: XCTestCase {
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
     }
     
-    /// a response code that is not 200 or in the recoverable list should result in removing the hit from the queue
+    /// a response code that is not 2xx or in the recoverable list should result in removing the hit from the queue
     func testProcessHitUnrecoverableErrorResponse() throws {
         // setup
         let entity = SignalHit(url: testUrl, postBody: testPostBody, contentType: testContentType,
