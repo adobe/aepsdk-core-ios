@@ -1,0 +1,31 @@
+@Tutorials(name: "Adobe Experience Platform Installation Methods") {
+    @Intro(title: "Introduction") {
+         These tutorials will go over the 3 different methods currently supported for installing the Adobe Experience Platform SDK, namely:
+         1. Cocoapods
+         2. Swift Package Manager
+         3. Manual installation of XCFrameworks
+        
+        @Image(source: "Adobe_Experience_Platform_logo.png", alt: "Adobe Experience Platform Logo")
+    }
+    
+    @Chapter(name: "Cocoapods") {
+        This tutorial will cover how to install the Adobe Experience Platform using Cocoapods. Before using cocoapods to install the Adobe Experience Platform SDK, make sure that cocoapods is installed on your machine as outlined [here](https://guides.cocoapods.org/using/getting-started.html#installation).
+        @Image(source: "cocoapods_logo.png", alt: "Cocoapods Logo")
+        
+        @TutorialReference(tutorial: "doc:Cocoapods")
+    }
+    
+    @Chapter(name: "Swift Package Manager") {
+        This tutorial will cover how to install the Adobe Experience Platform using Swift Package Manager.
+        @Image(source: "swift_logo.png", alt: "Swift Logo")
+        
+        @TutorialReference(tutorial: "doc:SwiftPackageManager")
+    }
+    
+    @Chapter(name: "Manual XCFramework Installation") {
+        This tutorial will cover how to manually install the Adobe Experience Platform binaries.
+        @Image(source: "xcframework.png", alt: "XCFramework Logo")
+        
+        @TutorialReference(tutorial: "doc:XCFrameworkInstallation")
+    }
+}

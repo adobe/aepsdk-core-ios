@@ -1,0 +1,29 @@
+@Tutorial(time: 5) {
+    @Intro(title: "Cocoapods Installation") {
+        Installing the Adobe Experience Platform with Cocoapods is very straightforward.
+        
+        @Image(source: "cocoapods_logo.png", alt: "Cocoapods Logo")
+    }
+    
+    @Section(title: "Podfile") {
+        @ContentAndMedia {
+            <#text#>
+            
+            @Image(source: <#file#>, alt: "<#accessible description#>")
+        }
+        @Steps {
+            @Step {
+                Add the extensions you want to install to your podfile, and replace the `YourTargetName` with your target name. Make sure that you are using the optimistic version operator `~>` to indicate the current major version of the extension in order to avoid breaking changes when running a `pod update` in the future.
+                
+                @Image(source: "podfile.png", alt: "Podfile")
+            }
+            
+            @Step {
+                Now simply run `pod install` from the podfile's directory to install the extensions.
+            }
+            @Step {
+                If this is your first time installing cocoapods in your project, close the project, and open the `.xcworkspace` from now on.
+            }
+        }
+    }
+}

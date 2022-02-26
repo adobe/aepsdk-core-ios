@@ -368,6 +368,7 @@
 		78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36A9525CA1C2D00D6D25F /* Dismissible.swift */; };
 		78B36AB425CA1FCE00D6D25F /* FullscreenPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */; };
 		78B36AEE25CA210E00D6D25F /* FloatingButtonPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */; };
+		78F41C9827C9A2A800D29B4A /* Documentation.docc in Sources */ = {isa = PBXBuildFile; fileRef = 78F41B7627C6A36500D29B4A /* Documentation.docc */; };
 		92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B3E25C9C1A7007BE140 /* UIService.swift */; };
 		92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
 		923547EB25BF9C6600BEA9A3 /* AEPUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */; };
@@ -1245,7 +1246,6 @@
 		21CAC0CC2422917600C11388 = {
 			isa = PBXGroup;
 			children = (
-				78F41B7627C6A36500D29B4A /* Documentation.docc */,
 				21CAC0D82422917600C11388 /* AEPCore */,
 				3FE6DE3024C642330065EA05 /* AEPIdentity */,
 				3FE6DDD224C62EE60065EA05 /* AEPLifecycle */,
@@ -1282,6 +1282,7 @@
 		21CAC0D82422917600C11388 /* AEPCore */ = {
 			isa = PBXGroup;
 			children = (
+				78F41B7627C6A36500D29B4A /* Documentation.docc */,
 				3FF8170424D89AC50064DFA1 /* Mocks */,
 				24B4934124D2310700AA38D9 /* Sources */,
 				24B4934224D231D800AA38D9 /* Tests */,
@@ -3097,6 +3098,7 @@
 				3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */,
 				3FB66AE224CA004400502CAF /* Event+Configuration.swift in Sources */,
 				3FB66AD124CA004400502CAF /* SharedState.swift in Sources */,
+				78F41C9827C9A2A800D29B4A /* Documentation.docc in Sources */,
 				215A6CE224ED92C500FE0657 /* V4MigrationConstants.swift in Sources */,
 				217E220524D1FD7900B70B3E /* SharedStateResult.swift in Sources */,
 				BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */,
