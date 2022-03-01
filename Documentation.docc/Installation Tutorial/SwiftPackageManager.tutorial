@@ -2,42 +2,41 @@
     @Intro(title: "Swift Package Manager Installation") {
         We will cover two different ways of installing the Adobe Experience Platform via SPM. 
         
-        @Image(source: "swift_logo.png", alt: "Swift Logo")
     }
     
     @Section(title: "Using Package Collections to Install the AEP SDK") {
         @ContentAndMedia {
-            <#text#>
             
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            
+            @Image(source: "swift_logo.png", alt: "Swift Logo")
         }
         @Steps {
             @Step {
-                From Xcode, click on `File -> Add Packages` 
+                From Xcode, click on "File -> Add Packages"
                 
                 @Image(source: "spmFileAddPackagesStep.png", alt: "Add Packages Screenshot")
             }
             
             @Step {
-                Now, click on the plus sign on the bottom left and click `Add Swift Package Collection`.
+                Now, click on the plus sign on the bottom left and click "Add Swift Package Collection".
                 
                 @Image(source: "spmPlusAddPackageCollectionStep.png", alt: "Add Package Collection Screenshot")
             }
             
             @Step {
-                Next, enter the package collection url and click `Load`. NOTE: We currently have one package collection for AEP Edge Packages hosted [here](https://opensource.adobe.com/aepsdk-core-ios/swift/packages/aep.json).  
+                Next, enter the package collection url and click "Load". NOTE: We currently have one package collection for AEP Edge Packages hosted [here](https://opensource.adobe.com/aepsdk-core-ios/swift/packages/aep.json).  
                 
-                @Image(source: "spmPlusAddPackageCollectionURLStep.png", alt: "Add Package Collection URL Screenshot")
+                @Image(source: "spmAddPackageCollectionURLStep.png", alt: "Add Package Collection URL Screenshot")
             }
             
             @Step {
-                After the package collection has loaded, click `Add Collection` to add the collection.
+                After the package collection has loaded, click "Add Collection" to add the collection.
                 
-                @Image(source: "spmPlusAddPackageCollectionURLNextStep.png", alt: "Add Package Collection URL Next Screenshot")
+                @Image(source: "spmAddPackageCollectionURLNextStep.png", alt: "Add Package Collection URL Next Screenshot")
             }
             
             @Step {
-                You should now see the added package collection on the left pane. Once selected, you will see all of the packages included in the collection listed. Simply select each package you would like to add to your project and click `Add Package` on the bottom right.
+                You should now see the added package collection on the left pane. Once selected, you will see all of the packages included in the collection listed. Simply select each package you would like to add to your project and click "Add Package" on the bottom right.
                 
                 @Image(source: "spmSelectPackageFromCollectionStep.png", alt: "Select Package From Collection Screenshot")
             }

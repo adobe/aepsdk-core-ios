@@ -1,6 +1,7 @@
 @Tutorials(name: "Adobe Experience Platform Installation Methods") {
-    @Intro(title: "Introduction") {
+    @Intro(title: "Adobe Experience Platform Installation Methods") {
          These tutorials will go over the 3 different methods currently supported for installing the Adobe Experience Platform SDK, namely:
+         
          1. Cocoapods
          2. Swift Package Manager
          3. Manual installation of XCFrameworks

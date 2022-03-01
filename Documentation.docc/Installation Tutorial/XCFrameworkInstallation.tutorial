@@ -2,27 +2,44 @@
     @Intro(title: "XCFramework Manual Installation") {
         This tutorial will demonstrate how to install the Adobe Experience Platform manually using XCFrameworks.
         
-        @Image(source: <#file#>, alt: "<#accessible description#>")
     }
     
     @Section(title: "Create XCFrameworks Manually") {
         @ContentAndMedia {
-            <#text#>
             
-            @Image(source: <#file#>, alt: "<#accessible description#>")
+            
+            @Image(source: "xcframework.png", alt: "XCFramework image")
         }
         
         @Steps {
             @Step {
-                Create Binaries for each
+                Create Binaries for each extension you would like to add by cloning the repo, navigating to the root repository for the repo, and running `make archive` from the command line. You should now have the corresponding xcframework in the "build/" directory.
                 
-                @Image(source: "podfile.png", alt: "test")
+                @Image(source: "xcframeworkBuildFolder.png", alt: "Build Folder")
             }
             
             @Step {
-                Next step test
+                Now from your Xcode project, create a "Frameworks" folder by right clicking on your target and clicking "New Group".
                 
-                @Code(name: "spmFinal.png", file: "test")
+                @Image(source: "xcframeworkCreateNewGroup.png", alt: "Create New Group")
+            }
+            
+            @Step {
+                Now drag and drop the xcframeworks from the respective build folder to your newly created Xcode Framework group. Then, make sure the following options are selected for adding files. Both “Copy items if needed” and “Create groups” should be checked and selected. Click Finish.
+             
+                @Image(source: "xcframeworkCopyItems.png", alt: "Copy items if needed")
+            }
+            
+            @Step {
+                The result should look like this.
+             
+                @Image(source: "xcframeworkGroup.png", alt: "XCFramework folder with frameworks")
+            }
+            
+            @Step {
+                Navigate to your project settings by clicking on it in the project navigator. Make sure that your target is selected and General tab is open. Select “Embed & Sign” for your newly added XCFramework
+             
+                @Image(source: "xcframeworksEmbedAndSign.png", alt: "XCFramework Embed and Sign")
             }
         }
     }
