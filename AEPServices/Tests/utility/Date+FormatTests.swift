@@ -56,6 +56,13 @@ class DateFormatTests: XCTestCase {
         XCTAssertEqual(expectedDateString, result)
     }
     
+    func testGetISO8601DateUTCInMilliseconds() {
+        let date = Date(milliseconds: 1391398245203) // Feb 2, 2014 20:30:45.203 MST
+        let result = date.getISO8601DateInMillisecondsUTC()
+        // MST -> UTC = +7 hours
+        XCTAssertEqual("2014-02-03T03:30:45.203Z", result)
+    }
+    
     // MARK: - Helpers
 
     /// [milliseconds offset from GMT : hours offset from GMT]
@@ -78,9 +85,9 @@ class DateFormatTests: XCTestCase {
         -10800: "-0300",
         -14400: "-0400",
         -18000: "-0500",
-        -21600: "-0600",   // US Mountain Standard
-        -25200: "-0700",   // US Mountain Daylight, US Pacific Standard
-        -28800: "-0800",   // US Pacific Daylight
+        -21600: "-0600",   // US Mountain Daylight
+        -25200: "-0700",   // US Mountain Standard, US Pacific Daylight
+        -28800: "-0800",   // US Pacific Standard
         -32400: "-0900",
         -36000: "-1000",
         -39600: "-1100",
@@ -106,9 +113,9 @@ class DateFormatTests: XCTestCase {
         -10800: "-03:00",
         -14400: "-04:00",
         -18000: "-05:00",
-        -21600: "-06:00",   // US Mountain Standard
-        -25200: "-07:00",   // US Mountain Daylight, US Pacific Standard
-        -28800: "-08:00",   // US Pacific Daylight
+        -21600: "-06:00",   // US Mountain Daylight
+        -25200: "-07:00",   // US Mountain Standard, US Pacific Daylight
+        -28800: "-08:00",   // US Pacific Standard
         -32400: "-09:00",
         -36000: "-10:00",
         -39600: "-11:00",
