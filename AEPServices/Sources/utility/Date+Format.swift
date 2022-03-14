@@ -12,7 +12,7 @@
 import Foundation
 
 public extension Date {
-    
+
     /// Returns the number of seconds since the Unix Epoch on 1 January 1970..
     /// - Returns: the number of seconds since 1 January 1970.
     func getUnixTimeInSeconds() -> Int64 {
@@ -21,7 +21,7 @@ public extension Date {
 
     /// Returns a string representation of this Date formatted as an ISO 8601 date-time using system local time zone.
     /// For example, Oct. 28 2020 at 9:08:32.301 am PST is returned as `2020-10-28T09:08:32-08:00`
-    /// - Returns: a string representation of the given Date in ISO8601 format using system local time zone.
+    /// - Returns: a string representation of the given Date formatted as an ISO 8601 date-time using system local time zone.
     func getISO8601Date() -> String {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = TimeZone.current
@@ -31,7 +31,7 @@ public extension Date {
 
     /// Returns a string representation of this Date formatted as an ISO 8601 date-time using system local time zone without colons.
     /// For example, Oct. 28 2020 at 9:08:32.301 am PST is returned as `2020-10-28T09:08:32-0800`
-    /// - Returns: a string representation of the given Date in ISO8601 format using system local time zone without colons.
+    /// - Returns: a string representation of the given Date formatted as an ISO 8601 date-time using system local time zone without colons.
     func getISO8601DateNoColon() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
@@ -39,15 +39,26 @@ public extension Date {
         return formatter.string(from: self)
     }
 
-    /// Returns a string representation of this Date formatted as an ISO 8601 date-time with fractional seconds using UTC time zone.
+    /// Returns a string representation of this Date formatted as an ISO 8601 date-time with fractional seconds, using UTC time zone.
     /// Use this date format for timestamps send to the Adobe Experience Edge Network.
     /// For example, Oct. 28 2020 at 9:08:32.301 am PST is returned as `2020-10-28T17:08:32.301Z`
-    /// - Returns: a string representation of the given Date in ISO8601 format with fractional seconds using UTC timezone.
+    /// - Returns: a string representation of the given Date formatted as an ISO 8601 date-time with fractional seconds using UTC time zone.
     func getISO8601DateInMillisecondsUTC() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone.init(abbreviation: "UTC")
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter.string(from: self)
+    }
+
+    /// Returns a string representation of this Date formatted as an ISO 8601 date without time, using UTC time zone.
+    /// For example, Oct. 28 2020 at 9:08:32.301 am PST is returned as `2020-10-28`.
+    /// - Returns: a string representation of this Date formatted as an ISO 8601 date without time, using UTC time zone.
+    func getISO8601FullDate() -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone.init(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd"
         return formatter.string(from: self)
     }
 }
