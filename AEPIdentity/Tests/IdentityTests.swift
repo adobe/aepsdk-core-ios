@@ -481,9 +481,7 @@ class IdentityTests: XCTestCase {
         let secondEvent = Event(name: "test-event", type: "test-type", source: "test-source", data: nil)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: secondEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
 
-        // expect false due to boot being executed
-        XCTAssertFalse(identity.readyForEvent(firstEvent))
-        // expect true since identity has booted
+        // expect true since identity has fast boot
         XCTAssertTrue(identity.readyForEvent(firstEvent))
     }
 
@@ -516,8 +514,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
 
         // verify
-        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
-        XCTAssertTrue(identity.readyForEvent(appendUrlEvent))
+        XCTAssertTrue(identity.readyForEvent(appendUrlEvent)) // fast boot
     }
 
     // analytics shared state pending
@@ -548,8 +545,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
 
         // verify
-        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
-        XCTAssertTrue(identity.readyForEvent(getUrlVariablesEvent))
+        XCTAssertTrue(identity.readyForEvent(getUrlVariablesEvent)) // fast boot
     }
 
     func testReadyForEventGetEcidOnAppInstallWillWaitForConfigurationAndECIDToBeGenerated() {
@@ -558,8 +554,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getEcidEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
 
         // verify
-        XCTAssertFalse(identity.readyForEvent(getEcidEvent)) // booting up
-        XCTAssertTrue(identity.readyForEvent(getEcidEvent))
+        XCTAssertTrue(identity.readyForEvent(getEcidEvent)) // fast boot
     }
 
     func testReadyForEventGetEcidOnAppLaunchNotInstallShouldNotWaitForConfigSharedStateWhenEcidIsCached() {

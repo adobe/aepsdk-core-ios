@@ -19,6 +19,7 @@ class IdentityState {
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
     private(set) var hasBooted = false
+    private(set) var hasSynced = false
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
         var identityProperties: IdentityProperties
@@ -41,14 +42,25 @@ class IdentityState {
     ///   - configSharedState: the current configuration shared state available at registration time
     ///   - event: The `Event` triggering the bootup
     /// - Returns: True if we should share state after bootup, false otherwise
-    func bootupIfReady(configSharedState: [String: Any], event: Event) -> Bool {
+    func boot(event: Event) -> Bool {
+
+        // load data from local storage
+        identityProperties.loadFromPersistence()
+
+        // generate ECID is not found in persistence
+        generateAndPersistECID()
+
+        hasBooted = true
+        Log.debug(label: "\(LOG_TAG):\(#function)", "Identity has successfully booted up")
+
+        return hasBooted
+    }
+
+    func SyncIdentifiersIfConfigurationAvailable(configSharedState: [String: Any], event: Event) -> Bool {
         // Only bootup once we can perform the first force sync
         guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else {
             return false
         }
-
-        // load data from local storage
-        identityProperties.loadFromPersistence()
 
         // Load privacy status
         let privacyStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? PrivacyStatus.unknown.rawValue
@@ -57,12 +69,11 @@ class IdentityState {
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
-        hasBooted = true
-        Log.debug(label: "\(LOG_TAG):\(#function)", "Identity has successfully booted up")
         // Identity should always share its state
         // However, don't create a shared state twice, which will log an error
-        // The force sync event processed above will create a shared state if the privacy is not opt-out
-        return syncIdentifiers(event: event) != nil || identityProperties.privacyStatus == .optedOut
+        hasSynced = syncIdentifiers(event: event) != nil
+
+        return hasSynced
     }
 
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
@@ -205,10 +216,9 @@ class IdentityState {
         if identityProperties.ecid != nil, !hasIds, !hasDpids, !needResync {
             Log.trace(label: "\(LOG_TAG):\(#function)", "Not syncing identifiers at this time, no new identifiers or previously synced.")
             syncForIds = false
-        } else if identityProperties.ecid == nil {
-            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
-            identityProperties.ecid = ECID()
         }
+
+        generateAndPersistECID()
 
         return syncForIds && syncForProps
     }
@@ -404,10 +414,7 @@ class IdentityState {
         if let error = identityResponse.error {
             // should never happen bc we generate ECID locally before n/w request.
             // Still, generate ECID locally if there's none yet.
-            if identityProperties.ecid == nil {
-                Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
-                identityProperties.ecid = ECID()
-            }
+            generateAndPersistECID()
 
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
             createSharedState(identityProperties.toEventData(), event)
@@ -426,6 +433,15 @@ class IdentityState {
             }
         } else {
             Log.trace(label: LOG_TAG, "Ignoring response for ECID: \(String(describing: identityResponse.ecid)) as it is either nil or does not match the ECID we have stored locally (\(String(describing: identityProperties.ecid?.ecidString)))")
+        }
+    }
+
+    /// Generates the ecid if not cached and save it to persistence
+    private func generateAndPersistECID() {
+        if identityProperties.ecid == nil {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
+            identityProperties.ecid = ECID()
+            identityProperties.saveToPersistence()
         }
     }
 }
