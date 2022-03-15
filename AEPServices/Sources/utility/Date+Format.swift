@@ -53,7 +53,7 @@ public extension Date {
 
     /// Returns a string representation of this Date formatted as an ISO 8601 date without time, using system local time zone.
     /// For example, Oct. 28 2020 at 9:08:32.301 am PST is returned as `2020-10-28`.
-    /// - Returns: a string representation of this Date formatted as an ISO 8601 date without time, using UTC time zone.
+    /// - Returns: a string representation of this Date formatted as an ISO 8601 date without time, using system local time zone.
     func getISO8601FullDate() -> String {
         let formatter = ISO8601DateFormatter()
         formatter.timeZone = TimeZone.current
