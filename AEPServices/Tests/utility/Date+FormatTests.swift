@@ -65,8 +65,9 @@ class DateFormatTests: XCTestCase {
     
     func testGetISO8601FullDate() {
         let date = Date(milliseconds: timestampUTC) // Feb 3, 2014 03:30:45.203 GMT
+        let expectedDateString = getLocalExpectedFullDateStringFrom(date)
         let result = date.getISO8601FullDate()
-        XCTAssertEqual("2014-02-02", result) // Feb 2 in the EST/CST/MST/PST timezones
+        XCTAssertEqual(expectedDateString, result)
     }
     
     // MARK: - Helpers
@@ -142,6 +143,19 @@ class DateFormatTests: XCTestCase {
         } else {
             return timezoneMapperWithColon[TimeZone.current.secondsFromGMT()] ?? ""
         }
+    }
+    
+    func getLocalExpectedFullDateStringFrom(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "YYYY"
+        let year = formatter.string(from: date)
+        formatter.dateFormat = "MM"
+        let month = formatter.string(from: date)
+        formatter.dateFormat = "dd"
+        let day = formatter.string(from: date)
+        
+        return "\(year)-\(month)-\(day)"
     }
     
     func getLocalExpectedDateStringFrom(_ date: Date) -> String {
