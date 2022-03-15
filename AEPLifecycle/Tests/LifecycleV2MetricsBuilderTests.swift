@@ -17,7 +17,7 @@ import AEPServicesMocks
 import XCTest
 
 class LifecycleV2MetricsBuilderTests: XCTestCase {
-    private let startDate = Date(timeIntervalSince1970: 1483889568)
+    private let startDate = Date(milliseconds: 1483889568123)
     private let xdmMetricsBuilder = LifecycleV2MetricsBuilder()
     private let expectedEnvironmentInfo = [
         "carrier": "test-carrier",
@@ -75,7 +75,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
                         "environment": expectedEnvironmentInfo,
                         "device": expectedDeviceInfo,
                         "eventType": "application.launch",
-                        "timestamp": "2017-01-08T15:32:48Z"] as [String : Any]
+                        "timestamp": "2017-01-08T15:32:48.123Z"] as [String : Any]
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
@@ -96,7 +96,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
                         "environment": expectedEnvironmentInfo,
                         "device": expectedDeviceInfo,
                         "eventType": "application.launch",
-                        "timestamp": "2017-01-08T15:32:48Z"] as [String : Any]
+                        "timestamp": "2017-01-08T15:32:48.123Z"] as [String : Any]
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
@@ -116,16 +116,16 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
                         "environment": expectedEnvironmentInfo,
                         "device": expectedDeviceInfo,
                         "eventType": "application.launch",
-                        "timestamp": "2017-01-08T15:32:48Z"] as [String : Any]
+                        "timestamp": "2017-01-08T15:32:48.123Z"] as [String : Any]
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppLaunchData ?? [:]).isEqual(to: expected))
     }
     
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseWithCloseUnknown() {
         let actualAppCloseData = xdmMetricsBuilder.buildAppCloseXDMData(
-            launchDate: Date(timeIntervalSince1970: 1483965500), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-            closeDate: Date(timeIntervalSince1970: 1483864390), // close: Sunday, January 8, 2017 8:33:10 AM GMT
-            fallbackCloseDate:  Date(timeIntervalSince1970: 1483864390), // fallbackClose: Sunday, January 8, 2017 8:33:10 AM GMT
+            launchDate: Date(milliseconds: 1483965500201), // start: Sunday, January 8, 2017 8:32:48.201 AM GMT
+            closeDate: Date(milliseconds: 1483864390436), // close: Sunday, January 8, 2017 8:33:10.436 AM GMT
+            fallbackCloseDate:  Date(milliseconds: 1483864390018), // fallbackClose: Sunday, January 8, 2017 8:33:10.018 AM GMT
             isCloseUnknown: true)
         
         // verify
@@ -137,15 +137,15 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         
         let expected = ["application": application,
                         "eventType": "application.close",
-                        "timestamp": "2017-01-08T08:33:10Z"] as [String : Any]
+                        "timestamp": "2017-01-08T08:33:10.436Z"] as [String : Any]
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
     }
     
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseIncorrectLifecycleImplementation() {
         let actualAppCloseData = xdmMetricsBuilder.buildAppCloseXDMData(
-            launchDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-            closeDate: nil, fallbackCloseDate: Date(timeIntervalSince1970: 1483864367), // start: Sunday, January 8, 2017 8:32:47 AM GMT
+            launchDate: Date(milliseconds: 1483864368401), // start: Sunday, January 8, 2017 8:32:48.401 AM GMT
+            closeDate: nil, fallbackCloseDate: Date(milliseconds: 1483864367804), // start: Sunday, January 8, 2017 8:32:47.804 AM GMT
             isCloseUnknown: true)
         
         // verify
@@ -157,15 +157,16 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         
         let expected = ["application": application,
                         "eventType": "application.close",
-                        "timestamp": "2017-01-08T08:32:47Z"] as [String : Any]
+                        "timestamp": "2017-01-08T08:32:47.804Z"] as [String : Any]
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
     }
     
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseCorrectSession() {
         let actualAppCloseData = xdmMetricsBuilder.buildAppCloseXDMData(
-            launchDate: Date(timeIntervalSince1970: 1483864368), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-            closeDate: Date(timeIntervalSince1970: 1483864390), fallbackCloseDate: Date(timeIntervalSince1970: 1483864390), // close: Sunday, January 8, 2017 8:33:10 AM GMT
+            launchDate: Date(milliseconds: 1483864368005), // start: Sunday, January 8, 2017 8:32:48 AM GMT
+            closeDate: Date(milliseconds: 1483864390123),
+            fallbackCloseDate: Date(milliseconds: 1483864390123), // close: Sunday, January 8, 2017 8:33:10 AM GMT
             isCloseUnknown: false)
         
         // verify
@@ -177,8 +178,14 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         
         let expected = ["application": application,
                         "eventType": "application.close",
-                        "timestamp": "2017-01-08T08:33:10Z"] as [String : Any]
+                        "timestamp": "2017-01-08T08:33:10.123Z"] as [String : Any]
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
-    }    
+    }
+}
+
+private extension Date {
+    init(milliseconds: Int64) {
+        self = Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000)
+    }
 }

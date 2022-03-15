@@ -16,7 +16,7 @@ import XCTest
 
 class DateFormatTests: XCTestCase {
     private static let timestamp:Int64 = 1391398245203 // Feb 3, 2014 03:30:45.203 GMT
-    private let timestampUtc:Int64 = DateFormatTests.timestamp
+    private let timestampUTC:Int64 = DateFormatTests.timestamp
     private var timestampLocal:Int64 {
         // Feb 2, 2014 8:30:45 pm MST
         return Int64(TimeZone.current.secondsFromGMT() * 1000) + DateFormatTests.timestamp
@@ -24,13 +24,13 @@ class DateFormatTests: XCTestCase {
     
     func testGetUnixTimeInSeconds() {
         // setup
-        let date = Date(milliseconds: timestampUtc)
+        let date = Date(milliseconds: timestampUTC)
         
         // test
         let result = date.getUnixTimeInSeconds()
         
         // verify
-        XCTAssertEqual(timestampUtc / 1000, result)
+        XCTAssertEqual(timestampUTC / 1000, result)
     }
     
     func testGetISO8601Date() {
@@ -58,15 +58,15 @@ class DateFormatTests: XCTestCase {
     }
     
     func testGetISO8601DateUTCInMilliseconds() {
-        let date = Date(milliseconds: timestampUtc) // Feb 3, 2014 03:30:45.203 GMT
+        let date = Date(milliseconds: timestampUTC) // Feb 3, 2014 03:30:45.203 GMT
         let result = date.getISO8601DateInMillisecondsUTC()
         XCTAssertEqual("2014-02-03T03:30:45.203Z", result)
     }
     
     func testGetISO8601FullDate() {
-        let date = Date(milliseconds: timestampUtc) // Feb 3, 2014 03:30:45.203 GMT
+        let date = Date(milliseconds: timestampUTC) // Feb 3, 2014 03:30:45.203 GMT
         let result = date.getISO8601FullDate()
-        XCTAssertEqual("2014-02-03", result)
+        XCTAssertEqual("2014-02-02", result) // Feb 2 in the EST/CST/MST/PST timezones
     }
     
     // MARK: - Helpers

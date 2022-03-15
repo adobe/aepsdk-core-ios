@@ -46,19 +46,18 @@ public extension Date {
     func getISO8601DateInMillisecondsUTC() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone.init(abbreviation: "UTC")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         return formatter.string(from: self)
     }
 
-    /// Returns a string representation of this Date formatted as an ISO 8601 date without time, using UTC time zone.
+    /// Returns a string representation of this Date formatted as an ISO 8601 date without time, using system local time zone.
     /// For example, Oct. 28 2020 at 9:08:32.301 am PST is returned as `2020-10-28`.
     /// - Returns: a string representation of this Date formatted as an ISO 8601 date without time, using UTC time zone.
     func getISO8601FullDate() -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone.init(abbreviation: "UTC")
-        formatter.dateFormat = "yyyy-MM-dd"
+        let formatter = ISO8601DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.formatOptions = [.withFullDate, .withDashSeparatorInDate]
         return formatter.string(from: self)
     }
 }
