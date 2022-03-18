@@ -164,9 +164,9 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     
     func testBuildAppCloseXDMDataReturnsCorrectDataWhenIsCloseCorrectSession() {
         let actualAppCloseData = xdmMetricsBuilder.buildAppCloseXDMData(
-            launchDate: Date(milliseconds: 1483864368005), // start: Sunday, January 8, 2017 8:32:48 AM GMT
-            closeDate: Date(milliseconds: 1483864390123),
-            fallbackCloseDate: Date(milliseconds: 1483864390123), // close: Sunday, January 8, 2017 8:33:10 AM GMT
+            launchDate: Date(milliseconds: 1483864368005), // start: Sunday, January 8, 2017 8:32:48.005 AM GMT
+            closeDate: Date(milliseconds: 1483864390123), // close: Sunday, January 8, 2017 8:33:10.123 AM GMT
+            fallbackCloseDate: Date(milliseconds: 1483864390321), // fallback: Sunday, January 8, 2017 8:33:10.321 AM GMT
             isCloseUnknown: false)
         
         // verify
