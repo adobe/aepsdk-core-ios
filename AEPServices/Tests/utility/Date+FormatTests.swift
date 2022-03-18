@@ -59,7 +59,7 @@ class DateFormatTests: XCTestCase {
     
     func testGetISO8601DateUTCInMilliseconds() {
         let date = Date(milliseconds: timestampUTC) // Feb 3, 2014 03:30:45.203 GMT
-        let result = date.getISO8601UTCDateInMilliseconds()
+        let result = date.getISO8601UTCDateWithMilliseconds()
         XCTAssertEqual("2014-02-03T03:30:45.203Z", result)
     }
     

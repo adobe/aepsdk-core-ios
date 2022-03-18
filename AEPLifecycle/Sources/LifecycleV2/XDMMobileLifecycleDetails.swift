@@ -48,6 +48,6 @@ extension XDMMobileLifecycleDetails: Encodable {
         if let unwrapped = device { try container.encode(unwrapped, forKey: .device) }
         if let unwrapped = environment { try container.encode(unwrapped, forKey: .environment) }
         if let unwrapped = eventType { try container.encode(unwrapped, forKey: .eventType) }
-        if let unwrapped = timestamp?.getISO8601UTCDateInMilliseconds() { try container.encode(unwrapped, forKey: .timestamp) }
+        if let unwrapped = timestamp?.getISO8601UTCDateWithMilliseconds() { try container.encode(unwrapped, forKey: .timestamp) }
     }
 }
