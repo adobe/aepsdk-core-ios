@@ -68,7 +68,7 @@ class TokenFinder: Traversable {
         case TOKEN_KEY_TIMESTAMP_ISO8601_NO_COLON:
             return now.getISO8601DateNoColon()
         case TOKEN_KEY_TIMESTAMP_ISO8601:
-            return now.getISO8601DateInMillisecondsUTC()
+            return now.getISO8601UTCDateInMilliseconds()
         case TOKEN_KEY_SDK_VERSION:
             return MobileCore.extensionVersion
         case TOKEN_KEY_CACHEBUST:

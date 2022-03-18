@@ -13,7 +13,7 @@ import Foundation
 
 public extension Date {
 
-    /// Returns the number of seconds since the Unix Epoch on 1 January 1970..
+    /// Returns the number of seconds since the Unix Epoch on 1 January 1970.
     /// - Returns: the number of seconds since 1 January 1970.
     func getUnixTimeInSeconds() -> Int64 {
         return Int64(timeIntervalSince1970)
@@ -43,7 +43,7 @@ public extension Date {
     /// Use this date format for timestamps send to the Adobe Experience Edge Network.
     /// For example, Oct. 28 2020 at 9:08:32.301 am PST is returned as `2020-10-28T17:08:32.301Z`
     /// - Returns: a string representation of the given Date formatted as an ISO 8601 date-time with fractional seconds using UTC time zone.
-    func getISO8601DateInMillisecondsUTC() -> String {
+    func getISO8601UTCDateInMilliseconds() -> String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
