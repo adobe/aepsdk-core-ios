@@ -321,6 +321,10 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
 private extension Date {
     func asISO8601String() -> String {
-        return ISO8601DateFormatter().string(from: self)
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone.init(abbreviation: "UTC")
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        return formatter.string(from: self)
     }
 }

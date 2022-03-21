@@ -15,24 +15,27 @@ import XCTest
 @testable import AEPServices
 
 class DateFormatTests: XCTestCase {
+    private static let timestamp:Int64 = 1391398245203 // Feb 3, 2014 03:30:45.203 GMT
+    private let timestampUTC:Int64 = DateFormatTests.timestamp
+    private var timestampLocal:Int64 {
+        // Feb 2, 2014 8:30:45 pm MST
+        return Int64(TimeZone.current.secondsFromGMT() * 1000) + DateFormatTests.timestamp
+    }
     
     func testGetUnixTimeInSeconds() {
         // setup
-        let victory: Int64 = 1391373045000 // Feb 2, 2014 8:30:45 pm MST
-        let date = Date(milliseconds: victory)
+        let date = Date(milliseconds: timestampUTC)
         
         // test
         let result = date.getUnixTimeInSeconds()
         
         // verify
-        XCTAssertEqual(victory, result * 1000)
+        XCTAssertEqual(timestampUTC / 1000, result)
     }
     
     func testGetISO8601Date() {
         // setup
-        let tzOffset = TimeZone.current.secondsFromGMT()
-        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm MST
-        let date = Date(milliseconds: victory)
+        let date = Date(milliseconds: timestampLocal) // Feb 2, 2014 8:30:45 pm MST
         let expectedDateString = getLocalExpectedDateStringFrom(date) + timezoneStringWithColon
         
         // test
@@ -44,15 +47,26 @@ class DateFormatTests: XCTestCase {
     
     func testGetISO8601DateNoColon() {
         // setup
-        let tzOffset = TimeZone.current.secondsFromGMT()
-        let victory: Int64 = Int64(tzOffset * 1000) + 1391398245000 // Feb 2, 2014 8:30:45 pm MST
-        let date = Date(milliseconds: victory)
+        let date = Date(milliseconds: timestampLocal) // Feb 2, 2014 8:30:45 pm MST
         let expectedDateString = getLocalExpectedDateStringFrom(date) + timezoneString
         
         // test
         let result = date.getISO8601DateNoColon()
 
         // verify
+        XCTAssertEqual(expectedDateString, result)
+    }
+    
+    func testGetISO8601DateUTCInMilliseconds() {
+        let date = Date(milliseconds: timestampUTC) // Feb 3, 2014 03:30:45.203 GMT
+        let result = date.getISO8601UTCDateWithMilliseconds()
+        XCTAssertEqual("2014-02-03T03:30:45.203Z", result)
+    }
+    
+    func testGetISO8601FullDate() {
+        let date = Date(milliseconds: timestampUTC) // Feb 3, 2014 03:30:45.203 GMT
+        let expectedDateString = getLocalExpectedFullDateStringFrom(date)
+        let result = date.getISO8601FullDate()
         XCTAssertEqual(expectedDateString, result)
     }
     
@@ -78,9 +92,9 @@ class DateFormatTests: XCTestCase {
         -10800: "-0300",
         -14400: "-0400",
         -18000: "-0500",
-        -21600: "-0600",   // US Mountain Standard
-        -25200: "-0700",   // US Mountain Daylight, US Pacific Standard
-        -28800: "-0800",   // US Pacific Daylight
+        -21600: "-0600",   // US Mountain Daylight
+        -25200: "-0700",   // US Mountain Standard, US Pacific Daylight
+        -28800: "-0800",   // US Pacific Standard
         -32400: "-0900",
         -36000: "-1000",
         -39600: "-1100",
@@ -106,9 +120,9 @@ class DateFormatTests: XCTestCase {
         -10800: "-03:00",
         -14400: "-04:00",
         -18000: "-05:00",
-        -21600: "-06:00",   // US Mountain Standard
-        -25200: "-07:00",   // US Mountain Daylight, US Pacific Standard
-        -28800: "-08:00",   // US Pacific Daylight
+        -21600: "-06:00",   // US Mountain Daylight
+        -25200: "-07:00",   // US Mountain Standard, US Pacific Daylight
+        -28800: "-08:00",   // US Pacific Standard
         -32400: "-09:00",
         -36000: "-10:00",
         -39600: "-11:00",
@@ -129,6 +143,19 @@ class DateFormatTests: XCTestCase {
         } else {
             return timezoneMapperWithColon[TimeZone.current.secondsFromGMT()] ?? ""
         }
+    }
+    
+    func getLocalExpectedFullDateStringFrom(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "YYYY"
+        let year = formatter.string(from: date)
+        formatter.dateFormat = "MM"
+        let month = formatter.string(from: date)
+        formatter.dateFormat = "dd"
+        let day = formatter.string(from: date)
+        
+        return "\(year)-\(month)-\(day)"
     }
     
     func getLocalExpectedDateStringFrom(_ date: Date) -> String {
