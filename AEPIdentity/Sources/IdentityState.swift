@@ -18,8 +18,8 @@ class IdentityState {
     private let LOG_TAG = "IdentityState"
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
-    private(set) var hasBooted = false
-    private(set) var hasSynced = false
+    private var hasBooted = false
+    private var hasSynced = false
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
         var identityProperties: IdentityProperties
@@ -37,27 +37,35 @@ class IdentityState {
         self.pushIdManager = pushIdManager
     }
 
-    /// Completes init for the Identity extension if we can force sync and determines if we need to share state
+    /// Completes init for the Identity extension and determines if we need to share state
     /// - Parameters:
-    ///   - configSharedState: the current configuration shared state available at registration time
     ///   - event: The `Event` triggering the bootup
     /// - Returns: True if we should share state after bootup, false otherwise
-    func boot(event: Event) -> Bool {
+    func boot(event: Event, createSharedState: ([String: Any], Event) -> Void) -> Bool {
+        if hasBooted { return true }
 
         // load data from local storage
         identityProperties.loadFromPersistence()
 
-        // generate ECID is not found in persistence
-        generateAndPersistECID()
+        if identityProperties.ecid != nil {
+            createSharedState(identityProperties.toEventData(), event)
+            hasBooted = true
+        }
 
-        hasBooted = true
         Log.debug(label: "\(LOG_TAG):\(#function)", "Identity has successfully booted up")
 
         return hasBooted
     }
 
-    func SyncIdentifiersIfConfigurationAvailable(configSharedState: [String: Any], event: Event) -> Bool {
+    /// Determines if there is all the required configuration and if we can force sync
+    /// - Parameters:
+    ///   - configSharedState: the current configuration shared state available at registration time
+    ///   - event: The `Event` triggering the bootup
+    /// - Returns: True if we did force synced or privacy is opted out, false otherwise
+    func forceSyncIdentifiers(configSharedState: [String: Any], event: Event) -> Bool {
         // Only bootup once we can perform the first force sync
+        if hasSynced { return true }
+
         guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else {
             return false
         }
@@ -71,7 +79,7 @@ class IdentityState {
 
         // Identity should always share its state
         // However, don't create a shared state twice, which will log an error
-        hasSynced = syncIdentifiers(event: event) != nil
+        hasSynced = syncIdentifiers(event: event) != nil || identityProperties.privacyStatus == .optedOut
 
         return hasSynced
     }

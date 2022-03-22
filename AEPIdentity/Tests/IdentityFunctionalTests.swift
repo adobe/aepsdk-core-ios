@@ -395,7 +395,8 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .pending))
 
         // verify
-        XCTAssertTrue(identity.readyForEvent(event)) // fast bootup and ECID will be generated
+        XCTAssertFalse(identity.readyForEvent(event)) // boot and wait for configuration and ecid to be generated
+        XCTAssertTrue(identity.readyForEvent(event))
         mockRuntime.simulateComingEvent(event: event)
 
         let dispatchedEvent = mockRuntime.dispatchedEvents.first

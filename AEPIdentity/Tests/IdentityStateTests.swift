@@ -33,44 +33,90 @@ class IdentityStateTests: XCTestCase {
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
     }
 
-    // MARK: bootupIfReady(...) tests
+    // MARK: boot(...) tests
 
-    /// Tests that the properties are not update and we ignore the call
-    func testBootEmptyConfigSharedState() {
+    /// Tests that the there is no shared state when ecid is not present
+    func testBootECIDUnavailable() {
         // test
-        let result = state.boot(event: Event.fakeSyncIDEvent())
+        let result = state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
+            XCTFail("Shared state should not be updated")
+        })
 
         // verify
-        XCTAssertTrue(result)
+        XCTAssertFalse(result)
 
     }
 
-    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is create due to force sync
-    func testBootGeneratesECIDIfNotAvailable() {
-        // setup
-        XCTAssertNil(state.identityProperties.ecid)
-
-        // test
-        let result = state.boot(event: Event.fakeSyncIDEvent())
-
-        // verify
-        XCTAssertTrue(result)
-        XCTAssertNotNil(state.identityProperties.ecid)
-    }
-
-
-    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is create due to force sync
-    func testBootDoesNotGeneratesNewECIDIfAvailable() {
+    /// Tests that the there is a shared state update when ecid is present and not wait for configuration shared state
+    func testBootECIDAvailableWithoutConfiguration() {
         // setup
         let ecid = ECID()
         state.identityProperties.ecid = ecid
 
+        let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated")
+
         // test
-        let result = state.boot(event: Event.fakeSyncIDEvent())
+        let result = state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
+            sharedStateExpectation.fulfill()
+        })
+
+        // verify
+        wait(for: [sharedStateExpectation], timeout: 1)
+        XCTAssertTrue(result)
+    }
+
+    // MARK: forceSyncIdentifiers(...) tests
+
+    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is create due to force sync
+    func testForceSyncIdentifiersEmptyConfigSharedState() {
+        // test
+        let result = state.forceSyncIdentifiers(configSharedState: [:], event: Event.fakeSyncIDEvent())
+
+        // verify
+        XCTAssertFalse(result)
+        XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus)
+        XCTAssertFalse(mockHitQueue.calledBeginProcessing && mockHitQueue.calledClear && mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
+    }
+
+    func testForceSyncIdentifiersWithOptInPrivacyReturnsTrue() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+
+        // test
+        let result = state.forceSyncIdentifiers(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
 
         // verify
         XCTAssertTrue(result)
-        XCTAssertEqual(state.identityProperties.ecid, ecid)
+        XCTAssertEqual(PrivacyStatus.optedIn, state.identityProperties.privacyStatus) // privacy status should have been updated
+        XCTAssertTrue(mockHitQueue.calledBeginProcessing) // opt-in should result in hit processing hits
+    }
+
+    /// Tests that the properties are updated, and the hit queue processes the change
+    func testForceSyncIdentifiersWithOptOutPrivacyReturnsTrue() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+
+        // test
+        let result = state.forceSyncIdentifiers(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
+
+        // verify
+        XCTAssertTrue(result)
+        XCTAssertEqual(PrivacyStatus.optedOut, state.identityProperties.privacyStatus) // privacy status should have been updated
+        XCTAssertTrue(mockHitQueue.calledSuspend && mockHitQueue.calledClear) // opt-out should suspend and clear the queue
+    }
+
+    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created from the force sync
+    func testForceSyncIdentifiersWithUnknownPrivacyReturnsFalse() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
+
+        // test
+        let result = state.forceSyncIdentifiers(configSharedState: configSharedState, event: Event.fakeSyncIDEvent())
+
+        // verify
+        XCTAssertTrue(result)
+        XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus) // privacy status should have been updated
+        XCTAssertTrue(mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
     }
 
     // MARK: syncIdentifiers(...) tests

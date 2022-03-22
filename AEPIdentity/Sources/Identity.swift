@@ -55,23 +55,31 @@ import Foundation
     }
 
     public func readyForEvent(_ event: Event) -> Bool {
-        // fast boot identity without waiting for configuration
-        guard bootUp(event: event) else { return false }
+        guard let state = state else { return false }
 
-        // skip waiting for configuration if event is getExperienceCloudId event or getIdentifiers event
-        if isGetIdentifierEvent(event: event) {
-            Log.trace(label: "\(name):\(#function)", "Not waiting for latest configuration as we have the ECID cached and available for processing [event:(\(event.name)) id:(\(event.id)].")
-            return true
+        // fast boot identity without waiting for configuration
+        if state.boot(event: event, createSharedState: createSharedState(data:event:)) {
+
+            // skip waiting for configuration if event is getExperienceCloudId event or getIdentifiers event
+            if event.isGetIdentifierEvent {
+                Log.trace(label: "\(name):\(#function)", "Not waiting for latest configuration as we have the ECID cached and available for processing [event:(\(event.name)) id:(\(event.id)].")
+                return true
+            }
         }
 
-        guard canProcessEvents(event: event) else { return false }
+        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value else {
+            Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state to get required configuration fields before processing [event:(\(event.name)) id:(\(event.id)].")
+            return false
+        }
+
+        guard state.forceSyncIdentifiers(configSharedState: configurationSharedState, event: event) else { return false }
 
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else {
-                Log.trace(label: "\(name):\(#function)", "Waiting for the Analytics shared state value before processing event: (\(event.name)).")
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state value before processing [event:(\(event.name)) id:(\(event.id)].")
                 return false
             }
-            return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
+            return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             let areSharedStateReady = MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
 
@@ -96,53 +104,6 @@ import Foundation
         }
 
         return isConfigSharedStateSet
-    }
-
-    // Loads all the identifiers in identity state from persistence, generates ecid if not found in persistence and gets the extension ready for get identifiers event.
-    /// - Parameter event: An `Event`
-    /// - Returns: True if we can process events, false otherwise
-    private func bootUp(event: Event) -> Bool {
-        guard let state = state else { return false }
-        guard !state.hasBooted else { return true } // we have booted, return true
-
-        // attempt to bootup
-        if state.boot(event: event) {
-            createSharedState(data: state.identityProperties.toEventData(), event: nil)
-            return true
-        }
-
-        return false // cannot handle any events until we have booted
-
-    }
-
-    /// Determines if Identity is ready to handle events, this is determined by if the Identity extension has received all the required configuration
-    /// - Parameter event: An `Event`
-    /// - Returns: True if we can process events, false otherwise
-    private func canProcessEvents(event: Event) -> Bool {
-        guard let state = state else { return false }
-        guard !state.hasSynced else { return true } // we have synced, return true
-
-        // fetch latest configuration when booting up
-        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value else {
-            Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state to get required configuration fields before processing [event:(\(event.name)) id:(\(event.id)].")
-            return false
-        }
-
-        if state.SyncIdentifiersIfConfigurationAvailable(configSharedState: configSharedState, event: event) {
-            return true
-        }
-
-        Log.trace(label: "\(name):\(#function)", "Waiting for the Identity state to Sync up. Identity will sync up when it has recevied all the required configuration before processing [event:(\(event.name)) id:(\(event.id)].")
-
-        return false // cannot handle any events until we have booted
-    }
-
-    /// Determines if Identity is event is getExperienceCloudId event or getIdentifiers event
-    /// - Parameter event: An `Event`
-    /// - Returns: true if the event is getExperienceCloudId event or getIdentifiers event
-    private func isGetIdentifierEvent(event: Event) -> Bool {
-        // return true if the event is getExperienceCloudId event or getIdentifiers event
-        return event.type == EventType.identity && event.source == EventSource.requestIdentity && event.baseUrl == nil && !event.urlVariables
     }
 
     // MARK: Event Listeners
