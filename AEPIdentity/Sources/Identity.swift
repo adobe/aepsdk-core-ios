@@ -67,12 +67,7 @@ import Foundation
             }
         }
 
-        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value else {
-            Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state to get required configuration fields before processing [event:(\(event.name)) id:(\(event.id)].")
-            return false
-        }
-
-        guard state.forceSyncIdentifiers(configSharedState: configurationSharedState, event: event) else { return false }
+        guard state.forceSyncIdentifiers(configSharedState: getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value, event: event, createSharedState: createSharedState(data:event:)) else { return false }
 
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else {
@@ -84,7 +79,7 @@ import Foundation
             let areSharedStateReady = MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
 
             if !areSharedStateReady {
-                Log.trace(label: "\(name):\(#function)", "Waiting for the Analytics, Identity, Configuration and Audience shared states to be set before processing [event:(\(event.name)) id:(\(event.id)].")
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Mobile Identities states to be set before processing [event:(\(event.name)) id:(\(event.id)].")
             }
 
             return areSharedStateReady

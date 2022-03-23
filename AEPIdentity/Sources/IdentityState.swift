@@ -18,14 +18,16 @@ class IdentityState {
     private let LOG_TAG = "IdentityState"
     private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
-    private var hasBooted = false
-    private var hasSynced = false
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
         var identityProperties: IdentityProperties
+        var hasBooted = false
+        var hasSynced = false
     #else
         private var lastValidConfig: [String: Any] = [:]
         private(set) var identityProperties: IdentityProperties
+        private var hasBooted = false
+        private var hasSynced = false
     #endif
 
     /// Creates a new `IdentityState` with the given identity properties
@@ -62,9 +64,14 @@ class IdentityState {
     ///   - configSharedState: the current configuration shared state available at registration time
     ///   - event: The `Event` triggering the bootup
     /// - Returns: True if we did force synced or privacy is opted out, false otherwise
-    func forceSyncIdentifiers(configSharedState: [String: Any], event: Event) -> Bool {
+    func forceSyncIdentifiers(configSharedState: [String: Any]?, event: Event, createSharedState: ([String: Any], Event) -> Void) -> Bool {
         // Only bootup once we can perform the first force sync
         if hasSynced { return true }
+
+        guard let configSharedState = configSharedState else {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Waiting for the Configuration shared state to get required configuration fields before processing [event:(\(event.name)) id:(\(event.id)].")
+            return false
+        }
 
         guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else {
             return false
@@ -80,6 +87,12 @@ class IdentityState {
         // Identity should always share its state
         // However, don't create a shared state twice, which will log an error
         hasSynced = syncIdentifiers(event: event) != nil || identityProperties.privacyStatus == .optedOut
+
+        // If the sync was susccessful and there is no shared state update, post a shared state update
+        if hasSynced && !hasBooted {
+            createSharedState(identityProperties.toEventData(), event)
+            hasBooted = true
+        }
 
         return hasSynced
     }
