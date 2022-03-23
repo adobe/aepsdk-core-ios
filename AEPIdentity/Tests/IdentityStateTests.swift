@@ -67,11 +67,25 @@ class IdentityStateTests: XCTestCase {
 
     // MARK: forceSyncIdentifiers(...) tests
 
-    /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created due to force sync when intial shared state has not been created on boot
+    /// Tests that force sync fails and there is no shared state created when empty configuration shared state is received
     func testForceSyncIdentifiersEmptyConfigSharedState() {
 
         // test
         let result = state.forceSyncIdentifiers(configSharedState: [:], event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
+            XCTFail("Shared state should not be updated")
+        })
+
+        // verify
+        XCTAssertFalse(result)
+        XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus)
+        XCTAssertFalse(mockHitQueue.calledBeginProcessing && mockHitQueue.calledClear && mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
+    }
+
+    /// Tests that force sync fails and there is no shared state created when invalid configuration shared state is received
+    func testForceSyncIdentifiersInvalidConfigSharedState() {
+
+        // test
+        let result = state.forceSyncIdentifiers(configSharedState: nil, event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
             XCTFail("Shared state should not be updated")
         })
 
@@ -167,6 +181,15 @@ class IdentityStateTests: XCTestCase {
     }
 
     // MARK: syncIdentifiers(...) tests
+
+    /// Tests that syncIdentifiers returns nil when lastValidConfig is empty
+    func testSyncIdentifiersEmptyLastValidConfig() {
+        // test
+        let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+
+        // verify
+        XCTAssertNil(eventData)
+    }
 
     /// Tests that syncIdentifiers appends the ECID and the two custom IDs to the visitor ID list
     func testSyncIdentifiersHappyIDs() {
