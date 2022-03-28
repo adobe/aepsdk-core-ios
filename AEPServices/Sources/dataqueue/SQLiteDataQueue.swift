@@ -53,9 +53,12 @@ class SQLiteDataQueue: DataQueue {
                 dataString = String(data: data, encoding: .utf8) ?? ""
             }
 
+            // Single quotes must be escaped with double single quotes as per SQL standard. See: https://www.sqlite.org/faq.html#q14
+            let sanitizedString = dataString.replacingOccurrences(of: "'", with: "''")
+
             let insertRowStatement = """
             INSERT INTO \(SQLiteDataQueue.TABLE_NAME) (uniqueIdentifier, timestamp, data)
-            VALUES ("\(dataEntity.uniqueIdentifier)", \(dataEntity.timestamp.millisecondsSince1970), '\(dataString)');
+            VALUES ("\(dataEntity.uniqueIdentifier)", \(dataEntity.timestamp.millisecondsSince1970), '\(sanitizedString)');
             """
 
             guard let connection = connect() else {

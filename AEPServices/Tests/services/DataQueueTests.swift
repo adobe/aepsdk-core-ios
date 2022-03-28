@@ -535,4 +535,18 @@ class DataQueueTests: XCTestCase {
         // Then
         wait(for: [expectation], timeout: 1.0)
     }
+    
+    func testAddDataWithEmbeddedSingleQuoteSucceeds() throws {
+        // Given
+        let queue = DataQueueService().getDataQueue(label: fileName)!
+        let event = EventEntity(id: UUID(), timestamp: Date(), name: "e'ventname")
+        let data = try JSONEncoder().encode(event)
+        let entity = DataEntity(uniqueIdentifier: event.id.uuidString, timestamp: event.timestamp, data: data)
+
+        // When
+        let result = queue.add(dataEntity: entity)
+
+        // Then
+        XCTAssertTrue(result)
+    }
 }
