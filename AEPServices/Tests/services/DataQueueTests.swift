@@ -535,7 +535,7 @@ class DataQueueTests: XCTestCase {
         // Then
         wait(for: [expectation], timeout: 1.0)
     }
-    
+
     func testAddDataWithEmbeddedSingleQuoteSucceeds() throws {
         // Given
         let queue = DataQueueService().getDataQueue(label: fileName)!
