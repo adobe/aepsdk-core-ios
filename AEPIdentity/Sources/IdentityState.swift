@@ -23,11 +23,13 @@ class IdentityState {
         var identityProperties: IdentityProperties
         var hasBooted = false
         var hasSynced = false
+        var didCreateInitialSharedState = false
     #else
         private var lastValidConfig: [String: Any] = [:]
         private(set) var identityProperties: IdentityProperties
         private var hasBooted = false
         private var hasSynced = false
+        private var didCreateInitialSharedState = false
     #endif
 
     /// Creates a new `IdentityState` with the given identity properties
@@ -41,27 +43,28 @@ class IdentityState {
 
     /// Completes init for the Identity extension and determines if we need to share state
     /// - Parameters:
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
     ///   - event: The `Event` triggering the bootup
-    /// - Returns: True if we should share state after bootup, false otherwise
-    func boot(event: Event, createSharedState: ([String: Any], Event) -> Void) -> Bool {
-        if hasBooted { return true }
+    /// - Returns: True if bootup was successful, false otherwise
+    func boot(event: Event, createSharedState: ([String: Any], Event) -> Void) {
+        if hasBooted { return }
 
         // load data from local storage
         identityProperties.loadFromPersistence()
 
         if identityProperties.ecid != nil {
             createSharedState(identityProperties.toEventData(), event)
-            hasBooted = true
+            didCreateInitialSharedState = true
         }
 
+        hasBooted = true
         Log.debug(label: "\(LOG_TAG):\(#function)", "Identity has successfully booted up")
-
-        return hasBooted
     }
 
     /// Determines if there is all the required configuration and if we can force sync
     /// - Parameters:
     ///   - configSharedState: the current configuration shared state available at registration time
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
     ///   - event: The `Event` triggering the bootup
     /// - Returns: True if we did force synced or privacy is opted out, false otherwise
     func forceSyncIdentifiers(configSharedState: [String: Any]?, event: Event, createSharedState: ([String: Any], Event) -> Void) -> Bool {
@@ -84,14 +87,15 @@ class IdentityState {
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
-        // Identity should always share its state
-        // However, don't create a shared state twice, which will log an error
         hasSynced = syncIdentifiers(event: event) != nil || identityProperties.privacyStatus == .optedOut
 
-        // If the sync was susccessful and there is no shared state update, post a shared state update
-        if hasSynced && !hasBooted {
+        // Identity should always share its state
+        // However, don't create a shared state twice, which will log an error
+        // The force sync event processed above will create a shared state if the privacy is not opt-out
+        // If the sync was susccessful and there is no intial shared state available, post a shared state update
+        if hasSynced && !didCreateInitialSharedState {
             createSharedState(identityProperties.toEventData(), event)
-            hasBooted = true
+            didCreateInitialSharedState = true
         }
 
         return hasSynced
@@ -237,9 +241,9 @@ class IdentityState {
         if identityProperties.ecid != nil, !hasIds, !hasDpids, !needResync {
             Log.trace(label: "\(LOG_TAG):\(#function)", "Not syncing identifiers at this time, no new identifiers or previously synced.")
             syncForIds = false
+        } else {
+            generateAndPersistECID()
         }
-
-        generateAndPersistECID()
 
         return syncForIds && syncForProps
     }

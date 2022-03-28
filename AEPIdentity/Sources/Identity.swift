@@ -58,16 +58,15 @@ import Foundation
         guard let state = state else { return false }
 
         // fast boot identity without waiting for configuration
-        if state.boot(event: event, createSharedState: createSharedState(data:event:)) {
-
-            // skip waiting for configuration if event is getExperienceCloudId event or getIdentifiers event
-            if event.isGetIdentifierEvent {
-                Log.trace(label: "\(name):\(#function)", "Not waiting for latest configuration as we have the ECID cached and available for processing [event:(\(event.name)) id:(\(event.id)].")
-                return true
-            }
-        }
+        state.boot(event: event, createSharedState: createSharedState(data:event:))
 
         guard state.forceSyncIdentifiers(configSharedState: getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value, event: event, createSharedState: createSharedState(data:event:)) else { return false }
+
+        // skip waiting for latest configuration if it is getExperienceCloudId event or getIdentifiers event
+        if event.isGetIdentifierEvent {
+            Log.trace(label: "\(name):\(#function)", "Not waiting for latest configuration as we have the cached ECID available for processing [event:(\(event.name)) id:(\(event.id)].")
+            return true
+        }
 
         if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else {
@@ -76,13 +75,13 @@ import Foundation
             }
             return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
-            let areSharedStateReady = MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+            let areSharedStatesReady = MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
 
-            if !areSharedStateReady {
+            if !areSharedStatesReady {
                 Log.trace(label: "\(name):\(#function)", "Waiting for the Mobile Identities states to be set before processing [event:(\(event.name)) id:(\(event.id)].")
             }
 
-            return areSharedStateReady
+            return areSharedStatesReady
         } else if event.type == EventType.identity, event.source == EventSource.requestIdentity, ( event.baseUrl != nil ||  event.urlVariables ) {
 
             // analytics shared state will be null if analytics extension is not registered. Wait for analytics shared only if the status is pending or none

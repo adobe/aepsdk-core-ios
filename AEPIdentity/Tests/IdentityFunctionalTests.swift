@@ -363,7 +363,7 @@ class IdentityFunctionalTests: XCTestCase {
     }
 
     /// Tests that getExperienceCloudId returns ECID as soon as possible
-    func testGetECIDNotWaitForConfigurationSharedStateToResolveWhenCachedECIDAvailable() {
+    func testGetECIDNotWaitsForConfigurationSharedStateToResolveWhenCachedECIDAvailable() {
         // setup
         let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
@@ -386,8 +386,8 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertFalse(ecid.isEmpty);
     }
 
-    /// Tests that getExperienceCloudId waits for Identity bootup and ECID to be generated when cached ECID is not avaiable
-    func testGetECIDWaitForConfigurationSharedStateToResolveWhenCachedECIDNotAvailable() {
+    /// Tests that getExperienceCloudId doesnt wait for Identity bootup and ECID to be generated when cached ECID is not avaiable
+    func testGetECIDWaitsForConfigurationSharedStateToResolveWhenCachedECIDNotAvailable() {
         // setup
         let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
@@ -395,7 +395,6 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .pending))
 
         // verify
-        XCTAssertFalse(identity.readyForEvent(event)) // boot and wait for configuration and ecid to be generated
         XCTAssertTrue(identity.readyForEvent(event))
         mockRuntime.simulateComingEvent(event: event)
 
@@ -406,5 +405,22 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
         XCTAssertFalse(ecid.isEmpty);
+    }
+
+    /// Tests that getExperienceCloudId doesnt waits for configuration for first install launch and cached ECID is not avaiable
+    func testGetECIDWaitsForConfigurationSharedStateWhenInstallLaunch() {
+        // setup
+        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(event))
+        XCTAssertFalse(identity.readyForEvent(event))
+        mockRuntime.simulateComingEvent(event: event)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
     }
 }

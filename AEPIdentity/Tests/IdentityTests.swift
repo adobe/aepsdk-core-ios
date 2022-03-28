@@ -557,11 +557,11 @@ class IdentityTests: XCTestCase {
         XCTAssertTrue(identity.readyForEvent(getEcidEvent)) // fast boot
     }
 
-    func testReadyForEventGetEcidOnAppLaunchNotInstallShouldNotWaitForConfigSharedStateWhenEcidIsCached() {
-        // setup
-        identity.state?.identityProperties.ecid = ECID()
-
+    func testReadyForEventGetEcidOnWillWaitForConfigurationWhenEcidIsCached() {
         let getEcidEvent = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        // setup
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getEcidEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+        identity.state?.identityProperties.ecid = ECID()
 
         // verify
         XCTAssertTrue(identity.readyForEvent(getEcidEvent)) //skips booting since ECID is cached

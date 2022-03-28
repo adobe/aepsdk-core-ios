@@ -41,10 +41,6 @@ class IdentityStateTests: XCTestCase {
         let result = state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
             XCTFail("Shared state should not be updated")
         })
-
-        // verify
-        XCTAssertFalse(result)
-
     }
 
     /// Tests that the there is a shared state update when ecid is present and not wait for configuration shared state
@@ -62,7 +58,6 @@ class IdentityStateTests: XCTestCase {
 
         // verify
         wait(for: [sharedStateExpectation], timeout: 1)
-        XCTAssertTrue(result)
     }
 
     // MARK: forceSyncIdentifiers(...) tests
@@ -114,9 +109,9 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the properties are updated, and the hit queue processes the change, and no shared state is created since we have booted and shared state is already created
-    func testForceSyncIdentifiersWithOptInPrivacyReturnsTrueAndNoSharedStateUpdateWhenAlreadyBooted() {
+    func testForceSyncIdentifiersWithOptInPrivacyReturnsTrueAndNoSharedStateUpdateWhenIntialSharedStateCreatedPreviously() {
         // setup
-        state.hasBooted = true
+        state.didCreateInitialSharedState = true
 
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
 
