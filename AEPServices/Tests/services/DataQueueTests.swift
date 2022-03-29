@@ -548,5 +548,23 @@ class DataQueueTests: XCTestCase {
 
         // Then
         XCTAssertTrue(result)
+        
+        
+        let sql = """
+        SELECT * from \(SQLiteDataQueue.TABLE_NAME)
+        """
+        let connection = SQLiteWrapper.connect(databaseFilePath: .cachesDirectory, databaseName: fileName)!
+        let row = SQLiteWrapper.query(database: connection, sql: sql)!
+
+        defer {
+            _ = SQLiteWrapper.disconnect(database: connection)
+        }
+
+        XCTAssertEqual(4, row[0].count)
+        XCTAssertEqual(event.id.uuidString, row[0]["uniqueIdentifier"])
+        XCTAssertEqual("1", row[0]["id"])
+        let dataString = String(data: data, encoding: .utf8)!
+        XCTAssertEqual(dataString, row[0]["data"])
+        XCTAssertEqual(event.timestamp.millisecondsSince1970, Int64(row[0]["timestamp"]!))
     }
 }
