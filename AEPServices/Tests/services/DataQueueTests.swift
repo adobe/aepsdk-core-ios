@@ -548,8 +548,8 @@ class DataQueueTests: XCTestCase {
 
         // Then
         XCTAssertTrue(result)
-        
-        
+
+
         let sql = """
         SELECT * from \(SQLiteDataQueue.TABLE_NAME)
         """
