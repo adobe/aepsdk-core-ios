@@ -19,7 +19,7 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
 
     func testEncodeLifecycleDetails() throws {
         var lifecycleDetails = XDMMobileLifecycleDetails()
-        lifecycleDetails.timestamp = Date(timeIntervalSince1970: 1619827190)
+        lifecycleDetails.timestamp = Date(timeIntervalSince1970: TimeInterval(1619827190123) / 1000) // milliseconds
         lifecycleDetails.eventType = "test-event-type"
         lifecycleDetails.application = XDMApplication()
         lifecycleDetails.application?.isInstall = true
@@ -72,7 +72,7 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
             "sessionLength" : 424394
           },
           "eventType" : "test-event-type",
-          "timestamp" : "2021-04-30T23:59:50Z"
+          "timestamp" : "2021-04-30T23:59:50.123Z"
         }
         """
 

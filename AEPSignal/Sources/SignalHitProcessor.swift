@@ -62,7 +62,7 @@ class SignalHitProcessor: HitProcessing {
     ///   - completion: a completion block to invoke after we have handled the network response with true for success and false for failure (retry)
     private func handleNetworkResponse(hit: SignalHit, connection: HttpConnection, completion: @escaping (Bool) -> Void) {
         let urlString = "\(String(describing: hit.url.host))\(String(describing: hit.url.path))"
-        if connection.responseCode == 200 {
+        if NetworkServiceConstants.HTTP_SUCCESS_CODES.contains(connection.responseCode ?? -1) {
             // hit sent successfully
             Log.debug(label: LOG_TAG, "Signal request successfully sent: \(hit.url.absoluteString) sent successfully")
             completion(true)

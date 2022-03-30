@@ -35,8 +35,8 @@ class LifecycleSessionTests: XCTestCase {
     private func computeDates() {
         currentDate = Date()
 
-        currentDateMinusOneMin = Calendar.current.date(byAdding: .minute, value: -1, to: currentDate)
-        currentDateMinusTenMin = Calendar.current.date(byAdding: .minute, value: -10, to: currentDate)
+        currentDateMinusOneMin = currentDate.addingTimeInterval(-60)
+        currentDateMinusTenMin = currentDate.addingTimeInterval(-60 * 10)
     }
 
     private func loadPersistedContext() -> LifecyclePersistedContext? {
@@ -64,8 +64,8 @@ class LifecycleSessionTests: XCTestCase {
     func testStartResumeSession() {
         // setup
         let previousSessionStartDate = currentDate
-        let previousSessionPauseDate = Calendar.current.date(byAdding: .minute, value: 2, to: currentDate)!
-        let newSessionStartDate = Calendar.current.date(byAdding: .minute, value: 6, to: currentDate)!
+        let previousSessionPauseDate = currentDate.addingTimeInterval(60 * 2)
+        let newSessionStartDate = currentDate.addingTimeInterval(60 * 6)
 
         let previousSessionPauseTime = newSessionStartDate.timeIntervalSince1970 - previousSessionPauseDate.timeIntervalSince1970
 
@@ -170,7 +170,7 @@ class LifecycleSessionTests: XCTestCase {
         // test
         session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
 
-        let previousSessionInfo = LifecycleSessionInfo(startDate: Calendar.current.date(byAdding: .day, value: -8, to: currentDate),
+        let previousSessionInfo = LifecycleSessionInfo(startDate: currentDate.addingTimeInterval(-8*24*60*60), // currentDate - 8 days
                                                        pauseDate: currentDateMinusTenMin, isCrash: false)
 
         let sessionData = session.getSessionData(startDate: currentDate, sessionTimeout: sessionTimeoutInSeconds, previousSessionInfo: previousSessionInfo)
@@ -185,7 +185,7 @@ class LifecycleSessionTests: XCTestCase {
         // test
         session.start(date: currentDate, sessionTimeout: sessionTimeoutInSeconds, coreMetrics: LifecycleMetrics())
 
-        let previousSessionInfo = LifecycleSessionInfo(startDate: Calendar.current.date(byAdding: .day, value: -5, to: currentDate),
+        let previousSessionInfo = LifecycleSessionInfo(startDate: currentDate.addingTimeInterval(-5*24*60*60), // currentDate - 5 days
                                                        pauseDate: currentDateMinusTenMin, isCrash: false)
 
         let sessionData = session.getSessionData(startDate: currentDate, sessionTimeout: sessionTimeoutInSeconds, previousSessionInfo: previousSessionInfo)
@@ -194,4 +194,5 @@ class LifecycleSessionTests: XCTestCase {
         let expectedData = [LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_LENGTH: "431400"]
         XCTAssertEqual(expectedData, sessionData)
     }
+
 }

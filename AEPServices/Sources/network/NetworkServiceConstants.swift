@@ -14,7 +14,7 @@ import Foundation
 
 public struct NetworkServiceConstants {
     public static let RECOVERABLE_ERROR_CODES = [408, 504, 503]
-
+    public static let HTTP_SUCCESS_CODES = 200 ... 299
     public struct Headers {
         public static let IF_MODIFIED_SINCE = "If-Modified-Since"
         public static let IF_NONE_MATCH = "If-None-Match"
