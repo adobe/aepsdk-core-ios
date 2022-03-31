@@ -86,7 +86,7 @@ class MobileCore_IdentityTests: XCTestCase {
         registerMockExtension(MockExtension.self)
         EventHub.shared.start()
         let pushIdData = "test-push-id".data(using: .utf8)!
-        let encodedPushId = "746573742d707573682d6964"
+        let encodedPushId = "746573742D707573682D6964"
 
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericIdentity, source: EventSource.requestContent, listener: { event in
             XCTAssertEqual(encodedPushId, event.data?[CoreConstants.Keys.PUSH_IDENTIFIER] as? String)
