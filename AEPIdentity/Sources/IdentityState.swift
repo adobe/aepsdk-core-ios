@@ -45,7 +45,6 @@ class IdentityState {
     /// - Parameters:
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
     ///   - event: The `Event` triggering the bootup
-    /// - Returns: True if bootup was successful, false otherwise
     func boot(event: Event, createSharedState: ([String: Any], Event) -> Void) {
         if hasBooted { return }
 
