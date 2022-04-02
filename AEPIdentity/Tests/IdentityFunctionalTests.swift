@@ -362,18 +362,42 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC])
     }
 
-    /// Tests that getExperienceCloudId returns ECID as soon as possible
-    func testGetECIDNotWaitsForConfigurationSharedStateToResolveWhenCachedECIDAvailable() {
+    // Tests that getExperienceCloudId returns ECID as soon as possible
+
+    /// forseSyncIdentifier needs valid configuration to be present to process
+    func testGetECIDBeforeForceSyncWaitsForConfigurationSharedStateToResolve() {
         // setup
         let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
-
-        identity.state?.identityProperties.ecid = ECID() //cache ECID
-
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
-        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .pending))
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (nil, .pending))
 
         // verify
-        // identity is ready for getExperienceCloudId event since ECID is cached and available
+        XCTAssertFalse(identity.readyForEvent(event))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (nil, .set))
+        // forceSync will fail since we don't have valid configuration
+        XCTAssertFalse(identity.readyForEvent(event))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+        XCTAssertTrue(identity.readyForEvent(event))
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
+        XCTAssertFalse(ecid.isEmpty)
+    }
+
+    func testGetECIDAfterForceSyncDoesNotWaitForConfigurationSharedState() {
+        // setup
+        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        // configuration shared state will allow forceSync to process
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+
+        // test
         XCTAssertTrue(identity.readyForEvent(event))
         mockRuntime.simulateComingEvent(event: event)
 
@@ -383,44 +407,6 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
         XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
-        XCTAssertFalse(ecid.isEmpty);
-    }
-
-    /// Tests that getExperienceCloudId doesnt wait for Identity bootup and ECID to be generated when cached ECID is not avaiable
-    func testGetECIDWaitsForConfigurationSharedStateToResolveWhenCachedECIDNotAvailable() {
-        // setup
-        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
-
-        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
-        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .pending))
-
-        // verify
-        XCTAssertTrue(identity.readyForEvent(event))
-        mockRuntime.simulateComingEvent(event: event)
-
-        let dispatchedEvent = mockRuntime.dispatchedEvents.first
-
-        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
-        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
-        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
-        XCTAssertFalse(ecid.isEmpty);
-    }
-
-    /// Tests that getExperienceCloudId doesnt waits for configuration for first install launch and cached ECID is not avaiable
-    func testGetECIDWaitsForConfigurationSharedStateWhenInstallLaunch() {
-        // setup
-        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
-
-        // verify
-        XCTAssertFalse(identity.readyForEvent(event))
-        XCTAssertFalse(identity.readyForEvent(event))
-        mockRuntime.simulateComingEvent(event: event)
-
-        let dispatchedEvent = mockRuntime.dispatchedEvents.first
-
-        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
-        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
-        XCTAssertNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertFalse(ecid.isEmpty)
     }
 }

@@ -36,7 +36,7 @@ class IdentityStateTests: XCTestCase {
     // MARK: boot(...) tests
 
     /// Tests that the there is no shared state when ecid is not present
-    func testBootECIDUnavailable() {
+    func testBoot_whenNoECID_noInitialSharedState() {
         // test
         let result = state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
             XCTFail("Shared state should not be updated")
@@ -44,7 +44,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the there is a shared state update when ecid is present and not wait for configuration shared state
-    func testBootECIDAvailableWithoutConfiguration() {
+    func testBoot_whenECID_createsInitialSharedState() {
         // setup
         let ecid = ECID()
         state.identityProperties.ecid = ecid
@@ -63,7 +63,7 @@ class IdentityStateTests: XCTestCase {
     // MARK: forceSyncIdentifiers(...) tests
 
     /// Tests that force sync fails and there is no shared state created when empty configuration shared state is received
-    func testForceSyncIdentifiersEmptyConfigSharedState() {
+    func testForceSyncIdentifiers_whenEmptyConfig_returnsFalse_noInitialSharedState() {
 
         // test
         let result = state.forceSyncIdentifiers(configSharedState: [:], event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
@@ -77,7 +77,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that force sync fails and there is no shared state created when invalid configuration shared state is received
-    func testForceSyncIdentifiersInvalidConfigSharedState() {
+    func testForceSyncIdentifiers_whenNilConfig_returnsFalse_noInitialSharedState() {
 
         // test
         let result = state.forceSyncIdentifiers(configSharedState: nil, event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
@@ -91,7 +91,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created due to force sync when intial shared state has not been created on boot
-    func testForceSyncIdentifiersWithOptInPrivacyReturnsTrue() {
+    func testForceSyncIdentifiers_whenValidConfig_returnsTrue_createsInitialSharedState() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated")
@@ -109,7 +109,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the properties are updated, and the hit queue processes the change, and no shared state is created since we have booted and shared state is already created
-    func testForceSyncIdentifiersWithOptInPrivacyReturnsTrueAndNoSharedStateUpdateWhenIntialSharedStateCreatedPreviously() {
+    func testForceSyncIdentifiers_whenValidConfigAndInitialSharedStateCreated_returnsTrue_noNewSharedState() {
         // setup
         state.didCreateInitialSharedState = true
 
@@ -126,7 +126,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(mockHitQueue.calledBeginProcessing) // opt-in should result in hit processing hits
     }
 
-    func testForceSyncIdentifiersReturnsTrueWhenAlreadySynced() {
+    func testForceSyncIdentifiers_whenAlreadySynched_returnsTrue() {
         // setup
         state.hasSynced = true
 
@@ -140,7 +140,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the properties are updated, and the hit queue processes the change
-    func testForceSyncIdentifiersWithOptOutPrivacyReturnsTrue() {
+    func testForceSyncIdentifiers_whenPrivacyOptedOut_returnsTrue() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated")
@@ -158,7 +158,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created from the force sync
-    func testForceSyncIdentifiersWithUnknownPrivacyReturnsTrue() {
+    func testForceSyncIdentifiers_whenPrivacyUnknown_returnsTrue() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.unknown.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"] as [String : Any]
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated")
@@ -178,7 +178,7 @@ class IdentityStateTests: XCTestCase {
     // MARK: syncIdentifiers(...) tests
 
     /// Tests that syncIdentifiers returns nil when lastValidConfig is empty
-    func testSyncIdentifiersEmptyLastValidConfig() {
+    func testSyncIdentifiers_whenNoLastValidConfig_returnsNil() {
         // test
         let eventData = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
 
@@ -187,7 +187,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that syncIdentifiers appends the ECID and the two custom IDs to the visitor ID list
-    func testSyncIdentifiersHappyIDs() {
+    func testSyncIdentifiers_withValidConfiguration_returnsSyncedIDs() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -205,7 +205,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that syncIdentifiers returns nil and does not queue a hit when the user is opted-out
-    func testSyncIdentifiersHappyIDsOptedOut() {
+    func testSyncIdentifiers_withValidConfiguration_andPrivacyOptedOut_returnsNil() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -220,7 +220,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the push identifier is attached to the event data
-    func testSyncIdentifiersHappyPushID() {
+    func testSyncIdentifiers_WithValidPushID_returnsSyncedIDsContainingPushID() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -238,7 +238,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the ECID is appended and the ad id is appended to the visitor id list
-    func testSyncIdentifiersHappyAdID() {
+    func testSyncIdentifiers_withValidAdID_returnsSyncedIDsListContainingAdID() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -263,7 +263,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// SetAdvertisingIdentifier with empty id and empty persisted id will not sync
-    func testSyncIdentifiersAdIdDidNotChangeEmpty() {
+    func testSyncIdentifiers_updatedWithSameAdIdEmptyString_returnsIDsListWithoutAdId() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -286,7 +286,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// SetAdvertisingIdentifier with same id will not sync
-    func testSyncIdentifiersAdIdDidNotChange() {
+    func testSyncIdentifiers_updateWithSameAdIdNonEmptryString_returnsSyncedIDsListWithAdId() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -315,7 +315,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// SetAdvertisingIdentifier with all zeros and empty persisted id will not sync
-    func testSyncIdentifiersAdIdWithZeros() {
+    func testSyncIdentifiers_updatedWithAdIdWithZeros_shouldNotSync() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -338,7 +338,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the ad is is correctly updated when a new value is passed
-    func testSyncIdentifiersAdIDIsUpdated() {
+    func testSyncIdentifiers_updatedWithDifferentAdIDNonEmptyString_returnsSyncedIDsListWithNewAdIdAndDeviceConsentNotUpdated() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -367,7 +367,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the ad id is is correctly updated when a new value is passed
-    func testSyncIdentifiersAdIDIsUpdatedFromEmpty() {
+    func testSyncIdentifiers_updatedAdIDsWithNonEmptyStringFromPreviousEmptyString_returnsIDsListWithNewAdIdAndDeviceConsent1() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -396,7 +396,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the ad id is correctly updated when a new value is passed (ad id changed from nil to valid value), hit is successfully queued and device_consent is set to 1.
-    func testSyncIdentifiersAdIDIsUpdatedFromNil() {
+    func testSyncIdentifiers_updatedAdIDsWithNonEmptyStringFromPreviousNilValue_returnsIDsListWithNewAdIdAndDeviceConsent1() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -425,7 +425,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the ad is is correctly updated when a new value is passed
-    func testSyncIdentifiersAdIDIsUpdatedFromZeroString() {
+    func testSyncIdentifiers_updatedAdIDsWithNonEmptyStringFromPreviousZeroValue_returnsIDsListWithNewAdIdAndDeviceConsent1() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -454,7 +454,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the ad is is correctly updated when a new value is passed
-    func testSyncIdentifiersAdIDIsUpdatedFromValidToEmpty() {
+    func testSyncIdentifiers_updatedAdIDsWithEmptyStringFromPreviousNonEmptyStringValue_firstSync_returnsIDsListWithoutAdIdAndDeviceConsent0() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -481,7 +481,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the ad is is correctly updated when a new value is passed
-    func testSyncIdentifiersAdIDIsUpdatedFromValidToZeroString() {
+    func testSyncIdentifiers_updatedAdIDsWithZeroStringFromPreviousNonEmptyStringValue_returnsIDsListWithoutAdIdAndDeviceConsent0() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -507,8 +507,8 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(hit.url.absoluteString.contains("d_consent_ic=DSID_20915")) // id namespace should be added
     }
 
-    /// When we currently have a nil ad id and update to an empty ad id we should sync with the device consent flag set to 0
-    func testSyncIdentifiersAdIDIsUpdatedFromZerosToEmpty() {
+    /// When we currently have a zero string ad id and update to an empty ad id we should sync with the device consent flag set to 0
+    func testSyncIdentifiers_updatedAdIDsWithEmptyStringFromPreviousZeroStringValue_previouslySynced_shouldSyncWithDeviceConsent0() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -536,7 +536,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// When we currently have a valid ad id and update to an empty ad id we should sync with the device consent flag set to 0
-    func testSyncIdentifiersAdIDIsUpdatedFromValidToEmptyFirstSync() {
+    func testSyncIdentifiers_updatedAdIDsWithEmptyStringFromPreviousNonEmptyStringValue_previouslySynced_returnsIDsListWithoutAdIdAndDeviceConsent0() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -564,7 +564,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that when updating the ad id from zero string to valid we add the consent flag as true
-    func testSyncIdentifiersAdIDIsUpdatedFromZeroStringToValid() {
+    func testSyncIdentifiers_updatedAdIDsWithNonEmptyStringStringFromPreviousZeroStringValue_returnsIDsListWithoutAdIdAndDeviceConsent1() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -593,7 +593,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that the location hint and blob are present int he event data
-    func testSyncIdentifiersAppendsBlobAndLocationHint() {
+    func testSyncIdentifiers_whenBlobAndLocationHintAvailable_returnsDataWithBlobAndLocationHint() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -617,7 +617,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that a hit is not queued for is sync event
-    func testSyncIdentifiersDoesNotQueue() {
+    func testSyncIdentifiers_whenNoNewIdentifersAndNotForceSync_shouldNotQueueHit() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -637,7 +637,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
 
-    func testSyncIdentifiersWhenEmptyServerValue() {
+    func testSyncIdentifiers_whenEmptyServerValue_shouldNotQueueHit() {
         // setup
         state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg",
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue,
@@ -667,7 +667,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(hit.url.absoluteString.contains("dpm.demdex.net"))
     }
 
-    func testSyncIdentifiersWhenProperStringServerValue() {
+    func testSyncIdentifiers_whenProperStringServerValue_shouldQueueHit() {
         // setup
         state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg",
                                  IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue,
@@ -682,7 +682,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(hit.url.absoluteString.contains("example.com"))
     }
 
-    func testSyncIdentifiersWhenPrivacyIsOptIn() {
+    func testSyncIdentifiers_whenPrivacyIsOptIn_returnsValidEventData() {
         // setup
         state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
 
@@ -694,7 +694,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// We are ready to process the event when the config shared state has an opt-in privacy status but our previous config has an opt-out
-    func testSyncIdentifiersReturnNilWhenLatestPrivacyIsOptOut() {
+    func testSyncIdentifiers_whenLatestPrivacyIsOptOut_returnsNil() {
         // setup
         state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedOut.rawValue] as [String: Any]
 
@@ -708,7 +708,7 @@ class IdentityStateTests: XCTestCase {
     // MARK: readyForSyncIdentifiers(...)
 
     /// When no valid configuration is available we should return false to wait for a valid configuration
-    func testReadyForSyncIdentifiersNoValidConfig() {
+    func testReadyForSyncIdentifiers_whenNoValidConfigPresent_returnsFalse() {
         // test
         let readyForSync = state.readyForSyncIdentifiers(event: Event.fakeSyncIDEvent(), configurationSharedState: [:])
 
@@ -716,7 +716,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(readyForSync)
     }
 
-    func testReadyForSyncIdentifiersShouldSyncWithEmptyCurrentConfigButValidLatestConfig() {
+    func testReadyForSyncIdentifiers_whenValidLastConfigPresentEvenWithEmptyCurrentConfig_returnsTrue() {
         // setup
         state.lastValidConfig = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "latestOrg", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
 
@@ -727,7 +727,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(readyForSync)
     }
 
-    func testReadyForSyncIdentifiersShouldNotSyncWithEmptyCurrentConfigAndNilLatestConfig() {
+    func testReadyForSyncIdentifiers_whenNilLastConfigAndEmptyCurrentConfig_returnsFalse() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: ""] as [String: Any]
 
@@ -741,7 +741,7 @@ class IdentityStateTests: XCTestCase {
     // MARK: handleHitResponse(...) tests
 
     /// Tests that when a non-opt out response is handled that we update the last sync and other identity properties, along with dispatching two identity events
-    func testHandleHitResponseHappy() {
+    func testHandleHitResponse_withSameECIDInResponse_shouldUpdateLastSyncAndProperties() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
@@ -776,7 +776,7 @@ class IdentityStateTests: XCTestCase {
 
     /// Tests that when a non-opt out response is handled with a non-matching ECID that we don't update the last sync and other identity properties, along with dispatching two identity events.
     /// This situation can usually happen if a network response is handled at the same time as the resetIdentities request.
-    func testHandleHitResponseMismatchECID() {
+    func testHandleHitResponse_whenMismatchECIDinHitResponse_shouldNotUpdateLastSyncAndProperties() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
@@ -812,7 +812,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// When the opt-out list in the response is not empty that we dispatch a configuration event setting the privacy to opt out
-    func testHandleHitResponseOptOutList() {
+    func testHandleHitResponse_WhenNonEmptyOptOutListInHitResponse_setsThePrivacyToOptOut() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "Three events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 3 // 2 identity events, 1 configuration
@@ -845,7 +845,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that when the hit response indicates an error that we do not update the identity properties
-    func testHandleHitResponseError() {
+    func testHandleHitResponse_whenErrorHitResponse_shouldNotUpdateProperties() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
@@ -878,7 +878,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that when we are opted out that we do not update the identity properties
-    func testHandleHitResponseOptOut() {
+    func testHandleHitResponse_whenPrivacyOptOut_shouldNotUpdateProperties() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "Two events should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 2 // 2 identity events
@@ -911,7 +911,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that when we get nil data back that we only dispatch one event and do not update the properties
-    func testHandleHitResponseNilData() {
+    func testHandleHitResponse_whenNilHitReponseData_shouldNotUpdateProperties() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "One event should be dispatched")
         dispatchedEventExpectation.assertForOverFulfill = true
@@ -940,7 +940,7 @@ class IdentityStateTests: XCTestCase {
     // MARK: processPrivacyChange(...)
 
     /// Tests that when the event data is empty that we do not update shared state or the push identifier
-    func testProcessPrivacyChangeNoPrivacyInEventData() {
+    func testProcessPrivacyChange_whenEmptyEventData_shouldNotUpdateSharedStateOrPushIdentifier() {
         // setup
         var props = IdentityProperties()
         props.privacyStatus = .unknown
@@ -962,7 +962,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that when we get an opt-in privacy status that we update the privacy status and start the hit queue
-    func testProcessPrivacyChangeToOptIn() {
+    func testProcessPrivacyChange_whenPrivacyOptIn_setsThePrivacyStatusToOptInAndResumesHitQueue() {
         // setup
         var props = IdentityProperties()
         props.privacyStatus = .unknown
@@ -984,7 +984,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that when we update privacy to opt-out that we suspend the hit queue and share state
-    func testProcessPrivacyChangeToOptOut() {
+    func testProcessPrivacyChange_whenPrivacyOptOut_setsThePrivacyStatusToOptOutAndSuspendsHitQueue() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
         var props = IdentityProperties()
@@ -1008,7 +1008,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// Tests that when we got from opt out to opt in that we dispatch a force sync event
-    func testProcessPrivacyChangeFromOptOutToOptIn() {
+    func testProcessPrivacyChange_whenPrivacyStatusUpdatedFromOptOutToOptIn_dispatchedForceSyncAndResumesHitQueue() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
         var props = IdentityProperties()
@@ -1034,7 +1034,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// When we go from opt-out to unknown we should suspend the queue and update the privacy status
-    func testProcessPrivacyChangeFromOptOutToUnknown() {
+    func testProcessPrivacyChange_whenPrivacyStatusUpdatedFromOptOutToUnknown_updatesthePrivacyStatusToOptUnkown() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "A force sync event should be dispatched")
         var props = IdentityProperties()
@@ -1061,7 +1061,7 @@ class IdentityStateTests: XCTestCase {
 
     // MARK: HandleAnalyticsResponse(...)
     /// When aid sycned is false, we dispatch an event, set it to true and save to persistence
-    func testHandleAnalyticsResponseAidSyncedFalse() {
+    func testHandleAnalyticsResponse_whenAidNotSynced_thenEventIsDispatchedAndAIDSyncedSetToTrue() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "one event should be dispatched")
         dispatchedEventExpectation.expectedFulfillmentCount = 1 // 1 identity events
@@ -1090,7 +1090,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// when aid synced is true, we don't dispatch event and don't save it to persistence
-    func testHandleAnalyticsResponseAidSyncedTrue() {
+    func testHandleAnalyticsResponse_AidAlreadySynced_thenEventIsNotDispatched() {
         // setup
         let dispatchedEventExpectation = XCTestExpectation(description: "no event should be dispatched")
         dispatchedEventExpectation.assertForOverFulfill = true
@@ -1110,7 +1110,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// We set aid synced to false when privacy is opt out.
-    func testAidSyncedFalseAfterPrivacyOptOut() {
+    func testAidSynced_whenPrivacyOptOut_setToFalse() {
         // setup
         state.identityProperties.isAidSynced = true
         XCTAssertTrue(state.identityProperties.isAidSynced == true)
@@ -1134,7 +1134,7 @@ class IdentityStateTests: XCTestCase {
     }
 
     /// We set aid synced to false when privacy is opt out, call handle analytics response, it set back to true
-    func testAidSyncedScenario() {
+    func testAidSynced_whenHandleAnalyticsResponseCalledWithPrivacyOptedOut_setsAidSyncedToTrue() {
         // setup
         state.identityProperties.isAidSynced = true
         XCTAssertTrue(state.identityProperties.isAidSynced == true)
@@ -1170,7 +1170,7 @@ class IdentityStateTests: XCTestCase {
         XCTAssertEqual(1, mockDataStore.dict.count) // identity properties should not be saved to persistence
     }
 
-    func testResetIdentities() {
+    func testResetIdentities_shouldClearAllIdentitiesAndResetECIDAndUpdateSharedState() {
         // setup
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated once")
 
@@ -1211,23 +1211,20 @@ class IdentityStateTests: XCTestCase {
         wait(for: [sharedStateExpectation], timeout: 0.5)
     }
 
-    func testResetIdentitiesOptedOut() {
+    func testResetIdentities_whenPrivacyOptedOut_shouldNotUpdateSharedState() {
         // setup
-        let sharedStateExpectation = XCTestExpectation(description: "Shared state should not be updated once")
-        sharedStateExpectation.isInverted = true
         state.identityProperties.privacyStatus = .optedOut
         let resetEvent = Event(name: "test reset event", type: EventType.genericIdentity, source: EventSource.requestReset, data: nil)
 
         // test
         state.resetIdentifiers(event: resetEvent, createSharedState: { (data, _) in
-            sharedStateExpectation.fulfill()
+            XCTFail("Shared state should not be updated")
         })
 
         // verify
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
         XCTAssertFalse(mockHitQueue.calledClear)
         XCTAssertFalse(mockPushIdManager.calledResetPersistedFlags)
-        wait(for: [sharedStateExpectation], timeout: 0.5)
     }
 }
 

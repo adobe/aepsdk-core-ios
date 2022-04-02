@@ -64,7 +64,7 @@ import Foundation
 
         // skip waiting for latest configuration if it is getExperienceCloudId event or getIdentifiers event
         if event.isGetIdentifierEvent {
-            Log.trace(label: "\(name):\(#function)", "Not waiting for latest configuration as we have the cached ECID available for processing [event:(\(event.name)) id:(\(event.id)].")
+            Log.trace(label: "\(name):\(#function)", "Processing get identifier event without waiting for configuration [event:(\(event.name)) id:(\(event.id)].")
             return true
         }
 
