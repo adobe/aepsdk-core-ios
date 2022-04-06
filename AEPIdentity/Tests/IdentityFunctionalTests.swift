@@ -393,13 +393,22 @@ class IdentityFunctionalTests: XCTestCase {
 
     func testGetECIDAfterForceSyncDoesNotWaitForConfigurationSharedState() {
         // setup
-        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        let syncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        let getECIDEvent = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+
         // configuration shared state will allow forceSync to process
-        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+
+        // trigger forceSync
+        XCTAssertTrue(identity.readyForEvent(syncEvent))
+        mockRuntime.simulateComingEvent(event: syncEvent)
+
+        // set configuration shared state to pending
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: (nil, .pending))
 
         // test
-        XCTAssertTrue(identity.readyForEvent(event))
-        mockRuntime.simulateComingEvent(event: event)
+        XCTAssertTrue(identity.readyForEvent(getECIDEvent))
+        mockRuntime.simulateComingEvent(event: getECIDEvent)
 
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
 
