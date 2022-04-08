@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AEPServices
 
 /// XDM Mobile Lifecycle Details schema representation
 struct XDMMobileLifecycleDetails {
@@ -47,6 +48,6 @@ extension XDMMobileLifecycleDetails: Encodable {
         if let unwrapped = device { try container.encode(unwrapped, forKey: .device) }
         if let unwrapped = environment { try container.encode(unwrapped, forKey: .environment) }
         if let unwrapped = eventType { try container.encode(unwrapped, forKey: .eventType) }
-        if let unwrapped = XDMFormatters.dateToISO8601String(from: timestamp) { try container.encode(unwrapped, forKey: .timestamp) }
+        if let unwrapped = timestamp?.getISO8601UTCDateWithMilliseconds() { try container.encode(unwrapped, forKey: .timestamp) }
     }
 }
