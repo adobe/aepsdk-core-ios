@@ -54,6 +54,8 @@ class IdentityStateTests: XCTestCase {
         // test
         let result = state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
             sharedStateExpectation.fulfill()
+            XCTAssertEqual(1, data.count)
+            XCTAssertEqual(ecid.ecidString, data["mid"] as! String)
         })
 
         // verify

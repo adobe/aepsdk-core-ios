@@ -551,10 +551,16 @@ class IdentityTests: XCTestCase {
     func testReadyForEventGetEcidOnAppInstallWillWaitForConfigurationAndECIDToBeGenerated() {
         let getEcidEvent = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
 
+        // cannot process getECID event and ecid is not set
+        XCTAssertFalse(identity.readyForEvent(getEcidEvent))
+        XCTAssertNil(identity.state?.identityProperties.ecid)
+
+        // pass valid configuration
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getEcidEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
 
         // verify
-        XCTAssertTrue(identity.readyForEvent(getEcidEvent)) // fast boot
+        XCTAssertTrue(identity.readyForEvent(getEcidEvent))
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
     }
 
     func testReadyForEventGetEcidOnWillWaitForConfigurationWhenEcidIsCached() {

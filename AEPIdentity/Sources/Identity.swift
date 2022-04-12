@@ -66,9 +66,7 @@ import Foundation
         if event.isGetIdentifierEvent {
             Log.trace(label: "\(name):\(#function)", "Processing get identifier event without waiting for configuration [event:(\(event.name)) id:(\(event.id)].")
             return true
-        }
-
-        if event.isSyncEvent || event.type == EventType.genericIdentity {
+        } else if event.isSyncEvent || event.type == EventType.genericIdentity {
             guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else {
                 Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state value before processing [event:(\(event.name)) id:(\(event.id)].")
                 return false
