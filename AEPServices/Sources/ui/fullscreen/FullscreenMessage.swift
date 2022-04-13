@@ -36,7 +36,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
 
     var isLocalImageUsed = false
     var payload: String
-    private var payloadUsingLocalAssets: String?
+    var payloadUsingLocalAssets: String?
     weak var listener: FullscreenMessageDelegate?
     public internal(set) var webView: UIView?
     private(set) var transparentBackgroundView: UIView?

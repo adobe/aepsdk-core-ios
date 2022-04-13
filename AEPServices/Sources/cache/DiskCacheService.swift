@@ -27,7 +27,11 @@ class DiskCacheService: Caching {
         let path = filePath(for: cacheName, with: key)
         _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
         try fileManager.setAttributes([.modificationDate: entry.expiry.date], ofItemAtPath: path)
-        let newCache = CacheEntry(data: entry.data, expiry: entry.expiry, metadata: [PATH: path])
+        var newMetadata = [PATH: path]
+        if let meta = entry.metadata, !meta.isEmpty {
+            newMetadata.merge(meta) { current, _ in current }
+        }
+        let newCache = CacheEntry(data: entry.data, expiry: entry.expiry, metadata: newMetadata)
         Log.trace(label: LOG_PREFIX, "Updating cache '\(cacheName)' - setting key '\(key)' to value: \n\(newCache.metadata as AnyObject)")
         dataStore.set(key: dataStoreKey(for: cacheName, with: key), value: newCache.metadata)
     }
