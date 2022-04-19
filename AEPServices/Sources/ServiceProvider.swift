@@ -101,17 +101,19 @@ public class ServiceProvider {
     }
 
     internal func reset() {
-        defaultSystemInfoService = ApplicationSystemInfoService()
-        defaultKeyValueService = UserDefaultsNamedCollection()
-        defaultNetworkService = NetworkService()
-        defaultDataQueueService = DataQueueService()
-        defaultCacheService = DiskCacheService()
-        defaultLoggingService = LoggingService()
+        queue.async {
+            self.defaultSystemInfoService = ApplicationSystemInfoService()
+            self.defaultKeyValueService = UserDefaultsNamedCollection()
+            self.defaultNetworkService = NetworkService()
+            self.defaultDataQueueService = DataQueueService()
+            self.defaultCacheService = DiskCacheService()
+            self.defaultLoggingService = LoggingService()
 
-        overrideSystemInfoService = nil
-        overrideKeyValueService = nil
-        overrideNetworkService = nil
-        overrideCacheService = nil
+            self.overrideSystemInfoService = nil
+            self.overrideKeyValueService = nil
+            self.overrideNetworkService = nil
+            self.overrideCacheService = nil
+        }
     }
 }
 
@@ -150,11 +152,13 @@ extension ServiceProvider {
         }
     }
 
-    internal func resetExtensionUnavailable() {
-        Holder.defaultURLService = URLService()
-        Holder.defaultUIService = AEPUIService()
-        Holder.overrideURLService = nil
-        Holder.overrideUIService = nil
+    internal func resetAppOnlyServices() {
+        queue.async {
+            Holder.defaultURLService = URLService()
+            Holder.defaultUIService = AEPUIService()
+            Holder.overrideURLService = nil
+            Holder.overrideUIService = nil
+        }
     }
 
 }
