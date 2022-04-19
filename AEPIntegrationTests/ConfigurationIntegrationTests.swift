@@ -16,6 +16,7 @@ import AEPIdentity
 import AEPLifecycle
 import AEPSignal
 
+@available(iOSApplicationExtension, unavailable)
 class ConfigurationIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()
     override func setUp() {

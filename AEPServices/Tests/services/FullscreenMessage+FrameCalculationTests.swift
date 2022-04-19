@@ -13,6 +13,7 @@
 @testable import AEPServices
 import XCTest
 
+@available(iOSApplicationExtension, unavailable)
 class FullscreenMessage_FrameCalculationTests: XCTestCase {
     
     let ACCURACY: Float = 0.00001

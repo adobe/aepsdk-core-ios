@@ -16,6 +16,7 @@ import Foundation
 /// Represents a FloatingButton UI element which is both `Showable` and `Dismissible`
 ///
 @objc(AEPFloatingButtonPresentable)
+@available(iOSApplicationExtension, unavailable)
 public protocol FloatingButtonPresentable: Showable, Dismissible {
 
     /// Set the Image for the floating button.

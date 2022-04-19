@@ -16,6 +16,7 @@ import WebKit
 
 /// This class is used to create and display fullscreen messages on the current view.
 @objc(AEPFullscreenMessage)
+@available(iOSApplicationExtension, unavailable)
 public class FullscreenMessage: NSObject, FullscreenPresentable {
 
     let LOG_PREFIX = "FullscreenMessage"

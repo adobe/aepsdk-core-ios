@@ -14,6 +14,7 @@ import Foundation
 import AEPServices
 import XCTest
 
+@available(iOSApplicationExtension, unavailable)
 public class MockFullscreenListener: FullscreenMessageDelegate {
     var onShowCalled = false
     var onDismissCalled = false

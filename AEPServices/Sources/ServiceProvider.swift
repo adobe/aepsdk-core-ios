@@ -30,11 +30,7 @@ public class ServiceProvider {
     private var defaultDataQueueService = DataQueueService()
     private var overrideCacheService: Caching?
     private var defaultCacheService = DiskCacheService()
-    private var overrideURLService: URLOpening?
-    private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
-    private var overrideUIService: UIService?
-    private var defaultUIService = AEPUIService()
 
     // Don't allow init of ServiceProvider outside the class
     private init() {}
@@ -98,35 +94,9 @@ public class ServiceProvider {
         }
     }
 
-    public var urlService: URLOpening {
-        get {
-            return queue.sync {
-                return overrideURLService ?? defaultURLService
-            }
-        }
-        set {
-            queue.async {
-                self.overrideURLService = newValue
-            }
-        }
-    }
-
     public var loggingService: Logging {
         return queue.sync {
             return defaultLoggingService
-        }
-    }
-
-    public var uiService: UIService {
-        get {
-            return queue.sync {
-                return overrideUIService ?? defaultUIService
-            }
-        }
-        set {
-            queue.async {
-                self.overrideUIService = newValue
-            }
         }
     }
 
@@ -136,15 +106,55 @@ public class ServiceProvider {
         defaultNetworkService = NetworkService()
         defaultDataQueueService = DataQueueService()
         defaultCacheService = DiskCacheService()
-        defaultURLService = URLService()
         defaultLoggingService = LoggingService()
-        defaultUIService = AEPUIService()
 
         overrideSystemInfoService = nil
         overrideKeyValueService = nil
         overrideNetworkService = nil
         overrideCacheService = nil
-        overrideURLService = nil
-        overrideUIService = nil
     }
+}
+
+@available(iOSApplicationExtension, unavailable)
+extension ServiceProvider {
+    private struct Holder {
+        static var overrideURLService: URLOpening?
+        static var defaultURLService = URLService()
+        static var overrideUIService: UIService?
+        static var defaultUIService = AEPUIService()
+    }
+
+    public var urlService: URLOpening {
+        get {
+            return queue.sync {
+                return Holder.overrideURLService ?? Holder.defaultURLService
+            }
+        }
+        set {
+            queue.async {
+                Holder.overrideURLService = newValue
+            }
+        }
+    }
+
+    public var uiService: UIService {
+        get {
+            return queue.sync {
+                return Holder.overrideUIService ?? Holder.defaultUIService
+            }
+        }
+        set {
+            queue.async {
+                Holder.overrideUIService = newValue
+            }
+        }
+    }
+
+    internal func resetExtensionUnavailable() {
+        Holder.defaultURLService = URLService()
+        Holder.defaultUIService = AEPUIService()
+        Holder.overrideURLService = nil
+        Holder.overrideUIService = nil
+    }
+
 }

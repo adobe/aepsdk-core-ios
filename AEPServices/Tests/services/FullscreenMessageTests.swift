@@ -17,6 +17,7 @@ import UIKit
 import WebKit
 import XCTest
 
+@available(iOSApplicationExtension, unavailable)
 class FullscreenMessageTests : XCTestCase {
     let mockHtml = "somehtml"
     var fullscreenMessage : FullscreenMessage?
