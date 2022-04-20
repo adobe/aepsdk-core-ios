@@ -12,6 +12,9 @@
 
 import Foundation
 
+///
+/// The ServiceProvider Singleton is used to override and provide Core Services
+///
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
@@ -105,9 +108,7 @@ public class ServiceProvider {
             self.defaultSystemInfoService = ApplicationSystemInfoService()
             self.defaultKeyValueService = UserDefaultsNamedCollection()
             self.defaultNetworkService = NetworkService()
-            self.defaultDataQueueService = DataQueueService()
             self.defaultCacheService = DiskCacheService()
-            self.defaultLoggingService = LoggingService()
 
             self.overrideSystemInfoService = nil
             self.overrideKeyValueService = nil
@@ -117,8 +118,13 @@ public class ServiceProvider {
     }
 }
 
+///
+/// ServiceProvider extension which will hold any iOSApplicationExtension restricted Services.
+///
 @available(iOSApplicationExtension, unavailable)
 extension ServiceProvider {
+    // Because Extensions cannot hold properties, this struct Holder is a work around.
+    // Please note that the static variables work because the ServiceProvider is a singleton.
     private struct Holder {
         static var overrideURLService: URLOpening?
         static var defaultURLService = URLService()

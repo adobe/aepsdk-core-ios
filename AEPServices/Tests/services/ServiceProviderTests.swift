@@ -16,18 +16,59 @@ import AEPServicesMocks
 
 class ServiceProviderTests: XCTestCase {
    
-    func testOverridingSimple() {
+    func testOverridingSystemInfoService() {
         let mockSystemInfoService = MockSystemInfoService()
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
         XCTAssertEqual(Unmanaged.passUnretained(mockSystemInfoService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.systemInfoService as! MockSystemInfoService).toOpaque())
     }
     
-    func testResettingSimple() {
+    func testResettingSystemInfoService() {
         let mockSystemInfoService = MockSystemInfoService()
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
         ServiceProvider.shared.reset()
         XCTAssertTrue(ServiceProvider.shared.systemInfoService is ApplicationSystemInfoService)
     }
+    
+    func testOverridingNamedKeyValueService() {
+        let mockKeyValueService = MockKeyValueService()
+        ServiceProvider.shared.namedKeyValueService = mockKeyValueService
+        XCTAssertEqual(Unmanaged.passUnretained(mockKeyValueService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.namedKeyValueService as! MockKeyValueService).toOpaque())
+       
+    }
+    
+    func testResettingNamedKeyValueService() {
+        let mockNamedKeyValueService = MockKeyValueService()
+        ServiceProvider.shared.namedKeyValueService = mockNamedKeyValueService
+        ServiceProvider.shared.reset()
+        XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is UserDefaultsNamedCollection)
+    }
+    
+    func testOverridingNetworkService() {
+        let mockNetworkService = MockNetworkServiceOverrider()
+        ServiceProvider.shared.networkService = mockNetworkService
+        XCTAssertEqual(Unmanaged.passUnretained(mockNetworkService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.networkService as! MockNetworkServiceOverrider).toOpaque())
+    }
+    
+    func testResettingNetworkService() {
+        let mockNetworkService = MockNetworkServiceOverrider()
+        ServiceProvider.shared.networkService = mockNetworkService
+        ServiceProvider.shared.reset()
+        XCTAssertTrue(ServiceProvider.shared.networkService is NetworkService)
+    }
+    
+    func testOverridingCacheService() {
+        let mockCacheService = MockDiskCache()
+        ServiceProvider.shared.cacheService = mockCacheService
+        XCTAssertEqual(Unmanaged.passUnretained(mockCacheService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.cacheService as! MockDiskCache).toOpaque())
+    }
+    
+    func testResettingCacheService() {
+        let mockCacheService = MockDiskCache()
+        ServiceProvider.shared.cacheService = mockCacheService
+        ServiceProvider.shared.reset()
+        XCTAssertTrue(ServiceProvider.shared.cacheService is DiskCacheService)
+    }
+    
     
     func testOverridingAppOnlyServices() {
         let mockUIService = MockUIService()

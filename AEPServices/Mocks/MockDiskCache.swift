@@ -12,8 +12,10 @@
 import AEPServices
 import Foundation
 
-class MockDiskCache: Caching {
+public class MockDiskCache: Caching {
     var mockCache: [String: CacheEntry] = [:]
+    
+    public init() {}
 
     enum MockDiskCacheError: Error {
         case setFailure
@@ -21,7 +23,7 @@ class MockDiskCache: Caching {
 
     var shouldThrow: Bool = false
     var setCalled = false
-    func set(cacheName _: String, key: String, entry: CacheEntry) throws {
+    public func set(cacheName _: String, key: String, entry: CacheEntry) throws {
         setCalled = true
         if shouldThrow {
             throw MockDiskCacheError.setFailure
@@ -30,10 +32,10 @@ class MockDiskCache: Caching {
     }
 
     var getCalled = false
-    func get(cacheName _: String, key: String) -> CacheEntry? {
+    public func get(cacheName _: String, key: String) -> CacheEntry? {
         getCalled = true
         return mockCache[key]
     }
 
-    func remove(cacheName _: String, key _: String) throws {}
+    public func remove(cacheName _: String, key _: String) throws {}
 }
