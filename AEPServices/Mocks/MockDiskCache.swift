@@ -14,7 +14,7 @@ import Foundation
 
 public class MockDiskCache: Caching {
     var mockCache: [String: CacheEntry] = [:]
-    
+
     public init() {}
 
     enum MockDiskCacheError: Error {
