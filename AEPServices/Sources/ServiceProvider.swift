@@ -109,6 +109,8 @@ public class ServiceProvider {
             self.defaultKeyValueService = UserDefaultsNamedCollection()
             self.defaultNetworkService = NetworkService()
             self.defaultCacheService = DiskCacheService()
+            self.defaultDataQueueService = DataQueueService()
+            self.defaultLoggingService = LoggingService()
 
             self.overrideSystemInfoService = nil
             self.overrideKeyValueService = nil
