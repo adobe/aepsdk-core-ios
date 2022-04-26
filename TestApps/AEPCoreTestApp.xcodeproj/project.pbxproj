@@ -59,8 +59,6 @@
 		78F2E312280F719C0073CE00 /* AEPCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E30D280F719C0073CE00 /* AEPCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		78F2E313280F719C0073CE00 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E30E280F719C0073CE00 /* AEPIdentity.framework */; };
 		78F2E314280F719D0073CE00 /* AEPIdentity.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E30E280F719C0073CE00 /* AEPIdentity.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		78F2E315280F719D0073CE00 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E30F280F719C0073CE00 /* AEPLifecycle.framework */; };
-		78F2E316280F719D0073CE00 /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E30F280F719C0073CE00 /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		78F2E317280F719D0073CE00 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E310280F719C0073CE00 /* AEPServices.framework */; };
 		78F2E318280F719D0073CE00 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E310280F719C0073CE00 /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7A08C6747E305D5BF9CE2A3D /* Pods_TestApp_Objc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B889355E99E7CE85BE01DA34 /* Pods_TestApp_Objc.framework */; };
@@ -160,7 +158,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				78F2E316280F719D0073CE00 /* AEPLifecycle.framework in Embed Frameworks */,
 				78F2E312280F719C0073CE00 /* AEPCore.framework in Embed Frameworks */,
 				78F2E314280F719D0073CE00 /* AEPIdentity.framework in Embed Frameworks */,
 				78F2E318280F719D0073CE00 /* AEPServices.framework in Embed Frameworks */,
@@ -312,7 +309,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				78F2E315280F719D0073CE00 /* AEPLifecycle.framework in Frameworks */,
 				78F2E311280F719C0073CE00 /* AEPCore.framework in Frameworks */,
 				78F2E313280F719C0073CE00 /* AEPIdentity.framework in Frameworks */,
 				78F2E2FC280F6DED0073CE00 /* UniformTypeIdentifiers.framework in Frameworks */,

@@ -12,7 +12,6 @@
 import FileProvider
 import AEPCore
 import AEPServices
-import AEPLifecycle
 import AEPIdentity
 
 class FileProviderExtension: NSFileProviderExtension {
@@ -23,12 +22,10 @@ class FileProviderExtension: NSFileProviderExtension {
     override init() {
         super.init()
         MobileCore.setLogLevel(.trace)
-        let extensions = [Identity.self,
-                          Lifecycle.self]
+        let extensions = [Identity.self]
 
         MobileCore.registerExtensions(extensions, {
             MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
-            MobileCore.lifecycleStart(additionalContextData: nil)
         })
 
     }
