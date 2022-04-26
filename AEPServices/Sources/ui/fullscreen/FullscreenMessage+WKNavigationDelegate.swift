@@ -10,8 +10,10 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 #if os(iOS)
+import Foundation
+import WebKit
+
 extension FullscreenMessage: WKNavigationDelegate {
     // MARK: WKNavigationDelegate delegate
     // default behavior is to call the decisionHandler with .allow
