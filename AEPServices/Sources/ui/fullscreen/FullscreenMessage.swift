@@ -10,6 +10,7 @@
  governing permissions and limitations under the License.
  */
 
+#if os(iOS)
 import Foundation
 import UIKit
 import WebKit
@@ -347,3 +348,4 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
         }
     }
 }
+#endif

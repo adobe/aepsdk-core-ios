@@ -10,6 +10,7 @@
  governing permissions and limitations under the License.
  */
 
+#if os(iOS)
 import Foundation
 import UIKit
 
@@ -29,3 +30,4 @@ class AEPUIService: UIService {
         return FloatingButton(listener: listener)
     }
 }
+#endif

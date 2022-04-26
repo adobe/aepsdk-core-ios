@@ -33,8 +33,10 @@ public class ServiceProvider {
     private var overrideURLService: URLOpening?
     private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
-    private var overrideUIService: UIService?
-    private var defaultUIService = AEPUIService()
+    #if os(iOS)
+        private var overrideUIService: UIService?
+        private var defaultUIService = AEPUIService()
+    #endif
 
     // Don't allow init of ServiceProvider outside the class
     private init() {}
@@ -117,19 +119,20 @@ public class ServiceProvider {
         }
     }
 
-    public var uiService: UIService {
-        get {
-            return queue.sync {
-                return overrideUIService ?? defaultUIService
+    #if os(iOS)
+        public var uiService: UIService? {
+            get {
+                return queue.sync {
+                    return overrideUIService ?? defaultUIService
+                }
+            }
+            set {
+                queue.async {
+                    self.overrideUIService = newValue
+                }
             }
         }
-        set {
-            queue.async {
-                self.overrideUIService = newValue
-            }
-        }
-    }
-
+    #endif
     internal func reset() {
         defaultSystemInfoService = ApplicationSystemInfoService()
         defaultKeyValueService = UserDefaultsNamedCollection()
@@ -138,13 +141,16 @@ public class ServiceProvider {
         defaultCacheService = DiskCacheService()
         defaultURLService = URLService()
         defaultLoggingService = LoggingService()
-        defaultUIService = AEPUIService()
-
+        #if os(iOS)
+            defaultUIService = AEPUIService()
+        #endif
         overrideSystemInfoService = nil
         overrideKeyValueService = nil
         overrideNetworkService = nil
         overrideCacheService = nil
         overrideURLService = nil
-        overrideUIService = nil
+        #if os(iOS)
+            overrideUIService = nil
+        #endif
     }
 }

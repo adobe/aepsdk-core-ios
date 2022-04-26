@@ -10,6 +10,7 @@
  governing permissions and limitations under the License.
  */
 
+#if os(iOS)
 import Foundation
 import UIKit
 
@@ -48,3 +49,4 @@ public protocol UIService {
     @objc
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
 }
+#endif

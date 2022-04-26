@@ -10,6 +10,7 @@
  governing permissions and limitations under the License.
  */
 
+#if os(iOS)
 import Foundation
 import UIKit
 
@@ -171,3 +172,4 @@ extension FullscreenMessage {
         return (screenHeight - height) / 2
     }
 }
+#endif

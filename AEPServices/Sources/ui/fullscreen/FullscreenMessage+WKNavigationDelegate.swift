@@ -11,8 +11,7 @@
  */
 
 import Foundation
-import WebKit
-
+#if os(iOS)
 extension FullscreenMessage: WKNavigationDelegate {
     // MARK: WKNavigationDelegate delegate
     // default behavior is to call the decisionHandler with .allow
@@ -46,3 +45,4 @@ extension FullscreenMessage: WKNavigationDelegate {
         }
     }
 }
+#endif

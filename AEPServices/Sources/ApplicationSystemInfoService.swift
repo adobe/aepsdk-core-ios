@@ -10,7 +10,9 @@
  governing permissions and limitations under the License.
  */
 
+#if os(iOS)
 import CoreTelephony
+#endif
 import Foundation
 import UIKit
 
@@ -79,7 +81,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getMobileCarrierName() -> String? {
-        #if targetEnvironment(macCatalyst)
+        #if targetEnvironment(macCatalyst) || os(tvOS)
             return "unknown"
         #else
             let networkInfo = CTTelephonyNetworkInfo()
@@ -165,8 +167,10 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getCurrentOrientation() -> DeviceOrientation {
+        #if os(iOS)
         if UIDevice.current.orientation.isPortrait {return .PORTRAIT}
         if UIDevice.current.orientation.isLandscape {return .LANDSCAPE}
+        #endif
         return .UNKNOWN
     }
 

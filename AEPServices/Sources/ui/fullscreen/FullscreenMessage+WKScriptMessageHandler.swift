@@ -10,6 +10,7 @@
  governing permissions and limitations under the License.
  */
 
+#if os(iOS)
 import Foundation
 import WebKit
 
@@ -22,3 +23,4 @@ extension FullscreenMessage: WKScriptMessageHandler {
         }
     }
 }
+#endif
