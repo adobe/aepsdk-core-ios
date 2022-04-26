@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPServices
 import UIKit
 
+@available(iOSApplicationExtension, unavailable)
 public class MockUIService: UIService {
     
     public init() {}

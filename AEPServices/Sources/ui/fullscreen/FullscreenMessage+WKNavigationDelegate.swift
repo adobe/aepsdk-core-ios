@@ -13,6 +13,7 @@
 import Foundation
 import WebKit
 
+@available(iOSApplicationExtension, unavailable)
 extension FullscreenMessage: WKNavigationDelegate {
     // MARK: WKNavigationDelegate delegate
     // default behavior is to call the decisionHandler with .allow

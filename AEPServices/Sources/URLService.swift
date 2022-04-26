@@ -14,6 +14,7 @@ import Foundation
 import UIKit
 
 /// A concrete implementation of protocol `URLOpening`
+@available(iOSApplicationExtension, unavailable)
 class URLService: URLOpening {
     private let LOG_PREFIX = "URLService"
 
