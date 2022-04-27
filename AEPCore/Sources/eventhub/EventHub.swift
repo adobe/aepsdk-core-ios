@@ -242,7 +242,7 @@ final class EventHub {
     ///   - resolution: The `SharedStateResolution` to determine how to resolve the shared state
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .none, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         return eventHubQueue.sync { [weak self] in
             guard let container = self?.registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
                 Log.warning(label: LOG_TAG, "Unable to retrieve \(sharedStateType.rawValue) shared state for \(extensionName). No such extension is registered.")

@@ -99,7 +99,7 @@ public final class MobileCore: NSObject {
     /// - Returns: list of registered extensions along with their respective versions
     @objc
     public static func getRegisteredExtensions() -> String {
-        let registeredExtensions = EventHub.shared.getSharedState(extensionName: EventHubConstants.NAME, event: nil, resolution: .none)?.value
+        let registeredExtensions = EventHub.shared.getSharedState(extensionName: EventHubConstants.NAME, event: nil)?.value
         guard let jsonData = try? JSONSerialization.data(withJSONObject: registeredExtensions ?? [:], options: .prettyPrinted) else { return "{}" }
         return String(data: jsonData, encoding: .utf8) ?? "{}"
     }

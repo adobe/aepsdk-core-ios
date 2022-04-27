@@ -13,6 +13,7 @@
 import AEPServices
 import Foundation
 
+/// Type representing the resolution of an extension's `SharedState`
 @objc(AEPSharedStateResolution)
 public enum SharedStateResolution: Int {
     case lastSet, none
@@ -101,7 +102,7 @@ class SharedState {
         }
     }
 
-    /// Resolves the last given version which is set to a `SharedState` instance
+    /// Resolves the last given version which is "set" to a `SharedState` instance
     /// - Parameters:
     ///   - version: The version of the `SharedState` to retrieve
     /// - Returns: The last set value for the shared state
