@@ -115,6 +115,10 @@ public extension Extension {
         return runtime.getSharedState(extensionName: extensionName, event: event, barrier: false)
     }
 
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = false, resolution: SharedStateResolution) -> SharedStateResult? {
+        return runtime.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution)
+    }
+
     // MARK: - XDM Shared State
 
     /// Creates a new XDM SharedState for this extension.
@@ -147,6 +151,10 @@ public extension Extension {
     /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
     func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false) -> SharedStateResult? {
         return runtime.getXDMSharedState(extensionName: extensionName, event: event, barrier: barrier)
+    }
+
+    func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false, resolution: SharedStateResolution) -> SharedStateResult? {
+        return runtime.getXDMSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution)
     }
 
     /// Called before each `Event` is processed by any `ExtensionListener` owned by this `Extension`

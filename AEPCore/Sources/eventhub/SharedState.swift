@@ -13,6 +13,11 @@
 import AEPServices
 import Foundation
 
+@objc(AEPSharedStateResolution)
+public enum SharedStateResolution: Int {
+    case lastSet, none
+}
+
 /// Type representing the state of an extension's `SharedState`
 @objc (AEPSharedStateStatus)
 public enum SharedStateStatus: Int {
@@ -93,6 +98,25 @@ class SharedState {
                 current = node.previousNode
             }
             return (nil, .none)
+        }
+    }
+
+    /// Resolves the last given version which is set to a `SharedState` instance
+    /// - Parameters:
+    ///   - version: The version of the `SharedState` to retrieve
+    /// - Returns: The last set value for the shared state
+    internal func resolveLastSet(version: Int) -> [String: Any]? {
+        return queue.sync {
+            var current = self.head
+            while let node = current {
+                if node.version <= version && node.nodeStatus == .set {
+                    return node.data
+                } else if node.previousNode == nil && node.nodeStatus == .set {
+                    return node.data
+                }
+                current = node.previousNode
+            }
+            return nil
         }
     }
 
