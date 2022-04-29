@@ -351,7 +351,6 @@
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
 		7814B23325CB455200841429 /* URL+Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7814B23225CB455200841429 /* URL+Validator.swift */; };
-		7841860D281B468900B04CDB /* ADBMobileConfig-OptedIn.json in Resources */ = {isa = PBXBuildFile; fileRef = 7841860C281B468800B04CDB /* ADBMobileConfig-OptedIn.json */; };
 		786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */; };
 		786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */; };
 		786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */; };
@@ -1020,7 +1019,6 @@
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7814B23225CB455200841429 /* URL+Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validator.swift"; sourceTree = "<group>"; };
-		7841860C281B468800B04CDB /* ADBMobileConfig-OptedIn.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "ADBMobileConfig-OptedIn.json"; sourceTree = "<group>"; };
 		786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatter.swift; sourceTree = "<group>"; };
 		786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpConnectionConstants.swift; sourceTree = "<group>"; };
 		786C004725B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatterTests.swift; sourceTree = "<group>"; };
@@ -2022,7 +2020,6 @@
 				246EFA052790B20000C76A6B /* rules_pii.zip */,
 				246EFA032790B20000C76A6B /* rules_signal.zip */,
 				3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */,
-				7841860C281B468800B04CDB /* ADBMobileConfig-OptedIn.json */,
 				3FF829482507F8AA00483C74 /* rules_lifecycle.json */,
 				3FEEA0DB2522436E007EC317 /* rules_pii.json */,
 				BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */,
@@ -2674,7 +2671,6 @@
 				BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */,
 				246EFA082790B20100C76A6B /* rules_pii.zip in Resources */,
 				BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */,
-				7841860D281B468900B04CDB /* ADBMobileConfig-OptedIn.json in Resources */,
 				246EFA072790B20100C76A6B /* rules_lifecycle.zip in Resources */,
 				3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */,
 			);
