@@ -376,7 +376,74 @@ class EventHubContractTest: XCTestCase {
 
         let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true)
         XCTAssertEqual(["event":"three"], sharedStateForEvent3?.value as? [String:String])
+    }
 
+    func testSharedStateWithResolutionGetsLatestValid() {
+        // setup
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        let event3 = Event(name: "three", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+        MobileCore.dispatch(event: event3)
+
+        // test
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"first"], event: event1)
+        ContractExtensionOne.runtime?.createSharedState(data: ["event":"two"], event: event2)
+        let resolver = ContractExtensionOne.runtime?.createPendingSharedState(event: event3)
+
+        // verify
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent1?.value as? [String:String])
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent1?.status)
+
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(["event":"two"], sharedStateForEvent2?.value as? [String:String])
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent2?.status)
+
+        let sharedStateForEvent3 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(["event":"two"], sharedStateForEvent3?.value as? [String:String])
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent3?.status)
+
+        resolver?(["event": "three"])
+
+        let sharedStateForEvent3New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event3, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(["event":"three"], sharedStateForEvent3New?.value as? [String:String])
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent3?.status)
+    }
+
+    func testResolvingSharedStateWithResolutionGetsLatestValid() {
+        let startExpectation = XCTestExpectation(description: "Start callback is invoked")
+        let event1 = Event(name: "first", type: "test", source: "test", data: nil)
+        let event2 = Event(name: "second", type: "test", source: "test", data: nil)
+        MobileCore.dispatch(event: event1)
+        MobileCore.dispatch(event: event2)
+        MobileCore.registerExtensions([ContractExtensionOne.self]) {
+            startExpectation.fulfill()
+        }
+        wait(for: [startExpectation], timeout: 1)
+        let resolver = ContractExtensionOne.runtime?.createPendingSharedState(event: event1)
+
+        let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent1?.status)
+
+        let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent2?.status)
+
+        resolver?(["event": "first"])
+
+        let sharedStateForEvent1New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent1New?.value as? [String:String])
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent1New?.status)
+
+        let sharedStateForEvent2New = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true, resolution: .lastSet)
+        XCTAssertEqual(["event":"first"], sharedStateForEvent2New?.value as? [String:String])
+        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent2New?.status)
     }
 
     /// Tests createPendingSharedState and then resolve it
