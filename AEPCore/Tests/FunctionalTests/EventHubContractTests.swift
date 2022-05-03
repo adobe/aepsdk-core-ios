@@ -430,10 +430,10 @@ class EventHubContractTest: XCTestCase {
         let resolver = ContractExtensionOne.runtime?.createPendingSharedState(event: event1)
 
         let sharedStateForEvent1 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event1, barrier: true, resolution: .lastSet)
-        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent1?.status)
+        XCTAssertEqual(SharedStateStatus.none, sharedStateForEvent1?.status)
 
         let sharedStateForEvent2 = ContractExtensionOne.runtime?.getSharedState(extensionName: "com.adobe.ContractExtensionOne", event: event2, barrier: true, resolution: .lastSet)
-        XCTAssertEqual(SharedStateStatus.set, sharedStateForEvent2?.status)
+        XCTAssertEqual(SharedStateStatus.none, sharedStateForEvent2?.status)
 
         resolver?(["event": "first"])
 

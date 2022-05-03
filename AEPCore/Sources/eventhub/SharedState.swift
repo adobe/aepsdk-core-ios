@@ -102,22 +102,22 @@ class SharedState {
         }
     }
 
-    /// Resolves the last given version which is "set" to a `SharedState` instance
+    /// Resolves the last given version which is "set" to a `SharedState` instance, if no current or previous shared state is set, will return .none
     /// - Parameters:
     ///   - version: The version of the `SharedState` to retrieve
     /// - Returns: The last set value for the shared state
-    internal func resolveLastSet(version: Int) -> [String: Any]? {
+    internal func resolveLastSet(version: Int) -> (value: [String: Any]?, status: SharedStateStatus) {
         return queue.sync {
             var current = self.head
             while let node = current {
                 if node.version <= version && node.nodeStatus == .set {
-                    return node.data
+                    return (node.data, .set)
                 } else if node.previousNode == nil && node.nodeStatus == .set {
-                    return node.data
+                    return (node.data, .set)
                 }
                 current = node.previousNode
             }
-            return nil
+            return (nil, .none)
         }
     }
 

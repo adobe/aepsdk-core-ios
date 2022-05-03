@@ -129,7 +129,7 @@ extension ExtensionContainer: ExtensionRuntime {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
     }
 
-    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution) -> SharedStateResult? {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .none) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution)
     }
 
@@ -145,7 +145,7 @@ extension ExtensionContainer: ExtensionRuntime {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, sharedStateType: .xdm)
     }
 
-    func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution) -> SharedStateResult? {
+    func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .none) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: .xdm)
     }
 

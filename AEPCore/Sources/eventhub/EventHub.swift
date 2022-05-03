@@ -258,7 +258,7 @@ final class EventHub {
             let result: (value: [String: Any]?, status: SharedStateStatus)
             switch resolution {
             case .lastSet:
-                result = (sharedState.resolveLastSet(version: version), .set)
+                result = sharedState.resolveLastSet(version: version)
             case .none:
                 result = sharedState.resolve(version: version)
             }
