@@ -59,7 +59,10 @@ class Configuration: NSObject, Extension {
             // notify rules engine to load cached rules
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
                 Log.trace(label: name, "Reading rules from cache for URL: \(rulesURLString)")
-                rulesEngine.replaceRulesWithCache(from: rulesURLString)
+                if !rulesEngine.replaceRulesWithCache(from: rulesURLString) {
+                    // Attempt to load rules from manifest if none in cache
+                    
+                }
             }
         }
     }

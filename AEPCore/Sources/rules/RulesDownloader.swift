@@ -27,6 +27,27 @@ struct RulesDownloader: RulesLoader {
         return getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable
     }
 
+    func loadRulesFromManifest() -> Result<Data, RulesDownloaderError> {
+        let systemInfoService = ServiceProvider.shared.systemInfoService
+        guard let data = systemInfoService.getAsset(fileName: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, fileType: "zip")?.data(using: .utf8) else {
+            Log.error(label: "rules downloader", "Loading rules from manifest failed")
+            return .failure(.noData)
+        }
+
+        // Store Zip file in temp directory for unzipping
+        switch self.storeDataInTempDirectory(data: data) {
+        case let .success(url):
+            // Unzip the rules.json from the zip file in the temp directory and get the rules dict from the json file
+            guard let data = self.unzipRules(at: url) else {
+                return .failure(.unableToUnzipRules)
+            }
+            return .success(data)
+        case let .failure(error):
+            Log.warning(label: "rules downloader", error.localizedDescription)
+            return .failure(error)
+        }
+    }
+
     func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Result<Data, RulesDownloaderError>) -> Void) {
         /// 304 - Not Modified support
         var headers = [String: String]()
