@@ -16,7 +16,9 @@ import Foundation
 /// Type representing the resolution of an extension's `SharedState`
 @objc(AEPSharedStateResolution)
 public enum SharedStateResolution: Int {
-    case lastSet, none
+    // lastSet will resolve for the lastSet shared state
+    // any will resolve for the last shared state indiscriminately
+    case lastSet, any
 }
 
 /// Type representing the state of an extension's `SharedState`
