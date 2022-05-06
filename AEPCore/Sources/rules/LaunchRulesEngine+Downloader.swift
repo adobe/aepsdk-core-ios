@@ -64,14 +64,14 @@ public extension LaunchRulesEngine {
     func replaceRulesWithManifest(from url: URL) {
         let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
         switch rulesDownloader.loadRulesFromManifest(for: url) {
-            case .success(let data):
-                guard let rules = JSONRulesParser.parse(data) else {
-                    Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from manifest")
-                    return
-                }
-                self.replaceRules(with: rules)
-            case .failure(let error):
-                Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from manifest, with error: \(error.localizedDescription)")
+        case .success(let data):
+            guard let rules = JSONRulesParser.parse(data) else {
+                Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from manifest")
+                return
+            }
+            self.replaceRules(with: rules)
+        case .failure(let error):
+            Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from manifest, with error: \(error.localizedDescription)")
         }
     }
 }
