@@ -82,7 +82,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(sharedStateForInstall?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
 
         let forceSyncdata = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.FORCE_SYNC: true]
-        let forceSyncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+        let forceSyncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: forceSyncdata)
 
         // test
         mockRuntime.simulateComingEvent(event: forceSyncEvent)
