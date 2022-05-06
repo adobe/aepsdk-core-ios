@@ -639,8 +639,8 @@ class IdentityStateTests: XCTestCase {
         XCTAssertTrue(mockHitQueue.queuedHits.isEmpty) // hit should NOT be queued in the hit queue
     }
 
-    /// Tests that a hit is queued when forceSynce
-    func testSyncIdentifiers_whenForceSync_shouldQueueHit() {
+    /// Tests that a hit is queued when forceSync is set to true while first event is processed and treated as forceSync event
+    func testSyncIdentifiers_whenForceSyncFirstEvent_shouldQueueHit() {
         // setup
         let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
@@ -655,6 +655,29 @@ class IdentityStateTests: XCTestCase {
         // test
         let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true] as [String: Any]
         _ = state.syncIdentifiers(event: Event(name: "ID Sync Test Event", type: EventType.identity, source: EventSource.requestIdentity, data: data), forceSync: true)
+
+        // verify
+        XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)
+        let hit = try! JSONDecoder().decode(IdentityHit.self, from: mockHitQueue.queuedHits.first!.data!)
+        XCTAssertTrue(hit.url.absoluteString.contains("test-server"))
+    }
+
+    /// Tests that a hit is queued when forceSync flag is set in eventData
+    func testSyncIdentifiers_whenForceSyncEvent_shouldQueueHit() {
+        // setup
+        let configSharedState = [IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org",
+                                 IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "test-server",
+                                 IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue] as [String: Any]
+        var props = IdentityProperties()
+        props.ecid = ECID() // visitor ID is null initially and set for the first time in
+        // shouldSync(). Mimic a second call to shouldSync by setting the ecid
+        props.lastSync = Date() // set last sync to now
+        state = IdentityState(identityProperties: props, hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+        state.lastValidConfig = configSharedState
+
+        // test
+        let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.FORCE_SYNC: true] as [String: Any]
+        _ = state.syncIdentifiers(event: Event(name: "ID Sync Test Event", type: EventType.identity, source: EventSource.requestIdentity, data: data))
 
         // verify
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)

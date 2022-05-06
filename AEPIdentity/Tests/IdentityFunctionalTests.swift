@@ -51,6 +51,48 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
     }
 
+    /// Tests that a sync event dispatches a shared state update
+    func testSyncIdentifiersForceSyncEventInstallScenario() {
+        // setup
+        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+        let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.FORCE_SYNC: true]
+        let event = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+
+        // test
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        let sharedState = mockRuntime.createdSharedStates.last!
+        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+    }
+
+    /// Tests that a sync event dispatches a shared state update even on subsequent launch when forceSync flag is set
+    func testSyncIdentifiersForceSyncEventSubsequentLaunchScenario() {
+        // setup
+        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+        let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
+        let event = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+
+        // test
+        // fist event treated as forceSync event
+        mockRuntime.simulateComingEvent(event: event)
+
+        // verify
+        let sharedStateForInstall = mockRuntime.createdSharedStates.last!
+        XCTAssertNotNil(sharedStateForInstall?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+
+        let forceSyncdata = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.FORCE_SYNC: true]
+        let forceSyncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+
+        // test
+        mockRuntime.simulateComingEvent(event: forceSyncEvent)
+
+        // verify
+        XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
+        let sharedStateForLaunch = mockRuntime.createdSharedStates.last!
+        XCTAssertNotNil(sharedStateForLaunch?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+    }
+
     /// Tests that a generic event dispatches a shared state update
     func testSyncIdentifiersGenericIdentity() {
         // setup
