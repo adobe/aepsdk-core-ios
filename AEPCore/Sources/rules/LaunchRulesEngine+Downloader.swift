@@ -60,9 +60,10 @@ public extension LaunchRulesEngine {
         return true
     }
 
-    func replaceRulesWithManifest() {
+    /// Reads the manifest for bundled rules and replaces rules with bundled rules if found
+    func replaceRulesWithManifest(from url: URL) {
         let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
-        switch rulesDownloader.loadRulesFromManifest() {
+        switch rulesDownloader.loadRulesFromManifest(for: url) {
             case .success(let data):
                 guard let rules = JSONRulesParser.parse(data) else {
                     Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from manifest")
