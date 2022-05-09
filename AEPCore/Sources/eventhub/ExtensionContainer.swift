@@ -129,6 +129,10 @@ extension ExtensionContainer: ExtensionRuntime {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
     }
 
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any) -> SharedStateResult? {
+        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution)
+    }
+
     func createXDMSharedState(data: [String: Any], event: Event?) {
         EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, event: event, sharedStateType: .xdm)
     }
@@ -139,6 +143,10 @@ extension ExtensionContainer: ExtensionRuntime {
 
     func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false) -> SharedStateResult? {
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, sharedStateType: .xdm)
+    }
+
+    func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any) -> SharedStateResult? {
+        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: .xdm)
     }
 
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {

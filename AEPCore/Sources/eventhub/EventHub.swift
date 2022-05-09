@@ -239,9 +239,10 @@ final class EventHub {
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version or latest if not yet versioned. If event is nil will return the latest `SharedState`
     ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+    ///   - resolution: The `SharedStateResolution` to determine how to resolve the shared state
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
+    func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         return eventHubQueue.sync { [weak self] in
             guard let container = self?.registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
                 Log.warning(label: LOG_TAG, "Unable to retrieve \(sharedStateType.rawValue) shared state for \(extensionName). No such extension is registered.")
@@ -254,7 +255,13 @@ final class EventHub {
                 version = self?.eventNumberMap[event.id] ?? Int.max
             }
 
-            let result = sharedState.resolve(version: version)
+            let result: (value: [String: Any]?, status: SharedStateStatus)
+            switch resolution {
+            case .lastSet:
+                result = sharedState.resolveLastSet(version: version)
+            case .any:
+                result = sharedState.resolve(version: version)
+            }
 
             let stateProviderLastVersion = self?.eventNumberFor(event: container.lastProcessedEvent) ?? 0
             // shared state is still considered pending if barrier is used and the state provider has not processed past the previous event
