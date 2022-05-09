@@ -18,6 +18,7 @@ import AEPServicesMocks
 @testable import AEPServices
 @testable import AEPSignal
 
+@available(iOSApplicationExtension, unavailable)
 class SignalTests: XCTestCase {
     var signal: Signal!
     var mockHitQueue: MockHitQueue!

@@ -18,6 +18,7 @@ import AEPServicesMocks
 @testable import AEPServices
 @testable import AEPSignal
 
+@available(iOSApplicationExtension, unavailable)
 class EventPlusSignalTests: XCTestCase {
     var signal: Signal!
     

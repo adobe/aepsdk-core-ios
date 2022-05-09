@@ -17,6 +17,7 @@ import UIKit
 import WebKit
 import XCTest
 
+@available(iOSApplicationExtension, unavailable)
 class FullscreenMessageTests : XCTestCase {
     let mockHtml = "somehtml"
     var fullscreenMessage : FullscreenMessage?
@@ -130,6 +131,20 @@ class FullscreenMessageTests : XCTestCase {
         XCTAssertEqual(15.0, webview?.scrollView.layer.cornerRadius)
     }
     
+    func testShowWithPayloadUsingLocalAssets() throws {
+        expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+        mockFullscreenListener.setExpectation(expectation!)
+        fullscreenMessage?.scriptHandlers["testScript"] = handler
+        fullscreenMessage?.isLocalImageUsed = true
+        fullscreenMessage?.payloadUsingLocalAssets = "use me instead"
+        messageMonitor.dismissMessage()
+        fullscreenMessage?.show()
+        wait(for: [expectation!], timeout: 2.0)
+        XCTAssertTrue(mockFullscreenListener.onShowCalled)
+        XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+        XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+    }
+    
     func testShowWithGestures() {
         expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
         mockFullscreenListener.setExpectation(expectation!)
@@ -227,7 +242,50 @@ class FullscreenMessageTests : XCTestCase {
         fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
         XCTAssertEqual(1, fullscreenMessage?.scriptHandlers.count)
     }
+    
+    func testSetAssetMapHappy() throws {
+        // setup
+        fullscreenMessage?.payload = "message with a token"
+        let testAssetMap = ["token":"value replaced"]
+        
+        // test
+        fullscreenMessage?.setAssetMap(testAssetMap)
+        
+        // verify
+        XCTAssertEqual("message with a value replaced", fullscreenMessage?.payloadUsingLocalAssets)
+    }
+    
+    func testSetAssetMapNoMatchingTokens() throws {
+        // setup
+        fullscreenMessage?.payload = "message with a token"
+        let testAssetMap = ["nope":"value replaced"]
+        
+        // test
+        fullscreenMessage?.setAssetMap(testAssetMap)
+        
+        // verify
+        XCTAssertEqual("message with a token", fullscreenMessage?.payloadUsingLocalAssets)
+    }
 
+    func testSetAssetMapNilMap() throws {
+        // test
+        fullscreenMessage?.setAssetMap(nil)
+        
+        // verify
+        XCTAssertNil(fullscreenMessage?.payloadUsingLocalAssets)
+    }
+    
+    func testSetAssetMapEmptyMap() throws {
+        // setup
+        let testAssetMap: [String: String] = [:]
+        
+        // test
+        fullscreenMessage?.setAssetMap(testAssetMap)
+        
+        // verify
+        XCTAssertNil(fullscreenMessage?.payloadUsingLocalAssets)
+    }
+    
     func testUserContentControllerWithScriptHandler() throws {
         expectation = XCTestExpectation(description: "JavaScript handler was called")
         let controller = WKUserContentController()

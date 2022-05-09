@@ -16,6 +16,7 @@ import WebKit
 
 /// This class is used to create and display fullscreen messages on the current view.
 @objc(AEPFullscreenMessage)
+@available(iOSApplicationExtension, unavailable)
 public class FullscreenMessage: NSObject, FullscreenPresentable {
 
     let LOG_PREFIX = "FullscreenMessage"
@@ -36,6 +37,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
 
     var isLocalImageUsed = false
     var payload: String
+    var payloadUsingLocalAssets: String?
     weak var listener: FullscreenMessageDelegate?
     public internal(set) var webView: UIView?
     private(set) var transparentBackgroundView: UIView?
@@ -125,7 +127,13 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
                     // URL to loadFileURL.
                     do {
                         try FileManager.default.createDirectory(atPath: cacheFolderURL?.path ?? "", withIntermediateDirectories: true, attributes: nil)
-                        let tempHtml = self.payload.data(using: .utf8, allowLossyConversion: false)
+                        var tempHtml: Data?
+                        // if a payload that uses local assets is defined, use it. otherwise, use the default payload.
+                        if let localAssetsHtml = self.payloadUsingLocalAssets {
+                            tempHtml = localAssetsHtml.data(using: .utf8, allowLossyConversion: false)
+                        } else {
+                            tempHtml = self.payload.data(using: .utf8, allowLossyConversion: false)
+                        }
                         try tempHtml?.write(to: file, options: .noFileProtection)
                         useTempHTML = true
                     } catch {
@@ -195,7 +203,7 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
     /// - Parameters:
     ///   - name: the name of the message being passed from javascript
     ///   - handler: a method to be called when the javascript message is passed
-    public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
+    @objc public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
         DispatchQueue.main.async {
             // don't add the handler if it's already been added
             guard self.scriptHandlers[name] == nil else {
@@ -208,6 +216,24 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             }
 
             self.scriptHandlers[name] = handler
+        }
+    }
+
+    /// Generates an HTML payload pointing to the provided local assets
+    ///
+    /// This method loops through each entry of the provided `map`, and generates a new HTML payload by replacing
+    /// occurrences of the key (the web URL for an image) with the value (the path to a file in local cache).
+    ///
+    /// - Parameter map: map containing image URLs and cached file paths
+    @objc public func setAssetMap(_ map: [String: String]?) {
+        guard let map = map, !map.isEmpty else {
+            payloadUsingLocalAssets = nil
+            return
+        }
+
+        payloadUsingLocalAssets = payload
+        for asset in map {
+            payloadUsingLocalAssets = payloadUsingLocalAssets?.replacingOccurrences(of: asset.key, with: asset.value)
         }
     }
 
@@ -335,9 +361,10 @@ public class FullscreenMessage: NSObject, FullscreenPresentable {
             } else {
                 if let bgView = self.transparentBackgroundView {
                     bgView.removeFromSuperview()
-                } else {
-                    self.webView?.removeFromSuperview()
                 }
+
+                self.webView?.removeFromSuperview()
+
                 if shouldDeallocateWebView {
                     self.webView = nil
                 } else {

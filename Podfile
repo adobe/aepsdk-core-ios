@@ -69,3 +69,7 @@ end
 target 'PerformanceApp' do
   tests_main
 end
+
+target 'TestAppExtension' do
+  tests_main
+end

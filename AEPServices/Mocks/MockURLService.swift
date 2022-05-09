@@ -13,6 +13,7 @@
 import AEPServices
 import Foundation
 
+@available(iOSApplicationExtension, unavailable)
 public class MockURLService: URLOpening {
     public var dispatchedUrls: [ URL ] = []
 
