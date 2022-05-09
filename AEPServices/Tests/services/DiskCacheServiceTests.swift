@@ -37,6 +37,30 @@ class DiskCacheServiceTests: XCTestCase {
         try? FileManager.default.removeItem(atPath: cachePath)
     }
 
+    func originalEntry(_ original: CacheEntry, equals cached: CacheEntry) -> Bool {
+        guard original.data == cached.data, original.expiry == cached.expiry else {
+            return false
+        }
+
+        guard let cachedMeta = cached.metadata, cachedMeta["PATH"] != nil else {
+            return false
+        }
+
+        guard let originalMeta = original.metadata else {
+            // the cached metadata will always contain a PATH.
+            // if original metadata doesn't exist, it's count should be 1
+            return cachedMeta.count == 1
+        }
+
+        for entry in originalMeta {
+            guard let cacheVal = cachedMeta[entry.key], cacheVal == entry.value else {
+                return false
+            }
+        }
+
+        return true
+    }
+
     /// When an entry doesn't exist in the cache we should return nil
     func testGetEmpty() {
         XCTAssertNil(diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY))
@@ -53,7 +77,20 @@ class DiskCacheServiceTests: XCTestCase {
 
         // verify
         let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
-        XCTAssertEqual(entry, storedEntry)
+        XCTAssertTrue(originalEntry(entry, equals: storedEntry!))
+    }
+
+    func testSetGetNoMetadata() {
+        // setup
+        let data = "Test".data(using: .utf8)!
+        let entry = CacheEntry(data: data, expiry: .date(dateOneMinInFuture), metadata: nil)
+
+        // test
+        try! diskCache.set(cacheName: CACHE_NAME, key: ENTRY_KEY, entry: entry)
+
+        // verify
+        let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
+        XCTAssertTrue(originalEntry(entry, equals: storedEntry!))
     }
 
     /// Tests that we can set and get an item in the cache
@@ -69,7 +106,7 @@ class DiskCacheServiceTests: XCTestCase {
         // verify
         let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
         let decodedPerson = try! JSONDecoder().decode(Person.self, from: storedEntry!.data)
-        XCTAssertEqual(entry, storedEntry)
+        XCTAssertTrue(originalEntry(entry, equals: storedEntry!))
         XCTAssertEqual(decodedPerson, person)
     }
 
@@ -89,7 +126,7 @@ class DiskCacheServiceTests: XCTestCase {
         // verify
         for i in 0 ..< count {
             let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: "\(i)")
-            XCTAssertEqual(entries[i], storedEntry)
+            XCTAssertTrue(originalEntry(entries[i], equals: storedEntry!))
         }
     }
 
@@ -118,7 +155,7 @@ class DiskCacheServiceTests: XCTestCase {
 
         // verify
         let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
-        XCTAssertEqual(newEntry, storedEntry)
+        XCTAssertTrue(originalEntry(newEntry, equals: storedEntry!))
     }
 
     /// When attempting to remove an item in the cache that doesn't exist we should throw an error
@@ -137,7 +174,7 @@ class DiskCacheServiceTests: XCTestCase {
 
         // verify pt. 1
         let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
-        XCTAssertEqual(entry, storedEntry)
+        XCTAssertTrue(originalEntry(entry, equals: storedEntry!))        
 
         // test pt. 2
         try! diskCache.remove(cacheName: CACHE_NAME, key: ENTRY_KEY)

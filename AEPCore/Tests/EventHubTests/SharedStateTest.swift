@@ -18,9 +18,29 @@ class SharedStateTest: XCTestCase {
     private var sharedState: SharedState = SharedState()
 
     // helper function
-    func validateSharedState(_ version: Int, _ dictionaryValue: String) {
-        XCTAssertEqual(sharedState.resolve(version: version).value![SharedStateTestHelper.DICT_KEY] as! String, dictionaryValue)
+    func validateSharedState(_ version: Int, _ dictionaryValue: String?, _ resolution: SharedStateResolution = .any, _ expectedStatus: SharedStateStatus? = nil) {
+        switch resolution {
+        case .lastSet:
+            let resolved = sharedState.resolveLastSet(version: version)
+            if let expectedStatus = expectedStatus {
+                XCTAssertEqual(resolved.status, expectedStatus)
+            }
+            guard let value = resolved.value else {
+                if dictionaryValue != nil {
+                    XCTFail("resolved value is unexpectedly nil")
+                }
+                return
+            }
+            XCTAssertEqual(value[SharedStateTestHelper.DICT_KEY] as? String, dictionaryValue)
+        case .any:
+            let resolved = sharedState.resolve(version: version)
+            XCTAssertEqual(resolved.value![SharedStateTestHelper.DICT_KEY] as? String, dictionaryValue)
+            if let expectedStatus = expectedStatus {
+                XCTAssertEqual(resolved.status, expectedStatus)
+            }
+        }
     }
+
 
     override func setUp() {
         sharedState = SharedState()
@@ -83,12 +103,65 @@ class SharedStateTest: XCTestCase {
         sharedState.addPending(version: 2)
         sharedState.set(version: 3, data: SharedStateTestHelper.THREE)
 
+        validateSharedState(0, "zero", .any, .set)
+        validateSharedState(1, "one", .any, .set)
+        validateSharedState(2, "one", .any, .pending)
+        validateSharedState(3, "three", .any, .set)
+
         sharedState.updatePending(version: 2, data: SharedStateTestHelper.TWO)
 
-        validateSharedState(0, "zero")
-        validateSharedState(1, "one")
-        validateSharedState(2, "two")
-        validateSharedState(3, "three")
+        validateSharedState(0, "zero", .any, .set)
+        validateSharedState(1, "one", .any, .set)
+        validateSharedState(2, "two", .any, .set)
+        validateSharedState(3, "three", .any, .set)
+    }
+
+    func testUpdatePendingWithLastSetInterleaved() {
+        sharedState.set(version: 0, data: SharedStateTestHelper.ZERO)
+        sharedState.set(version: 1, data: SharedStateTestHelper.ONE)
+        sharedState.addPending(version: 2)
+        sharedState.set(version: 3, data: SharedStateTestHelper.THREE)
+
+        validateSharedState(0, "zero", .lastSet, .set)
+        validateSharedState(1, "one", .lastSet, .set)
+        // Because version 2 was set to pending, last set is version 1
+        validateSharedState(2, "one", .lastSet, .set)
+        validateSharedState(3, "three", .lastSet, .set)
+
+        sharedState.updatePending(version: 2, data: SharedStateTestHelper.TWO)
+
+        validateSharedState(0, "zero", .lastSet, .set)
+        validateSharedState(1, "one", .lastSet, .set)
+        validateSharedState(2, "two", .lastSet, .set)
+        validateSharedState(3, "three", .lastSet, .set)
+    }
+
+    func testUpdatePendingWithLastSetAllPending() {
+        sharedState.addPending(version: 0)
+        sharedState.addPending(version: 1)
+        sharedState.addPending(version: 2)
+
+        validateSharedState(0, nil, .lastSet, SharedStateStatus.none)
+        validateSharedState(1, nil, .lastSet, SharedStateStatus.none)
+        validateSharedState(3, nil, .lastSet, SharedStateStatus.none)
+
+        sharedState.updatePending(version: 0, data: SharedStateTestHelper.ZERO)
+
+        validateSharedState(0, "zero", .lastSet, .set)
+        validateSharedState(1, "zero", .lastSet, .set)
+        validateSharedState(2, "zero", .lastSet, .set)
+
+        sharedState.updatePending(version: 1, data: SharedStateTestHelper.ONE)
+
+        validateSharedState(0, "zero", .lastSet, .set)
+        validateSharedState(1, "one", .lastSet, .set)
+        validateSharedState(2, "one", .lastSet, .set)
+
+        sharedState.updatePending(version: 2, data: SharedStateTestHelper.TWO)
+
+        validateSharedState(0, "zero", .lastSet, .set)
+        validateSharedState(1, "one", .lastSet, .set)
+        validateSharedState(2, "two", .lastSet, .set)
     }
 
     func testBackwardLookingResolve() {
@@ -102,10 +175,19 @@ class SharedStateTest: XCTestCase {
     func testForwardLookingResolve() {
         sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
 
-        validateSharedState(10, "ten")
-        validateSharedState(9, "ten")
-        validateSharedState(0, "ten")
-        validateSharedState(-1000, "ten")
+        validateSharedState(10, "ten", .any, SharedStateStatus.set)
+        validateSharedState(9, "ten", .any, SharedStateStatus.set)
+        validateSharedState(0, "ten", .any, SharedStateStatus.set)
+        validateSharedState(-1000, "ten", .any, SharedStateStatus.set)
+    }
+
+    func testForwardLookingResolveLastSet() {
+        sharedState.set(version: 10, data: SharedStateTestHelper.TEN)
+
+        validateSharedState(10, "ten", .lastSet, .set)
+        validateSharedState(9, "ten", .lastSet, .set)
+        validateSharedState(0, "ten", .lastSet, .set)
+        validateSharedState(-1000, "ten", .lastSet, .set)
     }
 
     func testMiddleResolve() {

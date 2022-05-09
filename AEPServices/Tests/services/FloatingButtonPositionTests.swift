@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPServices
 import XCTest
 
+@available(iOSApplicationExtension, unavailable)
 class FloatingButtonPositionTests : XCTestCase {
     
     // A sample screen bounds to which the button has to be centered

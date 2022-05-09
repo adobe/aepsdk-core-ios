@@ -59,7 +59,12 @@ class Configuration: NSObject, Extension {
             // notify rules engine to load cached rules
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
                 Log.trace(label: name, "Reading rules from cache for URL: \(rulesURLString)")
-                rulesEngine.replaceRulesWithCache(from: rulesURLString)
+                if !rulesEngine.replaceRulesWithCache(from: rulesURLString) {
+                    if let url = Bundle.main.url(forResource: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, withExtension: "zip") {
+                        // Attempt to load rules from manifest if none in cache
+                        rulesEngine.replaceRulesWithManifest(from: url)
+                    }
+                }
             }
         }
     }

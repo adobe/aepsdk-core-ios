@@ -74,7 +74,9 @@ class RulesEngineFunctionalTests: XCTestCase {
         rulesEngine.rulesEngine.clearRules()
 
         /// When:
-        rulesEngine.replaceRulesWithCache(from: "http://test.com/rules.url")
+        if rulesEngine.replaceRulesWithCache(from: "http://test.com/rules.url") == false {
+            XCTFail("Failed to replace rules with cache")
+        }
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
 
         // Multiple async functions are queued. Wait for them to complete before processing event. 
@@ -83,6 +85,23 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         /// Then:
         XCTAssertEqual(3, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual("value", processedEvent.data?["key"] as? String)
+
+    }
+
+    func testLoadRulesFromManifest() {
+        guard let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip") else {
+            XCTFail("Incorrect url for zip resource")
+            return
+        }
+
+        rulesEngine.replaceRulesWithManifest(from: filePath)
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
+
+        let processedEvent = rulesEngine.process(event: defaultEvent)
+
+        /// Then:
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual("value", processedEvent.data?["key"] as? String)
     }
 

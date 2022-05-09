@@ -13,6 +13,7 @@
 import Foundation
 
 /// Interface for open url actions
+@available(iOSApplicationExtension, unavailable)
 public protocol URLOpening {
     /// Open url with provided url string
     /// - Parameter url: the url to open

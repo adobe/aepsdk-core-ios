@@ -125,7 +125,7 @@ class RulesDownloaderTests: XCTestCase {
     }
 
     // This serves as a functional test right now which uses the actual unzipping and temporary directory work
-    func testLoadRulesFromUrlNoCache() {
+    func testLoadRulesFromUrlNoCacheFunctional() {
         // Use the actual rules unzipper for integration testing purposes
         let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper())
         ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
@@ -144,5 +144,31 @@ class RulesDownloaderTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1)
         XCTAssertNotNil(rules)
+    }
+
+    func testLoadRulesFromManifestFunctional() {
+        let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper())
+        var rules: Data?
+        switch rulesDownloaderReal.loadRulesFromManifest(for: RulesDownloaderTests.rulesUrl!) {
+        case .failure(let error):
+            XCTFail("Failed to load test rules with error: \(error)")
+        case .success(let data):
+            rules = data
+        }
+
+        XCTAssertNotNil(rules)
+
+    }
+
+    func testLoadRulesNotZip() {
+        let badUrl = URL(string: "https://www.adobe.com")
+        switch rulesDownloader.loadRulesFromManifest(for: badUrl!) {
+        case .failure(let error):
+            // Because url is a valid url, but not to a zip, expect unableToZipRules error
+            XCTAssertTrue(mockUnzipper.unzipCalled)
+            XCTAssertEqual(error, .unableToUnzipRules)
+        case .success(_):
+            XCTFail("Unexpected success")
+        }
     }
 }
