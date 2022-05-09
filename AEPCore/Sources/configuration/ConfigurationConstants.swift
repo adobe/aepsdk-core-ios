@@ -58,6 +58,8 @@ enum RulesDownloaderConstants {
 
     static let RULES_TEMP_DIR = "com.adobe.rules"
 
+    static let RULES_BUNDLED_FILE_NAME = "ADBMobileConfig-rules"
+
     enum Keys {
         static let RULES_CACHE_PREFIX = "cached.rules."
     }
