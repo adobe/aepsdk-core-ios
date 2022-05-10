@@ -481,9 +481,7 @@ class IdentityTests: XCTestCase {
         let secondEvent = Event(name: "test-event", type: "test-type", source: "test-source", data: nil)
         mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: secondEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
 
-        // expect false due to boot being executed
-        XCTAssertFalse(identity.readyForEvent(firstEvent))
-        // expect true since identity has booted
+        // expect true since identity has fast boot
         XCTAssertTrue(identity.readyForEvent(firstEvent))
     }
 
@@ -516,8 +514,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: appendUrlEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
 
         // verify
-        XCTAssertFalse(identity.readyForEvent(appendUrlEvent)) // booting up
-        XCTAssertTrue(identity.readyForEvent(appendUrlEvent))
+        XCTAssertTrue(identity.readyForEvent(appendUrlEvent)) // fast boot
     }
 
     // analytics shared state pending
@@ -548,7 +545,38 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.analytics", event: getUrlVariablesEvent, data: ([IdentityConstants.Analytics.ANALYTICS_ID: "test-aid"], .set))
 
         // verify
-        XCTAssertFalse(identity.readyForEvent(getUrlVariablesEvent)) // booting up
-        XCTAssertTrue(identity.readyForEvent(getUrlVariablesEvent))
+        XCTAssertTrue(identity.readyForEvent(getUrlVariablesEvent)) // fast boot
+    }
+
+    func testReadyForEventGetEcidOnAppInstallWillWaitForConfigurationAndECIDToBeGenerated() {
+        let getEcidEvent = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+
+        // cannot process getECID event and ecid is not set
+        XCTAssertFalse(identity.readyForEvent(getEcidEvent))
+        XCTAssertNil(identity.state?.identityProperties.ecid)
+
+        // pass valid configuration
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getEcidEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        // verify
+        XCTAssertTrue(identity.readyForEvent(getEcidEvent))
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
+    }
+
+    func testReadyForEventGetEcidOnWillWaitForConfigurationWhenEcidIsCached() {
+        let getEcidEvent = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        identity.state?.identityProperties.ecid = ECID()
+
+        // cannot process getECID event and ecid is set
+        XCTAssertFalse(identity.readyForEvent(getEcidEvent))
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
+
+        // pass valid configuration
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: getEcidEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+
+        // verify
+        XCTAssertTrue(identity.readyForEvent(getEcidEvent))
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
     }
 }

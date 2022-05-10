@@ -128,7 +128,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertTrue(identity.readyForEvent(event))
         mockRuntime.simulateComingEvent(event: event)
 
-        // response is dispatched omce Analytics shared state is set
+        // response is dispatched once Analytics shared state is set
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
 
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
@@ -212,7 +212,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertTrue(identity.readyForEvent(event))
         mockRuntime.simulateComingEvent(event: event)
 
-        // response is dispatched omce Analytics shared state is set
+        // response is dispatched once Analytics shared state is set
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
 
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
@@ -360,5 +360,62 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual(identity.state?.identityProperties.ecid?.ecidString, sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String)
         XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_IDS_LAST_SYNC])
+    }
+
+    // Tests that getExperienceCloudId returns ECID as soon as possible
+
+    /// forseSyncIdentifier needs valid configuration to be present to process
+    func testGetECIDBeforeForceSyncWaitsForConfigurationSharedStateToResolve() {
+        // setup
+        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (nil, .pending))
+
+        // verify
+        XCTAssertFalse(identity.readyForEvent(event))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (nil, .set))
+        // forceSync will fail since we don't have valid configuration
+        XCTAssertFalse(identity.readyForEvent(event))
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+        XCTAssertTrue(identity.readyForEvent(event))
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
+        XCTAssertFalse(ecid.isEmpty)
+    }
+
+    func testGetECIDAfterForceSyncDoesNotWaitForConfigurationSharedState() {
+        // setup
+        let syncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        let getECIDEvent = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+
+        // configuration shared state will allow forceSync to process
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+
+        // trigger forceSync
+        XCTAssertTrue(identity.readyForEvent(syncEvent))
+        mockRuntime.simulateComingEvent(event: syncEvent)
+
+        // set configuration shared state to pending
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: (nil, .pending))
+
+        // test
+        XCTAssertTrue(identity.readyForEvent(getECIDEvent))
+        mockRuntime.simulateComingEvent(event: getECIDEvent)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
+        XCTAssertFalse(ecid.isEmpty)
     }
 }
