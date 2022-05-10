@@ -31,6 +31,7 @@ class IdentityFunctionalTests: XCTestCase {
     }
 
     override func tearDown() {
+        identity.state?.hitQueue.clear()
         identity.onUnregistered()
     }
 
@@ -54,28 +55,31 @@ class IdentityFunctionalTests: XCTestCase {
     /// Tests that a sync event dispatches a shared state update
     func testSyncIdentifiersForceSyncEventInstallScenario() {
         // setup
-        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
-        let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.FORCE_SYNC: true]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
+        let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
         let event = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
 
         // test
-        mockRuntime.simulateComingEvent(event: event)
+        identity.readyForEvent(event) //// since first event will be processed by readyForEvent which calls forceSync
 
         // verify
         let sharedState = mockRuntime.createdSharedStates.last!
         XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertEqual(1, identity.state?.hitQueue.count() ?? 0)
     }
 
-    /// Tests that a sync event dispatches a shared state update even on subsequent launch when forceSync flag is set
+    /// Tests that a sync event dispatches a shared state update event and a sync network request on subsequent launch when forceSync flag is set
     func testSyncIdentifiersForceSyncEventSubsequentLaunchScenario() {
         // setup
-        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+        let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
         let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
         let event = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
 
         // test
-        // fist event treated as forceSync event
-        mockRuntime.simulateComingEvent(event: event)
+        identity.readyForEvent(event) // since first event will be processed by readyForEvent which calls forceSync
+        mockLastSyncTimeStamp() // mimick network response which updates lastSync flag
 
         // verify
         let sharedStateForInstall = mockRuntime.createdSharedStates.last!
@@ -91,6 +95,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
         let sharedStateForLaunch = mockRuntime.createdSharedStates.last!
         XCTAssertNotNil(sharedStateForLaunch?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertEqual(2, identity.state?.hitQueue.count() ?? 0)
     }
 
     /// Tests that a generic event dispatches a shared state update
@@ -459,5 +464,9 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
         XCTAssertFalse(ecid.isEmpty)
+    }
+
+    func mockLastSyncTimeStamp(ts: Date = Date()) {
+        identity?.state?.identityProperties.lastSync =  ts
     }
 }
