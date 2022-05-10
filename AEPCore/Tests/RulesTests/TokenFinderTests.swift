@@ -110,9 +110,10 @@ class TokenFinderTests: XCTestCase {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event
         let runtime = TestableExtensionRuntime()
         let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
-        let formatter_ISO8601 = ISO8601DateFormatter()
-        formatter_ISO8601.timeZone = TimeZone.current
-        formatter_ISO8601.formatOptions.insert(.withInternetDateTime)
+        let formatter_ISO8601 = DateFormatter()
+        formatter_ISO8601.timeZone = TimeZone.init(abbreviation: "UTC")
+        formatter_ISO8601.locale = Locale(identifier: "en_US_POSIX")
+        formatter_ISO8601.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         let formatter_ISO8601NoColon = DateFormatter()
         formatter_ISO8601NoColon.locale = Locale(identifier: "en_US_POSIX")
         formatter_ISO8601NoColon.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZ"
@@ -123,9 +124,9 @@ class TokenFinderTests: XCTestCase {
             return
         }
         let date_UNIX = Date(timeIntervalSince1970: TimeInterval(date_UNIX_Int))
-        /// Then: return same timestamp with different format
-        XCTAssertEqual(date_ISO8601, date_ISO8601NoColon)
-        XCTAssertEqual(date_ISO8601, date_UNIX)
+        // Then: return same timestamp with different format, but only compare seconds as ISO8601NoColon and UNIX do not count milliseconds
+        XCTAssertEqual(0, Calendar.current.dateComponents([.second], from: date_ISO8601, to: date_ISO8601NoColon).second)
+        XCTAssertEqual(0, Calendar.current.dateComponents([.second], from: date_ISO8601, to: date_UNIX).second)
     }
 
     func testGetTokenValue_shared_state() {

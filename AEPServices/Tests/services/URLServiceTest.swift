@@ -13,6 +13,7 @@
 @testable import AEPServices
 import XCTest
 
+@available(iOSApplicationExtension, unavailable)
 class URLServiceTest: XCTestCase {
     private let urlService = ServiceProvider.shared.urlService
 

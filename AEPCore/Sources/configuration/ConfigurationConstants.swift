@@ -15,7 +15,7 @@ import Foundation
 struct ConfigurationConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
     static let FRIENDLY_NAME = "Configuration"
-    static let EXTENSION_VERSION = "3.4.2"
+    static let EXTENSION_VERSION = "3.6.0"
     static let DATA_STORE_NAME = EXTENSION_NAME
 
     static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
@@ -57,6 +57,8 @@ enum RulesDownloaderConstants {
     static let RULES_ZIP_FILE_NAME = "rules.zip"
 
     static let RULES_TEMP_DIR = "com.adobe.rules"
+
+    static let RULES_BUNDLED_FILE_NAME = "ADBMobileConfig-rules"
 
     enum Keys {
         static let RULES_CACHE_PREFIX = "cached.rules."

@@ -34,7 +34,6 @@
 		21248099265D589E006CF300 /* XDMDeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248098265D589E006CF300 /* XDMDeviceType.swift */; };
 		212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480A8265D591A006CF300 /* XDMEnvironmentType.swift */; };
 		212480D7265D59F9006CF300 /* XDMApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480D6265D59F9006CF300 /* XDMApplication.swift */; };
-		212480E7265D5A4E006CF300 /* XDMFormatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480E6265D5A4E006CF300 /* XDMFormatters.swift */; };
 		212480F7265D5A7A006CF300 /* XDMCloseType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212480F6265D5A7A006CF300 /* XDMCloseType.swift */; };
 		21248107265D5BC3006CF300 /* XDMDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248106265D5BC3006CF300 /* XDMDevice.swift */; };
 		21248117265D5E1C006CF300 /* XDMEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21248116265D5E1C006CF300 /* XDMEnvironment.swift */; };
@@ -369,6 +368,7 @@
 		78B36A9625CA1C2D00D6D25F /* Dismissible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36A9525CA1C2D00D6D25F /* Dismissible.swift */; };
 		78B36AB425CA1FCE00D6D25F /* FullscreenPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */; };
 		78B36AEE25CA210E00D6D25F /* FloatingButtonPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */; };
+		78F2E2D427FF7B900073CE00 /* ServiceProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E2D327FF7B900073CE00 /* ServiceProviderTests.swift */; };
 		92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B3E25C9C1A7007BE140 /* UIService.swift */; };
 		92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
 		923547EB25BF9C6600BEA9A3 /* AEPUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923547EA25BF9C6600BEA9A3 /* AEPUIService.swift */; };
@@ -684,7 +684,6 @@
 		21248098265D589E006CF300 /* XDMDeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDeviceType.swift; sourceTree = "<group>"; };
 		212480A8265D591A006CF300 /* XDMEnvironmentType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironmentType.swift; sourceTree = "<group>"; };
 		212480D6265D59F9006CF300 /* XDMApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMApplication.swift; sourceTree = "<group>"; };
-		212480E6265D5A4E006CF300 /* XDMFormatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMFormatters.swift; sourceTree = "<group>"; };
 		212480F6265D5A7A006CF300 /* XDMCloseType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMCloseType.swift; sourceTree = "<group>"; };
 		21248106265D5BC3006CF300 /* XDMDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMDevice.swift; sourceTree = "<group>"; };
 		21248116265D5E1C006CF300 /* XDMEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XDMEnvironment.swift; sourceTree = "<group>"; };
@@ -1038,6 +1037,7 @@
 		78B36A9525CA1C2D00D6D25F /* Dismissible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dismissible.swift; sourceTree = "<group>"; };
 		78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenPresentable.swift; sourceTree = "<group>"; };
 		78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPresentable.swift; sourceTree = "<group>"; };
+		78F2E2D327FF7B900073CE00 /* ServiceProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProviderTests.swift; sourceTree = "<group>"; };
 		8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPLifecycleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92027B3E25C9C1A7007BE140 /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
 		92027B9825C9EAF2007BE140 /* MockUIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIService.swift; sourceTree = "<group>"; };
@@ -1722,6 +1722,7 @@
 				3F03980524BE61520019F095 /* URLServiceTest.swift */,
 				3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */,
 				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
+				78F2E2D327FF7B900073CE00 /* ServiceProviderTests.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -2117,7 +2118,6 @@
 				21248098265D589E006CF300 /* XDMDeviceType.swift */,
 				21248116265D5E1C006CF300 /* XDMEnvironment.swift */,
 				212480A8265D591A006CF300 /* XDMEnvironmentType.swift */,
-				212480E6265D5A4E006CF300 /* XDMFormatters.swift */,
 				AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */,
 				21248126265D606A006CF300 /* XDMMobileLifecycleDetails.swift */,
 			);
@@ -3333,6 +3333,7 @@
 				3F03981724BE61520019F095 /* DataQueueService+Testable.swift in Sources */,
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
 				3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */,
+				78F2E2D427FF7B900073CE00 /* ServiceProviderTests.swift in Sources */,
 				786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */,
 				246FD08626CC529800FD130B /* MessageGestureRecognizerTests.swift in Sources */,
 				78AA4EC02509731B00205AE9 /* FileManager+ZipTests.swift in Sources */,
@@ -3408,7 +3409,6 @@
 				D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */,
 				21248107265D5BC3006CF300 /* XDMDevice.swift in Sources */,
 				212480A9265D591A006CF300 /* XDMEnvironmentType.swift in Sources */,
-				212480E7265D5A4E006CF300 /* XDMFormatters.swift in Sources */,
 				3FE6DE0E24C630EB0065EA05 /* LifecycleState.swift in Sources */,
 				AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */,
 			);
@@ -3803,6 +3803,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2EE8956F25F8D2BD27B6D4D8 /* Pods-AEPCore.debug.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -3817,7 +3818,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3832,6 +3833,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9DE12D90D1BAF0798BC007AB /* Pods-AEPCore.release.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -3846,7 +3848,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3904,6 +3906,7 @@
 		24B4936024D4C31100AA38D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -3917,7 +3920,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3931,6 +3934,7 @@
 		24B4936124D4C31100AA38D9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -3944,7 +3948,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3993,6 +3997,7 @@
 		3F03979824BE5DD30019F095 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4006,7 +4011,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4019,6 +4024,7 @@
 		3F03979924BE5DD30019F095 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4032,7 +4038,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4152,7 +4158,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4179,7 +4185,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4191,6 +4197,7 @@
 		3FE6DDE324C62EE60065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4204,7 +4211,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4217,6 +4224,7 @@
 		3FE6DDE424C62EE60065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4230,7 +4238,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4281,6 +4289,7 @@
 		3FE6DE4124C642330065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4294,7 +4303,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4307,6 +4316,7 @@
 		3FE6DE4224C642330065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -4320,7 +4330,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4385,7 +4395,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4412,7 +4422,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

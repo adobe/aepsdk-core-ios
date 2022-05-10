@@ -14,6 +14,7 @@ import Foundation
 @testable import AEPServices
 import XCTest
 
+@available(iOSApplicationExtension, unavailable)
 class MessageMonitorServiceTest : XCTestCase {
 
     static var mockShouldShow = false

@@ -15,6 +15,7 @@ import AEPServices
 import Foundation
 
 @objc(AEPMobileSignal)
+@available(iOSApplicationExtension, unavailable)
 public class Signal: NSObject, Extension {
 
     private(set) var hitQueue: HitQueuing

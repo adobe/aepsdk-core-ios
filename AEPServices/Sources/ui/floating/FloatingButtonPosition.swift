@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@available(iOSApplicationExtension, unavailable)
 @objc(AEPFloatingButtonPosition) public enum FloatingButtonPosition: Int {
 
     case center

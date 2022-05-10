@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@available(iOSApplicationExtension, unavailable)
 struct UIUtils {
     internal static func getFrame() -> CGRect? {
         var newFrame = CGRect.zero

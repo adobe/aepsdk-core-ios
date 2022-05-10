@@ -692,7 +692,7 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: ""] as [String: Any]
 
         // test
-        state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        let _ = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
 
         // verify
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)
@@ -707,7 +707,7 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: 100] as [String: Any]
 
         // test
-        state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        let _ = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
 
         // verify
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)
@@ -722,7 +722,7 @@ class IdentityStateTests: XCTestCase {
                                  IdentityConstants.Configuration.EXPERIENCE_CLOUD_SERVER: "example.com"] as [String: Any]
 
         // test
-        state.syncIdentifiers(event: Event.fakeSyncIDEvent())
+        let _ = state.syncIdentifiers(event: Event.fakeSyncIDEvent())
 
         // verify
         XCTAssertFalse(mockHitQueue.queuedHits.isEmpty)

@@ -17,6 +17,7 @@ import Foundation
 struct RulesDownloader: RulesLoader {
     private let fileUnzipper: Unzipping
     private let cache: Cache
+    private let LOG_TAG = "rules downloader"
 
     init(fileUnzipper: Unzipping) {
         self.fileUnzipper = fileUnzipper
@@ -25,6 +26,25 @@ struct RulesDownloader: RulesLoader {
 
     func loadRulesFromCache(rulesUrl: URL) -> Data? {
         return getCachedRules(rulesUrl: rulesUrl.absoluteString)?.cacheable
+    }
+
+    func loadRulesFromManifest(for url: URL) -> Result<Data, RulesDownloaderError> {
+        guard let data = try? Data(contentsOf: url) else {
+            Log.debug(label: LOG_TAG, "Rules zip corrupted")
+            return .failure(.noData)
+        }
+        // Store Zip file in temp directory for unzipping
+        switch self.storeDataInTempDirectory(data: data) {
+        case let .success(url):
+            // Unzip the rules.json from the zip file in the temp directory and get the rules dict from the json file
+            guard let data = self.unzipRules(at: url) else {
+                return .failure(.unableToUnzipRules)
+            }
+            return .success(data)
+        case let .failure(error):
+            Log.warning(label: LOG_TAG, error.localizedDescription)
+            return .failure(error)
+        }
     }
 
     func loadRulesFromUrl(rulesUrl: URL, completion: @escaping (Result<Data, RulesDownloaderError>) -> Void) {
@@ -58,12 +78,12 @@ struct RulesDownloader: RulesLoader {
                                               eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
                 // Cache the rules, if fails, log message
                 if !self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
-                    Log.warning(label: "rules downloader", "Unable to cache rules")
+                    Log.warning(label: LOG_TAG, "Unable to cache rules")
                 }
                 completion(.success(data))
                 return
             case let .failure(error):
-                Log.warning(label: "rules downloader", error.localizedDescription)
+                Log.warning(label: LOG_TAG, error.localizedDescription)
                 completion(.failure(error))
                 return
             }
@@ -160,4 +180,6 @@ enum RulesDownloaderError: Error {
     case notModified
     // no data returned from the rules download
     case noData
+    // no rules zip found in bundle
+    case noZip
 }

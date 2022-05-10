@@ -13,6 +13,7 @@
 import Foundation
 import UIKit
 
+@available(iOSApplicationExtension, unavailable)
 extension FullscreenMessage {
     // MARK: - internal vars
 

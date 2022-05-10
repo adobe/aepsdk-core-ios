@@ -30,8 +30,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
     }
 
-    override func tearDown() {
-        identity.state?.hitQueue.clear()
+    override func tearDown() {        //identity.state?.hitQueue.clear()
         identity.onUnregistered()
     }
 
