@@ -38,7 +38,7 @@ class IdentityStateTests: XCTestCase {
     /// Tests that the there is no shared state when ecid is not present
     func testBoot_whenNoECID_noInitialSharedState() {
         // test
-        let result = state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
+        state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
             XCTFail("Shared state should not be updated")
         })
     }
@@ -52,7 +52,7 @@ class IdentityStateTests: XCTestCase {
         let sharedStateExpectation = XCTestExpectation(description: "Shared state should be updated")
 
         // test
-        let result = state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
+        state.boot(event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
             sharedStateExpectation.fulfill()
             XCTAssertEqual(1, data.count)
             XCTAssertEqual(ecid.ecidString, data["mid"] as! String)

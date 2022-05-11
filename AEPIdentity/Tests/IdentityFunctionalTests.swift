@@ -20,6 +20,9 @@ import AEPServicesMocks
 class IdentityFunctionalTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var identity: Identity!
+    var mockHitQueue: MockHitQueue {
+        return identity.state?.hitQueue as! MockHitQueue
+    }
 
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
@@ -27,6 +30,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
+        identity.state?.hitQueue = MockHitQueue(processor: MockHitProcessor())
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
     }
 
@@ -60,12 +64,13 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
 
         // test
-        identity.readyForEvent(event) //// since first event will be processed by readyForEvent which calls forceSync
+        XCTAssertTrue(identity.readyForEvent(event)) //// since first event will be processed by readyForEvent which calls forceSync
+
 
         // verify
         let sharedState = mockRuntime.createdSharedStates.last!
         XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual(1, identity.state?.hitQueue.count() ?? 0)
+        XCTAssertEqual(1, mockHitQueue.count())
     }
 
     /// Tests that a sync event dispatches a shared state update event and a sync network request on subsequent launch when forceSync flag is set
@@ -77,7 +82,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
 
         // test
-        identity.readyForEvent(event) // since first event will be processed by readyForEvent which calls forceSync
+        XCTAssertTrue(identity.readyForEvent(event)) // since first event will be processed by readyForEvent which calls forceSync
         mockLastSyncTimeStamp() // mimick network response which updates lastSync flag
 
         // verify
@@ -94,7 +99,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
         let sharedStateForLaunch = mockRuntime.createdSharedStates.last!
         XCTAssertNotNil(sharedStateForLaunch?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual(2, identity.state?.hitQueue.count() ?? 0)
+        XCTAssertEqual(2, mockHitQueue.count())
     }
 
     /// Tests that a generic event dispatches a shared state update

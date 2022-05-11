@@ -16,15 +16,16 @@ import Foundation
 /// Manages the business logic of the Identity extension
 class IdentityState {
     private let LOG_TAG = "IdentityState"
-    private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
     #if DEBUG
+        var hitQueue: HitQueuing
         var lastValidConfig: [String: Any] = [:]
         var identityProperties: IdentityProperties
         var hasBooted = false
         var hasSynced = false
         var didCreateInitialSharedState = false
     #else
+        private(set) var hitQueue: HitQueuing
         private var lastValidConfig: [String: Any] = [:]
         private(set) var identityProperties: IdentityProperties
         private var hasBooted = false
