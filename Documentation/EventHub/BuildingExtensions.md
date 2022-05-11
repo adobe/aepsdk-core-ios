@@ -262,7 +262,7 @@ If you want more control over the reading of the shared state, you can use the o
 func getSharedState(extensionName: String, event: Event?, barrier: Bool = false, resolution: SharedStateResolution = .any) -> SharedStateResult?
 ```
 
-The resolution is used to fetch a specific type of shared state. Using `.any` will just fetch the last shared state, but using `.lastSet`, will fetch the last shared state with a `.set` status. This is useful if you would like to read the cached config before the remote config has been downloaded. 
+The resolution is used to fetch a specific type of shared state. Using `.any` will fetch the last shared state with any status, while using `.lastSet`, will fetch the last shared state with a status of `.set`. This is useful if you would like to read the cached config before the remote config has been downloaded. 
 
 #### XDM Shared States
 
@@ -327,7 +327,7 @@ If you want more control over the reading of the shared state, you can use the o
 func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false, resolution: SharedStateResolution = .any) -> SharedStateResult?
 ```
 
-The resolution is used to fetch a specific type of shared state. Using `.any` will just fetch the last shared state, but using `.lastSet`, will fetch the last shared state with a `.set` status. This is useful if you would like to read the cached config before the remote config has been downloaded. 
+The resolution is used to fetch a specific type of shared state. Using `.any` will fetch the last shared state with any status, while using `.lastSet`, will fetch the last shared state with a status of `.set`. This is useful if you would like to read the cached config before the remote config has been downloaded. 
 
 ##### Listening for Shared State Updates
 
