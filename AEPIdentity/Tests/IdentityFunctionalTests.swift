@@ -20,22 +20,40 @@ import AEPServicesMocks
 class IdentityFunctionalTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var identity: Identity!
-    var mockHitQueue: MockHitQueue {
-        return identity.state?.hitQueue as! MockHitQueue
+    var mockNetworkService: MockNetworking {
+        return ServiceProvider.shared.networkService as! MockNetworking
     }
 
     override func setUp() {
-        ServiceProvider.shared.namedKeyValueService = MockDataStore()
-        UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
-        identity.state?.hitQueue = MockHitQueue(processor: MockHitProcessor())
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
+        ServiceProvider.shared.networkService = MockNetworking()
     }
 
-    override func tearDown() {        //identity.state?.hitQueue.clear()
-        identity.onUnregistered()
+    override func tearDown() {
+        reset()
+    }
+
+    func reset() {
+        identity.state?.hitQueue.clear()
+        mockNetworkService.reset()
+        UserDefaults.clear()
+    }
+
+    func setDefaultSuccessNetworkResponse() {
+        mockNetworkService.expectedResponse = HttpConnection(data: nil, response: HTTPURLResponse(url: URL(string: "https://www.adobe.com")!, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: [:]), error: nil)
+    }
+
+    func waitForProcessing(interval: TimeInterval = 0.5) {
+        let expectation = XCTestExpectation()
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + interval - 0.1) {
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: interval)
     }
 
     // MARK: syncIdentifiers(...) tests
@@ -58,24 +76,28 @@ class IdentityFunctionalTests: XCTestCase {
     /// Tests that a sync event dispatches a shared state update
     func testSyncIdentifiersForceSyncEventInstallScenario() {
         // setup
+        setDefaultSuccessNetworkResponse()
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
         let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
         let event = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (configSharedState, .set))
+        waitForProcessing()
 
         // test
         XCTAssertTrue(identity.readyForEvent(event)) //// since first event will be processed by readyForEvent which calls forceSync
-
+        waitForProcessing()
 
         // verify
         let sharedState = mockRuntime.createdSharedStates.last!
         XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual(1, mockHitQueue.count())
+        XCTAssertTrue(mockNetworkService.connectAsyncCalled)
+        XCTAssertEqual(1, mockNetworkService.calledNetworkRequests.count)
     }
 
     /// Tests that a sync event dispatches a shared state update event and a sync network request on subsequent launch when forceSync flag is set
     func testSyncIdentifiersForceSyncEventSubsequentLaunchScenario() {
         // setup
+        setDefaultSuccessNetworkResponse()
         let configSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
         let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
         let event = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
@@ -83,23 +105,27 @@ class IdentityFunctionalTests: XCTestCase {
 
         // test
         XCTAssertTrue(identity.readyForEvent(event)) // since first event will be processed by readyForEvent which calls forceSync
-        mockLastSyncTimeStamp() // mimick network response which updates lastSync flag
+        waitForProcessing()
 
         // verify
         let sharedStateForInstall = mockRuntime.createdSharedStates.last!
         XCTAssertNotNil(sharedStateForInstall?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertTrue(mockNetworkService.connectAsyncCalled)
+        XCTAssertEqual(1, mockNetworkService.calledNetworkRequests.count)
 
         let forceSyncdata = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true, IdentityConstants.EventDataKeys.FORCE_SYNC: true]
         let forceSyncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: forceSyncdata)
 
         // test
         mockRuntime.simulateComingEvent(event: forceSyncEvent)
+        waitForProcessing()
 
         // verify
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
         let sharedStateForLaunch = mockRuntime.createdSharedStates.last!
         XCTAssertNotNil(sharedStateForLaunch?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
-        XCTAssertEqual(2, mockHitQueue.count())
+        XCTAssertTrue(mockNetworkService.connectAsyncCalled)
+        XCTAssertEqual(2, mockNetworkService.calledNetworkRequests.count)
     }
 
     /// Tests that a generic event dispatches a shared state update
