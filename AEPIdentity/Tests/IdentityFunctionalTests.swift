@@ -38,14 +38,6 @@ class IdentityFunctionalTests: XCTestCase {
         UserDefaults.clear()
     }
 
-    func waitForProcessing(interval: TimeInterval = 0.5) {
-        let expectation = XCTestExpectation()
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + interval - 0.1) {
-            expectation.fulfill()
-        }
-        wait(for: [expectation], timeout: interval)
-    }
-
     // MARK: syncIdentifiers(...) tests
 
     /// Tests that a sync event dispatches a shared state update
