@@ -58,6 +58,17 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [initExpectation], timeout: 1)
     }
 
+    func extractECIDFrom(urlString: String) -> String? {
+        var ecid: String?
+        let regex = try! NSRegularExpression(pattern: "d_mid=(\\d{32})", options: .caseInsensitive)
+
+        if let match = regex.firstMatch(in: urlString, range: NSRange(urlString.startIndex..., in: urlString)) {
+            ecid = String(urlString[Range(match.range(at: 1), in: urlString)!])
+        }
+
+        return ecid
+    }
+
     func testSyncIdentifiers() {
         initExtensionsAndWait()
 
@@ -93,10 +104,7 @@ class IdentityIntegrationTests: XCTestCase {
                 XCTAssertTrue(urlString.contains("https://test.com/id"))
                 XCTAssertTrue(urlString.contains("d_orgid=orgid"))
                 XCTAssertTrue(urlString.contains("d_mid="))
-                let regex = try! NSRegularExpression(pattern: #"^(.*?)\s*d_mid=\s*(.*?)\s*&\s*(.*)$"#, options: .caseInsensitive)
-                if let match = regex.firstMatch(in: urlString, range: NSRange(urlString.startIndex..., in: urlString)) {
-                    extractedECID = String(urlString[Range(match.range(at: 2), in: urlString)!])
-                }
+                extractedECID = self.extractECIDFrom(urlString: urlString) ?? "ecid-not-found"
                 requestExpectation.fulfill()
             }
             return nil
