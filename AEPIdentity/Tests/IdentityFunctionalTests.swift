@@ -430,8 +430,4 @@ class IdentityFunctionalTests: XCTestCase {
         let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
         XCTAssertFalse(ecid.isEmpty)
     }
-
-    func mockLastSyncTimeStamp(ts: Date = Date()) {
-        identity?.state?.identityProperties.lastSync =  ts
-    }
 }
