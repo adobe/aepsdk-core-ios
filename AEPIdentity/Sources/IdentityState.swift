@@ -165,7 +165,7 @@ class IdentityState {
         identityProperties.mergeAndCleanCustomerIds(customerIds)
         customerIds.removeAll(where: { $0.identifier?.isEmpty ?? true }) // clean all identifiers by removing all that have a nil or empty identifier
 
-        // Checks if this is forceSync event: either this is the first event processed by the extension ad boot time or if the eventData contains the forceSync flag for backwards compatibility.
+        // Checks if this is forceSync event: either this is the first event processed by the extension at boot time or if the eventData contains the forceSync flag for backwards compatibility.
         let shouldForceSync = forceSync || event.forceSync
 
         // valid config: check if there's a need to sync. Don't if we're already up to date.

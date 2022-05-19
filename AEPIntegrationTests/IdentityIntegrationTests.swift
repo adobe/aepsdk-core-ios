@@ -79,7 +79,7 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [requestExpectation], timeout: 1)
     }
 
-    func testConsecutiveSyncIdentifiersWithForceSyncFlagSetSendsNetworkRequest() {
+    func testIdentitySendsForceSyncRequestOnEveryLaunch() {
         initExtensionsAndWait()
 
         let requestExpectation = XCTestExpectation(description: "syncIdentifiers request")
