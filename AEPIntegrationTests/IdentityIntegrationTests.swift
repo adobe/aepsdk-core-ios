@@ -21,12 +21,13 @@ class IdentityIntegrationTests: XCTestCase {
     override func setUp() {
         UserDefaults.clear()
         FileManager.default.clearCache()
-        ServiceProvider.shared.reset()
-        EventHub.reset()
     }
 
     override func tearDown() {
+        unregisterExtensionsAndReset()
+    }
 
+    func unregisterExtensionsAndReset() {
         let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
         unregisterExpectation.expectedFulfillmentCount = 3
         MobileCore.unregisterExtension(Identity.self) {
@@ -43,6 +44,9 @@ class IdentityIntegrationTests: XCTestCase {
 
         wait(for: [unregisterExpectation], timeout: 3)
         EventHub.shared.shutdown()
+
+        ServiceProvider.shared.reset()
+        EventHub.reset()
     }
 
     func initExtensionsAndWait() {
@@ -52,6 +56,17 @@ class IdentityIntegrationTests: XCTestCase {
             initExpectation.fulfill()
         }
         wait(for: [initExpectation], timeout: 1)
+    }
+
+    func extractECIDFrom(urlString: String) -> String? {
+        var ecid: String?
+        let regex = try! NSRegularExpression(pattern: "d_mid=(\\d{32})", options: .caseInsensitive)
+
+        if let match = regex.firstMatch(in: urlString, range: NSRange(urlString.startIndex..., in: urlString)) {
+            ecid = String(urlString[Range(match.range(at: 1), in: urlString)!])
+        }
+
+        return ecid
     }
 
     func testSyncIdentifiers() {
@@ -74,6 +89,53 @@ class IdentityIntegrationTests: XCTestCase {
 
         wait(for: [requestExpectation], timeout: 1)
     }
+
+    func testIdentitySendsForceSyncRequestOnEveryLaunch() {
+        initExtensionsAndWait()
+
+        let requestExpectation = XCTestExpectation(description: "syncIdentifiers request")
+        let mockNetworkService = TestableNetworkService()
+        ServiceProvider.shared.networkService = mockNetworkService
+        var extractedECID = ""
+
+        mockNetworkService.mock { request in
+            let urlString = request.url.absoluteString
+            if urlString.contains("d_cid_ic=id1%01value1%011") {
+                XCTAssertTrue(urlString.contains("https://test.com/id"))
+                XCTAssertTrue(urlString.contains("d_orgid=orgid"))
+                XCTAssertTrue(urlString.contains("d_mid="))
+                extractedECID = self.extractECIDFrom(urlString: urlString) ?? "ecid-not-found"
+                requestExpectation.fulfill()
+            }
+            return nil
+        }
+
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.syncIdentifiers(identifiers: ["id1": "value1"], authenticationState: .authenticated)
+
+        wait(for: [requestExpectation], timeout: 1)
+
+        //Relaunch app
+        unregisterExtensionsAndReset()
+        initExtensionsAndWait()
+
+        let secondLaunchRequestExpectation = XCTestExpectation(description: "syncIdentifiers request in new launch")
+        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.mock { request in
+            let urlString = request.url.absoluteString
+            if urlString.contains("d_cid_ic=id1%01value1%011") {
+                XCTAssertTrue(urlString.contains("https://test.com/id"))
+                XCTAssertTrue(urlString.contains("d_orgid=orgid"))
+                XCTAssertTrue(urlString.contains("d_mid=" + extractedECID))
+                secondLaunchRequestExpectation.fulfill()
+            }
+            return nil
+        }
+
+        // we should get config shared state update from cache which would forceSync and sendHit
+        wait(for: [secondLaunchRequestExpectation], timeout: 1)
+    }
+
 
     func testOptedout() {
         initExtensionsAndWait()

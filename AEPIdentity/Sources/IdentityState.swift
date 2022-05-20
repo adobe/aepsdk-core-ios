@@ -16,8 +16,8 @@ import Foundation
 /// Manages the business logic of the Identity extension
 class IdentityState {
     private let LOG_TAG = "IdentityState"
-    private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
+    private(set) var hitQueue: HitQueuing
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
         var identityProperties: IdentityProperties
@@ -86,7 +86,7 @@ class IdentityState {
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
-        hasSynced = syncIdentifiers(event: event) != nil || identityProperties.privacyStatus == .optedOut
+        hasSynced = syncIdentifiers(event: event, forceSync: true) != nil || identityProperties.privacyStatus == .optedOut
 
         // Identity should always share its state
         // However, don't create a shared state twice, which will log an error
@@ -119,13 +119,14 @@ class IdentityState {
         return true
     }
 
-    /// Will queue a sync identifiers hit if there are any new valid identifiers to be synced (non null/empty id_type and id values),
+    /// Will queue a sync identifiers hit if there are any new valid identifiers to be synced (non null/empty id_type and id values) or if the forceSync parameter is set to true,
     /// Updates the persistence values for the identifiers and ad id
     /// Assumes a valid config is in `lastValidConfig` from calling `readyForSyncIdentifiers`
     /// - Parameters:
     ///   - event: event corresponding to sync identifiers call or containing a new ADID value.
+    ///   - forceSync: a boolean value to force the sync call
     /// - Returns: The data to be used for Identity shared state
-    func syncIdentifiers(event: Event) -> [String: Any]? {
+    func syncIdentifiers(event: Event, forceSync: Bool = false) -> [String: Any]? {
         // sanity check, config should never be empty
         if lastValidConfig.isEmpty {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Ignoring sync identifiers request as last valid config is empty")
@@ -164,8 +165,11 @@ class IdentityState {
         identityProperties.mergeAndCleanCustomerIds(customerIds)
         customerIds.removeAll(where: { $0.identifier?.isEmpty ?? true }) // clean all identifiers by removing all that have a nil or empty identifier
 
+        // Checks if this is forceSync event: either this is the first event processed by the extension at boot time or if the eventData contains the forceSync flag for backwards compatibility.
+        let shouldForceSync = forceSync || event.forceSync
+
         // valid config: check if there's a need to sync. Don't if we're already up to date.
-        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
+        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: shouldForceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
             queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, addConsentFlag: shouldAddConsentFlag)
         } else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Ignored an ID sync request because no new IDs to sync after the last request.")

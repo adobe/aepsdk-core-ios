@@ -22,16 +22,20 @@ class IdentityFunctionalTests: XCTestCase {
     var identity: Identity!
 
     override func setUp() {
-        ServiceProvider.shared.namedKeyValueService = MockDataStore()
-        UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
     }
 
     override func tearDown() {
-        identity.onUnregistered()
+        reset()
+    }
+
+    func reset() {
+        identity.state?.hitQueue.clear()
+        UserDefaults.clear()
     }
 
     // MARK: syncIdentifiers(...) tests
