@@ -78,20 +78,6 @@ class IdentityStateTests: XCTestCase {
         XCTAssertFalse(mockHitQueue.calledBeginProcessing && mockHitQueue.calledClear && mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
     }
 
-    /// Tests that force sync fails and there is no shared state created when invalid configuration shared state is received
-    func testForceSyncIdentifiers_whenNilConfig_returnsFalse_noInitialSharedState() {
-
-        // test
-        let result = state.forceSyncIdentifiers(configSharedState: nil, event: Event.fakeSyncIDEvent(), createSharedState: { (data, event) in
-            XCTFail("Shared state should not be updated")
-        })
-
-        // verify
-        XCTAssertFalse(result)
-        XCTAssertEqual(PrivacyStatus.unknown, state.identityProperties.privacyStatus)
-        XCTAssertFalse(mockHitQueue.calledBeginProcessing && mockHitQueue.calledClear && mockHitQueue.calledSuspend) // privacy is unknown to only suspend the queue
-    }
-
     /// Tests that the properties are updated, and the hit queue processes the change, and that shared state is created due to force sync when intial shared state has not been created on boot
     func testForceSyncIdentifiers_whenValidConfig_returnsTrue_createsInitialSharedState() {
         // setup

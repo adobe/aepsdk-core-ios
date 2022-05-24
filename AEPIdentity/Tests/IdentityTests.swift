@@ -485,6 +485,19 @@ class IdentityTests: XCTestCase {
         XCTAssertTrue(identity.readyForEvent(firstEvent))
     }
 
+    func testReadyForEventBootupWithValidLastSetConfigurationReturnsTrue() {
+        // set initial config to invalid
+        let lastValidConfigEvent = Event(name: "test-event", type: "test-type", source: "test-source", data: nil)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: lastValidConfigEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .set))
+
+        let latestPendingConfigEvent = Event(name: "test-event", type: "test-type", source: "test-source", data: nil)
+        mockRuntime.simulateSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: latestPendingConfigEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id", IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue], .pending))
+
+        // expect true, since last set valid config is available
+        XCTAssertTrue(identity.readyForEvent(latestPendingConfigEvent))
+    }
+
+
     // analytics shared state pending
     func testReadyForEventIdentifierRequestAppendToUrlWaitForAnalyticsSharedState() {
 

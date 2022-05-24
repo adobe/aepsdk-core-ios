@@ -395,6 +395,30 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertFalse(ecid.isEmpty)
     }
 
+    /// forseSyncIdentifier needs valid configuration to be present to process
+    func testGetECIDWithValidLastSetConfigDoesNotWaitForLatestConfigurationSharedStateToResolve() {
+        // setup
+        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        // mock valid config last set
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+
+        // mock latest config pending
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id-2"], .pending))
+
+        // verify event is not blocked by pending config shared state
+        XCTAssertTrue(identity.readyForEvent(event))
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
+        XCTAssertFalse(ecid.isEmpty)
+    }
+
     func testGetECIDAfterForceSyncDoesNotWaitForConfigurationSharedState() {
         // setup
         let syncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
@@ -408,7 +432,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: syncEvent)
 
         // set configuration shared state to pending
-        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: (nil, .pending))
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .pending))
 
         // test
         XCTAssertTrue(identity.readyForEvent(getECIDEvent))

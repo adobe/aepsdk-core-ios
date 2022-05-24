@@ -60,18 +60,19 @@ import Foundation
         // fast boot identity without waiting for configuration
         state.boot(event: event, createSharedState: createSharedState(data:event:))
 
-        guard state.forceSyncIdentifiers(configSharedState: getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value, event: event, createSharedState: createSharedState(data:event:)) else { return false }
+        guard let lastSetConfigSharedStateValue = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil, resolution: SharedStateResolution.lastSet)?.value, !lastSetConfigSharedStateValue.isEmpty else {
+            Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state to be set before processing [event:(\(event.name)) id:(\(event.id)].")
+            return false
+        }
+
+        guard state.forceSyncIdentifiers(configSharedState: lastSetConfigSharedStateValue, event: event, createSharedState: createSharedState(data:event:)) else { return false }
 
         // skip waiting for latest configuration if it is getExperienceCloudId event or getIdentifiers event
         if event.isGetIdentifierEvent {
             Log.trace(label: "\(name):\(#function)", "Processing get identifier event without waiting for configuration [event:(\(event.name)) id:(\(event.id)].")
             return true
         } else if event.isSyncEvent || event.type == EventType.genericIdentity {
-            guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else {
-                Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state value before processing [event:(\(event.name)) id:(\(event.id)].")
-                return false
-            }
-            return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
+            return state.readyForSyncIdentifiers(event: event, configurationSharedState: lastSetConfigSharedStateValue)
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
             let areSharedStatesReady = MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
 
@@ -89,13 +90,7 @@ import Foundation
             }
         }
 
-        let isConfigSharedStateSet = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
-
-        if !isConfigSharedStateSet {
-            Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state to be set before processing [event:(\(event.name)) id:(\(event.id)].")
-        }
-
-        return isConfigSharedStateSet
+        return true
     }
 
     // MARK: Event Listeners
