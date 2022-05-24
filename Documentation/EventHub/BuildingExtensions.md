@@ -249,6 +249,21 @@ All extensions are provided a default API to read shared state from another exte
 func getSharedState(extensionName: String, event: Event?) -> SharedStateResult?
 ```
 
+If you want more control over the reading of the shared state, you can use the overloaded version of the above method:
+
+```swift
+/// Gets the `SharedState` data for a specified extension
+/// - Parameters:
+///   - extensionName: An extension name whose `SharedState` will be returned
+///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+///   - resolution: The `SharedStateResolution` to resolve for. E.g: `.lastSet` will resolve for the last set `SharedState`
+/// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
+func getSharedState(extensionName: String, event: Event?, barrier: Bool = false, resolution: SharedStateResolution = .any) -> SharedStateResult?
+```
+
+The resolution is used to fetch a specific type of shared state. Using `.any` will fetch the last shared state with any status, while using `.lastSet`, will fetch the last shared state with a status of `.set`. This is useful if you would like to read the cached config before the remote config has been downloaded. 
+
 #### XDM Shared States
 
 XDM shared states allow extensions allow the Edge extension to collect XDM data from various mobile extensions when needed and allow for the creation of XDM data elements to be used in Launch rules. All XDM Shared state data should be modeled based on known / global XDM schema.
@@ -298,6 +313,21 @@ All extensions are provided a default API to read XDM shared state from another 
 /// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
 func getXDMSharedState(extensionName: String, event: Event?) -> SharedStateResult?
 ```
+
+If you want more control over the reading of the shared state, you can use the overloaded version of the above method:
+
+```swift
+/// Gets the XDM SharedState data for a specified extension. If this extension populates multiple mixins in their shared state, all the data will be returned at once and it can be accessed using path discovery.
+/// - Parameters:
+///   - extensionName: An extension name whose `SharedState` will be returned
+///   - event: If not nil, will retrieve the `SharedState` that corresponds with the event's version, if nil will return the latest `SharedState`
+///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
+///   - resolution: The `SharedStateResolution` to resolve for
+/// - Returns: A `SharedStateResult?` for the requested `extensionName` and `event`
+func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false, resolution: SharedStateResolution = .any) -> SharedStateResult?
+```
+
+The resolution is used to fetch a specific type of shared state. Using `.any` will fetch the last shared state with any status, while using `.lastSet`, will fetch the last shared state with a status of `.set`. This is useful if you would like to read the cached config before the remote config has been downloaded. 
 
 ##### Listening for Shared State Updates
 

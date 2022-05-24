@@ -130,8 +130,10 @@ extension ServiceProvider {
     private struct Holder {
         static var overrideURLService: URLOpening?
         static var defaultURLService = URLService()
-        static var overrideUIService: UIService?
-        static var defaultUIService = AEPUIService()
+        #if os(iOS)
+            static var overrideUIService: UIService?
+            static var defaultUIService = AEPUIService()
+        #endif
     }
 
     public var urlService: URLOpening {
@@ -147,26 +149,29 @@ extension ServiceProvider {
         }
     }
 
-    public var uiService: UIService {
-        get {
-            return queue.sync {
-                return Holder.overrideUIService ?? Holder.defaultUIService
+    #if os(iOS)
+        public var uiService: UIService {
+            get {
+                return queue.sync {
+                    return Holder.overrideUIService ?? Holder.defaultUIService
+                }
+            }
+            set {
+                queue.async {
+                    Holder.overrideUIService = newValue
+                }
             }
         }
-        set {
-            queue.async {
-                Holder.overrideUIService = newValue
-            }
-        }
-    }
+    #endif
 
     internal func resetAppOnlyServices() {
         queue.async {
             Holder.defaultURLService = URLService()
-            Holder.defaultUIService = AEPUIService()
             Holder.overrideURLService = nil
-            Holder.overrideUIService = nil
+            #if os(iOS)
+                Holder.defaultUIService = AEPUIService()
+                Holder.overrideUIService = nil
+            #endif
         }
     }
-
 }

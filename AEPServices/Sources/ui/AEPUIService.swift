@@ -10,23 +10,25 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
-import UIKit
+#if os(iOS)
+    import Foundation
+    import UIKit
 
-@available(iOSApplicationExtension, unavailable)
-class AEPUIService: UIService {
+    @available(iOSApplicationExtension, unavailable)
+    class AEPUIService: UIService {
 
-    private var messageMonitor = MessageMonitor()
+        private var messageMonitor = MessageMonitor()
 
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
-        return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
+        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
+            return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
+        }
+
+        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
+            return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
+        }
+
+        func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
+            return FloatingButton(listener: listener)
+        }
     }
-
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
-        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
-    }
-
-    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
-        return FloatingButton(listener: listener)
-    }
-}
+#endif
