@@ -130,10 +130,10 @@ extension ServiceProvider {
     private struct Holder {
         static var overrideURLService: URLOpening?
         static var defaultURLService = URLService()
-#if os(iOS)
-        static var overrideUIService: UIService?
-        static var defaultUIService = AEPUIService()
-#endif
+        #if os(iOS)
+            static var overrideUIService: UIService?
+            static var defaultUIService = AEPUIService()
+        #endif
     }
 
     public var urlService: URLOpening {
