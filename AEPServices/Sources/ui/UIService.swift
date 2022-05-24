@@ -18,6 +18,7 @@
     /// UIService for creating UI elements
     ///
     @objc (AEPUIServiceProtocol)
+    @available(iOSApplicationExtension, unavailable)
     public protocol UIService {
 
         /// Creates a `FullscreenPresentable`

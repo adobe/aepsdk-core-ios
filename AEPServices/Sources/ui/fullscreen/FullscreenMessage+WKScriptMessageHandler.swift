@@ -15,6 +15,7 @@
     import WebKit
 
     // MARK: - WKScriptMessageHandler
+    @available(iOSApplicationExtension, unavailable)
     extension FullscreenMessage: WKScriptMessageHandler {
         public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             if let handler = scriptHandlers[message.name] {

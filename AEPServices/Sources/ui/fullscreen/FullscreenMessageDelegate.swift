@@ -15,6 +15,7 @@
     import WebKit
 
     /// Fullscreen message lifecycle event listener
+    @available(iOSApplicationExtension, unavailable)
     @objc(AEPFullscreenMessageDelegate) public protocol FullscreenMessageDelegate {
         /// Invoked when the fullscreen message is displayed
         /// - Parameters:

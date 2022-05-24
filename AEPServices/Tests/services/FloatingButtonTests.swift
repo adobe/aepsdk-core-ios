@@ -16,6 +16,7 @@ import XCTest
 import UIKit
 import AEPServicesMocks
 
+@available(iOSApplicationExtension, unavailable)
 class FloatingButtonTests : XCTestCase {
 
     var mockListener: FloatingButtonDelegate?

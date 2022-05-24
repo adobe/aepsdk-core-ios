@@ -12,6 +12,9 @@
 
 import Foundation
 
+///
+/// The ServiceProvider Singleton is used to override and provide Core Services
+///
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
@@ -30,13 +33,7 @@ public class ServiceProvider {
     private var defaultDataQueueService = DataQueueService()
     private var overrideCacheService: Caching?
     private var defaultCacheService = DiskCacheService()
-    private var overrideURLService: URLOpening?
-    private var defaultURLService = URLService()
     private var defaultLoggingService = LoggingService()
-    #if os(iOS)
-        private var overrideUIService: UIService?
-        private var defaultUIService = AEPUIService()
-    #endif
 
     // Don't allow init of ServiceProvider outside the class
     private init() {}
@@ -100,57 +97,76 @@ public class ServiceProvider {
         }
     }
 
-    public var urlService: URLOpening {
-        get {
-            return queue.sync {
-                return overrideURLService ?? defaultURLService
-            }
-        }
-        set {
-            queue.async {
-                self.overrideURLService = newValue
-            }
-        }
-    }
-
     public var loggingService: Logging {
         return queue.sync {
             return defaultLoggingService
         }
     }
 
-    #if os(iOS)
-        public var uiService: UIService? {
-            get {
-                return queue.sync {
-                    return overrideUIService ?? defaultUIService
-                }
-            }
-            set {
-                queue.async {
-                    self.overrideUIService = newValue
-                }
+    internal func reset() {
+        queue.async {
+            self.defaultSystemInfoService = ApplicationSystemInfoService()
+            self.defaultKeyValueService = UserDefaultsNamedCollection()
+            self.defaultNetworkService = NetworkService()
+            self.defaultCacheService = DiskCacheService()
+            self.defaultDataQueueService = DataQueueService()
+            self.defaultLoggingService = LoggingService()
+
+            self.overrideSystemInfoService = nil
+            self.overrideKeyValueService = nil
+            self.overrideNetworkService = nil
+            self.overrideCacheService = nil
+        }
+    }
+}
+
+///
+/// ServiceProvider extension which will hold any iOSApplicationExtension restricted Services.
+///
+@available(iOSApplicationExtension, unavailable)
+extension ServiceProvider {
+    // Because Extensions cannot hold properties, this struct Holder is a work around.
+    // Please note that the static variables work because the ServiceProvider is a singleton.
+    private struct Holder {
+        static var overrideURLService: URLOpening?
+        static var defaultURLService = URLService()
+        static var overrideUIService: UIService?
+        static var defaultUIService = AEPUIService()
+    }
+
+    public var urlService: URLOpening {
+        get {
+            return queue.sync {
+                return Holder.overrideURLService ?? Holder.defaultURLService
             }
         }
-    #endif
-    internal func reset() {
-        defaultSystemInfoService = ApplicationSystemInfoService()
-        defaultKeyValueService = UserDefaultsNamedCollection()
-        defaultNetworkService = NetworkService()
-        defaultDataQueueService = DataQueueService()
-        defaultCacheService = DiskCacheService()
-        defaultURLService = URLService()
-        defaultLoggingService = LoggingService()
-        #if os(iOS)
-            defaultUIService = AEPUIService()
-        #endif
-        overrideSystemInfoService = nil
-        overrideKeyValueService = nil
-        overrideNetworkService = nil
-        overrideCacheService = nil
-        overrideURLService = nil
-        #if os(iOS)
-            overrideUIService = nil
-        #endif
+        set {
+            queue.async {
+                Holder.overrideURLService = newValue
+            }
+        }
     }
+
+    public var uiService: UIService {
+        get {
+            return queue.sync {
+                return Holder.overrideUIService ?? Holder.defaultUIService
+            }
+        }
+        set {
+            queue.async {
+                Holder.overrideUIService = newValue
+            }
+        }
+    }
+
+    internal func resetAppOnlyServices() {
+        queue.async {
+            Holder.defaultURLService = URLService()
+            Holder.defaultUIService = AEPUIService()
+            Holder.overrideURLService = nil
+            Holder.overrideUIService = nil
+        }
+    }
+
 }

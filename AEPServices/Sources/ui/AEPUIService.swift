@@ -14,6 +14,7 @@
     import Foundation
     import UIKit
 
+    @available(iOSApplicationExtension, unavailable)
     class AEPUIService: UIService {
 
         private var messageMonitor = MessageMonitor()
