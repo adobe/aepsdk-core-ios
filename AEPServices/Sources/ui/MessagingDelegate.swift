@@ -9,7 +9,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
+#if os(iOS)
 import Foundation
 
 /// UI Message delegate which is used to listen for current message lifecycle events
@@ -42,3 +42,4 @@ public protocol MessagingDelegate {
     @objc
     optional func urlLoaded(_ url: URL, byMessage message: Showable)
 }
+#endif

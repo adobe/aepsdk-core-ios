@@ -27,11 +27,13 @@ public final class MobileCore: NSObject {
         return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
 
+    #if (iOS)
     @objc public static var messagingDelegate: MessagingDelegate? {
         @available(*, unavailable)
         get { ServiceProvider.shared.messagingDelegate }
         set { ServiceProvider.shared.messagingDelegate = newValue }
     }
+    #endif
 
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")

@@ -9,7 +9,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
+#if os(iOS)
 import Foundation
 import UIKit
 
@@ -50,9 +50,7 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
             }
 
             self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.bringFloatingButtonToFront), userInfo: nil, repeats: true)
-            #if os(iOS)
-                NotificationCenter.default.addObserver(self, selector: #selector(self.handleDeviceRotation), name: UIDevice.orientationDidChangeNotification, object: nil)
-            #endif
+            NotificationCenter.default.addObserver(self, selector: #selector(self.handleDeviceRotation), name: UIDevice.orientationDidChangeNotification, object: nil)
         }
     }
 
@@ -193,3 +191,4 @@ public class FloatingButton: NSObject, FloatingButtonPresentable {
         return newFrame
     }
 }
+#endif

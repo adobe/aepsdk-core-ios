@@ -110,7 +110,12 @@ class SystemInfoServiceTest: XCTestCase {
     }
 
     func testGetCanonicalPlatformName() {
-        XCTAssertEqual("ios", systemInfoService.getCanonicalPlatformName())
+        let name = systemInfoService.getCanonicalPlatformName()
+        #if os(iOS)
+        XCTAssertEqual("ios", name)
+        #elseif os(tvOS)
+        XCTAssertEqual("tvos", name)
+        #endif
     }
 
     func testGetDisplayInformation() {
@@ -122,7 +127,11 @@ class SystemInfoServiceTest: XCTestCase {
 
     func testGetDeviceType() {
         let type = systemInfoService.getDeviceType()
-        XCTAssertEqual(DeviceType.PHONE,type)
+        #if os(iOS)
+        XCTAssertEqual(DeviceType.PHONE, type)
+        #elseif os(tvOS)
+        XCTAssertEqual(DeviceType.TV, type)
+        #endif
     }
 
     func testGetApplicationBundleId() {
@@ -130,8 +139,8 @@ class SystemInfoServiceTest: XCTestCase {
         XCTAssertNotNil(id)
     }
 
-    func testGetApplicationVersionString() {
-        let version = systemInfoService.getApplicationVersion()
+    func testGetApplicationVersionNumberString() {
+        let version = systemInfoService.getApplicationVersionNumber()
         XCTAssertNotNil(version)
     }
 

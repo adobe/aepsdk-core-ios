@@ -9,7 +9,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
+#if os(iOS)
 import Foundation
 
 /// This protocol is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
@@ -35,3 +35,4 @@ protocol MessageMonitoring {
     /// - Returns: True if message needs to be dismissed false otherwise
     func dismiss() -> Bool
 }
+#endif

@@ -15,7 +15,7 @@ end
 
 def core_dev
   project 'AEPCore.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.2.0'
 end
 
 def tests_main
@@ -25,7 +25,7 @@ end
 
 def tests_dev
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.1.0'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v1.2.0'
 end
 
 target 'AEPCore' do
@@ -72,4 +72,14 @@ end
 
 target 'TestAppExtension' do
   tests_main
+end
+
+post_install do |pi|
+  pi.pods_project.targets.each do |t|
+    t.build_configurations.each do |bc|
+        bc.build_settings['TVOS_DEPLOYMENT_TARGET'] = '10.0'
+        bc.build_settings['SUPPORTED_PLATFORMS'] = 'iphoneos iphonesimulator appletvos appletvsimulator'
+        bc.build_settings['TARGETED_DEVICE_FAMILY'] = "1,2,3"
+    end
+  end
 end
