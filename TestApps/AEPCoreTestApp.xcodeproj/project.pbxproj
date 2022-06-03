@@ -50,6 +50,21 @@
 		786D650626D6FAFD000828FC /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 786D650426D6FAFD000828FC /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		786D650A26D6FB12000828FC /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 786D650926D6FB12000828FC /* AEPSignal.framework */; };
 		786D650B26D6FB12000828FC /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 786D650926D6FB12000828FC /* AEPSignal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		78A26DAD284A9C9F004A91B9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78A26DAB284A9C9F004A91B9 /* Main.storyboard */; };
+		78A26DAF284A9CA1004A91B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 78A26DAE284A9CA1004A91B9 /* Assets.xcassets */; };
+		78A26DB2284A9CA1004A91B9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 78A26DB0284A9CA1004A91B9 /* LaunchScreen.storyboard */; };
+		78A26DCC284A9D2D004A91B9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD092425267463000D207D /* main.m */; };
+		78A26DCD284A9D31004A91B9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD091925267460000D207D /* ViewController.m */; };
+		78A26DCE284A9D34004A91B9 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD091625267460000D207D /* SceneDelegate.m */; };
+		78A26DCF284A9D37004A91B9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD091325267460000D207D /* AppDelegate.m */; };
+		78A26DD0284A9D62004A91B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888A826D56F3800F5A665 /* AppDelegate.swift */; };
+		78A26DD1284A9D66004A91B9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888AC26D56F3800F5A665 /* SceneDelegate.swift */; };
+		78A26DD2284A9D69004A91B9 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888A726D56F3800F5A665 /* MenuView.swift */; };
+		78A26DD3284A9D6B004A91B9 /* CoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888AE26D56F3800F5A665 /* CoreView.swift */; };
+		78A26DD4284A9D6E004A91B9 /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888AF26D56F3800F5A665 /* IdentityView.swift */; };
+		78A26DD5284A9D71004A91B9 /* LifecycleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888A626D56F3800F5A665 /* LifecycleView.swift */; };
+		78A26DD6284A9D80004A91B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 780888B126D56F3800F5A665 /* Assets.xcassets */; };
+		78A26DD7284A9D97004A91B9 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 780888B426D56F3800F5A665 /* Preview Assets.xcassets */; };
 		78F2E2FC280F6DED0073CE00 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E2FB280F6DED0073CE00 /* UniformTypeIdentifiers.framework */; };
 		78F2E2FF280F6DED0073CE00 /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E2FE280F6DED0073CE00 /* FileProviderExtension.swift */; };
 		78F2E301280F6DED0073CE00 /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E300280F6DED0073CE00 /* FileProviderItem.swift */; };
@@ -234,6 +249,11 @@
 		786D64FF26D6FAF6000828FC /* AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		786D650426D6FAFD000828FC /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		786D650926D6FB12000828FC /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		78A26DA3284A9C9F004A91B9 /* TestApp_Objc (tvOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TestApp_Objc (tvOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		78A26DAC284A9C9F004A91B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		78A26DAE284A9CA1004A91B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		78A26DB1284A9CA1004A91B9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		78A26DBC284A9CB7004A91B9 /* TestApp_Swift (tvOS).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TestApp_Swift (tvOS).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		78F2E2FA280F6DEC0073CE00 /* TestAppExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TestAppExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		78F2E2FB280F6DED0073CE00 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		78F2E2FE280F6DED0073CE00 /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
@@ -305,6 +325,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		78A26DA0284A9C9F004A91B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		78A26DB9284A9CB7004A91B9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78F2E2F7280F6DEC0073CE00 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -368,6 +402,8 @@
 				3FB58F83252CE33A009C1358 /* E2E_Swift.app */,
 				7808888026D56E8700F5A665 /* TestApp_Swift.app */,
 				78F2E2FA280F6DEC0073CE00 /* TestAppExtension.appex */,
+				78A26DA3284A9C9F004A91B9 /* TestApp_Objc (tvOS).app */,
+				78A26DBC284A9CB7004A91B9 /* TestApp_Swift (tvOS).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -375,15 +411,14 @@
 		3FAD091125267460000D207D /* TestApp_Objc */ = {
 			isa = PBXGroup;
 			children = (
+				78A26DCA284A9CD1004A91B9 /* tvOS */,
+				78A26DCB284A9CE0004A91B9 /* iOS */,
 				3FAD091225267460000D207D /* AppDelegate.h */,
 				3FAD091325267460000D207D /* AppDelegate.m */,
 				3FAD091525267460000D207D /* SceneDelegate.h */,
 				3FAD091625267460000D207D /* SceneDelegate.m */,
 				3FAD091825267460000D207D /* ViewController.h */,
 				3FAD091925267460000D207D /* ViewController.m */,
-				3FAD091B25267460000D207D /* Main.storyboard */,
-				3FAD091E25267463000D207D /* Assets.xcassets */,
-				3FAD092025267463000D207D /* LaunchScreen.storyboard */,
 				3FAD092325267463000D207D /* Info.plist */,
 				3FAD092425267463000D207D /* main.m */,
 			);
@@ -470,6 +505,26 @@
 				73F917DDAA83CF54D6804B96 /* Pods_TestAppExtension.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		78A26DCA284A9CD1004A91B9 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				78A26DAB284A9C9F004A91B9 /* Main.storyboard */,
+				78A26DAE284A9CA1004A91B9 /* Assets.xcassets */,
+				78A26DB0284A9CA1004A91B9 /* LaunchScreen.storyboard */,
+			);
+			path = tvOS;
+			sourceTree = "<group>";
+		};
+		78A26DCB284A9CE0004A91B9 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				3FAD091B25267460000D207D /* Main.storyboard */,
+				3FAD091E25267463000D207D /* Assets.xcassets */,
+				3FAD092025267463000D207D /* LaunchScreen.storyboard */,
+			);
+			path = iOS;
 			sourceTree = "<group>";
 		};
 		78D6683472AF314ED5C05DD5 /* Pods */ = {
@@ -608,6 +663,40 @@
 			productReference = 7808888026D56E8700F5A665 /* TestApp_Swift.app */;
 			productType = "com.apple.product-type.application";
 		};
+		78A26DA2284A9C9F004A91B9 /* TestApp_Objc (tvOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 78A26DB7284A9CA1004A91B9 /* Build configuration list for PBXNativeTarget "TestApp_Objc (tvOS)" */;
+			buildPhases = (
+				78A26D9F284A9C9F004A91B9 /* Sources */,
+				78A26DA0284A9C9F004A91B9 /* Frameworks */,
+				78A26DA1284A9C9F004A91B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TestApp_Objc (tvOS)";
+			productName = "TestApp_Objc (tvOS)";
+			productReference = 78A26DA3284A9C9F004A91B9 /* TestApp_Objc (tvOS).app */;
+			productType = "com.apple.product-type.application";
+		};
+		78A26DBB284A9CB7004A91B9 /* TestApp_Swift (tvOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 78A26DC7284A9CB8004A91B9 /* Build configuration list for PBXNativeTarget "TestApp_Swift (tvOS)" */;
+			buildPhases = (
+				78A26DB8284A9CB7004A91B9 /* Sources */,
+				78A26DB9284A9CB7004A91B9 /* Frameworks */,
+				78A26DBA284A9CB7004A91B9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "TestApp_Swift (tvOS)";
+			productName = "TestApp_Swift (tvOS)";
+			productReference = 78A26DBC284A9CB7004A91B9 /* TestApp_Swift (tvOS).app */;
+			productType = "com.apple.product-type.application";
+		};
 		78F2E2F9280F6DEC0073CE00 /* TestAppExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 78F2E30C280F6DED0073CE00 /* Build configuration list for PBXNativeTarget "TestAppExtension" */;
@@ -703,6 +792,12 @@
 						CreatedOnToolsVersion = 12.3;
 						LastSwiftMigration = 1230;
 					};
+					78A26DA2284A9C9F004A91B9 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+					78A26DBB284A9CB7004A91B9 = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
 					78F2E2F9280F6DEC0073CE00 = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
@@ -739,6 +834,8 @@
 				3FAD090F25267460000D207D /* TestApp_Objc */,
 				7808887F26D56E8700F5A665 /* TestApp_Swift */,
 				78F2E2F9280F6DEC0073CE00 /* TestAppExtension */,
+				78A26DA2284A9C9F004A91B9 /* TestApp_Objc (tvOS) */,
+				78A26DBB284A9CB7004A91B9 /* TestApp_Swift (tvOS) */,
 			);
 		};
 /* End PBXProject section */
@@ -771,6 +868,25 @@
 				780888C026D56F3800F5A665 /* Preview Assets.xcassets in Resources */,
 				780888BE26D56F3800F5A665 /* Assets.xcassets in Resources */,
 				780888B826D56F3800F5A665 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		78A26DA1284A9C9F004A91B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78A26DB2284A9CA1004A91B9 /* LaunchScreen.storyboard in Resources */,
+				78A26DAF284A9CA1004A91B9 /* Assets.xcassets in Resources */,
+				78A26DAD284A9C9F004A91B9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		78A26DBA284A9CB7004A91B9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78A26DD7284A9D97004A91B9 /* Preview Assets.xcassets in Resources */,
+				78A26DD6284A9D80004A91B9 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1023,6 +1139,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		78A26D9F284A9C9F004A91B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78A26DCE284A9D34004A91B9 /* SceneDelegate.m in Sources */,
+				78A26DCC284A9D2D004A91B9 /* main.m in Sources */,
+				78A26DCD284A9D31004A91B9 /* ViewController.m in Sources */,
+				78A26DCF284A9D37004A91B9 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		78A26DB8284A9CB7004A91B9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				78A26DD0284A9D62004A91B9 /* AppDelegate.swift in Sources */,
+				78A26DD4284A9D6E004A91B9 /* IdentityView.swift in Sources */,
+				78A26DD3284A9D6B004A91B9 /* CoreView.swift in Sources */,
+				78A26DD5284A9D71004A91B9 /* LifecycleView.swift in Sources */,
+				78A26DD2284A9D69004A91B9 /* MenuView.swift in Sources */,
+				78A26DD1284A9D66004A91B9 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		78F2E2F6280F6DEC0073CE00 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1117,6 +1257,22 @@
 			isa = PBXVariantGroup;
 			children = (
 				780888AB26D56F3800F5A665 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		78A26DAB284A9C9F004A91B9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				78A26DAC284A9C9F004A91B9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		78A26DB0284A9CA1004A91B9 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				78A26DB1284A9CA1004A91B9 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1373,6 +1529,114 @@
 			};
 			name = Release;
 		};
+		78A26DB5284A9CA1004A91B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Objc--tvOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.2;
+			};
+			name = Debug;
+		};
+		78A26DB6284A9CA1004A91B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Objc--tvOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.2;
+			};
+			name = Release;
+		};
+		78A26DC8284A9CB8004A91B9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview\\ Content/Preview\\ Assets.xcassets\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift--tvOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.2;
+			};
+			name = Debug;
+		};
+		78A26DC9284A9CB8004A91B9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview\\ Content/Preview\\ Assets.xcassets\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Automatic;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adobe.TestApp-Swift--tvOS-";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 15.2;
+			};
+			name = Release;
+		};
 		78F2E30A280F6DED0073CE00 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 73E4CE7F314740BC6AF3A5CA /* Pods-TestAppExtension.debug.xcconfig */;
@@ -1594,6 +1858,24 @@
 			buildConfigurations = (
 				7808889226D56E8E00F5A665 /* Debug */,
 				7808889326D56E8E00F5A665 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		78A26DB7284A9CA1004A91B9 /* Build configuration list for PBXNativeTarget "TestApp_Objc (tvOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				78A26DB5284A9CA1004A91B9 /* Debug */,
+				78A26DB6284A9CA1004A91B9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		78A26DC7284A9CB8004A91B9 /* Build configuration list for PBXNativeTarget "TestApp_Swift (tvOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				78A26DC8284A9CB8004A91B9 /* Debug */,
+				78A26DC9284A9CB8004A91B9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
