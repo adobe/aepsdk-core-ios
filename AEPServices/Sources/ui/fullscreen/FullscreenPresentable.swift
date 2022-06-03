@@ -10,11 +10,11 @@
  governing permissions and limitations under the License.
  */
 #if os(iOS)
-import Foundation
+    import Foundation
 
-///
-/// Represents a Fullscreen UI element which is both `Showable` and `Dismissible`
-///
-@objc(AEPFullscreenPresentable)
-public protocol FullscreenPresentable: Showable, Dismissible {}
+    ///
+    /// Represents a Fullscreen UI element which is both `Showable` and `Dismissible`
+    ///
+    @objc(AEPFullscreenPresentable)
+    public protocol FullscreenPresentable: Showable, Dismissible {}
 #endif

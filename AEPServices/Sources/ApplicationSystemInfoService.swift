@@ -134,9 +134,9 @@ class ApplicationSystemInfoService: SystemInfoService {
 
     func getCanonicalPlatformName() -> String {
         #if os(iOS)
-        return "ios"
+            return "ios"
         #elseif os(tvOS)
-        return "tvos"
+            return "tvos"
         #endif
     }
 

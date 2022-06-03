@@ -112,9 +112,9 @@ class SystemInfoServiceTest: XCTestCase {
     func testGetCanonicalPlatformName() {
         let name = systemInfoService.getCanonicalPlatformName()
         #if os(iOS)
-        XCTAssertEqual("ios", name)
+            XCTAssertEqual("ios", name)
         #elseif os(tvOS)
-        XCTAssertEqual("tvos", name)
+            XCTAssertEqual("tvos", name)
         #endif
     }
 
@@ -128,9 +128,9 @@ class SystemInfoServiceTest: XCTestCase {
     func testGetDeviceType() {
         let type = systemInfoService.getDeviceType()
         #if os(iOS)
-        XCTAssertEqual(DeviceType.PHONE, type)
+            XCTAssertEqual(DeviceType.PHONE, type)
         #elseif os(tvOS)
-        XCTAssertEqual(DeviceType.TV, type)
+            XCTAssertEqual(DeviceType.TV, type)
         #endif
     }
 

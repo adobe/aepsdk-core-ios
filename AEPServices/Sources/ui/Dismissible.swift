@@ -10,17 +10,17 @@
  governing permissions and limitations under the License.
  */
 #if os(iOS)
-import Foundation
-
-///
-/// Represents a UI element which can be dismissed
-///
-@objc(AEPDismissible)
-public protocol Dismissible {
+    import Foundation
 
     ///
-    /// Dismisses the UI element
+    /// Represents a UI element which can be dismissed
     ///
-    func dismiss()
-}
+    @objc(AEPDismissible)
+    public protocol Dismissible {
+
+        ///
+        /// Dismisses the UI element
+        ///
+        func dismiss()
+    }
 #endif

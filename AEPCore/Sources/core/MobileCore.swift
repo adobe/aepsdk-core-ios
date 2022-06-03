@@ -28,11 +28,11 @@ public final class MobileCore: NSObject {
     }
 
     #if (iOS)
-    @objc public static var messagingDelegate: MessagingDelegate? {
-        @available(*, unavailable)
-        get { ServiceProvider.shared.messagingDelegate }
-        set { ServiceProvider.shared.messagingDelegate = newValue }
-    }
+        @objc public static var messagingDelegate: MessagingDelegate? {
+            @available(*, unavailable)
+            get { ServiceProvider.shared.messagingDelegate }
+            set { ServiceProvider.shared.messagingDelegate = newValue }
+        }
     #endif
 
     /// Pending extensions to be registered for legacy support
