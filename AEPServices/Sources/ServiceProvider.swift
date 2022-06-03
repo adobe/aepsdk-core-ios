@@ -125,6 +125,7 @@ public class ServiceProvider {
 /// ServiceProvider extension which will hold any iOSApplicationExtension restricted Services.
 ///
 @available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
 extension ServiceProvider {
     // Because Extensions cannot hold properties, this struct Holder is a work around.
     // Please note that the static variables work because the ServiceProvider is a singleton.

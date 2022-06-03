@@ -133,7 +133,11 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getCanonicalPlatformName() -> String {
+        #if os(iOS)
         return "ios"
+        #elseif os(tvOS)
+        return "tvos"
+        #endif
     }
 
     func getDisplayInformation() -> (width: Int, height: Int) {
