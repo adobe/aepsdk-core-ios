@@ -74,6 +74,14 @@ target 'TestAppExtension' do
   tests_main
 end
 
+target 'TestApp_Swift (tvOS)' do
+  tests_main
+end
+
+target 'TestApp_Objc (tvOS)' do
+  tests_main
+end
+
 post_install do |pi|
   pi.pods_project.targets.each do |t|
     t.build_configurations.each do |bc|
