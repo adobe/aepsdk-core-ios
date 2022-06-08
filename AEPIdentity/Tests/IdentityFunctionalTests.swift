@@ -403,7 +403,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
 
         // mock latest config pending
-        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id-2"], .pending))
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (nil, .pending))
 
         // verify event is not blocked by pending config shared state
         XCTAssertTrue(identity.readyForEvent(event))
@@ -432,7 +432,7 @@ class IdentityFunctionalTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: syncEvent)
 
         // set configuration shared state to pending
-        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .pending))
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: (nil, .pending))
 
         // test
         XCTAssertTrue(identity.readyForEvent(getECIDEvent))

@@ -66,9 +66,14 @@ class IdentityState {
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
     ///   - event: The `Event` triggering the bootup
     /// - Returns: True if we did force synced or privacy is opted out, false otherwise
-    func forceSyncIdentifiers(configSharedState: [String: Any], event: Event, createSharedState: ([String: Any], Event) -> Void) -> Bool {
+    func forceSyncIdentifiers(configSharedState: [String: Any]?, event: Event, createSharedState: ([String: Any], Event) -> Void) -> Bool {
         // Only bootup once we can perform the first force sync
         if hasSynced { return true }
+
+        guard let configSharedState = configSharedState else {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Waiting for the Configuration shared state to get required configuration fields before processing [event:(\(event.name)) id:(\(event.id)].")
+            return false
+        }
 
         guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else {
             return false
