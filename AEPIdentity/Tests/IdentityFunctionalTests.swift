@@ -86,6 +86,33 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertTrue(mockRuntime.createdSharedStates.isEmpty)
     }
 
+    static func createConfigUpdateEvent(configDict: [String: Any]) -> Event {
+        return Event(name: "Configure with Programmatic config", type: EventType.configuration, source: EventSource.requestContent,
+                     data: ["config.update": configDict])
+    }
+
+    func testSyncIdentifiersSynEvenWhenLatestConfigurationStateIsPendingtUsesLastSetConfiguration() {
+        let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
+        let syncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+
+        let lastValidConfigSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: (lastValidConfigSharedState, .set))
+
+        // set configuration shared state to pending
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: nil, data: (nil, .pending))
+
+        // test sync event
+        XCTAssertTrue(identity.readyForEvent(syncEvent))
+        mockRuntime.simulateComingEvent(event: syncEvent)
+
+        //verify
+        let sharedState = mockRuntime.createdSharedStates.last!
+        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertEqual("test-org-id", identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String ?? "")
+
+    }
+
     // MARK: processAppendToUrl(...) tests
 
     /// Tests that appendToUrl dispatches the correct event with the URL in data
