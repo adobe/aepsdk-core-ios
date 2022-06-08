@@ -83,12 +83,24 @@ class TestableExtensionRuntime: ExtensionRuntime {
     }
 
     func simulateSharedState(extensionName: String, event: Event?, data: (value: [String: Any]?, status: SharedStateStatus)) {
-        otherSharedStates[extensionName] = SharedStateResult(status: data.status, value: data.value)
-        otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: data.value)
+        var sharedStateValue : [String: Any]?
+        if data.status == .pending {
+            sharedStateValue = otherSharedStates[extensionName]?.value ?? nil
+        } else {
+            sharedStateValue = data.value
+        }
+        otherSharedStates[extensionName] = SharedStateResult(status: data.status, value: sharedStateValue)
+        otherSharedStates["\(extensionName)-\(String(describing: event?.id))"] = SharedStateResult(status: data.status, value: sharedStateValue)
     }
 
     public func simulateXDMSharedState(for extensionName: String, data: (value: [String: Any]?, status: SharedStateStatus)) {
-        otherXDMSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: data.value)
+        var sharedStateValue : [String: Any]?
+        if data.status == .pending {
+            sharedStateValue = otherSharedStates[extensionName]?.value ?? nil
+        } else {
+            sharedStateValue = data.value
+        }
+        otherXDMSharedStates["\(extensionName)"] = SharedStateResult(status: data.status, value: sharedStateValue)
     }
 
     /// clear the events and shared states that have been created by the current extension
