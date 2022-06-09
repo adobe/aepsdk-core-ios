@@ -10,30 +10,30 @@
  governing permissions and limitations under the License.
  */
 #if os(iOS)
-import Foundation
-@testable import AEPServices
-import UIKit
+    import Foundation
+    @testable import AEPServices
+    import UIKit
 
-@available(iOSApplicationExtension, unavailable)
-public class MockUIService: UIService {
+    @available(iOSApplicationExtension, unavailable)
+    public class MockUIService: UIService {
     
-    public init() {}
+        public init() {}
     
-    var mockMessageMonitor: MessageMonitoring?
+        var mockMessageMonitor: MessageMonitoring?
     
-    var createFullscreenMessageCalled = false
-    var fullscreenMessage: FullscreenPresentable?
-    public func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable {
-        createFullscreenMessageCalled = true
-        return fullscreenMessage ?? FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: mockMessageMonitor ?? MessageMonitor())
+        var createFullscreenMessageCalled = false
+        var fullscreenMessage: FullscreenPresentable?
+        public func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable {
+            createFullscreenMessageCalled = true
+            return fullscreenMessage ?? FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: mockMessageMonitor ?? MessageMonitor())
+        }
+    
+        var createFloatingButtonCalled = false
+        var floatingButton: FloatingButtonPresentable?
+        public func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
+            createFloatingButtonCalled = true
+            return floatingButton ?? createFloatingButton(listener: listener)
+        }   
+    
     }
-    
-    var createFloatingButtonCalled = false
-    var floatingButton: FloatingButtonPresentable?
-    public func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
-        createFloatingButtonCalled = true
-        return floatingButton ?? createFloatingButton(listener: listener)
-    }   
-    
-}
 #endif

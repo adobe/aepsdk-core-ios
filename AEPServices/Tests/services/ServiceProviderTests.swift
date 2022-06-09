@@ -70,27 +70,27 @@ class ServiceProviderTests: XCTestCase {
     }
     
     #if os(iOS)
-    func testOverridingAppOnlyServices() {
-        let mockUIService = MockUIService()
-        ServiceProvider.shared.uiService = mockUIService
-        XCTAssertEqual(Unmanaged.passUnretained(mockUIService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.uiService as! MockUIService).toOpaque())
+        func testOverridingAppOnlyServices() {
+            let mockUIService = MockUIService()
+            ServiceProvider.shared.uiService = mockUIService
+            XCTAssertEqual(Unmanaged.passUnretained(mockUIService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.uiService as! MockUIService).toOpaque())
         
-        let mockURLService = MockURLService()
-        ServiceProvider.shared.urlService = mockURLService
-        XCTAssertEqual(Unmanaged.passUnretained(mockURLService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.urlService as! MockURLService).toOpaque())
+            let mockURLService = MockURLService()
+            ServiceProvider.shared.urlService = mockURLService
+            XCTAssertEqual(Unmanaged.passUnretained(mockURLService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.urlService as! MockURLService).toOpaque())
         
-    }
-    @available(tvOSApplicationExtension, unavailable)
-    func testResettingAppOnlyServices() {
-        let mockUIService = MockUIService()
-        ServiceProvider.shared.uiService = mockUIService
-        ServiceProvider.shared.resetAppOnlyServices()
-        XCTAssertTrue(ServiceProvider.shared.uiService is AEPUIService)
+        }
+        @available(tvOSApplicationExtension, unavailable)
+        func testResettingAppOnlyServices() {
+            let mockUIService = MockUIService()
+            ServiceProvider.shared.uiService = mockUIService
+            ServiceProvider.shared.resetAppOnlyServices()
+            XCTAssertTrue(ServiceProvider.shared.uiService is AEPUIService)
         
-        let mockURLService = MockURLService()
-        ServiceProvider.shared.urlService = mockURLService
-        ServiceProvider.shared.resetAppOnlyServices()
-        XCTAssertTrue(ServiceProvider.shared.urlService is URLService)
-    }
+            let mockURLService = MockURLService()
+            ServiceProvider.shared.urlService = mockURLService
+            ServiceProvider.shared.resetAppOnlyServices()
+            XCTAssertTrue(ServiceProvider.shared.urlService is URLService)
+        }
     #endif
 }

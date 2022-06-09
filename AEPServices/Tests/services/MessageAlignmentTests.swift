@@ -10,58 +10,58 @@
  governing permissions and limitations under the License.
  */
 #if os(iOS)
-@testable import AEPServices
-import XCTest
+    @testable import AEPServices
+    import XCTest
 
-class MessageAlignmentTests: XCTestCase {
-    func testValueCenter() throws {
-        XCTAssertEqual(0, MessageAlignment.center.rawValue)
-    }
+    class MessageAlignmentTests: XCTestCase {
+        func testValueCenter() throws {
+            XCTAssertEqual(0, MessageAlignment.center.rawValue)
+        }
     
-    func testFromStringCenter() throws {
-        let align = MessageAlignment.fromString("center")
-        XCTAssertEqual(align, .center)
-    }
+        func testFromStringCenter() throws {
+            let align = MessageAlignment.fromString("center")
+            XCTAssertEqual(align, .center)
+        }
     
-    func testValueLeft() throws {
-        XCTAssertEqual(1, MessageAlignment.left.rawValue)
-    }
+        func testValueLeft() throws {
+            XCTAssertEqual(1, MessageAlignment.left.rawValue)
+        }
     
-    func testFromStringLeft() throws {
-        let align = MessageAlignment.fromString("left")
-        XCTAssertEqual(align, .left)
-    }
+        func testFromStringLeft() throws {
+            let align = MessageAlignment.fromString("left")
+            XCTAssertEqual(align, .left)
+        }
     
-    func testValueRight() throws {
-        XCTAssertEqual(2, MessageAlignment.right.rawValue)
-    }
+        func testValueRight() throws {
+            XCTAssertEqual(2, MessageAlignment.right.rawValue)
+        }
     
-    func testFromStringRight() throws {
-        let align = MessageAlignment.fromString("right")
-        XCTAssertEqual(align, .right)
-    }
+        func testFromStringRight() throws {
+            let align = MessageAlignment.fromString("right")
+            XCTAssertEqual(align, .right)
+        }
     
-    func testValueTop() throws {
-        XCTAssertEqual(3, MessageAlignment.top.rawValue)
-    }
+        func testValueTop() throws {
+            XCTAssertEqual(3, MessageAlignment.top.rawValue)
+        }
     
-    func testFromStringTop() throws {
-        let align = MessageAlignment.fromString("top")
-        XCTAssertEqual(align, .top)
-    }
+        func testFromStringTop() throws {
+            let align = MessageAlignment.fromString("top")
+            XCTAssertEqual(align, .top)
+        }
     
-    func testValueBottom() throws {
-        XCTAssertEqual(4, MessageAlignment.bottom.rawValue)
-    }
+        func testValueBottom() throws {
+            XCTAssertEqual(4, MessageAlignment.bottom.rawValue)
+        }
     
-    func testFromStringBottom() throws {
-        let align = MessageAlignment.fromString("bottom")
-        XCTAssertEqual(align, .bottom)
-    }
+        func testFromStringBottom() throws {
+            let align = MessageAlignment.fromString("bottom")
+            XCTAssertEqual(align, .bottom)
+        }
     
-    func testFromStringNoMatch() throws {
-        let align = MessageAlignment.fromString("oopsee")
-        XCTAssertEqual(align, .center, "center should be returned when there's no matching string")
+        func testFromStringNoMatch() throws {
+            let align = MessageAlignment.fromString("oopsee")
+            XCTAssertEqual(align, .center, "center should be returned when there's no matching string")
+        }
     }
-}
 #endif
