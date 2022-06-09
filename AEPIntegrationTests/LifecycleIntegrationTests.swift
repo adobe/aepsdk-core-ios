@@ -16,6 +16,8 @@ import AEPIdentity
 import AEPLifecycle
 import AEPSignal
 
+@available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
 class LifecycleIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()
     let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])

@@ -18,9 +18,10 @@ import Foundation
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
-    /// MessagingDelegate which is used to listen for message visibility updates.
-    public weak var messagingDelegate: MessagingDelegate?
-
+    #if os(iOS)
+        /// MessagingDelegate which is used to listen for message visibility updates.
+        public weak var messagingDelegate: MessagingDelegate?
+    #endif
     // Provide thread safety on the getters and setters
     private let queue = DispatchQueue(label: "ServiceProvider.barrierQueue")
 
@@ -124,6 +125,7 @@ public class ServiceProvider {
 /// ServiceProvider extension which will hold any iOSApplicationExtension restricted Services.
 ///
 @available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
 extension ServiceProvider {
     // Because Extensions cannot hold properties, this struct Holder is a work around.
     // Please note that the static variables work because the ServiceProvider is a singleton.

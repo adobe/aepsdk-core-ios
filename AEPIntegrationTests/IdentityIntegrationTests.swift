@@ -16,6 +16,8 @@ import XCTest
 import AEPLifecycle
 import AEPSignal
 
+@available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
 class IdentityIntegrationTests: XCTestCase {
 
     override func setUp() {

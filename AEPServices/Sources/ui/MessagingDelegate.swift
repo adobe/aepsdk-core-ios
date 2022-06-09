@@ -9,36 +9,37 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
 
-import Foundation
+    /// UI Message delegate which is used to listen for current message lifecycle events
+    @objc(AEPMessagingDelegate)
+    public protocol MessagingDelegate {
 
-/// UI Message delegate which is used to listen for current message lifecycle events
-@objc(AEPMessagingDelegate)
-public protocol MessagingDelegate {
+        /// Invoked when the any message is displayed
+        /// - Parameters:
+        ///     - message: UIMessaging message that is being displayed
+        @objc
+        func onShow(message: Showable)
 
-    /// Invoked when the any message is displayed
-    /// - Parameters:
-    ///     - message: UIMessaging message that is being displayed
-    @objc
-    func onShow(message: Showable)
+        /// Invoked when the any message is dismissed
+        /// - Parameters:
+        ///     - message: UIMessaging message that is being dismissed
+        @objc
+        func onDismiss(message: Showable)
 
-    /// Invoked when the any message is dismissed
-    /// - Parameters:
-    ///     - message: UIMessaging message that is being dismissed
-    @objc
-    func onDismiss(message: Showable)
+        /// Used to find whether messages should be shown or not
+        /// - Parameters:
+        ///     - message: UIMessaging message that is about to get displayed
+        /// - Returns: true if the message should be shown else false
+        @objc
+        func shouldShowMessage(message: Showable) -> Bool
 
-    /// Used to find whether messages should be shown or not
-    /// - Parameters:
-    ///     - message: UIMessaging message that is about to get displayed
-    /// - Returns: true if the message should be shown else false
-    @objc
-    func shouldShowMessage(message: Showable) -> Bool
-
-    /// Called when `message` loads a URL
-    /// - Parameters:
-    ///     - url: the `URL` being loaded by the `message`
-    ///     - message: the Message loading a `URL`
-    @objc
-    optional func urlLoaded(_ url: URL, byMessage message: Showable)
-}
+        /// Called when `message` loads a URL
+        /// - Parameters:
+        ///     - url: the `URL` being loaded by the `message`
+        ///     - message: the Message loading a `URL`
+        @objc
+        optional func urlLoaded(_ url: URL, byMessage message: Showable)
+    }
+#endif

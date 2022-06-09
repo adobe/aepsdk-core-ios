@@ -9,37 +9,38 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
+    import UIKit
 
-import Foundation
-import UIKit
+    @available(iOSApplicationExtension, unavailable)
+    @objc(AEPFloatingButtonPosition) public enum FloatingButtonPosition: Int {
 
-@available(iOSApplicationExtension, unavailable)
-@objc(AEPFloatingButtonPosition) public enum FloatingButtonPosition: Int {
+        case center
+        case topRight
+        case topLeft
 
-    case center
-    case topRight
-    case topLeft
+        internal func frame(screenBounds: CGSize) -> CGRect {
+            switch self {
+            case .center:
+                return CGRect(x: (Int(screenBounds.width) - FloatingButton.PREVIEW_BUTTON_WIDTH) / 2,
+                              y: (Int(screenBounds.height) - FloatingButton.PREVIEW_BUTTON_HEIGHT) / 2,
+                              width: FloatingButton.PREVIEW_BUTTON_WIDTH,
+                              height: FloatingButton.PREVIEW_BUTTON_HEIGHT)
 
-    internal func frame(screenBounds: CGSize) -> CGRect {
-        switch self {
-        case .center:
-            return CGRect(x: (Int(screenBounds.width) - FloatingButton.PREVIEW_BUTTON_WIDTH) / 2,
-                          y: (Int(screenBounds.height) - FloatingButton.PREVIEW_BUTTON_HEIGHT) / 2,
-                          width: FloatingButton.PREVIEW_BUTTON_WIDTH,
-                          height: FloatingButton.PREVIEW_BUTTON_HEIGHT)
+            case .topRight:
+                return CGRect(x: (Int(screenBounds.width) - FloatingButton.PREVIEW_BUTTON_WIDTH),
+                              y: FloatingButton.BUTTON_TOP_MARGIN,
+                              width: FloatingButton.PREVIEW_BUTTON_WIDTH,
+                              height: FloatingButton.PREVIEW_BUTTON_HEIGHT)
 
-        case .topRight:
-            return CGRect(x: (Int(screenBounds.width) - FloatingButton.PREVIEW_BUTTON_WIDTH),
-                          y: FloatingButton.BUTTON_TOP_MARGIN,
-                          width: FloatingButton.PREVIEW_BUTTON_WIDTH,
-                          height: FloatingButton.PREVIEW_BUTTON_HEIGHT)
+            case .topLeft:
+                return CGRect(x: 0,
+                              y: FloatingButton.BUTTON_TOP_MARGIN,
+                              width: FloatingButton.PREVIEW_BUTTON_WIDTH,
+                              height: FloatingButton.PREVIEW_BUTTON_HEIGHT)
+            }
 
-        case .topLeft:
-            return CGRect(x: 0,
-                          y: FloatingButton.BUTTON_TOP_MARGIN,
-                          width: FloatingButton.PREVIEW_BUTTON_WIDTH,
-                          height: FloatingButton.PREVIEW_BUTTON_HEIGHT)
         }
-
     }
-}
+#endif

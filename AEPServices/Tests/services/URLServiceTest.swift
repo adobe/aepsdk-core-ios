@@ -14,6 +14,7 @@
 import XCTest
 
 @available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
 class URLServiceTest: XCTestCase {
     private let urlService = ServiceProvider.shared.urlService
 
