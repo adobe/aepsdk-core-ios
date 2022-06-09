@@ -86,12 +86,7 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertTrue(mockRuntime.createdSharedStates.isEmpty)
     }
 
-    static func createConfigUpdateEvent(configDict: [String: Any]) -> Event {
-        return Event(name: "Configure with Programmatic config", type: EventType.configuration, source: EventSource.requestContent,
-                     data: ["config.update": configDict])
-    }
-
-    func testSyncIdentifiersSynEvenWhenLatestConfigurationStateIsPendingtUsesLastSetConfiguration() {
+    func testSyncIdentifiersResolvesToLastSetConfig() {
         let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
         let syncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
 
@@ -423,7 +418,7 @@ class IdentityFunctionalTests: XCTestCase {
     }
 
     /// forseSyncIdentifier needs valid configuration to be present to process
-    func testGetECIDWithValidLastSetConfigDoesNotWaitForLatestConfigurationSharedStateToResolve() {
+    func testGetECIDResolvesToLastSetConfig() {
         // setup
         let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         // mock valid config last set
