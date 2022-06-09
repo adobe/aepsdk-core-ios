@@ -9,7 +9,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
+#if os(iOS)
 @testable import AEPServices
 import XCTest
 
@@ -64,3 +64,4 @@ class MessageAlignmentTests: XCTestCase {
         XCTAssertEqual(align, .center, "center should be returned when there's no matching string")
     }
 }
+#endif

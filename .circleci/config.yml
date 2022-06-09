@@ -55,6 +55,7 @@ jobs:
       - run:
           name: Upload Code Coverage Reports for AEPCore
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPCore" 
+    
 
       - run:
           name: Run AEPServices Tests
@@ -71,6 +72,7 @@ jobs:
       - run:
           name: Upload Code Coverage Reports for AEPLifecycle
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPLifecycle" 
+
 
       - run:
           name: Run AEPIdentity Tests
@@ -89,5 +91,52 @@ jobs:
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPSignal" 
 
       - run:
+          name: Pre-start tvOS Simulator
+          command: xcrun instruments -w "Apple TV (15.0) [" || true
+
+      - run:
+          name: Run AEPCore tvOS Tests
+          command: make aep-core-tvos-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPCore tvOS
+          command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPCore tvOS" 
+
+      - run:
+          name: Run AEPServices tvOS Tests
+          command: make aep-services-tvos-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPServices tvOS
+          command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPServices tvOS" 
+      - run:
+          name: Run AEPLifecycle tvOS Tests
+          command: make aep-lifecycle-tvos-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPLifecycle tvOS
+          command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPLifecycle tvOS" 
+
+      - run:
+          name: Run AEPIdentity tvOS Tests
+          command: make aep-identity-tvos-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPIdentity tvOS
+          command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPIdentity tvOS" 
+
+      - run:
+          name: Run AEPSignal tvOS Tests
+          command: make aep-signal-tvos-unit-test
+
+      - run:
+          name: Upload Code Coverage Reports for AEPSignal tvOS
+          command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPSignal tvOS" 
+
+      - run:
           name: Run Integration Tests
           command: make integration-test
+
+      - run:
+          name: Run Integration tvOS Tests
+          command: make integration-tvos-test

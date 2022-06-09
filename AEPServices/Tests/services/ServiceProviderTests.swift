@@ -69,7 +69,7 @@ class ServiceProviderTests: XCTestCase {
         XCTAssertTrue(ServiceProvider.shared.cacheService is DiskCacheService)
     }
     
-    
+    #if os(iOS)
     func testOverridingAppOnlyServices() {
         let mockUIService = MockUIService()
         ServiceProvider.shared.uiService = mockUIService
@@ -80,7 +80,7 @@ class ServiceProviderTests: XCTestCase {
         XCTAssertEqual(Unmanaged.passUnretained(mockURLService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.urlService as! MockURLService).toOpaque())
         
     }
-    
+    @available(tvOSApplicationExtension, unavailable)
     func testResettingAppOnlyServices() {
         let mockUIService = MockUIService()
         ServiceProvider.shared.uiService = mockUIService
@@ -92,4 +92,5 @@ class ServiceProviderTests: XCTestCase {
         ServiceProvider.shared.resetAppOnlyServices()
         XCTAssertTrue(ServiceProvider.shared.urlService is URLService)
     }
+    #endif
 }

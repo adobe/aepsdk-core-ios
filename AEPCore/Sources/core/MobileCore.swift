@@ -27,7 +27,7 @@ public final class MobileCore: NSObject {
         return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
 
-    #if (iOS)
+    #if os(iOS)
         @objc public static var messagingDelegate: MessagingDelegate? {
             @available(*, unavailable)
             get { ServiceProvider.shared.messagingDelegate }
