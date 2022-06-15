@@ -12,6 +12,7 @@
 
 import AEPServices
 import Foundation
+import SwiftUI
 
 public typealias EventListener = (Event) -> Void
 public typealias EventResponseListener = (Event?) -> Void
@@ -58,7 +59,9 @@ final class EventHub {
                     return true
                 }
                 // Now that they are removed, we can call
-                _ = matchingResponseListeners?.map { $0.listener(processedEvent) }
+                matchingResponseListeners?.forEach({ eventListenerContainer in
+                    eventListenerContainer.listener(processedEvent)
+                })
             }
 
             // Send event to each ExtensionContainer
