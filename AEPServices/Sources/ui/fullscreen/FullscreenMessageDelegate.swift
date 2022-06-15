@@ -10,39 +10,41 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
-import WebKit
+#if os(iOS)
+    import Foundation
+    import WebKit
 
-/// Fullscreen message lifecycle event listener
-@available(iOSApplicationExtension, unavailable)
-@objc(AEPFullscreenMessageDelegate) public protocol FullscreenMessageDelegate {
-    /// Invoked when the fullscreen message is displayed
-    /// - Parameters:
-    ///     - message: Fullscreen message which is currently shown
-    @objc(onShowFullscreenMessage:)
-    func onShow(message: FullscreenMessage)
+    /// Fullscreen message lifecycle event listener
+    @available(iOSApplicationExtension, unavailable)
+    @objc(AEPFullscreenMessageDelegate) public protocol FullscreenMessageDelegate {
+        /// Invoked when the fullscreen message is displayed
+        /// - Parameters:
+        ///     - message: Fullscreen message which is currently shown
+        @objc(onShowFullscreenMessage:)
+        func onShow(message: FullscreenMessage)
 
-    /// Invoked when the fullscreen message is dismissed
-    /// - Parameters:
-    ///     - message: Fullscreen message which is dismissed
-    @objc(onDismissFullscreenMessage:)
-    func onDismiss(message: FullscreenMessage)
+        /// Invoked when the fullscreen message is dismissed
+        /// - Parameters:
+        ///     - message: Fullscreen message which is dismissed
+        @objc(onDismissFullscreenMessage:)
+        func onDismiss(message: FullscreenMessage)
 
-    /// Invoked when the fullscreen message is attempting to load a url
-    /// - Parameters:
-    ///     - message: Fullscreen message
-    ///     - url:     String the url being loaded by the message
-    /// - Returns: True if the core wants to handle the URL (and not the fullscreen message view implementation)
-    @objc(overrideUrlLoadFullscreenMessage:url:)
-    func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
+        /// Invoked when the fullscreen message is attempting to load a url
+        /// - Parameters:
+        ///     - message: Fullscreen message
+        ///     - url:     String the url being loaded by the message
+        /// - Returns: True if the core wants to handle the URL (and not the fullscreen message view implementation)
+        @objc(overrideUrlLoadFullscreenMessage:url:)
+        func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
 
-    /// Invoked when the fullscreen message finished loading its first content on the webView.
-    /// - Parameter webView - the `WKWebView` instance that completed loading its initial content.
-    @objc(webViewDidFinishInitialLoading:)
-    optional func webViewDidFinishInitialLoading(webView: WKWebView)
+        /// Invoked when the fullscreen message finished loading its first content on the webView.
+        /// - Parameter webView - the `WKWebView` instance that completed loading its initial content.
+        @objc(webViewDidFinishInitialLoading:)
+        optional func webViewDidFinishInitialLoading(webView: WKWebView)
 
-    ///
-    /// Invoked when the FullscreenMessage failed to be displayed
-    ///
-    func onShowFailure()
-}
+        ///
+        /// Invoked when the FullscreenMessage failed to be displayed
+        ///
+        func onShowFailure()
+    }
+#endif

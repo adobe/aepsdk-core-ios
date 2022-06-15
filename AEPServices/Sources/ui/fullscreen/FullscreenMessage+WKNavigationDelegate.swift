@@ -10,40 +10,42 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
-import WebKit
+#if os(iOS)
+    import Foundation
+    import WebKit
 
-@available(iOSApplicationExtension, unavailable)
-extension FullscreenMessage: WKNavigationDelegate {
-    // MARK: WKNavigationDelegate delegate
-    // default behavior is to call the decisionHandler with .allow
-    // either the messagingDelegate or listener may suppress this navigation
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        // notify the messagingDelegate of the url being loaded
-        guard let urlToLoad = navigationAction.request.url else {
-            decisionHandler(.allow)
-            return
+    @available(iOSApplicationExtension, unavailable)
+    extension FullscreenMessage: WKNavigationDelegate {
+        // MARK: WKNavigationDelegate delegate
+        // default behavior is to call the decisionHandler with .allow
+        // either the messagingDelegate or listener may suppress this navigation
+        public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+            // notify the messagingDelegate of the url being loaded
+            guard let urlToLoad = navigationAction.request.url else {
+                decisionHandler(.allow)
+                return
+            }
+
+            var navigation: WKNavigationActionPolicy = .allow
+
+            if self.listener != nil {
+                let navigateNormally = self.listener?.overrideUrlLoad(message: self, url: urlToLoad.absoluteString) ?? true
+
+                navigation = navigateNormally ? .allow : .cancel
+
+                if navigation == .cancel {
+                    self.messagingDelegate?.urlLoaded?(urlToLoad, byMessage: self)
+                }
+            }
+
+            decisionHandler(navigation)
         }
 
-        var navigation: WKNavigationActionPolicy = .allow
-
-        if self.listener != nil {
-            let navigateNormally = self.listener?.overrideUrlLoad(message: self, url: urlToLoad.absoluteString) ?? true
-
-            navigation = navigateNormally ? .allow : .cancel
-
-            if navigation == .cancel {
-                self.messagingDelegate?.urlLoaded?(urlToLoad, byMessage: self)
+        /// Delegate method invoked when the webView navigation is complete.
+        public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            if navigation == self.loadingNavigation {
+                self.listener?.webViewDidFinishInitialLoading?(webView: webView)
             }
         }
-
-        decisionHandler(navigation)
     }
-
-    /// Delegate method invoked when the webView navigation is complete.
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        if navigation == self.loadingNavigation {
-            self.listener?.webViewDidFinishInitialLoading?(webView: webView)
-        }
-    }
-}
+#endif

@@ -9,11 +9,12 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
 
-import Foundation
-
-///
-/// Represents a Fullscreen UI element which is both `Showable` and `Dismissible`
-///
-@objc(AEPFullscreenPresentable)
-public protocol FullscreenPresentable: Showable, Dismissible {}
+    ///
+    /// Represents a Fullscreen UI element which is both `Showable` and `Dismissible`
+    ///
+    @objc(AEPFullscreenPresentable)
+    public protocol FullscreenPresentable: Showable, Dismissible {}
+#endif

@@ -16,15 +16,20 @@ import Foundation
 /// Manages the business logic of the Identity extension
 class IdentityState {
     private let LOG_TAG = "IdentityState"
-    private(set) var hitQueue: HitQueuing
     private var pushIdManager: PushIDManageable
-    private(set) var hasBooted = false
+    private(set) var hitQueue: HitQueuing
     #if DEBUG
         var lastValidConfig: [String: Any] = [:]
         var identityProperties: IdentityProperties
+        var hasBooted = false
+        var hasSynced = false
+        var didCreateInitialSharedState = false
     #else
         private var lastValidConfig: [String: Any] = [:]
         private(set) var identityProperties: IdentityProperties
+        private var hasBooted = false
+        private var hasSynced = false
+        private var didCreateInitialSharedState = false
     #endif
 
     /// Creates a new `IdentityState` with the given identity properties
@@ -36,19 +41,43 @@ class IdentityState {
         self.pushIdManager = pushIdManager
     }
 
-    /// Completes init for the Identity extension if we can force sync and determines if we need to share state
+    /// Completes init for the Identity extension and determines if we need to share state
     /// - Parameters:
-    ///   - configSharedState: the current configuration shared state available at registration time
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
     ///   - event: The `Event` triggering the bootup
-    /// - Returns: True if we should share state after bootup, false otherwise
-    func bootupIfReady(configSharedState: [String: Any], event: Event) -> Bool {
-        // Only bootup once we can perform the first force sync
-        guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else {
-            return false
-        }
+    func boot(event: Event, createSharedState: ([String: Any], Event) -> Void) {
+        if hasBooted { return }
 
         // load data from local storage
         identityProperties.loadFromPersistence()
+
+        if identityProperties.ecid != nil {
+            createSharedState(identityProperties.toEventData(), event)
+            didCreateInitialSharedState = true
+        }
+
+        hasBooted = true
+        Log.debug(label: "\(LOG_TAG):\(#function)", "Identity has successfully booted up")
+    }
+
+    /// Determines if there is all the required configuration and if we can force sync
+    /// - Parameters:
+    ///   - configSharedState: the current configuration shared state available at registration time
+    ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
+    ///   - event: The `Event` triggering the bootup
+    /// - Returns: True if we did force synced or privacy is opted out, false otherwise
+    func forceSyncIdentifiers(configSharedState: [String: Any]?, event: Event, createSharedState: ([String: Any], Event) -> Void) -> Bool {
+        // Only bootup once we can perform the first force sync
+        if hasSynced { return true }
+
+        guard let configSharedState = configSharedState else {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Waiting for the Configuration shared state to get required configuration fields before processing [event:(\(event.name)) id:(\(event.id)].")
+            return false
+        }
+
+        guard readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) else {
+            return false
+        }
 
         // Load privacy status
         let privacyStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? PrivacyStatus.unknown.rawValue
@@ -57,12 +86,18 @@ class IdentityState {
         // Update hit queue with privacy status
         hitQueue.handlePrivacyChange(status: identityProperties.privacyStatus)
 
-        hasBooted = true
-        Log.debug(label: "\(LOG_TAG):\(#function)", "Identity has successfully booted up")
+        hasSynced = syncIdentifiers(event: event, forceSync: true) != nil || identityProperties.privacyStatus == .optedOut
+
         // Identity should always share its state
         // However, don't create a shared state twice, which will log an error
         // The force sync event processed above will create a shared state if the privacy is not opt-out
-        return syncIdentifiers(event: event) != nil || identityProperties.privacyStatus == .optedOut
+        // If the sync was susccessful and there is no intial shared state available, post a shared state update
+        if hasSynced && !didCreateInitialSharedState {
+            createSharedState(identityProperties.toEventData(), event)
+            didCreateInitialSharedState = true
+        }
+
+        return hasSynced
     }
 
     /// Determines if we have all the required pieces of information, such as configuration to process a sync identifiers call
@@ -84,13 +119,14 @@ class IdentityState {
         return true
     }
 
-    /// Will queue a sync identifiers hit if there are any new valid identifiers to be synced (non null/empty id_type and id values),
+    /// Will queue a sync identifiers hit if there are any new valid identifiers to be synced (non null/empty id_type and id values) or if the forceSync parameter is set to true,
     /// Updates the persistence values for the identifiers and ad id
     /// Assumes a valid config is in `lastValidConfig` from calling `readyForSyncIdentifiers`
     /// - Parameters:
     ///   - event: event corresponding to sync identifiers call or containing a new ADID value.
+    ///   - forceSync: a boolean value to force the sync call
     /// - Returns: The data to be used for Identity shared state
-    func syncIdentifiers(event: Event) -> [String: Any]? {
+    func syncIdentifiers(event: Event, forceSync: Bool = false) -> [String: Any]? {
         // sanity check, config should never be empty
         if lastValidConfig.isEmpty {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Ignoring sync identifiers request as last valid config is empty")
@@ -129,8 +165,11 @@ class IdentityState {
         identityProperties.mergeAndCleanCustomerIds(customerIds)
         customerIds.removeAll(where: { $0.identifier?.isEmpty ?? true }) // clean all identifiers by removing all that have a nil or empty identifier
 
+        // Checks if this is forceSync event: either this is the first event processed by the extension at boot time or if the eventData contains the forceSync flag for backwards compatibility.
+        let shouldForceSync = forceSync || event.forceSync
+
         // valid config: check if there's a need to sync. Don't if we're already up to date.
-        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: event.forceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
+        if shouldSync(customerIds: customerIds, dpids: event.dpids, forceSync: shouldForceSync || shouldAddConsentFlag, currentEventValidConfig: lastValidConfig) {
             queueHit(identityProperties: identityProperties, configSharedState: lastValidConfig, event: event, addConsentFlag: shouldAddConsentFlag)
         } else {
             Log.debug(label: "\(LOG_TAG):\(#function)", "Ignored an ID sync request because no new IDs to sync after the last request.")
@@ -205,9 +244,8 @@ class IdentityState {
         if identityProperties.ecid != nil, !hasIds, !hasDpids, !needResync {
             Log.trace(label: "\(LOG_TAG):\(#function)", "Not syncing identifiers at this time, no new identifiers or previously synced.")
             syncForIds = false
-        } else if identityProperties.ecid == nil {
-            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
-            identityProperties.ecid = ECID()
+        } else {
+            generateAndPersistECID()
         }
 
         return syncForIds && syncForProps
@@ -404,10 +442,7 @@ class IdentityState {
         if let error = identityResponse.error {
             // should never happen bc we generate ECID locally before n/w request.
             // Still, generate ECID locally if there's none yet.
-            if identityProperties.ecid == nil {
-                Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
-                identityProperties.ecid = ECID()
-            }
+            generateAndPersistECID()
 
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
             createSharedState(identityProperties.toEventData(), event)
@@ -426,6 +461,15 @@ class IdentityState {
             }
         } else {
             Log.trace(label: LOG_TAG, "Ignoring response for ECID: \(String(describing: identityResponse.ecid)) as it is either nil or does not match the ECID we have stored locally (\(String(describing: identityProperties.ecid?.ecidString)))")
+        }
+    }
+
+    /// Generates the ecid if not cached and save it to persistence
+    private func generateAndPersistECID() {
+        if identityProperties.ecid == nil {
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
+            identityProperties.ecid = ECID()
+            identityProperties.saveToPersistence()
         }
     }
 }

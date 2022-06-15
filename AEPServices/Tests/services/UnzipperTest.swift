@@ -189,7 +189,7 @@ class FileUnzipperTest: XCTestCase {
 
         let measureOptions = XCTMeasureOptions()
         measureOptions.iterationCount = 1
-        if #available(iOS 13.0, *) {
+        if #available(iOS 13.0, tvOS 13.0, *) {
             measure(options: measureOptions, block: {
                 let unzippedItems = self.unzipper.unzipItem(at: sourceUrl, to: temporaryDirectory)
                 XCTAssertEqual(unzippedItems.count, 2)

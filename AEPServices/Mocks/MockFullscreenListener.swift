@@ -9,41 +9,42 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
+    import AEPServices
+    import XCTest
 
-import Foundation
-import AEPServices
-import XCTest
-
-@available(iOSApplicationExtension, unavailable)
-public class MockFullscreenListener: FullscreenMessageDelegate {
-    var onShowCalled = false
-    var onDismissCalled = false
-    var overrideUrlLoadCalled = false
-    var onShowFailureCalled = false
+    @available(iOSApplicationExtension, unavailable)
+    public class MockFullscreenListener: FullscreenMessageDelegate {
+        var onShowCalled = false
+        var onDismissCalled = false
+        var overrideUrlLoadCalled = false
+        var onShowFailureCalled = false
     
-    var expectation: XCTestExpectation?
+        var expectation: XCTestExpectation?
     
-    public func setExpectation(_ expectation: XCTestExpectation) {
-        self.expectation = expectation
+        public func setExpectation(_ expectation: XCTestExpectation) {
+            self.expectation = expectation
+        }
+    
+        public func onShow(message: FullscreenMessage) {
+            onShowCalled = true
+            expectation?.fulfill()
+        }
+    
+        public func onDismiss(message: FullscreenMessage) {
+            onDismissCalled = true
+            expectation?.fulfill()
+        }
+    
+        public func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool {
+            overrideUrlLoadCalled = true
+            return true
+        }
+    
+        public func onShowFailure() {
+            onShowFailureCalled = true
+            expectation?.fulfill()
+        }
     }
-    
-    public func onShow(message: FullscreenMessage) {
-        onShowCalled = true
-        expectation?.fulfill()
-    }
-    
-    public func onDismiss(message: FullscreenMessage) {
-        onDismissCalled = true
-        expectation?.fulfill()
-    }
-    
-    public func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool {
-        overrideUrlLoadCalled = true
-        return true
-    }
-    
-    public func onShowFailure() {
-        onShowFailureCalled = true
-        expectation?.fulfill()
-    }
-}
+#endif

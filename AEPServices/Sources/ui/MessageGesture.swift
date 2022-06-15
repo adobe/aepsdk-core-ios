@@ -9,36 +9,37 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
 
-import Foundation
+    /// A MessageGesture represents a user interaction with a UIView.
+    @objc (AEPMessageGesture)
+    public enum MessageGesture: Int {
+        case swipeUp = 0
+        case swipeDown = 1
+        case swipeLeft = 2
+        case swipeRight = 3
+        case backgroundTap = 4
 
-/// A MessageGesture represents a user interaction with a UIView.
-@objc (AEPMessageGesture)
-public enum MessageGesture: Int {
-    case swipeUp = 0
-    case swipeDown = 1
-    case swipeLeft = 2
-    case swipeRight = 3
-    case backgroundTap = 4
-
-    /// Converts a `String` to its respective `MessageGesture`
-    /// If `string` is not a valid `MessageGesture`, calling this method will return `nil`
-    /// - Parameter string: a `String` representation of a `MessageGesture`
-    /// - Returns: a `MessageGesture` representing the passed-in `String`
-    public static func fromString(_ string: String) -> MessageGesture? {
-        switch string {
-        case "swipeUp":
-            return .swipeUp
-        case "swipeDown":
-            return .swipeDown
-        case "swipeRight":
-            return .swipeRight
-        case "swipeLeft":
-            return .swipeLeft
-        case "backgroundTap":
-            return .backgroundTap
-        default:
-            return nil
+        /// Converts a `String` to its respective `MessageGesture`
+        /// If `string` is not a valid `MessageGesture`, calling this method will return `nil`
+        /// - Parameter string: a `String` representation of a `MessageGesture`
+        /// - Returns: a `MessageGesture` representing the passed-in `String`
+        public static func fromString(_ string: String) -> MessageGesture? {
+            switch string {
+            case "swipeUp":
+                return .swipeUp
+            case "swipeDown":
+                return .swipeDown
+            case "swipeRight":
+                return .swipeRight
+            case "swipeLeft":
+                return .swipeLeft
+            case "backgroundTap":
+                return .backgroundTap
+            default:
+                return nil
+            }
         }
     }
-}
+#endif

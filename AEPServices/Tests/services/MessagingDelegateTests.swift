@@ -9,78 +9,79 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    @testable import AEPServices
+    import XCTest
 
-@testable import AEPServices
-import XCTest
-
-class MessagingDelegateTests: XCTestCase {
+    class MessagingDelegateTests: XCTestCase {
     
-    let delegate = TestDelegate()
-    let showable = TestShowable()
-    let url = URL(string: "https://adobe.com")!
+        let delegate = TestDelegate()
+        let showable = TestShowable()
+        let url = URL(string: "https://adobe.com")!
         
-    class TestShowable: Showable {
-        func show() {}
-    }
-    
-    class TestDelegate: MessagingDelegate {
-        var onShowCalled = false
-        var onDismissCalled = false
-        var shouldShowMessageCalled = false
-        var urlLoadedCalled = false
-        var paramShowable: Showable?
-        var paramUrl: URL?
-        
-        func onShow(message: Showable) {
-            paramShowable = message
-            onShowCalled = true
+        class TestShowable: Showable {
+            func show() {}
         }
+    
+        class TestDelegate: MessagingDelegate {
+            var onShowCalled = false
+            var onDismissCalled = false
+            var shouldShowMessageCalled = false
+            var urlLoadedCalled = false
+            var paramShowable: Showable?
+            var paramUrl: URL?
         
-        func onDismiss(message: Showable) {
-            paramShowable = message
-            onDismissCalled = true
-        }
+            func onShow(message: Showable) {
+                paramShowable = message
+                onShowCalled = true
+            }
         
-        func shouldShowMessage(message: Showable) -> Bool {
-            paramShowable = message
-            shouldShowMessageCalled = true
-            return true
-        }
+            func onDismiss(message: Showable) {
+                paramShowable = message
+                onDismissCalled = true
+            }
         
-        func urlLoaded(_ url: URL, byMessage message: Showable) {
-            paramShowable = message
-            paramUrl = url
-            urlLoadedCalled = true
+            func shouldShowMessage(message: Showable) -> Bool {
+                paramShowable = message
+                shouldShowMessageCalled = true
+                return true
+            }
+        
+            func urlLoaded(_ url: URL, byMessage message: Showable) {
+                paramShowable = message
+                paramUrl = url
+                urlLoadedCalled = true
+            }
+        }
+    
+        func testOnShow() throws {
+            delegate.onShow(message: showable)
+            XCTAssertTrue(delegate.onShowCalled)
+            XCTAssertNotNil(delegate.paramShowable)
+            XCTAssertNotNil(delegate.paramShowable as? TestShowable)
+        }
+    
+        func testOnDismiss() throws {
+            delegate.onDismiss(message: showable)
+            XCTAssertTrue(delegate.onDismissCalled)
+            XCTAssertNotNil(delegate.paramShowable)
+            XCTAssertNotNil(delegate.paramShowable as? TestShowable)
+        }
+    
+        func testShouldShowMessage() throws {
+            let result = delegate.shouldShowMessage(message: showable)
+            XCTAssertTrue(result)
+            XCTAssertTrue(delegate.shouldShowMessageCalled)
+            XCTAssertNotNil(delegate.paramShowable)
+            XCTAssertNotNil(delegate.paramShowable as? TestShowable)
+        }
+    
+        func testUrlLoaded() throws {
+            delegate.urlLoaded(url, byMessage: showable)
+            XCTAssertTrue(delegate.urlLoadedCalled)
+            XCTAssertNotNil(delegate.paramShowable)
+            XCTAssertNotNil(delegate.paramShowable as? TestShowable)
+            XCTAssertEqual(url, delegate.paramUrl)
         }
     }
-    
-    func testOnShow() throws {
-        delegate.onShow(message: showable)
-        XCTAssertTrue(delegate.onShowCalled)
-        XCTAssertNotNil(delegate.paramShowable)
-        XCTAssertNotNil(delegate.paramShowable as? TestShowable)
-    }
-    
-    func testOnDismiss() throws {
-        delegate.onDismiss(message: showable)
-        XCTAssertTrue(delegate.onDismissCalled)
-        XCTAssertNotNil(delegate.paramShowable)
-        XCTAssertNotNil(delegate.paramShowable as? TestShowable)
-    }
-    
-    func testShouldShowMessage() throws {
-        let result = delegate.shouldShowMessage(message: showable)
-        XCTAssertTrue(result)
-        XCTAssertTrue(delegate.shouldShowMessageCalled)
-        XCTAssertNotNil(delegate.paramShowable)
-        XCTAssertNotNil(delegate.paramShowable as? TestShowable)
-    }
-    
-    func testUrlLoaded() throws {
-        delegate.urlLoaded(url, byMessage: showable)
-        XCTAssertTrue(delegate.urlLoadedCalled)
-        XCTAssertNotNil(delegate.paramShowable)
-        XCTAssertNotNil(delegate.paramShowable as? TestShowable)
-        XCTAssertEqual(url, delegate.paramUrl)
-    }
-}
+#endif

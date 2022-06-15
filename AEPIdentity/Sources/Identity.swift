@@ -55,41 +55,47 @@ import Foundation
     }
 
     public func readyForEvent(_ event: Event) -> Bool {
-        guard canProcessEvents(event: event) else { return false }
+        guard let state = state else { return false }
 
-        if event.isSyncEvent || event.type == EventType.genericIdentity {
-            guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return false }
-            return state?.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState) ?? false
+        // fast boot identity without waiting for configuration
+        state.boot(event: event, createSharedState: createSharedState(data:event:))
+
+        guard state.forceSyncIdentifiers(configSharedState: getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil, resolution: .lastSet)?.value, event: event, createSharedState: createSharedState(data:event:)) else { return false }
+
+        // skip waiting for latest configuration if it is getExperienceCloudId event or getIdentifiers event
+        if event.isGetIdentifierEvent {
+            Log.trace(label: "\(name):\(#function)", "Processing get identifier event without waiting for configuration [event:(\(event.name)) id:(\(event.id)].")
+            return true
+        } else if event.isSyncEvent || event.type == EventType.genericIdentity {
+            guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value else {
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state value before processing [event:(\(event.name)) id:(\(event.id)].")
+                return false
+            }
+            return state.readyForSyncIdentifiers(event: event, configurationSharedState: configSharedState)
         } else if event.type == EventType.configuration, event.source == EventSource.requestIdentity {
-            return MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+            let areSharedStatesReady = MobileIdentities().areSharedStatesReady(event: event, sharedStateProvider: getSharedState(extensionName:event:))
+
+            if !areSharedStatesReady {
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Mobile Identities states to be set before processing [event:(\(event.name)) id:(\(event.id)].")
+            }
+
+            return areSharedStatesReady
         } else if event.type == EventType.identity, event.source == EventSource.requestIdentity, ( event.baseUrl != nil ||  event.urlVariables ) {
 
             // analytics shared state will be null if analytics extension is not registered. Wait for analytics shared only if the status is pending or none
             if let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event), analyticsSharedState.status != .set {
-                Log.trace(label: "\(name):\(#function)", "Waiting for the Analytics shared state to be set.")
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Analytics shared state to be set before processing [event:(\(event.name)) id:(\(event.id)].")
                 return false
             }
         }
 
-        return getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.status == .set
-    }
+        let isConfigSharedStateSet = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value != nil
 
-    /// Determines if Identity is ready to handle events, this is determined by if the Identity extension has booted up
-    /// - Parameter event: An `Event`
-    /// - Returns: True if we can process events, false otherwise
-    private func canProcessEvents(event: Event) -> Bool {
-        guard let state = state else { return false }
-        guard !state.hasBooted else { return true } // we have booted, return true
-
-        // fetch latest configuration when booting up
-        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil)?.value else { return false }
-        // attempt to bootup
-        if state.bootupIfReady(configSharedState: configSharedState, event: event) {
-            createSharedState(data: state.identityProperties.toEventData(), event: nil)
+        if !isConfigSharedStateSet {
+            Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state to be set before processing [event:(\(event.name)) id:(\(event.id)].")
         }
 
-        return false // cannot handle any events until we have booted
-
+        return isConfigSharedStateSet
     }
 
     // MARK: Event Listeners
@@ -186,7 +192,7 @@ import Foundation
 
     private func processAppendToUrl(baseUrl: String, event: Event) {
         guard let properties = state?.identityProperties else { return }
-        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
+        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value else { return }
 
         let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event)?.value ?? [:]
         let updatedUrl = URLAppender.appendVisitorInfo(baseUrl: baseUrl, configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
@@ -201,7 +207,7 @@ import Foundation
 
     private func processGetUrlVariables(event: Event) {
         guard let properties = state?.identityProperties else { return }
-        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
+        guard let configurationSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value else { return }
         let analyticsSharedState = getSharedState(extensionName: "com.adobe.module.analytics", event: event)?.value ?? [:]
         let urlVariables = URLAppender.generateVisitorIdPayload(configSharedState: configurationSharedState, analyticsSharedState: analyticsSharedState, identityProperties: properties)
 
@@ -238,7 +244,7 @@ import Foundation
     /// Determines if an opt-out network request should be sent
     /// - Parameter event: the event responsible for sending this opt-out hit
     private func handleOptOut(event: Event) {
-        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
+        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value else { return }
         // If the AAM server is configured let AAM handle opt out, else we send the opt out hit
         if configSharedState[IdentityConstants.Configuration.AAM_CONFIG_SERVER] != nil { return }
         sendOptOutRequest(event: event)
@@ -247,7 +253,7 @@ import Foundation
     /// Sends an opt-out network request if the current privacy status is opt-out
     /// - Parameter event: the event responsible for sending this opt-out hit
     private func sendOptOutRequest(event: Event) {
-        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value else { return }
+        guard let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value else { return }
         let privacyStatusStr = configSharedState[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 
@@ -269,7 +275,7 @@ import Foundation
     /// - Parameter event: the event
     /// - Returns: Returns true if we should ignore this event (if user is opted-out)
     private func shouldIgnore(event: Event) -> Bool {
-        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event)?.value
+        let configSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value
         let privacyStatusStr = configSharedState?[IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY] as? String ?? ""
         let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
 

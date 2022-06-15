@@ -9,62 +9,62 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
+    @testable import AEPServices
+    import XCTest
+    import UIKit
+    import AEPServicesMocks
 
-import Foundation
-@testable import AEPServices
-import XCTest
-import UIKit
-import AEPServicesMocks
+    @available(iOSApplicationExtension, unavailable)
+    class FloatingButtonTests : XCTestCase {
 
-@available(iOSApplicationExtension, unavailable)
-class FloatingButtonTests : XCTestCase {
+        var mockListener: FloatingButtonDelegate?
+        var floatingButton : FloatingButton?
+        var mockUIService: UIService?
 
-    var mockListener: FloatingButtonDelegate?
-    var floatingButton : FloatingButton?
-    var mockUIService: UIService?
+        override func setUp() {
+            mockListener = MockListener()
+            mockUIService = MockUIService()
+            ServiceProvider.shared.uiService = mockUIService!
+        }
 
-    override func setUp() {
-        mockListener = MockListener()
-        mockUIService = MockUIService()
-        ServiceProvider.shared.uiService = mockUIService!
+        func test_init_whenListenerIsNil() {
+            floatingButton = FloatingButton(listener: nil)
+            XCTAssertNotNil(floatingButton)
+        }
+
+        func test_init_whenListenerIsPresent() {
+            floatingButton = FloatingButton(listener: mockListener)
+            XCTAssertNotNil(floatingButton)
+        }
+
+        func test_display() {
+            floatingButton = FloatingButton(listener: mockListener)
+            XCTAssertNoThrow(floatingButton?.show())
+        }
+
+        func test_remove() {
+            floatingButton = FloatingButton(listener: mockListener)
+            XCTAssertNoThrow(floatingButton?.dismiss())
+        }
+
+        func test_setButtonImage() {
+            floatingButton = FloatingButton(listener: mockListener)
+            XCTAssertNoThrow(floatingButton?.setButtonImage(imageData: Data()))
+        }
+
+        func test_setInitialPosition() {
+            floatingButton = FloatingButton(listener: mockListener)
+            XCTAssertNoThrow(floatingButton?.setInitial(position: .center))
+            XCTAssertNoThrow(floatingButton?.show())
+        }
+
+        class MockListener: FloatingButtonDelegate {
+            func onShow() {}
+            func onDismiss() {}
+            func onTapDetected() {}
+            func onPanDetected() {}
+        }
     }
-
-    func test_init_whenListenerIsNil() {
-        floatingButton = FloatingButton(listener: nil)
-        XCTAssertNotNil(floatingButton)
-    }
-
-    func test_init_whenListenerIsPresent() {
-        floatingButton = FloatingButton(listener: mockListener)
-        XCTAssertNotNil(floatingButton)
-    }
-
-    func test_display() {
-        floatingButton = FloatingButton(listener: mockListener)
-        XCTAssertNoThrow(floatingButton?.show())
-    }
-
-    func test_remove() {
-        floatingButton = FloatingButton(listener: mockListener)
-        XCTAssertNoThrow(floatingButton?.dismiss())
-    }
-
-    func test_setButtonImage() {
-        floatingButton = FloatingButton(listener: mockListener)
-        XCTAssertNoThrow(floatingButton?.setButtonImage(imageData: Data()))
-    }
-
-    func test_setInitialPosition() {
-        floatingButton = FloatingButton(listener: mockListener)
-        XCTAssertNoThrow(floatingButton?.setInitial(position: .center))
-        XCTAssertNoThrow(floatingButton?.show())
-    }
-
-    class MockListener: FloatingButtonDelegate {
-        func onShow() {}
-        func onDismiss() {}
-        func onTapDetected() {}
-        func onPanDetected() {}
-    }
-}
-
+#endif
