@@ -73,6 +73,7 @@ public final class MobileCore: NSObject {
                 if registeredCounter.incrementAndGet() == nativeExtensions.count {
                     EventHub.shared.start()
                     completion?()
+                    return
                 }
             }
         }
