@@ -12,7 +12,6 @@
 
 import AEPServices
 import Foundation
-import SwiftUI
 
 public typealias EventListener = (Event) -> Void
 public typealias EventResponseListener = (Event?) -> Void
