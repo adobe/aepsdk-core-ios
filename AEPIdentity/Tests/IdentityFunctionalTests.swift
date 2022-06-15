@@ -86,6 +86,28 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertTrue(mockRuntime.createdSharedStates.isEmpty)
     }
 
+    func testSyncIdentifiersResolvesToLastSetConfig() {
+        let data = [IdentityConstants.EventDataKeys.IS_SYNC_EVENT: true]
+        let syncEvent = Event(name: "Sync Event", type: EventType.identity, source: EventSource.requestIdentity, data: data)
+
+        let lastValidConfigSharedState = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue, IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"]
+
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: syncEvent, data: (lastValidConfigSharedState, .set))
+
+        // set configuration shared state to pending
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: nil, data: (nil, .pending))
+
+        // test sync event
+        XCTAssertTrue(identity.readyForEvent(syncEvent))
+        mockRuntime.simulateComingEvent(event: syncEvent)
+
+        //verify
+        let sharedState = mockRuntime.createdSharedStates.last!
+        XCTAssertNotNil(sharedState?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        XCTAssertEqual("test-org-id", identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String ?? "")
+
+    }
+
     // MARK: processAppendToUrl(...) tests
 
     /// Tests that appendToUrl dispatches the correct event with the URL in data
@@ -382,6 +404,30 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertFalse(identity.readyForEvent(event))
 
         mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+        XCTAssertTrue(identity.readyForEvent(event))
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.identity, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.responseIdentity, dispatchedEvent?.source)
+        XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
+        let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
+        XCTAssertFalse(ecid.isEmpty)
+    }
+
+    /// forseSyncIdentifier needs valid configuration to be present to process
+    func testGetECIDResolvesToLastSetConfig() {
+        // setup
+        let event = Event(name: "Test Get ECID Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        // mock valid config last set
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: ([IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID: "test-org-id"], .set))
+
+        // mock latest config pending
+        mockRuntime.simulateSharedState(extensionName: "com.adobe.module.configuration", event: event, data: (nil, .pending))
+
+        // verify event is not blocked by pending config shared state
         XCTAssertTrue(identity.readyForEvent(event))
 
         mockRuntime.simulateComingEvent(event: event)
