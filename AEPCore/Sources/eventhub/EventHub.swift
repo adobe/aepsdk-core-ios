@@ -51,12 +51,14 @@ final class EventHub {
 
             // Handle response event listeners first
             if let responseID = processedEvent.responseID {
-                _ = self?.responseEventListeners.filterRemove { (eventListenerContainer: EventListenerContainer) -> Bool in
+                // Make sure we remove the listeners before we call them to avoid race conditions
+                let matchingResponseListeners = self?.responseEventListeners.filterRemove { (eventListenerContainer: EventListenerContainer) -> Bool in
                     guard eventListenerContainer.triggerEventId == responseID else { return false }
                     eventListenerContainer.timeoutTask?.cancel()
-                    eventListenerContainer.listener(processedEvent)
                     return true
                 }
+                // Now that they are removed, we can call
+                _ = matchingResponseListeners?.map { $0.listener(processedEvent) }
             }
 
             // Send event to each ExtensionContainer
@@ -160,8 +162,9 @@ final class EventHub {
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         let triggerEventId = triggerEvent.id
         let timeoutTask = DispatchWorkItem { [weak self, triggerEventId] in
-            listener(nil)
+            // Make sure we remove the listeners before we call them to avoid race conditions
             _ = self?.responseEventListeners.filterRemove { $0.triggerEventId == triggerEventId }
+            listener(nil)
         }
         let responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEventId, timeout: timeoutTask)
         responseEventListeners.append(responseListenerContainer)
