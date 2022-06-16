@@ -9,40 +9,41 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
+    import AEPServices
 
-import Foundation
-import AEPServices
-
-public class MockMessagingDelegate: MessagingDelegate {
-    var onShowCalled = false
-    var onDismissCalled = false
-    var shouldShowMessageCalled = false
-    var urlLoadedCalled = false
+    public class MockMessagingDelegate: MessagingDelegate {
+        var onShowCalled = false
+        var onDismissCalled = false
+        var shouldShowMessageCalled = false
+        var urlLoadedCalled = false
     
-    var paramMessage: Showable? = nil
-    var paramUrl: URL? = nil
+        var paramMessage: Showable? = nil
+        var paramUrl: URL? = nil
     
-    var valueShouldShowMessage = true
+        var valueShouldShowMessage = true
     
-    public func onShow(message: Showable) {
-        onShowCalled = true
-        paramMessage = message
+        public func onShow(message: Showable) {
+            onShowCalled = true
+            paramMessage = message
+        }
+    
+        public func onDismiss(message: Showable) {
+            onDismissCalled = true
+            paramMessage = message
+        }
+    
+        public func shouldShowMessage(message: Showable) -> Bool {
+            shouldShowMessageCalled = true
+            paramMessage = message
+            return valueShouldShowMessage
+        }
+    
+        public func urlLoaded(_ url: URL, byMessage message: Showable) {
+            urlLoadedCalled = true
+            paramUrl = url
+            paramMessage = message
+        }
     }
-    
-    public func onDismiss(message: Showable) {
-        onDismissCalled = true
-        paramMessage = message
-    }
-    
-    public func shouldShowMessage(message: Showable) -> Bool {
-        shouldShowMessageCalled = true
-        paramMessage = message
-        return valueShouldShowMessage
-    }
-    
-    public func urlLoaded(_ url: URL, byMessage message: Showable) {
-        urlLoadedCalled = true
-        paramUrl = url
-        paramMessage = message
-    }
-}
+#endif

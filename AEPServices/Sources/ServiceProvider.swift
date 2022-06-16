@@ -18,9 +18,10 @@ import Foundation
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
-    /// MessagingDelegate which is used to listen for message visibility updates.
-    public weak var messagingDelegate: MessagingDelegate?
-
+    #if os(iOS)
+        /// MessagingDelegate which is used to listen for message visibility updates.
+        public weak var messagingDelegate: MessagingDelegate?
+    #endif
     // Provide thread safety on the getters and setters
     private let queue = DispatchQueue(label: "ServiceProvider.barrierQueue")
 
@@ -124,14 +125,17 @@ public class ServiceProvider {
 /// ServiceProvider extension which will hold any iOSApplicationExtension restricted Services.
 ///
 @available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
 extension ServiceProvider {
     // Because Extensions cannot hold properties, this struct Holder is a work around.
     // Please note that the static variables work because the ServiceProvider is a singleton.
     private struct Holder {
         static var overrideURLService: URLOpening?
         static var defaultURLService = URLService()
-        static var overrideUIService: UIService?
-        static var defaultUIService = AEPUIService()
+        #if os(iOS)
+            static var overrideUIService: UIService?
+            static var defaultUIService = AEPUIService()
+        #endif
     }
 
     public var urlService: URLOpening {
@@ -147,26 +151,29 @@ extension ServiceProvider {
         }
     }
 
-    public var uiService: UIService {
-        get {
-            return queue.sync {
-                return Holder.overrideUIService ?? Holder.defaultUIService
+    #if os(iOS)
+        public var uiService: UIService {
+            get {
+                return queue.sync {
+                    return Holder.overrideUIService ?? Holder.defaultUIService
+                }
+            }
+            set {
+                queue.async {
+                    Holder.overrideUIService = newValue
+                }
             }
         }
-        set {
-            queue.async {
-                Holder.overrideUIService = newValue
-            }
-        }
-    }
+    #endif
 
     internal func resetAppOnlyServices() {
         queue.async {
             Holder.defaultURLService = URLService()
-            Holder.defaultUIService = AEPUIService()
             Holder.overrideURLService = nil
-            Holder.overrideUIService = nil
+            #if os(iOS)
+                Holder.defaultUIService = AEPUIService()
+                Holder.overrideUIService = nil
+            #endif
         }
     }
-
 }

@@ -17,6 +17,7 @@ import AEPSignal
 import AEPIdentity
 
 @main
+@available(tvOSApplicationExtension, unavailable)
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private let LAUNCH_ENVIRONMENT_FILE_ID = ""

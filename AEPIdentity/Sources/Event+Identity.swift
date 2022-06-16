@@ -72,4 +72,9 @@ extension Event {
     var aid: String? {
         return data?[IdentityConstants.Analytics.ANALYTICS_ID] as? String
     }
+
+    /// Returns true if the event is either getExperienceCloudId event or getIdentifiers event
+    var isGetIdentifierEvent: Bool {
+        return type == EventType.identity && source == EventSource.requestIdentity && data?.isEmpty ?? true
+    }
 }

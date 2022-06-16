@@ -9,76 +9,77 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    @testable import AEPServices
+    import XCTest
 
-@testable import AEPServices
-import XCTest
-
-class MessageAnimationTests: XCTestCase {        
-    func testValueNone() throws {
-        XCTAssertEqual(0, MessageAnimation.none.rawValue)
-    }
+    class MessageAnimationTests: XCTestCase {        
+        func testValueNone() throws {
+            XCTAssertEqual(0, MessageAnimation.none.rawValue)
+        }
     
-    func testFromStringNone() throws {
-        let animation = MessageAnimation.fromString("none")
-        XCTAssertEqual(animation, .none)
-    }
+        func testFromStringNone() throws {
+            let animation = MessageAnimation.fromString("none")
+            XCTAssertEqual(animation, .none)
+        }
     
-    func testValueLeft() throws {
-        XCTAssertEqual(1, MessageAnimation.left.rawValue)
-    }
+        func testValueLeft() throws {
+            XCTAssertEqual(1, MessageAnimation.left.rawValue)
+        }
     
-    func testFromStringLeft() throws {
-        let animation = MessageAnimation.fromString("left")
-        XCTAssertEqual(animation, .left)
-    }
+        func testFromStringLeft() throws {
+            let animation = MessageAnimation.fromString("left")
+            XCTAssertEqual(animation, .left)
+        }
     
-    func testValueRight() throws {
-        XCTAssertEqual(2, MessageAnimation.right.rawValue)
-    }
+        func testValueRight() throws {
+            XCTAssertEqual(2, MessageAnimation.right.rawValue)
+        }
     
-    func testFromStringRight() throws {
-        let animation = MessageAnimation.fromString("right")
-        XCTAssertEqual(animation, .right)
-    }
+        func testFromStringRight() throws {
+            let animation = MessageAnimation.fromString("right")
+            XCTAssertEqual(animation, .right)
+        }
     
-    func testValueTop() throws {
-        XCTAssertEqual(3, MessageAnimation.top.rawValue)
-    }
+        func testValueTop() throws {
+            XCTAssertEqual(3, MessageAnimation.top.rawValue)
+        }
     
-    func testFromStringTop() throws {
-        let animation = MessageAnimation.fromString("top")
-        XCTAssertEqual(animation, .top)
-    }
+        func testFromStringTop() throws {
+            let animation = MessageAnimation.fromString("top")
+            XCTAssertEqual(animation, .top)
+        }
     
-    func testValueBottom() throws {
-        XCTAssertEqual(4, MessageAnimation.bottom.rawValue)
-    }
+        func testValueBottom() throws {
+            XCTAssertEqual(4, MessageAnimation.bottom.rawValue)
+        }
     
-    func testFromStringBottom() throws {
-        let animation = MessageAnimation.fromString("bottom")
-        XCTAssertEqual(animation, .bottom)
-    }
+        func testFromStringBottom() throws {
+            let animation = MessageAnimation.fromString("bottom")
+            XCTAssertEqual(animation, .bottom)
+        }
     
-    func testValueCenter() throws {
-        XCTAssertEqual(5, MessageAnimation.center.rawValue)
-    }
+        func testValueCenter() throws {
+            XCTAssertEqual(5, MessageAnimation.center.rawValue)
+        }
     
-    func testFromStringCenter() throws {
-        let animation = MessageAnimation.fromString("center")
-        XCTAssertEqual(animation, .center)
-    }
+        func testFromStringCenter() throws {
+            let animation = MessageAnimation.fromString("center")
+            XCTAssertEqual(animation, .center)
+        }
     
-    func testValueFade() throws {
-        XCTAssertEqual(6, MessageAnimation.fade.rawValue)
-    }
+        func testValueFade() throws {
+            XCTAssertEqual(6, MessageAnimation.fade.rawValue)
+        }
     
-    func testFromStringFade() throws {
-        let animation = MessageAnimation.fromString("fade")
-        XCTAssertEqual(animation, .fade)
-    }
+        func testFromStringFade() throws {
+            let animation = MessageAnimation.fromString("fade")
+            XCTAssertEqual(animation, .fade)
+        }
     
-    func testFromStringNoMatch() throws {
-        let animation = MessageAnimation.fromString("oopsee")
-        XCTAssertEqual(animation, .none)
+        func testFromStringNoMatch() throws {
+            let animation = MessageAnimation.fromString("oopsee")
+            XCTAssertEqual(animation, .none)
+        }
     }
-}
+#endif

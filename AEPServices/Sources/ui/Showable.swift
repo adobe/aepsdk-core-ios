@@ -9,17 +9,18 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
-import Foundation
-
-///
-/// Represents a UI element which can be shown
-///
-@objc(AEPShowable)
-public protocol Showable {
+#if os(iOS)
+    import Foundation
 
     ///
-    /// Displays the UI element
+    /// Represents a UI element which can be shown
     ///
-    func show()
-}
+    @objc(AEPShowable)
+    public protocol Showable {
+
+        ///
+        /// Displays the UI element
+        ///
+        func show()
+    }
+#endif

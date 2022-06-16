@@ -9,22 +9,23 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
 
-import Foundation
+    /// Floating button lifecycle event listener
+    @objc(AEPFloatingButtonDelegate) public protocol FloatingButtonDelegate {
+        /// Invoked when the floating button is tapped
+        func onTapDetected()
 
-/// Floating button lifecycle event listener
-@objc(AEPFloatingButtonDelegate) public protocol FloatingButtonDelegate {
-    /// Invoked when the floating button is tapped
-    func onTapDetected()
+        /// Invoked when the floating button is dragged on the screen
+        func onPanDetected()
 
-    /// Invoked when the floating button is dragged on the screen
-    func onPanDetected()
+        /// Invoked when the floating button is displayed
+        @objc(onShowWithFloatingButton)
+        func onShow()
 
-    /// Invoked when the floating button is displayed
-    @objc(onShowWithFloatingButton)
-    func onShow()
-
-    /// Invoked when the floating button is removed
-    @objc(onDismissWithFloatingButton)
-    func onDismiss()
-}
+        /// Invoked when the floating button is removed
+        @objc(onDismissWithFloatingButton)
+        func onDismiss()
+    }
+#endif

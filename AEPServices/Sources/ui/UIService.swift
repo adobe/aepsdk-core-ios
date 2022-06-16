@@ -10,42 +10,44 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
-import UIKit
+#if os(iOS)
+    import Foundation
+    import UIKit
 
-///
-/// UIService for creating UI elements
-///
-@objc (AEPUIServiceProtocol)
-@available(iOSApplicationExtension, unavailable)
-public protocol UIService {
+    ///
+    /// UIService for creating UI elements
+    ///
+    @objc (AEPUIServiceProtocol)
+    @available(iOSApplicationExtension, unavailable)
+    public protocol UIService {
 
-    /// Creates a `FullscreenPresentable`
-    /// - Parameters:
-    ///     - payload: The payload used in the FullscreenPresentable as a string
-    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
-    ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
-    /// - Returns: A `FullscreenPresentable` implementation
-    @objc
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
+        /// Creates a `FullscreenPresentable`
+        /// - Parameters:
+        ///     - payload: The payload used in the FullscreenPresentable as a string
+        ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
+        ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
+        /// - Returns: A `FullscreenPresentable` implementation
+        @objc
+        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
 
-    /// Creates a `FullscreenPresentable`
-    /// - Parameters:
-    ///     - payload: The payload used in the FullscreenPresentable as a string
-    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
-    ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
-    ///     - settings: The `MessageSettings` that define construction, behavior and ownership of the newly created message
-    /// - Returns: A `FullscreenPresentable` implementation
-    @objc
-    optional func createFullscreenMessage(payload: String,
-                                          listener: FullscreenMessageDelegate?,
-                                          isLocalImageUsed: Bool,
-                                          settings: MessageSettings?) -> FullscreenPresentable
+        /// Creates a `FullscreenPresentable`
+        /// - Parameters:
+        ///     - payload: The payload used in the FullscreenPresentable as a string
+        ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
+        ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
+        ///     - settings: The `MessageSettings` that define construction, behavior and ownership of the newly created message
+        /// - Returns: A `FullscreenPresentable` implementation
+        @objc
+        optional func createFullscreenMessage(payload: String,
+                                              listener: FullscreenMessageDelegate?,
+                                              isLocalImageUsed: Bool,
+                                              settings: MessageSettings?) -> FullscreenPresentable
 
-    /// Creates a `FloatingButtonPresentable`
-    /// - Parameters:
-    ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
-    /// - Returns: A `FloatingButtonPresentable` implementation
-    @objc
-    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
-}
+        /// Creates a `FloatingButtonPresentable`
+        /// - Parameters:
+        ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
+        /// - Returns: A `FloatingButtonPresentable` implementation
+        @objc
+        func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
+    }
+#endif

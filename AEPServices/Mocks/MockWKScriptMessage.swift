@@ -9,24 +9,25 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
+    import Foundation
+    import WebKit
 
-import Foundation
-import WebKit
-
-public class MockWKScriptMessage: WKScriptMessage {
-    var mockName: String
-    var mockBody: Any
+    public class MockWKScriptMessage: WKScriptMessage {
+        var mockName: String
+        var mockBody: Any
     
-    public override var name: String {
-        return mockName
-    }
+        public override var name: String {
+            return mockName
+        }
     
-    public override var body: Any {
-        return mockBody
-    }
+        public override var body: Any {
+            return mockBody
+        }
     
-    init(name: String, body: Any) {
-        mockName = name
-        mockBody = body
+        init(name: String, body: Any) {
+            mockName = name
+            mockBody = body
+        }
     }
-}
+#endif
