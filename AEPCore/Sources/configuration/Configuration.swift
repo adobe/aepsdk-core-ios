@@ -27,6 +27,7 @@ class Configuration: NSObject, Extension {
     private let rulesEngine: LaunchRulesEngine
     private let retryQueue = DispatchQueue(label: "com.adobe.configuration.retry")
     private let rulesEngineName = "\(ConfigurationConstants.EXTENSION_NAME).rulesengine"
+    private var retryConfigurationCounter: Double = 1
 
     // MARK: - Extension
 
@@ -146,8 +147,12 @@ class Configuration: NSObject, Extension {
                 // If downloading config failed try again later
                 guard let self = self else { return }
                 Log.trace(label: self.name, "Downloading config failed, trying again")
-                self.retryQueue.asyncAfter(deadline: .now() + 5) {
-                    self.processConfigureWith(appId: appId, event: event, sharedStateResolver: sharedStateResolver)
+                self.retryQueue.asyncAfter(deadline: .now() + (self.retryConfigurationCounter * 2)) {
+                    let event = Event(name: CoreConstants.EventNames.CONFIGURE_WITH_APP_ID, type: EventType.configuration, source: EventSource.requestContent,
+                                      data: [CoreConstants.Keys.JSON_APP_ID: appId, CoreConstants.Keys.IS_INTERNAL_EVENT: true])
+                    self.dispatch(event: event)
+                    self.startEvents()
+                    self.retryConfigurationCounter += 1
                 }
             }
         }
