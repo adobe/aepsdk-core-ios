@@ -76,6 +76,28 @@ class ConfigurationAppIDTests: XCTestCase {
         XCTAssertNil(mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as Any?)
         
     }
+
+    // Tests that when we hit the retry queue, we properly send a configuration request event
+    func testConfigureWithAppIdNetworkDown() {
+        let mocknetworkService = MockConfigurationDownloaderNetworkService(responseType: .error)
+        ServiceProvider.shared.networkService = mocknetworkService
+        let appId = "app-id"
+        let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: appId)
+
+        mockRuntime.simulateComingEvents(appIdEvent)
+
+        sleep(4)
+        // verify
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(0, mockRuntime.createdSharedStates.count)
+        XCTAssertEqual(EventType.configuration, mockRuntime.firstEvent?.type)
+        XCTAssertEqual(EventSource.requestContent, mockRuntime.firstEvent?.source)
+
+        XCTAssertEqual(2, mockRuntime.firstEvent?.data?.count)
+        XCTAssertTrue(mockRuntime.firstEvent?.data?[CoreConstants.Keys.IS_INTERNAL_EVENT] as! Bool)
+        XCTAssertEqual(appId, mockRuntime.firstEvent?.data?[CoreConstants.Keys.JSON_APP_ID] as! String)
+
+    }
     
     /// Tests that we can re-try network requests, and it will succeed when the network comes back online
     func testConfigureWithAppIdNetworkDownThenComesOnline() {
