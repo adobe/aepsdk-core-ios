@@ -147,13 +147,13 @@ class Configuration: NSObject, Extension {
                 // If downloading config failed try again later
                 guard let self = self else { return }
                 sharedStateResolver(self.configState.environmentAwareConfiguration)
+                self.startEvents()
                 let retryInterval = self.retryConfigurationCounter * 5
                 Log.trace(label: self.name, "Downloading config failed, trying again after \(retryInterval) secs")
                 self.retryQueue.asyncAfter(deadline: .now() + retryInterval) {
                     let event = Event(name: CoreConstants.EventNames.CONFIGURE_WITH_APP_ID, type: EventType.configuration, source: EventSource.requestContent,
                                       data: [CoreConstants.Keys.JSON_APP_ID: appId, CoreConstants.Keys.IS_INTERNAL_EVENT: true])
                     self.dispatch(event: event)
-                    self.startEvents()
                     self.retryConfigurationCounter += 1
                 }
             }
