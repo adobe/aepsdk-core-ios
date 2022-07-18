@@ -204,6 +204,33 @@ class IdentityIntegrationTests: XCTestCase {
         wait(for: [urlExpectation], timeout: 1)
     }
 
+    func testGetExperienceCloudIdWithinPermissibleTimeOnInstall() {
+        initExtensionsAndWait()
+
+        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 0.5 seconds when Configuration is available on Install")
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.getExperienceCloudId { ecid, error in
+            XCTAssertFalse(ecid!.isEmpty)
+            XCTAssertNil(error)
+            getECIDExpectation.fulfill()
+        }
+        wait(for: [getECIDExpectation], timeout: 0.5)
+    }
+
+    func testGetExperienceCloudIdWithinPermissibleTimeOnLaunch() {
+        persistECIDInUserDefaults()
+        initExtensionsAndWait()
+
+        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 0.5 seconds when ECID is cached on Launch")
+        MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Identity.getExperienceCloudId { ecid, error in
+            XCTAssertFalse(ecid!.isEmpty)
+            XCTAssertNil(error)
+            getECIDExpectation.fulfill()
+        }
+        wait(for: [getECIDExpectation], timeout: 0.5)
+    }
+
     func testGetExperienceCloudIdInvalidConfigThenValid() {
         MobileCore.updateConfigurationWith(configDict: ["invalid": "config"])
         initExtensionsAndWait()
@@ -355,6 +382,13 @@ class IdentityIntegrationTests: XCTestCase {
 
         MobileCore.updateConfigurationWith(configDict: initialConfig)
         wait(for: [bootupExpectation], timeout: 2)
+    }
+
+    private func persistECIDInUserDefaults() {
+        let dataStore = NamedCollectionDataStore(name: "com.adobe.module.identity")
+        var properties = IdentityProperties()
+        properties.ecid = ECID()
+        dataStore.setObject(key: "identity.properties", value: properties)
     }
 
 }
