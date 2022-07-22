@@ -14,7 +14,8 @@
     import CoreTelephony
 #endif
 import Foundation
-import UIKit
+import WatchKit
+// import UIKit
 
 /// The Core system info service implementation which provides
 ///     - network connection status
@@ -24,8 +25,9 @@ import UIKit
 class ApplicationSystemInfoService: SystemInfoService {
     private let bundle: Bundle
     private lazy var userAgent: String = {
-        let model = UIDevice.current.model
-        let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
+        let model = WKInterfaceDevice.current().model
+        // let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
+        let osVersion = WKInterfaceDevice.current().systemVersion.replacingOccurrences(of: ".", with: "_")
         let localeIdentifier = getActiveLocaleName()
 
         return "Mozilla/5.0 (\(model); CPU OS \(osVersion) like Mac OS X; \(localeIdentifier))"
@@ -81,7 +83,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getMobileCarrierName() -> String? {
-        #if targetEnvironment(macCatalyst) || os(tvOS)
+        #if targetEnvironment(macCatalyst) || os(tvOS) || os(watchOS)
             return "unknown"
         #else
             let networkInfo = CTTelephonyNetworkInfo()
@@ -125,11 +127,12 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getOperatingSystemName() -> String {
-        return UIDevice.current.systemName
+        return WKInterfaceDevice.current().systemName
     }
 
     func getOperatingSystemVersion() -> String {
-        return UIDevice.current.systemVersion
+        return WKInterfaceDevice.current().systemName
+        
     }
 
     func getCanonicalPlatformName() -> String {
@@ -137,6 +140,8 @@ class ApplicationSystemInfoService: SystemInfoService {
             return "ios"
         #elseif os(tvOS)
             return "tvos"
+        #elseif os(watchOS)
+            return "watchos"
         #endif
     }
 
@@ -146,20 +151,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getDeviceType() -> DeviceType {
-        switch UIDevice.current.userInterfaceIdiom {
-        case .phone:
-            return .PHONE
-        case .pad:
-            return .PAD
-        case .tv:
-            return .TV
-        case .carPlay:
-            return .CARPLAY
-        case .unspecified:
-            return .UNKNOWN
-        default:
-            return .UNKNOWN
-        }
+            return .WATCH
     }
 
     func getApplicationBundleId() -> String? {
@@ -189,11 +181,11 @@ class ApplicationSystemInfoService: SystemInfoService {
 
 struct NativeDisplayInformation {
     private var screenRect: CGRect {
-        UIScreen.main.bounds
+        WKInterfaceDevice.current().screenBounds
     }
 
     private var screenScale: CGFloat {
-        UIScreen.main.scale
+        WKInterfaceDevice.current().screenScale
     }
 
     var widthPixels: Int {
