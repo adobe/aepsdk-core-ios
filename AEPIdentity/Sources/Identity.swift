@@ -48,6 +48,9 @@ import Foundation
         registerListener(type: EventType.analytics, source: EventSource.responseIdentity, listener: handleAnalyticsResponseIdentity)
         registerListener(type: EventType.audienceManager, source: EventSource.responseContent, listener: handleAudienceResponse(event:))
         registerListener(type: EventType.genericIdentity, source: EventSource.requestReset, listener: handleRequestReset)
+
+        // fast boot identity without waiting for configuration
+        state?.boot(createSharedState: createSharedState(data:event:))
     }
 
     public func onUnregistered() {
@@ -56,9 +59,6 @@ import Foundation
 
     public func readyForEvent(_ event: Event) -> Bool {
         guard let state = state else { return false }
-
-        // fast boot identity without waiting for configuration
-        state.boot(event: event, createSharedState: createSharedState(data:event:))
 
         guard state.forceSyncIdentifiers(configSharedState: getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: nil, resolution: .lastSet)?.value, event: event, createSharedState: createSharedState(data:event:)) else { return false }
 
