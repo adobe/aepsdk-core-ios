@@ -10,7 +10,7 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)|| os(watchOS)
+#if os(iOS)
     import Foundation
     import UIKit
 

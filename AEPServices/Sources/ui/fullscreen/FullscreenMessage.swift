@@ -10,12 +10,10 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)|| os(watchOS)
+#if os(iOS)
     import Foundation
     import UIKit
-    #if canImport(WebKit)
-    #elseif canImport(WatchKit)
-    #endif
+    import WebKit
 
     /// This class is used to create and display fullscreen messages on the current view.
     @objc(AEPFullscreenMessage)
