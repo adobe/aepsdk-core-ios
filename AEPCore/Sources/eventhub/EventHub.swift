@@ -48,7 +48,7 @@ final class EventHub {
         // Setup eventQueue handler for the main OperationOrderer
         eventQueue.setHandler { [weak self] (event) -> Bool in
             guard let processedEvent = self?.preprocessors.shallowCopy.reduce(event, {$1($0)}) else { return true }
-            Log.debug(label: self?.LOG_TAG ?? "EventHub", "Processed event: \(processedEvent)")
+            Log.trace(label: self?.LOG_TAG ?? "EventHub", "Processed Event #\(String(describing: self?.eventNumberMap[event.id] ?? 0)) - \(processedEvent)")
             // Handle response event listeners first
             if let responseID = processedEvent.responseID {
                 // Make sure we remove the listeners before we call them to avoid race conditions
