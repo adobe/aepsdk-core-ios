@@ -10,9 +10,11 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)
+#if os(iOS)|| os(watchOS)
     import Foundation
-    import WebKit
+    #if canImport(WebKit)
+    #elseif canImport(WatchKit)
+    #endif
 
     @available(iOSApplicationExtension, unavailable)
     extension FullscreenMessage: WKNavigationDelegate {
