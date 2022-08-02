@@ -48,7 +48,10 @@ final class EventHub {
         // Setup eventQueue handler for the main OperationOrderer
         eventQueue.setHandler { [weak self] (event) -> Bool in
             guard let processedEvent = self?.preprocessors.shallowCopy.reduce(event, {$1($0)}) else { return true }
-            Log.trace(label: self?.LOG_TAG ?? "EventHub", "Processed Event #\(String(describing: self?.eventNumberMap[event.id] ?? 0)) - \(processedEvent)")
+            // Hot path, avoid unnecessary string converstion of event
+            if Log.logFilter >= .trace {
+                Log.trace(label: self?.LOG_TAG ?? "EventHub", "Processed Event #\(String(describing: self?.eventNumberMap[event.id] ?? 0)) - \(processedEvent)")
+            }
             // Handle response event listeners first
             if let responseID = processedEvent.responseID {
                 // Make sure we remove the listeners before we call them to avoid race conditions
@@ -92,8 +95,11 @@ final class EventHub {
             // Set an event number for the event
             self?.eventNumberMap[event.id] = self?.eventNumberCounter.incrementAndGet()
             self?.eventQueue.add(event)
-            Log.trace(label: self?.LOG_TAG ?? "EventHub",
-                      "Dispatching Event #\(String(describing: self?.eventNumberMap[event.id] ?? 0)) - \(event)")
+            // Hot path, avoid unnecessary string converstion of event
+            if Log.logFilter >= .trace {
+                Log.trace(label: self?.LOG_TAG ?? "EventHub",
+                          "Dispatching Event #\(String(describing: self?.eventNumberMap[event.id] ?? 0)) - \(event)")
+            }
 
             // record the event in history if it has a mask
             if event.mask != nil {
