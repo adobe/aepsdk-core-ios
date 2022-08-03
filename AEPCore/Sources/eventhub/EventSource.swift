@@ -26,6 +26,8 @@ public class EventSource: NSObject {
     public static let responseIdentity = "com.adobe.eventSource.responseIdentity"
     public static let responseProfile = "com.adobe.eventSource.responseProfile"
     public static let sharedState = "com.adobe.eventSource.sharedState"
+    public static let startCapture = "com.adobe.eventSource.startCapture"
+    public static let stopCapture = "com.adobe.eventSource.stopCapture"
     public static let notification = "com.adobe.eventSource.notification"
     public static let updateConsent = "com.adobe.eventSource.updateConsent"
     public static let updateIdentity = "com.adobe.eventSource.updateIdentity"

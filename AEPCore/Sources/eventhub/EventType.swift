@@ -23,6 +23,7 @@ public class EventType: NSObject {
     public static let configuration = "com.adobe.eventType.configuration"
     public static let custom = "com.adobe.eventType.custom"
     public static let edge = "com.adobe.eventType.edge"
+    public static let edgeBridge = "com.adobe.eventType.edgeBridge"
     public static let edgeConsent = "com.adobe.eventType.edgeConsent"
     public static let edgeIdentity = "com.adobe.eventType.edgeIdentity"
     public static let genericData = "com.adobe.eventType.generic.data"
