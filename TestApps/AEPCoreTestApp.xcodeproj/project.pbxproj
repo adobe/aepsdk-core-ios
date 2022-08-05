@@ -31,6 +31,7 @@
 		780888BC26D56F3800F5A665 /* IdentityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 780888AF26D56F3800F5A665 /* IdentityView.swift */; };
 		780888BE26D56F3800F5A665 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 780888B126D56F3800F5A665 /* Assets.xcassets */; };
 		780888C026D56F3800F5A665 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 780888B426D56F3800F5A665 /* Preview Assets.xcassets */; };
+		7816BBCC289DB32600FCBCDF /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A69819289C70B700F67FEC /* ButtonStyle.swift */; };
 		786D630A26D6C7DA000828FC /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 786D630926D6C7DA000828FC /* AEPLifecycle.framework */; };
 		786D630B26D6C7DA000828FC /* AEPLifecycle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 786D630926D6C7DA000828FC /* AEPLifecycle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		786D631026D6C7F4000828FC /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 786D630F26D6C7F4000828FC /* AEPSignal.framework */; };
@@ -1344,6 +1345,7 @@
 				78A26DD5284A9D71004A91B9 /* LifecycleView.swift in Sources */,
 				78A26DD2284A9D69004A91B9 /* MenuView.swift in Sources */,
 				78A26DD1284A9D66004A91B9 /* SceneDelegate.swift in Sources */,
+				7816BBCC289DB32600FCBCDF /* ButtonStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
