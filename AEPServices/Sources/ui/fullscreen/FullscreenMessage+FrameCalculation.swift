@@ -81,7 +81,7 @@
             }
             return UIScreen.main.bounds.height - safeAreaHeight
         }
-        
+
         /// calculates the safe area at the top of the screen, measured by status bar and/or notch
         var safeAreaHeight: CGFloat {
             if #available(iOS 13.0, *) {
@@ -90,7 +90,7 @@
                 return UIApplication.shared.statusBarFrame.height
             }
         }
-        
+
         // MARK: - private vars
 
         /// width in settings represents a percentage of the screen.
@@ -104,7 +104,6 @@
             return screenWidth
         }
 
-        
         /// height in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen height.
         /// default value is full screen height.
