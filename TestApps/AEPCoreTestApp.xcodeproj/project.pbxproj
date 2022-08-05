@@ -86,6 +86,7 @@
 		78A26DF4284A9F86004A91B9 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78A26DEB284A9F86004A91B9 /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		78A26DF5284A9F86004A91B9 /* AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78A26DEC284A9F86004A91B9 /* AEPSignal.framework */; };
 		78A26DF6284A9F86004A91B9 /* AEPSignal.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78A26DEC284A9F86004A91B9 /* AEPSignal.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		78A6981A289C70B700F67FEC /* ButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A69819289C70B700F67FEC /* ButtonStyle.swift */; };
 		78F2E2FC280F6DED0073CE00 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E2FB280F6DED0073CE00 /* UniformTypeIdentifiers.framework */; };
 		78F2E2FF280F6DED0073CE00 /* FileProviderExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E2FE280F6DED0073CE00 /* FileProviderExtension.swift */; };
 		78F2E301280F6DED0073CE00 /* FileProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E300280F6DED0073CE00 /* FileProviderItem.swift */; };
@@ -319,6 +320,7 @@
 		78A26DEA284A9F86004A91B9 /* AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78A26DEB284A9F86004A91B9 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78A26DEC284A9F86004A91B9 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		78A69819289C70B700F67FEC /* ButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonStyle.swift; sourceTree = "<group>"; };
 		78F2E2FA280F6DEC0073CE00 /* TestAppExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TestAppExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		78F2E2FB280F6DED0073CE00 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
 		78F2E2FE280F6DED0073CE00 /* FileProviderExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileProviderExtension.swift; sourceTree = "<group>"; };
@@ -528,6 +530,7 @@
 				780888AE26D56F3800F5A665 /* CoreView.swift */,
 				780888AF26D56F3800F5A665 /* IdentityView.swift */,
 				780888A626D56F3800F5A665 /* LifecycleView.swift */,
+				78A69819289C70B700F67FEC /* ButtonStyle.swift */,
 				780888B126D56F3800F5A665 /* Assets.xcassets */,
 				780888A926D56F3800F5A665 /* Base.lproj */,
 				780888B226D56F3800F5A665 /* Info.plist */,
@@ -1316,6 +1319,7 @@
 				780888B526D56F3800F5A665 /* LifecycleView.swift in Sources */,
 				780888B626D56F3800F5A665 /* MenuView.swift in Sources */,
 				780888B926D56F3800F5A665 /* SceneDelegate.swift in Sources */,
+				78A6981A289C70B700F67FEC /* ButtonStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
