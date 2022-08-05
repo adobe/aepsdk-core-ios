@@ -267,7 +267,7 @@
 
             // if this is a ui takeover, add an invisible view over under the webview
             if let takeover = settings?.uiTakeover, takeover {
-                transparentBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
+                transparentBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight + safeAreaHeight))
                 transparentBackgroundView?.backgroundColor = settings?.getBackgroundColor()
                 let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
                 transparentBackgroundView?.addGestureRecognizer(tap)

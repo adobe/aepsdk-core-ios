@@ -105,7 +105,7 @@
             assertEqual(message.frameWhenVisible.size.width, screenWidth)
             assertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2)
             assertEqual(message.frameWhenVisible.origin.x, 0)
-            assertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height - (screenHeight * 0.05))
+            assertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height + (screenHeight * 0.05))
         }
     
         func testBotSettingsFrameBeforeShow() throws {

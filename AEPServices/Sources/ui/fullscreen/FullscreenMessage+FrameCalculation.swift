@@ -76,9 +76,21 @@
 
         /// returns the height of the screen, measured in points
         var screenHeight: CGFloat {
-            return UIScreen.main.bounds.height
+            if let settings = settings {
+                return settings.verticalAlign == .bottom ? UIScreen.main.bounds.height : UIScreen.main.bounds.height - safeAreaHeight
+            }
+            return UIScreen.main.bounds.height - safeAreaHeight
         }
-
+        
+        /// calculates the safe area at the top of the screen, measured by status bar and/or notch
+        var safeAreaHeight: CGFloat {
+            if #available(iOS 13.0, *) {
+                return UIApplication.shared.getKeyWindow()?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+            } else {
+                return UIApplication.shared.statusBarFrame.height
+            }
+        }
+        
         // MARK: - private vars
 
         /// width in settings represents a percentage of the screen.
@@ -92,6 +104,7 @@
             return screenWidth
         }
 
+        
         /// height in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen height.
         /// default value is full screen height.
@@ -144,9 +157,9 @@
         /// if vertical alignment is top or bottom, the inset will be calculated as a percentage height from the respective
         /// alignment origin.
         private var originY: CGFloat {
-            // default to 0 for y origin if unspecified
+            // default to 0 (considering safe area) for y origin if unspecified
             guard let settings = settings else {
-                return 0
+                return safeAreaHeight
             }
 
             if settings.verticalAlign == .top {
@@ -154,15 +167,15 @@
                 if let vInset = settings.verticalInset {
                     // since y alignment starts at 0 on the top, this value just needs to be
                     // the percentage value translated to actual points
-                    return screenHeight * CGFloat(vInset) / 100
+                    return screenHeight * CGFloat(vInset) / 100 + safeAreaHeight
                 } else {
-                    return 0
+                    return safeAreaHeight
                 }
             } else if settings.verticalAlign == .bottom {
                 // check for an inset
                 if let vInset = settings.verticalInset {
                     // y alignment here is screen height - message height - inset value converted from percentage to points
-                    return screenHeight - height - (screenHeight * CGFloat(vInset) / 100)
+                    return screenHeight - height + (screenHeight * CGFloat(vInset) / 100)
                 } else {
                     // no inset, bottom y alignment means screen height - message height
                     return screenHeight - height
@@ -170,7 +183,7 @@
             }
 
             // handle center alignment, y is (screen height - message height) / 2
-            return (screenHeight - height) / 2
+            return (screenHeight - height) / 2 + safeAreaHeight
         }
     }
 #endif
