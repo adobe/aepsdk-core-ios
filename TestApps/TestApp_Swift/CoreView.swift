@@ -18,7 +18,6 @@ struct CoreView: View {
     @State private var currentPrivacyStatus: String = ""
     @State private var showingAlert = false
     @State private var retrievedAttributes: String = ""
-    @State private var eventName: String = ""
 
     var body: some View {
         ScrollView {
@@ -118,15 +117,10 @@ struct CoreView: View {
             Button(action: {
                 let event = Event(name: "Sample Event", type: "type", source: "source", data: ["platform" : "ios"])
                 MobileCore.dispatch(event: event) { event in
-                    self.eventName = event?.name ?? ""
                 }
             }) {
                 Text("Dispatch Custom Event with response callback")
             }.buttonStyle(CustomButtonStyle())
-            VStack {
-                Text("Custom Event Response:")
-                Text(eventName)
-            }
         }
     }
 }
