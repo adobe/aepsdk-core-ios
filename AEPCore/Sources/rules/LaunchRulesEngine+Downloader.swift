@@ -56,6 +56,7 @@ public extension LaunchRulesEngine {
             return false
         }
 
+        Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Successfully loaded rules from cache")
         self.replaceRules(with: rules)
         return true
     }
@@ -69,6 +70,7 @@ public extension LaunchRulesEngine {
                 Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from manifest")
                 return
             }
+            Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Successfully loaded rules from manifest")
             self.replaceRules(with: rules)
         case .failure(let error):
             Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from manifest, with error: \(error.localizedDescription)")

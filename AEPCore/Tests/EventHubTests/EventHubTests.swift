@@ -552,6 +552,8 @@ class EventHubTests: XCTestCase {
         // test
         eventHub.start()
         eventHub.dispatch(event: Event(name: "First event", type: EventType.acquisition, source: EventSource.none, data: nil))
+        // Small delay in order for the event to get dispatched before MockExtensionTwo gets unregistered
+        sleep(1)
         eventHub.unregisterExtension(MockExtensionTwo.self) { error in
             XCTAssertNil(error)
             // dispatch event after MockExtensionTwo has been unregistered, this should not be received by MockExtensionTwo
