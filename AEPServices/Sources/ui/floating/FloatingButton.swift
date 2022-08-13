@@ -12,6 +12,7 @@
 #if os(iOS) || os(watchOS)
     import Foundation
     import UIKit
+    import WatchKit
 
     /// This class is used to create a floating button
     @objc(AEPFloatingButton)
@@ -24,8 +25,8 @@
         internal static let PREVIEW_BUTTON_WIDTH = 60
         internal static let PREVIEW_BUTTON_HEIGHT = 60
 
-        private var singleTap: UITapGestureRecognizer?
-        private var panner: UIPanGestureRecognizer?
+        private var singleTap: WKTapGestureRecognizer?
+        private var panner: WKPanGestureRecognizer?
         private var timer: Timer?
         private var buttonImageView: UIImageView?
         private var buttonPosition: FloatingButtonPosition = .center
