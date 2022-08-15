@@ -10,9 +10,11 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)
+// #if os(iOS)
+#if os(watchOS)
     import Foundation
-    import WebKit
+    //import WebKit
+    import WatchKit
 
     /// Fullscreen message lifecycle event listener
     @available(iOSApplicationExtension, unavailable)

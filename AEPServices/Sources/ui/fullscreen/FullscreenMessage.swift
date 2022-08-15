@@ -10,10 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)
+// #if os(iOS)
+#if os(watchOS)
     import Foundation
     import UIKit
-    import WebKit
+    // import WebKit
+    import WatchKit
 
     /// This class is used to create and display fullscreen messages on the current view.
     @objc(AEPFullscreenMessage)
@@ -39,11 +41,11 @@
         var payload: String
         var payloadUsingLocalAssets: String?
         weak var listener: FullscreenMessageDelegate?
-        public internal(set) var webView: UIView?
-        private(set) var transparentBackgroundView: UIView?
+        public internal(set) var webView: WKInterfaceGroup?
+        private(set) var transparentBackgroundView: WKInterfaceGroup?
         private(set) var messageMonitor: MessageMonitoring
 
-        var loadingNavigation: WKNavigation?
+       // var loadingNavigation: WKNavigation?
         var messagingDelegate: MessagingDelegate? {
             return ServiceProvider.shared.messagingDelegate
         }
@@ -93,6 +95,7 @@
         ///     b. if no, call onShowFailure of the listener and exit the function
         public func show() {
             DispatchQueue.main.async {
+                print("SHOW NEW VIEW!!!")
                 // check if the webview has already been created
                 if let webview = self.webView as? WKWebView {
                     // it has, determine if the monitor wants to show the message
@@ -239,6 +242,7 @@
 
         // MARK: - private methods
 
+
         private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
             let webViewConfiguration = WKWebViewConfiguration()
 
@@ -269,7 +273,7 @@
             if let takeover = settings?.uiTakeover, takeover {
                 transparentBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
                 transparentBackgroundView?.backgroundColor = settings?.getBackgroundColor()
-                let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+                let tap = WKTapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
                 transparentBackgroundView?.addGestureRecognizer(tap)
             }
 
@@ -292,7 +296,7 @@
             return wkWebView
         }
 
-        @objc func handleGesture(_ sender: UIGestureRecognizer? = nil) {
+        @objc func handleGesture(_ sender: WKGestureRecognizer? = nil) {
             DispatchQueue.main.async {
                 guard let recognizer = sender as? MessageGestureRecognizer else {
                     Log.trace(label: self.LOG_PREFIX, "Unable to handle message gesture - failed to convert UIGestureRecognizer to MessageGestureRecognizer.")
@@ -305,13 +309,13 @@
             }
         }
 
-        @objc func handleTap(_ sender: UITapGestureRecognizer? = nil) {
+        @objc func handleTap(_ sender: WKTapGestureRecognizer? = nil) {
             dismiss()
         }
 
-        private func displayWithAnimation(webView: WKWebView) {
+        private func displayWithAnimation(watchKitView: WKInterfaceObject) {
             DispatchQueue.main.async {
-                let keyWindow = UIApplication.shared.getKeyWindow()
+                let keyWindow = WKInterfaceDevice.shared().getKeyWindow()
 
                 if let animation = self.settings?.displayAnimation, animation != .none {
                     let isFade = animation == .fade
@@ -323,7 +327,7 @@
                     } else {
                         keyWindow?.addSubview(webView)
                     }
-                    UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
+                    WKInterfaceImage.animate(withDuration: self.ANIMATION_DURATION, animations: {
                         webView.frame = self.frameWhenVisible
                         webView.alpha = 1.0
                         self.transparentBackgroundView?.backgroundColor = self.settings?.getBackgroundColor()
@@ -338,7 +342,7 @@
         private func dismissWithAnimation(shouldDeallocateWebView: Bool) {
             DispatchQueue.main.async {
                 if let animation = self.settings?.dismissAnimation, animation != .none {
-                    UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
+                    WKInterfaceImage.animate(withDuration: self.ANIMATION_DURATION, animations: {
                         self.webView?.frame = self.frameAfterDismiss
                         if animation == .fade {
                             self.webView?.alpha = 0.0

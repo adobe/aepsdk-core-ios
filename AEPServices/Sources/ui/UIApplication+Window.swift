@@ -13,7 +13,7 @@
     import Foundation
     import UIKit
 
-    internal extension UIApplication {
+    internal extension WKInterfaceDevice {
         func getKeyWindow() -> UIWindow? {
             keyWindow ?? windows.first
         }

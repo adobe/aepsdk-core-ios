@@ -12,9 +12,10 @@
 #if os(iOS) || os(watchOS)
     import Foundation
     import UIKit
+    import WatchKit
 
     /// Handles message gesture support
-    class MessageGestureRecognizer: UISwipeGestureRecognizer {
+    class MessageGestureRecognizer: WKSwipeGestureRecognizer {
         /// The `MessageGesture` associated with this recognizer.
         var gesture: MessageGesture?
 
@@ -25,9 +26,9 @@
         var actionUrl: URL?
 
         /// A `UISwipeGestureRecognizer.Direction` necessary for capturing the correct gesture.
-        var swipeDirection: UISwipeGestureRecognizer.Direction? {
+        var swipeDirection: WKSwipeGestureRecognizerDirection? {
             switch gesture {
-            case .swipeUp:
+            case .up:
                 return .up
             case .swipeDown:
                 return .down

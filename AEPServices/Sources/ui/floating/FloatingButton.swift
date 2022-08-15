@@ -28,7 +28,7 @@
         private var singleTap: WKTapGestureRecognizer?
         private var panner: WKPanGestureRecognizer?
         private var timer: Timer?
-        private var buttonImageView: UIImageView?
+        private var buttonImageView: WKInterfaceImage?
         private var buttonPosition: FloatingButtonPosition = .center
 
         private var listener: FloatingButtonDelegate?
@@ -100,7 +100,7 @@
             self.buttonImageView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
             // gesture
-            self.panner = UIPanGestureRecognizer(target: self, action: #selector(panWasRecognized))
+            self.panner = WKPanGestureRecognizer(target: self, action: #selector(panWasRecognized))
 
             if let panner = self.panner {
                 self.buttonImageView?.addGestureRecognizer(panner)
@@ -135,7 +135,7 @@
             return true
         }
 
-        @objc private func panWasRecognized(recognizer: UIPanGestureRecognizer) {
+        @objc private func panWasRecognized(recognizer: WKPanGestureRecognizer) {
             DispatchQueue.main.async {
                 guard let draggedView: UIView = self.panner?.view else {
                     Log.debug(label: self.LOG_PREFIX, "Floating button couldn't be displayed, dragged view is nil.")
@@ -156,7 +156,7 @@
             }
         }
 
-        @objc private func tapDetected(recognizer: UITapGestureRecognizer) {
+        @objc private func tapDetected(recognizer: WKTapGestureRecognizer) {
             DispatchQueue.main.async {
                 self.listener?.onTapDetected()
             }
