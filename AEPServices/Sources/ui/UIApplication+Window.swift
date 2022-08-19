@@ -9,11 +9,11 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-#if os(iOS) || os(watchOS)
+#if os(iOS)
     import Foundation
     import UIKit
 
-    internal extension WKInterfaceDevice {
+    internal extension UIApplication {
         func getKeyWindow() -> UIWindow? {
             keyWindow ?? windows.first
         }

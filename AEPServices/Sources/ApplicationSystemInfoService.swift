@@ -10,13 +10,16 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)
-    import CoreTelephony
-#endif
-import Foundation
-import WatchKit
 
-// import UIKit
+#if os(iOS)
+import CoreTelephony
+#endif
+import UIKit
+import WatchKit
+import Foundation
+
+
+
 
 /// The Core system info service implementation which provides
 ///     - network connection status
@@ -26,9 +29,13 @@ import WatchKit
 class ApplicationSystemInfoService: SystemInfoService {
     private let bundle: Bundle
     private lazy var userAgent: String = {
-        let model = WKInterfaceDevice.current().model
+        // let model = UIDevice.current.model
         // let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
+        
+        // To get WatchOS information
+        let model = WKInterfaceDevice.current().model
         let osVersion = WKInterfaceDevice.current().systemVersion.replacingOccurrences(of: ".", with: "_")
+        
         let localeIdentifier = getActiveLocaleName()
 
         return "Mozilla/5.0 (\(model); CPU OS \(osVersion) like Mac OS X; \(localeIdentifier))"
@@ -128,12 +135,13 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getOperatingSystemName() -> String {
+        // return UIDevice.current.systemName
         return WKInterfaceDevice.current().systemName
     }
 
     func getOperatingSystemVersion() -> String {
+        // return UIDevice.current.systemVersion
         return WKInterfaceDevice.current().systemName
-        
     }
 
     func getCanonicalPlatformName() -> String {
@@ -151,10 +159,31 @@ class ApplicationSystemInfoService: SystemInfoService {
         return (displayInfo.widthPixels, displayInfo.heightPixels)
     }
 
-    func getDeviceType() -> DeviceType {
-            return .WATCH
-    }
+//    func getDeviceType() -> DeviceType {
+//        switch UIDevice.current.userInterfaceIdiom {
+//        case .phone:
+//            return .PHONE
+//        case .pad:
+//            return .PAD
+//        case .tv:
+//            return .TV
+//        case .carPlay:
+//            return .CARPLAY
+//        case .unspecified:
+//            return .UNKNOWN
+//        default:
+//            return .UNKNOWN
+//        }
+//    }
 
+   
+    #if os(watchOS)
+    func getDeviceType() -> DeviceType {
+            return .UNKNOWN
+        }
+    #endif
+    
+    
     func getApplicationBundleId() -> String? {
         return Bundle.main.bundleIdentifier
     }
@@ -182,10 +211,12 @@ class ApplicationSystemInfoService: SystemInfoService {
 
 struct NativeDisplayInformation {
     private var screenRect: CGRect {
+        // UIScreen.main.bounds
         WKInterfaceDevice.current().screenBounds
     }
 
     private var screenScale: CGFloat {
+        // UIScreen.main.scale
         WKInterfaceDevice.current().screenScale
     }
 

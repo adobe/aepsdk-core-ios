@@ -107,7 +107,6 @@ public enum DeviceType {
     case PAD
     case TV
     case CARPLAY
-    case WATCH
     case UNKNOWN
 }
 

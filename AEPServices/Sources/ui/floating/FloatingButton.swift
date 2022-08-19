@@ -9,10 +9,9 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-#if os(iOS) || os(watchOS)
+#if os(iOS)
     import Foundation
     import UIKit
-    import WatchKit
 
     /// This class is used to create a floating button
     @objc(AEPFloatingButton)
@@ -25,10 +24,10 @@
         internal static let PREVIEW_BUTTON_WIDTH = 60
         internal static let PREVIEW_BUTTON_HEIGHT = 60
 
-        private var singleTap: WKTapGestureRecognizer?
-        private var panner: WKPanGestureRecognizer?
+        private var singleTap: UITapGestureRecognizer?
+        private var panner: UIPanGestureRecognizer?
         private var timer: Timer?
-        private var buttonImageView: WKInterfaceImage?
+        private var buttonImageView: UIImageView?
         private var buttonPosition: FloatingButtonPosition = .center
 
         private var listener: FloatingButtonDelegate?
@@ -100,7 +99,7 @@
             self.buttonImageView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
             // gesture
-            self.panner = WKPanGestureRecognizer(target: self, action: #selector(panWasRecognized))
+            self.panner = UIPanGestureRecognizer(target: self, action: #selector(panWasRecognized))
 
             if let panner = self.panner {
                 self.buttonImageView?.addGestureRecognizer(panner)
@@ -135,7 +134,7 @@
             return true
         }
 
-        @objc private func panWasRecognized(recognizer: WKPanGestureRecognizer) {
+        @objc private func panWasRecognized(recognizer: UIPanGestureRecognizer) {
             DispatchQueue.main.async {
                 guard let draggedView: UIView = self.panner?.view else {
                     Log.debug(label: self.LOG_PREFIX, "Floating button couldn't be displayed, dragged view is nil.")
@@ -156,7 +155,7 @@
             }
         }
 
-        @objc private func tapDetected(recognizer: WKTapGestureRecognizer) {
+        @objc private func tapDetected(recognizer: UITapGestureRecognizer) {
             DispatchQueue.main.async {
                 self.listener?.onTapDetected()
             }

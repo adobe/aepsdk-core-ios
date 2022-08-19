@@ -9,13 +9,12 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-#if os(iOS) || os(watchOS)
+#if os(iOS)
     import Foundation
     import UIKit
-    import WatchKit
 
     /// Handles message gesture support
-    class MessageGestureRecognizer: WKSwipeGestureRecognizer {
+    class MessageGestureRecognizer: UISwipeGestureRecognizer {
         /// The `MessageGesture` associated with this recognizer.
         var gesture: MessageGesture?
 
@@ -26,9 +25,9 @@
         var actionUrl: URL?
 
         /// A `UISwipeGestureRecognizer.Direction` necessary for capturing the correct gesture.
-        var swipeDirection: WKSwipeGestureRecognizerDirection? {
+        var swipeDirection: UISwipeGestureRecognizer.Direction? {
             switch gesture {
-            case .up:
+            case .swipeUp:
                 return .up
             case .swipeDown:
                 return .down

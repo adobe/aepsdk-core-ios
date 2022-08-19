@@ -18,7 +18,7 @@ import Foundation
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
-    #if os(iOS) || os(watchOS)
+    #if os(iOS)
         /// MessagingDelegate which is used to listen for message visibility updates.
         public weak var messagingDelegate: MessagingDelegate?
     #endif

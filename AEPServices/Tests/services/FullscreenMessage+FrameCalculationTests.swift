@@ -105,7 +105,7 @@
             assertEqual(message.frameWhenVisible.size.width, screenWidth)
             assertEqual(message.frameWhenVisible.size.height, screenHeight * 0.2)
             assertEqual(message.frameWhenVisible.origin.x, 0)
-            assertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height - (screenHeight * 0.05))
+            assertEqual(message.frameWhenVisible.origin.y, screenHeight - message.frameWhenVisible.size.height + (screenHeight * 0.05))
         }
     
         func testBotSettingsFrameBeforeShow() throws {
@@ -245,6 +245,12 @@
             assertEqual(message.frameAfterDismiss.size.height, screenHeight)
             assertEqual(message.frameAfterDismiss.origin.x, 0)
             assertEqual(message.frameAfterDismiss.origin.y, 0)
+        }
+        
+        func testSafeAreaCalculation() throws {
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor)
+            // in a unit test, there is no UI and therefore no screen to calculate. return 0 in this case
+            assertEqual(0, message.safeAreaHeight)
         }
     }
 #endif

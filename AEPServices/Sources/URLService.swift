@@ -17,7 +17,6 @@ import WatchKit
 /// A concrete implementation of protocol `URLOpening`
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
-// @available(watchOSApplicationExtension, unavailable)
 class URLService: URLOpening {
     private let LOG_PREFIX = "URLService"
 
@@ -27,6 +26,11 @@ class URLService: URLOpening {
     @discardableResult func openUrl(_ url: URL) -> Bool {
         DispatchQueue.main.async {
             Log.trace(label: self.LOG_PREFIX, "Attempting to open URL: \(url)")
+//            UIApplication.shared.open(url) { success in
+//                if !success {
+//                    Log.warning(label: self.LOG_PREFIX, "Unable to open URL: \(url)")
+//                }
+//            }
             WKExtension.shared().openSystemURL(url) 
         }
         return true
