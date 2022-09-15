@@ -31,7 +31,7 @@ class URLService: URLOpening {
 //                    Log.warning(label: self.LOG_PREFIX, "Unable to open URL: \(url)")
 //                }
 //            }
-            WKExtension.shared().openSystemURL(url) 
+            WKExtension.shared().openSystemURL(url)
         }
         return true
     }

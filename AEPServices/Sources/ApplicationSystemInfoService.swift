@@ -10,16 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-
 #if os(iOS)
 import CoreTelephony
 #endif
 import UIKit
 import WatchKit
 import Foundation
-
-
-
 
 /// The Core system info service implementation which provides
 ///     - network connection status
@@ -29,9 +25,7 @@ import Foundation
 class ApplicationSystemInfoService: SystemInfoService {
     private let bundle: Bundle
     private lazy var userAgent: String = {
-        // let model = UIDevice.current.model
-        // let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
-        
+       
         // To get WatchOS information
         let model = WKInterfaceDevice.current().model
         let osVersion = WKInterfaceDevice.current().systemVersion.replacingOccurrences(of: ".", with: "_")
@@ -158,7 +152,14 @@ class ApplicationSystemInfoService: SystemInfoService {
         let displayInfo = NativeDisplayInformation()
         return (displayInfo.widthPixels, displayInfo.heightPixels)
     }
+    
+#if os(watchOS)
+func getDeviceType() -> DeviceType {
+    return .UNKNOWN
+    }
+#endif
 
+   
 //    func getDeviceType() -> DeviceType {
 //        switch UIDevice.current.userInterfaceIdiom {
 //        case .phone:
@@ -176,14 +177,6 @@ class ApplicationSystemInfoService: SystemInfoService {
 //        }
 //    }
 
-   
-    #if os(watchOS)
-    func getDeviceType() -> DeviceType {
-            return .UNKNOWN
-        }
-    #endif
-    
-    
     func getApplicationBundleId() -> String? {
         return Bundle.main.bundleIdentifier
     }

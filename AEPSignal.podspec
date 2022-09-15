@@ -1,14 +1,14 @@
 Pod::Spec.new do |s|
   s.name             = "AEPSignal"
-  s.version          = "3.7.0"
+  s.version          = "3.7.1"
   s.summary          = "Signal extension for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
                         The AEPSignal extension provides the support for Postback/PII/Open URL actions triggered by Core rules engine.
                         DESC
-  s.homepage         = "https://github.com/FrazierMark/aepsdk-test"
+  s.homepage         = "https://github.com/adobe/aepsdk-test"
   s.license          = 'Apache V2'
   s.author       = "Adobe Experience Platform SDK Team"
-  s.source           = { :git => "https://github.com/FrazierMark/aepsdk-test", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/adobe/aepsdk-test", :tag => s.version.to_s }
 
   s.platform = :ios, :watchos, :tvos
   s.platforms = { :ios => "10.0", :watchos => "3.0", :tvos => "10.0" }
@@ -22,6 +22,6 @@ Pod::Spec.new do |s|
   s.swift_version = '5.1'
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
-  s.dependency 'AEPCore', '>= 3.7.0'
+  s.dependency 'AEPCore', '>= 3.7.1'
 
 end

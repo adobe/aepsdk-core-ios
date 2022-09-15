@@ -1,14 +1,14 @@
 Pod::Spec.new do |s|
   s.name             = "AEPServices"
-  s.version          = "3.7.0"
+  s.version          = "3.7.1"
   s.summary          = "Servcies library for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
                         The AEPServices library provides the platform services and utilities for the Adobe Experience Platform SDK.  Having the services library installed is a pre-requisite for any other Adobe Experience Platform SDK extension to work.
                         DESC
-  s.homepage         = "https://github.com/FrazierMark/aepsdk-test"
+  s.homepage         = "https://github.com/adobe/aepsdk-test"
   s.license          = 'Apache V2'
   s.author       = "Adobe Experience Platform SDK Team"
-  s.source           = { :git => "https://github.com/FrazierMark/aepsdk-test", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/adobe/aepsdk-test", :tag => s.version.to_s }
 
   s.platform = :ios, :watchos, :tvos
   s.platforms = { :ios => "10.0", :watchos => "3.0", :tvos => "10.0" }

@@ -44,15 +44,14 @@ class IdentityState {
     /// Completes init for the Identity extension and determines if we need to share state
     /// - Parameters:
     ///   - createSharedState: a function which when invoked creates a shared state for the Identity extension
-    ///   - event: The `Event` triggering the bootup
-    func boot(event: Event, createSharedState: ([String: Any], Event) -> Void) {
+    func boot(createSharedState: ([String: Any], Event?) -> Void) {
         if hasBooted { return }
 
         // load data from local storage
         identityProperties.loadFromPersistence()
 
         if identityProperties.ecid != nil {
-            createSharedState(identityProperties.toEventData(), event)
+            createSharedState(identityProperties.toEventData(), nil)
             didCreateInitialSharedState = true
         }
 
