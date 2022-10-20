@@ -29,6 +29,10 @@ class MobileIdentitiesTests: XCTestCase {
         IdentityConstants.Audience.DPID : "test-dpid",
         IdentityConstants.Audience.DPUUID : "test-dpuuid",
     ]
+    let targetSharedState = [
+        IdentityConstants.Target.TNT_ID : "test-tntid",
+        IdentityConstants.Target.THIRD_PARTY_ID : "test-thirdpartyid"
+    ]
 
     private func buildIdentitySharedState() -> [String: Any] {
         let customIdOne = CustomIdentity(origin: "origin1", type: "type1", identifier: "id1", authenticationState: .authenticated)
@@ -106,6 +110,8 @@ class MobileIdentitiesTests: XCTestCase {
                 return SharedStateResult(status: .set, value: analyticsSharedState)
             } else if extensionName == IdentityConstants.SharedStateKeys.AUDIENCE {
                 return SharedStateResult(status: .set, value: audienceSharedState)
+            } else if extensionName == IdentityConstants.SharedStateKeys.TARGET {
+                return SharedStateResult(status: .set, value: targetSharedState)
             }
 
             return SharedStateResult(status: .set, value: nil)
@@ -115,7 +121,7 @@ class MobileIdentitiesTests: XCTestCase {
         let identifiers = String(data: encodedIdentities!, encoding: .utf8)
 
         // verify
-        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"\(ecid.ecidString)\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"},{\"namespace\":\"AVID\",\"value\":\"test-aid\",\"type\":\"integrationCode\"},{\"namespace\":\"vid\",\"value\":\"test-vid\",\"type\":\"analytics\"},{\"namespace\":\"test-dpid\",\"value\":\"test-dpuuid\",\"type\":\"namespaceId\"},{\"namespace\":\"0\",\"value\":\"test-uuid\",\"type\":\"namespaceId\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"\(ecid.ecidString)\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"},{\"namespace\":\"AVID\",\"value\":\"test-aid\",\"type\":\"integrationCode\"},{\"namespace\":\"vid\",\"value\":\"test-vid\",\"type\":\"analytics\"},{\"namespace\":\"test-dpid\",\"value\":\"test-dpuuid\",\"type\":\"namespaceId\"},{\"namespace\":\"0\",\"value\":\"test-uuid\",\"type\":\"namespaceId\"},{\"namespace\":\"tntid\",\"value\":\"test-tntid\",\"type\":\"target\"},{\"namespace\":\"3rdpartyid\",\"value\":\"test-thirdpartyid\",\"type\":\"target\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
         XCTAssertEqual(expected, identifiers)
     }
 
@@ -208,6 +214,29 @@ class MobileIdentitiesTests: XCTestCase {
 
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"test-dpid\",\"value\":\"test-dpuuid\",\"type\":\"namespaceId\"},{\"namespace\":\"0\",\"value\":\"test-uuid\",\"type\":\"namespaceId\"}]}]}"
+        XCTAssertEqual(expected, identifiers)
+    }
+
+    /// Tests that when Target provides shared state that we include Target identities in getAllIdentifiers
+    func testGetAllIdentifiersOnlyTarget() {
+        // setup
+        let event = Event(name: "test event", type: EventType.hub, source: EventSource.sharedState, data: nil)
+
+        // test
+        var mobileIdentities = MobileIdentities()
+        mobileIdentities.collectIdentifiers(event: event) { (extensionName, _) -> SharedStateResult? in
+            if extensionName == IdentityConstants.SharedStateKeys.TARGET {
+                return SharedStateResult(status: .set, value: targetSharedState)
+            }
+
+            return SharedStateResult(status: .set, value: nil)
+        }
+
+        let encodedIdentities = try? JSONEncoder().encode(mobileIdentities)
+        let identifiers = String(data: encodedIdentities!, encoding: .utf8)
+
+        // verify
+        let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"tntid\",\"value\":\"test-tntid\",\"type\":\"target\"},{\"namespace\":\"3rdpartyid\",\"value\":\"test-thirdpartyid\",\"type\":\"target\"}]}]}"
         XCTAssertEqual(expected, identifiers)
     }
 }
