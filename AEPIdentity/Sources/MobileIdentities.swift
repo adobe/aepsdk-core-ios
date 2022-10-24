@@ -49,8 +49,8 @@ struct MobileIdentities: Codable {
     static let NAMESPACE_ANALYTICS_AID = "AVID"
     static let NAMESPACE_USERIDENTIFIER = "vid"
     static let NAMESPACE_AUDIENCE_UUID = "0"
-    static let NAMESPACE_TARGET_TNTID = "tntid"
-    static let NAMESPACE_TARGET_THIRDPARTYID = "3rdpartyid"
+    static let NAMESPACE_TARGET_TNT_ID = "tntid"
+    static let NAMESPACE_TARGET_THIRD_PARTY_ID = "3rdpartyid"
     static let ANALYTICS = "analytics"
     static let TARGET = "target"
 
@@ -85,7 +85,7 @@ struct MobileIdentities: Codable {
         let configurationStatus = sharedStateProvider(IdentityConstants.SharedStateKeys.CONFIGURATION, event)?.status ?? .none
         let analyticsStatus = sharedStateProvider(IdentityConstants.SharedStateKeys.ANALYTICS, event)?.status ?? .none
         let audienceStatus = sharedStateProvider(IdentityConstants.SharedStateKeys.AUDIENCE, event)?.status ?? .none
-        let targetStatus = sharedStateProvider(IdentityConstants.SharedStateKeys.AUDIENCE, event)?.status ?? .none
+        let targetStatus = sharedStateProvider(IdentityConstants.SharedStateKeys.TARGET, event)?.status ?? .none
 
         return identityStatus != .pending &&
             configurationStatus != .pending &&
@@ -182,11 +182,11 @@ struct MobileIdentities: Codable {
         var targetIds = [UserID]()
 
         if let tntId = targetSharedState.value?[IdentityConstants.Target.TNT_ID] as? String {
-            targetIds.append(UserID(namespace: MobileIdentities.NAMESPACE_TARGET_TNTID, value: tntId, type: MobileIdentities.TARGET))
+            targetIds.append(UserID(namespace: MobileIdentities.NAMESPACE_TARGET_TNT_ID, value: tntId, type: MobileIdentities.TARGET))
         }
 
         if let thirdPartyId = targetSharedState.value?[IdentityConstants.Target.THIRD_PARTY_ID] as? String {
-            targetIds.append(UserID(namespace: MobileIdentities.NAMESPACE_TARGET_THIRDPARTYID, value: thirdPartyId, type: MobileIdentities.TARGET))
+            targetIds.append(UserID(namespace: MobileIdentities.NAMESPACE_TARGET_THIRD_PARTY_ID, value: thirdPartyId, type: MobileIdentities.TARGET))
         }
 
         return targetIds
