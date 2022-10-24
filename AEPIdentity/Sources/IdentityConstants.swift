@@ -27,6 +27,7 @@ enum IdentityConstants {
         static let CONFIGURATION = "com.adobe.module.configuration"
         static let ANALYTICS = "com.adobe.module.analytics"
         static let AUDIENCE = "com.adobe.module.audience"
+        static let TARGET = "com.adobe.module.target"
     }
 
     enum Hub {
@@ -117,5 +118,10 @@ enum IdentityConstants {
         static let DPUUID = "dpuuid"
         static let UUID = "uuid"
         static let OPTED_OUT_HIT_SENT = "optedouthitsent"
+    }
+
+    enum Target {
+        static let TNT_ID = "tntid"
+        static let THIRD_PARTY_ID = "thirdpartyid"
     }
 }
