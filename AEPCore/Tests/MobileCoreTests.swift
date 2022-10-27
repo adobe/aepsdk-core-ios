@@ -207,7 +207,7 @@ class MobileCoreTests: XCTestCase {
               "friendlyName" : "mockExtension"
             },
             "com.adobe.module.configuration" : {
-              "version" : "3.7.1",
+              "version" : "3.7.2",
               "friendlyName" : "Configuration"
             },
             "com.adobe.mockExtensionTwo" : {
