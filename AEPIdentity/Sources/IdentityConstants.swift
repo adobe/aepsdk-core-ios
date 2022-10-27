@@ -14,7 +14,7 @@ import Foundation
 enum IdentityConstants {
     static let EXTENSION_NAME = "com.adobe.module.identity"
     static let FRIENDLY_NAME = "Identity"
-    static let EXTENSION_VERSION = "3.7.1"
+    static let EXTENSION_VERSION = "3.7.2"
     static let DATASTORE_NAME = EXTENSION_NAME
 
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second
@@ -27,6 +27,7 @@ enum IdentityConstants {
         static let CONFIGURATION = "com.adobe.module.configuration"
         static let ANALYTICS = "com.adobe.module.analytics"
         static let AUDIENCE = "com.adobe.module.audience"
+        static let TARGET = "com.adobe.module.target"
     }
 
     enum Hub {
@@ -117,5 +118,10 @@ enum IdentityConstants {
         static let DPUUID = "dpuuid"
         static let UUID = "uuid"
         static let OPTED_OUT_HIT_SENT = "optedouthitsent"
+    }
+
+    enum Target {
+        static let TNT_ID = "tntid"
+        static let THIRD_PARTY_ID = "thirdpartyid"
     }
 }
