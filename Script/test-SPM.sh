@@ -55,10 +55,6 @@ xcodebuild archive -scheme TestProject -destination 'generic/platform=iOS'
 echo '############# Build for generic iOS device ###############'
 xcodebuild build -scheme TestProject -destination 'generic/platform=iOS'
 
-# Build for i386 simulator
-echo '############# Build for i386 simulator ###############'
-xcodebuild build -scheme TestProject -destination 'generic/platform=iOS Simulator' ARCHS=i386
-
 # Build for x86_64 simulator
 echo '############# Build for x86_64 simulator ###############'
 xcodebuild build -scheme TestProject -destination 'generic/platform=iOS Simulator' ARCHS=x86_64
