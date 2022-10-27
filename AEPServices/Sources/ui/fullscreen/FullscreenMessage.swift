@@ -38,7 +38,7 @@
         var isLocalImageUsed = false
         var payload: String
         var payloadUsingLocalAssets: String?
-        weak var listener: FullscreenMessageDelegate?
+        var listener: FullscreenMessageDelegate?
         public internal(set) var webView: UIView?
         private(set) var transparentBackgroundView: UIView?
         private(set) var messageMonitor: MessageMonitoring
