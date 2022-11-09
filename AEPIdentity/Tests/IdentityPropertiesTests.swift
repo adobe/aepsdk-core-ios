@@ -154,7 +154,7 @@ class IdentityPropertiesTests: XCTestCase {
         // can't guarantee order of IDs
         XCTAssertTrue(newIds == properties.customerIds || newIds.reversed() == properties.customerIds)
     }
-    
+
     // Covers an edge case where duplicate type makes it through, used to crash when using Dictionary(uniqueKeysWithValues:)
     func testMergeAndCleanWithDuplicateTypeDoesntCrash() {
         // setup
