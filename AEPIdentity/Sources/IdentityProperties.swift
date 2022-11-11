@@ -100,6 +100,6 @@ struct IdentityProperties: Codable {
     /// - Parameter ids: a list of identities
     private func idListToDict(_ ids: [CustomIdentity]?) -> [String?: CustomIdentity] {
         guard let ids = ids else { return [:] }
-        return Dictionary(uniqueKeysWithValues: ids.map { ($0.type, $0) })
+        return Dictionary(ids.map { ($0.type, $0) }, uniquingKeysWith: {_, new in return new})
     }
 }
