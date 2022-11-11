@@ -162,12 +162,12 @@
                 return
             }
 
+            // notify global listeners
+            message.listener?.onShow(message: message)
+            message.messagingDelegate?.onShow(message: message)
+
             // dispatch UI activity back to main thread
             DispatchQueue.main.async {
-                // notify global listeners
-                message.listener?.onShow(message: message)
-                message.messagingDelegate?.onShow(message: message)
-
                 message.displayWithAnimation(webView: webview)
             }
         }
