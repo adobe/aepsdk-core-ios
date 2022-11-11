@@ -98,10 +98,7 @@
         public func show(withMessagingDelegateControl delegateControl: Bool) {
             // check if the webview has already been created
             if let webview = self.webView as? WKWebView {
-                // get off main thread while delegate has control to prevent pause on main thread
-                DispatchQueue.global().async {
-                    self.handleShouldShow(self, webview: webview, delegateControl: delegateControl)
-                }
+                self.handleShouldShow(webview: webview, delegateControl: delegateControl)
                 return
             }
 
@@ -148,27 +145,27 @@
                     self.loadingNavigation = wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
 
-                // get off main thread while delegate has control to prevent pause on main thread
-                DispatchQueue.global().async {
-                    self.handleShouldShow(self, webview: wkWebView, delegateControl: delegateControl)
-                }
+                self.handleShouldShow(webview: wkWebView, delegateControl: delegateControl)
             }
         }
 
-        private func handleShouldShow(_ message: FullscreenMessage, webview: WKWebView, delegateControl: Bool) {
-            // only show the message if the monitor allows it
-            guard message.messageMonitor.show(message: message, delegateControl: delegateControl) else {
-                message.listener?.onShowFailure()
-                return
-            }
+        private func handleShouldShow(webview: WKWebView, delegateControl: Bool) {
+            // get off main thread while delegate has control to prevent pause on main thread
+            DispatchQueue.global().async {
+                // only show the message if the monitor allows it
+                guard self.messageMonitor.show(message: self, delegateControl: delegateControl) else {
+                    self.listener?.onShowFailure()
+                    return
+                }
 
-            // notify global listeners
-            message.listener?.onShow(message: message)
-            message.messagingDelegate?.onShow(message: message)
+                // notify global listeners
+                self.listener?.onShow(message: self)
+                self.messagingDelegate?.onShow(message: self)
 
-            // dispatch UI activity back to main thread
-            DispatchQueue.main.async {
-                message.displayWithAnimation(webView: webview)
+                // dispatch UI activity back to main thread
+                DispatchQueue.main.async {
+                    self.displayWithAnimation(webView: webview)
+                }
             }
         }
 
