@@ -5,7 +5,8 @@ labels: [feature-request, triage-required]
 body:
 - type: checkboxes
   attributes:
-    label:  Before logging a feature request please confirm the following
+    label:  Prerequisites
+    description: Please check the following items before logging a new feature request.
     options:
     - label: This is not a Security Disclosure, otherwise please follow the guidelines in [Security Policy](https://github.com/adobe/aepsdk-edge-ios/security/policy).
       required: true
@@ -16,14 +17,14 @@ body:
   id: description
   attributes:
     label: Feature request summary
-    description: Please provide a summary of the feature you request.
+    description: Please provide a summary of the feature.
   validations:
     required: true
 
 - type: textarea
   attributes:
     label: Current behavior
-    description: A concise description of what you're experiencing.
+    description: A concise description of what you are experiencing.
   validations:
     required: false
 
