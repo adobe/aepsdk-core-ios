@@ -1,6 +1,6 @@
 name: Project epic
 description: Create an internal epic that represents the top level parent of multiple tasks.
-labels: [epic, edgesquad]
+labels: [epic]
 
 body:
 - type: textarea
