@@ -1,0 +1,24 @@
+name: Project epic
+description: Create an internal epic that represents the top level parent of multiple tasks.
+labels: [epic]
+
+body:
+- type: textarea
+  id: description
+  attributes:
+    label: Epic description
+    description: Please provide a detailed description for this epic.
+  validations:
+    required: true
+
+- type: textarea
+  id: tasks
+  attributes:
+    label: Tasks
+    description: |
+      Provide a high-level definition of done for this epic as a list of tasks that need to be completed.
+      Tip: List out the task links if they already exist or list them out as text with a descriptive title so they can be easily converted to task items.
+    placeholder: |
+      - [ ] your task link here
+  validations:
+    required: false
