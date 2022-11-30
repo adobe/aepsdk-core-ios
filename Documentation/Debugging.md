@@ -14,7 +14,7 @@ pod 'AEPAssurance','~> 3.0'
 
 #### Update Extension Registration
 
-Register Assurance extension by including `Assurance.self` to the list of extensions registered with `MobileCore.registerExtensions`.
+Register Assurance extension by including `Assurance.self` in the list of extensions registered with `MobileCore.registerExtensions`.
 
 ```diff
 + import AEPAssurance
