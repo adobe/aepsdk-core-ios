@@ -5,6 +5,7 @@ set -e # Any subsequent(*) commands which fail will cause the shell script to ex
 ROOT_DIR=$(git rev-parse --show-toplevel)
 LINE="================================================================================"
 VERSION_REGEX="[0-9]+\.[0-9]+\.[0-9]+"
+DEPENDENCIES=none
 
 # make this script executable from terminal:
 # chmod 755 update-versions.sh
@@ -41,7 +42,7 @@ do
 done
 
 # Print help in case parameters are empty
-if [ -z "$NAME" ] || [ -z "$NEW_VERSION" ] || [ -z "$DEPENDENCIES" ]
+if [ -z "$NAME" ] || [ -z "$NEW_VERSION" ]
 then
    echo "********** USAGE ERROR **********"
    echo "Some or all of the parameters are empty.  See usage below:";

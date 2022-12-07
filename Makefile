@@ -217,4 +217,4 @@ bump-versions:
 	(LC_ALL=C find . -type f -name '*.podspec' -exec sed -i '' 's/$(from)/$(to)/' {} +)
 
 update-versions:
-	(sh ./Script/update-versions.sh -n Signal -v 3.7.4 -d "AEPCore 3.7.4")
+	(sh ./Script/update-versions.sh -n Signal -v 3.7.4)
