@@ -62,23 +62,36 @@ echo "Changing value of 's.version' to '$NEW_VERSION' in '$PODSPEC_FILE'"
 sed -i '' -E "/^ *s.version/{s/$VERSION_REGEX/$NEW_VERSION/;}" $PODSPEC_FILE
 
 # Replace dependencies in podspec
-IFS="," 
-dependenciesArray=($(echo "$DEPENDENCIES"))
+if [ "$DEPENDENCIES" != "none" ]; then
+    IFS="," 
+    dependenciesArray=($(echo "$DEPENDENCIES"))
 
-IFS=" "
-for dependency in "${dependenciesArray[@]}"; do    
-    dependencyArray=(${dependency// / })    
-    dependencyName=${dependencyArray[0]}    
-    dependencyVersion=${dependencyArray[1]}    
-    
-    echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"    
-    sed -i '' -E "/^ *s.dependency +'$dependencyName'/{s/$VERSION_REGEX/$dependencyVersion/;}" $PODSPEC_FILE
-done
+    IFS=" "
+    for dependency in "${dependenciesArray[@]}"; do    
+        dependencyArray=(${dependency// / })    
+        dependencyName=${dependencyArray[0]}    
+        dependencyVersion=${dependencyArray[1]}    
+        
+        echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"    
+        sed -i '' -E "/^ *s.dependency +'$dependencyName'/{s/$VERSION_REGEX/$dependencyVersion/;}" $PODSPEC_FILE
+    done
+fi
 
 # Replace version in Constants file
-CONSTANTS_FILE=$ROOT_DIR"/AEP$NAME/Sources/"$NAME"Constants.swift"
-echo "Changing value of 'EXTENSION_VERSION' to '$NEW_VERSION' in '$CONSTANTS_FILE'"
-sed -i '' -E "/^ +static let EXTENSION_VERSION/{s/$VERSION_REGEX/$NEW_VERSION/;}" $CONSTANTS_FILE
+if [ "$NAME" == "Services" ]; then
+    # Nothing, Services has no constants file
+    echo "No constants to replace"
+elif [ "$NAME" == "Core" ]; then
+    # Core does not need to update its own constants file, but rather Configuration's
+    CONSTANTS_FILE=$ROOT_DIR"/AEP$NAME/Sources/configuration/ConfigurationConstants.swift"
+    echo "Changing value of 'EXTENSION_VERSION' to '$NEW_VERSION' in '$CONSTANTS_FILE'"
+    sed -i '' -E "/^ +static let EXTENSION_VERSION/{s/$VERSION_REGEX/$NEW_VERSION/;}" $CONSTANTS_FILE
+else
+    CONSTANTS_FILE=$ROOT_DIR"/AEP$NAME/Sources/"$NAME"Constants.swift"
+    echo "Changing value of 'EXTENSION_VERSION' to '$NEW_VERSION' in '$CONSTANTS_FILE'"
+    sed -i '' -E "/^ +static let EXTENSION_VERSION/{s/$VERSION_REGEX/$NEW_VERSION/;}" $CONSTANTS_FILE
+fi
+
 
 # Replace marketing versions in project.pbxproj
 #PROJECT_PBX_FILE=$ROOT_DIR"/AEP$NAME.xcodeproj/project.pbxproj"
