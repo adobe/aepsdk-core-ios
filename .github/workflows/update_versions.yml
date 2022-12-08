@@ -1,0 +1,68 @@
+# This is a basic workflow that is manually triggered
+
+name: Update Versions
+
+# Controls when the action will run. Workflow runs when manually triggered using the UIk
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      version:
+        description: 'New version to use for the extension.  Example: 3.0.2'
+        required: true
+        
+      branch:
+        description: 'Branch to be used when updating versions'
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  update-versions:
+    runs-on: macos-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v3.1.0
+      with:
+        ref: ${{ github.event.inputs.branch }}
+    
+    - name: Update AEPCore
+      run: (sh ./Script/update-versions.sh -n Core -v ${{ github.event.inputs.version }} -d "AEPRulesEngine 1.1.0, AEPServices ${{ github.event.inputs.version }}")
+
+    - name: Update AEPIdentity
+      run: (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
+
+    - name: Update AEPLifecycle
+      run: (sh ./Script/update-versions.sh -n Lifecycle -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
+
+    - name: Update AEPServices
+      run: (sh ./Script/update-versions.sh -n Services -v ${{ github.event.inputs.version }})
+      
+    - name: Update AEPSignal
+      run: (sh ./Script/update-versions.sh -n Signal -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
+      
+    - name: Create Pull Request
+      # You may pin to the exact commit or the version.
+      # uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04
+      uses: peter-evans/create-pull-request@v4.2.3
+      with:
+        # GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)
+        token: ${{ secrets.PAT }}
+               
+        # The message to use when committing changes.
+        commit-message: Updating versions to ${{ github.event.inputs.version }}.
+        
+        # The pull request branch name.
+        branch: version-${{ github.event.inputs.version }}-update
+        
+        # Delete the `branch` when closing pull requests, and when undeleted after merging. Recommend `true`.
+        delete-branch: true
+                        
+        # The title of the pull request.
+        title: Updating versions to ${{ github.event.inputs.version }}
+        
+        # The body of the pull request.
+        body: Updating versions to ${{ github.event.inputs.version }}
