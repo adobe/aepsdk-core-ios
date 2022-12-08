@@ -50,19 +50,19 @@ jobs:
       uses: peter-evans/create-pull-request@v4.2.3
       with:
         # GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)
-        token: ${{ github.token }}
+        token: ${{ secrets.PAT }}
                
         # The message to use when committing changes.
-        commit-message: "Updating versions to ${{ github.event.inputs.version }}."
+        commit-message: Updating versions to ${{ github.event.inputs.version }}.
         
         # The pull request branch name.
-        branch: "version-${{ github.event.inputs.version }}-update"
+        branch: version-${{ github.event.inputs.version }}-update
         
         # Delete the `branch` when closing pull requests, and when undeleted after merging. Recommend `true`.
         delete-branch: true
                         
         # The title of the pull request.
-        title: "Updating versions to ${{ github.event.inputs.version }}"
+        title: Updating versions to ${{ github.event.inputs.version }}
         
         # The body of the pull request.
-        body: "Updating versions to ${{ github.event.inputs.version }}"
+        body: Updating versions to ${{ github.event.inputs.version }}
