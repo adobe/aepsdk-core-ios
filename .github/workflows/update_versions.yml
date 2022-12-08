@@ -2,7 +2,7 @@
 
 name: Update Versions
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
+# Controls when the action will run. Workflow runs when manually triggered using the UIk
 # or API.
 on:
   workflow_dispatch:
