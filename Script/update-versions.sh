@@ -82,16 +82,26 @@ if [ "$NAME" == "Services" ]; then
     # Nothing, Services has no constants file
     echo "No constants to replace"
 elif [ "$NAME" == "Core" ]; then
-    # Core does not need to update its own constants file, but rather Configuration's
+    # Core needs to update Event Hub and Configuration Constants
     CONSTANTS_FILE=$ROOT_DIR"/AEP$NAME/Sources/configuration/ConfigurationConstants.swift"
     echo "Changing value of 'EXTENSION_VERSION' to '$NEW_VERSION' in '$CONSTANTS_FILE'"
     sed -i '' -E "/^ +static let EXTENSION_VERSION/{s/$VERSION_REGEX/$NEW_VERSION/;}" $CONSTANTS_FILE
+
+    EVENT_HUB_FILE=$ROOT_DIR"/AEP$NAME/Sources/eventhub/EventHubConstants.swift"
+    echo "Changing value of 'VERSION_NUMBER' to '$NEW_VERSION' in '$EVENT_HUB_FILE'"
+    sed -i '' -E "/^ +static let VERSION_NUMBER/{s/$VERSION_REGEX/$NEW_VERSION/;}" $EVENT_HUB_FILE
 else
     CONSTANTS_FILE=$ROOT_DIR"/AEP$NAME/Sources/"$NAME"Constants.swift"
     echo "Changing value of 'EXTENSION_VERSION' to '$NEW_VERSION' in '$CONSTANTS_FILE'"
     sed -i '' -E "/^ +static let EXTENSION_VERSION/{s/$VERSION_REGEX/$NEW_VERSION/;}" $CONSTANTS_FILE
 fi
 
+# Replace test version in MobileCoreTests
+if [ "$NAME" == "Core" ]; then
+    TEST_FILE=$ROOT_DIR"/AEP$NAME/Tests/MobileCoreTests.swift"
+    echo "Changing value of 'version' to '$NEW_VERSION' in '$TEST_FILE'"
+    sed -i '' -E "/^ +\"version\" : \"/{s/[1-9]+\.[0-9]+\.[0-9]+/$NEW_VERSION/;}" $TEST_FILE
+fi
 
 # Replace marketing versions in project.pbxproj
 #PROJECT_PBX_FILE=$ROOT_DIR"/AEP$NAME.xcodeproj/project.pbxproj"
