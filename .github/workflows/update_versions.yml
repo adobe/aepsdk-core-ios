@@ -36,10 +36,12 @@ jobs:
     - name: Update AEPCore
       run: (sh ./Script/update-versions.sh -n Core -v ${{ github.event.inputs.version }} -d "AEPRulesEngine 1.2.0, AEPServices ${{ github.event.inputs.version }}")
 
-    - name: Update AEPIdentity      
-      if: ${{ github.event.inputs.core-dependency != '' }}      
+    - if: ${{ github.event.inputs.core-dependency != '' }}
+      name: Update AEPIdentity
       run: (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}")
-      if: ${{ github.event.inputs.core-dependency == '' }}      
+      
+    - if: ${{ github.event.inputs.core-dependency == '' }}
+      name: Update AEPIdentity
       run: (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }})
       
     - name: Update AEPLifecycle
