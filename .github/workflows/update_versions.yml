@@ -16,6 +16,10 @@ on:
         description: 'Branch to be used when updating versions'
         required: true
 
+      core-dependency:
+        description: 'If a version is provided, update AEPCore dependency in podspec and Package.swift'
+        required: false
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   update-versions:
@@ -30,10 +34,16 @@ jobs:
         ref: ${{ github.event.inputs.branch }}
     
     - name: Update AEPCore
-      run: (sh ./Script/update-versions.sh -n Core -v ${{ github.event.inputs.version }} -d "AEPRulesEngine 1.1.0, AEPServices ${{ github.event.inputs.version }}")
+      run: (sh ./Script/update-versions.sh -n Core -v ${{ github.event.inputs.version }} -d "AEPRulesEngine 1.2.0, AEPServices ${{ github.event.inputs.version }}")
 
     - name: Update AEPIdentity
-      run: (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
+      run: |
+      if [ -z "${{ github.event.inputs.core-dependency }}" ]
+      then
+        (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}")
+      else
+        (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }})
+      fi
 
     - name: Update AEPLifecycle
       run: (sh ./Script/update-versions.sh -n Lifecycle -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
