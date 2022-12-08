@@ -50,7 +50,7 @@ jobs:
       uses: peter-evans/create-pull-request@v4.2.3
       with:
         # GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)
-        token: ${{ GITHUB_TOKEN }}
+        token: ${{ github.token }}
                
         # The message to use when committing changes.
         commit-message: Updating versions to ${{ github.event.inputs.version }}.
