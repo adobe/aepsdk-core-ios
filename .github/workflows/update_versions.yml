@@ -1,8 +1,13 @@
 # This is a basic workflow that is manually triggered
 
+# IMPORTANT!
+# For this repo which contains AEPCore, AEPIdentity, AEPLifecycle, AEPServices, and AEPSignal, it is assumed
+# that when the version is updated for AEPCore, all other extensions (excluding AEPServices) will also
+# have their minimum dependencies updated to the same new version.
+
 name: Update Versions
 
-# Controls when the action will run. Workflow runs when manually triggered using the UIk
+# Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
   workflow_dispatch:
@@ -15,9 +20,9 @@ on:
       branch:
         description: 'Branch to be used when updating versions'
         required: true
-
-      core-dependency:
-        description: 'If a version is provided, update AEPCore dependency in podspec and Package.swift'
+      
+      rules-engine-dependency:
+        description: 'If a version is provided, update AEPRulesEngine dependency in podspec and Package.swift'
         required: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -33,17 +38,17 @@ jobs:
       with:
         ref: ${{ github.event.inputs.branch }}
     
-    - name: Update AEPCore
-      run: (sh ./Script/update-versions.sh -n Core -v ${{ github.event.inputs.version }} -d "AEPRulesEngine 1.2.0, AEPServices ${{ github.event.inputs.version }}")
+    - if: ${{ github.event.inputs.rules-engine-dependency != '' }}
+      name: Update AEPCore
+      run: (sh ./Script/update-versions.sh -n Core -v ${{ github.event.inputs.version }} -d "AEPRulesEngine ${{ github.event.inputs.rules-engine-dependency }}, AEPServices ${{ github.event.inputs.version }}")
 
-    - if: ${{ github.event.inputs.core-dependency != '' }}
-      name: Update AEPIdentity
-      run: (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}")
-      
-    - if: ${{ github.event.inputs.core-dependency == '' }}
-      name: Update AEPIdentity
-      run: (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }})
-      
+    - if: ${{ github.event.inputs.rules-engine-dependency == '' }}
+      name: Update AEPCore (no update to Rules Engine dependency)
+      run: (sh ./Script/update-versions.sh -n Core -v ${{ github.event.inputs.version }} -d "AEPServices ${{ github.event.inputs.version }}")
+
+    - name: Update AEPIdentity
+      run: (sh ./Script/update-versions.sh -n Identity -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
+
     - name: Update AEPLifecycle
       run: (sh ./Script/update-versions.sh -n Lifecycle -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
 
@@ -52,26 +57,13 @@ jobs:
       
     - name: Update AEPSignal
       run: (sh ./Script/update-versions.sh -n Signal -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.version }}")
-      
+
     - name: Create Pull Request
-      # You may pin to the exact commit or the version.
-      # uses: peter-evans/create-pull-request@2b011faafdcbc9ceb11414d64d0573f37c774b04
       uses: peter-evans/create-pull-request@v4.2.3
       with:
-        # GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)
         token: ${{ github.token }}
-               
-        # The message to use when committing changes.
         commit-message: Updating versions to ${{ github.event.inputs.version }}.
-        
-        # The pull request branch name.
         branch: version-${{ github.event.inputs.version }}-update
-        
-        # Delete the `branch` when closing pull requests, and when undeleted after merging. Recommend `true`.
         delete-branch: true
-                        
-        # The title of the pull request.
         title: Updating versions to ${{ github.event.inputs.version }}
-        
-        # The body of the pull request.
         body: Updating versions to ${{ github.event.inputs.version }}

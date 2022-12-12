@@ -31,7 +31,7 @@ help()
    echo ""
    echo -e "    -n\t- Name of the extension getting a version update. \n\t  Example: Edge, Analytics\n"
    echo -e "    -v\t- New version to use for the extension. \n\t  Example: 3.0.2\n"
-   echo -e "    -d (optional)\t- Dependency(ies) that require updating in the extension's podspec and Package.swift file. \n\t  Example: -d \"AEPCore 3.7.3\" (means update the dependency on AEPCore to version 3.7.3 or newer)\n"
+   echo -e "    -d (optional)\t- Dependency(ies) that require updating in the extension's podspec and Package.swift file. \n\t  Example: -d \"AEPCore 3.7.3\" (update the dependency on AEPCore to version 3.7.3 or newer)\n"
    exit 1 # Exit script after printing help
 }
 
@@ -66,7 +66,7 @@ echo "$LINE"
 echo "Changing value of 's.version' to '$NEW_VERSION' in '$PODSPEC_FILE'"
 sed -i '' -E "/^ *s.version/{s/$VERSION_REGEX/$NEW_VERSION/;}" $PODSPEC_FILE
 
-# Replace dependencies in podspec
+# Replace dependencies in podspec and Package.swift
 if [ "$DEPENDENCIES" != "none" ]; then
     IFS="," 
     dependenciesArray=($(echo "$DEPENDENCIES"))
