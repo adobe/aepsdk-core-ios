@@ -24,7 +24,7 @@ class AtomicCounterTests: XCTestCase {
         var counter = 0
         let finalCount = 50
         for _ in 0 ..< finalCount {
-           counter = atomicCounter.incrementAndGet()
+            counter = atomicCounter.incrementAndGet()
         }
         
         XCTAssertEqual(counter, finalCount)
