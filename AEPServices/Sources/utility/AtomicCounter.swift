@@ -12,11 +12,17 @@
 import Foundation
 
 public final class AtomicCounter {
-    private var count: Int32 = 0
+    private var count: Int = 0
+    private var lock = DispatchSemaphore(value: 1)
 
     public init() {}
 
     public func incrementAndGet() -> Int {
-        return Int(OSAtomicIncrement32(&count))
+        lock.wait()
+        defer {
+            lock.signal()
+        }
+        count += 1
+        return count
     }
 }
