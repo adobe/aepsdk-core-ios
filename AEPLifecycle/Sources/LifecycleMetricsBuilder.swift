@@ -69,7 +69,10 @@ class LifecycleMetricsBuilder {
                 return self
             }
 
-            lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
+            if daysSinceFirstLaunch >= 0 {
+                lifecycleMetrics.daysSinceFirstLaunch = daysSinceFirstLaunch
+            }
+
             lifecycleMetrics.previousOsVersion = prevOsVersion
             lifecycleMetrics.previousAppId = prevAppId
         }
@@ -79,7 +82,10 @@ class LifecycleMetricsBuilder {
                 return self
             }
 
-            lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
+            if daysSinceLastLaunch >= 0 {
+                lifecycleMetrics.daysSinceLastLaunch = daysSinceLastLaunch
+            }
+
             let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
             let lastLaunchDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastLaunchDate)
             // Check if we have launched this month already
@@ -125,14 +131,12 @@ class LifecycleMetricsBuilder {
     func addUpgradeData(upgrade: Bool) -> LifecycleMetricsBuilder {
         if upgrade {
             lifecycleMetrics.upgradeEvent = true
-        }
-
-        if upgrade {
             dataStore.setObject(key: KEYS.UPGRADE_DATE, value: date)
             dataStore.set(key: KEYS.LAUNCHES_SINCE_UPGRADE, value: 0)
         } else if let upgradeDate: Date = dataStore.getObject(key: KEYS.UPGRADE_DATE) {
-            let daysSinceLastUpgrade = Calendar.current.dateComponents([.day], from: upgradeDate, to: date).day
-            lifecycleMetrics.daysSinceLastUpgrade = daysSinceLastUpgrade
+            if let daysSinceLastUpgrade = Calendar.current.dateComponents([.day], from: upgradeDate, to: date).day, daysSinceLastUpgrade >= 0 {
+                lifecycleMetrics.daysSinceLastUpgrade = daysSinceLastUpgrade
+            }
             if var launchesSinceUpgrade = dataStore.getInt(key: KEYS.LAUNCHES_SINCE_UPGRADE, fallback: 0) {
                 launchesSinceUpgrade += 1
                 dataStore.set(key: KEYS.LAUNCHES_SINCE_UPGRADE, value: launchesSinceUpgrade)
