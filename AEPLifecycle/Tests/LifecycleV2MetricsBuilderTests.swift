@@ -38,10 +38,13 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     
     override func setUp() {
         buildAndSetMockInfoService()
+        continueAfterFailure = true
     }
     
+    private let mockSystemInfoService = MockSystemInfoService()
+
     private func buildAndSetMockInfoService() {
-        let mockSystemInfoService = MockSystemInfoService()
+        //let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.appId = "test-app-id"
         mockSystemInfoService.applicationName = "test-app-name"
         mockSystemInfoService.applicationBuildNumber = "build-number"
@@ -182,6 +185,52 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
     }
+    
+    // List of tests for verifying getFormattedLocaleBCPString function
+    // [$0: Locale identifier string to test, $1: expected result on iOS 16+, $2: expected result on iOS less than 16]
+    let localeBCPStringTests = [
+        ("es-US", "es-US", "es-US"), // language + region
+        ("en_US", "en-US", "en-US"), // language + region (underscore)
+        ("de", "de", "de"), // language only
+        ("-US", "und-US", nil), // region only
+        ("--POSIX", "und-u-va-posix", nil), // variant only
+        ("und", "und", "und"), // undefined
+        ("de-POSIX", "de-u-va-posix", "de"), // language + variant
+        ("de--POSIX", "de-u-va-posix", "de"), // language + variant (double hyphen)
+        ("de-DE-POSIX", "de-DE-u-va-posix", "de-DE"), // language + region + variant
+        ("de-Latn-DE-POSIX", "de-DE-u-va-posix", "de-DE"), // language + script + region + variant
+        ("zh-Hant-HK", "zh-Hant-HK", "zh-HK"), // Chinese Hong Kong
+        ("zh-Hans-CN", "zh-Hans-CN", "zh-CN"), // Chinese China
+        ("zh-Hans", "zh-Hans", "zh"), // language + script
+        ("-Hans-CN", "und-Hans-CN", nil), // script + region
+        ("no-NO-NY", "no-NO-x-lvariant-ny", "no-NO"), // Norwegian Nynorsk (special case)
+        ("sr-Latn-ME", "sr-Latn-ME", "sr-ME"), // Serbian Montenegro
+        ("it-Latn", "it", "it"), // langauge + variant
+        ("ja-JP-JP", "ja-JP-x-lvariant-jp", "ja-JP"), // Japanese (special case)
+        ("ja-JP-u-ca-japanese", "ja-JP-u-ca-japanese", "ja-JP"), // Japanese calendar BCP
+        ("ja-JP@calendar=japanese", "ja-JP-u-ca-japanese", "ja-JP"), // Japanese calender ICU
+        ("TH-TH-TH", "th-TH-x-lvariant-th", "th-TH"), // Thai (special case)
+        ("th-TH-u-ca-buddhist", "th-TH-u-ca-buddhist", "th-TH"), // Thai buddhist calendar BCP
+        ("th-TH@calendar=buddhist", "th-TH-u-ca-buddhist", "th-TH"), // Thai buddhist calendar ICU
+        ("en-US@calendar=buddhist", "en-US-u-ca-buddhist", "en-US"), // English US buddhist calendar ICU
+        ("en@calendar=buddhist;numbers=thai", "en-u-ca-buddhist-nu-thai", "en"), // English buddhist calendar with Thai numbers
+        ("i-klingon", "tlh", "tlh") // Grandfathered case Klingon
+    ]
+    
+    func testGetFormattedLocaleBCPString() {
+        XCTAssertFalse(localeBCPStringTests.isEmpty)
+        
+        localeBCPStringTests.forEach {
+            mockSystemInfoService.activeLocaleName = $0
+            let result = mockSystemInfoService.getFormattedLocaleBCPString()
+            if #available(iOS 16, *) {
+                XCTAssertEqual($1, result, "Locale '\($0)' failed on iOS 16 or greater!")
+            } else {
+                XCTAssertEqual($2, result, "Locale '\($0)' failed on iOS less than 16!")
+            }
+        }
+    }
+    
 }
 
 private extension Date {
