@@ -87,7 +87,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(metrics?.previousOsVersion, osVersion)
         XCTAssertEqual(metrics?.previousAppId, appID)
     }
-    
+
     // Tests that adding an invalid timestamp will not lead to negative values for the dayssincelastuse
     func testAddLaunchDataInvalidTimestamp() {
         // Adding a day to current date will make us go into the future and create a negative value for last launch and first launch
@@ -158,7 +158,7 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         XCTAssertEqual(dataStore?.setIntValues[0], launchesSinceLastUpgrade)
         XCTAssertEqual(metrics?.launchesSinceUpgrade, launchesSinceLastUpgrade)
     }
-    
+
     func testUpgradeWithInvalidTimestamp() {
         let futureDaysSinceUpgradeDate = Calendar.current.date(byAdding: .day, value: 1, to: date)
         dataStore?.getObjectValues.append(futureDaysSinceUpgradeDate!)
