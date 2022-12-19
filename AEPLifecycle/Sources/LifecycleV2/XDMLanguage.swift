@@ -35,7 +35,7 @@ struct XDMLanguage: Encodable {
     /// Validate the language tag is formatted per the XDM Environment Schema pattern.
     /// - Parameter tag: the language tag to validate
     /// - Returns: true if the language tag matches the pattern
-    static func isValidLanguageTag(tag: String) -> Bool {
+    private static func isValidLanguageTag(tag: String) -> Bool {
         return tag.range(of: languageRegex, options: .regularExpression) != nil
     }
 }
