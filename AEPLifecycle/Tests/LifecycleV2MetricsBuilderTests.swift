@@ -204,7 +204,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         ("-Hans-CN", nil), // script + region
         ("no-NO-NY", "no-NO"), // Norwegian Nynorsk (special case)
         ("sr-Latn-ME", "sr-ME"), // Serbian Montenegro
-        ("it-Latn", "it"), // langauge + variant
+        ("it-Latn", "it"), // language + variant
         ("ja-JP-JP", "ja-JP"), // Japanese (special case)
         ("ja-JP-u-ca-japanese", "ja-JP"), // Japanese calendar BCP
         ("ja-JP@calendar=japanese", "ja-JP"), // Japanese calender ICU

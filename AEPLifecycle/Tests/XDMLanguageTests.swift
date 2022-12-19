@@ -65,7 +65,7 @@ class XDMLanguageTests: XCTestCase {
 
     // MARK: isValidLanguageTag tests
 
-    // List of test langauge strings to verify isValidLanguageTag function
+    // List of test language strings to verify isValidLanguageTag function
     // [$0: language string to test, $1: expected is valid]
     let isValidLanguageTagCases = [
         ("en-US", true),
