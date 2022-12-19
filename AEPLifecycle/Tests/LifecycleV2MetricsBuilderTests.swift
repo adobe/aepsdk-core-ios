@@ -223,7 +223,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         localeBCPStringTests.forEach {
             mockSystemInfoService.activeLocaleName = $0
             let result = mockSystemInfoService.getFormattedLocaleBCPString()
-                XCTAssertEqual($1, result, "Locale '\($0)' failed!")
+            XCTAssertEqual($1, result, "Locale '\($0)' failed!")
         }
     }
     
