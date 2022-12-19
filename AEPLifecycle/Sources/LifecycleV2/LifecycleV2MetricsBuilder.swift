@@ -167,25 +167,23 @@ class LifecycleV2MetricsBuilder {
 
 extension SystemInfoService {
 
-    /// Return a BCP-47 style formatted string for the given 'locale' identifier. The default locale is 'Locale.autoupdatingCurrent'.
-    /// - Return:  'String' representation of the given 'locale' using BCP-47 style formatting
+    /// Return a string for the given 'locale' identifier.
+    /// Uses the format "`Locale.languageCode`-`Locale.regionCode`".
+    /// The default locale is 'Locale.autoupdatingCurrent'.
+    /// - Return:  'String' representation of the given 'locale', or nil if no language code is set.
     func getFormattedLocaleBCPString() -> String? {
         let locale = Locale(identifier: getActiveLocaleName())
 
-        if #available(iOS 16, *) {
-            return locale.identifier(.bcp47)
-        } else {
-            let language = locale.languageCode
-            let region = locale.regionCode
+        let language = locale.languageCode
+        let region = locale.regionCode
 
-            if let language = language {
-                if let region = region {
-                    return language + "-" + region
-                }
-                return language
+        if let language = language {
+            if let region = region {
+                return language + "-" + region
             }
-
-            return nil
+            return language
         }
+
+        return nil
     }
 }
