@@ -65,55 +65,61 @@ class XDMLanguageTests: XCTestCase {
 
     // MARK: isValidLanguageTag tests
 
-    // List of test language strings to verify isValidLanguageTag function
-    // [$0: language string to test, $1: expected is valid]
-    let isValidLanguageTagCases = [
-        ("en-US", true),
-        ("en", true),
-        ("und-US", true),
-        ("und-u-va-posix", true),
-        ("und-POSIX", true),
-        ("und", true),
-        ("de-u-va-posix", true),
-        ("de-DE-u-va-posix", true),
-        ("de-DE-POSIX", true),
-        ("de-POSIX", true),
-        ("de-Latn-POSIX", true),
-        ("zh-Hant-HK", true),
-        ("und-Hans-CN", true),
-        ("no-NO-x-lvariant-ny", true),
-        ("sr-Latn-ME", true),
-        ("sr-ME-x-lvariant-Latn", true),
-        ("ja-JP-x-lvariant-jp", true),
-        ("ja-JP-u-ca-japanese", true),
-        ("th-TH-x-lvariant-th", true),
-        ("th-TH-u-ca-buddhist", true),
-        ("en-u-ca-buddhist-nu-thai", true),
-        ("th-TH-u-ca-buddhist-nu-thai", true),
-        ("i-klingon", true),
-        ("en@calendar=buddhist;numbers=thai", false),
-        ("en-US@calendar=buddhist", false),
-        ("-US", false),
-        ("en_US", false),
-        ("de--POSIX", false),
-        ("zh-HK#Hant", false),
-        ("th-TH-TH-#u-nu-thai", false),
-        ("", false)
+    // List of test language strings to verify isValidLanguageTag positive function
+    let isValidLanguageTagCasesTrue = [
+        ("en-US"),
+        ("en"),
+        ("und-US"),
+        ("und-u-va-posix"),
+        ("und-POSIX"),
+        ("und"),
+        ("de-u-va-posix"),
+        ("de-DE-u-va-posix"),
+        ("de-DE-POSIX"),
+        ("de-POSIX"),
+        ("de-Latn-POSIX"),
+        ("zh-Hant-HK"),
+        ("und-Hans-CN"),
+        ("no-NO-x-lvariant-ny"),
+        ("sr-Latn-ME"),
+        ("sr-ME-x-lvariant-Latn"),
+        ("ja-JP-x-lvariant-jp"),
+        ("ja-JP-u-ca-japanese"),
+        ("th-TH-x-lvariant-th"),
+        ("th-TH-u-ca-buddhist"),
+        ("en-u-ca-buddhist-nu-thai"),
+        ("th-TH-u-ca-buddhist-nu-thai"),
+        ("i-klingon")
     ]
 
-    func testIsValidLanguageTag() throws {
-        XCTAssertFalse(isValidLanguageTagCases.isEmpty)
+    func testIsValidLanguageTag_positiveCases() throws {
+        XCTAssertFalse(isValidLanguageTagCasesTrue.isEmpty)
 
-        isValidLanguageTagCases.forEach {
+        isValidLanguageTagCasesTrue.forEach {
             let lang = XDMLanguage(language: $0)
-            if $1 {
-                XCTAssertEqual($0, lang.language, "Expected input language '\($0)' to be valid.")
-            } else {
-                XCTAssertNil(lang.language, "Expected input language '\($0)' to be invalid.")
-            }
+            XCTAssertEqual($0, lang.language, "Expected input language '\($0)' to be valid.")
         }
+    }
 
+    // List of test language strings to verify isValidLanguageTag negative function
+    let isValidLanguageTagCasesFalse = [
+        ("en@calendar=buddhist;numbers=thai"),
+        ("en-US@calendar=buddhist"),
+        ("-US"),
+        ("en_US"),
+        ("de--POSIX"),
+        ("zh-HK#Hant"),
+        ("th-TH-TH-#u-nu-thai"),
+        ("")
+    ]
 
+    func testIsValidLanguageTag_negativeCases() throws {
+        XCTAssertFalse(isValidLanguageTagCasesFalse.isEmpty)
+
+        isValidLanguageTagCasesFalse.forEach {
+            let lang = XDMLanguage(language: $0)
+            XCTAssertNil(lang.language, "Expected input language '\($0)' to be invalid.")
+        }
     }
 
 }
