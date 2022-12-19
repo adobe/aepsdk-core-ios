@@ -44,7 +44,6 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     private let mockSystemInfoService = MockSystemInfoService()
 
     private func buildAndSetMockInfoService() {
-        //let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.appId = "test-app-id"
         mockSystemInfoService.applicationName = "test-app-name"
         mockSystemInfoService.applicationBuildNumber = "build-number"

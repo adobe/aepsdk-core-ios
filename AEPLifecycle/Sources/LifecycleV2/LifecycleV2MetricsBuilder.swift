@@ -169,7 +169,7 @@ extension SystemInfoService {
 
     /// Return a string for the given 'locale' identifier.
     /// Uses the format "`Locale.languageCode`-`Locale.regionCode`".
-    /// The default locale is 'Locale.autoupdatingCurrent'.
+    /// The default locale is taken from `SystemInfoService.getActiveLocaleName()`.
     /// - Return:  'String' representation of the given 'locale', or nil if no language code is set.
     func getFormattedLocaleBCPString() -> String? {
         let locale = Locale(identifier: getActiveLocaleName())
