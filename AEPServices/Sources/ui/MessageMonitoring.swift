@@ -15,24 +15,34 @@
     /// This protocol is used to monitor if an UI message is displayed at some point in time, currently this applies for full screen and alert messages.
     /// The status is exposed through isMessageDisplayed.
     protocol MessageMonitoring {
-        /// - Returns: True if the message is being displayed else false
+        /// - Returns: `true` if a message is being displayed
         func isMessageDisplayed() -> Bool
 
-        /// Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
-        /// in the same time.
+        /// Sets the isMessageDisplayed flag to true so other UI messages will not be displayed at the same time.
         func displayMessage()
 
-        /// Sets the isMessageDisplayed flag on true so other UI messages will not be displayed
-        /// in the same time.
+        /// Sets the isMessageDisplayed flag to false
         func dismissMessage()
 
-        /// Check if any message is being displayed already or if the message should be shown based on `MessagingDelegate`
-        /// - Parameters:UIMessaging message which needs to be shown
-        /// - Returns: True if message needs to be shown false otherwise
+        /// Determines whether the provided `message` should be shown.
+        /// If a UI message is already showing, this method will return `false`.
+        /// If `MobileCore.messagingDelegate` exists, this method will call its `shouldShowMessage(:)` method.
+        /// - Parameter message: `Showable` message to be shown
+        /// - Returns: `true` if message needs to be shown
         func show(message: Showable) -> Bool
 
-        // Check if the message is being displayed and call invoke the appropriate listeners
-        /// - Returns: True if message needs to be dismissed false otherwise
+        /// Determines whether the provided `message` should be shown.
+        /// If a UI message is already showing, this method will return `false`.
+        /// If `delegateControl` is `true` and `MobileCore.messagingDelegate` exists,
+        ///   this method will call the delegate's `shouldShowMessage(:)` method.
+        /// - Parameters:
+        ///   - message: `Showable` message to be shown
+        ///   - delegateControl: If set to `true`, the `MessagingDelegate` will control whether the message should be shown.
+        /// - Returns: `true` if message needs to be shown
+        func show(message: Showable, delegateControl: Bool) -> Bool
+
+        /// Check if the message is being displayed and call invoke the appropriate listeners
+        /// - Returns: `true` if message needs to be dismissed
         func dismiss() -> Bool
     }
 #endif
