@@ -20,15 +20,16 @@ struct XDMLanguage: Encodable {
     let language: String?
 
     init(language: String?) {
-        if let language = language {
-            if XDMLanguage.isValidLanguageTag(tag: language) {
-                self.language = language
-            } else {
-                self.language = nil
-                Log.warning(label: LifecycleConstants.LOG_TAG, "Language tag \(language) failed validation and will be dropped. Values for XDM field 'environment._dc.language' must conform to BCP 47.")
-            }
+        guard let language = language else {
+            self.language = nil
+            return
+        }
+
+        if XDMLanguage.isValidLanguageTag(tag: language) {
+            self.language = language
         } else {
             self.language = nil
+            Log.warning(label: LifecycleConstants.LOG_TAG, "Language tag \(language) failed validation and will be dropped. Values for XDM field 'environment._dc.language' must conform to BCP 47.")
         }
     }
 
