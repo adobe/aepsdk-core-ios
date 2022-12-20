@@ -38,10 +38,12 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     
     override func setUp() {
         buildAndSetMockInfoService()
+        continueAfterFailure = true
     }
     
+    private let mockSystemInfoService = MockSystemInfoService()
+
     private func buildAndSetMockInfoService() {
-        let mockSystemInfoService = MockSystemInfoService()
         mockSystemInfoService.appId = "test-app-id"
         mockSystemInfoService.applicationName = "test-app-name"
         mockSystemInfoService.applicationBuildNumber = "build-number"
@@ -182,6 +184,48 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
     }
+    
+    // List of tests for verifying getFormattedLocaleBCPString function
+    // [$0: Locale identifier string to test, $1: expected result]
+    let localeBCPStringTests = [
+        ("es-US", "es-US"), // language + region
+        ("en_US", "en-US"), // language + region (underscore)
+        ("de", "de"), // language only
+        ("-US", nil), // region only
+        ("--POSIX", nil), // variant only
+        ("und", "und"), // undefined
+        ("de-POSIX", "de"), // language + variant
+        ("de--POSIX", "de"), // language + variant (double hyphen)
+        ("de-DE-POSIX", "de-DE"), // language + region + variant
+        ("de-Latn-DE-POSIX", "de-DE"), // language + script + region + variant
+        ("zh-Hant-HK", "zh-HK"), // Chinese Hong Kong
+        ("zh-Hans-CN", "zh-CN"), // Chinese China
+        ("zh-Hans", "zh"), // language + script
+        ("-Hans-CN", nil), // script + region
+        ("no-NO-NY", "no-NO"), // Norwegian Nynorsk (special case)
+        ("sr-Latn-ME", "sr-ME"), // Serbian Montenegro
+        ("it-Latn", "it"), // language + variant
+        ("ja-JP-JP", "ja-JP"), // Japanese (special case)
+        ("ja-JP-u-ca-japanese", "ja-JP"), // Japanese calendar BCP
+        ("ja-JP@calendar=japanese", "ja-JP"), // Japanese calender ICU
+        ("TH-TH-TH", "th-TH"), // Thai (special case)
+        ("th-TH-u-ca-buddhist", "th-TH"), // Thai buddhist calendar BCP
+        ("th-TH@calendar=buddhist", "th-TH"), // Thai buddhist calendar ICU
+        ("en-US@calendar=buddhist", "en-US"), // English US buddhist calendar ICU
+        ("en@calendar=buddhist;numbers=thai", "en"), // English buddhist calendar with Thai numbers
+        ("i-klingon", "tlh") // Grandfathered case Klingon
+    ]
+    
+    func testGetFormattedLocaleBCPString() {
+        XCTAssertFalse(localeBCPStringTests.isEmpty)
+        
+        localeBCPStringTests.forEach {
+            mockSystemInfoService.activeLocaleName = $0
+            let result = mockSystemInfoService.getFormattedLocaleBCPString()
+            XCTAssertEqual($1, result, "Locale '\($0)' failed!")
+        }
+    }
+    
 }
 
 private extension Date {
