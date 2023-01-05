@@ -132,6 +132,7 @@
 		2E36F6CA26C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */; };
 		2EF8B38226BCC69C009D6475 /* LifecycleV2DataStoreCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8B38126BCC69C009D6475 /* LifecycleV2DataStoreCache.swift */; };
 		3080C53E015AAAF2AC268368 /* Pods_AEPIdentityTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE1AFF2E227272FC92CF7ABE /* Pods_AEPIdentityTests.framework */; };
+		31DF174F297030D300B4B07F /* MockLoggingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DF174E297030D300B4B07F /* MockLoggingService.swift */; };
 		380ECFBFE9B4654A66A8F119 /* Pods_AEPIntegrationTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D855F28C43DD8DA6A4B6ACFE /* Pods_AEPIntegrationTests.framework */; };
 		3F03979024BE5DD30019F095 /* AEPServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F03978724BE5DD30019F095 /* AEPServices.framework */; };
 		3F0397C324BE5FF30019F095 /* Caching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0397A024BE5FF30019F095 /* Caching.swift */; };
@@ -789,6 +790,7 @@
 		2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2DataStoreCacheTests.swift; sourceTree = "<group>"; };
 		2EE8956F25F8D2BD27B6D4D8 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
 		2EF8B38126BCC69C009D6475 /* LifecycleV2DataStoreCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2DataStoreCache.swift; sourceTree = "<group>"; };
+		31DF174E297030D300B4B07F /* MockLoggingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoggingService.swift; sourceTree = "<group>"; };
 		39282143E012E30EEE6674F2 /* Pods_AEPCoreTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DCBEB2BB8208D5CED73869A /* Pods-AEPCoreTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3F03978724BE5DD30019F095 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1510,6 +1512,7 @@
 				24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */,
 				215C859C24C6492800CCCD26 /* MockHitProcessor.swift */,
 				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
+				31DF174E297030D300B4B07F /* MockLoggingService.swift */,
 				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
 				3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */,
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
@@ -3389,6 +3392,7 @@
 				92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */,
 				3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */,
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
+				31DF174F297030D300B4B07F /* MockLoggingService.swift in Sources */,
 				24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */,
 				3FE6DDF124C62F610065EA05 /* MockNetworkServiceOverrider.swift in Sources */,
 			);
