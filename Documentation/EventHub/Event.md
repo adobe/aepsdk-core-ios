@@ -13,7 +13,7 @@ This document outlines the specification for an Event Hub `Event`. These events 
 | data       | [String: Any]? | Dictionary holding one or more key value pairs that are associated with the event. |
 | timestamp  | Date           | The time that this event was generated                       |
 | responseID | UUID?          | If this event was generated in response to a previous event, this value holds the `id` of the triggering event. |
-| mask       | [String]       | Specifies the properties in the Event and its data that should be used in the hash for `EventHistory` storage. |
+| mask       | [String]       | Specifies the properties in the Event data that should be used in the hash for `EventHistory` storage. |
 | eventHash  | UInt32         | A calculated hash that represents this Event as defined by its properties and the provided `mask`. |
 
 ### Event Type
