@@ -34,6 +34,7 @@ public class ServiceProvider {
     private var defaultDataQueueService = DataQueueService()
     private var overrideCacheService: Caching?
     private var defaultCacheService = DiskCacheService()
+    private var overrideLoggingService: Logging?
     private var defaultLoggingService = LoggingService()
 
     // Don't allow init of ServiceProvider outside the class
@@ -99,8 +100,15 @@ public class ServiceProvider {
     }
 
     public var loggingService: Logging {
-        return queue.sync {
-            return defaultLoggingService
+        get {
+            return queue.sync {
+                return overrideLoggingService ?? defaultLoggingService
+            }
+        }
+        set {
+            queue.async {
+                self.overrideLoggingService = newValue
+            }
         }
     }
 
@@ -117,6 +125,7 @@ public class ServiceProvider {
             self.overrideKeyValueService = nil
             self.overrideNetworkService = nil
             self.overrideCacheService = nil
+            self.overrideLoggingService = nil
         }
     }
 }

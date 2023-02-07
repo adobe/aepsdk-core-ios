@@ -69,6 +69,19 @@ class ServiceProviderTests: XCTestCase {
         XCTAssertTrue(ServiceProvider.shared.cacheService is DiskCacheService)
     }
     
+    func testOverridingLoggingService() {
+        let mockLoggingService = MockLoggingService()
+        ServiceProvider.shared.loggingService = mockLoggingService
+        XCTAssertEqual(Unmanaged.passUnretained(mockLoggingService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.loggingService as! MockLoggingService).toOpaque())
+    }
+    
+    func testResettingLoggingService() {
+        let mockLoggingService = MockLoggingService()
+        ServiceProvider.shared.loggingService = mockLoggingService
+        ServiceProvider.shared.reset()
+        XCTAssertTrue(ServiceProvider.shared.loggingService is LoggingService)
+    }
+    
     #if os(iOS)
         func testOverridingAppOnlyServices() {
             let mockUIService = MockUIService()
