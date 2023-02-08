@@ -72,7 +72,7 @@ When launched, if an app is resuming from a backgrounded state, iOS might call t
 
 ```swift
 func applicationWillEnterForeground(_ application: UIApplication) {  
- AEPCore.lifecycleStart(nil)
+ MobileCore.lifecycleStart(nil)
 }
 ```
 
@@ -80,7 +80,7 @@ When the app enters the background, pause Lifecycle data collection from an app'
 
 ```swift
 func applicationDidEnterBackground(_ application: UIApplication) {  
- AEPCore.lifecyclePause()
+ MobileCore.lifecyclePause()
 }
 ```
 
