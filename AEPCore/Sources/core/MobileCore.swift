@@ -40,7 +40,6 @@ public final class MobileCore: NSObject {
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
 
     public static func start(with appID: String,
-                             usingSceneDelegate: Bool,
                              logLevel: LogLevel? = nil,
                              configUpdates: [String: Any]? = nil,
                              additionalContextData: [String: Any]? = nil,
@@ -61,6 +60,13 @@ public final class MobileCore: NSObject {
             
             // If disableLifecycleStart flag is non nil and true, set lifecycle notification listeners
             guard let disableLifecycleStart = disableLifecycleStart, disableLifecycleStart == true else {
+                var usingSceneDelegate = false
+                if #available(iOS 13, *) {
+                    let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
+                    if !sceneDelegateClasses.isEmpty {
+                        usingSceneDelegate = true
+                    }
+                }
                 setupLifecycle(usingSceneDelegate: usingSceneDelegate, applicationState: nil, additionalContextData: additionalContextData)
                 return
             }
