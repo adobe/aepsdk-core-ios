@@ -12,6 +12,7 @@
 
 import AEPServices
 import Foundation
+import UIKit
 
 /// Core extension for the Adobe Experience Platform SDK
 @objc(AEPMobileCore)
@@ -37,6 +38,33 @@ public final class MobileCore: NSObject {
 
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
+
+    public static func start(with appID: String,
+                             logLevel: LogLevel? = nil,
+                             configUpdates: [String: Any]? = nil,
+                             additionalContextData: [String: Any]? = nil,
+                             disableLifecycleStart: Bool? = nil,
+                             applicationState: UIApplication.State? = nil
+                             ) {
+        if let logLevel = logLevel {
+            setLogLevel(logLevel)
+        }
+        // Register Extensions, call configureWithAppId from callback
+        let classList = ClassFinder.classes(conformToProtocol: Extension.self)
+        let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
+        registerExtensions(filteredClassList) {
+            configureWith(appId: appID)
+            if let configUpdates = configUpdates {
+                updateConfigurationWith(configDict: configUpdates)
+            }
+            
+            // If disableLifecycleStart flag is non nil and true, set lifecycle notification listeners
+            guard let disableLifecycleStart = disableLifecycleStart, disableLifecycleStart == true else {
+                setupLifecycle(with: applicationState, additionalContextData: additionalContextData)
+                return
+            }
+        }
+    }
 
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered
@@ -220,5 +248,28 @@ public final class MobileCore: NSObject {
         let eventData = [CoreConstants.Signal.EventDataKeys.CONTEXT_DATA: data]
         let event = Event(name: CoreConstants.EventNames.COLLECT_PII, type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
         MobileCore.dispatch(event: event)
+    }
+    
+    private static func setupLifecycle(with applicationState: UIApplication.State? = nil, additionalContextData: [String: Any]? = nil) {
+        // TODO: - This is counting on this function being called from the didFinishLaunchingWithOptions, or assuming that when this is called, lifecycle start is starting.
+        if applicationState != .background {
+            self.lifecycleStart(additionalContextData: additionalContextData)
+        }
+        
+        NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
+            Log.trace(label: LOG_TAG, "didEnterBackground notification triggered")
+            self.lifecyclePause()
+        }
+    
+        if #available(iOS 13.0, *) {
+            NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil) { _ in
+                Log.trace(label: LOG_TAG, "UIScene willEnterForeground notification triggered with app state: \(String(describing: applicationState))")
+                self.lifecycleStart(additionalContextData: additionalContextData)
+            }
+            NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
+                Log.trace(label: LOG_TAG, "UIScene didEnterBackground notification triggered")
+                self.lifecyclePause()
+            }
+        }
     }
 }

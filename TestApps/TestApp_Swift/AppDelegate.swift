@@ -25,18 +25,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let appState = application.applicationState
-        MobileCore.setLogLevel(.trace)
-        let extensions = [Identity.self,
-                          Lifecycle.self,
-                          Signal.self]
-
-        MobileCore.registerExtensions(extensions, {
-            MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
-
-            if appState != .background {
-                MobileCore.lifecycleStart(additionalContextData: nil)
-            }
-        })
+//        MobileCore.setLogLevel(.trace)
+//        let extensions = [Identity.self,
+//                          Lifecycle.self,
+//                          Signal.self]
+//
+//        MobileCore.registerExtensions(extensions, {
+//            MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
+//
+//            if appState != .background {
+//                MobileCore.lifecycleStart(additionalContextData: nil)
+//            }
+//        })
+        MobileCore.start(with: LAUNCH_ENVIRONMENT_FILE_ID, logLevel: .trace, configUpdates: nil, additionalContextData: nil, disableLifecycleStart: false, applicationState: appState)
         return true
     }
 
