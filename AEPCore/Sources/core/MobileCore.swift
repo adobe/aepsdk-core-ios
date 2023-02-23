@@ -257,11 +257,9 @@ public final class MobileCore: NSObject {
             
             if #available(iOS 13.0, *) {
                 NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil) { _ in
-                    Log.trace(label: LOG_TAG, "UIScene willEnterForeground notification triggered with app state: \(String(describing: applicationState))")
                     self.lifecycleStart(additionalContextData: additionalContextData)
                 }
                 NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
-                    Log.trace(label: LOG_TAG, "UIScene didEnterBackground notification triggered")
                     self.lifecyclePause()
                 }
             }
@@ -270,8 +268,10 @@ public final class MobileCore: NSObject {
             if applicationState != .background {
                 self.lifecycleStart(additionalContextData: additionalContextData)
             }
+            NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil) { _ in
+                self.lifecycleStart(additionalContextData: additionalContextData)
+            }
             NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
-                Log.trace(label: LOG_TAG, "didEnterBackground notification triggered")
                 self.lifecyclePause()
             }
         }
