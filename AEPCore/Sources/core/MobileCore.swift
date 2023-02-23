@@ -40,6 +40,7 @@ public final class MobileCore: NSObject {
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
 
     public static func start(with appID: String,
+                             usingSceneDelegate: Bool,
                              logLevel: LogLevel? = nil,
                              configUpdates: [String: Any]? = nil,
                              additionalContextData: [String: Any]? = nil,
@@ -60,7 +61,7 @@ public final class MobileCore: NSObject {
             
             // If disableLifecycleStart flag is non nil and true, set lifecycle notification listeners
             guard let disableLifecycleStart = disableLifecycleStart, disableLifecycleStart == true else {
-                setupLifecycle(with: applicationState, additionalContextData: additionalContextData)
+                setupLifecycle(usingSceneDelegate: usingSceneDelegate, applicationState: nil, additionalContextData: additionalContextData)
                 return
             }
         }
@@ -250,24 +251,27 @@ public final class MobileCore: NSObject {
         MobileCore.dispatch(event: event)
     }
     
-    private static func setupLifecycle(with applicationState: UIApplication.State? = nil, additionalContextData: [String: Any]? = nil) {
-        // TODO: - This is counting on this function being called from the didFinishLaunchingWithOptions, or assuming that when this is called, lifecycle start is starting.
-        if applicationState != .background {
+    private static func setupLifecycle(usingSceneDelegate: Bool, applicationState: UIApplication.State? = nil, additionalContextData: [String: Any]? = nil) {
+        if usingSceneDelegate {
             self.lifecycleStart(additionalContextData: additionalContextData)
-        }
-        
-        NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
-            Log.trace(label: LOG_TAG, "didEnterBackground notification triggered")
-            self.lifecyclePause()
-        }
-    
-        if #available(iOS 13.0, *) {
-            NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil) { _ in
-                Log.trace(label: LOG_TAG, "UIScene willEnterForeground notification triggered with app state: \(String(describing: applicationState))")
+            
+            if #available(iOS 13.0, *) {
+                NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil) { _ in
+                    Log.trace(label: LOG_TAG, "UIScene willEnterForeground notification triggered with app state: \(String(describing: applicationState))")
+                    self.lifecycleStart(additionalContextData: additionalContextData)
+                }
+                NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
+                    Log.trace(label: LOG_TAG, "UIScene didEnterBackground notification triggered")
+                    self.lifecyclePause()
+                }
+            }
+        } else {
+            
+            if applicationState != .background {
                 self.lifecycleStart(additionalContextData: additionalContextData)
             }
-            NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
-                Log.trace(label: LOG_TAG, "UIScene didEnterBackground notification triggered")
+            NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
+                Log.trace(label: LOG_TAG, "didEnterBackground notification triggered")
                 self.lifecyclePause()
             }
         }
