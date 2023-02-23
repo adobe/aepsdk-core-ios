@@ -61,7 +61,7 @@ public final class MobileCore: NSObject {
             // If disableLifecycleStart flag is non nil and true, set lifecycle notification listeners
             guard let disableLifecycleStart = disableLifecycleStart, disableLifecycleStart == true else {
                 var usingSceneDelegate = false
-                if #available(iOS 13, *) {
+                if #available(iOS 13.0, tvOS 13.0, *) {
                     let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
                     if !sceneDelegateClasses.isEmpty {
                         usingSceneDelegate = true
@@ -261,7 +261,7 @@ public final class MobileCore: NSObject {
         if usingSceneDelegate {
             self.lifecycleStart(additionalContextData: additionalContextData)
             
-            if #available(iOS 13.0, *) {
+            if #available(iOS 13.0, tvOS 13.0, *) {
                 NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil) { _ in
                     self.lifecycleStart(additionalContextData: additionalContextData)
                 }
