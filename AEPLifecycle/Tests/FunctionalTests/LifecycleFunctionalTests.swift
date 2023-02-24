@@ -303,6 +303,9 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
         let mockRuntimeSession2 = TestableExtensionRuntime()
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
+
         mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
         // test
@@ -421,6 +424,8 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
         let mockRuntimeSession2 = TestableExtensionRuntime()
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
         mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
 
         // test

@@ -16,13 +16,13 @@
     @objc(AEPMessagingDelegate)
     public protocol MessagingDelegate {
 
-        /// Invoked when the any message is displayed
+        /// Invoked when a message is displayed
         /// - Parameters:
         ///     - message: UIMessaging message that is being displayed
         @objc(onShow:)
         func onShow(message: Showable)
 
-        /// Invoked when the any message is dismissed
+        /// Invoked when a message is dismissed
         /// - Parameters:
         ///     - message: UIMessaging message that is being dismissed
         @objc(onDismiss:)
