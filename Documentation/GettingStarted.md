@@ -47,7 +47,7 @@ Lifecycle metrics is an optional, yet valuable feature provided by the Adobe Exp
 
 
 
-Start Lifecycle data collection by calling `lifecycleStart:` from within the callback of `AEPCore.registerExtensions:`.
+Start Lifecycle data collection by calling `lifecycleStart:` from within the callback of `MobileCore.registerExtensions:`.
 
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
