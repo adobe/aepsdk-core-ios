@@ -283,3 +283,34 @@ public final class MobileCore: NSObject {
         }
     }
 }
+
+// Used to test that extension with no calls to it, can still be found with the ClassFinder
+class SampleExtension: NSObject, Extension {
+    var name: String
+    
+    var friendlyName: String
+    
+    static var extensionVersion: String = "1.0.0"
+    
+    var metadata: [String: String]?
+    
+    var runtime: ExtensionRuntime
+    
+    func readyForEvent(_ event: Event) -> Bool {
+        return true
+    }
+    
+    func onRegistered() {
+        
+    }
+    
+    func onUnregistered() {
+        
+    }
+    
+    required init?(runtime: ExtensionRuntime) {
+        self.name = "com.adobe.sampleExtension"
+        self.friendlyName = "SampleExtension"
+        self.runtime = runtime
+    }
+}
