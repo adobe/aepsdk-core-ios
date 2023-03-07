@@ -36,4 +36,8 @@ public class EventSource: NSObject {
     public static let applicationClose = "com.adobe.eventSource.applicationClose"
     public static let personalizationDecisions = "personalization:decisions"
     public static let locationHintResult = "locationHint:result"
+    public static let errorResponseContent = "com.adobe.eventSource.errorResponseContent";
+    public static let requestTracker = "com.adobe.eventSource.requestTracker";
+    public static let trackMedia = "com.adobe.eventSource.trackMedia";
+    public static let sessionCreated = "com.adobe.eventSource.sessionCreated";
 }
