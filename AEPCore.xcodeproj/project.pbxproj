@@ -352,7 +352,9 @@
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
 		75408CF72948EA0A00C44CE1 /* AtomicCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */; };
+		7589FBBA29AD55A400D29950 /* ClassFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7589FBB929AD55A400D29950 /* ClassFinderTests.swift */; };
 		75C53D1A2996DB7600A9EE32 /* ClassFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C53D192996DB7600A9EE32 /* ClassFinder.swift */; };
+		75FC60EA29AD45C200EB7579 /* CoreOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FC60E929AD45C200EB7579 /* CoreOptions.swift */; };
 		7814B23325CB455200841429 /* URL+Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7814B23225CB455200841429 /* URL+Validator.swift */; };
 		786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */; };
 		786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */; };
@@ -1025,7 +1027,9 @@
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicCounterTests.swift; sourceTree = "<group>"; };
+		7589FBB929AD55A400D29950 /* ClassFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassFinderTests.swift; sourceTree = "<group>"; };
 		75C53D192996DB7600A9EE32 /* ClassFinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ClassFinder.swift; path = AEPServices/Sources/utility/ClassFinder.swift; sourceTree = SOURCE_ROOT; };
+		75FC60E929AD45C200EB7579 /* CoreOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreOptions.swift; sourceTree = "<group>"; };
 		7814B23225CB455200841429 /* URL+Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validator.swift"; sourceTree = "<group>"; };
 		786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatter.swift; sourceTree = "<group>"; };
 		786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpConnectionConstants.swift; sourceTree = "<group>"; };
@@ -1750,6 +1754,7 @@
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
 				75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */,
+				7589FBB929AD55A400D29950 /* ClassFinderTests.swift */,
 			);
 			path = utility;
 			sourceTree = "<group>";
@@ -1919,6 +1924,7 @@
 				213F8A0324D8DC5A0003B8AF /* WrapperType.swift */,
 				216A15C7257818B200D43848 /* Data+HexString.swift */,
 				BBA1E96725F0506B00999DD2 /* DataMarshaller.swift */,
+				75FC60E929AD45C200EB7579 /* CoreOptions.swift */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -3104,6 +3110,7 @@
 				3FB66ADF24CA004400502CAF /* ConfigurationConstants.swift in Sources */,
 				3FB66ADE24CA004400502CAF /* Configuration.swift in Sources */,
 				3FB66ADD24CA004400502CAF /* JSONRulesParser.swift in Sources */,
+				75FC60EA29AD45C200EB7579 /* CoreOptions.swift in Sources */,
 				3FB66AD624CA004400502CAF /* EventSource.swift in Sources */,
 				218C813E24EC4101009B4F31 /* V5MigrationConstants.swift in Sources */,
 				3F16761424E1B0630041B970 /* RulesConstants.swift in Sources */,
@@ -3341,6 +3348,7 @@
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
 				923973CD25AF92140056A3E5 /* FullscreenMessageTests.swift in Sources */,
 				78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */,
+				7589FBBA29AD55A400D29950 /* ClassFinderTests.swift in Sources */,
 				246FD08426CC523F00FD130B /* MessageGestureTests.swift in Sources */,
 				3F03981924BE61520019F095 /* URLServiceTest.swift in Sources */,
 				3F03982324BE61520019F095 /* PersistentHitQueueTests.swift in Sources */,

@@ -38,37 +38,35 @@ public final class MobileCore: NSObject {
 
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
-
-    public static func start(with appID: String,
-                             logLevel: LogLevel? = nil,
-                             configUpdates: [String: Any]? = nil,
-                             additionalContextData: [String: Any]? = nil,
-                             disableLifecycleStart: Bool? = nil,
-                             applicationState: UIApplication.State? = nil
-                             ) {
-        if let logLevel = logLevel {
+    
+    @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
+    public static func start(with id: String, and options: CoreOptions) {
+        if let logLevel = options.logLevel {
             setLogLevel(logLevel)
         }
         // Register Extensions, call configureWithAppId from callback
-        let classList = ClassFinder.classes(conformToProtocol: Extension.self)
-        let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
-        registerExtensions(filteredClassList) {
-            configureWith(appId: appID)
-            if let configUpdates = configUpdates {
-                updateConfigurationWith(configDict: configUpdates)
-            }
-            
-            // If disableLifecycleStart flag is non nil and true, set lifecycle notification listeners
-            guard let disableLifecycleStart = disableLifecycleStart, disableLifecycleStart == true else {
-                var usingSceneDelegate = false
-                if #available(iOS 13.0, tvOS 13.0, *) {
-                    let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
-                    if !sceneDelegateClasses.isEmpty {
-                        usingSceneDelegate = true
-                    }
+        DispatchQueue.global().async {
+            let classList = ClassFinder.classes(conformToProtocol: Extension.self)
+            let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
+            registerExtensions(filteredClassList) {
+                configureWith(appId: id)
+                if let configUpdates = options.configUpdates {
+                    updateConfigurationWith(configDict: configUpdates)
                 }
-                setupLifecycle(usingSceneDelegate: usingSceneDelegate, applicationState: nil, additionalContextData: additionalContextData)
-                return
+                
+                // If disableLifecycleStart flag is non nil and true, set lifecycle notification listeners
+                guard let disableAutoLifecycleTracking = options.disableAutoLifecycleTracking, disableAutoLifecycleTracking == true else {
+                    var usingSceneDelegate = false
+                    if #available(iOS 13.0, tvOS 13.0, *) {
+                        let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
+                        if !sceneDelegateClasses.isEmpty {
+                            usingSceneDelegate = true
+                        }
+                    }
+                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options.additionalContextData)
+                    return
+                }
             }
         }
     }
@@ -257,7 +255,9 @@ public final class MobileCore: NSObject {
         MobileCore.dispatch(event: event)
     }
     
-    private static func setupLifecycle(usingSceneDelegate: Bool, applicationState: UIApplication.State? = nil, additionalContextData: [String: Any]? = nil) {
+    @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
+    private static func setupLifecycle(usingSceneDelegate: Bool, additionalContextData: [String: Any]? = nil) {
         if usingSceneDelegate {
             self.lifecycleStart(additionalContextData: additionalContextData)
             
@@ -270,8 +270,7 @@ public final class MobileCore: NSObject {
                 }
             }
         } else {
-            
-            if applicationState != .background {
+            if UIApplication.shared.applicationState != .background {
                 self.lifecycleStart(additionalContextData: additionalContextData)
             }
             NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil) { _ in

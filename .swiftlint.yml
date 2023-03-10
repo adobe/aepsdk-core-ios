@@ -35,3 +35,4 @@ disabled_rules: # rule identifiers to exclude from running
   - trailing_comma
   - type_body_length
   - trailing_whitespace
+  - colon

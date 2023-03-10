@@ -59,4 +59,32 @@ class EventTest: XCTestCase {
         let newEventData = newEvent.data ?? [:]
         XCTAssertTrue(NSDictionary(dictionary: newEventData).isEqual(to: newData))
     }
+    
+    func testAccessingEventDescriptionFromMultiThread() {
+        let testEvent = Event(name: "test", type: "testType", source: "testSource", data: ["testKey": "testValue"])
+        let count = 1000
+        let expectation = self.expectation(description: "Test sync")
+        let dispatchQueue1 = DispatchQueue(label: "Test.queue1", attributes: .concurrent)
+        let dispatchQueue2 = DispatchQueue(label: "Test.queue2", attributes: .concurrent)
+        expectation.expectedFulfillmentCount = count
+        
+        // test
+        for _ in 1 ... count {
+            let rand = Int.random(in: 1 ..< 100)
+            if rand % 2 == 0 {
+                dispatchQueue1.async {
+                    print(testEvent.description)
+                    expectation.fulfill()
+                }
+            } else {
+                dispatchQueue2.async {
+                    print(testEvent.description)
+                    expectation.fulfill()
+                }
+            }
+        }
+        
+        // verify
+        wait(for: [expectation], timeout: 2.0)
+    }
 }
