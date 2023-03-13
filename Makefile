@@ -196,10 +196,6 @@ version-source-code:
 	(echo "AEPLifecycle - ${BLUE}$(shell cat ./AEPLifecycle/Sources/LifecycleConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
 	(echo "AEPSignal - ${BLUE}$(shell cat ./AEPSignal/Sources/SignalConstants.swift | egrep '\s*EXTENSION_VERSION\s*=\s*\"(.*)\"' | ruby -e "puts gets.scan(/\"(.*)\"/)[0] " | tr -d '"')${NC}")
 
-# make check-version VERSION=3.1.0
-check-version:
-	(sh ./Script/version.sh $(VERSION))
-
 test-SPM-integration:
 	(sh ./Script/test-SPM.sh)
 
@@ -209,9 +205,6 @@ test-podspec:
 pod-lint:
 	(pod lib lint --allow-warnings --verbose --swift-version=5.1)
 
-
-# make bump-versions from='3\.1\.0' to=3.1.1
-bump-versions:
-	(LC_ALL=C find . -type f -name 'project.pbxproj' -exec sed -i '' 's/$(from)/$(to)/' {} +)
-	(LC_ALL=C find . -type f -name '*.swift' -exec sed -i '' 's/$(from)/$(to)/' {} +)	
-	(LC_ALL=C find . -type f -name '*.podspec' -exec sed -i '' 's/$(from)/$(to)/' {} +)
+# make check-version VERSION=3.1.0
+check-version:
+	(sh ./Script/version.sh $(VERSION))
