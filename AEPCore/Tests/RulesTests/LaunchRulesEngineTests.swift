@@ -54,7 +54,7 @@ class LaunchRulesEngineTests: XCTestCase {
         Log.logFilter = .debug
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_testTimestampu", withExtension: "json"),
-                let data = try? Data(contentsOf: url) else {
+              let data = try? Data(contentsOf: url) else {
             XCTAssertTrue(false)
             return
         }
