@@ -50,7 +50,7 @@ class LaunchRulesEngineTests: XCTestCase {
         XCTAssertEqual("http://adobe.com/device=abc", urlString)
     }
     
-    func testMatcher() {
+    func testTimestampUMatchers() {
         Log.logFilter = .debug
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_testTimestampu", withExtension: "json"),
