@@ -208,7 +208,3 @@ pod-lint:
 # make check-version VERSION=3.1.0
 check-version:
 	(sh ./Script/version.sh $(VERSION))
-
-# make update-versions NAME=Core VERSION=3.8.0
-update-versions:
-	(sh ./Script/update-versions.sh -n $(NAME) -v $(VERSION))
