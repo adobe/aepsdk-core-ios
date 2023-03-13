@@ -120,7 +120,7 @@ class LifecycleV2MetricsBuilder {
         xdmEnvironmentInfo?.type = XDMEnvironmentType.from(runMode: systemInfoService.getRunMode())
         xdmEnvironmentInfo?.operatingSystem = systemInfoService.getOperatingSystemName()
         xdmEnvironmentInfo?.operatingSystemVersion = systemInfoService.getOperatingSystemVersion()
-        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getFormattedLocale())
+        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getFormattedLocaleBCPString())
 
         return xdmEnvironmentInfo
     }
@@ -163,4 +163,27 @@ class LifecycleV2MetricsBuilder {
         return sessionLength > 0 ? sessionLength : 0
     }
 
+}
+
+extension SystemInfoService {
+
+    /// Return a string for the given 'locale' identifier.
+    /// Uses the format "`Locale.languageCode`-`Locale.regionCode`".
+    /// The default locale is taken from `SystemInfoService.getActiveLocaleName()`.
+    /// - Return:  'String' representation of the given 'locale', or nil if no language code is set.
+    func getFormattedLocaleBCPString() -> String? {
+        let locale = Locale(identifier: getActiveLocaleName())
+
+        let language = locale.languageCode
+        let region = locale.regionCode
+
+        if let language = language {
+            if let region = region {
+                return language + "-" + region
+            }
+            return language
+        }
+
+        return nil
+    }
 }

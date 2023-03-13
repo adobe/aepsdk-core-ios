@@ -53,6 +53,13 @@ func receiveConfigurationRequest(event: Event)
 func readyForEvent(_ event: Event) -> Bool
 ```
 
+If your method has a trailing closure parameter, name it `completion:`.
+
+*Example:*
+```swift
+func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void) 
+```
+
 #### Constants
 
 Prefer using case-less `enums` to store constants as static variables.
