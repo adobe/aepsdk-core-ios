@@ -1,0 +1,44 @@
+{
+    "version": 1,
+    "rules": [
+        {
+            "condition": {
+                "type": "group",
+                "definition": {
+                    "logic": "and",
+                    "conditions": [
+                        {
+                            "type": "matcher",
+                            "definition": {
+                                "key": "~timestampu",
+                                "matcher": "lt",
+                                "values": [
+                                    2524633200
+                                ]
+                            }
+                        },
+                        {
+                            "type": "matcher",
+                            "definition": {
+                                "key": "~timestampu",
+                                "matcher": "gt",
+                                "values": [
+                                    1672556400
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "consequences": [
+                {
+                    "id": "RCd6959d7b48da42709b442c52b74b0e3c",
+                    "type": "url",
+                    "detail": {
+                        "url": "http://adobe.com/device={%~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename%}"
+                    }
+                }
+            ]
+        }
+    ]
+}

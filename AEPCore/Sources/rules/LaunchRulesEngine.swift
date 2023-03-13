@@ -80,6 +80,15 @@ public class LaunchRulesEngine {
         self.sendReprocessEventsRequest()
     }
 
+    /// Adds provided rules to the current rules.
+    /// - Parameter rules: the array of `LaunchRule`s to be added
+    public func addRules(_ rules: [LaunchRule]) {
+        rulesQueue.sync {
+            self.rulesEngine.addRules(rules: rules)
+            Log.debug(label: self.LOG_TAG, "Successfully added \(rules.count) rule(s) into the (\(self.name)) rules engine.")
+        }
+    }
+
     /// Evaluates all the current rules against the supplied `Event`.
     /// - Parameters:
     ///   - event: the `Event` against which to evaluate the rules

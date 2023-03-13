@@ -49,4 +49,63 @@ class LaunchRulesEngineTests: XCTestCase {
         let urlString = result.details["url"] as! String
         XCTAssertEqual("http://adobe.com/device=abc", urlString)
     }
+    
+    func testMatcher() {
+        Log.logFilter = .debug
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_testTimestampu", withExtension: "json"),
+                let data = try? Data(contentsOf: url) else {
+            XCTAssertTrue(false)
+            return
+        }
+        
+        let runtime = TestableExtensionRuntime()
+        let event = Event(name: "test", type: "type", source: "source", data: [:])
+        runtime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["devicename": "abc"]], status: .set))
+
+        /// Then: this json rules should be parsed to `LaunchRule` objects
+        let rules = JSONRulesParser.parse(data)
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let transformer = LaunchRuleTransformer(runtime: runtime)
+        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: runtime)
+        
+        /// Then: this json rules should be parsed to `LaunchRule` objects
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertTrue(rules?[0].condition is LogicalExpression)
+        
+        let context = Context(data: traversableTokenFinder, evaluator: rulesEngine.evaluator, transformer: transformer.transformer)
+        
+        let result = rules?.first?.condition.evaluate(in: context)
+        XCTAssertEqual(true, result?.value)
+    }
+    
+    func testAddRules() {
+        Log.logFilter = .debug
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"), let data = try? Data(contentsOf: url) else {
+            XCTAssertTrue(false)
+            return
+        }
+        
+        let runtime = TestableExtensionRuntime()
+        runtime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["devicename": "abc"]], status: .set))
+
+        /// Then: this json rules should be parsed to `LaunchRule` objects
+        guard let rules = JSONRulesParser.parse(data) else {
+            XCTFail("unable to properly parse rules")
+            return
+        }
+        
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        XCTAssertEqual(0, rulesEngine.rulesEngine.rules.count)
+        
+        /// add rules to existing rules engine
+        XCTAssertEqual(2, rules.count)
+        
+        rulesEngine.addRules(rules)
+        XCTAssertEqual(2, rulesEngine.rulesEngine.rules.count)
+        
+        rulesEngine.addRules(rules)
+        XCTAssertEqual(4, rulesEngine.rulesEngine.rules.count)
+    }
 }
