@@ -10,8 +10,8 @@ Pod::Spec.new do |s|
   s.author       = "Adobe Experience Platform SDK Team"
   s.source           = { :git => "https://github.com/adobe/aepsdk-core-ios", :tag => s.version.to_s }
 
-  s.ios.deployment_target = '11.0'
-  s.tvos.deployment_target = '11.0'
+  s.ios.deployment_target = '10.0'
+  s.tvos.deployment_target = '10.0'
 
   s.source_files          = 'AEPServices/Sources/**/*.swift'
 
