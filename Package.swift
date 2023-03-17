@@ -26,7 +26,7 @@ let package = Package(
         .library(name: "AEPSignal", targets: ["AEPSignal"])
     ],
     dependencies: [
-        .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .upToNextMajor(from: "1.2.1")),
+        .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .upToNextMajor(from: "1.2.2")),
     ],
     targets: [
         .target(name: "AEPCore",
