@@ -17,7 +17,7 @@ import PackageDescription
 
 let package = Package(
     name: "AEPCore",
-    platforms: [.iOS(.v11), .tvOS(.v11)],
+    platforms: [.iOS(.v10), .tvOS(.v10)],
     products: [
         .library(name: "AEPCore", targets: ["AEPCore"]),
         .library(name: "AEPIdentity", targets: ["AEPIdentity"]),
@@ -26,7 +26,7 @@ let package = Package(
         .library(name: "AEPSignal", targets: ["AEPSignal"])
     ],
     dependencies: [
-        .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .upToNextMajor(from: "1.2.1")),
+        .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .upToNextMajor(from: "1.2.2")),
     ],
     targets: [
         .target(name: "AEPCore",
