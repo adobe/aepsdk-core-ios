@@ -240,7 +240,7 @@ final class EventHub {
         return eventHubQueue.sync { [weak self] in
             guard let self = self else { return { _ in } }
             var pendingVersion: Int?
-            
+
             if let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) {
                 pendingVersion = version
                 sharedState.addPending(version: version)
