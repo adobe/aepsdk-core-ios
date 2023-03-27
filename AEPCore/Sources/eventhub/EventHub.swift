@@ -92,7 +92,7 @@ final class EventHub {
     /// - Parameter event: An `Event` to be dispatched to listeners
     func dispatch(event: Event) {
         eventHubQueue.async { [weak self] in
-            
+
             guard let self = self else { return }
             // Set an event number for the event
             self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
