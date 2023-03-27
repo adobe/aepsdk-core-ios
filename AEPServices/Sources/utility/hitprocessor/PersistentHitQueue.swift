@@ -90,7 +90,8 @@ public class PersistentHitQueue: HitQueuing {
                     }
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
-                    self.queue.asyncAfter(deadline: .now() + self.processor.retryInterval(for: hit)) {
+                    self.queue.asyncAfter(deadline: .now() + self.processor.retryInterval(for: hit)) { [weak self] in
+                        guard let self = self else { return }
                         self.isTaskScheduled = false
                         self.processNextHit()
                     }
