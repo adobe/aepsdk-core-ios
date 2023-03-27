@@ -92,26 +92,28 @@ final class EventHub {
     /// - Parameter event: An `Event` to be dispatched to listeners
     func dispatch(event: Event) {
         eventHubQueue.async { [weak self] in
+            
+            guard let self = self else { return }
             // Set an event number for the event
-            self?.eventNumberMap[event.id] = self?.eventNumberCounter.incrementAndGet()
-            self?.eventQueue.add(event)
+            self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
+            self.eventQueue.add(event)
             // Hot path, avoid unnecessary string converstion of event
             if Log.logFilter >= .trace {
-                Log.trace(label: self?.LOG_TAG ?? "EventHub",
-                          "Dispatching Event #\(String(describing: self?.eventNumberMap[event.id] ?? 0)) - \(event)")
+                Log.trace(label: self.LOG_TAG,
+                          "Dispatching Event #\(String(describing: self.eventNumberMap[event.id])) - \(event)")
             }
 
             // record the event in history if it has a mask
             if event.mask != nil {
-                if let history = self?.eventHistory {
+                if let history = self.eventHistory {
                     history.recordEvent(event) { result in
                         let message = result ?
                             "Successfully inserted an Event into EventHistory database" :
                             "Failed to insert an Event into EventHistory database"
-                        Log.trace(label: self?.LOG_TAG ?? "Event History", message)
+                        Log.trace(label: self.LOG_TAG, message)
                     }
                 } else {
-                    Log.warning(label: self?.LOG_TAG ?? "Event History", "Unable to access EventHistory database to record an Event.")
+                    Log.warning(label: self.LOG_TAG, "Unable to access EventHistory database to record an Event.")
                 }
             }
         }
