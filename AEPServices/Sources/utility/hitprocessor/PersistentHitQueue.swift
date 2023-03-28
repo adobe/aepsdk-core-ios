@@ -16,7 +16,6 @@ public class PersistentHitQueue: HitQueuing {
     public let processor: HitProcessing
     let dataQueue: DataQueue
 
-    private static let DEFAULT_RETRY_INTERVAL = TimeInterval(30)
     private var suspended = true
     private var isTaskScheduled = false
     private let queue = DispatchQueue(label: "com.adobe.mobile.persistenthitqueue")
@@ -72,12 +71,18 @@ public class PersistentHitQueue: HitQueuing {
 
             let semaphore = DispatchSemaphore(value: 0)
             self.processor.processHit(entity: hit, completion: { [weak self] success in
+
+                guard let self = self else {
+                    semaphore.signal()
+                    return
+                }
+
                 if success {
                     // successful processing of hit
                     // attempt to remove it from the queue and process next hit if successful
-                    if self?.dataQueue.remove() ?? false {
-                        self?.isTaskScheduled = false
-                        self?.processNextHit()
+                    if self.dataQueue.remove() {
+                        self.isTaskScheduled = false
+                        self.processNextHit()
                     } else {
                         // deleting the hit from the database failed
                         // need to delete the database to try and recover
@@ -85,9 +90,10 @@ public class PersistentHitQueue: HitQueuing {
                     }
                 } else {
                     // processing hit failed, leave it in the queue, retry after the retry interval
-                    self?.queue.asyncAfter(deadline: .now() + (self?.processor.retryInterval(for: hit) ?? PersistentHitQueue.DEFAULT_RETRY_INTERVAL)) {
-                        self?.isTaskScheduled = false
-                        self?.processNextHit()
+                    self.queue.asyncAfter(deadline: .now() + self.processor.retryInterval(for: hit)) { [weak self] in
+                        guard let self = self else { return }
+                        self.isTaskScheduled = false
+                        self.processNextHit()
                     }
                 }
 

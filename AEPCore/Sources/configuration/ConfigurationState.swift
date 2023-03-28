@@ -110,9 +110,10 @@ class ConfigurationState {
 
         // Try to download config from network, if fails try to load from cache
         configDownloader.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { [weak self] config in
+            guard let self = self else { return }
             if let loadedConfig = config {
-                self?.appIdDownloadDateMap[appId] = Date()
-                self?.replaceConfigurationWith(newConfig: loadedConfig)
+                self.appIdDownloadDateMap[appId] = Date()
+                self.replaceConfigurationWith(newConfig: loadedConfig)
             }
 
             completion(config)
