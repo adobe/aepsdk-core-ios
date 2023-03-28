@@ -15,7 +15,7 @@ import Foundation
 enum SignalConstants {
     static let EXTENSION_NAME = "com.adobe.module.signal"
     static let FRIENDLY_NAME = "Signal"
-    static let EXTENSION_VERSION = "3.8.1"
+    static let EXTENSION_VERSION = "3.8.2"
     static let DATASTORE_NAME = EXTENSION_NAME
     static let LOG_PREFIX = FRIENDLY_NAME
 

@@ -140,12 +140,12 @@ class Configuration: NSObject, Extension {
         // stop all other event processing while we are attempting to download the config
         stopEvents()
         configState.updateWith(appId: appId) { [weak self] config in
+            guard let self = self else { return }
             if let _ = config {
-                self?.publishCurrentConfig(sharedStateResolver: sharedStateResolver)
-                self?.startEvents()
+                self.publishCurrentConfig(sharedStateResolver: sharedStateResolver)
+                self.startEvents()
             } else {
                 // If downloading config failed try again later
-                guard let self = self else { return }
                 sharedStateResolver(self.configState.environmentAwareConfiguration)
                 self.startEvents()
                 let retryInterval = self.retryConfigurationCounter * 5
