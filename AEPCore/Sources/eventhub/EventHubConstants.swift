@@ -17,7 +17,7 @@ enum EventHubConstants {
     static let XDM_STATE_CHANGE = "Shared state change (XDM)"
     static let NAME = "com.adobe.module.eventhub"
     static let FRIENDLY_NAME = "EventHub"
-    static let VERSION_NUMBER = "3.8.1"
+    static let VERSION_NUMBER = "3.8.2"
 
     enum EventDataKeys {
         static let VERSION = "version"
