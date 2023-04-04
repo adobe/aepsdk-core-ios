@@ -90,10 +90,8 @@ public class LaunchRulesEngine {
     }
 
     /// Evaluates all the current rules against the supplied `Event`.
-    /// - Parameters:
-    ///   - event: the `Event` against which to evaluate the rules
-    ///   - sharedStates: the `SharedState`s registered to the `EventHub`
-    /// - Returns: the  processed`Event`
+    /// - Parameter event: the `Event` against which to evaluate the rules
+    /// - Returns: the processed `Event`
     @discardableResult
     public func process(event: Event) -> Event {
         rulesQueue.sync {
@@ -114,6 +112,56 @@ public class LaunchRulesEngine {
             }
             return evaluateRules(for: event)
         }
+    }
+
+    /// Evaluates the current rules against the supplied `Event`.
+    /// Instead of dispatching consequence `Event`s for matching rules, this method calls
+    /// `completion` with an array of `RuleConsequence` objects.
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` against which to evaluate the rules
+    ///   - completion: callback method that will contain an array of `RuleConsequence` objects resulting from `event` being processed.
+    public func process(event: Event, completion: (([RuleConsequence]?) -> Void )) {
+        rulesQueue.sync {
+            // if our waitingEvents array is nil, we know we have rules registered and can skip to evaluation
+            guard let currentWaitingEvents = waitingEvents else {
+                return evaluateRulesBatch(for: event, completion: completion)
+            }
+
+            // check if this is an event to kick processing of waitingEvents
+            // otherwise, add the event to waitingEvents
+            if (event.data?[RulesConstants.Keys.RULES_ENGINE_NAME] as? String) == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
+                for currentEvent in currentWaitingEvents {
+                    _ = evaluateRules(for: currentEvent)
+                }
+                waitingEvents = nil
+            } else {
+                waitingEvents?.append(event)
+            }
+
+            evaluateRulesBatch(for: event, completion: completion)
+        }
+    }
+
+    /// Evaluates rules for an `Event` but calls the provided `completion` method with matching `RuleConsequence` instead of dispatching consequence `Event`s
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` against which to evaluate the rules
+    ///   - completion: callback method that will contain an array of `RuleConsequence` objects resulting from `event` being processed.
+    private func evaluateRulesBatch(for event: Event, completion: (([RuleConsequence]?) -> Void)) {
+        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
+        let matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
+        guard !matchedRules.isEmpty else {
+            completion(nil)
+            return
+        }
+
+        var tokenReplacedConsequences: [RuleConsequence] = []
+        for rule in matchedRules {
+            tokenReplacedConsequences.append(contentsOf: rule.consequences.map({ replaceToken(for: $0, data: traversableTokenFinder)}))
+        }
+
+        completion(tokenReplacedConsequences)
     }
 
     private func evaluateRules(for event: Event) -> Event {
