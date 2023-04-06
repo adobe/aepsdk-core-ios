@@ -115,30 +115,18 @@ public class LaunchRulesEngine {
     }
 
     /// Evaluates the current rules against the supplied `Event`.
+    ///
     /// Instead of dispatching consequence `Event`s for matching rules, this method calls
     /// `completion` with an array of `RuleConsequence` objects.
+    ///
+    /// Calling this method will not check for `self.waitingEvents`, but rather it's assumed that the caller
+    /// will not invoke this message prior to configuration being available.
     ///
     /// - Parameters:
     ///   - event: the `Event` against which to evaluate the rules
     ///   - completion: callback method that will contain an array of `RuleConsequence` objects resulting from `event` being processed.
     public func process(event: Event, completion: (([RuleConsequence]?) -> Void )) {
         rulesQueue.sync {
-            // if our waitingEvents array is nil, we know we have rules registered and can skip to evaluation
-            guard let currentWaitingEvents = waitingEvents else {
-                return evaluateRulesBatch(for: event, completion: completion)
-            }
-
-            // check if this is an event to kick processing of waitingEvents
-            // otherwise, add the event to waitingEvents
-            if (event.data?[RulesConstants.Keys.RULES_ENGINE_NAME] as? String) == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
-                for currentEvent in currentWaitingEvents {
-                    _ = evaluateRules(for: currentEvent)
-                }
-                waitingEvents = nil
-            } else {
-                waitingEvents?.append(event)
-            }
-
             evaluateRulesBatch(for: event, completion: completion)
         }
     }
