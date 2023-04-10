@@ -108,4 +108,50 @@ class LaunchRulesEngineTests: XCTestCase {
         rulesEngine.addRules(rules)
         XCTAssertEqual(4, rulesEngine.rulesEngine.rules.count)
     }
+    
+    func testProcessWithCallback() {
+        // setup
+        Log.logFilter = .debug
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"), let data = try? Data(contentsOf: url) else {
+            XCTAssertTrue(false)
+            return
+        }
+        
+        let runtime = TestableExtensionRuntime()
+        let fakeLifecycleData = [
+            "lifecyclecontextdata": [
+                "carriername": "AT&T",
+                "devicename": "abc"
+            ]
+        ]
+        runtime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: fakeLifecycleData, status: .set))
+        guard let rules = JSONRulesParser.parse(data) else {
+            XCTFail("unable to properly parse rules")
+            return
+        }
+        
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        XCTAssertEqual(0, rulesEngine.rulesEngine.rules.count)
+        rulesEngine.addRules(rules)
+        XCTAssertEqual(2, rulesEngine.rulesEngine.rules.count)
+        
+        let testEventData: [String: Any] = [
+            "lifecyclecontextdata": [
+                "launchevent": true
+            ]
+        ]
+        let testEvent = Event(name: "testing_rules",
+                              type: "com.adobe.eventType.lifecycle",
+                              source: "com.adobe.eventSource.responseContent",
+                              data: testEventData)
+        
+        // test
+        rulesEngine.process(event: testEvent) { consequences in
+            // verify
+            XCTAssertEqual(1, consequences?.count)
+            let urlString = consequences?.first?.details["url"] as? String
+            XCTAssertTrue(urlString?.contains("device=abc") ?? false) // verify token replacement occurred
+        }
+    }
 }
