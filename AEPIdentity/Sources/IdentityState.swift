@@ -49,6 +49,7 @@ class IdentityState {
 
         // load data from local storage
         identityProperties.loadFromPersistence()
+        Log.debug(label: "\(LOG_TAG):\(#function)", "Load ECID from persistence: ecid = \(identityProperties.ecid?.ecidString ?? "nil")")
 
         if identityProperties.ecid != nil {
             createSharedState(identityProperties.toEventData(), nil)
@@ -466,9 +467,9 @@ class IdentityState {
     /// Generates the ecid if not cached and save it to persistence
     private func generateAndPersistECID() {
         if identityProperties.ecid == nil {
-            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
             identityProperties.ecid = ECID()
             identityProperties.saveToPersistence()
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID value \(identityProperties.ecid?.ecidString ?? "nil")")
         }
     }
 }
