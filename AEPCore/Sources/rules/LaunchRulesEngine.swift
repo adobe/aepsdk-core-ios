@@ -194,7 +194,7 @@ public class LaunchRulesEngine {
                     dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
 
                 default:
-                    if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
+                    if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent) {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
                         extensionRuntime.dispatch(event: event)
                     }
@@ -316,12 +316,12 @@ public class LaunchRulesEngine {
     /// Generate a consequence event with provided consequence data
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
-    private func generateConsequenceEvent(consequence: RuleConsequence) -> Event? {
+    private func generateConsequenceEvent(consequence: RuleConsequence, parentEvent: Event) -> Event? {
         var dict: [String: Any] = [:]
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.details
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
+        return parentEvent.createChainedEvent(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
     }
 }
 

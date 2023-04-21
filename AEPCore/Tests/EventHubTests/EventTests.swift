@@ -60,6 +60,24 @@ class EventTest: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: newEventData).isEqual(to: newData))
     }
     
+    func testCreateResponseEventUsesParentID() {
+        let parentEvent = Event(name: "parent event", type: "type", source: "source", data: ["parent": "data"])
+        let childName = "child event"
+        let childType = "child type"
+        let childSource = "child source"
+        let childDataKey = "child"
+        let childDataValue = "data"
+        let childEvent = parentEvent.createResponseEvent(name: childName, type: childType, source: childSource, data: [childDataKey: childDataValue])
+        
+        XCTAssertEqual(childEvent.parentID, parentEvent.id)
+        XCTAssertEqual(childEvent.responseID, parentEvent.id)
+        XCTAssertEqual(childEvent.name, childName)
+        XCTAssertEqual(childEvent.type, childType)
+        XCTAssertEqual(childEvent.source, childSource)
+        XCTAssertEqual(childEvent.data?[childDataKey] as? String, childDataValue)
+        
+    }
+    
     func testCreateChainedEventUsesParentID() {
         let parentEvent = Event(name: "parent event", type: "type", source: "source", data: ["parent": "data"])
         let childName = "child event"

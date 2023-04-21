@@ -114,7 +114,7 @@ public class Event: NSObject, Codable {
     ///   - data: Any associated data with this `Event`
     @objc(responseEventWithName:type:source:data:)
     public func createResponseEvent(name: String, type: String, source: String, data: [String: Any]?) -> Event {
-        return Event(name: name, type: type, source: source, data: data, requestEvent: self)
+        return Event(name: name, type: type, source: source, data: data, requestEvent: self, parentID: self.id)
     }
 
     /// Creates a new `Event` where the `parentID` is equal to the `id` of this `Event`.
