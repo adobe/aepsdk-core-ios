@@ -49,9 +49,9 @@ class RulesEngineIntegrationTests: XCTestCase {
         mockRemoteConfigAndRules(for: "appid", with: configData, localRulesName: "rules_dispatch_consequence")
         
         let parentEvent = Event(name: "Test Event Trigger",
-                          type: "test.type.trigger",
-                          source: "test.source.trigger",
-                          data: ["xdm": "test data"])
+                                type: "test.type.trigger",
+                                source: "test.source.trigger",
+                                data: ["xdm": "test data"])
         let expectation = XCTestExpectation(description: "validate dispatched events")
         expectation.assertForOverFulfill = true
         MobileCore.registerEventListener(type: "test.type.consequence",
@@ -83,9 +83,9 @@ class RulesEngineIntegrationTests: XCTestCase {
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
         let parentEvent = Event(name: "Test Event Trigger",
-                          type: "test.type.trigger",
-                          source: "test.source.trigger",
-                          data: ["dispatch": "yes"])
+                                type: "test.type.trigger",
+                                source: "test.source.trigger",
+                                data: ["dispatch": "yes"])
         MobileCore.registerEventListener(type: "test.type.consequence",
                                          source: "test.source.consequence") { event in
             XCTAssertEqual("test.type.consequence", event.type)
