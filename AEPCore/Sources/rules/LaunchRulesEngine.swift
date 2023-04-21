@@ -184,7 +184,7 @@ public class LaunchRulesEngine {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
                         continue
                     }
-                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data)  else {
+                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent)  else {
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
@@ -246,9 +246,9 @@ public class LaunchRulesEngine {
     /// Process a dispatch consequence event. Generates a new Event from the details contained within the RuleConsequence.
     /// - Parameters:
     ///   - consequence: the RuleConsequence which contains details on the new Event to generate
-    ///   - eventData: the triggering Event data
+    ///   - processedEvent: the dispatch consequence event to be processed
     /// - Returns: a new Event to be dispatched to the EventHub, or nil if the processing failed.
-    private func processDispatchConsequence(consequence: RuleConsequence, eventData: [String: Any]?) -> Event? {
+    private func processDispatchConsequence(consequence: RuleConsequence, processedEvent: Event) -> Event? {
         guard let type = consequence.eventType else {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'type' is missing from 'details'")
             return nil
@@ -264,7 +264,7 @@ public class LaunchRulesEngine {
 
         var dispatchEventData: [String: Any]?
         if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_COPY {
-            dispatchEventData = eventData // copy event data from triggering event
+            dispatchEventData = processedEvent.data // copy event data from triggering event
         } else if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW {
             dispatchEventData = consequence.eventData?.compactMapValues { $0 }
         } else {
@@ -272,10 +272,10 @@ public class LaunchRulesEngine {
             return nil
         }
 
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
-                     type: type,
-                     source: source,
-                     data: dispatchEventData)
+        return processedEvent.createChainedEvent(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
+                                                 type: type,
+                                                 source: source,
+                                                 data: dispatchEventData)
     }
 
     /// Replace tokens inside the provided consequence with the right value
