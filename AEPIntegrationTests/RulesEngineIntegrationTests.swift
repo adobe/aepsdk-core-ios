@@ -82,19 +82,20 @@ class RulesEngineIntegrationTests: XCTestCase {
         let expectation = XCTestExpectation(description: "validate dispatched events")
         expectation.expectedFulfillmentCount = 2
         expectation.assertForOverFulfill = true
+        let parentEvent = Event(name: "Test Event Trigger",
+                          type: "test.type.trigger",
+                          source: "test.source.trigger",
+                          data: ["dispatch": "yes"])
         MobileCore.registerEventListener(type: "test.type.consequence",
                                          source: "test.source.consequence") { event in
             XCTAssertEqual("test.type.consequence", event.type)
             XCTAssertEqual("test.source.consequence", event.source)
             XCTAssertEqual("yes", event.data?["dispatch"] as? String)
+            XCTAssertEqual(parentEvent.id, event.parentID)
             expectation.fulfill()
         }
         
-        let event = Event(name: "Test Event Trigger",
-                          type: "test.type.trigger",
-                          source: "test.source.trigger",
-                          data: ["dispatch": "yes"])
-        MobileCore.dispatch(event: event)
+        MobileCore.dispatch(event: parentEvent)
         
         wait(for: [expectation], timeout: 2)
     }
