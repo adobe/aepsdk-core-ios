@@ -37,7 +37,7 @@ public class Event: NSObject, Codable {
 
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
     @objc public private(set) var responseID: UUID?
-    
+
     /// unique identifier for the parent of this event. The parent event being the trigger for creating the current event
     @objc public private(set) var parentID: UUID?
 
