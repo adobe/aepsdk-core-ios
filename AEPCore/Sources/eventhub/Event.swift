@@ -126,9 +126,10 @@ public class Event: NSObject, Codable {
     ///   - type: `EventType` for the `Event`
     ///   - source: `EventSource` for the `Event`
     ///   - data: Any associated data with this `Event`
-    @objc(chainedEventWithName:type:source:data:)
-    public func createChainedEvent(name: String, type: String, source: String, data: [String: Any]?) -> Event {
-        return Event(name: name, type: type, source: source, data: data, requestEvent: nil, parentID: self.id)
+    ///   - mask: Defines which properties should be used in creation of the Event's hash
+    @objc(chainedEventWithName:type:source:data:mask:)
+    public func createChainedEvent(name: String, type: String, source: String, data: [String: Any]?, mask: [String]? = nil) -> Event {
+        return Event(name: name, type: type, source: source, data: data, requestEvent: nil, mask: mask, parentID: self.id)
     }
 
     /// Clones the current `Event` with updated data
