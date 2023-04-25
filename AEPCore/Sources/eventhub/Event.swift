@@ -22,7 +22,6 @@ public class Event: NSObject, Codable {
     /// unique identifier for the event
     @objc public private(set) var id = UUID()
 
-
     /// The `EventType` for the event
     @objc public let type: String
 
