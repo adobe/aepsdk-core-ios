@@ -129,7 +129,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual("7/27/2020", dispatchedEvent.lifecycleContextData["installdate"] as? String)
         XCTAssertEqual("1", dispatchedEvent.lifecycleContextData["launches"] as? String)
         XCTAssertEqual(event.id, dispatchedEvent.parentID)
-        
+
         // shared state
         let sharedState = mockRuntime.createdSharedStates[0]
         let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
@@ -222,7 +222,7 @@ class LifecycleFunctionalTests: XCTestCase {
 
         XCTAssertEqual(1_595_909_459, sharedStateEvent1?["starttimestampmillis"] as? Double)
         XCTAssertEqual(1_595_909_499, sharedStateEvent2?["starttimestampmillis"] as? Double)
-        
+
         XCTAssertEqual(startEvent1.id, dispatchedLifecycleStartEvent1.parentID)
         XCTAssertEqual(startEvent2.id, dispatchedLifecycleStartEvent2.parentID)
     }

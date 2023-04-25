@@ -100,7 +100,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
             "key1": "value1",
             "key2": "value2"
         ]
-        
+
         let event = createStartEvent(additionalData: expectedFreeFormData)
         // test
         mockRuntime.simulateComingEvents(event)
