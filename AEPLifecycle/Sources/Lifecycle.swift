@@ -108,10 +108,10 @@ public class Lifecycle: NSObject, Extension {
         )
 
         if let prevSessionInfo = prevSessionInfo {
-            dispatchSessionStart(date: event.timestamp, contextData: lifecycleState.getContextData(), previousStartDate: prevSessionInfo.startDate, previousPauseDate: prevSessionInfo.pauseDate)
+            dispatchSessionStart(parentEvent: event, contextData: lifecycleState.getContextData(), previousStartDate: prevSessionInfo.startDate, previousPauseDate: prevSessionInfo.pauseDate)
         }
 
-        lifecycleV2.start(date: event.timestamp, additionalData: event.additionalData, isInstall: install)
+        lifecycleV2.start(parentEvent: event, isInstall: install)
 
         if install {
             persistInstallDate(event.timestamp)
@@ -123,7 +123,7 @@ public class Lifecycle: NSObject, Extension {
     ///   - event: the lifecycle pause event
     private func pauseApplicationLifecycle(event: Event) {
         lifecycleState.pause(pauseDate: event.timestamp)
-        lifecycleV2.pause(pauseDate: event.timestamp)
+        lifecycleV2.pause(parentEvent: event)
     }
 
     /// Attempts to read the advertising identifier from Identity shared state
@@ -155,21 +155,20 @@ public class Lifecycle: NSObject, Extension {
 
     /// Dispatches a Lifecycle response content event with appropriate event data
     /// - Parameters:
-    ///   - date: date of the session start event
+    ///   - parentEvent: the triggering lifecycle event
     ///   - contextData: current Lifecycle context data
     ///   - previousStartDate: start date of the previous session
     ///   - previousPauseDate: end date of the previous session
-    private func dispatchSessionStart(date: Date, contextData: LifecycleContextData?, previousStartDate: Date?, previousPauseDate: Date?) {
+    private func dispatchSessionStart(parentEvent: Event, contextData: LifecycleContextData?, previousStartDate: Date?, previousPauseDate: Date?) {
         let eventData: [String: Any] = [
             LifecycleConstants.EventDataKeys.LIFECYCLE_CONTEXT_DATA: contextData?.toEventData() ?? [:],
             LifecycleConstants.EventDataKeys.SESSION_EVENT: LifecycleConstants.START,
-            LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: date.timeIntervalSince1970,
+            LifecycleConstants.EventDataKeys.SESSION_START_TIMESTAMP: parentEvent.timestamp.timeIntervalSince1970,
             LifecycleConstants.EventDataKeys.MAX_SESSION_LENGTH: LifecycleConstants.MAX_SESSION_LENGTH_SECONDS,
             LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_START_TIMESTAMP: previousStartDate?.timeIntervalSince1970 ?? 0.0,
             LifecycleConstants.EventDataKeys.PREVIOUS_SESSION_PAUSE_TIMESTAMP: previousPauseDate?.timeIntervalSince1970 ?? 0.0,
         ]
-
-        let startEvent = Event(name: LifecycleConstants.EventNames.LIFECYCLE_START,
+        let startEvent = parentEvent.createChainedEvent(name: LifecycleConstants.EventNames.LIFECYCLE_START,
                                type: EventType.lifecycle,
                                source: EventSource.responseContent,
                                data: eventData)
