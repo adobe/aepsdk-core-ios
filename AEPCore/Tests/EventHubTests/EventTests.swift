@@ -85,14 +85,15 @@ class EventTest: XCTestCase {
         let childSource = "child source"
         let childDataKey = "child"
         let childDataValue = "data"
-        let childEvent = parentEvent.createChainedEvent(name: childName, type: childType, source: childSource, data: [childDataKey: childDataValue])
+        let childMaskValue = ["testMask"]
+        let childEvent = parentEvent.createChainedEvent(name: childName, type: childType, source: childSource, data: [childDataKey: childDataValue], mask: childMaskValue)
         
         XCTAssertEqual(childEvent.parentID, parentEvent.id)
         XCTAssertEqual(childEvent.name, childName)
         XCTAssertEqual(childEvent.type, childType)
         XCTAssertEqual(childEvent.source, childSource)
         XCTAssertEqual(childEvent.data?[childDataKey] as? String, childDataValue)
-        
+        XCTAssertEqual(childEvent.mask, childMaskValue)
     }
     
     func testCopyWithNewDataChainedEvent() {
