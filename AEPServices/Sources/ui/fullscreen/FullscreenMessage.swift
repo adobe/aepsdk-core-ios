@@ -91,14 +91,20 @@
         /// 2. check if the messageMonitor is allowing the message to be shown
         ///     a. if yes, show the message and exit the function
         ///     b. if no, call onShowFailure of the listener and exit the function
+        ///
+        /// - Parameter completion: called with `true` if message was shown
+        public func show(_ completion: @escaping ((Bool) -> Void)) {
+            show(withMessagingDelegateControl: true, completion)
+        }
+        
         public func show() {
             show(withMessagingDelegateControl: true)
         }
-
-        public func show(withMessagingDelegateControl delegateControl: Bool) {
+        
+        public func show(withMessagingDelegateControl delegateControl: Bool, _ completion: ((Bool) -> Void)? = nil) {
             // check if the webview has already been created
             if let webview = self.webView as? WKWebView {
-                self.handleShouldShow(webview: webview, delegateControl: delegateControl)
+                self.handleShouldShow(webview: webview, delegateControl: delegateControl, completion)
                 return
             }
 
@@ -145,16 +151,19 @@
                     self.loadingNavigation = wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
 
-                self.handleShouldShow(webview: wkWebView, delegateControl: delegateControl)
+                self.handleShouldShow(webview: wkWebView, delegateControl: delegateControl, completion)
             }
         }
-
-        private func handleShouldShow(webview: WKWebView, delegateControl: Bool) {
+     
+        private func handleShouldShow(webview: WKWebView, delegateControl: Bool, _ completion: ((Bool) -> Void)? = nil) {
             // get off main thread while delegate has control to prevent pause on main thread
             DispatchQueue.global().async {
                 // only show the message if the monitor allows it
                 guard self.messageMonitor.show(message: self, delegateControl: delegateControl) else {
                     self.listener?.onShowFailure()
+                    if let completion = completion {
+                        completion(false)
+                    }
                     return
                 }
 
@@ -165,6 +174,10 @@
                 // dispatch UI activity back to main thread
                 DispatchQueue.main.async {
                     self.displayWithAnimation(webView: webview)
+                }
+                
+                if let completion = completion {
+                    completion(true)
                 }
             }
         }
