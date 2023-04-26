@@ -96,11 +96,11 @@
         public func show(_ completion: @escaping ((Bool) -> Void)) {
             show(withMessagingDelegateControl: true, completion)
         }
-        
+
         public func show() {
             show(withMessagingDelegateControl: true)
         }
-        
+
         public func show(withMessagingDelegateControl delegateControl: Bool, _ completion: ((Bool) -> Void)? = nil) {
             // check if the webview has already been created
             if let webview = self.webView as? WKWebView {
@@ -154,7 +154,7 @@
                 self.handleShouldShow(webview: wkWebView, delegateControl: delegateControl, completion)
             }
         }
-     
+
         private func handleShouldShow(webview: WKWebView, delegateControl: Bool, _ completion: ((Bool) -> Void)? = nil) {
             // get off main thread while delegate has control to prevent pause on main thread
             DispatchQueue.global().async {
@@ -175,7 +175,7 @@
                 DispatchQueue.main.async {
                     self.displayWithAnimation(webView: webview)
                 }
-                
+
                 if let completion = completion {
                     completion(true)
                 }

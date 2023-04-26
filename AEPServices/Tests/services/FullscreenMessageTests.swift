@@ -100,6 +100,43 @@
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
         }
+        
+        func testShowWithCompletionMessageShown() {
+            // setup
+            expectation = XCTestExpectation(description: "Testing Show FullscreenMessage with completion")
+            messageMonitor.dismissMessage()
+            
+            // test
+            fullscreenMessage?.show() { messageShown in
+                XCTAssertTrue(messageShown)
+                self.expectation?.fulfill()
+            }
+            
+            // verify
+            wait(for: [expectation!], timeout: 2.0)
+            XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+            XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+            XCTAssertTrue(mockFullscreenListener.onShowCalled)
+        }
+        
+        func testShowWithCompletionMessageNotShown() {
+            // setup
+            expectation = XCTestExpectation(description: "Testing Show FullscreenMessage with completion")
+            mockMessagingDelegate.valueShouldShowMessage = false
+            messageMonitor.dismissMessage()
+            
+            // test
+            fullscreenMessage?.show() { messageShown in
+                XCTAssertFalse(messageShown)
+                self.expectation?.fulfill()
+            }
+            
+            // verify
+            wait(for: [expectation!], timeout: 2.0)
+            XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+            XCTAssertFalse(mockMessagingDelegate.onShowCalled)
+            XCTAssertFalse(mockFullscreenListener.onShowCalled)
+        }
     
         func testShowWithUITakeover() {
             expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
