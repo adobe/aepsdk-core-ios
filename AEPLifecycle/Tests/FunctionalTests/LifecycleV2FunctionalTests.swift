@@ -250,13 +250,15 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // start event, no pause event
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing()
 
         // simulate a new start
         let lifecycleSession2 = Lifecycle(runtime: mockRuntimeSession2)
         lifecycleSession2.onRegistered()
-        mockRuntimeSession2.simulateComingEvents(createStartEvent())
+        let startEvent2 = createStartEvent()
+        mockRuntimeSession2.simulateComingEvents(startEvent2)
         waitForProcessing()
 
         // verify
@@ -266,6 +268,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual("Application Close (Background)", dispatchedCloseCrashEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
+        XCTAssertEqual(dispatchedCloseCrashEvent.parentID, startEvent2.id)
         XCTAssertNotNil(xdm["timestamp"] as? String)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
@@ -285,7 +288,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // start event, no pause event
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing()
 
         // Remove persisted close date before starting new session
@@ -311,6 +315,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         let expectedCloseDate = Date(timeIntervalSince1970: start2Event.timestamp.timeIntervalSince1970 - 1).asISO8601String()
         XCTAssertNotNil(closeDate)
         XCTAssertEqual(expectedCloseDate, closeDate)
+        XCTAssertEqual(dispatchedCloseCrashEvent.parentID, start2Event.id)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
 
