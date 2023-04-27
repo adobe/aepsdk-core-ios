@@ -8,11 +8,65 @@ workflows:
   version: 2
   build-test:
     jobs:
-      - build-and-test
+      - setup
+      - start-ios-simulator:
+          requires:
+            - setup
+      - build-and-test-ios-core:
+          requires:
+            - setup
+            - start-ios-simulator
+      - build-and-test-ios-services:
+          requires:
+            - setup
+            - start-ios-simulator
+      - build-and-test-ios-lifecycle:
+          requires:
+            - setup
+            - start-ios-simulator
+      - build-and-test-ios-identity:
+          requires:
+            - setup
+            - start-ios-simulator
+      - build-and-test-ios-signal:
+          requires:
+            - setup
+            - start-ios-simulator
+      - integration-tests-ios:
+          requires:
+            - setup
+            - start-ios-simulator
+      - start-tvos-simulator:
+          requires:
+            - setup
+      - build-and-test-tvos-core:
+          requires:
+            - setup
+            - start-tvos-simulator
+      - build-and-test-tvos-services:
+          requires:
+            - setup
+            - start-tvos-simulator
+      - build-and-test-tvos-lifecycle:
+          requires:
+            - setup
+            - start-tvos-simulator
+      - build-and-test-tvos-identity:
+          requires:
+            - setup
+            - start-tvos-simulator
+      - build-and-test-tvos-signal:
+          requires:
+            - setup
+            - start-tvos-simulator
+      - integration-tests-tvos:
+          requires:
+            - setup
+            - start-tvos-simulator
+
 
 jobs:
-
-  build-and-test:
+  setup:
     macos:
       xcode: 13.0.0 # Specify the Xcode version to use
 
@@ -32,15 +86,7 @@ jobs:
       - run: 
           name: Swift Format Check
           command: make checkFormat
-      # pre-start the simulator to prevent timeouts
-      - run:
-          name: Pre-start Simulator
-          command: xcrun instruments -w "iPhone 8 (13.0) [" || true
 
-      - run:
-          name: Run AEPCore Tests
-          command: make aep-core-unit-test
-          
       - run:
           name: Download Codecov Uploader
           command: |
@@ -52,11 +98,25 @@ jobs:
               shasum -a $i -c <(curl -s "https://raw.githubusercontent.com/codecov/codecov-bash/${VERSION}/SHA${i}SUM" | grep -w "codecov")
             done
 
+  start-ios-simulator:
+    steps:
       - run:
-          name: Upload Code Coverage Reports for AEPCore
-          command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPCore" 
-    
+          name: Pre-start Simulator
+          command: xcrun instruments -w "iPhone 8 (13.0) [" || true
 
+  build-and-test-ios-core:
+    steps:
+      - checkout
+      - run:
+          name: Run AEPCore Tests
+          command: make aep-core-unit-test
+        
+    - run:
+        name: Upload Code Coverage Reports for AEPCore
+        command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPCore" 
+
+  build-and-test-ios-services:
+    steps:
       - run:
           name: Run AEPServices Tests
           command: make aep-services-unit-test
@@ -65,6 +125,8 @@ jobs:
           name: Upload Code Coverage Reports for AEPServices
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPServices" 
 
+  build-and-test-ios-lifecycle:
+    steps:
       - run:
           name: Run AEPLifecycle Tests
           command: make aep-lifecycle-unit-test
@@ -73,7 +135,8 @@ jobs:
           name: Upload Code Coverage Reports for AEPLifecycle
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPLifecycle" 
 
-
+  build-and-test-ios-identity:
+    steps:
       - run:
           name: Run AEPIdentity Tests
           command: make aep-identity-unit-test
@@ -82,6 +145,8 @@ jobs:
           name: Upload Code Coverage Reports for AEPIdentity
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPIdentity" 
 
+  build-and-test-ios-signal:
+    steps:
       - run:
           name: Run AEPSignal Tests
           command: make aep-signal-unit-test
@@ -90,9 +155,15 @@ jobs:
           name: Upload Code Coverage Reports for AEPSignal
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPSignal" 
 
+  start-tvos-simulator:
+    steps:
       - run:
           name: Pre-start tvOS Simulator
           command: xcrun instruments -w "Apple TV (15.0) [" || true
+
+  build-and-test-tvos-core:
+    steps:
+      - checkout
 
       - run:
           name: Run AEPCore tvOS Tests
@@ -102,6 +173,8 @@ jobs:
           name: Upload Code Coverage Reports for AEPCore tvOS
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPCore tvOS" 
 
+  build-and-test-tvos-services:
+    steps:
       - run:
           name: Run AEPServices tvOS Tests
           command: make aep-services-tvos-unit-test
@@ -109,6 +182,9 @@ jobs:
       - run:
           name: Upload Code Coverage Reports for AEPServices tvOS
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPServices tvOS" 
+
+  build-and-test-tvos-lifecycle:
+    steps:
       - run:
           name: Run AEPLifecycle tvOS Tests
           command: make aep-lifecycle-tvos-unit-test
@@ -117,6 +193,8 @@ jobs:
           name: Upload Code Coverage Reports for AEPLifecycle tvOS
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPLifecycle tvOS" 
 
+  build-and-test-tvos-identity:
+    steps:
       - run:
           name: Run AEPIdentity tvOS Tests
           command: make aep-identity-tvos-unit-test
@@ -125,6 +203,8 @@ jobs:
           name: Upload Code Coverage Reports for AEPIdentity tvOS
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPIdentity tvOS" 
 
+  build-and-test-tvos-signal:
+    steps:
       - run:
           name: Run AEPSignal tvOS Tests
           command: make aep-signal-tvos-unit-test
@@ -133,10 +213,14 @@ jobs:
           name: Upload Code Coverage Reports for AEPSignal tvOS
           command: bash ./codecov -v -X s3 -c -D "./build/out" -J "AEPSignal tvOS" 
 
+  integration-tests-ios:
+    steps:
       - run:
           name: Run Integration Tests
           command: make integration-test
 
+  integration-tests-tvos:
+    steps:
       - run:
           name: Run Integration tvOS Tests
           command: make integration-tvos-test
