@@ -420,6 +420,20 @@ MobileCore.getSdkIdentities { (ids, error) in
 }];
 ```
 
+##### Reset SDK identities
+
+###### Swift
+
+```swift
+MobileCore.resetIdentities()
+```
+
+###### Objective-C
+
+```objective-c
+[AEPMobileCore resetIdentities];
+```
+
 ##### Collecting message info:
 
 ###### Swift
