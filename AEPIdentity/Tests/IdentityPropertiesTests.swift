@@ -154,4 +154,29 @@ class IdentityPropertiesTests: XCTestCase {
         // can't guarantee order of IDs
         XCTAssertTrue(newIds == properties.customerIds || newIds.reversed() == properties.customerIds)
     }
+
+    // Covers an edge case where duplicate type makes it through, used to crash when using Dictionary(uniqueKeysWithValues:)
+    func testMergeAndCleanWithDuplicateTypeDoesntCrash() {
+        // setup
+        var properties = IdentityProperties()
+        let existingIds = [CustomIdentity(origin: "origin", type: "type", identifier: "id", authenticationState: .authenticated)]
+        properties.customerIds = existingIds
+
+        // Use duplicate type, should pick the second
+        let newIds = [CustomIdentity(origin: "origin", type: "type2", identifier: "id_1", authenticationState: .authenticated),
+                      CustomIdentity(origin: "origin", type: "type2", identifier: "id_2", authenticationState: .loggedOut)]
+        properties.mergeAndCleanCustomerIds(newIds)
+
+        // verify
+        guard let customerIds = properties.customerIds else {
+            XCTFail("Customer ids unexpectedly nil")
+            return
+        }
+        for id in customerIds {
+            if id.type == "type2" {
+                XCTAssertEqual(id.identifier, "id_2")
+                XCTAssertEqual(id.authenticationState, .loggedOut)
+            }
+        }
+    }
 }

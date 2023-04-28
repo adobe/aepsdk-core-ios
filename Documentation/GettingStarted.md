@@ -47,7 +47,7 @@ Lifecycle metrics is an optional, yet valuable feature provided by the Adobe Exp
 
 
 
-Start Lifecycle data collection by calling `lifecycleStart:` from within the callback of `AEPCore.registerExtensions:`.
+Start Lifecycle data collection by calling `lifecycleStart:` from within the callback of `MobileCore.registerExtensions:`.
 
 ```swift
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -72,7 +72,7 @@ When launched, if an app is resuming from a backgrounded state, iOS might call t
 
 ```swift
 func applicationWillEnterForeground(_ application: UIApplication) {  
- AEPCore.lifecycleStart(nil)
+ MobileCore.lifecycleStart(nil)
 }
 ```
 
@@ -80,7 +80,7 @@ When the app enters the background, pause Lifecycle data collection from an app'
 
 ```swift
 func applicationDidEnterBackground(_ application: UIApplication) {  
- AEPCore.lifecyclePause()
+ MobileCore.lifecyclePause()
 }
 ```
 

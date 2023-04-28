@@ -38,7 +38,7 @@
         var isLocalImageUsed = false
         var payload: String
         var payloadUsingLocalAssets: String?
-        weak var listener: FullscreenMessageDelegate?
+        var listener: FullscreenMessageDelegate?
         public internal(set) var webView: UIView?
         private(set) var transparentBackgroundView: UIView?
         private(set) var messageMonitor: MessageMonitoring
@@ -92,23 +92,17 @@
         ///     a. if yes, show the message and exit the function
         ///     b. if no, call onShowFailure of the listener and exit the function
         public func show() {
+            show(withMessagingDelegateControl: true)
+        }
+
+        public func show(withMessagingDelegateControl delegateControl: Bool) {
+            // check if the webview has already been created
+            if let webview = self.webView as? WKWebView {
+                self.handleShouldShow(webview: webview, delegateControl: delegateControl)
+                return
+            }
+
             DispatchQueue.main.async {
-                // check if the webview has already been created
-                if let webview = self.webView as? WKWebView {
-                    // it has, determine if the monitor wants to show the message
-                    guard self.messageMonitor.show(message: self) else {
-                        self.listener?.onShowFailure()
-                        return
-                    }
-
-                    // notify global listeners
-                    self.listener?.onShow(message: self)
-                    self.messagingDelegate?.onShow(message: self)
-
-                    self.displayWithAnimation(webView: webview)
-                    return
-                }
-
                 // create the webview
                 let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
 
@@ -151,8 +145,15 @@
                     self.loadingNavigation = wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
 
+                self.handleShouldShow(webview: wkWebView, delegateControl: delegateControl)
+            }
+        }
+
+        private func handleShouldShow(webview: WKWebView, delegateControl: Bool) {
+            // get off main thread while delegate has control to prevent pause on main thread
+            DispatchQueue.global().async {
                 // only show the message if the monitor allows it
-                guard self.messageMonitor.show(message: self) else {
+                guard self.messageMonitor.show(message: self, delegateControl: delegateControl) else {
                     self.listener?.onShowFailure()
                     return
                 }
@@ -161,7 +162,10 @@
                 self.listener?.onShow(message: self)
                 self.messagingDelegate?.onShow(message: self)
 
-                self.displayWithAnimation(webView: wkWebView)
+                // dispatch UI activity back to main thread
+                DispatchQueue.main.async {
+                    self.displayWithAnimation(webView: webview)
+                }
             }
         }
 

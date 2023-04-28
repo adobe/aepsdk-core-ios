@@ -29,6 +29,9 @@ DerivedData/
 *.ipa
 *.dSYM.zip
 *.dSYM
+AEPIntegrationTests/resources/rules_lifecycle.zip
+AEPIntegrationTests/resources/rules_pii.zip
+AEPIntegrationTests/resources/rules_signal.zip
 
 ## Playgrounds
 timeline.xctimeline
