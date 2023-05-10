@@ -147,11 +147,11 @@ class LaunchRulesEngineTests: XCTestCase {
                               data: testEventData)
         
         // test
-        rulesEngine.process(event: testEvent) { consequences in
-            // verify
-            XCTAssertEqual(1, consequences?.count)
-            let urlString = consequences?.first?.details["url"] as? String
-            XCTAssertTrue(urlString?.contains("device=abc") ?? false) // verify token replacement occurred
-        }
+        let consequences = rulesEngine.evaluate(event: testEvent)
+        
+        // verify
+        XCTAssertEqual(1, consequences?.count)
+        let urlString = consequences?.first?.details["url"] as? String
+        XCTAssertTrue(urlString?.contains("device=abc") ?? false) // verify token replacement occurred
     }
 }
