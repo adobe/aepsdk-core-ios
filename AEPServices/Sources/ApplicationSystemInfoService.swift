@@ -22,11 +22,12 @@ import UIKit
 ///     - bundled assets
 ///     - TBD as WIP as of now, holds required functionality for ConfigurationExtension
 class ApplicationSystemInfoService: SystemInfoService {
+    
     private let bundle: Bundle
     private lazy var userAgent: String = {
         let model = UIDevice.current.model
         let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
-        let localeIdentifier = getActiveLocaleName()
+        let localeIdentifier = getSystemLocaleName()
 
         return "Mozilla/5.0 (\(model); CPU OS \(osVersion) like Mac OS X; \(localeIdentifier))"
     }()
@@ -70,6 +71,10 @@ class ApplicationSystemInfoService: SystemInfoService {
 
     func getActiveLocaleName() -> String {
         return Locale.autoupdatingCurrent.identifier
+    }
+    
+    func getSystemLocaleName() -> String {
+        return Locale.preferredLanguages.first ?? ""
     }
 
     func getDeviceName() -> String {

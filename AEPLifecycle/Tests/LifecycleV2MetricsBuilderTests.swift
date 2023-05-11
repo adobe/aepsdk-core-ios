@@ -185,7 +185,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: actualAppCloseData ?? [:]).isEqual(to: expected))
     }
     
-    // List of tests for verifying getFormattedLocaleBCPString function
+    // List of tests for verifying bcpFormattedLocale function
     // [$0: Locale identifier string to test, $1: expected result]
     let localeBCPStringTests = [
         ("es-US", "es-US"), // language + region
@@ -221,7 +221,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         
         localeBCPStringTests.forEach {
             mockSystemInfoService.activeLocaleName = $0
-            let result = mockSystemInfoService.getFormattedLocaleBCPString()
+            let result = mockSystemInfoService.getActiveLocaleName().bcpFormattedLocale()
             XCTAssertEqual($1, result, "Locale '\($0)' failed!")
         }
     }

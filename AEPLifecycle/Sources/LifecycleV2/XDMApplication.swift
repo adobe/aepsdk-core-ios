@@ -43,6 +43,9 @@ struct XDMApplication {
 
     /// Version of the application
     var version: String?
+    
+    /// The language being used by the application to represent the user's linguistic, geographical, or cultural preferences for data presentation.
+    var language: XDMLanguage?
 
     enum CodingKeys: String, CodingKey {
         case closeType
@@ -54,6 +57,7 @@ struct XDMApplication {
         case name
         case sessionLength
         case version
+        case language = "_dc"
     }
 }
 

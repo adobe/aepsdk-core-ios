@@ -75,9 +75,14 @@ public protocol SystemInfoService {
     /// - Return: `String` representing the default user agent
     func getDefaultUserAgent() -> String
 
-    /// Returns the currently selected / active locale name (as set by the user on the system).
+    /// Returns the highest preferred locale (as set by the user on the system) that is also supported in the app's localization.
+    /// If no matching language is found, the application's default language will be used along with the system's selected region.
     /// - Return: `String` representation of the locale name
     func getActiveLocaleName() -> String
+    
+    /// Returns the locale created by combining the device's preferred language and selected region (as set by the user on the system).
+    /// - Return: `String` representation of the locale name
+    func getSystemLocaleName() -> String
 
     /// Returns the device type
     /// - Return: `DeviceType` the type of the Apple device
