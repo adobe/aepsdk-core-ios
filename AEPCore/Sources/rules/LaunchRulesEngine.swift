@@ -143,7 +143,8 @@ public class LaunchRulesEngine {
 
         var tokenReplacedConsequences: [RuleConsequence] = []
         for rule in matchedRules {
-            tokenReplacedConsequences.append(contentsOf: rule.consequences.map({ replaceToken(for: $0, data: traversableTokenFinder)}))
+            tokenReplacedConsequences.append(contentsOf: rule.consequences.map { replaceToken(for: $0, data: traversableTokenFinder)
+            })
         }
 
         return tokenReplacedConsequences
