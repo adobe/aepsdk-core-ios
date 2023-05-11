@@ -412,7 +412,7 @@ final class EventHub {
                       "Dispatching Event #\(String(describing: self.eventNumberMap[event.id])) - \(event)")
         }
     }
-    
+
     /// Gets the appropriate `SharedState` for the provided `extensionName` and `event`
     /// If the provided `event` is `nil`, this method will retrieve `SharedState` for version 0.
     /// - Parameters:
