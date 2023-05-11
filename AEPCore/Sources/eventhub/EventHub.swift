@@ -72,6 +72,22 @@ final class EventHub {
                 $0.eventOrderer.add(processedEvent)
             }
 
+            // record the event in history if it has a mask
+            if event.mask != nil {
+                if let history = self.eventHistory {
+                    history.recordEvent(event) { result in
+                        if !result {
+                            Log.debug(
+                                label: self.LOG_TAG,
+                                "Failed to insert Event(\(processedEvent.id)) into EventHistory database"
+                            )
+                        }
+                    }
+                } else {
+                    Log.warning(label: self.LOG_TAG, "Unable to access EventHistory database to record an Event.")
+                }
+            }
+
             return true
         }
     }
@@ -89,35 +105,13 @@ final class EventHub {
 
     /// Dispatches a new `Event` to the `EventHub`. This `Event` is sent to all listeners who have registered for the `EventType`and `EventSource`
     ///
-    /// If the `event` has a `mask`, this method will attempt to record the `event` in `eventHistory`.
+    /// If the `event` has a `mask`, `EventHub` will attempt to record the `event` in `eventHistory` when processing.
     ///
     /// - Parameter event: An `Event` to be dispatched to listeners
     func dispatch(event: Event) {
         eventHubQueue.async { [weak self] in
-
             guard let self = self else { return }
-            // Set an event number for the event
-            self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
-            self.eventQueue.add(event)
-            // Hot path, avoid unnecessary string converstion of event
-            if Log.logFilter >= .trace {
-                Log.trace(label: self.LOG_TAG,
-                          "Dispatching Event #\(String(describing: self.eventNumberMap[event.id])) - \(event)")
-            }
-
-            // record the event in history if it has a mask
-            if event.mask != nil {
-                if let history = self.eventHistory {
-                    history.recordEvent(event) { result in
-                        let message = result ?
-                            "Successfully inserted an Event into EventHistory database" :
-                            "Failed to insert an Event into EventHistory database"
-                        Log.trace(label: self.LOG_TAG, message)
-                    }
-                } else {
-                    Log.warning(label: self.LOG_TAG, "Unable to access EventHistory database to record an Event.")
-                }
-            }
+            self.dispatchInternal(event: event)
         }
     }
 
@@ -221,9 +215,8 @@ final class EventHub {
             }
 
             sharedState.set(version: version, data: data)
-            let toBeDispatched = self.createSharedStateEvent(extensionName: extensionName, sharedStatetype: sharedStateType)
-            self.dispatch(event: toBeDispatched)
-            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
+            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")            
+            self.dispatchInternal(event: self.createSharedStateEvent(extensionName: extensionName, sharedStatetype: sharedStateType))
         }
     }
 
@@ -249,8 +242,10 @@ final class EventHub {
 
             return { [weak self] data in
                 guard let self = self else { return }
-                self.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data, sharedStateType: sharedStateType)
-                Log.debug(label: self.LOG_TAG, "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(PrettyDictionary.prettify(data))")
+                self.eventHubQueue.async { [weak self] in
+                    guard let self = self else { return }
+                    self.resolvePendingSharedState(extensionName: extensionName, version: pendingVersion, data: data, sharedStateType: sharedStateType)
+                }
             }
         }
     }
@@ -347,8 +342,8 @@ final class EventHub {
 
             let version = sharedState.resolve(version: 0).value == nil ? 0 : self.eventNumberCounter.incrementAndGet()
             sharedState.set(version: version, data: data)
-            self.dispatch(event: self.createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
             Log.debug(label: self.LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
+            self.dispatchInternal(event: self.createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
         }
     }
 
@@ -405,6 +400,19 @@ final class EventHub {
 
     // MARK: - Private
 
+    /// Internal method to dispatch a new `Event` to the `EventHub`.
+    /// - Parameter event: An `Event` to be dispatched to listeners
+    private func dispatchInternal(event: Event) {
+        // Set an event number for the event
+        self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
+        self.eventQueue.add(event)
+        // Hot path, avoid unnecessary string converstion of event
+        if Log.logFilter >= .trace {
+            Log.trace(label: self.LOG_TAG,
+                      "Dispatching Event #\(String(describing: self.eventNumberMap[event.id])) - \(event)")
+        }
+    }
+    
     /// Gets the appropriate `SharedState` for the provided `extensionName` and `event`
     /// If the provided `event` is `nil`, this method will retrieve `SharedState` for version 0.
     /// - Parameters:
@@ -443,7 +451,8 @@ final class EventHub {
         guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value else { return }
         guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
-        dispatch(event: createSharedStateEvent(extensionName: container.sharedStateName, sharedStatetype: sharedStateType))
+        Log.debug(label: self.LOG_TAG, "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(PrettyDictionary.prettify(data))")
+        dispatchInternal(event: createSharedStateEvent(extensionName: container.sharedStateName, sharedStatetype: sharedStateType))
     }
 
     /// Creates a template `Event` for `SharedState` of the provided `extensionName`
