@@ -17,6 +17,8 @@ import XCTest
 
 class EventHubTests: XCTestCase {
     private static let MOCK_EXTENSION_NAME = "com.adobe.mockExtension"
+    private static let SHARED_STATE_OWNER = "stateowner"
+    private static let EVENTHUB_NAME = "com.adobe.module.eventhub"
 
     var eventHub: EventHub!
 
@@ -1338,4 +1340,102 @@ class EventHubTests: XCTestCase {
         // verify
         validateSharedState(EventHubTests.MOCK_EXTENSION_NAME, event, "one", .xdm)
     }
+
+    /// Tests that event hub dispatches events in order when creating shared state
+    func testCreateSharedStateDispatchesEventInOrder() {
+        // setup
+        let expectation = XCTestExpectation(description: "EventHub dispatches shared state events in order")
+        expectation.expectedFulfillmentCount = 3
+
+        var dispatchedEvents = [Event]()
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.wildcard, source: EventSource.wildcard) { event in
+            // Filter Event hub shared state update
+            if (self.isEventHubSharedState(event: event)) {
+                return;
+            }
+
+            dispatchedEvents.append(event)
+            expectation.fulfill()
+        }
+
+        // test
+        eventHub.start()
+        let testEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: testEvent)
+
+        eventHub.createSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, data: SharedStateTestHelper.ONE, event: nil)
+
+        let testEvent1 = Event(name: "testEvent1", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: testEvent1)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(dispatchedEvents.count, 3)
+        // Event 1: testEvent
+        XCTAssertEqual(dispatchedEvents[0], testEvent)
+
+        // Event 2: Shared state update - MockExtension
+        XCTAssertEqual(dispatchedEvents[1].type, EventType.hub)
+        XCTAssertEqual(dispatchedEvents[1].source, EventSource.sharedState)
+        XCTAssertEqual(dispatchedEvents[1].data as? [String : String], [EventHubTests.SHARED_STATE_OWNER: EventHubTests.MOCK_EXTENSION_NAME])
+
+        // Event 3: testEvent1
+        XCTAssertEqual(dispatchedEvents[2], testEvent1)
+    }
+
+    /// Tests that event hub dispatches events in order when resolving pending shared state
+    func testResolveSharedStateDispatchesEventInOrder() {
+        // setup
+        let expectation = XCTestExpectation(description: "EventHub dispatches shared state events in order")
+        expectation.expectedFulfillmentCount = 3
+
+        var dispatchedEvents = [Event]()
+        eventHub.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.wildcard, source: EventSource.wildcard) { event in
+            // Filter Event hub shared state update
+            if (self.isEventHubSharedState(event: event)) {
+                return;
+            }
+
+            dispatchedEvents.append(event)
+            expectation.fulfill()
+        }
+
+        // test
+        eventHub.start()
+        let testEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        let sharedStateResolver = eventHub.createPendingSharedState(extensionName: EventHubTests.MOCK_EXTENSION_NAME, event: testEvent)
+        eventHub.dispatch(event: testEvent)
+
+        sharedStateResolver(SharedStateTestHelper.ONE)
+
+        let testEvent1 = Event(name: "testEvent1", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+        eventHub.dispatch(event: testEvent1)
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+        XCTAssertEqual(dispatchedEvents.count, 3)
+        // Event 1: testEvent
+        XCTAssertEqual(dispatchedEvents[0], testEvent)
+
+        // Event 2: Shared state update - MockExtension
+        XCTAssertEqual(dispatchedEvents[1].type, EventType.hub)
+        XCTAssertEqual(dispatchedEvents[1].source, EventSource.sharedState)
+        XCTAssertEqual(dispatchedEvents[1].data as? [String : String], [EventHubTests.SHARED_STATE_OWNER: EventHubTests.MOCK_EXTENSION_NAME])
+
+        // Event 3: testEvent1
+        XCTAssertEqual(dispatchedEvents[2], testEvent1)
+    }
+
+    private func isEventHubSharedState(event: Event) -> Bool {
+        if (event.type != EventType.hub || event.source != EventSource.sharedState) {
+            return false
+        }
+
+        if let owner = event.data?[EventHubTests.SHARED_STATE_OWNER] as? String, owner == EventHubTests.EVENTHUB_NAME {
+            return true;
+        }
+
+        return false;
+    }
+
 }
