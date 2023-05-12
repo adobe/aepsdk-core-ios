@@ -22,7 +22,7 @@ import UIKit
 ///     - bundled assets
 ///     - TBD as WIP as of now, holds required functionality for ConfigurationExtension
 class ApplicationSystemInfoService: SystemInfoService {
-    
+
     private let bundle: Bundle
     private lazy var userAgent: String = {
         let model = UIDevice.current.model
@@ -72,7 +72,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     func getActiveLocaleName() -> String {
         return Locale.autoupdatingCurrent.identifier
     }
-    
+
     func getSystemLocaleName() -> String {
         return Locale.preferredLanguages.first ?? ""
     }

@@ -60,7 +60,7 @@ public class MockSystemInfoService: SystemInfoService {
     public func getActiveLocaleName() -> String {
         return activeLocaleName
     }
-    
+
     public var systemLocaleName = ""
     public func getSystemLocaleName() -> String {
         return systemLocaleName

@@ -79,7 +79,7 @@ public protocol SystemInfoService {
     /// If no matching language is found, the application's default language will be used along with the system's selected region.
     /// - Return: `String` representation of the locale name
     func getActiveLocaleName() -> String
-    
+
     /// Returns the locale created by combining the device's preferred language and selected region (as set by the user on the system).
     /// - Return: `String` representation of the locale name
     func getSystemLocaleName() -> String

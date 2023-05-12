@@ -43,7 +43,7 @@ struct XDMApplication {
 
     /// Version of the application
     var version: String?
-    
+
     /// The language being used by the application to represent the user's linguistic, geographical, or cultural preferences for data presentation.
     var language: XDMLanguage?
 
