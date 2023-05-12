@@ -24,7 +24,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         "operatingSystemVersion": "test-os-version",
         "operatingSystem": "test-os-name",
         "type": "application",
-        "_dc": ["language": "en-US"]
+        "_dc": ["language": "es-US"]
     ] as [String : Any]
     
     let expectedDeviceInfo = [
@@ -57,6 +57,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         mockSystemInfoService.displayInformation = (100, 200)
         mockSystemInfoService.deviceType = .PHONE
         mockSystemInfoService.activeLocaleName = "en_US"
+        mockSystemInfoService.systemLocaleName = "es_US"
         mockSystemInfoService.runMode = "Application"
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
@@ -70,7 +71,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
             "version": "version-number (build-number)",
             "isInstall": true,
             "isLaunch": true,
-            "id": "test-app-id"
+            "id": "test-app-id",
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -91,7 +93,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
             "version": "version-number (build-number)",
             "isUpgrade": true,
             "isLaunch": true,
-            "id": "test-app-id"
+            "id": "test-app-id",
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -111,7 +114,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
             "name": "test-app-name",
             "version": "version-number (build-number)",
             "isLaunch": true,
-            "id": "test-app-id"
+            "id": "test-app-id",
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
         
         let expected = ["application": application,
