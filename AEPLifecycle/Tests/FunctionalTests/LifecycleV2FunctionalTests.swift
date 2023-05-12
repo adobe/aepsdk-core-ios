@@ -102,8 +102,10 @@ class LifecycleV2FunctionalTests: XCTestCase {
             "key1": "value1",
             "key2": "value2"
         ]
+
+        let event = createStartEvent(additionalData: expectedFreeFormData)
         // test
-        mockRuntime.simulateComingEvents(createStartEvent(additionalData: expectedFreeFormData))
+        mockRuntime.simulateComingEvents(event)
         waitForProcessing()
 
         // verify
@@ -122,6 +124,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: xdm["environment"] as? [String : Any] ?? [:]).isEqual(to: expectedEnvironmentInfo))
         XCTAssertTrue(NSDictionary(dictionary: xdm["device"] as? [String : Any] ?? [:]).isEqual(to: expectedDeviceInfo))
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+        XCTAssertEqual(event.id, dispatchedLaunchEvent.parentID)
     }
 
     func testLifecycleV2_appClose() {
@@ -135,16 +138,19 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // appplication launch install hit
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing(interval: 1.1) // app close after 1 sec
         // application close
-        mockRuntime.simulateComingEvents(createPauseEvent())
+        let pauseEvent = createPauseEvent()
+        mockRuntime.simulateComingEvents(pauseEvent)
         waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // verify
         XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch, application close
 
         // event data
+        let dispatchedStartEvent = mockRuntime.dispatchedEvents[0]
         let dispatchedCloseEvent = mockRuntime.dispatchedEvents[1]
         let xdm = dispatchedCloseEvent.data?["xdm"] as? [String:Any] ?? [:]
         XCTAssertEqual("Application Close (Background)", dispatchedCloseEvent.name)
@@ -152,6 +158,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseEvent.source)
         XCTAssertNotNil(xdm["timestamp"] as? String)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+        XCTAssertEqual(startEvent.id, dispatchedStartEvent.parentID)
+        XCTAssertEqual(pauseEvent.id, dispatchedCloseEvent.parentID)
     }
 
     func testLifecycleV2_appUpgrade() {
@@ -246,13 +254,15 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // start event, no pause event
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing()
 
         // simulate a new start
         let lifecycleSession2 = Lifecycle(runtime: mockRuntimeSession2)
         lifecycleSession2.onRegistered()
-        mockRuntimeSession2.simulateComingEvents(createStartEvent())
+        let startEvent2 = createStartEvent()
+        mockRuntimeSession2.simulateComingEvents(startEvent2)
         waitForProcessing()
 
         // verify
@@ -262,6 +272,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual("Application Close (Background)", dispatchedCloseCrashEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
+        XCTAssertEqual(dispatchedCloseCrashEvent.parentID, startEvent2.id)
         XCTAssertNotNil(xdm["timestamp"] as? String)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
@@ -281,7 +292,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // start event, no pause event
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing()
 
         // Remove persisted close date before starting new session
@@ -307,6 +319,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         let expectedCloseDate = Date(timeIntervalSince1970: start2Event.timestamp.timeIntervalSince1970 - 1).asISO8601String()
         XCTAssertNotNil(closeDate)
         XCTAssertEqual(expectedCloseDate, closeDate)
+        XCTAssertEqual(dispatchedCloseCrashEvent.parentID, start2Event.id)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
 
