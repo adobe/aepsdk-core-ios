@@ -73,5 +73,6 @@ extension XDMApplication: Encodable {
         if let unwrapped = name { try container.encode(unwrapped, forKey: .name) }
         if let unwrapped = sessionLength { try container.encode(unwrapped, forKey: .sessionLength) }
         if let unwrapped = version { try container.encode(unwrapped, forKey: .version) }
+        if let unwrapped = language { try container.encode(unwrapped, forKey: .language) }
     }
 }

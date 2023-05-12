@@ -32,7 +32,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         "operatingSystemVersion": "test-os-version",
         "operatingSystem": "test-os-name",
         "type": "application",
-        "_dc": ["language": "en-US"]
+        "_dc": ["language": "es-US"]
     ] as [String : Any]
 
     let expectedDeviceInfo = [
@@ -79,6 +79,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockSystemInfoService.operatingSystemName = "test-os-name"
         mockSystemInfoService.operatingSystemVersion = "test-os-version"
         mockSystemInfoService.activeLocaleName = "en-US"
+        mockSystemInfoService.systemLocaleName = "es-US"
         mockSystemInfoService.displayInformation = (100, 100)
         mockSystemInfoService.appVersion = "1.0.0"
 
@@ -93,7 +94,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
             "name": "test-app-name",
             "version": "version-number (build-number)",
             "isInstall": true,
-            "isLaunch": true
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
 
         let expectedFreeFormData = [
@@ -159,7 +161,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
             "name": "test-app-name",
             "version": "version-number (next-build-number)",
             "isUpgrade": true,
-            "isLaunch": true
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
 
         // test
@@ -197,7 +200,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
         let expectedApplicationInfo = [
             "name": "test-app-name",
             "version": "version-number (build-number)",
-            "isLaunch": true
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
 
         // test
