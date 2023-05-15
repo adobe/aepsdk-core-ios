@@ -388,6 +388,9 @@
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
+		ACC7A9762A0EA51F001A04FB /* EventHistoryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */; };
+		ACC7A97B2A12AF9D001A04FB /* rules_attach.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC7A9792A12AF9D001A04FB /* rules_attach.json */; };
+		ACC7A97C2A12AF9D001A04FB /* rules_attach.zip in Resources */ = {isa = PBXBuildFile; fileRef = ACC7A97A2A12AF9D001A04FB /* rules_attach.zip */; };
 		ACD255AF26CE353000532B1E /* LifecycleV2StateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */; };
 		ACD255B126CE51EA00532B1E /* LifecycleV2StateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD255B026CE51EA00532B1E /* LifecycleV2StateManagerTests.swift */; };
 		B3E6E9762859BEC553298E95 /* Pods_AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */; };
@@ -662,6 +665,13 @@
 			remoteInfo = AEPCore;
 		};
 		3FF8172124D8ABF20064DFA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3FF8170924D89B160064DFA1;
+			remoteInfo = AEPCoreMocks;
+		};
+		ACC7A9772A0ED173001A04FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
 			proxyType = 1;
@@ -1068,6 +1078,9 @@
 		AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDMLanguage.swift; sourceTree = "<group>"; };
 		AC4D8D4526D9AC0200A86435 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		AC838996795DECE800B0A11B /* Pods-AEPIdentityTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.release.xcconfig"; sourceTree = "<group>"; };
+		ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryIntegrationTests.swift; sourceTree = "<group>"; };
+		ACC7A9792A12AF9D001A04FB /* rules_attach.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_attach.json; sourceTree = "<group>"; };
+		ACC7A97A2A12AF9D001A04FB /* rules_attach.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_attach.zip; sourceTree = "<group>"; };
 		ACD255AE26CE353000532B1E /* LifecycleV2StateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2StateManager.swift; sourceTree = "<group>"; };
 		ACD255B026CE51EA00532B1E /* LifecycleV2StateManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2StateManagerTests.swift; sourceTree = "<group>"; };
 		AE1AFF2E227272FC92CF7ABE /* Pods_AEPIdentityTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIdentityTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1892,6 +1905,7 @@
 				3FF829462507EBE400483C74 /* LifecycleIntegrationTests.swift */,
 				3FF829682509937100483C74 /* SignalIntegrationTests.swift */,
 				BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */,
+				ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */,
 			);
 			path = AEPIntegrationTests;
 			sourceTree = "<group>";
@@ -2031,6 +2045,8 @@
 		3FF829432507E9C900483C74 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				ACC7A9792A12AF9D001A04FB /* rules_attach.json */,
+				ACC7A97A2A12AF9D001A04FB /* rules_attach.zip */,
 				246EFA042790B20000C76A6B /* rules_lifecycle.zip */,
 				246EFA052790B20000C76A6B /* rules_pii.zip */,
 				246EFA032790B20000C76A6B /* rules_signal.zip */,
@@ -2350,7 +2366,6 @@
 			buildConfigurationList = 3F42570624F474F4005D4006 /* Build configuration list for PBXNativeTarget "AEPIntegrationTests" */;
 			buildPhases = (
 				5236D728E9AB04F15E4033B0 /* [CP] Check Pods Manifest.lock */,
-				3FF8294A2507FAEA00483C74 /* Run Script */,
 				3F4256F824F474F4005D4006 /* Sources */,
 				3F4256F924F474F4005D4006 /* Frameworks */,
 				3F4256FA24F474F4005D4006 /* Resources */,
@@ -2359,6 +2374,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				ACC7A9782A0ED173001A04FB /* PBXTargetDependency */,
 				3F42570824F47501005D4006 /* PBXTargetDependency */,
 				3F42570A24F47501005D4006 /* PBXTargetDependency */,
 				3F42570C24F47501005D4006 /* PBXTargetDependency */,
@@ -2682,8 +2698,10 @@
 			files = (
 				246EFA062790B20100C76A6B /* rules_signal.zip in Resources */,
 				3FEEA0DD2522436E007EC317 /* rules_pii.json in Resources */,
+				ACC7A97C2A12AF9D001A04FB /* rules_attach.zip in Resources */,
 				3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */,
 				3FF8296D2509942300483C74 /* rules_signal.json in Resources */,
+				ACC7A97B2A12AF9D001A04FB /* rules_attach.json in Resources */,
 				BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */,
 				246EFA082790B20100C76A6B /* rules_pii.zip in Resources */,
 				BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */,
@@ -2792,24 +2810,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		3FF8294A2507FAEA00483C74 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd ${PROJECT_DIR}/AEPIntegrationTests/resources\nzip -r rules_lifecycle.zip rules_lifecycle.json\nzip -r rules_signal.zip rules_signal.json\nzip -r rules_pii.zip rules_pii.json\n\n";
 		};
 		461B02974871EBDBADF78DAF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -3368,6 +3368,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ACC7A9762A0EA51F001A04FB /* EventHistoryIntegrationTests.swift in Sources */,
 				3F42571024F4754F005D4006 /* TestableNetworkService.swift in Sources */,
 				3F5F9ED12502D34500C8A0B4 /* ConfigurationIntegrationTests.swift in Sources */,
 				BF4A709E26CCCF5500612434 /* RulesEngineIntegrationTests.swift in Sources */,
@@ -3682,6 +3683,11 @@
 			isa = PBXTargetDependency;
 			target = 3FF8170924D89B160064DFA1 /* AEPCoreMocks */;
 			targetProxy = 3FF8172124D8ABF20064DFA1 /* PBXContainerItemProxy */;
+		};
+		ACC7A9782A0ED173001A04FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3FF8170924D89B160064DFA1 /* AEPCoreMocks */;
+			targetProxy = ACC7A9772A0ED173001A04FB /* PBXContainerItemProxy */;
 		};
 		BFE8A20825F98F60006C4AAF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
