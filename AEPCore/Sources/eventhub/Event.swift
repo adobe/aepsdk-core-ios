@@ -37,6 +37,9 @@ public class Event: NSObject, Codable {
     /// If `responseID` is not nil, then this event is a response event and `responseID` is the `event.id` of the `triggerEvent`
     @objc public private(set) var responseID: UUID?
 
+    /// unique identifier for the parent of this event. The parent event being the trigger for creating the current event
+    @objc public private(set) var parentID: UUID?
+
     /// Event description used for logging
     @objc override public var description: String {
         return """
@@ -48,6 +51,7 @@ public class Event: NSObject, Codable {
               data: \(PrettyDictionary.prettify(data))
               timestamp: \(timestamp.description)
               responseId: \(String(describing: responseID?.uuidString))
+              parentId: \(String(describing: parentID?.uuidString))
               mask: \(String(describing: mask))
             ]
         """
@@ -92,13 +96,14 @@ public class Event: NSObject, Codable {
     ///   - data: Any associated data with this `Event`
     ///   - requestEvent: The requesting `Event` for which this `Event` will be a response
     ///   - mask: Defines which properties should be used in creation of the Event's hash
-    private init(name: String, type: String, source: String, data: [String: Any]?, requestEvent: Event?, mask: [String]? = nil) {
+    private init(name: String, type: String, source: String, data: [String: Any]?, requestEvent: Event?, mask: [String]? = nil, parentID: UUID? = nil) {
         self.name = name
         self.type = type
         self.source = source
         self.data = data
         responseID = requestEvent?.id
         self.mask = mask
+        self.parentID = parentID
     }
 
     /// Creates a new `Event` where the `responseID` is equal to the `id` of this `Event`
@@ -109,7 +114,21 @@ public class Event: NSObject, Codable {
     ///   - data: Any associated data with this `Event`
     @objc(responseEventWithName:type:source:data:)
     public func createResponseEvent(name: String, type: String, source: String, data: [String: Any]?) -> Event {
-        return Event(name: name, type: type, source: source, data: data, requestEvent: self)
+        return Event(name: name, type: type, source: source, data: data, requestEvent: self, parentID: self.id)
+    }
+
+    /// Creates a new `Event` where the `parentID` is equal to the `id` of this `Event`.
+    /// Allows for defining logical chain of events, with each new event pointing to the previous event it is tied to. Used primarily for historical analysis.
+    ///   For direct request -> responses, use ``createResponseEvent(name:type:source:data:)``
+    /// - Parameters:
+    ///   - name: Name for the `Event`
+    ///   - type: `EventType` for the `Event`
+    ///   - source: `EventSource` for the `Event`
+    ///   - data: Any associated data with this `Event`
+    ///   - mask: Defines which properties should be used in creation of the Event's hash
+    @objc(chainedEventWithName:type:source:data:mask:)
+    public func createChainedEvent(name: String, type: String, source: String, data: [String: Any]?, mask: [String]? = nil) -> Event {
+        return Event(name: name, type: type, source: source, data: data, requestEvent: nil, mask: mask, parentID: self.id)
     }
 
     /// Clones the current `Event` with updated data
@@ -120,6 +139,7 @@ public class Event: NSObject, Codable {
         newEvent.id = self.id
         newEvent.timestamp = self.timestamp
         newEvent.responseID = self.responseID
+        newEvent.parentID = self.parentID
         return newEvent
     }
     // MARK: - Codable
@@ -132,6 +152,7 @@ public class Event: NSObject, Codable {
         case data
         case timestamp
         case responseID
+        case parentID
         case mask
     }
 
@@ -146,6 +167,7 @@ public class Event: NSObject, Codable {
         data = AnyCodable.toAnyDictionary(dictionary: anyCodableDict)
         timestamp = try values.decode(Date.self, forKey: .timestamp)
         responseID = try? values.decode(UUID.self, forKey: .responseID)
+        parentID = try? values.decode(UUID.self, forKey: .parentID)
         mask = try? values.decode([String].self, forKey: .mask)
     }
 
@@ -159,6 +181,7 @@ public class Event: NSObject, Codable {
         try container.encode(AnyCodable.from(dictionary: data), forKey: .data)
         try container.encode(timestamp, forKey: .timestamp)
         try container.encode(responseID, forKey: .responseID)
+        try container.encode(parentID, forKey: .parentID)
         try container.encode(mask, forKey: .mask)
     }
 }
