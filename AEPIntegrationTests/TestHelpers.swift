@@ -48,6 +48,11 @@ extension FileManager {
             } catch {
                 print("ERROR DESCRIPTION: \(error)")
             }
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.eventHistory"))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
 
         }
 
