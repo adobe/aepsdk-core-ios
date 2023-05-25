@@ -42,7 +42,7 @@ class EventHistory {
             return
         }
 
-        db.insert(hash: event.eventHash, handler: handler)
+        db.insert(hash: event.eventHash, timestamp: event.timestamp, handler: handler)
     }
 
     /// Retrieves a count of historical events matching the provided requests.

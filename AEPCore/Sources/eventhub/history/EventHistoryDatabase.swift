@@ -53,12 +53,11 @@ class EventHistoryDatabase {
     ///
     /// Fails if a connection to the database cannot be established, and calls the `handler` with a value of `false`.
     ///
-    /// The current timestamp will always be used on this insert.
-    ///
     /// - Parameters:
     ///   - hash: the hashed value representing an event.
+    ///   - timestamp: the event timestamp
     ///   - handler: called with the `Bool` result of the insert statement.
-    func insert(hash: UInt32, handler: ((Bool) -> Void)? = nil) {
+    func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
         dispatchQueue.async {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
@@ -68,7 +67,7 @@ class EventHistoryDatabase {
 
             let insertStatement = """
             INSERT INTO \(self.tableName) (\(self.columnHash), \(self.columnTimestamp))
-            VALUES (\(hash), \(Date().millisecondsSince1970))
+            VALUES (\(hash), \(timestamp.millisecondsSince1970))
             """
 
             let result = SQLiteWrapper.execute(database: connection, sql: insertStatement)

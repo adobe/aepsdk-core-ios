@@ -16,6 +16,7 @@ import Foundation
 class MockEventHistoryDatabase: EventHistoryDatabase {
     
     var paramHash: UInt32?
+    var paramTimestamp: Date?
     var paramFrom: Date?
     var paramTo: Date?
     var returnInsert: Bool = false
@@ -26,8 +27,9 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
         super.init(dispatchQueue: DispatchQueue(label: "mockEventHistoryDatabase"))
     }
     
-    override func insert(hash: UInt32, handler: ((Bool) -> Void)? = nil) {
+    override func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
         paramHash = hash
+        paramTimestamp = timestamp
         handler?(returnInsert)
     }
     
