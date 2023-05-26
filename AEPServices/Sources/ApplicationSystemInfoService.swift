@@ -76,7 +76,7 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getSystemLocaleName() -> String {
-        if #available(iOS 16, *) {
+        if #available(iOS 16, tvOS 16, *) {
             var systemLocaleComponents = Locale.Components(locale: Locale.autoupdatingCurrent)
             let preferredLanguageComponents = Locale.Language.Components(identifier: Locale.preferredLanguages.first ?? DEFAULT_LOCALE)
 
@@ -225,7 +225,7 @@ extension String {
     var userAgentLocale: String? {
         let locale = Locale(identifier: self)
 
-        if #available(iOS 16, *) {
+        if #available(iOS 16, tvOS 16, *) {
             if let language = locale.language.languageCode?.identifier {
                 if let region = locale.region?.identifier {
                     return "\(language)-\(region)"

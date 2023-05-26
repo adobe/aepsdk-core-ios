@@ -226,7 +226,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         localeBCPStringTests.forEach {
             mockSystemInfoService.activeLocaleName = $0
             let result = mockSystemInfoService.getActiveLocaleName().bcpFormattedLocale
-            if #available(iOS 16, *) {
+            if #available(iOS 16, tvOS 16, *) {
                 XCTAssertEqual($1, result, "Locale '\($0)' failed on iOS 16 or greater!")
             } else {
                 XCTAssertEqual($2, result, "Locale '\($0)' failed on iOS less than 16!")
@@ -240,7 +240,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         localeBCPStringTests.forEach {
             mockSystemInfoService.systemLocaleName = $0
             let result = mockSystemInfoService.getSystemLocaleName().bcpFormattedLocale
-            if #available(iOS 16, *) {
+            if #available(iOS 16, tvOS 16, *) {
                 XCTAssertEqual($1, result, "Locale '\($0)' failed on iOS 16 or greater!")
             } else {
                 XCTAssertEqual($2, result, "Locale '\($0)' failed on iOS less than 16!")

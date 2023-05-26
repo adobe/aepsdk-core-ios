@@ -174,7 +174,7 @@ extension String {
     var bcpFormattedLocale: String? {
         let locale = Locale(identifier: self)
 
-        if #available(iOS 16, *) {
+        if #available(iOS 16, tvOS 16, *) {
             return locale.identifier(.bcp47)
         } else {
             if let language = locale.languageCode {

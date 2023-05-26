@@ -220,7 +220,7 @@ extension String {
     var lifecycleLocaleFormat: String {
         let locale = Locale(identifier: self)
 
-        if #available(iOS 16, *) {
+        if #available(iOS 16, tvOS 16, *) {
             if let language = locale.language.languageCode?.identifier {
                 if let region = locale.region?.identifier {
                     return "\(language)-\(region)"
