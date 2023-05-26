@@ -177,12 +177,9 @@ extension String {
         if #available(iOS 16, *) {
             return locale.identifier(.bcp47)
         } else {
-            let language = locale.languageCode
-            let region = locale.regionCode
-
-            if let language = language {
-                if let region = region {
-                    return language + "-" + region
+            if let language = locale.languageCode {
+                if let region = locale.regionCode {
+                    return "\(language)-\(region)"
                 }
                 return language
             }
