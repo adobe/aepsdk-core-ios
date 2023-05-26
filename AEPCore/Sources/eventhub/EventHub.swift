@@ -75,7 +75,7 @@ final class EventHub {
             // record the event in history if it has a mask
             if event.mask != nil {
                 if let history = self.eventHistory {
-                    history.recordEvent(event) { result in
+                    history.recordEvent(processedEvent) { result in
                         if !result {
                             Log.debug(
                                 label: self.LOG_TAG,

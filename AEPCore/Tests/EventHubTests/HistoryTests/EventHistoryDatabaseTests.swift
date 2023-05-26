@@ -44,7 +44,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let expectation = XCTestExpectation(description: "handler was called for insert")
         let testHash: UInt32 = 552
                 
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertTrue(result)
             expectation.fulfill()
         }
@@ -57,7 +57,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let testHash: UInt32 = 552
         eventHistoryDatabase.connection = nil
         
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertFalse(result)
             expectation.fulfill()
         }
@@ -70,7 +70,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let selectExpectation = XCTestExpectation(description: "handler was called for select")
         let testHash: UInt32 = 552
         
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertTrue(result)
             insertExpectation.fulfill()
         }
@@ -107,7 +107,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let deleteExpectation = XCTestExpectation(description: "handler was called for delete")
         let testHash: UInt32 = 552
         
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertTrue(result)
             insertExpectation.fulfill()
         }
