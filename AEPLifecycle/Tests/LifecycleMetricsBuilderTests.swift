@@ -193,8 +193,8 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         let heightPixels = 812
         let resolution = "\(widthPixels)x\(heightPixels)"
         systemInfoService?.displayInformation = (widthPixels, heightPixels)
-        let locale = "US_OF_A"
-        let formattedLocale = "US-OF-A"
+        let locale = "en_US"
+        let formattedLocale = "en-US"
         systemInfoService?.activeLocaleName = locale
         let runMode = "Application"
         systemInfoService?.runMode = runMode

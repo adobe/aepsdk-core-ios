@@ -24,7 +24,7 @@ import UIKit
 class ApplicationSystemInfoService: SystemInfoService {
 
     private let DEFAULT_LOCALE = "en-US"
-    
+
     private let bundle: Bundle
     private lazy var userAgent: String = {
         let model = UIDevice.current.model
@@ -79,9 +79,9 @@ class ApplicationSystemInfoService: SystemInfoService {
         if #available(iOS 16, *) {
             var systemLocaleComponents = Locale.Components(locale: Locale.autoupdatingCurrent)
             let preferredLanguageComponents = Locale.Language.Components(identifier: Locale.preferredLanguages.first ?? DEFAULT_LOCALE)
-            
+
             systemLocaleComponents.languageComponents = preferredLanguageComponents
-            
+
             return Locale(components: systemLocaleComponents).identifier
         } else {
             return Locale.preferredLanguages.first ?? DEFAULT_LOCALE
@@ -224,7 +224,7 @@ struct NativeDisplayInformation {
 extension String {
     var userAgentLocale: String? {
         let locale = Locale(identifier: self)
-        
+
         if #available(iOS 16, *) {
             if let language = locale.language.languageCode?.identifier {
                 if let region = locale.region?.identifier {
@@ -240,7 +240,7 @@ extension String {
                 return language
             }
         }
-        
+
         return nil
     }
 }

@@ -217,7 +217,7 @@ class LifecycleMetricsBuilder {
 extension String {
     /// Gets the formatted locale
     /// - Return: `String` formatted locale
-    var lifecycleLocaleFormat: String {        
+    var lifecycleLocaleFormat: String {
         let locale = Locale(identifier: self)
 
         if #available(iOS 16, *) {
@@ -235,7 +235,7 @@ extension String {
                 return language
             }
         }
-        
+
         return "en-US"
     }
 }
