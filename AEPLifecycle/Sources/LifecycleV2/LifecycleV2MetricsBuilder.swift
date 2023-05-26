@@ -169,7 +169,7 @@ class LifecycleV2MetricsBuilder {
 extension String {
 
     /// Returns a BCP formatted locale from the calling locale String.
-    /// Uses the format "`Locale.languageCode`-`Locale.regionCode`".
+    /// Uses `Locale.identifier(.bcp47)` for iOS 16+, otherwise uses format `Locale.languageCode-Locale.regionCode`.
     /// - Return:  'String' representation of the given 'locale', or nil if no language code is set.
     var bcpFormattedLocale: String? {
         let locale = Locale(identifier: self)
