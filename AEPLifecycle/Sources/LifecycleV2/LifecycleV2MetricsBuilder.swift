@@ -76,7 +76,7 @@ class LifecycleV2MetricsBuilder {
         xdmApplicationInfoLaunch.name = systemInfoService.getApplicationName()
         xdmApplicationInfoLaunch.id = systemInfoService.getApplicationBundleId()
         xdmApplicationInfoLaunch.version = getAppVersion()
-        xdmApplicationInfoLaunch.language = XDMLanguage(language: systemInfoService.getActiveLocaleName().bcpFormattedLocale())
+        xdmApplicationInfoLaunch.language = XDMLanguage(language: systemInfoService.getActiveLocaleName().bcpFormattedLocale)
 
         return xdmApplicationInfoLaunch
     }
@@ -121,7 +121,7 @@ class LifecycleV2MetricsBuilder {
         xdmEnvironmentInfo?.type = XDMEnvironmentType.from(runMode: systemInfoService.getRunMode())
         xdmEnvironmentInfo?.operatingSystem = systemInfoService.getOperatingSystemName()
         xdmEnvironmentInfo?.operatingSystemVersion = systemInfoService.getOperatingSystemVersion()
-        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getSystemLocaleName().bcpFormattedLocale())
+        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getSystemLocaleName().bcpFormattedLocale)
 
         return xdmEnvironmentInfo
     }
@@ -171,19 +171,23 @@ extension String {
     /// Returns a BCP formatted locale from the calling locale String.
     /// Uses the format "`Locale.languageCode`-`Locale.regionCode`".
     /// - Return:  'String' representation of the given 'locale', or nil if no language code is set.
-    func bcpFormattedLocale() -> String? {
+    var bcpFormattedLocale: String? {
         let locale = Locale(identifier: self)
 
-        let language = locale.languageCode
-        let region = locale.regionCode
+        if #available(iOS 16, *) {
+            return locale.identifier(.bcp47)
+        } else {
+            let language = locale.languageCode
+            let region = locale.regionCode
 
-        if let language = language {
-            if let region = region {
-                return language + "-" + region
+            if let language = language {
+                if let region = region {
+                    return language + "-" + region
+                }
+                return language
             }
-            return language
-        }
 
-        return nil
+            return nil
+        }
     }
 }
