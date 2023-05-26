@@ -64,12 +64,14 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
+          version: "15.5"
           device: "iPhone 14"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
+          version: "16.1"
           device: "Apple TV"
 
 jobs:
