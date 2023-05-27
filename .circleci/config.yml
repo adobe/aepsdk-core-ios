@@ -64,8 +64,8 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          version: "15.5"
-          device: "iPhone 13"
+          version: "16.1"
+          device: "iPhone 14"
 
   prestart_tvos_simulator:
     steps:
