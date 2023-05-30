@@ -64,18 +64,20 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          device: "iPhone 8"
+          version: "16.1"
+          device: "iPhone 14"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
+          version: "16.1"
           device: "Apple TV"
 
 jobs:
   validate-code:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -88,7 +90,7 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -110,7 +112,7 @@ jobs:
 
   test-ios-services:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -132,7 +134,7 @@ jobs:
   
   test-ios-lifecycle:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -154,7 +156,7 @@ jobs:
 
   test-ios-identity:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -176,7 +178,7 @@ jobs:
 
   test-ios-signal:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -198,7 +200,7 @@ jobs:
 
   test-ios-integration:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -213,7 +215,7 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -235,7 +237,7 @@ jobs:
 
   test-tvos-services:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -257,7 +259,7 @@ jobs:
 
   test-tvos-lifecycle:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -279,7 +281,7 @@ jobs:
 
   test-tvos-identity:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -301,7 +303,7 @@ jobs:
 
   test-tvos-signal:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -323,7 +325,7 @@ jobs:
 
   test-tvos-integration:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -338,7 +340,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
     
     steps:
       - checkout
