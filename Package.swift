@@ -17,7 +17,7 @@ import PackageDescription
 
 let package = Package(
     name: "AEPCore",
-    platforms: [.iOS(.v10), .tvOS(.v10)],
+    platforms: [.iOS(.v11), .tvOS(.v11)],
     products: [
         .library(name: "AEPCore", targets: ["AEPCore"]),
         .library(name: "AEPIdentity", targets: ["AEPIdentity"]),
