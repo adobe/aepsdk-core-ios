@@ -88,8 +88,7 @@ jobs:
 
     - name: Create GH Release
       id: create_release
-#https://github.com/release-drafter/release-drafter/commit/fe52e97d262833ae07d05efaf1a239df3f1b5cd4
-      uses: release-drafter/release-drafter@fe52e97d262833ae07d05efaf1a239df3f1b5cd4
+      uses: release-drafter/release-drafter@v5
       if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
         name: v${{ github.event.inputs.tag }}
@@ -99,24 +98,13 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload - AEPRulesEngine          
-      uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}  
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
-        asset_path: ./build/AEPRulesEngine.xcframework.zip
-        asset_name: AEPRulesEngine.xcframework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Upload - AEPServices
       uses: actions/upload-release-asset@v1
       if: ${{ github.event.inputs.action_tag == 'yes' }}  
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ./build/AEPServices.xcframework.zip
-        asset_name: AEPServices.xcframework.zip
+        asset_name: AEPServices-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,7 +115,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ./build/AEPCore.xcframework.zip
-        asset_name: AEPCore.xcframework.zip
+        asset_name: AEPCore-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -138,7 +126,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ./build/AEPIdentity.xcframework.zip
-        asset_name: AEPIdentity.xcframework.zip
+        asset_name: AEPIdentity-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -149,7 +137,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ./build/AEPLifecycle.xcframework.zip
-        asset_name: AEPLifecycle.xcframework.zip
+        asset_name: AEPLifecycle-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -160,7 +148,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} 
         asset_path: ./build/AEPSignal.xcframework.zip
-        asset_name: AEPSignal.xcframework.zip
+        asset_name: AEPSignal-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
