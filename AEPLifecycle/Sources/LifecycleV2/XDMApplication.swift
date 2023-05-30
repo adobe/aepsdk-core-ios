@@ -44,6 +44,9 @@ struct XDMApplication {
     /// Version of the application
     var version: String?
 
+    /// The language being used by the application to represent the user's linguistic, geographical, or cultural preferences for data presentation.
+    var language: XDMLanguage?
+
     enum CodingKeys: String, CodingKey {
         case closeType
         case id
@@ -54,6 +57,7 @@ struct XDMApplication {
         case name
         case sessionLength
         case version
+        case language = "_dc"
     }
 }
 
@@ -69,5 +73,6 @@ extension XDMApplication: Encodable {
         if let unwrapped = name { try container.encode(unwrapped, forKey: .name) }
         if let unwrapped = sessionLength { try container.encode(unwrapped, forKey: .sessionLength) }
         if let unwrapped = version { try container.encode(unwrapped, forKey: .version) }
+        if let unwrapped = language { try container.encode(unwrapped, forKey: .language) }
     }
 }

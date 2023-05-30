@@ -215,7 +215,7 @@ final class EventHub {
             }
 
             sharedState.set(version: version, data: data)
-            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")            
+            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
             self.dispatchInternal(event: self.createSharedStateEvent(extensionName: extensionName, sharedStatetype: sharedStateType))
         }
     }

@@ -52,6 +52,7 @@ struct LifecycleMetrics: Equatable {
     var deviceResolution: String?
     var carrierName: String?
     var locale: String?
+    var systemLocale: String?
     var runMode: String?
     var previousOsVersion: String?
     var previousAppId: String?
@@ -81,6 +82,7 @@ extension LifecycleMetrics {
         case deviceResolution = "resolution"
         case carrierName = "carriername"
         case locale
+        case systemLocale = "systemlocale"
         case runMode = "runmode"
         case previousOsVersion = "previousosversion"
         case previousAppId = "previousappid"
@@ -118,6 +120,7 @@ extension LifecycleMetrics: Encodable {
         if let unwrapped = deviceResolution { try container.encode(unwrapped, forKey: .deviceResolution) }
         if let unwrapped = carrierName { try container.encode(unwrapped, forKey: .carrierName) }
         if let unwrapped = locale { try container.encode(unwrapped, forKey: .locale) }
+        if let unwrapped = systemLocale { try container.encode(unwrapped, forKey: .systemLocale) }
         if let unwrapped = runMode { try container.encode(unwrapped, forKey: .runMode) }
         if let unwrapped = previousOsVersion { try container.encode(unwrapped, forKey: .previousOsVersion) }
         if let unwrapped = previousAppId { try container.encode(unwrapped, forKey: .previousAppId) }
@@ -151,6 +154,7 @@ extension LifecycleMetrics: Decodable {
         deviceResolution = try? values.decode(String?.self, forKey: .deviceResolution)
         carrierName = try? values.decode(String?.self, forKey: .carrierName)
         locale = try? values.decode(String?.self, forKey: .locale)
+        systemLocale = try? values.decode(String?.self, forKey: .systemLocale)
         runMode = try? values.decode(String?.self, forKey: .runMode)
         previousOsVersion = try? values.decode(String?.self, forKey: .previousOsVersion)
         previousAppId = try? values.decode(String?.self, forKey: .previousAppId)

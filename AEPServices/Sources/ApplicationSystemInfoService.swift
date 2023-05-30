@@ -22,11 +22,14 @@ import UIKit
 ///     - bundled assets
 ///     - TBD as WIP as of now, holds required functionality for ConfigurationExtension
 class ApplicationSystemInfoService: SystemInfoService {
+
+    private let DEFAULT_LOCALE = "en-US"
+
     private let bundle: Bundle
     private lazy var userAgent: String = {
         let model = UIDevice.current.model
         let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
-        let localeIdentifier = getActiveLocaleName()
+        let localeIdentifier = getSystemLocaleName().userAgentLocale ?? DEFAULT_LOCALE
 
         return "Mozilla/5.0 (\(model); CPU OS \(osVersion) like Mac OS X; \(localeIdentifier))"
     }()
@@ -70,6 +73,19 @@ class ApplicationSystemInfoService: SystemInfoService {
 
     func getActiveLocaleName() -> String {
         return Locale.autoupdatingCurrent.identifier
+    }
+
+    func getSystemLocaleName() -> String {
+        if #available(iOS 16, tvOS 16, *) {
+            var systemLocaleComponents = Locale.Components(locale: Locale.autoupdatingCurrent)
+            let preferredLanguageComponents = Locale.Language.Components(identifier: Locale.preferredLanguages.first ?? DEFAULT_LOCALE)
+
+            systemLocaleComponents.languageComponents = preferredLanguageComponents
+
+            return Locale(components: systemLocaleComponents).identifier
+        } else {
+            return Locale.preferredLanguages.first ?? DEFAULT_LOCALE
+        }
     }
 
     func getDeviceName() -> String {
@@ -202,5 +218,29 @@ struct NativeDisplayInformation {
 
     var heightPixels: Int {
         Int(screenRect.size.height * screenScale)
+    }
+}
+
+extension String {
+    var userAgentLocale: String? {
+        let locale = Locale(identifier: self)
+
+        if #available(iOS 16, tvOS 16, *) {
+            if let language = locale.language.languageCode?.identifier {
+                if let region = locale.region?.identifier {
+                    return "\(language)-\(region)"
+                }
+                return language
+            }
+        } else {
+            if let language = locale.languageCode {
+                if let region = locale.regionCode {
+                    return "\(language)-\(region)"
+                }
+                return language
+            }
+        }
+
+        return nil
     }
 }
