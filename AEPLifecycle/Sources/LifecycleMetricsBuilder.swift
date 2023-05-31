@@ -187,7 +187,8 @@ class LifecycleMetricsBuilder {
 
         lifecycleMetrics.deviceResolution = getResolution()
         lifecycleMetrics.operatingSystem = "\(systemInfoService.getOperatingSystemName()) \(systemInfoService.getOperatingSystemVersion())"
-        lifecycleMetrics.locale = systemInfoService.getFormattedLocale()
+        lifecycleMetrics.locale = systemInfoService.getActiveLocaleName().lifecycleLocaleFormat
+        lifecycleMetrics.systemLocale = systemInfoService.getSystemLocaleName().lifecycleLocaleFormat
         lifecycleMetrics.runMode = systemInfoService.getRunMode()
 
         return self
@@ -213,11 +214,28 @@ class LifecycleMetricsBuilder {
     }
 }
 
-extension SystemInfoService {
+extension String {
     /// Gets the formatted locale
     /// - Return: `String` formatted locale
-    func getFormattedLocale() -> String {
-        let locale = getActiveLocaleName()
-        return locale.replacingOccurrences(of: "_", with: "-")
+    var lifecycleLocaleFormat: String {
+        let locale = Locale(identifier: self)
+
+        if #available(iOS 16, tvOS 16, *) {
+            if let language = locale.language.languageCode?.identifier {
+                if let region = locale.region?.identifier {
+                    return "\(language)-\(region)"
+                }
+                return language
+            }
+        } else {
+            if let language = locale.languageCode {
+                if let region = locale.regionCode {
+                    return "\(language)-\(region)"
+                }
+                return language
+            }
+        }
+
+        return "en-US"
     }
 }
