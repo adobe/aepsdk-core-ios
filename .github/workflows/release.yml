@@ -86,6 +86,14 @@ jobs:
         make archive
         make zip
 
+    - name: Detect AEPRulesEngine version
+      if: ${{ github.event.inputs.action_tag == 'yes' }}  
+      shell: bash
+      run: |
+        RULES_VERSION=$(pod spec cat AEPRulesEngine | jq '.version' | tr -d '"')
+        echo $RULES_VERSION
+        echo RULES_VERSION=$RULES_VERSION >> $GITHUB_ENV
+
     - name: Create GH Release
       id: create_release
       uses: release-drafter/release-drafter@v5
@@ -98,11 +106,22 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Upload - AEPRulesEngine
+      uses: actions/upload-release-asset@v1
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/AEPRulesEngine.xcframework.zip
+        asset_name: AEPRulesEngine-${{ env.RULES_VERSION }}.xcframework.zip
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Upload - AEPServices
       uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}  
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build/AEPServices.xcframework.zip
         asset_name: AEPServices-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
@@ -111,9 +130,9 @@ jobs:
 
     - name: Upload - AEPCore
       uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}  
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build/AEPCore.xcframework.zip
         asset_name: AEPCore-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
@@ -122,9 +141,9 @@ jobs:
 
     - name: Upload - AEPIdentity
       uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}  
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build/AEPIdentity.xcframework.zip
         asset_name: AEPIdentity-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
@@ -133,9 +152,9 @@ jobs:
 
     - name: Upload - AEPLifecycle
       uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}  
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build/AEPLifecycle.xcframework.zip
         asset_name: AEPLifecycle-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
@@ -144,9 +163,9 @@ jobs:
 
     - name: Upload - AEPSignal
       uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}  
+      if: ${{ github.event.inputs.action_tag == 'yes' }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./build/AEPSignal.xcframework.zip
         asset_name: AEPSignal-${{ github.event.inputs.tag }}.xcframework.zip
         asset_content_type: application/zip
