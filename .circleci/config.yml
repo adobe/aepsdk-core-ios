@@ -194,7 +194,7 @@ jobs:
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
       - codecov/upload:
-          flags: aepidentity-ios-tests
+          flags: aepsignal-ios-tests
           upload_name: Coverage Report for AEPSignal iOS Tests
           xtra_args: -c -v --xc --xp iossignalresults.xcresult
 
