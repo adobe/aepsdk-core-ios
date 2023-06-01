@@ -108,7 +108,7 @@ jobs:
       - codecov/upload:
           flags: aepcore-ios-tests
           upload_name: Coverage Report for AEPCore iOS Tests
-          xtra_args: -c -v --xc --xp ioscoreresults.xcresult
+          xtra_args: -c -v --xc --xp  build/AEPCore-ios.xcresult
 
   test-ios-services:
     macos:
@@ -130,7 +130,7 @@ jobs:
       - codecov/upload:
           flags: aepservices-ios-tests
           upload_name: Coverage Report for AEPServices iOS Tests
-          xtra_args: -c -v --xc --xp iosservicesresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPServices-ios.xcresult
   
   test-ios-lifecycle:
     macos:
@@ -152,7 +152,7 @@ jobs:
       - codecov/upload:
           flags: aeplifecycle-ios-tests
           upload_name: Coverage Report for AEPLifecycle iOS Tests
-          xtra_args: -c -v --xc --xp ioslifecycleresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPLifecycle-ios.xcresult
 
   test-ios-identity:
     macos:
@@ -174,7 +174,7 @@ jobs:
       - codecov/upload:
           flags: aepidentity-ios-tests
           upload_name: Coverage Report for AEPIdentity iOS Tests
-          xtra_args: -c -v --xc --xp iosidentityresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPIdentity-ios.xcresult
 
   test-ios-signal:
     macos:
@@ -196,7 +196,7 @@ jobs:
       - codecov/upload:
           flags: aepsignal-ios-tests
           upload_name: Coverage Report for AEPSignal iOS Tests
-          xtra_args: -c -v --xc --xp iossignalresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPSignal-ios.xcresult
 
   test-ios-integration:
     macos:
@@ -233,7 +233,7 @@ jobs:
       - codecov/upload:
           flags: aepcore-tvos-tests
           upload_name: Coverage Report for AEPCore tvOS Tests
-          xtra_args: -c -v --xc --xp aepcoretvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPCore-tvos.xcresult
 
   test-tvos-services:
     macos:
@@ -255,7 +255,7 @@ jobs:
       - codecov/upload:
           flags: aepservices-tvos-tests
           upload_name: Coverage Report for AEPServices tvOS Tests
-          xtra_args: -c -v --xc --xp aepservicestvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPServices-tvos.xcresult
 
   test-tvos-lifecycle:
     macos:
@@ -277,7 +277,7 @@ jobs:
       - codecov/upload:
           flags: aeplifecycle-tvos-tests
           upload_name: Coverage Report for AEPLifecycle tvOS Tests
-          xtra_args: -c -v --xc --xp aeplifecycletvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPLifecycle-tvos.xcresult
 
   test-tvos-identity:
     macos:
@@ -299,7 +299,7 @@ jobs:
       - codecov/upload:
           flags: aepidentity-tvos-tests
           upload_name: Coverage Report for AEPIdentity tvOS Tests
-          xtra_args: -c -v --xc --xp aepidentitytvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPIdentity-tvos.xcresult
 
   test-tvos-signal:
     macos:
@@ -321,7 +321,7 @@ jobs:
       - codecov/upload:
           flags: aepsignal-tvos-tests
           upload_name: Coverage Report for AEPSignal tvOS Tests
-          xtra_args: -c -v --xc --xp aepsignaltvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPSignal-tvos.xcresult
 
   test-tvos-integration:
     macos:

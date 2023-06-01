@@ -31,52 +31,52 @@ aep-core-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPCore"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPCORE_TARGET_NAME) -destination $(IOS_DESTINATION)  -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPCORE_TARGET_NAME) -destination $(IOS_DESTINATION)  -derivedDataPath build/out -resultBundlePath build/$(AEPCORE_TARGET_NAME)-ios.xcresult -enableCodeCoverage YES
 aep-core-tvos-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPCore on tvOS"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPCORE_TARGET_NAME) -destination $(TVOS_DESTINATION)  -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPCORE_TARGET_NAME) -destination $(TVOS_DESTINATION)  -derivedDataPath build/out -resultBundlePath build/$(AEPCORE_TARGET_NAME)-tvos.xcresult -enableCodeCoverage YES
 aep-services-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPServices"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSERVICES_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSERVICES_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/$(AEPSERVICES_TARGET_NAME)-ios.xcresult -enableCodeCoverage YES
 aep-services-tvos-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPServices on tvOS"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSERVICES_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSERVICES_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/$(AEPSERVICES_TARGET_NAME)-tvos.xcresult -enableCodeCoverage YES
 aep-lifecycle-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPLifecycle"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -resultBundlePath  build/$(AEPLIFECYCLE_TARGET_NAME)-ios.xcresult -enableCodeCoverage YES
 aep-lifecycle-tvos-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPLifecycle on tvOS"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPLIFECYCLE_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -resultBundlePath  build/$(AEPLIFECYCLE_TARGET_NAME)-tvos.xcresult -enableCodeCoverage YES
 aep-identity-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPIdentity"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPIDENTITY_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPIDENTITY_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/$(AEPIDENTITY_TARGET_NAME)-ios.xcresult -enableCodeCoverage YES
 aep-identity-tvos-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPIdentity on tvOS"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPIDENTITY_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPIDENTITY_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/$(AEPIDENTITY_TARGET_NAME)-tvos.xcresult -enableCodeCoverage YES
 aep-signal-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPSignal"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSIGNAL_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSIGNAL_TARGET_NAME) -destination $(IOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/$(AEPSIGNAL_TARGET_NAME)-ios.xcresult -enableCodeCoverage YES
 aep-signal-tvos-unit-test:
 	@echo "######################################################################"
 	@echo "### Unit Testing AEPSignal on tvOS"
 	@echo "######################################################################"
-	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSIGNAL_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -enableCodeCoverage YES
+	xcodebuild test -workspace $(PROJECT_NAME).xcworkspace -scheme $(AEPSIGNAL_TARGET_NAME) -destination $(TVOS_DESTINATION) -derivedDataPath build/out -resultBundlePath build/$(AEPSIGNAL_TARGET_NAME)-tvos.xcresult -enableCodeCoverage YES
 
 unit-test-all: aep-core-unit-test aep-core-tvos-unit-test aep-services-unit-test aep-services-tvos-unit-test aep-lifecycle-unit-test aep-lifecycle-tvos-unit-test aep-identity-unit-test aep-identity-tvos-unit-test aep-signal-unit-test aep-signal-tvos-unit-test
 
