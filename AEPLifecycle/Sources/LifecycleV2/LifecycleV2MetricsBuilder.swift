@@ -76,6 +76,7 @@ class LifecycleV2MetricsBuilder {
         xdmApplicationInfoLaunch.name = systemInfoService.getApplicationName()
         xdmApplicationInfoLaunch.id = systemInfoService.getApplicationBundleId()
         xdmApplicationInfoLaunch.version = getAppVersion()
+        xdmApplicationInfoLaunch.language = XDMLanguage(language: systemInfoService.getActiveLocaleName().bcpFormattedLocale)
 
         return xdmApplicationInfoLaunch
     }
@@ -120,7 +121,7 @@ class LifecycleV2MetricsBuilder {
         xdmEnvironmentInfo?.type = XDMEnvironmentType.from(runMode: systemInfoService.getRunMode())
         xdmEnvironmentInfo?.operatingSystem = systemInfoService.getOperatingSystemName()
         xdmEnvironmentInfo?.operatingSystemVersion = systemInfoService.getOperatingSystemVersion()
-        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getFormattedLocaleBCPString())
+        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getSystemLocaleName().bcpFormattedLocale)
 
         return xdmEnvironmentInfo
     }
@@ -165,25 +166,25 @@ class LifecycleV2MetricsBuilder {
 
 }
 
-extension SystemInfoService {
+extension String {
 
-    /// Return a string for the given 'locale' identifier.
-    /// Uses the format "`Locale.languageCode`-`Locale.regionCode`".
-    /// The default locale is taken from `SystemInfoService.getActiveLocaleName()`.
+    /// Returns a BCP formatted locale from the calling locale String.
+    /// Uses `Locale.identifier(.bcp47)` for iOS 16+, otherwise uses format `Locale.languageCode-Locale.regionCode`.
     /// - Return:  'String' representation of the given 'locale', or nil if no language code is set.
-    func getFormattedLocaleBCPString() -> String? {
-        let locale = Locale(identifier: getActiveLocaleName())
+    var bcpFormattedLocale: String? {
+        let locale = Locale(identifier: self)
 
-        let language = locale.languageCode
-        let region = locale.regionCode
-
-        if let language = language {
-            if let region = region {
-                return language + "-" + region
+        if #available(iOS 16, tvOS 16, *) {
+            return locale.identifier(.bcp47)
+        } else {
+            if let language = locale.languageCode {
+                if let region = locale.regionCode {
+                    return "\(language)-\(region)"
+                }
+                return language
             }
-            return language
-        }
 
-        return nil
+            return nil
+        }
     }
 }

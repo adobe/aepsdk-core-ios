@@ -245,7 +245,7 @@ class IdentityState {
             Log.trace(label: "\(LOG_TAG):\(#function)", "Not syncing identifiers at this time, no new identifiers or previously synced.")
             syncForIds = false
         } else {
-            if (identityProperties.ecid == nil) {
+            if identityProperties.ecid == nil {
                 Log.trace(label: "\(LOG_TAG):\(#function)", "ECID is nil when sync identifiers event received. Generate new ECID value.")
                 generateAndPersistECID()
             }
@@ -445,7 +445,7 @@ class IdentityState {
         if let error = identityResponse.error {
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
 
-            if (identityProperties.ecid == nil) {
+            if identityProperties.ecid == nil {
                 // should never happen bc we generate ECID locally before n/w request.
                 // Still, generate ECID locally if there's none yet.
                 Log.trace(label: "\(LOG_TAG):\(#function)", "ECID is nil when network response error received. Generate new ECID value.")

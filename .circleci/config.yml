@@ -64,18 +64,20 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          device: "iPhone 8"
+          version: "16.1"
+          device: "iPhone 14"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
+          version: "16.1"
           device: "Apple TV"
 
 jobs:
   validate-code:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -88,7 +90,7 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -106,11 +108,11 @@ jobs:
       - codecov/upload:
           flags: aepcore-ios-tests
           upload_name: Coverage Report for AEPCore iOS Tests
-          xtra_args: -c -v --xc --xp ioscoreresults.xcresult
+          xtra_args: -c -v --xc --xp  build/AEPCore-ios.xcresult
 
   test-ios-services:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -128,11 +130,11 @@ jobs:
       - codecov/upload:
           flags: aepservices-ios-tests
           upload_name: Coverage Report for AEPServices iOS Tests
-          xtra_args: -c -v --xc --xp iosservicesresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPServices-ios.xcresult
   
   test-ios-lifecycle:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -150,11 +152,11 @@ jobs:
       - codecov/upload:
           flags: aeplifecycle-ios-tests
           upload_name: Coverage Report for AEPLifecycle iOS Tests
-          xtra_args: -c -v --xc --xp ioslifecycleresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPLifecycle-ios.xcresult
 
   test-ios-identity:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -172,11 +174,11 @@ jobs:
       - codecov/upload:
           flags: aepidentity-ios-tests
           upload_name: Coverage Report for AEPIdentity iOS Tests
-          xtra_args: -c -v --xc --xp iosidentityresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPIdentity-ios.xcresult
 
   test-ios-signal:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -192,13 +194,13 @@ jobs:
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
       - codecov/upload:
-          flags: aepidentity-ios-tests
+          flags: aepsignal-ios-tests
           upload_name: Coverage Report for AEPSignal iOS Tests
-          xtra_args: -c -v --xc --xp iossignalresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPSignal-ios.xcresult
 
   test-ios-integration:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -213,7 +215,7 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -231,11 +233,11 @@ jobs:
       - codecov/upload:
           flags: aepcore-tvos-tests
           upload_name: Coverage Report for AEPCore tvOS Tests
-          xtra_args: -c -v --xc --xp aepcoretvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPCore-tvos.xcresult
 
   test-tvos-services:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -253,11 +255,11 @@ jobs:
       - codecov/upload:
           flags: aepservices-tvos-tests
           upload_name: Coverage Report for AEPServices tvOS Tests
-          xtra_args: -c -v --xc --xp aepservicestvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPServices-tvos.xcresult
 
   test-tvos-lifecycle:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -275,11 +277,11 @@ jobs:
       - codecov/upload:
           flags: aeplifecycle-tvos-tests
           upload_name: Coverage Report for AEPLifecycle tvOS Tests
-          xtra_args: -c -v --xc --xp aeplifecycletvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPLifecycle-tvos.xcresult
 
   test-tvos-identity:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -297,11 +299,11 @@ jobs:
       - codecov/upload:
           flags: aepidentity-tvos-tests
           upload_name: Coverage Report for AEPIdentity tvOS Tests
-          xtra_args: -c -v --xc --xp aepidentitytvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPIdentity-tvos.xcresult
 
   test-tvos-signal:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -319,11 +321,11 @@ jobs:
       - codecov/upload:
           flags: aepsignal-tvos-tests
           upload_name: Coverage Report for AEPSignal tvOS Tests
-          xtra_args: -c -v --xc --xp aepsignaltvosresults.xcresult
+          xtra_args: -c -v --xc --xp build/AEPSignal-tvos.xcresult
 
   test-tvos-integration:
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -338,7 +340,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 13.0.0 # Specify the Xcode version to use
+      xcode: 14.1.0 # Specify the Xcode version to use
     
     steps:
       - checkout

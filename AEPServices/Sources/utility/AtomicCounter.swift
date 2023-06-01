@@ -25,4 +25,8 @@ public final class AtomicCounter {
         count += 1
         return count
     }
+
+    public func get() -> Int {
+        return count
+    }
 }
