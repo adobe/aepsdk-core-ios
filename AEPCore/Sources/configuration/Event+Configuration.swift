@@ -28,6 +28,11 @@ extension Event {
     var isClearConfigEvent: Bool {
         return data?[ConfigurationConstants.Keys.CLEAR_UPDATED_CONFIG] as? Bool ?? false
     }
+    
+    /// Returns true if this `Event` is an internal configure with appId event, otherwise false
+    var isInternalConfigEvent: Bool {
+        return data?[ConfigurationConstants.Keys.IS_INTERNAL_EVENT] as? Bool ?? false
+    }
 
     /// Returns the appId stored in `data` if found, otherwise nil
     var appId: String? {
