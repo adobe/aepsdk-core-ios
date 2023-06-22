@@ -167,8 +167,8 @@ clean:
 format:
 	swiftformat . --swiftversion 5.1
 
-lint-autocorrect:
-	./Pods/SwiftLint/swiftlint autocorrect
+lint-autocorrect:	
+	./Pods/SwiftLint/swiftlint --fix
 
 lint:
 	./Pods/SwiftLint/swiftlint lint

@@ -34,3 +34,6 @@ disabled_rules: # rule identifiers to exclude from running
   - large_tuple
   - trailing_comma
   - type_body_length
+
+analyzer_rules:
+  - unused_import

@@ -244,6 +244,8 @@ class ConfigurationUpdateTests: XCTestCase {
         // Simulate reboot
         mockRuntime = TestableExtensionRuntime()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+        // Ignore the configuration request for persisted app-id
+        mockRuntime.ignoreEvent(type: EventType.configuration, source: EventSource.requestContent)
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
 
