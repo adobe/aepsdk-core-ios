@@ -71,19 +71,36 @@
 
         /// returns the width of the screen, measured in points
         var screenWidth: CGFloat {
+            if #available(iOS 13.0, *) {
+                if let keyWindow = UIApplication.shared.getKeyWindow() {
+                    return keyWindow.frame.width
+                }
+            }
+
             return UIScreen.main.bounds.width
         }
 
         /// returns the height of the screen, measured in points
         var screenHeight: CGFloat {
-            if let settings = settings {
-                return settings.verticalAlign == .bottom ? UIScreen.main.bounds.height : UIScreen.main.bounds.height - safeAreaHeight
+            let isVAlignBottom = settings?.verticalAlign == .bottom
+            if #available(iOS 13.0, *) {
+                if let keyWindow = UIApplication.shared.getKeyWindow() {
+                    return isVAlignBottom ? keyWindow.frame.height : keyWindow.frame.height - safeAreaHeight
+                }
+            } else if isVAlignBottom {
+                return UIScreen.main.bounds.height
             }
+
             return UIScreen.main.bounds.height - safeAreaHeight
         }
 
         /// calculates the safe area at the top of the screen, measured by status bar and/or notch
         var safeAreaHeight: CGFloat {
+            if #available(iOS 16.0, *) {
+                if let fullscreen = UIApplication.shared.getKeyWindow()?.windowScene?.isFullScreen, fullscreen {
+                    return 0
+                }
+            }
             if #available(iOS 13.0, *) {
                 return UIApplication.shared.getKeyWindow()?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
             } else {
