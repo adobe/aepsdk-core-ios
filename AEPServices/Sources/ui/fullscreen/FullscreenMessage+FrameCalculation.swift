@@ -191,7 +191,7 @@
                 // check for an inset
                 if let vInset = settings.verticalInset {
                     // y alignment here is screen height - message height - inset value converted from percentage to points
-                    return screenHeight - height + (screenHeight * CGFloat(vInset) / 100)
+                    return screenHeight - height - (screenHeight * CGFloat(vInset) / 100)
                 } else {
                     // no inset, bottom y alignment means screen height - message height
                     return screenHeight - height
