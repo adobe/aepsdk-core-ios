@@ -197,6 +197,7 @@
             DispatchQueue.main.async {
                 // remove device orientation observer
                 NotificationCenter.default.removeObserver(self)
+                self.observerSet = false
 
                 if self.messageMonitor.dismiss() == false {
                     return
