@@ -91,9 +91,12 @@ class EventHistory {
     func deleteEvents(_ requests: [EventHistoryRequest], handler: ((Int) -> Void)? = nil) {
         var rowsDeleted = 0
         for request in requests {
+            let semaphore = DispatchSemaphore(value: 0)
             db.delete(hash: request.mask.fnv1a32(), from: request.fromDate, to: request.toDate) { count in
                 rowsDeleted += count
+                semaphore.signal()
             }
+            semaphore.wait()
         }
 
         handler?(rowsDeleted)
