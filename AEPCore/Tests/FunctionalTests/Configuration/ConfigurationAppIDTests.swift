@@ -75,7 +75,7 @@ class ConfigurationAppIDTests: XCTestCase {
         // Should have been removed from storage
         XCTAssertNil(mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as Any?)
     }
-    
+
     func testInternalConfigureWithAppIdIsDroppedIfAppIdDiffersFromPersistedAppId() {
         let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         ServiceProvider.shared.networkService = mockNetworkService
@@ -94,7 +94,7 @@ class ConfigurationAppIDTests: XCTestCase {
         // appIdEvent2 should be dropped.
         XCTAssertEqual(validAppId, mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as? String)
     }
-    
+
     func testInternalConfigureWithAppIdIsNotDroppedIfNoPersistedAppIdExists() {
         let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         ServiceProvider.shared.networkService = mockNetworkService
