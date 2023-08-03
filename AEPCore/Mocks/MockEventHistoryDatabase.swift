@@ -28,22 +28,28 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
     }
     
     override func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
-        paramHash = hash
-        paramTimestamp = timestamp
-        handler?(returnInsert)
+        dispatchQueue.async {
+            self.paramHash = hash
+            self.paramTimestamp = timestamp
+            handler?(self.returnInsert)
+        }
     }
     
     override func select(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: @escaping (EventHistoryResult) -> Void) {
-        paramHash = hash
-        paramFrom = from
-        paramTo = to
-        handler(returnSelect ?? EventHistoryResult(count: 0))
+        dispatchQueue.async {
+            self.paramHash = hash
+            self.paramFrom = from
+            self.paramTo = to
+            handler(self.returnSelect ?? EventHistoryResult(count: 0))
+        }
     }
     
     override func delete(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: ((Int) -> Void)? = nil) {
-        paramHash = hash
-        paramFrom = from
-        paramTo = to
-        handler?(returnDelete)
+        dispatchQueue.async {            
+            self.paramHash = hash
+            self.paramFrom = from
+            self.paramTo = to
+            handler?(self.returnDelete)
+        }
     }
 }
