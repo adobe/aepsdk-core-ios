@@ -95,6 +95,11 @@
             show(withMessagingDelegateControl: true)
         }
 
+        deinit {
+            NotificationCenter.default.removeObserver(self)
+        }
+
+        private var observerSet = false
         public func show(withMessagingDelegateControl delegateControl: Bool) {
             // check if the webview has already been created
             if let webview = self.webView as? WKWebView {
@@ -103,6 +108,16 @@
             }
 
             DispatchQueue.main.async {
+
+                // add observer to handle device rotation
+                if !self.observerSet {
+                    NotificationCenter.default.addObserver(self,
+                                                           selector: #selector(self.handleDeviceRotation(notification:)),
+                                                           name: UIDevice.orientationDidChangeNotification,
+                                                           object: nil)
+                    self.observerSet = true
+                }
+
                 // create the webview
                 let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
 
@@ -149,6 +164,15 @@
             }
         }
 
+        @objc private func handleDeviceRotation(notification: NSNotification) {
+            DispatchQueue.main.async {
+                if self.transparentBackgroundView != nil {
+                    self.transparentBackgroundView?.frame = CGRect(x: 0, y: 0, width: self.screenWidth, height: self.screenHeight + self.safeAreaHeight)
+                }
+                self.webView?.frame = self.frameWhenVisible
+            }
+        }
+
         private func handleShouldShow(webview: WKWebView, delegateControl: Bool) {
             // get off main thread while delegate has control to prevent pause on main thread
             DispatchQueue.global().async {
@@ -171,6 +195,10 @@
 
         public func dismiss() {
             DispatchQueue.main.async {
+                // remove device orientation observer
+                NotificationCenter.default.removeObserver(self)
+                self.observerSet = false
+
                 if self.messageMonitor.dismiss() == false {
                     return
                 }
@@ -378,4 +406,5 @@
             }
         }
     }
+
 #endif
