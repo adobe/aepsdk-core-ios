@@ -15,7 +15,7 @@ import XCTest
 @testable import AEPServices
 
 class UserDefaultsNamedCollectionTest: XCTestCase {
-    let service = UserDefaultsNamedCollection()
+    let service = FileSystemNamedCollection()
 
     func testSimpleStore() {
         let collectionName = "testName"

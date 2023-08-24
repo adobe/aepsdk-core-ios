@@ -353,6 +353,7 @@
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
 		75408CF72948EA0A00C44CE1 /* AtomicCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */; };
+		75E0EA2E2A8D46C2006B81CB /* FileSystemNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E0EA2D2A8D46C2006B81CB /* FileSystemNamedCollection.swift */; };
 		7814B23325CB455200841429 /* URL+Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7814B23225CB455200841429 /* URL+Validator.swift */; };
 		786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */; };
 		786C001525B8EE6200F26D34 /* HttpConnectionConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */; };
@@ -1043,6 +1044,7 @@
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicCounterTests.swift; sourceTree = "<group>"; };
+		75E0EA2D2A8D46C2006B81CB /* FileSystemNamedCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FileSystemNamedCollection.swift; path = TestApps/FileSystemNamedCollection.swift; sourceTree = SOURCE_ROOT; };
 		7814B23225CB455200841429 /* URL+Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validator.swift"; sourceTree = "<group>"; };
 		786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatter.swift; sourceTree = "<group>"; };
 		786C001425B8EE6200F26D34 /* HttpConnectionConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpConnectionConstants.swift; sourceTree = "<group>"; };
@@ -1675,6 +1677,7 @@
 		3F0397BA24BE5FF30019F095 /* storage */ = {
 			isa = PBXGroup;
 			children = (
+				75E0EA2D2A8D46C2006B81CB /* FileSystemNamedCollection.swift */,
 				3F0397BC24BE5FF30019F095 /* NamedCollectionDataStore.swift */,
 				3F0397BB24BE5FF30019F095 /* NamedCollectionProcessing.swift */,
 				3F0397BD24BE5FF30019F095 /* UserDefaultsNamedCollection.swift */,
@@ -3278,6 +3281,7 @@
 				3F0397C424BE5FF30019F095 /* Cache.swift in Sources */,
 				3F0397D724BE5FF30019F095 /* DataQueueService.swift in Sources */,
 				3F0397F324BE60910019F095 /* PersistentHitQueue.swift in Sources */,
+				75E0EA2E2A8D46C2006B81CB /* FileSystemNamedCollection.swift in Sources */,
 				24D9D54C26AB797D002A441A /* FullscreenMessage+WKScriptMessageHandler.swift in Sources */,
 				3F0397CD24BE5FF30019F095 /* NetworkServiceConstants.swift in Sources */,
 				3F0397C724BE5FF30019F095 /* CacheExpiry.swift in Sources */,

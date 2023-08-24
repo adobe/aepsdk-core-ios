@@ -178,8 +178,9 @@ public class NamedCollectionDataStore {
         }
 
         let encoder = JSONEncoder()
-        let encodedValue = try? encoder.encode(value)
-        set(key: key, value: encodedValue)
+        guard let encodedValue = try? encoder.encode(value) else {return}
+        let encodedString = String(data: encodedValue, encoding: .utf8)
+        set(key: key, value: encodedString)
     }
 
     public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
@@ -189,7 +190,7 @@ public class NamedCollectionDataStore {
             return Date(timeIntervalSince1970: date) as? T
         }
 
-        if let savedData = get(key: key) as? Data {
+        if let savedString = get(key: key) as? String, let savedData = savedString.data(using: .utf8) {
             return try? JSONDecoder().decode(T.self, from: savedData)
         }
 
@@ -212,6 +213,7 @@ public class NamedCollectionDataStore {
         if key.isEmpty {
             return
         }
+
         storageService.set(collectionName: name, key: key, value: value)
     }
 
