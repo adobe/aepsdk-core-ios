@@ -23,6 +23,7 @@ class ConfigurationFileInPathTests: XCTestCase {
 
     override func setUp() {
         UserDefaults.clear()
+        clearStorageFiles()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
@@ -211,5 +212,15 @@ class ConfigurationFileInPathTests: XCTestCase {
     static func createConfigFilePathEvent(filePath: String) -> Event {
         return Event(name: "Configure with file path", type: EventType.configuration, source: EventSource.requestContent,
                      data: ["config.filePath": filePath])
+    }
+    
+    private func clearStorageFiles() {
+        let directory = FileManager.default.urls(for: .libraryDirectory, in: .allDomainsMask)[0].appendingPathComponent("com.adobe.aep.datastore", isDirectory: true)
+        guard let filePaths = try? FileManager.default.contentsOfDirectory(atPath: directory.absoluteString) else {
+            return
+        }
+        for filePath in filePaths {
+            try? FileManager.default.removeItem(atPath: directory.absoluteString + filePath)
+        }
     }
 }

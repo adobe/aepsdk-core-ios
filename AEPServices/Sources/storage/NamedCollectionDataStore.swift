@@ -163,7 +163,7 @@ public class NamedCollectionDataStore {
             return getObject(key: key)
         }
         set {
-            set(key: key, value: newValue)
+            setObject(key: key, value: newValue)
         }
     }
 
