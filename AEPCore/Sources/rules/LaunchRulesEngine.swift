@@ -37,7 +37,6 @@ public class LaunchRulesEngine {
     private let name: String
     private let rulesQueue: DispatchQueue
     private var waitingEvents: [Event]?
-    private let dataStore: NamedCollectionDataStore
     private var dispatchChainedEventsCount: [UUID: Int] = [:]
 
     let extensionRuntime: ExtensionRuntime
@@ -52,7 +51,6 @@ public class LaunchRulesEngine {
         self.name = name
         rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.\(name)")
         transformer = LaunchRuleTransformer(runtime: extensionRuntime).transformer
-        dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
         rulesEngine = RulesEngine(evaluator: evaluator, transformer: transformer)
         waitingEvents = [Event]()
