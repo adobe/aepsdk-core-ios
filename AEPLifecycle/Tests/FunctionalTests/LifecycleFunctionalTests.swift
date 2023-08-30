@@ -10,11 +10,11 @@
  governing permissions and limitations under the License.
  */
 
+@testable import AEPLifecycle
+@testable import AEPServicesMocks
 import AEPCore
 import AEPCoreMocks
-@testable import AEPLifecycle
 import AEPServices
-import AEPServicesMocks
 import XCTest
 
 /// Functional tests for the Lifecycle extension
@@ -38,6 +38,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
         UserDefaults.clear()
+        NamedCollectionDataStore.clearStorageFiles()
     }
 
     private func setupMockSystemInfoService() {

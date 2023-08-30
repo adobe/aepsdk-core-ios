@@ -11,9 +11,9 @@
  */
 
 @testable import AEPCore
+@testable import AEPServicesMocks
 import AEPCoreMocks
 import AEPServices
-import AEPServicesMocks
 import XCTest
 
 /// Functional tests for the Configuration extension
@@ -48,6 +48,7 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     override func tearDown() {
+        NamedCollectionDataStore.clearStorageFiles()
         UserDefaults.clear()
     }
 

@@ -12,6 +12,7 @@
 import XCTest
 @testable import AEPCore
 @testable import AEPServices
+@testable import AEPServicesMocks
 import AEPIdentity
 import AEPLifecycle
 import AEPSignal
@@ -25,6 +26,7 @@ class LifecycleIntegrationTests: XCTestCase {
     override func setUp() {
         UserDefaults.clear()
         FileManager.default.clearCache()
+        NamedCollectionDataStore.clearStorageFiles()
         ServiceProvider.shared.reset()
         initExtensionsAndWait()
     }

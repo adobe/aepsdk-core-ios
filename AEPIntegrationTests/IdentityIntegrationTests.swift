@@ -13,6 +13,7 @@ import XCTest
 @testable import AEPCore
 @testable import AEPServices
 @testable import AEPIdentity
+@testable import AEPServicesMocks
 import AEPLifecycle
 import AEPSignal
 
@@ -23,6 +24,7 @@ class IdentityIntegrationTests: XCTestCase {
     override func setUp() {
         UserDefaults.clear()
         FileManager.default.clearCache()
+        NamedCollectionDataStore.clearStorageFiles()
     }
 
     override func tearDown() {

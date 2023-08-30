@@ -11,6 +11,7 @@
 
 import XCTest
 @testable import AEPIdentity
+@testable import AEPServicesMocks
 
 class CustomIdentityTests: XCTestCase {
 

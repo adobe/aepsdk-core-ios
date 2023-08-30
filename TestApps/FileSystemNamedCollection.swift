@@ -14,6 +14,8 @@
 import Foundation
 
 class FileSystemNamedCollection: NamedCollectionProcessing {
+    
+    private let queue = DispatchQueue(label: "FileSystemNamedCollection.barrierQueue")
     let adobeDirectory = "com.adobe.aep.datastore"
     var appGroup: String?
     var appGroupUrl: URL?
@@ -34,42 +36,48 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
         guard let fileUrl = fileUrl(for: collectionName) else {
             return
         }
-        
-        if var dict = getDictFor(collectionName: collectionName) {
-            dict[key] = value
-            if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
-                try? updatedStorageData.write(to: fileUrl)
-            }
-        } else {
-            // If value is nil, and dict doesn't exist, don't do anything
-            guard let value = value else {
-                return
-            }
-            
-            let dict: NSDictionary = [key: value]
-            if JSONSerialization.isValidJSONObject(dict) {
+        queue.async {
+            if var dict = self.getDictFor(collectionName: collectionName) {
+                dict[key] = value
                 if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
                     try? updatedStorageData.write(to: fileUrl, options: .atomic)
                 }
+            } else {
+                // If value is nil, and dict doesn't exist, don't do anything
+                guard let value = value else {
+                    return
+                }
+                
+                let dict: NSDictionary = [key: value]
+                if JSONSerialization.isValidJSONObject(dict) {
+                    if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
+                        try? updatedStorageData.write(to: fileUrl, options: .atomic)
+                    }
+                }
             }
         }
+        
     }
     
     func get(collectionName: String, key: String) -> Any? {
-        if let dict = getDictFor(collectionName: collectionName) {
-            return dict[key]
+        return queue.sync {
+            if let dict = getDictFor(collectionName: collectionName) {
+                return dict[key]
+            }
+            return nil
         }
-        return nil
     }
     
     func remove(collectionName: String, key: String) {
-        guard let fileUrl = fileUrl(for: collectionName) else {
-            return
-        }
-        if var dict = getDictFor(collectionName: collectionName) {
-            dict.removeValue(forKey: key)
-            if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
-                try? updatedStorageData.write(to: fileUrl, options: .atomic)
+        queue.async {
+            guard let fileUrl = self.fileUrl(for: collectionName) else {
+                return
+            }
+            if var dict = self.getDictFor(collectionName: collectionName) {
+                dict.removeValue(forKey: key)
+                if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
+                    try? updatedStorageData.write(to: fileUrl, options: .atomic)
+                }
             }
         }
     }
