@@ -16,16 +16,20 @@
 
     @available(iOSApplicationExtension, unavailable)
     extension FullscreenMessage {
+        /// NOTE - all methods in this extension must be called from the main thread
+
         // MARK: - internal vars
 
         /// NOTE - `frameWhenVisible`, `frameBeforeShow` and `frameAfterDismiss` are calculated frames are used for animation
 
         /// frameWhenVisible is the frame when the message is visible to the user
+        /// this method should only be called from the main thread
         var frameWhenVisible: CGRect {
             return CGRect(x: originX, y: originY, width: width, height: height)
         }
 
         /// frameBeforeShow considers displayAnimation and positions the message appropriately
+        /// this method should only be called from the main thread
         var frameBeforeShow: CGRect {
             guard let displayAnimation = settings?.displayAnimation else {
                 return frameWhenVisible
@@ -48,6 +52,7 @@
         }
 
         /// frameAfterDismiss considers dismissAnimation and positions the message appropriately
+        /// this method should only be called from the main thread
         var frameAfterDismiss: CGRect {
             guard let dismissAnimation = settings?.dismissAnimation else {
                 return frameWhenVisible
@@ -70,20 +75,38 @@
         }
 
         /// returns the width of the screen, measured in points
+        /// this method should only be called from the main thread
         var screenWidth: CGFloat {
+            if #available(iOS 13.0, *) {
+                if let keyWindow = UIApplication.shared.getKeyWindow() {
+                    return keyWindow.frame.width
+                }
+            }
+
             return UIScreen.main.bounds.width
         }
 
         /// returns the height of the screen, measured in points
+        /// this method should only be called from the main thread
         var screenHeight: CGFloat {
-            if let settings = settings {
-                return settings.verticalAlign == .bottom ? UIScreen.main.bounds.height : UIScreen.main.bounds.height - safeAreaHeight
+            let isVAlignBottom = settings?.verticalAlign == .bottom
+            if #available(iOS 13.0, *) {
+                if let keyWindow = UIApplication.shared.getKeyWindow() {
+                    return isVAlignBottom ? keyWindow.frame.height : keyWindow.frame.height - safeAreaHeight
+                }
             }
-            return UIScreen.main.bounds.height - safeAreaHeight
+
+            return isVAlignBottom ? UIScreen.main.bounds.height : UIScreen.main.bounds.height - safeAreaHeight
         }
 
         /// calculates the safe area at the top of the screen, measured by status bar and/or notch
+        /// this method should only be called from the main thread
         var safeAreaHeight: CGFloat {
+            if #available(iOS 16.0, *) {
+                if let fullscreen = UIApplication.shared.getKeyWindow()?.windowScene?.isFullScreen, fullscreen {
+                    return 0
+                }
+            }
             if #available(iOS 13.0, *) {
                 return UIApplication.shared.getKeyWindow()?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
             } else {
@@ -96,6 +119,7 @@
         /// width in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen width.
         /// default value is full screen width.
+        /// this method should only be called from the main thread
         private var width: CGFloat {
             if let settingsWidth = settings?.width {
                 return screenWidth * CGFloat(settingsWidth) / 100
@@ -107,6 +131,7 @@
         /// height in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen height.
         /// default value is full screen height.
+        /// this method should only be called from the main thread
         private var height: CGFloat {
             if let settingsHeight = settings?.height {
                 return screenHeight * CGFloat(settingsHeight) / 100
@@ -120,6 +145,7 @@
         /// centered according to its width.
         /// if horizontal alignment is left or right, the inset will be calculated as a percentage width from the respective
         /// alignment origin.
+        /// this method should only be called from the main thread
         private var originX: CGFloat {
             // default to 0 for x origin if unspecified
             guard let settings = settings else {
@@ -155,6 +181,7 @@
         /// centered according to its height.
         /// if vertical alignment is top or bottom, the inset will be calculated as a percentage height from the respective
         /// alignment origin.
+        /// this method should only be called from the main thread
         private var originY: CGFloat {
             // default to 0 (considering safe area) for y origin if unspecified
             guard let settings = settings else {
@@ -174,7 +201,7 @@
                 // check for an inset
                 if let vInset = settings.verticalInset {
                     // y alignment here is screen height - message height - inset value converted from percentage to points
-                    return screenHeight - height + (screenHeight * CGFloat(vInset) / 100)
+                    return screenHeight - height - (screenHeight * CGFloat(vInset) / 100)
                 } else {
                     // no inset, bottom y alignment means screen height - message height
                     return screenHeight - height
