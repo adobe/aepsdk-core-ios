@@ -255,7 +255,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
 
     func testArraySubscript() {
         let val: String = "test"
-        let putArrVal: [String] = [val]
+        let putArrVal: [Any] = [val]
         store?[ARRAY_KEY] = putArrVal
         XCTAssertTrue(mockKeyValueService.setCalled)
         guard let arr = mockKeyValueService.setValue as? [Any] else {
@@ -282,7 +282,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         let defaultDictKey: String = "testKey"
         let defaultDictVal: String = "test"
 
-        let defaultVal: [String: String] = [defaultDictKey: defaultDictVal]
+        let defaultVal: [AnyHashable: Any] = [defaultDictKey: defaultDictVal]
         mockKeyValueService.getResult = nil
         guard let dict = store?.getDictionary(key: DICT_KEY, fallback: defaultVal) else {
             XCTFail()
@@ -324,7 +324,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
     func testDictSubscript() {
         let valKey: String = "testKey"
         let val: String = "test"
-        let putDictVal: [String: String] = [valKey: val]
+        let putDictVal: [AnyHashable: Any] = [valKey: val]
         store?[DICT_KEY] = putDictVal
         XCTAssertTrue(mockKeyValueService.setCalled)
         guard let dict = mockKeyValueService.setValue as? [AnyHashable: Any] else {
@@ -374,6 +374,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
     func testCodableSubscript() {
         let val = MockCoding(id: 1, name: "testName")
         mockKeyValueService.shouldEncode = true
+        mockKeyValueService.shouldDecode = true
         store?[OBJ_KEY] = val
         XCTAssertTrue(mockKeyValueService.setCalled)
         let setVal = mockKeyValueService.setValue as? MockCoding
@@ -391,8 +392,11 @@ class NamedCollectionDataStoreTest: XCTestCase {
 
         XCTAssertTrue(mockKeyValueService.setCalled)
         if #available(iOS 13, tvOS 13, *) {
-            let encodedDate = try? JSONEncoder().encode(date)
-            XCTAssertEqual(mockKeyValueService.setValue as? Data, encodedDate)
+            guard let encodedDate = try? JSONEncoder().encode(date), let encodedStringDate = String(data: encodedDate, encoding: .utf8) else {
+                XCTFail()
+                return
+            }
+            XCTAssertEqual(mockKeyValueService.setValue as? String, encodedStringDate)
         } else {
             XCTAssertEqual(mockKeyValueService.setValue as? Double, date.timeIntervalSince1970)
         }
@@ -402,7 +406,11 @@ class NamedCollectionDataStoreTest: XCTestCase {
         // Date can not be persisted as Codable in iOS versions < 13
         if #available(iOS 13, tvOS 13, *) {
             let date = Date()
-            mockKeyValueService.getResult = try? JSONEncoder().encode(date)
+            guard let encodedDate = try? JSONEncoder().encode(date), let encodedStringDate = String(data: encodedDate, encoding: .utf8) else {
+                XCTFail()
+                return
+            }
+            mockKeyValueService.getResult = encodedStringDate
 
             let persistedDate: Date? = store?.getObject(key: OBJ_KEY)
             XCTAssertTrue(date.equal(other: persistedDate))
@@ -445,9 +453,13 @@ class MockKeyValueService: NamedCollectionProcessing {
     func get(collectionName _: String, key _: String) -> Any? {
         getCalled = true
         if shouldEncode {
-            let encoded = try? JSONEncoder().encode(getResult as? MockCoding)
-            return encoded
+            guard let encoded = try? JSONEncoder().encode(getResult as? MockCoding) else {
+                return nil
+            }
+            return String(data: encoded, encoding: .utf8)
+            
         }
+        
 
         return getResult
     }
@@ -459,7 +471,7 @@ class MockKeyValueService: NamedCollectionProcessing {
     func set(collectionName _: String, key _: String, value: Any?) {
         setCalled = true
         if shouldDecode {
-            if let data = value as? Data {
+            if let encodedString = value as? String, let data = encodedString.data(using: .utf8) {
                 setValue = try? JSONDecoder().decode(MockCoding.self, from: data)
             }
         } else {
