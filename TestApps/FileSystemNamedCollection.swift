@@ -114,15 +114,21 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     }
     
     private func findOrCreateAdobeSubdirectory(at baseUrl: URL) -> URL? {
-        let adobeBaseUrl = baseUrl.appendingPathComponent(adobeDirectory, isDirectory: true)
-        do {
-            try fileManager.createDirectory(at: adobeBaseUrl, withIntermediateDirectories: true)
-        } catch {
-            Log.error(label: adobeDirectory, "Failed to create storage directory with error: \(error)")
+        // Validate baseUrl
+        if baseUrl.isSafeUrl() {
+            let adobeBaseUrl = baseUrl.appendingPathComponent(adobeDirectory, isDirectory: true)
+            do {
+                try fileManager.createDirectory(at: adobeBaseUrl, withIntermediateDirectories: true)
+            } catch {
+                Log.error(label: adobeDirectory, "Failed to create storage directory with error: \(error)")
+                return nil
+            }
+            
+            return adobeBaseUrl
+        } else {
+            Log.error(label: adobeDirectory, "Failed to create storage directory, baseURL is not valid.")
             return nil
         }
-        
-        return adobeBaseUrl
     }
     
 }
