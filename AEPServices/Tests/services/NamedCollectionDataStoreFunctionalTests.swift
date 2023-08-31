@@ -247,6 +247,48 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
         XCTAssertNil(store?.getInt(key: INT_KEY))
     }
     
+    // Make sure file writing does not corrupt when done on multiple threads
+    func testMultiThreadingSimple() {
+        let threadCount = 10
+        let expectation = XCTestExpectation()
+        expectation.assertForOverFulfill = true
+        expectation.expectedFulfillmentCount = threadCount
+        for i in 0 ..< threadCount {
+            DispatchQueue.global().async {
+                self.store?.set(key: self.INT_KEY, value: i)
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
+        
+        XCTAssertNotNil(store?.getInt(key: INT_KEY))
+    }
+    
+    // Make sure storage is not corrupted with multiple Store instances and multi threading
+    func testMultiThreadingMultipleStores() {
+        let threadCount = 10
+        let expectation = XCTestExpectation()
+        expectation.assertForOverFulfill = true
+        expectation.expectedFulfillmentCount = threadCount
+        let stores = ThreadSafeDictionary<Int, NamedCollectionDataStore>(identifier: "stores")
+        let storeBaseName = "testStore."
+        for i in 0 ..< threadCount {
+            DispatchQueue.global().async {
+                let store = NamedCollectionDataStore(name: storeBaseName + "\(i)")
+                stores[i] = store
+                store.set(key: self.INT_KEY, value: i)
+                expectation.fulfill()
+            }
+        }
+        
+        wait(for: [expectation], timeout: 1.0)
+        
+        for i in 0 ..< threadCount {
+            XCTAssertEqual(i, stores[i]?.getInt(key: INT_KEY))
+        }
+    }
+    
     private func removeAll() {
         let keys = [INT_KEY, STRING_KEY, DOUBLE_KEY, LONG_KEY, FLOAT_KEY, BOOL_KEY, ARRAY_KEY, DICT_KEY, OBJ_KEY]
         for key in keys {
