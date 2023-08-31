@@ -12,6 +12,7 @@
 import XCTest
 
 @testable import AEPServices
+@testable import AEPServicesMocks
 
 import Foundation
 
@@ -30,8 +31,8 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
     let OBJ_KEY = "OBJECT_KEY"
 
     override func setUp() {
+        NamedCollectionDataStore.clearStorageFiles()
         store = NamedCollectionDataStore(name: "testStore")
-        removeAll()
     }
 
 
@@ -286,13 +287,6 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
 
         for i in 0 ..< threadCount {
             XCTAssertEqual(i, stores[i]?.getInt(key: INT_KEY))
-        }
-    }
-
-    private func removeAll() {
-        let keys = [INT_KEY, STRING_KEY, DOUBLE_KEY, LONG_KEY, FLOAT_KEY, BOOL_KEY, ARRAY_KEY, DICT_KEY, OBJ_KEY]
-        for key in keys {
-            store?.remove(key: key)
         }
     }
 }

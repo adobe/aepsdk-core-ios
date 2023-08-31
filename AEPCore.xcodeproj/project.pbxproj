@@ -355,6 +355,7 @@
 		75408CF72948EA0A00C44CE1 /* AtomicCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */; };
 		75550A3F2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */; };
 		75C0D9052A9D545100EF74BC /* DatastoreUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0D9042A9D545100EF74BC /* DatastoreUtilities.swift */; };
+		75C0D9062AA1287B00EF74BC /* AEPServicesMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMocks.framework */; };
 		75E0EA2E2A8D46C2006B81CB /* FileSystemNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E0EA2D2A8D46C2006B81CB /* FileSystemNamedCollection.swift */; };
 		7814B23325CB455200841429 /* URL+Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7814B23225CB455200841429 /* URL+Validator.swift */; };
 		786C000525B8EE2100F26D34 /* DefaultHeadersFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */; };
@@ -1206,6 +1207,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75C0D9062AA1287B00EF74BC /* AEPServicesMocks.framework in Frameworks */,
 				3F2F12BB24F6D07E00600CB4 /* AEPIdentity.framework in Frameworks */,
 				3F2F12BC24F6D07E00600CB4 /* AEPLifecycle.framework in Frameworks */,
 				3F2F12BD24F6D07E00600CB4 /* AEPServices.framework in Frameworks */,
