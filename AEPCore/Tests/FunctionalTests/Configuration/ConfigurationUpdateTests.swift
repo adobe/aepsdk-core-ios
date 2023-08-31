@@ -29,6 +29,7 @@ class ConfigurationUpdateTests: XCTestCase {
 
     func setUpForUpdate() {
         UserDefaults.clear()
+        NamedCollectionDataStore.clearStorageFiles()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
@@ -37,6 +38,7 @@ class ConfigurationUpdateTests: XCTestCase {
 
     func setupWithCachedConfig() {
         UserDefaults.clear()
+        NamedCollectionDataStore.clearStorageFiles()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         // Make sure initial config is cached
