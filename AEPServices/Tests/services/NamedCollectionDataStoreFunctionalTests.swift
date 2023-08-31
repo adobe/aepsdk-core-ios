@@ -32,10 +32,9 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
 
     override func setUp() {
         NamedCollectionDataStore.clearStorageFiles()
+        ServiceProvider.shared.reset()
         store = NamedCollectionDataStore(name: "testStore")
     }
-
-
 
     func testGetIntFallback() {
         let defaultVal: Int = 0
