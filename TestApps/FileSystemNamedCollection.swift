@@ -36,7 +36,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
         guard let fileUrl = fileUrl(for: collectionName) else {
             return
         }
-        queue.async {
+        queue.sync {
             if var dict = self.getDictFor(collectionName: collectionName) {
                 dict[key] = value
                 if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
@@ -69,7 +69,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     }
     
     func remove(collectionName: String, key: String) {
-        queue.async {
+        queue.sync {
             guard let fileUrl = self.fileUrl(for: collectionName) else {
                 return
             }

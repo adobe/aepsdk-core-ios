@@ -12,8 +12,8 @@
 
 @testable import AEPCore
 @testable import AEPServicesMocks
+@testable import AEPServices
 import AEPCoreMocks
-import AEPServices
 import XCTest
 
 /// Functional tests for the Configuration extension
@@ -30,6 +30,7 @@ class ConfigurationUpdateTests: XCTestCase {
     func setUpForUpdate() {
         UserDefaults.clear()
         NamedCollectionDataStore.clearStorageFiles()
+        ServiceProvider.shared.reset()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
@@ -39,6 +40,7 @@ class ConfigurationUpdateTests: XCTestCase {
     func setupWithCachedConfig() {
         UserDefaults.clear()
         NamedCollectionDataStore.clearStorageFiles()
+        ServiceProvider.shared.reset()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         // Make sure initial config is cached
