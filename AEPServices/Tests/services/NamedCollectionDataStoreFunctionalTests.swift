@@ -28,14 +28,14 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
     let ARRAY_KEY = "ARRAY_KEY"
     let DICT_KEY = "DICT_KEY"
     let OBJ_KEY = "OBJECT_KEY"
-    
+
     override func setUp() {
         store = NamedCollectionDataStore(name: "testStore")
         removeAll()
     }
-    
-    
-    
+
+
+
     func testGetIntFallback() {
         let defaultVal: Int = 0
         XCTAssertEqual(store?.getInt(key: INT_KEY, fallback: defaultVal), defaultVal)
@@ -193,7 +193,7 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
         XCTAssertEqual(getVal?["key1"] as? String, "val1")
         XCTAssertEqual(getVal?["key2"] as? String, "val2")
     }
-    
+
     func testDictSubscript() {
         let valKey: String = "testKey"
         let val: String = "test"
@@ -246,7 +246,7 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
         store?.remove(key: INT_KEY)
         XCTAssertNil(store?.getInt(key: INT_KEY))
     }
-    
+
     // Make sure file writing does not corrupt when done on multiple threads
     func testMultiThreadingSimple() {
         let threadCount = 10
@@ -259,12 +259,12 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
                 expectation.fulfill()
             }
         }
-        
+
         wait(for: [expectation], timeout: 1.0)
-        
+
         XCTAssertNotNil(store?.getInt(key: INT_KEY))
     }
-    
+
     // Make sure storage is not corrupted with multiple Store instances and multi threading
     func testMultiThreadingMultipleStores() {
         let threadCount = 10
@@ -281,14 +281,14 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
                 expectation.fulfill()
             }
         }
-        
+
         wait(for: [expectation], timeout: 1.0)
-        
+
         for i in 0 ..< threadCount {
             XCTAssertEqual(i, stores[i]?.getInt(key: INT_KEY))
         }
     }
-    
+
     private func removeAll() {
         let keys = [INT_KEY, STRING_KEY, DOUBLE_KEY, LONG_KEY, FLOAT_KEY, BOOL_KEY, ARRAY_KEY, DICT_KEY, OBJ_KEY]
         for key in keys {

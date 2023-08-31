@@ -457,9 +457,9 @@ class MockKeyValueService: NamedCollectionProcessing {
                 return nil
             }
             return String(data: encoded, encoding: .utf8)
-            
+
         }
-        
+
 
         return getResult
     }
