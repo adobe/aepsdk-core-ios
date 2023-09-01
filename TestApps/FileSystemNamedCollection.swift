@@ -17,10 +17,10 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     
     private let queue = DispatchQueue(label: "FileSystemNamedCollection.barrierQueue")
     private let adobeDirectory = "com.adobe.aep.datastore"
-    private var appGroup: String?
     private var appGroupUrl: URL?
     private let fileManager = FileManager.default
     private let LOG_TAG = "FileSystemNamedCollection"
+    var appGroup: String?
     
     func setAppGroup(_ appGroup: String?) {
         self.appGroup = appGroup
@@ -90,6 +90,11 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
         }
     }
     
+    ///
+    /// Gets the JSON dictionary from the file with the given collection name
+    /// - Parameter collectionName: The collectionName, in this case used to destinguish a file
+    /// - Returns: The JSON dictionary if it exists, or nil if there is an error / it doesn't exist
+    ///
     private func getDictFor(collectionName: String) -> [String: Any]? {
         guard let fileUrl = fileUrl(for: collectionName) else {
             return nil
@@ -105,15 +110,11 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     }
     
     private func fileUrl(for collectionName: String) -> URL? {
-        return urlToSubdirectory()?.appendingPathComponent(collectionName).appendingPathExtension("json")
-    }
-    
-    private func urlToSubdirectory() -> URL? {
         if let appGroupUrl = appGroupUrl {
-            return findOrCreateAdobeSubdirectory(at: appGroupUrl)
+            return findOrCreateAdobeSubdirectory(at: appGroupUrl)?.appendingPathComponent(collectionName).appendingPathExtension("json")
         } else {
             let filePath = fileManager.urls(for: .libraryDirectory, in: .allDomainsMask)[0]
-            return findOrCreateAdobeSubdirectory(at: filePath)
+            return findOrCreateAdobeSubdirectory(at: filePath)?.appendingPathComponent(collectionName).appendingPathExtension("json")
         }
     }
     
