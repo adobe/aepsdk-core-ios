@@ -20,6 +20,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     var appGroup: String?
     var appGroupUrl: URL?
     var fileManager = FileManager.default
+    let LOG_TAG = "FileSystemNamedCollection"
     
     func setAppGroup(_ appGroup: String?) {
         self.appGroup = appGroup
@@ -40,7 +41,11 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             if var dict = self.getDictFor(collectionName: collectionName) {
                 dict[key] = value
                 if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
-                    try? updatedStorageData.write(to: fileUrl, options: .atomic)
+                    do {
+                        try updatedStorageData.write(to: fileUrl, options: .atomic)
+                    } catch {
+                        Log.error(label: LOG_TAG, "Error when writing to file: \(error)")
+                    }
                 }
             } else {
                 // If value is nil, and dict doesn't exist, don't do anything
@@ -56,7 +61,6 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                 }
             }
         }
-        
     }
     
     func get(collectionName: String, key: String) -> Any? {
@@ -76,14 +80,14 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             if var dict = self.getDictFor(collectionName: collectionName) {
                 dict.removeValue(forKey: key)
                 if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
-                    try? updatedStorageData.write(to: fileUrl, options: .atomic)
+                    do {
+                        try updatedStorageData.write(to: fileUrl, options: .atomic)
+                    } catch {
+                        Log.error(label: LOG_TAG, "Error when attempting to remove value from file: \(error)")
+                    }
                 }
             }
         }
-    }
-    
-    private func keyNameFor(collectionName: String, key: String) -> String {
-        return "Adobe.\(collectionName).\(key)"
     }
     
     private func getDictFor(collectionName: String) -> [String: Any]? {
