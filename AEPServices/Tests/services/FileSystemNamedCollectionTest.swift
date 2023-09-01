@@ -13,6 +13,7 @@
 import XCTest
 
 @testable import AEPServices
+@testable import AEPServicesMocks
 
 class FileSystemNamedCollectionTest: XCTestCase {
     let service = FileSystemNamedCollection()
@@ -49,5 +50,68 @@ class FileSystemNamedCollectionTest: XCTestCase {
         XCTAssertNotEqual(firstGet as? String, secondGet as? String)
         XCTAssertEqual(firstGet as? String, testValue)
         XCTAssertEqual(secondGet as? String, testValue2)
+    }
+    
+    func testNewFileCreationSetPerformance() {
+        NamedCollectionDataStore.clear()
+        
+        let collectionName = "testName"
+        let testKey = "testKey"
+        let testValue: String = "testValue"
+        
+        let measureOptions = XCTMeasureOptions()
+        measureOptions.iterationCount = 1
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            // .03 - .04 avg with FileSystem
+            measure(options: measureOptions, block: {
+                for i in 0 ..< 100 {
+                    service.set(collectionName: collectionName + "\(i)", key: testKey, value: testValue)
+                }
+            })
+        }
+    }
+    
+    func testExistingFileSetPerformance() {
+        NamedCollectionDataStore.clear()
+        
+        let collectionName = "testName"
+        let testKey = "testKey"
+        let testValue: String = "testValue"
+        
+        service.set(collectionName: collectionName, key: testKey, value: testValue)
+        
+        let measureOptions = XCTMeasureOptions()
+        measureOptions.iterationCount = 1
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            // .038-.043s Avg with FileSystem
+            measure(options: measureOptions, block: {
+                for i in 0 ..< 100 {
+                    service.set(collectionName: collectionName, key: testKey + "\(i)", value: testValue)
+                }
+            })
+        }
+    }
+    
+    func testGetPerformance() {
+        NamedCollectionDataStore.clear()
+        
+        let collectionName = "testName"
+        let testKey = "testKey"
+        let testValue: String = "testValue"
+        
+        for i in 0 ..< 100 {
+            service.set(collectionName: collectionName, key: testKey + "\(i)", value: testValue)
+        }
+        
+        let measureOptions = XCTMeasureOptions()
+        measureOptions.iterationCount = 1
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            // .008 avg with FileSystem
+            measure(options: measureOptions, block: {
+                for i in 0 ..< 100 {
+                    _ = service.get(collectionName: collectionName, key: testKey + "\(i)")
+                }
+            })
+        }
     }
 }
