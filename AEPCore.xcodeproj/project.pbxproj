@@ -185,7 +185,7 @@
 		3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980424BE61520019F095 /* DataQueueServiceTests.swift */; };
 		3F03981924BE61520019F095 /* URLServiceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980524BE61520019F095 /* URLServiceTest.swift */; };
 		3F03981A24BE61520019F095 /* DiskCacheServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980624BE61520019F095 /* DiskCacheServiceTests.swift */; };
-		3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */; };
+		3F03981B24BE61520019F095 /* FileSystemNamedCollectionTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980724BE61520019F095 /* FileSystemNamedCollectionTest.swift */; };
 		3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980824BE61520019F095 /* SQLiteWrapperTests.swift */; };
 		3F03981E24BE61520019F095 /* DataQueueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980A24BE61520019F095 /* DataQueueTests.swift */; };
 		3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F03980B24BE61520019F095 /* NetworkServiceTests.swift */; };
@@ -869,7 +869,7 @@
 		3F03980424BE61520019F095 /* DataQueueServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataQueueServiceTests.swift; sourceTree = "<group>"; };
 		3F03980524BE61520019F095 /* URLServiceTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLServiceTest.swift; sourceTree = "<group>"; };
 		3F03980624BE61520019F095 /* DiskCacheServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskCacheServiceTests.swift; sourceTree = "<group>"; };
-		3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsNamedCollectionTest.swift; sourceTree = "<group>"; };
+		3F03980724BE61520019F095 /* FileSystemNamedCollectionTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileSystemNamedCollectionTest.swift; sourceTree = "<group>"; };
 		3F03980824BE61520019F095 /* SQLiteWrapperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteWrapperTests.swift; sourceTree = "<group>"; };
 		3F03980A24BE61520019F095 /* DataQueueTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataQueueTests.swift; sourceTree = "<group>"; };
 		3F03980B24BE61520019F095 /* NetworkServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceTests.swift; sourceTree = "<group>"; };
@@ -1760,7 +1760,7 @@
 				3F03980224BE61520019F095 /* SystemInfoServiceTest.swift */,
 				3F03980124BE61520019F095 /* UnzipperTest.swift */,
 				3F03980524BE61520019F095 /* URLServiceTest.swift */,
-				3F03980724BE61520019F095 /* UserDefaultsNamedCollectionTest.swift */,
+				3F03980724BE61520019F095 /* FileSystemNamedCollectionTest.swift */,
 				78AA4EB92502DF2200205AE9 /* ZipArchiveTest.swift */,
 				78F2E2D327FF7B900073CE00 /* ServiceProviderTests.swift */,
 				75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */,
@@ -3372,7 +3372,7 @@
 				3F03982324BE61520019F095 /* PersistentHitQueueTests.swift in Sources */,
 				3F03981724BE61520019F095 /* DataQueueService+Testable.swift in Sources */,
 				3F03981824BE61520019F095 /* DataQueueServiceTests.swift in Sources */,
-				3F03981B24BE61520019F095 /* UserDefaultsNamedCollectionTest.swift in Sources */,
+				3F03981B24BE61520019F095 /* FileSystemNamedCollectionTest.swift in Sources */,
 				78F2E2D427FF7B900073CE00 /* ServiceProviderTests.swift in Sources */,
 				786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */,
 				246FD08626CC529800FD130B /* MessageGestureRecognizerTests.swift in Sources */,

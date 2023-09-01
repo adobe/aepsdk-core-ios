@@ -14,7 +14,7 @@ import XCTest
 
 @testable import AEPServices
 
-class UserDefaultsNamedCollectionTest: XCTestCase {
+class FileSystemNamedCollectionTest: XCTestCase {
     let service = FileSystemNamedCollection()
 
     func testSimpleStore() {
