@@ -10,59 +10,47 @@
  governing permissions and limitations under the License.
 */
 
-
 import Foundation
 
 class FileSystemNamedCollection: NamedCollectionProcessing {
-    
     private let queue = DispatchQueue(label: "FileSystemNamedCollection.barrierQueue")
     private let adobeDirectory = "com.adobe.aep.datastore"
     private var appGroupUrl: URL?
     private let fileManager = FileManager.default
     private let LOG_TAG = "FileSystemNamedCollection"
     var appGroup: String?
-    
+
     func setAppGroup(_ appGroup: String?) {
         self.appGroup = appGroup
         if let appGroup = appGroup {
             self.appGroupUrl = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
         }
     }
-    
+
     func getAppGroup() -> String? {
         return appGroup
     }
-    
+
     func set(collectionName: String, key: String, value: Any?) {
         guard let fileUrl = fileUrl(for: collectionName) else {
             return
         }
         queue.sync {
-            if var dict = self.getDictFor(collectionName: collectionName) {
-                dict[key] = value
-                if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
-                    do {
-                        try updatedStorageData.write(to: fileUrl, options: .atomic)
-                    } catch {
-                        Log.error(label: LOG_TAG, "Error when writing to file: \(error)")
-                    }
-                }
-            } else {
-                // If value is nil, and dict doesn't exist, don't do anything
-                guard let value = value else {
-                    return
-                }
-                
-                let dict: NSDictionary = [key: value]
-                if JSONSerialization.isValidJSONObject(dict) {
-                    if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
-                        try? updatedStorageData.write(to: fileUrl, options: .atomic)
-                    }
+            var dict = self.getDictFor(collectionName: collectionName) ?? [:]
+            guard !dict.isEmpty || value != nil else {
+                return
+            }
+            dict[key] = value
+            if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
+                do {
+                    try updatedStorageData.write(to: fileUrl, options: .atomic)
+                } catch {
+                    Log.error(label: LOG_TAG, "Error when writing to file: \(error)")
                 }
             }
         }
     }
-    
+
     func get(collectionName: String, key: String) -> Any? {
         return queue.sync {
             if let dict = getDictFor(collectionName: collectionName) {
@@ -71,7 +59,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             return nil
         }
     }
-    
+
     func remove(collectionName: String, key: String) {
         queue.sync {
             guard let fileUrl = self.fileUrl(for: collectionName) else {
