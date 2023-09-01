@@ -16,11 +16,11 @@ import Foundation
 class FileSystemNamedCollection: NamedCollectionProcessing {
     
     private let queue = DispatchQueue(label: "FileSystemNamedCollection.barrierQueue")
-    let adobeDirectory = "com.adobe.aep.datastore"
-    var appGroup: String?
-    var appGroupUrl: URL?
-    var fileManager = FileManager.default
-    let LOG_TAG = "FileSystemNamedCollection"
+    private let adobeDirectory = "com.adobe.aep.datastore"
+    private var appGroup: String?
+    private var appGroupUrl: URL?
+    private let fileManager = FileManager.default
+    private let LOG_TAG = "FileSystemNamedCollection"
     
     func setAppGroup(_ appGroup: String?) {
         self.appGroup = appGroup
