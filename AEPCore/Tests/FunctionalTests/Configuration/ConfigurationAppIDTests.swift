@@ -26,7 +26,6 @@ class ConfigurationAppIDTests: XCTestCase {
     }
 
     override func setUp() {
-        UserDefaults.clear()
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)

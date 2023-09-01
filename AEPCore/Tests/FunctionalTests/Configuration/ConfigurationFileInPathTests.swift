@@ -22,8 +22,7 @@ class ConfigurationFileInPathTests: XCTestCase {
     var configuration: Configuration!
 
     override func setUp() {
-        UserDefaults.clear()
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()

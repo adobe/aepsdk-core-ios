@@ -21,9 +21,7 @@ import AEPSignal
 class ConfigurationIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()
     override func setUp() {
-        UserDefaults.clear()
-        FileManager.default.clearCache()
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         resetTestEnv()
         initExtensionsAndWait()

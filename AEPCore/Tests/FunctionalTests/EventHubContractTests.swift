@@ -20,7 +20,7 @@ import XCTest
 class EventHubContractTest: XCTestCase {
     override func setUp() {
         EventHub.reset()  
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
         ContractExtensionOne.reset()
         ContractExtensionTwo.reset()
     }

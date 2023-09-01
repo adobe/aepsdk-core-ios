@@ -14,8 +14,52 @@
 import Foundation
 import AEPServices
 
+extension UserDefaults {
+    public static func clear() {
+        for _ in 0 ... 5 {
+            for key in UserDefaults.standard.dictionaryRepresentation().keys {
+                UserDefaults.standard.removeObject(forKey: key)
+            }
+        }
+    }
+}
+
+extension FileManager {
+    
+    func clearCache() {
+        if let _ = self.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.module.signal"))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+            
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.module.identity"))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.mobile.diskcache", isDirectory: true))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.eventHistory"))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+            
+        }
+        
+    }
+}
+
 extension NamedCollectionDataStore {
-    static func clearStorageFiles() {
+    static func clear() {
+        UserDefaults.clear()
+        FileManager.default.clearCache()
         let directory = FileManager.default.urls(for: .libraryDirectory, in: .allDomainsMask)[0].appendingPathComponent("com.adobe.aep.datastore", isDirectory: true).path
         guard let filePaths = try? FileManager.default.contentsOfDirectory(atPath: directory) else {
             return

@@ -35,7 +35,7 @@ class LifecycleStateTests: XCTestCase {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
     }
 
     private func setupDates() {

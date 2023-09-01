@@ -37,8 +37,7 @@ class LifecycleFunctionalTests: XCTestCase {
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
-        UserDefaults.clear()
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
     }
 
     private func setupMockSystemInfoService() {

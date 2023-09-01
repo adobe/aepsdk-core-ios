@@ -35,7 +35,6 @@ class IdentityFunctionalTests: XCTestCase {
 
     func reset() {
         identity.state?.hitQueue.clear()
-        UserDefaults.clear()
     }
 
     // MARK: syncIdentifiers(...) tests

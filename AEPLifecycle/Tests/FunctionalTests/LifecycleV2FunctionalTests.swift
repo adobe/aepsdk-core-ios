@@ -56,8 +56,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         lifecycle.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
-        UserDefaults.clear()
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
     }
 
     private func waitForProcessing(interval: TimeInterval = 0.5) {

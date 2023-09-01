@@ -22,9 +22,7 @@ import AEPSignal
 class IdentityIntegrationTests: XCTestCase {
 
     override func setUp() {
-        UserDefaults.clear()
-        FileManager.default.clearCache()
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
     }
 
     override func tearDown() {

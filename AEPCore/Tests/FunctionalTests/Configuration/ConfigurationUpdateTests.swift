@@ -28,8 +28,7 @@ class ConfigurationUpdateTests: XCTestCase {
                                                     "analytics.server": "default"]
 
     func setUpForUpdate() {
-        UserDefaults.clear()
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
@@ -38,8 +37,7 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     func setupWithCachedConfig() {
-        UserDefaults.clear()
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
@@ -52,8 +50,7 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     override func tearDown() {
-        NamedCollectionDataStore.clearStorageFiles()
-        UserDefaults.clear()
+        NamedCollectionDataStore.clear()
     }
 
     // MARK: update shared state tests

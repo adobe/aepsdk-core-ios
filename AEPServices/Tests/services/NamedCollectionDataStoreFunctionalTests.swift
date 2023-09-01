@@ -31,7 +31,7 @@ class NamedCollectionDataStoreFunctionalTests: XCTestCase {
     let OBJ_KEY = "OBJECT_KEY"
 
     override func setUp() {
-        NamedCollectionDataStore.clearStorageFiles()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         store = NamedCollectionDataStore(name: "testStore")
     }
