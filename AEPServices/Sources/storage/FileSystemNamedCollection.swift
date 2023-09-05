@@ -89,7 +89,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
         }
         
         if let storageData = try? Data(contentsOf: fileUrl) {
-            if let jsonResult = try? JSONSerialization.jsonObject(with: storageData) as? Dictionary<String, Any> {
+            if let jsonResult = try? JSONSerialization.jsonObject(with: storageData) as? [String: Any] {
                 return jsonResult
             }
         }
@@ -97,6 +97,11 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
         return nil
     }
     
+    ///
+    /// Gets the URL for the file given a collection name
+    /// - Parameter collectionName: The collectionName, in this case is used to destinguish a file
+    /// - Returns: The URL to the file or nil if it could not be found
+    ///
     private func fileUrl(for collectionName: String) -> URL? {
         if let appGroupUrl = appGroupUrl {
             return findOrCreateAdobeSubdirectory(at: appGroupUrl)?.appendingPathComponent(collectionName).appendingPathExtension("json")
@@ -106,6 +111,11 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
         }
     }
     
+    ///
+    /// Finds or creates the Adobe subdirectory where all data store files will reside
+    /// - Parameter baseUrl: The baseUrl where the Adobe directory should reside
+    /// - Returns: The URL to the Adobe directory or nil if it could not be found or created
+    ///
     private func findOrCreateAdobeSubdirectory(at baseUrl: URL) -> URL? {
         // Validate baseUrl
         if baseUrl.isSafeUrl() {

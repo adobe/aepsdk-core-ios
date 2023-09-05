@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let appState = application.applicationState
         MobileCore.setLogLevel(.trace)
+        MobileCore.setAppGroup("group.com.adobe.aepsampleapp")
         let extensions = [Identity.self,
                           Lifecycle.self,
                           Signal.self]
