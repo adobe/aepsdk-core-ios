@@ -8,7 +8,7 @@
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
-*/
+ */
 
 import Foundation
 
@@ -77,7 +77,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             }
         }
     }
-    
+
     ///
     /// Gets the JSON dictionary from the file with the given collection name
     /// - Parameter collectionName: The collectionName, in this case used to destinguish a file
@@ -87,16 +87,16 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
         guard let fileUrl = fileUrl(for: collectionName) else {
             return nil
         }
-        
+
         if let storageData = try? Data(contentsOf: fileUrl) {
             if let jsonResult = try? JSONSerialization.jsonObject(with: storageData) as? [String: Any] {
                 return jsonResult
             }
         }
-        
+
         return nil
     }
-    
+
     ///
     /// Gets the URL for the file given a collection name
     /// - Parameter collectionName: The collectionName, in this case is used to destinguish a file
@@ -110,7 +110,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             return findOrCreateAdobeSubdirectory(at: filePath)?.appendingPathComponent(collectionName).appendingPathExtension("json")
         }
     }
-    
+
     ///
     /// Finds or creates the Adobe subdirectory where all data store files will reside
     /// - Parameter baseUrl: The baseUrl where the Adobe directory should reside
@@ -126,12 +126,12 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                 Log.error(label: adobeDirectory, "Failed to create storage directory with error: \(error)")
                 return nil
             }
-            
+
             return adobeBaseUrl
         } else {
             Log.error(label: adobeDirectory, "Failed to create storage directory, baseURL is not valid.")
             return nil
         }
     }
-    
+
 }
