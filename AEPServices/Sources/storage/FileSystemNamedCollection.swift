@@ -13,7 +13,7 @@
 import Foundation
 
 class FileSystemNamedCollection: NamedCollectionProcessing {
-    private let queue = DispatchQueue(label: "FileSystemNamedCollection.barrierQueue")
+    private let queue = DispatchQueue(label: "com.adobe.fileSystemNamedCollection.queue")
     private let adobeDirectory = "com.adobe.aep.datastore"
     private var appGroupUrl: URL?
     private let fileManager = FileManager.default
