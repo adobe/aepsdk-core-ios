@@ -32,7 +32,7 @@ class ConfigurationAppIDTests: XCTestCase {
         configuration.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
     }
-    
+
     override func tearDown() {
         ServiceProvider.shared.reset()
     }

@@ -32,7 +32,7 @@ class IdentityStateTests: XCTestCase {
         mockPushIdManager = MockPushIDManager()
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
     }
-    
+
     override func tearDown() {
         ServiceProvider.shared.reset()
     }

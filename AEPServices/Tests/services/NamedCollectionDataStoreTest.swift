@@ -35,7 +35,7 @@ class NamedCollectionDataStoreTest: XCTestCase {
         ServiceProvider.shared.namedKeyValueService = mockKeyValueService
         store = NamedCollectionDataStore(name: "testStore.")
     }
-    
+
     override func tearDown() {
         ServiceProvider.shared.reset()
     }

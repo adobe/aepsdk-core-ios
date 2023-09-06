@@ -36,7 +36,7 @@ class V4MigratorTests: XCTestCase {
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
     }
-    
+
     override func tearDown() {
         ServiceProvider.shared.reset()
     }

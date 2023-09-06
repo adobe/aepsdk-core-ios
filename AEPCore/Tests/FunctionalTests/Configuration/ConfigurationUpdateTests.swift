@@ -25,7 +25,7 @@ class ConfigurationUpdateTests: XCTestCase {
                                                     "lifecycle.sessionTimeout": 300,
                                                     "rules.url": "https://link.to.rules/test.zip",
                                                     "analytics.server": "default"]
-    
+
     func setUpForUpdate() {
         NamedCollectionDataStore.clear()
         mockRuntime = TestableExtensionRuntime()
