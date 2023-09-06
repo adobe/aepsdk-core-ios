@@ -29,7 +29,6 @@ public class ServiceProvider {
     private var defaultSystemInfoService = ApplicationSystemInfoService()
     private var overrideKeyValueService: NamedCollectionProcessing?
     private var defaultKeyValueService = FileSystemNamedCollection()
-//    private var defaultKeyValueService = UserDefaultsNamedCollection()
     private var overrideNetworkService: Networking?
     private var defaultNetworkService = NetworkService()
     private var defaultDataQueueService = DataQueueService()

@@ -441,7 +441,7 @@ class MobileCoreTests: XCTestCase {
 
         // verify
         let keyValueService = ServiceProvider.shared.namedKeyValueService as? FileSystemNamedCollection
-        XCTAssertEqual(appGroup, keyValueService?.appGroup)
+        XCTAssertEqual(appGroup, keyValueService?.getAppGroup())
     }
 
     // MARK: collectMessageInfo(...) tests

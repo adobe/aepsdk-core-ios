@@ -11,9 +11,9 @@
  */
 
 @testable import AEPCore
+@testable import AEPServices
 import XCTest
 import AEPCoreMocks
-import AEPServices
 import AEPServicesMocks
 import XCTest
 
@@ -31,6 +31,10 @@ class ConfigurationAppIDTests: XCTestCase {
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+    }
+    
+    override func tearDown() {
+        ServiceProvider.shared.reset()
     }
 
     // MARK: configureWith(appId) tests

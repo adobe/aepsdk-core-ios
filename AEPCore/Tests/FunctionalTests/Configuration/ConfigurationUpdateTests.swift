@@ -20,16 +20,14 @@ import XCTest
 class ConfigurationUpdateTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var configuration: Configuration!
-    let mockDataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private let mockAppid = "mockAppid"
     private let mockConfig: [String: AnyCodable] = ["global.privacy": "optedin",
                                                     "lifecycle.sessionTimeout": 300,
                                                     "rules.url": "https://link.to.rules/test.zip",
                                                     "analytics.server": "default"]
-
+    
     func setUpForUpdate() {
         NamedCollectionDataStore.clear()
-        ServiceProvider.shared.reset()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
@@ -37,8 +35,9 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     func setupWithCachedConfig() {
-        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
+        let mockDataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
+        NamedCollectionDataStore.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         // Make sure initial config is cached

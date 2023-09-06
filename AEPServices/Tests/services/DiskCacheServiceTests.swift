@@ -35,6 +35,7 @@ class DiskCacheServiceTests: XCTestCase {
         // clear cache after each test
         let cachePath = diskCache.cachePath(for: CACHE_NAME)
         try? FileManager.default.removeItem(atPath: cachePath)
+        ServiceProvider.shared.reset()
     }
 
     func originalEntry(_ original: CacheEntry, equals cached: CacheEntry) -> Bool {

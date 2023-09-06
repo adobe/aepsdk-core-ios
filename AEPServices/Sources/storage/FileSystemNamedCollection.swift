@@ -18,24 +18,28 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     private var appGroupUrl: URL?
     private let fileManager = FileManager.default
     private let LOG_TAG = "FileSystemNamedCollection"
-    var appGroup: String?
+    private var appGroup: String?
 
     func setAppGroup(_ appGroup: String?) {
-        self.appGroup = appGroup
-        if let appGroup = appGroup {
-            self.appGroupUrl = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+        queue.async {
+            self.appGroup = appGroup
+            if let appGroup = appGroup {
+                self.appGroupUrl = self.fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+            }
         }
     }
 
     func getAppGroup() -> String? {
-        return appGroup
+        return queue.sync {
+            appGroup
+        }
     }
 
     func set(collectionName: String, key: String, value: Any?) {
-        guard let fileUrl = fileUrl(for: collectionName) else {
-            return
-        }
-        queue.sync {
+        queue.async {
+            guard let fileUrl = self.fileUrl(for: collectionName) else {
+                return
+            }
             var dict = self.getDictFor(collectionName: collectionName) ?? [:]
             guard !dict.isEmpty || value != nil else {
                 return
@@ -45,7 +49,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                 do {
                     try updatedStorageData.write(to: fileUrl, options: .atomic)
                 } catch {
-                    Log.error(label: LOG_TAG, "Error when writing to file: \(error)")
+                    Log.error(label: self.LOG_TAG, "Error when writing to file: \(error)")
                 }
             }
         }
@@ -61,7 +65,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     }
 
     func remove(collectionName: String, key: String) {
-        queue.sync {
+        queue.async {
             guard let fileUrl = self.fileUrl(for: collectionName) else {
                 return
             }
@@ -71,7 +75,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                     do {
                         try updatedStorageData.write(to: fileUrl, options: .atomic)
                     } catch {
-                        Log.error(label: LOG_TAG, "Error when attempting to remove value from file: \(error)")
+                        Log.error(label: self.LOG_TAG, "Error when attempting to remove value from file: \(error)")
                     }
                 }
             }

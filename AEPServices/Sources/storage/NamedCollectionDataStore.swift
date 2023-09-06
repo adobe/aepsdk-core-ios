@@ -178,9 +178,11 @@ public class NamedCollectionDataStore {
         }
 
         let encoder = JSONEncoder()
-        guard let encodedValue = try? encoder.encode(value) else {return}
-        let encodedString = String(data: encodedValue, encoding: .utf8)
-        set(key: key, value: encodedString)
+        var setVal: Any?
+        if let encodedValue = try? encoder.encode(value), let encodedString = String(data: encodedValue, encoding: .utf8) {
+            setVal = encodedString
+        }
+        set(key: key, value: setVal)
     }
 
     public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
