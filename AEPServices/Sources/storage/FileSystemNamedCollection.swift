@@ -49,7 +49,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                 do {
                     try updatedStorageData.write(to: fileUrl, options: .atomic)
                 } catch {
-                    Log.error(label: self.LOG_TAG, "Error when writing to file: \(error)")
+                    Log.warning(label: self.LOG_TAG, "Error when writing to file: \(error)")
                 }
             }
         }
@@ -75,7 +75,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                     do {
                         try updatedStorageData.write(to: fileUrl, options: .atomic)
                     } catch {
-                        Log.error(label: self.LOG_TAG, "Error when attempting to remove value from file: \(error)")
+                        Log.warning(label: self.LOG_TAG, "Error when attempting to remove value from file: \(error)")
                     }
                 }
             }
@@ -97,7 +97,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                 return jsonResult
             }
         }
-
+        Log.warning(label: LOG_TAG, "Failed to get Dictionary from data store")
         return nil
     }
 
@@ -127,13 +127,13 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             do {
                 try fileManager.createDirectory(at: adobeBaseUrl, withIntermediateDirectories: true)
             } catch {
-                Log.error(label: adobeDirectory, "Failed to create storage directory with error: \(error)")
+                Log.warning(label: adobeDirectory, "Failed to create storage directory with error: \(error)")
                 return nil
             }
 
             return adobeBaseUrl
         } else {
-            Log.error(label: adobeDirectory, "Failed to create storage directory, baseURL is not valid.")
+            Log.warning(label: adobeDirectory, "Failed to create storage directory, baseURL is not valid.")
             return nil
         }
     }
