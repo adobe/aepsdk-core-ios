@@ -353,6 +353,7 @@
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
 		752261862AA257F600D59847 /* FileSystemNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752261852AA257F600D59847 /* FileSystemNamedCollection.swift */; };
+		7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */; };
 		75408CF72948EA0A00C44CE1 /* AtomicCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */; };
 		75550A3F2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */; };
 		75C0D9052A9D545100EF74BC /* DatastoreUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0D9042A9D545100EF74BC /* DatastoreUtilities.swift */; };
@@ -1047,6 +1048,7 @@
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		752261852AA257F600D59847 /* FileSystemNamedCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileSystemNamedCollection.swift; sourceTree = "<group>"; };
+		7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsMigrator.swift; sourceTree = "<group>"; };
 		75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicCounterTests.swift; sourceTree = "<group>"; };
 		75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedCollectionDataStoreFunctionalTests.swift; sourceTree = "<group>"; };
 		75C0D9042A9D545100EF74BC /* DatastoreUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatastoreUtilities.swift; sourceTree = "<group>"; };
@@ -1277,6 +1279,7 @@
 				218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */,
 				21F79AB624E704C5003204C3 /* IDParser.swift */,
 				21F79ABA24E70CDC003204C3 /* IDParsing.swift */,
+				7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -3154,6 +3157,7 @@
 				3FB66AD524CA004400502CAF /* EventHubError.swift in Sources */,
 				24EDE33B26F39F450068A65F /* EventHistoryResult.swift in Sources */,
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
+				7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */,
 				3F2B1DA62631E7FE0030F50B /* RuleConsequence.swift in Sources */,
 				24EDE33326EFB7470068A65F /* EventHistoryRequest.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
