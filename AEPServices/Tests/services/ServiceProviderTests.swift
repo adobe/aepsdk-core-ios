@@ -40,7 +40,7 @@ class ServiceProviderTests: XCTestCase {
         let mockNamedKeyValueService = MockKeyValueService()
         ServiceProvider.shared.namedKeyValueService = mockNamedKeyValueService
         ServiceProvider.shared.reset()
-        XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is UserDefaultsNamedCollection)
+        XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is FileSystemNamedCollection)
     }
     
     func testOverridingNetworkService() {

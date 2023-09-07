@@ -14,7 +14,7 @@ import XCTest
 import AEPCore
 @testable import AEPIdentity
 import AEPCoreMocks
-import AEPServices
+@testable import AEPServices
 import AEPServicesMocks
 
 class IdentityFunctionalTests: XCTestCase {
@@ -34,8 +34,8 @@ class IdentityFunctionalTests: XCTestCase {
     }
 
     func reset() {
+        ServiceProvider.shared.reset()
         identity.state?.hitQueue.clear()
-        UserDefaults.clear()
     }
 
     // MARK: syncIdentifiers(...) tests

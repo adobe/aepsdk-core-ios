@@ -14,9 +14,11 @@ import XCTest
 @testable import AEPCore
 @testable import AEPServices
 @testable import AEPCoreMocks
+@testable import AEPServicesMocks
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
+        NamedCollectionDataStore.clear()
         MobileCore.setWrapperType(.none) // reset wrapper type before each test
         MobileCore.setLogLevel(.error) // reset log level to error before each test
         EventHub.reset()
@@ -438,8 +440,8 @@ class MobileCoreTests: XCTestCase {
         MobileCore.setAppGroup(appGroup)
 
         // verify
-        let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
-        XCTAssertEqual(appGroup, keyValueService?.appGroup)
+        let keyValueService = ServiceProvider.shared.namedKeyValueService as? FileSystemNamedCollection
+        XCTAssertEqual(appGroup, keyValueService?.getAppGroup())
     }
 
     // MARK: collectMessageInfo(...) tests

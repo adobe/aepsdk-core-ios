@@ -26,7 +26,6 @@ class RulesEngineFunctionalTests: XCTestCase {
 
     override func setUp() {
         continueAfterFailure = false
-        UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         defaultEvent = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
                              data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])

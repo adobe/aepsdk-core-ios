@@ -22,7 +22,6 @@ class ConfigurationLifecycleResponseTests: XCTestCase {
     var configuration: Configuration!
 
     override func setUp() {
-        UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()

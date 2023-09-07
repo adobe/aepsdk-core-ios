@@ -11,6 +11,7 @@
  */
 
 @testable import AEPCore
+@testable import AEPServicesMocks
 import AEPServices
 import XCTest
 
@@ -21,6 +22,7 @@ class ConfigurationStateTests: XCTestCase {
 
     override func setUp() {
         configDownloader = MockConfigurationDownloader()
+        NamedCollectionDataStore.clear()
         configState = ConfigurationState(dataStore: dataStore, configDownloader: configDownloader)
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
