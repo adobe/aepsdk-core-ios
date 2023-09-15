@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "780880CF26C5CE6800F5A665"
+               BlueprintIdentifier = "7808887F26D56E8700F5A665"
                BuildableName = "TestApp_Swift.app"
                BlueprintName = "TestApp_Swift"
                ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "780880CF26C5CE6800F5A665"
+            BlueprintIdentifier = "7808887F26D56E8700F5A665"
             BuildableName = "TestApp_Swift.app"
             BlueprintName = "TestApp_Swift"
             ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">
@@ -61,7 +61,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "780880CF26C5CE6800F5A665"
+            BlueprintIdentifier = "7808887F26D56E8700F5A665"
             BuildableName = "TestApp_Swift.app"
             BlueprintName = "TestApp_Swift"
             ReferencedContainer = "container:AEPCoreTestApp.xcodeproj">

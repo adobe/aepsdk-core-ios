@@ -13,160 +13,51 @@
 
 
 import Foundation
+import AEPServices
 
 struct UserDefaultsMigrator {
-    
-}
-
-enum UserDefaultMigratorConstants {
-    enum Configuration {
-        static let DATASTORE_NAME = "com.adobe.module.configuration"
+    private let LOG_TAG = "UserDefaultsMigrator"
+    private typealias constants = UserDefaultMigratorConstants
+    private let dataStore = ServiceProvider.shared.namedKeyValueService
+    private var defaults: UserDefaults {
+        if let appGroup = ServiceProvider.shared.namedKeyValueService.getAppGroup() {
+            return UserDefaults(suiteName: appGroup) ?? UserDefaults.standard
+        }
         
-        enum DataStoreKeys {
-            static let OVERRIDDEN_MAP = "config.overridden.map"
-            static let APP_ID = "config.appID"
+        return UserDefaults.standard
+    }
+    
+    func migrate() {
+        if needToMigrate() {
+            Log.debug(label: LOG_TAG, "Beginning UserDefaults migration")
+            for (collectionName, keys) in constants.migrationDict {
+                for key in keys {
+                    if let valueToMigrate = getAndDelete(key: keyWithPrefix(datastoreName: collectionName, key: key)) {
+                        dataStore.set(collectionName: collectionName, key: key, value: valueToMigrate)
+                    }
+                }
+                Log.debug(label: LOG_TAG, "UserDefaults Migration complete for \(collectionName)")
+            }
+            Log.debug(label: LOG_TAG, "UserDefaults migration complete")
         }
     }
     
-    enum Lifecycle {
-        static let DATASTORE_NAME = "com.adobe.module.lifecycle"
-        
-        enum DataStoreKeys {
-            static let INSTALL_DATE = "install.date"
-            static let LAST_LAUNCH_DATE = "last.date.used"
-            static let UPGRADE_DATE = "upgrade.date"
-            static let LAUNCHES_SINCE_UPGRADE = "launches.after.upgrade"
-            static let PERSISTED_CONTEXT = "persisted.context"
-            static let LIFECYCLE_DATA = "lifecycle.data"
-            static let LAST_VERSION = "last.version"
-            static let V2_LAST_VERSION = "v2.last.app.version"
-            static let V2_APP_START_DATE = "v2.app.start.date"
-            static let V2_APP_PAUSE_DATE = "v2.app.pause.date"
-            static let V2_APP_CLOSE_DATE = "v2.app.close.date"
-        }
+    private func needToMigrate() -> Bool {
+        let installDateKey = keyWithPrefix(datastoreName: constants.Lifecycle.DATASTORE_NAME, key: constants.Lifecycle.DataStoreKeys.INSTALL_DATE.rawValue)
+        return defaults.object(forKey: installDateKey) != nil
     }
     
-    enum Identity {
-        static let DATASTORE_NAME = "com.adobe.module.identity"
-        
-        enum DataStoreKeys {
-            static let IDENTITY_PROPERTIES = "identity.properties"
-            static let PUSH_ENABLED = "push.enabled"
-            static let ANALYTICS_PUSH_ENABLED = "analytics.push.enabled"
-        }
+    private func keyWithPrefix(datastoreName: String, key: String) -> String {
+        return "Adobe.\(datastoreName).\(key)"
     }
     
-    enum Assurance {
-        static let DATASTORE_NAME = "com.adobe.module.assurance"
-        
-        enum DataStoreKeys {
-            static let SESSION_ID = "assurance.session.Id"
-            static let CLIENT_ID = "assurance.client.Id"
-            static let ENVIRONMENT = "assurance.environment"
-            static let SOCKET_URL = "assurance.socketurl"
-            static let MODIFIED_CONFIG_KEYS = "assurance.control.modifiedConfigKeys"
+    private func getAndDelete(key: String) -> Any? {
+        guard let value = defaults.object(forKey: key) else {
+            Log.debug(label: LOG_TAG, "Failed to get value to migrate from UserDefaults")
+            return nil
         }
-    }
-    
-    enum Analytics {
-        static let DATASTORE_NAME = "com.adobe.module.analytics"
         
-        enum DataStoreKeys {
-            static let LAST_HIT_TS = "mostrecenthittimestamp"
-            static let AID = "aid"
-            static let VID = "vid"
-            static let DATA_MIGRATED = "data.migrated"
-        }
-    }
-    
-    enum Audience {
-        static let DATASTORE_NAME = "com.adobe.module.audience"
-        
-        enum DataStoreKeys {
-            static let USER_PROFILE = "AAMUserProfile"
-            static let USER_ID = "AAMUserId"
-        }
-    }
-    
-    enum Target {
-        static let DATASTORE_NAME = "com.adobe.module.target"
-        
-        enum DataStoreKeys {
-            static let SESSION_TIMESTAMP = "session.timestamp"
-            static let SESSION_ID = "session.id"
-            static let TNT_ID = "tnt.id"
-            static let EDGE_HOST = "edge.host"
-            static let THIRD_PARTY_ID = "thirdparty.id"
-        }
-    }
-    
-    enum Campaign {
-        static let DATASTORE_NAME = "com.adobe.module.campaign"
-        
-        enum DataStoreKeys {
-            static let REMOTE_URL = "CampaignRemoteUrl"
-            static let ECID = "ExperienceCloudId"
-            static let REGISTRATION_TS = "CampaignRegistrationTimestamp"
-        }
-    }
-    
-    enum CampaignClassic {
-        static let DATASTORE_NAME = "com.adobe.module.campaignclassic"
-        
-        enum DataStoreKeys {
-            static let TOKEN_HASH = "ADOBEMOBILE_STOREDDEFAULTS_TOKENHASH"
-        }
-    }
-    
-    enum Places {
-        static let DATASTORE_NAME = "PlacesDataStore"
-        
-        enum DataStoreKeys {
-            static let ACCURACY = "places_accuracy"
-            static let AUTH_STATUS = "places_auth_status"
-            static let CURRENT_POI = "places_current_poi"
-            static let LAST_ENTERED_POI = "places_last_entered_poi"
-            static let LAST_EXITED_POI = "places_last_exited_poi"
-            static let LAST_KNOWN_LATITUDE = "places_last_known_latitude"
-            static let LAST_KNOWN_LONGITUDE = "places_last_known_longitude"
-            static let MEMBERSHIP = "places_membership_valid_until"
-            static let NEARBY_POIS = "places_nearby_pois"
-            static let USER_WITHIN_POIS = "places_user_within_pois"
-        }
-    }
-    
-    enum UserProfile {
-        static let DATASTORE_NAME = "com.adobe.module.userProfile"
-        
-        enum DataStoreKeys {
-            static let ATTRIBUTES = "attributes"
-        }
-    }
-    
-    enum Edge {
-        static let DATASTORE_NAME = "com.adobe.edge"
-        static let PAYLOAD_DATASTORE_NAME = "AEPEdge"
-        
-        enum DataStoreKeys {
-           static let RESET_IDENTITIES_DATE = "reset.identities.date"
-            static let EDGE_PROPERTIES = "edge.properties"
-            static let STORE_PAYLOADS = "storePayloads"
-        }
-    }
-    
-    enum EdgeIdentity {
-        static let DATASTORE_NAME = "com.adobe.edge.identity"
-        
-        enum DataStoreKeys {
-           static let IDENTITY_PROPERTIES = "identity.properties"
-        }
-    }
-    
-    enum EdgeConsent {
-        static let DATASTORE_NAME = "com.adobe.edge.consent"
-        
-        enum DataStoreKeys {
-           static let CONSENT_PREFERENCES = "consent.preferences.consents"
-        }
+        defaults.removeObject(forKey: key)
+        return value
     }
 }
