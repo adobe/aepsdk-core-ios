@@ -356,6 +356,8 @@
 		7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */; };
 		7522618D2AABBE9600D59847 /* UserDefaultMigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618C2AABBE9600D59847 /* UserDefaultMigrationConstants.swift */; };
 		7522618F2AAF6E2400D59847 /* UserDefaultMigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618E2AAF6E2400D59847 /* UserDefaultMigratorTests.swift */; };
+		753E9B432ABCDB1400A82A27 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */; };
+		753E9B442ABCDB7D00A82A27 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */; };
 		75408CF72948EA0A00C44CE1 /* AtomicCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */; };
 		75550A3F2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */; };
 		75C0D9052A9D545100EF74BC /* DatastoreUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0D9042A9D545100EF74BC /* DatastoreUtilities.swift */; };
@@ -1169,6 +1171,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				753E9B442ABCDB7D00A82A27 /* AEPIdentity.framework in Frameworks */,
+				753E9B432ABCDB1400A82A27 /* AEPLifecycle.framework in Frameworks */,
 				3FF8171C24D89B8F0064DFA1 /* AEPCoreMocks.framework in Frameworks */,
 				3FE6DDBC24C62DA80065EA05 /* AEPServicesMocks.framework in Frameworks */,
 				3F03984224BE65170019F095 /* AEPServices.framework in Frameworks */,
