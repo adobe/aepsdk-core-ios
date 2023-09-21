@@ -255,42 +255,268 @@ class UserDefaultMigratorTests: XCTestCase {
         let storeName = UserDefaultMigratorConstants.Analytics.DATASTORE_NAME
         typealias analyticsKeys = UserDefaultMigratorConstants.Analytics.DataStoreKeys
         let lastHitTSKey = keyWithPrefix(datastoreName: storeName, key: analyticsKeys.LAST_HIT_TS.rawValue)
-        let 
+        let aidKey = keyWithPrefix(datastoreName: storeName, key: analyticsKeys.AID.rawValue)
+        let vidKey = keyWithPrefix(datastoreName: storeName, key: analyticsKeys.VID.rawValue)
+        let dataMigratedKey = keyWithPrefix(datastoreName: storeName, key: analyticsKeys.DATA_MIGRATED.rawValue)
+        let lastHitTS = 1
+        let aid = "aid"
+        let vid = "vid"
+        let dataMigrated = true
+        
+        defaults.set(lastHitTS, forKey: lastHitTSKey)
+        defaults.set(aid, forKey: aidKey)
+        defaults.set(vid, forKey: vidKey)
+        defaults.set(dataMigrated, forKey: dataMigratedKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[analyticsKeys.LAST_HIT_TS.rawValue] as? Int, lastHitTS)
+        XCTAssertEqual(mockDataStore.dict[analyticsKeys.AID.rawValue] as? String, aid)
+        XCTAssertEqual(mockDataStore.dict[analyticsKeys.VID.rawValue] as? String, vid)
+        XCTAssertEqual(mockDataStore.dict[analyticsKeys.DATA_MIGRATED.rawValue] as? Bool, dataMigrated)
+        
+        XCTAssertNil(defaults.object(forKey: lastHitTSKey))
+        XCTAssertNil(defaults.object(forKey: aidKey))
+        XCTAssertNil(defaults.object(forKey: vidKey))
+        XCTAssertNil(defaults.object(forKey: dataMigratedKey))
     }
     
     func testAudienceMigration() {
+        let storeName = UserDefaultMigratorConstants.Audience.DATASTORE_NAME
+        typealias audienceKeys = UserDefaultMigratorConstants.Audience.DataStoreKeys
+        let userProfileKey = keyWithPrefix(datastoreName: storeName, key: audienceKeys.USER_PROFILE.rawValue)
+        let userIDKey = keyWithPrefix(datastoreName: storeName, key: audienceKeys.USER_ID.rawValue)
         
+        let userProfile = ["test": "profiles"]
+        let userID = "userID"
+        
+        defaults.set(userProfile, forKey: userProfileKey)
+        defaults.set(userID, forKey: userIDKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[audienceKeys.USER_PROFILE.rawValue] as? [String: String], userProfile)
+        XCTAssertEqual(mockDataStore.dict[audienceKeys.USER_ID.rawValue] as? String, userID)
+        
+        XCTAssertNil(defaults.object(forKey: userProfileKey))
+        XCTAssertNil(defaults.object(forKey: userIDKey))
     }
     
     func testTargetMigration() {
+        let storeName = UserDefaultMigratorConstants.Target.DATASTORE_NAME
+        typealias targetKeys = UserDefaultMigratorConstants.Target.DataStoreKeys
+        let sessionTimestampKey = keyWithPrefix(datastoreName: storeName, key: targetKeys.SESSION_TIMESTAMP.rawValue)
+        let sessionIDKey = keyWithPrefix(datastoreName: storeName, key: targetKeys.SESSION_ID.rawValue)
+        let tntIDKey = keyWithPrefix(datastoreName: storeName, key: targetKeys.TNT_ID.rawValue)
+        let edgeHostKey = keyWithPrefix(datastoreName: storeName, key: targetKeys.EDGE_HOST.rawValue)
+        let thirdPartyIDKey = keyWithPrefix(datastoreName: storeName, key: targetKeys.THIRD_PARTY_ID.rawValue)
+        let sessionTimestamp = Date()
+        let sessionID = "sessionID"
+        let tntID = "tntID"
+        let edgeHost = "edge.host"
+        let thirdPartyID = "thirdPartyID"
         
+        defaults.set(sessionTimestamp.timeIntervalSince1970, forKey: sessionTimestampKey)
+        defaults.set(sessionID, forKey: sessionIDKey)
+        defaults.set(tntID, forKey: tntIDKey)
+        defaults.set(edgeHost, forKey: edgeHostKey)
+        defaults.set(thirdPartyID, forKey: thirdPartyIDKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[targetKeys.SESSION_TIMESTAMP.rawValue] as? Double, sessionTimestamp.timeIntervalSince1970)
+        XCTAssertEqual(mockDataStore.dict[targetKeys.SESSION_ID.rawValue] as? String, sessionID)
+        XCTAssertEqual(mockDataStore.dict[targetKeys.TNT_ID.rawValue] as? String, tntID)
+        XCTAssertEqual(mockDataStore.dict[targetKeys.EDGE_HOST.rawValue] as? String, edgeHost)
+        XCTAssertEqual(mockDataStore.dict[targetKeys.THIRD_PARTY_ID.rawValue] as? String, thirdPartyID)
+        
+        XCTAssertNil(defaults.object(forKey: sessionTimestampKey))
+        XCTAssertNil(defaults.object(forKey: sessionIDKey))
+        XCTAssertNil(defaults.object(forKey: tntIDKey))
+        XCTAssertNil(defaults.object(forKey: edgeHostKey))
+        XCTAssertNil(defaults.object(forKey: thirdPartyIDKey))
     }
     
     func testCampaignMigration() {
+        let storeName = UserDefaultMigratorConstants.Campaign.DATASTORE_NAME
+        typealias campaignKeys = UserDefaultMigratorConstants.Campaign.DataStoreKeys
         
+        let remoteURLKey = keyWithPrefix(datastoreName: storeName, key: campaignKeys.REMOTE_URL.rawValue)
+        let ecidKey = keyWithPrefix(datastoreName: storeName, key: campaignKeys.ECID.rawValue)
+        let registrationTSKey = keyWithPrefix(datastoreName: storeName, key: campaignKeys.REGISTRATION_TS.rawValue)
+        
+        let remoteURL = "remote.url"
+        let ecid = "ecid"
+        let registrationTS = Date().timeIntervalSince1970
+        
+        defaults.set(remoteURL, forKey: remoteURLKey)
+        defaults.set(ecid, forKey: ecidKey)
+        defaults.set(registrationTS, forKey: registrationTSKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[campaignKeys.REMOTE_URL.rawValue] as? String, remoteURL)
+        XCTAssertEqual(mockDataStore.dict[campaignKeys.ECID.rawValue] as? String, ecid)
+        XCTAssertEqual(mockDataStore.dict[campaignKeys.REGISTRATION_TS.rawValue] as? Double, registrationTS)
+        
+        XCTAssertNil(defaults.object(forKey: remoteURLKey))
+        XCTAssertNil(defaults.object(forKey: ecidKey))
+        XCTAssertNil(defaults.object(forKey: registrationTSKey))
     }
     
     func testCampaignClassicMigration() {
+        let storeName = UserDefaultMigratorConstants.CampaignClassic.DATASTORE_NAME
+        let tokenHashKey = keyWithPrefix(datastoreName: storeName, key: UserDefaultMigratorConstants.CampaignClassic.DataStoreKeys.TOKEN_HASH.rawValue)
         
+        let tokenHash = "hash"
+        
+        defaults.set(tokenHash, forKey: tokenHashKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[UserDefaultMigratorConstants.CampaignClassic.DataStoreKeys.TOKEN_HASH.rawValue] as? String, tokenHash)
+        
+        XCTAssertNil(defaults.object(forKey: tokenHashKey))
     }
     
     func testPlacesMigration() {
+        let storeName = UserDefaultMigratorConstants.Places.DATASTORE_NAME
+        typealias storeKeys = UserDefaultMigratorConstants.Places.DataStoreKeys
         
+        let accuracyKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.ACCURACY.rawValue) // String
+        let authStatusKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.AUTH_STATUS.rawValue) // String
+        let currentPOIKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.CURRENT_POI.rawValue) // String
+        let lastEnteredPOIKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.LAST_ENTERED_POI.rawValue) // String
+        let lastExitedPOIKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.LAST_EXITED_POI.rawValue) // String
+        let lastKnownLatKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.LAST_KNOWN_LATITUDE.rawValue) // Double
+        let lastKnownLongKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.LAST_KNOWN_LONGITUDE.rawValue) // Double
+        let membershipKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.MEMBERSHIP.rawValue) // TimeInterval
+        let nearbyPOIsKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.NEARBY_POIS.rawValue) // [String: String]
+        let userWithinPOIsKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.USER_WITHIN_POIS.rawValue) // [String: String]
+        
+        let accuracy = "accurate"
+        let authStatus = "authorized"
+        let currentPOI = "current poi"
+        let lastEnteredPOI = "last entered poi"
+        let lastExitedPOI = "last exited poi"
+        let lastKnownLat: Double = 12.345
+        let lastKnownLong: Double = 67.891
+        let membershipValidUntil = Date().timeIntervalSince1970
+        let nearbyPOIs = ["nearby": "pois"]
+        let userWithinPOIs = ["user": "within"]
+        
+        defaults.set(accuracy, forKey: accuracyKey)
+        defaults.set(authStatus, forKey: authStatusKey)
+        defaults.set(currentPOI, forKey: currentPOIKey)
+        defaults.set(lastEnteredPOI, forKey: lastEnteredPOIKey)
+        defaults.set(lastExitedPOI, forKey: lastExitedPOIKey)
+        defaults.set(lastKnownLat, forKey: lastKnownLatKey)
+        defaults.set(lastKnownLong, forKey: lastKnownLongKey)
+        defaults.set(membershipValidUntil, forKey: membershipKey)
+        defaults.set(nearbyPOIs, forKey: nearbyPOIsKey)
+        defaults.set(userWithinPOIs, forKey: userWithinPOIsKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[storeKeys.ACCURACY.rawValue] as? String, accuracy)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.AUTH_STATUS.rawValue] as? String, authStatus)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.CURRENT_POI.rawValue] as? String, currentPOI)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.LAST_ENTERED_POI.rawValue] as? String, lastEnteredPOI)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.LAST_EXITED_POI.rawValue] as? String, lastExitedPOI)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.LAST_KNOWN_LATITUDE.rawValue] as? Double, lastKnownLat)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.LAST_KNOWN_LONGITUDE.rawValue] as? Double, lastKnownLong)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.MEMBERSHIP.rawValue] as? Double, membershipValidUntil)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.NEARBY_POIS.rawValue] as? [String: String], nearbyPOIs)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.USER_WITHIN_POIS.rawValue] as? [String: String], userWithinPOIs)
+        
+        XCTAssertNil(defaults.object(forKey: accuracyKey))
+        XCTAssertNil(defaults.object(forKey: authStatusKey))
+        XCTAssertNil(defaults.object(forKey: currentPOIKey))
+        XCTAssertNil(defaults.object(forKey: lastEnteredPOIKey))
+        XCTAssertNil(defaults.object(forKey: lastExitedPOIKey))
+        XCTAssertNil(defaults.object(forKey: lastKnownLatKey))
+        XCTAssertNil(defaults.object(forKey: lastKnownLongKey))
+        XCTAssertNil(defaults.object(forKey: membershipKey))
+        XCTAssertNil(defaults.object(forKey: nearbyPOIsKey))
+        XCTAssertNil(defaults.object(forKey: userWithinPOIsKey))
     }
     
     func testUserProfileMigration() {
+        let storeName = UserDefaultMigratorConstants.UserProfile.DATASTORE_NAME
+        
+        let attributeKey = keyWithPrefix(datastoreName: storeName, key: UserDefaultMigratorConstants.UserProfile.DataStoreKeys.ATTRIBUTES.rawValue)
+        let attributes = ["attributeKey": "attributeValue"]
+        
+        defaults.set(attributes, forKey: attributeKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[UserDefaultMigratorConstants.UserProfile.DataStoreKeys.ATTRIBUTES.rawValue] as? [String: String], attributes)
+        
+        XCTAssertNil(defaults.object(forKey: attributeKey))
         
     }
     
     func testEdgeMigration() {
+        let storeName = UserDefaultMigratorConstants.Edge.DATASTORE_NAME
+        typealias storeKeys = UserDefaultMigratorConstants.Edge.EdgeDataStoreKeys
         
+        let resetIdentitiesDateKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.RESET_IDENTITIES_DATE.rawValue)
+        let edgePropertiesKey = keyWithPrefix(datastoreName: storeName, key: storeKeys.EDGE_PROPERTIES.rawValue)
+        
+        let resetIdentitiesDate = Date().timeIntervalSince1970
+        let edgeProperties = ["locationHint": "hint"]
+        
+        defaults.set(resetIdentitiesDate, forKey: resetIdentitiesDateKey)
+        defaults.set(edgeProperties, forKey: edgePropertiesKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[storeKeys.RESET_IDENTITIES_DATE.rawValue] as? Double, resetIdentitiesDate)
+        XCTAssertEqual(mockDataStore.dict[storeKeys.EDGE_PROPERTIES.rawValue] as? [String: String], edgeProperties)
+        
+        XCTAssertNil(defaults.object(forKey: resetIdentitiesDateKey))
+        XCTAssertNil(defaults.object(forKey: edgePropertiesKey))
+    }
+    
+    func testEdgePayloadMigration() {
+        let payloadStoreName = UserDefaultMigratorConstants.Edge.PAYLOAD_DATASTORE_NAME
+        let payloadKey = keyWithPrefix(datastoreName: payloadStoreName, key: UserDefaultMigratorConstants.Edge.EdgePayloadStoreKeys.STORE_PAYLOADS.rawValue)
+        
+        let payload = ["payloadKey": "payloadValue"]
+        
+        defaults.set(payload, forKey: payloadKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[UserDefaultMigratorConstants.Edge.EdgePayloadStoreKeys.STORE_PAYLOADS.rawValue] as? [String: String], payload)
+        XCTAssertNil(defaults.object(forKey: payloadKey))
     }
     
     func testEdgeIdentityMigration() {
+        let storeName = UserDefaultMigratorConstants.EdgeIdentity.DATASTORE_NAME
+        let identityPropertiesKey = keyWithPrefix(datastoreName: storeName, key: UserDefaultMigratorConstants.EdgeIdentity.DataStoreKeys.IDENTITY_PROPERTIES.rawValue)
+        let identityProperties = ["identity": "properties"]
+        defaults.set(identityProperties, forKey: identityPropertiesKey)
         
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[UserDefaultMigratorConstants.EdgeIdentity.DataStoreKeys.IDENTITY_PROPERTIES.rawValue] as? [String: String], identityProperties)
+        XCTAssertNil(defaults.object(forKey: identityPropertiesKey))
     }
     
     func testEdgeConsentMigration() {
+        let storeName = UserDefaultMigratorConstants.EdgeConsent.DATASTORE_NAME
+        let consentPreferencesKey = keyWithPrefix(datastoreName: storeName, key: UserDefaultMigratorConstants.EdgeConsent.DataStoreKeys.CONSENT_PREFERENCES.rawValue)
         
+        let consentPreferences = ["consent": "preferences"]
+        
+        defaults.set(consentPreferences, forKey: consentPreferencesKey)
+        
+        UserDefaultsMigrator().migrate()
+        
+        XCTAssertEqual(mockDataStore.dict[UserDefaultMigratorConstants.EdgeConsent.DataStoreKeys.CONSENT_PREFERENCES.rawValue] as? [String: String], consentPreferences)
+        
+        XCTAssertNil(defaults.object(forKey: consentPreferencesKey))
     }
 }
