@@ -34,24 +34,22 @@ class UserDefaultMigratorTests: XCTestCase {
         return "Adobe.\(datastoreName).\(key)"
     }
     
-    private func setInstallDate(date: Date) {
-        let installDateKey = keyWithPrefix(datastoreName: UserDefaultMigratorConstants.Lifecycle.DATASTORE_NAME, key: UserDefaultMigratorConstants.Lifecycle.DataStoreKeys.INSTALL_DATE.rawValue)
-        defaults.set(date, forKey: installDateKey)
+    private func removeMigrationComplete() {
+        mockDataStore.remove(collectionName: UserDefaultMigratorConstants.MIGRATION_STORE_NAME, key: UserDefaultMigratorConstants.MIGRATION_COMPLETE)
     }
     
-    private func removeInstallDate() {
-        let installDateKey = keyWithPrefix(datastoreName: UserDefaultMigratorConstants.Lifecycle.DATASTORE_NAME, key: UserDefaultMigratorConstants.Lifecycle.DataStoreKeys.INSTALL_DATE.rawValue)
-        defaults.removeObject(forKey: installDateKey)
+    private func setMigrationComplete() {
+        mockDataStore.set(collectionName: UserDefaultMigratorConstants.MIGRATION_STORE_NAME, key: UserDefaultMigratorConstants.MIGRATION_COMPLETE, value: true)
     }
     
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         let date = Date()
-        setInstallDate(date: date)
+        removeMigrationComplete()
     }
 
     func testNoMigrationIfAlreadyMigrated() {
-        removeInstallDate()
+        setMigrationComplete()
         let configurationStoreName = UserDefaultMigratorConstants.Configuration.DATASTORE_NAME
         typealias configurationKeys = UserDefaultMigratorConstants.Configuration.DataStoreKeys
         let configMap = "{\"global.privacy\": \"optedout\"}"
@@ -62,7 +60,7 @@ class UserDefaultMigratorTests: XCTestCase {
         defaults.set(appID, forKey: appIDKey)
         
         UserDefaultsMigrator().migrate()
-        XCTAssertTrue(mockDataStore.dict.isEmpty)
+        XCTAssertTrue(mockDataStore.dict.count == 1)
     }
     
     func testConfigurationMigration() {
@@ -126,10 +124,7 @@ class UserDefaultMigratorTests: XCTestCase {
     }
     
     func testLifecycleMigration() {
-        removeInstallDate()
-        
         let mockDate = Date()
-        setInstallDate(date: mockDate)
         let lifecycleStoreName = UserDefaultMigratorConstants.Lifecycle.DATASTORE_NAME
         typealias lifecycleKeys = UserDefaultMigratorConstants.Lifecycle.DataStoreKeys
         let installDateKey = keyWithPrefix(datastoreName: lifecycleStoreName, key: lifecycleKeys.INSTALL_DATE.rawValue)
@@ -167,6 +162,7 @@ class UserDefaultMigratorTests: XCTestCase {
             defaults.set(encodedString, forKey: lifecycleDataKey)
         }
         let lastVersion = "1.0.0"
+        defaults.set(mockDate, forKey: installDateKey)
         defaults.set(lastVersion, forKey: lastVersionKey)
         defaults.set(lastVersion, forKey: v2LastVersionKey)
         defaults.set(mockDate.timeIntervalSince1970, forKey: upgradeDateKey)

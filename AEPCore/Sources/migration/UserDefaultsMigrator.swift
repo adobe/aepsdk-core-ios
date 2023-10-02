@@ -37,13 +37,18 @@ struct UserDefaultsMigrator {
                 }
                 Log.debug(label: LOG_TAG, "UserDefaults Migration complete for \(collectionName)")
             }
+            dataStore.set(collectionName: constants.MIGRATION_STORE_NAME, key: constants.MIGRATION_COMPLETE, value: true)
             Log.debug(label: LOG_TAG, "UserDefaults migration complete")
         }
     }
     
     private func needToMigrate() -> Bool {
-        let installDateKey = keyWithPrefix(datastoreName: constants.Lifecycle.DATASTORE_NAME, key: constants.Lifecycle.DataStoreKeys.INSTALL_DATE.rawValue)
-        return defaults.object(forKey: installDateKey) != nil
+        guard let migrationComplete = dataStore.get(collectionName: constants.MIGRATION_STORE_NAME, key: constants.MIGRATION_COMPLETE) as? Bool else {
+            return true
+        }
+        
+        return !migrationComplete
+        
     }
     
     private func keyWithPrefix(datastoreName: String, key: String) -> String {
@@ -52,7 +57,7 @@ struct UserDefaultsMigrator {
     
     private func getAndDelete(key: String) -> Any? {
         guard let value = defaults.object(forKey: key) else {
-            Log.debug(label: LOG_TAG, "Failed to get value to migrate from UserDefaults")
+            Log.trace(label: LOG_TAG, "No value for \(key) found")
             return nil
         }
         
