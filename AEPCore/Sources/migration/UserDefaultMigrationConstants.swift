@@ -16,7 +16,7 @@ import Foundation
 enum UserDefaultMigratorConstants {
     
     static let MIGRATION_STORE_NAME = "com.adobe.migration"
-    static let MIGRATION_COMPLETE = "migrationComplete"
+    static let MIGRATION_COMPLETE = "migration.userdefaults.complete"
     
     static let migrationDict: [String: [String]] = [
         Configuration.DATASTORE_NAME: Configuration.DataStoreKeys.allCases.map {$0.rawValue},
