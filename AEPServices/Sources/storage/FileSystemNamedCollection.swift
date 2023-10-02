@@ -49,7 +49,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                 do {
                     try updatedStorageData.write(to: fileUrl, options: .atomic)
                 } catch {
-                    Log.warning(label: self.LOG_TAG, "Error when writing to file: \(error)")
+                    Log.warning(label: self.LOG_TAG, "Error '\(error)' when writing '\(key)' to collection '\(collectionName)'")
                 }
             }
         }
@@ -75,7 +75,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                     do {
                         try updatedStorageData.write(to: fileUrl, options: .atomic)
                     } catch {
-                        Log.warning(label: self.LOG_TAG, "Error when attempting to remove value from file: \(error)")
+                        Log.warning(label: self.LOG_TAG, "Error '\(error)' when attempting to remove key '\(key)' from collection '\(collectionName)'")
                     }
                 }
             }
@@ -92,13 +92,16 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             return nil
         }
 
-        if let storageData = try? Data(contentsOf: fileUrl) {
-            if let jsonResult = try? JSONSerialization.jsonObject(with: storageData) as? [String: Any] {
-                return jsonResult
-            }
+        guard let storageData = try? Data(contentsOf: fileUrl) else {
+            return nil
         }
-        Log.warning(label: LOG_TAG, "Failed to get Dictionary from data store")
-        return nil
+
+        guard let jsonResult = try? JSONSerialization.jsonObject(with: storageData) as? [String: Any] else {
+            Log.warning(label: LOG_TAG, "Failed to read dictionary from collection '\(collectionName)'")
+            return nil
+        }
+        
+        return jsonResult
     }
 
     ///

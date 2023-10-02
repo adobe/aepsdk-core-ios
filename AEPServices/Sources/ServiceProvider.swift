@@ -116,7 +116,6 @@ public class ServiceProvider {
         queue.async {
             self.defaultSystemInfoService = ApplicationSystemInfoService()
             self.defaultKeyValueService = FileSystemNamedCollection()
-//            self.defaultKeyValueService = UserDefaultsNamedCollection()
             self.defaultNetworkService = NetworkService()
             self.defaultCacheService = DiskCacheService()
             self.defaultDataQueueService = DataQueueService()
