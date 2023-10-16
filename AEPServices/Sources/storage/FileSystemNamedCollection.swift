@@ -129,6 +129,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             let adobeBaseUrl = baseUrl.appendingPathComponent(adobeDirectory, isDirectory: true)
             do {
                 try fileManager.createDirectory(at: adobeBaseUrl, withIntermediateDirectories: true)
+                try fileManager.setAttributes([FileAttributeKey.protectionKey: FileProtectionType.none], ofItemAtPath: adobeBaseUrl.path)
             } catch {
                 Log.warning(label: adobeDirectory, "Failed to create storage directory with error: \(error)")
                 return nil
