@@ -18,7 +18,9 @@ class DiskCacheService: Caching {
     let cachePrefix = "com.adobe.mobile.diskcache/"
     let fileManager = FileManager.default
     private let LOG_PREFIX = "DiskCacheService"
-    private let PATH = "PATH"
+    private let EXPIRY_DATE = "expirydate"
+    private let METADATA = "metadata"
+    private let METADATA_KEY_PATH = "PATH"
 
     // MARK: Caching
 
@@ -26,35 +28,41 @@ class DiskCacheService: Caching {
         try createDirectoryIfNeeded(cacheName: cacheName)
         let path = filePath(for: cacheName, with: key)
         _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
-        try fileManager.setAttributes([.modificationDate: entry.expiry.date], ofItemAtPath: path)
-        var newMetadata = [PATH: path]
+        
+        var newMetadata = [METADATA_KEY_PATH: path]
         if let meta = entry.metadata, !meta.isEmpty {
             newMetadata.merge(meta) { current, _ in current }
         }
-        let newCache = CacheEntry(data: entry.data, expiry: entry.expiry, metadata: newMetadata)
-        Log.trace(label: LOG_PREFIX, "Updating cache '\(cacheName)' - setting key '\(key)' to value: \n\(newCache.metadata as AnyObject)")
-        dataStore.set(key: dataStoreKey(for: cacheName, with: key), value: newCache.metadata)
+        
+        var attributes: [String: Any] = [
+            EXPIRY_DATE: entry.expiry.date.timeIntervalSince1970,
+            METADATA: newMetadata
+        ]
+        Log.trace(label: LOG_PREFIX, "Updating cache '\(cacheName)' - setting key '\(key)' to value: \n\(attributes as AnyObject)")
+        dataStore.set(key: dataStoreKey(for: cacheName, with: key), value: attributes)
     }
 
     public func get(cacheName: String, key: String) -> CacheEntry? {
         try? createDirectoryIfNeeded(cacheName: cacheName)
         let path = filePath(for: cacheName, with: key)
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: path)) else { return nil }
-        let attributes = try? fileManager.attributesOfItem(atPath: path)
+        let attributes = dataStore.getDictionary(key: dataStoreKey(for: cacheName, with: key)) as? [String: Any]
 
-        guard let expiryDate = attributes?[.modificationDate] as? Date else {
+        guard let attributes = attributes, let expiryDate = attributes[EXPIRY_DATE] as? Double else {
+            // Expiry date attribute is either missing or unreadable, remove from cache
+            try? remove(cacheName: cacheName, key: key)
             return nil
         }
 
-        let expiry = CacheExpiry.date(expiryDate)
+        let expiry = CacheExpiry.date(Date(timeIntervalSince1970: expiryDate))
         if expiry.isExpired {
             // item is expired, remove from cache
             try? remove(cacheName: cacheName, key: key)
             return nil
         }
 
-        let meta = dataStore.getDictionary(key: dataStoreKey(for: cacheName, with: key)) as? [String: String]
-        return CacheEntry(data: data, expiry: .date(expiryDate), metadata: meta)
+        let meta = attributes[METADATA] as? [String: String]        
+        return CacheEntry(data: data, expiry: expiry, metadata: meta)
     }
 
     public func remove(cacheName: String, key: String) throws {
@@ -101,7 +109,7 @@ class DiskCacheService: Caching {
     ///   - cacheName: name of the cache
     ///   - key: key for the entry
     /// - Returns: the key to be used in the datastore for the entry
-    private func dataStoreKey(for cacheName: String, with key: String) -> String {
+    func dataStoreKey(for cacheName: String, with key: String) -> String {
         return "\(cacheName.alphanumeric)/\(key.alphanumeric)"
     }
 }

@@ -11,16 +11,15 @@
  */
 
 @testable import AEPCore
+@testable import AEPServicesMocks
+@testable import AEPServices
 import AEPCoreMocks
-import AEPServices
-import AEPServicesMocks
 import XCTest
 
 /// Functional tests for the Configuration extension
 class ConfigurationUpdateTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var configuration: Configuration!
-    let mockDataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
     private let mockAppid = "mockAppid"
     private let mockConfig: [String: AnyCodable] = ["global.privacy": "optedin",
                                                     "lifecycle.sessionTimeout": 300,
@@ -28,7 +27,7 @@ class ConfigurationUpdateTests: XCTestCase {
                                                     "analytics.server": "default"]
 
     func setUpForUpdate() {
-        UserDefaults.clear()
+        NamedCollectionDataStore.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
@@ -36,7 +35,9 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     func setupWithCachedConfig() {
-        UserDefaults.clear()
+        ServiceProvider.shared.reset()
+        let mockDataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
+        NamedCollectionDataStore.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         // Make sure initial config is cached
@@ -48,7 +49,7 @@ class ConfigurationUpdateTests: XCTestCase {
     }
 
     override func tearDown() {
-        UserDefaults.clear()
+        NamedCollectionDataStore.clear()
     }
 
     // MARK: update shared state tests

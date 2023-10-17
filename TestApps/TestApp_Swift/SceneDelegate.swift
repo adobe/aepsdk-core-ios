@@ -12,6 +12,8 @@
 import UIKit
 import SwiftUI
 import AEPCore
+import AEPServices
+import BackgroundTasks
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -61,7 +63,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
         MobileCore.lifecyclePause()
+        // To test background task, breakpoint below, and then enter the following command in to the debug console:
+        // e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"testBackground"]
+        (UIApplication.shared.delegate as! AppDelegate).scheduleAppRefresh()
     }
+    
 
 
 }

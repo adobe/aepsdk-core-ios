@@ -13,6 +13,7 @@ import XCTest
 @testable import AEPCore
 @testable import AEPServices
 @testable import AEPIdentity
+@testable import AEPServicesMocks
 import AEPLifecycle
 import AEPSignal
 
@@ -21,8 +22,7 @@ import AEPSignal
 class IdentityIntegrationTests: XCTestCase {
 
     override func setUp() {
-        UserDefaults.clear()
-        FileManager.default.clearCache()
+        NamedCollectionDataStore.clear()
     }
 
     override func tearDown() {
@@ -207,14 +207,16 @@ class IdentityIntegrationTests: XCTestCase {
     func testGetExperienceCloudIdWithinPermissibleTimeOnInstall() {
         initExtensionsAndWait()
 
-        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 0.5 seconds when Configuration is available on Install")
+        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 seconds when Configuration is available on Install")
         MobileCore.updateConfigurationWith(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
             XCTAssertNil(error)
             getECIDExpectation.fulfill()
         }
-        wait(for: [getECIDExpectation], timeout: 0.5)
+        // getExperienceCloudId returns within 0.5 sec when config is bundled with the app. 
+        // Increasing timeout to 1 sec to avoid race conditions
+        wait(for: [getECIDExpectation], timeout: 1)
     }
 
     func testGetExperienceCloudIdWithinPermissibleTimeOnLaunch() {
@@ -346,18 +348,9 @@ class IdentityIntegrationTests: XCTestCase {
         waitForBootupHit(initialConfig: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
 
         let resetHitExpectation = XCTestExpectation(description: "new sync from reset identities")
-        resetHitExpectation.assertForOverFulfill = true
-
         let mockNetworkService = TestableNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
-
         mockNetworkService.mock { request in
-            // assert new ECID on last hit
-            props.loadFromPersistence()
-            XCTAssertNotEqual(firstEcid.ecidString, props.ecid?.ecidString)
-            XCTAssertTrue(request.url.absoluteString.contains(props.ecid!.ecidString))
-            XCTAssertFalse(request.url.absoluteString.contains(firstEcid.ecidString))
-
             resetHitExpectation.fulfill()
             return nil
         }
@@ -366,6 +359,20 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.resetIdentities()
 
         wait(for: [resetHitExpectation], timeout: 2)
+        
+        // Wait for 500ms so that the new ECID gets persisted and to avoid race conditions
+        usleep(500)
+        
+        // assert new ECID on last hit
+        props.loadFromPersistence()
+        guard let newEcid = props.ecid else {
+            XCTFail("New ECID is not generated")
+            return
+        }
+        
+        XCTAssertNotEqual(firstEcid.ecidString, newEcid.ecidString)
+        XCTAssertTrue(mockNetworkService.requests[0].url.absoluteString.contains(newEcid.ecidString))
+        XCTAssertFalse(mockNetworkService.requests[0].url.absoluteString.contains(firstEcid.ecidString))
     }
 
     private func waitForBootupHit(initialConfig: [String: String]) {

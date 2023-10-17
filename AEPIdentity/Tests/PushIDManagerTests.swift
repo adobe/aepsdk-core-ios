@@ -10,7 +10,7 @@
  */
 
 @testable import AEPIdentity
-import AEPServices
+@testable import AEPServices
 import AEPServicesMocks
 import XCTest
 
@@ -29,6 +29,10 @@ class PushIDManagerTests: XCTestCase {
 
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
+    }
+
+    override func tearDown() {
+        ServiceProvider.shared.reset()
     }
 
     /// Tests that when we set the first push id to nil and the existing push id is nil that we dispatch a analytics event
