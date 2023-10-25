@@ -97,8 +97,8 @@ class UserDefaultMigratorTests: XCTestCase {
         let identityPushEnabledKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.PUSH_ENABLED.rawValue)
         let identityAnalyticsPushEnabledKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.ANALYTICS_PUSH_ENABLED.rawValue)
         let encoder = JSONEncoder()
-        if let encodedValue = try? encoder.encode(properties), let encodedString = String(data: encodedValue, encoding: .utf8) {
-            defaults.set(encodedString, forKey: identityPropertyKey)
+        if let encodedValue = try? encoder.encode(properties) {
+            defaults.set(encodedValue, forKey: identityPropertyKey)
         }
         defaults.set(true, forKey: identityPushEnabledKey)
         defaults.set(false, forKey: identityAnalyticsPushEnabledKey)
@@ -148,8 +148,8 @@ class UserDefaultMigratorTests: XCTestCase {
         persistedContext.startDate = mockDate
         persistedContext.successfulClose = true
         let encoder = JSONEncoder()
-        if let encodedValue = try? encoder.encode(persistedContext), let encodedString = String(data: encodedValue, encoding: .utf8) {
-            defaults.set(encodedString, forKey: persistedContextKey)
+        if let encodedValue = try? encoder.encode(persistedContext) {
+            defaults.set(encodedValue, forKey: persistedContextKey)
         }
         var lifecycleMetrics = LifecycleMetrics()
         lifecycleMetrics.appId = "appID"
@@ -158,8 +158,8 @@ class UserDefaultMigratorTests: XCTestCase {
         lifecycleContextData.additionalContextData = ["additionalContextDataKey": "additionalContextDataVal"]
         lifecycleContextData.lifecycleMetrics = lifecycleMetrics
         lifecycleContextData.advertisingIdentifier = "advertisingID"
-        if let encodedValue = try? encoder.encode(lifecycleContextData), let encodedString = String(data: encodedValue, encoding: .utf8) {
-            defaults.set(encodedString, forKey: lifecycleDataKey)
+        if let encodedValue = try? encoder.encode(lifecycleContextData) {
+            defaults.set(encodedValue, forKey: lifecycleDataKey)
         }
         let lastVersion = "1.0.0"
         defaults.set(mockDate, forKey: installDateKey)

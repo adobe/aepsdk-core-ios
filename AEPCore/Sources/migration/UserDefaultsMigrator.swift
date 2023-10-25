@@ -31,7 +31,10 @@ struct UserDefaultsMigrator {
             Log.debug(label: LOG_TAG, "Beginning UserDefaults migration")
             for (collectionName, keys) in constants.migrationDict {
                 for key in keys {
-                    if let valueToMigrate = getAndDelete(key: keyWithPrefix(datastoreName: collectionName, key: key)) {
+                    if var valueToMigrate = getAndDelete(key: keyWithPrefix(datastoreName: collectionName, key: key)) {
+                        if valueToMigrate is Data {
+                            valueToMigrate = String(data: valueToMigrate as! Data, encoding: .utf8) as Any
+                        }
                         dataStore.set(collectionName: collectionName, key: key, value: valueToMigrate)
                     }
                 }
