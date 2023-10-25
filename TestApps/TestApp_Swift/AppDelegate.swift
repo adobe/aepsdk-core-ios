@@ -27,7 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         let appState = application.applicationState
         MobileCore.setLogLevel(.trace)
-        MobileCore.setAppGroup("group.com.adobe.aepsampleapp")
         let extensions = [Identity.self,
                           Lifecycle.self,
                           Signal.self]
@@ -40,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         })
         
+        // If testing background, edit test app scheme -> options -> background fetch -> Check "launch app due to background fetch event"
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "testBackground", using: nil) { task in
             // Check if we can retrieve from file from background
             self.backgroundTask()
