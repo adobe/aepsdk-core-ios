@@ -45,12 +45,16 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
                 return
             }
             dict[key] = value
-            if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
-                do {
-                    try updatedStorageData.write(to: fileUrl, options: .atomic)
-                } catch {
-                    Log.warning(label: self.LOG_TAG, "Error '\(error)' when writing '\(key)' to collection '\(collectionName)'")
+            if JSONSerialization.isValidJSONObject(dict) {
+                if let updatedStorageData = try? JSONSerialization.data(withJSONObject: dict) {
+                    do {
+                        try updatedStorageData.write(to: fileUrl, options: .atomic)
+                    } catch {
+                        Log.warning(label: self.LOG_TAG, "Error '\(error)' when writing '\(key)' to collection '\(collectionName)'")
+                    }
                 }
+            } else {
+                Log.warning(label: self.LOG_TAG, "Setting value: \(String(describing: value)) with dict: \(dict) failed. Not serializable.")
             }
         }
     }
