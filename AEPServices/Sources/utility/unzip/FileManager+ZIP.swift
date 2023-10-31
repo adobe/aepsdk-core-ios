@@ -61,11 +61,12 @@ extension FileManager {
     class func attributes(from entry: ZipEntry) -> [FileAttributeKey: Any] {
         let centralDirectoryStructure = entry.centralDirectoryStructure
         let entryType = entry.type
-        let entryTime = centralDirectoryStructure.lastModFileTime
-        let entryDate = centralDirectoryStructure.lastModFileDate
         let defaultPermissions = FileUnzipperConstants.defaultFilePermissions
         var attributes = [.posixPermissions: defaultPermissions] as [FileAttributeKey: Any]
-        attributes[.modificationDate] = Date(dateTime: (entryDate, entryTime))
+        // `modificationDate` attribute is now marked as a restricted API. We will not set it as we don't have any use case based on this attribute.
+        // let entryTime = centralDirectoryStructure.lastModFileTime
+        // let entryDate = centralDirectoryStructure.lastModFileDate
+        // attributes[.modificationDate] = Date(dateTime: (entryDate, entryTime))
         let versionMadeBy = centralDirectoryStructure.versionMadeBy
         guard let osType = ZipEntry.OSType(rawValue: UInt(versionMadeBy >> 8)) else { return attributes }
 

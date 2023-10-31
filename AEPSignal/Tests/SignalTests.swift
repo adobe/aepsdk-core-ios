@@ -46,10 +46,9 @@ class SignalTests: XCTestCase {
     }
     
     // after each
-    override func tearDown() {}
-    
-    // after all
-    override class func tearDown() {}
+    override func tearDown() {
+        ServiceProvider.shared.reset()
+    }
         
     // MARK: - handleConfigurationResponse(event: Event)
     /// on privacy opt-out, the hit queue should be cleared

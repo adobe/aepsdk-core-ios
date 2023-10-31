@@ -12,6 +12,7 @@
 import XCTest
 @testable import AEPCore
 @testable import AEPServices
+@testable import AEPServicesMocks
 import AEPIdentity
 import AEPLifecycle
 import AEPSignal
@@ -20,8 +21,7 @@ import AEPSignal
 class ConfigurationIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()
     override func setUp() {
-        UserDefaults.clear()
-        FileManager.default.clearCache()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         resetTestEnv()
         initExtensionsAndWait()

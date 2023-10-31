@@ -28,7 +28,7 @@ public class ServiceProvider {
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()
     private var overrideKeyValueService: NamedCollectionProcessing?
-    private var defaultKeyValueService = UserDefaultsNamedCollection()
+    private var defaultKeyValueService = FileSystemNamedCollection()
     private var overrideNetworkService: Networking?
     private var defaultNetworkService = NetworkService()
     private var defaultDataQueueService = DataQueueService()
@@ -115,7 +115,7 @@ public class ServiceProvider {
     internal func reset() {
         queue.async {
             self.defaultSystemInfoService = ApplicationSystemInfoService()
-            self.defaultKeyValueService = UserDefaultsNamedCollection()
+            self.defaultKeyValueService = FileSystemNamedCollection()
             self.defaultNetworkService = NetworkService()
             self.defaultCacheService = DiskCacheService()
             self.defaultDataQueueService = DataQueueService()

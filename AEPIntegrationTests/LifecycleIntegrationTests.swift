@@ -12,6 +12,7 @@
 import XCTest
 @testable import AEPCore
 @testable import AEPServices
+@testable import AEPServicesMocks
 import AEPIdentity
 import AEPLifecycle
 import AEPSignal
@@ -23,8 +24,7 @@ class LifecycleIntegrationTests: XCTestCase {
     let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
     override func setUp() {
-        UserDefaults.clear()
-        FileManager.default.clearCache()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         initExtensionsAndWait()
     }
