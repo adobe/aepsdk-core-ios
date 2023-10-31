@@ -11,7 +11,7 @@
 
 @testable import AEPCore
 @testable import AEPIdentity
-import AEPServices
+@testable import AEPServices
 import AEPServicesMocks
 import XCTest
 
@@ -28,6 +28,7 @@ class IdentityTests: XCTestCase {
     }
 
     override func tearDown() {
+        ServiceProvider.shared.reset()
         identity.onUnregistered()
     }
 

@@ -15,6 +15,7 @@ import AEPServices
 import AEPLifecycle
 import AEPSignal
 import AEPIdentity
+import BackgroundTasks
 
 @main
 @available(tvOSApplicationExtension, unavailable)
@@ -37,7 +38,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 MobileCore.lifecycleStart(additionalContextData: nil)
             }
         })
+        
+        // If testing background, edit test app scheme -> options -> background fetch -> Check "launch app due to background fetch event"
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "testBackground", using: nil) { task in
+            // Check if we can retrieve from file from background
+            self.backgroundTask()
+            task.setTaskCompleted(success: true)
+            self.scheduleAppRefresh()
+        }
         return true
+    }
+    
+    func backgroundTask() {
+        // Provide the task you want to test in the background here
+    }
+    
+    func scheduleAppRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: "testBackground")
+
+        request.earliestBeginDate = nil // Refresh after 5 minutes.
+
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Could not schedule app refresh task \(error.localizedDescription)")
+        }
     }
 
     // MARK: UISceneSession Lifecycle
