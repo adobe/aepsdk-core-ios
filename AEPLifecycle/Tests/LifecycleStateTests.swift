@@ -11,8 +11,8 @@
  */
 
 @testable import AEPLifecycle
+@testable import AEPServicesMocks
 import AEPServices
-import AEPServicesMocks
 import XCTest
 
 class LifecycleStateTests: XCTestCase {
@@ -35,6 +35,7 @@ class LifecycleStateTests: XCTestCase {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
+        NamedCollectionDataStore.clear()
     }
 
     private func setupDates() {

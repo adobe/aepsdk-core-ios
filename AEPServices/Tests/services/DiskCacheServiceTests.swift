@@ -22,12 +22,15 @@ private struct Person: Codable, Equatable {
 
 class DiskCacheServiceTests: XCTestCase {
     var diskCache = DiskCacheService()
+    let DATA_STORE_NAME = "DiskCacheService"
     let CACHE_NAME = "DiskCacheServiceTests"
     let ENTRY_KEY = "testEntryKey"
+    var mockDataStore: MockDataStore!
     var dateOneMinInFuture: Date!
 
     override func setUp() {
-        ServiceProvider.shared.namedKeyValueService = MockDataStore()
+        mockDataStore = MockDataStore()
+        ServiceProvider.shared.namedKeyValueService = mockDataStore
         dateOneMinInFuture = Calendar.current.date(byAdding: .minute, value: 1, to: Date())
     }
 
@@ -35,10 +38,11 @@ class DiskCacheServiceTests: XCTestCase {
         // clear cache after each test
         let cachePath = diskCache.cachePath(for: CACHE_NAME)
         try? FileManager.default.removeItem(atPath: cachePath)
+        ServiceProvider.shared.reset()
     }
 
     func originalEntry(_ original: CacheEntry, equals cached: CacheEntry) -> Bool {
-        guard original.data == cached.data, original.expiry == cached.expiry else {
+        guard original.data == cached.data, original.expiry.date.equal(other: cached.expiry.date) else {
             return false
         }
 
@@ -78,6 +82,34 @@ class DiskCacheServiceTests: XCTestCase {
         // verify
         let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
         XCTAssertTrue(originalEntry(entry, equals: storedEntry!))
+    }
+    
+    func testSetGetMissingAttributes() {
+        // setup
+        let data = "Test".data(using: .utf8)!
+        let entry = CacheEntry(data: data, expiry: .date(dateOneMinInFuture), metadata: nil)
+
+        // test
+        try! diskCache.set(cacheName: CACHE_NAME, key: ENTRY_KEY, entry: entry)
+        // remove attributes for this entry
+        mockDataStore.remove(collectionName: "DiskCacheService", key: diskCache.dataStoreKey(for: CACHE_NAME, with: ENTRY_KEY))
+
+        // verify
+        XCTAssertNil(diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY))
+    }
+    
+    func testSetGetMissingExpiryDate() {
+        // setup
+        let data = "Test".data(using: .utf8)!
+        let entry = CacheEntry(data: data, expiry: .date(dateOneMinInFuture), metadata: nil)
+
+        // test
+        try! diskCache.set(cacheName: CACHE_NAME, key: ENTRY_KEY, entry: entry)
+        // overwrite attributes for this entry
+        mockDataStore.set(collectionName: DATA_STORE_NAME, key: diskCache.dataStoreKey(for: CACHE_NAME, with: ENTRY_KEY), value: ["key": "value"])
+
+        // verify
+        XCTAssertNil(diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY))
     }
 
     func testSetGetNoMetadata() {
@@ -183,3 +215,16 @@ class DiskCacheServiceTests: XCTestCase {
         XCTAssertNil(diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY))
     }
 }
+
+private extension Date {
+    func equal(other: Date?) -> Bool {
+        guard let other = other else {
+            return false;
+        }
+
+        // As date stores the timestamp in milliseconds, compare double value with accuracy greater than milliseconds.
+        let accuracy = 0.00001;
+        return abs(self.timeIntervalSince1970 - other.timeIntervalSince1970) < accuracy;
+    }
+}
+

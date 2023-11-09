@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -277,6 +277,12 @@
 		68C6A2805E015B5EAEC88EB9 /* Pods-TestApp_Objc.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp_Objc.debug.xcconfig"; path = "Target Support Files/Pods-TestApp_Objc/Pods-TestApp_Objc.debug.xcconfig"; sourceTree = "<group>"; };
 		73E4CE7F314740BC6AF3A5CA /* Pods-TestAppExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAppExtension.debug.xcconfig"; path = "Target Support Files/Pods-TestAppExtension/Pods-TestAppExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		73F917DDAA83CF54D6804B96 /* Pods_TestAppExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestAppExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		752261872AA7826700D59847 /* TestApp_Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TestApp_Swift.entitlements; sourceTree = "<group>"; };
+		754508902ADDD3C400865E75 /* AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		754508942ADDD3F000865E75 /* AEPIdentity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPIdentity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		754508952ADDD3F000865E75 /* AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		754508962ADDD3F000865E75 /* AEPServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7545089D2ADDD3F800865E75 /* AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7808888026D56E8700F5A665 /* TestApp_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		780888A626D56F3800F5A665 /* LifecycleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleView.swift; sourceTree = "<group>"; };
 		780888A726D56F3800F5A665 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
@@ -525,6 +531,7 @@
 		7808888126D56E8700F5A665 /* TestApp_Swift */ = {
 			isa = PBXGroup;
 			children = (
+				752261872AA7826700D59847 /* TestApp_Swift.entitlements */,
 				780888A826D56F3800F5A665 /* AppDelegate.swift */,
 				780888AC26D56F3800F5A665 /* SceneDelegate.swift */,
 				780888A726D56F3800F5A665 /* MenuView.swift */,
@@ -559,6 +566,11 @@
 		786D629D26D69E94000828FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7545089D2ADDD3F800865E75 /* AEPSignal.framework */,
+				754508942ADDD3F000865E75 /* AEPIdentity.framework */,
+				754508952ADDD3F000865E75 /* AEPLifecycle.framework */,
+				754508962ADDD3F000865E75 /* AEPServices.framework */,
+				754508902ADDD3C400865E75 /* AEPCore.framework */,
 				78A26DE8284A9F86004A91B9 /* AEPCore.framework */,
 				78A26DE9284A9F86004A91B9 /* AEPIdentity.framework */,
 				78A26DEA284A9F86004A91B9 /* AEPLifecycle.framework */,
@@ -884,7 +896,7 @@
 		3F912D9424E1A75C00E2AC84 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1320;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1230;
 				ORGANIZATIONNAME = Adobe;
 				TargetAttributes = {
@@ -1672,6 +1684,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TestApp_Swift/TestApp_Swift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;
@@ -1698,6 +1711,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = TestApp_Swift/TestApp_Swift.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TestApp_Swift/Preview Content\"";
 				DEVELOPMENT_TEAM = FKGEE875K4;

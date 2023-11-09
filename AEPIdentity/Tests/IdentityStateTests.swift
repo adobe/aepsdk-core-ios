@@ -11,7 +11,7 @@
 
 import AEPCore
 @testable import AEPIdentity
-import AEPServices
+@testable import AEPServices
 import AEPServicesMocks
 import XCTest
 
@@ -31,6 +31,10 @@ class IdentityStateTests: XCTestCase {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockPushIdManager = MockPushIDManager()
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+    }
+
+    override func tearDown() {
+        ServiceProvider.shared.reset()
     }
 
     // MARK: boot(...) tests

@@ -14,7 +14,7 @@ import AEPCore
 import AEPCoreMocks
 @testable import AEPLifecycle
 import AEPServices
-import AEPServicesMocks
+@testable import AEPServicesMocks
 import XCTest
 
 /// Functional tests for the Lifecycle extension
@@ -56,7 +56,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         lifecycle.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
-        UserDefaults.clear()
+        NamedCollectionDataStore.clear()
     }
 
     private func waitForProcessing(interval: TimeInterval = 0.5) {

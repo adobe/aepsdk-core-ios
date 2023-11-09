@@ -11,10 +11,10 @@
  */
 
 @testable import AEPCore
+@testable import AEPServicesMocks
 import XCTest
 import AEPCoreMocks
 import AEPServices
-import AEPServicesMocks
 import XCTest
 
 class ConfigurationPrivacyStatusTests: XCTestCase {
@@ -22,7 +22,7 @@ class ConfigurationPrivacyStatusTests: XCTestCase {
     var configuration: Configuration!
     
     override func setUp() {
-        UserDefaults.clear()
+        NamedCollectionDataStore.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
