@@ -56,6 +56,9 @@ jobs:
     - name: Install cocoapods
       run: gem install cocoapods
 
+    - name: Install xcodegen
+      run: brew install xcodegen
+
     - name: Check version in Podspec
       run: |
         set -eo pipefail
