@@ -293,6 +293,16 @@ public class LaunchRulesEngine {
             case is [String: Any]:
                 let valueDict = mutableDict[key] as! [String: Any]
                 mutableDict[key] = replaceToken(in: valueDict, data: data)
+            case is [Any]:
+                var valueArr = mutableDict[key] as! [Any]
+                let tokenReplacedArr = valueArr.map({ (val: Any) -> Any in
+                    if val is String {
+                        return replaceToken(for: val as! String, data: data)
+                    } else {
+                        return val
+                    }
+                })
+                mutableDict[key] = tokenReplacedArr
             default:
                 break
             }
