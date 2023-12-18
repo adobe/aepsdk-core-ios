@@ -35,6 +35,8 @@ disabled_rules: # rule identifiers to exclude from running
   - trailing_comma
   - type_body_length
   - trailing_whitespace
+  - notification_center_detachment
+  - for_where
 
 analyzer_rules:
   - unused_import
