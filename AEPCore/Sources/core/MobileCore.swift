@@ -47,7 +47,7 @@ public final class MobileCore: NSObject {
         V4Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v4 if needed
         V5Migrator(idParser: idParser).migrate() // before starting SDK, migrate from v5 if needed
         #if os(iOS)
-        UserDefaultsMigrator().migrate() // before starting SDK, migrate from UserDefaults if needed
+            UserDefaultsMigrator().migrate() // before starting SDK, migrate from UserDefaults if needed
         #endif
         // Invoke registerExtension on legacy extensions
         let legacyExtensions = extensions.filter {!($0.self is Extension.Type)} // All extensions that do not conform to `Extension`

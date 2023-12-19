@@ -29,9 +29,9 @@ public class ServiceProvider {
     private var defaultSystemInfoService = ApplicationSystemInfoService()
     private var overrideKeyValueService: NamedCollectionProcessing?
     #if os(iOS)
-    private var defaultKeyValueService = FileSystemNamedCollection()
+        private var defaultKeyValueService = FileSystemNamedCollection()
     #elseif os(tvOS)
-    private var defaultKeyValueService = UserDefaultsNamedCollection()
+        private var defaultKeyValueService = UserDefaultsNamedCollection()
     #endif
     private var overrideNetworkService: Networking?
     private var defaultNetworkService = NetworkService()
@@ -120,9 +120,9 @@ public class ServiceProvider {
         queue.async {
             self.defaultSystemInfoService = ApplicationSystemInfoService()
             #if os(iOS)
-            self.defaultKeyValueService = FileSystemNamedCollection()
+                self.defaultKeyValueService = FileSystemNamedCollection()
             #elseif os(tvOS)
-            self.defaultKeyValueService = UserDefaultsNamedCollection()
+                self.defaultKeyValueService = UserDefaultsNamedCollection()
             #endif
             self.defaultNetworkService = NetworkService()
             self.defaultCacheService = DiskCacheService()

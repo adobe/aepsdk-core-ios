@@ -41,9 +41,9 @@ class ServiceProviderTests: XCTestCase {
         ServiceProvider.shared.namedKeyValueService = mockNamedKeyValueService
         ServiceProvider.shared.reset()
         #if os(iOS)
-        XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is FileSystemNamedCollection)
+            XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is FileSystemNamedCollection)
         #elseif os(tvOS)
-        XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is UserDefaultsNamedCollection)
+            XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is UserDefaultsNamedCollection)
         #endif
     }
     

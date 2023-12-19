@@ -359,17 +359,17 @@ class IdentityIntegrationTests: XCTestCase {
         MobileCore.resetIdentities()
 
         wait(for: [resetHitExpectation], timeout: 2)
-        
+
         // Wait for 500ms so that the new ECID gets persisted and to avoid race conditions
         usleep(500)
-        
+
         // assert new ECID on last hit
         props.loadFromPersistence()
         guard let newEcid = props.ecid else {
             XCTFail("New ECID is not generated")
             return
         }
-        
+
         XCTAssertNotEqual(firstEcid.ecidString, newEcid.ecidString)
         XCTAssertTrue(mockNetworkService.requests[0].url.absoluteString.contains(newEcid.ecidString))
         XCTAssertFalse(mockNetworkService.requests[0].url.absoluteString.contains(firstEcid.ecidString))
