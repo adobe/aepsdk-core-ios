@@ -15,6 +15,7 @@ import XCTest
 @testable import AEPServices
 @testable import AEPServicesMocks
 
+@available(tvOS, unavailable)
 class FileSystemNamedCollectionTest: XCTestCase {
     let service = FileSystemNamedCollection()
 
