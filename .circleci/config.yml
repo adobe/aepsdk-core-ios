@@ -56,9 +56,25 @@ workflows:
 commands: 
   install_dependencies:
     steps:
+          # restore pods related caches
+      - restore_cache:
+          keys:
+            - 1-gems-{{ checksum "Gemfile.lock" }}
+
+      # make sure we're on the right version of cocoapods
+      - run:
+          name: Verify Cocoapods Version
+          command: bundle check || bundle install --path vendor/bundle
+
+      # save cocoapods version gem data
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
       - run:
           name: Pod install
-          command: pod install
+          command: make ci-pod-install
         
   prestart_ios_simulator:
     steps:
@@ -349,7 +365,7 @@ jobs:
           name: Build XCFramework
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              make archive
+              make ci-archive
             fi
       # verify podspec is valid
       - run:
