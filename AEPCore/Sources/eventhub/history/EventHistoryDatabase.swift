@@ -101,7 +101,7 @@ class EventHistoryDatabase {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database.")
-                handler(EventHistoryResult(count: 0))
+                handler(EventHistoryResult(count: -1))
                 return
             }
 
