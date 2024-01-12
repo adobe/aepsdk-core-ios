@@ -128,7 +128,7 @@
                 let cacheFolder: URL? = self.fileManager.getCacheDirectoryPath()
                 if cacheFolder != nil {
                     cacheFolderURL = cacheFolder?.appendingPathComponent(self.DOWNLOAD_CACHE)
-                    let tempHTMLFileName = "\(self.TEMP_FILE_NAME)_\(Date().millisecondsSince1970)"
+                    let tempHTMLFileName = "\(self.TEMP_FILE_NAME)_\(self.hash)"
                     tempHTMLFile = cacheFolderURL?.appendingPathComponent(tempHTMLFileName).appendingPathExtension(self.HTML_EXTENSION)
                     if self.isLocalImageUsed, let file = tempHTMLFile {
                         // We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL

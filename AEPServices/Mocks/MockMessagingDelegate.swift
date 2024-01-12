@@ -12,8 +12,11 @@
 #if os(iOS)
     import Foundation
     import AEPServices
+    import XCTest
 
     public class MockMessagingDelegate: MessagingDelegate {
+        var expectation: XCTestExpectation? = nil
+        
         var onShowCalled = false
         var onDismissCalled = false
         var shouldShowMessageCalled = false
@@ -24,16 +27,24 @@
     
         var valueShouldShowMessage = true
     
+        public func setExpectation(_ expectation: XCTestExpectation) {
+            self.expectation = expectation
+        }
+        
         public func onShow(message: Showable) {
             onShowCalled = true
             paramMessage = message
+            expectation?.fulfill()
         }
     
         public func onDismiss(message: Showable) {
             onDismissCalled = true
             paramMessage = message
+            expectation?.fulfill()
         }
-    
+            
+        // intentionally not fulfilling expectation here -
+        // omit setting the expectation if you only expect `shouldShowMessage` to be called
         public func shouldShowMessage(message: Showable) -> Bool {
             shouldShowMessageCalled = true
             paramMessage = message
@@ -44,6 +55,7 @@
             urlLoadedCalled = true
             paramUrl = url
             paramMessage = message
+            expectation?.fulfill()
         }
     }
 #endif
