@@ -133,7 +133,7 @@
                     if self.isLocalImageUsed, let file = tempHTMLFile {
                         // We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL
                         // expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the
-                        // payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp_[EPOCH_TIMESTAMP].html
+                        // payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp_[self.hash].html
                         // and pass that file URL to loadFileURL.
                         do {
                             try FileManager.default.createDirectory(atPath: cacheFolderURL?.path ?? "", withIntermediateDirectories: true, attributes: nil)
