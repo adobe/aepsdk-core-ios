@@ -80,7 +80,11 @@
             "eventdata": {
               "attached_data_array": [
                 "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}",
-                "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}"
+                "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}",
+                "testString",
+                {
+                    "testDictKey": "testVal"
+                }
               ]
             }
           }

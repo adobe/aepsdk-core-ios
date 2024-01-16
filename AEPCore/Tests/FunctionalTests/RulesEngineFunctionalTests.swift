@@ -515,7 +515,11 @@ class RulesEngineFunctionalTests: XCTestCase {
         //        "eventdata": {
         //        "attached_data_array": [
         //          "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}",
-        //          "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}"
+        //          "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}",
+        //          "testString",
+        //          {
+        //            "testDictKey": "testVal"
+        //          }
         //        ]
         //       }
         //    --------------------------------------
@@ -538,13 +542,17 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         /// Then: no consequence event will be dispatched
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-        guard let attachedData = processedEvent.data?["attached_data_array"] as? [String] else {
+        guard let attachedData = processedEvent.data?["attached_data_array"] as? [Any] else {
             XCTFail()
             return
         }
-
-        XCTAssertTrue(attachedData.contains("AT&T"))
-        XCTAssertTrue(attachedData.contains("17.0"))
+        
+        XCTAssertEqual(attachedData[0] as? String, "AT&T")
+        XCTAssertEqual(attachedData[1] as? String, "17.0")
+        XCTAssertEqual(attachedData[2] as? String, "testString")
+        let dict = attachedData[3] as? [String: String]
+        XCTAssertEqual(dict?["testDictKey"], "testVal")
+        
     }
 
     func testAttachData_invalidJson() {
