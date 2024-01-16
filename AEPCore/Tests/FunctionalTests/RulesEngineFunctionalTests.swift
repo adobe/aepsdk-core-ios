@@ -507,6 +507,45 @@ class RulesEngineFunctionalTests: XCTestCase {
         /// Then: should not get "launches" value from (lifecycle) shared state
         XCTAssertEqual("", attachedData["launches"] as? String)
     }
+    
+    func testAttachDataArray() {
+        /// Given: a launch rule to attach data to event
+
+        //    ---------- attach data rule ----------
+        //        "eventdata": {
+        //          "attached_data": [
+        //            "key1": "value1",
+        //            "carrier": "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}"
+        //          ]
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testAttachDataArray")
+
+        /// When: evaluating a launch event
+
+        //    ------------ launch event ------------
+        //        "eventdata": {
+        //            "lifecyclecontextdata": {
+        //                "launchevent": "LaunchEvent"
+        //            }
+        //        }
+        //    --------------------------------------
+
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "osversion": "17.0"]], status: .set))
+        let processedEvent = rulesEngine.process(event: defaultEvent)
+
+        /// Then: no consequence event will be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        guard let attachedData = processedEvent.data?["attached_data_array"] as? [String] else {
+            XCTFail()
+            return
+        }
+        
+        XCTAssertTrue(attachedData.contains("AT&T"))
+        XCTAssertTrue(attachedData.contains("17.0"))
+    }
 
     func testAttachData_invalidJson() {
         /// Given: a launch rule to attach data to event
