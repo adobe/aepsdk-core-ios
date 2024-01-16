@@ -40,6 +40,7 @@
         var payloadUsingLocalAssets: String?
         var listener: FullscreenMessageDelegate?
         public internal(set) var webView: UIView?
+        private var tempHtmlFile: URL?
         private(set) var transparentBackgroundView: UIView?
         private(set) var messageMonitor: MessageMonitoring
 
@@ -97,6 +98,16 @@
 
         deinit {
             NotificationCenter.default.removeObserver(self)
+
+            // remove the temporary html if it exists
+            if let tempFile = self.tempHtmlFile {
+                do {
+                    try FileManager.default.removeItem(at: tempFile)
+                    self.tempHtmlFile = nil
+                } catch {
+                    Log.debug(label: self.LOG_PREFIX, "Unable to remove temporary HTML file for dismissed in-app message: \(error)")
+                }
+            }
         }
 
         private var observerSet = false
@@ -124,13 +135,13 @@
                 // save the HTML payload to a local file if the cached image is being used
                 var useTempHTML = false
                 var cacheFolderURL: URL?
-                var tempHTMLFile: URL?
                 let cacheFolder: URL? = self.fileManager.getCacheDirectoryPath()
                 if cacheFolder != nil {
                     cacheFolderURL = cacheFolder?.appendingPathComponent(self.DOWNLOAD_CACHE)
                     let tempHTMLFileName = "\(self.TEMP_FILE_NAME)_\(self.hash)"
-                    tempHTMLFile = cacheFolderURL?.appendingPathComponent(tempHTMLFileName).appendingPathExtension(self.HTML_EXTENSION)
-                    if self.isLocalImageUsed, let file = tempHTMLFile {
+                    self.tempHtmlFile = cacheFolderURL?.appendingPathComponent(tempHTMLFileName).appendingPathExtension(self.HTML_EXTENSION)
+
+                    if self.isLocalImageUsed, let file = self.tempHtmlFile {
                         // We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL
                         // expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the
                         // payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp_[self.hash].html
@@ -156,7 +167,7 @@
                 // loadFileURL:allowingReadAccessToURL: to load the html from local file, which will give us the correct
                 // permission to read cached files
                 if useTempHTML {
-                    self.loadingNavigation = wkWebView.loadFileURL(URL(fileURLWithPath: tempHTMLFile?.path ?? ""), allowingReadAccessTo: URL(fileURLWithPath: cacheFolder?.path ?? ""))
+                    self.loadingNavigation = wkWebView.loadFileURL(URL(fileURLWithPath: self.tempHtmlFile?.path ?? ""), allowingReadAccessTo: URL(fileURLWithPath: cacheFolder?.path ?? ""))
                 } else {
                     self.loadingNavigation = wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
@@ -205,28 +216,19 @@
                 }
 
                 self.dismissWithAnimation(shouldDeallocateWebView: true)
-                // Notifying all listeners
+
+                // notify all listeners
                 self.listener?.onDismiss(message: self)
                 self.messagingDelegate?.onDismiss(message: self)
 
                 // remove the temporary html if it exists
-                guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {
-                    return
-                }
-                cacheFolder.appendPathComponent(self.DOWNLOAD_CACHE)
-                cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
-                cacheFolder.appendPathExtension(self.HTML_EXTENSION)
-                let tempHTMLFilePath = cacheFolder.absoluteString
-
-                guard let tempHTMLFilePathUrl = URL(string: tempHTMLFilePath) else {
-                    Log.debug(label: self.LOG_PREFIX, "Unable to dismiss, error converting temp path \(tempHTMLFilePath) to URL")
-                    return
-                }
-
-                do {
-                    try FileManager.default.removeItem(at: tempHTMLFilePathUrl)
-                } catch {
-                    Log.debug(label: self.LOG_PREFIX, "Unable to dismiss \(error)")
+                if let tempFile = self.tempHtmlFile {
+                    do {
+                        try FileManager.default.removeItem(at: tempFile)
+                        self.tempHtmlFile = nil
+                    } catch {
+                        Log.debug(label: self.LOG_PREFIX, "Unable to remove temporary HTML file for dismissed in-app message: \(error)")
+                    }
                 }
             }
         }
