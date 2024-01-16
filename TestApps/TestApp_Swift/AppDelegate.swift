@@ -38,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 MobileCore.lifecycleStart(additionalContextData: nil)
             }
         })
-        
+
         // If testing background, edit test app scheme -> options -> background fetch -> Check "launch app due to background fetch event"
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "testBackground", using: nil) { task in
             // Check if we can retrieve from file from background
@@ -48,11 +48,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return true
     }
-    
+
     func backgroundTask() {
         // Provide the task you want to test in the background here
     }
-    
+
     func scheduleAppRefresh() {
         let request = BGAppRefreshTaskRequest(identifier: "testBackground")
 

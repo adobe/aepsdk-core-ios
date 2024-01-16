@@ -28,12 +28,12 @@ class DiskCacheService: Caching {
         try createDirectoryIfNeeded(cacheName: cacheName)
         let path = filePath(for: cacheName, with: key)
         _ = fileManager.createFile(atPath: path, contents: entry.data, attributes: nil)
-        
+
         var newMetadata = [METADATA_KEY_PATH: path]
         if let meta = entry.metadata, !meta.isEmpty {
             newMetadata.merge(meta) { current, _ in current }
         }
-        
+
         var attributes: [String: Any] = [
             EXPIRY_DATE: entry.expiry.date.timeIntervalSince1970,
             METADATA: newMetadata

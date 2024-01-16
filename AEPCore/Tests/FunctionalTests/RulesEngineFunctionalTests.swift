@@ -507,17 +507,17 @@ class RulesEngineFunctionalTests: XCTestCase {
         /// Then: should not get "launches" value from (lifecycle) shared state
         XCTAssertEqual("", attachedData["launches"] as? String)
     }
-    
+
     func testAttachDataArray() {
         /// Given: a launch rule to attach data to event
 
         //    ---------- attach data rule ----------
         //        "eventdata": {
-        //          "attached_data": [
-        //            "key1": "value1",
-        //            "carrier": "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}"
-        //          ]
-        //        }
+        //        "attached_data_array": [
+        //          "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}",
+        //          "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}"
+        //        ]
+        //       }
         //    --------------------------------------
 
         resetRulesEngine(withNewRules: "rules_testAttachDataArray")
@@ -542,7 +542,7 @@ class RulesEngineFunctionalTests: XCTestCase {
             XCTFail()
             return
         }
-        
+
         XCTAssertTrue(attachedData.contains("AT&T"))
         XCTAssertTrue(attachedData.contains("17.0"))
     }
