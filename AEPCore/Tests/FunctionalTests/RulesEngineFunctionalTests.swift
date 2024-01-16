@@ -546,10 +546,12 @@ class RulesEngineFunctionalTests: XCTestCase {
             XCTFail()
             return
         }
-        
+        // Token replaces values
         XCTAssertEqual(attachedData[0] as? String, "AT&T")
         XCTAssertEqual(attachedData[1] as? String, "17.0")
+        // non token replaced string
         XCTAssertEqual(attachedData[2] as? String, "testString")
+        // attached, non-string value
         let dict = attachedData[3] as? [String: String]
         XCTAssertEqual(dict?["testDictKey"], "testVal")
         
