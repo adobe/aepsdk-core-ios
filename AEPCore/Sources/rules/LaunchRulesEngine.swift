@@ -283,7 +283,7 @@ public class LaunchRulesEngine {
         let dict = replaceToken(in: consequence.details, data: data)
         return RuleConsequence(id: consequence.id, type: consequence.type, details: dict)
     }
-    
+
     private func replaceToken(in value: Any, data: Traversable) -> Any {
         switch value {
         case let valString as String:

@@ -561,7 +561,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         let arr = attachedData[3] as? [Any]
         XCTAssertEqual(arr?[0] as? String, "17.0")
         XCTAssertEqual(arr?[1] as? String, "testStringInsideNestedArray")
-        
+
     }
 
     func testAttachData_invalidJson() {
