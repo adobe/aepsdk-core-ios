@@ -87,8 +87,10 @@
 
                 }, [
                     "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}",
-                    "testStringInsideNestedArray"
-                ]
+                    "testStringInsideNestedArray",
+                    null
+                ],
+                null
               ]
             }
           }
