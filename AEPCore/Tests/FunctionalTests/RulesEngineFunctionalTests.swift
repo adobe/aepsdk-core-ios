@@ -513,15 +513,19 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         //    ---------- attach data rule ----------
         //        "eventdata": {
-        //        "attached_data_array": [
-        //          "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}",
-        //          "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}",
-        //          "testString",
-        //          {
-        //            "testDictKey": "testVal"
-        //          }
-        //        ]
-        //       }
+        //          "attached_data_array": [
+        //            "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}",
+        //            "testStringTopLevel",
+        //            {
+        //                "testDictKey": "testVal",
+        //                "osversionNested": "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}"
+        //
+        //            }, [
+        //                "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}",
+        //                "testStringInsideNestedArray"
+        //            ]
+        //          ]
+        //        }
         //    --------------------------------------
 
         resetRulesEngine(withNewRules: "rules_testAttachDataArray")
@@ -548,12 +552,15 @@ class RulesEngineFunctionalTests: XCTestCase {
         }
         // Token replaces values
         XCTAssertEqual(attachedData[0] as? String, "AT&T")
-        XCTAssertEqual(attachedData[1] as? String, "17.0")
         // non token replaced string
-        XCTAssertEqual(attachedData[2] as? String, "testString")
-        // attached, non-string value
-        let dict = attachedData[3] as? [String: String]
-        XCTAssertEqual(dict?["testDictKey"], "testVal")
+        XCTAssertEqual(attachedData[1] as? String, "testStringTopLevel")
+        // Dict with token replaced string, and non token replaced string
+        let dict = attachedData[2] as? [String: Any?]
+        XCTAssertEqual(dict?["testDictKey"] as? String, "testVal")
+        XCTAssertEqual(dict?["osversionNested"] as? String, "17.0")
+        let arr = attachedData[3] as? [Any]
+        XCTAssertEqual(arr?[0] as? String, "17.0")
+        XCTAssertEqual(arr?[1] as? String, "testStringInsideNestedArray")
         
     }
 
