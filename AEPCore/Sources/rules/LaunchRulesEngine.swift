@@ -300,7 +300,9 @@ public class LaunchRulesEngine {
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
         var mutableDict = dict
         for (key, value) in mutableDict {
-            mutableDict[key] = replaceToken(in: value as Any, data: data)
+            if let value = value {
+                mutableDict[key] = replaceToken(in: value, data: data)
+            }
         }
         return mutableDict
     }
