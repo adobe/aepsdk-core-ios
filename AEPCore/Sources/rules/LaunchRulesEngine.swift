@@ -284,20 +284,31 @@ public class LaunchRulesEngine {
         return RuleConsequence(id: consequence.id, type: consequence.type, details: dict)
     }
 
+    private func replaceToken(in value: Any, data: Traversable) -> Any {
+        switch value {
+        case let valString as String:
+            return replaceToken(for: valString, data: data)
+        case let nestedDict as [String: Any?]:
+            return replaceToken(in: nestedDict, data: data)
+        case let nestedArray as [Any]:
+            return replaceToken(in: nestedArray, data: data)
+        default:
+            return value
+        }
+    }
+
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
         var mutableDict = dict
         for (key, value) in mutableDict {
-            switch value {
-            case is String:
-                mutableDict[key] = replaceToken(for: value as! String, data: data)
-            case is [String: Any]:
-                let valueDict = mutableDict[key] as! [String: Any]
-                mutableDict[key] = replaceToken(in: valueDict, data: data)
-            default:
-                break
+            if let value = value {
+                mutableDict[key] = replaceToken(in: value, data: data)
             }
         }
         return mutableDict
+    }
+
+    private func replaceToken(in array: [Any], data: Traversable) -> [Any] {
+        return array.map { replaceToken(in: $0, data: data) }
     }
 
     private func replaceToken(for value: String, data: Traversable) -> String {

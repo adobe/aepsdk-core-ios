@@ -15,7 +15,7 @@ import Foundation
 struct ConfigurationConstants {
     static let EXTENSION_NAME = "com.adobe.module.configuration"
     static let FRIENDLY_NAME = "Configuration"
-    static let EXTENSION_VERSION = "4.2.1"
+    static let EXTENSION_VERSION = "4.2.2"
     static let DATA_STORE_NAME = EXTENSION_NAME
 
     static let CONFIG_URL_BASE = "https://assets.adobedtm.com/"
