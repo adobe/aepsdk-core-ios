@@ -93,7 +93,7 @@ class EventHistoryDatabaseTests: XCTestCase {
                 
         eventHistoryDatabase.select(hash: testHash, from: nil, to: nil) { result in
             XCTAssertNotNil(result)
-            XCTAssertEqual(0, result.count)
+            XCTAssertEqual(-1, result.count)
             XCTAssertNil(result.newestOccurrence)
             XCTAssertNil(result.oldestOccurrence)
             selectExpectation.fulfill()

@@ -21,7 +21,8 @@
     class FullscreenMessageTests : XCTestCase {
         let mockHtml = "somehtml"
         var fullscreenMessage : FullscreenMessage?
-        var expectation: XCTestExpectation?
+        var fullscreenListenerExpectation: XCTestExpectation?
+        var messagingDelegateExpectation: XCTestExpectation?
         var webViewExpectation: XCTestExpectation?
         var webViewContent: String?
         var mockUIService: UIService?
@@ -50,7 +51,7 @@
             handler = { content in
                 self.handlerCalled = true
                 self.handlerContent = content
-                self.expectation?.fulfill()
+                self.fullscreenListenerExpectation?.fulfill()
             }
         }
 
@@ -70,45 +71,54 @@
         }
 
         func testDismiss() {
-            expectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             messageMonitor.displayMessage()
             fullscreenMessage?.dismiss()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onDismissCalled)
             XCTAssertTrue(mockMessagingDelegate.onDismissCalled)
         }
     
         func testDismissNoMessageVisible() {
-            expectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
-            expectation?.isInverted = true
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            fullscreenListenerExpectation?.isInverted = true
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            messagingDelegateExpectation?.isInverted = true
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             fullscreenMessage?.dismiss()
-            wait(for: [expectation!], timeout: 1.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 1.0)
             XCTAssertFalse(mockFullscreenListener.onDismissCalled)
             XCTAssertFalse(mockMessagingDelegate.onDismissCalled)
         }
 
         func testShow() {
-            expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             fullscreenMessage?.scriptHandlers["testScript"] = handler
             messageMonitor.dismissMessage()
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
         }
     
         func testShowWithUITakeover() {
-            expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             mockMessageSettings.setUiTakeover(true)
             mockMessageSettings.setBackdropColor("000000")
             mockMessageSettings.setBackdropOpacity(0.3)
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
@@ -119,11 +129,13 @@
         }
     
         func testShowWithCornerRadius() {
-            expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             mockMessageSettings.setCornerRadius(15.0)
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
@@ -132,27 +144,31 @@
         }
     
         func testShowWithPayloadUsingLocalAssets() throws {
-            expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             fullscreenMessage?.scriptHandlers["testScript"] = handler
             fullscreenMessage?.isLocalImageUsed = true
             fullscreenMessage?.payloadUsingLocalAssets = "use me instead"
             messageMonitor.dismissMessage()
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
         }
     
         func testShowWithGestures() {
-            expectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             mockMessageSettings.setGestures([
                 .swipeUp: URL(string: "https://adobe.com")!
             ])
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
@@ -176,53 +192,55 @@
         }
  
         func testOnShowDelegateReturnsFalse() throws {
-            expectation = XCTestExpectation(description: "Testing show failed")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing show failed")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)            
             mockMessagingDelegate.valueShouldShowMessage = false
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowFailureCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
         }
     
         func testShowWhenWebviewAlreadyExists() throws {
-            expectation = XCTestExpectation(description: "Testing show when webview already exists")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing show when webview already exists")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing show when webview already exists")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
             fullscreenMessage?.webView = WKWebView()
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
         }
     
         func testShowWhenWebviewAlreadyExistsDelegateReturnsFalse() throws {
-            expectation = XCTestExpectation(description: "Testing show when webview already exists")
-            mockFullscreenListener.setExpectation(expectation!)
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing show when webview already exists")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
             fullscreenMessage?.webView = WKWebView()
             mockMessagingDelegate.valueShouldShowMessage = false
             fullscreenMessage?.show()
-            wait(for: [expectation!], timeout: 2.0)
+            wait(for: [fullscreenListenerExpectation!], timeout: 2.0)
             XCTAssertTrue(mockFullscreenListener.onShowFailureCalled)
             XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
         }
     
         func testHandleJavascriptMessageHappy() throws {
-            expectation = XCTestExpectation(description: "Testing handler is properly set")
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing handler is properly set")
             fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
         
             // above code runs on mt, dispatch validation on mt
             DispatchQueue.main.async {
                 XCTAssertEqual(1, self.fullscreenMessage?.scriptHandlers.count)
                 self.fullscreenMessage?.scriptHandlers["testScript"]!("content")
-                self.wait(for: [self.expectation!], timeout: 2.0)
+                self.wait(for: [self.fullscreenListenerExpectation!], timeout: 2.0)
                 XCTAssertTrue(self.handlerCalled)
                 XCTAssertEqual("content", self.handlerContent as? String)
             }
         }
     
         func testHandleJavascriptMessageWebviewExists() throws {
-            expectation = XCTestExpectation(description: "Testing handler is properly set")
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing handler is properly set")
             fullscreenMessage?.webView = WKWebView()
             fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
         
@@ -230,7 +248,7 @@
             DispatchQueue.main.async {
                 XCTAssertEqual(1, self.fullscreenMessage?.scriptHandlers.count)
                 self.fullscreenMessage?.scriptHandlers["testScript"]!("content")
-                self.wait(for: [self.expectation!], timeout: 2.0)
+                self.wait(for: [self.fullscreenListenerExpectation!], timeout: 2.0)
                 XCTAssertTrue(self.handlerCalled)
                 XCTAssertEqual("content", self.handlerContent as? String)
             }
@@ -287,27 +305,27 @@
         }
     
         func testUserContentControllerWithScriptHandler() throws {
-            expectation = XCTestExpectation(description: "JavaScript handler was called")
+            fullscreenListenerExpectation = XCTestExpectation(description: "JavaScript handler was called")
             let controller = WKUserContentController()
             let message = MockWKScriptMessage(name: "testScript", body: "body")
             fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
             // above code runs on mt, dispatch validation on mt
             DispatchQueue.main.async {
                 self.fullscreenMessage?.userContentController(controller, didReceive: message)
-                self.wait(for: [self.expectation!], timeout: 1.0)
+                self.wait(for: [self.fullscreenListenerExpectation!], timeout: 1.0)
                 XCTAssertTrue(self.handlerCalled)
                 XCTAssertEqual("body", self.handlerContent as? String)
             }
         }
     
         func testUserContentControllerNoMatchingScriptHandler() throws {
-            expectation = XCTestExpectation(description: "JavaScript handler was called")
-            expectation?.isInverted = true
+            fullscreenListenerExpectation = XCTestExpectation(description: "JavaScript handler was called")
+            fullscreenListenerExpectation?.isInverted = true
             let controller = WKUserContentController()
             let message = MockWKScriptMessage(name: "not a matching message", body: "body")
             fullscreenMessage?.handleJavascriptMessage("testScript", withHandler: handler)
             fullscreenMessage?.userContentController(controller, didReceive: message)
-            wait(for: [expectation!], timeout: 1.0)
+            wait(for: [fullscreenListenerExpectation!], timeout: 1.0)
             XCTAssertFalse(handlerCalled)
             XCTAssertNil(handlerContent)
         }
