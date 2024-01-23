@@ -18,14 +18,23 @@ def core_dev
   pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
 end
 
-def tests_main
+def testapp_main
   project 'TestApps/AEPCoreTestApp.xcodeproj'
   pod 'AEPRulesEngine'
 end
 
-def tests_dev
+def testapp_dev
   project 'TestApps/AEPCoreTestApp.xcodeproj'
   pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+end
+
+def testapp_dev
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+end
+
+def tests
+  pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :branch => 'feature/latest'
 end
 
 target 'AEPCore' do
@@ -34,52 +43,62 @@ end
 
 target 'AEPCoreTests' do
   core_main
+  tests
 end
 
 target 'AEPSignalTests' do
   core_main
+  tests
 end
 
 target 'AEPLifecycleTests' do
   core_main
+  tests
 end
 
 target 'AEPIdentityTests' do
   core_main
+  tests
 end
 
 target 'AEPIntegrationTests' do
   core_main
+  tests
+end
+
+
+target 'AEPServicesTests' do
+  tests
 end
 
 # TestApps project dependencies
 
 target 'TestApp_Swift' do
-  tests_main
+  testapp_main
 end
 
 target 'TestApp_Objc' do
-  tests_main
+  testapp_main
 end
 
 target 'E2E_Swift' do
-  tests_main
+  testapp_main
 end
 
 target 'PerformanceApp' do
-  tests_main
+  testapp_main
 end
 
 target 'TestAppExtension' do
-  tests_main
+  testapp_main
 end
 
 target 'TestApp_Swift (tvOS)' do
-  tests_main
+  testapp_main
 end
 
 target 'TestApp_Objc (tvOS)' do
-  tests_main
+  testapp_main
 end
 
 post_install do |pi|

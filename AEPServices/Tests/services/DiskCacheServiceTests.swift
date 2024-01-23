@@ -13,6 +13,7 @@
 @testable import AEPServices
 import AEPServicesMocks
 import XCTest
+import AEPTestUtils
 
 /// Test type to ensure we can cache codable types
 private struct Person: Codable, Equatable {

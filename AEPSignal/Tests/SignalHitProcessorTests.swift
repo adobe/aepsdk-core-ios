@@ -12,7 +12,7 @@
 
 import XCTest
 import AEPCoreMocks
-import AEPServicesMocks
+import AEPTestUtils
 
 @testable import AEPCore
 @testable import AEPServices
@@ -21,7 +21,7 @@ import AEPServicesMocks
 class SignalHitProcessorTests: XCTestCase {
     
     var hitProcessor: SignalHitProcessor!
-    var mockNetworkService: MockNetworkServiceOverrider!
+    var mockNetworkService: MockNetworkService!
     
     let testUrl = URL(string: "https://testsignals.com")!
     let testPostBody = "{\"key\":\"value\"}"
@@ -31,7 +31,7 @@ class SignalHitProcessorTests: XCTestCase {
         
     override func setUp() {
         hitProcessor = SignalHitProcessor()
-        mockNetworkService = MockNetworkServiceOverrider()
+        mockNetworkService = MockNetworkService()
                 
         ServiceProvider.shared.networkService = mockNetworkService
     }
@@ -67,9 +67,7 @@ class SignalHitProcessorTests: XCTestCase {
         
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
-        guard let sentRequest = mockNetworkService.connectAsyncCalledWithNetworkRequest else {
-            throw SignalHitProcessingError.invalidNetworkRequest
-        }
+        let sentRequest = mockNetworkService.getNetworkRequestsWith(url: testUrl, httpMethod: HttpMethod.post)
         XCTAssertEqual(testUrl, sentRequest.url)
         XCTAssertEqual(testPostBody, String(decoding: sentRequest.connectPayload, as: UTF8.self))
         XCTAssertEqual(HttpMethod.post, sentRequest.httpMethod)

@@ -10,10 +10,11 @@
  */
 
 import XCTest
+import AEPTestUtils
 @testable import AEPIdentity
 @testable import AEPServicesMocks
 
-class CustomIdentityTests: XCTestCase {
+class CustomIdentityTests: XCTestCase, AnyCodableAsserts {
 
     // MARK: Codable tests
     
@@ -93,7 +94,7 @@ class CustomIdentityTests: XCTestCase {
         let encoded = try! encoder.encode(decodedCustomId)
         
         // verify encoding
-        XCTAssertEqual(expectedCustomIdentityJson, String(data: encoded, encoding: .utf8))
+        assertEqual(expected: expectedCustomIdentityJson, actual: String(data: encoded, encoding: .utf8))
     }
     
     func testCustomIdentityAllProperties_EncodesAndDecodes() {
@@ -122,7 +123,8 @@ class CustomIdentityTests: XCTestCase {
         let encoded = try! encoder.encode(decodedCustomId)
         
         // verify encoding
-        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+        
+        assertEqual(expected: customIdentityJson, actual: String(data: encoded, encoding: .utf8))
     }
     
     func testCustomIdentityMissingType_EncodesAndDecodes() {
@@ -150,7 +152,7 @@ class CustomIdentityTests: XCTestCase {
         let encoded = try! encoder.encode(decodedCustomId)
         
         // verify encoding
-        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+        assertEqual(expected: customIdentityJson, actual: String(data: encoded, encoding: .utf8))
     }
     
     func testCustomIdentityMissingId_EncodesAndDecodes() {
@@ -178,7 +180,7 @@ class CustomIdentityTests: XCTestCase {
         let encoded = try! encoder.encode(decodedCustomId)
         
         // verify encoding
-        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+        assertEqual(expected: customIdentityJson, actual: String(data: encoded, encoding: .utf8))
     }
     
     func testCustomIdentityMissingOrigin_EncodesAndDecodes() {
@@ -206,7 +208,7 @@ class CustomIdentityTests: XCTestCase {
         let encoded = try! encoder.encode(decodedCustomId)
         
         // verify encoding
-        XCTAssertEqual(customIdentityJson, String(data: encoded, encoding: .utf8))
+        assertEqual(expected: customIdentityJson, actual: String(data: encoded, encoding: .utf8))
     }
     
     // MARK: Equatable tests

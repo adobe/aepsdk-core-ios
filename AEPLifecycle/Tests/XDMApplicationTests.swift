@@ -13,9 +13,10 @@
 @testable import AEPLifecycle
 import AEPServices
 import AEPServicesMocks
+import AEPTestUtils
 import XCTest
 
-class XDMApplicationTests: XCTestCase {
+class XDMApplicationTests: XCTestCase, AnyCodableAsserts {
 
     private func buildAndSetMockInfoService() {
         let mockSystemInfoService = MockSystemInfoService()
@@ -52,6 +53,6 @@ class XDMApplicationTests: XCTestCase {
         }
         """
 
-        XCTAssertEqual(expected, dataStr)
+        assertEqual(expected: expected, actual: dataStr)
     }
 }

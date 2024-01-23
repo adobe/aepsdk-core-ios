@@ -10,7 +10,7 @@
  */
 
 @testable import AEPCore
-import AEPCoreMocks
+import AEPTestUtils
 import XCTest
 
 class LaunchRuleTransformerTests: XCTestCase {
