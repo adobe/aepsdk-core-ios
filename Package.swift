@@ -30,7 +30,7 @@ let package = Package(
     ],
     targets: [
         .target(name: "AEPCore",
-                dependencies: ["AEPServices", "AEPRulesEngine"],
+                dependencies: ["AEPServices", .product(name: "AEPRulesEngine", package: "aepsdk-rulesengine-ios")],
                 path: "AEPCore/Sources",
                 resources: [
                     .process("PrivacyInfo.xcprivacy")
