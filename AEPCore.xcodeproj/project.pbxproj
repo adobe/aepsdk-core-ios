@@ -1381,8 +1381,8 @@
 				3FB66AA524CA004400502CAF /* eventhub */,
 				3FB66AB324CA004400502CAF /* rules */,
 				21CAC0D92422917600C11388 /* AEPCore.h */,
-				21CAC0DA2422917600C11388 /* Info.plist */,
 				754965C32B607861000E49B0 /* PrivacyInfo.xcprivacy */,
+				21CAC0DA2422917600C11388 /* Info.plist */,
 			);
 			name = Sources;
 			path = AEPCore/Sources;
