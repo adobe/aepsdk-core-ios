@@ -30,6 +30,9 @@ let package = Package(
     ],
     targets: [
         .target(name: "AEPCore",
+                resources: [
+                    .copy("PrivacyInfo.xcprivacy")
+                ],
                 dependencies: ["AEPServices", "AEPRulesEngine"],
                 path: "AEPCore/Sources"),
         .target(name: "AEPIdentity",
@@ -39,7 +42,9 @@ let package = Package(
                 dependencies: ["AEPCore"],
                 path: "AEPLifecycle/Sources"),
         .target(name: "AEPServices",
-                dependencies: [],
+                resources: [
+                    .copy("PrivacyInfo.xcprivacy")
+                ],
                 path: "AEPServices/Sources"),
         .target(name: "AEPSignal",
                 dependencies: ["AEPCore"],
