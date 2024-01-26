@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
 
 
   s.source_files          = 'AEPCore/Sources/**/*.swift'
-  s.resource_bundles        = { 'AEPCore' => ['AEPCore/Sources/PrivacyInfo.xcprivacy'] }
+  s.resource_bundles        = { 'AEPCore_Resources' => ['AEPCore/Sources/PrivacyInfo.xcprivacy'] }
 
 
 end
