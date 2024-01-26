@@ -30,11 +30,11 @@ let package = Package(
     ],
     targets: [
         .target(name: "AEPCore",
+                dependencies: ["AEPServices", "aepsdk-rulesengine-ios"],
+                path: "AEPCore/Sources",
                 resources: [
-                    .copy("PrivacyInfo.xcprivacy")
-                ],
-                dependencies: ["AEPServices", "AEPRulesEngine"],
-                path: "AEPCore/Sources"),
+                    .copy("Sources/PrivacyInfo.xcprivacy")
+                ]),
         .target(name: "AEPIdentity",
                 dependencies: ["AEPCore"],
                 path: "AEPIdentity/Sources"),
@@ -42,10 +42,10 @@ let package = Package(
                 dependencies: ["AEPCore"],
                 path: "AEPLifecycle/Sources"),
         .target(name: "AEPServices",
+                path: "AEPServices/Sources",
                 resources: [
-                    .copy("PrivacyInfo.xcprivacy")
-                ],
-                path: "AEPServices/Sources"),
+                    .copy("Sources/PrivacyInfo.xcprivacy")
+                ]),
         .target(name: "AEPSignal",
                 dependencies: ["AEPCore"],
                 path: "AEPSignal/Sources"),
