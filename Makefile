@@ -164,7 +164,9 @@ zip:
 clean:
 	rm -rf ./build
 
-format:
+format: lint-autocorrect swift-format
+
+swift-format:
 	swiftformat . --swiftversion 5.1
 
 lint-autocorrect:	

@@ -80,11 +80,11 @@
             XCTAssertEqual(recognizer.swipeDirection, .left)
         }
     
-        func testInitFromStringBackgroundTap() throws {
-            let recognizer = MessageGestureRecognizer.messageGestureRecognizer(fromString: "backgroundTap", dismissAnimation: .fade, url: testUrl,
+        func testInitFromStringTapBackground() throws {
+            let recognizer = MessageGestureRecognizer.messageGestureRecognizer(fromString: "tapBackground", dismissAnimation: .fade, url: testUrl,
                                                                                target: testTarget, action: #selector(testSelector))
             XCTAssertNotNil(recognizer)
-            XCTAssertEqual(recognizer.gesture, .backgroundTap)
+            XCTAssertEqual(recognizer.gesture, .tapBackground)
             XCTAssertEqual(recognizer.dismissAnimation, .fade)
             XCTAssertEqual(recognizer.actionUrl, testUrl)
             XCTAssertNil(recognizer.swipeDirection)
@@ -94,7 +94,7 @@
             let recognizer = MessageGestureRecognizer.messageGestureRecognizer(fromString: "oopsee", dismissAnimation: .fade, url: testUrl,
                                                                                target: testTarget, action: #selector(testSelector))
             XCTAssertNotNil(recognizer)
-            XCTAssertEqual(recognizer.gesture, .backgroundTap)
+            XCTAssertEqual(recognizer.gesture, .tapBackground)
             XCTAssertEqual(recognizer.dismissAnimation, .fade)
             XCTAssertEqual(recognizer.actionUrl, testUrl)
             XCTAssertNil(recognizer.swipeDirection)

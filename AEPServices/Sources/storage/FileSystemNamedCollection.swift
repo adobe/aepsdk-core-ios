@@ -104,7 +104,7 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
             Log.warning(label: LOG_TAG, "Failed to read dictionary from collection '\(collectionName)'")
             return nil
         }
-        
+
         return jsonResult
     }
 
