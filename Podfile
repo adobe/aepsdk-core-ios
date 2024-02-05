@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '11.0'
+platform :ios, '12.0'
 
 # Comment the next line if you don't want to use dynamic frameworks
 use_frameworks!
@@ -10,22 +10,22 @@ pod 'SwiftLint', '0.52.0'
 
 def core_main
   project 'AEPCore.xcodeproj'
-  pod 'AEPRulesEngine'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 def core_dev
   project 'AEPCore.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 def tests_main
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 def tests_dev
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 target 'AEPCore' do
@@ -85,7 +85,7 @@ end
 post_install do |pi|
   pi.pods_project.targets.each do |t|
     t.build_configurations.each do |bc|
-        bc.build_settings['TVOS_DEPLOYMENT_TARGET'] = '11.0'
+        bc.build_settings['TVOS_DEPLOYMENT_TARGET'] = '12.0'
         bc.build_settings['SUPPORTED_PLATFORMS'] = 'iphoneos iphonesimulator appletvos appletvsimulator'
         bc.build_settings['TARGETED_DEVICE_FAMILY'] = "1,2,3"
     end

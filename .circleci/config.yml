@@ -4,7 +4,7 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@3.2.4
+  codecov: codecov/codecov@3.3.0
   macos: circleci/macos@2
   
 # Workflows orchestrate a set of jobs to be run;
@@ -56,28 +56,44 @@ workflows:
 commands: 
   install_dependencies:
     steps:
+          # restore pods related caches
+      - restore_cache:
+          keys:
+            - 1-gems-{{ checksum "Gemfile.lock" }}
+
+      # make sure we're on the right version of cocoapods
+      - run:
+          name: Verify Cocoapods Version
+          command: bundle check || bundle install --path vendor/bundle
+
+      # save cocoapods version gem data
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
       - run:
           name: Pod install
-          command: pod install
+          command: make ci-pod-install
         
   prestart_ios_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          version: "16.1"
-          device: "iPhone 14"
+          version: "17.0"
+          device: "iPhone 15"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
-          version: "16.1"
+          version: "17.0"
           device: "Apple TV"
 
 jobs:
   validate-code:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -90,7 +106,7 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -112,7 +128,7 @@ jobs:
 
   test-ios-services:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -134,7 +150,7 @@ jobs:
   
   test-ios-lifecycle:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -156,7 +172,7 @@ jobs:
 
   test-ios-identity:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -178,7 +194,7 @@ jobs:
 
   test-ios-signal:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -200,7 +216,7 @@ jobs:
 
   test-ios-integration:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -215,7 +231,7 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -237,7 +253,7 @@ jobs:
 
   test-tvos-services:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -259,7 +275,7 @@ jobs:
 
   test-tvos-lifecycle:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -281,7 +297,7 @@ jobs:
 
   test-tvos-identity:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -303,7 +319,7 @@ jobs:
 
   test-tvos-signal:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -325,7 +341,7 @@ jobs:
 
   test-tvos-integration:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -340,7 +356,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0.0 # Specify the Xcode version to use
     
     steps:
       - checkout
@@ -349,7 +365,7 @@ jobs:
           name: Build XCFramework
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              make archive
+              make ci-archive
             fi
       # verify podspec is valid
       - run:
