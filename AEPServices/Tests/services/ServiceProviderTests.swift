@@ -93,7 +93,6 @@ class ServiceProviderTests: XCTestCase {
             XCTAssertEqual(Unmanaged.passUnretained(mockURLService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.urlService as! MockURLService).toOpaque())
         
         }
-        @available(tvOSApplicationExtension, unavailable)
         func testResettingAppOnlyServices() {
             let mockUIService = MockUIService()
             ServiceProvider.shared.uiService = mockUIService
