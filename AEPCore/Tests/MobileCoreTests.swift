@@ -10,6 +10,7 @@
  */
 
 import XCTest
+import AEPTestUtils
 
 @testable import AEPCore
 @testable import AEPServices

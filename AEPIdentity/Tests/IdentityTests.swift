@@ -304,7 +304,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertTrue(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have been sent
     }
 
@@ -328,8 +328,8 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
+        let optOutHitHost = mockNetworkService.getNetworkRequests().first?.url.host ?? "" // network request for opt-out hit should have been sent
         XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
     }
 
@@ -353,8 +353,8 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
+        let optOutHitHost = mockNetworkService.getNetworkRequests().first?.url.host ?? "" // network request for opt-out hit should have been sent
         XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
     }
 
@@ -378,8 +378,8 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
+        let optOutHitHost = mockNetworkService.getNetworkRequests().first?.url.host ?? "" // network request for opt-out hit should have been sent
         XCTAssertTrue(optOutHitHost.contains("example.com"))
     }
 
@@ -403,7 +403,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify no network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit shouldn't have been sent
     }
 

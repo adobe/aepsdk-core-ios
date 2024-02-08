@@ -13,17 +13,18 @@
 @testable import AEPIdentity
 @testable import AEPServices
 import AEPServicesMocks
+import AEPTestUtils
 import XCTest
 
 class IdentityHitProcessorTests: XCTestCase {
     var hitProcessor: IdentityHitProcessor!
     var responseCallbackArgs = [(IdentityHit, Data?)]()
-    var mockNetworkService: MockNetworkServiceOverrider? {
-        return ServiceProvider.shared.networkService as? MockNetworkServiceOverrider
+    var mockNetworkService: MockNetworkService? {
+        return ServiceProvider.shared.networkService as? MockNetworkService
     }
 
     override func setUp() {
-        ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
+        ServiceProvider.shared.networkService = MockNetworkService()
         hitProcessor = IdentityHitProcessor(responseHandler: { [weak self] hit, data in
             self?.responseCallbackArgs.append((hit, data))
         })
@@ -54,7 +55,9 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedUrl = URL(string: "adobe.com")!
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
-        mockNetworkService?.expectedResponse = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: 200, httpVersion: nil, headerFields: nil), error: nil)
+        let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: 200, httpVersion: nil, headerFields: nil), error: nil)
+        
+        mockNetworkService?.setMockResponse(url: expectedUrl, responseConnection: testConnection)
 
         let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
 
@@ -68,7 +71,7 @@ class IdentityHitProcessorTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         XCTAssertFalse(responseCallbackArgs.isEmpty) // response handler should have been invoked
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
-        XCTAssertEqual(mockNetworkService?.connectAsyncCalledWithNetworkRequest?.url, expectedUrl) // network request should be made with the url in the hit
+        XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
     }
 
     /// Tests that when the network request fails but has a recoverable error that we will retry the hit and do not invoke the response handler for that hit
@@ -78,7 +81,9 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedUrl = URL(string: "adobe.com")!
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
-        mockNetworkService?.expectedResponse = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil), error: nil)
+        let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil), error: nil)
+        
+        mockNetworkService?.setMockResponse(url: expectedUrl, responseConnection: testConnection)
 
         let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
 
@@ -92,7 +97,7 @@ class IdentityHitProcessorTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         XCTAssertTrue(responseCallbackArgs.isEmpty) // response handler should have not been invoked
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
-        XCTAssertEqual(mockNetworkService?.connectAsyncCalledWithNetworkRequest?.url, expectedUrl) // network request should be made with the url in the hit
+        XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
     }
 
     /// Tests that when the network request fails and does not have a recoverable response code that we invoke the response handler and do not retry the hit
@@ -102,7 +107,9 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedUrl = URL(string: "adobe.com")!
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
-        mockNetworkService?.expectedResponse = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: -1, httpVersion: nil, headerFields: nil), error: nil)
+        let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: -1, httpVersion: nil, headerFields: nil), error: nil)
+        
+        mockNetworkService?.setMockResponse(url: expectedUrl, responseConnection: testConnection)
 
         let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
 
@@ -116,6 +123,6 @@ class IdentityHitProcessorTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
         XCTAssertFalse(responseCallbackArgs.isEmpty) // response handler should have been invoked
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
-        XCTAssertEqual(mockNetworkService?.connectAsyncCalledWithNetworkRequest?.url, expectedUrl) // network request should be made with the url in the hit
+        XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
     }
 }

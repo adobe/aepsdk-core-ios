@@ -34,7 +34,7 @@ def testapp_dev
 end
 
 def tests
-  pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :branch => 'feature/latest'
+  pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :tag => 'v5.0.0-beta'
 end
 
 target 'AEPCore' do

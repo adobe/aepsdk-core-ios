@@ -24,7 +24,7 @@ import AEPTestUtils
 class SignalTests: XCTestCase {
     var signal: Signal!
     var mockHitQueue: MockHitQueue!
-    var mockNetworkService: MockNetworkServiceOverrider!
+    var mockNetworkService: MockNetworkService!
     var mockOpenURLService: MockURLService!
     var mockRuntime: TestableExtensionRuntime!
     
@@ -36,7 +36,7 @@ class SignalTests: XCTestCase {
         mockHitQueue = MockHitQueue(processor: SignalHitProcessor())
         mockOpenURLService = MockURLService()
         mockRuntime = TestableExtensionRuntime()
-        mockNetworkService = MockNetworkServiceOverrider()
+        mockNetworkService = MockNetworkService()
                     
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         ServiceProvider.shared.networkService = mockNetworkService

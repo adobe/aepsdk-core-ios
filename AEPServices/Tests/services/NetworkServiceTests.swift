@@ -12,6 +12,7 @@
 
 @testable import AEPServices
 import AEPServicesMocks
+import AEPTestUtils
 import XCTest
 
 let testBody = "{\"test\": \"json\"\"}"
@@ -208,7 +209,7 @@ class NetworkServiceTests: XCTestCase {
     // MARK: NetworkService overrider tests
 
     func testOverridenConnectAsync_called_whenMultipleRequests() {
-        let testNetworkService = MockNetworkServiceOverrider()
+        let testNetworkService = MockNetworkService()
         ServiceProvider.shared.networkService = testNetworkService
 
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.post, connectPayload: "test body", httpHeaders: ["Accept": "text/html"], connectTimeout: 2.0, readTimeout: 3.0)
@@ -220,47 +221,47 @@ class NetworkServiceTests: XCTestCase {
 
         // test&verify
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: completionHandler)
-        XCTAssertEqual(request1.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
-        XCTAssertNotNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
+        XCTAssertEqual(request1.url, testNetworkService.getNetworkRequests().first?.url)
+        XCTAssertNotNil(testNetworkService.connectAsyncCalled)
         testNetworkService.reset()
 
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request2, completionHandler: nil)
-        XCTAssertEqual(request2.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
-        XCTAssertNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
+        XCTAssertEqual(request2.url, testNetworkService.getNetworkRequests().first?.url)
+        XCTAssertNil(testNetworkService.connectAsyncCalled)
         testNetworkService.reset()
 
         testNetworkService.connectAsync(networkRequest: request3)
-        XCTAssertEqual(request3.url, testNetworkService.connectAsyncCalledWithNetworkRequest?.url)
-        XCTAssertNil(testNetworkService.connectAsyncCalledWithCompletionHandler)
+        XCTAssertEqual(request3.url, testNetworkService.getNetworkRequests().first?.url)
+        XCTAssertNil(testNetworkService.connectAsyncCalled)
     }
 
     func testOverridenConnectAsync_addsDefaultHeaders_whenCalledWithHeaders() {
-        let testNetworkService = MockNetworkServiceOverrider()
+        let testNetworkService = MockNetworkService()
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.post, connectPayload: "test body", httpHeaders: ["Accept": "text/html"], connectTimeout: 2.0, readTimeout: 3.0)
 
         // test&verify
         testNetworkService.connectAsync(networkRequest: request1)
         XCTAssertTrue(testNetworkService.connectAsyncCalled)
-        XCTAssertEqual(3, testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders.count)
-        XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["Accept"])
-        XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["User-Agent"])
-        XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["Accept-Language"])
+        XCTAssertEqual(3, testNetworkService.getNetworkRequests().first?.httpHeaders.count)
+        XCTAssertNotNil(testNetworkService.getNetworkRequests().first?.httpHeaders["Accept"])
+        XCTAssertNotNil(testNetworkService.getNetworkRequests().first?.httpHeaders["User-Agent"])
+        XCTAssertNotNil(testNetworkService.getNetworkRequests().first?.httpHeaders["Accept-Language"])
     }
 
     func testOverridenConnectAsync_addsDefaultHeaders_whenCalledWithoutHeaders() {
-        let testNetworkService = MockNetworkServiceOverrider()
+        let testNetworkService = MockNetworkService()
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!)
 
         // test&verify
         testNetworkService.connectAsync(networkRequest: request1)
         XCTAssertTrue(testNetworkService.connectAsyncCalled)
-        XCTAssertEqual(2, testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders.count)
-        XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["User-Agent"])
-        XCTAssertNotNil(testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["Accept-Language"])
+        XCTAssertEqual(2, testNetworkService.getNetworkRequests().first?.httpHeaders.count)
+        XCTAssertNotNil(testNetworkService.getNetworkRequests().first?.httpHeaders["User-Agent"])
+        XCTAssertNotNil(testNetworkService.getNetworkRequests().first?.httpHeaders["Accept-Language"])
     }
 
     func testOverridenConnectAsync_doesNotOverrideHeaders_whenCalledWithDefaultHeaders() {
-        let testNetworkService = MockNetworkServiceOverrider()
+        let testNetworkService = MockNetworkService()
         ServiceProvider.shared.networkService = testNetworkService
 
         let request1 = NetworkRequest(url: URL(string: "https://test1.com")!, httpMethod: HttpMethod.get, httpHeaders: ["User-Agent": "test", "Accept-Language": "ro-RO"], connectTimeout: 2.0, readTimeout: 3.0)
@@ -268,15 +269,15 @@ class NetworkServiceTests: XCTestCase {
         // test&verify
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request1, completionHandler: nil)
         XCTAssertTrue(testNetworkService.connectAsyncCalled)
-        XCTAssertEqual(2, testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders.count)
-        XCTAssertEqual("test", testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["User-Agent"])
-        XCTAssertEqual("ro-RO", testNetworkService.connectAsyncCalledWithNetworkRequest?.httpHeaders["Accept-Language"])
+        XCTAssertEqual(2, testNetworkService.getNetworkRequests().first?.httpHeaders.count)
+        XCTAssertEqual("test", testNetworkService.getNetworkRequests().first?.httpHeaders["User-Agent"])
+        XCTAssertEqual("ro-RO", testNetworkService.getNetworkRequests().first?.httpHeaders["Accept-Language"])
     }
 
     func testEnableOverride_work_whenCalledWithMultipleOverriders() {
-        let testNetworkServiceOverrider1 = MockNetworkServiceOverrider()
-        let testNetworkServiceOverrider2 = MockNetworkServiceOverrider()
-        let testNetworkServiceOverrider3 = MockNetworkServiceOverrider()
+        let testNetworkServiceOverrider1 = MockNetworkService()
+        let testNetworkServiceOverrider2 = MockNetworkService()
+        let testNetworkServiceOverrider3 = MockNetworkService()
 
         // test&verify
         // set first overrider

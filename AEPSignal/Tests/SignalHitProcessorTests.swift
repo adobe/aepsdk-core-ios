@@ -67,7 +67,10 @@ class SignalHitProcessorTests: XCTestCase {
         
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
-        let sentRequest = mockNetworkService.getNetworkRequestsWith(url: testUrl, httpMethod: HttpMethod.post)
+        guard let sentRequest = mockNetworkService.getNetworkRequests().first else {
+            XCTFail("Request is unexpectedly nil")
+            return
+        }
         XCTAssertEqual(testUrl, sentRequest.url)
         XCTAssertEqual(testPostBody, String(decoding: sentRequest.connectPayload, as: UTF8.self))
         XCTAssertEqual(HttpMethod.post, sentRequest.httpMethod)
@@ -95,8 +98,9 @@ class SignalHitProcessorTests: XCTestCase {
         
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
-        guard let sentRequest = mockNetworkService.connectAsyncCalledWithNetworkRequest else {
-            throw SignalHitProcessingError.invalidNetworkRequest
+        guard let sentRequest = mockNetworkService.getNetworkRequests().first else {
+            XCTFail("Request is unexpectedly nil")
+            return
         }
         XCTAssertEqual(testUrl, sentRequest.url)
         XCTAssertEqual("", String(decoding: sentRequest.connectPayload, as: UTF8.self))
@@ -114,9 +118,10 @@ class SignalHitProcessorTests: XCTestCase {
         guard let jsonData = try? JSONEncoder().encode(entity) else {
             throw SignalHitProcessingError.jsonEncodingFailure
         }
-        mockNetworkService.expectedResponse = HttpConnection(data: nil,
-                                                             response: HTTPURLResponse(url: testUrl, statusCode: 200, httpVersion: nil, headerFields: nil),
-                                                             error: nil)
+        let testConnection = HttpConnection(data: nil,
+                                            response: HTTPURLResponse(url: testUrl, statusCode: 200, httpVersion: nil, headerFields: nil),
+                                            error: nil)
+        mockNetworkService.setMockResponse(url: testUrl, responseConnection: testConnection)
         
         // test
         hitProcessor.processHit(entity: DataEntity(data: jsonData)) { (discardProcessedHit) in
@@ -136,9 +141,11 @@ class SignalHitProcessorTests: XCTestCase {
         guard let jsonData = try? JSONEncoder().encode(entity) else {
             throw SignalHitProcessingError.jsonEncodingFailure
         }
-        mockNetworkService.expectedResponse = HttpConnection(data: nil,
-                                                             response: HTTPURLResponse(url: testUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil),
-                                                             error: nil)
+        
+        let testConnection = HttpConnection(data: nil,
+                                            response: HTTPURLResponse(url: testUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil),
+                                            error: nil)
+        mockNetworkService.setMockResponse(url: testUrl, responseConnection: testConnection)
         
         // test
         hitProcessor.processHit(entity: DataEntity(data: jsonData)) { (discardProcessedHit) in
@@ -157,9 +164,11 @@ class SignalHitProcessorTests: XCTestCase {
         guard let jsonData = try? JSONEncoder().encode(entity) else {
             throw SignalHitProcessingError.jsonEncodingFailure
         }
-        mockNetworkService.expectedResponse = HttpConnection(data: nil,
-                                                             response: HTTPURLResponse(url: testUrl, statusCode: 1337, httpVersion: nil, headerFields: nil),
-                                                             error: nil)
+        
+        let testConnection = HttpConnection(data: nil,
+                                            response: HTTPURLResponse(url: testUrl, statusCode: 1337, httpVersion: nil, headerFields: nil),
+                                            error: nil)
+        mockNetworkService.setMockResponse(url: testUrl, responseConnection: testConnection)
         
         // test
         hitProcessor.processHit(entity: DataEntity(data: jsonData)) { (discardProcessedHit) in

@@ -12,6 +12,7 @@
 @testable import AEPServices
 import XCTest
 import AEPServicesMocks
+import AEPTestUtils
 
 
 class ServiceProviderTests: XCTestCase {
@@ -44,13 +45,13 @@ class ServiceProviderTests: XCTestCase {
     }
     
     func testOverridingNetworkService() {
-        let mockNetworkService = MockNetworkServiceOverrider()
+        let mockNetworkService = MockNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
-        XCTAssertEqual(Unmanaged.passUnretained(mockNetworkService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.networkService as! MockNetworkServiceOverrider).toOpaque())
+        XCTAssertEqual(Unmanaged.passUnretained(mockNetworkService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.networkService as! MockNetworkService).toOpaque())
     }
     
     func testResettingNetworkService() {
-        let mockNetworkService = MockNetworkServiceOverrider()
+        let mockNetworkService = MockNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         ServiceProvider.shared.reset()
         XCTAssertTrue(ServiceProvider.shared.networkService is NetworkService)
