@@ -345,6 +345,14 @@
         }
 
         private func displayWithAnimation(webView: WKWebView) {
+            // MOB-20427 - only display the WKWebView if we have html to show
+            guard !self.payload.isEmpty else {
+                Log.trace(label: self.LOG_PREFIX, "Suppressing the display of a FullscreenMessage because it has no HTML to be shown.")
+                // reset the monitor so it doesn't think a message is being shown
+                self.messageMonitor.dismissMessage()
+                return
+            }
+            
             DispatchQueue.main.async {
                 let keyWindow = UIApplication.shared.getKeyWindow()
 
