@@ -83,7 +83,7 @@ class IdentityHitProcessorTests: XCTestCase {
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil), error: nil)
         
-        mockNetworkService?.setMockResponse(url: expectedUrl, responseConnection: testConnection)
+        mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
 
         let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
 

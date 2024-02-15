@@ -11,6 +11,7 @@
 
 @testable import AEPCore
 @testable import AEPCoreMocks
+import AEPTestUtils
 import XCTest
 
 class MobileCore_IdentityTests: XCTestCase {

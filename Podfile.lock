@@ -11,7 +11,7 @@ PODS:
 
 DEPENDENCIES:
   - AEPRulesEngine
-  - AEPTestUtils (from `https://github.com/adobe/aepsdk-testutils-ios.git`, tag `v5.0.0-beta`)
+  - AEPTestUtils (from `~/code/MobileSDK/Forks/aepsdk-testutils-ios/`)
   - SwiftLint (= 0.52.0)
 
 SPEC REPOS:
@@ -23,13 +23,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   AEPTestUtils:
-    :git: https://github.com/adobe/aepsdk-testutils-ios.git
-    :tag: v5.0.0-beta
-
-CHECKOUT OPTIONS:
-  AEPTestUtils:
-    :git: https://github.com/adobe/aepsdk-testutils-ios.git
-    :tag: v5.0.0-beta
+    :path: "~/code/MobileSDK/Forks/aepsdk-testutils-ios/"
 
 SPEC CHECKSUMS:
   AEPCore: 3c0367f3454ae9950ae1f92f0d5f417ed747a49b
@@ -38,6 +32,6 @@ SPEC CHECKSUMS:
   AEPTestUtils: 756e5997318be74584057d7628941c737d358640
   SwiftLint: 13280e21cdda6786ad908dc6e416afe5acd1fcb7
 
-PODFILE CHECKSUM: a09bce03f7454817d47c5c11a1a102dc04191438
+PODFILE CHECKSUM: d2e982db3530ac604cabbecf96431342b419bbc2
 
 COCOAPODS: 1.14.3

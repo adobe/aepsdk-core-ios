@@ -34,7 +34,8 @@ def testapp_dev
 end
 
 def tests
-  pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :tag => 'v5.0.0-beta'
+  #pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :tag => 'v5.0.0-beta'
+  pod 'AEPTestUtils', :path => '~/code/MobileSDK/Forks/aepsdk-testutils-ios/'
 end
 
 target 'AEPCore' do
