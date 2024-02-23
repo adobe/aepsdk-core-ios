@@ -43,6 +43,5 @@ class NetworkService_IdentityTests: XCTestCase {
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
         XCTAssertEqual(url, mockNetworkService.getNetworkRequests().first?.url)
-        XCTAssertFalse(mockNetworkService.connectAsyncCalled)
     }
 }

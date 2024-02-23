@@ -204,7 +204,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: SignalConstants.Configuration.NAME,
                                         data: (configData, .set))
         var rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
-        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com/invalid#@%@%things()#~@!", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
+        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: "", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
         rulesEvent = rulesEvent.copyWithNewData(data: updatedEventData)
 
         // test

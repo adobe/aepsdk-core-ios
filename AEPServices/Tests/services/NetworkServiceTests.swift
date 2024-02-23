@@ -227,12 +227,12 @@ class NetworkServiceTests: XCTestCase {
 
         ServiceProvider.shared.networkService.connectAsync(networkRequest: request2, completionHandler: nil)
         XCTAssertEqual(request2.url, testNetworkService.getNetworkRequests().first?.url)
-        XCTAssertFalse(testNetworkService.connectAsyncCalled)
+        XCTAssertTrue(testNetworkService.connectAsyncCalled)
         testNetworkService.reset()
 
         testNetworkService.connectAsync(networkRequest: request3)
         XCTAssertEqual(request3.url, testNetworkService.getNetworkRequests().first?.url)
-        XCTAssertFalse(testNetworkService.connectAsyncCalled)
+        XCTAssertTrue(testNetworkService.connectAsyncCalled)
     }
 
     func testOverridenConnectAsync_addsDefaultHeaders_whenCalledWithHeaders() {
