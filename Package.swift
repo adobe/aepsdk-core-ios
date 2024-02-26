@@ -1,4 +1,4 @@
-// swift-tools-version:5.9
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
@@ -30,8 +30,11 @@ let package = Package(
     ],
     targets: [
         .target(name: "AEPCore",
-                dependencies: ["AEPServices", "AEPRulesEngine"],
-                path: "AEPCore/Sources"),
+                dependencies: ["AEPServices", .product(name: "AEPRulesEngine", package: "aepsdk-rulesengine-ios")],
+                path: "AEPCore/Sources",
+                resources: [
+                    .process("PrivacyInfo.xcprivacy")
+                ]),
         .target(name: "AEPIdentity",
                 dependencies: ["AEPCore"],
                 path: "AEPIdentity/Sources"),
@@ -39,8 +42,10 @@ let package = Package(
                 dependencies: ["AEPCore"],
                 path: "AEPLifecycle/Sources"),
         .target(name: "AEPServices",
-                dependencies: [],
-                path: "AEPServices/Sources"),
+                path: "AEPServices/Sources",
+                resources: [
+                    .process("PrivacyInfo.xcprivacy")
+                ]),
         .target(name: "AEPSignal",
                 dependencies: ["AEPCore"],
                 path: "AEPSignal/Sources"),

@@ -10,22 +10,22 @@ pod 'SwiftLint', '0.52.0'
 
 def core_main
   project 'AEPCore.xcodeproj'
-  pod 'AEPRulesEngine'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 def core_dev
   project 'AEPCore.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 def testapp_main
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 def testapp_dev
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
 end
 
 def testapp_dev
