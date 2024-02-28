@@ -233,7 +233,6 @@
 		3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F624CA096100F7325B /* MockExtensionTwo.swift */; };
 		3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */; };
 		3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */; };
-		3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */; };
 		3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */; };
 		3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */; };
 		3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */; };
@@ -285,7 +284,6 @@
 		3FE6DDDA24C62EE60065EA05 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */; };
 		3FE6DDE124C62EE60065EA05 /* AEPLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3FE6DDF024C62F610065EA05 /* AEPServicesMock.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3FE6DDF124C62F610065EA05 /* MockNetworkServiceOverrider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */; };
 		3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDEA24C62F610065EA05 /* MockTask.swift */; };
 		3FE6DDF524C62F620065EA05 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDED24C62F610065EA05 /* MockURLSession.swift */; };
 		3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */; };
@@ -921,7 +919,6 @@
 		3F3951F624CA096100F7325B /* MockExtensionTwo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtensionTwo.swift; sourceTree = "<group>"; };
 		3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
 		3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloader.swift; sourceTree = "<group>"; };
-		3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNetworkServiceOverrider.swift; sourceTree = "<group>"; };
 		3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
 		3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
 		3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloaderNetworkService.swift; sourceTree = "<group>"; };
@@ -977,7 +974,6 @@
 		3FE6DDD924C62EE60065EA05 /* AEPLifecycleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPLifecycleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE6DDE024C62EE60065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPServicesMock.h; path = AEPServices/Mocks/AEPServicesMock.h; sourceTree = SOURCE_ROOT; };
-		3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNetworkServiceOverrider.swift; path = AEPServices/Mocks/MockNetworkServiceOverrider.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDEA24C62F610065EA05 /* MockTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockTask.swift; path = AEPServices/Mocks/MockTask.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDEC24C62F610065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPServices/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
 		3FE6DDED24C62F610065EA05 /* MockURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLSession.swift; path = AEPServices/Mocks/MockURLSession.swift; sourceTree = SOURCE_ROOT; };
@@ -1062,7 +1058,7 @@
 		754965BB2B602CB7000E49B0 /* AEPTestUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPTestUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754965BF2B603915000E49B0 /* AEPTestUtils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AEPTestUtils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		754965C32B607861000E49B0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		754965C72B6421A0000E49B0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = file; name = PrivacyInfo.xcprivacy; path = AEPServices/Sources/PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
+		754965C72B6421A0000E49B0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = AEPServices/Sources/PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
 		75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedCollectionDataStoreFunctionalTests.swift; sourceTree = "<group>"; };
 		7814B23225CB455200841429 /* URL+Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validator.swift"; sourceTree = "<group>"; };
 		786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatter.swift; sourceTree = "<group>"; };
@@ -1572,7 +1568,6 @@
 				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
 				31DF174E297030D300B4B07F /* MockLoggingService.swift */,
 				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
-				3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */,
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
 				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
 				2467E43C24CB54B70022F6BE /* MockUnzipper.swift */,
@@ -1917,7 +1912,6 @@
 			isa = PBXGroup;
 			children = (
 				3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */,
-				3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
 				3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */,
 				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
@@ -3286,7 +3280,6 @@
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
 				7522618F2AAF6E2400D59847 /* UserDefaultMigratorTests.swift in Sources */,
 				3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */,
-				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
 				21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */,
@@ -3503,7 +3496,6 @@
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
 				31DF174F297030D300B4B07F /* MockLoggingService.swift in Sources */,
 				24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */,
-				3FE6DDF124C62F610065EA05 /* MockNetworkServiceOverrider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

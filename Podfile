@@ -20,22 +20,16 @@ end
 
 def testapp_main
   project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
-end
-
-def testapp_dev
-  project 'TestApps/AEPCoreTestApp.xcodeproj'
-  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
-end
-
-def testapp_dev
-  project 'TestApps/AEPCoreTestApp.xcodeproj'
   pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
 end
 
+def testapp_dev
+  project 'TestApps/AEPCoreTestApp.xcodeproj'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
+end
+
 def tests
-  #pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :tag => 'v5.0.0-beta'
-  pod 'AEPTestUtils', :path => '~/code/MobileSDK/Forks/aepsdk-testutils-ios/'
+  pod 'AEPTestUtils', :git => 'https://github.com/adobe/aepsdk-testutils-ios.git', :branch => 'main'
 end
 
 target 'AEPCore' do
