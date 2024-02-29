@@ -67,7 +67,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"testBackground"]
         (UIApplication.shared.delegate as! AppDelegate).scheduleAppRefresh()
     }
-    
+
 
 
 }
