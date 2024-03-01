@@ -84,7 +84,7 @@ class DiskCacheServiceTests: XCTestCase {
         let storedEntry = diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY)
         XCTAssertTrue(originalEntry(entry, equals: storedEntry!))
     }
-    
+
     func testSetGetMissingAttributes() {
         // setup
         let data = "Test".data(using: .utf8)!
@@ -98,7 +98,7 @@ class DiskCacheServiceTests: XCTestCase {
         // verify
         XCTAssertNil(diskCache.get(cacheName: CACHE_NAME, key: ENTRY_KEY))
     }
-    
+
     func testSetGetMissingExpiryDate() {
         // setup
         let data = "Test".data(using: .utf8)!

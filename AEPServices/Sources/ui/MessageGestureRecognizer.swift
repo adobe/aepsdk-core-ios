@@ -35,7 +35,7 @@
                 return .left
             case .swipeRight:
                 return .right
-            case .backgroundTap:
+            case .tapBackground:
                 return nil
             default:
                 return nil
@@ -54,7 +54,7 @@
         /// Convenience method for initializing a `MessageGestureRecognizer` from a provided `String`.
         ///
         /// If the provided `name` is not recognized in the list, this method will return a recognizer
-        /// that supports `MessageGesture.backgroundTap`.
+        /// that supports `MessageGesture.tapBackground`.
         ///
         /// - Parameters:
         ///   - name: `String` representing the type of recognizer that should be created.
@@ -74,10 +74,10 @@
                 return MessageGestureRecognizer(gesture: .swipeRight, dismissAnimation: animation, url: url, target: target, action: action)
             case "swipeLeft":
                 return MessageGestureRecognizer(gesture: .swipeLeft, dismissAnimation: animation, url: url, target: target, action: action)
-            case "backgroundTap":
-                return MessageGestureRecognizer(gesture: .backgroundTap, dismissAnimation: animation, url: url, target: target, action: action)
+            case "tapBackground":
+                return MessageGestureRecognizer(gesture: .tapBackground, dismissAnimation: animation, url: url, target: target, action: action)
             default:
-                return MessageGestureRecognizer(gesture: .backgroundTap, dismissAnimation: animation, url: url, target: target, action: action)
+                return MessageGestureRecognizer(gesture: .tapBackground, dismissAnimation: animation, url: url, target: target, action: action)
             }
         }
     }

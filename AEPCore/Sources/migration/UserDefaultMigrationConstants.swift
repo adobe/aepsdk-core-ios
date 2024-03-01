@@ -9,7 +9,7 @@
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
-*/
+ */
 
 import Foundation
 
@@ -177,7 +177,7 @@ enum UserDefaultMigratorConstants {
         static let DATASTORE_NAME = "com.adobe.edge.identity"
         
         enum DataStoreKeys: String, CaseIterable {
-           case IDENTITY_PROPERTIES = "identity.properties"
+            case IDENTITY_PROPERTIES = "identity.properties"
         }
     }
     
@@ -185,7 +185,7 @@ enum UserDefaultMigratorConstants {
         static let DATASTORE_NAME = "com.adobe.edge.consent"
         
         enum DataStoreKeys: String, CaseIterable {
-           case CONSENT_PREFERENCES = "consent.preferences"
+            case CONSENT_PREFERENCES = "consent.preferences"
         }
     }
 }
