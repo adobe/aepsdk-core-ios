@@ -87,7 +87,7 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
-          device: "Apple TV 4K"
+          device: "Apple TV"
           version: "17.2"
 
 jobs:
