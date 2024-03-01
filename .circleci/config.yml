@@ -87,6 +87,8 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
+          device: "Apple TV 4K"
+          version: "17.0"
 
 jobs:
   validate-code:
@@ -104,7 +106,7 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -126,7 +128,7 @@ jobs:
 
   test-ios-services:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -148,7 +150,7 @@ jobs:
   
   test-ios-lifecycle:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -170,7 +172,7 @@ jobs:
 
   test-ios-identity:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -192,7 +194,7 @@ jobs:
 
   test-ios-signal:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -214,7 +216,7 @@ jobs:
 
   test-ios-integration:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -229,7 +231,7 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -251,7 +253,7 @@ jobs:
 
   test-tvos-services:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -273,7 +275,7 @@ jobs:
 
   test-tvos-lifecycle:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -295,7 +297,7 @@ jobs:
 
   test-tvos-identity:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -317,7 +319,7 @@ jobs:
 
   test-tvos-signal:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -339,7 +341,7 @@ jobs:
 
   test-tvos-integration:
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -354,7 +356,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 15.0.0 # Specify the Xcode version to use
+      xcode: 15.0 # Specify the Xcode version to use
     
     steps:
       - checkout
