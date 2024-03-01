@@ -80,15 +80,11 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          version: "17.0.1"
-          device: "iPhone 15"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
-          version: "17.0.1"
-          device: "Apple TV"
 
 jobs:
   validate-code:
