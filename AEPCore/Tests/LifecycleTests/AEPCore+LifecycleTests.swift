@@ -12,7 +12,7 @@
 @testable import AEPCore
 @testable import AEPCoreMocks
 import XCTest
-import AEPTestUtils
+import AEPServicesMocks
 
 class AEPCoreLifecycleTests: XCTestCase {
     override func setUp() {

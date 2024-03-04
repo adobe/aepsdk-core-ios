@@ -12,7 +12,7 @@
 
 import AEPCore
 import AEPCoreMocks
-import AEPTestUtils
+import AEPServicesMocks
 @testable import AEPLifecycle
 import AEPServices
 @testable import AEPServicesMocks

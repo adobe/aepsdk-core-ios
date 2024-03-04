@@ -15,7 +15,7 @@
 import XCTest
 import AEPCoreMocks
 import AEPServices
-import AEPTestUtils
+import AEPServicesMocks
 import XCTest
 
 class ConfigurationPrivacyStatusTests: XCTestCase {

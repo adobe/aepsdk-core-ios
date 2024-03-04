@@ -11,7 +11,7 @@
 
 @testable import AEPIdentity
 import AEPServicesMocks
-import AEPTestUtils
+import AEPServicesMocks
 import XCTest
 
 class HitQueuing_PrivacyTests: XCTestCase {

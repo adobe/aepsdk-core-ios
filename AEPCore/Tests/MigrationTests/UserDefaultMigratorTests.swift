@@ -16,7 +16,7 @@ import XCTest
 @testable import AEPServices
 @testable import AEPIdentity
 @testable import AEPLifecycle
-import AEPTestUtils
+import AEPServicesMocks
 
 class UserDefaultMigratorTests: XCTestCase {
     private var mockDataStore: MockDataStore {

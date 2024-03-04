@@ -14,7 +14,7 @@ import XCTest
 import AEPCore
 @testable import AEPIdentity
 @testable import AEPServices
-import AEPTestUtils
+import AEPServicesMocks
 
 class IdentityFunctionalTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
