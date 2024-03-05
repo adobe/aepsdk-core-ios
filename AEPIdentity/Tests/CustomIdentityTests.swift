@@ -12,7 +12,7 @@
 import XCTest
 import AEPServicesMocks
 @testable import AEPIdentity
-@testable import AEPServicesMocks
+import AEPCoreMocks
 
 class CustomIdentityTests: XCTestCase, AnyCodableAsserts {
 

@@ -13,7 +13,7 @@
 @testable import AEPCore
 @testable import AEPServicesMocks
 @testable import AEPServices
-import AEPServicesMocks
+import AEPCoreMocks
 import XCTest
 
 /// Functional tests for the Configuration extension

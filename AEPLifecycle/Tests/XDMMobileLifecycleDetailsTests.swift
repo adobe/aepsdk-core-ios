@@ -12,7 +12,7 @@
 
 @testable import AEPLifecycle
 import XCTest
-import AEPServicesMocks
+import AEPCoreMocks
 
 class XDMMobileLifecycleDetailsTests: XCTestCase, AnyCodableAsserts {
 

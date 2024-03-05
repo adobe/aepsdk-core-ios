@@ -28,8 +28,6 @@ class NetworkRequestHelper {
     private var expectedNetworkRequests: [TestableNetworkRequest: CountDownLatch] = [:]
 
     func recordSentNetworkRequest(_ networkRequest: NetworkRequest) {
-        TestBase.log("Received connectAsync to URL \(networkRequest.url.absoluteString) and HTTPMethod \(networkRequest.httpMethod.toString())")
-
         // Add to ordered list
         orderedNetworkRequests.append(networkRequest)
 
