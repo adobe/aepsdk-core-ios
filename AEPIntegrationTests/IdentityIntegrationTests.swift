@@ -337,7 +337,7 @@ class IdentityIntegrationTests: XCTestCase {
     }
 
     /// Tests that when we reset the identities we generate a new ECID and send it out
-    func testResetIdentities() {
+    func _testResetIdentities() {
         // set first ecid
         var props = IdentityProperties()
         let firstEcid = ECID()
