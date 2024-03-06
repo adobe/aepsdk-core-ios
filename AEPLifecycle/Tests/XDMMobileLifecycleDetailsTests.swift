@@ -12,8 +12,9 @@
 
 @testable import AEPLifecycle
 import XCTest
+import AEPCoreMocks
 
-class XDMMobileLifecycleDetailsTests: XCTestCase {
+class XDMMobileLifecycleDetailsTests: XCTestCase, AnyCodableAsserts {
 
     // MARK: Encodable Tests
 
@@ -76,7 +77,7 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
         }
         """
 
-        XCTAssertEqual(expected, dataStr)
+        assertEqual(expected: expected, actual: dataStr)
     }
 
 }
