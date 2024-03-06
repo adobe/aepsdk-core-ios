@@ -12,7 +12,6 @@
 
 @testable import AEPServices
 import AEPServicesMocks
-import AEPServicesMocks
 import XCTest
 
 let testBody = "{\"test\": \"json\"\"}"

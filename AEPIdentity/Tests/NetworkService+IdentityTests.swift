@@ -12,7 +12,6 @@
 @testable import AEPIdentity
 import AEPServices
 import AEPServicesMocks
-import AEPServicesMocks
 import XCTest
 
 class NetworkService_IdentityTests: XCTestCase {

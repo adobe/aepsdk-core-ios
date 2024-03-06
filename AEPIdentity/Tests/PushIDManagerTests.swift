@@ -12,7 +12,6 @@
 @testable import AEPIdentity
 @testable import AEPServices
 import AEPServicesMocks
-import AEPServicesMocks
 import XCTest
 
 class PushIDManagerTests: XCTestCase {

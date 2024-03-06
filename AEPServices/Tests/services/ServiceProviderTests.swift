@@ -12,7 +12,6 @@
 @testable import AEPServices
 import XCTest
 import AEPServicesMocks
-import AEPServicesMocks
 
 
 class ServiceProviderTests: XCTestCase {

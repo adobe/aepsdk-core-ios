@@ -16,7 +16,6 @@ import XCTest
 import AEPIdentity
 import AEPLifecycle
 import AEPSignal
-import AEPServicesMocks
 
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)

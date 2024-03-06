@@ -15,7 +15,6 @@ import XCTest
 import AEPCoreMocks
 import AEPServices
 import AEPServicesMocks
-import AEPServicesMocks
 import XCTest
 
 class ConfigurationLifecycleResponseTests: XCTestCase {
