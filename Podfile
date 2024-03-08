@@ -13,6 +13,11 @@ def core_main
   pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'main'
 end
 
+def core_staging
+  project 'AEPCore.xcodeproj'
+  pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'staging'
+end
+
 def core_dev
   project 'AEPCore.xcodeproj'
   pod 'AEPRulesEngine', :git => 'https://github.com/adobe/aepsdk-rulesengine-ios.git', :branch => 'dev-v5.0.0'
@@ -29,27 +34,27 @@ def testapp_dev
 end
 
 target 'AEPCore' do
-  core_main
+  core_staging
 end
 
 target 'AEPCoreTests' do
-  core_main
+  core_staging
 end
 
 target 'AEPSignalTests' do
-  core_main
+  core_staging
 end
 
 target 'AEPLifecycleTests' do
-  core_main
+  core_staging
 end
 
 target 'AEPIdentityTests' do
-  core_main
+  core_staging
 end
 
 target 'AEPIntegrationTests' do
-  core_main
+  core_staging
 end
 
 # TestApps project dependencies
