@@ -101,7 +101,7 @@ class EventHistoryDatabase {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database.")
-                handler(EventHistoryResult(count: 0))
+                handler(EventHistoryResult(count: -1))
                 return
             }
 
@@ -113,11 +113,11 @@ class EventHistoryDatabase {
             AND \(self.columnTimestamp) <= \(to?.millisecondsSince1970 ?? Date().millisecondsSince1970)
             """
 
-            // a nil result means there was no query results to be returned
+            // a nil result means something went wrong with the database query
             guard let result = SQLiteWrapper.query(database: connection, sql: selectStatement),
                   let row = result.first else {
-                Log.trace(label: self.LOG_PREFIX, "No query results were returned for event '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
-                handler(EventHistoryResult(count: 0))
+                Log.warning(label: self.LOG_PREFIX, "An error occurred when attempting to query for event(s) '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
+                handler(EventHistoryResult(count: -1))
                 return
             }
 

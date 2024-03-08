@@ -1,6 +1,7 @@
 Pod::Spec.new do |s|
   s.name             = "AEPCore"
   s.version          = "5.0.0"
+
   s.summary          = "Core library for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
                         The core library provides the foundation for the Adobe Experience Platform SDK.  Having the core library installed is a pre-requisite for any other Adobe Experience Platform SDK extension to work.

@@ -15,6 +15,7 @@ enum IdentityConstants {
     static let EXTENSION_NAME = "com.adobe.module.identity"
     static let FRIENDLY_NAME = "Identity"
     static let EXTENSION_VERSION = "5.0.0"
+
     static let DATASTORE_NAME = EXTENSION_NAME
 
     static let API_TIMEOUT = TimeInterval(0.5) // Get API requests timeout after half a second

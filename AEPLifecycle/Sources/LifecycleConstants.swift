@@ -17,6 +17,7 @@ enum LifecycleConstants {
     static let EXTENSION_NAME = "com.adobe.module.lifecycle"
     static let FRIENDLY_NAME = "Lifecycle"
     static let EXTENSION_VERSION = "5.0.0"
+
     static let DATA_STORE_NAME = LifecycleConstants.EXTENSION_NAME
 
     static let START = "start"

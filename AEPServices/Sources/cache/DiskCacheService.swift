@@ -36,6 +36,7 @@ class DiskCacheService: Caching {
         
         let attributes: [String: Any] = [
 
+
             EXPIRY_DATE: entry.expiry.date.timeIntervalSince1970,
             METADATA: newMetadata
         ]

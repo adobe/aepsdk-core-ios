@@ -210,6 +210,7 @@ class MobileCoreTests: XCTestCase {
             },
             "com.adobe.module.configuration" : {
               "version" : "5.0.0",
+
               "friendlyName" : "Configuration"
             },
             "com.adobe.mockExtensionTwo" : {
@@ -439,9 +440,8 @@ class MobileCoreTests: XCTestCase {
         // test
         MobileCore.setAppGroup(appGroup)
 
-        // verify
-        let keyValueService = ServiceProvider.shared.namedKeyValueService as? FileSystemNamedCollection
-        XCTAssertEqual(appGroup, keyValueService?.getAppGroup())
+        let keyValueService = ServiceProvider.shared.namedKeyValueService
+        XCTAssertEqual(appGroup, keyValueService.getAppGroup())
     }
 
     // MARK: collectMessageInfo(...) tests

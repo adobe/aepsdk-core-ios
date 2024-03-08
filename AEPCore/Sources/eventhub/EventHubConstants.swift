@@ -19,6 +19,7 @@ enum EventHubConstants {
     static let FRIENDLY_NAME = "EventHub"
     static let VERSION_NUMBER = "5.0.0"
 
+
     enum EventDataKeys {
         static let VERSION = "version"
         static let EXTENSIONS = "extensions"

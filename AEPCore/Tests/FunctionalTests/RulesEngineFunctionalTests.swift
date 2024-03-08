@@ -508,6 +508,62 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual("", attachedData["launches"] as? String)
     }
 
+    func testAttachDataArray() {
+        /// Given: a launch rule to attach data to event
+
+        //    ---------- attach data rule ----------
+        //        "eventdata": {
+        //          "attached_data_array": [
+        //            "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}",
+        //            "testStringTopLevel",
+        //            {
+        //                "testDictKey": "testVal",
+        //                "osversionNested": "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}"
+        //
+        //            }, [
+        //                "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}",
+        //                "testStringInsideNestedArray"
+        //            ]
+        //          ]
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testAttachDataArray")
+
+        /// When: evaluating a launch event
+
+        //    ------------ launch event ------------
+        //        "eventdata": {
+        //            "lifecyclecontextdata": {
+        //                "launchevent": "LaunchEvent"
+        //            }
+        //        }
+        //    --------------------------------------
+
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "osversion": "17.0"]], status: .set))
+        let processedEvent = rulesEngine.process(event: defaultEvent)
+
+        /// Then: no consequence event will be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        guard let attachedData = processedEvent.data?["attached_data_array"] as? [Any] else {
+            XCTFail()
+            return
+        }
+        // Token replaces values
+        XCTAssertEqual(attachedData[0] as? String, "AT&T")
+        // non token replaced string
+        XCTAssertEqual(attachedData[1] as? String, "testStringTopLevel")
+        // Dict with token replaced string, and non token replaced string
+        let dict = attachedData[2] as? [String: Any?]
+        XCTAssertEqual(dict?["testDictKey"] as? String, "testVal")
+        XCTAssertEqual(dict?["osversionNested"] as? String, "17.0")
+        let arr = attachedData[3] as? [Any]
+        XCTAssertEqual(arr?[0] as? String, "17.0")
+        XCTAssertEqual(arr?[1] as? String, "testStringInsideNestedArray")
+
+    }
+
     func testAttachData_invalidJson() {
         /// Given: a launch rule to attach data to event
 
