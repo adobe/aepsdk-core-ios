@@ -23,8 +23,7 @@ class SignalIntegrationTests: XCTestCase {
     let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
     override func setUp() {
-        UserDefaults.clear()
-        FileManager.default.clearCache()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         initExtensionsAndWait()
     }
