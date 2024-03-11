@@ -4,7 +4,7 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@3.2.4
+  # codecov: codecov/codecov@3.3.0
   macos: circleci/macos@2
   
 # Workflows orchestrate a set of jobs to be run;
@@ -56,28 +56,44 @@ workflows:
 commands: 
   install_dependencies:
     steps:
+          # restore pods related caches
+      - restore_cache:
+          keys:
+            - 1-gems-{{ checksum "Gemfile.lock" }}
+
+      # make sure we're on the right version of cocoapods
+      - run:
+          name: Verify Cocoapods Version
+          command: bundle check || bundle install --path vendor/bundle
+
+      # save cocoapods version gem data
+      - save_cache:
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
       - run:
           name: Pod install
-          command: pod install
+          command: make ci-pod-install
         
   prestart_ios_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          version: "16.1"
-          device: "iPhone 14"
+          device: "iPhone 15"
+          version: "17.2"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
-          version: "16.1"
           device: "Apple TV"
+          version: "17.2"
 
 jobs:
   validate-code:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -90,7 +106,7 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -105,14 +121,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepcore-ios-tests
-          upload_name: Coverage Report for AEPCore iOS Tests
-          xtra_args: -c -v --xc --xp  build/AEPCore-ios.xcresult
+      # - codecov/upload:
+      #     flags: aepcore-ios-tests
+      #     upload_name: Coverage Report for AEPCore iOS Tests
+      #     xtra_args: -c -v --xc --xp  build/AEPCore-ios.xcresult
 
   test-ios-services:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -127,14 +143,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepservices-ios-tests
-          upload_name: Coverage Report for AEPServices iOS Tests
-          xtra_args: -c -v --xc --xp build/AEPServices-ios.xcresult
+      # - codecov/upload:
+      #     flags: aepservices-ios-tests
+      #     upload_name: Coverage Report for AEPServices iOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPServices-ios.xcresult
   
   test-ios-lifecycle:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -149,14 +165,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aeplifecycle-ios-tests
-          upload_name: Coverage Report for AEPLifecycle iOS Tests
-          xtra_args: -c -v --xc --xp build/AEPLifecycle-ios.xcresult
+      # - codecov/upload:
+      #     flags: aeplifecycle-ios-tests
+      #     upload_name: Coverage Report for AEPLifecycle iOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPLifecycle-ios.xcresult
 
   test-ios-identity:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -171,14 +187,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepidentity-ios-tests
-          upload_name: Coverage Report for AEPIdentity iOS Tests
-          xtra_args: -c -v --xc --xp build/AEPIdentity-ios.xcresult
+      # - codecov/upload:
+      #     flags: aepidentity-ios-tests
+      #     upload_name: Coverage Report for AEPIdentity iOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPIdentity-ios.xcresult
 
   test-ios-signal:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -193,14 +209,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepsignal-ios-tests
-          upload_name: Coverage Report for AEPSignal iOS Tests
-          xtra_args: -c -v --xc --xp build/AEPSignal-ios.xcresult
+      # - codecov/upload:
+      #     flags: aepsignal-ios-tests
+      #     upload_name: Coverage Report for AEPSignal iOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPSignal-ios.xcresult
 
   test-ios-integration:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -215,7 +231,7 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -230,14 +246,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepcore-tvos-tests
-          upload_name: Coverage Report for AEPCore tvOS Tests
-          xtra_args: -c -v --xc --xp build/AEPCore-tvos.xcresult
+      # - codecov/upload:
+      #     flags: aepcore-tvos-tests
+      #     upload_name: Coverage Report for AEPCore tvOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPCore-tvos.xcresult
 
   test-tvos-services:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -252,14 +268,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepservices-tvos-tests
-          upload_name: Coverage Report for AEPServices tvOS Tests
-          xtra_args: -c -v --xc --xp build/AEPServices-tvos.xcresult
+      # - codecov/upload:
+      #     flags: aepservices-tvos-tests
+      #     upload_name: Coverage Report for AEPServices tvOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPServices-tvos.xcresult
 
   test-tvos-lifecycle:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -274,14 +290,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aeplifecycle-tvos-tests
-          upload_name: Coverage Report for AEPLifecycle tvOS Tests
-          xtra_args: -c -v --xc --xp build/AEPLifecycle-tvos.xcresult
+      # - codecov/upload:
+      #     flags: aeplifecycle-tvos-tests
+      #     upload_name: Coverage Report for AEPLifecycle tvOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPLifecycle-tvos.xcresult
 
   test-tvos-identity:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -296,14 +312,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepidentity-tvos-tests
-          upload_name: Coverage Report for AEPIdentity tvOS Tests
-          xtra_args: -c -v --xc --xp build/AEPIdentity-tvos.xcresult
+      # - codecov/upload:
+      #     flags: aepidentity-tvos-tests
+      #     upload_name: Coverage Report for AEPIdentity tvOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPIdentity-tvos.xcresult
 
   test-tvos-signal:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -318,14 +334,14 @@ jobs:
 
       # Code coverage upload using Codecov
       # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      - codecov/upload:
-          flags: aepsignal-tvos-tests
-          upload_name: Coverage Report for AEPSignal tvOS Tests
-          xtra_args: -c -v --xc --xp build/AEPSignal-tvos.xcresult
+      # - codecov/upload:
+      #     flags: aepsignal-tvos-tests
+      #     upload_name: Coverage Report for AEPSignal tvOS Tests
+      #     xtra_args: -c -v --xc --xp build/AEPSignal-tvos.xcresult
 
   test-tvos-integration:
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.1 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -340,7 +356,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 14.1.0 # Specify the Xcode version to use
+      xcode: 15.0 # Specify the Xcode version to use
     
     steps:
       - checkout
@@ -349,7 +365,7 @@ jobs:
           name: Build XCFramework
           command: |
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              make archive
+              make ci-archive
             fi
       # verify podspec is valid
       - run:

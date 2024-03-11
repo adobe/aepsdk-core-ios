@@ -15,10 +15,10 @@ import AEPServicesMocks
 import XCTest
 
 class NetworkService_IdentityTests: XCTestCase {
-    var mockNetworkService: MockNetworkServiceOverrider!
+    var mockNetworkService: MockNetworkService!
 
     override func setUp() {
-        mockNetworkService = MockNetworkServiceOverrider()
+        mockNetworkService = MockNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
     }
 
@@ -41,7 +41,6 @@ class NetworkService_IdentityTests: XCTestCase {
 
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
-        XCTAssertEqual(url, mockNetworkService.connectAsyncCalledWithNetworkRequest?.url)
-        XCTAssertNil(mockNetworkService.connectAsyncCalledWithCompletionHandler)
+        XCTAssertEqual(url, mockNetworkService.getNetworkRequests().first?.url)
     }
 }

@@ -50,13 +50,13 @@
             XCTAssertEqual(gesture, .swipeRight)
         }
     
-        func testValueBackgroundTap() throws {
-            XCTAssertEqual(4, MessageGesture.backgroundTap.rawValue)
+        func testValueTapBackground() throws {
+            XCTAssertEqual(4, MessageGesture.tapBackground.rawValue)
         }
     
-        func testFromStringBackgroundTap() throws {
-            let gesture = MessageGesture.fromString("backgroundTap")
-            XCTAssertEqual(gesture, .backgroundTap)
+        func testFromStringTapBackground() throws {
+            let gesture = MessageGesture.fromString("tapBackground")
+            XCTAssertEqual(gesture, .tapBackground)
         }
     
         func testFromStringNoMatch() throws {

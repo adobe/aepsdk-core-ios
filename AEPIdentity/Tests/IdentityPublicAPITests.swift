@@ -10,6 +10,7 @@
  */
 
 import XCTest
+import AEPServicesMocks
 @testable import AEPCore
 @testable import AEPIdentity
 @testable import AEPCoreMocks

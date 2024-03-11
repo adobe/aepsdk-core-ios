@@ -45,7 +45,6 @@
 		214154A825186734005CEB80 /* CustomIdentityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214154A725186734005CEB80 /* CustomIdentityTests.swift */; };
 		215A6CE224ED92C500FE0657 /* V4MigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */; };
 		215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
-		215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859C24C6492800CCCD26 /* MockHitProcessor.swift */; };
 		21629DB22461CC48009D05BF /* AEPCore+LifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */; };
 		216A15C8257818B200D43848 /* Data+HexString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A15C7257818B200D43848 /* Data+HexString.swift */; };
 		216A15F5257818EF00D43848 /* Data+HexStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216A15D7257818E900D43848 /* Data+HexStringTests.swift */; };
@@ -69,8 +68,6 @@
 		21F79ABF24E71B03003204C3 /* IDParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABD24E7144F003204C3 /* IDParserTests.swift */; };
 		21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC024E72204003204C3 /* V4MigratorTests.swift */; };
 		21FE152024F03254008A82FF /* IdentityPublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */; };
-		21FE152124F0335E008A82FF /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F524CA096100F7325B /* MockExtension.swift */; };
-		21FE152224F03386008A82FF /* EventHub+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FC24CA096100F7325B /* EventHub+Testable.swift */; };
 		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */ = {isa = PBXBuildFile; fileRef = 2438B92929BF906F001D6F3A /* rules_testTimestampu.json */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
@@ -236,7 +233,6 @@
 		3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F624CA096100F7325B /* MockExtensionTwo.swift */; };
 		3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */; };
 		3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */; };
-		3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */; };
 		3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */; };
 		3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */; };
 		3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */; };
@@ -288,12 +284,9 @@
 		3FE6DDDA24C62EE60065EA05 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */; };
 		3FE6DDE124C62EE60065EA05 /* AEPLifecycle.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE6DDD324C62EE60065EA05 /* AEPLifecycle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3FE6DDF024C62F610065EA05 /* AEPServicesMock.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3FE6DDF124C62F610065EA05 /* MockNetworkServiceOverrider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */; };
 		3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDEA24C62F610065EA05 /* MockTask.swift */; };
-		3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDEB24C62F610065EA05 /* MockDataStore.swift */; };
 		3FE6DDF524C62F620065EA05 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDED24C62F610065EA05 /* MockURLSession.swift */; };
 		3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */; };
-		3FE6DDF724C62F620065EA05 /* MockDataQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDEF24C62F610065EA05 /* MockDataQueue.swift */; };
 		3FE6DDFF24C630DF0065EA05 /* LifecycleMetricsBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDF824C630DE0065EA05 /* LifecycleMetricsBuilderTests.swift */; };
 		3FE6DE0024C630DF0065EA05 /* LifecycleContextDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDF924C630DE0065EA05 /* LifecycleContextDataTests.swift */; };
 		3FE6DE0224C630DF0065EA05 /* LifecycleMetricsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */; };
@@ -344,7 +337,6 @@
 		3FEEA0DD2522436E007EC317 /* rules_pii.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FEEA0DB2522436E007EC317 /* rules_pii.json */; };
 		3FF8171624D89B500064DFA1 /* Event+Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */; };
 		3FF8171724D89B500064DFA1 /* AEPCoreMocks.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3FF8171924D89B500064DFA1 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */; };
 		3FF8171C24D89B8F0064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
 		3FF8172324D8ABF80064DFA1 /* AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FF8170A24D89B160064DFA1 /* AEPCoreMocks.framework */; };
 		3FF829452507E9F500483C74 /* ADBMobileConfig-OptedOut.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */; };
@@ -356,11 +348,33 @@
 		7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */; };
 		7522618D2AABBE9600D59847 /* UserDefaultMigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618C2AABBE9600D59847 /* UserDefaultMigrationConstants.swift */; };
 		7522618F2AAF6E2400D59847 /* UserDefaultMigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618E2AAF6E2400D59847 /* UserDefaultMigratorTests.swift */; };
+		75341CC22B96742D0090CE3A /* TestableNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB52B96742A0090CE3A /* TestableNetworkRequest.swift */; };
+		75341CC32B96742D0090CE3A /* TestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB22B96742A0090CE3A /* TestConstants.swift */; };
+		75341CC52B96742D0090CE3A /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB72B96742A0090CE3A /* MockHitProcessor.swift */; };
+		75341CC72B96742D0090CE3A /* MockDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CBC2B96742C0090CE3A /* MockDataStore.swift */; };
+		75341CC82B96742D0090CE3A /* EventSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB42B96742A0090CE3A /* EventSpec.swift */; };
+		75341CC92B96742D0090CE3A /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CBD2B96742C0090CE3A /* TestUtils.swift */; };
+		75341CCB2B96742D0090CE3A /* FileManager+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CBF2B96742C0090CE3A /* FileManager+TestHelper.swift */; };
+		75341CCE2B96742D0090CE3A /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CBB2B96742C0090CE3A /* CountDownLatch.swift */; };
+		75341CD02B96742D0090CE3A /* URL+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CBE2B96742C0090CE3A /* URL+TestHelper.swift */; };
+		75341CD12B96742D0090CE3A /* UserDefaults+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB32B96742A0090CE3A /* UserDefaults+TestHelper.swift */; };
+		75341CD32B96742D0090CE3A /* NamedCollectionDataStore+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CC02B96742C0090CE3A /* NamedCollectionDataStore+TestHelper.swift */; };
+		75341CD42B96742D0090CE3A /* RealNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB62B96742A0090CE3A /* RealNetworkService.swift */; };
+		75341CD52B96742D0090CE3A /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CAD2B9674290090CE3A /* MockNetworkService.swift */; };
+		75341CD92B9674A30090CE3A /* MockDataQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CD82B9674A30090CE3A /* MockDataQueue.swift */; };
+		75341CDB2B9675450090CE3A /* NetworkRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CDA2B9675440090CE3A /* NetworkRequestHelper.swift */; };
+		75341CDE2B9695D70090CE3A /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB12B96742A0090CE3A /* TestableExtensionRuntime.swift */; };
+		75341CDF2B96960B0090CE3A /* EventHub+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CAC2B9674290090CE3A /* EventHub+TestHelper.swift */; };
+		75341CE12B9696240090CE3A /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB82B96742B0090CE3A /* MockExtension.swift */; };
+		75341CE42B96969C0090CE3A /* XCTestCase+AnyCodableAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CAB2B9674290090CE3A /* XCTestCase+AnyCodableAsserts.swift */; };
+		75341CE52B9699600090CE3A /* NodeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CB02B96742A0090CE3A /* NodeConfig.swift */; };
+		75341CE62B969A270090CE3A /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75341CAE2B9674290090CE3A /* AnyCodable+Array.swift */; };
 		753E9B432ABCDB1400A82A27 /* AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDD124C62EE60065EA05 /* AEPLifecycle.framework */; };
 		753E9B442ABCDB7D00A82A27 /* AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DE2F24C642330065EA05 /* AEPIdentity.framework */; };
 		75408CF72948EA0A00C44CE1 /* AtomicCounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */; };
+		754965C42B607861000E49B0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 754965C32B607861000E49B0 /* PrivacyInfo.xcprivacy */; };
+		754965C82B6421A0000E49B0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 754965C72B6421A0000E49B0 /* PrivacyInfo.xcprivacy */; };
 		75550A3F2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */; };
-		75C0D9052A9D545100EF74BC /* DatastoreUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0D9042A9D545100EF74BC /* DatastoreUtilities.swift */; };
 		75C0D9062AA1287B00EF74BC /* AEPServicesMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMocks.framework */; };
 		75ED44D12B56F0B400F2CEB1 /* rules_testAttachDataArray.json in Resources */ = {isa = PBXBuildFile; fileRef = 75ED44D02B56F0B300F2CEB1 /* rules_testAttachDataArray.json */; };
 		7814B23325CB455200841429 /* URL+Validator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7814B23225CB455200841429 /* URL+Validator.swift */; };
@@ -432,7 +446,6 @@
 		BBA512A924F4A7EE0030DAD1 /* rules_testMatcherNx.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512A824F4A7EE0030DAD1 /* rules_testMatcherNx.json */; };
 		BBA512B324F5CF380030DAD1 /* rules_testAttachData.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512B124F5CF380030DAD1 /* rules_testAttachData.json */; };
 		BBA512B424F5CF380030DAD1 /* rules_testModifyData.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512B224F5CF380030DAD1 /* rules_testModifyData.json */; };
-		BBA512B524F5D0CC0030DAD1 /* EventHub+Testable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3951FC24CA096100F7325B /* EventHub+Testable.swift */; };
 		BBA512B724F6C4D90030DAD1 /* rules_testAttachData_invalidJson.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512B624F6C4D90030DAD1 /* rules_testAttachData_invalidJson.json */; };
 		BBA512BB24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json in Resources */ = {isa = PBXBuildFile; fileRef = BBA512BA24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json */; };
 		BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */; };
@@ -726,7 +739,6 @@
 		214154A725186734005CEB80 /* CustomIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIdentityTests.swift; sourceTree = "<group>"; };
 		215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = V4MigrationConstants.swift; sourceTree = "<group>"; };
 		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
-		215C859C24C6492800CCCD26 /* MockHitProcessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitProcessor.swift; path = AEPServices/Mocks/MockHitProcessor.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		216A15C7257818B200D43848 /* Data+HexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+HexString.swift"; sourceTree = "<group>"; };
 		216A15D7257818E900D43848 /* Data+HexStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+HexStringTests.swift"; sourceTree = "<group>"; };
@@ -918,12 +930,9 @@
 		3F3951F124CA096100F7325B /* TestConfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = TestConfig.json; sourceTree = "<group>"; };
 		3F3951F224CA096100F7325B /* testRulesDownloader.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = testRulesDownloader.zip; sourceTree = "<group>"; };
 		3F3951F424CA096100F7325B /* SlowMockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlowMockExtension.swift; sourceTree = "<group>"; };
-		3F3951F524CA096100F7325B /* MockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
 		3F3951F624CA096100F7325B /* MockExtensionTwo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtensionTwo.swift; sourceTree = "<group>"; };
 		3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MobileCore+ConfigurationTests.swift"; sourceTree = "<group>"; };
 		3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloader.swift; sourceTree = "<group>"; };
-		3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNetworkServiceOverrider.swift; sourceTree = "<group>"; };
-		3F3951FC24CA096100F7325B /* EventHub+Testable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventHub+Testable.swift"; sourceTree = "<group>"; };
 		3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
 		3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
 		3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloaderNetworkService.swift; sourceTree = "<group>"; };
@@ -979,13 +988,10 @@
 		3FE6DDD924C62EE60065EA05 /* AEPLifecycleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPLifecycleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE6DDE024C62EE60065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPServicesMock.h; path = AEPServices/Mocks/AEPServicesMock.h; sourceTree = SOURCE_ROOT; };
-		3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNetworkServiceOverrider.swift; path = AEPServices/Mocks/MockNetworkServiceOverrider.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDEA24C62F610065EA05 /* MockTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockTask.swift; path = AEPServices/Mocks/MockTask.swift; sourceTree = SOURCE_ROOT; };
-		3FE6DDEB24C62F610065EA05 /* MockDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDataStore.swift; path = AEPServices/Mocks/MockDataStore.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDEC24C62F610065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPServices/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
 		3FE6DDED24C62F610065EA05 /* MockURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLSession.swift; path = AEPServices/Mocks/MockURLSession.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockSystemInfoService.swift; path = AEPServices/Mocks/MockSystemInfoService.swift; sourceTree = SOURCE_ROOT; };
-		3FE6DDEF24C62F610065EA05 /* MockDataQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDataQueue.swift; path = AEPServices/Mocks/MockDataQueue.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDF824C630DE0065EA05 /* LifecycleMetricsBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsBuilderTests.swift; sourceTree = "<group>"; };
 		3FE6DDF924C630DE0065EA05 /* LifecycleContextDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleContextDataTests.swift; sourceTree = "<group>"; };
 		3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsTests.swift; sourceTree = "<group>"; };
@@ -1041,7 +1047,6 @@
 		3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Event+Timestamp.swift"; path = "AEPCore/Mocks/Event+Timestamp.swift"; sourceTree = SOURCE_ROOT; };
 		3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPCoreMocks.h; path = AEPCore/Mocks/AEPCoreMocks.h; sourceTree = SOURCE_ROOT; };
 		3FF8171424D89B500064DFA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPCore/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
-		3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableExtensionRuntime.swift; path = AEPCore/Mocks/TestableExtensionRuntime.swift; sourceTree = SOURCE_ROOT; };
 		3FF829442507E9F500483C74 /* ADBMobileConfig-OptedOut.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ADBMobileConfig-OptedOut.json"; sourceTree = "<group>"; };
 		3FF829462507EBE400483C74 /* LifecycleIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleIntegrationTests.swift; sourceTree = "<group>"; };
 		3FF829482507F8AA00483C74 /* rules_lifecycle.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_lifecycle.json; sourceTree = "<group>"; };
@@ -1056,9 +1061,32 @@
 		7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsMigrator.swift; sourceTree = "<group>"; };
 		7522618C2AABBE9600D59847 /* UserDefaultMigrationConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultMigrationConstants.swift; sourceTree = "<group>"; };
 		7522618E2AAF6E2400D59847 /* UserDefaultMigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultMigratorTests.swift; sourceTree = "<group>"; };
+		75341CAB2B9674290090CE3A /* XCTestCase+AnyCodableAsserts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+AnyCodableAsserts.swift"; sourceTree = "<group>"; };
+		75341CAC2B9674290090CE3A /* EventHub+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventHub+TestHelper.swift"; sourceTree = "<group>"; };
+		75341CAD2B9674290090CE3A /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
+		75341CAE2B9674290090CE3A /* AnyCodable+Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
+		75341CB02B96742A0090CE3A /* NodeConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeConfig.swift; sourceTree = "<group>"; };
+		75341CB12B96742A0090CE3A /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
+		75341CB22B96742A0090CE3A /* TestConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestConstants.swift; sourceTree = "<group>"; };
+		75341CB32B96742A0090CE3A /* UserDefaults+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+TestHelper.swift"; sourceTree = "<group>"; };
+		75341CB42B96742A0090CE3A /* EventSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventSpec.swift; sourceTree = "<group>"; };
+		75341CB52B96742A0090CE3A /* TestableNetworkRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableNetworkRequest.swift; sourceTree = "<group>"; };
+		75341CB62B96742A0090CE3A /* RealNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
+		75341CB72B96742A0090CE3A /* MockHitProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockHitProcessor.swift; sourceTree = "<group>"; };
+		75341CB82B96742B0090CE3A /* MockExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
+		75341CBB2B96742C0090CE3A /* CountDownLatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownLatch.swift; sourceTree = "<group>"; };
+		75341CBC2B96742C0090CE3A /* MockDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDataStore.swift; sourceTree = "<group>"; };
+		75341CBD2B96742C0090CE3A /* TestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
+		75341CBE2B96742C0090CE3A /* URL+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+TestHelper.swift"; sourceTree = "<group>"; };
+		75341CBF2B96742C0090CE3A /* FileManager+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+TestHelper.swift"; sourceTree = "<group>"; };
+		75341CC02B96742C0090CE3A /* NamedCollectionDataStore+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NamedCollectionDataStore+TestHelper.swift"; sourceTree = "<group>"; };
+		75341CD82B9674A30090CE3A /* MockDataQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataQueue.swift; sourceTree = "<group>"; };
+		75341CDA2B9675440090CE3A /* NetworkRequestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequestHelper.swift; sourceTree = "<group>"; };
 		75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicCounterTests.swift; sourceTree = "<group>"; };
+		754965C32B607861000E49B0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		754965C72B6421A0000E49B0 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = AEPServices/Sources/PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
 		75550A3E2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamedCollectionDataStoreFunctionalTests.swift; sourceTree = "<group>"; };
-		75C0D9042A9D545100EF74BC /* DatastoreUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatastoreUtilities.swift; sourceTree = "<group>"; };
+
 		75ED44D02B56F0B300F2CEB1 /* rules_testAttachDataArray.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testAttachDataArray.json; sourceTree = "<group>"; };
 		7814B23225CB455200841429 /* URL+Validator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validator.swift"; sourceTree = "<group>"; };
 		786C000425B8EE2100F26D34 /* DefaultHeadersFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeadersFormatter.swift; sourceTree = "<group>"; };
@@ -1379,6 +1407,7 @@
 				3FB66AA524CA004400502CAF /* eventhub */,
 				3FB66AB324CA004400502CAF /* rules */,
 				21CAC0D92422917600C11388 /* AEPCore.h */,
+				754965C32B607861000E49B0 /* PrivacyInfo.xcprivacy */,
 				21CAC0DA2422917600C11388 /* Info.plist */,
 			);
 			name = Sources;
@@ -1526,6 +1555,9 @@
 		24B4934824D337B300AA38D9 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				243DCE4624C7AA2800E99AD9 /* AEPServices.h */,
+				3F0397B924BE5FF30019F095 /* Info.plist */,
+				754965C72B6421A0000E49B0 /* PrivacyInfo.xcprivacy */,
 				921EE17A2579E89E00A119FA /* ui */,
 				3F03979F24BE5FF30019F095 /* cache */,
 				3F0397B224BE5FF30019F095 /* dataqueue */,
@@ -1533,9 +1565,7 @@
 				3F0397AA24BE5FF30019F095 /* network */,
 				3F0397BA24BE5FF30019F095 /* storage */,
 				3F0397E124BE60910019F095 /* utility */,
-				243DCE4624C7AA2800E99AD9 /* AEPServices.h */,
 				3F0397BE24BE5FF30019F095 /* ApplicationSystemInfoService.swift */,
-				3F0397B924BE5FF30019F095 /* Info.plist */,
 				3F0397A524BE5FF30019F095 /* ServiceProvider.swift */,
 				3F0397BF24BE5FF30019F095 /* SystemInfoService.swift */,
 				3F0397C024BE5FF30019F095 /* URLOpening.swift */,
@@ -1551,15 +1581,12 @@
 			children = (
 				3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */,
 				3FE6DDEC24C62F610065EA05 /* Info.plist */,
-				3FE6DDEF24C62F610065EA05 /* MockDataQueue.swift */,
-				3FE6DDEB24C62F610065EA05 /* MockDataStore.swift */,
+				75341CD72B9674870090CE3A /* AEPTestUtils */,
 				2467E43B24CB54B70022F6BE /* MockDiskCache.swift */,
 				24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */,
-				215C859C24C6492800CCCD26 /* MockHitProcessor.swift */,
 				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
 				31DF174E297030D300B4B07F /* MockLoggingService.swift */,
 				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
-				3FE6DDE924C62F610065EA05 /* MockNetworkServiceOverrider.swift */,
 				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
 				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
 				2467E43C24CB54B70022F6BE /* MockUnzipper.swift */,
@@ -1567,7 +1594,6 @@
 				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
 				92027B9825C9EAF2007BE140 /* MockUIService.swift */,
 				24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */,
-				75C0D9042A9D545100EF74BC /* DatastoreUtilities.swift */,
 			);
 			name = Mocks;
 			path = AEPServices/Mocks;
@@ -1895,7 +1921,6 @@
 			isa = PBXGroup;
 			children = (
 				3F3951F424CA096100F7325B /* SlowMockExtension.swift */,
-				3F3951F524CA096100F7325B /* MockExtension.swift */,
 				3F3951F624CA096100F7325B /* MockExtensionTwo.swift */,
 				2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */,
 				2130A5BA260AB582005DBA0F /* NotAnExtension.swift */,
@@ -1907,8 +1932,6 @@
 			isa = PBXGroup;
 			children = (
 				3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */,
-				3F3951FB24CA096100F7325B /* MockNetworkServiceOverrider.swift */,
-				3F3951FC24CA096100F7325B /* EventHub+Testable.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
 				3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */,
 				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
@@ -2067,9 +2090,9 @@
 				3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */,
 				3FF8171224D89B500064DFA1 /* Event+Timestamp.swift */,
 				246B19FC2728C1CD0017716A /* MockEventHistoryDatabase.swift */,
-				3FF8171524D89B500064DFA1 /* TestableExtensionRuntime.swift */,
 				3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */,
 				3F08FFA724DBBDD700D34DE3 /* UserDefaults+Clear.swift */,
+				75341CE32B9696520090CE3A /* AEPTestUtils */,
 				3FF8171424D89B500064DFA1 /* Info.plist */,
 			);
 			name = Mocks;
@@ -2092,6 +2115,41 @@
 				3FF8296B2509942300483C74 /* rules_signal.json */,
 			);
 			path = resources;
+			sourceTree = "<group>";
+		};
+		75341CD72B9674870090CE3A /* AEPTestUtils */ = {
+			isa = PBXGroup;
+			children = (
+				75341CBB2B96742C0090CE3A /* CountDownLatch.swift */,
+				75341CB42B96742A0090CE3A /* EventSpec.swift */,
+				75341CBF2B96742C0090CE3A /* FileManager+TestHelper.swift */,
+				75341CD82B9674A30090CE3A /* MockDataQueue.swift */,
+				75341CBC2B96742C0090CE3A /* MockDataStore.swift */,
+				75341CB72B96742A0090CE3A /* MockHitProcessor.swift */,
+				75341CAD2B9674290090CE3A /* MockNetworkService.swift */,
+				75341CDA2B9675440090CE3A /* NetworkRequestHelper.swift */,
+				75341CC02B96742C0090CE3A /* NamedCollectionDataStore+TestHelper.swift */,
+				75341CB62B96742A0090CE3A /* RealNetworkService.swift */,
+				75341CB52B96742A0090CE3A /* TestableNetworkRequest.swift */,
+				75341CB22B96742A0090CE3A /* TestConstants.swift */,
+				75341CBD2B96742C0090CE3A /* TestUtils.swift */,
+				75341CBE2B96742C0090CE3A /* URL+TestHelper.swift */,
+				75341CB32B96742A0090CE3A /* UserDefaults+TestHelper.swift */,
+			);
+			path = AEPTestUtils;
+			sourceTree = "<group>";
+		};
+		75341CE32B9696520090CE3A /* AEPTestUtils */ = {
+			isa = PBXGroup;
+			children = (
+				75341CB12B96742A0090CE3A /* TestableExtensionRuntime.swift */,
+				75341CAC2B9674290090CE3A /* EventHub+TestHelper.swift */,
+				75341CB82B96742B0090CE3A /* MockExtension.swift */,
+				75341CAB2B9674290090CE3A /* XCTestCase+AnyCodableAsserts.swift */,
+				75341CAE2B9674290090CE3A /* AnyCodable+Array.swift */,
+				75341CB02B96742A0090CE3A /* NodeConfig.swift */,
+			);
+			path = AEPTestUtils;
 			sourceTree = "<group>";
 		};
 		78AA4EC72513AE5200205AE9 /* Configuration */ = {
@@ -2646,6 +2704,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				754965C42B607861000E49B0 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2710,6 +2769,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				754965C82B6421A0000E49B0 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3214,7 +3274,6 @@
 			files = (
 				BB59402B24CF6E1D00EE0C6C /* LaunchRulesEngineTests.swift in Sources */,
 				3F39521324CA096100F7325B /* MobileCore+ConfigurationTests.swift in Sources */,
-				BBA512B524F5D0CC0030DAD1 /* EventHub+Testable.swift in Sources */,
 				246B1A2B272B48A80017716A /* EventTests.swift in Sources */,
 				24B4BE592714F5A40000C3AA /* EventHistoryRequestTests.swift in Sources */,
 				78AA4EC92513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift in Sources */,
@@ -3227,7 +3286,6 @@
 				BBE1295124DBCE870045CD8D /* TokenFinderTests.swift in Sources */,
 				7522618F2AAF6E2400D59847 /* UserDefaultMigratorTests.swift in Sources */,
 				3F5D45FB251904F00040E298 /* LaunchRuleTransformerTests.swift in Sources */,
-				3F39521624CA096200F7325B /* MockNetworkServiceOverrider.swift in Sources */,
 				3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
 				21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */,
@@ -3431,23 +3489,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				215C859E24C6492800CCCD26 /* MockHitProcessor.swift in Sources */,
 				24CE74AD26D40239008F9EFD /* MockMessagingDelegate.swift in Sources */,
 				24543A1524E1DC8E002D8D9A /* MockDiskCache.swift in Sources */,
 				3FE6DDF524C62F620065EA05 /* MockURLSession.swift in Sources */,
+				75341CD42B96742D0090CE3A /* RealNetworkService.swift in Sources */,
+				75341CCE2B96742D0090CE3A /* CountDownLatch.swift in Sources */,
 				24CE74AF26D40278008F9EFD /* MockWKScriptMessage.swift in Sources */,
+				75341CD32B96742D0090CE3A /* NamedCollectionDataStore+TestHelper.swift in Sources */,
+				75341CD12B96742D0090CE3A /* UserDefaults+TestHelper.swift in Sources */,
+				75341CCB2B96742D0090CE3A /* FileManager+TestHelper.swift in Sources */,
 				24543A1624E1DC95002D8D9A /* MockUnzipper.swift in Sources */,
-				3FE6DDF724C62F620065EA05 /* MockDataQueue.swift in Sources */,
+				75341CD52B96742D0090CE3A /* MockNetworkService.swift in Sources */,
+				75341CC22B96742D0090CE3A /* TestableNetworkRequest.swift in Sources */,
+				75341CDB2B9675450090CE3A /* NetworkRequestHelper.swift in Sources */,
 				215C859D24C6492800CCCD26 /* MockHitQueue.swift in Sources */,
 				3FE6DDF224C62F610065EA05 /* MockTask.swift in Sources */,
 				24CE74AB26D401ED008F9EFD /* MockFullscreenListener.swift in Sources */,
 				92027B9925C9EAF2007BE140 /* MockUIService.swift in Sources */,
-				3FE6DDF324C62F610065EA05 /* MockDataStore.swift in Sources */,
+				75341CC92B96742D0090CE3A /* TestUtils.swift in Sources */,
+				75341CC82B96742D0090CE3A /* EventSpec.swift in Sources */,
+				75341CD02B96742D0090CE3A /* URL+TestHelper.swift in Sources */,
+				75341CC52B96742D0090CE3A /* MockHitProcessor.swift in Sources */,
+				75341CD92B9674A30090CE3A /* MockDataQueue.swift in Sources */,
+				75341CC32B96742D0090CE3A /* TestConstants.swift in Sources */,
+				75341CC72B96742D0090CE3A /* MockDataStore.swift in Sources */,
 				3FE6DDF624C62F620065EA05 /* MockSystemInfoService.swift in Sources */,
 				31DF174F297030D300B4B07F /* MockLoggingService.swift in Sources */,
 				24543A1424E1DAFC002D8D9A /* MockURLService.swift in Sources */,
-				3FE6DDF124C62F610065EA05 /* MockNetworkServiceOverrider.swift in Sources */,
-				75C0D9052A9D545100EF74BC /* DatastoreUtilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3561,12 +3629,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F08FFA924DBBDD700D34DE3 /* UserDefaults+Clear.swift in Sources */,
-				3FF8171924D89B500064DFA1 /* TestableExtensionRuntime.swift in Sources */,
-				21FE152224F03386008A82FF /* EventHub+Testable.swift in Sources */,
 				3F08FFAA24DBBDD700D34DE3 /* TestableNetworkService.swift in Sources */,
+				75341CE52B9699600090CE3A /* NodeConfig.swift in Sources */,
+				75341CE62B969A270090CE3A /* AnyCodable+Array.swift in Sources */,
+				75341CDF2B96960B0090CE3A /* EventHub+TestHelper.swift in Sources */,
 				3FF8171624D89B500064DFA1 /* Event+Timestamp.swift in Sources */,
-				21FE152124F0335E008A82FF /* MockExtension.swift in Sources */,
+				75341CE12B9696240090CE3A /* MockExtension.swift in Sources */,
 				246B19FD2728C1CD0017716A /* MockEventHistoryDatabase.swift in Sources */,
+				75341CE42B96969C0090CE3A /* XCTestCase+AnyCodableAsserts.swift in Sources */,
+				75341CDE2B9695D70090CE3A /* TestableExtensionRuntime.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3889,13 +3960,13 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3904,7 +3975,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -3922,13 +3993,14 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPCore/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -3936,7 +4008,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -3950,7 +4022,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3962,7 +4034,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -3976,7 +4048,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPCore/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -3987,7 +4059,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4003,13 +4075,14 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4018,7 +4091,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4034,13 +4107,14 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4048,7 +4122,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4058,7 +4132,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4069,7 +4143,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4079,7 +4153,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPSignal/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4090,7 +4164,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4106,13 +4180,14 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4120,7 +4195,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4136,32 +4211,32 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
 		3F03979A24BE5DD30019F095 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4172,19 +4247,18 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
 		3F03979B24BE5DD30019F095 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
 				INFOPLIST_FILE = AEPServices/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4195,7 +4269,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4203,10 +4277,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 10.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4214,10 +4289,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 10.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4228,7 +4304,7 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4239,7 +4315,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4250,7 +4326,7 @@
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIntegrationTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4261,7 +4337,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4277,13 +4353,14 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4291,7 +4368,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4307,20 +4384,21 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPServices/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4336,13 +4414,14 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPLifecycle/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4350,7 +4429,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4366,20 +4445,21 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPLifecycle/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4390,7 +4470,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4402,7 +4482,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4413,7 +4493,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPLifecycle/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4424,7 +4504,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4440,13 +4520,14 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4454,7 +4535,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4470,20 +4551,21 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = AEPIdentity/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4494,7 +4576,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4506,7 +4588,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4517,7 +4599,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = AEPIdentity/Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -4528,7 +4610,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
@@ -4542,15 +4624,17 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				INFOPLIST_FILE = AEPCore/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4558,7 +4642,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Debug;
 		};
@@ -4572,22 +4656,24 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_TESTING_SEARCH_PATHS = YES;
 				INFOPLIST_FILE = AEPCore/Mocks/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.2.3;
+				MARKETING_VERSION = 5.0.0;
+
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3";
-				TVOS_DEPLOYMENT_TARGET = 11.0;
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 			};
 			name = Release;
 		};
