@@ -1,14 +1,14 @@
-/*
- Copyright 2020 Adobe. All rights reserved.
- This file is licensed to you under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License. You may obtain a copy
- of the License at http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software distributed under
- the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
- OF ANY KIND, either express or implied. See the License for the specific language
- governing permissions and limitations under the License.
- */
+//
+// Copyright 2021 Adobe. All rights reserved.
+// This file is licensed to you under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License. You may obtain a copy
+// of the License at http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software distributed under
+// the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+// OF ANY KIND, either express or implied. See the License for the specific language
+// governing permissions and limitations under the License.
+//
 
 @testable import AEPCore
 import Foundation
@@ -16,7 +16,9 @@ import Foundation
 /// Testable implementation for `ExtensionRuntime`
 ///
 /// Enable easy setup for the input and verification of the output of an extension
+/// See also AEPCore/Mocks
 public class TestableExtensionRuntime: ExtensionRuntime {
+
     public var listeners: [String: EventListener] = [:]
     public var dispatchedEvents: [Event] = []
     public var createdSharedStates: [[String: Any]?] = []
@@ -40,7 +42,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     }
 
     public func dispatch(event: Event) {
-        if(shouldIgnore(event)) {
+        if shouldIgnore(event) {
             return
         }
         dispatchedEvents += [event]
@@ -60,15 +62,15 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: .any)
     }
 
-    public func getSharedState(extensionName: String, event: Event?, barrier: Bool, resolution: SharedStateResolution = .any) -> SharedStateResult? {
-        // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
+    public func getSharedState(extensionName: String, event: Event?, barrier: Bool, resolution: SharedStateResolution) -> SharedStateResult? {
+        // if there is a shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
         if let id = event?.id {
             return mockedSharedStates["\(extensionName)-\(id)"] ?? mockedSharedStates["\(extensionName)"]
         }
         return mockedSharedStates["\(extensionName)"]
     }
 
-    public func createXDMSharedState(data: [String : Any], event: Event?) {
+    public func createXDMSharedState(data: [String: Any], event: Event?) {
         createdXdmSharedStates += [data]
     }
 
@@ -78,12 +80,12 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         }
     }
 
-    public func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false) -> SharedStateResult? {
+    public func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool) -> SharedStateResult? {
         getXDMSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: .any)
     }
 
-    public func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool, resolution: SharedStateResolution = .any) -> SharedStateResult? {
-        // if there is an shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
+    public func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool, resolution: SharedStateResolution) -> SharedStateResult? {
+        // if there is a shared state setup for the specific (extension, event id) pair, return it. Otherwise, return the shared state that is setup for the extension.
         if let id = event?.id {
             return mockedXdmSharedStates["\(extensionName)-\(id)"] ?? mockedXdmSharedStates["\(extensionName)"]
         }
@@ -95,6 +97,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public func stopEvents() {}
 
     // MARK: - Helper methods
+
     /// Ignores the events from being dispatched by event hub.
     /// - Parameters:
     ///  - type: `EventType` of the event to be ignored
@@ -102,16 +105,14 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public func ignoreEvent(type: String, source: String) {
         ignoredEvents.insert("\(type)-\(source)")
     }
-
     /// Removes all the ignored events.
     public func resetIgnoredEvents() {
         ignoredEvents.removeAll()
     }
-
     /// Determines if the event is to be ignored and not dispatched by event hub
     /// - Parameter event: An `Event`
     private func shouldIgnore(_ event: Event) -> Bool {
-        return ignoredEvents.contains("\(event.type)-\(event.source)")
+        ignoredEvents.contains("\(event.type)-\(event.source)")
     }
 
     /// Simulate the events that are being sent to event hub, if there is a listener registered for that type of event, that listener will receive the event
@@ -178,28 +179,36 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     }
 }
 
-extension TestableExtensionRuntime {
-    public var firstEvent: Event? {
+/// Convenience properties for `TestableExtensionRuntime`
+public extension TestableExtensionRuntime {
+
+    /// First dispatched event
+    var firstEvent: Event? {
         dispatchedEvents[0]
     }
 
-    public var secondEvent: Event? {
+    /// Second dispatched event
+    var secondEvent: Event? {
         dispatchedEvents[1]
     }
 
-    public var thirdEvent: Event? {
+    /// Third dispatched event
+    var thirdEvent: Event? {
         dispatchedEvents[2]
     }
 
-    public var firstSharedState: [String: Any]? {
+    /// First created shared state
+    var firstSharedState: [String: Any]? {
         createdSharedStates[0]
     }
 
-    public var secondSharedState: [String: Any]? {
+    /// Second created shared state
+    var secondSharedState: [String: Any]? {
         createdSharedStates[1]
     }
 
-    public var thirdSharedState: [String: Any]? {
+    /// Third created shared state
+    var thirdSharedState: [String: Any]? {
         createdSharedStates[2]
     }
 }

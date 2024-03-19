@@ -23,7 +23,7 @@ import AEPServicesMocks
 class SignalTests: XCTestCase {
     var signal: Signal!
     var mockHitQueue: MockHitQueue!
-    var mockNetworkService: MockNetworkServiceOverrider!
+    var mockNetworkService: MockNetworkService!
     var mockOpenURLService: MockURLService!
     var mockRuntime: TestableExtensionRuntime!
     
@@ -35,7 +35,7 @@ class SignalTests: XCTestCase {
         mockHitQueue = MockHitQueue(processor: SignalHitProcessor())
         mockOpenURLService = MockURLService()
         mockRuntime = TestableExtensionRuntime()
-        mockNetworkService = MockNetworkServiceOverrider()
+        mockNetworkService = MockNetworkService()
                     
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         ServiceProvider.shared.networkService = mockNetworkService
@@ -203,7 +203,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateSharedState(for: SignalConstants.Configuration.NAME,
                                         data: (configData, .set))
         var rulesEvent = getRulesResponseEvent(type: SignalConstants.ConsequenceTypes.POSTBACK)
-        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: "http://nope.com/invalid#@%@%things()#~@!", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
+        let updatedEventData = updateDetailDict(dict: rulesEvent.data!, withValue: "", forKey: SignalConstants.EventDataKeys.TEMPLATE_URL)
         rulesEvent = rulesEvent.copyWithNewData(data: updatedEventData)
 
         // test

@@ -13,7 +13,6 @@
 import XCTest
 import AEPCore
 @testable import AEPIdentity
-import AEPCoreMocks
 @testable import AEPServices
 import AEPServicesMocks
 

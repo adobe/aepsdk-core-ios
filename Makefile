@@ -17,7 +17,7 @@ IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
 TVOS_ARCHIVE_PATH = ./build/tvos.xcarchive/Products/Library/Frameworks/
 IOS_ARCHIVE_DSYM_PATH = $(CURR_DIR)/build/ios.xcarchive/dSYMs/
 TVOS_ARCHIVE_DSYM_PATH = $(CURR_DIR)/build/tvos.xcarchive/dSYMs/
-IOS_DESTINATION = 'platform=iOS Simulator,name=iPhone 14'
+IOS_DESTINATION = 'platform=iOS Simulator,name=iPhone 15'
 TVOS_DESTINATION = 'platform=tvOS Simulator,name=Apple TV'
 NC='\033[0m'
 RED='\033[0;31m'
@@ -95,10 +95,18 @@ integration-tvos-test:
 pod-install:
 	pod install --repo-update
 
+ci-pod-install:
+	bundle exec pod install --repo-update
+
 # Targets - archive
 
+archive: pod-install _archive
 
-archive: clean pod-install build-ios build-tvos
+ci-archive: ci-pod-install _archive
+
+ci-archive-ios: ci-pod-install _archive-ios
+
+_archive: clean pod-install build-ios build-tvos
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM \
 	-framework $(TVOS_SIMULATOR_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(TVOS_SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM \
 	-framework $(IOS_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(IOS_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM \
@@ -124,7 +132,7 @@ archive: clean pod-install build-ios build-tvos
 	-framework $(IOS_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -debug-symbols $(IOS_ARCHIVE_DSYM_PATH)$(AEPRULESENGINE_TARGET_NAME).framework.dSYM \
 	-framework $(TVOS_ARCHIVE_PATH)$(AEPRULESENGINE_TARGET_NAME).framework -debug-symbols $(TVOS_ARCHIVE_DSYM_PATH)$(AEPRULESENGINE_TARGET_NAME).framework.dSYM -output ./build/$(AEPRULESENGINE_TARGET_NAME).xcframework
 
-archive-ios: clean pod-install build-ios
+_archive-ios: clean pod-install build-ios
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM \
 	-framework $(IOS_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(IOS_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM -output ./build/$(AEPSERVICES_TARGET_NAME).xcframework
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPCORE_TARGET_NAME).framework -debug-symbols $(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPCORE_TARGET_NAME).framework.dSYM \
@@ -164,7 +172,9 @@ zip:
 clean:
 	rm -rf ./build
 
-format:
+format: lint-autocorrect swift-format
+
+swift-format:
 	swiftformat . --swiftversion 5.1
 
 lint-autocorrect:	

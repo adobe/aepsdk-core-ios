@@ -19,7 +19,7 @@
         case swipeDown = 1
         case swipeLeft = 2
         case swipeRight = 3
-        case backgroundTap = 4
+        case tapBackground = 4
 
         /// Converts a `String` to its respective `MessageGesture`
         /// If `string` is not a valid `MessageGesture`, calling this method will return `nil`
@@ -35,8 +35,8 @@
                 return .swipeRight
             case "swipeLeft":
                 return .swipeLeft
-            case "backgroundTap":
-                return .backgroundTap
+            case "tapBackground":
+                return .tapBackground
             default:
                 return nil
             }

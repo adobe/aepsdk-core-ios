@@ -25,7 +25,7 @@ The `AEPCore`, `AEPServices`, and `AEPIdentity` extensions represent the foundat
 `AEPLifecycle` represents the Adobe Experience Platform SDK's `Lifecycle` extension that helps collect application Lifecycle metrics such as, application install or upgrade information, application launch and session information, device information, and any additional context data provided by the application developer. 
 
 ## Requirements
-- Xcode 14.1 (or newer)
+- Xcode 15 (or newer)
 - Swift 5.1 (or newer)
 
 ## Installation
@@ -70,7 +70,7 @@ Alternatively, if your project has a `Package.swift` file, you can add AEPCore d
 
 ```
 dependencies: [
-    .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .upToNextMajor(from: "4.0.0"))
+    .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .upToNextMajor(from: "5.0.0"))
 ]
 ```
 

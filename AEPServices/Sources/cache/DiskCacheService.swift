@@ -33,8 +33,9 @@ class DiskCacheService: Caching {
         if let meta = entry.metadata, !meta.isEmpty {
             newMetadata.merge(meta) { current, _ in current }
         }
+        
+        let attributes: [String: Any] = [
 
-        var attributes: [String: Any] = [
             EXPIRY_DATE: entry.expiry.date.timeIntervalSince1970,
             METADATA: newMetadata
         ]
