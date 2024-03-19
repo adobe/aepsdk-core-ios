@@ -362,14 +362,12 @@ jobs:
       - checkout
 
       - install_dependencies
-      
+
       # verify XCFramework archive builds
       - run:
           name: Build XCFramework
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              make ci-archive
-            fi
+          command: make ci-archive
+
       # verify podspec is valid
       - run:
           name: Test Podspec
