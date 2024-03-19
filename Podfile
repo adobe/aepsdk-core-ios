@@ -39,57 +39,57 @@ def testapp_dev
 end
 
 target 'AEPCore' do
-  core_staging
+  core_main
 end
 
 target 'AEPCoreTests' do
-  core_staging
+  core_main
 end
 
 target 'AEPSignalTests' do
-  core_staging
+  core_main
 end
 
 target 'AEPLifecycleTests' do
-  core_staging
+  core_main
 end
 
 target 'AEPIdentityTests' do
-  core_staging
+  core_main
 end
 
 target 'AEPIntegrationTests' do
-  core_staging
+  core_main
 end
 
 # TestApps project dependencies
 
 target 'TestApp_Swift' do
-  testapp_staging
+  testapp_main
 end
 
 target 'TestApp_Objc' do
-  testapp_staging
+  testapp_main
 end
 
 target 'E2E_Swift' do
-  testapp_staging
+  testapp_main
 end
 
 target 'PerformanceApp' do
-  testapp_staging
+  testapp_main
 end
 
 target 'TestAppExtension' do
-  testapp_staging
+  testapp_main
 end
 
 target 'TestApp_Swift (tvOS)' do
-  testapp_staging
+  testapp_main
 end
 
 target 'TestApp_Objc (tvOS)' do
-  testapp_staging
+  testapp_main
 end
 
 post_install do |pi|
