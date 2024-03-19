@@ -75,6 +75,10 @@ commands:
       - run:
           name: Pod install
           command: make ci-pod-install
+      
+      - run:
+          name: Install xcodegen
+          command: brew install xcodegen
         
   prestart_ios_simulator:
     steps:
