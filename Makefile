@@ -98,18 +98,15 @@ pod-install:
 ci-pod-install:
 	bundle exec pod install --repo-update
 
-bundle-install:
-	bundle install
-
 # Targets - archive
 
 archive: pod-install _archive
 
-ci-archive: bundle-install ci-pod-install _archive
+ci-archive: ci-pod-install _archive
 
 ci-archive-ios: ci-pod-install _archive-ios
 
-_archive: clean pod-install build-ios build-tvos
+_archive: clean build-ios build-tvos
 	xcodebuild -create-xcframework -framework $(SIMULATOR_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM \
 	-framework $(TVOS_SIMULATOR_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(TVOS_SIMULATOR_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM \
 	-framework $(IOS_ARCHIVE_PATH)$(AEPSERVICES_TARGET_NAME).framework -debug-symbols $(IOS_ARCHIVE_DSYM_PATH)$(AEPSERVICES_TARGET_NAME).framework.dSYM \
