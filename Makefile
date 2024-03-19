@@ -98,11 +98,14 @@ pod-install:
 ci-pod-install:
 	bundle exec pod install --repo-update
 
+bundle-install:
+	bundle install
+
 # Targets - archive
 
 archive: pod-install _archive
 
-ci-archive: bundle install ci-pod-install _archive
+ci-archive: bundle-install ci-pod-install _archive
 
 ci-archive-ios: ci-pod-install _archive-ios
 
