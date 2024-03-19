@@ -375,12 +375,13 @@ jobs:
               make ci-archive
             fi
       # verify podspec is valid
-      - run:
-          name: Test Podspec
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
-              make test-podspec
-            fi
+      ## TODO: - Add this back in once we update the script to use gemfile cocoapods
+      # - run:
+      #     name: Test Podspec
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
+      #         make test-podspec
+      #       fi
       # verify SPM works
       - run:
           name: Test SPM 
