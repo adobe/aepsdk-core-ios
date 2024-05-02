@@ -75,7 +75,7 @@ class LifecycleV2MetricsBuilder {
 
         xdmApplicationInfoLaunch.name = systemInfoService.getApplicationName()
         xdmApplicationInfoLaunch.id = systemInfoService.getApplicationBundleId()
-        xdmApplicationInfoLaunch.version = getAppVersion()
+        xdmApplicationInfoLaunch.version = LifecycleV2.getAppVersion(systemInfoService: systemInfoService)
         xdmApplicationInfoLaunch.language = XDMLanguage(language: systemInfoService.getActiveLocaleName().bcpFormattedLocale)
 
         return xdmApplicationInfoLaunch
@@ -98,14 +98,6 @@ class LifecycleV2MetricsBuilder {
         xdmApplicationInfoClose.sessionLength = computeSessionLength(launchDate: launchDate, closeDate: closeDate)
 
         return xdmApplicationInfoClose
-    }
-
-    /// Returns the application version in the format appVersion (versionCode). Example: 2.3 (10)
-    /// - Returns: the app version as a `String` formatted in the specified format.
-    private func getAppVersion() -> String {
-        let appBuildNumber = systemInfoService.getApplicationBuildNumber() ?? ""
-        let appVersionNumber = systemInfoService.getApplicationVersionNumber() ?? ""
-        return "\(appVersionNumber) (\(appBuildNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     /// Returns information related to the running environment. This data is computed once, when it is first used, then
