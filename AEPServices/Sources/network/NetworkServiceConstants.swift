@@ -26,4 +26,20 @@ public struct NetworkServiceConstants {
     public struct HeaderValues {
         public static let CONTENT_TYPE_URL_ENCODED = "application/x-www-form-urlencoded"
     }
+    
+    public static let RECOVERABLE_NETWORK_TRANSPORT_ERROR = [
+        NetworkTransportErrors.NSURLErrorTimedOut,
+        NetworkTransportErrors.NSURLErrorCannotConnectToHost,
+        NetworkTransportErrors.NSURLErrorNetworkConnectionLost,
+        NetworkTransportErrors.NSURLErrorNotConnectedToInternet,
+        NetworkTransportErrors.NSURLErrorDataNotAllowed
+    ]
+    
+    public struct NetworkTransportErrors {
+        public static let NSURLErrorTimedOut = -1001
+        public static let NSURLErrorCannotConnectToHost = -1004
+        public static let NSURLErrorNetworkConnectionLost  = -1005
+        public static let NSURLErrorNotConnectedToInternet = -1009
+        public static let NSURLErrorDataNotAllowed = -1020
+    }
 }
