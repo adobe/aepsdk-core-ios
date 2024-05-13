@@ -21,11 +21,11 @@ class IdentityFunctionalTests: XCTestCase {
     var identity: Identity!
 
     override func setUp() {
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
-        ServiceProvider.shared.namedKeyValueService = MockDataStore()
     }
 
     override func tearDown() {
@@ -466,5 +466,80 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
         XCTAssertFalse(ecid.isEmpty)
+    }
+    
+    // MARK: dispatch AnalyticsForIdentityRequest Event tests
+    
+    // Test setting valid push token on launch dispatches event to Analytics with a.push.optin = True
+    func testSetPushIdentifierValidTokenDispatchesAnalyticsForIdentityRequestEvent() {
+        // Set valid config to allow sync to process
+        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+        
+        let pushIdData = "test-push-id".data(using: .utf8)!
+        let encodedPushId = "746573742D707573682D6964"
+                
+        let data = ["pushidentifier": encodedPushId]
+        let event = Event(name: "Set Push Identifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
+        
+        mockRuntime.simulateComingEvent(event: event)
+        
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
+        XCTAssertEqual("Push", dispatchedEvent?.data?["action"] as? String)
+        XCTAssertTrue((dispatchedEvent?.data?["trackinternal"] as? Bool) ?? false)
+        let contextData = dispatchedEvent?.data?["contextdata"] as? [String: Any]
+        XCTAssertEqual("True", contextData?["a.push.optin"] as? String)
+    }
+    
+    // Test setting push token to nil on launch dispatches event to Analytics with a.push.optin = False
+    func testSetPushIdentifierNilDispatchesAnalyticsForIdentityRequestEvent() {
+        // Set valid config to allow sync to process
+        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+                
+        let data = ["pushidentifier": ""]
+        let event = Event(name: "Set Push Identifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
+        
+        mockRuntime.simulateComingEvent(event: event)
+        
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
+        XCTAssertEqual("Push", dispatchedEvent?.data?["action"] as? String)
+        XCTAssertTrue((dispatchedEvent?.data?["trackinternal"] as? Bool) ?? false)
+        let contextData = dispatchedEvent?.data?["contextdata"] as? [String: Any]
+        XCTAssertEqual("False", contextData?["a.push.optin"] as? String)
+    }
+    
+    // Test calling resetIdentities will not trigger dispatch of Analytics event
+    func testResetIdentifiersDoesNotDispatcheAnalyticsForIdentityRequestEvent() {
+        identity.state?.identityProperties.ecid = ECID()
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
+        
+        let event = Event(name: "Reset Identities",
+                          type: EventType.genericIdentity,
+                          source: EventSource.requestReset,
+                          data: nil)
+        
+        mockRuntime.simulateComingEvent(event: event)
+        
+        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertNil(identity.state?.identityProperties.ecid)
+    }
+    
+    // Test changing privacy to opt-out will not trigger dispatch of Analytics event
+    func testPrivacyOptOutDoesNotDispatcheAnalyticsForIdentityRequestEvent() {
+        identity.state?.identityProperties.ecid = ECID()
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
+        
+        let event = Event(name: "Configuration Update Response", type: EventType.configuration, source: EventSource.responseContent,
+                          data: ["global.privacy": PrivacyStatus.optedOut.rawValue])
+        
+        mockRuntime.simulateComingEvent(event: event)
+        
+        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertNil(identity.state?.identityProperties.ecid)
     }
 }
