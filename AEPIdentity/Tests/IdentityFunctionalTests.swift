@@ -475,8 +475,7 @@ class IdentityFunctionalTests: XCTestCase {
         // Set valid config to allow sync to process
         identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
         
-        let pushIdData = "test-push-id".data(using: .utf8)!
-        let encodedPushId = "746573742D707573682D6964"
+        let encodedPushId = "746573742D707573682D6964" // encoded value of string "test-push-id"
                 
         let data = ["pushidentifier": encodedPushId]
         let event = Event(name: "Set Push Identifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
