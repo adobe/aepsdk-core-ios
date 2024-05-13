@@ -28,18 +28,11 @@ public struct NetworkServiceConstants {
     }
     
     public static let RECOVERABLE_NETWORK_TRANSPORT_ERROR_CODES = [
-        NetworkTransportErrors.NSURLErrorTimedOut,
-        NetworkTransportErrors.NSURLErrorCannotConnectToHost,
-        NetworkTransportErrors.NSURLErrorNetworkConnectionLost,
-        NetworkTransportErrors.NSURLErrorNotConnectedToInternet,
-        NetworkTransportErrors.NSURLErrorDataNotAllowed
+        URLError.timedOut.rawValue,
+        URLError.cannotConnectToHost.rawValue,
+        URLError.networkConnectionLost.rawValue,
+        URLError.notConnectedToInternet.rawValue,
+        URLError.dataNotAllowed.rawValue
     ]
-    
-    public struct NetworkTransportErrors {
-        public static let NSURLErrorTimedOut = -1001
-        public static let NSURLErrorCannotConnectToHost = -1004
-        public static let NSURLErrorNetworkConnectionLost  = -1005
-        public static let NSURLErrorNotConnectedToInternet = -1009
-        public static let NSURLErrorDataNotAllowed = -1020
-    }
+
 }
