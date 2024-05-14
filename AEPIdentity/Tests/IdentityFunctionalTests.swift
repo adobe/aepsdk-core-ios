@@ -482,6 +482,7 @@ class IdentityFunctionalTests: XCTestCase {
         
         mockRuntime.simulateComingEvent(event: event)
         
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
 
         XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
@@ -502,6 +503,7 @@ class IdentityFunctionalTests: XCTestCase {
         
         mockRuntime.simulateComingEvent(event: event)
         
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
 
         XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
