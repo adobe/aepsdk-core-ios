@@ -15,8 +15,9 @@ import AEPCore
 @testable import AEPIdentity
 @testable import AEPServices
 import AEPServicesMocks
+import AEPCoreMocks
 
-class IdentityFunctionalTests: XCTestCase {
+class IdentityFunctionalTests: XCTestCase, AnyCodableAsserts {
     var mockRuntime: TestableExtensionRuntime!
     var identity: Identity!
 
@@ -486,6 +487,8 @@ class IdentityFunctionalTests: XCTestCase {
         let dataStore = NamedCollectionDataStore(name: "com.adobe.module.identity")
         let identityProperties: IdentityProperties? = dataStore.getObject(key: "identity.properties")
         XCTAssertEqual(encodedPushId,  identityProperties?.pushIdentifier)
+        XCTAssertTrue(dataStore.getBool(key: "analytics.push.sync") ?? false)
+        XCTAssertTrue(dataStore.getBool(key: "push.enabled") ?? false)
         
         // Verify only one event dispatched
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
@@ -494,10 +497,17 @@ class IdentityFunctionalTests: XCTestCase {
         // Verify dispatched event has expected data
         XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
-        XCTAssertEqual("Push", dispatchedEvent?.data?["action"] as? String)
-        XCTAssertTrue((dispatchedEvent?.data?["trackinternal"] as? Bool) ?? false)
-        let contextData = dispatchedEvent?.data?["contextdata"] as? [String: Any]
-        XCTAssertEqual("True", contextData?["a.push.optin"] as? String)
+        let expectedPushData = """
+                {
+                    "action": "Push",
+                    "trackinternal": true,
+                    "contextdata": {
+                        "a.push.optin": "True"
+                    }
+                }
+        """
+        
+        assertEqual(expected: expectedPushData, actual: dispatchedEvent?.data)
     }
     
     // Test setting push token to nil on launch dispatches event to Analytics with a.push.optin = False
@@ -514,7 +524,9 @@ class IdentityFunctionalTests: XCTestCase {
         let dataStore = NamedCollectionDataStore(name: "com.adobe.module.identity")
         let identityProperties: IdentityProperties? = dataStore.getObject(key: "identity.properties")
         XCTAssertEqual("",  identityProperties?.pushIdentifier)
-        
+        XCTAssertTrue(dataStore.getBool(key: "analytics.push.sync") ?? false)
+        XCTAssertFalse(dataStore.getBool(key: "push.enabled") ?? true)
+
         // Verify only one event dispatched
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
@@ -522,10 +534,17 @@ class IdentityFunctionalTests: XCTestCase {
         // Verify dispatched event has expected data
         XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
-        XCTAssertEqual("Push", dispatchedEvent?.data?["action"] as? String)
-        XCTAssertTrue((dispatchedEvent?.data?["trackinternal"] as? Bool) ?? false)
-        let contextData = dispatchedEvent?.data?["contextdata"] as? [String: Any]
-        XCTAssertEqual("False", contextData?["a.push.optin"] as? String)
+        let expectedPushData = """
+                {
+                    "action": "Push",
+                    "trackinternal": true,
+                    "contextdata": {
+                        "a.push.optin": "False"
+                    }
+                }
+        """
+        
+        assertEqual(expected: expectedPushData, actual: dispatchedEvent?.data)
     }
     
     // Test calling resetIdentities will not trigger dispatch of Analytics event
