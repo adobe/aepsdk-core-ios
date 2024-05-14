@@ -513,7 +513,7 @@ class IdentityFunctionalTests: XCTestCase {
     }
     
     // Test calling resetIdentities will not trigger dispatch of Analytics event
-    func testResetIdentifiersDoesNotDispatcheAnalyticsForIdentityRequestEvent() {
+    func testResetIdentifiersDoesNotDispatchAnalyticsForIdentityRequestEvent() {
         identity.state?.identityProperties.ecid = ECID()
         XCTAssertNotNil(identity.state?.identityProperties.ecid)
         
@@ -529,7 +529,7 @@ class IdentityFunctionalTests: XCTestCase {
     }
     
     // Test changing privacy to opt-out will not trigger dispatch of Analytics event
-    func testPrivacyOptOutDoesNotDispatcheAnalyticsForIdentityRequestEvent() {
+    func testPrivacyOptOutDoesNotDispatchAnalyticsForIdentityRequestEvent() {
         identity.state?.identityProperties.ecid = ECID()
         XCTAssertNotNil(identity.state?.identityProperties.ecid)
         
