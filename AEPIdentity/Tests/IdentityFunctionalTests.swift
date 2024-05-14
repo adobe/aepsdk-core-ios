@@ -482,9 +482,16 @@ class IdentityFunctionalTests: XCTestCase {
         
         mockRuntime.simulateComingEvent(event: event)
         
+        // Verify push ID saved to persistence
+        let dataStore = NamedCollectionDataStore(name: "com.adobe.module.identity")
+        let identityProperties: IdentityProperties? = dataStore.getObject(key: "identity.properties")
+        XCTAssertEqual(encodedPushId,  identityProperties?.pushIdentifier)
+        
+        // Verify only one event dispatched
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
 
+        // Verify dispatched event has expected data
         XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
         XCTAssertEqual("Push", dispatchedEvent?.data?["action"] as? String)
@@ -503,9 +510,16 @@ class IdentityFunctionalTests: XCTestCase {
         
         mockRuntime.simulateComingEvent(event: event)
         
+        // Verify push ID saved to persistence
+        let dataStore = NamedCollectionDataStore(name: "com.adobe.module.identity")
+        let identityProperties: IdentityProperties? = dataStore.getObject(key: "identity.properties")
+        XCTAssertEqual("",  identityProperties?.pushIdentifier)
+        
+        // Verify only one event dispatched
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         let dispatchedEvent = mockRuntime.dispatchedEvents.first
 
+        // Verify dispatched event has expected data
         XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
         XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
         XCTAssertEqual("Push", dispatchedEvent?.data?["action"] as? String)
