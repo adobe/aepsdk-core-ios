@@ -5,9 +5,9 @@
         "package": "AEPRulesEngine",
         "repositoryURL": "https://github.com/adobe/aepsdk-rulesengine-ios.git",
         "state": {
-          "branch": "dev-v5.0.0",
-          "revision": "01bd861e9df32b4d2dc784b2b94d87835e813c53",
-          "version": null
+          "branch": null,
+          "revision": "514d2b3787c545bfa6749ffce5dd3e6f560c9319",
+          "version": "5.0.0"
         }
       }
     ]
