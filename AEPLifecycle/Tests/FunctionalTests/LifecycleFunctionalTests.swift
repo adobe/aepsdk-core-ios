@@ -298,7 +298,7 @@ class LifecycleFunctionalTests: XCTestCase {
     }
 
     /// Tests upgrade event when app version changes
-    func testUpgrade() {
+    func testUpgradeWhenBuildNumberChanged() {
         // setup
         let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
         let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
@@ -336,6 +336,47 @@ class LifecycleFunctionalTests: XCTestCase {
         let storedUpgradeDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.UPGRADE_DATE, fallback: nil)
         XCTAssertEqual(startEvent2.timestamp.timeIntervalSince1970, storedUpgradeDate?.timeIntervalSince1970)
         XCTAssertNotEqual(storedInstallDate, storedUpgradeDate)
+    }
+    
+    /// Tests upgrade event when app version number changes
+    func testUpgradeWhenVersionNumberChanged() {
+        // setup
+        let startEvent1 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459))
+        let pauseEvent = createPauseEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100))
+        let startEvent2 = createStartEvent().copyWithNewTimeStamp(Date(timeIntervalSince1970: 1_595_909_459 + 100 + 86400)) // next day
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
+
+        let mockRuntimeSession2 = TestableExtensionRuntime()
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationClose)
+        mockRuntimeSession2.ignoreEvent(type: EventType.lifecycle, source: EventSource.applicationLaunch)
+
+        mockRuntimeSession2.simulateSharedState(for: "com.adobe.module.configuration", data: (["lifecycle.sessionTimeout": 30], .set))
+
+        // test
+        mockRuntime.simulateComingEvents(startEvent1, pauseEvent)
+
+        // simulate a new start
+        mockSystemInfoService.applicationVersionNumber = "1.1.2"
+        let lifecycleSession2 = Lifecycle(runtime: mockRuntimeSession2)
+        lifecycleSession2.onRegistered()
+        mockRuntimeSession2.simulateComingEvents(startEvent2)
+
+        // verify
+        let upgradeEvent = mockRuntimeSession2.dispatchedEvents[0]
+        XCTAssertFalse(upgradeEvent.lifecycleContextData.keys.contains("upgradeevent"))
+        XCTAssertEqual("Test app name 1.1.2 (1.1.1.12345)", upgradeEvent.lifecycleContextData["appid"] as? String)
+
+        let sharedState = mockRuntimeSession2.createdSharedStates[1]
+        let lifecycleData = sharedState?["lifecyclecontextdata"] as? [String: Any]
+        XCTAssertNotNil(lifecycleData)
+        XCTAssertFalse(lifecycleData!.keys.contains("upgradeevent"))
+
+        // persistance
+        let storedInstallDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, fallback: nil)
+        XCTAssertEqual(startEvent1.timestamp.timeIntervalSince1970, storedInstallDate?.timeIntervalSince1970)
+        let storedUpgradeDate: Date? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.UPGRADE_DATE, fallback: nil)
+        XCTAssertEqual(nil, storedUpgradeDate?.timeIntervalSince1970)
     }
 
     /// Tests dailyUserEvent when the new launch happens in the same day

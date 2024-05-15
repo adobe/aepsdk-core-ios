@@ -162,7 +162,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual(pauseEvent.id, dispatchedCloseEvent.parentID)
     }
 
-    func testLifecycleV2_appUpgrade() {
+    func testLifecycleV2_appUpgrade_buildNumberChanged() {
         // setup
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
@@ -183,6 +183,46 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // Update app version
         mockSystemInfoService.applicationBuildNumber = "next-build-number"
+        // application launch upgrade hit
+        mockRuntime.simulateComingEvents(createStartEvent())
+        waitForProcessing()
+
+        // verify
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch, application close, application launch
+
+        // event data
+        let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
+        let xdm = dispatchedUpgradeEvent.data?["xdm"] as? [String:Any] ?? [:]
+        XCTAssertEqual("Application Launch (Foreground)", dispatchedUpgradeEvent.name)
+        XCTAssertEqual(EventType.lifecycle, dispatchedUpgradeEvent.type)
+        XCTAssertEqual(EventSource.applicationLaunch, dispatchedUpgradeEvent.source)
+        XCTAssertNotNil(xdm["timestamp"] as? String)
+        XCTAssertTrue(NSDictionary(dictionary: xdm["environment"] as? [String : Any] ?? [:]).isEqual(to: expectedEnvironmentInfo))
+        XCTAssertTrue(NSDictionary(dictionary: xdm["device"] as? [String : Any] ?? [:]).isEqual(to: expectedDeviceInfo))
+        XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+    }
+    
+    func testLifecycleV2_appUpgrade_versionNumberChanged() {
+        // setup
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
+        let expectedApplicationInfo = [
+            "name": "test-app-name",
+            "version": "next-version-number (build-number)",
+            "isUpgrade": true,
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
+        ] as [String : Any]
+
+        // test
+        // appplication launch install hit
+        mockRuntime.simulateComingEvents(createStartEvent())
+        waitForProcessing()
+        // application close
+        mockRuntime.simulateComingEvents(createPauseEvent())
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
+
+        // Update app version
+        mockSystemInfoService.applicationVersionNumber = "next-version-number"
         // application launch upgrade hit
         mockRuntime.simulateComingEvents(createStartEvent())
         waitForProcessing()
