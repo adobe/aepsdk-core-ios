@@ -60,12 +60,13 @@ struct PushIDManager: PushIDManageable {
         properties.pushIdentifier = pushId
         properties.saveToPersistence()
 
-        if pushId?.isEmpty ?? true, !pushEnabled {
+        let isPushEnabled = pushEnabled
+        if pushId?.isEmpty ?? true, !isPushEnabled {
             updatePushStatusAndSendAnalyticsEvent(enabled: false)
             Log.trace(label: "\(LOG_TAG):\(#function)", "First time sending a.push.optin False")
-        } else if pushId?.isEmpty ?? true, pushEnabled {
+        } else if pushId?.isEmpty ?? true, isPushEnabled {
             updatePushStatusAndSendAnalyticsEvent(enabled: false)
-        } else if let pushId = pushId, !pushId.isEmpty, !pushEnabled {
+        } else if let pushId = pushId, !pushId.isEmpty, !isPushEnabled {
             updatePushStatusAndSendAnalyticsEvent(enabled: true)
         }
     }

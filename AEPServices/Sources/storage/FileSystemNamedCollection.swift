@@ -21,7 +21,8 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     private var appGroup: String?
 
     func setAppGroup(_ appGroup: String?) {
-        queue.async {
+        queue.async { [weak self] in
+            guard let self = self else { return }
             self.appGroup = appGroup
             if let appGroup = appGroup {
                 self.appGroupUrl = self.fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
@@ -36,8 +37,8 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     }
 
     func set(collectionName: String, key: String, value: Any?) {
-        queue.async {
-            guard let fileUrl = self.fileUrl(for: collectionName) else {
+        queue.async { [weak self] in
+            guard let self = self, let fileUrl = self.fileUrl(for: collectionName) else {
                 return
             }
             var dict = self.getDictFor(collectionName: collectionName) ?? [:]
@@ -69,8 +70,8 @@ class FileSystemNamedCollection: NamedCollectionProcessing {
     }
 
     func remove(collectionName: String, key: String) {
-        queue.async {
-            guard let fileUrl = self.fileUrl(for: collectionName) else {
+        queue.async { [weak self] in
+            guard let self = self, let fileUrl = self.fileUrl(for: collectionName) else {
                 return
             }
             if var dict = self.getDictFor(collectionName: collectionName) {
