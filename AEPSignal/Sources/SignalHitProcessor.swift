@@ -70,6 +70,10 @@ class SignalHitProcessor: HitProcessing {
             // retry this hit later
             Log.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(hit.url.absoluteString)")
             completion(false)
+        } else if let error = connection.error as? URLError, NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES.contains(error.code) {
+            // retry this hit later as the request failed with a recoverable transport error
+            Log.debug(label: LOG_TAG, "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(urlString)")
+            completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
             Log.warning(label: LOG_TAG, "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(urlString)")

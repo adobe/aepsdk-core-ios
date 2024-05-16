@@ -65,6 +65,10 @@ class IdentityHitProcessor: HitProcessing {
             // retry this hit later
             Log.debug(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url \(hit.url.absoluteString) failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1)")
             completion(false)
+        } else if let error = connection.error as? URLError, NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES.contains(error.code) {
+            // retry this hit later as the request failed with a recoverable transport error
+            Log.debug(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url \(urlString) failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1)")
+            completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
             Log.warning(label: "\(LOG_TAG):\(#function)", "Dropping Identity hit, request with url \(urlString) failed with error \(connection.error?.localizedDescription ?? "") and unrecoverable status code \(connection.responseCode ?? -1)")
