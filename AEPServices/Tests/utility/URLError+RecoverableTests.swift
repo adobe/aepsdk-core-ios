@@ -14,7 +14,7 @@ import XCTest
 
 @testable import AEPServices
 
-class URLErrorHelperTests: XCTestCase {
+class URLErrorRecoverableTests: XCTestCase {
    
     func test_isrecoverable_recoverableErrors_returnsTrue() {
         var recoverableErrors = [
