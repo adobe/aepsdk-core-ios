@@ -17,7 +17,7 @@ import XCTest
 class URLErrorRecoverableTests: XCTestCase {
    
     func test_isrecoverable_recoverableErrors_returnsTrue() {
-        var recoverableErrors = [
+        let recoverableErrors = [
             URLError.timedOut,
             URLError.cannotConnectToHost,
             URLError.networkConnectionLost,
