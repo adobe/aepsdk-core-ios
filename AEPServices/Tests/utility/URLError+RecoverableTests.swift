@@ -26,7 +26,7 @@ class URLErrorRecoverableTests: XCTestCase {
         ]
         
         recoverableErrors.forEach { errorCode in
-           XCTAssertTrue(URLError(errorCode).isRecoverable)
+           XCTAssertTrue(URLError(errorCode).isRecoverable, "\(errorCode) should be recoverable")
         }
     }
     
@@ -40,7 +40,7 @@ class URLErrorRecoverableTests: XCTestCase {
         ]
         
         unrecoverableErrors.forEach { errorCode in
-           XCTAssertFalse(URLError(errorCode).isRecoverable)
+           XCTAssertFalse(URLError(errorCode).isRecoverable, "\(errorCode) should not be recoverable")
         }
     }
 }
