@@ -15,7 +15,7 @@ import Foundation
 extension URLError {
 
     /// Returns `true` if the URLError is recoverable, `false` otherwise.
-    var isRecoverable: Bool {
+    public var isRecoverable: Bool {
         NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES.contains(self.code)
     }
 }
