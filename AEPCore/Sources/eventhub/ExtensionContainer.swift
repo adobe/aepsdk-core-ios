@@ -28,7 +28,12 @@ class ExtensionContainer {
     /// The XDM `SharedState` associated with the extension
     var xdmSharedState: SharedState?
 
-    var sharedStateName: String = "invalidSharedStateName"
+    /// Make access to the `sharedStateName` thread safe via our dispatch queue
+    private var _sharedStateName = "invalidSharedStateName"
+    var sharedStateName: String {
+        get { containerQueue.sync { self._sharedStateName } }
+        set { containerQueue.async { self._sharedStateName = newValue } }
+    }
 
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
