@@ -28,7 +28,7 @@ class ExtensionContainer {
     /// The XDM `SharedState` associated with the extension
     var xdmSharedState: SharedState?
 
-    var sharedStateName: String = "invalidSharedStateName"
+    private var _sharedStateName: String = "invalidSharedStateName"
 
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
@@ -44,6 +44,19 @@ class ExtensionContainer {
 
     private var _lastProcessedEvent: Event?
 
+    var sharedStateName: String {
+        get {
+            containerQueue.sync {
+                return _sharedStateName
+            }
+        }
+        set {
+            containerQueue.sync {
+                _sharedStateName = newValue
+            }
+        }
+    }
+    
     /// The last `Event` that was processed by this extension, nil if no events have been processed
     var lastProcessedEvent: Event? {
         get {
