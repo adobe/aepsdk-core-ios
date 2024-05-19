@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "AEPLifecycle"
-  s.version          = "4.2.3"
+  s.version          = "4.2.4"
   s.summary          = "Lifecycle extension for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
                         The AEPLifecycle extension is used to track application lifecycle including session metricss and device related data.
