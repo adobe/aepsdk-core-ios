@@ -80,7 +80,7 @@ targets:
   $PROJECT_NAME:
     type: framework
     sources: Sources
-    platform: iOS
+    platform: tvOS
     deploymentTarget: "11.0"
     settings:
       GENERATE_INFOPLIST_FILE: YES
