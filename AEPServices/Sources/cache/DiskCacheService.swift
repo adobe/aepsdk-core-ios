@@ -14,9 +14,9 @@ import Foundation
 
 /// Implements a cache which saves and retrieves data from the disk
 class DiskCacheService: Caching {
-    var dataStore = NamedCollectionDataStore(name: "DiskCacheService")
-    let cachePrefix = "com.adobe.mobile.diskcache/"
-    let fileManager = FileManager.default
+    private let dataStore = NamedCollectionDataStore(name: "DiskCacheService")
+    private let cachePrefix = "com.adobe.mobile.diskcache/"
+    private let fileManager = FileManager.default
     private let LOG_PREFIX = "DiskCacheService"
     private let EXPIRY_DATE = "expirydate"
     private let METADATA = "metadata"
