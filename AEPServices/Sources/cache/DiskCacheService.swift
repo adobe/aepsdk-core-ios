@@ -14,9 +14,9 @@ import Foundation
 
 /// Implements a cache which saves and retrieves data from the disk
 class DiskCacheService: Caching {
-    lazy var dataStore = NamedCollectionDataStore(name: "DiskCacheService")
-    let cachePrefix = "com.adobe.mobile.diskcache/"
-    let fileManager = FileManager.default
+    private let dataStore = NamedCollectionDataStore(name: "DiskCacheService")
+    private let cachePrefix = "com.adobe.mobile.diskcache/"
+    private let fileManager = FileManager.default
     private let LOG_PREFIX = "DiskCacheService"
     private let EXPIRY_DATE = "expirydate"
     private let METADATA = "metadata"
@@ -35,7 +35,6 @@ class DiskCacheService: Caching {
         }
         
         let attributes: [String: Any] = [
-
             EXPIRY_DATE: entry.expiry.date.timeIntervalSince1970,
             METADATA: newMetadata
         ]
