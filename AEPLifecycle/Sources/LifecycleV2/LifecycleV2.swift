@@ -146,8 +146,8 @@ class LifecycleV2 {
 
     /// - Returns: Bool indicating whether the app has been upgraded
     private func isUpgrade() -> Bool {
-        if let currentAppVersion = systemInfoService.getApplicationBuildNumber(),
-           let previousAppVersion = dataStore.getString(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION) {
+        if let previousAppVersion = dataStore.getString(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION) {
+            let currentAppVersion = LifecycleV2.getAppVersion(systemInfoService: systemInfoService)
             return previousAppVersion != currentAppVersion
         }
 
@@ -156,7 +156,15 @@ class LifecycleV2 {
 
     /// Persist the application version into dataStore
     private func persistAppVersion() {
-        guard let currentAppVersion = systemInfoService.getApplicationBuildNumber() else { return }
+        let currentAppVersion = LifecycleV2.getAppVersion(systemInfoService: systemInfoService)
         dataStore.set(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION, value: currentAppVersion)
+    }
+    
+    /// Returns the application version in the format appVersion (versionCode). Example: 2.3 (10)
+    /// - Returns: the app version as a `String` formatted in the specified format.
+    static func getAppVersion(systemInfoService: SystemInfoService) -> String {
+        let appBuildNumber = systemInfoService.getApplicationBuildNumber() ?? ""
+        let appVersionNumber = systemInfoService.getApplicationVersionNumber() ?? ""
+        return "\(appVersionNumber) (\(appBuildNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

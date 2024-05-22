@@ -269,14 +269,7 @@ class IdentityState {
         identityProperties.privacyStatus = newPrivacyStatus
 
         if newPrivacyStatus == .optedOut {
-            identityProperties.ecid = nil
-            identityProperties.advertisingIdentifier = nil
-            identityProperties.blob = nil
-            identityProperties.locationHint = nil
-            identityProperties.customerIds?.removeAll()
-            identityProperties.isAidSynced = false
-            identityProperties.pushIdentifier = nil
-            pushIdManager.updatePushId(pushId: nil)
+            clearIdentifiers()
             identityProperties.saveToPersistence()
             createSharedState(identityProperties.toEventData(), event)
         } else if identityProperties.ecid == nil {
@@ -337,15 +330,7 @@ class IdentityState {
     func resetIdentifiers(event: Event,
                           createSharedState: ([String: Any], Event) -> Void) {
         guard identityProperties.privacyStatus != .optedOut else { return }
-        // clear the properties
-        identityProperties.ecid = nil
-        identityProperties.advertisingIdentifier = nil
-        identityProperties.blob = nil
-        identityProperties.locationHint = nil
-        identityProperties.customerIds?.removeAll()
-        identityProperties.isAidSynced = false
-        identityProperties.pushIdentifier = nil
-        pushIdManager.resetPersistedFlags()
+        clearIdentifiers()
         hitQueue.clear() // clear hit queue
 
         // do a force sync to generate ECID, then save the properties to persistence.
@@ -478,5 +463,17 @@ class IdentityState {
             identityProperties.saveToPersistence()
             Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID value \(identityProperties.ecid?.ecidString ?? "nil")")
         }
+    }
+    
+    /// Clears identifiers in held `IdentityProperties` and resets flags in `PushIdManager`.
+    private func clearIdentifiers() {
+        identityProperties.ecid = nil
+        identityProperties.advertisingIdentifier = nil
+        identityProperties.blob = nil
+        identityProperties.locationHint = nil
+        identityProperties.customerIds?.removeAll()
+        identityProperties.isAidSynced = false
+        identityProperties.pushIdentifier = nil
+        pushIdManager.resetPersistedFlags()
     }
 }

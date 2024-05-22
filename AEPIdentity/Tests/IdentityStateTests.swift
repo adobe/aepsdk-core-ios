@@ -1054,7 +1054,8 @@ class IdentityStateTests: XCTestCase {
         // verify
         wait(for: [sharedStateExpectation], timeout: 1)
         XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
-        XCTAssertTrue(mockPushIdManager.calledUpdatePushId)
+        XCTAssertFalse(mockPushIdManager.calledUpdatePushId)
+        XCTAssertTrue(mockPushIdManager.calledResetPersistedFlags)
         XCTAssertTrue(mockHitQueue.calledSuspend && mockHitQueue.calledClear) // we should suspend the queue and clear it
         XCTAssertEqual(PrivacyStatus.optedOut, state.identityProperties.privacyStatus) // privacy status should change to opt out
     }
