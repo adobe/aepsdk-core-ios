@@ -26,6 +26,9 @@ class ApplicationSystemInfoService: SystemInfoService {
     private let DEFAULT_LOCALE = "en-US"
 
     private let bundle: Bundle
+
+    private let queue = DispatchQueue(label: "com.adobe.applicationSystemInfoService.queue")
+
     private lazy var userAgent: String = {
         let model = UIDevice.current.model
         let osVersion = UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")
@@ -68,7 +71,10 @@ class ApplicationSystemInfoService: SystemInfoService {
     }
 
     func getDefaultUserAgent() -> String {
-        return userAgent
+        // Ensure the lazy variable is initialized correctly during concurrent API calls.
+        queue.sync {
+            return userAgent
+        }
     }
 
     func getActiveLocaleName() -> String {
