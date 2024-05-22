@@ -27,9 +27,14 @@ class ExtensionContainer {
 
     /// The XDM `SharedState` associated with the extension
     var xdmSharedState: SharedState?
-
-    var sharedStateName: String = "invalidSharedStateName"
-
+    
+    /// The shared state name associated with the extension
+    private var _sharedStateName = "invalidSharedStateName"    
+    var sharedStateName: String {
+        get { containerQueue.sync { self._sharedStateName } }
+        set { containerQueue.async { self._sharedStateName = newValue } }
+    }
+    
     /// The extension's dispatch queue
     let extensionQueue: DispatchQueue
 
@@ -42,25 +47,16 @@ class ExtensionContainer {
     /// Listeners array of `EventListeners` for this extension
     let eventListeners: ThreadSafeArray<EventListenerContainer>
 
-    private var _lastProcessedEvent: Event?
-
     /// The last `Event` that was processed by this extension, nil if no events have been processed
-    var lastProcessedEvent: Event? {
-        get {
-            containerQueue.sync {
-                return _lastProcessedEvent
-            }
-        }
-        set {
-            containerQueue.sync {
-                _lastProcessedEvent = newValue
-            }
-        }
+    private var _lastProcessedEvent: Event?        
+    var lastProcessedEvent: Event? { 
+        get { containerQueue.sync { self._lastProcessedEvent } }
+        set { containerQueue.async { self._lastProcessedEvent = newValue } }
     }
 
     init(_ name: String, _ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
         extensionQueue = queue
-        self.containerQueue = DispatchQueue(label: "\(name).containerqueue")
+        containerQueue = DispatchQueue(label: "\(name).containerqueue")
         eventOrderer = OperationOrderer<Event>()
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)

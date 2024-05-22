@@ -73,34 +73,40 @@ class IdentityHitProcessorTests: XCTestCase {
         XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
     }
 
-    /// Tests that when the network request fails but has a recoverable error that we will retry the hit and do not invoke the response handler for that hit
-    func testProcessHitRecoverableNetworkError() {
+    /// a response code in the list of `NetworkServiceConstants.RECOVERABLE_ERROR_CODES` should not result in
+    /// the `DataEntity` being removed from the queue
+    func testProcessHitRecoverableHTTPError() {
         // setup
-        let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should be retried")
         let expectedUrl = URL(string: "adobe.com")!
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
-        let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil), error: nil)
         
-        mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
+        NetworkServiceConstants.RECOVERABLE_ERROR_CODES.forEach { error in
+            let expectation = XCTestExpectation(description: "Callback should be invoked with false signaling this hit should be retried")
+            mockNetworkService?.reset()
+            
+            let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: error , httpVersion: nil, headerFields: nil), error: nil)
+            
+            mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
 
-        let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
+            let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
 
-        // test
-        hitProcessor.processHit(entity: entity) { success in
-            XCTAssertFalse(success)
-            expectation.fulfill()
+            // test
+            hitProcessor.processHit(entity: entity) { success in
+                XCTAssertFalse(success)
+                expectation.fulfill()
+            }
+
+            // verify
+            wait(for: [expectation], timeout: 1)
+            XCTAssertTrue(responseCallbackArgs.isEmpty) // response handler should have not been invoked
+            XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
+            XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
         }
-
-        // verify
-        wait(for: [expectation], timeout: 1)
-        XCTAssertTrue(responseCallbackArgs.isEmpty) // response handler should have not been invoked
-        XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
-        XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
     }
 
-    /// Tests that when the network request fails and does not have a recoverable response code that we invoke the response handler and do not retry the hit
-    func testProcessHitUnrecoverableNetworkError() {
+    /// a response code that is not 2xx or in the recoverable list should result in removing the hit from the queue
+    func testProcessHitUnrecoverableHTTPError() {
         // setup
         let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should not be retried")
         let expectedUrl = URL(string: "adobe.com")!
@@ -123,5 +129,71 @@ class IdentityHitProcessorTests: XCTestCase {
         XCTAssertFalse(responseCallbackArgs.isEmpty) // response handler should have been invoked
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
         XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
+    }
+    
+    // an error in the list of `NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES` should not result in
+    /// the `DataEntity` being removed from the queue
+    func testProcessHitRecoverableURLError() throws {
+        // setup
+        let expectedUrl = URL(string: "adobe.com")!
+        let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
+        
+        NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES.forEach { error in
+            let expectation = XCTestExpectation(description: "Callback should be invoked with false signaling this hit should be retried")
+            mockNetworkService?.reset()
+            
+            let testConnection = HttpConnection(data: nil, response: nil, error: URLError(error))
+            
+            mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
+
+            let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
+
+            // test
+            hitProcessor.processHit(entity: entity) { success in
+                XCTAssertFalse(success)
+                expectation.fulfill()
+            }
+
+            // verify
+            wait(for: [expectation], timeout: 1)
+            XCTAssertTrue(responseCallbackArgs.isEmpty) // response handler should have not been invoked
+            XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
+            XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
+        }
+    }
+    
+    // an error not in the list of `NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES` should result in
+    /// the `DataEntity` being removed from the queue
+    func testProcessHitUnrecoverableError() throws {
+        // setup
+        let expectedUrl = URL(string: "adobe.com")!
+        let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
+        let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
+        
+        // Errors not in recoverable error list
+        let unrecoverableErrors:[Error] = [AEPError.networkError, URLError(URLError.badURL)]
+        unrecoverableErrors.forEach { error in
+            let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should not be retried")
+            mockNetworkService?.reset()
+            
+            let testConnection = HttpConnection(data: nil, response: nil, error: error)
+            
+            mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
+            
+            let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
+            
+            // test
+            hitProcessor.processHit(entity: entity) { success in
+                XCTAssertTrue(success)
+                expectation.fulfill()
+            }
+            
+            // verify
+            wait(for: [expectation], timeout: 1)
+            XCTAssertFalse(responseCallbackArgs.isEmpty) // response handler should have been invoked
+            XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
+            XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
+        }
     }
 }
