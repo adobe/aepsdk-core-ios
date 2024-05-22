@@ -82,7 +82,7 @@ class IdentityHitProcessorTests: XCTestCase {
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         
         NetworkServiceConstants.RECOVERABLE_ERROR_CODES.forEach { error in
-            let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should not be retried")
+            let expectation = XCTestExpectation(description: "Callback should be invoked with false signaling this hit should be retried")
             mockNetworkService?.reset()
             
             let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: error , httpVersion: nil, headerFields: nil), error: nil)
@@ -140,7 +140,7 @@ class IdentityHitProcessorTests: XCTestCase {
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         
         NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES.forEach { error in
-            let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should not be retried")
+            let expectation = XCTestExpectation(description: "Callback should be invoked with false signaling this hit should be retried")
             mockNetworkService?.reset()
             
             let testConnection = HttpConnection(data: nil, response: nil, error: URLError(error))
