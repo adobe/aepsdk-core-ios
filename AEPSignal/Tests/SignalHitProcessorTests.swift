@@ -134,7 +134,7 @@ class SignalHitProcessorTests: XCTestCase {
     
     /// a response code in the list of `NetworkServiceConstants.RECOVERABLE_ERROR_CODES` should not result in
     /// the `DataEntity` being removed from the queue
-    func testProcessHitRecoverableErrorResponse() throws {
+    func testProcessHitRecoverableHTTPError() throws {
         // setup
         let entity = SignalHit(url: testUrl, postBody: testPostBody, contentType: testContentType,
                                timeout: testTimeout, event: testEvent)
@@ -142,22 +142,26 @@ class SignalHitProcessorTests: XCTestCase {
             throw SignalHitProcessingError.jsonEncodingFailure
         }
         
-        let testConnection = HttpConnection(data: nil,
-                                            response: HTTPURLResponse(url: testUrl, statusCode: NetworkServiceConstants.RECOVERABLE_ERROR_CODES.first!, httpVersion: nil, headerFields: nil),
-                                            error: nil)
-        mockNetworkService.setMockResponse(url: testUrl, responseConnection: testConnection)
-        
-        // test
-        hitProcessor.processHit(entity: DataEntity(data: jsonData)) { (discardProcessedHit) in
-            XCTAssertFalse(discardProcessedHit)
+        NetworkServiceConstants.RECOVERABLE_ERROR_CODES.forEach { error in
+            mockNetworkService.reset()
+            
+            let testConnection = HttpConnection(data: nil,
+                                                response: HTTPURLResponse(url: testUrl, statusCode: error, httpVersion: nil, headerFields: nil),
+                                                error: nil)
+            mockNetworkService.setMockResponse(url: testUrl, responseConnection: testConnection)
+            
+            // test
+            hitProcessor.processHit(entity: DataEntity(data: jsonData)) { (discardProcessedHit) in
+                XCTAssertFalse(discardProcessedHit)
+            }
+            
+            // verify
+            XCTAssertTrue(mockNetworkService.connectAsyncCalled)
         }
-        
-        // verify
-        XCTAssertTrue(mockNetworkService.connectAsyncCalled)
     }
     
     /// a response code that is not 2xx or in the recoverable list should result in removing the hit from the queue
-    func testProcessHitUnrecoverableErrorResponse() throws {
+    func testProcessHitUnrecoverableHTTPError() throws {
         // setup
         let entity = SignalHit(url: testUrl, postBody: testPostBody, contentType: testContentType,
                                timeout: testTimeout, event: testEvent)
@@ -177,6 +181,64 @@ class SignalHitProcessorTests: XCTestCase {
         
         // verify
         XCTAssertTrue(mockNetworkService.connectAsyncCalled)
+    }
+    
+    // an error in the list of `NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES` should not result in
+    /// the `DataEntity` being removed from the queue
+    func testProcessHitRecoverableURLError() throws {
+        // setup
+        let entity = SignalHit(url: testUrl, postBody: testPostBody, contentType: testContentType,
+                               timeout: testTimeout, event: testEvent)
+        guard let jsonData = try? JSONEncoder().encode(entity) else {
+            throw SignalHitProcessingError.jsonEncodingFailure
+        }
+        
+        NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES.forEach { err in
+            mockNetworkService.reset()
+
+            let testConnection = HttpConnection(data: nil,
+                                                response: nil,
+                                                error: URLError(err))
+            mockNetworkService.setMockResponse(url: testUrl, responseConnection: testConnection)
+            
+            // test
+            hitProcessor.processHit(entity: DataEntity(data: jsonData)) { (discardProcessedHit) in
+                XCTAssertFalse(discardProcessedHit)
+            }
+            
+            // verify
+            XCTAssertTrue(mockNetworkService.connectAsyncCalled)
+        }
+    }
+    
+    // an error not in the list of `NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES` should result in
+    /// the `DataEntity` being removed from the queue
+    func testProcessHitUnrecoverableError() throws {
+        // setup
+        let entity = SignalHit(url: testUrl, postBody: testPostBody, contentType: testContentType,
+                               timeout: testTimeout, event: testEvent)
+        guard let jsonData = try? JSONEncoder().encode(entity) else {
+            throw SignalHitProcessingError.jsonEncodingFailure
+        }
+        
+        // Errors not in recoverable error list
+        let unrecoverableErrors:[Error] = [AEPError.networkError, URLError(URLError.badURL)]
+        unrecoverableErrors.forEach { error in
+            mockNetworkService.reset()
+            
+            let testConnection = HttpConnection(data: nil,
+                                                response: nil,
+                                                error: error)
+            mockNetworkService.setMockResponse(url: testUrl, responseConnection: testConnection)
+            
+            // test
+            hitProcessor.processHit(entity: DataEntity(data: jsonData)) { (discardProcessedHit) in
+                XCTAssertTrue(discardProcessedHit)
+            }
+            
+            // verify
+            XCTAssertTrue(mockNetworkService.connectAsyncCalled)
+        }
     }
     
     // MARK: - Helpers
