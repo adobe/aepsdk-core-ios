@@ -82,8 +82,8 @@ class UserDefaultMigratorTests: XCTestCase {
     }
     
     func testIdentityMigration() {
-        let identityStoreName = UserDefaultMigratorConstants.Identity.DATASTORE_NAME
-        typealias identityKeys = UserDefaultMigratorConstants.Identity.DataStoreKeys
+        let identityStoreName = IdentityConstants.DATASTORE_NAME
+        typealias identityKeys = IdentityConstants.DataStoreKeys
         var properties = IdentityProperties()
         properties.ecid = ECID()
         properties.advertisingIdentifier = "test-ad-id"
@@ -93,9 +93,9 @@ class UserDefaultMigratorTests: XCTestCase {
         properties.customerIds = [CustomIdentity(origin: "test-origin", type: "test-type", identifier: "test-identifier", authenticationState: .authenticated)]
         properties.lastSync = Date()
         
-        let identityPropertyKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.IDENTITY_PROPERTIES.rawValue)
-        let identityPushEnabledKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.PUSH_ENABLED.rawValue)
-        let identityAnalyticsPushEnabledKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.ANALYTICS_PUSH_ENABLED.rawValue)
+        let identityPropertyKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.IDENTITY_PROPERTIES)
+        let identityPushEnabledKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.PUSH_ENABLED)
+        let identityAnalyticsPushEnabledKey = keyWithPrefix(datastoreName: identityStoreName, key: identityKeys.ANALYTICS_PUSH_SYNC)
         let encoder = JSONEncoder()
         if let encodedValue = try? encoder.encode(properties) {
             defaults.set(encodedValue, forKey: identityPropertyKey)
@@ -106,7 +106,7 @@ class UserDefaultMigratorTests: XCTestCase {
         UserDefaultsMigrator().migrate()
         
         var setProperties: IdentityProperties?
-        if let savedString = mockDataStore.dict[identityKeys.IDENTITY_PROPERTIES.rawValue] as? String, let savedData = savedString.data(using: .utf8) {
+        if let savedString = mockDataStore.dict[identityKeys.IDENTITY_PROPERTIES] as? String, let savedData = savedString.data(using: .utf8) {
             setProperties =  try? JSONDecoder().decode(IdentityProperties.self, from: savedData)
         }
         XCTAssertEqual(setProperties?.ecid, properties.ecid)
@@ -116,8 +116,8 @@ class UserDefaultMigratorTests: XCTestCase {
         XCTAssertEqual(setProperties?.locationHint, properties.locationHint)
         XCTAssertEqual(setProperties?.customerIds, properties.customerIds)
         XCTAssertEqual(setProperties?.lastSync, properties.lastSync)
-        XCTAssertTrue(mockDataStore.dict[identityKeys.PUSH_ENABLED.rawValue] as! Bool)
-        XCTAssertFalse(mockDataStore.dict[identityKeys.ANALYTICS_PUSH_ENABLED.rawValue] as! Bool)
+        XCTAssertTrue(mockDataStore.dict[identityKeys.PUSH_ENABLED] as? Bool ?? false)
+        XCTAssertFalse(mockDataStore.dict[identityKeys.ANALYTICS_PUSH_SYNC] as? Bool ?? true)
         XCTAssertNil(defaults.object(forKey: identityPropertyKey))
         XCTAssertNil(defaults.object(forKey: identityPushEnabledKey))
         XCTAssertNil(defaults.object(forKey: identityAnalyticsPushEnabledKey))

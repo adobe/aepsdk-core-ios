@@ -69,7 +69,7 @@ enum UserDefaultMigratorConstants {
         enum DataStoreKeys: String, CaseIterable {
             case IDENTITY_PROPERTIES = "identity.properties"
             case PUSH_ENABLED = "push.enabled"
-            case ANALYTICS_PUSH_ENABLED = "analytics.push.enabled"
+            case ANALYTICS_PUSH_SYNC = "analytics.push.sync"
         }
     }
     
