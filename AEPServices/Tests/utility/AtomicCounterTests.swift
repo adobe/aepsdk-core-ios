@@ -15,37 +15,26 @@ import XCTest
 
 class AtomicCounterTests: XCTestCase {
     var atomicCounter: AtomicCounter!
-    
+
     override func setUp() {
         atomicCounter = AtomicCounter()
     }
-    
+
     func testAtomicCounterSimple() {
-        var counter = 0
-        let finalCount = 50
-        for _ in 0 ..< finalCount {
-            counter = atomicCounter.incrementAndGet()
+        let count = 50
+        for _ in 0 ..< count {
+            _ = atomicCounter.incrementAndGet()
         }
-        
-        XCTAssertEqual(counter, finalCount)
+        XCTAssertEqual(atomicCounter.get(), count)
     }
-    
+
     func testAtomicCounterMultiThread() {
-        let threadCount = 10
-        var counter = 0
-        let expectation = XCTestExpectation()
-        expectation.assertForOverFulfill = true
-        expectation.expectedFulfillmentCount = threadCount
-        for _ in 0 ..< threadCount {
-            DispatchQueue.global().async {
-                counter = self.atomicCounter.incrementAndGet()
-                expectation.fulfill()
-            }
+        let count = 100
+        DispatchQueue.concurrentPerform(iterations: count) { _ in
+            _ = self.atomicCounter.incrementAndGet()
         }
-        
-        wait(for: [expectation], timeout: 1.0)
-        
-        XCTAssertEqual(counter, threadCount)
+
+        XCTAssertEqual(atomicCounter.get(), count)
     }
 }
 
