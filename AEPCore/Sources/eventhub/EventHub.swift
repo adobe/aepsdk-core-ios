@@ -209,14 +209,7 @@ final class EventHub {
     func createSharedState(extensionName: String, data: [String: Any]?, event: Event?, sharedStateType: SharedStateType = .standard) {
         eventHubQueue.async { [weak self] in
             guard let self = self else { return }
-            guard let (sharedState, version) = self.versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) else {
-                Log.warning(label: self.LOG_TAG, "Error creating \(sharedStateType.rawValue) shared state for \(extensionName)")
-                return
-            }
-
-            sharedState.set(version: version, data: data)
-            Log.debug(label: self.LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
-            self.dispatchInternal(event: self.createSharedStateEvent(extensionName: extensionName, sharedStatetype: sharedStateType))
+            self.createSharedStateInternal(extensionName: extensionName, data: data, event: event, sharedStateType: sharedStateType)
         }
     }
 
@@ -335,15 +328,8 @@ final class EventHub {
                 EventHubConstants.EventDataKeys.WRAPPER: wrapperInfo,
                 EventHubConstants.EventDataKeys.EXTENSIONS: extensionsInfo]
 
-            guard let sharedState = self.registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(EventHubConstants.NAME) == .orderedSame })?.value.sharedState else {
-                Log.warning(label: self.LOG_TAG, "Extension not registered with EventHub")
-                return
-            }
-
-            let version = sharedState.resolve(version: 0).value == nil ? 0 : self.eventNumberCounter.incrementAndGet()
-            sharedState.set(version: version, data: data)
-            Log.debug(label: self.LOG_TAG, "Shared state created for \(EventHubConstants.NAME) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
-            self.dispatchInternal(event: self.createSharedStateEvent(extensionName: EventHubConstants.NAME, sharedStatetype: .standard))
+            // Update latest shared state with all registered extensions
+            self.createSharedStateInternal(extensionName: EventHubConstants.NAME, data: data, event: nil, sharedStateType: .standard)
         }
     }
 
@@ -411,6 +397,25 @@ final class EventHub {
             Log.trace(label: self.LOG_TAG,
                       "Dispatching Event #\(String(describing: self.eventNumberMap[event.id])) - \(event)")
         }
+    }
+    
+    /// Internal method to create a new `SharedState` for the extension with provided data, versioned at `event`
+    /// If `event` is nil, one of two behaviors will be observed:
+    /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0
+    /// 2. If this extension has previously published a shared state, shared state will be versioned at the latest
+    /// - Parameters:
+    ///   - extensionName: Extension whose `SharedState` is to be updated
+    ///   - data: Data for the `SharedState`
+    ///   - event: `Event` for which the `SharedState` should be versioned
+    private func createSharedStateInternal(extensionName: String, data: [String: Any]?, event: Event?, sharedStateType: SharedStateType = .standard) {
+        guard let (sharedState, version) = versionSharedState(extensionName: extensionName, event: event, sharedStateType: sharedStateType) else {
+            Log.warning(label: LOG_TAG, "Error creating \(sharedStateType.rawValue) shared state for \(extensionName)")
+            return
+        }
+
+        sharedState.set(version: version, data: data)
+        Log.debug(label: LOG_TAG, "\(sharedStateType.rawValue.capitalized) shared state created for \(extensionName) with version \(version) and data: \n\(PrettyDictionary.prettify(data))")
+        dispatchInternal(event: createSharedStateEvent(extensionName: extensionName, sharedStatetype: sharedStateType))
     }
 
     /// Gets the appropriate `SharedState` for the provided `extensionName` and `event`
