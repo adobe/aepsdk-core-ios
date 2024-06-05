@@ -398,7 +398,7 @@ final class EventHub {
                       "Dispatching Event #\(String(describing: self.eventNumberMap[event.id])) - \(event)")
         }
     }
-    
+
     /// Internal method to create a new `SharedState` for the extension with provided data, versioned at `event`
     /// If `event` is nil, one of two behaviors will be observed:
     /// 1. If this extension has not previously published a shared state, shared state will be versioned at 0

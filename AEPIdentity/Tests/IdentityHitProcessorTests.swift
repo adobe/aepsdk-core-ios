@@ -55,7 +55,7 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: 200, httpVersion: nil, headerFields: nil), error: nil)
-        
+
         mockNetworkService?.setMockResponse(url: expectedUrl, responseConnection: testConnection)
 
         let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
@@ -80,13 +80,13 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedUrl = URL(string: "adobe.com")!
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
-        
+
         NetworkServiceConstants.RECOVERABLE_ERROR_CODES.forEach { error in
             let expectation = XCTestExpectation(description: "Callback should be invoked with false signaling this hit should be retried")
             mockNetworkService?.reset()
-            
+
             let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: error , httpVersion: nil, headerFields: nil), error: nil)
-            
+
             mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
 
             let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
@@ -113,7 +113,7 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
         let testConnection = HttpConnection(data: nil, response: HTTPURLResponse(url: expectedUrl, statusCode: -1, httpVersion: nil, headerFields: nil), error: nil)
-        
+
         mockNetworkService?.setMockResponse(url: expectedUrl, responseConnection: testConnection)
 
         let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
@@ -130,7 +130,7 @@ class IdentityHitProcessorTests: XCTestCase {
         XCTAssertTrue(mockNetworkService?.connectAsyncCalled ?? false) // network request should have been made
         XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
     }
-    
+
     // an error in the list of `NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES` should not result in
     /// the `DataEntity` being removed from the queue
     func testProcessHitRecoverableURLError() throws {
@@ -138,13 +138,13 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedUrl = URL(string: "adobe.com")!
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
-        
+
         NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES.forEach { error in
             let expectation = XCTestExpectation(description: "Callback should be invoked with false signaling this hit should be retried")
             mockNetworkService?.reset()
-            
+
             let testConnection = HttpConnection(data: nil, response: nil, error: URLError(error))
-            
+
             mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
 
             let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
@@ -162,7 +162,7 @@ class IdentityHitProcessorTests: XCTestCase {
             XCTAssertEqual(mockNetworkService?.getNetworkRequests().first?.url, expectedUrl) // network request should be made with the url in the hit
         }
     }
-    
+
     // an error not in the list of `NetworkServiceConstants.RECOVERABLE_URL_ERROR_CODES` should result in
     /// the `DataEntity` being removed from the queue
     func testProcessHitUnrecoverableError() throws {
@@ -170,25 +170,25 @@ class IdentityHitProcessorTests: XCTestCase {
         let expectedUrl = URL(string: "adobe.com")!
         let expectedEvent = Event(name: "Hit Event", type: EventType.identity, source: EventSource.requestIdentity, data: nil)
         let hit = IdentityHit(url: expectedUrl, event: expectedEvent)
-        
+
         // Errors not in recoverable error list
         let unrecoverableErrors:[Error] = [AEPError.networkError, URLError(URLError.badURL)]
         unrecoverableErrors.forEach { error in
             let expectation = XCTestExpectation(description: "Callback should be invoked with true signaling this hit should not be retried")
             mockNetworkService?.reset()
-            
+
             let testConnection = HttpConnection(data: nil, response: nil, error: error)
-            
+
             mockNetworkService?.setMockResponse(url: expectedUrl, httpMethod: .get, responseConnection: testConnection)
-            
+
             let entity = DataEntity(uniqueIdentifier: "test-uuid", timestamp: Date(), data: try! JSONEncoder().encode(hit))
-            
+
             // test
             hitProcessor.processHit(entity: entity) { success in
                 XCTAssertTrue(success)
                 expectation.fulfill()
             }
-            
+
             // verify
             wait(for: [expectation], timeout: 1)
             XCTAssertFalse(responseCallbackArgs.isEmpty) // response handler should have been invoked

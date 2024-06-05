@@ -337,7 +337,7 @@ class LifecycleFunctionalTests: XCTestCase {
         XCTAssertEqual(startEvent2.timestamp.timeIntervalSince1970, storedUpgradeDate?.timeIntervalSince1970)
         XCTAssertNotEqual(storedInstallDate, storedUpgradeDate)
     }
-    
+
     /// Tests upgrade event when app version number changes
     func testUpgradeWhenVersionNumberChanged() {
         // setup

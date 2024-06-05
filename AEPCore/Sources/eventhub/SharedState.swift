@@ -31,7 +31,7 @@ public enum SharedStateStatus: Int {
 class SharedState {
     private let LOG_TAG: String
     private let queue: DispatchQueue /// Allows multi-threaded access to shared state.  Reads are concurrent, Add/Updates act as barriers.
-    private var head: Node? = nil
+    private var head: Node?
     var isEmpty: Bool {
         return queue.sync { head == nil }
     }
