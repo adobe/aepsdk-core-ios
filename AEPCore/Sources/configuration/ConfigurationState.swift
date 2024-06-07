@@ -68,7 +68,7 @@ class ConfigurationState {
     /// - Parameter newConfig: The new configuration
     func updateWith(newConfig: [String: Any]) {
         queue.sync {
-            self.replaceConfigurationWith(newConfig: newConfig)
+            replaceConfigurationWith(newConfig: newConfig)
         }
 
     }
@@ -79,8 +79,8 @@ class ConfigurationState {
     ///     - appId: The application identifier for which the configuration is being updated.
     func updateWith(newConfig: [String: Any], appId: String) {
         queue.sync {
-            self.appIdDownloadDateMap[appId] = Date()
-            self.replaceConfigurationWith(newConfig: newConfig)
+            appIdDownloadDateMap[appId] = Date()
+            replaceConfigurationWith(newConfig: newConfig)
         }
     }
 
@@ -94,10 +94,10 @@ class ConfigurationState {
             // Any existing programmatic configuration updates are retrieved from persistence.
             // New configuration updates are applied over the existing persisted programmatic configurations
             // New programmatic configuration updates are saved to persistence.
-            self.programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: mappedEnvironmentKeyConfig) ?? [:]) { _, updated in updated }
+            programmaticConfigInDataStore.merge(AnyCodable.from(dictionary: mappedEnvironmentKeyConfig) ?? [:]) { _, updated in updated }
 
             // The current configuration is updated with these new programmatic configuration changes.
-            self.currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: self.programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
+            currentConfiguration.merge(AnyCodable.toAnyDictionary(dictionary: programmaticConfigInDataStore) ?? [:]) { _, updated in updated }
         }
     }
 
@@ -105,9 +105,9 @@ class ConfigurationState {
     func clearConfigUpdates() {
         queue.sync {
             // Clear the programmatic config
-            self.programmaticConfigInDataStore = [:]
+            programmaticConfigInDataStore = [:]
 
-            self.replaceConfigurationWith(newConfig: self.unmergedConfiguration)
+            replaceConfigurationWith(newConfig: self.unmergedConfiguration)
         }
     }
 

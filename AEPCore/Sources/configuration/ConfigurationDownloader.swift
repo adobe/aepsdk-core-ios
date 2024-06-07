@@ -79,7 +79,9 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
 
         let networkRequest = NetworkRequest(url: url, httpMethod: .get, httpHeaders: headers)
 
-        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { [weak self] httpConnection in
+            guard let self = self else { return }
+
             // If we get a 304 back, we can use the config in cache and exit early
             if httpConnection.responseCode == 304 {
                 completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cacheable))
