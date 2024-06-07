@@ -69,7 +69,7 @@ public class PersistentHitQueue: HitQueuing {
             self.isTaskScheduled = true
             self.processor.processHit(entity: hit, completion: { [weak self] success in
                 guard let self = self else { return }
-                
+
                 if success {
                     self.queue.async {
                         // successful processing of hit
@@ -82,12 +82,12 @@ public class PersistentHitQueue: HitQueuing {
                         }
                     }
                 } else {
-                        // processing hit failed, retry after the retry interval
-                        self.queue.asyncAfter(deadline: .now() + self.processor.retryInterval(for: hit)) { [weak self] in
-                            guard let self = self else { return }
-                            self.isTaskScheduled = false
-                            self.processNextHit()
-                        }
+                    // processing hit failed, retry after the retry interval
+                    self.queue.asyncAfter(deadline: .now() + self.processor.retryInterval(for: hit)) { [weak self] in
+                        guard let self = self else { return }
+                        self.isTaskScheduled = false
+                        self.processNextHit()
+                    }
                 }
             })
         }
