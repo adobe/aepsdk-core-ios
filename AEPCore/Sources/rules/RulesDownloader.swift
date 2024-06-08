@@ -55,9 +55,7 @@ struct RulesDownloader: RulesLoader {
         }
 
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
-        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { [weak self] httpConnection in
-            guard let self = self else { return }
-
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in            
             if httpConnection.responseCode == 304 {
                 completion(.failure(.notModified))
                 return

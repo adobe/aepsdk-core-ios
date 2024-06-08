@@ -24,7 +24,9 @@ public extension LaunchRulesEngine {
             return
         }
         let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
-        rulesDownloader.loadRulesFromUrl(rulesUrl: url) { result in
+        rulesDownloader.loadRulesFromUrl(rulesUrl: url) { [weak self] result in
+            guard let self = self else { return }
+
             switch result {
             case .success(let data):
                 guard let rules = JSONRulesParser.parse(data) else {
