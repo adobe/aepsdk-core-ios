@@ -54,6 +54,7 @@ enum CoreConstants {
         static let EXPERIENCE_CLOUD_SERVER = "experienceCloud.server"
         static let ADVERTISING_IDENTIFIER = "advertisingidentifier"
         static let PUSH_IDENTIFIER = "pushidentifier"
+        static let DEBUG = "debug"
     }
 
     enum DataStoreKeys {
