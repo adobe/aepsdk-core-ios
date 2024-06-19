@@ -352,7 +352,7 @@
                 self.messageMonitor.dismissMessage()
                 return
             }
-            
+
             DispatchQueue.main.async {
                 let keyWindow = UIApplication.shared.getKeyWindow()
 
