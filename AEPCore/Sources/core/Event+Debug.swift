@@ -18,12 +18,13 @@ import Foundation
 ///
 public extension Event {
     
+    static let DEBUG_EVENT_DEBUG_KEY = "debug"
     static let DEBUG_EVENT_TYPE_KEY = "eventType"
     static let DEBUG_EVENT_SOURCE_KEY = "eventSource"
     
     /// The debug event type (identified by debug.eventType) found in the event data if present, nil otherwise
     var debugEventType: String? {
-        if let debugDictionary = data?[CoreConstants.Keys.DEBUG] as? [String: Any], let debugType = debugDictionary[Event.DEBUG_EVENT_TYPE_KEY] as? String {
+        if let debugDictionary = debugEventData, let debugType = debugDictionary[Event.DEBUG_EVENT_TYPE_KEY] as? String {
             return debugType
         }
         return nil
@@ -31,18 +32,18 @@ public extension Event {
     
     /// The debug event source (identified by debug.eventSource) found in the event data if present, nil otherwise
     var debugEventSource: String? {
-        if let debugDictionary = data?[CoreConstants.Keys.DEBUG] as? [String: Any], let debugSource = debugDictionary[Event.DEBUG_EVENT_SOURCE_KEY] as? String {
+        if let debugDictionary = debugEventData, let debugSource = debugDictionary[Event.DEBUG_EVENT_SOURCE_KEY] as? String {
             return debugSource
         }
         return nil
     }
     
     /// The data found in the event if the event is a debug event, otherwise nil
-    var debugEventData: [String: Any]? {
+    private var debugEventData: [String: Any]? {
         if type != EventType.system || source != EventSource.debug {
             return nil
         }
         
-        return data
+        return data?[Event.DEBUG_EVENT_DEBUG_KEY] as? [String: Any]
     }
 }

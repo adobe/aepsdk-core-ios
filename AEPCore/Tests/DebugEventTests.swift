@@ -20,69 +20,51 @@ class DebugEventTests: XCTestCase, AnyCodableAsserts {
     private let TEST_EVENT_NAME = "testName"
     private let TEST_EVENT_TYPE = EventType.system
     private let TEST_EVENT_SOURCE = EventSource.debug
+    private let DEBUG_KEY = "debug"
     private let TYPE_KEY = "eventType"
     private let SOURCE_KEY = "eventSource"
     private let NOT_DEBUG_DUMMY_DATA = ["testData": "testDataVal"]
     
     func testTypeNilWhenNotDebugEvent() {
-        var event = Event(name: TEST_EVENT_NAME, type: EventType.hub, source: EventSource.requestContent, data: NOT_DEBUG_DUMMY_DATA)
+        let event = Event(name: TEST_EVENT_NAME, type: EventType.hub, source: EventSource.requestContent, data: NOT_DEBUG_DUMMY_DATA)
         XCTAssertNil(event.debugEventType)
     }
     
     func testTypeNilWhenDataNil() {
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: nil)
+        let event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: nil)
         XCTAssertNil(event.debugEventType)
     }
     
     func testTypeNilWhenDebugNotMap() {
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [CoreConstants.Keys.DEBUG: "debug"])
+        let event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [DEBUG_KEY: "debug"])
         XCTAssertNil(event.debugEventType)
     }
     
     func testGetTypeWhenIsDebugEvent() {
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [CoreConstants.Keys.DEBUG: [TYPE_KEY: EventType.rulesEngine, SOURCE_KEY: EventSource.responseContent]])
+        let event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [DEBUG_KEY: [TYPE_KEY: EventType.rulesEngine, SOURCE_KEY: EventSource.responseContent]])
         
         XCTAssertEqual(event.debugEventType, EventType.rulesEngine)
     }
     
     func testSourceNilWhenNotDebugEvent() {
-        var event = Event(name: TEST_EVENT_NAME, type: EventType.hub, source: EventSource.requestContent, data: NOT_DEBUG_DUMMY_DATA)
+        let event = Event(name: TEST_EVENT_NAME, type: EventType.hub, source: EventSource.requestContent, data: NOT_DEBUG_DUMMY_DATA)
         XCTAssertNil(event.debugEventSource)
     }
     
     func testSourceNilWhenDataNil() {
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: nil)
+        let event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: nil)
         XCTAssertNil(event.debugEventSource)
     }
     
     func testSourceNilWhenDebugNotMap() {
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [CoreConstants.Keys.DEBUG: "debug"])
+        let event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [DEBUG_KEY: "debug"])
         XCTAssertNil(event.debugEventSource)
     }
     
     func testGetSourceWhenIsDebugEvent() {
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [CoreConstants.Keys.DEBUG: [TYPE_KEY: EventType.rulesEngine, SOURCE_KEY: EventSource.responseContent]])
+        let event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: [DEBUG_KEY: [TYPE_KEY: EventType.rulesEngine, SOURCE_KEY: EventSource.responseContent]])
         
         XCTAssertEqual(event.debugEventSource, EventSource.responseContent)
     }
-    
-    func testGetDataNilWhenNotSystemEventType() {
-        var event = Event(name: TEST_EVENT_NAME, type: EventType.hub, source: EventSource.debug, data: NOT_DEBUG_DUMMY_DATA)
-        XCTAssertNil(event.debugEventData)
-    }
-    
-    func testGetDataNilWhenNotDebugSource() {
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: EventSource.responseContent, data: NOT_DEBUG_DUMMY_DATA)
-        XCTAssertNil(event.debugEventData)
-    }
-    
-    func testGetDataWhenDebug() {
-        var debugData = [CoreConstants.Keys.DEBUG: [TYPE_KEY: EventType.rulesEngine, SOURCE_KEY: EventSource.responseContent], "triggeredConsequence": ["id": "1234", "type": "schema"]]
-        var event = Event(name: TEST_EVENT_NAME, type: TEST_EVENT_TYPE, source: TEST_EVENT_SOURCE, data: debugData)
-        
-        assertEqual(expected: debugData, actual: event.debugEventData)
-    }
-    
-    
 }
 
