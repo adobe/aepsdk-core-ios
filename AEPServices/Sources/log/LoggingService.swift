@@ -16,18 +16,21 @@ import os.log
 /// Implements a `Logging` which will send log message to Apple's unified logging system
 class LoggingService: Logging {
     private let LOG_SUB_SYSTEM_NAME = "com.adobe.mobile.marketing.aep"
-    private let cachedOSLogs = ThreadSafeDictionary<String, OSLog>()
+    private let queue = DispatchQueue(label: "com.adobe.loggingService.queue")
+    private var cachedOSLogs: [String: OSLog] = [:]
 
     /// Generates or Retrieves an `OSLog` object by a label name
     /// - Parameter label: a name of label, which can be used to identify the consumer of this logging service
     /// - Returns: an `OSLog` object
     private func osLog(_ label: String) -> OSLog {
-        if let osLog = cachedOSLogs[label] {
-            return osLog
-        } else {
-            let osLog = OSLog(subsystem: LOG_SUB_SYSTEM_NAME, category: label)
-            cachedOSLogs[label] = osLog
-            return osLog
+        queue.sync {
+            if let osLog = cachedOSLogs[label] {
+                return osLog
+            } else {
+                let osLog = OSLog(subsystem: LOG_SUB_SYSTEM_NAME, category: label)
+                cachedOSLogs[label] = osLog
+                return osLog
+            }
         }
     }
 
@@ -50,6 +53,6 @@ class LoggingService: Logging {
     // MARK: Logging
 
     func log(level: LogLevel, label: String, message: String) {
-        os_log("%@", log: osLog(label), type: osLogType(level), message)
+        os_log("%@", log: osLog("AEP SDK \(level.toString()) - <\(label)>"), type: osLogType(level), message)
     }
 }

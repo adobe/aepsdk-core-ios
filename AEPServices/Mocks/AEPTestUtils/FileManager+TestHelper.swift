@@ -44,7 +44,7 @@ public extension FileManager {
             do {
                 try self.removeItem(at: URL(fileURLWithPath: "\(url.relativePath)/\(cacheItem.name)", isDirectory: cacheItem.isDirectory))
                 if let dqService = ServiceProvider.shared.dataQueueService as? DataQueueService {
-                    _ = dqService.threadSafeDictionary.removeValue(forKey: cacheItem.name)
+                    _ = dqService.store.removeValue(forKey: cacheItem.name)
                 }
             } catch {
                 Log.error(label: LOG_TAG, "Error removing cache item, with reason: \(error)")
