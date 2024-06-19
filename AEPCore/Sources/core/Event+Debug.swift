@@ -24,7 +24,7 @@ public extension Event {
     
     /// The debug event type (identified by debug.eventType) found in the event data if present, nil otherwise
     var debugEventType: String? {
-        if let debugDictionary = debugEventData, let debugType = debugDictionary[Event.DEBUG_EVENT_TYPE_KEY] as? String {
+        if let debugType = debugEventData?[Event.DEBUG_EVENT_TYPE_KEY] as? String {
             return debugType
         }
         return nil
@@ -32,7 +32,7 @@ public extension Event {
     
     /// The debug event source (identified by debug.eventSource) found in the event data if present, nil otherwise
     var debugEventSource: String? {
-        if let debugDictionary = debugEventData, let debugSource = debugDictionary[Event.DEBUG_EVENT_SOURCE_KEY] as? String {
+        if let debugSource = debugEventData?[Event.DEBUG_EVENT_SOURCE_KEY] as? String {
             return debugSource
         }
         return nil
