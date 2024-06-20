@@ -134,9 +134,9 @@ final class EventHub {
             }
 
             // Init the extension on a dedicated queue
-            let extensionName = "com.adobe.eventhub.extension.\(type.typeName)"
-            let extensionQueue = DispatchQueue(label: extensionName)
-            let extensionContainer = ExtensionContainer(extensionName, type, extensionQueue, completion: completion)
+            let extensionTypeName = "com.adobe.eventhub.extension.\(type.typeName)"
+            let extensionQueue = DispatchQueue(label: extensionTypeName)
+            let extensionContainer = ExtensionContainer(extensionTypeName, type, extensionQueue, completion: completion)
             self.registeredExtensions[type.typeName] = extensionContainer
             Log.debug(label: self.LOG_TAG, "\(type.typeName) successfully registered.")
         }
@@ -189,7 +189,7 @@ final class EventHub {
         eventHubQueue.async { [weak self] in
             guard let self = self else { return }
             // use the event hub placeholder extension to hold all the listeners registered from the public API
-            guard let eventHubExtension = self.registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(EventHubConstants.NAME) == .orderedSame })?.value else {
+            guard let eventHubExtension = self.extensionContainerFor(type: EventHubPlaceholderExtension.self) else {
                 Log.warning(label: self.LOG_TAG, "Error registering event listener")
                 return
             }
@@ -254,7 +254,7 @@ final class EventHub {
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         return eventHubQueue.sync { [weak self] in
             guard let self = self else { return nil }
-            guard let container = self.registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value, let sharedState = container.sharedState(for: sharedStateType) else {
+            guard let container = self.extensionContainerFor(extensionName: extensionName), let sharedState = container.sharedState(for: sharedStateType) else {
                 Log.warning(label: self.LOG_TAG, "Unable to retrieve \(sharedStateType.rawValue) shared state for \(extensionName). No such extension is registered.")
                 return nil
             }
@@ -284,13 +284,13 @@ final class EventHub {
         }
     }
 
-    /// Retrieves the `ExtensionContainer` wrapper for the given extension type
+    /// Retrieves the `ExtensionContainer` wrapper for the given extension type. This is exposed primarily for testing purposes.
     /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
     /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
     func getExtensionContainer(_ type: Extension.Type) -> ExtensionContainer? {
         return eventHubQueue.sync { [weak self] in
             guard let self = self else { return nil }
-            return self.registeredExtensions[type.typeName]
+            return self.extensionContainerFor(type: type)
         }
     }
 
@@ -426,7 +426,7 @@ final class EventHub {
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: A `(SharedState, Int)?` containing the state for the provided extension and its version number
     private func versionSharedState(extensionName: String, event: Event?, sharedStateType: SharedStateType = .standard) -> (SharedState, Int)? {
-        guard let extensionContainer = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value else {
+        guard let extensionContainer = extensionContainerFor(extensionName: extensionName) else {
             Log.error(label: LOG_TAG, "Extension \(extensionName) not registered with EventHub")
             return nil
         }
@@ -453,7 +453,7 @@ final class EventHub {
     ///   - data: A `[String: Any]?` containing data to add to the pending state prior to it being dispatched
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     private func resolvePendingSharedState(extensionName: String, version: Int?, data: [String: Any]?, sharedStateType: SharedStateType = .standard) {
-        guard let pendingVersion = version, let container = registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value else { return }
+        guard let pendingVersion = version, let container = extensionContainerFor(extensionName: extensionName) else { return }
         guard let sharedState = container.sharedState(for: sharedStateType) else { return }
         sharedState.updatePending(version: pendingVersion, data: data)
         Log.debug(label: self.LOG_TAG, "Pending \(sharedStateType.rawValue) shared state resolved for \(extensionName) with version \(String(describing: pendingVersion)) and data: \n\(PrettyDictionary.prettify(data))")
@@ -467,6 +467,20 @@ final class EventHub {
         let eventName = sharedStatetype == .standard ? EventHubConstants.STATE_CHANGE : EventHubConstants.XDM_STATE_CHANGE
         return Event(name: eventName, type: EventType.hub, source: EventSource.sharedState,
                      data: [EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER: extensionName])
+    }
+
+    /// Internal method to retrieve the `ExtensionContainer` wrapper for the given extension type.
+    /// - Parameter type: The `Extension` class to find the `ExtensionContainer` for
+    /// - Returns: The `ExtensionContainer` instance if the `Extension` type was found, nil otherwise
+    private func extensionContainerFor(type: Extension.Type) -> ExtensionContainer? {
+        return registeredExtensions[type.typeName]
+    }
+
+    /// Internal method to retrieve the `ExtensionContainer` wrapper for the given extension name.
+    /// - Parameter extensionName: The `Extension` name
+    /// - Returns: The `ExtensionContainer` instance whose backing extension has been initialized and its name matches the given `extensionName`, nil otherwise
+    private func extensionContainerFor(extensionName: String) -> ExtensionContainer? {
+        return registeredExtensions.first(where: { $1.sharedStateName.caseInsensitiveCompare(extensionName) == .orderedSame })?.value
     }
 
     /// Returns the event number for the event
