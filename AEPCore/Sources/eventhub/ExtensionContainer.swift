@@ -20,23 +20,27 @@ class ExtensionContainer {
     private static let LOG_TAG = "ExtensionContainer"
 
     /// The extension held in this container
-    var exten: Extension?
+    private var _exten: Extension?
+    var exten: Extension? {
+        get { containerQueue.sync { self._exten } }
+        set { containerQueue.async { self._exten = newValue } }
+    }
 
     /// The `SharedState` associated with the extension
-    var sharedState: SharedState?
+    private var sharedState: SharedState?
 
     /// The XDM `SharedState` associated with the extension
-    var xdmSharedState: SharedState?
-    
+    private var xdmSharedState: SharedState?
+
     /// The shared state name associated with the extension
     private var _sharedStateName = "invalidSharedStateName"    
     var sharedStateName: String {
         get { containerQueue.sync { self._sharedStateName } }
         set { containerQueue.async { self._sharedStateName = newValue } }
     }
-    
+
     /// The extension's dispatch queue
-    let extensionQueue: DispatchQueue
+    private let extensionQueue: DispatchQueue
 
     /// The extension container's queue to allow multi threaded access to its members.
     private let containerQueue: DispatchQueue
@@ -45,7 +49,7 @@ class ExtensionContainer {
     let eventOrderer: OperationOrderer<Event>
 
     /// Listeners array of `EventListeners` for this extension
-    let eventListeners: ThreadSafeArray<EventListenerContainer>
+    private let eventListeners: ThreadSafeArray<EventListenerContainer>
 
     /// The last `Event` that was processed by this extension, nil if no events have been processed
     private var _lastProcessedEvent: Event?        

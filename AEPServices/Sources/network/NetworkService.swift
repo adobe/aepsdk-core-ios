@@ -20,7 +20,8 @@ public enum NetworkServiceError: Error {
 class NetworkService: Networking {
     private let LOG_PREFIX = "NetworkService"
 
-    private var sessions = ThreadSafeDictionary<String, URLSession>(identifier: "com.adobe.networkservice.sessions")
+    private var sessionsQueue = DispatchQueue(label: "com.adobe.networkService.sessions")
+    private var sessions: [String: URLSession] = [:]
 
     public func connectAsync(networkRequest: NetworkRequest, completionHandler: ((HttpConnection) -> Void)? = nil) {
         if !networkRequest.url.absoluteString.starts(with: "https") {
@@ -49,19 +50,20 @@ class NetworkService: Networking {
     /// - Parameter networkRequest: current network request
     func createURLSession(networkRequest: NetworkRequest) -> URLSession {
         let sessionId = "\(networkRequest.url.host ?? "")\(networkRequest.readTimeout)\(networkRequest.connectTimeout)"
-        guard let session = sessions[sessionId] else {
-            // Create config for an ephemeral NSURLSession with specified timeouts
-            let config = URLSessionConfiguration.ephemeral
-            config.urlCache = nil
-            config.timeoutIntervalForRequest = networkRequest.readTimeout
-            config.timeoutIntervalForResource = networkRequest.connectTimeout
+        return sessionsQueue.sync {
+            guard let session = sessions[sessionId] else {
+                // Create config for an ephemeral NSURLSession with specified timeouts
+                let config = URLSessionConfiguration.ephemeral
+                config.urlCache = nil
+                config.timeoutIntervalForRequest = networkRequest.readTimeout
+                config.timeoutIntervalForResource = networkRequest.connectTimeout
 
-            let newSession: URLSession = URLSession(configuration: config)
-            sessions[sessionId] = newSession
-            return newSession
+                let newSession: URLSession = URLSession(configuration: config)
+                sessions[sessionId] = newSession
+                return newSession
+            }
+            return session
         }
-
-        return session
     }
 
     /// Creates an `URLRequest` with the provided parameters and adds the SDK default headers. The cache policy used is reloadIgnoringLocalCacheData.

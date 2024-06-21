@@ -55,7 +55,7 @@ struct RulesDownloader: RulesLoader {
         }
 
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
-        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in
+        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in            
             if httpConnection.responseCode == 304 {
                 completion(.failure(.notModified))
                 return

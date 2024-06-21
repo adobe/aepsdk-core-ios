@@ -291,7 +291,8 @@
             wkWebView.navigationDelegate = self
             wkWebView.scrollView.bounces = false
             wkWebView.scrollView.layer.cornerRadius = settings?.cornerRadius ?? 0.0
-            wkWebView.backgroundColor = UIColor.clear
+            wkWebView.scrollView.backgroundColor = .clear
+            wkWebView.backgroundColor = .clear
             wkWebView.isOpaque = false
             wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
@@ -352,7 +353,7 @@
                 self.messageMonitor.dismissMessage()
                 return
             }
-            
+
             DispatchQueue.main.async {
                 let keyWindow = UIApplication.shared.getKeyWindow()
 

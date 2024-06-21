@@ -29,9 +29,9 @@ public enum SharedStateStatus: Int {
 
 /// Provides a construct by which an `Extension` can share its state with other `Extension`s
 class SharedState {
+    private let LOG_TAG: String
     private let queue: DispatchQueue /// Allows multi-threaded access to shared state.  Reads are concurrent, Add/Updates act as barriers.
     private var head: Node?
-    private let LOG_TAG: String
     var isEmpty: Bool {
         return queue.sync { head == nil }
     }
@@ -39,9 +39,8 @@ class SharedState {
     // MARK: - Internal API
 
     init(_ name: String = "anonymous") {
-        queue = DispatchQueue(label: "com.adobe.mobile.sharedstate(\(name))", qos: .default, attributes: .concurrent)
-        head = nil
         LOG_TAG = "SharedState(\(name))"
+        queue = DispatchQueue(label: "com.adobe.sharedState(\(name))", qos: .default, attributes: .concurrent)        
     }
 
     /// Sets the given version of this `SharedState` to the given data dictionary.
