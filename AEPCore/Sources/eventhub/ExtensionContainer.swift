@@ -61,7 +61,7 @@ class ExtensionContainer {
     init(_ name: String, _ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
         extensionQueue = queue
         containerQueue = DispatchQueue(label: "\(name).containerQueue")
-        eventOrderer = OperationOrderer<Event>()
+        eventOrderer = OperationOrderer<Event>("\(name).operationOrderer")
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
 
