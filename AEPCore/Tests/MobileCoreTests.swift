@@ -209,7 +209,7 @@ class MobileCoreTests: XCTestCase {
               "friendlyName" : "mockExtension"
             },
             "com.adobe.module.configuration" : {
-              "version" : "5.1.0",
+              "version" : "5.2.0",
 
               "friendlyName" : "Configuration"
             },
@@ -224,19 +224,18 @@ class MobileCoreTests: XCTestCase {
         """
         let expectedDict = jsonStrToDict(jsonStr: expected)
 
-        // test
-        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self], {
-            EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
-                if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME {
-                    let registered = MobileCore.getRegisteredExtensions()
-                    let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
-                    let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
-                    XCTAssertTrue(equal)
-                    expectation.fulfill()
-
-                }
+        EventHub.shared.registerEventListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME {
+                let registered = MobileCore.getRegisteredExtensions()
+                let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
+                let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
+                XCTAssertTrue(equal)
+                expectation.fulfill()
             }
-        })
+        }
+
+        // test
+        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
 
         // verify
         wait(for: [expectation], timeout: 1)

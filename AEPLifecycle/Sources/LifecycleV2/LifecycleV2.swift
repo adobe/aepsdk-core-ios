@@ -159,7 +159,7 @@ class LifecycleV2 {
         let currentAppVersion = LifecycleV2.getAppVersion(systemInfoService: systemInfoService)
         dataStore.set(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION, value: currentAppVersion)
     }
-    
+
     /// Returns the application version in the format appVersion (versionCode). Example: 2.3 (10)
     /// - Returns: the app version as a `String` formatted in the specified format.
     static func getAppVersion(systemInfoService: SystemInfoService) -> String {
