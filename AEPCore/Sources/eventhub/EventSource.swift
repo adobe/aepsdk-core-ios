@@ -40,4 +40,5 @@ public class EventSource: NSObject {
     public static let createTracker = "com.adobe.eventSource.createTracker"
     public static let trackMedia = "com.adobe.eventSource.trackMedia"
     public static let contentComplete = "com.adobe.eventSource.contentComplete"
+    public static let debug = "com.adobe.eventSource.debug"
 }

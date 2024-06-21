@@ -18,7 +18,7 @@ public class PersistentHitQueue: HitQueuing {
 
     private var suspended = true
     private var isTaskScheduled = false
-    private let queue = DispatchQueue(label: "com.adobe.mobile.persistenthitqueue")
+    private let queue = DispatchQueue(label: "com.adobe.persistentHitQueue")
 
     /// Creates a new `HitQueue` with the underlying `DataQueue` which is used to persist hits
     /// - Parameter dataQueue: a `DataQueue` used to persist hits
@@ -62,44 +62,34 @@ public class PersistentHitQueue: HitQueuing {
         queue.async {
             guard !self.suspended, !self.isTaskScheduled else { return }
 
-            self.isTaskScheduled = true
-
             guard let hit = self.dataQueue.peek() else {
-                self.isTaskScheduled = false
                 return
             } // nothing left in the queue, stop processing
 
-            let semaphore = DispatchSemaphore(value: 0)
+            self.isTaskScheduled = true
             self.processor.processHit(entity: hit, completion: { [weak self] success in
-
-                guard let self = self else {
-                    semaphore.signal()
-                    return
-                }
+                guard let self = self else { return }
 
                 if success {
-                    // successful processing of hit
-                    // attempt to remove it from the queue and process next hit if successful
-                    if self.dataQueue.remove() {
-                        self.isTaskScheduled = false
-                        self.processNextHit()
-                    } else {
-                        // deleting the hit from the database failed
-                        // need to delete the database to try and recover
-                        Log.warning(label: "PersistentHitQueue", "An unexpected error occurred while attempting to delete a record from the database. Data processing will be paused.")
+                    self.queue.async {
+                        // successful processing of hit
+                        if self.dataQueue.remove() {
+                            self.isTaskScheduled = false
+                            self.processNextHit()
+                        } else {
+                            // deleting the hit from the database failed
+                            Log.warning(label: "PersistentHitQueue", "An unexpected error occurred while attempting to delete a record from the database. Data processing will be paused.")
+                        }
                     }
                 } else {
-                    // processing hit failed, leave it in the queue, retry after the retry interval
+                    // processing hit failed, retry after the retry interval
                     self.queue.asyncAfter(deadline: .now() + self.processor.retryInterval(for: hit)) { [weak self] in
                         guard let self = self else { return }
                         self.isTaskScheduled = false
                         self.processNextHit()
                     }
                 }
-
-                semaphore.signal()
             })
-            semaphore.wait()
         }
     }
 }

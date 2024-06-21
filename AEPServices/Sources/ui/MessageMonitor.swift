@@ -15,7 +15,7 @@
     class MessageMonitor: MessageMonitoring {
         private let LOG_PREFIX = "MessageMonitor"
         private var isMsgDisplayed = false
-        private let messageQueue = DispatchQueue(label: "com.adobe.uiservice.messagemonitor")
+        private let messageQueue = DispatchQueue(label: "com.adobe.uiService.messageMonitor.queue")
 
         internal func isMessageDisplayed() -> Bool {
             return messageQueue.sync {

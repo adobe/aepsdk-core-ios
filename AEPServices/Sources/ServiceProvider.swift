@@ -23,7 +23,7 @@ public class ServiceProvider {
         public weak var messagingDelegate: MessagingDelegate?
     #endif
     // Provide thread safety on the getters and setters
-    private let queue = DispatchQueue(label: "ServiceProvider.barrierQueue")
+    private let queue = DispatchQueue(label: "com.adobe.serviceProvider.queue")
 
     private var overrideSystemInfoService: SystemInfoService?
     private var defaultSystemInfoService = ApplicationSystemInfoService()

@@ -201,7 +201,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: xdm["device"] as? [String : Any] ?? [:]).isEqual(to: expectedDeviceInfo))
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
-    
+
     func testLifecycleV2_appUpgrade_versionNumberChanged() {
         // setup
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))

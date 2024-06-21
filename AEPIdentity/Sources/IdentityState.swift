@@ -464,7 +464,7 @@ class IdentityState {
             Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID value \(identityProperties.ecid?.ecidString ?? "nil")")
         }
     }
-    
+
     /// Clears identifiers in held `IdentityProperties` and resets flags in `PushIdManager`.
     private func clearIdentifiers() {
         identityProperties.ecid = nil
