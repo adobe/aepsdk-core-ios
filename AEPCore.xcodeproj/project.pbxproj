@@ -1606,7 +1606,7 @@
 			children = (
 				3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */,
 				3FE6DDEC24C62F610065EA05 /* Info.plist */,
-				75341CD72B9674870090CE3A /* AEPTestUtils */,
+				75341CD72B9674870090CE3A /* PublicTestUtils */,
 				2467E43B24CB54B70022F6BE /* MockDiskCache.swift */,
 				24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */,
 				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
@@ -2117,7 +2117,7 @@
 			children = (
 				3FF8171324D89B500064DFA1 /* AEPCoreMocks.h */,
 				3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */,
-				75341CE32B9696520090CE3A /* AEPTestUtils */,
+				75341CE32B9696520090CE3A /* PublicTestUtils */,
 				3FF8171424D89B500064DFA1 /* Info.plist */,
 			);
 			name = Mocks;
@@ -2142,7 +2142,7 @@
 			path = resources;
 			sourceTree = "<group>";
 		};
-		75341CD72B9674870090CE3A /* AEPTestUtils */ = {
+		75341CD72B9674870090CE3A /* PublicTestUtils */ = {
 			isa = PBXGroup;
 			children = (
 				4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */,
@@ -2166,10 +2166,10 @@
 				4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */,
 				4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */,
 			);
-			path = AEPTestUtils;
+			path = PublicTestUtils;
 			sourceTree = "<group>";
 		};
-		75341CE32B9696520090CE3A /* AEPTestUtils */ = {
+		75341CE32B9696520090CE3A /* PublicTestUtils */ = {
 			isa = PBXGroup;
 			children = (
 				4CF027E12C2CC941008ADE05 /* Event+AnyCodableComparable.swift */,
@@ -2181,7 +2181,7 @@
 				4CF027E02C2CC941008ADE05 /* TestableExtensionRuntime.swift */,
 				4CF027DE2C2CC941008ADE05 /* TestBase.swift */,
 			);
-			path = AEPTestUtils;
+			path = PublicTestUtils;
 			sourceTree = "<group>";
 		};
 		78AA4EC72513AE5200205AE9 /* Configuration */ = {
