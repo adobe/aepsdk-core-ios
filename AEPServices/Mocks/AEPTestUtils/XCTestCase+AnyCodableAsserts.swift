@@ -10,7 +10,6 @@
 // governing permissions and limitations under the License.
 //
 
-import AEPCore
 import AEPServices
 import Foundation
 import XCTest
@@ -49,12 +48,6 @@ extension String: AnyCodableComparable {
 extension AnyCodable: AnyCodableComparable {
     public func toAnyCodable() -> AnyCodable? {
         return self
-    }
-}
-
-extension Event: AnyCodableComparable {
-    public func toAnyCodable() -> AnyCodable? {
-        return self.data?.toAnyCodable()
     }
 }
 
@@ -427,13 +420,14 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             return
         }
         guard let expected = expected, let actual = actual else {
-            XCTFail(#"""
-                \#(expected == nil ? "Expected is nil" : "Actual is nil") and \#(expected == nil ? "Actual" : "Expected") is non-nil.
-
-                Expected: \#(String(describing: expected))
-
-                Actual: \#(String(describing: actual))
-            """#, file: file, line: line)
+            XCTFail(
+                #"""
+                    \#(expected == nil ? "Expected is nil" : "Actual is nil") and \#(expected == nil ? "Actual" : "Expected") is non-nil.
+                    Expected: \#(String(describing: expected))
+                    Actual: \#(String(describing: actual))
+                """#,
+                file: file,
+                line: line)
             return
         }
         // Exact equality is just a special case of exact match
@@ -869,6 +863,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         assertExactMatch(expected: expected, actual: actual, pathOptions: pathOptions, file: file, line: line)
     }
 
+    // swiftlint:disable function_parameter_count
     private func validate(
         expected: AnyCodableComparable,
         actual: AnyCodableComparable?,
@@ -892,8 +887,10 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         _ = validateActual(actual: actual, nodeTree: nodeTree, file: file, line: line)
         validateJSON(expected: expected, actual: actual, nodeTree: nodeTree, file: file, line: line)
     }
+    // swiftlint:enable function_parameter_count
 
     // MARK: - AnyCodable validation helpers
+    // swiftlint:disable function_body_length
     /// Performs a cutomizable validation between the given `expected` and `actual` values, using the configured options.
     /// In case of a validation failure **and** if `shouldAssert` is `true`, a test failure occurs.
     ///
@@ -921,19 +918,23 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
-                XCTFail(#"""
-                    Expected JSON is non-nil but Actual JSON is nil.
+                XCTFail(
+                    #"""
+                        Expected JSON is non-nil but Actual JSON is nil.
 
-                    Expected: \#(String(describing: expected))
+                        Expected: \#(String(describing: expected))
 
-                    Actual: \#(String(describing: actual))
+                        Actual: \#(String(describing: actual))
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                        Key path: \#(keyPathAsString(keyPath))
+                    """#,
+                    file: file,
+                    line: line)
             }
             return false
         }
 
+        // swiftlint:disable no_fallthrough_only
         switch (expected, actual) {
         case let (expected, actual) where (expected.value is String && actual.value is String):
             fallthrough
@@ -989,17 +990,21 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                 line: line)
         default:
             if shouldAssert {
-                XCTFail(#"""
-                    Expected and Actual types do not match.
+                XCTFail(
+                    #"""
+                        Expected and Actual types do not match.
 
-                    Expected: \#(expected)
+                        Expected: \#(expected)
 
-                    Actual: \#(actual)
+                        Actual: \#(actual)
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                        Key path: \#(keyPathAsString(keyPath))
+                    """#,
+                    file: file,
+                    line: line)
             }
             return false
+        // swiftlint:enable no_fallthrough_only
         }
     }
 
@@ -1029,32 +1034,38 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
-                XCTFail(#"""
-                    Expected JSON is non-nil but Actual JSON is nil.
+                XCTFail(
+                    #"""
+                        Expected JSON is non-nil but Actual JSON is nil.
 
-                    Expected: \#(String(describing: expected))
+                        Expected: \#(String(describing: expected))
 
-                    Actual: \#(String(describing: actual))
+                        Actual: \#(String(describing: actual))
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                        Key path: \#(keyPathAsString(keyPath))
+                """#,
+                    file: file,
+                    line: line)
             }
             return false
         }
         if nodeTree.collectionEqualCount.isActive ? (expected.count != actual.count) : (expected.count > actual.count) {
             if shouldAssert {
-                XCTFail(#"""
-                    Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
+                XCTFail(
+                    #"""
+                        Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
 
-                    Expected count: \#(expected.count)
-                    Actual count: \#(actual.count)
+                        Expected count: \#(expected.count)
+                        Actual count: \#(actual.count)
 
-                    Expected: \#(expected)
+                        Expected: \#(expected)
 
-                    Actual: \#(actual)
+                        Actual: \#(actual)
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                        Key path: \#(keyPathAsString(keyPath))
+                    """#,
+                    file: file,
+                    line: line)
             }
             return false
         }
@@ -1081,8 +1092,8 @@ public extension AnyCodableAsserts where Self: XCTestCase {
 
         // Validate non-wildcard expected side indexes first, as these don't have
         // position flexibility
-        for (index, config) in expectedIndexes {
-            let intIndex = Int(index)!
+        for (index, _) in expectedIndexes {
+            let intIndex = Int(index)! // swiftlint:disable:this force_unwrapping
             validationResult = validateJSON(
                 expected: expected[intIndex],
                 actual: actual[intIndex],
@@ -1094,31 +1105,36 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                 && validationResult
         }
 
-        for (index, config) in anyOrderIndexes {
-            let intIndex = Int(index)!
+        for (index, _) in anyOrderIndexes {
+            let intIndex = Int(index)! // swiftlint:disable:this force_unwrapping
 
             guard let actualIndex = availableWildcardActualIndexes.first(where: {
                 validateJSON(
                     expected: expected[intIndex],
-                    actual: actual[Int($0)!],
+                    actual: actual[Int($0)!], // swiftlint:disable:this force_unwrapping
                     keyPath: keyPath + [intIndex],
                     nodeTree: nodeTree.getNextNode(for: index),
                     shouldAssert: false)
             }) else {
+                // swiftlint:disable force_unwrapping
                 if shouldAssert {
-                    XCTFail(#"""
-                        Wildcard \#(NodeConfig.resolveOption(.primitiveExactMatch, for: nodeTree.getChild(named: index), parent: nodeTree).isActive ? "exact" : "type")
-                        match found no matches on Actual side satisfying the Expected requirement.
+                    XCTFail(
+                        #"""
+                            Wildcard \#(NodeConfig.resolveOption(.primitiveExactMatch, for: nodeTree.getChild(named: index), parent: nodeTree).isActive ? "exact" : "type")
+                            match found no matches on Actual side satisfying the Expected requirement.
 
-                        Requirement: \#(nodeTree)
+                            Requirement: \#(nodeTree)
 
-                        Expected: \#(expected[intIndex])
+                            Expected: \#(expected[intIndex])
 
-                        Actual (remaining unmatched elements): \#(availableWildcardActualIndexes.map({ actual[Int($0)!] }))
+                            Actual (remaining unmatched elements): \#(availableWildcardActualIndexes.map({ actual[Int($0)!] }))
 
-                        Key path: \#(keyPathAsString(keyPath))
-                    """#, file: file, line: line)
+                            Key path: \#(keyPathAsString(keyPath))
+                        """#,
+                        file: file,
+                        line: line)
                 }
+                // swiftlint:enable force_unwrapping
                 validationResult = false
                 break
             }
@@ -1153,32 +1169,38 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
-                XCTFail(#"""
-                    Expected JSON is non-nil but Actual JSON is nil.
+                XCTFail(
+                    #"""
+                        Expected JSON is non-nil but Actual JSON is nil.
 
-                    Expected: \#(String(describing: expected))
+                        Expected: \#(String(describing: expected))
 
-                    Actual: \#(String(describing: actual))
+                        Actual: \#(String(describing: actual))
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                        Key path: \#(keyPathAsString(keyPath))
+                    """#,
+                    file: file,
+                    line: line)
             }
             return false
         }
         if nodeTree.collectionEqualCount.isActive ? (expected.count != actual.count) : (expected.count > actual.count) {
             if shouldAssert {
-                XCTFail(#"""
-                    Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
+                XCTFail(
+                    #"""
+                        Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
 
-                    Expected count: \#(expected.count)
-                    Actual count: \#(actual.count)
+                        Expected count: \#(expected.count)
+                        Actual count: \#(actual.count)
 
-                    Expected: \#(expected)
+                        Expected: \#(expected)
 
-                    Actual: \#(actual)
+                        Actual: \#(actual)
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                        Key path: \#(keyPathAsString(keyPath))
+                    """#,
+                    file: file,
+                    line: line)
             }
             return false
         }
@@ -1198,6 +1220,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         return validationResult
     }
+    // swiftlint:enable function_body_length
 
     // MARK: - Actual JSON validation
 
@@ -1340,13 +1363,16 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             // Check for keys that must be absent in the current node
             let resolvedKeyMustBeAbsent = NodeConfig.resolveOption(.keyMustBeAbsent, for: nodeTree.getChild(named: key), parent: nodeTree)
             if resolvedKeyMustBeAbsent.isActive {
-                XCTFail(#"""
-                    Actual JSON should not have key with name: \#(key)
+                XCTFail(
+                    #"""
+                        Actual JSON should not have key with name: \#(key)
 
-                    Actual: \#(actual)
+                        Actual: \#(actual)
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                        Key path: \#(keyPathAsString(keyPath))
+                    """#,
+                    file: file,
+                    line: line)
                 validationResult = false
             }
             validationResult = validateActual(
