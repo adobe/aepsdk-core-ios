@@ -33,6 +33,9 @@ jobs:
     - name: List Files for Debugging
       run: ls -al
 
+    - name: List Script for Debugging
+      run: ls -al Script
+
     - name: Print working directory for Debugging
       run: pwd
 
