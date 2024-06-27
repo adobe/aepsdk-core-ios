@@ -29,6 +29,12 @@ jobs:
       uses: actions/checkout@v4.1.7
       with:
         ref: ${{ github.event.inputs.branch }}
+    
+    - name: List Files for Debugging
+      run: ls -al
+
+    - name: Print working directory for Debugging
+      run: pwd
 
     - name: Update TestUtils
       run: (sh ./Script/update-aeptestutils-version.sh -n TestUtils -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}")
