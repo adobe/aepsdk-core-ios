@@ -43,6 +43,11 @@ jobs:
       shell: bash
       run: ./Script/update-aeptestutils-version.sh -n TestUtils -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}"
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+
     - name: Create Pull Request
       env:
         GH_TOKEN: ${{ github.token }}
