@@ -8,7 +8,7 @@ set -e # Any subsequent(*) commands which fail will cause the shell script to ex
 ROOT_DIR=$(git rev-parse --show-toplevel)
 LINE="================================================================================"
 VERSION_REGEX="[0-9]+\.[0-9]+\.[0-9]+"
-DEPENDENCIES=none
+DEPENDENCIES=""
 
 # Determine the platform (macOS or Linux) to adjust the sed command accordingly
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -65,8 +65,8 @@ fi
 echo "Changing value of 's.version' to '$NEW_VERSION' in '$PODSPEC_FILE'"
 $SED_COMMAND "/^ *s.version/s/$VERSION_REGEX/$NEW_VERSION/" "$PODSPEC_FILE"
 
-# Update dependencies in podspec and Package.swift
-if [ "$DEPENDENCIES" != "none" ]; then
+# Update dependencies in podspec and Package.swift only if DEPENDENCIES is not empty
+if [ ! -z "$DEPENDENCIES" ]; then
     IFS=","
     dependenciesArray=($(echo "$DEPENDENCIES"))
 

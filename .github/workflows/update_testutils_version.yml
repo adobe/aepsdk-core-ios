@@ -1,12 +1,7 @@
-# This is a basic workflow that is manually triggered
-
 name: Update AEPTestUtils Version
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
     inputs:
       version:
         description: 'New version to use for the library. Example: 3.0.2'
@@ -32,7 +27,7 @@ jobs:
 
     - name: Update TestUtils
       shell: bash
-      run: ./Script/update-testutils-version.sh -n TestUtils -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}"
+      run: ./Script/update-testutils-version.sh -n TestUtils -v ${{ github.event.inputs.version }} -d "${{ github.event.inputs.core-dependency }}"
 
     - name: Configure Git
       run: |
