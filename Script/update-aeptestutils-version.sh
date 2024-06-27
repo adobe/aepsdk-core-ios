@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # make this script executable from terminal:
-# chmod 755 update-aeptestutils-version.sh
+# chmod 755 update-versions.sh
 
 set -e # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 
@@ -12,9 +12,9 @@ DEPENDENCIES=none
 
 # Determine the platform (macOS or Linux) to adjust the sed command accordingly
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    SED_COMMAND="sed -i ''"
+    SED_COMMAND="sed -i '' -E"
 else
-    SED_COMMAND="sed -i"
+    SED_COMMAND="sed -i -E"
 fi
 
 # make a "dictionary" to help us find the correct spm repo per dependency (if necessary)
@@ -79,9 +79,17 @@ if [ ! -f "$PODSPEC_FILE" ]; then
   exit 1
 fi
 
+# Print the contents of the podspec file for debugging
+echo "Contents of the podspec file before changes:"
+cat "$PODSPEC_FILE"
+
 # Replace extension version in podspec
 echo "Changing value of 's.version' to '$NEW_VERSION' in '$PODSPEC_FILE'"
-$SED_COMMAND -E "/^ *s.version/s/$VERSION_REGEX/$NEW_VERSION/" "$PODSPEC_FILE"
+$SED_COMMAND "/^ *s.version/s/$VERSION_REGEX/$NEW_VERSION/" "$PODSPEC_FILE"
+
+# Print the contents of the podspec file after changes
+echo "Contents of the podspec file after changes:"
+cat "$PODSPEC_FILE"
 
 # Replace dependencies in podspec and Package.swift
 if [ "$DEPENDENCIES" != "none" ]; then
@@ -95,12 +103,6 @@ if [ "$DEPENDENCIES" != "none" ]; then
         dependencyVersion=${dependencyArray[1]}
         
         echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"
-        $SED_COMMAND -E "/^ *s.dependency +'$dependencyName'/s/$VERSION_REGEX/$dependencyVersion/" "$PODSPEC_FILE"
-
-        # spmRepoUrl=$(getRepo $dependencyName)
-        # if [ "$spmRepoUrl" != "" ]; then
-        #     echo "Changing value of '.upToNextMajor(from:)' for '$spmRepoUrl' to '$dependencyVersion' in '$SPM_FILE'"
-        #     $SED_COMMAND -E "/$spmRepoUrl\", \.upToNextMajor/s/$VERSION_REGEX/$dependencyVersion/" "$SPM_FILE"
-        # fi
+        $SED_COMMAND "/^ *s.dependency +'$dependencyName'/s/$VERSION_REGEX/$dependencyVersion/" "$PODSPEC_FILE"
     done
 fi
