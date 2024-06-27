@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # make this script executable from terminal:
-# chmod 755 update-versions.sh
+# chmod 755 update-testutils-version.sh
 
 set -e # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 
@@ -16,20 +16,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
     SED_COMMAND="sed -i -E"
 fi
-
-# make a "dictionary" to help us find the correct spm repo per dependency (if necessary)
-# IMPORTANT - this will be used in a regex search so escape special chars
-# usage :
-# getRepo AEPCore
-
-declare "repos_AEPCore=https:\/\/github\.com\/adobe\/aepsdk-core-ios\.git"
-declare "repos_AEPRulesEngine=https:\/\/github\.com\/adobe\/aepsdk-rulesengine-ios\.git"
-
-getRepo() {
-    local extensionName=$1
-    local url="repos_$extensionName"
-    echo "${!url}"
-}
 
 help()
 {
@@ -69,29 +55,17 @@ echo "$LINE"
 echo "Changing version of AEP$NAME to $NEW_VERSION with the following minimum version dependencies: $DEPENDENCIES"
 echo "$LINE"
 
-# Debugging information
-echo "Root directory: $ROOT_DIR"
-echo "Podspec file: $PODSPEC_FILE"
-
 # Check if podspec file exists
 if [ ! -f "$PODSPEC_FILE" ]; then
   echo "Error: Podspec file '$PODSPEC_FILE' does not exist."
   exit 1
 fi
 
-# Print the contents of the podspec file for debugging
-echo "Contents of the podspec file before changes:"
-cat "$PODSPEC_FILE"
-
-# Replace extension version in podspec
+# Update extension version in podspec
 echo "Changing value of 's.version' to '$NEW_VERSION' in '$PODSPEC_FILE'"
 $SED_COMMAND "/^ *s.version/s/$VERSION_REGEX/$NEW_VERSION/" "$PODSPEC_FILE"
 
-# Print the contents of the podspec file after changes
-echo "Contents of the podspec file after changes:"
-cat "$PODSPEC_FILE"
-
-# Replace dependencies in podspec and Package.swift
+# Update dependencies in podspec and Package.swift
 if [ "$DEPENDENCIES" != "none" ]; then
     IFS=","
     dependenciesArray=($(echo "$DEPENDENCIES"))
