@@ -16,23 +16,25 @@ import XCTest
 /// CountDown latch to be used for asserts and expectations
 public class CountDownLatch {
     private let initialCount: Int32
-    private var currentCount: Int32
+    private let queue: DispatchQueue = .init(label: "com.adobe.testutils.countdownlatch.queue")
     private let waitSemaphore = DispatchSemaphore(value: 0)
+    private var currentCount: Int32 = 0
 
     public init(_ expectedCount: Int32) {
         guard expectedCount > 0 else {
-            assertionFailure("CountDownLatch requires a count greater than 0")
-            self.currentCount = 0
             self.initialCount = 0
+            assertionFailure("CountDownLatch requires a count greater than 0")
             return
         }
 
-        self.currentCount = expectedCount
         self.initialCount = expectedCount
+        self.currentCount = expectedCount
     }
 
     public func getCurrentCount() -> Int32 {
-        return currentCount
+        queue.sync {
+            currentCount
+        }
     }
 
     public func getInitialCount() -> Int32 {
@@ -40,18 +42,24 @@ public class CountDownLatch {
     }
 
     public func await(timeout: TimeInterval = 1) -> DispatchTimeoutResult {
-        return currentCount > 0 ? waitSemaphore.wait(timeout: (DispatchTime.now() + timeout)) : DispatchTimeoutResult.success
+        if getCurrentCount() == 0 {
+            return .success
+        }
+
+        return self.waitSemaphore.wait(timeout: (DispatchTime.now() + timeout))
     }
 
     public func countDown() {
-        OSAtomicDecrement32(&currentCount)
-        if currentCount == 0 {
-            waitSemaphore.signal()
-        }
+        queue.sync {
+            self.currentCount -= 1
 
-        if currentCount < 0 {
-            print("Count Down decreased more times than expected.")
-        }
+            if self.currentCount == 0 {
+                self.waitSemaphore.signal()
+            }
 
+            if self.currentCount < 0 {
+                print("Count Down decreased more times than expected.")
+            }
+        }
     }
 }
