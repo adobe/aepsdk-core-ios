@@ -364,15 +364,15 @@
 		4CF0287B2C2CCBD3008ADE05 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
 		4CF0287C2C2CCBD3008ADE05 /* MockWKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */; };
 		4CF0287D2C2CCBE1008ADE05 /* TestableNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */; };
-		4CF0287E2C2CCBE1008ADE05 /* Event+AnyCodableComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027E12C2CC941008ADE05 /* Event+AnyCodableComparable.swift */; };
-		4CF0287F2C2CCBE1008ADE05 /* Event+Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027E22C2CC941008ADE05 /* Event+Timestamp.swift */; };
-		4CF028802C2CCBE1008ADE05 /* EventHub+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027E52C2CC941008ADE05 /* EventHub+TestHelper.swift */; };
-		4CF028812C2CCBE1008ADE05 /* InstrumentedExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027DF2C2CC941008ADE05 /* InstrumentedExtension.swift */; };
-		4CF028822C2CCBE1008ADE05 /* MockEventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027E32C2CC941008ADE05 /* MockEventHistoryDatabase.swift */; };
-		4CF028832C2CCBE1008ADE05 /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027E42C2CC941008ADE05 /* MockExtension.swift */; };
-		4CF028842C2CCBE1008ADE05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027E02C2CC941008ADE05 /* TestableExtensionRuntime.swift */; };
-		4CF028852C2CCBE1008ADE05 /* TestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF027DE2C2CC941008ADE05 /* TestBase.swift */; };
 		4CF028882C2CCC2A008ADE05 /* AEPServicesMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMocks.framework */; };
+		4CF0289A2C2D401E008ADE05 /* Event+Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028922C2D401E008ADE05 /* Event+Timestamp.swift */; };
+		4CF0289B2C2D401E008ADE05 /* MockEventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028932C2D401E008ADE05 /* MockEventHistoryDatabase.swift */; };
+		4CF0289C2C2D401E008ADE05 /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028942C2D401E008ADE05 /* MockExtension.swift */; };
+		4CF0289D2C2D401E008ADE05 /* InstrumentedExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028952C2D401E008ADE05 /* InstrumentedExtension.swift */; };
+		4CF0289E2C2D401E008ADE05 /* EventHub+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028962C2D401E008ADE05 /* EventHub+TestHelper.swift */; };
+		4CF0289F2C2D401E008ADE05 /* Event+AnyCodableComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028972C2D401E008ADE05 /* Event+AnyCodableComparable.swift */; };
+		4CF028A02C2D401E008ADE05 /* TestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028982C2D401E008ADE05 /* TestBase.swift */; };
+		4CF028A12C2D401E008ADE05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028992C2D401E008ADE05 /* TestableExtensionRuntime.swift */; };
 		752261862AA257F600D59847 /* FileSystemNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752261852AA257F600D59847 /* FileSystemNamedCollection.swift */; };
 		7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */; };
 		7522618D2AABBE9600D59847 /* UserDefaultMigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618C2AABBE9600D59847 /* UserDefaultMigrationConstants.swift */; };
@@ -1069,14 +1069,6 @@
 		3FF8296B2509942300483C74 /* rules_signal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_signal.json; sourceTree = "<group>"; };
 		4107BA7054E313DACA0D4EF4 /* Pods-AEPCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		41E5D22C6D72CCCF26904EDE /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4CF027DE2C2CC941008ADE05 /* TestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBase.swift; sourceTree = "<group>"; };
-		4CF027DF2C2CC941008ADE05 /* InstrumentedExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentedExtension.swift; sourceTree = "<group>"; };
-		4CF027E02C2CC941008ADE05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestableExtensionRuntime.swift; path = "../../../../../adobepublic/aepsdk-testutils-ios/Sources/CoreDependent/TestableExtensionRuntime.swift"; sourceTree = "<group>"; };
-		4CF027E12C2CC941008ADE05 /* Event+AnyCodableComparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+AnyCodableComparable.swift"; sourceTree = "<group>"; };
-		4CF027E22C2CC941008ADE05 /* Event+Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+Timestamp.swift"; sourceTree = "<group>"; };
-		4CF027E32C2CC941008ADE05 /* MockEventHistoryDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockEventHistoryDatabase.swift; sourceTree = "<group>"; };
-		4CF027E42C2CC941008ADE05 /* MockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockExtension.swift; path = "../../../../../adobepublic/aepsdk-testutils-ios/Sources/CoreDependent/MockExtension.swift"; sourceTree = "<group>"; };
-		4CF027E52C2CC941008ADE05 /* EventHub+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "EventHub+TestHelper.swift"; path = "../../../../../adobepublic/aepsdk-testutils-ios/Sources/CoreDependent/EventHub+TestHelper.swift"; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
 		4CF028182C2CCA0F008ADE05 /* EventSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventSpec.swift; sourceTree = "<group>"; };
@@ -1097,6 +1089,14 @@
 		4CF028272C2CCA10008ADE05 /* MockDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataStore.swift; sourceTree = "<group>"; };
 		4CF028282C2CCA10008ADE05 /* HttpConnection+DeepCopy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpConnection+DeepCopy.swift"; sourceTree = "<group>"; };
 		4CF028292C2CCA10008ADE05 /* NetworkRequestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequestHelper.swift; sourceTree = "<group>"; };
+		4CF028922C2D401E008ADE05 /* Event+Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+Timestamp.swift"; sourceTree = "<group>"; };
+		4CF028932C2D401E008ADE05 /* MockEventHistoryDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockEventHistoryDatabase.swift; sourceTree = "<group>"; };
+		4CF028942C2D401E008ADE05 /* MockExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockExtension.swift; sourceTree = "<group>"; };
+		4CF028952C2D401E008ADE05 /* InstrumentedExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstrumentedExtension.swift; sourceTree = "<group>"; };
+		4CF028962C2D401E008ADE05 /* EventHub+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventHub+TestHelper.swift"; sourceTree = "<group>"; };
+		4CF028972C2D401E008ADE05 /* Event+AnyCodableComparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+AnyCodableComparable.swift"; sourceTree = "<group>"; };
+		4CF028982C2D401E008ADE05 /* TestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBase.swift; sourceTree = "<group>"; };
+		4CF028992C2D401E008ADE05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2172,14 +2172,14 @@
 		75341CE32B9696520090CE3A /* PublicTestUtils */ = {
 			isa = PBXGroup;
 			children = (
-				4CF027E12C2CC941008ADE05 /* Event+AnyCodableComparable.swift */,
-				4CF027E22C2CC941008ADE05 /* Event+Timestamp.swift */,
-				4CF027E52C2CC941008ADE05 /* EventHub+TestHelper.swift */,
-				4CF027DF2C2CC941008ADE05 /* InstrumentedExtension.swift */,
-				4CF027E32C2CC941008ADE05 /* MockEventHistoryDatabase.swift */,
-				4CF027E42C2CC941008ADE05 /* MockExtension.swift */,
-				4CF027E02C2CC941008ADE05 /* TestableExtensionRuntime.swift */,
-				4CF027DE2C2CC941008ADE05 /* TestBase.swift */,
+				4CF028972C2D401E008ADE05 /* Event+AnyCodableComparable.swift */,
+				4CF028922C2D401E008ADE05 /* Event+Timestamp.swift */,
+				4CF028962C2D401E008ADE05 /* EventHub+TestHelper.swift */,
+				4CF028952C2D401E008ADE05 /* InstrumentedExtension.swift */,
+				4CF028932C2D401E008ADE05 /* MockEventHistoryDatabase.swift */,
+				4CF028942C2D401E008ADE05 /* MockExtension.swift */,
+				4CF028992C2D401E008ADE05 /* TestableExtensionRuntime.swift */,
+				4CF028982C2D401E008ADE05 /* TestBase.swift */,
 			);
 			path = PublicTestUtils;
 			sourceTree = "<group>";
@@ -3671,14 +3671,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF0287D2C2CCBE1008ADE05 /* TestableNetworkService.swift in Sources */,
-				4CF0287E2C2CCBE1008ADE05 /* Event+AnyCodableComparable.swift in Sources */,
-				4CF0287F2C2CCBE1008ADE05 /* Event+Timestamp.swift in Sources */,
-				4CF028802C2CCBE1008ADE05 /* EventHub+TestHelper.swift in Sources */,
-				4CF028812C2CCBE1008ADE05 /* InstrumentedExtension.swift in Sources */,
-				4CF028822C2CCBE1008ADE05 /* MockEventHistoryDatabase.swift in Sources */,
-				4CF028832C2CCBE1008ADE05 /* MockExtension.swift in Sources */,
-				4CF028842C2CCBE1008ADE05 /* TestableExtensionRuntime.swift in Sources */,
-				4CF028852C2CCBE1008ADE05 /* TestBase.swift in Sources */,
+				4CF0289C2C2D401E008ADE05 /* MockExtension.swift in Sources */,
+				4CF0289E2C2D401E008ADE05 /* EventHub+TestHelper.swift in Sources */,
+				4CF0289F2C2D401E008ADE05 /* Event+AnyCodableComparable.swift in Sources */,
+				4CF028A02C2D401E008ADE05 /* TestBase.swift in Sources */,
+				4CF0289B2C2D401E008ADE05 /* MockEventHistoryDatabase.swift in Sources */,
+				4CF028A12C2D401E008ADE05 /* TestableExtensionRuntime.swift in Sources */,
+				4CF0289D2C2D401E008ADE05 /* InstrumentedExtension.swift in Sources */,
+				4CF0289A2C2D401E008ADE05 /* Event+Timestamp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
