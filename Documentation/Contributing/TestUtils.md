@@ -30,4 +30,5 @@ While external repositories bring in the `AEPTestUtils` dependency using Cocoapo
 1. The file goes into the appropriate project directory based on its dependencies.
    * For example, if it has a dependency on `AEPCore`, place it under `AEPCore/Mocks/PublicTestUtils`. If it only has a dependency on `AEPServices`, place it under `AEPServices/Mocks/PublicTestUtils`.
    * If the file has no dependencies on either `AEPServices` or `AEPCore`, place it under `AEPServices/Mocks/PublicTestUtils`.
-2. The file is added to the appropriate project target's Build Phases -> Compile Sources list of source files, using the same dependency logic as the previous point.
+   * If the file is not intended to be published as part of `AEPTestUtils`, place it in its respective `Mocks` directory, but outside of `PublicTestUtils`.
+2. The file is added to the appropriate project target's **Build Phases** -> **Compile Sources** list of source files, using the same dependency logic as the previous point.
