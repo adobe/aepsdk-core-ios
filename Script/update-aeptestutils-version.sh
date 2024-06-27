@@ -10,6 +10,13 @@ LINE="==========================================================================
 VERSION_REGEX="[0-9]+\.[0-9]+\.[0-9]+"
 DEPENDENCIES=none
 
+# Determine the platform (macOS or Linux) to adjust the sed command accordingly
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    SED_COMMAND="sed -i ''"
+else
+    SED_COMMAND="sed -i"
+fi
+
 # make a "dictionary" to help us find the correct spm repo per dependency (if necessary)
 # IMPORTANT - this will be used in a regex search so escape special chars
 # usage :
@@ -53,8 +60,8 @@ then
    help
 fi
 
-PODSPEC_FILE=$ROOT_DIR"/AEP"$NAME.podspec
-SPM_FILE=$ROOT_DIR/Package.swift
+PODSPEC_FILE="$ROOT_DIR/AEP$NAME.podspec"
+SPM_FILE="$ROOT_DIR/Package.swift"
 
 # Begin script in case all parameters are correct
 echo ""
@@ -62,13 +69,23 @@ echo "$LINE"
 echo "Changing version of AEP$NAME to $NEW_VERSION with the following minimum version dependencies: $DEPENDENCIES"
 echo "$LINE"
 
+# Debugging information
+echo "Root directory: $ROOT_DIR"
+echo "Podspec file: $PODSPEC_FILE"
+
+# Check if podspec file exists
+if [ ! -f "$PODSPEC_FILE" ]; then
+  echo "Error: Podspec file '$PODSPEC_FILE' does not exist."
+  exit 1
+fi
+
 # Replace extension version in podspec
 echo "Changing value of 's.version' to '$NEW_VERSION' in '$PODSPEC_FILE'"
-sed -i '' -E "/^ *s.version/{s/$VERSION_REGEX/$NEW_VERSION/;}" $PODSPEC_FILE
+$SED_COMMAND -E "/^ *s.version/{s/$VERSION_REGEX/$NEW_VERSION/;}" "$PODSPEC_FILE"
 
 # Replace dependencies in podspec and Package.swift
 if [ "$DEPENDENCIES" != "none" ]; then
-    IFS="," 
+    IFS=","
     dependenciesArray=($(echo "$DEPENDENCIES"))
 
     IFS=" "
@@ -78,12 +95,12 @@ if [ "$DEPENDENCIES" != "none" ]; then
         dependencyVersion=${dependencyArray[1]}
         
         echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"
-        sed -i '' -E "/^ *s.dependency +'$dependencyName'/{s/$VERSION_REGEX/$dependencyVersion/;}" $PODSPEC_FILE
+        $SED_COMMAND -E "/^ *s.dependency +'$dependencyName'/{s/$VERSION_REGEX/$dependencyVersion/;}" "$PODSPEC_FILE"
 
         # spmRepoUrl=$(getRepo $dependencyName)
         # if [ "$spmRepoUrl" != "" ]; then
         #     echo "Changing value of '.upToNextMajor(from:)' for '$spmRepoUrl' to '$dependencyVersion' in '$SPM_FILE'"
-        #     sed -i '' -E "/$spmRepoUrl\", \.upToNextMajor/{s/$VERSION_REGEX/$dependencyVersion/;}" $SPM_FILE
+        #     $SED_COMMAND -E "/$spmRepoUrl\", \.upToNextMajor/{s/$VERSION_REGEX/$dependencyVersion/;}" "$SPM_FILE"
         # fi
     done
 fi
