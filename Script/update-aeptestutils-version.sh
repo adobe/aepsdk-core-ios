@@ -81,7 +81,7 @@ fi
 
 # Replace extension version in podspec
 echo "Changing value of 's.version' to '$NEW_VERSION' in '$PODSPEC_FILE'"
-$SED_COMMAND -E "/^ *s.version/{s/$VERSION_REGEX/$NEW_VERSION/;}" "$PODSPEC_FILE"
+$SED_COMMAND -E "/^ *s.version/s/$VERSION_REGEX/$NEW_VERSION/" "$PODSPEC_FILE"
 
 # Replace dependencies in podspec and Package.swift
 if [ "$DEPENDENCIES" != "none" ]; then
@@ -95,12 +95,12 @@ if [ "$DEPENDENCIES" != "none" ]; then
         dependencyVersion=${dependencyArray[1]}
         
         echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"
-        $SED_COMMAND -E "/^ *s.dependency +'$dependencyName'/{s/$VERSION_REGEX/$dependencyVersion/;}" "$PODSPEC_FILE"
+        $SED_COMMAND -E "/^ *s.dependency +'$dependencyName'/s/$VERSION_REGEX/$dependencyVersion/" "$PODSPEC_FILE"
 
         # spmRepoUrl=$(getRepo $dependencyName)
         # if [ "$spmRepoUrl" != "" ]; then
         #     echo "Changing value of '.upToNextMajor(from:)' for '$spmRepoUrl' to '$dependencyVersion' in '$SPM_FILE'"
-        #     $SED_COMMAND -E "/$spmRepoUrl\", \.upToNextMajor/{s/$VERSION_REGEX/$dependencyVersion/;}" "$SPM_FILE"
+        #     $SED_COMMAND -E "/$spmRepoUrl\", \.upToNextMajor/s/$VERSION_REGEX/$dependencyVersion/" "$SPM_FILE"
         # fi
     done
 fi
