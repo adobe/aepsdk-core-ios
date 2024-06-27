@@ -75,8 +75,10 @@ if [ "$DEPENDENCIES" != "none" ]; then
         dependencyArray=(${dependency// / })
         dependencyName=${dependencyArray[0]}
         dependencyVersion=${dependencyArray[1]}
-        
-        echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"
-        $SED_COMMAND "/^ *s.dependency +'$dependencyName'/s/$VERSION_REGEX/$dependencyVersion/" "$PODSPEC_FILE"
+
+        if [ ! -z "$dependencyVersion" ]; then
+            echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"
+            $SED_COMMAND "/^ *s.dependency +'$dependencyName'/s/$VERSION_REGEX/$dependencyVersion/" "$PODSPEC_FILE"
+        fi
     done
 fi
