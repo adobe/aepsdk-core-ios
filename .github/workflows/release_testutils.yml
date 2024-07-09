@@ -33,7 +33,9 @@ jobs:
     - name: Check Podspec Version
       id: check_version
       run: |
-        podspec_version=$(grep -E 's.version\s*=\s*".*"' AEPTestUtils.podspec | sed -E 's/[^0-9.]*([0-9.]+).*/\1/')
+        set -eo pipefail
+        podspec_version=$(grep -E 's.version\s*=\s*".*"' AEPTestUtils.podspec | sed -E 's/[^0-9]*([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+        echo "Podspec version: $podspec_version"
         if [ "$podspec_version" != "${{ github.event.inputs.version }}" ]; then
           echo "Error: Version mismatch. Expected ${{ github.event.inputs.version }}, but found $podspec_version."
           echo "You can update the AEPTestUtils version by running the 'Update AEPTestUtils Version' workflow."
