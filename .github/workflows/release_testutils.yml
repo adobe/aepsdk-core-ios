@@ -15,6 +15,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4.1.7
 
+    - name: Install XcodeGen
+      run: brew install xcodegen
+
     - name: Run Test Podspec Script
       run: ./Script/test-podspec-testutils.sh
 
