@@ -32,7 +32,12 @@ jobs:
 
     - name: Update TestUtils
       shell: bash
-      run: ./Script/update-testutils-version.sh -n TestUtils -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}"
+      run: |
+        if [ -n "${{ github.event.inputs.core-dependency }}" ]; then
+          ./Script/update-versions.sh -n TestUtils -v ${{ github.event.inputs.version }} -d "AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}"
+        else
+          ./Script/update-versions.sh -n TestUtils -v ${{ github.event.inputs.version }}
+        fi
 
     - name: Configure Git
       run: |
