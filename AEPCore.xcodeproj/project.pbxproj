@@ -331,6 +331,26 @@
 		3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF829482507F8AA00483C74 /* rules_lifecycle.json */; };
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
+		4C71C5872C3DE4CF009C6DF7 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
+		4C71C5882C3DE4CF009C6DF7 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
+		4C71C5892C3DE4CF009C6DF7 /* EventSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028182C2CCA0F008ADE05 /* EventSpec.swift */; };
+		4C71C58A2C3DE4CF009C6DF7 /* FileManager+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028222C2CCA0F008ADE05 /* FileManager+TestHelper.swift */; };
+		4C71C58B2C3DE4CF009C6DF7 /* HttpConnection+DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028282C2CCA10008ADE05 /* HttpConnection+DeepCopy.swift */; };
+		4C71C58C2C3DE4CF009C6DF7 /* MockDataQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028212C2CCA0F008ADE05 /* MockDataQueue.swift */; };
+		4C71C58D2C3DE4CF009C6DF7 /* MockDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028272C2CCA10008ADE05 /* MockDataStore.swift */; };
+		4C71C58E2C3DE4CF009C6DF7 /* MockHitProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028202C2CCA0F008ADE05 /* MockHitProcessor.swift */; };
+		4C71C58F2C3DE4CF009C6DF7 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028192C2CCA0F008ADE05 /* MockNetworkService.swift */; };
+		4C71C5902C3DE4CF009C6DF7 /* NamedCollectionDataStore+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281A2C2CCA0F008ADE05 /* NamedCollectionDataStore+TestHelper.swift */; };
+		4C71C5912C3DE4CF009C6DF7 /* NetworkRequest+DeepCopy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281B2C2CCA0F008ADE05 /* NetworkRequest+DeepCopy.swift */; };
+		4C71C5922C3DE4CF009C6DF7 /* NetworkRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028292C2CCA10008ADE05 /* NetworkRequestHelper.swift */; };
+		4C71C5932C3DE4CF009C6DF7 /* NodeConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028232C2CCA0F008ADE05 /* NodeConfig.swift */; };
+		4C71C5942C3DE4CF009C6DF7 /* RealNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */; };
+		4C71C5952C3DE4CF009C6DF7 /* TestableNetworkRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281C2C2CCA0F008ADE05 /* TestableNetworkRequest.swift */; };
+		4C71C5962C3DE4CF009C6DF7 /* TestConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028242C2CCA0F008ADE05 /* TestConstants.swift */; };
+		4C71C5972C3DE4CF009C6DF7 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028262C2CCA10008ADE05 /* TestUtils.swift */; };
+		4C71C5982C3DE4CF009C6DF7 /* URL+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281E2C2CCA0F008ADE05 /* URL+TestHelper.swift */; };
+		4C71C5992C3DE4CF009C6DF7 /* UserDefaults+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */; };
+		4C71C59A2C3DE4CF009C6DF7 /* XCTestCase+AnyCodableAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
 		4CF0285F2C2CCBD3008ADE05 /* EventSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028182C2CCA0F008ADE05 /* EventSpec.swift */; };
@@ -364,7 +384,6 @@
 		4CF0287B2C2CCBD3008ADE05 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
 		4CF0287C2C2CCBD3008ADE05 /* MockWKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */; };
 		4CF0287D2C2CCBE1008ADE05 /* TestableNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F08FFA824DBBDD700D34DE3 /* TestableNetworkService.swift */; };
-		4CF028882C2CCC2A008ADE05 /* AEPServicesMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FE6DDA924C62C090065EA05 /* AEPServicesMocks.framework */; };
 		4CF0289A2C2D401E008ADE05 /* Event+Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028922C2D401E008ADE05 /* Event+Timestamp.swift */; };
 		4CF0289B2C2D401E008ADE05 /* MockEventHistoryDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028932C2D401E008ADE05 /* MockEventHistoryDatabase.swift */; };
 		4CF0289C2C2D401E008ADE05 /* MockExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028942C2D401E008ADE05 /* MockExtension.swift */; };
@@ -702,13 +721,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3FF8170924D89B160064DFA1;
 			remoteInfo = AEPCoreMocks;
-		};
-		4CF028862C2CCC21008ADE05 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 21CAC0CD2422917600C11388 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3FE6DDA824C62C090065EA05;
-			remoteInfo = AEPServicesMocks;
 		};
 		ACC7A9772A0ED173001A04FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1325,7 +1337,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CF028882C2CCC2A008ADE05 /* AEPServicesMocks.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2629,7 +2640,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4CF028872C2CCC21008ADE05 /* PBXTargetDependency */,
 				3FF8171E24D89BCD0064DFA1 /* PBXTargetDependency */,
 			);
 			name = AEPCoreMocks;
@@ -3670,6 +3680,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C71C5872C3DE4CF009C6DF7 /* AnyCodable+Array.swift in Sources */,
+				4C71C5882C3DE4CF009C6DF7 /* CountDownLatch.swift in Sources */,
+				4C71C5892C3DE4CF009C6DF7 /* EventSpec.swift in Sources */,
+				4C71C58A2C3DE4CF009C6DF7 /* FileManager+TestHelper.swift in Sources */,
+				4C71C58B2C3DE4CF009C6DF7 /* HttpConnection+DeepCopy.swift in Sources */,
+				4C71C58C2C3DE4CF009C6DF7 /* MockDataQueue.swift in Sources */,
+				4C71C58D2C3DE4CF009C6DF7 /* MockDataStore.swift in Sources */,
+				4C71C58E2C3DE4CF009C6DF7 /* MockHitProcessor.swift in Sources */,
+				4C71C58F2C3DE4CF009C6DF7 /* MockNetworkService.swift in Sources */,
+				4C71C5902C3DE4CF009C6DF7 /* NamedCollectionDataStore+TestHelper.swift in Sources */,
+				4C71C5912C3DE4CF009C6DF7 /* NetworkRequest+DeepCopy.swift in Sources */,
+				4C71C5922C3DE4CF009C6DF7 /* NetworkRequestHelper.swift in Sources */,
+				4C71C5932C3DE4CF009C6DF7 /* NodeConfig.swift in Sources */,
+				4C71C5942C3DE4CF009C6DF7 /* RealNetworkService.swift in Sources */,
+				4C71C5952C3DE4CF009C6DF7 /* TestableNetworkRequest.swift in Sources */,
+				4C71C5962C3DE4CF009C6DF7 /* TestConstants.swift in Sources */,
+				4C71C5972C3DE4CF009C6DF7 /* TestUtils.swift in Sources */,
+				4C71C5982C3DE4CF009C6DF7 /* URL+TestHelper.swift in Sources */,
+				4C71C5992C3DE4CF009C6DF7 /* UserDefaults+TestHelper.swift in Sources */,
+				4C71C59A2C3DE4CF009C6DF7 /* XCTestCase+AnyCodableAsserts.swift in Sources */,
 				4CF0287D2C2CCBE1008ADE05 /* TestableNetworkService.swift in Sources */,
 				4CF0289C2C2D401E008ADE05 /* MockExtension.swift in Sources */,
 				4CF0289E2C2D401E008ADE05 /* EventHub+TestHelper.swift in Sources */,
@@ -3844,11 +3874,6 @@
 			isa = PBXTargetDependency;
 			target = 3FF8170924D89B160064DFA1 /* AEPCoreMocks */;
 			targetProxy = 3FF8172124D8ABF20064DFA1 /* PBXContainerItemProxy */;
-		};
-		4CF028872C2CCC21008ADE05 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3FE6DDA824C62C090065EA05 /* AEPServicesMocks */;
-			targetProxy = 4CF028862C2CCC21008ADE05 /* PBXContainerItemProxy */;
 		};
 		ACC7A9782A0ED173001A04FB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
