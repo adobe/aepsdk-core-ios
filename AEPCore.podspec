@@ -16,17 +16,20 @@ Pod::Spec.new do |s|
 
   s.swift_version = '5.1'
 
-  s.pod_target_xcconfig = {
-    'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES',
-    'ENABLE_TESTABILITY' => 'YES' # Allows AEPTestUtils to use @testable import
-  }
+  s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
   s.dependency 'AEPRulesEngine', '>= 5.0.0', '< 6.0.0'
   s.dependency 'AEPServices', '>= 5.2.0', '< 6.0.0'
 
-
   s.source_files          = 'AEPCore/Sources/**/*.swift'
   s.resource_bundles        = { 'AEPCore_Resources' => ['AEPCore/Sources/PrivacyInfo.xcprivacy'] }
 
-
+  # Test specification block
+  s.test_spec 'tests' do |test_spec|
+    test_spec.source_files = 'AEPCore/Sources/**/*.swift'
+    test_spec.pod_target_xcconfig = {
+      'ENABLE_TESTABILITY' => 'YES', # Allows AEPTestUtils to use @testable import
+      'OTHER_SWIFT_FLAGS' => '-DDEBUG'
+    }
+  end
 end
