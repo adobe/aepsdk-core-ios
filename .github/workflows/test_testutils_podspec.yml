@@ -1,0 +1,19 @@
+name: Test Podspec for TestUtils
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-podspec:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4.1.7
+
+    - name: Install XcodeGen
+      run: |
+        brew install xcodegen
+
+    - name: Run Test Podspec Script
+      run: ./Script/test-podspec-testutils.sh
