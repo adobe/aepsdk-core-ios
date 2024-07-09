@@ -10,7 +10,7 @@
 // governing permissions and limitations under the License.
 //
 
-@testable import AEPCore
+import AEPCore
 import Foundation
 
 extension Event {
