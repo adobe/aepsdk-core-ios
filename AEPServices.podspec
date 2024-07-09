@@ -20,13 +20,4 @@ Pod::Spec.new do |s|
   s.resource_bundles        = { 'AEPServices_Resources' => ['AEPServices/Sources/PrivacyInfo.xcprivacy'] }
 
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
-
-  # Test specification block
-  # s.test_spec 'tests' do |test_spec|
-  #   test_spec.source_files = 'AEPServices/Sources/**/*.swift'
-  #   test_spec.pod_target_xcconfig = {
-  #     'ENABLE_TESTABILITY' => 'YES', # Allows AEPTestUtils to use @testable import
-  #     'OTHER_SWIFT_FLAGS' => '-DDEBUG'
-  #   }
-  # end
 end
