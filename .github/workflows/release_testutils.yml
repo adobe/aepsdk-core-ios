@@ -43,6 +43,11 @@ jobs:
         fi
         echo "Podspec version matches the input version."
 
+    - name: Configure Git
+      run: |
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+
     - name: Create Git Tag
       # if: github.ref == 'refs/heads/main'
       env:
