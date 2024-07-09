@@ -1,0 +1,39 @@
+name: Release AEPTestUtils
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version for AEPTestUtils. Example: 3.0.2 (workflow will create tag `testutils-3.0.2`)'
+        required: true
+
+jobs:
+  release-testutils:
+    runs-on: ubuntu-latest
+
+    steps:    
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Run Test Podspec Script
+      run: ./test-podspec-testutils.sh
+
+    - name: Check Podspec Version
+      id: check_version
+      run: |
+        podspec_version=$(grep -E 's.version\s*=\s*".*"' AEPTestUtils.podspec | sed -E 's/[^0-9.]*([0-9.]+).*/\1/')
+        if [ "$podspec_version" != "${{ github.event.inputs.version }}" ]; then
+          echo "Error: Version mismatch. Expected ${{ github.event.inputs.version }}, but found $podspec_version."
+          echo "You can update the AEPTestUtils version by running the 'Update AEPTestUtils Version' workflow."
+          exit 1
+        fi
+        echo "Podspec version matches the input version."
+
+    - name: Create Git Tag
+      if: github.ref == 'refs/heads/main'
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        tag_name="testutils-${{ github.event.inputs.version }}"
+        git tag -a "$tag_name" -m "Release $tag_name"
+        git push origin "$tag_name"
