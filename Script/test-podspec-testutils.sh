@@ -13,7 +13,7 @@ mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
 # Create a new Xcode project.
 swift package init
 
-# Use Xcodegen to generate the project.
+# Use Xcodegen to generate the project with a test target.
 echo "
 name: $PROJECT_NAME
 options:
@@ -26,6 +26,15 @@ targets:
     deploymentTarget: "12.0"
     settings:
       GENERATE_INFOPLIST_FILE: YES
+  ${PROJECT_NAME}Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: Tests
+    dependencies:
+      - target: $PROJECT_NAME
+    settings:
+      base:
+        ENABLE_TESTABILITY: YES
 " >>project.yml
 
 xcodegen generate
@@ -35,9 +44,14 @@ echo "
 platform :ios, '12.0'
 target '$PROJECT_NAME' do
   use_frameworks!
-  pod 'AEPTestUtils', :path => '../AEPTestUtils.podspec'
   pod 'AEPCore', :path => '../AEPCore.podspec'
   pod 'AEPServices', :path => '../AEPServices.podspec'
+end
+
+target '${PROJECT_NAME}Tests' do
+  inherit! :search_paths
+  use_frameworks!
+  pod 'AEPTestUtils', :path => '../AEPTestUtils.podspec'
 end
 " >>Podfile
 
@@ -70,7 +84,7 @@ mkdir -p $PROJECT_NAME && cd $PROJECT_NAME
 # Create a new Xcode project.
 swift package init
 
-# Use Xcodegen to generate the project.
+# Use Xcodegen to generate the project with a test target.
 echo "
 name: $PROJECT_NAME
 options:
@@ -83,24 +97,38 @@ targets:
     deploymentTarget: "12.0"
     settings:
       GENERATE_INFOPLIST_FILE: YES
+  ${PROJECT_NAME}Tests:
+    type: bundle.unit-test
+    platform: tvOS
+    sources: Tests
+    dependencies:
+      - target: $PROJECT_NAME
+    settings:
+      base:
+        ENABLE_TESTABILITY: YES
 " >>project.yml
 
 xcodegen generate
-
 
 # Create a Podfile with our pod as dependency.
 echo "
 platform :tvos, '12.0'
 target '$PROJECT_NAME' do
   use_frameworks!
-  pod 'AEPTestUtils', :path => '../AEPTestUtils.podspec'
   pod 'AEPCore', :path => '../AEPCore.podspec'
   pod 'AEPServices', :path => '../AEPServices.podspec'
+end
+
+target '${PROJECT_NAME}Tests' do
+  inherit! :search_paths
+  use_frameworks!
+  pod 'AEPTestUtils', :path => '../AEPTestUtils.podspec'
 end
 " >>Podfile
 
 # Install the pods.
 pod install
+
 # Archive for generic tvOS device
 echo '############# Archive for generic tvOS device ###############'
 xcodebuild archive -scheme TestProject -workspace TestProject.xcworkspace -destination 'generic/platform=tvOS'
