@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   
     s.pod_target_xcconfig = { 
         # 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES',
-        'ENABLE_TESTING_SEARCH_PATHS' => 'YES',
+        # 'ENABLE_TESTING_SEARCH_PATHS' => 'YES',
         'ENABLE_TESTABILITY' => 'YES', # Allows AEPTestUtils to use @testable import
         'OTHER_SWIFT_FLAGS' => '-DDEBUG'
     }
