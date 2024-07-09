@@ -25,11 +25,11 @@ Pod::Spec.new do |s|
   s.resource_bundles        = { 'AEPCore_Resources' => ['AEPCore/Sources/PrivacyInfo.xcprivacy'] }
 
   # Test specification block
-  s.test_spec 'tests' do |test_spec|
-    test_spec.source_files = 'AEPCore/Sources/**/*.swift'
-    test_spec.pod_target_xcconfig = {
-      'ENABLE_TESTABILITY' => 'YES', # Allows AEPTestUtils to use @testable import
-      'OTHER_SWIFT_FLAGS' => '-DDEBUG'
-    }
-  end
+  # s.test_spec 'tests' do |test_spec|
+  #   test_spec.source_files = 'AEPCore/Sources/**/*.swift'
+  #   test_spec.pod_target_xcconfig = {
+  #     'ENABLE_TESTABILITY' => 'YES', # Allows AEPTestUtils to use @testable import
+  #     'OTHER_SWIFT_FLAGS' => '-DDEBUG'
+  #   }
+  # end
 end
