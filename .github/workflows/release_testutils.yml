@@ -13,10 +13,10 @@ jobs:
 
     steps:    
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v4.1.7
 
     - name: Run Test Podspec Script
-      run: ./test-podspec-testutils.sh
+      run: ./Script/test-podspec-testutils.sh
 
     - name: Check Podspec Version
       id: check_version
@@ -30,7 +30,7 @@ jobs:
         echo "Podspec version matches the input version."
 
     - name: Create Git Tag
-      if: github.ref == 'refs/heads/main'
+      # if: github.ref == 'refs/heads/main'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
