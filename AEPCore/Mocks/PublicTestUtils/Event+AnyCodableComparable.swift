@@ -12,6 +12,7 @@
 
 import AEPCore
 import AEPServices
+import AEPServicesMocks
 
 extension Event: AnyCodableComparable {
     public func toAnyCodable() -> AnyCodable? {
