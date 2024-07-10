@@ -23,8 +23,8 @@ jobs:
     
     - name: Checkout
       uses: actions/checkout@v4.1.7
-      with:
-        ref: main
+      # with:
+      #   ref: main
 
     - name: Install XcodeGen
       run: brew install xcodegen
