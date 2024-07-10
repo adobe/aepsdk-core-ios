@@ -30,7 +30,7 @@ jobs:
       run: brew install xcodegen
 
     - name: Run Test Podspec Script
-      run: ./Script/test-podspec-testutils.sh
+      run: make test-podspec-testutils
 
     - name: Check Podspec Version
       id: check_version
