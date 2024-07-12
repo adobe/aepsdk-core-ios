@@ -153,7 +153,7 @@ public struct ValueTypeMatch: MultiPathConfig {
 /// `NodeConfig` provides a way to set configuration options for nodes in a hierarchical tree structure.
 /// It supports different types of configuration options, including options that apply to individual nodes
 /// or to entire subtrees.
-public class NodeConfig: Hashable {
+public class NodeConfig: Hashable { // swiftlint:disable:this type_body_length
     /// Represents the scope of the configuration; that is, to which nodes the configuration applies.
     public enum Scope: String, Hashable {
         /// Only this node should apply the current configuration.
@@ -206,22 +206,22 @@ public class NodeConfig: Hashable {
     // Property accessors for each option which use the `options` set for the current node
     // and fall back to subtree options.
     var anyOrderMatch: Config {
-        get { options[.anyOrderMatch] ?? subtreeOptions[.anyOrderMatch]! }
+        get { options[.anyOrderMatch] ?? subtreeOptions[.anyOrderMatch]! } // swiftlint:disable:this force_unwrapping
         set { options[.anyOrderMatch] = newValue }
     }
 
     var collectionEqualCount: Config {
-        get { options[.collectionEqualCount] ?? subtreeOptions[.collectionEqualCount]! }
+        get { options[.collectionEqualCount] ?? subtreeOptions[.collectionEqualCount]! } // swiftlint:disable:this force_unwrapping
         set { options[.collectionEqualCount] = newValue }
     }
 
     var keyMustBeAbsent: Config {
-        get { options[.keyMustBeAbsent] ?? subtreeOptions[.keyMustBeAbsent]! }
+        get { options[.keyMustBeAbsent] ?? subtreeOptions[.keyMustBeAbsent]! } // swiftlint:disable:this force_unwrapping
         set { options[.keyMustBeAbsent] = newValue }
     }
 
     var primitiveExactMatch: Config {
-        get { options[.primitiveExactMatch] ?? subtreeOptions[.primitiveExactMatch]! }
+        get { options[.primitiveExactMatch] ?? subtreeOptions[.primitiveExactMatch]! } // swiftlint:disable:this force_unwrapping
         set { options[.primitiveExactMatch] = newValue }
     }
 
@@ -238,7 +238,7 @@ public class NodeConfig: Hashable {
         // Validate subtreeOptions has every option defined
         var validatedSubtreeOptions = subtreeOptions
         for key in OptionKey.allCases {
-            if let foundConfig = subtreeOptions[key] {
+            if subtreeOptions[key] != nil {
                 continue
             }
             // If key is missing, add a default value
@@ -404,13 +404,14 @@ public class NodeConfig: Hashable {
             let components = getArrayPathComponents(from: key)
 
             // Process string segment
-            if var stringComponent = components.stringComponent {
+            if let stringComponent = components.stringComponent {
                 // Check if component is wildcard
                 let isWildcard = stringComponent == "*"
                 if isWildcard {
                     pathComponents.append(PathComponent(name: stringComponent, isAnyOrder: false, isArray: false, isWildcard: isWildcard))
                 } else {
-                    pathComponents.append(PathComponent(name: stringComponent.replacingOccurrences(of: "\\*", with: "*"), isAnyOrder: false, isArray: false, isWildcard: isWildcard))
+                    let cleanStringComponent = stringComponent.replacingOccurrences(of: "\\*", with: "*")
+                    pathComponents.append(PathComponent(name: cleanStringComponent, isAnyOrder: false, isArray: false, isWildcard: isWildcard))
                 }
             }
 
@@ -613,13 +614,14 @@ public class NodeConfig: Hashable {
         segments.append(String(path[startIndex...]))
 
         // Handle edge case where input ends with a dot (but not an escaped dot)
-        if path.hasSuffix(".") && !path.hasSuffix("\\.") && segments.last != "" {
+        if path.hasSuffix(".") && !path.hasSuffix("\\.") && !(segments.last ?? "").isEmpty {
             segments.append("")
         }
 
         return segments
     }
 
+    // swiftlint:disable function_body_length
     /// Extracts valid array format access components from a given path component and returns the separated components.
     ///
     /// Given `"key1[0][1]"`, the result is `["key1", "[0]", "[1]"]`.
@@ -697,6 +699,7 @@ public class NodeConfig: Hashable {
         }
         return (stringComponent: stringComponent, arrayComponents: arrayComponents)
     }
+    // swiftlint:enable function_body_length
 }
 
 extension NodeConfig: CustomStringConvertible {
@@ -704,6 +707,7 @@ extension NodeConfig: CustomStringConvertible {
         return describeNode(indentation: 0)
     }
 
+    // swiftlint:disable function_body_length
     private func describeNode(indentation: Int) -> String {
         var result = indentation == 0 ? "\n" : ""
         let indentString = String(repeating: "  ", count: indentation) // Two spaces per indentation level
@@ -737,9 +741,11 @@ extension NodeConfig: CustomStringConvertible {
         // Node options - Only include options where config is TRUE
         let filteredOptions = options.filter { $1.isActive }
         let sortedOptions = filteredOptions.sorted { $0.key < $1.key }
-        var optionsDescription = sortedOptions.map { key, config in
-            "\(indentString)  \(key): \(config)"
-        }.joined(separator: "\n")
+        let optionsDescription = sortedOptions
+            .map { key, config in
+                "\(indentString)  \(key): \(config)"
+            }
+            .joined(separator: "\n")
 
         // Append filtered options to the result if there are any
         if !optionsDescription.isEmpty {
@@ -749,9 +755,11 @@ extension NodeConfig: CustomStringConvertible {
         // Subtree options - Only include options where config is TRUE
         let filteredSubtreeOptions = subtreeOptions.filter { $1.isActive }
         let sortedSubtreeOptions = filteredSubtreeOptions.sorted { $0.key < $1.key }
-        var subtreeOptionsDescription = sortedSubtreeOptions.map { key, config in
-            "\(indentString)  \(key): \(config)"
-        }.joined(separator: "\n")
+        let subtreeOptionsDescription = sortedSubtreeOptions
+            .map { key, config in
+                "\(indentString)  \(key): \(config)"
+            }
+            .joined(separator: "\n")
 
         // Append filtered subtree options to the result if there are any
         if !subtreeOptionsDescription.isEmpty {
@@ -771,6 +779,7 @@ extension NodeConfig: CustomStringConvertible {
 
         return result
     }
+    // swiftlint:enable function_body_length
 }
 
 extension NodeConfig.OptionKey: Comparable {
@@ -801,7 +810,7 @@ extension NodeConfig.OptionKey: CustomStringConvertible {
         case .collectionEqualCount: return "Equal Count"
         case .keyMustBeAbsent: return "Key Absent"
         case .primitiveExactMatch: return "Exact Match"
-            // Add cases for other options
+        // Add cases for other options
         }
     }
 }

@@ -21,9 +21,6 @@ Pod::Spec.new do |s|
   s.dependency 'AEPRulesEngine', '>= 5.0.0', '< 6.0.0'
   s.dependency 'AEPServices', '>= 5.2.0', '< 6.0.0'
 
-
   s.source_files          = 'AEPCore/Sources/**/*.swift'
   s.resource_bundles        = { 'AEPCore_Resources' => ['AEPCore/Sources/PrivacyInfo.xcprivacy'] }
-
-
 end

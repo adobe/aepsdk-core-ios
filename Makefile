@@ -233,6 +233,9 @@ test-SPM-integration:
 test-podspec:
 	(sh ./Script/test-podspec.sh)
 
+test-podspec-testutils:
+	(sh ./Script/test-podspec-testutils.sh)
+
 pod-lint:
 	(pod lib lint --allow-warnings --verbose --swift-version=5.1)
 
