@@ -23,9 +23,9 @@ import XCTest
 class NetworkRequestHelper {
     private var _orderedNetworkRequests: ThreadSafeArray<NetworkRequest> = ThreadSafeArray()
     /// Matches sent `NetworkRequest`s with their corresponding `HttpConnection` responses.
-    private var _networkResponses: ThreadSafeDictionary<TestableNetworkRequest, [HttpConnection]> = ThreadSafeDictionary()
+    private var _networkResponses: ThreadSafeDictionary<TestableNetworkRequest, ThreadSafeArray<HttpConnection>> = ThreadSafeDictionary()
 
-    private var networkRequests: ThreadSafeDictionary<TestableNetworkRequest, [NetworkRequest]> = ThreadSafeDictionary()
+    private var networkRequests: ThreadSafeDictionary<TestableNetworkRequest, ThreadSafeArray<NetworkRequest>> = ThreadSafeDictionary()
     private var expectedNetworkRequests: ThreadSafeDictionary<TestableNetworkRequest, CountDownLatch> = ThreadSafeDictionary()
 
     var orderedNetworkRequests: [NetworkRequest] {
@@ -34,7 +34,7 @@ class NetworkRequestHelper {
 
     var networkResponses: [TestableNetworkRequest: [HttpConnection]] {
         return _networkResponses.shallowCopy.mapValues { value in
-            return value.map { $0.deepCopy() }
+            return value.shallowCopy.map { $0.deepCopy() }
         }
     }
 
@@ -44,7 +44,10 @@ class NetworkRequestHelper {
         _orderedNetworkRequests.append(networkRequest)
 
         let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
-        networkRequests[testableNetworkRequest, default: []].append(networkRequest)
+        if networkRequests[testableNetworkRequest] == nil {
+            networkRequests[testableNetworkRequest] = ThreadSafeArray()
+        }
+        networkRequests[testableNetworkRequest]?.append(networkRequest)
     }
 
     func reset() {
@@ -88,10 +91,7 @@ class NetworkRequestHelper {
     /// - Returns: An array of `NetworkRequest`s that match the specified `networkRequest`. If no matches are found, an empty array is returned.
     func getSentRequests(matching networkRequest: NetworkRequest) -> [NetworkRequest] {
         let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
-        if let matchingRequests = networkRequests.first(where: { key, _ in key == testableNetworkRequest }) {
-            return matchingRequests.value
-        }
-        return []
+        return networkRequests[testableNetworkRequest]?.shallowCopy ?? []
     }
 
     // MARK: - Network response helpers
@@ -102,7 +102,10 @@ class NetworkRequestHelper {
     ///   - responseConnection: The `HttpConnection` to set as a response.
     func addResponse(for networkRequest: NetworkRequest, responseConnection: HttpConnection) {
         let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
-        _networkResponses[testableNetworkRequest, default: []].append(responseConnection)
+        if _networkResponses[testableNetworkRequest] == nil {
+            _networkResponses[testableNetworkRequest] = ThreadSafeArray()
+        }
+        _networkResponses[testableNetworkRequest]?.append(responseConnection)
     }
 
     /// Removes all network responses for the provided network request.
@@ -119,7 +122,7 @@ class NetworkRequestHelper {
     /// - Parameter networkRequest: The `NetworkRequest` for which the response should be retrieved.
     /// - Returns: The array of `HttpConnection` responses associated with the provided `NetworkRequest`, or `nil` if no response was found.
     func getResponses(for networkRequest: NetworkRequest) -> [HttpConnection]? {
-        return _networkResponses[TestableNetworkRequest(from: networkRequest)]?.map { $0.deepCopy() }
+        return _networkResponses[TestableNetworkRequest(from: networkRequest)]?.shallowCopy.map { $0.deepCopy() }
     }
 
     // MARK: Assertion helpers
