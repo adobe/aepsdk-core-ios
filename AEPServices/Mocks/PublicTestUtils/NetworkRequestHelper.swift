@@ -21,73 +21,46 @@ import XCTest
 ///    - ``MockNetworkService``
 ///    - ``RealNetworkService``
 class NetworkRequestHelper {
-    private let queue: DispatchQueue = .init(label: "com.adobe.testutils.networkrequesthelper.queue")
-
-    private var _orderedNetworkRequests: [NetworkRequest] = []
+    private var _orderedNetworkRequests: ThreadSafeArray<NetworkRequest> = ThreadSafeArray()
     /// Matches sent `NetworkRequest`s with their corresponding `HttpConnection` responses.
-    private var _networkResponses: [TestableNetworkRequest: [HttpConnection]] = [:]
+    private var _networkResponses: ThreadSafeDictionary<TestableNetworkRequest, [HttpConnection]> = ThreadSafeDictionary()
 
-    private var sentNetworkRequests: [TestableNetworkRequest: [NetworkRequest]] = [:]
-    private var expectedNetworkRequests: [TestableNetworkRequest: CountDownLatch] = [:]
+    private var networkRequests: ThreadSafeDictionary<TestableNetworkRequest, [NetworkRequest]> = ThreadSafeDictionary()
+    private var expectedNetworkRequests: ThreadSafeDictionary<TestableNetworkRequest, CountDownLatch> = ThreadSafeDictionary()
 
     var orderedNetworkRequests: [NetworkRequest] {
-        return queue.sync {
-            return _orderedNetworkRequests.map { $0.deepCopy() }
-        }
+        return _orderedNetworkRequests.shallowCopy.map { $0.deepCopy() }
     }
 
     var networkResponses: [TestableNetworkRequest: [HttpConnection]] {
-        return queue.sync {
-            return _networkResponses.mapValues { value in
-                return value.map { $0.deepCopy() }
-            }
+        return _networkResponses.shallowCopy.mapValues { value in
+            return value.map { $0.deepCopy() }
         }
     }
 
     func recordSentNetworkRequest(_ networkRequest: NetworkRequest) {
         print("Received connectAsync to URL \(networkRequest.url.absoluteString) and HTTPMethod \(networkRequest.httpMethod.toString())")
 
-        queue.async { [weak self] in
+        _orderedNetworkRequests.append(networkRequest)
 
-            guard let self = self else { return }
-            // Add to ordered list
-            _orderedNetworkRequests.append(networkRequest)
-
-            // Add to grouped collection
-            let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
-            if let equalNetworkRequest = sentNetworkRequests.first(where: { key, _ in
-                key == testableNetworkRequest
-            }) {
-                sentNetworkRequests[equalNetworkRequest.key]?.append(networkRequest)
-            } else {
-                sentNetworkRequests[testableNetworkRequest] = [networkRequest]
-            }
-        }
+        let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
+        networkRequests[testableNetworkRequest, default: []].append(networkRequest)
     }
 
     func reset() {
-        queue.async { [weak self] in
-
-            guard let self = self else { return }
-
-            _orderedNetworkRequests.removeAll()
-            _networkResponses.removeAll()
-            expectedNetworkRequests.removeAll()
-            sentNetworkRequests.removeAll()
-        }
+        _orderedNetworkRequests.clear()
+        _networkResponses = ThreadSafeDictionary()
+        expectedNetworkRequests = ThreadSafeDictionary()
+        networkRequests = ThreadSafeDictionary()
     }
 
     /// Decrements the expectation count for a given network request.
     ///
     /// - Parameter networkRequest: The `NetworkRequest` for which the expectation count should be decremented.
     func countDownExpected(networkRequest: NetworkRequest) {
-        queue.async { [weak self] in
-
-            guard let self = self else { return }
-
-            for expectedNetworkRequest in expectedNetworkRequests where expectedNetworkRequest.key == TestableNetworkRequest(from: networkRequest) {
-                expectedNetworkRequest.value.countDown()
-            }
+        let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
+        if let expectedRequest = expectedNetworkRequests.first(where: { key, _ in key == testableNetworkRequest }) {
+            expectedRequest.value.countDown()
         }
     }
 
@@ -100,10 +73,10 @@ class NetworkRequestHelper {
     ///
     /// - Returns: A `DispatchTimeoutResult` with the result of the wait operation, or `nil` if the `NetworkRequest` does not match any expected request.
     private func awaitFor(networkRequest: NetworkRequest, timeout: TimeInterval) -> DispatchTimeoutResult? {
-        for expectedNetworkRequest in expectedNetworkRequests where expectedNetworkRequest.key == TestableNetworkRequest(from: networkRequest) {
-            return expectedNetworkRequest.value.await(timeout: timeout)
+        let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
+        if let expectedRequest = expectedNetworkRequests.first(where: { key, _ in key == testableNetworkRequest }) {
+            return expectedRequest.value.await(timeout: timeout)
         }
-
         return nil
     }
 
@@ -114,13 +87,11 @@ class NetworkRequestHelper {
     ///
     /// - Returns: An array of `NetworkRequest`s that match the specified `networkRequest`. If no matches are found, an empty array is returned.
     func getSentRequests(matching networkRequest: NetworkRequest) -> [NetworkRequest] {
-        queue.sync {
-            for request in sentNetworkRequests where request.key == TestableNetworkRequest(from: networkRequest) {
-                return request.value
-            }
-
-            return []
+        let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
+        if let matchingRequests = networkRequests.first(where: { key, _ in key == testableNetworkRequest }) {
+            return matchingRequests.value
         }
+        return []
     }
 
     // MARK: - Network response helpers
@@ -131,15 +102,7 @@ class NetworkRequestHelper {
     ///   - responseConnection: The `HttpConnection` to set as a response.
     func addResponse(for networkRequest: NetworkRequest, responseConnection: HttpConnection) {
         let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
-
-        queue.sync {
-            if _networkResponses[testableNetworkRequest] != nil {
-                _networkResponses[testableNetworkRequest]?.append(responseConnection)
-            } else {
-                _networkResponses[testableNetworkRequest] = [responseConnection]
-            }
-        }
-
+        _networkResponses[testableNetworkRequest, default: []].append(responseConnection)
     }
 
     /// Removes all network responses for the provided network request.
@@ -147,13 +110,8 @@ class NetworkRequestHelper {
     /// - Parameters:
     ///   - networkRequest: The `NetworkRequest` for which to remove all responses.
     func removeAllResponses(for networkRequest: NetworkRequest) {
-        queue.async { [weak self] in
-
-            guard let self = self else { return }
-
-            let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
-            _networkResponses[testableNetworkRequest] = nil
-        }
+        let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
+        _ = _networkResponses.removeValue(forKey: testableNetworkRequest)
     }
 
     /// Returns the network responses associated with the given network request.
@@ -161,9 +119,7 @@ class NetworkRequestHelper {
     /// - Parameter networkRequest: The `NetworkRequest` for which the response should be retrieved.
     /// - Returns: The array of `HttpConnection` responses associated with the provided `NetworkRequest`, or `nil` if no response was found.
     func getResponses(for networkRequest: NetworkRequest) -> [HttpConnection]? {
-        queue.sync {
-            return _networkResponses[TestableNetworkRequest(from: networkRequest)]?.map { $0.deepCopy() }
-        }
+        return _networkResponses[TestableNetworkRequest(from: networkRequest)]?.map { $0.deepCopy() }
     }
 
     // MARK: Assertion helpers
@@ -181,9 +137,7 @@ class NetworkRequestHelper {
             return
         }
 
-        queue.sync {
-            expectedNetworkRequests[TestableNetworkRequest(from: networkRequest)] = CountDownLatch(expectedCount)
-        }
+        expectedNetworkRequests[TestableNetworkRequest(from: networkRequest)] = CountDownLatch(expectedCount)
     }
 
     /// Asserts that the correct number of network requests were seen for all previously set network request expectations.
@@ -236,7 +190,7 @@ class NetworkRequestHelper {
     func assertUnexpectedRequests(timeout: TimeInterval = TestConstants.Defaults.WAIT_NETWORK_REQUEST_TIMEOUT, file: StaticString = #file, line: UInt = #line) {
         var unexpectedRequestsCount = 0
         var unexpectedRequestsAsString = ""
-        for (sentRequest, requests) in sentNetworkRequests {
+        for (sentRequest, requests) in networkRequests {
             let sentRequestURL = sentRequest.url.absoluteString
             let sentRequestHTTPMethod = sentRequest.httpMethod.toString()
             // Check if request is expected and it is over the expected count
@@ -369,5 +323,28 @@ public extension NetworkRequest {
 
         print("Connection payload is empty for network request with URL \(self.url.absoluteString), HTTPMethod \(self.httpMethod.toString())")
         return [:]
+    }
+}
+
+extension ThreadSafeDictionary: Sequence {
+    public func makeIterator() -> Dictionary<K, V>.Iterator {
+        return queue.sync { return self.dictionary.makeIterator() }
+    }
+
+    public var isEmpty: Bool {
+        return queue.sync { return self.dictionary.isEmpty }
+    }
+
+    public subscript(key: K, default defaultValue: @autoclosure () -> V) -> V {
+        get {
+            return queue.sync {
+                return dictionary[key] ?? defaultValue()
+            }
+        }
+        set {
+            queue.async {
+                self.dictionary[key] = newValue
+            }
+        }
     }
 }
