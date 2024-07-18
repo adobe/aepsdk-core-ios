@@ -84,9 +84,11 @@ class NetworkRequestHelper {
     /// - Returns: A `DispatchTimeoutResult` with the result of the wait operation, or `nil` if the `NetworkRequest` does not match any expected request.
     private func awaitFor(networkRequest: NetworkRequest, timeout: TimeInterval) -> DispatchTimeoutResult? {
         let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
-        return queue.sync {
-            return self.expectedNetworkRequests[testableNetworkRequest]?.await(timeout: timeout)
+        var countdownLatch: CountDownLatch?
+        queue.sync {
+            countdownLatch = self.expectedNetworkRequests[testableNetworkRequest]
         }
+        return countdownLatch?.await(timeout: timeout)
     }
 
     ///  Returns all sent network requests that match the provided network request using the
