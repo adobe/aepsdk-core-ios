@@ -234,8 +234,7 @@ class ControllableHitProcessor: HitProcessing {
 
     func processHit(entity: DataEntity, completion: @escaping (Bool) -> Void) {
         processedHits.append(entity)
-        var hitResult = _hitResult
-        completion(hitResult)
+        completion(_hitResult)
     }
 }
 
