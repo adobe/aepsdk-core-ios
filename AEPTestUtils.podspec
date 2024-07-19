@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "AEPTestUtils"
-    s.version          = "5.0.3"
+    s.version          = "5.2.0"
     s.summary          = "Adobe Experience Platform test utilities for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   
     s.description      = <<-DESC
