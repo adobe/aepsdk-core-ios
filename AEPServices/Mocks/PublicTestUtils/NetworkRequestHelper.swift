@@ -21,6 +21,7 @@ import XCTest
 ///    - ``MockNetworkService``
 ///    - ``RealNetworkService``
 class NetworkRequestHelper {
+    private let LOG_TAG = "NetworkRequestHelper"
     /// A dispatch queue for synchronizing access to the internal state.
     private let queue = DispatchQueue(label: "com.adobe.networkrequesthelper.syncqueue")
 
@@ -58,7 +59,7 @@ class NetworkRequestHelper {
     ///
     /// - Parameter networkRequest: The ``NetworkRequest`` object representing the network request that was sent.
     func recordSentNetworkRequest(_ networkRequest: NetworkRequest) {
-        print("Received connectAsync to URL \(networkRequest.url.absoluteString) and HTTPMethod \(networkRequest.httpMethod.toString())")
+        Log.debug(label: LOG_TAG, "Received connectAsync to URL \(networkRequest.url.absoluteString) and HTTPMethod \(networkRequest.httpMethod.toString())")
 
         queue.async { [weak self] in
             guard let self = self else { return }
@@ -156,6 +157,7 @@ class NetworkRequestHelper {
     ///     - ``setExpectation(for:expectedCount:file:line:)``
     func getNetworkRequestsWith(url: String, httpMethod: HttpMethod, timeout: TimeInterval = TestConstants.Defaults.WAIT_NETWORK_REQUEST_TIMEOUT, file: StaticString = #file, line: UInt = #line) -> [NetworkRequest] {
         guard let url = URL(string: url) else {
+            Log.error(label: LOG_TAG, "getNetworkRequestsWith - Unable to construct valid URL instance from provided URL String: \(url).")
             return []
         }
 
