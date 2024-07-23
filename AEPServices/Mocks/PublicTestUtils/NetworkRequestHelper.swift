@@ -346,12 +346,15 @@ class NetworkRequestHelper {
     ///   - line: The line from which the method is called, used for localized assertion failures.
     private func awaitRequest(_ networkRequest: NetworkRequest, timeout: TimeInterval = TestConstants.Defaults.WAIT_NETWORK_REQUEST_TIMEOUT, file: StaticString = #file, line: UInt = #line) {
         let testableNetworkRequest = TestableNetworkRequest(from: networkRequest)
+        var countDownLatch: CountDownLatch?
 
-        let waitResult = queue.sync {
-            return self.expectedNetworkRequests[testableNetworkRequest]?.await(timeout: timeout)
+        // Get the latch in a synchronized block
+        queue.sync {
+            countDownLatch = self.expectedNetworkRequests[testableNetworkRequest]
         }
 
-        if let result = waitResult {
+        // Perform operations outside the synchronized block
+        if let result = countDownLatch?.await(timeout: timeout) {
             XCTAssertFalse(result == DispatchTimeoutResult.timedOut,
                            """
                            Timed out waiting for network request(s) with URL \(networkRequest.url)
