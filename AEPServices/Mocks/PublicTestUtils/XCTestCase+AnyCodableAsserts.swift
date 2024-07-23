@@ -326,11 +326,11 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         guard let expected = expected, let actual = actual else {
             XCTFail(
-                #"""
-                    \#(expected == nil ? "Expected is nil" : "Actual is nil") and \#(expected == nil ? "Actual" : "Expected") is non-nil.
-                    Expected: \#(String(describing: expected))
-                    Actual: \#(String(describing: actual))
-                """#,
+                """
+                \(expected == nil ? "Expected is nil" : "Actual is nil") and \(expected == nil ? "Actual" : "Expected") is non-nil.
+                Expected: \(String(describing: expected))
+                Actual: \(String(describing: actual))
+                """,
                 file: file,
                 line: line)
             return
@@ -693,15 +693,15 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
                 XCTFail(
-                    #"""
-                        Expected JSON is non-nil but Actual JSON is nil.
+                    """
+                    Expected JSON is non-nil but Actual JSON is nil.
 
-                        Expected: \#(String(describing: expected))
+                    Expected: \(String(describing: expected))
 
-                        Actual: \#(String(describing: actual))
+                    Actual: \(String(describing: actual))
 
-                        Key path: \#(keyPathAsString(keyPath))
-                    """#,
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
                     file: file,
                     line: line)
             }
@@ -765,15 +765,15 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         default:
             if shouldAssert {
                 XCTFail(
-                    #"""
-                        Expected and Actual types do not match.
+                    """
+                    Expected and Actual types do not match.
 
-                        Expected: \#(expected)
+                    Expected: \(expected) (Type: \(type(of: expected)))
 
-                        Actual: \#(actual)
+                    Actual: \(actual) (Type: \(type(of: actual)))
 
-                        Key path: \#(keyPathAsString(keyPath))
-                    """#,
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
                     file: file,
                     line: line)
             }
@@ -809,15 +809,15 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
                 XCTFail(
-                    #"""
-                        Expected JSON is non-nil but Actual JSON is nil.
+                    """
+                    Expected JSON is non-nil but Actual JSON is nil.
 
-                        Expected: \#(String(describing: expected))
+                    Expected: \(String(describing: expected))
 
-                        Actual: \#(String(describing: actual))
+                    Actual: \(String(describing: actual))
 
-                        Key path: \#(keyPathAsString(keyPath))
-                """#,
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
                     file: file,
                     line: line)
             }
@@ -826,18 +826,18 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         if nodeTree.collectionEqualCount.isActive ? (expected.count != actual.count) : (expected.count > actual.count) {
             if shouldAssert {
                 XCTFail(
-                    #"""
-                        Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
+                    """
+                    Expected JSON \(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
 
-                        Expected count: \#(expected.count)
-                        Actual count: \#(actual.count)
+                    Expected count: \(expected.count)
+                    Actual count: \(actual.count)
 
-                        Expected: \#(expected)
+                    Expected: \(expected)
 
-                        Actual: \#(actual)
+                    Actual: \(actual)
 
-                        Key path: \#(keyPathAsString(keyPath))
-                    """#,
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
                     file: file,
                     line: line)
             }
@@ -860,12 +860,12 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             expectedIndexes.removeValue(forKey: key)
         }
 
-        var availableWildcardActualIndexes = Set((0..<actual.count).map({ String($0) })).subtracting(expectedIndexes.keys)
+        var availableAnyOrderActualIndexes = Set((0..<actual.count).map({ String($0) })).subtracting(expectedIndexes.keys)
 
         var validationResult = true
 
-        // Validate non-wildcard expected side indexes first, as these don't have
-        // position flexibility
+        // Validate non-any-order expected side indexes first, as these don't have
+        // order flexibility
         for (index, _) in expectedIndexes {
             let intIndex = Int(index)! // swiftlint:disable:this force_unwrapping
             validationResult = validateJSON(
@@ -882,7 +882,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         for (index, _) in anyOrderIndexes {
             let intIndex = Int(index)! // swiftlint:disable:this force_unwrapping
 
-            guard let actualIndex = availableWildcardActualIndexes.first(where: {
+            guard let actualIndex = availableAnyOrderActualIndexes.first(where: {
                 validateJSON(
                     expected: expected[intIndex],
                     actual: actual[Int($0)!], // swiftlint:disable:this force_unwrapping
@@ -893,18 +893,18 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                 // swiftlint:disable force_unwrapping
                 if shouldAssert {
                     XCTFail(
-                        #"""
-                            Wildcard \#(NodeConfig.resolveOption(.primitiveExactMatch, childName: index, parentNode: nodeTree).isActive ? "exact" : "type")
-                            match found no matches on Actual side satisfying the Expected requirement.
+                        """
+                        Any order \(NodeConfig.resolveOption(.primitiveExactMatch, childName: index, parentNode: nodeTree).isActive ? "exact" : "type")
+                        match found no matches on Actual side satisfying the Expected requirement.
 
-                            Requirement: \#(nodeTree)
+                        Requirement: \(nodeTree)
 
-                            Expected: \#(expected[intIndex])
+                        Expected: \(expected[intIndex])
 
-                            Actual (remaining unmatched elements): \#(availableWildcardActualIndexes.map({ actual[Int($0)!] }))
+                        Actual (remaining unmatched elements): \(availableAnyOrderActualIndexes.map({ actual[Int($0)!] }))
 
-                            Key path: \#(keyPathAsString(keyPath))
-                        """#,
+                        Key path: \(keyPathAsString(keyPath))
+                        """,
                         file: file,
                         line: line)
                 }
@@ -912,7 +912,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                 validationResult = false
                 break
             }
-            availableWildcardActualIndexes.remove(actualIndex)
+            availableAnyOrderActualIndexes.remove(actualIndex)
         }
         return validationResult
     }
@@ -944,15 +944,15 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
                 XCTFail(
-                    #"""
-                        Expected JSON is non-nil but Actual JSON is nil.
+                    """
+                    Expected JSON is non-nil but Actual JSON is nil.
 
-                        Expected: \#(String(describing: expected))
+                    Expected: \(String(describing: expected))
 
-                        Actual: \#(String(describing: actual))
+                    Actual: \(String(describing: actual))
 
-                        Key path: \#(keyPathAsString(keyPath))
-                    """#,
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
                     file: file,
                     line: line)
             }
@@ -961,18 +961,18 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         if nodeTree.collectionEqualCount.isActive ? (expected.count != actual.count) : (expected.count > actual.count) {
             if shouldAssert {
                 XCTFail(
-                    #"""
-                        Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
+                    """
+                    Expected JSON \(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
 
-                        Expected count: \#(expected.count)
-                        Actual count: \#(actual.count)
+                    Expected count: \(expected.count)
+                    Actual count: \(actual.count)
 
-                        Expected: \#(expected)
+                    Expected: \(expected)
 
-                        Actual: \#(actual)
+                    Actual: \(actual)
 
-                        Key path: \#(keyPathAsString(keyPath))
-                    """#,
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
                     file: file,
                     line: line)
             }
@@ -1083,7 +1083,6 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
     }
 
-
     /// Validates an array of `AnyCodable` values against the provided node configuration tree.
     ///
     /// This method iterates through each element in the given array of `AnyCodable` and performs validation
@@ -1170,7 +1169,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                 if resolvedKeyMustBeAbsent.isActive {
                     XCTFail(
                         """
-                        Actual JSON should not have key with name: \(key)
+                        Actual JSON must not have key with name: \(key)
 
                         Actual: \(actual)
 
