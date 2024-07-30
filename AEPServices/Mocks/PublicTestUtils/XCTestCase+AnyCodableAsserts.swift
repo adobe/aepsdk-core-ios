@@ -34,7 +34,6 @@ public protocol AnyCodableComparable {
     func toAnyCodable() -> AnyCodable?
 }
 
-
 extension Optional where Wrapped: AnyCodableComparable {
     public func toAnyCodable() -> AnyCodable? {
         switch self {
