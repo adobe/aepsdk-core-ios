@@ -14,14 +14,26 @@ import AEPServices
 import Foundation
 import XCTest
 
+/// Represents the result of a validation process, including whether the validation was successful and the count of leaf nodes encountered.
+///
+/// `ValidationResult` is used by the `validateActual` recursive methods to return the outcome of their validation
+/// and to track the number of leaf nodes encountered during a depth-first traversal.
 struct ValidationResult {
+    /// A Boolean value indicating whether the validation was successful.
     var isValid: Bool
+
+    /// The total number of leaf nodes encountered up to this point in the hierarchy, during a depth-first traversal.
     var elementCount: Int
 }
 
+/// A protocol that enables conversion of conforming types into `AnyCodable` format.
 public protocol AnyCodableComparable {
+    /// Converts the conforming type to an optional `AnyCodable` instance.
+    ///
+    /// - Returns: An optional `AnyCodable` instance representing the conforming type, or `nil` if the conversion fails.
     func toAnyCodable() -> AnyCodable?
 }
+
 
 extension Optional where Wrapped: AnyCodableComparable {
     public func toAnyCodable() -> AnyCodable? {
@@ -189,9 +201,6 @@ public protocol AnyCodableAsserts {
     ///   - file: The file from which the method is called, used for localized assertion failures.
     ///   - line: The line from which the method is called, used for localized assertion failures.
     func assertTypeMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, pathOptions: MultiPathConfig..., file: StaticString, line: UInt)
-
-    // Create a no-path-option version of the API the compiler will favor so that the deprecation
-    // message is not applied to all base usages of the API
 
     /// Performs JSON validation where only the values from the `expected` JSON are required by default.
     /// By default, the comparison logic uses the value exact match option, validating that both values are of the same type
