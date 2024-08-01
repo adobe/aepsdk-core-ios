@@ -18,7 +18,7 @@ import XCTest
 ///
 /// `ValidationResult` is used by the `validateActual` recursive methods to return the outcome of their validation
 /// and to track the number of leaf nodes encountered during a depth-first traversal.
-struct ValidationResult {
+private struct ValidationResult {
     /// A Boolean value indicating whether the validation was successful.
     var isValid: Bool
 
@@ -1023,7 +1023,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
     ///   - line: The line from which the method is called, used for localized assertion failures.
     ///
     /// - Returns: A `Bool` indicating whether the `actual` value is valid based on the `nodeTree` configuration.
-    internal func validateActual(
+    private func validateActual(
         actual: AnyCodable?,
         keyPath: [Any] = [],
         nodeTree: NodeConfig,
