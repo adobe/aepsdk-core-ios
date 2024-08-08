@@ -84,7 +84,7 @@ Path option usage example
 assertExactMatch(
     expected: expected, 
     actual: actual, 
-    pathOptions: KeyMustBeAbsent("key1"), CollectionEqualCount(scope: .subtree))
+    pathOptions: KeyMustBeAbsent(paths: "key1"), ValueTypeMatch(paths: "key1.key2")
 ```
 
 -------------------------
@@ -118,10 +118,6 @@ XCTAssertEqual(executeJson["mboxes"][0]["parameters"]["mbox-parameter-key1"].str
 
 Each section below explains the key pattern to look for in your test case when migrating to the equivalent JSON comparison API usage.
 
-### Default value exact vs type match
-
-The only difference between the two APIs, `assertExactMatch` and `assertTypeMatch`, is that the default value validation logic they use is exact value versus value type validation for JSON nodes. When determining which API to use, it can be helpful to **count how many exact property versus non-null assertions you have and choose the API based on which has the higher occurrence rate**.
-
 ### Equals validation
 
 #### Key pattern
@@ -147,6 +143,10 @@ assertEqual(expected: expected, actual: event)
 
 This is commonly encountered when an exact validation of all values in a JSON payload is required, with no extensible collections. Use `assertEquals`, which is essentially equivalent to a collection equals comparison.
 
+### Default value exact vs type match
+
+The only difference between the two APIs, `assertExactMatch` and `assertTypeMatch`, is that the default value validation logic they use is exact value versus value type validation for JSON nodes. When determining which API to use, it can be helpful to **count how many exact property versus non-null assertions you have and choose the API based on which has the higher occurrence rate**.
+
 ### Mixed value exact and type validation
 
 #### Key pattern
@@ -162,13 +162,22 @@ XCTAssertEqual(123, flattenedEventData["key1"]) // (Key pattern 1.) exact value
 XCTAssertNotNil(flattenedEventData["timestamp"]) // (Key pattern 1.) value type
 ```
 
-After
+After (option 1: base mode exact value validation)
 ```swift
 let expected = """{ "timestamp": "STRING_TYPE", "key1": 123 }""" // "STRING_TYPE" is just a value convention - the only requirement is that the value type is the one you want to validate
 assertExactMatch( // Base value comparison mode is exact match
     expected: expected,
     actual: event,
-    pathOptions: ValueTypeMatch(paths: "timestamp")) // Enables value type match for the specified path
+    pathOptions: ValueTypeMatch(paths: "timestamp")) // Enables value type validation for the specified path
+```
+
+After (option 2: base mode value type validation)
+```swift
+let expected = """{ "timestamp": "STRING_TYPE", "key1": 123 }""" // "STRING_TYPE" is just a value convention - the only requirement is that the value type is the one you want to validate
+assertTypeMatch( // Base value comparison mode is type match
+    expected: expected,
+    actual: event,
+    pathOptions: ValueExactMatch(paths: "key1")) // Enables exact value validation for the specified path
 ```
 
 This pattern is commonly encountered when performing JSON payload validation with randomly generated or time-based values, such as ECIDs or timestamps. By using only value type validation on these values, the correct type can be validated without needing to pre-capture the actual value.
