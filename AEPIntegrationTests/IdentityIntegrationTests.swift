@@ -24,6 +24,7 @@ class IdentityIntegrationTests: TestBase {
 
     override func setUp() {
         NamedCollectionDataStore.clear()
+        resetTestExpectations()
     }
 
     override func tearDown() {
@@ -57,7 +58,11 @@ class IdentityIntegrationTests: TestBase {
         EventHub.reset()
     }
 
-    func initExtensionsAndWait() {
+    func initExtensionsAndWait(sharedStateCount: Int = 2) {
+        // Usually Hub and Lifecycle shared state events, but some test cases may have conditions
+        // that trigger more shared states
+        setExpectationEvent(type: EventType.hub, source: EventSource.sharedState, expectedCount: Int32(sharedStateCount))
+
         let initExpectation = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([InstrumentedExtension.self, Identity.self, Lifecycle.self, Signal.self]) {
@@ -65,12 +70,8 @@ class IdentityIntegrationTests: TestBase {
         }
         wait(for: [initExpectation], timeout: 1)
 
-        // Add an additional wait time
-        let semaphore = DispatchSemaphore(value: 0)
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
-            semaphore.signal()
-        }
-        semaphore.wait()
+        assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+        resetTestExpectations()
     }
 
     func extractECIDFrom(urlString: String) -> String? {
@@ -146,7 +147,7 @@ class IdentityIntegrationTests: TestBase {
             return nil
         }
 
-        initExtensionsAndWait()
+        initExtensionsAndWait(sharedStateCount: 4)
 
         // we should get config shared state update from cache which would forceSync and sendHit
         wait(for: [secondLaunchRequestExpectation], timeout: 1)
@@ -236,7 +237,7 @@ class IdentityIntegrationTests: TestBase {
 
     func testGetExperienceCloudIdWithinPermissibleTimeOnLaunch() {
         persistECIDInUserDefaults()
-        initExtensionsAndWait()
+        initExtensionsAndWait(sharedStateCount: 3)
 
         let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 0.5 seconds when ECID is cached on Launch")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
@@ -283,7 +284,10 @@ class IdentityIntegrationTests: TestBase {
 
         let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+
+        setExpectationEvent(type: EventType.identity, source: EventSource.requestIdentity)
         Identity.syncIdentifier(identifierType: "type1", identifier: "id1", authenticationState: .authenticated)
+        assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
 
         Identity.getIdentifiers { identifiers, error in
             XCTAssertNotNil(identifiers)
@@ -423,5 +427,6 @@ class IdentityIntegrationTests: TestBase {
         MobileCore.updateConfigurationWith(configDict: configDict)
 
         assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+        resetTestExpectations()
     }
 }
