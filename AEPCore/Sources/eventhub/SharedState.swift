@@ -22,7 +22,7 @@ public enum SharedStateResolution: Int {
 }
 
 /// Type representing the state of an extension's `SharedState`
-@objc (AEPSharedStateStatus)
+@objc(AEPSharedStateStatus)
 public enum SharedStateStatus: Int {
     case set, pending, none
 }

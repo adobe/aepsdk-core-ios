@@ -13,7 +13,7 @@
     import Foundation
 
     /// A MessageGesture represents a user interaction with a UIView.
-    @objc (AEPMessageGesture)
+    @objc(AEPMessageGesture)
     public enum MessageGesture: Int {
         case swipeUp = 0
         case swipeDown = 1
