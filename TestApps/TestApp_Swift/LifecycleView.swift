@@ -11,6 +11,7 @@
 
 import SwiftUI
 import AEPCore
+import AEPLifecycle
 
 struct LifecycleView: View {
     @State private var additionalDataKey:String = ""
@@ -18,35 +19,25 @@ struct LifecycleView: View {
 
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading, spacing: 12) {
+            Text("Lifecycle extension version: \(Lifecycle.extensionVersion)")
+            
             Text("Additional Context Data")
             TextField("Key", text: $additionalDataKey)
             TextField("Value", text: $additionalDataValue)
-            HStack {
-                Button(action: {
-                    if additionalDataKey.isEmpty {
-                        MobileCore.lifecycleStart(additionalContextData: nil)
-                    } else {
-                        MobileCore.lifecycleStart(additionalContextData: [additionalDataKey:additionalDataValue])
-                    }
-                }){
-                    Text("Lifecycle Start")
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .padding()
-                        .background(Color.gray)
-                        .foregroundColor(.white)
-                        .font(.caption)
-                }.cornerRadius(5)
-            }
+            Button(action: {
+                if additionalDataKey.isEmpty {
+                    MobileCore.lifecycleStart(additionalContextData: nil)
+                } else {
+                    MobileCore.lifecycleStart(additionalContextData: [additionalDataKey:additionalDataValue])
+                }
+            }){
+                Text("Lifecycle Start")
+            }.buttonStyle(CustomButtonStyle())
             Button(action: {
                 MobileCore.lifecyclePause()
             }) {
                 Text("Lifecycle Pause")
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray)
-                    .foregroundColor(.white)
-                    .font(.caption)
-            }.cornerRadius(5)
+            }.buttonStyle(CustomButtonStyle())
 
         }.padding()
     }
