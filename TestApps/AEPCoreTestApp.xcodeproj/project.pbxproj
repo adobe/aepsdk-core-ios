@@ -101,6 +101,15 @@
 		78F2E318280F719D0073CE00 /* AEPServices.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 78F2E310280F719C0073CE00 /* AEPServices.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7A08C6747E305D5BF9CE2A3D /* Pods_TestApp_Objc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B889355E99E7CE85BE01DA34 /* Pods_TestApp_Objc.framework */; };
 		9F65FBBE14E3EB518B8FA743 /* Pods_TestApp_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 148E88836D30DB0A4542D6F1 /* Pods_TestApp_Swift.framework */; };
+		AC0BC7342C66C34A0034105C /* UIServicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC0BC7312C66ADB70034105C /* UIServicesView.swift */; };
+		ACC05DC22C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */; };
+		ACC05DC32C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */; };
+		ACC05DC52C6AC997005101D7 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */; };
+		ACC05DC62C6AC997005101D7 /* ADBMobileConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */; };
+		ACC05DC82C6AC9B6005101D7 /* ADBMobileConfig-rules.zip in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC72C6AC9B6005101D7 /* ADBMobileConfig-rules.zip */; };
+		ACC05DC92C6AC9B6005101D7 /* ADBMobileConfig-rules.zip in Resources */ = {isa = PBXBuildFile; fileRef = ACC05DC72C6AC9B6005101D7 /* ADBMobileConfig-rules.zip */; };
+		ACC05DCB2C6ACB39005101D7 /* SignalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC05DCA2C6ACB39005101D7 /* SignalView.swift */; };
+		ACC05DCC2C6ACB39005101D7 /* SignalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC05DCA2C6ACB39005101D7 /* SignalView.swift */; };
 		B784FED2B823BE1487A956C9 /* Pods_TestAppExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73F917DDAA83CF54D6804B96 /* Pods_TestAppExtension.framework */; };
 		BBF55F53251E494D00CAAC53 /* E2ETestingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF55F52251E494D00CAAC53 /* E2ETestingUITests.swift */; };
 		BBF5EE282512BA0B0003265F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF5EE272512BA0B0003265F /* AppDelegate.swift */; };
@@ -344,6 +353,12 @@
 		85706A036E6FEF709B34873D /* Pods-TestApp_Objc (tvOS).debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp_Objc (tvOS).debug.xcconfig"; path = "Target Support Files/Pods-TestApp_Objc (tvOS)/Pods-TestApp_Objc (tvOS).debug.xcconfig"; sourceTree = "<group>"; };
 		8DD57656B2661DC8D3B4EB5D /* Pods-TestAppExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAppExtension.release.xcconfig"; path = "Target Support Files/Pods-TestAppExtension/Pods-TestAppExtension.release.xcconfig"; sourceTree = "<group>"; };
 		9E695D276A2D5CA7797EF41F /* Pods-PerformanceApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PerformanceApp.debug.xcconfig"; path = "Target Support Files/Pods-PerformanceApp/Pods-PerformanceApp.debug.xcconfig"; sourceTree = "<group>"; };
+		AC0BC7312C66ADB70034105C /* UIServicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIServicesView.swift; sourceTree = "<group>"; };
+		AC0BC7352C66C8D60034105C /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig_custom.json; sourceTree = "<group>"; };
+		ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ADBMobileConfig.json; sourceTree = "<group>"; };
+		ACC05DC72C6AC9B6005101D7 /* ADBMobileConfig-rules.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = "ADBMobileConfig-rules.zip"; sourceTree = "<group>"; };
+		ACC05DCA2C6ACB39005101D7 /* SignalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalView.swift; sourceTree = "<group>"; };
 		B25A64F5BA85E21A5C27FD87 /* Pods_TestApp_Swift__tvOS_.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestApp_Swift__tvOS_.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B889355E99E7CE85BE01DA34 /* Pods_TestApp_Objc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestApp_Objc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBF55F4E251E494D00CAAC53 /* E2E_SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = E2E_SwiftUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -531,6 +546,7 @@
 		7808888126D56E8700F5A665 /* TestApp_Swift */ = {
 			isa = PBXGroup;
 			children = (
+				ACC05DC12C6AC15A005101D7 /* Config */,
 				752261872AA7826700D59847 /* TestApp_Swift.entitlements */,
 				780888A826D56F3800F5A665 /* AppDelegate.swift */,
 				780888AC26D56F3800F5A665 /* SceneDelegate.swift */,
@@ -538,6 +554,8 @@
 				780888AE26D56F3800F5A665 /* CoreView.swift */,
 				780888AF26D56F3800F5A665 /* IdentityView.swift */,
 				780888A626D56F3800F5A665 /* LifecycleView.swift */,
+				ACC05DCA2C6ACB39005101D7 /* SignalView.swift */,
+				AC0BC7312C66ADB70034105C /* UIServicesView.swift */,
 				78A69819289C70B700F67FEC /* ButtonStyle.swift */,
 				780888B126D56F3800F5A665 /* Assets.xcassets */,
 				780888A926D56F3800F5A665 /* Base.lproj */,
@@ -566,6 +584,7 @@
 		786D629D26D69E94000828FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AC0BC7352C66C8D60034105C /* WebKit.framework */,
 				7545089D2ADDD3F800865E75 /* AEPSignal.framework */,
 				754508942ADDD3F000865E75 /* AEPIdentity.framework */,
 				754508952ADDD3F000865E75 /* AEPLifecycle.framework */,
@@ -667,6 +686,16 @@
 				78F2E305280F6DED0073CE00 /* TestAppExtension.entitlements */,
 			);
 			path = TestAppExtension;
+			sourceTree = "<group>";
+		};
+		ACC05DC12C6AC15A005101D7 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				ACC05DC72C6AC9B6005101D7 /* ADBMobileConfig-rules.zip */,
+				ACC05DC42C6AC997005101D7 /* ADBMobileConfig.json */,
+				ACC05DC02C6AC15A005101D7 /* ADBMobileConfig_custom.json */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		BBF55F51251E494D00CAAC53 /* E2E_SwiftUITests */ = {
@@ -985,7 +1014,10 @@
 			files = (
 				780888C026D56F3800F5A665 /* Preview Assets.xcassets in Resources */,
 				780888BE26D56F3800F5A665 /* Assets.xcassets in Resources */,
+				ACC05DC32C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */,
+				ACC05DC82C6AC9B6005101D7 /* ADBMobileConfig-rules.zip in Resources */,
 				780888B826D56F3800F5A665 /* LaunchScreen.storyboard in Resources */,
+				ACC05DC52C6AC997005101D7 /* ADBMobileConfig.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1004,7 +1036,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				78A26DD7284A9D97004A91B9 /* Preview Assets.xcassets in Resources */,
+				ACC05DC62C6AC997005101D7 /* ADBMobileConfig.json in Resources */,
+				ACC05DC92C6AC9B6005101D7 /* ADBMobileConfig-rules.zip in Resources */,
 				78A26DD6284A9D80004A91B9 /* Assets.xcassets in Resources */,
+				ACC05DC22C6AC15A005101D7 /* ADBMobileConfig_custom.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1330,6 +1365,8 @@
 				780888BC26D56F3800F5A665 /* IdentityView.swift in Sources */,
 				780888BB26D56F3800F5A665 /* CoreView.swift in Sources */,
 				780888B526D56F3800F5A665 /* LifecycleView.swift in Sources */,
+				ACC05DCB2C6ACB39005101D7 /* SignalView.swift in Sources */,
+				AC0BC7342C66C34A0034105C /* UIServicesView.swift in Sources */,
 				780888B626D56F3800F5A665 /* MenuView.swift in Sources */,
 				780888B926D56F3800F5A665 /* SceneDelegate.swift in Sources */,
 				78A6981A289C70B700F67FEC /* ButtonStyle.swift in Sources */,
@@ -1355,6 +1392,7 @@
 				78A26DD4284A9D6E004A91B9 /* IdentityView.swift in Sources */,
 				78A26DD3284A9D6B004A91B9 /* CoreView.swift in Sources */,
 				78A26DD5284A9D71004A91B9 /* LifecycleView.swift in Sources */,
+				ACC05DCC2C6ACB39005101D7 /* SignalView.swift in Sources */,
 				78A26DD2284A9D69004A91B9 /* MenuView.swift in Sources */,
 				78A26DD1284A9D66004A91B9 /* SceneDelegate.swift in Sources */,
 				7816BBCC289DB32600FCBCDF /* ButtonStyle.swift in Sources */,
@@ -1680,7 +1718,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 85165225B3B3ADF492F246FB /* Pods-TestApp_Swift.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1707,7 +1744,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F43587A27948BD58B9ED83FC /* Pods-TestApp_Swift.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -1914,7 +1950,6 @@
 		BBF55F59251E494D00CAAC53 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;
@@ -1936,7 +1971,6 @@
 		BBF55F5A251E494D00CAAC53 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = FKGEE875K4;

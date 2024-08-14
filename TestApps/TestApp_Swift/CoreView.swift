@@ -16,54 +16,79 @@ import AEPCore
 
 struct CoreView: View {
     @State private var currentPrivacyStatus: String = ""
-    @State private var showingAlert = false
-    @State private var retrievedAttributes: String = ""
+    @State private var appID: String = ""
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
+                configSection
                 privacySection
-                piiSection
-                manualOverridesSection
+                trackSection
                 eventsSection
             }.padding()
         }
     }
 
+    var configSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Configuration").bold()
+            
+            TextField("App ID", text: $appID)
+            Button(action: {
+                MobileCore.configureWith(appId: appID)
+            }) {
+                Text("Configure With AppID")
+            }.disabled(appID.isEmpty)
+            .buttonStyle(CustomButtonStyle())
+
+            Button(action: {
+                let path = Bundle.main.path(forResource: "ADBMobileConfig_custom", ofType: "json") ?? ""
+                MobileCore.configureWith(filePath: path)
+            }) {
+                Text("Configure With FilePath")
+            }.buttonStyle(CustomButtonStyle())
+
+            Button(action: {
+                MobileCore.updateConfigurationWith(configDict: ["custom_key": "custom_value"])
+            }) {
+                Text("Update Configuration")
+            }.buttonStyle(CustomButtonStyle())
+            
+            Button(action: {
+                MobileCore.clearUpdatedConfiguration()
+            }) {
+                Text("Clear Updated Configuration")
+            }.buttonStyle(CustomButtonStyle())
+        }
+    }
+    
     var privacySection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Change Privacy Status").bold()
+            
             Button(action: {
-                // step-privacy-start
                 MobileCore.setPrivacyStatus(.optedIn)
-                // step-privacy-end
             }) {
                 Text("Opted In")
             }.buttonStyle(CustomButtonStyle())
 
             Button(action: {
-                // step-privacy-start
                 MobileCore.setPrivacyStatus(.optedOut)
-                // step-privacy-end
             }) {
                 Text("Opted Out")
             }.buttonStyle(CustomButtonStyle())
 
             Button(action: {
-                // step-privacy-start
                 MobileCore.setPrivacyStatus(.unknown)
-                // step-privacy-end
             }) {
                 Text("Unknown")
             }.buttonStyle(CustomButtonStyle())
 
             HStack {
                 Button(action: {
-                    // step-privacy-start
                     MobileCore.getPrivacyStatus { privacyStatus in
                         self.currentPrivacyStatus = "\(privacyStatus.rawValue)"
                     }
-                    // step-privacy-end
                 }) {
                     Text("Get Privacy")
                 }.buttonStyle(CustomButtonStyle())
@@ -75,52 +100,55 @@ struct CoreView: View {
         }
     }
 
-    var piiSection: some View {
-
+    var trackSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Collect PII").bold()
+            Text("Track").bold()
             Button(action: {
-                // step-pii-start
+                MobileCore.track(state: "state", data: nil)
+            }) {
+                Text("Track State")
+            }.buttonStyle(CustomButtonStyle())
+            
+            Button(action: {
+                MobileCore.track(action: "action", data: nil)
+            }) {
+                Text("Track Action")
+            }.buttonStyle(CustomButtonStyle())
+            
+            Button(action: {
                 MobileCore.collectPii(["name":"Adobe Experience Platform"])
-                // step-pii-end
             }){
                 Text("Collect PII")
             }.buttonStyle(CustomButtonStyle())
-        }
-    }
-
-
-    var manualOverridesSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Update Configuration").bold()
+            
             Button(action: {
-                // step-config-start
-                let dataDict = ["analytics.batchLimit": 3]
-                MobileCore.updateConfigurationWith(configDict: dataDict)
-                // step-config-end
-            }) {
-                Text("Update Configuration")
+                MobileCore.setAdvertisingIdentifier("ad_id")
+            }){
+                Text("Set Advertising Identifier")
+            }.buttonStyle(CustomButtonStyle())
+            
+            Button(action: {
+                MobileCore.setPushIdentifier("device_token".data(using: .utf8))
+            }){
+                Text("Set Push Identifier")
             }.buttonStyle(CustomButtonStyle())
         }
     }
 
     var eventsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Dispatch Events").bold()
-            Button(action: {
-                let event = Event(name: "Sample Event", type: "type", source: "source", data: ["platform" : "ios"])
+            Text("Events").bold()
+            Button("Dispatch Event") {
+                let event = Event(name: "Sample Event", type: "type", source: "source", data: ["platform": "ios"])
                 MobileCore.dispatch(event: event)
-            }) {
-                Text("Dispatch Custom Event")
-            }.buttonStyle(CustomButtonStyle())
+            }
+            .buttonStyle(CustomButtonStyle())
 
-            Button(action: {
-                let event = Event(name: "Sample Event", type: "type", source: "source", data: ["platform" : "ios"])
-                MobileCore.dispatch(event: event) { event in
-                }
-            }) {
-                Text("Dispatch Custom Event with response callback")
-            }.buttonStyle(CustomButtonStyle())
+            Button("Dispatch with Callback") {
+                let event = Event(name: "Sample Event", type: "type", source: "source", data: ["platform": "ios"])
+                MobileCore.dispatch(event: event) { _ in }
+            }
+            .buttonStyle(CustomButtonStyle())
         }
     }
 }

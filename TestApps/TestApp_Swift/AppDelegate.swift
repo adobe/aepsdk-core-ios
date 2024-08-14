@@ -33,9 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MobileCore.registerExtensions(extensions, {
             MobileCore.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
 
-            if appState != .background {
-                MobileCore.lifecycleStart(additionalContextData: nil)
-            }
+            // Enable for Production apps
+            // if appState != .background {
+            //      MobileCore.lifecycleStart(additionalContextData: nil)
+            // }
         })
 
         // If testing background, edit test app scheme -> options -> background fetch -> Check "launch app due to background fetch event"

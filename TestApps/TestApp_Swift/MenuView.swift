@@ -27,6 +27,15 @@ struct MenuView: View {
                     NavigationLink(destination: LifecycleView().navigationBarTitle("Lifecycle")) {
                         Text("Lifecycle")
                     }
+                    
+                    NavigationLink(destination: SignalView().navigationBarTitle("Signal")) {
+                        Text("Signal")
+                    }
+#if os(iOS)
+                    NavigationLink(destination: UIServicesView().navigationBarTitle("UIServices")) {
+                        Text("UIServices")
+                    }
+#endif
                 }
 
             }.navigationBarTitle(Text("Extensions"))
