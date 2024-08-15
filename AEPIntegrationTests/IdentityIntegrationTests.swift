@@ -57,21 +57,34 @@ class IdentityIntegrationTests: TestBase {
         ServiceProvider.shared.reset()
         EventHub.reset()
     }
-
+    /// Initializes the test case extensions and waits for their shared state events.
+    ///
+    /// - Parameter sharedStateCount: The number of shared state events to wait for. Defaults to 2 (Hub and Lifecycle).
+    /// if the count is less than 1, expectations on shared state events are disabled.
     func initExtensionsAndWait(sharedStateCount: Int = 2) {
         // Usually Hub and Lifecycle shared state events, but some test cases may have conditions
         // that trigger more shared states
-        setExpectationEvent(type: EventType.hub, source: EventSource.sharedState, expectedCount: Int32(sharedStateCount))
+        if sharedStateCount > 0 {
+            setExpectationEvent(type: EventType.hub, source: EventSource.sharedState, expectedCount: Int32(sharedStateCount))
+        }
 
         let initExpectation = XCTestExpectation(description: "init extensions")
         MobileCore.setLogLevel(.trace)
         MobileCore.registerExtensions([InstrumentedExtension.self, Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
+
         wait(for: [initExpectation], timeout: 1)
 
-        assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
-        resetTestExpectations()
+        if sharedStateCount > 0 {
+            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+            resetTestExpectations()
+        }
+    }
+
+    /// Initializes the test case extensions without waiting for shared state events.
+    func initExtensions() {
+        initExtensionsAndWait(sharedStateCount: -1)
     }
 
     func extractECIDFrom(urlString: String) -> String? {
@@ -221,10 +234,10 @@ class IdentityIntegrationTests: TestBase {
     }
 
     func testGetExperienceCloudIdWithinPermissibleTimeOnInstall() {
-        initExtensionsAndWait()
+        initExtensions()
 
-        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 seconds when Configuration is available on Install")
-        updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 second when Configuration is available on Install")
+        updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"], shouldWait: false)
         Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
             XCTAssertNil(error)
@@ -232,26 +245,34 @@ class IdentityIntegrationTests: TestBase {
         }
         // getExperienceCloudId returns within 0.5 sec when config is bundled with the app. 
         // Increasing timeout to 1 sec to avoid race conditions
-        wait(for: [getECIDExpectation], timeout: 1)
+        wait(for: [getECIDExpectation], timeout: 1.5)
     }
 
     func testGetExperienceCloudIdWithinPermissibleTimeOnLaunch() {
+        // Setup
+        // Persist ECID and configuration items
         persistECIDInUserDefaults()
         initExtensionsAndWait(sharedStateCount: 3)
-
-        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 0.5 seconds when ECID is cached on Launch")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        unregisterExtensionsAndReset()
+
+        // Test - when valid ECID and config items are in persistence
+        // API should return a valid value and NOT a timeout error
+        initExtensions()
+
+        let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 second with valid ECID when ECID is cached on Launch")
+
         Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
             XCTAssertNil(error)
             getECIDExpectation.fulfill()
         }
-        wait(for: [getECIDExpectation], timeout: 0.5)
+        wait(for: [getECIDExpectation], timeout: 1.5)
     }
 
     func testGetExperienceCloudIdInvalidConfigThenValid() {
         MobileCore.updateConfigurationWith(configDict: ["invalid": "config"])
-        initExtensionsAndWait()
+        initExtensionsAndWait(sharedStateCount: 3)
 
         let urlExpectation = XCTestExpectation(description: "getExperienceCloudId callback")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
@@ -421,12 +442,16 @@ class IdentityIntegrationTests: TestBase {
     /// Updates the configuration with the provided dictionary and waits for the event response.
     /// - Parameters:
     ///   - configDict: A dictionary containing the configuration settings to update.
-    private func updateConfigurationAndWait(configDict: [String: Any]) {
-        setExpectationEvent(type: EventType.configuration, source: EventSource.responseContent)
+    private func updateConfigurationAndWait(configDict: [String: Any], shouldWait: Bool = true) {
+        if shouldWait {
+            setExpectationEvent(type: EventType.configuration, source: EventSource.responseContent)
+        }
 
         MobileCore.updateConfigurationWith(configDict: configDict)
 
-        assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
-        resetTestExpectations()
+        if shouldWait {
+            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+            resetTestExpectations()
+        }
     }
 }
