@@ -53,6 +53,10 @@ class IdentityIntegrationTests: TestBase {
 
         wait(for: [unregisterExpectation], timeout: 3)
 
+        // NOTE: There may be some test cases where there are carryover events due to the race condition interactions
+        // between the shutdown process of extension containers and the singleton nature of the EventHub.
+        // If it needs to be addressed, the architecture should be updated to allow for definitive stopping
+        // of event dispatching in extension containers in the shutdown process.
         EventHub.shared.shutdown()
         ServiceProvider.shared.reset()
         EventHub.reset()
@@ -243,8 +247,7 @@ class IdentityIntegrationTests: TestBase {
             XCTAssertNil(error)
             getECIDExpectation.fulfill()
         }
-        // getExperienceCloudId returns within 0.5 sec when config is bundled with the app. 
-        // Increasing timeout to 1 sec to avoid race conditions
+
         wait(for: [getECIDExpectation], timeout: 1.5)
     }
 
