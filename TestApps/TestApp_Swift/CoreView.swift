@@ -59,6 +59,13 @@ struct CoreView: View {
             }) {
                 Text("Clear Updated Configuration")
             }.buttonStyle(CustomButtonStyle())
+            
+            Button(action: {
+                // The bundled rule is configured to triggers a postback for the following condition: a trackAction event with the action type 'bundled_trigger_postback'.
+                MobileCore.track(action: "bundled_trigger_postback", data: nil)
+            }) {
+                Text("Trigger Bundled Rule Consequence")
+            }.buttonStyle(CustomButtonStyle())
         }
     }
     
