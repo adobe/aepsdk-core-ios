@@ -212,7 +212,21 @@ class PersistentHitQueueTests: XCTestCase {
 
 class ControllableHitProcessor: HitProcessing {
     let processedHits = ThreadSafeArray<DataEntity>()
-    var hitResult = true
+    private let queue = DispatchQueue(label: "com.adobe.controllablehitprocessor.syncqueue")
+    private var _hitResult = true
+
+    var hitResult: Bool {
+        get {
+            return queue.sync {
+                _hitResult
+            }
+        }
+        set {
+            queue.async {
+                self._hitResult = newValue
+            }
+        }
+    }
 
     func retryInterval(for entity: DataEntity) -> TimeInterval {
         return 1

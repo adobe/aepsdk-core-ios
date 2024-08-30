@@ -10,12 +10,27 @@
 // governing permissions and limitations under the License.
 //
 
-import AEPCore
 import AEPServices
 import Foundation
 import XCTest
 
+/// Represents the result of a validation process, including whether the validation was successful and the count of leaf nodes encountered.
+///
+/// `ValidationResult` is used by the `validateActual` recursive methods to return the outcome of their validation
+/// and to track the number of leaf nodes encountered during a depth-first traversal.
+private struct ValidationResult {
+    /// A Boolean value indicating whether the validation was successful.
+    var isValid: Bool
+
+    /// The total number of leaf nodes encountered up to this point in the hierarchy, during a depth-first traversal.
+    var elementCount: Int
+}
+
+/// A protocol that enables conversion of conforming types into `AnyCodable` format.
 public protocol AnyCodableComparable {
+    /// Converts the conforming type to an optional `AnyCodable` instance.
+    ///
+    /// - Returns: An optional `AnyCodable` instance representing the conforming type, or `nil` if the conversion fails.
     func toAnyCodable() -> AnyCodable?
 }
 
@@ -52,12 +67,6 @@ extension AnyCodable: AnyCodableComparable {
     }
 }
 
-extension Event: AnyCodableComparable {
-    public func toAnyCodable() -> AnyCodable? {
-        return self.data?.toAnyCodable()
-    }
-}
-
 extension NetworkRequest: AnyCodableComparable {
     public func toAnyCodable() -> AnyCodable? {
         guard let payloadAsDictionary = try? JSONSerialization.jsonObject(with: self.connectPayload, options: []) as? [String: Any] else {
@@ -77,9 +86,6 @@ public protocol AnyCodableAsserts {
     ///   - line: The line from which the method is called, used for localized assertion failures.
     func assertEqual(expected: AnyCodableComparable?, actual: AnyCodableComparable?, file: StaticString, line: UInt)
 
-    // Create a no-path-option version of the API the compiler will favor so that the deprecation
-    // message is not applied to all base usages of the API
-
     /// Performs JSON validation where only the values from the `expected` JSON are required.
     /// By default, the comparison logic uses the value type match option, only validating that both values are of the same type.
     ///
@@ -92,54 +98,6 @@ public protocol AnyCodableAsserts {
     ///   - file: The file from which the method is called, used for localized assertion failures.
     ///   - line: The line from which the method is called, used for localized assertion failures.
     func assertTypeMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, file: StaticString, line: UInt)
-
-    /// Performs JSON validation where only the values from the `expected` JSON are required.
-    /// By default, the comparison logic uses the value type match option, only validating that both values are of the same type.
-    ///
-    /// Both objects and arrays use extensible collections by default, meaning that only the elements in `expected` are
-    /// validated.
-    ///
-    /// Alternate mode paths enable switching from the default type matching mode to exact matching
-    /// mode for specified paths onward.
-    ///
-    /// For example, given an expected JSON like:
-    /// ```
-    /// {
-    ///   "key1": "value1",
-    ///   "key2": [{ "nest1": 1}, {"nest2": 2}],
-    ///   "key3": { "key4": 1 },
-    ///   "key.name": 1,
-    ///   "key[123]": 1
-    /// }
-    /// ```
-    /// An example `exactMatchPaths` path for this JSON would be: `"key2[1].nest2"`.
-    ///
-    /// Alternate mode paths must begin from the top level of the expected JSON. Multiple paths can be defined.
-    ///
-    /// Formats for object keys:
-    /// - Standard keys - The key name itself: `"key1"`
-    /// - Nested keys - Use dot notation: `"key3.key4"`.
-    /// - Keys with dots in the name: Escape the dot notation with a backslash: `"key\.name"`.
-    ///
-    /// Formats for arrays:
-    /// - Standard index - The index integer inside square brackets: `[<INT>]` (e.g., `[0]`, `[28]`).
-    /// - Keys with array brackets in the name - Escape the brackets with backslashes: `key\[123\]`.
-    ///
-    /// For any position array element matching:
-    /// 1. Specific index: `[*<INT>]` (ex: `[*0]`, `[*28]`). Only a single `*` character MUST be placed to the
-    /// left of the index value. The element at the given index in `expected` will use any position matching in `actual`.
-    /// 2. All elements: `[*]`. All elements in `expected` will use any position matching in `actual`.
-    ///
-    /// When combining any position option indexes and standard indexes, standard indexes are validated first.
-    ///
-    /// - Parameters:
-    ///   - expected: The expected `AnyCodableComparable` to compare.
-    ///   - actual: The actual `AnyCodableComparable` to compare.
-    ///   - typeMatchPaths: The key paths in the expected JSON that should use value type matching, where values require only the same type (and are non-nil if the expected value is not nil).
-    ///   - file: The file from which the method is called, used for localized assertion failures.
-    ///   - line: The line from which the method is called, used for localized assertion failures.
-    @available(*, deprecated, message: "Use assertTypeMatch with pathOptions for more flexible path configurations.")
-    func assertTypeMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, exactMatchPaths: [String], file: StaticString, line: UInt)
 
     /// Performs JSON validation where only the values from the `expected` JSON are required by default.
     /// By default, the comparison logic uses the value type match option, only validating that both values are of the same type.
@@ -243,9 +201,6 @@ public protocol AnyCodableAsserts {
     ///   - line: The line from which the method is called, used for localized assertion failures.
     func assertTypeMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, pathOptions: MultiPathConfig..., file: StaticString, line: UInt)
 
-    // Create a no-path-option version of the API the compiler will favor so that the deprecation
-    // message is not applied to all base usages of the API
-
     /// Performs JSON validation where only the values from the `expected` JSON are required by default.
     /// By default, the comparison logic uses the value exact match option, validating that both values are of the same type
     /// **and** have the same literal value.
@@ -259,55 +214,6 @@ public protocol AnyCodableAsserts {
     ///   - file: The file from which the method is called, used for localized assertion failures.
     ///   - line: The line from which the method is called, used for localized assertion failures.
     func assertExactMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, file: StaticString, line: UInt)
-
-    /// Performs JSON validation where only the values from the `expected` JSON are required.
-    /// By default, the comparison logic uses value exact match mode, validating that both values are of the same type
-    /// **and** have the same literal value.
-    ///
-    /// Both objects and arrays use extensible collections by default, meaning that only the elements in `expected` are
-    /// validated.
-    ///
-    /// Alternate mode paths enable switching from the default exact matching mode to type matching
-    /// mode for specified paths onward.
-    ///
-    /// For example, given an expected JSON like:
-    /// ```
-    /// {
-    ///   "key1": "value1",
-    ///   "key2": [{ "nest1": 1}, {"nest2": 2}],
-    ///   "key3": { "key4": 1 },
-    ///   "key.name": 1,
-    ///   "key[123]": 1
-    /// }
-    /// ```
-    /// An example `typeMatchPaths` path for this JSON would be: `"key2[1].nest2"`.
-    ///
-    /// Alternate mode paths must begin from the top level of the expected JSON. Multiple paths can be defined.
-    ///
-    /// Formats for object keys:
-    /// - Standard keys - The key name itself: `"key1"`
-    /// - Nested keys - Use dot notation: `"key3.key4"`.
-    /// - Keys with dots in the name: Escape the dot notation with a backslash: `"key\.name"`.
-    ///
-    /// Formats for arrays:
-    /// - Standard index - The index integer inside square brackets: `[<INT>]` (e.g., `[0]`, `[28]`).
-    /// - Keys with array brackets in the name - Escape the brackets with backslashes: `key\[123\]`.
-    ///
-    /// For any position array element matching:
-    /// 1. Specific index: `[*<INT>]` (ex: `[*0]`, `[*28]`). Only a single `*` character MUST be placed to the
-    /// left of the index value. The element at the given index in `expected` will use any position matching in `actual`.
-    /// 2. All elements: `[*]`. All elements in `expected` will use any position matching in `actual`.
-    ///
-    /// When combining any position option indexes and standard indexes, standard indexes are validated first.
-    ///
-    /// - Parameters:
-    ///   - expected: The expected `AnyCodableComparable` to compare.
-    ///   - actual: The actual `AnyCodableComparable` to compare.
-    ///   - typeMatchPaths: The key paths in the expected JSON that should use value type matching, where values require only the same type (and are non-nil if the expected value is not nil).
-    ///   - file: The file from which the method is called, used for localized assertion failures.
-    ///   - line: The line from which the method is called, used for localized assertion failures.
-    @available(*, deprecated, message: "Use assertExactMatch with pathOptions for more flexible path configurations.")
-    func assertExactMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, typeMatchPaths: [String], file: StaticString, line: UInt)
 
     /// Performs JSON validation where only the values from the `expected` JSON are required by default.
     /// By default, the comparison logic uses the value exact match option, validating that both values are of the same type
@@ -427,13 +333,14 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             return
         }
         guard let expected = expected, let actual = actual else {
-            XCTFail(#"""
-                \#(expected == nil ? "Expected is nil" : "Actual is nil") and \#(expected == nil ? "Actual" : "Expected") is non-nil.
-
-                Expected: \#(String(describing: expected))
-
-                Actual: \#(String(describing: actual))
-            """#, file: file, line: line)
+            XCTFail(
+                """
+                \(expected == nil ? "Expected is nil" : "Actual is nil") and \(expected == nil ? "Actual" : "Expected") is non-nil.
+                Expected: \(String(describing: expected))
+                Actual: \(String(describing: actual))
+                """,
+                file: file,
+                line: line)
             return
         }
         // Exact equality is just a special case of exact match
@@ -464,74 +371,11 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             actual: actual,
             pathOptions: [],
             treeDefaults: treeDefaults,
-            isLegacyMode: false,
             file: file,
             line: line)
     }
 
     // MARK: Type match
-    /// Performs JSON validation where only the values from the `expected` JSON are required.
-    /// By default, the comparison logic uses the value type match option, only validating that both values are of the same type.
-    ///
-    /// Both objects and arrays use extensible collections by default, meaning that only the elements in `expected` are
-    /// validated.
-    ///
-    /// Alternate mode paths enable switching from the default type matching mode to exact matching
-    /// mode for specified paths onward.
-    ///
-    /// For example, given an expected JSON like:
-    /// ```
-    /// {
-    ///   "key1": "value1",
-    ///   "key2": [{ "nest1": 1}, {"nest2": 2}],
-    ///   "key3": { "key4": 1 },
-    ///   "key.name": 1,
-    ///   "key[123]": 1
-    /// }
-    /// ```
-    /// An example `exactMatchPaths` path for this JSON would be: `"key2[1].nest2"`.
-    ///
-    /// Alternate mode paths must begin from the top level of the expected JSON. Multiple paths can be defined.
-    ///
-    /// Formats for object keys:
-    /// - Standard keys - The key name itself: `"key1"`
-    /// - Nested keys - Use dot notation: `"key3.key4"`.
-    /// - Keys with dots in the name: Escape the dot notation with a backslash: `"key\.name"`.
-    ///
-    /// Formats for arrays:
-    /// - Standard index - The index integer inside square brackets: `[<INT>]` (e.g., `[0]`, `[28]`).
-    /// - Keys with array brackets in the name - Escape the brackets with backslashes: `key\[123\]`.
-    ///
-    /// For any position array element matching:
-    /// 1. Specific index: `[*<INT>]` (ex: `[*0]`, `[*28]`). Only a single `*` character MUST be placed to the
-    /// left of the index value. The element at the given index in `expected` will use any position matching in `actual`.
-    /// 2. All elements: `[*]`. All elements in `expected` will use any position matching in `actual`.
-    ///
-    /// When combining any position option indexes and standard indexes, standard indexes are validated first.
-    ///
-    /// - Parameters:
-    ///   - expected: The expected `AnyCodableComparable` to compare.
-    ///   - actual: The actual `AnyCodableComparable` to compare.
-    ///   - typeMatchPaths: The key paths in the expected JSON that should use value type matching, where values require only the same type (and are non-nil if the expected value is not nil).
-    ///   - file: The file from which the method is called, used for localized assertion failures.
-    ///   - line: The line from which the method is called, used for localized assertion failures.
-    @available(*, deprecated, message: "Use assertTypeMatch with pathOptions for more flexible path configurations.")
-    func assertTypeMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, exactMatchPaths: [String] = [], file: StaticString = #file, line: UInt = #line) {
-        let treeDefaults: [MultiPathConfig] = [
-            AnyOrderMatch(paths: nil, isActive: false),
-            CollectionEqualCount(paths: nil, isActive: false),
-            KeyMustBeAbsent(paths: nil, isActive: false),
-            ValueTypeMatch(paths: nil)
-        ]
-        validate(
-            expected: expected,
-            actual: actual,
-            pathOptions: [ValueExactMatch(paths: exactMatchPaths, scope: .subtree)],
-            treeDefaults: treeDefaults,
-            isLegacyMode: true,
-            file: file,
-            line: line)
-    }
 
     /// Performs JSON validation where only the values from the `expected` JSON are required by default.
     /// By default, the comparison logic uses the value type match option, only validating that both values are of the same type.
@@ -595,7 +439,6 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             actual: actual,
             pathOptions: pathOptions,
             treeDefaults: treeDefaults,
-            isLegacyMode: false,
             file: file,
             line: line)
     }
@@ -677,75 +520,11 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             actual: actual,
             pathOptions: [],
             treeDefaults: treeDefaults,
-            isLegacyMode: false,
             file: file,
             line: line)
     }
 
     // MARK: Exact match
-    /// Performs JSON validation where only the values from the `expected` JSON are required.
-    /// By default, the comparison logic uses value exact match mode, validating that both values are of the same type
-    /// **and** have the same literal value.
-    ///
-    /// Both objects and arrays use extensible collections by default, meaning that only the elements in `expected` are
-    /// validated.
-    ///
-    /// Alternate mode paths enable switching from the default exact matching mode to type matching
-    /// mode for specified paths onward.
-    ///
-    /// For example, given an expected JSON like:
-    /// ```
-    /// {
-    ///   "key1": "value1",
-    ///   "key2": [{ "nest1": 1}, {"nest2": 2}],
-    ///   "key3": { "key4": 1 },
-    ///   "key.name": 1,
-    ///   "key[123]": 1
-    /// }
-    /// ```
-    /// An example `typeMatchPaths` path for this JSON would be: `"key2[1].nest2"`.
-    ///
-    /// Alternate mode paths must begin from the top level of the expected JSON. Multiple paths can be defined.
-    ///
-    /// Formats for object keys:
-    /// - Standard keys - The key name itself: `"key1"`
-    /// - Nested keys - Use dot notation: `"key3.key4"`.
-    /// - Keys with dots in the name: Escape the dot notation with a backslash: `"key\.name"`.
-    ///
-    /// Formats for arrays:
-    /// - Standard index - The index integer inside square brackets: `[<INT>]` (e.g., `[0]`, `[28]`).
-    /// - Keys with array brackets in the name - Escape the brackets with backslashes: `key\[123\]`.
-    ///
-    /// For any position array element matching:
-    /// 1. Specific index: `[*<INT>]` (ex: `[*0]`, `[*28]`). Only a single `*` character MUST be placed to the
-    /// left of the index value. The element at the given index in `expected` will use any position matching in `actual`.
-    /// 2. All elements: `[*]`. All elements in `expected` will use any position matching in `actual`.
-    ///
-    /// When combining any position option indexes and standard indexes, standard indexes are validated first.
-    ///
-    /// - Parameters:
-    ///   - expected: The expected `AnyCodableComparable` to compare.
-    ///   - actual: The actual `AnyCodableComparable` to compare.
-    ///   - typeMatchPaths: The key paths in the expected JSON that should use value type matching, where values require only the same type (and are non-nil if the expected value is not nil).
-    ///   - file: The file from which the method is called, used for localized assertion failures.
-    ///   - line: The line from which the method is called, used for localized assertion failures.
-    @available(*, deprecated, message: "Use assertExactMatch with pathOptions for more flexible path configurations.")
-    func assertExactMatch(expected: AnyCodableComparable, actual: AnyCodableComparable?, typeMatchPaths: [String] = [], file: StaticString = #file, line: UInt = #line) {
-        let treeDefaults: [MultiPathConfig] = [
-            AnyOrderMatch(paths: nil, isActive: false),
-            CollectionEqualCount(paths: nil, isActive: false),
-            KeyMustBeAbsent(paths: nil, isActive: false),
-            ValueExactMatch(paths: nil)
-        ]
-        validate(
-            expected: expected,
-            actual: actual,
-            pathOptions: [ValueTypeMatch(paths: typeMatchPaths, scope: .subtree)],
-            treeDefaults: treeDefaults,
-            isLegacyMode: true,
-            file: file,
-            line: line)
-    }
 
     /// Performs JSON validation where only the values from the `expected` JSON are required by default.
     /// By default, the comparison logic uses the value exact match option, validating that both values are of the same type
@@ -810,7 +589,6 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             actual: actual,
             pathOptions: pathOptions,
             treeDefaults: treeDefaults,
-            isLegacyMode: false,
             file: file,
             line: line)
     }
@@ -869,12 +647,12 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         assertExactMatch(expected: expected, actual: actual, pathOptions: pathOptions, file: file, line: line)
     }
 
+    // swiftlint:disable function_parameter_count
     private func validate(
         expected: AnyCodableComparable,
         actual: AnyCodableComparable?,
         pathOptions: [MultiPathConfig],
         treeDefaults: [MultiPathConfig],
-        isLegacyMode: Bool,
         file: StaticString,
         line: UInt) {
         guard let expected = expected.toAnyCodable() else {
@@ -886,14 +664,15 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         let nodeTree = generateNodeTree(
             pathOptions: pathOptions,
             treeDefaults: treeDefaults,
-            isLegacyMode: isLegacyMode,
             file: file,
             line: line)
         _ = validateActual(actual: actual, nodeTree: nodeTree, file: file, line: line)
         validateJSON(expected: expected, actual: actual, nodeTree: nodeTree, file: file, line: line)
     }
+    // swiftlint:enable function_parameter_count
 
     // MARK: - AnyCodable validation helpers
+    // swiftlint:disable function_body_length
     /// Performs a cutomizable validation between the given `expected` and `actual` values, using the configured options.
     /// In case of a validation failure **and** if `shouldAssert` is `true`, a test failure occurs.
     ///
@@ -921,19 +700,23 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
-                XCTFail(#"""
+                XCTFail(
+                    """
                     Expected JSON is non-nil but Actual JSON is nil.
 
-                    Expected: \#(String(describing: expected))
+                    Expected: \(String(describing: expected))
 
-                    Actual: \#(String(describing: actual))
+                    Actual: \(String(describing: actual))
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
+                    file: file,
+                    line: line)
             }
             return false
         }
 
+        // swiftlint:disable no_fallthrough_only
         switch (expected, actual) {
         case let (expected, actual) where (expected.value is String && actual.value is String):
             fallthrough
@@ -989,17 +772,21 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                 line: line)
         default:
             if shouldAssert {
-                XCTFail(#"""
+                XCTFail(
+                    """
                     Expected and Actual types do not match.
 
-                    Expected: \#(expected)
+                    Expected: \(expected) (Type: \(type(of: expected)))
 
-                    Actual: \#(actual)
+                    Actual: \(actual) (Type: \(type(of: actual)))
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
+                    file: file,
+                    line: line)
             }
             return false
+        // swiftlint:enable no_fallthrough_only
         }
     }
 
@@ -1029,32 +816,38 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
-                XCTFail(#"""
+                XCTFail(
+                    """
                     Expected JSON is non-nil but Actual JSON is nil.
 
-                    Expected: \#(String(describing: expected))
+                    Expected: \(String(describing: expected))
 
-                    Actual: \#(String(describing: actual))
+                    Actual: \(String(describing: actual))
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
+                    file: file,
+                    line: line)
             }
             return false
         }
         if nodeTree.collectionEqualCount.isActive ? (expected.count != actual.count) : (expected.count > actual.count) {
             if shouldAssert {
-                XCTFail(#"""
-                    Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
+                XCTFail(
+                    """
+                    Expected JSON \(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
 
-                    Expected count: \#(expected.count)
-                    Actual count: \#(actual.count)
+                    Expected count: \(expected.count)
+                    Actual count: \(actual.count)
 
-                    Expected: \#(expected)
+                    Expected: \(expected)
 
-                    Actual: \#(actual)
+                    Actual: \(actual)
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
+                    file: file,
+                    line: line)
             }
             return false
         }
@@ -1067,22 +860,22 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             let indexString = String(index)
             result[indexString] = NodeConfig.resolveOption(
                 .anyOrderMatch,
-                for: nodeTree.getChild(named: indexString),
-                parent: nodeTree)
+                childName: indexString,
+                parentNode: nodeTree)
         }
         let anyOrderIndexes = expectedIndexes.filter({ $0.value.isActive })
         anyOrderIndexes.forEach { key, _ in
             expectedIndexes.removeValue(forKey: key)
         }
 
-        var availableWildcardActualIndexes = Set((0..<actual.count).map({ String($0) })).subtracting(expectedIndexes.keys)
+        var availableAnyOrderActualIndexes = Set((0..<actual.count).map({ String($0) })).subtracting(expectedIndexes.keys)
 
         var validationResult = true
 
-        // Validate non-wildcard expected side indexes first, as these don't have
-        // position flexibility
-        for (index, config) in expectedIndexes {
-            let intIndex = Int(index)!
+        // Validate non-any-order expected side indexes first, as these don't have
+        // order flexibility
+        for (index, _) in expectedIndexes {
+            let intIndex = Int(index)! // swiftlint:disable:this force_unwrapping
             validationResult = validateJSON(
                 expected: expected[intIndex],
                 actual: actual[intIndex],
@@ -1094,35 +887,40 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                 && validationResult
         }
 
-        for (index, config) in anyOrderIndexes {
-            let intIndex = Int(index)!
+        for (index, _) in anyOrderIndexes {
+            let intIndex = Int(index)! // swiftlint:disable:this force_unwrapping
 
-            guard let actualIndex = availableWildcardActualIndexes.first(where: {
+            guard let actualIndex = availableAnyOrderActualIndexes.first(where: {
                 validateJSON(
                     expected: expected[intIndex],
-                    actual: actual[Int($0)!],
+                    actual: actual[Int($0)!], // swiftlint:disable:this force_unwrapping
                     keyPath: keyPath + [intIndex],
                     nodeTree: nodeTree.getNextNode(for: index),
                     shouldAssert: false)
             }) else {
+                // swiftlint:disable force_unwrapping
                 if shouldAssert {
-                    XCTFail(#"""
-                        Wildcard \#(NodeConfig.resolveOption(.primitiveExactMatch, for: nodeTree.getChild(named: index), parent: nodeTree).isActive ? "exact" : "type")
+                    XCTFail(
+                        """
+                        Any order \(NodeConfig.resolveOption(.primitiveExactMatch, childName: index, parentNode: nodeTree).isActive ? "exact" : "type")
                         match found no matches on Actual side satisfying the Expected requirement.
 
-                        Requirement: \#(nodeTree)
+                        Requirement: \(nodeTree)
 
-                        Expected: \#(expected[intIndex])
+                        Expected: \(expected[intIndex])
 
-                        Actual (remaining unmatched elements): \#(availableWildcardActualIndexes.map({ actual[Int($0)!] }))
+                        Actual (remaining unmatched elements): \(availableAnyOrderActualIndexes.map({ actual[Int($0)!] }))
 
-                        Key path: \#(keyPathAsString(keyPath))
-                    """#, file: file, line: line)
+                        Key path: \(keyPathAsString(keyPath))
+                        """,
+                        file: file,
+                        line: line)
                 }
+                // swiftlint:enable force_unwrapping
                 validationResult = false
                 break
             }
-            availableWildcardActualIndexes.remove(actualIndex)
+            availableAnyOrderActualIndexes.remove(actualIndex)
         }
         return validationResult
     }
@@ -1153,32 +951,38 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         guard let expected = expected, let actual = actual else {
             if shouldAssert {
-                XCTFail(#"""
+                XCTFail(
+                    """
                     Expected JSON is non-nil but Actual JSON is nil.
 
-                    Expected: \#(String(describing: expected))
+                    Expected: \(String(describing: expected))
 
-                    Actual: \#(String(describing: actual))
+                    Actual: \(String(describing: actual))
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
+                    file: file,
+                    line: line)
             }
             return false
         }
         if nodeTree.collectionEqualCount.isActive ? (expected.count != actual.count) : (expected.count > actual.count) {
             if shouldAssert {
-                XCTFail(#"""
-                    Expected JSON \#(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
+                XCTFail(
+                    """
+                    Expected JSON \(nodeTree.collectionEqualCount.isActive ? "count does not match" : "has more elements than") Actual JSON.
 
-                    Expected count: \#(expected.count)
-                    Actual count: \#(actual.count)
+                    Expected count: \(expected.count)
+                    Actual count: \(actual.count)
 
-                    Expected: \#(expected)
+                    Expected: \(expected)
 
-                    Actual: \#(actual)
+                    Actual: \(actual)
 
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
+                    file: file,
+                    line: line)
             }
             return false
         }
@@ -1198,6 +1002,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         }
         return validationResult
     }
+    // swiftlint:enable function_body_length
 
     // MARK: - Actual JSON validation
 
@@ -1218,53 +1023,71 @@ public extension AnyCodableAsserts where Self: XCTestCase {
     ///   - line: The line from which the method is called, used for localized assertion failures.
     ///
     /// - Returns: A `Bool` indicating whether the `actual` value is valid based on the `nodeTree` configuration.
-    func validateActual(
+    private func validateActual(
         actual: AnyCodable?,
         keyPath: [Any] = [],
         nodeTree: NodeConfig,
-        file: StaticString,
-        line: UInt
-    ) -> Bool {
+        file: StaticString = #file,
+        line: UInt = #line
+    ) -> ValidationResult {
         guard let actual = actual else {
-            return true
+            return ValidationResult(isValid: true, elementCount: 0)
         }
 
-        switch actual {
+        switch actual.value {
         // Handle dictionaries
-        case let actual where actual.value is [String: AnyCodable]:
+        case let dict as [String: AnyCodable]:
             return validateActual(
-                actual: actual.value as? [String: AnyCodable],
+                actual: dict,
                 keyPath: keyPath,
                 nodeTree: nodeTree,
                 file: file,
-                line: line)
-        case let actual where actual.value is [String: Any?]:
+                line: line
+            )
+        case let dict as [String: Any?]:
             return validateActual(
-                actual: AnyCodable.from(dictionary: actual.value as? [String: Any?]),
+                actual: AnyCodable.from(dictionary: dict),
                 keyPath: keyPath,
                 nodeTree: nodeTree,
                 file: file,
-                line: line)
+                line: line
+            )
         // Handle arrays
-        case let actual where actual.value is [AnyCodable]:
+        case let array as [AnyCodable]:
             return validateActual(
-                actual: actual.value as? [AnyCodable],
+                actual: array,
                 keyPath: keyPath,
                 nodeTree: nodeTree,
                 file: file,
-                line: line)
-        case let actual where actual.value is [Any?]:
+                line: line
+            )
+        case let array as [Any?]:
             return validateActual(
-                actual: AnyCodable.from(array: actual.value as? [Any?]),
+                actual: AnyCodable.from(array: array),
                 keyPath: keyPath,
                 nodeTree: nodeTree,
                 file: file,
-                line: line)
+                line: line
+            )
         default:
-            // MARK: KeyMustBeAbsent check
-            // Value type validations currently do not have any options that should be handled by `actual`
-            // validation side - default is true
-            return true
+            // Check SingleNode and Subtree options set for ElementCount for this specific node.
+            // If it hits this case, then the ElementCount assertion was set on a non-collection type element
+            // and should emit a test failure.
+            if nodeTree.options[.elementCount]?.elementCount != nil ||
+               nodeTree.subtreeOptions[.elementCount]?.elementCount != nil {
+                XCTFail(
+                    """
+                    Invalid ElementCount assertion on a non-collection element.
+                    Remove ElementCount requirements from this key path in the test setup.
+
+                    Key path: \(keyPathAsString(keyPath))
+                    """,
+                    file: file,
+                    line: line
+                )
+                return ValidationResult(isValid: false, elementCount: 1)
+            }
+            return ValidationResult(isValid: true, elementCount: 1)
         }
     }
 
@@ -1287,26 +1110,39 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         nodeTree: NodeConfig,
         file: StaticString,
         line: UInt
-    ) -> Bool {
-        guard let actual = actual else {
-            return true
-        }
-
+    ) -> ValidationResult {
         var validationResult = true
+        var singleNodeElementCount = 0
+        var subtreeElementCount = 0
 
-        for (index, element) in actual.enumerated() {
-            // MARK: KeyMustBeAbsent check
-            // No check required - Validating an array key must not exist can be covered by size validation
-            validationResult = validateActual(
-                actual: element,
-                keyPath: keyPath + [index],
-                nodeTree: nodeTree.getNextNode(for: index),
-                file: file,
-                line: line)
-                && validationResult
+        if let actual = actual {
+            for (index, element) in actual.enumerated() {
+                // ElementCount check
+                let result = validateActual(
+                    actual: element,
+                    keyPath: keyPath + [index],
+                    nodeTree: nodeTree.getNextNode(for: index),
+                    file: file,
+                    line: line
+                )
+                validationResult = result.isValid && validationResult
+
+                switch element.value {
+                case is [AnyCodable], is [String: AnyCodable]:
+                    subtreeElementCount += result.elementCount
+                default:
+                    if NodeConfig.resolveOption(.elementCount, childName: "\(index)", parentNode: nodeTree).isActive {
+                        singleNodeElementCount += result.elementCount
+                    }
+                }
+            }
         }
 
-        return validationResult
+        let totalElementCount = singleNodeElementCount + subtreeElementCount
+        validationResult = validateElementCount(scope: .singleNode, keyPath: keyPath, node: nodeTree, elementCount: singleNodeElementCount) && validationResult
+        validationResult = validateElementCount(scope: .subtree, keyPath: keyPath, node: nodeTree, elementCount: totalElementCount) && validationResult
+
+        return ValidationResult(isValid: validationResult, elementCount: totalElementCount)
     }
 
     /// Validates a dictionary of `AnyCodable` values against the provided node configuration tree.
@@ -1328,34 +1164,96 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         nodeTree: NodeConfig,
         file: StaticString,
         line: UInt
-    ) -> Bool {
-        guard let actual = actual else {
-            return true
+    ) -> ValidationResult {
+        var validationResult = true
+        var singleNodeElementCount = 0
+        var subtreeElementCount = 0
+
+        if let actual = actual {
+            for (key, value) in actual {
+                // MARK: KeyMustBeAbsent check
+                // Check for keys that must be absent in the current node
+                let resolvedKeyMustBeAbsent = NodeConfig.resolveOption(.keyMustBeAbsent, childName: key, parentNode: nodeTree)
+                if resolvedKeyMustBeAbsent.isActive {
+                    XCTFail(
+                        """
+                        Actual JSON must not have key with name: \(key)
+
+                        Actual: \(actual)
+
+                        Key path: \(keyPathAsString(keyPath + [key]))
+                        """,
+                        file: file,
+                        line: line
+                    )
+                    validationResult = false
+                }
+
+                // ElementCount check
+                let result = validateActual(
+                    actual: value,
+                    keyPath: keyPath + [key],
+                    nodeTree: nodeTree.getNextNode(for: key),
+                    file: file,
+                    line: line
+                )
+                validationResult = result.isValid && validationResult
+
+                switch value.value {
+                case is [String: AnyCodable], is [AnyCodable]:
+                    subtreeElementCount += result.elementCount
+                default:
+                    if NodeConfig.resolveOption(.elementCount, childName: key, parentNode: nodeTree).isActive {
+                        singleNodeElementCount += result.elementCount
+                    }
+                }
+            }
         }
 
+        let totalElementCount = singleNodeElementCount + subtreeElementCount
+        validationResult = validateElementCount(scope: .singleNode, keyPath: keyPath, node: nodeTree, elementCount: singleNodeElementCount) && validationResult
+        validationResult = validateElementCount(scope: .subtree, keyPath: keyPath, node: nodeTree, elementCount: totalElementCount) && validationResult
+
+        return ValidationResult(isValid: validationResult, elementCount: totalElementCount)
+    }
+
+    /**
+     * Validates that the element count for a given scope is satisfied within the node configuration.
+     * Used to validate [ElementCount] assertions.
+     *
+     * - Parameters:
+     *   - scope: The scope of the element count check, either SingleNode or Subtree.
+     *   - keyPath: The current path in the JSON hierarchy traversal. Used for test failure message info.
+     *   - node: The current node in the NodeConfig tree against which the element count is validated.
+     *   - elementCount: The actual count of elements to be validated.
+     * - Returns: `true` if the element count is satisfied, `false` otherwise.
+     */
+    private func validateElementCount(scope: NodeConfig.Scope, keyPath: [Any], node: NodeConfig, elementCount: Int) -> Bool {
         var validationResult = true
-
-        for (key, value) in actual {
-            // MARK: KeyMustBeAbsent check
-            // Check for keys that must be absent in the current node
-            let resolvedKeyMustBeAbsent = NodeConfig.resolveOption(.keyMustBeAbsent, for: nodeTree.getChild(named: key), parent: nodeTree)
-            if resolvedKeyMustBeAbsent.isActive {
-                XCTFail(#"""
-                    Actual JSON should not have key with name: \#(key)
-
-                    Actual: \#(actual)
-
-                    Key path: \#(keyPathAsString(keyPath))
-                """#, file: file, line: line)
-                validationResult = false
+        let config: NodeConfig.Config? = {
+            switch scope {
+            case .singleNode:
+                return node.options[.elementCount]
+            case .subtree:
+                return node.subtreeOptions[.elementCount]
             }
-            validationResult = validateActual(
-                actual: value,
-                keyPath: keyPath + [key],
-                nodeTree: nodeTree.getNextNode(for: key),
-                file: file,
-                line: line)
-                && validationResult
+        }()
+
+        // Check if the element count is satisfied
+        if let config = config, config.isActive, let expectedCount = config.elementCount {
+            validationResult = (expectedCount == elementCount)
+            assert(
+                validationResult,
+                """
+                The \(scope == .subtree ? "subtree" : "single node") expected element count
+                is not equal to the actual number of elements.
+
+                Expected count: \(expectedCount)
+                Actual count: \(elementCount)
+
+                Key path: \(keyPathAsString(keyPath))
+                """
+            )
         }
         return validationResult
     }
@@ -1373,7 +1271,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
     ///
     /// - Returns: A tree-like dictionary structure representing the nested structure of the provided paths. Returns `nil` if the
     /// resulting tree is empty.
-    private func generateNodeTree(pathOptions: [MultiPathConfig], treeDefaults: [MultiPathConfig], isLegacyMode: Bool, file: StaticString, line: UInt) -> NodeConfig {
+    private func generateNodeTree(pathOptions: [MultiPathConfig], treeDefaults: [MultiPathConfig], file: StaticString, line: UInt) -> NodeConfig {
         // 1. creates the first node using the incoming defaults
         // using the first node it passes the path to the node to create the child nodes and just loops through all the paths passing them
 
@@ -1386,7 +1284,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
         let rootNode = NodeConfig(name: nil, subtreeOptions: subtreeOptions)
 
         for pathConfig in pathOptions {
-            rootNode.createOrUpdateNode(with: pathConfig, isLegacyMode: isLegacyMode, file: file, line: line)
+            NodeConfig.createOrUpdateNode(rootNode, with: pathConfig, file: file, line: line)
         }
 
         return rootNode
