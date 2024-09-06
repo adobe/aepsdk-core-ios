@@ -83,17 +83,17 @@ class SDKInstanceIdentifierTests: XCTestCase {
         let instance: SDKInstanceIdentifier = .default
         
         XCTAssertEqual(nil, instance.id)
-        XCTAssertEqual("default-instance", instance.description)
+        XCTAssertEqual("aep-default-instance", instance.description)
     }
     
     func testDefaultInitializedFromInit() {
-        guard let instance = SDKInstanceIdentifier(id: "default-instance") else {
+        guard let instance = SDKInstanceIdentifier(id: "aep-default-instance") else {
             XCTFail("SDKInstanceIdentifier init returned nil.")
             return
         }
         
         XCTAssertEqual(nil, instance.id)
-        XCTAssertEqual("default-instance", instance.description)
+        XCTAssertEqual("aep-default-instance", instance.description)
     }
     
     func testIDInitializedFromEnum() {
