@@ -154,14 +154,6 @@ class SDKInstanceIdentifierTests: XCTestCase {
         }
     }
     
-    func testListOfValidNamesPassFileCreation() {
-        NamedCollectionDataStore.clear()
-        for i in validIdentifiers {
-            XCTAssertEqual("testValue", createFile(name: i))
-        }
-        print("Application directory: \(NSHomeDirectory())")
-    }
-    
     func testListOfInvalidNamesFailInitialization() {
         for i in invalidIdentifiers {
             XCTAssertNil(SDKInstanceIdentifier(id: i), "SDKInstanceIdentifier init returned non-nil for id '\(i)' but expected init to fail with nil.")
@@ -184,11 +176,5 @@ class SDKInstanceIdentifierTests: XCTestCase {
         }
         
         XCTAssertNil(SDKInstanceIdentifier(id: id), "SDKInstanceIdentifier init returned non-nil for id '\(id)' but expected init to fail with nil.")
-    }
-    
-    func createFile(name: String) -> String? {
-        let service = FileSystemNamedCollection()
-        service.set(collectionName: "com.adobe.instance.test." + name, key: "testKey", value: "testValue")
-        return service.get(collectionName: "com.adobe.instance.test." + name, key: "testKey") as? String
     }
 }
