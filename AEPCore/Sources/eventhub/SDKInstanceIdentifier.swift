@@ -16,6 +16,7 @@ import Foundation
 /// An identifier for an SDK instance.
 enum SDKInstanceIdentifier: Hashable {
     private static let IDENTIFIER_MAX_LENGTH = 100
+    private static let IDENTIFIER_PATTERN = "[^A-Za-z0-9._-]+"
     private static let DEFAULT_STRING = "default-instance"
     
     case `default`
@@ -61,12 +62,7 @@ enum SDKInstanceIdentifier: Hashable {
             return false
         }
         
-        let invalidCharset = CharacterSet(charactersIn: ":\\/")
-            .union(.illegalCharacters)
-            .union(.whitespacesAndNewlines)
-            .union(.controlCharacters)
-            .union(.symbols)
-        return identifier.rangeOfCharacter(from: invalidCharset) == nil
+        return identifier.range(of: IDENTIFIER_PATTERN, options: .regularExpression) == nil
     }
 }
 

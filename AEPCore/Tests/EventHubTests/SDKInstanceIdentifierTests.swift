@@ -22,9 +22,24 @@ class SDKInstanceIdentifierTests: XCTestCase {
     let maxCharacterLength = 100
 
     let validIdentifiers = [
+        "a",
+        "1",
+        "hello123",
+        "HelloWorld123",
         "hello-world",
         "hello_world",
         "hello.world",
+        "\u{0048}\u{0065}\u{006C}\u{006C}\u{006F}" // hello
+        ]
+    
+    let invalidIdentifiers = [
+        "", // empty string
+        " ", // space
+        "   ", // tab
+        "hello/world", // forward slash
+        "hello\\world", // backward slash
+        "hello world",
+        "https://adobe.com",
         "hello!",
         "world?",
         "(hello)",
@@ -39,17 +54,7 @@ class SDKInstanceIdentifierTests: XCTestCase {
         "@hello",
         "\u{21}", // unicode for '!'
         "美美",
-        "请您首先亲临任一网点更新邮寄地址"
-        ]
-    
-    let invalidIdentifiers = [
-        "", // empty string
-        " ", // space
-        "   ", // tab
-        "hello/world", // forward slash
-        "hello\\world", // backward slash
-        "hello world",
-        "https://adobe.com",
+        "请您首先亲临任一网点更新邮寄地址",
         ":",
         "$",
         "<>",
