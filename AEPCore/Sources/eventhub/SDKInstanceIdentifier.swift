@@ -14,24 +14,28 @@
 import Foundation
 
 /// An identifier for an SDK instance.
-public enum SDKInstanceIdentifier: Hashable {
+enum SDKInstanceIdentifier: Hashable {
+    private static let IDENTIFIER_MAX_LENGTH = 100
+    private static let DEFAULT_STRING = "default-instance"
+    
     case `default`
     case id(String)
-    
     
     /// Creates an instance of `SDKInstanceIdentifier`. 
     /// If the given `id` is either too long or contains invalid characters then `nil` is returned.
     /// - Parameter id: the identifier string for an SDK instance.
     init?(id: String) {
-        if id == "default-instance" {
+        if id == SDKInstanceIdentifier.DEFAULT_STRING {
             self = .default
-        } else if !SDKInstanceIdentifier.isValidFilename(id) {
-            return nil
-        } else {
+        } else if SDKInstanceIdentifier.isValidFilename(id) {
             self = .id(id)
+        } else {
+            return nil
         }
     }
 
+    /// The SDK instance identifier string.
+    /// Returns nil for the default instance.
     var id: String? {
         switch self {
         case .default:
@@ -42,9 +46,8 @@ public enum SDKInstanceIdentifier: Hashable {
     }
 
     var description: String {
-        id ?? "default-instance"
+        id ?? SDKInstanceIdentifier.DEFAULT_STRING
     }
-    
     
     /// Validates the given `identifier` to ensure it is safe to use as a filename.
     /// - Parameter identifier: The instance identifier string to validate.
@@ -54,7 +57,7 @@ public enum SDKInstanceIdentifier: Hashable {
             return false
         }
         
-        if identifier.count > 150 {
+        if identifier.count > SDKInstanceIdentifier.IDENTIFIER_MAX_LENGTH {
             return false
         }
         
@@ -67,11 +70,27 @@ public enum SDKInstanceIdentifier: Hashable {
     }
 }
 
-public extension String {
+extension String {
+    
+    /// Attaches the `instance` to this `String`.
+    /// If the given `instance` is `SDKInstanceIdentifier.default`, then this String is returned unmodified.
+    /// - Parameter instance: The `SDKInstanceIdentifier` to attach to this `String`.
+    /// - Returns: A string with the SDK Instance identifier attached.
     func instanceAwareName(for instance: SDKInstanceIdentifier) -> String {
         guard let instanceId = instance.id else {
             return self
         }
         return "\(self)-\(instanceId)"
+    }
+    
+    /// Joins the `instance` to this `String` delimited by a dot '.' for use in filenames.
+    /// If the given `instance` is `SDKInstanceIdentifier.default`, then this String is returned unmodifed.
+    /// - Parameter instance: iThe `SDKInstanceIdentifier` to join to this `String`.
+    /// - Returns: A file safe string joined with the SDK Instance identifier.
+    func instanceAwareFilename(for instance: SDKInstanceIdentifier) -> String {
+        guard let instanceId = instance.id else {
+            return self
+        }
+        return "aep.\(instanceId).\(self)"
     }
 }

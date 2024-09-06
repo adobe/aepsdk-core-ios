@@ -19,10 +19,11 @@ import XCTest
 
 class SDKInstanceIdentifierTests: XCTestCase {
     
-    let maxCharacterLength = 150
+    let maxCharacterLength = 100
 
     let validIdentifiers = [
         "hello-world",
+        "hello_world",
         "hello.world",
         "hello!",
         "world?",
@@ -116,6 +117,30 @@ class SDKInstanceIdentifierTests: XCTestCase {
         
         XCTAssertEqual("", instance.id)
         XCTAssertEqual("", instance.description)
+    }
+    
+    func testStringExtensionInstanceAwareName() {
+        let instance: SDKInstanceIdentifier = .id("tenant")
+        let string = "message"
+        XCTAssertEqual("message-tenant", string.instanceAwareName(for: instance))
+    }
+    
+    func testStringExtensionInstanceAwareNameDefault() {
+        let instance: SDKInstanceIdentifier = .default
+        let string = "message"
+        XCTAssertEqual("message", string.instanceAwareName(for: instance))
+    }
+    
+    func testStringExtensionInstanceAwareFilename() {
+        let instance: SDKInstanceIdentifier = .id("tenant")
+        let string = "filename"
+        XCTAssertEqual("aep.tenant.filename", string.instanceAwareFilename(for: instance))
+    }
+    
+    func testStringExtensionInstanceAwareFilenameDefault() {
+        let instance: SDKInstanceIdentifier = .default
+        let string = "filename"
+        XCTAssertEqual("filename", string.instanceAwareFilename(for: instance))
     }
     
     func testListOfValidNamesPassInitialization() {
