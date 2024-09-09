@@ -10,7 +10,6 @@
  governing permissions and limitations under the License.
 */
 
-@objc
 public protocol Logger {
     
     /// Used to print more verbose information.
