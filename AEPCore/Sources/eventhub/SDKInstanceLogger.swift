@@ -16,6 +16,8 @@ import AEPServices
 /// Tenant aware logging service.
 class SDKInstanceLogger: Logger {
     private static var instanceLoggers: [SDKInstanceIdentifier: SDKInstanceLogger] = [:]
+    // DispatchQueue to synchronize access to `instanceLoggers` dictionary
+    private static let loggersQueue = DispatchQueue(label: "com.adobe.queue.sdkinstancelogger")
     
     private let instance: SDKInstanceIdentifier
     
@@ -27,12 +29,14 @@ class SDKInstanceLogger: Logger {
     /// - Parameter instance: the SDK instance identifier.
     /// - Returns: a `Logger` for the given `instance`.
     static func getForInstance(_ instance: SDKInstanceIdentifier) -> SDKInstanceLogger {
-        if let logger = instanceLoggers[instance] {
-            return logger
-        } else {
-            let logger = SDKInstanceLogger(instance: instance)
-            instanceLoggers[instance] = logger
-            return logger
+        loggersQueue.sync {
+            if let logger = instanceLoggers[instance] {
+                return logger
+            } else {
+                let logger = SDKInstanceLogger(instance: instance)
+                instanceLoggers[instance] = logger
+                return logger
+            }
         }
     }
 
