@@ -472,6 +472,8 @@
 		BF4A709E26CCCF5500612434 /* RulesEngineIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */; };
 		BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */; };
 		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
+		BF4BDFBE2C87D5AB00485ABC /* SDKInstanceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */; };
+		BF4BDFC02C87DD8600485ABC /* SDKInstanceIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFBF2C87DD8600485ABC /* SDKInstanceIdentifierTests.swift */; };
 		C0FC8CAF8ADDBE9FBAE4C374 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
 		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
@@ -1206,6 +1208,8 @@
 		BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RulesEngineIntegrationTests.swift; sourceTree = "<group>"; };
 		BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_dispatch_consequence.json; sourceTree = "<group>"; };
 		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
+		BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceIdentifier.swift; sourceTree = "<group>"; };
+		BF4BDFBF2C87DD8600485ABC /* SDKInstanceIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceIdentifierTests.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
 		D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2Constants.swift; sourceTree = "<group>"; };
@@ -1898,6 +1902,7 @@
 				24E255D3270F403A00AB9F07 /* HistoryTests */,
 				246B1A2A272B48A80017716A /* EventTests.swift */,
 				3F3951EB24CA096100F7325B /* EventHubTests.swift */,
+				BF4BDFBF2C87DD8600485ABC /* SDKInstanceIdentifierTests.swift */,
 				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
 			);
 			path = EventHubTests;
@@ -2040,6 +2045,7 @@
 				3FB66AB224CA004400502CAF /* Extension.swift */,
 				3FB66AA824CA004400502CAF /* ExtensionContainer.swift */,
 				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
+				BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */,
 				3FB66AAB24CA004400502CAF /* SharedState.swift */,
 				217E220424D1FD7900B70B3E /* SharedStateResult.swift */,
 				21A6737225434AE600A7E906 /* SharedStateType.swift */,
@@ -3250,6 +3256,7 @@
 				24EDE33726F10B810068A65F /* EventData+FNV1A32.swift in Sources */,
 				24EDE33526EFBDD60068A65F /* EventHistoryDatabase.swift in Sources */,
 				BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */,
+				BF4BDFBE2C87D5AB00485ABC /* SDKInstanceIdentifier.swift in Sources */,
 				24EDE33126EFB7170068A65F /* EventHistory.swift in Sources */,
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
@@ -3337,6 +3344,7 @@
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
 				BBE1294F24DBBBD60045CD8D /* Dictionary+FlattenTests.swift in Sources */,
 				BBA1E97825F099D000999DD2 /* DataMarshallerTests.swift in Sources */,
+				BF4BDFC02C87DD8600485ABC /* SDKInstanceIdentifierTests.swift in Sources */,
 				24B4BE5B2714F7730000C3AA /* EventHistoryResponseTests.swift in Sources */,
 				3F39521824CA096200F7325B /* MockRulesDownloaderNetworkService.swift in Sources */,
 				3F39521224CA096100F7325B /* MockExtensionTwo.swift in Sources */,
