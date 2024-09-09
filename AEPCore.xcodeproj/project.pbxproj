@@ -475,7 +475,6 @@
 		BF4BDFBE2C87D5AB00485ABC /* SDKInstanceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */; };
 		BF4BDFC02C87DD8600485ABC /* SDKInstanceIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFBF2C87DD8600485ABC /* SDKInstanceIdentifierTests.swift */; };
 		BF4BDFC22C8F609500485ABC /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFC12C8F609500485ABC /* Logger.swift */; };
-		BF4BDFC42C8F615400485ABC /* LoggerImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFC32C8F615400485ABC /* LoggerImpl.swift */; };
 		BF4BDFC62C8F623D00485ABC /* SDKInstanceLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFC52C8F623D00485ABC /* SDKInstanceLogger.swift */; };
 		C0FC8CAF8ADDBE9FBAE4C374 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
@@ -1214,7 +1213,6 @@
 		BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceIdentifier.swift; sourceTree = "<group>"; };
 		BF4BDFBF2C87DD8600485ABC /* SDKInstanceIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceIdentifierTests.swift; sourceTree = "<group>"; };
 		BF4BDFC12C8F609500485ABC /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		BF4BDFC32C8F615400485ABC /* LoggerImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerImpl.swift; sourceTree = "<group>"; };
 		BF4BDFC52C8F623D00485ABC /* SDKInstanceLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceLogger.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
@@ -1725,7 +1723,6 @@
 			children = (
 				3F0397A824BE5FF30019F095 /* Log.swift */,
 				BF4BDFC12C8F609500485ABC /* Logger.swift */,
-				BF4BDFC32C8F615400485ABC /* LoggerImpl.swift */,
 				3F0397A724BE5FF30019F095 /* Logging.swift */,
 				3F0397AD24BE5FF30019F095 /* LoggingService.swift */,
 				3F0397A924BE5FF30019F095 /* LogLevel.swift */,
@@ -3465,7 +3462,6 @@
 				92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
 				92F06D0425BA33F4004C1700 /* Showable.swift in Sources */,
-				BF4BDFC42C8F615400485ABC /* LoggerImpl.swift in Sources */,
 				3F0397D524BE5FF30019F095 /* DataQueue.swift in Sources */,
 				BB00E26D24D9BF6C00C578C1 /* URLUtility.swift in Sources */,
 				3F0397DE24BE5FF30019F095 /* SystemInfoService.swift in Sources */,
