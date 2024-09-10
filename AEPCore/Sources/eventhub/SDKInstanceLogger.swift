@@ -16,8 +16,8 @@ import AEPServices
 class SDKInstanceLogger: Logger {
     private static var instanceLoggers: [SDKInstanceIdentifier: SDKInstanceLogger] = [:]
     // DispatchQueue to synchronize access to `instanceLoggers` dictionary
-    private static let loggersQueue = DispatchQueue(label: "com.adobe.queue.sdkinstancelogger")
-    
+    private static let loggersQueue = DispatchQueue(label: "com.adobe.sdkInstanceLogger")
+
     private let instance: SDKInstanceIdentifier
     
     private init(instance: SDKInstanceIdentifier) {
