@@ -474,6 +474,8 @@
 		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
 		BF4BDFBE2C87D5AB00485ABC /* SDKInstanceIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */; };
 		BF4BDFC02C87DD8600485ABC /* SDKInstanceIdentifierTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFBF2C87DD8600485ABC /* SDKInstanceIdentifierTests.swift */; };
+		BF4BDFC22C8F609500485ABC /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFC12C8F609500485ABC /* Logger.swift */; };
+		BF4BDFC62C8F623D00485ABC /* SDKInstanceLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF4BDFC52C8F623D00485ABC /* SDKInstanceLogger.swift */; };
 		C0FC8CAF8ADDBE9FBAE4C374 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
 		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
@@ -1210,6 +1212,8 @@
 		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceIdentifier.swift; sourceTree = "<group>"; };
 		BF4BDFBF2C87DD8600485ABC /* SDKInstanceIdentifierTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceIdentifierTests.swift; sourceTree = "<group>"; };
+		BF4BDFC12C8F609500485ABC /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		BF4BDFC52C8F623D00485ABC /* SDKInstanceLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SDKInstanceLogger.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
 		D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2Constants.swift; sourceTree = "<group>"; };
@@ -1718,9 +1722,10 @@
 			isa = PBXGroup;
 			children = (
 				3F0397A824BE5FF30019F095 /* Log.swift */,
-				3F0397A924BE5FF30019F095 /* LogLevel.swift */,
+				BF4BDFC12C8F609500485ABC /* Logger.swift */,
 				3F0397A724BE5FF30019F095 /* Logging.swift */,
 				3F0397AD24BE5FF30019F095 /* LoggingService.swift */,
+				3F0397A924BE5FF30019F095 /* LogLevel.swift */,
 			);
 			path = log;
 			sourceTree = "<group>";
@@ -2046,6 +2051,7 @@
 				3FB66AA824CA004400502CAF /* ExtensionContainer.swift */,
 				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
 				BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */,
+				BF4BDFC52C8F623D00485ABC /* SDKInstanceLogger.swift */,
 				3FB66AAB24CA004400502CAF /* SharedState.swift */,
 				217E220424D1FD7900B70B3E /* SharedStateResult.swift */,
 				21A6737225434AE600A7E906 /* SharedStateType.swift */,
@@ -3261,6 +3267,7 @@
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */,
+				BF4BDFC62C8F623D00485ABC /* SDKInstanceLogger.swift in Sources */,
 				21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
 				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
@@ -3461,6 +3468,7 @@
 				3F0397F624BE60910019F095 /* FileUnzipper.swift in Sources */,
 				3F0397D424BE5FF30019F095 /* SQLiteWrapper.swift in Sources */,
 				3F0397D024BE5FF30019F095 /* HttpMethod.swift in Sources */,
+				BF4BDFC22C8F609500485ABC /* Logger.swift in Sources */,
 				3F0397CB24BE5FF30019F095 /* LogLevel.swift in Sources */,
 				BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */,
 				3F0397FA24BE60910019F095 /* FileUnzipperConstants.swift in Sources */,
