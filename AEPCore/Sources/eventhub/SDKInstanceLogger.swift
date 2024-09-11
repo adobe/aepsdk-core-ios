@@ -14,26 +14,26 @@ import AEPServices
 
 /// Tenant aware logging service.
 class SDKInstanceLogger: Logger {
-    private static var instanceLoggers: [SDKInstanceIdentifier: SDKInstanceLogger] = [:]
-    // DispatchQueue to synchronize access to `instanceLoggers` dictionary
-    private static let loggersQueue = DispatchQueue(label: "com.adobe.sdkInstanceLogger")
+    private static var loggerInstances: [SDKInstanceIdentifier: SDKInstanceLogger] = [:]
+    // DispatchQueue to synchronize access to `loggerInstances` dictionary
+    private static let loggerQueue = DispatchQueue(label: "com.adobe.sdkInstanceLogger")
 
-    private let instance: SDKInstanceIdentifier
-    
-    private init(instance: SDKInstanceIdentifier) {
-        self.instance = instance
+    private let identifier: SDKInstanceIdentifier
+
+    private init(identifier: SDKInstanceIdentifier) {
+        self.identifier = identifier
     }
     
     /// Get a `SDKInstanceLogger` for the given `SDKInstanceIdentifier`.
-    /// - Parameter instance: the SDK instance identifier.
+    /// - Parameter identifier: the SDK instance identifier.
     /// - Returns: a `Logger` for the given `instance`.
-    static func getForInstance(_ instance: SDKInstanceIdentifier) -> SDKInstanceLogger {
-        loggersQueue.sync {
-            if let logger = instanceLoggers[instance] {
+    static func getInstance(for identifier: SDKInstanceIdentifier) -> SDKInstanceLogger {
+        loggerQueue.sync {
+            if let logger = loggerInstances[identifier] {
                 return logger
             } else {
-                let logger = SDKInstanceLogger(instance: instance)
-                instanceLoggers[instance] = logger
+                let logger = SDKInstanceLogger(identifier: identifier)
+                loggerInstances[identifier] = logger
                 return logger
             }
         }
@@ -44,7 +44,7 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func trace(label: String, _ message: String) {
-        Log.trace(label: label.instanceAwareName(for: instance), message)
+        Log.trace(label: label.instanceAwareName(for: identifier), message)
     }
 
     /// Information provided to the debug method should contain high-level details about the data being processed
@@ -52,7 +52,7 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func debug(label: String, _ message: String) {
-        Log.debug(label: label.instanceAwareName(for: instance), message)
+        Log.debug(label: label.instanceAwareName(for: identifier), message)
     }
 
     /// Information provided to the warning method indicates that a request has been made to the SDK, but the SDK will be unable to perform the requested task
@@ -60,7 +60,7 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func warning(label: String, _ message: String) {
-        Log.warning(label: label.instanceAwareName(for: instance), message)
+        Log.warning(label: label.instanceAwareName(for: identifier), message)
     }
 
     /// Information provided to the error method indicates that there has been an unrecoverable error
@@ -68,6 +68,6 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func error(label: String, _ message: String) {
-        Log.error(label: label.instanceAwareName(for: instance), message)
+        Log.error(label: label.instanceAwareName(for: identifier), message)
     }
 }
