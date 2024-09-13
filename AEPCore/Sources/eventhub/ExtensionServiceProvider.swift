@@ -19,16 +19,8 @@ public class ExtensionServiceProvider: NSObject {
     private let identifier: SDKInstanceIdentifier
     private let logger: Logger
 
-    private var dataStoreInstances: [String: NamedCollectionDataStore] = [:]
-    private var dataQueueInstances: [String: DataQueue] = [:]
-    private var cacheInstances: [String: Cache] = [:]
-
-    // DispatchQueue to synchronize access to service dictionaries
-    private let queue: DispatchQueue
-
     init(identifier: SDKInstanceIdentifier) {
         self.identifier = identifier
-        self.queue = DispatchQueue(label: "com.adobe.extensionServiceProvider".instanceAwareLabel(for: identifier))
         self.logger = SDKInstanceLogger(identifier: identifier)
     }
 
@@ -38,7 +30,7 @@ public class ExtensionServiceProvider: NSObject {
         return ServiceProvider.shared.namedKeyValueService.getAppGroup()
     }
 
-    /// Append the SDK instance identifer to `label` for use in lables such as in logging or dispatch queues..
+    /// Append the SDK instance identifer to `label` for use in lables such as in logging or dispatch queues.
     /// If the given identifier is `SDKInstanceIdentifier.default`, then `label` is returned unmodified.
     /// - Parameter name: the String to attach the instance identifier.
     /// - Returns: the string with the SDK Instance identifier attached.
@@ -54,53 +46,29 @@ public class ExtensionServiceProvider: NSObject {
         return name.instanceAwareFilename(for: identifier)
     }
 
-    /// Returns a `NamedCollectionDataStore` with the given `name` appended with this instance's identifier.
+    /// Returns a `NamedCollectionDataStore` with the SDK instance identifier added to the given `name`.
     /// - Parameter name: the name of this data store
-    /// - Returns: an instance of type `NamedCollectionDataStore` with the given data store `name` appended with the instance identifier.
+    /// - Returns: a `NamedCollectionDataStore` with the SDK instance identifier added to `name`
     public func getNamedCollectionDataStore(name: String) -> NamedCollectionDataStore {
-        queue.sync {
-            if let dataStore = dataStoreInstances[name] {
-                return dataStore
-            } else {
-                let dataStore = NamedCollectionDataStore(name: name.instanceAwareFilename(for: identifier))
-                dataStoreInstances[name] = dataStore
-                return dataStore
-            }
-        }
+        NamedCollectionDataStore(name: name.instanceAwareFilename(for: identifier))
     }
 
-    /// Returns a `DataQueue` where the given `label` appended with the instance identifier.
+    /// Returns a `DataQueue` with the SDK instance identifier added to the given `label`.
     /// - Parameter label: the  label assigned to the `DataQueue` when created
-    /// - Returns: a `DataQueue` with the `label` appended with the instance identifier.
+    /// - Returns: a `DataQueue` with the SDK instance identifier added to `label`
     public func getDataQueue(label: String) -> DataQueue? {
-        queue.sync {
-            if let dataQueue = dataQueueInstances[label] {
-                return dataQueue
-            } else {
-                let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: label.instanceAwareFilename(for: identifier))
-                dataQueueInstances[label] = dataQueue
-                return dataQueue
-            }
-        }
+        ServiceProvider.shared.dataQueueService.getDataQueue(label: label.instanceAwareFilename(for: identifier))
     }
 
-    /// Returns a`Cache` with the given cache `name` appended with the instance identifier.
+    /// Returns a`Cache` with the SDK instance identifier added to the given cache `name`.
     /// - Parameter name: the name of the cache
-    /// - Returns: a `Cache` with the given `name` appended with the instance identifier.
+    /// - Returns: a `Cache` with the SDK instance identifier added to `name`
     public func getCache(name: String) -> Cache {
-        queue.sync {
-            if let cache = cacheInstances[name] {
-                return cache
-            } else {
-                let cache = Cache(name: name.instanceAwareFilename(for: identifier))
-                cacheInstances[name] = cache
-                return cache
-            }
-        }
+        Cache(name: name.instanceAwareFilename(for: identifier))
     }
 
     /// Returns a `Logger` specific to this SDK instance.
-    /// - Returns: a tenant-aware instance of type `Logger`
+    /// - Returns: a `Logger` which includes the SDK instance identifier when logging.
     public func getLogger() -> Logger {
         return logger
     }
