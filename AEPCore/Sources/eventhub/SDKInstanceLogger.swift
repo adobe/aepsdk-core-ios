@@ -14,29 +14,11 @@ import AEPServices
 
 /// Tenant aware logging service.
 class SDKInstanceLogger: Logger {
-    private static var loggerInstances: [SDKInstanceIdentifier: SDKInstanceLogger] = [:]
-    // DispatchQueue to synchronize access to `loggerInstances` dictionary
-    private static let loggerQueue = DispatchQueue(label: "com.adobe.sdkInstanceLogger")
 
     private let identifier: SDKInstanceIdentifier
 
-    private init(identifier: SDKInstanceIdentifier) {
+    init(identifier: SDKInstanceIdentifier) {
         self.identifier = identifier
-    }
-    
-    /// Get a `SDKInstanceLogger` for the given `SDKInstanceIdentifier`.
-    /// - Parameter identifier: the SDK instance identifier.
-    /// - Returns: a `Logger` for the given `instance`.
-    static func getInstance(for identifier: SDKInstanceIdentifier) -> SDKInstanceLogger {
-        loggerQueue.sync {
-            if let logger = loggerInstances[identifier] {
-                return logger
-            } else {
-                let logger = SDKInstanceLogger(identifier: identifier)
-                loggerInstances[identifier] = logger
-                return logger
-            }
-        }
     }
 
     /// Used to print more verbose information.
