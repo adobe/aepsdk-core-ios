@@ -127,13 +127,13 @@ class SDKInstanceIdentifierTests: XCTestCase {
     func testStringExtensionInstanceAwareName() {
         let instance: SDKInstanceIdentifier = .id("tenant")
         let string = "message"
-        XCTAssertEqual("message-tenant", string.instanceAwareName(for: instance))
+        XCTAssertEqual("message-tenant", string.instanceAwareLabel(for: instance))
     }
     
     func testStringExtensionInstanceAwareNameDefault() {
         let instance: SDKInstanceIdentifier = .default
         let string = "message"
-        XCTAssertEqual("message", string.instanceAwareName(for: instance))
+        XCTAssertEqual("message", string.instanceAwareLabel(for: instance))
     }
     
     func testStringExtensionInstanceAwareFilename() {

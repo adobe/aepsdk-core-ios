@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AEPServices
 
 /// provides all the methods needed by an `Extension`
 @objc(AEPExtensionRuntime)
