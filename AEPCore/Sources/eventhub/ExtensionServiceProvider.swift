@@ -13,8 +13,8 @@
 import AEPServices
 
 /// provides all the services needed by an `Extension` which supports multi-instances.
-@objc(AEPSDKInstanceServiceProvider)
-public class SDKInstanceServiceProvider: NSObject {
+@objc(AEPExtensionServiceProvider)
+public class ExtensionServiceProvider: NSObject {
 
     private let identifier: SDKInstanceIdentifier
     private let logger: Logger
@@ -28,27 +28,30 @@ public class SDKInstanceServiceProvider: NSObject {
 
     init(identifier: SDKInstanceIdentifier) {
         self.identifier = identifier
-        self.queue = DispatchQueue(label: "com.adobe.sdkInstanceServiceProvider".instanceAwareName(for: identifier))
+        self.queue = DispatchQueue(label: "com.adobe.extensionServiceProvider".instanceAwareLabel(for: identifier))
         self.logger = SDKInstanceLogger(identifier: identifier)
-    }
-
-    /// Set the name of the app group that will be used to store the data
-    /// - Parameter appGroup: The app group name
-    func setAppGroup(_ appGroup: String?) {
-        ServiceProvider.shared.namedKeyValueService.setAppGroup(appGroup)
     }
 
     /// Gets the app group.
     /// - Returns: The app group if set
-    func getAppGroup() -> String? {
+    public func getAppGroup() -> String? {
         return ServiceProvider.shared.namedKeyValueService.getAppGroup()
     }
 
-    /// Attach the instance identifier to the given String `name`.
+    /// Append the SDK instance identifer to `label` for use in lables such as in logging or dispatch queues..
+    /// If the given identifier is `SDKInstanceIdentifier.default`, then `label` is returned unmodified.
     /// - Parameter name: the String to attach the instance identifier.
     /// - Returns: the string with the SDK Instance identifier attached.
-    func getInstanceAwareName(for name: String) -> String {
-        return name.instanceAwareName(for: identifier)
+    public func getInstanceAwareLabel(for label: String) -> String {
+        return label.instanceAwareLabel(for: identifier)
+    }
+
+    /// Adds the SDK instance identifier to `name` for use in filenames.
+    /// If the given identifier is `SDKInstanceIdentifier.default`, then `name` is returned unmodifed.
+    /// - Parameter name: the String to attach the instance identifier.
+    /// - Returns: the string with the SDK Instance identifier attached.
+    public func getInstanceAwareFileName(for name: String) -> String {
+        return name.instanceAwareFilename(for: identifier)
     }
 
     /// Returns a `NamedCollectionDataStore` with the given `name` appended with this instance's identifier.
@@ -59,7 +62,7 @@ public class SDKInstanceServiceProvider: NSObject {
             if let dataStore = dataStoreInstances[name] {
                 return dataStore
             } else {
-                let dataStore = NamedCollectionDataStore(name: name.instanceAwareName(for: identifier))
+                let dataStore = NamedCollectionDataStore(name: name.instanceAwareFilename(for: identifier))
                 dataStoreInstances[name] = dataStore
                 return dataStore
             }
@@ -74,7 +77,7 @@ public class SDKInstanceServiceProvider: NSObject {
             if let dataQueue = dataQueueInstances[label] {
                 return dataQueue
             } else {
-                let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: label.instanceAwareName(for: identifier))
+                let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: label.instanceAwareFilename(for: identifier))
                 dataQueueInstances[label] = dataQueue
                 return dataQueue
             }
@@ -89,7 +92,7 @@ public class SDKInstanceServiceProvider: NSObject {
             if let cache = cacheInstances[name] {
                 return cache
             } else {
-                let cache = Cache(name: name.instanceAwareName(for: identifier))
+                let cache = Cache(name: name.instanceAwareFilename(for: identifier))
                 cacheInstances[name] = cache
                 return cache
             }
@@ -118,7 +121,7 @@ public class SDKInstanceServiceProvider: NSObject {
 
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
-extension SDKInstanceServiceProvider {
+extension ExtensionServiceProvider {
 
     /// Returns a shared instance of type `URLOpening` provided by the shared `ServiceProvider`.
     /// - Returns: a shared instance of type `URLOpening`

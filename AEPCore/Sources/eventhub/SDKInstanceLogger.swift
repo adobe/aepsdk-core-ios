@@ -26,7 +26,7 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func trace(label: String, _ message: String) {
-        Log.trace(label: label.instanceAwareName(for: identifier), message)
+        Log.trace(label: label.instanceAwareLabel(for: identifier), message)
     }
 
     /// Information provided to the debug method should contain high-level details about the data being processed
@@ -34,7 +34,7 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func debug(label: String, _ message: String) {
-        Log.debug(label: label.instanceAwareName(for: identifier), message)
+        Log.debug(label: label.instanceAwareLabel(for: identifier), message)
     }
 
     /// Information provided to the warning method indicates that a request has been made to the SDK, but the SDK will be unable to perform the requested task
@@ -42,7 +42,7 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func warning(label: String, _ message: String) {
-        Log.warning(label: label.instanceAwareName(for: identifier), message)
+        Log.warning(label: label.instanceAwareLabel(for: identifier), message)
     }
 
     /// Information provided to the error method indicates that there has been an unrecoverable error
@@ -50,6 +50,6 @@ class SDKInstanceLogger: Logger {
     ///   - label: the name of the label to localize message
     ///   - message: the string to be logged
     func error(label: String, _ message: String) {
-        Log.error(label: label.instanceAwareName(for: identifier), message)
+        Log.error(label: label.instanceAwareLabel(for: identifier), message)
     }
 }

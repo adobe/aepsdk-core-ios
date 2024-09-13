@@ -68,23 +68,23 @@ enum SDKInstanceIdentifier: Hashable {
 
 extension String {
     
-    /// Attaches the `instance` to this `String`.
-    /// If the given `instance` is `SDKInstanceIdentifier.default`, then this String is returned unmodified.
-    /// - Parameter instance: The `SDKInstanceIdentifier` to attach to this `String`.
+    /// Append the SDK instance identifer to this String for use in lables such as in logging or dispatch queues..
+    /// If the given identifier is `SDKInstanceIdentifier.default`, then this String is returned unmodified.
+    /// - Parameter identifier: the `SDKInstanceIdentifier` to append to this `String`.
     /// - Returns: A string with the SDK Instance identifier attached.
-    func instanceAwareName(for instance: SDKInstanceIdentifier) -> String {
-        guard let instanceId = instance.id else {
+    func instanceAwareLabel(for identifier: SDKInstanceIdentifier) -> String {
+        guard let instanceId = identifier.id else {
             return self
         }
         return "\(self)-\(instanceId)"
     }
     
-    /// Joins the `instance` to this `String` delimited by a dot '.' for use in filenames.
-    /// If the given `instance` is `SDKInstanceIdentifier.default`, then this String is returned unmodifed.
-    /// - Parameter instance: iThe `SDKInstanceIdentifier` to join to this `String`.
+    /// Adds the SDK instance identifier to this String for use in filenames.
+    /// If the given identifier is `SDKInstanceIdentifier.default`, then this String is returned unmodifed.
+    /// - Parameter identifier: the `SDKInstanceIdentifier` to join to this `String`.
     /// - Returns: A file safe string joined with the SDK Instance identifier.
-    func instanceAwareFilename(for instance: SDKInstanceIdentifier) -> String {
-        guard let instanceId = instance.id else {
+    func instanceAwareFilename(for identifier: SDKInstanceIdentifier) -> String {
+        guard let instanceId = identifier.id else {
             return self
         }
         return "aep.\(instanceId).\(self)"
