@@ -90,3 +90,15 @@ extension String {
         return "aep.\(instanceId).\(self)"
     }
 }
+
+extension DispatchQueue {
+    /// Initializes a new `DispatchQueue` with a label that is specific to the provided `SDKInstanceIdentifier`.
+    ///
+    /// - Parameters:
+    ///   - identifier: The `SDKInstanceIdentifier` used to make the queue label instance-specific.
+    ///   - label: A base label string, to which the identifier will be appended to create a unique queue label.
+    convenience init(for identifier: SDKInstanceIdentifier, label: String) {
+        let label = label.instanceAwareLabel(for: identifier)
+        self.init(label: label)
+    }
+}

@@ -24,7 +24,7 @@ class EventHubTests: XCTestCase {
     var eventHub: EventHub!
 
     override func setUp() {
-        eventHub = EventHub()
+        eventHub = EventHub(identifier: .default)
         MockExtension.reset()
         MockExtensionTwo.reset()
         registerMockExtension(MockExtension.self)
@@ -769,7 +769,7 @@ class EventHubTests: XCTestCase {
     }
 
     func testEventHubDeinit() {
-        var hub: EventHub? = EventHub()
+        var hub: EventHub? = EventHub(identifier: .default)
         hub = nil
         XCTAssert(hub == nil)
     }

@@ -34,11 +34,18 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
         return queue.sync { return Array(self.dictionary.keys) }
     }
 
-    // Gets a non-thread-safe shallow copy of the backing dictionary
+    /// Gets a non-thread-safe shallow copy of the backing dictionary
     public var shallowCopy: [K: V] {
         return queue.sync {
             let dictionary = self.dictionary
             return dictionary
+        }
+    }
+
+    /// Clears the dictionary by removing all elements
+    public func clear() {
+        queue.async {
+            self.dictionary.removeAll()
         }
     }
 

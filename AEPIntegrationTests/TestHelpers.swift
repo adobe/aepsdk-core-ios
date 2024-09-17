@@ -14,7 +14,7 @@ import XCTest
 
 extension EventHub {
     static func reset() {
-        shared = EventHub()
+        shared = EventHub(identifier: .default)
     }
 }
 

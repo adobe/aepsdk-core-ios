@@ -15,17 +15,32 @@ import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.
 class EventHistory {
-    var db: EventHistoryDatabase
+    static let LOG_TAG = "EventHistory"
+    static let DB_NAME = "com.adobe.eventHistory"
+    
+    let logger: Logger
+    let db: EventHistoryDatabase
 
-    /// Default initializer.
+    /// Initializes a new `EventHistory` instance for the given identifier.
     ///
-    /// - Returns `nil` if the database cannot be initialized.
-    init?() {
-        guard let db = EventHistoryDatabase(dispatchQueue: DispatchQueue.init(label: "EventHistory")) else {
+    /// - Parameters:
+    ///   - identifier: The `SDKInstanceIdentifier`, used to configure the database filename.
+    ///   - logger: The `Logger` instance used for logging purposes.
+    ///
+    /// - Returns: A new `EventHistory` instance if initialization succeeds; otherwise, `nil` if the initialization fails.
+    convenience init?(identifier: SDKInstanceIdentifier, logger: Logger) {
+        let dbQueue = DispatchQueue.init(for: identifier, label: "\(Self.DB_NAME).queue")
+        let dbName = Self.DB_NAME.instanceAwareFilename(for: identifier)
+        guard let db = EventHistoryDatabase(dbName: dbName, dbQueue: dbQueue, logger: logger) else {
             return nil
         }
-
+        
+        self.init(db: db, logger: logger)
+    }
+    
+    init(db: EventHistoryDatabase, logger: Logger) {
         self.db = db
+        self.logger = logger
     }
 
     /// Records an `Event` based on its calculated hash.
@@ -62,8 +77,8 @@ class EventHistory {
                 let eventHash = event.mask.fnv1a32()
                 let from = previousEventOldestOccurrence ?? event.fromDate
                 let semaphore = DispatchSemaphore(value: 0)
-                db.select(hash: eventHash, from: from, to: event.toDate) { result in
-                    Log.debug(label: "EventHistory", "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(from?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder enabled returned \(result.count) record(s).")
+                db.select(hash: eventHash, from: from, to: event.toDate) { [logger] result in
+                    logger.debug(label: Self.LOG_TAG, "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(from?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder enabled returned \(result.count) record(s).")
                     previousEventOldestOccurrence = result.oldestOccurrence
                     results.append(result)
                     semaphore.signal()
@@ -74,8 +89,8 @@ class EventHistory {
             for event in requests {
                 let semaphore = DispatchSemaphore(value: 0)
                 let eventHash = event.mask.fnv1a32()
-                db.select(hash: eventHash, from: event.fromDate, to: event.toDate) { result in
-                    Log.debug(label: "EventHistory", "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(event.fromDate?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder disabled returned \(result.count) record(s).")
+                db.select(hash: eventHash, from: event.fromDate, to: event.toDate) { [logger] result in
+                    logger.debug(label: Self.LOG_TAG, "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(event.fromDate?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder disabled returned \(result.count) record(s).")
                     results.append(result)
                     semaphore.signal()
                 }

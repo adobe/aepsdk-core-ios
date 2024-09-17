@@ -192,6 +192,7 @@ public extension Extension {
     /// Register a event preprocessor
     /// - Parameter preprocessor: The `EventPreprocessor`
     internal func registerPreprocessor(_ preprocessor: @escaping EventPreprocessor) {
-        EventHub.shared.registerPreprocessor(preprocessor)
+        guard let container = runtime as? ExtensionContainer else { return }
+        container.registerPreprocessor(preprocessor: preprocessor)        
     }
 }

@@ -12,9 +12,9 @@
 
 import Foundation
 @testable import AEPCore
+import AEPServicesMocks
 
 class MockEventHistoryDatabase: EventHistoryDatabase {
-
     var paramHash: UInt32?
     var paramTimestamp: Date?
     var paramFrom: Date?
@@ -24,11 +24,11 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
     var returnDelete: Int = 0
 
     init?() {
-        super.init(dispatchQueue: DispatchQueue(label: "mockEventHistoryDatabase"))
+        super.init(dbName: "MockEventHistoryDatabase", dbQueue: DispatchQueue(label: "MockEventHistoryDatabase"), logger: MockLogger())
     }
 
     override func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
-        dispatchQueue.async {
+        dbQueue.async {
             self.paramHash = hash
             self.paramTimestamp = timestamp
             handler?(self.returnInsert)
@@ -36,7 +36,7 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
     }
 
     override func select(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: @escaping (EventHistoryResult) -> Void) {
-        dispatchQueue.async {
+        dbQueue.async {
             self.paramHash = hash
             self.paramFrom = from
             self.paramTo = to
@@ -45,7 +45,7 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
     }
 
     override func delete(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: ((Int) -> Void)? = nil) {
-        dispatchQueue.async {
+        dbQueue.async {
             self.paramHash = hash
             self.paramFrom = from
             self.paramTo = to

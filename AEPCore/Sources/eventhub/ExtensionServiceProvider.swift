@@ -19,9 +19,9 @@ public class ExtensionServiceProvider: NSObject {
     private let identifier: SDKInstanceIdentifier
     private let logger: Logger
 
-    init(identifier: SDKInstanceIdentifier) {
+    init(identifier: SDKInstanceIdentifier, logger: Logger) {
         self.identifier = identifier
-        self.logger = SDKInstanceLogger(identifier: identifier)
+        self.logger = logger
     }
 
     /// Gets the app group.
@@ -98,10 +98,10 @@ extension ExtensionServiceProvider {
     }
 
     #if os(iOS)
-    /// Returns a shared instance of type `UIService` provided by the shared `ServiceProvider`.
-    /// - Returns: a shared instance of type `UIService`
-    public func getUIService() -> UIService {
-        return ServiceProvider.shared.uiService
-    }
+        /// Returns a shared instance of type `UIService` provided by the shared `ServiceProvider`.
+        /// - Returns: a shared instance of type `UIService`
+        public func getUIService() -> UIService {
+            return ServiceProvider.shared.uiService
+        }
     #endif
 }

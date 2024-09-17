@@ -12,6 +12,7 @@
 
 @testable import AEPCore
 import Foundation
+import AEPServicesMocks
 
 class TestableExtensionRuntime: ExtensionRuntime {
     var listeners: [String: EventListener] = [:]
@@ -121,4 +122,9 @@ class TestableExtensionRuntime: ExtensionRuntime {
     func startEvents() {}
 
     func stopEvents() {}
+    
+    func getServiceProvider() -> ExtensionServiceProvider {
+        return ExtensionServiceProvider(identifier: .default, logger: MockLogger())
+    }
+    
 }

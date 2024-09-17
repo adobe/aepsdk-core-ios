@@ -12,6 +12,7 @@
 
 @testable import AEPCore
 import Foundation
+import AEPServicesMocks
 
 /// Testable implementation for `ExtensionRuntime`
 ///
@@ -180,6 +181,11 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         receivedEnforceOrder = enforceOrder
         handler(mockEventHistoryResults)
     }
+    
+    public func getServiceProvider() -> ExtensionServiceProvider {
+        ExtensionServiceProvider(identifier: .default, logger: MockLogger())
+    }
+    
 }
 
 /// Convenience properties for `TestableExtensionRuntime`
