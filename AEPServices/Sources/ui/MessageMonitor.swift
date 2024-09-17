@@ -35,27 +35,27 @@
             }
         }
 
-        internal func show(message: Showable) -> Bool {
+        internal func show(message: Showable) -> (Bool, String?) {
             show(message: message, delegateControl: true)
         }
-
-        internal func show(message: Showable, delegateControl: Bool) -> Bool {
+        
+        internal func show(message: Showable, delegateControl: Bool) -> (Bool, String?) {
             if isMessageDisplayed() {
                 Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
-                return false
+                return (false, "conflict")
             }
 
             if delegateControl {
                 if ServiceProvider.shared.messagingDelegate?.shouldShowMessage(message: message) == false {
                     Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, MessagingDelegate#showMessage states the message should not be displayed.")
-                    return false
+                    return (false, "suppressedByDelegate")
                 }
             }
 
             // Change message monitor to display
             displayMessage()
 
-            return true
+            return (true, nil)
         }
 
         internal func dismiss() -> Bool {
