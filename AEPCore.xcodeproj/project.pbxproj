@@ -118,6 +118,7 @@
 		24EDE33726F10B810068A65F /* EventData+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */; };
 		24EDE33926F10BA10068A65F /* String+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33826F10BA10068A65F /* String+FNV1A32.swift */; };
 		24EDE33B26F39F450068A65F /* EventHistoryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33A26F39F450068A65F /* EventHistoryResult.swift */; };
+		24FE9ABE2C9A268E008DA017 /* PresentationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FE9ABD2C9A268E008DA017 /* PresentationError.swift */; };
 		2E00098F26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00098E26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift */; };
 		2E36F6CA26C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */; };
 		2EF54C262BF6C69800685C07 /* URLError+Recoverable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF54C252BF6C69800685C07 /* URLError+Recoverable.swift */; };
@@ -843,6 +844,7 @@
 		24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventData+FNV1A32.swift"; sourceTree = "<group>"; };
 		24EDE33826F10BA10068A65F /* String+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+FNV1A32.swift"; sourceTree = "<group>"; };
 		24EDE33A26F39F450068A65F /* EventHistoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryResult.swift; sourceTree = "<group>"; };
+		24FE9ABD2C9A268E008DA017 /* PresentationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationError.swift; sourceTree = "<group>"; };
 		2E00098E26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2FunctionalTests.swift; sourceTree = "<group>"; };
 		2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2DataStoreCacheTests.swift; sourceTree = "<group>"; };
 		2EE8956F25F8D2BD27B6D4D8 /* Pods-AEPCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.debug.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2214,6 +2216,7 @@
 				92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */,
 				24C5E14C26B8B00B005BEA72 /* MessageSettings.swift */,
 				9239713F25A6380A0056A3E5 /* MessagingDelegate.swift */,
+				24FE9ABD2C9A268E008DA017 /* PresentationError.swift */,
 				92F06D0325BA33F3004C1700 /* Showable.swift */,
 				923972B225AD844E0056A3E5 /* UIApplication+Window.swift */,
 				92027B3E25C9C1A7007BE140 /* UIService.swift */,
@@ -3412,6 +3415,7 @@
 				3F0397C624BE5FF30019F095 /* DiskCacheService.swift in Sources */,
 				3F0397FC24BE60910019F095 /* OperationOrderer.swift in Sources */,
 				92027B3F25C9C1A8007BE140 /* UIService.swift in Sources */,
+				24FE9ABE2C9A268E008DA017 /* PresentationError.swift in Sources */,
 				78B36AEE25CA210E00D6D25F /* FloatingButtonPresentable.swift in Sources */,
 				923547FC25BFF18200BEA9A3 /* FloatingButton.swift in Sources */,
 				3F0397D324BE5FF30019F095 /* SQLiteDataQueue.swift in Sources */,

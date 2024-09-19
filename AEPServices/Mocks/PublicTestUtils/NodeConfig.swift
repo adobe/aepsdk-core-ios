@@ -881,7 +881,7 @@ extension NodeConfig.OptionKey: CustomStringConvertible {
         case .keyMustBeAbsent: return "Key Absent"
         case .primitiveExactMatch: return "Exact Match"
         case .valueNotEqual: return "Value not Equal"
-        // Add cases for other options
+            // Add cases for other options
         }
     }
 }

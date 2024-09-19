@@ -150,7 +150,7 @@ class IdentityIntegrationTests: TestBase {
 
         //Relaunch app
         unregisterExtensionsAndReset()
-        
+
         let secondLaunchRequestExpectation = XCTestExpectation(description: "syncIdentifiers request in new launch")
         ServiceProvider.shared.networkService = mockNetworkService
         mockNetworkService.mock { request in

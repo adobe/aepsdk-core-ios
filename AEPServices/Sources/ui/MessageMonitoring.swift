@@ -28,8 +28,8 @@
         /// If a UI message is already showing, this method will return `false`.
         /// If `MobileCore.messagingDelegate` exists, this method will call its `shouldShowMessage(:)` method.
         /// - Parameter message: `Showable` message to be shown
-        /// - Returns: a tuple for which the first value is a bool with `true` if message should be shown, and a string reason for why the message should not be shown if false
-        func show(message: Showable) -> (Bool, String?)
+        /// - Returns: a tuple for which the first value is a bool with `true` if message should be shown, and a `PresentationError` for why the message should not be shown if false
+        func show(message: Showable) -> (Bool, PresentationError?)
 
         /// Determines whether the provided `message` should be shown.
         /// If a UI message is already showing, this method will return `false`.
@@ -38,8 +38,8 @@
         /// - Parameters:
         ///   - message: `Showable` message to be shown
         ///   - delegateControl: If set to `true`, the `MessagingDelegate` will control whether the message should be shown.
-        /// - Returns: a tuple for which the first value is a bool with `true` if message should be shown, and a string reason for why the message should not be shown if false
-        func show(message: Showable, delegateControl: Bool) -> (Bool, String?)
+        /// - Returns: a tuple for which the first value is a bool with `true` if message should be shown, and a `PresentationError` for why the message should not be shown if false
+        func show(message: Showable, delegateControl: Bool) -> (Bool, PresentationError?)
 
         /// Check if the message is being displayed and call invoke the appropriate listeners
         /// - Returns: `true` if message needs to be dismissed

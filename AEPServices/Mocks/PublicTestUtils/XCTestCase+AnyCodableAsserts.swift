@@ -786,7 +786,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
                     line: line)
             }
             return false
-        // swiftlint:enable no_fallthrough_only
+            // swiftlint:enable no_fallthrough_only
         }
     }
 
@@ -1074,7 +1074,7 @@ public extension AnyCodableAsserts where Self: XCTestCase {
             // If it hits this case, then the ElementCount assertion was set on a non-collection type element
             // and should emit a test failure.
             if nodeTree.options[.elementCount]?.elementCount != nil ||
-               nodeTree.subtreeOptions[.elementCount]?.elementCount != nil {
+                nodeTree.subtreeOptions[.elementCount]?.elementCount != nil {
                 XCTFail(
                     """
                     Invalid ElementCount assertion on a non-collection element.

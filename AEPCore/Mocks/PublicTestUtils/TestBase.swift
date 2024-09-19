@@ -103,9 +103,9 @@ open class TestBase: XCTestCase {
             let receivedCount: Int32 = expectedEvent.value.getInitialCount() - expectedEvent.value.getCurrentCount()
             XCTAssertFalse(waitResult == DispatchTimeoutResult.timedOut,
                            """
-                            Timed out waiting for event type \(expectedEvent.key.type) and source \(expectedEvent.key.source),
-                            expected \(expectedCount), but received \(receivedCount)
-                            """,
+                           Timed out waiting for event type \(expectedEvent.key.type) and source \(expectedEvent.key.source),
+                           expected \(expectedCount), but received \(receivedCount)
+                           """,
                            file: (file),
                            line: line)
             XCTAssertEqual(expectedCount,
