@@ -124,4 +124,13 @@ public protocol ExtensionRuntime {
     ///                   from date
     ///   - handler: contains an `EventHistoryResult` for each provided request
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void)
+
+    // MARK: - Extension Services
+
+    /// Returns an instance of `ExtensionServiceProvider`, which is used to provide core services.
+    /// This is a wrapper around the shared `ServiceProvider`, handling service translations for a multi-instance SDK, so extensions don't need to manage them manually.
+    /// 
+    /// - Returns: An instance of `ExtensionServiceProvider`.
+    func getServiceProvider() -> ExtensionServiceProvider
+
 }

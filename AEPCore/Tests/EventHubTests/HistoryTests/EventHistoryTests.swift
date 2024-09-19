@@ -14,6 +14,7 @@ import XCTest
 
 @testable import AEPCore
 @testable import AEPCoreMocks
+import AEPServicesMocks
 
 class EventHistoryTests: XCTestCase {
 
@@ -23,10 +24,9 @@ class EventHistoryTests: XCTestCase {
     var expectedHash: UInt32!
     
     override func setUp() {
-        eventHistory = EventHistory()
         mockEventHistoryDatabase = MockEventHistoryDatabase()
-        eventHistory.db = mockEventHistoryDatabase
-        
+        eventHistory = EventHistory(db: mockEventHistoryDatabase, logger: MockLogger())
+       
         // hashed string will be "key:valuenumeric:552" - 1254850096
         expectedHash = 1254850096
         mockEvent = Event(name: "name", type: "type", source: "source", data: [
@@ -181,5 +181,23 @@ class EventHistoryTests: XCTestCase {
         XCTAssertEqual(expectedHash, mockEventHistoryDatabase.paramHash)
         XCTAssertEqual(mockOldestDate, mockEventHistoryDatabase.paramFrom)
         XCTAssertEqual(mockNewestDate, mockEventHistoryDatabase.paramTo)
+    }
+    
+    // MARK: - Multi-Instance
+    func testMultiInstance() throws {
+        // test
+        let eventHistory1 = EventHistory(identifier: .default, logger: MockLogger())
+        let eventHistory2 = EventHistory(identifier: .id("test"), logger: MockLogger())
+        
+        // verify
+        let dbName1 = "com.adobe.eventHistory".instanceAwareFilename(for: .default)
+        XCTAssertEqual(dbName1, eventHistory1?.db.dbName)
+                
+        let dbName2 = "com.adobe.eventHistory".instanceAwareFilename(for: .id("test"))
+        XCTAssertEqual(dbName2, eventHistory2?.db.dbName)
+        
+        // cleanup
+        eventHistory1?.db.cleanup()
+        eventHistory2?.db.cleanup()
     }
 }

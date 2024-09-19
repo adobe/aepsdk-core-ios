@@ -13,30 +13,23 @@
 import XCTest
 import SQLite3
 @testable import AEPCore
+import AEPServicesMocks
 
 class EventHistoryDatabaseTests: XCTestCase {
     let testDispatchQueue: DispatchQueue = DispatchQueue(label: "testEventHistoryQueue")
     var eventHistoryDatabase: EventHistoryDatabase!
-    var dbConnection: OpaquePointer!
     let dbName = "com.adobe.eventHistory"
-    let dbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
-    var dbFileUrl: URL?
-    
+ 
     override func setUp() {
-        eventHistoryDatabase = EventHistoryDatabase(dispatchQueue: testDispatchQueue)
-        dbConnection = eventHistoryDatabase.connection
-        dbFileUrl = try? FileManager.default.url(for: dbFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(dbName)
+        eventHistoryDatabase = EventHistoryDatabase(dbName: dbName, dbQueue: testDispatchQueue, logger: MockLogger())
     }
     
     override func tearDown() {
-        sqlite3_close(dbConnection)
-        if let dbFile = dbFileUrl {
-            try? FileManager.default.removeItem(at: dbFile)
-        }
+        eventHistoryDatabase.cleanup()
     }
     
     func testInit() throws {
-        XCTAssertTrue(FileManager.default.fileExists(atPath: dbFileUrl?.path ?? ""), "The database file failed to initialize")
+        XCTAssertTrue(dbExists(dbName), "The database file failed to initialize")
         XCTAssertNotNil(eventHistoryDatabase.connection)
     }
     
@@ -55,7 +48,26 @@ class EventHistoryDatabaseTests: XCTestCase {
     func testInsertNoConnection() throws {
         let expectation = XCTestExpectation(description: "handler was called for insert")
         let testHash: UInt32 = 552
+        
+        let connection = eventHistoryDatabase.connection
+        defer {
+            sqlite3_close(connection)
+        }
         eventHistoryDatabase.connection = nil
+        
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
+            XCTAssertFalse(result)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 1)
+    }
+    
+    func testInsertInvalidConnection() throws {
+        let expectation = XCTestExpectation(description: "handler was called for insert")
+        let testHash: UInt32 = 552
+        
+        sqlite3_close(eventHistoryDatabase.connection)
         
         eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertFalse(result)
@@ -89,7 +101,29 @@ class EventHistoryDatabaseTests: XCTestCase {
     func testSelectNoConnection() throws {
         let selectExpectation = XCTestExpectation(description: "handler was called for select")
         let testHash: UInt32 = 552
+        
+        let connection = eventHistoryDatabase.connection
+        defer {
+            sqlite3_close(connection)
+        }
+        
         eventHistoryDatabase.connection = nil
+                
+        eventHistoryDatabase.select(hash: testHash, from: nil, to: nil) { result in
+            XCTAssertNotNil(result)
+            XCTAssertEqual(-1, result.count)
+            XCTAssertNil(result.newestOccurrence)
+            XCTAssertNil(result.oldestOccurrence)
+            selectExpectation.fulfill()
+        }
+        wait(for: [selectExpectation], timeout: 1)
+    }
+    
+    func testSelectInvalidConnection() throws {
+        let selectExpectation = XCTestExpectation(description: "handler was called for select")
+        let testHash: UInt32 = 552
+                
+        sqlite3_close(eventHistoryDatabase.connection)
                 
         eventHistoryDatabase.select(hash: testHash, from: nil, to: nil) { result in
             XCTAssertNotNil(result)
@@ -130,6 +164,12 @@ class EventHistoryDatabaseTests: XCTestCase {
     func testDeleteNoConnection() throws {
         let deleteExpectation = XCTestExpectation(description: "handler was called for delete")
         let testHash: UInt32 = 552
+
+        let connection = eventHistoryDatabase.connection
+        defer {
+            sqlite3_close(connection)
+        }
+        
         eventHistoryDatabase.connection = nil
         
         eventHistoryDatabase.delete(hash: testHash, from: nil, to: nil) { count in
@@ -137,5 +177,46 @@ class EventHistoryDatabaseTests: XCTestCase {
             deleteExpectation.fulfill()
         }
         wait(for: [deleteExpectation], timeout: 1)
+    }
+    
+    func testDeleteInvalidConnection() throws {
+        let deleteExpectation = XCTestExpectation(description: "handler was called for delete")
+        let testHash: UInt32 = 552
+
+        sqlite3_close(eventHistoryDatabase.connection)
+        
+        eventHistoryDatabase.delete(hash: testHash, from: nil, to: nil) { count in
+            XCTAssertEqual(0, count)
+            deleteExpectation.fulfill()
+        }
+        wait(for: [deleteExpectation], timeout: 1)
+    }
+    
+    // MARK: - Multi-Instance
+    func testMultiInstance() throws {
+        let dbName1 = "com.adobe.eventHistory1"
+        let _ = EventHistoryDatabase(dbName: dbName1, dbQueue: testDispatchQueue, logger: MockLogger())
+        
+        let dbName2 = "com.adobe.eventHistory2"
+        let _ = EventHistoryDatabase(dbName: dbName2, dbQueue: testDispatchQueue, logger: MockLogger())
+        
+        XCTAssertTrue(dbExists(dbName1))
+        XCTAssertTrue(dbExists(dbName2))
+    }
+    
+    private func dbExists(_ name: String) -> Bool {
+        guard let dbFile = try? FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(name) else {
+            return false
+        }
+        return FileManager.default.fileExists(atPath: dbFile.path)
+    }
+}
+
+extension EventHistoryDatabase {
+    func cleanup() {
+        let dbFileUrl = try? FileManager.default.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(dbName)
+        if let dbFile = dbFileUrl {
+            try? FileManager.default.removeItem(at: dbFile)
+        }
     }
 }

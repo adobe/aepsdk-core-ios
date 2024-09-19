@@ -422,6 +422,8 @@
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
+		AC3835C22C98FD47000CE68E /* MockLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3835C12C98FD41000CE68E /* MockLogger.swift */; };
+		AC5C517D2C8FA7770021C1E9 /* EventHubProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5C517C2C8FA76E0021C1E9 /* EventHubProvider.swift */; };
 		ACC7A9762A0EA51F001A04FB /* EventHistoryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */; };
 		ACC7A97B2A12AF9D001A04FB /* rules_attach.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC7A9792A12AF9D001A04FB /* rules_attach.json */; };
 		ACC7A97C2A12AF9D001A04FB /* rules_attach.zip in Resources */ = {isa = PBXBuildFile; fileRef = ACC7A97A2A12AF9D001A04FB /* rules_attach.zip */; };
@@ -1158,7 +1160,9 @@
 		A5F5A65742E1DBDC25CF9F98 /* Pods-AEPIdentityTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AA4461A0B65C5DFE219540A5 /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
 		AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDMLanguage.swift; sourceTree = "<group>"; };
+		AC3835C12C98FD41000CE68E /* MockLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLogger.swift; sourceTree = "<group>"; };
 		AC4D8D4526D9AC0200A86435 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
+		AC5C517C2C8FA76E0021C1E9 /* EventHubProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHubProvider.swift; sourceTree = "<group>"; };
 		AC838996795DECE800B0A11B /* Pods-AEPIdentityTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.release.xcconfig"; sourceTree = "<group>"; };
 		ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryIntegrationTests.swift; sourceTree = "<group>"; };
 		ACC7A9792A12AF9D001A04FB /* rules_attach.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_attach.json; sourceTree = "<group>"; };
@@ -2052,6 +2056,7 @@
 				3FB66AB224CA004400502CAF /* Extension.swift */,
 				3FB66AA824CA004400502CAF /* ExtensionContainer.swift */,
 				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
+				AC5C517C2C8FA76E0021C1E9 /* EventHubProvider.swift */,
 				BF4BDFBD2C87D5AB00485ABC /* SDKInstanceIdentifier.swift */,
 				BF4BDFC52C8F623D00485ABC /* SDKInstanceLogger.swift */,
 				BF4BDFD02C93994000485ABC /* ExtensionServiceProvider.swift */,
@@ -2170,6 +2175,7 @@
 				4CF028212C2CCA0F008ADE05 /* MockDataQueue.swift */,
 				4CF028272C2CCA10008ADE05 /* MockDataStore.swift */,
 				4CF028202C2CCA0F008ADE05 /* MockHitProcessor.swift */,
+				AC3835C12C98FD41000CE68E /* MockLogger.swift */,
 				4CF028192C2CCA0F008ADE05 /* MockNetworkService.swift */,
 				4CF0281A2C2CCA0F008ADE05 /* NamedCollectionDataStore+TestHelper.swift */,
 				4CF0281B2C2CCA0F008ADE05 /* NetworkRequest+DeepCopy.swift */,
@@ -3271,6 +3277,7 @@
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
 				BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */,
 				BF4BDFC62C8F623D00485ABC /* SDKInstanceLogger.swift in Sources */,
+				AC5C517D2C8FA7770021C1E9 /* EventHubProvider.swift in Sources */,
 				21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
 				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
@@ -3577,6 +3584,7 @@
 				4CF028752C2CCBD3008ADE05 /* MockMessagingDelegate.swift in Sources */,
 				4CF028762C2CCBD3008ADE05 /* MockSystemInfoService.swift in Sources */,
 				4CF028772C2CCBD3008ADE05 /* MockTask.swift in Sources */,
+				AC3835C22C98FD47000CE68E /* MockLogger.swift in Sources */,
 				4CF028782C2CCBD3008ADE05 /* MockUnzipper.swift in Sources */,
 				4CF028792C2CCBD3008ADE05 /* MockURLService.swift in Sources */,
 				4CF0287A2C2CCBD3008ADE05 /* MockURLSession.swift in Sources */,

@@ -22,6 +22,9 @@ class ExtensionContainer {
     /// A weak reference to the EventHub instance responsible for processing events sent to/from this ExtensionContainer.
     private weak var eventHub: EventHub?
 
+    /// The extension service provider instance
+    private let serviceProvider: ExtensionServiceProvider
+
     /// The extension held in this container
     private var _exten: Extension?
     var exten: Extension? {
@@ -61,11 +64,23 @@ class ExtensionContainer {
         set { containerQueue.async { self._lastProcessedEvent = newValue } }
     }
 
-    init(_ eventHub: EventHub, _ name: String, _ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
+    /// Initializes a new instance of an `ExtensionContainer`.
+    ///
+    /// - Parameters:
+    ///   - eventHub: The `EventHub` that the extension will interact with using `ExtensionRuntime`.
+    ///   - serviceProvider: The `ExtensionServiceProvider` used to provide core services required by the extension.
+    ///   - type: The specific `Extension` type being initialized.
+    ///   - label: A string label that helps identify the extension, typically for debugging purposes.
+    ///   - extensionQueue: The `DispatchQueue` on which the extension is initialized.
+    ///   - completion: A closure that is called when the initialization is complete, passing an optional `EventHubError` if an error occurs.
+    ///
+    /// - Note: The `completion` closure will pass `nil` if the initialization succeeds, or an `EventHubError` if an error occurs during initialization.
+    init(eventHub: EventHub, serviceProvider: ExtensionServiceProvider, type: Extension.Type, label: String, extensionQueue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
         self.eventHub = eventHub
-        extensionQueue = queue
-        containerQueue = DispatchQueue(label: "\(name).containerQueue")
-        eventOrderer = OperationOrderer<Event>("\(name).operationOrderer")
+        self.serviceProvider = serviceProvider
+        self.extensionQueue = extensionQueue
+        containerQueue = DispatchQueue(label: "\(label).containerQueue")
+        eventOrderer = OperationOrderer<Event>("\(label).operationOrderer")
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
 
@@ -73,7 +88,6 @@ class ExtensionContainer {
         extensionQueue.async {
             self.exten = type.init(runtime: self)
             guard let unwrappedExtension = self.exten else {
-                Log.error(label: "\(ExtensionContainer.LOG_TAG):\(#function)", "Failed to initialize extension of type: \(type)")
                 completion(.extensionInitializationFailure)
                 return
             }
@@ -103,6 +117,11 @@ class ExtensionContainer {
 // MARK: - ExtensionContainer public extension
 
 extension ExtensionContainer: ExtensionRuntime {
+
+    func getServiceProvider() -> ExtensionServiceProvider {
+        return serviceProvider
+    }
+
     func unregisterExtension() {
         guard let exten = exten, let eventHub = eventHub else { return }
         eventHub.unregisterExtension(type(of: exten), completion: {_ in })
@@ -178,6 +197,17 @@ extension ExtensionContainer: ExtensionRuntime {
 
     func shutdown() {
         eventOrderer.waitToStop()
+    }
+}
+
+extension ExtensionContainer {
+    /// Registers an event preprocessor with the  `EventHub`.
+    /// This method currently exists to allow `Configuration` extension to register an `EventPreprocessor` with the correct `EventHub` instance
+    /// 
+    /// - Parameter preprocessor: A closure of type `EventPreprocessor` that defines the preprocessing logic.
+    internal func registerPreprocessor(preprocessor: @escaping EventPreprocessor) {
+        guard let eventHub = eventHub else { return }
+        eventHub.registerPreprocessor(preprocessor)
     }
 }
 

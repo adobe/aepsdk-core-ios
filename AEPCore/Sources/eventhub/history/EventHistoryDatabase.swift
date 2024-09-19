@@ -14,11 +14,11 @@ import Foundation
 import AEPServices
 
 class EventHistoryDatabase {
-    let LOG_PREFIX = "Event History Database"
+    let LOG_TAG = "EventHistoryDatabase"
+    let logger: Logger
 
-    let dispatchQueue: DispatchQueue
-
-    let dbName = "com.adobe.eventHistory"
+    let dbName: String
+    let dbQueue: DispatchQueue
     let dbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
 
     let tableName = "Events"
@@ -27,17 +27,25 @@ class EventHistoryDatabase {
 
     var connection: OpaquePointer?
 
-    /// Default initializer.
+    /// Initializes a new `EventHistoryDatabase` with the provided database name
     ///
-    /// - Returns `nil` if the `DispatchQueue` cannot be initialized.
-    init?(dispatchQueue: DispatchQueue) {
-        self.dispatchQueue = dispatchQueue
+    /// - Parameters:
+    ///   - dbName: The name of the database.
+    ///   - dbQueue: The `DispatchQueue` to be used for database operations.
+    ///   - logger: The `Logger` instance used for logging.
+    ///
+    /// - Returns: A new `EventHistoryDatabase` instance if initialization succeeds; otherwise, `nil` if the initialization fails (e.g., if the database could not be created).    
+    init?(dbName: String, dbQueue: DispatchQueue, logger: Logger) {
+        self.dbName = dbName
+        self.dbQueue = dbQueue
+        self.logger = logger
+
         guard createTable() else {
-            Log.warning(label: LOG_PREFIX, "Failed to initialize Event History Database.")
+            logger.warning(label: LOG_TAG, "Failed to initialize Event History Database.")
             return nil
         }
         guard let dbConnection = connect() else {
-            Log.warning(label: LOG_PREFIX, "Failed to connect to Event History Database.")
+            logger.warning(label: LOG_TAG, "Failed to connect to Event History Database.")
             return nil
         }
         self.connection = dbConnection
@@ -58,7 +66,7 @@ class EventHistoryDatabase {
     ///   - timestamp: the event timestamp
     ///   - handler: called with the `Bool` result of the insert statement.
     func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
-        dispatchQueue.async {
+        dbQueue.async {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 handler?(false)
@@ -97,10 +105,10 @@ class EventHistoryDatabase {
     ///   - to: represents the upper bounds of the date range to use when searching for the hash
     ///   - handler: a callback which will contain `EventHistoryResult` representing matching events
     func select(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: @escaping (EventHistoryResult) -> Void) {
-        dispatchQueue.sync {
+        dbQueue.sync {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
-                Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database.")
+                logger.warning(label: self.LOG_TAG, "Unable to get a connection to the event history database.")
                 handler(EventHistoryResult(count: -1))
                 return
             }
@@ -116,7 +124,7 @@ class EventHistoryDatabase {
             // a nil result means something went wrong with the database query
             guard let result = SQLiteWrapper.query(database: connection, sql: selectStatement),
                   let row = result.first else {
-                Log.warning(label: self.LOG_PREFIX, "An error occurred when attempting to query for event(s) '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
+                logger.warning(label: self.LOG_TAG, "An error occurred when attempting to query for event(s) '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
                 handler(EventHistoryResult(count: -1))
                 return
             }
@@ -143,7 +151,7 @@ class EventHistoryDatabase {
     ///   - to: represents the upper bounds of the date range to use when searching for the hash
     ///   - handler: a callback which will contain the number of records deleted
     func delete(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: ((Int) -> Void)? = nil) {
-        dispatchQueue.async {
+        dbQueue.async {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 handler?(0)
@@ -180,7 +188,7 @@ class EventHistoryDatabase {
         if let database = SQLiteWrapper.connect(databaseFilePath: dbFilePath, databaseName: dbName) {
             return database
         } else {
-            Log.warning(label: LOG_PREFIX, "Failed to connect to database: \(dbName).")
+            logger.warning(label: LOG_TAG, "Failed to connect to database: \(dbName).")
             return nil
         }
     }
@@ -210,9 +218,9 @@ class EventHistoryDatabase {
 
             let result = SQLiteWrapper.execute(database: connection, sql: createTableStatement)
             if result {
-                Log.trace(label: LOG_PREFIX, "Successfully created table '\(tableName)'.")
+                logger.trace(label: LOG_TAG, "Successfully created table '\(tableName)'.")
             } else {
-                Log.warning(label: LOG_PREFIX, "Failed to create table '\(tableName)'.")
+                logger.warning(label: LOG_TAG, "Failed to create table '\(tableName)'.")
             }
 
             return result
