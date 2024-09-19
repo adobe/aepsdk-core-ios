@@ -192,7 +192,7 @@
                 let shouldShow = self.messageMonitor.show(message: self, delegateControl: delegateControl)
                 guard shouldShow.0 else {
                     self.listener?.onShowFailure()
-                    self.listener?.onShowFailure?(message: self, error: shouldShow.1)
+                    self.listener?.onError?(message: self, error: shouldShow.1)
                     return
                 }
 

@@ -46,13 +46,14 @@
         ///
         /// Invoked when the FullscreenMessage failed to be displayed
         ///
+        @available(*, deprecated, message: "Use onError(message:error:) instead. Function onShowFailure will be removed in the next major version of AEPServices.")
         func onShowFailure()
 
         /// Invoked when the FullscreenMessage fails to be displayed
         /// - Parameters:
         ///  - message - the message that was not displayed
         ///  - error - an optional `PresentationError` containing the reason why the message was not shown
-        @objc(onShowFailure:reason:)
-        optional func onShowFailure(message: FullscreenMessage, error: PresentationError?)
+        @objc(onErrorMessage:error:)
+        optional func onError(message: FullscreenMessage, error: PresentationError?)
     }
 #endif

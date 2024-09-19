@@ -16,7 +16,9 @@ import Foundation
 /// Class used for communicating type and reason for presentation errors
 @objc(AEPPresentationError)
 public class PresentationError: NSObject {
-
+    static let CONFLICT = "conflict"
+    static let SUPPRESSED_BY_DELEGATE = "suppressedByDelegate"
+    
     /// Internal enum that allows capturing a reason for the provided kind of failure
     enum ErrorType {
         case showFailure(String)
