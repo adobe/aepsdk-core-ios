@@ -42,13 +42,13 @@
         internal func show(message: Showable, delegateControl: Bool) -> (Bool, PresentationError?) {
             if isMessageDisplayed() {
                 Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, another message is displayed at this time.")
-                return (false, PresentationError(.showFailure(PresentationError.CONFLICT)))
+                return (false, PresentationError.CONFLICT)
             }
 
             if delegateControl {
                 if ServiceProvider.shared.messagingDelegate?.shouldShowMessage(message: message) == false {
                     Log.debug(label: LOG_PREFIX, "Message couldn't be displayed, MessagingDelegate#showMessage states the message should not be displayed.")
-                    return (false, PresentationError(.showFailure(PresentationError.SUPPRESSED_BY_DELEGATE)))
+                    return (false, PresentationError.SUPPRESSED_BY_APP_DEVELOPER)
                 }
             }
 

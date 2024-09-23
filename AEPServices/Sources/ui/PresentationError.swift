@@ -1,4 +1,3 @@
-//
 /*
  Copyright 2024 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -16,8 +15,8 @@ import Foundation
 /// Class used for communicating type and reason for presentation errors
 @objc(AEPPresentationError)
 public class PresentationError: NSObject {
-    static let CONFLICT = "conflict"
-    static let SUPPRESSED_BY_DELEGATE = "suppressedByDelegate"
+    static let CONFLICT = PresentationError(.showFailure("Conflict"))
+    static let SUPPRESSED_BY_APP_DEVELOPER = PresentationError(.showFailure("SuppressedByAppDeveloper"))
     
     /// Internal enum that allows capturing a reason for the provided kind of failure
     enum ErrorType {
