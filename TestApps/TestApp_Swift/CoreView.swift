@@ -32,14 +32,14 @@ struct CoreView: View {
     var configSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Configuration").bold()
-            
+
             TextField("App ID", text: $appID)
             Button(action: {
                 MobileCore.configureWith(appId: appID)
             }) {
                 Text("Configure With AppID")
             }.disabled(appID.isEmpty)
-            .buttonStyle(CustomButtonStyle())
+                .buttonStyle(CustomButtonStyle())
 
             Button(action: {
                 let path = Bundle.main.path(forResource: "ADBMobileConfig_custom", ofType: "json") ?? ""
@@ -53,13 +53,13 @@ struct CoreView: View {
             }) {
                 Text("Update Configuration")
             }.buttonStyle(CustomButtonStyle())
-            
+
             Button(action: {
                 MobileCore.clearUpdatedConfiguration()
             }) {
                 Text("Clear Updated Configuration")
             }.buttonStyle(CustomButtonStyle())
-            
+
             Button(action: {
                 // The bundled rule is configured to triggers a postback for the following condition: a trackAction event with the action type 'bundled_trigger_postback'.
                 MobileCore.track(action: "bundled_trigger_postback", data: nil)
@@ -68,11 +68,11 @@ struct CoreView: View {
             }.buttonStyle(CustomButtonStyle())
         }
     }
-    
+
     var privacySection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Change Privacy Status").bold()
-            
+
             Button(action: {
                 MobileCore.setPrivacyStatus(.optedIn)
             }) {
@@ -115,25 +115,25 @@ struct CoreView: View {
             }) {
                 Text("Track State")
             }.buttonStyle(CustomButtonStyle())
-            
+
             Button(action: {
                 MobileCore.track(action: "action", data: nil)
             }) {
                 Text("Track Action")
             }.buttonStyle(CustomButtonStyle())
-            
+
             Button(action: {
                 MobileCore.collectPii(["name":"Adobe Experience Platform"])
             }){
                 Text("Collect PII")
             }.buttonStyle(CustomButtonStyle())
-            
+
             Button(action: {
                 MobileCore.setAdvertisingIdentifier("ad_id")
             }){
                 Text("Set Advertising Identifier")
             }.buttonStyle(CustomButtonStyle())
-            
+
             Button(action: {
                 MobileCore.setPushIdentifier("device_token".data(using: .utf8))
             }){

@@ -20,7 +20,7 @@ struct LifecycleView: View {
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading, spacing: 12) {
             Text("Lifecycle extension version: \(Lifecycle.extensionVersion)")
-            
+
             Text("Additional Context Data")
             TextField("Key", text: $additionalDataKey)
             TextField("Value", text: $additionalDataValue)

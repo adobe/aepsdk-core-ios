@@ -16,34 +16,34 @@ class AEPUIManager {
     static let shared: AEPUIManager = AEPUIManager()
     
     private let sampleHTML = """
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript">
-        function callNative(action) {
-            try {
-                // the name of the message handler is the same name that must be registered in native code.
-                // in this case the message name is "iOS"
-                webkit.messageHandlers.iOS.postMessage(action);                
-            } catch(err) {
-                console.log(err);
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript">
+            function callNative(action) {
+                try {
+                    // the name of the message handler is the same name that must be registered in native code.
+                    // in this case the message name is "iOS"
+                    webkit.messageHandlers.iOS.postMessage(action);                
+                } catch(err) {
+                    console.log(err);
+                }
             }
-        }
-    </script>
-    <title>Responsive Webpage</title>
-</head>
-<body style="margin: 0; font-family: Arial, sans-serif; background-color: black; color: white;">
-    <header style="background-color: #333; text-align: center; padding: 1rem;">
-        <h1>Fictional Webpage</h1>
-    </header>
-    <main style="text-align: center;">
-        <img src="https://picsum.photos/id/234/100/100" alt="Sample Image" style="max-width: 100%; height: auto; padding: 1rem; display: block; margin: 0 auto;">
-        <button onclick="callNative('native callbacks are cool!')">Native callback!</button>
-    </main>
-</body>
-</html>
-"""
+        </script>
+        <title>Responsive Webpage</title>
+    </head>
+    <body style="margin: 0; font-family: Arial, sans-serif; background-color: black; color: white;">
+        <header style="background-color: #333; text-align: center; padding: 1rem;">
+            <h1>Fictional Webpage</h1>
+        </header>
+        <main style="text-align: center;">
+            <img src="https://picsum.photos/id/234/100/100" alt="Sample Image" style="max-width: 100%; height: auto; padding: 1rem; display: block; margin: 0 auto;">
+            <button onclick="callNative('native callbacks are cool!')">Native callback!</button>
+        </main>
+    </body>
+    </html>
+    """
     
     lazy var floatingButton: FloatingButtonPresentable = {
         let button = ServiceProvider.shared.uiService.createFloatingButton(listener: self)
@@ -65,9 +65,9 @@ class AEPUIManager {
         settings.setDismissAnimation(.bottom)
         
         return ServiceProvider.shared.uiService.createFullscreenMessage?(payload: sampleHTML,
-                                                                                listener: self,
-                                                                                isLocalImageUsed: false,
-                                                                                settings: settings)
+                                                                         listener: self,
+                                                                         isLocalImageUsed: false,
+                                                                         settings: settings)
     }()
 }
 
@@ -99,7 +99,7 @@ struct UIServicesView: View {
     var body: some View {
         VStack {
             VStack {
-               Text("Floating Button").bold()
+                Text("Floating Button").bold()
                 HStack {
                     Button(action: {
                         AEPUIManager.shared.floatingButton.show()
@@ -115,7 +115,7 @@ struct UIServicesView: View {
                     
             }
             VStack {
-               Text("FullScreen Message").bold()
+                Text("FullScreen Message").bold()
                 HStack {
                     Button(action: {
                         AEPUIManager.shared.fullscreenMessage?.show()

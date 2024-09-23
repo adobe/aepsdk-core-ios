@@ -14,7 +14,7 @@ import AEPSignal
 import AEPCore
 
 struct SignalView: View {
-    
+
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading, spacing: 12) {
             Text("Signal extension version: \(Signal.extensionVersion)")
