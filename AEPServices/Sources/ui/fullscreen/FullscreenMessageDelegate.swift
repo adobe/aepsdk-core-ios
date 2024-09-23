@@ -52,8 +52,8 @@
         /// Invoked when the FullscreenMessage fails to be displayed
         /// - Parameters:
         ///  - message - the message that was not displayed
-        ///  - error - an optional `PresentationError` containing the reason why the message was not shown
-        @objc(onErrorMessage:error:)
-        optional func onError(message: FullscreenMessage, error: PresentationError?)
+        ///  - error - a `PresentationError` containing the reason why the message was not shown
+        @objc(onErrorFullscreenMessage:error:)
+        optional func onError(message: FullscreenMessage, error: PresentationError)
     }
 #endif

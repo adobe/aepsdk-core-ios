@@ -22,7 +22,7 @@
         static var onShowCall = false
         static var onDismissCall = false
         static var shouldShowMessageCall = false
-        var mockMessageMonitor: MessageMonitoring?
+        var mockMessageMonitor: MessageMonitoring!
         var messageDelegate : MessagingDelegate?
         var message: FullscreenPresentable?
 
@@ -37,43 +37,47 @@
         }
 
         func test_isMessageDisplayed_DefaultIsFalse() {
-            let isDisplayed = mockMessageMonitor?.isMessageDisplayed()
+            let isDisplayed = mockMessageMonitor.isMessageDisplayed()
             XCTAssertTrue((isDisplayed == false))
         }
 
         func test_isMessageDislayed_isTrue_whenDislayMessageCalled() {
             mockMessageMonitor?.displayMessage()
-            let display : Bool = mockMessageMonitor?.isMessageDisplayed() == true
+            let display : Bool = mockMessageMonitor.isMessageDisplayed() == true
             XCTAssertTrue(display)
         }
 
         func test_isMessageDislayed_isFalse_whenDismissMessageIsCalled() {
             mockMessageMonitor?.dismissMessage()
-            let display : Bool = mockMessageMonitor?.isMessageDisplayed() == false
+            let display : Bool = mockMessageMonitor.isMessageDisplayed() == false
             XCTAssertTrue(display)
         }
 
         func test_show_whenMessageAlreadyDisplayed() {
             mockMessageMonitor?.displayMessage()
-            XCTAssertTrue(mockMessageMonitor?.show(message: message!) == false)
+            let (shouldShow, error) = mockMessageMonitor.show(message: message!)
+            XCTAssertFalse(shouldShow)
+            XCTAssertEqual(PresentationError(.showFailure("conflict")).getReason(), error?.getReason())
         }
 
         func test_show_withShouldShowMessageTrue() {
-            XCTAssertTrue(mockMessageMonitor?.show(message: message!) == true)
-            let display : Bool = mockMessageMonitor?.isMessageDisplayed() == true
-            XCTAssertTrue(display)
+            let (shouldShow, error) = mockMessageMonitor.show(message: message!)
+            XCTAssertTrue(shouldShow)
+            XCTAssertNil(error)
+            XCTAssertTrue(mockMessageMonitor.isMessageDisplayed())
         }
 
         func test_show_withShouldShowMessageFalse() {
             MessageMonitorServiceTest.mockShouldShow = false
-            XCTAssertTrue(mockMessageMonitor?.show(message: message!) == false)
-            let display : Bool = mockMessageMonitor?.isMessageDisplayed() == false
-            XCTAssertTrue(display)
+            let (shouldShow, error) = mockMessageMonitor.show(message: message!)
+            XCTAssertFalse(shouldShow)
+            XCTAssertEqual(PresentationError(.showFailure("suppressedByDelegate")).getReason(), error?.getReason())
+            XCTAssertFalse(mockMessageMonitor.isMessageDisplayed())
         }
 
         func test_dismiss_whenNoMessageToDismiss() {
-            mockMessageMonitor?.dismissMessage()
-            XCTAssertTrue(mockMessageMonitor?.dismiss() == false)
+            mockMessageMonitor.dismissMessage()
+            XCTAssertTrue(mockMessageMonitor.dismiss() == false)
         }
 
         class MockGlobalUIMessagingListener : MessagingDelegate {

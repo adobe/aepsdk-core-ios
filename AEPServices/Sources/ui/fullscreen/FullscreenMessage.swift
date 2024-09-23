@@ -189,10 +189,12 @@
             // get off main thread while delegate has control to prevent pause on main thread
             DispatchQueue.global().async {
                 // only show the message if the monitor allows it
-                let shouldShow = self.messageMonitor.show(message: self, delegateControl: delegateControl)
-                guard shouldShow.0 else {
+                let (shouldShow, error) = self.messageMonitor.show(message: self, delegateControl: delegateControl)
+                guard shouldShow else {
                     self.listener?.onShowFailure()
-                    self.listener?.onError?(message: self, error: shouldShow.1)
+                    if let error = error {
+                        self.listener?.onError?(message: self, error: error)
+                    }                    
                     return
                 }
 
