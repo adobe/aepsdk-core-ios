@@ -16,7 +16,8 @@ import Foundation
 /// Manages the business logic of the Lifecycle extension
 struct LifecycleState {
     let dataStore: NamedCollectionDataStore
-
+    let systemInfoService: SystemInfoService
+    
     // Access level modified for tests
     #if DEBUG
         var lifecycleContextData: LifecycleContextData?
@@ -34,8 +35,9 @@ struct LifecycleState {
 
     /// Creates a new `LifecycleState` with the given `NamedCollectionDataStore`
     /// - Parameter dataStore: The Lifecycle extension's data store
-    init(dataStore: NamedCollectionDataStore) {
+    init(dataStore: NamedCollectionDataStore, systemInfoService: SystemInfoService) {
         self.dataStore = dataStore
+        self.systemInfoService = systemInfoService
         lifecycleSession = LifecycleSession(dataStore: dataStore)
     }
 
@@ -43,7 +45,7 @@ struct LifecycleState {
     /// - Returns: `LifecycleContextData` with device data, launch event data and any persisted context data
     mutating func computeBootData() -> LifecycleContextData {
         let contextData = LifecycleContextData().merging(with: getContextData())
-        let defaultMetrics = LifecycleMetricsBuilder(dataStore: dataStore, date: Date()).addDeviceData().addLaunchEventData().build()
+        let defaultMetrics = LifecycleMetricsBuilder(dataStore: dataStore, systemInfoService: systemInfoService, date: Date()).addDeviceData().addLaunchEventData().build()
 
         var bootContextData = LifecycleContextData()
         bootContextData.lifecycleMetrics = defaultMetrics
@@ -65,7 +67,7 @@ struct LifecycleState {
                         isInstall: Bool) -> LifecycleSessionInfo? {
         let sessionContainer: LifecyclePersistedContext? = dataStore.getObject(key: LifecycleConstants.DataStoreKeys.PERSISTED_CONTEXT)
         // Build default LifecycleMetrics
-        let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, date: date).addDeviceData()
+        let metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore, systemInfoService: systemInfoService, date: date).addDeviceData()
         let defaultMetrics = metricsBuilder.build()
         if !isInstall {
             applyApplicationUpgrade(appId: defaultMetrics.appId)

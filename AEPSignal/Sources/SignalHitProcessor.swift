@@ -16,8 +16,12 @@ import Foundation
 
 class SignalHitProcessor: HitProcessing {
     private let LOG_TAG = "SignalHitProcessor"
-    private var networkService: Networking {
-        return ServiceProvider.shared.networkService
+    private let logger: Logger
+    private let networkService: Networking
+        
+    init(logger: Logger, networkService: Networking) {
+        self.networkService = networkService
+        self.logger = logger
     }
 
     // MARK: - HitProcessing
@@ -65,19 +69,19 @@ class SignalHitProcessor: HitProcessing {
         let urlString = "\(String(describing: hit.url.host))\(String(describing: hit.url.path))"
         if NetworkServiceConstants.HTTP_SUCCESS_CODES.contains(connection.responseCode ?? -1) {
             // hit sent successfully
-            Log.debug(label: LOG_TAG, "Signal request successfully sent: \(hit.url.absoluteString) sent successfully")
+            logger.debug(label: LOG_TAG, "Signal request successfully sent: \(hit.url.absoluteString) sent successfully")
             completion(true)
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
-            Log.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(hit.url.absoluteString)")
+            logger.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(hit.url.absoluteString)")
             completion(false)
         } else if let error = connection.error as? URLError, error.isRecoverable {
             // retry this hit later as the request failed with a recoverable transport error
-            Log.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(urlString)")
+            logger.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(urlString)")
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue
-            Log.warning(label: LOG_TAG, "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(urlString)")
+            logger.warning(label: LOG_TAG, "Signal request failed with unrecoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). It will be dropped from the queue: \(urlString)")
             completion(true)
         }
     }

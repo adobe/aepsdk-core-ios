@@ -423,6 +423,7 @@
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
 		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
 		AC3835C22C98FD47000CE68E /* MockLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3835C12C98FD41000CE68E /* MockLogger.swift */; };
+		AC3835C62C9CE9A1000CE68E /* MultiInstanceCapable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC3835C52C9CE99F000CE68E /* MultiInstanceCapable.swift */; };
 		AC5C517D2C8FA7770021C1E9 /* EventHubProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5C517C2C8FA76E0021C1E9 /* EventHubProvider.swift */; };
 		ACC7A9762A0EA51F001A04FB /* EventHistoryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */; };
 		ACC7A97B2A12AF9D001A04FB /* rules_attach.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC7A9792A12AF9D001A04FB /* rules_attach.json */; };
@@ -1161,6 +1162,7 @@
 		AA4461A0B65C5DFE219540A5 /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
 		AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDMLanguage.swift; sourceTree = "<group>"; };
 		AC3835C12C98FD41000CE68E /* MockLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLogger.swift; sourceTree = "<group>"; };
+		AC3835C52C9CE99F000CE68E /* MultiInstanceCapable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiInstanceCapable.swift; sourceTree = "<group>"; };
 		AC4D8D4526D9AC0200A86435 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		AC5C517C2C8FA76E0021C1E9 /* EventHubProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHubProvider.swift; sourceTree = "<group>"; };
 		AC838996795DECE800B0A11B /* Pods-AEPIdentityTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -2054,6 +2056,7 @@
 				3FB66AB024CA004400502CAF /* EventSource.swift */,
 				3FB66AAE24CA004400502CAF /* EventType.swift */,
 				3FB66AB224CA004400502CAF /* Extension.swift */,
+				AC3835C52C9CE99F000CE68E /* MultiInstanceCapable.swift */,
 				3FB66AA824CA004400502CAF /* ExtensionContainer.swift */,
 				3FB66AAD24CA004400502CAF /* ExtensionRuntime.swift */,
 				AC5C517C2C8FA76E0021C1E9 /* EventHubProvider.swift */,
@@ -3295,6 +3298,7 @@
 				3FB66AD324CA004400502CAF /* ExtensionRuntime.swift in Sources */,
 				7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */,
 				3F2B1DA62631E7FE0030F50B /* RuleConsequence.swift in Sources */,
+				AC3835C62C9CE9A1000CE68E /* MultiInstanceCapable.swift in Sources */,
 				24EDE33326EFB7470068A65F /* EventHistoryRequest.swift in Sources */,
 				3FB66AE324CA004400502CAF /* ConfigurationDownloadable.swift in Sources */,
 				3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */,

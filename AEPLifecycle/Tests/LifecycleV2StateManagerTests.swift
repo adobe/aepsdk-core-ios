@@ -23,7 +23,7 @@ class LifecycleV2StateManagerTests: XCTestCase {
     var stateManager: LifecycleV2StateManager!
     
     override func setUp() {        
-        stateManager = LifecycleV2StateManager()
+        stateManager = LifecycleV2StateManager(logger: MockLogger())
     }
     
     func testUpdateStateUpdatesOnceWithConsecutiveStarts() {

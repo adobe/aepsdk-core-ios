@@ -23,8 +23,12 @@ class LifecycleV2MetricsBuilder {
     private var xdmDeviceInfo: XDMDevice?
     private var xdmEnvironmentInfo: XDMEnvironment?
 
-    private var systemInfoService: SystemInfoService {
-        return ServiceProvider.shared.systemInfoService
+    private let logger: Logger
+    private let systemInfoService: SystemInfoService
+    
+    init(logger: Logger, systemInfoService: SystemInfoService) {
+        self.logger = logger
+        self.systemInfoService = systemInfoService
     }
 
     /// Builds the data required for the XDM Application Launch event, including `XDMApplication`
@@ -76,8 +80,13 @@ class LifecycleV2MetricsBuilder {
         xdmApplicationInfoLaunch.name = systemInfoService.getApplicationName()
         xdmApplicationInfoLaunch.id = systemInfoService.getApplicationBundleId()
         xdmApplicationInfoLaunch.version = LifecycleV2.getAppVersion(systemInfoService: systemInfoService)
-        xdmApplicationInfoLaunch.language = XDMLanguage(language: systemInfoService.getActiveLocaleName().bcpFormattedLocale)
-
+        let language = systemInfoService.getActiveLocaleName().bcpFormattedLocale
+        let xdmLanguage = XDMLanguage(language: language)
+        if xdmLanguage.language == nil {
+            logger.warning(label: LifecycleConstants.LOG_TAG, "Language tag \(language ?? "") failed validation and will be dropped. Values for XDM field 'application._dc.language' must conform to BCP 47.")
+        }
+        xdmApplicationInfoLaunch.language = xdmLanguage
+        
         return xdmApplicationInfoLaunch
     }
 
@@ -113,8 +122,14 @@ class LifecycleV2MetricsBuilder {
         xdmEnvironmentInfo?.type = XDMEnvironmentType.from(runMode: systemInfoService.getRunMode())
         xdmEnvironmentInfo?.operatingSystem = systemInfoService.getOperatingSystemName()
         xdmEnvironmentInfo?.operatingSystemVersion = systemInfoService.getOperatingSystemVersion()
-        xdmEnvironmentInfo?.language = XDMLanguage(language: systemInfoService.getSystemLocaleName().bcpFormattedLocale)
 
+        let language = systemInfoService.getSystemLocaleName().bcpFormattedLocale
+        let xdmLanguage = XDMLanguage(language: language)
+        if xdmLanguage.language == nil {
+            logger.warning(label: LifecycleConstants.LOG_TAG, "Language tag \(language ?? "") failed validation and will be dropped. Values for XDM field 'environment._dc.language' must conform to BCP 47.")
+        }
+        xdmEnvironmentInfo?.language = xdmLanguage
+        
         return xdmEnvironmentInfo
     }
 

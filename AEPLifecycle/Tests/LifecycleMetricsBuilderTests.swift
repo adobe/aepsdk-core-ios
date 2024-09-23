@@ -18,7 +18,7 @@ import XCTest
 class LifecycleMetricsBuilderTests: XCTestCase {
     private var dataStore: FakeDataStore?
     private var metricsBuilder: LifecycleMetricsBuilder?
-    private var systemInfoService: MockSystemInfoService?
+    private var systemInfoService: MockSystemInfoService!
     private var date: Date = Date()
     private typealias KEYS = LifecycleConstants.EventDataKeys
 
@@ -27,10 +27,9 @@ class LifecycleMetricsBuilderTests: XCTestCase {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         let someDateTime = formatter.date(from: "2020/05/02 22:31")
         date = someDateTime!
-        systemInfoService = MockSystemInfoService()
-        ServiceProvider.shared.systemInfoService = systemInfoService!
+        systemInfoService = MockSystemInfoService()        
         dataStore = FakeDataStore(name: "testStore")
-        metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore!, date: date)
+        metricsBuilder = LifecycleMetricsBuilder(dataStore: dataStore!, systemInfoService: systemInfoService, date: date)
     }
 
     override func tearDown() {

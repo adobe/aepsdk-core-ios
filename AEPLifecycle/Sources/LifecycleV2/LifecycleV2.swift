@@ -17,13 +17,12 @@ import Foundation
 /// The responsibility of `LifecycleV2` is to compute the application launch/close XDM metrics,
 /// usually consumed by the Edge Network and related extensions
 class LifecycleV2 {
+    private let logger: Logger
     private let dataStore: NamedCollectionDataStore
     private let dataStoreCache: LifecycleV2DataStoreCache
+    private var systemInfoService: SystemInfoService
     private let stateManager: LifecycleV2StateManager
     private let dispatch: ((_ event: Event) -> Void)
-    private var systemInfoService: SystemInfoService {
-        ServiceProvider.shared.systemInfoService
-    }
     private let xdmMetricsBuilder: LifecycleV2MetricsBuilder
 
     /// Creates a new `LifecycleV2` with the given `NamedCollectionDataStore`
@@ -31,11 +30,13 @@ class LifecycleV2 {
     /// - Parameters:
     ///   - dataStore: The `NamedCollectionDataStore` used for reading and writing data to persistence
     ///   - dispatch: The dispatch closure which is used to dispatch application launch/close events to `EventHub`
-    init(dataStore: NamedCollectionDataStore, dispatch: @escaping (_ event: Event) -> Void) {
+    init(logger: Logger, dataStore: NamedCollectionDataStore, systemInfoService: SystemInfoService, dispatch: @escaping (_ event: Event) -> Void) {
+        self.logger = logger
         self.dataStore = dataStore
-        self.stateManager = LifecycleV2StateManager()
         self.dataStoreCache = LifecycleV2DataStoreCache(dataStore: self.dataStore)
-        self.xdmMetricsBuilder = LifecycleV2MetricsBuilder()
+        self.systemInfoService = systemInfoService
+        self.stateManager = LifecycleV2StateManager(logger: logger)
+        self.xdmMetricsBuilder = LifecycleV2MetricsBuilder(logger: logger, systemInfoService: systemInfoService)
         self.dispatch = dispatch
     }
 
