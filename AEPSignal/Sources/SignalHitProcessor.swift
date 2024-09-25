@@ -52,6 +52,7 @@ class SignalHitProcessor: HitProcessing {
 
         let request = NetworkRequest(url: signalHit.url, httpMethod: httpMethod, connectPayload: signalHit.postBody ?? "", httpHeaders: headers, connectTimeout: timeout, readTimeout: timeout)
 
+        logger.debug(label: LOG_TAG, "Signal request initiated: \(signalHit.url.absoluteString)")
         networkService.connectAsync(networkRequest: request) { [weak self] connection in
             guard let self = self else { return }
             self.handleNetworkResponse(hit: signalHit, connection: connection, completion: completion)

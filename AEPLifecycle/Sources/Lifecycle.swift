@@ -15,7 +15,7 @@ import AEPServices
 import Foundation
 
 @objc(AEPMobileLifecycle)
-public class Lifecycle: NSObject, Extension {
+public class Lifecycle: NSObject, Extension, MultiInstanceCapable {
     
     private let logger: Logger
     private let lifecycleDataStore: NamedCollectionDataStore

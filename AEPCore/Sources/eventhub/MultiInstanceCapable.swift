@@ -12,11 +12,11 @@
 
 /// A marker protocol indicating that an `Extension` supports multiple instances.
 ///
-/// Types conforming to both `Extension` and `MultiInstancable` can be instantiated multiple times.
+/// Types conforming to both `Extension` and `MultiInstanceCapable` can be instantiated multiple times.
 /// This protocol does not define any methods or properties; it serves solely to mark extensions
 /// that are capable of supporting multiple concurrent instances.
 ///
-/// Conform to `MultiInstancable` to have your extension recognized as capable of supporting multiple instances
+/// Conform to `MultiInstanceCapable` to have your extension recognized as capable of supporting multiple instances
 /// and to enable its registration across various SDK instances.
 ///
 @objc(AEPMultiInstanceCapable)
