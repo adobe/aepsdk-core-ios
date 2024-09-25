@@ -17,9 +17,10 @@ import Foundation
 @objc(AEPMobileSignal)
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
-public class Signal: NSObject, Extension {
+public class Signal: NSObject, Extension, MultiInstanceCapable {
 
-    private(set) var hitQueue: HitQueuing
+    private let hitQueue: HitQueuing
+    private let logger: Logger
 
     // MARK: - Extension
 
@@ -31,21 +32,26 @@ public class Signal: NSObject, Extension {
     public let metadata: [String: String]? = nil
 
     public required init?(runtime: ExtensionRuntime) {
-        guard let dataQueue = ServiceProvider.shared.dataQueueService.getDataQueue(label: name) else {
-            Log.error(label: SignalConstants.LOG_PREFIX, "Signal extension could not be initialized - unable to create a DataQueue.")
+        self.runtime = runtime
+        
+        let serviceProvider = runtime.getServiceProvider()
+        let logger = serviceProvider.getLogger()
+        let networkService = serviceProvider.getNetworkService()
+        guard let dataQueue = serviceProvider.getDataQueue(label: name) else {
+            logger.error(label: SignalConstants.LOG_PREFIX, "Signal extension could not be initialized - unable to create a DataQueue.")
             return nil
         }
-
-        hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: SignalHitProcessor())
-        self.runtime = runtime
-
+        let signalProcessor = SignalHitProcessor(logger: logger, networkService: networkService)
+        self.hitQueue = PersistentHitQueue(dataQueue: dataQueue, processor: signalProcessor)
+        self.logger = logger
         super.init()
     }
 
     // internal init added for testing
-    internal init(runtime: ExtensionRuntime, hitQueue: HitQueuing) {
-        self.hitQueue = hitQueue
+    internal init(runtime: ExtensionRuntime, hitQueue: HitQueuing, logger: Logger) {
         self.runtime = runtime
+        self.hitQueue = hitQueue
+        self.logger = logger
         super.init()
     }
 
@@ -71,7 +77,7 @@ public class Signal: NSObject, Extension {
             let privacyStatus = PrivacyStatus(rawValue: privacyStatusStr) ?? PrivacyStatus.unknown
             hitQueue.handlePrivacyChange(status: privacyStatus)
             if privacyStatus == .optedOut {
-                Log.debug(label: SignalConstants.LOG_PREFIX, "Device has opted-out of tracking. Clearing the Signal queue.")
+                logger.debug(label: SignalConstants.LOG_PREFIX, "Device has opted-out of tracking. Clearing the Signal queue.")
             }
         }
     }
@@ -99,23 +105,23 @@ public class Signal: NSObject, Extension {
     /// - Parameter event: the event containing postback definition
     private func handlePostback(event: Event) {
         guard let urlString = event.templateUrl else {
-            Log.warning(label: SignalConstants.LOG_PREFIX, "Dropping postback, missing templateurl from EventData.")
+            logger.warning(label: SignalConstants.LOG_PREFIX, "Dropping postback, missing templateurl from EventData.")
             return
         }
 
         // https required for pii calls
         if event.isCollectPii && !urlString.starts(with: "https") {
-            Log.warning(label: SignalConstants.LOG_PREFIX, "Dropping collect pii call, url must be https.")
+            logger.warning(label: SignalConstants.LOG_PREFIX, "Dropping collect pii call, url must be https.")
             return
         }
 
         guard let url = URL(string: urlString) else {
-            Log.warning(label: SignalConstants.LOG_PREFIX, "Dropping postback, templateurl from EventData is malformed.")
+            logger.warning(label: SignalConstants.LOG_PREFIX, "Dropping postback, templateurl from EventData is malformed.")
             return
         }
 
         guard let postbackJsonData = try? JSONEncoder().encode(SignalHit(url: url, postBody: event.templateBody, contentType: event.contentType ?? SignalConstants.Defaults.CONTENT_TYPE, timeout: event.timeout, event: event)) else {
-            Log.debug(label: SignalConstants.LOG_PREFIX, "Dropping postback, unable to encode JSON data.")
+            logger.debug(label: SignalConstants.LOG_PREFIX, "Dropping postback, unable to encode JSON data.")
             return
         }
 
@@ -124,17 +130,18 @@ public class Signal: NSObject, Extension {
 
     private func handleOpenURL(event: Event) {
         guard let urlString = event.urlToOpen else {
-            Log.warning(label: SignalConstants.LOG_PREFIX, "Unable to process OpenURL consequence - no URL was found in EventData.")
+            logger.warning(label: SignalConstants.LOG_PREFIX, "Unable to process OpenURL consequence - no URL was found in EventData.")
             return
         }
 
         guard let url = URL(string: urlString) else {
-            Log.warning(label: SignalConstants.LOG_PREFIX, "Unable to process OpenURL consequence - URL in EventData was malformed.")
+            logger.warning(label: SignalConstants.LOG_PREFIX, "Unable to process OpenURL consequence - URL in EventData was malformed.")
             return
         }
 
         Log.debug(label: SignalConstants.LOG_PREFIX, "Opening URL \(url.absoluteString)")
-        ServiceProvider.shared.urlService.openUrl(url)
+        let urlService = runtime.getServiceProvider().getUrlService()
+        urlService.openUrl(url)
     }
 
     // MARK: - Helpers
@@ -149,7 +156,7 @@ public class Signal: NSObject, Extension {
     /// - Returns: true if the event should be ignored
     private func shouldIgnore(event: Event) -> Bool {
         guard let configSharedState = getSharedState(extensionName: SignalConstants.Configuration.NAME, event: event)?.value else {
-            Log.debug(label: SignalConstants.LOG_PREFIX, "Configuration is unavailable - unable to process event '\(event.id)'.")
+            logger.debug(label: SignalConstants.LOG_PREFIX, "Configuration is unavailable - unable to process event '\(event.id)'.")
             return true
         }
 

@@ -29,7 +29,6 @@ struct XDMLanguage: Encodable {
             self.language = language
         } else {
             self.language = nil
-            Log.warning(label: LifecycleConstants.LOG_TAG, "Language tag \(language) failed validation and will be dropped. Values for XDM field 'environment._dc.language' must conform to BCP 47.")
         }
     }
 

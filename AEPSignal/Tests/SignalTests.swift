@@ -22,7 +22,7 @@ import AEPServicesMocks
 @available(tvOSApplicationExtension, unavailable)
 class SignalTests: XCTestCase {
     var signal: Signal!
-    var mockHitQueue: MockHitQueue!
+    var signalHitQueue: MockHitQueue!
     var mockNetworkService: MockNetworkService!
     var mockOpenURLService: MockURLService!
     var mockRuntime: TestableExtensionRuntime!
@@ -32,16 +32,16 @@ class SignalTests: XCTestCase {
     
     // before each
     override func setUp() {
-        mockHitQueue = MockHitQueue(processor: SignalHitProcessor())
         mockOpenURLService = MockURLService()
         mockRuntime = TestableExtensionRuntime()
         mockNetworkService = MockNetworkService()
-                    
+        
+        signalHitQueue = MockHitQueue(processor: SignalHitProcessor(logger: MockLogger(), networkService: mockNetworkService))
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         ServiceProvider.shared.networkService = mockNetworkService
         ServiceProvider.shared.urlService = mockOpenURLService
                 
-        signal = Signal(runtime: mockRuntime, hitQueue: mockHitQueue)
+        signal = Signal(runtime: mockRuntime, hitQueue: signalHitQueue, logger: MockLogger())
         signal.onRegistered()
     }
     
@@ -54,8 +54,8 @@ class SignalTests: XCTestCase {
     /// on privacy opt-out, the hit queue should be cleared
     func testConfigResponseOptOut() throws {
         // setup
-        signal.hitQueue.queue(entity: DataEntity(data: nil))
-        XCTAssertEqual(1, signal.hitQueue.count())
+        signalHitQueue.queue(entity: DataEntity(data: nil))
+        XCTAssertEqual(1, signalHitQueue.count())
         
         let configEvent = getConfigSharedStateEvent(privacy: .optedOut)
                 
@@ -63,14 +63,14 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(configEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
     }
 
     /// on any privacy status other than opt-out, the hit queue should remain unaffected
     func testConfigResponseOptIn() throws {
         // setup
-        signal.hitQueue.queue(entity: DataEntity(data: nil))
-        XCTAssertEqual(1, signal.hitQueue.count())
+        signalHitQueue.queue(entity: DataEntity(data: nil))
+        XCTAssertEqual(1, signalHitQueue.count())
         
         let configEvent = getConfigSharedStateEvent(privacy: .optedIn)
                 
@@ -78,7 +78,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(configEvent)
         
         // verify
-        XCTAssertEqual(1, signal.hitQueue.count())
+        XCTAssertEqual(1, signalHitQueue.count())
     }
 
     // MARK: - handleRulesEngineResponse(event: Event)
@@ -95,7 +95,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
                 
         // verify
-        XCTAssertEqual(1, signal.hitQueue.count())
+        XCTAssertEqual(1, signalHitQueue.count())
         XCTAssertEqual(0, mockOpenURLService.dispatchedUrls.count)
     }
     
@@ -111,7 +111,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(1, signal.hitQueue.count())
+        XCTAssertEqual(1, signalHitQueue.count())
         XCTAssertEqual(0, mockOpenURLService.dispatchedUrls.count)
     }
     
@@ -127,7 +127,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
         XCTAssertEqual(1, mockOpenURLService.dispatchedUrls.count)
     }
     
@@ -143,7 +143,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
         XCTAssertEqual(0, mockOpenURLService.dispatchedUrls.count)
     }
     
@@ -156,7 +156,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
         XCTAssertEqual(0, mockOpenURLService.dispatchedUrls.count)
     }
     
@@ -175,7 +175,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
                 
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
     }
     
     /// a pii event without https should be ignored
@@ -193,7 +193,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
     }
     
     /// an event with an invalid url should be ignored
@@ -210,7 +210,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
     }
     
     /// an event with data that can't be json encoded should be ingored
@@ -227,7 +227,7 @@ class SignalTests: XCTestCase {
 //        mockRuntime.simulateComingEvents(rulesEvent)
 //
 //        // verify
-//        XCTAssertEqual(0, signal.hitQueue.count())
+//        XCTAssertEqual(0, signalHitQueue.count())
 //    }
     
     /// a valid event should be queued
@@ -242,7 +242,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(1, signal.hitQueue.count())
+        XCTAssertEqual(1, signalHitQueue.count())
     }
     
     // MARK: - handleOpenURL(event: Event)
@@ -260,7 +260,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
     }
     
     /// an event with an invalid url should be ignored
@@ -277,7 +277,7 @@ class SignalTests: XCTestCase {
         mockRuntime.simulateComingEvents(rulesEvent)
         
         // verify
-        XCTAssertEqual(0, signal.hitQueue.count())
+        XCTAssertEqual(0, signalHitQueue.count())
     }
     
     /// a valid event should be opened by the urlService

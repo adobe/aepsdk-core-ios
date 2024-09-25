@@ -31,7 +31,7 @@ class LifecycleStateTests: XCTestCase {
     override func setUp() {
         setupDates()
         setupMockSystemInfoService()
-        lifecycleState = LifecycleState(dataStore: dataStore)
+        lifecycleState = LifecycleState(dataStore: dataStore, systemInfoService: mockSystemInfoService)
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
@@ -58,8 +58,6 @@ class LifecycleStateTests: XCTestCase {
         mockSystemInfoService.operatingSystemName = "Test OS"
         mockSystemInfoService.activeLocaleName = "en-US"
         mockSystemInfoService.displayInformation = (100, 100)
-
-        ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
 
     /// Happy path testing start

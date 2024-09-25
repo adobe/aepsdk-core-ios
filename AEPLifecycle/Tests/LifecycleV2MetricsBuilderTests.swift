@@ -18,7 +18,7 @@ import XCTest
 
 class LifecycleV2MetricsBuilderTests: XCTestCase {
     private let startDate = Date(milliseconds: 1483889568123)
-    private let xdmMetricsBuilder = LifecycleV2MetricsBuilder()
+    private var xdmMetricsBuilder: LifecycleV2MetricsBuilder!
     private let expectedEnvironmentInfo = [
         "carrier": "test-carrier",
         "operatingSystemVersion": "test-os-version",
@@ -38,6 +38,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     
     override func setUp() {
         buildAndSetMockInfoService()
+        xdmMetricsBuilder = LifecycleV2MetricsBuilder(logger: MockLogger(), systemInfoService: mockSystemInfoService)
         continueAfterFailure = true
     }
     
@@ -59,7 +60,6 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         mockSystemInfoService.activeLocaleName = "en_US"
         mockSystemInfoService.systemLocaleName = "es_US"
         mockSystemInfoService.runMode = "Application"
-        ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
     
     func testBuildAppLaunchXDMDataReturnsCorrectDataWhenIsInstall() {

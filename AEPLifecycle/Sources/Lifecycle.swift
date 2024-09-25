@@ -15,7 +15,10 @@ import AEPServices
 import Foundation
 
 @objc(AEPMobileLifecycle)
-public class Lifecycle: NSObject, Extension {
+public class Lifecycle: NSObject, Extension, MultiInstanceCapable {
+    
+    private let logger: Logger
+    private let lifecycleDataStore: NamedCollectionDataStore
     private var lifecycleState: LifecycleState
     private var lifecycleV2: LifecycleV2
 
@@ -31,10 +34,16 @@ public class Lifecycle: NSObject, Extension {
     /// Invoked when the `EventHub` creates it's instance of the Lifecycle extension
     public required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
+        
+        let serviceProvider = runtime.getServiceProvider()
+        logger = serviceProvider.getLogger()        
+        let systemInfoService = serviceProvider.getSystemInfoService()
+        lifecycleDataStore = serviceProvider.getNamedCollectionDataStore(name: name)
         // Handle the classic lifecycle workflow
-        lifecycleState = LifecycleState(dataStore: NamedCollectionDataStore(name: name))
+        lifecycleState = LifecycleState(dataStore: lifecycleDataStore, systemInfoService: systemInfoService)
+        
         // Handle the XDM workflow to compute the application launch/close XDM metrics
-        lifecycleV2 = LifecycleV2(dataStore: NamedCollectionDataStore(name: name), dispatch: runtime.dispatch(event:))
+        lifecycleV2 = LifecycleV2(logger: logger, dataStore: lifecycleDataStore, systemInfoService: systemInfoService, dispatch: runtime.dispatch(event:))
         super.init()
     }
 
@@ -71,15 +80,15 @@ public class Lifecycle: NSObject, Extension {
     /// - Parameter event: the generic lifecycle event
     private func receiveLifecycleRequest(event: Event) {
         guard let configurationSharedState = getSharedState(extensionName: LifecycleConstants.SharedStateKeys.CONFIGURATION, event: event) else {
-            Log.trace(label: LifecycleConstants.LOG_TAG, "Waiting for valid configuration to process lifecycle.")
+            logger.trace(label: LifecycleConstants.LOG_TAG, "Waiting for valid configuration to process lifecycle.")
             return
         }
 
         if event.isLifecycleStartEvent {
-            Log.debug(label: LifecycleConstants.LOG_TAG, "Starting lifecycle.")
+            logger.debug(label: LifecycleConstants.LOG_TAG, "Starting lifecycle.")
             startApplicationLifecycle(event: event, configurationSharedState: configurationSharedState)
         } else if event.isLifecyclePauseEvent {
-            Log.debug(label: LifecycleConstants.LOG_TAG, "Pausing lifecycle.")
+            logger.debug(label: LifecycleConstants.LOG_TAG, "Pausing lifecycle.")
             pauseApplicationLifecycle(event: event)
         }
     }
@@ -172,7 +181,7 @@ public class Lifecycle: NSObject, Extension {
                                                         type: EventType.lifecycle,
                                                         source: EventSource.responseContent,
                                                         data: eventData)
-        Log.trace(label: LifecycleConstants.LOG_TAG, "Dispatching lifecycle start event with data: \n\(PrettyDictionary.prettify(eventData))")
+        logger.trace(label: LifecycleConstants.LOG_TAG, "Dispatching lifecycle start event with data: \n\(PrettyDictionary.prettify(eventData))")
         dispatch(event: startEvent)
     }
 
@@ -188,14 +197,12 @@ public class Lifecycle: NSObject, Extension {
 
     /// - Returns: true if there is no install date stored in the data store
     private func isInstall() -> Bool {
-        let dataStore = NamedCollectionDataStore(name: name)
-        return !dataStore.contains(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE)
+        return !lifecycleDataStore.contains(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE)
     }
 
     /// Persists the application install date
     /// - Parameter date: install date
     private func persistInstallDate(_ date: Date) {
-        let dataStore = NamedCollectionDataStore(name: name)
-        dataStore.setObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, value: date)
+        lifecycleDataStore.setObject(key: LifecycleConstants.DataStoreKeys.INSTALL_DATE, value: date)
     }
 }

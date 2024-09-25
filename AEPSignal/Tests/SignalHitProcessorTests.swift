@@ -30,10 +30,8 @@ class SignalHitProcessorTests: XCTestCase {
     let testEvent = getTestEvent()
         
     override func setUp() {
-        hitProcessor = SignalHitProcessor()
         mockNetworkService = MockNetworkService()
-                
-        ServiceProvider.shared.networkService = mockNetworkService
+        hitProcessor = SignalHitProcessor(logger: MockLogger(), networkService: mockNetworkService)
     }
         
     // MARK: - processHit(entity: DataEntity, completion: @escaping (Bool) -> Void)

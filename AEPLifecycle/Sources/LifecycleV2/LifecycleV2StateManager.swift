@@ -16,19 +16,21 @@ import AEPServices
 /// LifecycleV2StateManager manages app session state updates for the XDM scenario based on the start/pause Lifecycle events.
 class LifecycleV2StateManager {
 
-    private static var SELF_LOG_TAG = "LifecycleV2StateManager"
+    private static let SELF_LOG_TAG = "LifecycleV2StateManager"
 
     enum State: String {
         case START = "start"
         case PAUSE = "pause"
     }
-
+    
+    private let logger: Logger
     private let dispatchQueue = DispatchQueue(label: "\(LifecycleConstants.EXTENSION_NAME).stateManager")
     private var scheduledPauseTask: DispatchWorkItem?
     private var cancellablePauseCallback: ((Bool) -> Void)?
     private var currentState: State?
 
-    init() {
+    init(logger: Logger) {
+        self.logger = logger
         self.scheduledPauseTask = nil
         self.cancellablePauseCallback = nil
         self.currentState = nil
@@ -52,11 +54,11 @@ class LifecycleV2StateManager {
             if self.scheduledPauseTask != nil {
                 switch state {
                 case .START:
-                    Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->start state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, ignoring.")
+                    logger.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->start state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, ignoring.")
                     self.cancelPauseTask()
                     callback(false)
                 case .PAUSE:
-                    Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->pause state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, rescheduling.")
+                    logger.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received pause->pause state update within \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec, rescheduling.")
                     self.cancelPauseTask()
                     self.schedulePauseTask(callback: callback)
                 }
@@ -65,18 +67,18 @@ class LifecycleV2StateManager {
             }
 
             if self.currentState == state {
-                Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received consecutive \(state) state update, ignoring.")
+                logger.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received consecutive \(state) state update, ignoring.")
                 callback(false)
                 return
             }
 
             switch state {
             case .START:
-                Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new start state, updating.")
+                logger.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new start state, updating.")
                 self.currentState = state
                 callback(true)
             case .PAUSE:
-                Log.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new pause state, waiting for \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec before updating.")
+                logger.trace(label: LifecycleConstants.LOG_TAG, "\(Self.SELF_LOG_TAG) - Received new pause state, waiting for \(LifecycleV2Constants.STATE_UPDATE_TIMEOUT_SEC) sec before updating.")
                 self.schedulePauseTask(callback: callback)
             }
         }
