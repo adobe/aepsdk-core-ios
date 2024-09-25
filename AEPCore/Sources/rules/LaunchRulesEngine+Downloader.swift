@@ -20,26 +20,32 @@ public extension LaunchRulesEngine {
     /// - Parameter urlString: the url of the remote rules
     func replaceRules(from urlString: String) {
         guard let url = URL(string: urlString) else {
-            Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules url: \(urlString)")
+            logger.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules url: \(urlString)")
             return
         }
-        let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
+        let serviceProvider = extensionRuntime.getServiceProvider()
+        let rulesDownloader = RulesDownloader(
+            fileUnzipper: FileUnzipper(),
+            cache: serviceProvider.getCache(name: RulesDownloaderConstants.RULES_CACHE_NAME),
+            logger: logger,
+            networking: serviceProvider.getNetworkService()
+        )
         rulesDownloader.loadRulesFromUrl(rulesUrl: url) { [weak self] result in
             guard let self = self else { return }
 
             switch result {
             case .success(let data):
                 guard let rules = JSONRulesParser.parse(data) else {
-                    Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from URL: \(urlString)")
+                    logger.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from URL: \(urlString)")
                     return
                 }
                 self.replaceRules(with: rules)
             case .failure(let error):
                 switch error {
                 case .notModified:
-                    Log.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Rules were not modified, not loading rules from url: \(urlString)")
+                    logger.trace(label: RulesConstants.LOG_MODULE_PREFIX, "Rules were not modified, not loading rules from url: \(urlString)")
                 default:
-                    Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from url: \(urlString), with error: \(error.localizedDescription)")
+                    logger.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from url: \(urlString), with error: \(error.localizedDescription)")
                 }
             }
         }
@@ -49,33 +55,45 @@ public extension LaunchRulesEngine {
     /// - Parameter urlString: the url of the remote rules
     func replaceRulesWithCache(from urlString: String) -> Bool {
         guard let url = URL(string: urlString) else {
-            Log.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules url: \(urlString)")
+            logger.warning(label: RulesConstants.LOG_MODULE_PREFIX, "Invalid rules url: \(urlString)")
             return false
         }
-        let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
+        let serviceProvider = extensionRuntime.getServiceProvider()
+        let rulesDownloader = RulesDownloader(
+            fileUnzipper: FileUnzipper(),
+            cache: serviceProvider.getCache(name: RulesDownloaderConstants.RULES_CACHE_NAME),
+            logger: logger,
+            networking: serviceProvider.getNetworkService()
+        )
         guard let data = rulesDownloader.loadRulesFromCache(rulesUrl: url), let rules = JSONRulesParser.parse(data, runtime: extensionRuntime) else {
-            Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load cached rules for url: \(urlString)")
+            logger.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load cached rules for url: \(urlString)")
             return false
         }
 
-        Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Successfully loaded rules from cache")
+        logger.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Successfully loaded rules from cache")
         self.replaceRules(with: rules)
         return true
     }
 
     /// Reads the manifest for bundled rules and replaces rules with bundled rules if found
     func replaceRulesWithManifest(from url: URL) {
-        let rulesDownloader = RulesDownloader(fileUnzipper: FileUnzipper())
+        let serviceProvider = extensionRuntime.getServiceProvider()
+        let rulesDownloader = RulesDownloader(
+            fileUnzipper: FileUnzipper(),
+            cache: serviceProvider.getCache(name: RulesDownloaderConstants.RULES_CACHE_NAME),
+            logger: logger,
+            networking: serviceProvider.getNetworkService()
+        )
         switch rulesDownloader.loadRulesFromManifest(for: url) {
         case .success(let data):
             guard let rules = JSONRulesParser.parse(data) else {
-                Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from manifest")
+                logger.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Unable to parse rules for data from manifest")
                 return
             }
-            Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Successfully loaded rules from manifest")
+            logger.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Successfully loaded rules from manifest")
             self.replaceRules(with: rules)
         case .failure(let error):
-            Log.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from manifest, with error: \(error.localizedDescription)")
+            logger.debug(label: RulesConstants.LOG_MODULE_PREFIX, "Failed to load rules from manifest, with error: \(error.localizedDescription)")
         }
     }
 }

@@ -19,6 +19,7 @@ class ConfigurationState {
 
     private let queue = DispatchQueue(label: "com.adobe.configurationState")
     private let dataStore: NamedCollectionDataStore
+    private let logger: Logger
     private let appIdManager: LaunchIDManager
     private let configDownloader: ConfigurationDownloadable
 
@@ -35,7 +36,7 @@ class ConfigurationState {
             if let storedConfig: [String: AnyCodable] = dataStore.getObject(key: ConfigurationConstants.DataStoreKeys.PERSISTED_OVERRIDDEN_CONFIG) {
                 return storedConfig
             } else {
-                Log.trace(label: logTag, "Config not found in data store, returning empty config")
+                logger.trace(label: logTag, "Config not found in data store, returning empty config")
                 return [:]
             }
         }
@@ -47,12 +48,14 @@ class ConfigurationState {
     /// Creates a new `ConfigurationState` with an empty current configuration
     /// - Parameters:
     ///   - dataStore: The datastore in which configurations are cached
-    ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration
-    ///     from various locations
-    init(dataStore: NamedCollectionDataStore, configDownloader: ConfigurationDownloadable) {
+    ///   - logger: The logging service
+    ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration from various locations
+    ///   - appIdManager: Manger for storing and loading the app ID
+    init(dataStore: NamedCollectionDataStore, logger: Logger, configDownloader: ConfigurationDownloadable, appIdManager: LaunchIDManager) {
         self.dataStore = dataStore
+        self.logger = logger
         self.configDownloader = configDownloader
-        appIdManager = LaunchIDManager(dataStore: dataStore)
+        self.appIdManager = appIdManager
     }
 
     /// Computes and returns environment aware configuration based on `self.currentConfiguration`
@@ -133,7 +136,7 @@ class ConfigurationState {
         // Remove all __env__ keys, only need to process config keys who do not have the environment prefix
         var environmentAwareConfig = currentConfiguration.filter { !$0.key.hasPrefix(ConfigurationConstants.ENVIRONMENT_PREFIX_DELIMITER) }
         guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else {
-            Log.trace(label: logTag, "Build environment not found in current config, returning environment aware config.")
+            logger.trace(label: logTag, "Build environment not found in current config, returning environment aware config.")
             return environmentAwareConfig
         }
 
@@ -153,7 +156,7 @@ class ConfigurationState {
     /// - Returns: `programmaticConfig` with all keys mapped to their build environment equivalent
     private func mapEnvironmentKeys(programmaticConfig: [String: Any]) -> [String: Any] {
         guard let buildEnvironment = currentConfiguration[ConfigurationConstants.Keys.BUILD_ENVIRONMENT] as? String else {
-            Log.trace(label: logTag, "Build environment not found in current config, returning programmatic config.")
+            logger.trace(label: logTag, "Build environment not found in current config, returning programmatic config.")
             return programmaticConfig
         }
 
@@ -201,7 +204,7 @@ extension ConfigurationState {
                 ?? configDownloader.loadDefaultConfigFromManifest()
                 ?? [:]
         } else {
-            Log.trace(label: logTag, "App ID not found, attempting to load default config from manifest")
+            logger.trace(label: logTag, "App ID not found, attempting to load default config from manifest")
             config = configDownloader.loadDefaultConfigFromManifest() ?? [:]
         }
 

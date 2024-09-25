@@ -15,6 +15,12 @@ import Foundation
 import AEPRulesEngine
 
 class RulesEngineNativeLogging: AEPRulesEngine.Logging {
+    private let logger: Logger
+
+    init(logger: Logger) {
+        self.logger = logger
+    }
+
     /// Converts RulesEngine `LogLevel` to Core `LogLevel`
     /// - Parameter logLevel: a RulesEngine `LogLevel` object
     /// - Returns: a Core `LogLevel` object
@@ -34,8 +40,21 @@ class RulesEngineNativeLogging: AEPRulesEngine.Logging {
     }
 
     func log(level: AEPRulesEngine.LogLevel, label: String, message: String) {
-        if Log.logFilter >= convert(level) {
-            ServiceProvider.shared.loggingService.log(level: convert(level), label: label, message: message)
+        let logLevel = convert(level)
+        guard Log.logFilter >= convert(level) else {
+            return
+        }
+        switch logLevel {
+        case .error:
+            logger.error(label: label, message)
+        case .warning:
+            logger.warning(label: label, message)
+        case .debug:
+            logger.debug(label: label, message)
+        case .trace:
+            logger.trace(label: label, message)
+        @unknown default:
+            logger.error(label: label, message)
         }
     }
 }

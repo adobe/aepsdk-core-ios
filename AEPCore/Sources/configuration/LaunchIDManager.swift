@@ -16,6 +16,7 @@ import Foundation
 /// Handles loading and saving the launch appId to the data store and manifest
 struct LaunchIDManager {
     let dataStore: NamedCollectionDataStore
+    let logger: Logger
     private let logTag = "LaunchIDManager"
 
     /// Loads the appId from the data store, if not present in the data store loads from the manifest
@@ -29,7 +30,7 @@ struct LaunchIDManager {
     /// - Parameter appId: appId to be saved to data store
     func saveAppIdToPersistence(appId: String) {
         if appId.isEmpty {
-            Log.trace(label: logTag, "Attempting to set App ID in data store with empty string")
+            logger.trace(label: logTag, "Attempting to set App ID in data store with empty string")
             return
         }
         dataStore.set(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID, value: appId)
@@ -44,10 +45,10 @@ struct LaunchIDManager {
     /// - Returns: appId loaded from persistence, nil if not present
     func loadAppIdFromPersistence() -> String? {
         if let appId = dataStore.getString(key: ConfigurationConstants.DataStoreKeys.PERSISTED_APPID) {
-            Log.trace(label: logTag, "Loading App ID from persistence with appId: \(appId)")
+            logger.trace(label: logTag, "Loading App ID from persistence with appId: \(appId)")
             return appId
         }
-        Log.trace(label: logTag, "App ID not found in data store")
+        logger.trace(label: logTag, "App ID not found in data store")
         return nil
     }
 
@@ -56,10 +57,10 @@ struct LaunchIDManager {
     func loadAppIdFromManifest() -> String? {
         if let appId = ServiceProvider.shared.systemInfoService.getProperty(for: ConfigurationConstants.CONFIG_MANIFEST_APPID_KEY) {
             saveAppIdToPersistence(appId: appId)
-            Log.trace(label: logTag, "Loading App ID from manifest with appId: \(appId)")
+            logger.trace(label: logTag, "Loading App ID from manifest with appId: \(appId)")
             return appId
         }
-        Log.trace(label: logTag, "App ID not found in manifest")
+        logger.trace(label: logTag, "App ID not found in manifest")
         return nil
     }
 }
