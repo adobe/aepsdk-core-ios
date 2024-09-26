@@ -43,7 +43,7 @@ class LaunchRulesEngineTests: XCTestCase {
         let rules = JSONRulesParser.parse(data)
         let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
         // ~state.com.adobe.module.lifecycle/lifecyclecontextdata.devicename
-        let tokens = TokenFinder(event: event, extensionRuntime: runtime)
+        let tokens = TokenFinder(event: event, logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         let result = rulesEngine.replaceToken(for: (rules?[0].consequences[0])!, data: tokens)
         // http://adobe.com/device=abc
 
@@ -67,9 +67,9 @@ class LaunchRulesEngineTests: XCTestCase {
         /// Then: this json rules should be parsed to `LaunchRule` objects
         let rules = JSONRulesParser.parse(data)
         let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
-        let transformer = LaunchRuleTransformer(runtime: runtime)
-        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: runtime)
-        
+        let transformer = LaunchRuleTransformer()
+        let traversableTokenFinder = TokenFinder(event: event, logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
+
         /// Then: this json rules should be parsed to `LaunchRule` objects
         XCTAssertEqual(1, rules?.count)
         XCTAssertTrue(rules?[0].condition is LogicalExpression)

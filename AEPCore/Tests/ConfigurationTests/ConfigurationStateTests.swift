@@ -24,7 +24,8 @@ class ConfigurationStateTests: XCTestCase, AnyCodableAsserts {
     override func setUp() {
         configDownloader = MockConfigurationDownloader()
         NamedCollectionDataStore.clear()
-        configState = ConfigurationState(dataStore: dataStore, configDownloader: configDownloader)
+        let idManager = LaunchIDManager(dataStore: dataStore, logger: MockLogger())
+        configState = ConfigurationState(dataStore: dataStore, logger: MockLogger(), configDownloader: configDownloader, appIdManager: idManager)
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
