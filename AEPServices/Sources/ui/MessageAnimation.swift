@@ -13,7 +13,7 @@
     import Foundation
 
     /// A MessageAnimation represents the type of animation that should be used when displaying or dismissing a message.
-    @objc (AEPMessageAnimation)
+    @objc(AEPMessageAnimation)
     public enum MessageAnimation: Int {
         case none = 0
         case left = 1

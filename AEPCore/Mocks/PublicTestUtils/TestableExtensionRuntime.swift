@@ -18,9 +18,10 @@ import Foundation
 /// Enable easy setup for the input and verification of the output of an extension
 /// See also AEPCore/Mocks
 public class TestableExtensionRuntime: ExtensionRuntime {
+    private let queue = DispatchQueue(label: "com.adobe.testableextensionruntime.syncqueue")
 
     public var listeners: [String: EventListener] = [:]
-    public var dispatchedEvents: [Event] = []
+    private var _dispatchedEvents: [Event] = []
     public var createdSharedStates: [[String: Any]?] = []
     public var createdXdmSharedStates: [[String: Any]?] = []
     public var mockedSharedStates: [String: SharedStateResult] = [:]
@@ -45,7 +46,9 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         if shouldIgnore(event) {
             return
         }
-        dispatchedEvents += [event]
+        queue.async {
+            self._dispatchedEvents += [event]
+        }
     }
 
     public func createSharedState(data: [String: Any], event _: Event?) {
@@ -181,6 +184,18 @@ public class TestableExtensionRuntime: ExtensionRuntime {
 
 /// Convenience properties for `TestableExtensionRuntime`
 public extension TestableExtensionRuntime {
+    var dispatchedEvents: [Event] {
+        get {
+            return queue.sync {
+                _dispatchedEvents
+            }
+        }
+        set {
+            queue.async {
+                self._dispatchedEvents = newValue
+            }
+        }
+    }
 
     /// First dispatched event
     var firstEvent: Event? {

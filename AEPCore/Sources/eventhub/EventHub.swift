@@ -136,7 +136,7 @@ final class EventHub {
             // Init the extension on a dedicated queue
             let extensionTypeName = "com.adobe.eventhub.extension.\(type.typeName)"
             let extensionQueue = DispatchQueue(label: extensionTypeName)
-            let extensionContainer = ExtensionContainer(extensionTypeName, type, extensionQueue, completion: completion)
+            let extensionContainer = ExtensionContainer(self, extensionTypeName, type, extensionQueue, completion: completion)
             self.registeredExtensions[type.typeName] = extensionContainer
             Log.debug(label: self.LOG_TAG, "\(type.typeName) successfully registered.")
         }

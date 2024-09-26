@@ -16,7 +16,8 @@
 
     /// Fullscreen message lifecycle event listener
     @available(iOSApplicationExtension, unavailable)
-    @objc(AEPFullscreenMessageDelegate) public protocol FullscreenMessageDelegate {
+    @objc(AEPFullscreenMessageDelegate) 
+    public protocol FullscreenMessageDelegate {
         /// Invoked when the fullscreen message is displayed
         /// - Parameters:
         ///     - message: Fullscreen message which is currently shown
@@ -45,6 +46,14 @@
         ///
         /// Invoked when the FullscreenMessage failed to be displayed
         ///
+        @available(*, deprecated, message: "Use onError(message:error:) instead. Function onShowFailure will be removed in the next major version of AEPServices.")
         func onShowFailure()
+
+        /// Invoked when the FullscreenMessage fails to be displayed
+        /// - Parameters:
+        ///  - message - the message that was not displayed
+        ///  - error - a `PresentationError` containing the reason why the message was not shown
+        @objc(onErrorFullscreenMessage:error:)
+        optional func onError(message: FullscreenMessage, error: PresentationError)
     }
 #endif

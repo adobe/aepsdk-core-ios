@@ -3,6 +3,8 @@
 # make this script executable from terminal:
 # chmod 755 update-versions.sh
 
+# This script must be run on macOS because of the sed command syntax used to update the files.
+
 set -e # Any subsequent(*) commands which fail will cause the shell script to exit immediately
 
 ROOT_DIR=$(git rev-parse --show-toplevel)
@@ -80,6 +82,11 @@ if [ "$DEPENDENCIES" != "none" ]; then
         echo "Changing value of 's.dependency' for '$dependencyName' to '>= $dependencyVersion' in '$PODSPEC_FILE'"
         sed -i '' -E "/^ *s.dependency +'$dependencyName'/{s/$VERSION_REGEX/$dependencyVersion/;}" $PODSPEC_FILE
 
+        # Check if NAME is TestUtils and continue if true - TestUtils does not currently support SPM
+        if [ "$NAME" == "TestUtils" ]; then 
+            continue
+        fi
+
         spmRepoUrl=$(getRepo $dependencyName)
         if [ "$spmRepoUrl" != "" ]; then
             echo "Changing value of '.upToNextMajor(from:)' for '$spmRepoUrl' to '$dependencyVersion' in '$SPM_FILE'"
@@ -91,6 +98,9 @@ fi
 # Replace version in Constants file
 if [ "$NAME" == "Services" ]; then
     # Nothing, Services has no constants file
+    echo "No constants to replace"
+elif [ "$NAME" == "TestUtils" ]; then 
+    # Nothing, TestUtils has no constants file
     echo "No constants to replace"
 elif [ "$NAME" == "Core" ]; then
     # Core needs to update Event Hub and Configuration Constants
@@ -112,6 +122,12 @@ if [ "$NAME" == "Core" ]; then
     TEST_FILE=$ROOT_DIR"/AEP$NAME/Tests/MobileCoreTests.swift"
     echo "Changing value of 'version' to '$NEW_VERSION' in '$TEST_FILE'"
     sed -i '' -E "/^ +\"version\" : \"/{s/[1-9]+\.[0-9]+\.[0-9]+/$NEW_VERSION/;}" $TEST_FILE
+fi
+
+# Early exit if the name is TestUtils
+if [ "$NAME" == "TestUtils" ]; then
+    echo "TestUtils version is not matched with Core. Exiting."
+    exit 0
 fi
 
 # Replace marketing versions in project.pbxproj
