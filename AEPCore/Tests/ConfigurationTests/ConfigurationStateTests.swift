@@ -25,7 +25,7 @@ class ConfigurationStateTests: XCTestCase, AnyCodableAsserts {
         configDownloader = MockConfigurationDownloader()
         NamedCollectionDataStore.clear()
         let idManager = LaunchIDManager(dataStore: dataStore, logger: MockLogger())
-        configState = ConfigurationState(dataStore: dataStore, logger: MockLogger(), configDownloader: configDownloader, appIdManager: idManager)
+        configState = ConfigurationState(configDownloader: configDownloader, appIdManager: idManager, dataStore: dataStore, logger: MockLogger())
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }

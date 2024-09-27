@@ -47,11 +47,11 @@ class ConfigurationState {
 
     /// Creates a new `ConfigurationState` with an empty current configuration
     /// - Parameters:
-    ///   - dataStore: The datastore in which configurations are cached
-    ///   - logger: The logging service
     ///   - configDownloader: A `ConfigurationDownloadable` which will be responsible for loading the configuration from various locations
     ///   - appIdManager: Manger for storing and loading the app ID
-    init(dataStore: NamedCollectionDataStore, logger: Logger, configDownloader: ConfigurationDownloadable, appIdManager: LaunchIDManager) {
+    ///   - dataStore: The datastore in which configurations are cached
+    ///   - logger: The logging service
+    init(configDownloader: ConfigurationDownloadable, appIdManager: LaunchIDManager, dataStore: NamedCollectionDataStore, logger: Logger) {
         self.dataStore = dataStore
         self.logger = logger
         self.configDownloader = configDownloader

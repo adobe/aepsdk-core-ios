@@ -48,10 +48,10 @@ class Configuration: NSObject, Extension, MultiInstanceCapable {
             networking: serviceProvider.getNetworkService(),
             systemInfoService: serviceProvider.getSystemInfoService())
         self.configState = ConfigurationState(
-            dataStore: dataStore,
-            logger: logger,
             configDownloader: configDownloader,
-            appIdManager: appIdManager)
+            appIdManager: appIdManager,
+            dataStore: dataStore,
+            logger: logger)
     }
 
     /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
