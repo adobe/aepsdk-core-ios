@@ -11,15 +11,10 @@
 //
 
 import AEPServices
+import Foundation
 
-public extension NamedCollectionDataStore {
-    /// Clears all known locations for Adobe Mobile SDK local device data persistence:
-    /// 1. `UserDefaults` - tvOS (in use for all versions) and iOS (in use for Core version lower than v4.2.0) (see: ``UserDefaults/clearAll()``)
-    /// 2. `FileManager` - hits databases for each extension (see: ``FileManager/clearCache``)
-    /// 3. File system directory - iOS (in use for Core version v4.2.0 and beyond)
-    static func clear() {
-        UserDefaults.clearAll()
-        FileManager.default.clearCache()
-        FileManager.default.clearDirectory()
+extension HttpConnection {
+    public func deepCopy() -> HttpConnection {
+        return HttpConnection(data: self.data, response: self.response, error: self.error)
     }
 }

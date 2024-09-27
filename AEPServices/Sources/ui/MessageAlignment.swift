@@ -13,7 +13,7 @@
     import Foundation
 
     /// A MessageAlignment represents the anchor point on a view for a non-fullscreen message.
-    @objc (AEPMessageAlignment)
+    @objc(AEPMessageAlignment)
     public enum MessageAlignment: Int {
         case center = 0
         case left = 1
