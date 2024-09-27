@@ -17,7 +17,7 @@ import Foundation
 enum SDKInstanceIdentifier: Hashable {
     private static let IDENTIFIER_MAX_LENGTH = 100
     private static let IDENTIFIER_PATTERN = "[^A-Za-z0-9._-]+"
-    private static let DEFAULT_STRING = "aep-default-instance"
+    static let DEFAULT_STRING = "aep-default-instance"
     
     case `default`
     case id(String)

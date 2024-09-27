@@ -14,16 +14,22 @@ import Foundation
 
 class EventHubProvider {
     
-    private let dispatchQueue = DispatchQueue(label: "com.adobe.eventHubProvider")
-    private var eventHubs: [SDKInstanceIdentifier: EventHub] = [
-        .default: EventHub(identifier: .default)
-    ]
-
+    private let wrapperTypeProvider: WrapperTypeProvider
+    private let dispatchQueue = DispatchQueue(label: "com.adobe.eventHubProvider")    
+    private var eventHubs: [SDKInstanceIdentifier: EventHub]
+    
+    init(wrapperTypeProvider: WrapperTypeProvider) {
+        self.wrapperTypeProvider = wrapperTypeProvider
+        eventHubs = [
+            .default: EventHub(identifier: .default, wrapperTypeProvider: wrapperTypeProvider)
+        ]
+    }
+    
     // Creates an EventHub instance for the given identifier if it does not already exist.
     func createEventHub(for identifier: SDKInstanceIdentifier) {
         dispatchQueue.sync {
             guard eventHubs[identifier] == nil else { return }
-            eventHubs[identifier] = EventHub(identifier: identifier)
+            eventHubs[identifier] = EventHub(identifier: identifier, wrapperTypeProvider: wrapperTypeProvider)
         }
     }
 
@@ -32,5 +38,11 @@ class EventHubProvider {
         dispatchQueue.sync {
             return eventHubs[identifier]
         }
+    }
+    
+    func reset() {
+        eventHubs = [
+            .default: EventHub(identifier: .default, wrapperTypeProvider: wrapperTypeProvider)
+        ]
     }
 }

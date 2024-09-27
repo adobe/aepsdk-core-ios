@@ -21,10 +21,7 @@ public extension MobileCore {
     ///   - data: Dictionary of data to attach to the dispatched `Event`
     @objc(trackAction:data:)
     static func track(action: String?, data: [String: Any]?) {
-        var eventData: [String: Any] = [:]
-        eventData[CoreConstants.Keys.CONTEXT_DATA] = data
-        eventData[CoreConstants.Keys.ACTION] = action
-        trackWithEventData(eventData)
+        apiDefaultInstance.track(action: action, data: data)        
     }
 
     /// Generates and dispatches a track state `Event`
@@ -33,19 +30,6 @@ public extension MobileCore {
     ///   - data: Dictionary of data to attach to the dispatched `Event`
     @objc(trackState:data:)
     static func track(state: String?, data: [String: Any]?) {
-        var eventData: [String: Any] = [:]
-        eventData[CoreConstants.Keys.CONTEXT_DATA] = data
-        eventData[CoreConstants.Keys.STATE] = state
-        trackWithEventData(eventData)
-    }
-
-    /// Dispatches an Analytics Track event with the provided `eventData`
-    /// - Parameter eventData: Optional dictionary containing data for the outgoing `Event`
-    private static func trackWithEventData(_ eventData: [String: Any]?) {
-        let event = Event(name: CoreConstants.EventNames.ANALYTICS_TRACK,
-                          type: EventType.genericTrack,
-                          source: EventSource.requestContent,
-                          data: eventData)
-        MobileCore.dispatch(event: event)
+        apiDefaultInstance.track(state: state, data: data)
     }
 }

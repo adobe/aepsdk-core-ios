@@ -23,6 +23,7 @@ public typealias EventPreprocessor = (Event) -> Event
 final class EventHub {
     private let LOG_TAG = "EventHub"
     private let identifier: SDKInstanceIdentifier
+    private let wrapperTypeProvider: WrapperTypeProvider
     private let logger: Logger
     private let extensionServiceProvider: ExtensionServiceProvider
     private let eventHubQueue: DispatchQueue
@@ -34,18 +35,13 @@ final class EventHub {
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
     private var started = false // true if the `EventHub` is started, false otherwise. Should only be accessed from within the `eventHubQueue`
     private var eventHistory: EventHistory?
-    private var wrapperType: WrapperType = .none
-    #if DEBUG
-        public internal(set) static var shared = EventHub(identifier: .default)
-    #else
-        internal static let shared = EventHub(identifier: .default)
-    #endif
 
     // MARK: - Internal API
 
     /// Creates a new instance of `EventHub`
-    init(identifier: SDKInstanceIdentifier) {
+    init(identifier: SDKInstanceIdentifier, wrapperTypeProvider: WrapperTypeProvider) {
         self.identifier = identifier
+        self.wrapperTypeProvider = wrapperTypeProvider
         logger = SDKInstanceLogger(identifier: identifier)
         extensionServiceProvider = ExtensionServiceProvider(identifier: identifier, logger: logger)
         eventHubQueue = DispatchQueue(for: identifier, label: "com.adobe.eventHub.queue")
@@ -341,8 +337,8 @@ final class EventHub {
             }
 
             let wrapperInfo: [String: String] = [
-                EventHubConstants.EventDataKeys.TYPE: self.wrapperType.rawValue,
-                EventHubConstants.EventDataKeys.FRIENDLY_NAME: self.wrapperType.friendlyName
+                EventHubConstants.EventDataKeys.TYPE: self.wrapperTypeProvider.wrapperType.rawValue,
+                EventHubConstants.EventDataKeys.FRIENDLY_NAME: self.wrapperTypeProvider.wrapperType.friendlyName
             ]
             let data: [String: Any] = [
                 EventHubConstants.EventDataKeys.VERSION: EventHubConstants.VERSION_NUMBER,
@@ -363,28 +359,6 @@ final class EventHub {
     ///   - handler: contains an `EventHistoryResult` for each provided request
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
         eventHistory?.getEvents(requests, enforceOrder: enforceOrder, handler: handler)
-    }
-
-    /// Sets wrapper type if `Eventhub` has not started
-    /// - Parameter type: A `WrapperType` denoting the type of wrapper
-    func setWrapperType(_ type: WrapperType) {
-        eventHubQueue.sync { [weak self] in
-            guard let self = self else { return }
-            guard !self.started else {
-                logger.warning(label: self.LOG_TAG, "Wrapper type can not be set after EventHub starts processing events")
-                return
-            }
-            self.wrapperType = type
-        }
-    }
-
-    /// Returns wrapper type, if not previously set returns `WrapperType.none`    
-    /// - Returns: A `WrapperType` denoting the type of wrapper
-    func getWrapperType() -> WrapperType {
-        return eventHubQueue.sync { [weak self] in
-            guard let self = self else { return .none }
-            return self.wrapperType
-        }
     }
 
     /// shut down the event hub, wait for the event queue to stop and unregister all the extensions

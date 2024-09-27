@@ -13,8 +13,24 @@ import XCTest
 @testable import AEPCore
 
 extension EventHub {
+    @available(*, deprecated, message: "Extensions should not directly access EventHub.")
+    static var shared: EventHub {
+        MobileCore.eventHubProvider.getEventHub(for: SDKInstanceIdentifier.default)!
+    }
+    
+    /// Deprecated: Extensions should not directly call `reset()` on `EventHub`.
+    /// Instead, use `MobileCore.reset()` between test extensions.
+    @available(*, deprecated, message: "Extensions should not call EventHub.reset(). Use MobileCore.reset() between tests.")
     static func reset() {
-        shared = EventHub(identifier: .default)
+        MobileCore.eventHubProvider.reset()
+    }
+}
+
+extension MobileCore {
+    static func reset() {
+        MobileCore.eventHubProvider.reset()
+        MobileCore.wrapperTypeProvider.reset()
+        MobileCore.apiStore = [SDKInstanceIdentifier.DEFAULT_STRING: MobileCore.apiDefaultInstance]
     }
 }
 

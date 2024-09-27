@@ -14,7 +14,15 @@
 import Foundation
 
 extension EventHub {
-    public static func reset() {
-        shared = EventHub(identifier: .default)
+    @available(*, deprecated, message: "Extensions should not directly access EventHub.")
+    static var shared: EventHub {
+        MobileCore.eventHubProvider.getEventHub(for: SDKInstanceIdentifier.default)!
+    }
+    
+    /// Deprecated: Extensions should not directly call `reset()` on `EventHub`.
+    /// Instead, use `MobileCore.reset()` between tests.
+    @available(*, deprecated, message: "Extensions should not call EventHub.reset(). Use MobileCore.reset() between tests.")
+    static func reset() {
+        MobileCore.eventHubProvider.reset()
     }
 }
