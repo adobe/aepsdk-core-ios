@@ -14,14 +14,14 @@ import AEPServices
 import Foundation
 
 /// Responsible for retrieving the configuration of the SDK and updating the shared state and dispatching configuration updates through the `EventHub`
-class Configuration: NSObject, Extension {
+class Configuration: NSObject, Extension, MultiInstanceCapable {
     let runtime: ExtensionRuntime
     let name = ConfigurationConstants.EXTENSION_NAME
     let friendlyName = ConfigurationConstants.FRIENDLY_NAME
     public static let extensionVersion = ConfigurationConstants.EXTENSION_VERSION
     let metadata: [String: String]? = nil
 
-    private let dataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
+    private let dataStore: NamedCollectionDataStore
     private var appIdManager: LaunchIDManager
     private var configState: ConfigurationState // should only be modified/used within the event queue
     private let rulesEngine: LaunchRulesEngine
@@ -29,15 +29,29 @@ class Configuration: NSObject, Extension {
     private let rulesEngineName = "\(ConfigurationConstants.EXTENSION_NAME).rulesengine"
     private var retryConfigurationCounter: Double = 1
 
+    private let logger: Logger
+
     // MARK: - Extension
 
     /// Initializes the Configuration extension and it's dependencies
     required init(runtime: ExtensionRuntime) {
         self.runtime = runtime
-        rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: runtime)
+        let serviceProvider = runtime.getServiceProvider()
+        self.logger = serviceProvider.getLogger()
+        self.dataStore = serviceProvider.getNamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
 
-        appIdManager = LaunchIDManager(dataStore: dataStore)
-        configState = ConfigurationState(dataStore: dataStore, configDownloader: ConfigurationDownloader())
+        self.rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: runtime)
+
+        self.appIdManager = LaunchIDManager(dataStore: dataStore, logger: logger)
+        let configDownloader = ConfigurationDownloader(
+            logger: logger,
+            networking: serviceProvider.getNetworkService(),
+            systemInfoService: serviceProvider.getSystemInfoService())
+        self.configState = ConfigurationState(
+            configDownloader: configDownloader,
+            appIdManager: appIdManager,
+            dataStore: dataStore,
+            logger: logger)
     }
 
     /// Invoked when the Configuration extension has been registered by the `EventHub`, this results in the Configuration extension loading the first configuration for the SDK
@@ -54,12 +68,16 @@ class Configuration: NSObject, Extension {
         configState.loadInitialConfig()
         let config = configState.environmentAwareConfiguration
         if !config.isEmpty {
-            let responseEvent = Event(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: config)
+            let responseEvent = Event(
+                name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT,
+                type: EventType.configuration,
+                source: EventSource.responseContent,
+                data: config)
             dispatch(event: responseEvent)
             createSharedState(data: config, event: nil)
             // notify rules engine to load cached rules
             if let rulesURLString = config[ConfigurationConstants.Keys.RULES_URL] as? String {
-                Log.trace(label: name, "Reading rules from cache for URL: \(rulesURLString)")
+                logger.trace(label: name, "Reading rules from cache for URL: \(rulesURLString)")
                 if !rulesEngine.replaceRulesWithCache(from: rulesURLString) {
                     if let url = Bundle.main.url(forResource: RulesDownloaderConstants.RULES_BUNDLED_FILE_NAME, withExtension: "zip") {
                         // Attempt to load rules from manifest if none in cache
@@ -107,7 +125,7 @@ class Configuration: NSObject, Extension {
     private func processUpdateConfig(event: Event, sharedStateResolver: SharedStateResolver) {
         // Update the overriddenConfig with the new config from API and persist them in disk, and abort if overridden config is empty
         guard let updatedConfig = event.data?[ConfigurationConstants.Keys.UPDATE_CONFIG] as? [String: Any], !updatedConfig.isEmpty else {
-            Log.warning(label: name, "Overriden config is empty, resolving pending shared state with current config")
+            logger.warning(label: name, "Overriden config is empty, resolving pending shared state with current config")
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
@@ -125,7 +143,7 @@ class Configuration: NSObject, Extension {
     private func processConfigureWith(appId: String, event: Event, sharedStateResolver: @escaping SharedStateResolver) {
         guard !appId.isEmpty else {
             // Error: No appId provided or its empty, resolve pending shared state with current config
-            Log.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
+            logger.warning(label: name, "No AppID provided or it is empty, resolving pending shared state with current config")
             appIdManager.removeAppIdFromPersistence()
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
@@ -138,7 +156,7 @@ class Configuration: NSObject, Extension {
         }
 
         guard !isStaleAppIdUpdateRequest(newAppId: appId, isInternalEvent: event.isInternalConfigEvent) else {
-            Log.debug(label: name, "An explicit configureWithAppId request has preceded this internal event.")
+            logger.debug(label: name, "An explicit configureWithAppId request has preceded this internal event.")
             return
         }
 
@@ -154,10 +172,13 @@ class Configuration: NSObject, Extension {
                 sharedStateResolver(self.configState.environmentAwareConfiguration)
                 self.startEvents()
                 let retryInterval = self.retryConfigurationCounter * 5
-                Log.trace(label: self.name, "Downloading config failed, trying again after \(retryInterval) secs")
+                logger.trace(label: self.name, "Downloading config failed, trying again after \(retryInterval) secs")
                 self.retryQueue.asyncAfter(deadline: .now() + retryInterval) {
-                    let event = Event(name: CoreConstants.EventNames.CONFIGURE_WITH_APP_ID, type: EventType.configuration, source: EventSource.requestContent,
-                                      data: [CoreConstants.Keys.JSON_APP_ID: appId, CoreConstants.Keys.IS_INTERNAL_EVENT: true])
+                    let event = Event(
+                        name: CoreConstants.EventNames.CONFIGURE_WITH_APP_ID,
+                        type: EventType.configuration,
+                        source: EventSource.requestContent,
+                        data: [CoreConstants.Keys.JSON_APP_ID: appId, CoreConstants.Keys.IS_INTERNAL_EVENT: true])
                     self.dispatch(event: event)
                     self.retryConfigurationCounter += 1
                 }
@@ -194,7 +215,7 @@ class Configuration: NSObject, Extension {
     private func processConfigureWith(filePath: String, event: Event, sharedStateResolver: SharedStateResolver) {
         guard let filePath = event.data?[ConfigurationConstants.Keys.JSON_FILE_PATH] as? String, !filePath.isEmpty else {
             // Error: Shared state is updated with previous config
-            Log.warning(label: name, "Loaded configuration from file path was empty, using previous config.")
+            logger.warning(label: name, "Loaded configuration from file path was empty, using previous config.")
             sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
@@ -222,13 +243,21 @@ class Configuration: NSObject, Extension {
     ///   - data: Optional data to be attached to the event
     private func dispatchConfigurationResponse(requestEvent: Event?, data: [String: Any]?) {
         if let requestEvent = requestEvent {
-            let pairedResponseEvent = requestEvent.createResponseEvent(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
+            let pairedResponseEvent = requestEvent.createResponseEvent(
+                name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT,
+                type: EventType.configuration,
+                source: EventSource.responseContent,
+                data: data)
             dispatch(event: pairedResponseEvent)
             return
         }
 
         // send a generic event if this is not the response to a getter
-        let responseEvent = Event(name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT, type: EventType.configuration, source: EventSource.responseContent, data: data)
+        let responseEvent = Event(
+            name: CoreConstants.EventNames.CONFIGURATION_RESPONSE_EVENT,
+            type: EventType.configuration,
+            source: EventSource.responseContent,
+            data: data)
         dispatch(event: responseEvent)
         return
 

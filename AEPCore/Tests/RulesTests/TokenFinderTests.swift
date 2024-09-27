@@ -18,7 +18,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_event_type_source() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~type` and `~source`
         guard let type = tokenFinder.get(key: "~type") as? String, let source = tokenFinder.get(key: "~source") as? String else {
             XCTFail("Expected no-nil event type and event source")
@@ -32,7 +32,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_sdk_version() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~sdkver`
         guard let version = tokenFinder.get(key: "~sdkver") as? String else {
             XCTFail("Expected no-nil SDK version")
@@ -45,7 +45,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_cachebust() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~cachebust`
         guard let randomString = tokenFinder.get(key: "~cachebust") as? String, let randomInt = Int(randomString) else {
             XCTFail("Expected no-nil random int")
@@ -58,7 +58,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_url() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event which should contain non-nil event data and it's data value should contain `String` and `Double`
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: ["key1": "value1", "key2": ["key22": 22.0]]), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: ["key1": "value1", "key2": ["key22": 22.0]]), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~all_url`
         guard let urlQueryString = tokenFinder.get(key: "~all_url") as? String else {
             XCTFail("Expected no-nil url query string")
@@ -71,7 +71,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_url_empty_kvp() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event whose event data property is `nil`
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~all_url`
         guard let urlQueryString = tokenFinder.get(key: "~all_url") as? String else {
             XCTFail("Expected no-nil url query string")
@@ -84,7 +84,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_json() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event which should contain non-nil event data and it's data value should contain `String` and `Double`
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: ["key1": "value1", "key2": ["key22": 22.0]]), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: ["key1": "value1", "key2": ["key22": 22.0]]), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~all_json`
         guard let json = tokenFinder.get(key: "~all_json") as? String else {
             XCTFail("Expected no-nil json string")
@@ -97,7 +97,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_json_empty_kvp() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event whose event data property is `nil`
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~all_json`
         guard let json = tokenFinder.get(key: "~all_json") as? String else {
             XCTFail("Expected no-nil json string")
@@ -110,7 +110,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_timestamp() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         let formatter_ISO8601 = DateFormatter()
         formatter_ISO8601.timeZone = TimeZone.init(abbreviation: "UTC")
         formatter_ISO8601.locale = Locale(identifier: "en_US_POSIX")
@@ -134,7 +134,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
         /// Given: initialize `TokenFinder` with mocked  dummy event & extension runtime which contains a valid shared state
         let runtime = TestableExtensionRuntime()
         runtime.mockedSharedStates["com.adobe.module.lifecycle"] = SharedStateResult(status: .set, value: ["lifecyclecontextdata": ["dayssincelastupgrade": 10]])
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~state.com.adobe.module.lifecycle/lifecyclecontextdata.dayssincelastupgrade`
         guard let days = tokenFinder.get(key: "~state.com.adobe.module.lifecycle/lifecyclecontextdata.dayssincelastupgrade") as? Int else {
             XCTFail("Expected no-nil shared state")
@@ -147,7 +147,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_shared_state_extension_name_not_exist() {
         /// Given: initialize `TokenFinder` with mocked  dummy event & extension runtime which don't have the right extension registered
         let runtime = TestableExtensionRuntime()
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~state.com.adobe.module.lifecycle/lifecyclecontextdata.dayssincelastupgrade`
         guard tokenFinder.get(key: "~state.com.adobe.module.lifecycle/lifecyclecontextdata.dayssincelastupgrade") != nil else {
             /// Then: return `nil`
@@ -160,7 +160,7 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
         /// Given: initialize `TokenFinder` with mocked  dummy event & extension runtime which don't contain the right key
         let runtime = TestableExtensionRuntime()
         runtime.mockedSharedStates["com.adobe.module.lifecycle"] = SharedStateResult(status: .set, value: ["lifecyclecontextdata": ["a": 10]])
-        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), extensionRuntime: runtime)
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: nil), logger: MockLogger(), sharedStateProvider: runtime.getSharedState(extensionName:event:barrier:))
         /// When: retrieve token `~state.com.adobe.module.lifecycle/lifecyclecontextdata.dayssincelastupgrade`
         guard tokenFinder.get(key: "~state.com.adobe.module.lifecycle/lifecyclecontextdata.dayssincelastupgrade") != nil else {
             /// Then: return `nil`

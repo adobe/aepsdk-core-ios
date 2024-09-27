@@ -19,6 +19,7 @@ import XCTest
 
 class ConfigurationAppIDTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
+    var mockNetworkService: MockConfigurationDownloaderNetworkService!
     var configuration: Configuration!
 
     var mockDataStore: MockDataStore {
@@ -27,6 +28,8 @@ class ConfigurationAppIDTests: XCTestCase {
 
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
+        mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
+        ServiceProvider.shared.networkService = mockNetworkService
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
@@ -42,8 +45,7 @@ class ConfigurationAppIDTests: XCTestCase {
     /// When network service returns a valid response configure with appId succeeds
     func testConfigureWithAppId() {
         // setup
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.responseType = .success
         let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: "valid-app-id")
 
         // test
@@ -60,8 +62,7 @@ class ConfigurationAppIDTests: XCTestCase {
     }
 
     func testConfigureWithEmptyAppIdRemovesFromPersistence() {
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.responseType = .success
         let validAppId = "valid-app-id"
         let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId)
 
@@ -80,8 +81,7 @@ class ConfigurationAppIDTests: XCTestCase {
     }
 
     func testInternalConfigureWithAppIdIsDroppedIfAppIdDiffersFromPersistedAppId() {
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.responseType = .success
         let validAppId = "valid-app-id"
         let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId)
 
@@ -99,8 +99,7 @@ class ConfigurationAppIDTests: XCTestCase {
     }
 
     func testInternalConfigureWithAppIdIsNotDroppedIfNoPersistedAppIdExists() {
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.responseType = .success
         let validAppId = "valid-app-id"
         let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId, isInternal: true)
 
@@ -113,8 +112,7 @@ class ConfigurationAppIDTests: XCTestCase {
 
     // Tests that when we hit the retry queue, we properly send a configuration request event
     func testConfigureWithAppIdNetworkDown() {
-        let mocknetworkService = MockConfigurationDownloaderNetworkService(responseType: .error)
-        ServiceProvider.shared.networkService = mocknetworkService
+        mockNetworkService.responseType = .error
         let appId = "app-id"
         let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: appId)
 
@@ -134,8 +132,7 @@ class ConfigurationAppIDTests: XCTestCase {
     }
 
     func testConfigureWithAppIdFirstOnlineThenOffline() {
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
-        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.responseType = .success
         let validAppId = "valid-app-id"
         let invalidAppId = "invalid-app-id"
         let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId)
@@ -144,7 +141,7 @@ class ConfigurationAppIDTests: XCTestCase {
         mockRuntime.simulateComingEvents(appIdEvent)
 
         // simulate offline
-        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
+        mockNetworkService.responseType = .error
         mockRuntime.simulateComingEvents(invalidAppIdEvent)
 
         // Sleep for the retryInterval
@@ -169,8 +166,7 @@ class ConfigurationAppIDTests: XCTestCase {
     /// Tests that we can re-try network requests, and it will succeed when the network comes back online
     func testConfigureWithAppIdNetworkDownThenComesOnline() {
         // setup
-        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .error)
-        ServiceProvider.shared.networkService = mockNetworkService
+        mockNetworkService.responseType = .error
         let validAppId = "valid-app-id"
         let invalidAppId = "invalid-app-id"
         let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId)
@@ -182,7 +178,7 @@ class ConfigurationAppIDTests: XCTestCase {
         // Sleep for retryInterval
         sleep(6)
 
-        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success) // setup a valid network response
+        mockNetworkService.responseType = .success // setup a valid network response
         mockRuntime.simulateComingEvents(appIdEvent)
 
         // verify

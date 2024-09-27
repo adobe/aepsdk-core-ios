@@ -42,6 +42,7 @@ public class LaunchRulesEngine {
     let extensionRuntime: ExtensionRuntime
     let evaluator: ConditionEvaluator
     let rulesEngine: RulesEngine<LaunchRule>
+    let logger: Logger
 
     /// Creates a new rules engine instance
     /// - Parameters:
@@ -49,16 +50,18 @@ public class LaunchRulesEngine {
     ///   - extensionRuntime: the `extensionRuntime`
     public init(name: String, extensionRuntime: ExtensionRuntime) {
         self.name = name
+        self.extensionRuntime = extensionRuntime
+        let serviceProvider = extensionRuntime.getServiceProvider()
+        self.logger = serviceProvider.getLogger()
         rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.\(name)")
-        transformer = LaunchRuleTransformer(runtime: extensionRuntime).transformer
+        transformer = LaunchRuleTransformer().transformer
         evaluator = ConditionEvaluator(options: .caseInsensitive)
         rulesEngine = RulesEngine(evaluator: evaluator, transformer: transformer)
         waitingEvents = [Event]()
         // you can enable the log when debugging rules engine
 //        if RulesEngineLog.logging == nil {
-//            RulesEngineLog.logging = RulesEngineNativeLogging()
+//            RulesEngineLog.logging = RulesEngineNativeLogging(logger: logger)
 //        }
-        self.extensionRuntime = extensionRuntime
     }
 
     /// Register a `RulesTracer`
@@ -73,7 +76,7 @@ public class LaunchRulesEngine {
         rulesQueue.sync {
             self.rulesEngine.clearRules()
             self.rulesEngine.addRules(rules: rules)
-            Log.debug(label: self.LOG_TAG, "Successfully loaded \(rules.count) rule(s) into the (\(self.name)) rules engine.")
+            logger.debug(label: self.LOG_TAG, "Successfully loaded \(rules.count) rule(s) into the (\(self.name)) rules engine.")
         }
         self.sendReprocessEventsRequest()
     }
@@ -83,7 +86,7 @@ public class LaunchRulesEngine {
     public func addRules(_ rules: [LaunchRule]) {
         rulesQueue.sync {
             self.rulesEngine.addRules(rules: rules)
-            Log.debug(label: self.LOG_TAG, "Successfully added \(rules.count) rule(s) into the (\(self.name)) rules engine.")
+            logger.debug(label: self.LOG_TAG, "Successfully added \(rules.count) rule(s) into the (\(self.name)) rules engine.")
         }
     }
 
@@ -133,7 +136,7 @@ public class LaunchRulesEngine {
     /// - Parameter event: the `Event` against which to evaluate the rules
     /// - Returns: an array of `RuleConsequence` objects resulting from `event` being processed
     private func evaluateConsequence(for event: Event) -> [RuleConsequence]? {
-        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
+        let traversableTokenFinder = TokenFinder(event: event, logger: logger, sharedStateProvider: extensionRuntime.getSharedState(extensionName:event:barrier:))
         let matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
         guard !matchedRules.isEmpty else {
             return nil
@@ -150,7 +153,7 @@ public class LaunchRulesEngine {
 
     private func evaluateRules(for event: Event) -> Event {
         let dispatchChainCount = dispatchChainedEventsCount.removeValue(forKey: event.id)
-        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
+        let traversableTokenFinder = TokenFinder(event: event, logger: logger, sharedStateProvider: extensionRuntime.getSharedState(extensionName:event:barrier:))
         var matchedRules: [LaunchRule]?
         matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
         guard let matchedRulesUnwrapped = matchedRules else {
@@ -177,13 +180,13 @@ public class LaunchRulesEngine {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_DISPATCH:
 
                     if let unwrappedDispatchCount = dispatchChainCount, unwrappedDispatchCount >= LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT {
-                        Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
+                        logger.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
                         continue
                     }
                     guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent)  else {
                         continue
                     }
-                    Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
+                    logger.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
                     extensionRuntime.dispatch(event: dispatchEvent)
 
                     // Keep track of dispatch consequence events to prevent triggering of infinite dispatch consequences
@@ -191,7 +194,7 @@ public class LaunchRulesEngine {
 
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent) {
-                        Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
+                        logger.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
                         extensionRuntime.dispatch(event: event)
                     }
                 }
@@ -209,14 +212,14 @@ public class LaunchRulesEngine {
     /// - Returns: event data with the RuleConsequence data attached to the triggering Event data, or nil if the processing fails
     private func processAttachDataConsequence(consequence: RuleConsequence, eventData: [String: Any]?) -> [String: Any]? {
         guard let from = consequence.eventData else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from 'details'")
             return nil
         }
         guard let to = eventData else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process an AttachDataConsequence Event, 'eventData' is missing from original event")
             return nil
         }
-        Log.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data: \(PrettyDictionary.prettify(from)) to \(PrettyDictionary.prettify(to))\n")
+        logger.trace(label: LOG_TAG, "(\(self.name)) : Attaching event data: \(PrettyDictionary.prettify(from)) to \(PrettyDictionary.prettify(to))\n")
         return EventDataMerger.merging(to: to, from: from, overwrite: false)
     }
 
@@ -228,14 +231,14 @@ public class LaunchRulesEngine {
     /// - Returns: event data with the Event data modified with the RuleConsequence data, or nil if the processing fails
     private func processModifyDataConsequence(consequence: RuleConsequence, eventData: [String: Any]?) -> [String: Any]? {
         guard let from = consequence.eventData else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from 'details'")
             return nil
         }
         guard let to = eventData else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process a ModifyDataConsequence Event, 'eventData' is missing from original event")
             return nil
         }
-        Log.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data: \(PrettyDictionary.prettify(to)) with data: \(PrettyDictionary.prettify(from))\n")
+        logger.trace(label: LOG_TAG, "(\(self.name)) : Modifying event data: \(PrettyDictionary.prettify(to)) with data: \(PrettyDictionary.prettify(from))\n")
         return EventDataMerger.merging(to: to, from: from, overwrite: true)
     }
 
@@ -246,15 +249,15 @@ public class LaunchRulesEngine {
     /// - Returns: a new Event to be dispatched to the EventHub, or nil if the processing failed.
     private func processDispatchConsequence(consequence: RuleConsequence, processedEvent: Event) -> Event? {
         guard let type = consequence.eventType else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'type' is missing from 'details'")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'type' is missing from 'details'")
             return nil
         }
         guard let source = consequence.eventSource else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'source' is missing from 'details'")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'source' is missing from 'details'")
             return nil
         }
         guard let action = consequence.eventDataAction else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'eventdataaction' is missing from 'details'")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'eventdataaction' is missing from 'details'")
             return nil
         }
 
@@ -264,7 +267,7 @@ public class LaunchRulesEngine {
         } else if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW {
             dispatchEventData = consequence.eventData?.compactMapValues { $0 }
         } else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, unsupported 'eventdataaction', expected values copy/new")
+            logger.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, unsupported 'eventdataaction', expected values copy/new")
             return nil
         }
 
