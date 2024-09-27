@@ -17,6 +17,9 @@ import Foundation
 struct ConfigurationDownloader: ConfigurationDownloadable {
 
     private let logTag = "ConfigurationDownloader"
+    let logger: Logger
+    let networking: Networking
+    let systemInfoService: SystemInfoService
 
     /// Retrieves a configuration Dictionary from the provided `filePath`
     /// If the provided `filePath` is invalid or if does not contain valid JSON, `nil` is returned.
@@ -24,7 +27,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     /// - Returns: An optional Dictionary containing an SDK configuration
     func loadConfigFrom(filePath: String) -> [String: Any]? {
         guard let data = try? String(contentsOfFile: filePath).data(using: .utf8) else {
-            Log.error(label: logTag, "Failed to load config from file path: \(filePath)")
+            logger.error(label: logTag, "Failed to load config from file path: \(filePath)")
             return nil
         }
         let decoded = try? JSONDecoder().decode([String: AnyCodable].self, from: data)
@@ -36,9 +39,8 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     /// If there is no bundled file named `ADBMobileConfig.json`, this method returns `nil`.
     /// - Returns: An optional Dictionary containing an SDK configuration
     func loadDefaultConfigFromManifest() -> [String: Any]? {
-        let systemInfoService = ServiceProvider.shared.systemInfoService
         guard let data = systemInfoService.getAsset(fileName: ConfigurationConstants.CONFIG_BUNDLED_FILE_NAME, fileType: "json")?.data(using: .utf8) else {
-            Log.error(label: logTag, "Loading config from manifest failed")
+            logger.error(label: logTag, "Loading config from manifest failed")
             return nil
         }
         let decoded = try? JSONDecoder().decode([String: AnyCodable].self, from: data)
@@ -66,7 +68,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
     ///   - completion: A closure that accepts an optional Dictionary containing configuration information.
     func loadConfigFromUrl(appId: String, dataStore: NamedCollectionDataStore, completion: @escaping ([String: Any]?) -> Void) {
         guard !appId.isEmpty, let url = URL(string: ConfigurationConstants.CONFIG_URL_BASE + appId + ".json") else {
-            Log.error(label: logTag, "Failed to load config from URL: \(ConfigurationConstants.CONFIG_URL_BASE + appId + ".json")")
+            logger.error(label: logTag, "Failed to load config from URL: \(ConfigurationConstants.CONFIG_URL_BASE + appId + ".json")")
             completion(nil)
             return
         }
@@ -78,8 +80,8 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
         }
 
         let networkRequest = NetworkRequest(url: url, httpMethod: .get, httpHeaders: headers)
-
-        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in
+        logger.debug(label: self.logTag, "Initiated (\(networkRequest.httpMethod.toString())) network request to (\(networkRequest.url.absoluteString)).")
+        networking.connectAsync(networkRequest: networkRequest) { httpConnection in
             // If we get a 304 back, we can use the config in cache and exit early
             if httpConnection.responseCode == 304 {
                 completion(AnyCodable.toAnyDictionary(dictionary: self.getCachedConfig(appId: appId, dataStore: dataStore)?.cacheable))
@@ -94,7 +96,7 @@ struct ConfigurationDownloader: ConfigurationDownloadable {
                 dataStore.setObject(key: self.buildCacheKey(appId: appId), value: config) // cache config
                 completion(AnyCodable.toAnyDictionary(dictionary: config.cacheable))
             } else {
-                Log.error(label: self.logTag, "Loading config from URL \(url.absoluteString) failed with response code: \(httpConnection.responseCode as Int?)")
+                logger.error(label: self.logTag, "Loading config from URL \(url.absoluteString) failed with response code: \(httpConnection.responseCode as Int?)")
                 completion(nil)
             }
         }

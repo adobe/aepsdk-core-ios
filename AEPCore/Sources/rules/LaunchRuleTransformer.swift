@@ -18,11 +18,9 @@ import AEPRulesEngine
 class LaunchRuleTransformer {
 
     let transformer: Transformer
-    let runtime: ExtensionRuntime
 
-    init(runtime: ExtensionRuntime) {
+    init() {
         self.transformer = Transformer()
-        self.runtime = runtime
         addFunctionalTransformations(to: self.transformer)
         addTypeTransformations(to: self.transformer)
     }

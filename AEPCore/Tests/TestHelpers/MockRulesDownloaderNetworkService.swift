@@ -18,8 +18,12 @@ enum MockRulesDownloaderResponses {
     case notModified
 }
 
-struct MockRulesDownloaderNetworkService: Networking {
-    var response: MockRulesDownloaderResponses!
+class MockRulesDownloaderNetworkService: Networking {
+    public var response: MockRulesDownloaderResponses
+
+    init(response: MockRulesDownloaderResponses) {
+        self.response = response
+    }
 
     let expectedData = try? Data(contentsOf: RulesDownloaderTests.rulesUrl!)
 
@@ -37,8 +41,6 @@ struct MockRulesDownloaderNetworkService: Networking {
         case .notModified:
             let httpConnection = HttpConnection(data: nil, response: notModifiedResponse, error: nil)
             completionHandler!(httpConnection)
-        case .none:
-            print("Invalid response type")
         }
     }
 }

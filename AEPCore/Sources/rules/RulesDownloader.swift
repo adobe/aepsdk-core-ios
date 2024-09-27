@@ -18,10 +18,14 @@ struct RulesDownloader: RulesLoader {
     private let fileUnzipper: Unzipping
     private let cache: Cache
     private let LOG_TAG = "rules downloader"
+    private let logger: Logger
+    private let networking: Networking
 
-    init(fileUnzipper: Unzipping) {
+    init(fileUnzipper: Unzipping, cache: Cache, logger: Logger, networking: Networking) {
         self.fileUnzipper = fileUnzipper
-        cache = Cache(name: RulesDownloaderConstants.RULES_CACHE_NAME)
+        self.logger = logger
+        self.networking = networking
+        self.cache = cache
     }
 
     func loadRulesFromCache(rulesUrl: URL) -> Data? {
@@ -30,7 +34,7 @@ struct RulesDownloader: RulesLoader {
 
     func loadRulesFromManifest(for url: URL) -> Result<Data, RulesDownloaderError> {
         guard let data = try? Data(contentsOf: url) else {
-            Log.debug(label: LOG_TAG, "Rules zip corrupted")
+            logger.debug(label: LOG_TAG, "Rules zip corrupted")
             return .failure(.noData)
         }
         // Store Zip file in temp directory for unzipping
@@ -42,7 +46,7 @@ struct RulesDownloader: RulesLoader {
             }
             return .success(data)
         case let .failure(error):
-            Log.warning(label: LOG_TAG, error.localizedDescription)
+            logger.warning(label: LOG_TAG, error.localizedDescription)
             return .failure(error)
         }
     }
@@ -55,7 +59,8 @@ struct RulesDownloader: RulesLoader {
         }
 
         let networkRequest = NetworkRequest(url: rulesUrl, httpMethod: .get, httpHeaders: headers)
-        ServiceProvider.shared.networkService.connectAsync(networkRequest: networkRequest) { httpConnection in            
+        logger.debug(label: LOG_TAG, "Initiated (\(networkRequest.httpMethod.toString())) network request to (\(networkRequest.url.absoluteString)).")
+        networking.connectAsync(networkRequest: networkRequest) { httpConnection in
             if httpConnection.responseCode == 304 {
                 completion(.failure(.notModified))
                 return
@@ -78,12 +83,12 @@ struct RulesDownloader: RulesLoader {
                                               eTag: httpConnection.response?.allHeaderFields[NetworkServiceConstants.Headers.ETAG] as? String)
                 // Cache the rules, if fails, log message
                 if !self.setCachedRules(rulesUrl: rulesUrl.absoluteString, cachedRules: cachedRules) {
-                    Log.warning(label: LOG_TAG, "Unable to cache rules")
+                    logger.warning(label: LOG_TAG, "Unable to cache rules")
                 }
                 completion(.success(data))
                 return
             case let .failure(error):
-                Log.warning(label: LOG_TAG, error.localizedDescription)
+                logger.warning(label: LOG_TAG, error.localizedDescription)
                 completion(.failure(error))
                 return
             }
