@@ -11,7 +11,7 @@
  */
 
 @testable import AEPLifecycle
-@testable import AEPServicesMocks
+@testable import AEPCoreMocks
 import AEPServices
 import XCTest
 

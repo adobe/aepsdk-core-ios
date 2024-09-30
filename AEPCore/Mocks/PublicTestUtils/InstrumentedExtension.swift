@@ -12,7 +12,7 @@
 
 import AEPCore
 import AEPServices
-@testable import AEPServicesMocks
+//@testable import AEPServicesMocks
 import XCTest
 
 /// Instrumented extension that registers a wildcard listener for intercepting events in current session. Use it along with `TestBase`

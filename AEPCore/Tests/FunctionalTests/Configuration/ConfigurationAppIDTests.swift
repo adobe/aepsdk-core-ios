@@ -14,7 +14,6 @@
 @testable import AEPServices
 import XCTest
 import AEPCoreMocks
-import AEPServicesMocks
 import XCTest
 
 class ConfigurationAppIDTests: XCTestCase {

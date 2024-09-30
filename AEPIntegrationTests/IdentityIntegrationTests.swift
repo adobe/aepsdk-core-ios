@@ -13,7 +13,7 @@ import XCTest
 @testable import AEPCore
 @testable import AEPServices
 @testable import AEPIdentity
-@testable import AEPServicesMocks
+//@testable import AEPServicesMocks
 import AEPCoreMocks
 import AEPLifecycle
 import AEPSignal

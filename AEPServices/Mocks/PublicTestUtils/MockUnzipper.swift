@@ -12,10 +12,13 @@
 import AEPServices
 import Foundation
 
-class MockUnzipper: Unzipping {
-    var unzippedResults: [String] = []
-    var unzipCalled = false
-    func unzipItem(at _: URL, to _: URL) -> [String] {
+public class MockUnzipper: Unzipping {
+    public var unzippedResults: [String] = []
+    public var unzipCalled = false
+
+    public init() {}
+    
+    public func unzipItem(at _: URL, to _: URL) -> [String] {
         unzipCalled = true
         return unzippedResults
     }

@@ -11,7 +11,7 @@
 
 @testable import AEPCore
 import AEPServices
-import AEPServicesMocks
+import AEPCoreMocks
 import XCTest
 
 class LaunchIDManagerTests: XCTestCase {

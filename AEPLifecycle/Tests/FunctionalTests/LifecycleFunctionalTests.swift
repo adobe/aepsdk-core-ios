@@ -11,7 +11,7 @@
  */
 
 @testable import AEPLifecycle
-@testable import AEPServicesMocks
+//@testable import AEPServicesMocks
 import AEPCore
 import AEPCoreMocks
 import AEPServices

@@ -14,7 +14,7 @@
 @testable import AEPIdentity
 import XCTest
 import AEPCoreMocks
-import AEPServicesMocks
+//import AEPServicesMocks
 
 class MobileIdentitiesTests: XCTestCase, AnyCodableAsserts {
     let ecid = ECID()

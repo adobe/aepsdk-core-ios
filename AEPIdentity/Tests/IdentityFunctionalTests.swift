@@ -14,7 +14,7 @@ import XCTest
 import AEPCore
 @testable import AEPIdentity
 @testable import AEPServices
-import AEPServicesMocks
+//import AEPServicesMocks
 import AEPCoreMocks
 
 class IdentityFunctionalTests: XCTestCase, AnyCodableAsserts {

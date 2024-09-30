@@ -10,7 +10,8 @@
  */
 
 @testable import AEPIdentity
-import AEPServicesMocks
+//import AEPServicesMocks
+import AEPCoreMocks
 import XCTest
 
 class HitQueuing_PrivacyTests: XCTestCase {

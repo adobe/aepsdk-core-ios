@@ -12,7 +12,7 @@
 
 @testable import AEPLifecycle
 @testable import AEPServices
-import AEPServicesMocks
+import AEPCoreMocks
 import XCTest
 
 class LifecycleMetricsBuilderTests: XCTestCase {

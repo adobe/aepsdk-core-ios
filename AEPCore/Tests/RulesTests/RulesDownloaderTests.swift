@@ -11,7 +11,8 @@
 
 @testable import AEPCore
 @testable import AEPServices
-@testable import AEPServicesMocks
+//@testable import AEPServicesMocks
+import AEPCoreMocks
 import XCTest
 
 class RulesDownloaderTests: XCTestCase {

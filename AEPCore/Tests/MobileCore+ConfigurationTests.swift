@@ -12,7 +12,7 @@
 @testable import AEPCore
 @testable import AEPCoreMocks
 import XCTest
-import AEPServicesMocks
+//import AEPServicesMocks
 
 class MobileCore_ConfigurationTests: XCTestCase {
     override func setUp() {
