@@ -30,7 +30,7 @@ extension MobileCore {
     static func reset() {
         MobileCore.eventHubProvider.reset()
         MobileCore.wrapperTypeProvider.reset()
-        MobileCore.apiStore = [SDKInstanceIdentifier.DEFAULT_STRING: MobileCore.apiDefaultInstance]
+        MobileCore.apiStore = [SDKInstanceIdentifier.DEFAULT_INSTANCE_NAME: MobileCore.apiDefaultInstance]
     }
 }
 
