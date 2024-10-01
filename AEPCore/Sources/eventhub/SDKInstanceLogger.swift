@@ -12,7 +12,7 @@
 
 import AEPServices
 
-/// Tenant aware logging service.
+/// Instance aware logging service.
 class SDKInstanceLogger: Logger {
 
     private let identifier: SDKInstanceIdentifier
@@ -20,7 +20,12 @@ class SDKInstanceLogger: Logger {
     init(identifier: SDKInstanceIdentifier) {
         self.identifier = identifier
     }
-
+    
+    /// Gets the logging level of this Logger instance, default value is `LogLevel.error`
+    var logFilter: LogLevel {
+        return Log.logFilter
+    }
+    
     /// Used to print more verbose information.
     /// - Parameters:
     ///   - label: the name of the label to localize message

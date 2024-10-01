@@ -13,6 +13,9 @@
 @objc(AEPLogger)
 public protocol Logger {
     
+    /// Gets the logging level of this Logger instance, default value is `LogLevel.error`
+    var logFilter: LogLevel { get }
+    
     /// Used to print more verbose information.
     /// - Parameters:
     ///   - label: the name of the label to localize message

@@ -17,21 +17,21 @@ import Foundation
 enum SDKInstanceIdentifier: Hashable {
     private static let IDENTIFIER_MAX_LENGTH = 100
     private static let IDENTIFIER_PATTERN = "[^A-Za-z0-9._-]+"
-    static let DEFAULT_STRING = "aep-default-instance"
+    static let DEFAULT_INSTANCE_NAME = "aep-default-instance"
+    static let `default` = id(DEFAULT_INSTANCE_NAME)
     
-    case `default`
     case id(String)
     
     /// Creates an instance of `SDKInstanceIdentifier`. 
     /// If the given `id` is either too long or contains invalid characters then `nil` is returned.
     /// - Parameter id: the identifier string for an SDK instance.
     init?(id: String) {
-        if id == SDKInstanceIdentifier.DEFAULT_STRING {
+        guard SDKInstanceIdentifier.isValidFilename(id) else { return nil }
+        
+        if id == SDKInstanceIdentifier.DEFAULT_INSTANCE_NAME {
             self = .default
-        } else if SDKInstanceIdentifier.isValidFilename(id) {
-            self = .id(id)
         } else {
-            return nil
+            self = .id(id)
         }
     }
 
@@ -47,7 +47,7 @@ enum SDKInstanceIdentifier: Hashable {
     }
 
     var description: String {
-        id ?? SDKInstanceIdentifier.DEFAULT_STRING
+        id ?? SDKInstanceIdentifier.DEFAULT_INSTANCE_NAME
     }
     
     /// Validates the given `identifier` to ensure it is safe to use as a filename.

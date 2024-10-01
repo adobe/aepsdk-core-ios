@@ -41,7 +41,7 @@ class RulesEngineNativeLogging: AEPRulesEngine.Logging {
 
     func log(level: AEPRulesEngine.LogLevel, label: String, message: String) {
         let logLevel = convert(level)
-        guard Log.logFilter >= convert(level) else {
+        guard logger.logFilter >= convert(level) else {
             return
         }
         switch logLevel {
