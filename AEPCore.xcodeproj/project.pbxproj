@@ -770,7 +770,7 @@
 		213F8A0324D8DC5A0003B8AF /* WrapperType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WrapperType.swift; sourceTree = "<group>"; };
 		214154A725186734005CEB80 /* CustomIdentityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIdentityTests.swift; sourceTree = "<group>"; };
 		215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = V4MigrationConstants.swift; sourceTree = "<group>"; };
-		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/PublicTestUtils/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
+		215C859B24C6492800CCCD26 /* MockHitQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockHitQueue.swift; path = AEPServices/Mocks/MockHitQueue.swift; sourceTree = SOURCE_ROOT; };
 		21629DB12461CC48009D05BF /* AEPCore+LifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEPCore+LifecycleTests.swift"; sourceTree = "<group>"; };
 		216A15C7257818B200D43848 /* Data+HexString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+HexString.swift"; sourceTree = "<group>"; };
 		216A15D7257818E900D43848 /* Data+HexStringTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+HexStringTests.swift"; sourceTree = "<group>"; };
@@ -802,10 +802,10 @@
 		2438B92929BF906F001D6F3A /* rules_testTimestampu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTimestampu.json; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		245292622CA2199400820CD4 /* PresentationErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationErrorTests.swift; sourceTree = "<group>"; };
-		24543A1324E1DAFC002D8D9A /* MockURLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLService.swift; path = AEPServices/Mocks/PublicTestUtils/MockURLService.swift; sourceTree = SOURCE_ROOT; };
+		24543A1324E1DAFC002D8D9A /* MockURLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLService.swift; path = AEPServices/Mocks/MockURLService.swift; sourceTree = SOURCE_ROOT; };
 		2467E43924CA4DE20022F6BE /* Unzipping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unzipping.swift; sourceTree = "<group>"; };
-		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/PublicTestUtils/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
-		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/PublicTestUtils/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
+		2467E43B24CB54B70022F6BE /* MockDiskCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockDiskCache.swift; path = AEPServices/Mocks/MockDiskCache.swift; sourceTree = SOURCE_ROOT; };
+		2467E43C24CB54B70022F6BE /* MockUnzipper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockUnzipper.swift; path = AEPServices/Mocks/MockUnzipper.swift; sourceTree = SOURCE_ROOT; };
 		246B1A2A272B48A80017716A /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
 		246EFA032790B20000C76A6B /* rules_signal.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_signal.zip; sourceTree = "<group>"; };
 		246EFA042790B20000C76A6B /* rules_lifecycle.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_lifecycle.zip; sourceTree = "<group>"; };
@@ -1022,10 +1022,10 @@
 		3FE6DDD924C62EE60065EA05 /* AEPLifecycleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AEPLifecycleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FE6DDE024C62EE60065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEPServicesMock.h; path = AEPServices/Mocks/AEPServicesMock.h; sourceTree = SOURCE_ROOT; };
-		3FE6DDEA24C62F610065EA05 /* MockTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockTask.swift; path = AEPServices/Mocks/PublicTestUtils/MockTask.swift; sourceTree = SOURCE_ROOT; };
+		3FE6DDEA24C62F610065EA05 /* MockTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockTask.swift; path = AEPServices/Mocks/MockTask.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDEC24C62F610065EA05 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = AEPServices/Mocks/Info.plist; sourceTree = SOURCE_ROOT; };
-		3FE6DDED24C62F610065EA05 /* MockURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLSession.swift; path = AEPServices/Mocks/PublicTestUtils/MockURLSession.swift; sourceTree = SOURCE_ROOT; };
-		3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockSystemInfoService.swift; path = AEPServices/Mocks/PublicTestUtils/MockSystemInfoService.swift; sourceTree = SOURCE_ROOT; };
+		3FE6DDED24C62F610065EA05 /* MockURLSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLSession.swift; path = AEPServices/Mocks/MockURLSession.swift; sourceTree = SOURCE_ROOT; };
+		3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockSystemInfoService.swift; path = AEPServices/Mocks/MockSystemInfoService.swift; sourceTree = SOURCE_ROOT; };
 		3FE6DDF824C630DE0065EA05 /* LifecycleMetricsBuilderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsBuilderTests.swift; sourceTree = "<group>"; };
 		3FE6DDF924C630DE0065EA05 /* LifecycleContextDataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleContextDataTests.swift; sourceTree = "<group>"; };
 		3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleMetricsTests.swift; sourceTree = "<group>"; };
@@ -1626,6 +1626,18 @@
 			children = (
 				3FE6DDE824C62F610065EA05 /* AEPServicesMock.h */,
 				3FE6DDEC24C62F610065EA05 /* Info.plist */,
+				2467E43B24CB54B70022F6BE /* MockDiskCache.swift */,
+				24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */,
+				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
+				31DF174E297030D300B4B07F /* MockLoggingService.swift */,
+				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
+				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
+				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
+				2467E43C24CB54B70022F6BE /* MockUnzipper.swift */,
+				24543A1324E1DAFC002D8D9A /* MockURLService.swift */,
+				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
+				92027B9825C9EAF2007BE140 /* MockUIService.swift */,
+				24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */,
 				75341CD72B9674870090CE3A /* PublicTestUtils */,
 			);
 			name = Mocks;
@@ -2175,18 +2187,6 @@
 				4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */,
 				4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */,
 				4C7B340E2C59B2B7009FA7A2 /* ThreadSafeDictionary+TestHelper.swift */,
-				2467E43B24CB54B70022F6BE /* MockDiskCache.swift */,
-				24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */,
-				215C859B24C6492800CCCD26 /* MockHitQueue.swift */,
-				31DF174E297030D300B4B07F /* MockLoggingService.swift */,
-				24CE74AC26D40239008F9EFD /* MockMessagingDelegate.swift */,
-				3FE6DDEE24C62F610065EA05 /* MockSystemInfoService.swift */,
-				3FE6DDEA24C62F610065EA05 /* MockTask.swift */,
-				2467E43C24CB54B70022F6BE /* MockUnzipper.swift */,
-				24543A1324E1DAFC002D8D9A /* MockURLService.swift */,
-				3FE6DDED24C62F610065EA05 /* MockURLSession.swift */,
-				92027B9825C9EAF2007BE140 /* MockUIService.swift */,
-				24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */,
 			);
 			path = PublicTestUtils;
 			sourceTree = "<group>";
