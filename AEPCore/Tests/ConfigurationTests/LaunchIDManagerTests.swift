@@ -20,7 +20,7 @@ class LaunchIDManagerTests: XCTestCase {
 
     override func setUp() {
         ServiceProvider.shared.systemInfoService = MockSystemInfoService()
-        appIdManager = LaunchIDManager(dataStore: dataStore)
+        appIdManager = LaunchIDManager(dataStore: dataStore, logger: MockLogger())
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }

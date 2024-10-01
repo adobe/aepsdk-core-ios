@@ -20,9 +20,9 @@ enum MockConfigurationDownloaderResponses {
     case notModified
 }
 
-struct MockConfigurationDownloaderNetworkService: Networking {
+class MockConfigurationDownloaderNetworkService: Networking {
     let validResponseDictSize = 16
-    let responseType: MockConfigurationDownloaderResponses!
+    public var responseType: MockConfigurationDownloaderResponses!
     let expectedData = """
     {
       "target.timeout": 5,
@@ -48,6 +48,10 @@ struct MockConfigurationDownloaderNetworkService: Networking {
     let expectedInValidHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 500, httpVersion: nil, headerFields: [:])
     let expectedNotModifiedHttpUrlResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 304, httpVersion: nil, headerFields: [:])
 
+
+    init(responseType: MockConfigurationDownloaderResponses) {
+        self.responseType = responseType
+    }
     func connectAsync(networkRequest _: NetworkRequest, completionHandler: ((HttpConnection) -> Void)?) {
         switch responseType {
         case .success:

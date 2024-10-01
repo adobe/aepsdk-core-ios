@@ -9,6 +9,7 @@
  governing permissions and limitations under the License.
  */
 
+import AEPServicesMocks
 @testable import AEPCore
 @testable import AEPServices
 import XCTest
@@ -18,10 +19,18 @@ class ConfigurationDownloaderTests: XCTestCase {
     let validAppId = "valid-app-id"
     let invalidAppId = "invalid-app-id"
 
+    var configDownloaderNetworkSuccess: ConfigurationDownloadable!
+
     override func setUp() {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
+
+        configDownloaderNetworkSuccess = ConfigurationDownloader(
+            logger: MockLogger(),
+            networking: MockConfigurationDownloaderNetworkService(responseType: .success),
+            systemInfoService: MockSystemInfoService()
+        )
     }
 
     override class func tearDown() {
@@ -34,7 +43,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         let path = Bundle(for: type(of: self)).path(forResource: "ADBMobileConfig", ofType: "json")!
 
         // test
-        let config = ConfigurationDownloader().loadConfigFrom(filePath: path)
+        let config = configDownloaderNetworkSuccess.loadConfigFrom(filePath: path)
 
         // verify
         XCTAssertEqual(18, config?.count)
@@ -43,7 +52,7 @@ class ConfigurationDownloaderTests: XCTestCase {
     /// Tests that no config is loaded when an invalid file path is given
     func testLoadConfigFromFilePathInvalid() {
         // test
-        let config = ConfigurationDownloader().loadConfigFrom(filePath: "Invalid/path/ADBMobileConfig.json")
+        let config = configDownloaderNetworkSuccess.loadConfigFrom(filePath: "Invalid/path/ADBMobileConfig.json")
 
         // verify
         XCTAssertNil(config)
@@ -70,7 +79,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         dataStore.setObject(key: "\(ConfigurationConstants.DataStoreKeys.CONFIG_CACHE_PREFIX)\(appId)", value: CachedConfiguration(cacheable: expectedConfig, lastModified: "test-last-modified", eTag: "test-etag"))
 
         // test
-        let cachedConfig = ConfigurationDownloader().loadConfigFromCache(appId: appId, dataStore: dataStore)
+        let cachedConfig = configDownloaderNetworkSuccess.loadConfigFromCache(appId: appId, dataStore: dataStore)
 
         // verify
         XCTAssertEqual(14, cachedConfig?.count)
@@ -84,7 +93,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         dataStore.set(key: "\(ConfigurationConstants.DataStoreKeys.CONFIG_CACHE_PREFIX)\(appId)", value: invalidConfig)
 
         // test
-        let cachedConfig = ConfigurationDownloader().loadConfigFromCache(appId: appId, dataStore: dataStore)
+        let cachedConfig = configDownloaderNetworkSuccess.loadConfigFromCache(appId: appId, dataStore: dataStore)
 
         // verify
         XCTAssertNil(cachedConfig)
@@ -95,13 +104,12 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .success)
         let expectedConfigSize = 16
 
         var remoteConfig: [String: Any]?
 
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { loadedConfig in
+        configDownloaderNetworkSuccess.loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -109,7 +117,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         // verify
         wait(for: [expectation], timeout: 1)
         XCTAssertEqual(expectedConfigSize, remoteConfig?.count)
-        XCTAssertEqual(expectedConfigSize, ConfigurationDownloader().loadConfigFromCache(appId: validAppId, dataStore: dataStore)?.count) // ensure downloaded config is cached
+        XCTAssertEqual(expectedConfigSize, configDownloaderNetworkSuccess.loadConfigFromCache(appId: validAppId, dataStore: dataStore)?.count) // ensure downloaded config is cached
     }
 
     /// When the network service returns an invalid response that we do not return a config
@@ -117,12 +125,17 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .error)
 
         var remoteConfig: [String: Any]?
 
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { loadedConfig in
+        let configDownloader = ConfigurationDownloader(
+            logger: MockLogger(),
+            networking: MockConfigurationDownloaderNetworkService(responseType: .error),
+            systemInfoService: MockSystemInfoService()
+        )
+
+        configDownloader.loadConfigFromUrl(appId: validAppId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -137,7 +150,6 @@ class ConfigurationDownloaderTests: XCTestCase {
         // setup
         let expectation = XCTestExpectation(description: "ConfigurationDownloader invokes callback with config")
         expectation.assertForOverFulfill = true
-        ServiceProvider.shared.networkService = MockConfigurationDownloaderNetworkService(responseType: .notModified)
 
         let appId = "test-app-id"
         let expectedConfig: [String: AnyCodable] = ["experienceCloud.org": "3CE342C75100435B0A490D4C@AdobeOrg",
@@ -159,7 +171,13 @@ class ConfigurationDownloaderTests: XCTestCase {
         var remoteConfig: [String: Any]?
 
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { loadedConfig in
+        let configDownloader = ConfigurationDownloader(
+            logger: MockLogger(),
+            networking: MockConfigurationDownloaderNetworkService(responseType: .notModified),
+            systemInfoService: MockSystemInfoService()
+        )
+
+        configDownloader.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -179,7 +197,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         var remoteConfig: [String: Any]?
 
         // test
-        ConfigurationDownloader().loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { loadedConfig in
+        configDownloaderNetworkSuccess.loadConfigFromUrl(appId: appId, dataStore: dataStore, completion: { loadedConfig in
             remoteConfig = loadedConfig
             expectation.fulfill()
         })
@@ -191,11 +209,12 @@ class ConfigurationDownloaderTests: XCTestCase {
 
     /// Ensures that when a config is present in the manifest it can be loaded.
     func testLoadDefaultBundledConfig() {
-        // setup
-        ServiceProvider.shared.systemInfoService = ApplicationSystemInfoService(bundle: Bundle(for: type(of: self)))
-
         // test
-        let config = ConfigurationDownloader().loadDefaultConfigFromManifest()
+        let config = ConfigurationDownloader(
+            logger: MockLogger(),
+            networking: MockConfigurationDownloaderNetworkService(responseType: .success),
+            systemInfoService: ApplicationSystemInfoService(bundle: Bundle(for: type(of: self)))
+        ).loadDefaultConfigFromManifest()
 
         // verify
         XCTAssertEqual(18, config?.count)

@@ -16,10 +16,16 @@ import XCTest
 
 class RulesDownloaderTests: XCTestCase {
     private static let zipTestFileName = "testRulesDownloader"
-    private let cache = MockDiskCache()
+    private let mockCacheService = MockDiskCache()
+    private let rulesCache = Cache(name: "rules.cache")
+    private let logger = MockLogger()
+    private let mockNetworkService = MockRulesDownloaderNetworkService(response: .success)
     private var mockUnzipper = MockUnzipper()
     var rulesDownloader: RulesDownloader {
-        return RulesDownloader(fileUnzipper: mockUnzipper)
+        return RulesDownloader(fileUnzipper: mockUnzipper, 
+                               cache: rulesCache,
+                               logger: logger,
+                               networking: mockNetworkService)
     }
 
     // The number of items in the rules.json for verifying in tests
@@ -40,7 +46,7 @@ class RulesDownloaderTests: XCTestCase {
     }
 
     override func setUp() {
-        ServiceProvider.shared.cacheService = cache
+        ServiceProvider.shared.cacheService = mockCacheService
     }
 
     func testLoadRulesFromCacheSimple() {
@@ -48,27 +54,27 @@ class RulesDownloaderTests: XCTestCase {
         let testRules: CachedRules = CachedRules(cacheable: rulesData, lastModified: nil, eTag: nil)
         let dataToCache = try! JSONEncoder().encode(testRules)
         let testEntry = CacheEntry(data: dataToCache, expiry: .never, metadata: nil)
-        cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
+        mockCacheService.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
         guard let cachedRulesData = rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!) else {
             XCTFail("Rules not loaded from cache")
             return
         }
         XCTAssertEqual(rulesData, cachedRulesData)
-        XCTAssertTrue(cache.getCalled)
+        XCTAssertTrue(mockCacheService.getCalled)
     }
 
     func testLoadRulesFromCacheNotInCache() {
         XCTAssertNil(rulesDownloader.loadRulesFromCache(rulesUrl: RulesDownloaderTests.rulesUrl!))
-        XCTAssertTrue(cache.getCalled)
+        XCTAssertTrue(mockCacheService.getCalled)
     }
 
     func testLoadRulesFromUrlWithCacheNotModified() {
-        ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .notModified)
+        mockNetworkService.response = .notModified
         let rulesData = "testdata".data(using: .utf8)!
         let testRules: CachedRules = CachedRules(cacheable: rulesData, lastModified: nil, eTag: nil)
         let data = try! JSONEncoder().encode(testRules)
         let testEntry = CacheEntry(data: data, expiry: .never, metadata: nil)
-        cache.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
+        mockCacheService.mockCache[RulesDownloaderConstants.Keys.RULES_CACHE_PREFIX + encodedUrl] = testEntry
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with cached rules")
 
         rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { result in
@@ -83,12 +89,12 @@ class RulesDownloaderTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1)
         XCTAssertFalse(mockUnzipper.unzipCalled)
-        XCTAssertTrue(cache.getCalled)
-        XCTAssertFalse(cache.setCalled)
+        XCTAssertTrue(mockCacheService.getCalled)
+        XCTAssertFalse(mockCacheService.setCalled)
     }
 
     func testLoadRulesFromUrlWithError() {
-        ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .error)
+        mockNetworkService.response = .error
         let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
         rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { result in
             switch result {
@@ -102,12 +108,11 @@ class RulesDownloaderTests: XCTestCase {
 
         wait(for: [expectation], timeout: 1)
         XCTAssertFalse(mockUnzipper.unzipCalled)
-        XCTAssertTrue(cache.getCalled)
-        XCTAssertFalse(cache.setCalled)
+        XCTAssertTrue(mockCacheService.getCalled)
+        XCTAssertFalse(mockCacheService.setCalled)
     }
 
     func testLoadRulesFromUrlUnzipFail() {
-        ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
         let expectation = XCTestExpectation(description: "RulesDownloader invoked callback with nil")
         rulesDownloader.loadRulesFromUrl(rulesUrl: RulesDownloaderTests.rulesUrl!, completion: { result in
             switch result {
@@ -120,14 +125,14 @@ class RulesDownloaderTests: XCTestCase {
         })
         wait(for: [expectation], timeout: 1)
         XCTAssertTrue(mockUnzipper.unzipCalled)
-        XCTAssertTrue(cache.getCalled)
-        XCTAssertFalse(cache.setCalled)
+        XCTAssertTrue(mockCacheService.getCalled)
+        XCTAssertFalse(mockCacheService.setCalled)
     }
 
     // This serves as a functional test right now which uses the actual unzipping and temporary directory work
     func testLoadRulesFromUrlNoCacheFunctional() {
         // Use the actual rules unzipper for integration testing purposes
-        let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper())
+        let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper(), cache: rulesCache, logger: logger, networking: mockNetworkService)
         ServiceProvider.shared.networkService = MockRulesDownloaderNetworkService(response: .success)
         let expectation = XCTestExpectation(description: "RulesDownloader invokes callback with rules")
         var rules: Data?
@@ -147,7 +152,7 @@ class RulesDownloaderTests: XCTestCase {
     }
 
     func testLoadRulesFromManifestFunctional() {
-        let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper())
+        let rulesDownloaderReal = RulesDownloader(fileUnzipper: FileUnzipper(), cache: rulesCache, logger: logger, networking: mockNetworkService)
         var rules: Data?
         switch rulesDownloaderReal.loadRulesFromManifest(for: RulesDownloaderTests.rulesUrl!) {
         case .failure(let error):

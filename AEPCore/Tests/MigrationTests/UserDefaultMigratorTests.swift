@@ -44,7 +44,6 @@ class UserDefaultMigratorTests: XCTestCase {
     
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
-        let date = Date()
         removeMigrationComplete()
     }
 

@@ -46,13 +46,18 @@ class TokenFinder: Traversable {
     private let EMPTY_STRING = ""
     private let RANDOM_INT_BOUNDARY = 100_000_000
 
+    // getSharedState(extensionName:event:barrier:) -> SharedStateResult?
+    typealias SharedStateProvider = (_ extensionName: String, _ event: Event?, _ barrier: Bool) -> SharedStateResult?
+
     let event: Event
-    let extensionRuntime: ExtensionRuntime
+    let getSharedState: SharedStateProvider
+    let logger: Logger
     let now = Date()
 
-    init(event: Event, extensionRuntime: ExtensionRuntime) {
+    init(event: Event, logger: Logger, sharedStateProvider: @escaping SharedStateProvider) {
         self.event = event
-        self.extensionRuntime = extensionRuntime
+        self.getSharedState = sharedStateProvider
+        self.logger = logger
     }
 
     /// Implement the `Traversable` protocol. Retrieve the token value for the specific key.
@@ -75,7 +80,7 @@ class TokenFinder: Traversable {
             return String(Int.random(in: 1 ..< RANDOM_INT_BOUNDARY))
         case TOKEN_KEY_ALL_URL:
             guard let dict = event.data else {
-                Log.debug(label: LOG_TAG, "Current event data is nil, can not use it to generate an url query string")
+                logger.debug(label: LOG_TAG, "Current event data is nil, can not use it to generate an url query string")
                 return EMPTY_STRING
             }
             return URLUtility.generateQueryString(parameters: dict.flattening())
@@ -98,8 +103,8 @@ class TokenFinder: Traversable {
         let extensionName = key.substring(from: TOKEN_KEY_SHARED_STATE.count + 1, to: index - 1)
         let dataKeyName = key.substring(from: index + 1, to: key.count - 1)
 
-        guard let data = extensionRuntime.getSharedState(extensionName: String(extensionName), event: event, barrier: false)?.value else {
-            Log.trace(label: LOG_TAG, "Can not find the shared state of extension [\(extensionName)]")
+        guard let data = getSharedState(String(extensionName), event, false)?.value else {
+            logger.trace(label: LOG_TAG, "Can not find the shared state of extension [\(extensionName)]")
             return nil
         }
 
@@ -109,7 +114,7 @@ class TokenFinder: Traversable {
 
     private func getValueFromEvent(key: String) -> Any? {
         guard let dict = event.data else {
-            Log.trace(label: LOG_TAG, "Current event data is nil, can not use it to do token replacement")
+            logger.trace(label: LOG_TAG, "Current event data is nil, can not use it to do token replacement")
             return ""
         }
         return dict.flattening()[key]
