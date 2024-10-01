@@ -39,6 +39,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // }
         })
 
+        // Sample for setting up a named SDK instance
+        let sdkInstance1 = "sdkInstance1"
+        MobileCore.initializeInstance(sdkInstance1)
+        let core = MobileCore.api(for: sdkInstance1)
+        core.registerExtensions(extensions) {
+            // Use the same or a different app ID as the default instance
+            core.configureWith(appId: self.LAUNCH_ENVIRONMENT_FILE_ID)
+            
+            // To track the lifecycle for sdkInstance1, uncomment the following lines
+            // if appState != .background {
+                // core.lifecycleStart(additionalContextData: nil)
+            // }
+        }
+
         // If testing background, edit test app scheme -> options -> background fetch -> Check "launch app due to background fetch event"
         BGTaskScheduler.shared.register(forTaskWithIdentifier: "testBackground", using: nil) { task in
             // Check if we can retrieve from file from background

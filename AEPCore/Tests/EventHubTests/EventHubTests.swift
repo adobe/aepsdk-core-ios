@@ -22,9 +22,11 @@ class EventHubTests: XCTestCase {
     private static let EVENTHUB_NAME = "com.adobe.module.eventhub"
 
     var eventHub: EventHub!
+    var wrapperTypeProvider: WrapperTypeProvider!
 
     override func setUp() {
-        eventHub = EventHub(identifier: .default)
+        wrapperTypeProvider = WrapperTypeProvider()
+        eventHub = EventHub(identifier: .default, wrapperTypeProvider: wrapperTypeProvider)
         MockExtension.reset()
         MockExtensionTwo.reset()
         registerMockExtension(MockExtension.self)
@@ -599,7 +601,7 @@ class EventHubTests: XCTestCase {
         registerMockExtension(MockExtensionTwo.self)
 
         let wrapperType = WrapperType.flutter
-        eventHub.setWrapperType(wrapperType)
+        wrapperTypeProvider.wrapperType = wrapperType
         eventHub.start()
 
         // verify
@@ -768,44 +770,12 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 5.0)
     }
 
-    func testEventHubDeinit() {
-        var hub: EventHub? = EventHub(identifier: .default)
-        hub = nil
-        XCTAssert(hub == nil)
-    }
-
-    // MARK: WrapperType Tests
-    /// Tests the default value of wrapper type is None
-    func testDefaultWrapperType() {
-        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.none)
-    }
-
-    /// Tests updating the wrapper type before start call.
-    func testUpdateWrapperTypeBeforeStart() {
-        eventHub.setWrapperType(WrapperType.flutter)
-        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
-
-        eventHub.setWrapperType(WrapperType.reactNative)
-        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.reactNative)
-
-        eventHub.setWrapperType(WrapperType.cordova)
-        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.cordova)
-    }
-
-    /// Tests updating the wrapper type after start call.
-    func testUpdateWrapperTypeAfterStart() {
-        eventHub.setWrapperType(WrapperType.flutter)
-        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
-
-        eventHub.start()
-
-        // Updates to wrapper type fail after start() call
-        eventHub.setWrapperType(WrapperType.reactNative)
-        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
-
-        eventHub.setWrapperType(WrapperType.cordova)
-        XCTAssertEqual(eventHub.getWrapperType(), WrapperType.flutter)
-    }
+    // Todo: Test for memory leaks on Deinit
+//    func testEventHubDeinit() {
+//        var hub: EventHub? = EventHub(identifier: .default)
+//        hub = nil
+//        XCTAssert(hub == nil)
+//    }
 
     // MARK: SharedState Tests
 

@@ -21,10 +21,7 @@ public extension MobileCore {
     /// - Parameter additionalContextData: Optional additional context for this session.
     @objc(lifecycleStart:)
     static func lifecycleStart(additionalContextData: [String: Any]?) {
-        let data: [String: Any] = [CoreConstants.Keys.ACTION: CoreConstants.Lifecycle.START,
-                                   CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA: additionalContextData ?? [:]]
-        let event = Event(name: CoreConstants.EventNames.LIFECYCLE_RESUME, type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
-        MobileCore.dispatch(event: event)
+        apiDefaultInstance.lifecycleStart(additionalContextData: additionalContextData)
     }
 
     /// Pauses the current lifecycle session. Calling pause on an already paused session updates the paused timestamp,
@@ -32,8 +29,6 @@ public extension MobileCore {
     /// then calling this method does nothing.
     @objc(lifecyclePause)
     static func lifecyclePause() {
-        let data = [CoreConstants.Keys.ACTION: CoreConstants.Lifecycle.PAUSE]
-        let event = Event(name: CoreConstants.EventNames.LIFECYCLE_PAUSE, type: EventType.genericLifecycle, source: EventSource.requestContent, data: data)
-        MobileCore.dispatch(event: event)
+        apiDefaultInstance.lifecyclePause()
     }
 }

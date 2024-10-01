@@ -19,9 +19,8 @@ import XCTest
 class MobileCoreTests: XCTestCase {
     override func setUp() {
         NamedCollectionDataStore.clear()
-        MobileCore.setWrapperType(.none) // reset wrapper type before each test
+        MobileCore.reset()
         MobileCore.setLogLevel(.error) // reset log level to error before each test
-        EventHub.reset()
         MockExtension.reset()
         MockExtensionTwo.reset()
         MockLegacyExtension.reset()
