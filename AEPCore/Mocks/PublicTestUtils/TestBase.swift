@@ -17,8 +17,6 @@ import AEPServices
 @testable import AEPCore
 
 open class TestBase: XCTestCase {
-    /// Use this property to execute code logic in the first run in this test class; this value changes to False after the parent tearDown is executed
-    public private(set) static var isFirstRun: Bool = true
     /// Use this setting to enable debug mode logging in the `TestBase`
     public static var debugEnabled = false
 
@@ -41,7 +39,6 @@ open class TestBase: XCTestCase {
         // Wait .2 seconds in case there are unexpected events that were in the dispatch process during cleanup
         usleep(200000)
         resetTestExpectations()
-        TestBase.isFirstRun = false
         MobileCore.resetSDK()
         NamedCollectionDataStore.clear()
     }
