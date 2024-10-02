@@ -192,7 +192,7 @@ open class TestBase: XCTestCase {
     ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
     /// - Returns: The `SharedState` data and status for the extension with `extensionName`
     public func getSharedStateFor(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
-        log("GetSharedState for \(extensionName)")
+        log("Getting shared state for: \(extensionName)")
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: sharedStateType)
     }
 
