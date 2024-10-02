@@ -12,9 +12,10 @@
 
 import XCTest
 
+import AEPServices
+
 @testable import AEPCore
 @testable import AEPCoreMocks
-import AEPServices
 
 class ConfigurationStateTests: XCTestCase, AnyCodableAsserts {
     var configState: ConfigurationState!

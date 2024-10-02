@@ -10,9 +10,9 @@
  governing permissions and limitations under the License.
  */
 #if os(iOS)
-    import Foundation
-    import AEPServices
     import XCTest
+
+    import AEPServices
 
     @available(iOSApplicationExtension, unavailable)
     public class MockFullscreenListener: FullscreenMessageDelegate {

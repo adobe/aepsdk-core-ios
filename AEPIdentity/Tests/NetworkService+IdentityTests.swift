@@ -12,8 +12,9 @@
 import XCTest
 
 import AEPCoreMocks
-@testable import AEPIdentity
 import AEPServices
+
+@testable import AEPIdentity
 
 class NetworkService_IdentityTests: XCTestCase {
     var mockNetworkService: MockNetworkService!

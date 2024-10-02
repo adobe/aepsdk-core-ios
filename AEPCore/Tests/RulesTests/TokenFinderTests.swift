@@ -11,8 +11,9 @@
 
 import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
+
+@testable import AEPCore
 
 class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_event_type_source() {

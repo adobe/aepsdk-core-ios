@@ -1545,7 +1545,6 @@
 			isa = PBXGroup;
 			children = (
 				3F39153624CB823100B58C3E /* FunctionalTests */,
-				3FE6DDE024C62EE60065EA05 /* Info.plist */,
 				3FE6DDF924C630DE0065EA05 /* LifecycleContextDataTests.swift */,
 				3FE6DDF824C630DE0065EA05 /* LifecycleMetricsBuilderTests.swift */,
 				3FE6DDFB24C630DE0065EA05 /* LifecycleMetricsTests.swift */,
@@ -1562,6 +1561,7 @@
 				21BA2E1C265D8E480011207C /* XDMEnvironmentTypeTests.swift */,
 				BF38CD87294C4044006FF893 /* XDMLanguageTests.swift */,
 				21BA2E88265D96150011207C /* XDMMobileLifecycleDetailsTests.swift */,
+				3FE6DDE024C62EE60065EA05 /* Info.plist */,
 			);
 			name = Tests;
 			path = AEPLifecycle/Tests;

@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPLifecycle
 import XCTest
+
+@testable import AEPLifecycle
 
 class XDMLanguageTests: XCTestCase {
 

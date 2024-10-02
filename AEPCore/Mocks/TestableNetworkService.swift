@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-import AEPServices
 import Foundation
+
+import AEPServices
 
 public class TestableNetworkService: Networking {
     public var mockResponse: (data: Data?, response: HTTPURLResponse?, error: Error?)?

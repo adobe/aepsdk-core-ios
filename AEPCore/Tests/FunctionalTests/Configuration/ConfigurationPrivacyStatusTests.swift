@@ -12,9 +12,10 @@
 
 import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
 import AEPServices
+
+@testable import AEPCore
 
 class ConfigurationPrivacyStatusTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!

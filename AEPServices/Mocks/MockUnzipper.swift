@@ -9,8 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-import AEPServices
 import Foundation
+
+import AEPServices
 
 public class MockUnzipper: Unzipping {
     public var unzippedResults: [String] = []

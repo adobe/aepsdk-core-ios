@@ -13,6 +13,7 @@
 import XCTest
 
 import AEPCoreMocks
+
 @testable import AEPLifecycle
 
 class XDMEnvironmentTests: XCTestCase, AnyCodableAsserts {

@@ -9,9 +9,11 @@
  governing permissions and limitations under the License.
  */
 
-import AEPCore
-@testable import AEPIdentity
 import XCTest
+
+import AEPCore
+
+@testable import AEPIdentity
 
 private extension String {
     /// Returns the first index of the character in this `String`

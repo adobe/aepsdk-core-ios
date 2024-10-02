@@ -12,9 +12,10 @@
 
 import XCTest
 
+import AEPServices
+
 @testable import AEPCoreMocks
 @testable import AEPLifecycle
-import AEPServices
 
 class LifecycleSessionTests: XCTestCase {
     let sessionTimeoutInSeconds = TimeInterval(60 * 5) // 5 min

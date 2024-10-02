@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
 import Foundation
+
+@testable import AEPCore
 
 class TestableExtensionRuntime: ExtensionRuntime {
     var listeners: [String: EventListener] = [:]

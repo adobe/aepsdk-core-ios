@@ -13,8 +13,9 @@
 import XCTest
 
 import AEPCoreMocks
-@testable import AEPLifecycle
 import AEPServices
+
+@testable import AEPLifecycle
 
 class LifecycleV2MetricsBuilderTests: XCTestCase {
     private let startDate = Date(milliseconds: 1483889568123)

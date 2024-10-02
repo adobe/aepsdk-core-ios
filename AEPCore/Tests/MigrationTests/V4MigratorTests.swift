@@ -11,10 +11,11 @@
 
 import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
-@testable import AEPServices
+
+@testable import AEPCore
 @testable import AEPIdentity
+@testable import AEPServices
 
 private struct MockIDParser: IDParsing {
     func convertStringToIds(idString: String?) -> [[String : Any]] {

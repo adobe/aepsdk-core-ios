@@ -12,6 +12,7 @@
 import XCTest
 
 import AEPCoreMocks
+
 @testable import AEPIdentity
 
 class CustomIdentityTests: XCTestCase, AnyCodableAsserts {

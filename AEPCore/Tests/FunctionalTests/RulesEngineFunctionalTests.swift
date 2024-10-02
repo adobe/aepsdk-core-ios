@@ -11,9 +11,10 @@
 
 import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
 import AEPServices
+
+@testable import AEPCore
 
 /// Functional tests for the rules engine feature
 class RulesEngineFunctionalTests: XCTestCase {

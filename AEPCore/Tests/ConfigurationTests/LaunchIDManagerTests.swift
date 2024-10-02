@@ -11,9 +11,10 @@
 
 import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
 import AEPServices
+
+@testable import AEPCore
 
 class LaunchIDManagerTests: XCTestCase {
     let dataStore = NamedCollectionDataStore(name: "AppIDManagerTests")

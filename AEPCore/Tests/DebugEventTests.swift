@@ -13,8 +13,9 @@
 
 import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
+
+@testable import AEPCore
 
 class DebugEventTests: XCTestCase, AnyCodableAsserts {
     private let TEST_EVENT_NAME = "testName"

@@ -13,8 +13,9 @@
 import Foundation
 import XCTest
 
-@testable import AEPCore
 import AEPServices
+
+@testable import AEPCore
 @testable import AEPRulesEngine
 
 class JSONRulesParserTests: XCTestCase {

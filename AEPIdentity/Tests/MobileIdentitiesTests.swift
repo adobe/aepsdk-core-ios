@@ -12,8 +12,9 @@
 
 import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
+
+@testable import AEPCore
 @testable import AEPIdentity
 
 class MobileIdentitiesTests: XCTestCase, AnyCodableAsserts {

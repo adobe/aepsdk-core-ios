@@ -11,12 +11,13 @@
 
 import XCTest
 
-@testable import AEPCore
-@testable import AEPCoreMocks
 import AEPIdentity
 import AEPLifecycle
-@testable import AEPServices
 import AEPSignal
+
+@testable import AEPCore
+@testable import AEPCoreMocks
+@testable import AEPServices
 
 class ConfigurationIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()

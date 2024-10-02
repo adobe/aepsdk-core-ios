@@ -13,8 +13,9 @@
 import XCTest
 
 import AEPCoreMocks
-@testable import AEPLifecycle
 import AEPServices
+
+@testable import AEPLifecycle
 
 class XDMDeviceTests: XCTestCase, AnyCodableAsserts {
 

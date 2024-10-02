@@ -12,6 +12,7 @@
 import XCTest
 
 import AEPCoreMocks
+
 @testable import AEPIdentity
 @testable import AEPServices
 
