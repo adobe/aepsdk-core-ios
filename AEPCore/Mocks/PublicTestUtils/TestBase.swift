@@ -199,7 +199,7 @@ open class TestBase: XCTestCase {
         let event = Event(name: "Get Shared State",
                           type: TestConstants.EventType.INSTRUMENTED_EXTENSION,
                           source: TestConstants.EventSource.SHARED_STATE_REQUEST,
-                          data: ["stateowner": ownerExtension])
+                          data: [TestConstants.EventDataKey.STATE_OWNER: ownerExtension])
 
         var returnedState: SharedStateResult?
 
@@ -207,7 +207,7 @@ open class TestBase: XCTestCase {
         MobileCore.dispatch(event: event, responseCallback: { event in
 
             if let eventData = event?.data {
-                returnedState = eventData["state"] as? SharedStateResult
+                returnedState = eventData[TestConstants.EventDataKey.STATE] as? SharedStateResult
             }
             expectation.fulfill()
         })
