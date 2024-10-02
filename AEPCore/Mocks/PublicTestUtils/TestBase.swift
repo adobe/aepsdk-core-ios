@@ -183,24 +183,31 @@ open class TestBase: XCTestCase {
         return InstrumentedExtension.receivedEvents[EventSpec(type: type, source: source)] ?? []
     }
 
-    /// Synchronous call to get the shared state for the specified `stateOwner`. This API throws an assertion failure in case of timeout.
-    /// - Parameter ownerExtension: the owner extension of the shared state (typically the name of the extension)
-    /// - Parameter timeout: how long should this method wait for the requested shared state, in seconds; by default it waits up to 3 second
-    /// - Returns: latest shared state of the given `stateOwner` or nil if no shared state was found
-    public func getSharedStateFor(_ ownerExtension: String, timeout: TimeInterval = TestConstants.Defaults.WAIT_SHARED_STATE_TIMEOUT) -> [AnyHashable: Any]? {
+    /// Synchronously retrieves the shared state for the specified `stateowner` (`ownerExtension`).
+    /// This method waits for a response for a defined time and throws an assertion failure in case of a timeout.
+    /// This method requires that the ``InstrumentedExtension`` is registered.
+    ///
+    /// - Parameters:
+    ///   - ownerExtension: The name of the `stateOwner` extension for which the shared state is requested (typically the name of the extension).
+    ///   - timeout: The maximum time to wait for the shared state response, in seconds. Defaults to
+    ///     ``TestConstants/Defaults/WAIT_SHARED_STATE_TIMEOUT`` (3 seconds).
+    ///
+    /// - Returns:
+    ///   The latest shared state for the given `ownerExtension` or `nil` if no shared state is found.
+    public func getSharedStateFor(_ ownerExtension: String, timeout: TimeInterval = TestConstants.Defaults.WAIT_SHARED_STATE_TIMEOUT) -> SharedStateResult? {
         log("GetSharedState for \(ownerExtension)")
         let event = Event(name: "Get Shared State",
                           type: TestConstants.EventType.INSTRUMENTED_EXTENSION,
                           source: TestConstants.EventSource.SHARED_STATE_REQUEST,
                           data: ["stateowner": ownerExtension])
 
-        var returnedState: [AnyHashable: Any]?
+        var returnedState: SharedStateResult?
 
         let expectation = XCTestExpectation(description: "Shared state data returned")
         MobileCore.dispatch(event: event, responseCallback: { event in
 
             if let eventData = event?.data {
-                returnedState = eventData["state"] as? [AnyHashable: Any]
+                returnedState = eventData["state"] as? SharedStateResult
             }
             expectation.fulfill()
         })
