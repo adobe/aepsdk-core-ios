@@ -17,8 +17,8 @@ import AEPServices
 @testable import AEPCore
 
 open class TestBase: XCTestCase {
-    /// Use this setting to enable debug mode logging in the `TestBase`
-    public static var debugEnabled = false
+    /// Use this setting to enable logging in `TestBase`.
+    public var loggingEnabled = false
 
     // Runs once per test suite
     open class override func setUp() {
@@ -206,17 +206,10 @@ open class TestBase: XCTestCase {
         return returnedState
     }
 
-    /// Print message to console if `TestBase.debug` is true
+    /// Print message to console if ``loggingEnabled`` is true.
     /// - Parameter message: message to log to console
     public func log(_ message: String) {
-        TestBase.log(message)
-
-    }
-
-    /// Print message to console if `TestBase.debug` is true
-    /// - Parameter message: message to log to console
-    public static func log(_ message: String) {
-        guard !message.isEmpty && TestBase.debugEnabled else { return }
+        guard !message.isEmpty && loggingEnabled else { return }
         print("TestBase - \(message)")
     }
 }
