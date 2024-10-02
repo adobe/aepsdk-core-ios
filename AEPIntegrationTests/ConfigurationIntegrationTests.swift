@@ -10,11 +10,12 @@
  */
 
 import XCTest
+
 @testable import AEPCore
-@testable import AEPServices
 @testable import AEPCoreMocks
 import AEPIdentity
 import AEPLifecycle
+@testable import AEPServices
 import AEPSignal
 
 class ConfigurationIntegrationTests: XCTestCase {

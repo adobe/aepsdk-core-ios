@@ -9,10 +9,11 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
+import AEPCoreMocks
 @testable import AEPIdentity
 import AEPServices
-import AEPCoreMocks
-import XCTest
 
 class NetworkService_IdentityTests: XCTestCase {
     var mockNetworkService: MockNetworkService!

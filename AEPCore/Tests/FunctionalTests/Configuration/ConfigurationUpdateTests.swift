@@ -10,11 +10,11 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
-//@testable import AEPServicesMocks
-@testable import AEPServices
-import AEPCoreMocks
 import XCTest
+
+@testable import AEPCore
+import AEPCoreMocks
+@testable import AEPServices
 
 /// Functional tests for the Configuration extension
 class ConfigurationUpdateTests: XCTestCase {

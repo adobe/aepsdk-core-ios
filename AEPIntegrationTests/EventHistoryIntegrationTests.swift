@@ -10,10 +10,10 @@
  */
 
 import XCTest
-import AEPCoreMocks
-@testable import AEPCore
-@testable import AEPServices
 
+@testable import AEPCore
+import AEPCoreMocks
+@testable import AEPServices
 
 class EventHistoryIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()

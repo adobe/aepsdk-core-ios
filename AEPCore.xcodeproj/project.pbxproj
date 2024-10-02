@@ -970,7 +970,6 @@
 		3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRulesDownloaderNetworkService.swift; sourceTree = "<group>"; };
 		3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedStateTestHelper.swift; sourceTree = "<group>"; };
 		3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockConfigurationDownloaderNetworkService.swift; sourceTree = "<group>"; };
-		3F39520124CA096100F7325B /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		3F39520324CA096100F7325B /* ConfigurationStateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationStateTests.swift; sourceTree = "<group>"; };
 		3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigurationDownloaderTests.swift; sourceTree = "<group>"; };
 		3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchIDManagerTests.swift; sourceTree = "<group>"; };
@@ -1426,9 +1425,9 @@
 			isa = PBXGroup;
 			children = (
 				21F79ABD24E7144F003204C3 /* IDParserTests.swift */,
+				7522618E2AAF6E2400D59847 /* UserDefaultMigratorTests.swift */,
 				21F79AC024E72204003204C3 /* V4MigratorTests.swift */,
 				21CD581024EC7B8900D9D590 /* V5MigratorTests.swift */,
-				7522618E2AAF6E2400D59847 /* UserDefaultMigratorTests.swift */,
 			);
 			path = MigrationTests;
 			sourceTree = "<group>";
@@ -1461,23 +1460,23 @@
 		24B4934224D231D800AA38D9 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				21F79ABC24E71427003204C3 /* MigrationTests */,
 				3F39520024CA096100F7325B /* ConfigurationTests */,
 				3F3951E924CA096100F7325B /* EventHubTests */,
+				3FB5F7CC24D283F300F0F6DF /* FunctionalTests */,
 				21D4A658246D991200DFCD02 /* LifecycleTests */,
+				21F79ABC24E71427003204C3 /* MigrationTests */,
 				3F3951F324CA096100F7325B /* MockExtensions */,
 				3F39152E24CA47B600B58C3E /* RulesTests */,
 				3F3951F824CA096100F7325B /* TestHelpers */,
 				3F3951EC24CA096100F7325B /* TestResources */,
-				3FB5F7CC24D283F300F0F6DF /* FunctionalTests */,
+				216A15D7257818E900D43848 /* Data+HexStringTests.swift */,
+				BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */,
+				7522C4852C234180004AF637 /* DebugEventTests.swift */,
 				3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */,
 				3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */,
 				24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */,
 				3F3951E824CA096100F7325B /* MobileCoreTests.swift */,
-				216A15D7257818E900D43848 /* Data+HexStringTests.swift */,
 				21CAC0E62422917600C11388 /* Info.plist */,
-				BBA1E97725F099D000999DD2 /* DataMarshallerTests.swift */,
-				7522C4852C234180004AF637 /* DebugEventTests.swift */,
 			);
 			name = Tests;
 			path = AEPCore/Tests;
@@ -1517,24 +1516,24 @@
 			isa = PBXGroup;
 			children = (
 				3FE6DE8624C643EA0065EA05 /* TestHelpers */,
+				214154A725186734005CEB80 /* CustomIdentityTests.swift */,
+				3FE6DE6C24C643610065EA05 /* ECIDTests.swift */,
 				218E01BF24C7595000BEC470 /* HitQueuing+PrivacyTests.swift */,
-				BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */,
 				3FE6DE7124C643620065EA05 /* IdentityFunctionalTests.swift */,
 				3FE6DE7324C643620065EA05 /* IdentityHitProcessorTests.swift */,
 				3FE6DE7424C643620065EA05 /* IdentityHitResponseTests.swift */,
 				3FE6DE7724C643620065EA05 /* IdentityPropertiesTests.swift */,
+				BB3E86E324F99C9600E39C53 /* IdentityPublicAPITests.swift */,
+				21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */,
 				3FE6DE7024C643620065EA05 /* IdentityStateTests.swift */,
 				3FE6DE7624C643620065EA05 /* IdentityTests.swift */,
-				3FE6DE3E24C642330065EA05 /* Info.plist */,
-				3FE6DE6C24C643610065EA05 /* ECIDTests.swift */,
 				3FE6DE6D24C643610065EA05 /* MobileIdentitiesTests.swift */,
 				3FE6DE7524C643620065EA05 /* NetworkService+IdentityTests.swift */,
+				2107F02924C9FF46002935CF /* PushIDManagerTests.swift */,
+				3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */,
 				3FE6DE7224C643620065EA05 /* URLAppenderTests.swift */,
 				3FE6DE6F24C643610065EA05 /* URLQueryItem+IdentityTests.swift */,
-				3FE6DE6E24C643610065EA05 /* URL+IdentityTests.swift */,
-				2107F02924C9FF46002935CF /* PushIDManagerTests.swift */,
-				21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */,
-				214154A725186734005CEB80 /* CustomIdentityTests.swift */,
+				3FE6DE3E24C642330065EA05 /* Info.plist */,
 			);
 			name = Tests;
 			path = AEPIdentity/Tests;
@@ -1684,10 +1683,10 @@
 			isa = PBXGroup;
 			children = (
 				24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */,
-				24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */,
 				24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */,
 				24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */,
 				24B4BE5A2714F7730000C3AA /* EventHistoryResponseTests.swift */,
+				24B4BE5C2714F7B30000C3AA /* EventHistoryTests.swift */,
 				24E255D6270F526D00AB9F07 /* String+FNV1A32Tests.swift */,
 			);
 			path = HistoryTests;
@@ -1891,13 +1890,13 @@
 		3F39152E24CA47B600B58C3E /* RulesTests */ = {
 			isa = PBXGroup;
 			children = (
-				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
+				BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */,
 				3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */,
 				3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */,
 				BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */,
-				BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */,
-				BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */,
 				3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */,
+				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
+				BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */,
 			);
 			path = RulesTests;
 			sourceTree = "<group>";
@@ -1915,8 +1914,8 @@
 			isa = PBXGroup;
 			children = (
 				24E255D3270F403A00AB9F07 /* HistoryTests */,
-				246B1A2A272B48A80017716A /* EventTests.swift */,
 				3F3951EB24CA096100F7325B /* EventHubTests.swift */,
+				246B1A2A272B48A80017716A /* EventTests.swift */,
 				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
 			);
 			path = EventHubTests;
@@ -1968,10 +1967,10 @@
 		3F3951F324CA096100F7325B /* MockExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				3F3951F424CA096100F7325B /* SlowMockExtension.swift */,
 				3F3951F624CA096100F7325B /* MockExtensionTwo.swift */,
 				2130A59C260AB448005DBA0F /* MockLegacyExtension.swift */,
 				2130A5BA260AB582005DBA0F /* NotAnExtension.swift */,
+				3F3951F424CA096100F7325B /* SlowMockExtension.swift */,
 			);
 			path = MockExtensions;
 			sourceTree = "<group>";
@@ -1980,9 +1979,9 @@
 			isa = PBXGroup;
 			children = (
 				3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */,
+				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
 				3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */,
-				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
@@ -1993,7 +1992,6 @@
 				3F39520424CA096100F7325B /* ConfigurationDownloaderTests.swift */,
 				3F39520324CA096100F7325B /* ConfigurationStateTests.swift */,
 				3F39520624CA096100F7325B /* LaunchIDManagerTests.swift */,
-				3F39520124CA096100F7325B /* TestableExtensionRuntime.swift */,
 			);
 			path = ConfigurationTests;
 			sourceTree = "<group>";
@@ -2002,15 +2000,15 @@
 			isa = PBXGroup;
 			children = (
 				3FF829432507E9C900483C74 /* resources */,
-				3F42570F24F4754F005D4006 /* TestableNetworkService.swift */,
-				3F4256FE24F474F4005D4006 /* IdentityIntegrationTests.swift */,
-				3F42570024F474F4005D4006 /* Info.plist */,
-				3F2F12BF24F6D66C00600CB4 /* TestHelpers.swift */,
 				3F5F9ED02502D34500C8A0B4 /* ConfigurationIntegrationTests.swift */,
-				3FF829462507EBE400483C74 /* LifecycleIntegrationTests.swift */,
-				3FF829682509937100483C74 /* SignalIntegrationTests.swift */,
-				BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */,
 				ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */,
+				3F4256FE24F474F4005D4006 /* IdentityIntegrationTests.swift */,
+				3FF829462507EBE400483C74 /* LifecycleIntegrationTests.swift */,
+				BF4A709D26CCCF5400612434 /* RulesEngineIntegrationTests.swift */,
+				3FF829682509937100483C74 /* SignalIntegrationTests.swift */,
+				3F42570F24F4754F005D4006 /* TestableNetworkService.swift */,
+				3F2F12BF24F6D66C00600CB4 /* TestHelpers.swift */,
+				3F42570024F474F4005D4006 /* Info.plist */,
 			);
 			path = AEPIntegrationTests;
 			sourceTree = "<group>";
@@ -2019,9 +2017,9 @@
 			isa = PBXGroup;
 			children = (
 				78AA4EC72513AE5200205AE9 /* Configuration */,
-				3F16762724F031A00041B970 /* EventHubContractTests.swift */,
 				3F16762924F032C60041B970 /* ContractExtensionOne.swift */,
 				3F16762B24F032E60041B970 /* ContractExtensionTwo.swift */,
+				3F16762724F031A00041B970 /* EventHubContractTests.swift */,
 				3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */,
 			);
 			path = FunctionalTests;
@@ -2209,11 +2207,11 @@
 		78AA4EC72513AE5200205AE9 /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
-				3FB5F7CF24D2848900F0F6DF /* ConfigurationUpdateTests.swift */,
+				78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */,
 				78AA4EC32513AD2000205AE9 /* ConfigurationFileInPathTests.swift */,
 				78AA4EC52513AE3900205AE9 /* ConfigurationLifecycleResponseTests.swift */,
 				78AA4EC82513AEBD00205AE9 /* ConfigurationPrivacyStatusTests.swift */,
-				78AA4ECA2513AF4200205AE9 /* ConfigurationAppIDTests.swift */,
+				3FB5F7CF24D2848900F0F6DF /* ConfigurationUpdateTests.swift */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";

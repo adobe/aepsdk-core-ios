@@ -10,11 +10,10 @@
 // governing permissions and limitations under the License.
 //
 
+import XCTest
+
 @testable import AEPCore
 import AEPServices
-//@testable import AEPServicesMocks
-import Foundation
-import XCTest
 
 open class TestBase: XCTestCase {
     /// Use this property to execute code logic in the first run in this test class; this value changes to False after the parent tearDown is executed

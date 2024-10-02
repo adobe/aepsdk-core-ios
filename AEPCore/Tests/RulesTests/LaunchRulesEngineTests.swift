@@ -9,14 +9,13 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-import Foundation
+
 import XCTest
-//import AEPServicesMocks
 
 @testable import AEPCore
 @testable import AEPCoreMocks
-import AEPServices
 @testable import AEPRulesEngine
+import AEPServices
 
 class LaunchRulesEngineTests: XCTestCase {
     override func setUp() {

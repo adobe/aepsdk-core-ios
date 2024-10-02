@@ -10,11 +10,11 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
+import XCTest
+
+import AEPCoreMocks
 @testable import AEPLifecycle
 import AEPServices
-import AEPCoreMocks
-import XCTest
 
 class LifecycleV2MetricsBuilderTests: XCTestCase {
     private let startDate = Date(milliseconds: 1483889568123)

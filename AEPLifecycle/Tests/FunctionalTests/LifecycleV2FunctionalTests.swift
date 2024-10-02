@@ -10,12 +10,12 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 import AEPCore
 import AEPCoreMocks
 @testable import AEPLifecycle
 import AEPServices
-//@testable import AEPServicesMocks
-import XCTest
 
 /// Functional tests for the Lifecycle extension
 class LifecycleV2FunctionalTests: XCTestCase {

@@ -9,10 +9,10 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 @testable import AEPCore
 import AEPCoreMocks
-import XCTest
-//import AEPServicesMocks
 
 class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_event_type_source() {

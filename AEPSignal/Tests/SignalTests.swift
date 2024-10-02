@@ -11,9 +11,8 @@
  */
 
 import XCTest
-import AEPCoreMocks
-//import AEPServicesMocks
 
+import AEPCoreMocks
 @testable import AEPCore
 @testable import AEPServices
 @testable import AEPSignal

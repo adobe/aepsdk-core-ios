@@ -11,11 +11,11 @@
  */
 
 import XCTest
+
 import AEPCore
+import AEPCoreMocks
 @testable import AEPIdentity
 @testable import AEPServices
-//import AEPServicesMocks
-import AEPCoreMocks
 
 class IdentityFunctionalTests: XCTestCase, AnyCodableAsserts {
     var mockRuntime: TestableExtensionRuntime!

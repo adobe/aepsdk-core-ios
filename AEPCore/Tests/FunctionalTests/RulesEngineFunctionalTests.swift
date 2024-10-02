@@ -9,13 +9,11 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
+import XCTest
 
 @testable import AEPCore
 import AEPCoreMocks
 import AEPServices
-//import AEPServicesMocks
-import XCTest
 
 /// Functional tests for the rules engine feature
 class RulesEngineFunctionalTests: XCTestCase {

@@ -9,11 +9,12 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 @testable import AEPCore
+import AEPCoreMocks
 @testable import AEPIdentity
 @testable import AEPServices
-import AEPCoreMocks
-import XCTest
 
 class IdentityHitProcessorTests: XCTestCase {
     var hitProcessor: IdentityHitProcessor!

@@ -12,11 +12,12 @@
  */
 
 import XCTest
+
 @testable import AEPCore
+import AEPCoreMocks
 @testable import AEPServices
 @testable import AEPIdentity
 @testable import AEPLifecycle
-import AEPCoreMocks
 
 class UserDefaultMigratorTests: XCTestCase {
     private var mockDataStore: MockDataStore {

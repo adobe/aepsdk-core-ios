@@ -10,8 +10,9 @@
 // governing permissions and limitations under the License.
 //
 
-@testable import AEPCore
 import Foundation
+
+@testable import AEPCore
 
 extension EventHub {
     public static func reset() {

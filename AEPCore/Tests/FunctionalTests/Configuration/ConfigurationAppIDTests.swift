@@ -10,11 +10,11 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 @testable import AEPCore
-@testable import AEPServices
-import XCTest
 import AEPCoreMocks
-import XCTest
+@testable import AEPServices
 
 class ConfigurationAppIDTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!

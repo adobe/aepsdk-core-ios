@@ -10,9 +10,9 @@
  */
 
 import XCTest
-//import AEPServicesMocks
-@testable import AEPIdentity
+
 import AEPCoreMocks
+@testable import AEPIdentity
 
 class CustomIdentityTests: XCTestCase, AnyCodableAsserts {
 

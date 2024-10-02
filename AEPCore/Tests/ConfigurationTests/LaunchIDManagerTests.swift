@@ -9,10 +9,11 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
-import AEPServices
-import AEPCoreMocks
 import XCTest
+
+@testable import AEPCore
+import AEPCoreMocks
+import AEPServices
 
 class LaunchIDManagerTests: XCTestCase {
     let dataStore = NamedCollectionDataStore(name: "AppIDManagerTests")

@@ -9,11 +9,12 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 import AEPCore
+import AEPCoreMocks
 @testable import AEPIdentity
 @testable import AEPServices
-import AEPCoreMocks
-import XCTest
 
 class IdentityStateTests: XCTestCase {
     var state: IdentityState!

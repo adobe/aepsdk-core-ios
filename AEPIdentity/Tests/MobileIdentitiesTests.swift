@@ -10,11 +10,11 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
-@testable import AEPIdentity
 import XCTest
+
+@testable import AEPCore
 import AEPCoreMocks
-//import AEPServicesMocks
+@testable import AEPIdentity
 
 class MobileIdentitiesTests: XCTestCase, AnyCodableAsserts {
     let ecid = ECID()
