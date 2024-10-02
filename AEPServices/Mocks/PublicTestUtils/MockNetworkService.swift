@@ -10,9 +10,9 @@
 // governing permissions and limitations under the License.
 //
 
-@testable import AEPServices
-import Foundation
 import XCTest
+
+@testable import AEPServices
 
 /// `Networking` conforming network service utility used for tests that require mocked network requests and mocked responses.
 public class MockNetworkService: Networking {

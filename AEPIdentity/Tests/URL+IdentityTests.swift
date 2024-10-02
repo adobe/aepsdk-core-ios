@@ -9,8 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPIdentity
 import XCTest
+
+@testable import AEPIdentity
 
 class URL_IdentityTests: XCTestCase {
     // MARK: URL(experienceCloudServer, orgId, identityProperties, dpids) tests

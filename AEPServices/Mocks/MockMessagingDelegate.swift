@@ -10,9 +10,9 @@
  governing permissions and limitations under the License.
  */
 #if os(iOS)
-    import Foundation
-    import AEPServices
     import XCTest
+
+    import AEPServices
 
     public class MockMessagingDelegate: MessagingDelegate {
         var expectation: XCTestExpectation? = nil

@@ -10,9 +10,9 @@
 // governing permissions and limitations under the License.
 //
 
-@testable import AEPServices
-import Foundation
 import XCTest
+
+@testable import AEPServices
 
 /// Implements shared utilities and logic for `NetworkService`/`Networking` class implementations
 /// used for testing.

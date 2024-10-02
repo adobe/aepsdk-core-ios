@@ -10,9 +10,11 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
-import AEPServices
 import Foundation
+
+import AEPServices
+
+@testable import AEPCore
 
 enum MockConfigurationDownloaderResponses {
     case success

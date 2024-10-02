@@ -11,6 +11,7 @@
  */
 
 import Foundation
+
 @testable import AEPCore
 
 class MockEventHistoryDatabase: EventHistoryDatabase {

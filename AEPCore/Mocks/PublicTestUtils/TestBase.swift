@@ -10,11 +10,11 @@
 // governing permissions and limitations under the License.
 //
 
-@testable import AEPCore
-import AEPServices
-@testable import AEPServicesMocks
-import Foundation
 import XCTest
+
+import AEPServices
+
+@testable import AEPCore
 
 open class TestBase: XCTestCase {
     /// Use this property to execute code logic in the first run in this test class; this value changes to False after the parent tearDown is executed
@@ -42,7 +42,7 @@ open class TestBase: XCTestCase {
         usleep(200000)
         resetTestExpectations()
         TestBase.isFirstRun = false
-        EventHub.reset()
+        MobileCore.resetSDK()
         NamedCollectionDataStore.clear()
     }
 

@@ -10,10 +10,10 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 @testable import AEPCore
 @testable import AEPCoreMocks
-import XCTest
-import AEPServicesMocks
 
 class MobileCoreTrackingTests: XCTestCase {
     override func setUp() {

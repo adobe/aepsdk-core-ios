@@ -9,10 +9,10 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 @testable import AEPCore
 @testable import AEPCoreMocks
-import AEPServicesMocks
-import XCTest
 
 class MobileCore_IdentityTests: XCTestCase {
     override func setUp() {

@@ -10,7 +10,6 @@
  */
 
 import AEPServices
-import Foundation
 
 public class MockDataStore: NamedCollectionProcessing {
     public var dict = ThreadSafeDictionary<String, Any>()

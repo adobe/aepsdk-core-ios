@@ -10,11 +10,13 @@
  */
 
 import XCTest
-@testable import AEPCore
-@testable import AEPServices
+
 import AEPIdentity
 import AEPLifecycle
 import AEPSignal
+
+@testable import AEPCore
+@testable import AEPServices
 
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)

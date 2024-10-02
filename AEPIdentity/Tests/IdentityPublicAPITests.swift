@@ -10,10 +10,10 @@
  */
 
 import XCTest
-import AEPServicesMocks
+
 @testable import AEPCore
-@testable import AEPIdentity
 @testable import AEPCoreMocks
+@testable import AEPIdentity
 
 class IdentityAPITests: XCTestCase {
 
