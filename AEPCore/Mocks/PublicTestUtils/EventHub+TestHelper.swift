@@ -15,6 +15,7 @@ import Foundation
 @testable import AEPCore
 
 extension EventHub {
+    @available(*, deprecated, renamed: "MobileCore.resetSDK()", message: "Avoid using EventHub APIs directly. Use MobileCore.resetSDK() instead.")
     public static func reset() {
         shared = EventHub()
     }

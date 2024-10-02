@@ -410,6 +410,7 @@
 		4CF791972CAB517F003C1FD8 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
 		4CF791982CAB517F003C1FD8 /* MockWKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */; };
 		4CF791992CAB5377003C1FD8 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
+		4CF7919B2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF7919A2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift */; };
 		752261862AA257F600D59847 /* FileSystemNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752261852AA257F600D59847 /* FileSystemNamedCollection.swift */; };
 		7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */; };
 		7522618D2AABBE9600D59847 /* UserDefaultMigrationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618C2AABBE9600D59847 /* UserDefaultMigrationConstants.swift */; };
@@ -1116,6 +1117,7 @@
 		4CF028982C2D401E008ADE05 /* TestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBase.swift; sourceTree = "<group>"; };
 		4CF028992C2D401E008ADE05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
 		4CF791742CAB4F84003C1FD8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/AppleTVOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		4CF7919A2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TestHelper.swift"; sourceTree = "<group>"; };
 		57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2200,6 +2202,7 @@
 				4CF028942C2D401E008ADE05 /* MockExtension.swift */,
 				4CF028992C2D401E008ADE05 /* TestableExtensionRuntime.swift */,
 				4CF028982C2D401E008ADE05 /* TestBase.swift */,
+				4CF7919A2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift */,
 			);
 			path = PublicTestUtils;
 			sourceTree = "<group>";
@@ -3722,6 +3725,7 @@
 				4CF791882CAB4F97003C1FD8 /* TestUtils.swift in Sources */,
 				4CF791892CAB4F97003C1FD8 /* URL+TestHelper.swift in Sources */,
 				4CF7918A2CAB4F97003C1FD8 /* UserDefaults+TestHelper.swift in Sources */,
+				4CF7919B2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift in Sources */,
 				4CF7918B2CAB4F97003C1FD8 /* XCTestCase+AnyCodableAsserts.swift in Sources */,
 				4CF7918C2CAB4F97003C1FD8 /* ThreadSafeDictionary+TestHelper.swift in Sources */,
 				4CF0287D2C2CCBE1008ADE05 /* TestableNetworkService.swift in Sources */,
