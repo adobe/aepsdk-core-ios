@@ -29,7 +29,7 @@ class RulesEngineFunctionalTests: XCTestCase {
         mockRuntime = TestableExtensionRuntime()
         defaultEvent = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
                              data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
-        Log.logFilter = .trace
+        
         rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: mockRuntime)
         rulesEngine.trace { _, _, _, failure in
             print(failure ?? "unknown failure")

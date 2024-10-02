@@ -45,7 +45,14 @@ public class MobileCoreAPI: NSObject {
         return eventHub
     }
     
-    /// Registers the extensions with Core and begins event processing
+    /// Registers the specified extensions with Core and begins event processing.
+    ///
+    /// For the default SDK instance:
+    /// - Migration from SDK v4 and v5 is performed before starting event processing.
+    ///
+    /// For named SDK instances:
+    /// - Only `MultiInstanceCapable` extensions will be registered; non-conforming extensions will be skipped, and a warning will be logged.
+    ///
     /// - Parameter extensions: The extensions to be registered
     /// - Parameter completion: Closure to run when extensions have been registered
     @objc(registerExtensions:completion:)

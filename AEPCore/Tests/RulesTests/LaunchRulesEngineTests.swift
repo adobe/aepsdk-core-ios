@@ -29,7 +29,6 @@ class LaunchRulesEngineTests: XCTestCase {
 
     func testTokenReplacement() {
         // When: load rules from a json file
-        Log.logFilter = .debug
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"), let data = try? Data(contentsOf: url) else {
             XCTAssertTrue(false)
@@ -52,7 +51,6 @@ class LaunchRulesEngineTests: XCTestCase {
     }
     
     func testTimestampUMatchers() {
-        Log.logFilter = .debug
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_testTimestampu", withExtension: "json"),
               let data = try? Data(contentsOf: url) else {
@@ -81,7 +79,6 @@ class LaunchRulesEngineTests: XCTestCase {
     }
     
     func testAddRules() {
-        Log.logFilter = .debug
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"), let data = try? Data(contentsOf: url) else {
             XCTAssertTrue(false)
@@ -111,8 +108,7 @@ class LaunchRulesEngineTests: XCTestCase {
     }
     
     func testProcessWithCallback() {
-        // setup
-        Log.logFilter = .debug
+        // setup        
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"), let data = try? Data(contentsOf: url) else {
             XCTAssertTrue(false)

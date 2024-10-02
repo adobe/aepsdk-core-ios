@@ -13,6 +13,8 @@
 import AEPServices
 
 public class MockLogger: Logger {
+    public var logFilter = LogLevel.error
+    
     public init() {}
     
     public func trace(label: String, _ message: String) {}

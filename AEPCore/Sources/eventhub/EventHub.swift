@@ -56,7 +56,7 @@ final class EventHub {
             guard let self = self else { return true }
             let processedEvent = self.preprocessors.shallowCopy.reduce(event, {$1($0)})
             // Hot path, avoid unnecessary string converstion of event
-            if Log.logFilter >= .trace {
+            if logger.logFilter >= .trace {
                 self.logger.trace(label: self.LOG_TAG, "Processed Event #\(String(describing: self.eventNumberMap[event.id])) - \(processedEvent)")
             }
             // Handle response event listeners first
@@ -387,7 +387,7 @@ final class EventHub {
         self.eventNumberMap[event.id] = self.eventNumberCounter.incrementAndGet()
         self.eventQueue.add(event)
         // Hot path, avoid unnecessary string converstion of event
-        if Log.logFilter >= .trace {
+        if logger.logFilter >= .trace {
             logger.trace(label: self.LOG_TAG,
                          "Dispatching Event #\(String(describing: self.eventNumberMap[event.id])) - \(event)")
         }

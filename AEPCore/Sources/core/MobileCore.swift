@@ -30,10 +30,13 @@ public final class MobileCore: NSObject {
 
     /// The `MobileCoreAPI` instance that handles API calls for the default instance.
     /// This instance is also used for the static APIs exposed by `MobileCore`, unless additional named instances are created.
-    static var apiDefaultInstance = MobileCoreAPI(instanceIdentifier: SDKInstanceIdentifier.DEFAULT_STRING, eventHubProvider: eventHubProvider)
+    static var apiDefaultInstance = MobileCoreAPI(instanceIdentifier: SDKInstanceIdentifier.DEFAULT_INSTANCE_NAME, eventHubProvider: eventHubProvider)
 
     /// A dictionary that stores `MobileCoreAPI` instances keyed by their instance name.
-    static var apiStore: [String: MobileCoreAPI] = [SDKInstanceIdentifier.DEFAULT_STRING: apiDefaultInstance]
+    static var apiStore: [String: MobileCoreAPI] = [SDKInstanceIdentifier.DEFAULT_INSTANCE_NAME: apiDefaultInstance]
+    
+    /// The identifier string for the default SDK instance.
+    public static var DEFAULT_INSTANCE_NAME = SDKInstanceIdentifier.DEFAULT_INSTANCE_NAME
     
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {

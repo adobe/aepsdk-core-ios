@@ -36,8 +36,7 @@ class JSONRulesParserTests: XCTestCase {
     }
 
     func testGenerateLaunchRules() {
-        // When: load rules from a json file
-        Log.logFilter = .debug
+        // When: load rules from a json file        
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"), let data = try? Data(contentsOf: url) else {
             XCTAssertTrue(false)
