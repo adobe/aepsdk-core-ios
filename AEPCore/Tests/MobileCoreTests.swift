@@ -20,7 +20,7 @@ class MobileCoreTests: XCTestCase {
         NamedCollectionDataStore.clear()
         MobileCore.setWrapperType(.none) // reset wrapper type before each test
         MobileCore.setLogLevel(.error) // reset log level to error before each test
-        EventHub.reset()
+        MobileCore.resetSDK()
         MockExtension.reset()
         MockExtensionTwo.reset()
         MockLegacyExtension.reset()

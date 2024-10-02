@@ -16,7 +16,7 @@ import XCTest
 
 class MobileCore_IdentityTests: XCTestCase {
     override func setUp() {
-        EventHub.reset()
+        MobileCore.resetSDK()
         MockExtension.reset()
     }
 
