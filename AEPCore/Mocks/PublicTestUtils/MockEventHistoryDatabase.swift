@@ -11,10 +11,10 @@
  */
 
 import Foundation
+
 @testable import AEPCore
 
 class MockEventHistoryDatabase: EventHistoryDatabase {
-
     var paramHash: UInt32?
     var paramTimestamp: Date?
     var paramFrom: Date?

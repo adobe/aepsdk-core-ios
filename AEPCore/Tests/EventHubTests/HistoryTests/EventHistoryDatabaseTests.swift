@@ -12,6 +12,7 @@
 
 import XCTest
 import SQLite3
+
 @testable import AEPCore
 
 class EventHistoryDatabaseTests: XCTestCase {

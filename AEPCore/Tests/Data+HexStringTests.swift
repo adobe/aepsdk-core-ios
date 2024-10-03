@@ -9,8 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
 import XCTest
+
+@testable import AEPCore
 
 class Data_HexStringTests: XCTestCase {
 

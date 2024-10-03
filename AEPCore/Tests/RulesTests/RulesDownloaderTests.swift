@@ -9,10 +9,12 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
+import AEPCoreMocks
+
 @testable import AEPCore
 @testable import AEPServices
-@testable import AEPServicesMocks
-import XCTest
 
 class RulesDownloaderTests: XCTestCase {
     private static let zipTestFileName = "testRulesDownloader"

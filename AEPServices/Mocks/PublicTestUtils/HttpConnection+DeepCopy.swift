@@ -11,7 +11,6 @@
 //
 
 import AEPServices
-import Foundation
 
 extension HttpConnection {
     public func deepCopy() -> HttpConnection {

@@ -9,10 +9,12 @@
  governing permissions and limitations under the License.
  */
 
-import AEPCore
-@testable import AEPIdentity
-import AEPServices
 import Foundation
+
+import AEPCore
+import AEPServices
+
+@testable import AEPIdentity
 
 class MockPushIDManager: PushIDManageable {
     init() {}

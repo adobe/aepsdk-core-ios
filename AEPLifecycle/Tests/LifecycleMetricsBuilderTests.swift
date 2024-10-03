@@ -10,10 +10,12 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
+import AEPCoreMocks
+
 @testable import AEPLifecycle
 @testable import AEPServices
-import AEPServicesMocks
-import XCTest
 
 class LifecycleMetricsBuilderTests: XCTestCase {
     private var dataStore: FakeDataStore?

@@ -12,16 +12,15 @@
 import XCTest
 
 @testable import AEPCore
-@testable import AEPServices
 @testable import AEPCoreMocks
-@testable import AEPServicesMocks
+@testable import AEPServices
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
         NamedCollectionDataStore.clear()
         MobileCore.setWrapperType(.none) // reset wrapper type before each test
         MobileCore.setLogLevel(.error) // reset log level to error before each test
-        EventHub.reset()
+        MobileCore.resetSDK()
         MockExtension.reset()
         MockExtensionTwo.reset()
         MockLegacyExtension.reset()

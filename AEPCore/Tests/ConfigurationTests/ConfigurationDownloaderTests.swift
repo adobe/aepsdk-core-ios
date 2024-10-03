@@ -9,9 +9,10 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 @testable import AEPCore
 @testable import AEPServices
-import XCTest
 
 class ConfigurationDownloaderTests: XCTestCase {
     let dataStore = NamedCollectionDataStore(name: ConfigurationConstants.DATA_STORE_NAME)
@@ -22,6 +23,7 @@ class ConfigurationDownloaderTests: XCTestCase {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
+        MobileCore.resetSDK()
     }
 
     override class func tearDown() {

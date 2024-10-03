@@ -30,10 +30,14 @@ This scenario is usually encountered when there are changes in Core that affect 
 
 ## When developing locally in the Core repository
 
-While external repositories bring in the `AEPTestUtils` dependency using Cocoapods, Core instead uses the local Xcode targets `AEPCoreMocks` and `AEPServicesMocks`. When creating a new source file to be part of `AEPTestUtils`, make sure that:
+While external repositories bring in the `AEPTestUtils` dependency using CocoaPods, Core uses local Xcode targets: `AEPCoreMocks` and `AEPServicesMocks` to manage this dependency. When adding a new source file to `AEPTestUtils`, follow these steps:
 
-1. The file goes into the appropriate project directory based on its dependencies.
-   * For example, if it has a dependency on `AEPCore`, place it under `AEPCore/Mocks/PublicTestUtils`. If it only has a dependency on `AEPServices`, place it under `AEPServices/Mocks/PublicTestUtils`.
-   * If the file has no dependencies on either `AEPServices` or `AEPCore`, place it under `AEPServices/Mocks/PublicTestUtils`.
-   * If the file is not intended to be published as part of `AEPTestUtils`, place it in its respective `Mocks` directory, but outside of `PublicTestUtils`.
-2. The file is added to the appropriate project target's **Build Phases** -> **Compile Sources** list of source files, using the same dependency logic as the previous point.
+1. Place the file in the appropriate project directory based on its dependencies:
+   * If the file depends on `AEPCore`, place it in `AEPCore/Mocks/PublicTestUtils`.
+   * If the file depends only on `AEPServices`, place it in `AEPServices/Mocks/PublicTestUtils`.
+   * If the file has no dependencies on either `AEPServices` or `AEPCore`, place it in `AEPServices/Mocks/PublicTestUtils`.
+   * If the file is not intended to be included in `AEPTestUtils`, place it in its respective `Mocks` directory but outside of `PublicTestUtils`.
+   
+2. Add the file to the correct project target's **Build Phases** -> **Compile Sources** list:
+   * If the file is under `AEPServices/Mocks/PublicTestUtils`, add it to **both** the `AEPServicesMocks` and `AEPCoreMocks` frameworks.
+   * If the file is under `AEPCore/Mocks/PublicTestUtils`, add it **only** to the `AEPCoreMocks` framework.
