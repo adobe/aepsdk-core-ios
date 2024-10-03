@@ -16,7 +16,7 @@ import AEPCore
 import AEPServices
 
 /// Instrumented extension that registers a wildcard listener for intercepting events in current session. Use it along with `TestBase`
-@available(*, deprecated, message: "Will be replaced by a new wildcard listener class soon. Please avoid using InstrumentedExtension directly in your tests.")
+@available(*, deprecated, message: "A new class for capturing events using MobileCore.registerEventListener will be added in the next version. Please avoid using InstrumentedExtension directly in your tests.")
 public class InstrumentedExtension: NSObject, Extension {
     private static let logTag = "InstrumentedExtension"
     public var name = "com.adobe.InstrumentedExtension"
