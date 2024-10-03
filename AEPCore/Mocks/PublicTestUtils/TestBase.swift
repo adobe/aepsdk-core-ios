@@ -183,37 +183,28 @@ open class TestBase: XCTestCase {
         return InstrumentedExtension.receivedEvents[EventSpec(type: type, source: source)] ?? []
     }
 
-    /// Synchronous call to get the shared state for the specified `stateOwner`. This API throws an assertion failure in case of timeout.
-    /// - Parameter ownerExtension: the owner extension of the shared state (typically the name of the extension)
-    /// - Parameter timeout: how long should this method wait for the requested shared state, in seconds; by default it waits up to 3 second
-    /// - Returns: latest shared state of the given `stateOwner` or nil if no shared state was found
-    public func getSharedStateFor(_ ownerExtension: String, timeout: TimeInterval = TestConstants.Defaults.WAIT_SHARED_STATE_TIMEOUT) -> [AnyHashable: Any]? {
-        log("GetSharedState for \(ownerExtension)")
-        let event = Event(name: "Get Shared State",
-                          type: TestConstants.EventType.INSTRUMENTED_EXTENSION,
-                          source: TestConstants.EventSource.SHARED_STATE_REQUEST,
-                          data: ["stateowner": ownerExtension])
-
-        var returnedState: [AnyHashable: Any]?
-
-        let expectation = XCTestExpectation(description: "Shared state data returned")
-        MobileCore.dispatch(event: event, responseCallback: { event in
-
-            if let eventData = event?.data {
-                returnedState = eventData["state"] as? [AnyHashable: Any]
-            }
-            expectation.fulfill()
-        })
-
-        wait(for: [expectation], timeout: timeout)
-        return returnedState
+    /// Retrieves the standard `SharedState` for a specific extension (as opposed to XDM).
+    /// This method fetches the shared state for a given extension name, optionally based on a specific event.
+    /// The shared state can be resolved according to the specified resolution and shared state type.
+    /// - Parameters:
+    ///   - extensionName: The name of the extension whose `SharedState` will be returned.
+    ///   - event: If provided, retrieves the `SharedState` that corresponds with this event's version, or the latest if not yet versioned.
+    ///            If `event` is nil, the method returns the latest `SharedState`. Defaults to `nil`.
+    ///   - barrier: If true, the `EventHub` will only return `.set` if the extension has moved past the given event.
+    ///              Defaults to `true`.
+    ///   - resolution: The `SharedStateResolution` used to determine how to resolve the shared state.
+    ///                 Defaults to `.any`.
+    /// - Returns: A `SharedStateResult` containing the shared state data and status for the specified extension,
+    ///            or `nil` if no shared state is available.
+    public func getSharedStateFor(extensionName: String, event: Event? = nil, barrier: Bool = true, resolution: SharedStateResolution = .any) -> SharedStateResult? {
+        log("Getting shared state for: \(extensionName)")
+        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: .standard)
     }
 
     /// Print message to console if `TestBase.debug` is true
     /// - Parameter message: message to log to console
     public func log(_ message: String) {
         TestBase.log(message)
-
     }
 
     /// Print message to console if `TestBase.debug` is true
