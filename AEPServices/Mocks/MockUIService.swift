@@ -10,9 +10,9 @@
  governing permissions and limitations under the License.
  */
 #if os(iOS)
-    import Foundation
-    @testable import AEPServices
     import UIKit
+
+    @testable import AEPServices
 
     @available(iOSApplicationExtension, unavailable)
     public class MockUIService: UIService {

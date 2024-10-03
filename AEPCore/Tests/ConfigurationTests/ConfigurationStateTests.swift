@@ -10,11 +10,12 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
+import AEPServices
+
 @testable import AEPCore
 @testable import AEPCoreMocks
-@testable import AEPServicesMocks
-import AEPServices
-import XCTest
 
 class ConfigurationStateTests: XCTestCase, AnyCodableAsserts {
     var configState: ConfigurationState!

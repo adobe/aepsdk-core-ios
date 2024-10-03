@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPServices
 import Foundation
+
+@testable import AEPServices
 
 public class MockSystemInfoService: SystemInfoService {
     public init() {}

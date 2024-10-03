@@ -10,9 +10,9 @@
 // governing permissions and limitations under the License.
 //
 
-@testable import AEPServices
-import Foundation
 import XCTest
+
+@testable import AEPServices
 
 /// Overriding `NetworkService` used for tests that require real outgoing network requests.
 public class RealNetworkService: NetworkService {

@@ -9,11 +9,13 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
+import AEPCoreMocks
+
 @testable import AEPCore
 @testable import AEPIdentity
 @testable import AEPServices
-import AEPServicesMocks
-import XCTest
 
 class IdentityTests: XCTestCase {
     var identity: Identity!
