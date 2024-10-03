@@ -18,7 +18,7 @@ import XCTest
 
 class EventHubContractTest: XCTestCase {
     override func setUp() {
-        EventHub.reset()  
+        MobileCore.resetSDK()
         NamedCollectionDataStore.clear()
         ContractExtensionOne.reset()
         ContractExtensionTwo.reset()

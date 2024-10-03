@@ -16,7 +16,7 @@ import XCTest
 
 class MobileCore_ConfigurationTests: XCTestCase {
     override func setUp() {
-        EventHub.reset()
+        MobileCore.resetSDK()
         MockExtension.reset()
         EventHub.shared.start()
         registerMockExtension(Configuration.self)
@@ -24,7 +24,7 @@ class MobileCore_ConfigurationTests: XCTestCase {
     }
 
     override func tearDown() {
-        EventHub.reset()
+        MobileCore.resetSDK()
     }
 
     private func registerMockExtension<T: Extension>(_ type: T.Type) {

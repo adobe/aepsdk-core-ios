@@ -18,7 +18,7 @@ import XCTest
 class IdentityAPITests: XCTestCase {
 
     override func setUp() {
-        EventHub.reset()
+        MobileCore.resetSDK()
         MockExtension.reset()
         EventHub.shared.start()
         registerMockExtension(MockExtension.self)
