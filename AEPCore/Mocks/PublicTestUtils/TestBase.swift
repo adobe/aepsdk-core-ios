@@ -189,7 +189,7 @@ open class TestBase: XCTestCase {
     /// - Parameters:
     ///   - extensionName: The name of the extension whose `SharedState` will be returned.
     ///   - event: If provided, retrieves the `SharedState` that corresponds with this event's version, or the latest if not yet versioned.
-    ///            If `event` is nil, the method returns the latest `SharedState`.
+    ///            If `event` is nil, the method returns the latest `SharedState`. Defaults to `nil`.
     ///   - barrier: If true, the `EventHub` will only return `.set` if the extension has moved past the given event.
     ///              Defaults to `true`.
     ///   - resolution: The `SharedStateResolution` used to determine how to resolve the shared state.
