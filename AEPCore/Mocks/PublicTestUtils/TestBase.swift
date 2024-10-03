@@ -183,15 +183,21 @@ open class TestBase: XCTestCase {
         return InstrumentedExtension.receivedEvents[EventSpec(type: type, source: source)] ?? []
     }
 
-    /// Retrieves the `SharedState` for a specific extension
+    /// Retrieves the `SharedState` for a specific extension.
+    /// This method fetches the shared state for a given extension name, optionally based on a specific event.
+    /// The shared state can be resolved according to the specified resolution and shared state type.
     /// - Parameters:
-    ///   - extensionName: An extension name whose `SharedState` will be returned
-    ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version or latest if not yet versioned. If event is nil will return the latest `SharedState`
-    ///   - barrier: If true, the `EventHub` will only return `.set` if `extensionName` has moved past `event`
-    ///   - resolution: The `SharedStateResolution` to determine how to resolve the shared state
-    ///   - sharedStateType: The type of shared state to be read from, if not provided defaults to `.standard`
-    /// - Returns: The `SharedState` data and status for the extension with `extensionName`
-    public func getSharedStateFor(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
+    ///   - extensionName: The name of the extension whose `SharedState` will be returned.
+    ///   - event: If provided, retrieves the `SharedState` that corresponds with this event's version, or the latest if not yet versioned.
+    ///            If `event` is nil, the method returns the latest `SharedState`.
+    ///   - barrier: If true, the `EventHub` will only return `.set` if the extension has moved past the given event.
+    ///              Defaults to `true`.
+    ///   - resolution: The `SharedStateResolution` used to determine how to resolve the shared state.
+    ///                 Defaults to `.any`.
+    ///   - sharedStateType: The type of shared state to be read from. Defaults to `.standard`.
+    /// - Returns: A `SharedStateResult` containing the shared state data and status for the specified extension,
+    ///            or `nil` if no shared state is available.
+    public func getSharedStateFor(extensionName: String, event: Event? = nil, barrier: Bool = true, resolution: SharedStateResolution = .any, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
         log("Getting shared state for: \(extensionName)")
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: sharedStateType)
     }
