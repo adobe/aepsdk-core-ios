@@ -17,6 +17,13 @@ import AEPServices
 @testable import AEPCore
 
 open class TestBase: XCTestCase {
+    /// Represents the `SharedState` types in ``EventHub`` that can be used by an extension to share data with other extensions and for rules execution.
+    /// This is a publicly accessible version of the ``SharedStateType`` used internally.
+    public enum SharedStateTypeTestHelper: String {
+        case standard = "standard"  // regular data, the key names and structure can be defined by each extension
+        case xdm = "XDM"  // data mapped on XDM mixins populated by an extension
+    }
+
     /// Use this property to execute code logic in the first run in this test class; this value changes to False after the parent tearDown is executed
     public private(set) static var isFirstRun: Bool = true
     /// Use this setting to enable debug mode logging in the `TestBase`
@@ -197,7 +204,7 @@ open class TestBase: XCTestCase {
     ///   - sharedStateType: The type of shared state to be read from. Defaults to `.standard`.
     /// - Returns: A `SharedStateResult` containing the shared state data and status for the specified extension,
     ///            or `nil` if no shared state is available.
-    public func getSharedStateFor(extensionName: String, event: Event? = nil, barrier: Bool = true, resolution: SharedStateResolution = .any, sharedStateType: SharedStateType = .standard) -> SharedStateResult? {
+    public func getSharedStateFor(extensionName: String, event: Event? = nil, barrier: Bool = true, resolution: SharedStateResolution = .any, sharedStateType: SharedStateTypeTestHelper = .standard) -> SharedStateResult? {
         log("Getting shared state for: \(extensionName)")
         return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: sharedStateType)
     }
