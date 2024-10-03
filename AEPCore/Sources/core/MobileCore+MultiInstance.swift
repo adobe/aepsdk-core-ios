@@ -11,6 +11,7 @@
 */
 
 import AEPServices
+import Foundation
 
 /// An extension for `MobileCore` that provides methods to create and manage instances of the SDK.
 /// This includes the ability to create named instances and retrieve the API for specific instances.

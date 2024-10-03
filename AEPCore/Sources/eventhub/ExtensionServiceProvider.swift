@@ -11,6 +11,7 @@
 */
 
 import AEPServices
+import Foundation
 
 /// provides all the services needed by an `Extension` which supports multi-instances.
 @objc(AEPExtensionServiceProvider)
