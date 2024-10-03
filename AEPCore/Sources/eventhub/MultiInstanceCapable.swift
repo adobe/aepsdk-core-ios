@@ -10,6 +10,8 @@
  governing permissions and limitations under the License.
 */
 
+import Foundation
+
 /// A marker protocol indicating that an `Extension` supports multiple instances.
 ///
 /// Types conforming to both `Extension` and `MultiInstanceCapable` can be instantiated multiple times.

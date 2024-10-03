@@ -10,6 +10,8 @@
  governing permissions and limitations under the License.
 */
 
+import Foundation
+
 @objc(AEPLogger)
 public protocol Logger {
     

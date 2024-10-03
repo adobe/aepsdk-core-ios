@@ -10,6 +10,8 @@
  governing permissions and limitations under the License.
 */
 
+import Foundation
+
 /// `WrapperTypeProvider` is responsible for managing the wrapper type in a thread-safe manner.
 class WrapperTypeProvider {
     private var _wrapperType: WrapperType = .none
