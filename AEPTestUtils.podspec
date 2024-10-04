@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "AEPTestUtils"
-    s.version          = "5.2.0"
+    s.version          = "5.2.1"
     s.summary          = "Adobe Experience Platform test utilities for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   
     s.description      = <<-DESC
@@ -26,5 +26,7 @@ Pod::Spec.new do |s|
     
     s.dependency 'AEPCore', '>= 5.2.0', '< 6.0.0'
     s.dependency 'AEPServices', '>= 5.2.0', '< 6.0.0'
+
+    s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
   end
   
