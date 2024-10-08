@@ -67,7 +67,7 @@ public extension HttpConnection {
     /// calling this method produces a non-deterministic result.
     /// - Parameter forKey: the header key name sent in response when requesting a connection to the URL.
     func responseHttpHeader(forKey: String) -> String? {
-        if #available(iOS 13, *) {
+        if #available(iOS 13, tvOS 13, *) {
             return response?.value(forHTTPHeaderField: forKey)
         }
         
