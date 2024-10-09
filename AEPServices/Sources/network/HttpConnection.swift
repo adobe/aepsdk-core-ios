@@ -62,8 +62,28 @@ public extension HttpConnection {
 
     /// Returns a value for the response header key from the `response` property, if available.
     /// This is protocol specific. For example, HTTP URLs could have headers like "last-modified", or "ETag" set.
+    ///
+    /// In alignment with OS behavior for responses where there are duplicate entries of the header,
+    /// calling this method produces a non-deterministic result.  Per HTTP RFC, header field name look ups should be case-insensitive.
     /// - Parameter forKey: the header key name sent in response when requesting a connection to the URL.
     func responseHttpHeader(forKey: String) -> String? {
-        return response?.allHeaderFields[forKey] as? String
+        if #available(iOS 13, tvOS 13, *) {
+            return response?.value(forHTTPHeaderField: forKey)
+        }
+        
+        return response?.lowercasedHeaders[forKey.lowercased()] as? String
+    }
+}
+
+extension HTTPURLResponse {
+    var lowercasedHeaders: [String: Any] {
+        var lcHeaders: [String: Any] = [:]
+        for (key, value) in allHeaderFields {
+            if let keyAsString = key.base as? String {
+                lcHeaders[keyAsString.lowercased()] = value
+            }
+        }
+        
+        return lcHeaders
     }
 }
