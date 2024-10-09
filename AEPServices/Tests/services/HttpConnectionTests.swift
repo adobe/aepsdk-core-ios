@@ -14,7 +14,7 @@
 import XCTest
 
 class HttpConnectionTests: XCTestCase {
-    func testResponseHttpHeaderHappy() throws {
+    func testResponseHttpHeader_Happy() throws {
         // setup
         let searchKey = "some-key"
         let response = HTTPURLResponse(url: URL(string: "https://someurl")!, statusCode: 200, httpVersion: nil, headerFields: ["some-key": "value"])
@@ -29,7 +29,7 @@ class HttpConnectionTests: XCTestCase {
         XCTAssertEqual(iOS13Result, iOS12Result)
     }
     
-    func testResponseHttpHeaderMisMatchedCasing() throws {
+    func testResponseHttpHeader_MisMatchedCasing() throws {
         // setup
         let searchKey = "some-key"
         let response = HTTPURLResponse(url: URL(string: "https://someurl")!, statusCode: 200, httpVersion: nil, headerFields: ["Some-Key": "value"])
@@ -44,7 +44,7 @@ class HttpConnectionTests: XCTestCase {
         XCTAssertEqual(iOS13Result, iOS12Result)
     }
     
-    func testResponseHttpHeaderMisMatchedCasingTwo() throws {
+    func testResponseHttpHeader_MisMatchedCasingTwo() throws {
         // setup
         let searchKey = "Some-Key"
         let response = HTTPURLResponse(url: URL(string: "https://someurl")!, statusCode: 200, httpVersion: nil, headerFields: ["some-key": "value"])
@@ -59,7 +59,7 @@ class HttpConnectionTests: XCTestCase {
         XCTAssertEqual(iOS13Result, iOS12Result)
     }
     
-    func testResponseHttpHeaderDuplicateKeys() throws {
+    func testResponseHttpHeader_DuplicateKeys() throws {
         // setup
         let searchKey = "some-key"
         let response = HTTPURLResponse(url: URL(string: "https://someurl")!, statusCode: 200, httpVersion: nil, headerFields: [
@@ -80,7 +80,7 @@ class HttpConnectionTests: XCTestCase {
         XCTAssertTrue(nonDeterministicResultMatchesOneValue12)
     }
     
-    func testResponseHttpHeaderNoMatch() throws {
+    func testResponseHttpHeader_NoMatch() throws {
         // setup
         let searchKey = "something-else"
         let response = HTTPURLResponse(url: URL(string: "https://someurl")!, statusCode: 200, httpVersion: nil, headerFields: ["Some-Key": "value"])
@@ -95,7 +95,7 @@ class HttpConnectionTests: XCTestCase {
         XCTAssertEqual(iOS13Result, iOS12Result)
     }
     
-    func testResponseHttpHeaderSpecialChars() throws {
+    func testResponseHttpHeader_SpecialChars() throws {
         // setup
         let searchKey = "$om3-Ke?"
         let response = HTTPURLResponse(url: URL(string: "https://someurl")!, statusCode: 200, httpVersion: nil, headerFields: ["$om3-Ke?": "value"])
@@ -110,7 +110,7 @@ class HttpConnectionTests: XCTestCase {
         XCTAssertEqual(iOS13Result, iOS12Result)
     }
     
-    func testResponseHttpHeaderMixedCase() throws {
+    func testResponseHttpHeader_MixedCase() throws {
         // setup
         let searchKey = "soMe-KeY"
         let response = HTTPURLResponse(url: URL(string: "https://someurl")!, statusCode: 200, httpVersion: nil, headerFields: ["SOmE-kEy": "value"])
