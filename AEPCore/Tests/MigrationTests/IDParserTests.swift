@@ -10,6 +10,7 @@
  */
 
 import XCTest
+
 @testable import AEPCore
 
 class IDParserTests: XCTestCase {

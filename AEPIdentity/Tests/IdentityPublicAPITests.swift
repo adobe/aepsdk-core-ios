@@ -10,15 +10,15 @@
  */
 
 import XCTest
-import AEPServicesMocks
+
 @testable import AEPCore
-@testable import AEPIdentity
 @testable import AEPCoreMocks
+@testable import AEPIdentity
 
 class IdentityAPITests: XCTestCase {
 
     override func setUp() {
-        EventHub.reset()
+        MobileCore.resetSDK()
         MockExtension.reset()
         EventHub.shared.start()
         registerMockExtension(MockExtension.self)

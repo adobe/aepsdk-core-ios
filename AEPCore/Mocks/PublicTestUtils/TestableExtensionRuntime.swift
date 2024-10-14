@@ -10,8 +10,9 @@
 // governing permissions and limitations under the License.
 //
 
-@testable import AEPCore
 import Foundation
+
+@testable import AEPCore
 
 /// Testable implementation for `ExtensionRuntime`
 ///

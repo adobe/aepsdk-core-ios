@@ -10,11 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPLifecycle
-import AEPServices
-import AEPCoreMocks
-import AEPServicesMocks
 import XCTest
+
+import AEPCoreMocks
+import AEPServices
+
+@testable import AEPLifecycle
 
 class XDMApplicationTests: XCTestCase, AnyCodableAsserts {
 

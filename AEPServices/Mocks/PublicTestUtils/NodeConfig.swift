@@ -10,7 +10,6 @@
 // governing permissions and limitations under the License.
 //
 
-import Foundation
 import XCTest
 
 /// A protocol that defines a multi-path configuration.

@@ -9,9 +9,11 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPLifecycle
-import AEPServices
 import XCTest
+
+import AEPServices
+
+@testable import AEPLifecycle
 
 class LifecycleV2DataStoreCacheTests: XCTestCase {
 

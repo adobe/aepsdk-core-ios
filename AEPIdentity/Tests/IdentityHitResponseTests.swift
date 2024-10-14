@@ -9,8 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPIdentity
 import XCTest
+
+@testable import AEPIdentity
 
 class IdentityHitResponseTests: XCTestCase {
     /// Tests that when all properties are present they are all populated in the response struct

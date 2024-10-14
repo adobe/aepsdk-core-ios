@@ -9,8 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPIdentity
 import XCTest
+
+@testable import AEPIdentity
 
 class ECIDTests: XCTestCase {
     /// Ensures that an ECID has a length of 38

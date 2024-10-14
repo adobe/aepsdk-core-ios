@@ -9,10 +9,12 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
+import AEPCoreMocks
+
 @testable import AEPIdentity
 @testable import AEPServices
-import AEPServicesMocks
-import XCTest
 
 class PushIDManagerTests: XCTestCase {
     var pushIdManager: PushIDManager!

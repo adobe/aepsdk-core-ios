@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-import AEPCore
 import Foundation
+
+import AEPCore
 
 class MockLegacyExtension: NSObject {
 

@@ -10,9 +10,10 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 @testable import AEPCore
 @testable import AEPServices
-import XCTest
 
 extension Dictionary where Key == String, Value == Any {
     func flattening(prefix: String = "") -> [String: Any] {

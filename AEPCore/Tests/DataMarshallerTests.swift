@@ -9,11 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
 import XCTest
 
 @testable import AEPCore
-
 
 class DataMarshallerTests: XCTestCase {
     

@@ -10,7 +10,6 @@
  */
 
 import AEPServices
-import Foundation
 
 public typealias NetworkResponse = (data: Data?, response: HTTPURLResponse?, error: Error?)
 public typealias RequestResolver = (NetworkRequest) -> NetworkResponse?

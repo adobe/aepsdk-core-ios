@@ -11,7 +11,6 @@
 //
 
 import AEPServices
-import Foundation
 
 extension NetworkRequest {
     public func deepCopy() -> NetworkRequest {

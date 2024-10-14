@@ -9,9 +9,11 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPIdentity
-import AEPServicesMocks
 import XCTest
+
+import AEPCoreMocks
+
+@testable import AEPIdentity
 
 class HitQueuing_PrivacyTests: XCTestCase {
     var hitQueue: MockHitQueue!
