@@ -44,4 +44,5 @@ public class EventSource: NSObject {
     public static let startScanEventSource = "com.adobe.eventSource.startScan"
     public static let scanScreenshot = "com.adobe.eventSource.scanScreenshot"
     public static let stopScanEventSource = "com.adobe.eventSource.stopScan"
+    public static let readyForScanSource = "com.adobe.eventSource.readyForScan"
 }
