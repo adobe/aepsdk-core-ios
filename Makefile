@@ -242,3 +242,11 @@ pod-lint:
 # make check-version VERSION=3.1.0
 check-version:
 	(sh ./Script/version.sh $(VERSION))
+
+api-check:
+	(sh ./Script/api-check.sh  --check --platform ios)
+	(sh ./Script/api-check.sh  --check --platform tvos)
+
+api-dump:
+	(sh ./Script/api-check.sh  --dump --platform ios)
+	(sh ./Script/api-check.sh  --dump --platform tvos)
