@@ -1,0 +1,1580 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "AEPIdentity",
+    "printedName": "AEPIdentity",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "AEPCore",
+        "printedName": "AEPCore",
+        "declKind": "Import",
+        "moduleName": "AEPIdentity"
+      },
+      {
+        "kind": "Import",
+        "name": "AEPServices",
+        "printedName": "AEPServices",
+        "declKind": "Import",
+        "moduleName": "AEPIdentity"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "AEPIdentity"
+      },
+      {
+        "kind": "Import",
+        "name": "_Concurrency",
+        "printedName": "_Concurrency",
+        "declKind": "Import",
+        "moduleName": "AEPIdentity"
+      },
+      {
+        "kind": "Import",
+        "name": "_StringProcessing",
+        "printedName": "_StringProcessing",
+        "declKind": "Import",
+        "moduleName": "AEPIdentity"
+      },
+      {
+        "kind": "Import",
+        "name": "_SwiftConcurrencyShims",
+        "printedName": "_SwiftConcurrencyShims",
+        "declKind": "Import",
+        "moduleName": "AEPIdentity"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Identifiable",
+        "printedName": "Identifiable",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "origin",
+            "printedName": "origin",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(py)origin",
+            "mangledName": "$s11AEPIdentity12IdentifiableP6originSSSgvp",
+            "moduleName": "AEPIdentity",
+            "protocolReq": true,
+            "declAttributes": [
+              "ObjC"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(im)origin",
+                "mangledName": "$s11AEPIdentity12IdentifiableP6originSSSgvg",
+                "moduleName": "AEPIdentity",
+                "genericSig": "<τ_0_0 where τ_0_0 : AEPIdentity.Identifiable>",
+                "sugared_genericSig": "<Self where Self : AEPIdentity.Identifiable>",
+                "protocolReq": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "type",
+            "printedName": "type",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(py)type",
+            "mangledName": "$s11AEPIdentity12IdentifiableP4typeSSSgvp",
+            "moduleName": "AEPIdentity",
+            "protocolReq": true,
+            "declAttributes": [
+              "ObjC"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(im)type",
+                "mangledName": "$s11AEPIdentity12IdentifiableP4typeSSSgvg",
+                "moduleName": "AEPIdentity",
+                "genericSig": "<τ_0_0 where τ_0_0 : AEPIdentity.Identifiable>",
+                "sugared_genericSig": "<Self where Self : AEPIdentity.Identifiable>",
+                "protocolReq": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "identifier",
+            "printedName": "identifier",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(py)identifier",
+            "mangledName": "$s11AEPIdentity12IdentifiableP10identifierSSSgvp",
+            "moduleName": "AEPIdentity",
+            "protocolReq": true,
+            "declAttributes": [
+              "ObjC"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(im)identifier",
+                "mangledName": "$s11AEPIdentity12IdentifiableP10identifierSSSgvg",
+                "moduleName": "AEPIdentity",
+                "genericSig": "<τ_0_0 where τ_0_0 : AEPIdentity.Identifiable>",
+                "sugared_genericSig": "<Self where Self : AEPIdentity.Identifiable>",
+                "protocolReq": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "authenticationState",
+            "printedName": "authenticationState",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "MobileVisitorAuthenticationState",
+                "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(py)authenticationState",
+            "mangledName": "$s11AEPIdentity12IdentifiableP19authenticationStateAA027MobileVisitorAuthenticationD0Ovp",
+            "moduleName": "AEPIdentity",
+            "protocolReq": true,
+            "declAttributes": [
+              "ObjC"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MobileVisitorAuthenticationState",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                    "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable(im)authenticationState",
+                "mangledName": "$s11AEPIdentity12IdentifiableP19authenticationStateAA027MobileVisitorAuthenticationD0Ovg",
+                "moduleName": "AEPIdentity",
+                "genericSig": "<τ_0_0 where τ_0_0 : AEPIdentity.Identifiable>",
+                "sugared_genericSig": "<Self where Self : AEPIdentity.Identifiable>",
+                "protocolReq": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "reqNewWitnessTableEntry": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable",
+        "mangledName": "$s11AEPIdentity12IdentifiableP",
+        "moduleName": "AEPIdentity",
+        "genericSig": "<τ_0_0 : AnyObject>",
+        "sugared_genericSig": "<Self : AnyObject>",
+        "objc_name": "AEPIdentifiable",
+        "declAttributes": [
+          "ObjC"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Identity",
+        "printedName": "Identity",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "runtime",
+            "printedName": "runtime",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ExtensionRuntime",
+                "printedName": "any AEPCore.ExtensionRuntime",
+                "usr": "c:@M@AEPCore@objc(pl)AEPExtensionRuntime"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(py)runtime",
+            "mangledName": "$s11AEPIdentity8IdentityC7runtime7AEPCore16ExtensionRuntime_pvp",
+            "moduleName": "AEPIdentity",
+            "objc_name": "runtime",
+            "declAttributes": [
+              "Final",
+              "ObjC",
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExtensionRuntime",
+                    "printedName": "any AEPCore.ExtensionRuntime",
+                    "usr": "c:@M@AEPCore@objc(pl)AEPExtensionRuntime"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)runtime",
+                "mangledName": "$s11AEPIdentity8IdentityC7runtime7AEPCore16ExtensionRuntime_pvg",
+                "moduleName": "AEPIdentity",
+                "implicit": true,
+                "objc_name": "runtime",
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "name",
+            "printedName": "name",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(py)name",
+            "mangledName": "$s11AEPIdentity8IdentityC4nameSSvp",
+            "moduleName": "AEPIdentity",
+            "objc_name": "name",
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "ObjC",
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)name",
+                "mangledName": "$s11AEPIdentity8IdentityC4nameSSvg",
+                "moduleName": "AEPIdentity",
+                "implicit": true,
+                "objc_name": "name",
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "friendlyName",
+            "printedName": "friendlyName",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(py)friendlyName",
+            "mangledName": "$s11AEPIdentity8IdentityC12friendlyNameSSvp",
+            "moduleName": "AEPIdentity",
+            "objc_name": "friendlyName",
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "ObjC",
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)friendlyName",
+                "mangledName": "$s11AEPIdentity8IdentityC12friendlyNameSSvg",
+                "moduleName": "AEPIdentity",
+                "implicit": true,
+                "objc_name": "friendlyName",
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "extensionVersion",
+            "printedName": "extensionVersion",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(cpy)extensionVersion",
+            "mangledName": "$s11AEPIdentity8IdentityC16extensionVersionSSvpZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "objc_name": "extensionVersion",
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "ObjC",
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(cm)extensionVersion",
+                "mangledName": "$s11AEPIdentity8IdentityC16extensionVersionSSvgZ",
+                "moduleName": "AEPIdentity",
+                "static": true,
+                "implicit": true,
+                "objc_name": "extensionVersion",
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "metadata",
+            "printedName": "metadata",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Swift.String]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Swift.String]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(py)metadata",
+            "mangledName": "$s11AEPIdentity8IdentityC8metadataSDyS2SGSgvp",
+            "moduleName": "AEPIdentity",
+            "objc_name": "metadata",
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "ObjC",
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Swift.String]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Swift.String]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)metadata",
+                "mangledName": "$s11AEPIdentity8IdentityC8metadataSDyS2SGSgvg",
+                "moduleName": "AEPIdentity",
+                "implicit": true,
+                "objc_name": "metadata",
+                "declAttributes": [
+                  "Final",
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(runtime:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Identity",
+                "printedName": "AEPIdentity.Identity",
+                "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ExtensionRuntime",
+                "printedName": "any AEPCore.ExtensionRuntime",
+                "usr": "c:@M@AEPCore@objc(pl)AEPExtensionRuntime"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)initWithRuntime:",
+            "mangledName": "$s11AEPIdentity8IdentityC7runtimeAC7AEPCore16ExtensionRuntime_p_tcfc",
+            "moduleName": "AEPIdentity",
+            "objc_name": "initWithRuntime:",
+            "declAttributes": [
+              "ObjC",
+              "Required"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "onRegistered",
+            "printedName": "onRegistered()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)onRegistered",
+            "mangledName": "$s11AEPIdentity8IdentityC12onRegisteredyyF",
+            "moduleName": "AEPIdentity",
+            "objc_name": "onRegistered",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "onUnregistered",
+            "printedName": "onUnregistered()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)onUnregistered",
+            "mangledName": "$s11AEPIdentity8IdentityC14onUnregisteredyyF",
+            "moduleName": "AEPIdentity",
+            "objc_name": "onUnregistered",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "readyForEvent",
+            "printedName": "readyForEvent(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Event",
+                "printedName": "AEPCore.Event",
+                "usr": "c:@M@AEPCore@objc(cs)AEPEvent"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)readyForEvent:",
+            "mangledName": "$s11AEPIdentity8IdentityC13readyForEventySb7AEPCore0E0CF",
+            "moduleName": "AEPIdentity",
+            "objc_name": "readyForEvent:",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Identity",
+                "printedName": "AEPIdentity.Identity",
+                "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity(im)init",
+            "mangledName": "$s11AEPIdentity8IdentityCACycfc",
+            "moduleName": "AEPIdentity",
+            "overriding": true,
+            "implicit": true,
+            "objc_name": "init",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "appendTo",
+            "printedName": "appendTo(url:completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Foundation.URL?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "URL",
+                    "printedName": "Foundation.URL",
+                    "usr": "s:10Foundation3URLV"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Foundation.URL?, (any Swift.Error)?) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(Foundation.URL?, (any Swift.Error)?)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "Foundation.URL?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "URL",
+                            "printedName": "Foundation.URL",
+                            "usr": "s:10Foundation3URLV"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "(any Swift.Error)?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Error",
+                            "printedName": "any Swift.Error",
+                            "usr": "s:s5ErrorP"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@AEPIdentity@objc(cs)AEPMobileIdentity(cm)appendToUrl:completion:",
+            "mangledName": "$s11AEPIdentity8IdentityC8appendTo3url10completiony10Foundation3URLVSg_yAJ_s5Error_pSgtctFZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "getIdentifiers",
+            "printedName": "getIdentifiers(completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "([any AEPIdentity.Identifiable]?, (any Swift.Error)?) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "([any AEPIdentity.Identifiable]?, (any Swift.Error)?)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "[any AEPIdentity.Identifiable]?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Array",
+                            "printedName": "[any AEPIdentity.Identifiable]",
+                            "children": [
+                              {
+                                "kind": "TypeNominal",
+                                "name": "Identifiable",
+                                "printedName": "any AEPIdentity.Identifiable",
+                                "usr": "c:@M@AEPIdentity@objc(pl)AEPIdentifiable"
+                              }
+                            ],
+                            "usr": "s:Sa"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "(any Swift.Error)?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Error",
+                            "printedName": "any Swift.Error",
+                            "usr": "s:s5ErrorP"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@AEPIdentity@objc(cs)AEPMobileIdentity(cm)getIdentifiers:",
+            "mangledName": "$s11AEPIdentity8IdentityC14getIdentifiers10completionyySayAA12Identifiable_pGSg_s5Error_pSgtc_tFZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "objc_name": "getIdentifiers:",
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "getExperienceCloudId",
+            "printedName": "getExperienceCloudId(completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.String?, (any Swift.Error)?) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(Swift.String?, (any Swift.Error)?)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "Swift.String?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "(any Swift.Error)?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Error",
+                            "printedName": "any Swift.Error",
+                            "usr": "s:s5ErrorP"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@AEPIdentity@objc(cs)AEPMobileIdentity(cm)getExperienceCloudId:",
+            "mangledName": "$s11AEPIdentity8IdentityC20getExperienceCloudId10completionyySSSg_s5Error_pSgtc_tFZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "objc_name": "getExperienceCloudId:",
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "syncIdentifier",
+            "printedName": "syncIdentifier(identifierType:identifier:authenticationState:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "MobileVisitorAuthenticationState",
+                "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@AEPIdentity@objc(cs)AEPMobileIdentity(cm)syncIdentifierWithType:identifier:authenticationState:",
+            "mangledName": "$s11AEPIdentity8IdentityC14syncIdentifier14identifierType0E019authenticationStateySS_SSAA027MobileVisitorAuthenticationH0OtFZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "objc_name": "syncIdentifierWithType:identifier:authenticationState:",
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "syncIdentifiers",
+            "printedName": "syncIdentifiers(identifiers:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Swift.String]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Swift.String]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@AEPIdentity@objc(cs)AEPMobileIdentity(cm)syncIdentifiers:",
+            "mangledName": "$s11AEPIdentity8IdentityC15syncIdentifiers11identifiersySDyS2SGSg_tFZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "objc_name": "syncIdentifiers:",
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "syncIdentifiers",
+            "printedName": "syncIdentifiers(identifiers:authenticationState:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Swift.String]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Swift.String]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "MobileVisitorAuthenticationState",
+                "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@AEPIdentity@objc(cs)AEPMobileIdentity(cm)syncIdentifiers:authenticationState:",
+            "mangledName": "$s11AEPIdentity8IdentityC15syncIdentifiers11identifiers19authenticationStateySDyS2SGSg_AA027MobileVisitorAuthenticationG0OtFZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "objc_name": "syncIdentifiers:authenticationState:",
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "getUrlVariables",
+            "printedName": "getUrlVariables(completion:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.String?, (any Swift.Error)?) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(Swift.String?, (any Swift.Error)?)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "Swift.String?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Optional",
+                        "printedName": "(any Swift.Error)?",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "Error",
+                            "printedName": "any Swift.Error",
+                            "usr": "s:s5ErrorP"
+                          }
+                        ],
+                        "usr": "s:Sq"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@AEPIdentity@objc(cs)AEPMobileIdentity(cm)getUrlVariables:",
+            "mangledName": "$s11AEPIdentity8IdentityC15getUrlVariables10completionyySSSg_s5Error_pSgtc_tFZ",
+            "moduleName": "AEPIdentity",
+            "static": true,
+            "objc_name": "getUrlVariables:",
+            "declAttributes": [
+              "Final",
+              "ObjC"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:@M@AEPIdentity@objc(cs)AEPMobileIdentity",
+        "mangledName": "$s11AEPIdentity8IdentityC",
+        "moduleName": "AEPIdentity",
+        "objc_name": "AEPMobileIdentity",
+        "declAttributes": [
+          "ObjC"
+        ],
+        "superclassUsr": "c:objc(cs)NSObject",
+        "superclassNames": [
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Extension",
+            "printedName": "Extension",
+            "usr": "c:@M@AEPCore@objc(pl)AEPExtension",
+            "mangledName": "$s7AEPCore9ExtensionP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "MobileVisitorAuthenticationState",
+        "printedName": "MobileVisitorAuthenticationState",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "unknown",
+            "printedName": "unknown",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(AEPIdentity.MobileVisitorAuthenticationState.Type) -> AEPIdentity.MobileVisitorAuthenticationState",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MobileVisitorAuthenticationState",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                    "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MobileVisitorAuthenticationState",
+                        "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                        "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState@AEPMobileVisitorAuthStateUnknown",
+            "mangledName": "$s11AEPIdentity32MobileVisitorAuthenticationStateO7unknownyA2CmF",
+            "moduleName": "AEPIdentity",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 0
+          },
+          {
+            "kind": "Var",
+            "name": "authenticated",
+            "printedName": "authenticated",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(AEPIdentity.MobileVisitorAuthenticationState.Type) -> AEPIdentity.MobileVisitorAuthenticationState",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MobileVisitorAuthenticationState",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                    "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MobileVisitorAuthenticationState",
+                        "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                        "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState@AEPMobileVisitorAuthStateAuthenticated",
+            "mangledName": "$s11AEPIdentity32MobileVisitorAuthenticationStateO13authenticatedyA2CmF",
+            "moduleName": "AEPIdentity",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 1
+          },
+          {
+            "kind": "Var",
+            "name": "loggedOut",
+            "printedName": "loggedOut",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(AEPIdentity.MobileVisitorAuthenticationState.Type) -> AEPIdentity.MobileVisitorAuthenticationState",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MobileVisitorAuthenticationState",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                    "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "MobileVisitorAuthenticationState",
+                        "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                        "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState@AEPMobileVisitorAuthStateLoggedOut",
+            "mangledName": "$s11AEPIdentity32MobileVisitorAuthenticationStateO9loggedOutyA2CmF",
+            "moduleName": "AEPIdentity",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "fixedbinaryorder": 2
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(rawValue:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "AEPIdentity.MobileVisitorAuthenticationState?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "MobileVisitorAuthenticationState",
+                    "printedName": "AEPIdentity.MobileVisitorAuthenticationState",
+                    "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:11AEPIdentity32MobileVisitorAuthenticationStateO8rawValueACSgSi_tcfc",
+            "mangledName": "$s11AEPIdentity32MobileVisitorAuthenticationStateO8rawValueACSgSi_tcfc",
+            "moduleName": "AEPIdentity",
+            "implicit": true,
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Var",
+            "name": "rawValue",
+            "printedName": "rawValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPIdentity32MobileVisitorAuthenticationStateO8rawValueSivp",
+            "mangledName": "$s11AEPIdentity32MobileVisitorAuthenticationStateO8rawValueSivp",
+            "moduleName": "AEPIdentity",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPIdentity32MobileVisitorAuthenticationStateO8rawValueSivg",
+                "mangledName": "$s11AEPIdentity32MobileVisitorAuthenticationStateO8rawValueSivg",
+                "moduleName": "AEPIdentity",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "c:@M@AEPIdentity@E@AEPMobileVisitorAuthState",
+        "mangledName": "$s11AEPIdentity32MobileVisitorAuthenticationStateO",
+        "moduleName": "AEPIdentity",
+        "objc_name": "AEPMobileVisitorAuthState",
+        "declAttributes": [
+          "ObjC"
+        ],
+        "enumRawTypeName": "Int",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "RawRepresentable",
+            "printedName": "RawRepresentable",
+            "children": [
+              {
+                "kind": "TypeWitness",
+                "name": "RawValue",
+                "printedName": "RawValue",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ]
+              }
+            ],
+            "usr": "s:SY",
+            "mangledName": "$sSY"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Decodable",
+            "printedName": "Decodable",
+            "usr": "s:Se",
+            "mangledName": "$sSe"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Encodable",
+            "printedName": "Encodable",
+            "usr": "s:SE",
+            "mangledName": "$sSE"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  }
+}
