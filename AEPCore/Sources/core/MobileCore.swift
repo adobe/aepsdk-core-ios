@@ -41,22 +41,24 @@ public final class MobileCore: NSObject {
     
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
-    public static func start(with id: String, and options: CoreOptions) {
-        if let logLevel = options.logLevel {
+    public static func initialize(with id: String, options: InitOptions?, _ completion: (() -> Void)? = nil) {
+        if let logLevel = options?.logLevel {
             setLogLevel(logLevel)
         }
+
+        if let wrapperType = options?.wrapperType {
+            setWrapperType(wrapperType)
+        }
+
         // Register Extensions, call configureWithAppId from callback
         DispatchQueue.global().async {
             let classList = ClassFinder.classes(conformToProtocol: Extension.self)
             let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
             registerExtensions(filteredClassList) {
                 configureWith(appId: id)
-                if let configUpdates = options.configUpdates {
-                    updateConfigurationWith(configDict: configUpdates)
-                }
                 
                 // If disableLifecycleStart flag is non nil and true, set lifecycle notification listeners
-                guard let disableAutoLifecycleTracking = options.disableAutoLifecycleTracking, disableAutoLifecycleTracking == true else {
+                guard let disableAutoLifecycleTracking = options?.disableAutoLifecycleTracking, disableAutoLifecycleTracking == true else {
                     var usingSceneDelegate = false
                     if #available(iOS 13.0, tvOS 13.0, *) {
                         let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
@@ -64,9 +66,12 @@ public final class MobileCore: NSObject {
                             usingSceneDelegate = true
                         }
                     }
-                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options.additionalContextData)
+                    // TODO - only call once
+                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options?.additionalContextData)
                     return
                 }
+
+                completion?()
             }
         }
     }

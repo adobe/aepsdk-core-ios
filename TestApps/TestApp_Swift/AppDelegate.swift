@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                MobileCore.lifecycleStart(additionalContextData: nil)
 //            }
 //        })
-        MobileCore.start(with: LAUNCH_ENVIRONMENT_FILE_ID, and: CoreOptions(logLevel: .trace, configUpdates: nil, additionalContextData: nil, disableAutoLifecycleTracking: false))
+        MobileCore.initialize(with: LAUNCH_ENVIRONMENT_FILE_ID, options: InitOptions(logLevel: .trace, additionalContextData: nil, disableAutoLifecycleTracking: false))
         return true
     }
 

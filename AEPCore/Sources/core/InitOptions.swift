@@ -14,16 +14,21 @@ import Foundation
 import UIKit
 import AEPServices
 
-public struct CoreOptions {
+public struct InitOptions {
     
     var logLevel: LogLevel?
-    var configUpdates: [String: Any]?
+    var wrapperType: WrapperType?
     var additionalContextData: [String: Any]?
     var disableAutoLifecycleTracking: Bool?
     
-    public init(logLevel: LogLevel? = nil, configUpdates: [String : Any]? = nil, additionalContextData: [String : Any]? = nil, disableAutoLifecycleTracking: Bool? = nil) {
+    public init(
+        logLevel: LogLevel? = nil,
+        wrapperType: WrapperType? = nil,
+        additionalContextData: [String : Any]? = nil,
+        disableAutoLifecycleTracking: Bool? = nil
+    ) {
         self.logLevel = logLevel
-        self.configUpdates = configUpdates
+        self.wrapperType = wrapperType
         self.additionalContextData = additionalContextData
         self.disableAutoLifecycleTracking = disableAutoLifecycleTracking
     }
