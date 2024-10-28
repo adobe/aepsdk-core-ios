@@ -19,17 +19,17 @@ public struct InitOptions {
     var logLevel: LogLevel?
     var wrapperType: WrapperType?
     var additionalContextData: [String: Any]?
-    var disableAutoLifecycleTracking: Bool?
-    
+    var enableLifecycleTracking: Bool
+
     public init(
         logLevel: LogLevel? = nil,
         wrapperType: WrapperType? = nil,
-        additionalContextData: [String : Any]? = nil,
-        disableAutoLifecycleTracking: Bool? = nil
+        additionalContextData: [String: Any]? = nil,
+        enableLifecycleTracking: Bool = true
     ) {
         self.logLevel = logLevel
         self.wrapperType = wrapperType
         self.additionalContextData = additionalContextData
-        self.disableAutoLifecycleTracking = disableAutoLifecycleTracking
+        self.enableLifecycleTracking = enableLifecycleTracking
     }
 }

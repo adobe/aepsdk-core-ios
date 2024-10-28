@@ -11,10 +11,10 @@
 
 import UIKit
 import AEPCore
-import AEPServices
-import AEPLifecycle
-import AEPSignal
-import AEPIdentity
+//import AEPServices
+//import AEPLifecycle
+//import AEPSignal
+//import AEPIdentity
 import BackgroundTasks
 
 @main
@@ -24,9 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let appState = application.applicationState
+//        let appState = application.applicationState
 
-        MobileCore.initialize(with: LAUNCH_ENVIRONMENT_FILE_ID, options: InitOptions(logLevel: .trace, additionalContextData: nil, disableAutoLifecycleTracking: false))
+        MobileCore.initialize(with: LAUNCH_ENVIRONMENT_FILE_ID, options: InitOptions(logLevel: .trace, additionalContextData: nil, enableLifecycleTracking: true))
 //        MobileCore.setLogLevel(.trace)
 //        let extensions = [Identity.self,
 //                          Lifecycle.self,
