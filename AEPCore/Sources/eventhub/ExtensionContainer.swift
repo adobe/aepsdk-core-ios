@@ -19,19 +19,31 @@ import Foundation
 class ExtensionContainer {
     private static let LOG_TAG = "ExtensionContainer"
 
+    /// A weak reference to the EventHub instance responsible for processing events sent to/from this ExtensionContainer.
+    private weak var eventHub: EventHub?
+
     /// The extension held in this container
-    var exten: Extension?
+    private var _exten: Extension?
+    var exten: Extension? {
+        get { containerQueue.sync { self._exten } }
+        set { containerQueue.async { self._exten = newValue } }
+    }
 
     /// The `SharedState` associated with the extension
-    var sharedState: SharedState?
+    private var sharedState: SharedState?
 
     /// The XDM `SharedState` associated with the extension
-    var xdmSharedState: SharedState?
+    private var xdmSharedState: SharedState?
 
-    var sharedStateName: String = "invalidSharedStateName"
+    /// The shared state name associated with the extension
+    private var _sharedStateName = "invalidSharedStateName"    
+    var sharedStateName: String {
+        get { containerQueue.sync { self._sharedStateName } }
+        set { containerQueue.async { self._sharedStateName = newValue } }
+    }
 
     /// The extension's dispatch queue
-    let extensionQueue: DispatchQueue
+    private let extensionQueue: DispatchQueue
 
     /// The extension container's queue to allow multi threaded access to its members.
     private let containerQueue: DispatchQueue
@@ -40,28 +52,20 @@ class ExtensionContainer {
     let eventOrderer: OperationOrderer<Event>
 
     /// Listeners array of `EventListeners` for this extension
-    let eventListeners: ThreadSafeArray<EventListenerContainer>
-
-    private var _lastProcessedEvent: Event?
+    private let eventListeners: ThreadSafeArray<EventListenerContainer>
 
     /// The last `Event` that was processed by this extension, nil if no events have been processed
-    var lastProcessedEvent: Event? {
-        get {
-            containerQueue.sync {
-                return _lastProcessedEvent
-            }
-        }
-        set {
-            containerQueue.sync {
-                _lastProcessedEvent = newValue
-            }
-        }
+    private var _lastProcessedEvent: Event?        
+    var lastProcessedEvent: Event? { 
+        get { containerQueue.sync { self._lastProcessedEvent } }
+        set { containerQueue.async { self._lastProcessedEvent = newValue } }
     }
 
-    init(_ name: String, _ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
+    init(_ eventHub: EventHub, _ name: String, _ type: Extension.Type, _ queue: DispatchQueue, completion: @escaping (EventHubError?) -> Void) {
+        self.eventHub = eventHub
         extensionQueue = queue
-        self.containerQueue = DispatchQueue(label: "\(name).containerqueue")
-        eventOrderer = OperationOrderer<Event>()
+        containerQueue = DispatchQueue(label: "\(name).containerQueue")
+        eventOrderer = OperationOrderer<Event>("\(name).operationOrderer")
         eventListeners = ThreadSafeArray<EventListenerContainer>()
         eventOrderer.setHandler(eventProcessor)
 
@@ -100,8 +104,8 @@ class ExtensionContainer {
 
 extension ExtensionContainer: ExtensionRuntime {
     func unregisterExtension() {
-        guard let exten = exten else { return }
-        EventHub.shared.unregisterExtension(type(of: exten), completion: {_ in })
+        guard let exten = exten, let eventHub = eventHub else { return }
+        eventHub.unregisterExtension(type(of: exten), completion: {_ in })
     }
 
     public func registerListener(type: String, source: String, listener: @escaping EventListener) {
@@ -110,47 +114,58 @@ extension ExtensionContainer: ExtensionRuntime {
     }
 
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
-        EventHub.shared.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
+        guard let eventHub = eventHub else { return }
+        eventHub.registerResponseListener(triggerEvent: triggerEvent, timeout: timeout, listener: listener)
     }
 
     func dispatch(event: Event) {
-        EventHub.shared.dispatch(event: event)
+        guard let eventHub = eventHub else { return }
+        eventHub.dispatch(event: event)
     }
 
     func createSharedState(data: [String: Any], event: Event?) {
-        EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, event: event)
+        guard let eventHub = eventHub else { return }
+        eventHub.createSharedState(extensionName: sharedStateName, data: data, event: event)
     }
 
     func createPendingSharedState(event: Event?) -> SharedStateResolver {
-        return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event)
+        guard let eventHub = eventHub else { return { _ in } }
+        return eventHub.createPendingSharedState(extensionName: sharedStateName, event: event)
     }
 
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true) -> SharedStateResult? {
-        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
+        guard let eventHub = eventHub else { return nil }
+        return eventHub.getSharedState(extensionName: extensionName, event: event, barrier: barrier)
     }
 
     func getSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any) -> SharedStateResult? {
-        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution)
+        guard let eventHub = eventHub else { return nil }
+        return eventHub.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution)
     }
 
     func createXDMSharedState(data: [String: Any], event: Event?) {
-        EventHub.shared.createSharedState(extensionName: sharedStateName, data: data, event: event, sharedStateType: .xdm)
+        guard let eventHub = eventHub else { return }
+        return eventHub.createSharedState(extensionName: sharedStateName, data: data, event: event, sharedStateType: .xdm)
     }
 
     func createPendingXDMSharedState(event: Event?) -> SharedStateResolver {
-        return EventHub.shared.createPendingSharedState(extensionName: sharedStateName, event: event, sharedStateType: .xdm)
+        guard let eventHub = eventHub else { return { _ in } }
+        return eventHub.createPendingSharedState(extensionName: sharedStateName, event: event, sharedStateType: .xdm)
     }
 
     func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = false) -> SharedStateResult? {
-        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, sharedStateType: .xdm)
+        guard let eventHub = eventHub else { return nil }
+        return eventHub.getSharedState(extensionName: extensionName, event: event, barrier: barrier, sharedStateType: .xdm)
     }
 
     func getXDMSharedState(extensionName: String, event: Event?, barrier: Bool = true, resolution: SharedStateResolution = .any) -> SharedStateResult? {
-        return EventHub.shared.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: .xdm)
+        guard let eventHub = eventHub else { return nil }
+        return eventHub.getSharedState(extensionName: extensionName, event: event, barrier: barrier, resolution: resolution, sharedStateType: .xdm)
     }
 
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
-        EventHub.shared.getHistoricalEvents(requests, enforceOrder: enforceOrder, handler: handler)
+        guard let eventHub = eventHub else { return }
+        eventHub.getHistoricalEvents(requests, enforceOrder: enforceOrder, handler: handler)
     }
 
     func startEvents() {

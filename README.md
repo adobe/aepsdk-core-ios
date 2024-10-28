@@ -1,12 +1,12 @@
 # Adobe Experience Platform Core SDK
 
-[![Cocoapods](https://img.shields.io/cocoapods/v/AEPCore.svg?color=orange&label=AEPCore&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPCore)
-[![Cocoapods](https://img.shields.io/cocoapods/v/AEPServices.svg?color=orange&label=AEPServices&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPServices)
-[![Cocoapods](https://img.shields.io/cocoapods/v/AEPLifecycle.svg?color=orange&label=AEPLifecycle&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPLifecycle)
-[![Cocoapods](https://img.shields.io/cocoapods/v/AEPIdentity.svg?color=orange&label=AEPIdentity&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPIdentity)
-[![Cocoapods](https://img.shields.io/cocoapods/v/AEPSignal.svg?color=orange&label=AEPSignal&logo=apple&logoColor=white)](https://cocoapods.org/pods/AEPSignal)
+[![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-core-ios?label=AEPCore&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPCore)
+[![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-core-ios?label=AEPServices&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPServices)
+[![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-core-ios?label=AEPLifecycle&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPLifecycle)
+[![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-core-ios?label=AEPIdentity&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPIdentity)
+[![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-core-ios?label=AEPSignal&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPSignal)
 
-[![SPM](https://img.shields.io/badge/SPM-Supported-orange.svg?logo=apple&logoColor=white)](https://swift.org/package-manager/)
+[![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-core-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-core-ios/releases)
 [![CircleCI](https://img.shields.io/circleci/project/github/adobe/aepsdk-core-ios/master.svg?logo=circleci)](https://circleci.com/gh/adobe/workflows/aepsdk-core-ios)
 [![Code Coverage](https://img.shields.io/codecov/c/github/adobe/aepsdk-core-ios/main.svg?logo=codecov)](https://codecov.io/gh/adobe/aepsdk-core-ios/branch/main)
 
@@ -25,7 +25,7 @@ The `AEPCore`, `AEPServices`, and `AEPIdentity` extensions represent the foundat
 `AEPLifecycle` represents the Adobe Experience Platform SDK's `Lifecycle` extension that helps collect application Lifecycle metrics such as, application install or upgrade information, application launch and session information, device information, and any additional context data provided by the application developer. 
 
 ## Requirements
-- Xcode 11.0 (or newer)
+- Xcode 15 (or newer)
 - Swift 5.1 (or newer)
 
 ## Installation
@@ -70,7 +70,7 @@ Alternatively, if your project has a `Package.swift` file, you can add AEPCore d
 
 ```
 dependencies: [
-    .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .upToNextMajor(from: "3.0.0"))
+    .package(url: "https://github.com/adobe/aepsdk-core-ios.git", .upToNextMajor(from: "5.0.0"))
 ]
 ```
 
@@ -80,7 +80,7 @@ Include `AEPCore.xcodeproj` in the targeted Xcode project and link all necessary
 
 ### Binaries
 
-Run `make archive` from the root directory to generate `.xcframeworks` for each module under the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
+Run `make archive` or `make archive-ios` from the root directory to generate `.xcframeworks` for each module. The `make archive` command will generate XCFrameworks which support iOS and tvOS, while `make archive-ios` will generate XCFrameworks for iOS alone. Once complete, the XCFrameworks can be found in the `build` folder. Drag and drop all `.xcframeworks` to your app target in Xcode.
 
 ## Documentation
 
@@ -88,13 +88,26 @@ Additional documentation for usage and SDK architecture can be found under the [
 
 ## Related Projects
 
-| Project      | Description |
-| ------------ | ----------- |
-| [AEPEdge Extension](https://github.com/adobe/aepsdk-edge-ios) | Provides support to the Experience Platform Edge for the AEP SDK. |
-| [AEPRulesEngine](https://github.com/adobe/aepsdk-rulesengine-ios) | Implementation of the Rules Engine used by the AEP SDK. |
-| [AEP SDK Sample App for iOS](https://github.com/adobe/aepsdk-sample-app-ios) | Contains iOS sample apps for the AEP SDK. Apps are provided for both Objective-C and Swift implementations. |
-| [AEP SDK Sample Extension for iOS](https://github.com/adobe/aepsdk-sample-extension-ios) | Contains a sample implementation of an iOS extension for the AEP SDK. Example implementations are provided for both Objective-C and Swift.
-| [AEP SDK Compatibility for iOS](https://github.com/adobe/aepsdk-compatibility-ios) | Contains code that bridges `ACPCore` and 3rd party extension implementations into the AEP SDK runtime. |
+| Project | Latest Release | Github |
+|---|---|---|
+|  Rules Engine | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-rulesengine-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPRulesEngine) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-rulesengine-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-rulesengine-ios/releases) | [Link](https://github.com/adobe/aepsdk-rulesengine-ios) |
+| [Profile](https://developer.adobe.com/client-sdks/documentation/profile/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-userprofile-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPUserProfile) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-userprofile-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-userprofile-ios/releases)| [Link](https://github.com/adobe/aepsdk-userprofile-ios) |
+| [Adobe Experience Platform Edge Network](https://developer.adobe.com/client-sdks/documentation/edge-network/) |[![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-edge-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPEdge) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-edge-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-edge-ios/releases)| [Link](https://github.com/adobe/aepsdk-edge-ios) |
+| [Identity for Edge Network](https://developer.adobe.com/client-sdks/documentation/identity-for-edge-network/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-edgeidentity-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPEdgeIdentity) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-edgeidentity-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-edgeidentity-ios/releases) | [Link](https://github.com/adobe/aepsdk-edgeidentity-ios) |
+| [Consent for Edge Network](https://developer.adobe.com/client-sdks/documentation/consent-for-edge-network/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-edgeconsent-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPEdgeConsent) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-edgeconsent-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-edgeconsent-ios/releases) | [Link](https://github.com/adobe/aepsdk-edgeconsent-ios) |
+| [Edge Bridge](https://developer.adobe.com/client-sdks/documentation/adobe-analytics/migrate-to-edge-network/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-edgebridge-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPEdgeBridge) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-edgebridge-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-edgebridge-ios/releases) | [Link](https://github.com/adobe/aepsdk-edgebridge-ios) |
+| [Adobe Experience Platform Assurance](https://developer.adobe.com/client-sdks/documentation/platform-assurance-sdk/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-assurance-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPAssurance) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-assurance-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-assurance-ios/releases) | [Link](https://github.com/adobe/aepsdk-assurance-ios)
+| [Places Service](https://developer.adobe.com/client-sdks/documentation/places/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-places-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPPlaces) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-places-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-places-ios/releases) | [Link](https://github.com/adobe/aepsdk-places-ios) |
+| [Adobe Analytics](https://developer.adobe.com/client-sdks/documentation/adobe-analytics/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-analytics-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPAnalytics) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-analytics-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-analytics-ios/releases) | [Link](https://github.com/adobe/aepsdk-analytics-ios) |
+| [Adobe Streaming Media for Edge Network](https://developer.adobe.com/client-sdks/documentation/media-for-edge-network/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-edgemedia-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPEdgeMedia) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-edgemedia-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-edgemedia-ios/releases) | [Link](https://github.com/adobe/aepsdk-edgemedia-ios) |
+| [Adobe Analytics - Media Analytics for Audio & Video](https://developer.adobe.com/client-sdks/documentation/adobe-media-analytics/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-media-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPMedia) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-media-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-media-ios/releases) | [Link](https://github.com/adobe/aepsdk-media-ios) |
+| [Adobe Audience Manager](https://developer.adobe.com/client-sdks/documentation/adobe-audience-manager/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-audience-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPAudience) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-audience-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-audience-ios/releases) | [Link](https://github.com/adobe/aepsdk-audience-ios) |
+| [Adobe Journey Optimizer](https://developer.adobe.com/client-sdks/documentation/adobe-journey-optimizer/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-messaging-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPMessaging) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-messaging-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-messaging-ios/releases) | [Link](https://github.com/adobe/aepsdk-messaging-ios) |
+| [Adobe Journey Optimizer - Decisioning](https://developer.adobe.com/client-sdks/documentation/adobe-journey-optimizer-decisioning/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-optimize-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPOptimize) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-optimize-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-optimize-ios/releases) | [Link](https://github.com/adobe/aepsdk-optimize-ios) |
+| [Adobe Target](https://developer.adobe.com/client-sdks/documentation/adobe-target/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-target-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPTarget) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-target-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-target-ios/releases) | [Link](https://github.com/adobe/aepsdk-target-ios) |
+| [Adobe Campaign Standard](https://developer.adobe.com/client-sdks/documentation/adobe-campaign-standard/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-campaign-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPCampaign) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-campaign-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-campaign-ios/releases) | [Link](https://github.com/adobe/aepsdk-campaign-ios) | 
+[Adobe Campaign Classic](https://developer.adobe.com/client-sdks/documentation/adobe-campaign-classic/) | [![CocoaPods](https://img.shields.io/github/v/release/adobe/aepsdk-campaignclassic-ios?label=CocoaPods&logo=apple&logoColor=white&color=orange&sort=semver)](https://cocoapods.org/pods/AEPCampaignClassic) [![SPM](https://img.shields.io/github/v/release/adobe/aepsdk-campaignclassic-ios?label=SPM&logo=apple&logoColor=white&color=orange&sort=semver)](https://github.com/adobe/aepsdk-campaignclassic-ios/releases) | [Link](https://github.com/adobe/aepsdk-campaignclassic-ios) |
+| AEP SDK Sample App for iOS | - |  [Link](https://github.com/adobe/aepsdk-sample-app-ios) |
 
 ## Contributing
 

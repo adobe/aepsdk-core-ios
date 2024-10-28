@@ -12,14 +12,15 @@
 import XCTest
 
 @testable import AEPCore
-@testable import AEPServices
 @testable import AEPCoreMocks
+@testable import AEPServices
 
 class MobileCoreTests: XCTestCase {
     override func setUp() {
+        NamedCollectionDataStore.clear()
         MobileCore.setWrapperType(.none) // reset wrapper type before each test
         MobileCore.setLogLevel(.error) // reset log level to error before each test
-        EventHub.reset()
+        MobileCore.resetSDK()
         MockExtension.reset()
         MockExtensionTwo.reset()
         MockLegacyExtension.reset()
@@ -207,7 +208,8 @@ class MobileCoreTests: XCTestCase {
               "friendlyName" : "mockExtension"
             },
             "com.adobe.module.configuration" : {
-              "version" : "3.7.4",
+              "version" : "5.3.1",
+
               "friendlyName" : "Configuration"
             },
             "com.adobe.mockExtensionTwo" : {
@@ -221,19 +223,18 @@ class MobileCoreTests: XCTestCase {
         """
         let expectedDict = jsonStrToDict(jsonStr: expected)
 
-        // test
-        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self], {
-            EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.hub, source: EventSource.sharedState) { event in
-                if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME {
-                    let registered = MobileCore.getRegisteredExtensions()
-                    let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
-                    let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
-                    XCTAssertTrue(equal)
-                    expectation.fulfill()
-
-                }
+        EventHub.shared.registerEventListener(type: EventType.hub, source: EventSource.sharedState) { event in
+            if event.data?[EventHubConstants.EventDataKeys.Configuration.EVENT_STATE_OWNER] as? String == EventHubConstants.NAME {
+                let registered = MobileCore.getRegisteredExtensions()
+                let registeredDict = self.jsonStrToDict(jsonStr: registered)?["extensions"] as? Dictionary<String, Any>
+                let equal = NSDictionary(dictionary: registeredDict!).isEqual(to: expectedDict!)
+                XCTAssertTrue(equal)
+                expectation.fulfill()
             }
-        })
+        }
+
+        // test
+        MobileCore.registerExtensions([MockExtension.self, MockExtensionTwo.self])
 
         // verify
         wait(for: [expectation], timeout: 1)
@@ -437,9 +438,8 @@ class MobileCoreTests: XCTestCase {
         // test
         MobileCore.setAppGroup(appGroup)
 
-        // verify
-        let keyValueService = ServiceProvider.shared.namedKeyValueService as? UserDefaultsNamedCollection
-        XCTAssertEqual(appGroup, keyValueService?.appGroup)
+        let keyValueService = ServiceProvider.shared.namedKeyValueService
+        XCTAssertEqual(appGroup, keyValueService.getAppGroup())
     }
 
     // MARK: collectMessageInfo(...) tests

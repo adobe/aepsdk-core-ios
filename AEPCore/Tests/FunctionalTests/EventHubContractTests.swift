@@ -13,18 +13,18 @@
 import XCTest
 
 @testable import AEPCore
-@testable import AEPServices
 @testable import AEPCoreMocks
+@testable import AEPServices
 
 class EventHubContractTest: XCTestCase {
     override func setUp() {
-        EventHub.reset()  
+        MobileCore.resetSDK()
+        NamedCollectionDataStore.clear()
         ContractExtensionOne.reset()
         ContractExtensionTwo.reset()
     }
 
     override func tearDown() {
-
     }
 
 

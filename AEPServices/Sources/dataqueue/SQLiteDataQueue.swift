@@ -46,8 +46,9 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func add(dataEntity: DataEntity) -> Bool {
-        if isClosed { return false}
         return serialQueue.sync {
+            if isClosed { return false}
+
             var dataString = ""
             if let data = dataEntity.data {
                 dataString = String(data: data, encoding: .utf8) ?? ""
@@ -76,8 +77,9 @@ class SQLiteDataQueue: DataQueue {
 
     func peek(n: Int) -> [DataEntity]? {
         guard n > 0 else { return nil }
-        if isClosed { return nil }
         return serialQueue.sync {
+            if isClosed { return nil }
+
             let queryRowStatement = """
             SELECT id,uniqueIdentifier,timestamp,data FROM \(SQLiteDataQueue.TABLE_NAME) ORDER BY id ASC LIMIT \(n);
             """
@@ -103,8 +105,9 @@ class SQLiteDataQueue: DataQueue {
 
     func remove(n: Int) -> Bool {
         guard n > 0 else { return false }
-        if isClosed { return false }
         return serialQueue.sync {
+            if isClosed { return false }
+
             guard let connection = connect() else {
                 return false
             }
@@ -128,8 +131,9 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func clear() -> Bool {
-        if isClosed { return false}
         return serialQueue.sync {
+            if isClosed { return false}
+
             let dropTableStatement = """
             DELETE FROM \(SQLiteDataQueue.TABLE_NAME);
             """
@@ -149,8 +153,9 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func count() -> Int {
-        if isClosed { return 0 }
         return serialQueue.sync {
+            if isClosed { return 0 }
+
             let queryRowStatement = """
             SELECT count(id) FROM \(SQLiteDataQueue.TABLE_NAME);
             """
@@ -170,9 +175,8 @@ class SQLiteDataQueue: DataQueue {
     }
 
     func close() {
-        isClosed = true
-        // waiting for the current operations finished
         serialQueue.sync {
+            isClosed = true
         }
     }
 

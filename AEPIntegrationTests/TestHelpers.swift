@@ -10,6 +10,7 @@
  */
 
 import XCTest
+
 @testable import AEPCore
 
 extension EventHub {
@@ -45,6 +46,11 @@ extension FileManager {
             }
             do {
                 try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.mobile.diskcache", isDirectory: true))
+            } catch {
+                print("ERROR DESCRIPTION: \(error)")
+            }
+            do {
+                try self.removeItem(at: URL(fileURLWithPath: "Library/Caches/com.adobe.eventHistory"))
             } catch {
                 print("ERROR DESCRIPTION: \(error)")
             }

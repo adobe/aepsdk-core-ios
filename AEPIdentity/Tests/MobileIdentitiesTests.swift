@@ -10,11 +10,14 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
-@testable import AEPIdentity
 import XCTest
 
-class MobileIdentitiesTests: XCTestCase {
+import AEPCoreMocks
+
+@testable import AEPCore
+@testable import AEPIdentity
+
+class MobileIdentitiesTests: XCTestCase, AnyCodableAsserts {
     let ecid = ECID()
     let configurationSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-orgid"]
     var identitySharedState: [String: Any] {
@@ -122,7 +125,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"\(ecid.ecidString)\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"},{\"namespace\":\"AVID\",\"value\":\"test-aid\",\"type\":\"integrationCode\"},{\"namespace\":\"vid\",\"value\":\"test-vid\",\"type\":\"analytics\"},{\"namespace\":\"test-dpid\",\"value\":\"test-dpuuid\",\"type\":\"namespaceId\"},{\"namespace\":\"0\",\"value\":\"test-uuid\",\"type\":\"namespaceId\"},{\"namespace\":\"tntid\",\"value\":\"test-tntid\",\"type\":\"target\"},{\"namespace\":\"3rdpartyid\",\"value\":\"test-thirdpartyid\",\"type\":\"target\"}]}],\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
-        XCTAssertEqual(expected, identifiers)
+        assertEqual(expected: expected, actual: identifiers)
     }
 
     /// Tests that when configuration provides shared state that we include configuration identities in getAllIdentifiers
@@ -145,7 +148,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // verify
         let expected = "{\"companyContexts\":[{\"namespace\":\"imsOrgID\",\"marketingCloudId\":\"test-orgid\"}]}"
-        XCTAssertEqual(expected, identifiers)
+        assertEqual(expected: expected, actual: identifiers)
     }
 
     /// Tests that when identity provides shared state that we include identity identities in getAllIdentifiers
@@ -168,7 +171,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"4\",\"value\":\"\(ecid.ecidString)\",\"type\":\"namespaceId\"},{\"namespace\":\"type1\",\"value\":\"id1\",\"type\":\"integrationCode\"},{\"namespace\":\"type2\",\"value\":\"id2\",\"type\":\"integrationCode\"},{\"namespace\":\"DSID_20915\",\"value\":\"test-advertisingId\",\"type\":\"integrationCode\"},{\"namespace\":\"20920\",\"value\":\"test-pushid\",\"type\":\"integrationCode\"}]}]}"
-        XCTAssertEqual(expected, identifiers)
+        assertEqual(expected: expected, actual: identifiers)
     }
 
     /// Tests that when analytics provides shared state that we include analytics identities in getAllIdentifiers
@@ -191,7 +194,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"AVID\",\"value\":\"test-aid\",\"type\":\"integrationCode\"},{\"namespace\":\"vid\",\"value\":\"test-vid\",\"type\":\"analytics\"}]}]}"
-        XCTAssertEqual(expected, identifiers)
+        assertEqual(expected: expected, actual: identifiers)
     }
 
     /// Tests that when audience provides shared state that we include audience identities in getAllIdentifiers
@@ -214,7 +217,7 @@ class MobileIdentitiesTests: XCTestCase {
 
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"test-dpid\",\"value\":\"test-dpuuid\",\"type\":\"namespaceId\"},{\"namespace\":\"0\",\"value\":\"test-uuid\",\"type\":\"namespaceId\"}]}]}"
-        XCTAssertEqual(expected, identifiers)
+        assertEqual(expected: expected, actual: identifiers)
     }
 
     /// Tests that when Target provides shared state that we include Target identities in getAllIdentifiers
@@ -237,6 +240,6 @@ class MobileIdentitiesTests: XCTestCase {
 
         // verify
         let expected = "{\"users\":[{\"userIDs\":[{\"namespace\":\"tntid\",\"value\":\"test-tntid\",\"type\":\"target\"},{\"namespace\":\"3rdpartyid\",\"value\":\"test-thirdpartyid\",\"type\":\"target\"}]}]}"
-        XCTAssertEqual(expected, identifiers)
+        assertEqual(expected: expected, actual: identifiers)
     }
 }

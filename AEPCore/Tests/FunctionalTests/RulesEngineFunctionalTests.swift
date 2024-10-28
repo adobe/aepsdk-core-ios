@@ -9,13 +9,12 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
+import XCTest
 
-@testable import AEPCore
 import AEPCoreMocks
 import AEPServices
-import AEPServicesMocks
-import XCTest
+
+@testable import AEPCore
 
 /// Functional tests for the rules engine feature
 class RulesEngineFunctionalTests: XCTestCase {
@@ -26,7 +25,6 @@ class RulesEngineFunctionalTests: XCTestCase {
 
     override func setUp() {
         continueAfterFailure = false
-        UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         defaultEvent = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
                              data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
@@ -507,6 +505,62 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         /// Then: should not get "launches" value from (lifecycle) shared state
         XCTAssertEqual("", attachedData["launches"] as? String)
+    }
+
+    func testAttachDataArray() {
+        /// Given: a launch rule to attach data to event
+
+        //    ---------- attach data rule ----------
+        //        "eventdata": {
+        //          "attached_data_array": [
+        //            "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.carriername%}",
+        //            "testStringTopLevel",
+        //            {
+        //                "testDictKey": "testVal",
+        //                "osversionNested": "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}"
+        //
+        //            }, [
+        //                "{%~state.com.adobe.module.lifecycle/lifecyclecontextdata.osversion%}",
+        //                "testStringInsideNestedArray"
+        //            ]
+        //          ]
+        //        }
+        //    --------------------------------------
+
+        resetRulesEngine(withNewRules: "rules_testAttachDataArray")
+
+        /// When: evaluating a launch event
+
+        //    ------------ launch event ------------
+        //        "eventdata": {
+        //            "lifecyclecontextdata": {
+        //                "launchevent": "LaunchEvent"
+        //            }
+        //        }
+        //    --------------------------------------
+
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "osversion": "17.0"]], status: .set))
+        let processedEvent = rulesEngine.process(event: defaultEvent)
+
+        /// Then: no consequence event will be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        guard let attachedData = processedEvent.data?["attached_data_array"] as? [Any] else {
+            XCTFail()
+            return
+        }
+        // Token replaces values
+        XCTAssertEqual(attachedData[0] as? String, "AT&T")
+        // non token replaced string
+        XCTAssertEqual(attachedData[1] as? String, "testStringTopLevel")
+        // Dict with token replaced string, and non token replaced string
+        let dict = attachedData[2] as? [String: Any?]
+        XCTAssertEqual(dict?["testDictKey"] as? String, "testVal")
+        XCTAssertEqual(dict?["osversionNested"] as? String, "17.0")
+        let arr = attachedData[3] as? [Any]
+        XCTAssertEqual(arr?[0] as? String, "17.0")
+        XCTAssertEqual(arr?[1] as? String, "testStringInsideNestedArray")
+
     }
 
     func testAttachData_invalidJson() {

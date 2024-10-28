@@ -49,16 +49,14 @@ class LifecycleV2 {
     /// an application close event is dispatched first.
     ///
     /// - Parameters:
-    ///   - date: date at which the start event occurred
-    ///   - additionalData: additional data received with the start event
+    ///   - parentEvent: The triggering lifecycle event
     ///   - isInstall: indicates whether this is an application install scenario
-    func start(date: Date,
-               additionalData: [String: Any]?,
+    func start(parentEvent: Event,
                isInstall: Bool) {
         stateManager.update(state: .START) { [weak self] (updated: Bool) in
             guard let self = self else { return }
             guard updated else { return }
-
+            let date = parentEvent.timestamp
             // detect a possible crash/incorrect start/pause implementation
             if !isInstall && self.isCloseUnknown(prevAppStart: self.dataStoreCache.getAppStartDate(), prevAppPause: self.dataStoreCache.getAppPauseDate()) {
                 // in case of an unknown close situation, use the last known app close event timestamp
@@ -69,7 +67,7 @@ class LifecycleV2 {
 
                 if let crashXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: previousAppStartDate, closeDate: previousAppCloseDate, fallbackCloseDate: computedAppCloseDate, isCloseUnknown: true) {
                     // dispatch application close event with xdm data
-                    self.dispatchApplicationClose(xdm: crashXDM)
+                    self.dispatchApplicationClose(xdm: crashXDM, parentEvent: parentEvent)
                 }
             }
 
@@ -77,7 +75,7 @@ class LifecycleV2 {
 
             if let launchXDM = self.xdmMetricsBuilder.buildAppLaunchXDMData(launchDate: date, isInstall: isInstall, isUpgrade: self.isUpgrade()) {
                 // dispatch application launch event with xdm data
-                self.dispatchApplicationLaunch(xdm: launchXDM, data: additionalData)
+                self.dispatchApplicationLaunch(xdm: launchXDM, parentEvent: parentEvent)
             }
 
             self.persistAppVersion()
@@ -86,12 +84,12 @@ class LifecycleV2 {
 
     /// Handles the pause use-case as application close XDM event.
     ///
-    /// - Parameter pauseDate: Date at which the pause event occurred
-    func pause(pauseDate: Date) {
+    /// - Parameter parentEvent: The triggering lifecycle pause event
+    func pause(parentEvent: Event) {
         stateManager.update(state: .PAUSE) { [weak self] (updated: Bool) in
             guard let self = self else { return }
             guard updated else { return }
-
+            let pauseDate = parentEvent.timestamp
             // store pause date to persistence
             self.dataStoreCache.setAppPauseDate(pauseDate)
             // get start date from cache/presistence
@@ -99,7 +97,7 @@ class LifecycleV2 {
 
             if let closeXDM = self.xdmMetricsBuilder.buildAppCloseXDMData(launchDate: startDate, closeDate: pauseDate, fallbackCloseDate: pauseDate, isCloseUnknown: false) {
                 // dispatch application close event with xdm data
-                self.dispatchApplicationClose(xdm: closeXDM)
+                self.dispatchApplicationClose(xdm: closeXDM, parentEvent: parentEvent)
             }
         }
 
@@ -120,35 +118,36 @@ class LifecycleV2 {
     /// Dispatches a Lifecycle application launch event with appropriate event data
     /// - Parameters:
     ///   - xdm: xdm data for the application launch event
-    ///   - data: additional free-form context data
-    private func dispatchApplicationLaunch(xdm: [String: Any], data: [String: Any]?) {
+    ///   - parentEvent: the triggering lifecycle event
+    private func dispatchApplicationLaunch(xdm: [String: Any], parentEvent: Event) {
         var eventData: [String: Any] = [:]
         eventData[LifecycleV2Constants.EventDataKeys.XDM] = xdm
 
-        if let freeFormData = data, !freeFormData.isEmpty {
+        if let freeFormData = parentEvent.additionalData, !freeFormData.isEmpty {
             eventData[LifecycleV2Constants.EventDataKeys.DATA] = freeFormData
         }
 
-        let applicationLaunchEvent = Event(name: LifecycleV2Constants.EventNames.APPLICATION_LAUNCH, type: EventType.lifecycle, source: EventSource.applicationLaunch, data: eventData)
+        let applicationLaunchEvent = parentEvent.createChainedEvent(name: LifecycleV2Constants.EventNames.APPLICATION_LAUNCH, type: EventType.lifecycle, source: EventSource.applicationLaunch, data: eventData)
         dispatch(applicationLaunchEvent)
     }
 
     /// Dispatches a Lifecycle application close event with appropriate event data
     /// - Parameters:
     ///   - xdm: xdm data for the application close event
-    private func dispatchApplicationClose(xdm: [String: Any]) {
+    ///   - parentEvent: the triggering lifecycle event
+    private func dispatchApplicationClose(xdm: [String: Any], parentEvent: Event) {
         let eventData: [String: Any] = [
             LifecycleV2Constants.EventDataKeys.XDM: xdm
         ]
 
-        let applicationCloseEvent = Event(name: LifecycleV2Constants.EventNames.APPLICATION_CLOSE, type: EventType.lifecycle, source: EventSource.applicationClose, data: eventData)
+        let applicationCloseEvent = parentEvent.createChainedEvent(name: LifecycleV2Constants.EventNames.APPLICATION_CLOSE, type: EventType.lifecycle, source: EventSource.applicationClose, data: eventData)
         dispatch(applicationCloseEvent)
     }
 
     /// - Returns: Bool indicating whether the app has been upgraded
     private func isUpgrade() -> Bool {
-        if let currentAppVersion = systemInfoService.getApplicationBuildNumber(),
-           let previousAppVersion = dataStore.getString(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION) {
+        if let previousAppVersion = dataStore.getString(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION) {
+            let currentAppVersion = LifecycleV2.getAppVersion(systemInfoService: systemInfoService)
             return previousAppVersion != currentAppVersion
         }
 
@@ -157,7 +156,15 @@ class LifecycleV2 {
 
     /// Persist the application version into dataStore
     private func persistAppVersion() {
-        guard let currentAppVersion = systemInfoService.getApplicationBuildNumber() else { return }
+        let currentAppVersion = LifecycleV2.getAppVersion(systemInfoService: systemInfoService)
         dataStore.set(key: LifecycleV2Constants.DataStoreKeys.LAST_APP_VERSION, value: currentAppVersion)
+    }
+
+    /// Returns the application version in the format appVersion (versionCode). Example: 2.3 (10)
+    /// - Returns: the app version as a `String` formatted in the specified format.
+    static func getAppVersion(systemInfoService: SystemInfoService) -> String {
+        let appBuildNumber = systemInfoService.getApplicationBuildNumber() ?? ""
+        let appVersionNumber = systemInfoService.getApplicationVersionNumber() ?? ""
+        return "\(appVersionNumber) (\(appBuildNumber))".replacingOccurrences(of: "  ", with: " ").replacingOccurrences(of: "()", with: "").trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

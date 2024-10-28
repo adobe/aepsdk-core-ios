@@ -15,7 +15,6 @@ import Foundation
 /// Constant values used throughout Rules Engine
 enum RulesConstants {
     static let LOG_MODULE_PREFIX = "Launch Rules Engine"
-    static let DATA_STORE_PREFIX = "com.adobe.module.rulesengine"
     enum Keys {
         static let RULES_ENGINE_NAME = "name"
     }

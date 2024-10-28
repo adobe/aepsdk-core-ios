@@ -42,7 +42,8 @@ class IdentityHitProcessor: HitProcessing {
         let headers = [NetworkServiceConstants.Headers.CONTENT_TYPE: NetworkServiceConstants.HeaderValues.CONTENT_TYPE_URL_ENCODED]
         let networkRequest = NetworkRequest(url: identityHit.url, httpMethod: .get, connectPayload: "", httpHeaders: headers, connectTimeout: IdentityConstants.Default.TIMEOUT, readTimeout: IdentityConstants.Default.TIMEOUT)
 
-        networkService.connectAsync(networkRequest: networkRequest) { connection in
+        networkService.connectAsync(networkRequest: networkRequest) { [weak self] connection in
+            guard let self = self else { return }
             self.handleNetworkResponse(hit: identityHit, connection: connection, completion: completion)
         }
     }
@@ -64,6 +65,10 @@ class IdentityHitProcessor: HitProcessing {
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
             Log.debug(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url \(hit.url.absoluteString) failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1)")
+            completion(false)
+        } else if let error = connection.error as? URLError, error.isRecoverable {
+            // retry this hit later as the request failed with a recoverable transport error
+            Log.debug(label: "\(LOG_TAG):\(#function)", "Retrying Identity hit, request with url \(urlString) failed with error \(connection.error?.localizedDescription ?? "") and recoverable status code \(connection.responseCode ?? -1)")
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue

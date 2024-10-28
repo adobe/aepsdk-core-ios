@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPServices
 import Foundation
+
+@testable import AEPServices
 
 public class MockSystemInfoService: SystemInfoService {
     public init() {}
@@ -59,6 +60,11 @@ public class MockSystemInfoService: SystemInfoService {
     public var activeLocaleName = ""
     public func getActiveLocaleName() -> String {
         return activeLocaleName
+    }
+
+    public var systemLocaleName = ""
+    public func getSystemLocaleName() -> String {
+        return systemLocaleName
     }
 
     public var deviceName = ""

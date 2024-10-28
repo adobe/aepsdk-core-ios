@@ -10,12 +10,13 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
 import AEPCore
 import AEPCoreMocks
-@testable import AEPLifecycle
 import AEPServices
-import AEPServicesMocks
-import XCTest
+
+@testable import AEPLifecycle
 
 /// Functional tests for the Lifecycle extension
 class LifecycleV2FunctionalTests: XCTestCase {
@@ -32,7 +33,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         "operatingSystemVersion": "test-os-version",
         "operatingSystem": "test-os-name",
         "type": "application",
-        "_dc": ["language": "en-US"]
+        "_dc": ["language": "es-US"]
     ] as [String : Any]
 
     let expectedDeviceInfo = [
@@ -56,7 +57,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         lifecycle.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
         mockRuntime.ignoreEvent(type: EventType.lifecycle, source: EventSource.responseContent)
-        UserDefaults.clear()
+        NamedCollectionDataStore.clear()
     }
 
     private func waitForProcessing(interval: TimeInterval = 0.5) {
@@ -79,6 +80,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         mockSystemInfoService.operatingSystemName = "test-os-name"
         mockSystemInfoService.operatingSystemVersion = "test-os-version"
         mockSystemInfoService.activeLocaleName = "en-US"
+        mockSystemInfoService.systemLocaleName = "es-US"
         mockSystemInfoService.displayInformation = (100, 100)
         mockSystemInfoService.appVersion = "1.0.0"
 
@@ -93,15 +95,18 @@ class LifecycleV2FunctionalTests: XCTestCase {
             "name": "test-app-name",
             "version": "version-number (build-number)",
             "isInstall": true,
-            "isLaunch": true
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
 
         let expectedFreeFormData = [
             "key1": "value1",
             "key2": "value2"
         ]
+
+        let event = createStartEvent(additionalData: expectedFreeFormData)
         // test
-        mockRuntime.simulateComingEvents(createStartEvent(additionalData: expectedFreeFormData))
+        mockRuntime.simulateComingEvents(event)
         waitForProcessing()
 
         // verify
@@ -120,6 +125,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: xdm["environment"] as? [String : Any] ?? [:]).isEqual(to: expectedEnvironmentInfo))
         XCTAssertTrue(NSDictionary(dictionary: xdm["device"] as? [String : Any] ?? [:]).isEqual(to: expectedDeviceInfo))
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+        XCTAssertEqual(event.id, dispatchedLaunchEvent.parentID)
     }
 
     func testLifecycleV2_appClose() {
@@ -133,16 +139,19 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // appplication launch install hit
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing(interval: 1.1) // app close after 1 sec
         // application close
-        mockRuntime.simulateComingEvents(createPauseEvent())
+        let pauseEvent = createPauseEvent()
+        mockRuntime.simulateComingEvents(pauseEvent)
         waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
 
         // verify
         XCTAssertEqual(2, mockRuntime.dispatchedEvents.count) //application launch, application close
 
         // event data
+        let dispatchedStartEvent = mockRuntime.dispatchedEvents[0]
         let dispatchedCloseEvent = mockRuntime.dispatchedEvents[1]
         let xdm = dispatchedCloseEvent.data?["xdm"] as? [String:Any] ?? [:]
         XCTAssertEqual("Application Close (Background)", dispatchedCloseEvent.name)
@@ -150,16 +159,19 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseEvent.source)
         XCTAssertNotNil(xdm["timestamp"] as? String)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+        XCTAssertEqual(startEvent.id, dispatchedStartEvent.parentID)
+        XCTAssertEqual(pauseEvent.id, dispatchedCloseEvent.parentID)
     }
 
-    func testLifecycleV2_appUpgrade() {
+    func testLifecycleV2_appUpgrade_buildNumberChanged() {
         // setup
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
             "version": "version-number (next-build-number)",
             "isUpgrade": true,
-            "isLaunch": true
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
 
         // test
@@ -191,13 +203,54 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
 
+    func testLifecycleV2_appUpgrade_versionNumberChanged() {
+        // setup
+        mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
+        let expectedApplicationInfo = [
+            "name": "test-app-name",
+            "version": "next-version-number (build-number)",
+            "isUpgrade": true,
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
+        ] as [String : Any]
+
+        // test
+        // appplication launch install hit
+        mockRuntime.simulateComingEvents(createStartEvent())
+        waitForProcessing()
+        // application close
+        mockRuntime.simulateComingEvents(createPauseEvent())
+        waitForProcessing(interval: Self.PAUSE_UPDATE_TIMEOUT)
+
+        // Update app version
+        mockSystemInfoService.applicationVersionNumber = "next-version-number"
+        // application launch upgrade hit
+        mockRuntime.simulateComingEvents(createStartEvent())
+        waitForProcessing()
+
+        // verify
+        XCTAssertEqual(3, mockRuntime.dispatchedEvents.count) //application launch, application close, application launch
+
+        // event data
+        let dispatchedUpgradeEvent = mockRuntime.dispatchedEvents[2]
+        let xdm = dispatchedUpgradeEvent.data?["xdm"] as? [String:Any] ?? [:]
+        XCTAssertEqual("Application Launch (Foreground)", dispatchedUpgradeEvent.name)
+        XCTAssertEqual(EventType.lifecycle, dispatchedUpgradeEvent.type)
+        XCTAssertEqual(EventSource.applicationLaunch, dispatchedUpgradeEvent.source)
+        XCTAssertNotNil(xdm["timestamp"] as? String)
+        XCTAssertTrue(NSDictionary(dictionary: xdm["environment"] as? [String : Any] ?? [:]).isEqual(to: expectedEnvironmentInfo))
+        XCTAssertTrue(NSDictionary(dictionary: xdm["device"] as? [String : Any] ?? [:]).isEqual(to: expectedDeviceInfo))
+        XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
+    }
+
     func testLifecycleV2_appLaunch_noInstall_noUpgrade() {
         // setup
         mockRuntime.simulateSharedState(for: "com.adobe.module.configuration", data: ([:], .set))
         let expectedApplicationInfo = [
             "name": "test-app-name",
             "version": "version-number (build-number)",
-            "isLaunch": true
+            "isLaunch": true,
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
 
         // test
@@ -242,13 +295,15 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // start event, no pause event
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing()
 
         // simulate a new start
         let lifecycleSession2 = Lifecycle(runtime: mockRuntimeSession2)
         lifecycleSession2.onRegistered()
-        mockRuntimeSession2.simulateComingEvents(createStartEvent())
+        let startEvent2 = createStartEvent()
+        mockRuntimeSession2.simulateComingEvents(startEvent2)
         waitForProcessing()
 
         // verify
@@ -258,6 +313,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         XCTAssertEqual("Application Close (Background)", dispatchedCloseCrashEvent.name)
         XCTAssertEqual(EventType.lifecycle, dispatchedCloseCrashEvent.type)
         XCTAssertEqual(EventSource.applicationClose, dispatchedCloseCrashEvent.source)
+        XCTAssertEqual(dispatchedCloseCrashEvent.parentID, startEvent2.id)
         XCTAssertNotNil(xdm["timestamp"] as? String)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
@@ -277,7 +333,8 @@ class LifecycleV2FunctionalTests: XCTestCase {
 
         // test
         // start event, no pause event
-        mockRuntime.simulateComingEvents(createStartEvent())
+        let startEvent = createStartEvent()
+        mockRuntime.simulateComingEvents(startEvent)
         waitForProcessing()
 
         // Remove persisted close date before starting new session
@@ -303,6 +360,7 @@ class LifecycleV2FunctionalTests: XCTestCase {
         let expectedCloseDate = Date(timeIntervalSince1970: start2Event.timestamp.timeIntervalSince1970 - 1).asISO8601String()
         XCTAssertNotNil(closeDate)
         XCTAssertEqual(expectedCloseDate, closeDate)
+        XCTAssertEqual(dispatchedCloseCrashEvent.parentID, start2Event.id)
         XCTAssertTrue(NSDictionary(dictionary: xdm["application"] as? [String : Any] ?? [:]).isEqual(to: expectedApplicationInfo))
     }
 

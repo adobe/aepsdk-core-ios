@@ -10,10 +10,12 @@
  */
 
 import XCTest
+
+import AEPCoreMocks
+
 @testable import AEPCore
-import AEPServicesMocks
-import AEPServices
 @testable import AEPIdentity
+@testable import AEPServices
 
 private struct MockIDParser: IDParsing {
     func convertStringToIds(idString: String?) -> [[String : Any]] {
@@ -35,6 +37,10 @@ class V4MigratorTests: XCTestCase {
 
     override func setUp() {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
+    }
+
+    override func tearDown() {
+        ServiceProvider.shared.reset()
     }
 
     /// Tests that on a fresh install that all values are nil and nothing is migrated

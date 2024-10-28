@@ -37,7 +37,6 @@ public class LaunchRulesEngine {
     private let name: String
     private let rulesQueue: DispatchQueue
     private var waitingEvents: [Event]?
-    private let dataStore: NamedCollectionDataStore
     private var dispatchChainedEventsCount: [UUID: Int] = [:]
 
     let extensionRuntime: ExtensionRuntime
@@ -52,7 +51,6 @@ public class LaunchRulesEngine {
         self.name = name
         rulesQueue = DispatchQueue(label: "com.adobe.rulesengine.\(name)")
         transformer = LaunchRuleTransformer(runtime: extensionRuntime).transformer
-        dataStore = NamedCollectionDataStore(name: "\(RulesConstants.DATA_STORE_PREFIX).\(self.name)")
         evaluator = ConditionEvaluator(options: .caseInsensitive)
         rulesEngine = RulesEngine(evaluator: evaluator, transformer: transformer)
         waitingEvents = [Event]()
@@ -80,11 +78,18 @@ public class LaunchRulesEngine {
         self.sendReprocessEventsRequest()
     }
 
+    /// Adds provided rules to the current rules.
+    /// - Parameter rules: the array of `LaunchRule`s to be added
+    public func addRules(_ rules: [LaunchRule]) {
+        rulesQueue.sync {
+            self.rulesEngine.addRules(rules: rules)
+            Log.debug(label: self.LOG_TAG, "Successfully added \(rules.count) rule(s) into the (\(self.name)) rules engine.")
+        }
+    }
+
     /// Evaluates all the current rules against the supplied `Event`.
-    /// - Parameters:
-    ///   - event: the `Event` against which to evaluate the rules
-    ///   - sharedStates: the `SharedState`s registered to the `EventHub`
-    /// - Returns: the  processed`Event`
+    /// - Parameter event: the `Event` against which to evaluate the rules
+    /// - Returns: the processed `Event`
     @discardableResult
     public func process(event: Event) -> Event {
         rulesQueue.sync {
@@ -105,6 +110,42 @@ public class LaunchRulesEngine {
             }
             return evaluateRules(for: event)
         }
+    }
+
+    /// Evaluates the current rules against the supplied `Event`.
+    ///
+    /// Instead of dispatching consequence `Event`s for matching rules, this method returns 
+    /// an array of `RuleConsequence` objects.
+    ///
+    /// Calling this method will not check for `self.waitingEvents`, but rather it's assumed that the caller
+    /// will not invoke this message prior to configuration being available.
+    ///
+    /// - Parameter event: the `Event` against which to evaluate the rules
+    /// - Returns: an array of `RuleConsequence` objects resulting from `event` being processed
+    public func evaluate(event: Event) -> [RuleConsequence]? {
+        rulesQueue.sync {
+            return evaluateConsequence(for: event)
+        }
+    }
+
+    /// Evaluates rules for an `Event` and returns an array of matching `RuleConsequence` instead of processing them.
+    ///
+    /// - Parameter event: the `Event` against which to evaluate the rules
+    /// - Returns: an array of `RuleConsequence` objects resulting from `event` being processed
+    private func evaluateConsequence(for event: Event) -> [RuleConsequence]? {
+        let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
+        let matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
+        guard !matchedRules.isEmpty else {
+            return nil
+        }
+
+        var tokenReplacedConsequences: [RuleConsequence] = []
+        for rule in matchedRules {
+            tokenReplacedConsequences.append(contentsOf: rule.consequences.map { replaceToken(for: $0, data: traversableTokenFinder)
+            })
+        }
+
+        return tokenReplacedConsequences
     }
 
     private func evaluateRules(for event: Event) -> Event {
@@ -139,7 +180,7 @@ public class LaunchRulesEngine {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Unable to process dispatch consequence, max chained dispatch consequences limit of \(LaunchRulesEngine.MAX_CHAINED_CONSEQUENCE_COUNT) met for this event uuid \(event.id)")
                         continue
                     }
-                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, eventData: processedEvent.data)  else {
+                    guard let dispatchEvent = processDispatchConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent)  else {
                         continue
                     }
                     Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new dispatch consequence result event \(dispatchEvent)")
@@ -149,7 +190,7 @@ public class LaunchRulesEngine {
                     dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
 
                 default:
-                    if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue) {
+                    if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent) {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
                         extensionRuntime.dispatch(event: event)
                     }
@@ -201,9 +242,9 @@ public class LaunchRulesEngine {
     /// Process a dispatch consequence event. Generates a new Event from the details contained within the RuleConsequence.
     /// - Parameters:
     ///   - consequence: the RuleConsequence which contains details on the new Event to generate
-    ///   - eventData: the triggering Event data
+    ///   - processedEvent: the dispatch consequence event to be processed
     /// - Returns: a new Event to be dispatched to the EventHub, or nil if the processing failed.
-    private func processDispatchConsequence(consequence: RuleConsequence, eventData: [String: Any]?) -> Event? {
+    private func processDispatchConsequence(consequence: RuleConsequence, processedEvent: Event) -> Event? {
         guard let type = consequence.eventType else {
             Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a DispatchConsequence Event, 'type' is missing from 'details'")
             return nil
@@ -219,7 +260,7 @@ public class LaunchRulesEngine {
 
         var dispatchEventData: [String: Any]?
         if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_COPY {
-            dispatchEventData = eventData // copy event data from triggering event
+            dispatchEventData = processedEvent.data // copy event data from triggering event
         } else if action == LaunchRulesEngine.CONSEQUENCE_DETAIL_ACTION_NEW {
             dispatchEventData = consequence.eventData?.compactMapValues { $0 }
         } else {
@@ -227,10 +268,10 @@ public class LaunchRulesEngine {
             return nil
         }
 
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
-                     type: type,
-                     source: source,
-                     data: dispatchEventData)
+        return processedEvent.createChainedEvent(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
+                                                 type: type,
+                                                 source: source,
+                                                 data: dispatchEventData)
     }
 
     /// Replace tokens inside the provided consequence with the right value
@@ -243,20 +284,31 @@ public class LaunchRulesEngine {
         return RuleConsequence(id: consequence.id, type: consequence.type, details: dict)
     }
 
+    private func replaceToken(in value: Any, data: Traversable) -> Any {
+        switch value {
+        case let valString as String:
+            return replaceToken(for: valString, data: data)
+        case let nestedDict as [String: Any?]:
+            return replaceToken(in: nestedDict, data: data)
+        case let nestedArray as [Any]:
+            return replaceToken(in: nestedArray, data: data)
+        default:
+            return value
+        }
+    }
+
     private func replaceToken(in dict: [String: Any?], data: Traversable) -> [String: Any?] {
         var mutableDict = dict
         for (key, value) in mutableDict {
-            switch value {
-            case is String:
-                mutableDict[key] = replaceToken(for: value as! String, data: data)
-            case is [String: Any]:
-                let valueDict = mutableDict[key] as! [String: Any]
-                mutableDict[key] = replaceToken(in: valueDict, data: data)
-            default:
-                break
+            if let value = value {
+                mutableDict[key] = replaceToken(in: value, data: data)
             }
         }
         return mutableDict
+    }
+
+    private func replaceToken(in array: [Any], data: Traversable) -> [Any] {
+        return array.map { replaceToken(in: $0, data: data) }
     }
 
     private func replaceToken(for value: String, data: Traversable) -> String {
@@ -271,12 +323,12 @@ public class LaunchRulesEngine {
     /// Generate a consequence event with provided consequence data
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
-    private func generateConsequenceEvent(consequence: RuleConsequence) -> Event? {
+    private func generateConsequenceEvent(consequence: RuleConsequence, parentEvent: Event) -> Event? {
         var dict: [String: Any] = [:]
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.details
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
-        return Event(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
+        return parentEvent.createChainedEvent(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
     }
 }
 

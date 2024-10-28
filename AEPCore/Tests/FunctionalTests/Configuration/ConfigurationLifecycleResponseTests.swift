@@ -10,19 +10,18 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
 import XCTest
+
 import AEPCoreMocks
 import AEPServices
-import AEPServicesMocks
-import XCTest
+
+@testable import AEPCore
 
 class ConfigurationLifecycleResponseTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var configuration: Configuration!
 
     override func setUp() {
-        UserDefaults.clear()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()

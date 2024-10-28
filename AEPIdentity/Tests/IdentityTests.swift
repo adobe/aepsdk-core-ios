@@ -9,18 +9,20 @@
  governing permissions and limitations under the License.
  */
 
+import XCTest
+
+import AEPCoreMocks
+
 @testable import AEPCore
 @testable import AEPIdentity
-import AEPServices
-import AEPServicesMocks
-import XCTest
+@testable import AEPServices
 
 class IdentityTests: XCTestCase {
     var identity: Identity!
     var mockRuntime: TestableExtensionRuntime!
 
     override func setUp() {
-        ServiceProvider.shared.networkService = MockNetworkServiceOverrider()
+        ServiceProvider.shared.networkService = MockNetworkService()
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
@@ -28,6 +30,7 @@ class IdentityTests: XCTestCase {
     }
 
     override func tearDown() {
+        ServiceProvider.shared.reset()
         identity.onUnregistered()
     }
 
@@ -135,7 +138,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertTrue(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have been sent
         XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
@@ -158,7 +161,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
     }
@@ -181,7 +184,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.optedIn, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-in
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
@@ -205,7 +208,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.unknown, identity.state?.identityProperties.privacyStatus) // identity state should have remained unknown
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
@@ -230,7 +233,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
     }
@@ -252,7 +255,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have NOT been sent
         XCTAssertEqual(PrivacyStatus.unknown, identity.state?.identityProperties.privacyStatus) // identity state should have remained unknown
         XCTAssertNil(identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have NOT been updated with the org id
@@ -277,7 +280,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify no network request is sent because there is an AAM server configured
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit shouldn't have been sent
         XCTAssertEqual(PrivacyStatus.optedOut, identity.state?.identityProperties.privacyStatus) // identity state should have updated to opt-out
         XCTAssertEqual(testOrgId, identity.state?.lastValidConfig[IdentityConstants.Configuration.EXPERIENCE_CLOUD_ORGID] as? String) // last valid config should have been updated with the org id
@@ -303,7 +306,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertTrue(mockNetworkService.connectAsyncCalled) // network request for opt-out hit should have been sent
     }
 
@@ -327,8 +330,8 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
+        let optOutHitHost = mockNetworkService.getNetworkRequests().first?.url.host ?? "" // network request for opt-out hit should have been sent
         XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
     }
 
@@ -352,8 +355,8 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
+        let optOutHitHost = mockNetworkService.getNetworkRequests().first?.url.host ?? "" // network request for opt-out hit should have been sent
         XCTAssertTrue(optOutHitHost.contains("dpm.demdex.net"))
     }
 
@@ -377,8 +380,8 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
-        let optOutHitHost = mockNetworkService.connectAsyncCalledWithNetworkRequest?.url.host ?? "" // network request for opt-out hit should have been sent
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
+        let optOutHitHost = mockNetworkService.getNetworkRequests().first?.url.host ?? "" // network request for opt-out hit should have been sent
         XCTAssertTrue(optOutHitHost.contains("example.com"))
     }
 
@@ -402,7 +405,7 @@ class IdentityTests: XCTestCase {
         mockRuntime.simulateComingEvent(event: event)
 
         // verify no network request is sent
-        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkServiceOverrider
+        let mockNetworkService = ServiceProvider.shared.networkService as! MockNetworkService
         XCTAssertFalse(mockNetworkService.connectAsyncCalled) // network request for opt-out hit shouldn't have been sent
     }
 

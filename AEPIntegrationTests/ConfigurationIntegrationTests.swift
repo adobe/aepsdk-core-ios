@@ -10,18 +10,19 @@
  */
 
 import XCTest
-@testable import AEPCore
-@testable import AEPServices
+
 import AEPIdentity
 import AEPLifecycle
 import AEPSignal
 
-@available(tvOSApplicationExtension, unavailable)
+@testable import AEPCore
+@testable import AEPCoreMocks
+@testable import AEPServices
+
 class ConfigurationIntegrationTests: XCTestCase {
     var mockNetworkService = TestableNetworkService()
     override func setUp() {
-        UserDefaults.clear()
-        FileManager.default.clearCache()
+        NamedCollectionDataStore.clear()
         ServiceProvider.shared.reset()
         resetTestEnv()
         initExtensionsAndWait()

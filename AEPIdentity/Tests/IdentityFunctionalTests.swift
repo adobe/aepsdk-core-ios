@@ -11,22 +11,23 @@
  */
 
 import XCTest
-import AEPCore
-@testable import AEPIdentity
-import AEPCoreMocks
-import AEPServices
-import AEPServicesMocks
 
-class IdentityFunctionalTests: XCTestCase {
+import AEPCore
+import AEPCoreMocks
+
+@testable import AEPIdentity
+@testable import AEPServices
+
+class IdentityFunctionalTests: XCTestCase, AnyCodableAsserts {
     var mockRuntime: TestableExtensionRuntime!
     var identity: Identity!
 
     override func setUp() {
+        ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         identity = Identity(runtime: mockRuntime)
         identity.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
-        ServiceProvider.shared.namedKeyValueService = MockDataStore()
     }
 
     override func tearDown() {
@@ -34,8 +35,8 @@ class IdentityFunctionalTests: XCTestCase {
     }
 
     func reset() {
+        ServiceProvider.shared.reset()
         identity.state?.hitQueue.clear()
-        UserDefaults.clear()
     }
 
     // MARK: syncIdentifiers(...) tests
@@ -467,5 +468,113 @@ class IdentityFunctionalTests: XCTestCase {
         XCTAssertNotNil(dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID])
         let ecid = dispatchedEvent?.data?[IdentityConstants.EventDataKeys.VISITOR_ID_ECID] as? String ?? ""
         XCTAssertFalse(ecid.isEmpty)
+    }
+
+    // MARK: dispatch AnalyticsForIdentityRequest Event tests
+
+    // Test setting valid push token on launch dispatches event to Analytics with a.push.optin = True
+    func testSetPushIdentifierValidTokenDispatchesAnalyticsForIdentityRequestEvent() {
+        // Set valid config to allow sync to process
+        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+
+        let encodedPushId = "746573742D707573682D6964" // encoded value of string "test-push-id"
+
+        let data = ["pushidentifier": encodedPushId]
+        let event = Event(name: "Set Push Identifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        // Verify push ID saved to persistence
+        let dataStore = NamedCollectionDataStore(name: "com.adobe.module.identity")
+        let identityProperties: IdentityProperties? = dataStore.getObject(key: "identity.properties")
+        XCTAssertEqual(encodedPushId,  identityProperties?.pushIdentifier)
+        XCTAssertTrue(dataStore.getBool(key: "analytics.push.sync") ?? false)
+        XCTAssertTrue(dataStore.getBool(key: "push.enabled") ?? false)
+
+        // Verify only one event dispatched
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        // Verify dispatched event has expected data
+        XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
+        let expectedPushData = """
+                {
+                    "action": "Push",
+                    "trackinternal": true,
+                    "contextdata": {
+                        "a.push.optin": "True"
+                    }
+                }
+        """
+
+        assertEqual(expected: expectedPushData, actual: dispatchedEvent?.data)
+    }
+
+    // Test setting push token to nil on launch dispatches event to Analytics with a.push.optin = False
+    func testSetPushIdentifierNilDispatchesAnalyticsForIdentityRequestEvent() {
+        // Set valid config to allow sync to process
+        identity.state?.lastValidConfig = [IdentityConstants.Configuration.GLOBAL_CONFIG_PRIVACY: PrivacyStatus.optedIn.rawValue]
+
+        let data = ["pushidentifier": ""]
+        let event = Event(name: "Set Push Identifier", type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        // Verify push ID saved to persistence
+        let dataStore = NamedCollectionDataStore(name: "com.adobe.module.identity")
+        let identityProperties: IdentityProperties? = dataStore.getObject(key: "identity.properties")
+        XCTAssertEqual("",  identityProperties?.pushIdentifier)
+        XCTAssertTrue(dataStore.getBool(key: "analytics.push.sync") ?? false)
+        XCTAssertFalse(dataStore.getBool(key: "push.enabled") ?? true)
+
+        // Verify only one event dispatched
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let dispatchedEvent = mockRuntime.dispatchedEvents.first
+
+        // Verify dispatched event has expected data
+        XCTAssertEqual(EventType.analytics, dispatchedEvent?.type)
+        XCTAssertEqual(EventSource.requestContent, dispatchedEvent?.source)
+        let expectedPushData = """
+                {
+                    "action": "Push",
+                    "trackinternal": true,
+                    "contextdata": {
+                        "a.push.optin": "False"
+                    }
+                }
+        """
+
+        assertEqual(expected: expectedPushData, actual: dispatchedEvent?.data)
+    }
+
+    // Test calling resetIdentities will not trigger dispatch of Analytics event
+    func testResetIdentifiersDoesNotDispatchAnalyticsForIdentityRequestEvent() {
+        identity.state?.identityProperties.ecid = ECID()
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
+
+        let event = Event(name: "Reset Identities",
+                          type: EventType.genericIdentity,
+                          source: EventSource.requestReset,
+                          data: nil)
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertNil(identity.state?.identityProperties.ecid)
+    }
+
+    // Test changing privacy to opt-out will not trigger dispatch of Analytics event
+    func testPrivacyOptOutDoesNotDispatchAnalyticsForIdentityRequestEvent() {
+        identity.state?.identityProperties.ecid = ECID()
+        XCTAssertNotNil(identity.state?.identityProperties.ecid)
+
+        let event = Event(name: "Configuration Update Response", type: EventType.configuration, source: EventSource.responseContent,
+                          data: ["global.privacy": PrivacyStatus.optedOut.rawValue])
+
+        mockRuntime.simulateComingEvent(event: event)
+
+        XCTAssertTrue(mockRuntime.dispatchedEvents.isEmpty)
+        XCTAssertNil(identity.state?.identityProperties.ecid)
     }
 }

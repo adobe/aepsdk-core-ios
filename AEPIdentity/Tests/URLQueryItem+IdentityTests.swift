@@ -9,8 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPIdentity
 import XCTest
+
+@testable import AEPIdentity
 
 class URLQueryItem_IdentityTests: XCTestCase {
     let cidDelimiter: String = (IdentityConstants.CID_DELIMITER.removingPercentEncoding ?? " cid delimiter failed to remove encoding ")

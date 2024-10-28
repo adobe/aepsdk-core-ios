@@ -10,9 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPLifecycle
-import AEPServices
 import XCTest
+
+import AEPServices
+
+@testable import AEPCoreMocks
+@testable import AEPLifecycle
 
 class LifecycleSessionTests: XCTestCase {
     let sessionTimeoutInSeconds = TimeInterval(60 * 5) // 5 min
@@ -30,6 +33,7 @@ class LifecycleSessionTests: XCTestCase {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
+        NamedCollectionDataStore.clear()
     }
 
     private func computeDates() {

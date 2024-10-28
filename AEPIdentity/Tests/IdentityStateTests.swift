@@ -9,11 +9,13 @@
  governing permissions and limitations under the License.
  */
 
-import AEPCore
-@testable import AEPIdentity
-import AEPServices
-import AEPServicesMocks
 import XCTest
+
+import AEPCore
+import AEPCoreMocks
+
+@testable import AEPIdentity
+@testable import AEPServices
 
 class IdentityStateTests: XCTestCase {
     var state: IdentityState!
@@ -31,6 +33,10 @@ class IdentityStateTests: XCTestCase {
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockPushIdManager = MockPushIDManager()
         state = IdentityState(identityProperties: IdentityProperties(), hitQueue: MockHitQueue(processor: MockHitProcessor()), pushIdManager: mockPushIdManager)
+    }
+
+    override func tearDown() {
+        ServiceProvider.shared.reset()
     }
 
     // MARK: boot(...) tests
@@ -1050,7 +1056,8 @@ class IdentityStateTests: XCTestCase {
         // verify
         wait(for: [sharedStateExpectation], timeout: 1)
         XCTAssertFalse(mockDataStore.dict.isEmpty) // identity properties should have been saved to persistence
-        XCTAssertTrue(mockPushIdManager.calledUpdatePushId)
+        XCTAssertFalse(mockPushIdManager.calledUpdatePushId)
+        XCTAssertTrue(mockPushIdManager.calledResetPersistedFlags)
         XCTAssertTrue(mockHitQueue.calledSuspend && mockHitQueue.calledClear) // we should suspend the queue and clear it
         XCTAssertEqual(PrivacyStatus.optedOut, state.identityProperties.privacyStatus) // privacy status should change to opt out
     }

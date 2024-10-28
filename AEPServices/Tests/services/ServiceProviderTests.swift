@@ -40,17 +40,21 @@ class ServiceProviderTests: XCTestCase {
         let mockNamedKeyValueService = MockKeyValueService()
         ServiceProvider.shared.namedKeyValueService = mockNamedKeyValueService
         ServiceProvider.shared.reset()
-        XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is UserDefaultsNamedCollection)
+        #if os(iOS)
+            XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is FileSystemNamedCollection)
+        #elseif os(tvOS)
+            XCTAssertTrue(ServiceProvider.shared.namedKeyValueService is UserDefaultsNamedCollection)
+        #endif
     }
     
     func testOverridingNetworkService() {
-        let mockNetworkService = MockNetworkServiceOverrider()
+        let mockNetworkService = MockNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
-        XCTAssertEqual(Unmanaged.passUnretained(mockNetworkService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.networkService as! MockNetworkServiceOverrider).toOpaque())
+        XCTAssertEqual(Unmanaged.passUnretained(mockNetworkService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.networkService as! MockNetworkService).toOpaque())
     }
     
     func testResettingNetworkService() {
-        let mockNetworkService = MockNetworkServiceOverrider()
+        let mockNetworkService = MockNetworkService()
         ServiceProvider.shared.networkService = mockNetworkService
         ServiceProvider.shared.reset()
         XCTAssertTrue(ServiceProvider.shared.networkService is NetworkService)
@@ -93,7 +97,6 @@ class ServiceProviderTests: XCTestCase {
             XCTAssertEqual(Unmanaged.passUnretained(mockURLService).toOpaque(), Unmanaged.passUnretained(ServiceProvider.shared.urlService as! MockURLService).toOpaque())
         
         }
-        @available(tvOSApplicationExtension, unavailable)
         func testResettingAppOnlyServices() {
             let mockUIService = MockUIService()
             ServiceProvider.shared.uiService = mockUIService

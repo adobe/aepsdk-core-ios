@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-import AEPServices
 import Foundation
+
+import AEPServices
 
 @available(iOSApplicationExtension, unavailable)
 public class MockURLService: URLOpening {

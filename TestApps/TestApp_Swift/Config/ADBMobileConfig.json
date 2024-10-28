@@ -1,0 +1,9 @@
+{
+  "rules.url": "https://assets.adobedtm.com/94f571f308d5/fec7505defe0/launch-eaa54c95a6b5-development-rules.zip",
+  "experienceCloud.org": "972C898555E9F7BC7F000101@AdobeOrg",
+  "lifecycle.sessionTimeout": 300,
+  "global.privacy": "optedin",
+  "property.id": "PR16596147e65c4d37980310bae3097e6b",
+  "bundled_configuration": true,
+  "build.environment": "dev"
+}

@@ -10,12 +10,14 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPLifecycle
-import AEPServices
-import AEPServicesMocks
 import XCTest
 
-class XDMDeviceTests: XCTestCase {
+import AEPCoreMocks
+import AEPServices
+
+@testable import AEPLifecycle
+
+class XDMDeviceTests: XCTestCase, AnyCodableAsserts {
 
     private func buildAndSetMockInfoService() {
         let mockSystemInfoService = MockSystemInfoService()
@@ -54,6 +56,6 @@ class XDMDeviceTests: XCTestCase {
         }
         """
 
-        XCTAssertEqual(expected, dataStr)
+        assertEqual(expected: expected, actual: dataStr)
     }
 }

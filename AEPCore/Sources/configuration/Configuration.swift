@@ -47,8 +47,8 @@ class Configuration: NSObject, Extension {
         registerListener(type: EventType.configuration, source: EventSource.requestContent, listener: receiveConfigurationRequest(event:))
 
         // If we have an appId stored in persistence, kick off the configureWithAppId event
-        if let appId = appIdManager.loadAppIdFromManifest(), !appId.isEmpty {
-            dispatchConfigurationRequest(data: [ConfigurationConstants.Keys.JSON_APP_ID: appId])
+        if let appId = appIdManager.loadAppId(), !appId.isEmpty {
+            dispatchConfigurationRequest(data: [CoreConstants.Keys.JSON_APP_ID: appId, CoreConstants.Keys.IS_INTERNAL_EVENT: true])
         }
 
         configState.loadInitialConfig()
@@ -137,15 +137,20 @@ class Configuration: NSObject, Extension {
             return
         }
 
+        guard !isStaleAppIdUpdateRequest(newAppId: appId, isInternalEvent: event.isInternalConfigEvent) else {
+            Log.debug(label: name, "An explicit configureWithAppId request has preceded this internal event.")
+            return
+        }
+
         // stop all other event processing while we are attempting to download the config
         stopEvents()
         configState.updateWith(appId: appId) { [weak self] config in
+            guard let self = self else { return }
             if let _ = config {
-                self?.publishCurrentConfig(sharedStateResolver: sharedStateResolver)
-                self?.startEvents()
+                self.publishCurrentConfig(sharedStateResolver: sharedStateResolver)
+                self.startEvents()
             } else {
                 // If downloading config failed try again later
-                guard let self = self else { return }
                 sharedStateResolver(self.configState.environmentAwareConfiguration)
                 self.startEvents()
                 let retryInterval = self.retryConfigurationCounter * 5
@@ -158,6 +163,27 @@ class Configuration: NSObject, Extension {
                 }
             }
         }
+    }
+
+    /// Determines if the current AppID update request is stale.
+    /// A request is considered stale if it is a configuration request sent internally and there is a newer request that has been sent externally via configureWithAppId
+    /// - Parameters:
+    ///     - newAppId the new app ID with which the configuration update is being requested
+    ///     - isInternalEvent whether the current request is an initial configuration request
+    /// - Returns: True if the current request is stale, False otherwise
+    private func isStaleAppIdUpdateRequest(newAppId: String, isInternalEvent: Bool) -> Bool {
+        // Because events are dispatched and processed serially, external config with app id events
+        // cannot be stale.
+        guard isInternalEvent else {
+            return false
+        }
+
+        // Cannot find persisted app id, process with this request.
+        guard let persistedAppId = appIdManager.loadAppIdFromPersistence(), !persistedAppId.isEmpty else {
+            return false
+        }
+
+        return newAppId != persistedAppId
     }
 
     /// Interacts with the `ConfigurationState` to fetch the configuration associated with `filePath`

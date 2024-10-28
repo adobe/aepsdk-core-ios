@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
@@ -17,7 +17,7 @@ import PackageDescription
 
 let package = Package(
     name: "AEPCore",
-    platforms: [.iOS(.v10), .tvOS(.v10)],
+    platforms: [.iOS(.v12), .tvOS(.v12)],
     products: [
         .library(name: "AEPCore", targets: ["AEPCore"]),
         .library(name: "AEPIdentity", targets: ["AEPIdentity"]),
@@ -26,12 +26,15 @@ let package = Package(
         .library(name: "AEPSignal", targets: ["AEPSignal"])
     ],
     dependencies: [
-        .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .upToNextMajor(from: "1.2.0")),
+        .package(url: "https://github.com/adobe/aepsdk-rulesengine-ios.git", .upToNextMajor(from: "5.0.0")),
     ],
     targets: [
         .target(name: "AEPCore",
-                dependencies: ["AEPServices", "AEPRulesEngine"],
-                path: "AEPCore/Sources"),
+                dependencies: ["AEPServices", .product(name: "AEPRulesEngine", package: "aepsdk-rulesengine-ios")],
+                path: "AEPCore/Sources",
+                resources: [
+                    .process("PrivacyInfo.xcprivacy")
+                ]),
         .target(name: "AEPIdentity",
                 dependencies: ["AEPCore"],
                 path: "AEPIdentity/Sources"),
@@ -39,8 +42,10 @@ let package = Package(
                 dependencies: ["AEPCore"],
                 path: "AEPLifecycle/Sources"),
         .target(name: "AEPServices",
-                dependencies: [],
-                path: "AEPServices/Sources"),
+                path: "AEPServices/Sources",
+                resources: [
+                    .process("PrivacyInfo.xcprivacy")
+                ]),
         .target(name: "AEPSignal",
                 dependencies: ["AEPCore"],
                 path: "AEPSignal/Sources"),

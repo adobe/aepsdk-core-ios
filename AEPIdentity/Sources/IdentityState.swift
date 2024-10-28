@@ -49,6 +49,7 @@ class IdentityState {
 
         // load data from local storage
         identityProperties.loadFromPersistence()
+        Log.trace(label: "\(LOG_TAG):\(#function)", "Successfully loaded the Identity data from persistence. Loaded \(identityProperties.customerIds?.count ?? 0) VisitorIds. ECID is set to \(identityProperties.ecid?.ecidString ?? "nil").")
 
         if identityProperties.ecid != nil {
             createSharedState(identityProperties.toEventData(), nil)
@@ -244,7 +245,10 @@ class IdentityState {
             Log.trace(label: "\(LOG_TAG):\(#function)", "Not syncing identifiers at this time, no new identifiers or previously synced.")
             syncForIds = false
         } else {
-            generateAndPersistECID()
+            if identityProperties.ecid == nil {
+                Log.trace(label: "\(LOG_TAG):\(#function)", "ECID is nil when sync identifiers event received. Generate new ECID value.")
+                generateAndPersistECID()
+            }
         }
 
         return syncForIds && syncForProps
@@ -265,14 +269,7 @@ class IdentityState {
         identityProperties.privacyStatus = newPrivacyStatus
 
         if newPrivacyStatus == .optedOut {
-            identityProperties.ecid = nil
-            identityProperties.advertisingIdentifier = nil
-            identityProperties.blob = nil
-            identityProperties.locationHint = nil
-            identityProperties.customerIds?.removeAll()
-            identityProperties.isAidSynced = false
-            identityProperties.pushIdentifier = nil
-            pushIdManager.updatePushId(pushId: nil)
+            clearIdentifiers()
             identityProperties.saveToPersistence()
             createSharedState(identityProperties.toEventData(), event)
         } else if identityProperties.ecid == nil {
@@ -333,15 +330,7 @@ class IdentityState {
     func resetIdentifiers(event: Event,
                           createSharedState: ([String: Any], Event) -> Void) {
         guard identityProperties.privacyStatus != .optedOut else { return }
-        // clear the properties
-        identityProperties.ecid = nil
-        identityProperties.advertisingIdentifier = nil
-        identityProperties.blob = nil
-        identityProperties.locationHint = nil
-        identityProperties.customerIds?.removeAll()
-        identityProperties.isAidSynced = false
-        identityProperties.pushIdentifier = nil
-        pushIdManager.resetPersistedFlags()
+        clearIdentifiers()
         hitQueue.clear() // clear hit queue
 
         // do a force sync to generate ECID, then save the properties to persistence.
@@ -439,11 +428,15 @@ class IdentityState {
 
         // something's wrong - n/w call returned an error. update the pending state.
         if let error = identityResponse.error {
-            // should never happen bc we generate ECID locally before n/w request.
-            // Still, generate ECID locally if there's none yet.
-            generateAndPersistECID()
-
             Log.error(label: "\(LOG_TAG):\(#function)", "Identity response returned error: \(error)")
+
+            if identityProperties.ecid == nil {
+                // should never happen bc we generate ECID locally before n/w request.
+                // Still, generate ECID locally if there's none yet.
+                Log.trace(label: "\(LOG_TAG):\(#function)", "ECID is nil when network response error received. Generate new ECID value.")
+                generateAndPersistECID()
+            }
+
             createSharedState(identityProperties.toEventData(), event)
             return
         }
@@ -466,9 +459,21 @@ class IdentityState {
     /// Generates the ecid if not cached and save it to persistence
     private func generateAndPersistECID() {
         if identityProperties.ecid == nil {
-            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID, ECID not found in persistence.")
             identityProperties.ecid = ECID()
             identityProperties.saveToPersistence()
+            Log.trace(label: "\(LOG_TAG):\(#function)", "Generating new ECID value \(identityProperties.ecid?.ecidString ?? "nil")")
         }
+    }
+
+    /// Clears identifiers in held `IdentityProperties` and resets flags in `PushIdManager`.
+    private func clearIdentifiers() {
+        identityProperties.ecid = nil
+        identityProperties.advertisingIdentifier = nil
+        identityProperties.blob = nil
+        identityProperties.locationHint = nil
+        identityProperties.customerIds?.removeAll()
+        identityProperties.isAidSynced = false
+        identityProperties.pushIdentifier = nil
+        pushIdManager.resetPersistedFlags()
     }
 }

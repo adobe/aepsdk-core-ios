@@ -9,8 +9,9 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPIdentity
 import XCTest
+
+@testable import AEPIdentity
 
 class IdentityPropertiesTests: XCTestCase {
     /// When all properties all nil, the event data should be empty

@@ -1,20 +1,29 @@
 PODS:
-  - AEPRulesEngine (1.2.0)
-  - SwiftLint (0.44.0)
+  - AEPRulesEngine (5.0.0)
+  - SwiftLint (0.52.0)
 
 DEPENDENCIES:
-  - AEPRulesEngine
-  - SwiftLint (= 0.44.0)
+  - AEPRulesEngine (from `https://github.com/adobe/aepsdk-rulesengine-ios.git`, branch `main`)
+  - SwiftLint (= 0.52.0)
 
 SPEC REPOS:
   trunk:
-    - AEPRulesEngine
     - SwiftLint
 
+EXTERNAL SOURCES:
+  AEPRulesEngine:
+    :branch: main
+    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
+
+CHECKOUT OPTIONS:
+  AEPRulesEngine:
+    :commit: 514d2b3787c545bfa6749ffce5dd3e6f560c9319
+    :git: https://github.com/adobe/aepsdk-rulesengine-ios.git
+
 SPEC CHECKSUMS:
-  AEPRulesEngine: 71228dfdac24c9ded09be13e3257a7eb22468ccc
-  SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
+  AEPRulesEngine: fe5800653a4bee07b1e41e61b4d5551f0dba557b
+  SwiftLint: 13280e21cdda6786ad908dc6e416afe5acd1fcb7
 
-PODFILE CHECKSUM: d5ebdd60e861450030157bc4c5d28329246e2f6f
+PODFILE CHECKSUM: 97254cbd04fab126044d7f41eb570457b9466316
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.15.2

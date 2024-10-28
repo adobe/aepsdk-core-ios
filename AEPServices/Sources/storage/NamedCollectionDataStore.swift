@@ -14,11 +14,12 @@ import Foundation
 
 /// The named key value storage object to be used to store and retrieve values
 public class NamedCollectionDataStore {
-    private var storageService: NamedCollectionProcessing
+    private var storageService: NamedCollectionProcessing {
+        get { ServiceProvider.shared.namedKeyValueService }
+    }
     private var name: String
 
     public init(name: String) {
-        storageService = ServiceProvider.shared.namedKeyValueService
         self.name = name
     }
 
@@ -163,7 +164,7 @@ public class NamedCollectionDataStore {
             return getObject(key: key)
         }
         set {
-            set(key: key, value: newValue)
+            setObject(key: key, value: newValue)
         }
     }
 
@@ -178,8 +179,11 @@ public class NamedCollectionDataStore {
         }
 
         let encoder = JSONEncoder()
-        let encodedValue = try? encoder.encode(value)
-        set(key: key, value: encodedValue)
+        var setVal: Any?
+        if let encodedValue = try? encoder.encode(value), let encodedString = String(data: encodedValue, encoding: .utf8) {
+            setVal = encodedString
+        }
+        set(key: key, value: setVal)
     }
 
     public func getObject<T: Codable>(key: String, fallback: T? = nil) -> T? {
@@ -189,7 +193,7 @@ public class NamedCollectionDataStore {
             return Date(timeIntervalSince1970: date) as? T
         }
 
-        if let savedData = get(key: key) as? Data {
+        if let savedString = get(key: key) as? String, let savedData = savedString.data(using: .utf8) {
             return try? JSONDecoder().decode(T.self, from: savedData)
         }
 
@@ -212,6 +216,7 @@ public class NamedCollectionDataStore {
         if key.isEmpty {
             return
         }
+
         storageService.set(collectionName: name, key: key, value: value)
     }
 

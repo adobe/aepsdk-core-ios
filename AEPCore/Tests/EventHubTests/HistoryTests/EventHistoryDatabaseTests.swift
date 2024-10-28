@@ -12,6 +12,7 @@
 
 import XCTest
 import SQLite3
+
 @testable import AEPCore
 
 class EventHistoryDatabaseTests: XCTestCase {
@@ -44,7 +45,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let expectation = XCTestExpectation(description: "handler was called for insert")
         let testHash: UInt32 = 552
                 
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertTrue(result)
             expectation.fulfill()
         }
@@ -57,7 +58,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let testHash: UInt32 = 552
         eventHistoryDatabase.connection = nil
         
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertFalse(result)
             expectation.fulfill()
         }
@@ -70,7 +71,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let selectExpectation = XCTestExpectation(description: "handler was called for select")
         let testHash: UInt32 = 552
         
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertTrue(result)
             insertExpectation.fulfill()
         }
@@ -93,7 +94,7 @@ class EventHistoryDatabaseTests: XCTestCase {
                 
         eventHistoryDatabase.select(hash: testHash, from: nil, to: nil) { result in
             XCTAssertNotNil(result)
-            XCTAssertEqual(0, result.count)
+            XCTAssertEqual(-1, result.count)
             XCTAssertNil(result.newestOccurrence)
             XCTAssertNil(result.oldestOccurrence)
             selectExpectation.fulfill()
@@ -107,7 +108,7 @@ class EventHistoryDatabaseTests: XCTestCase {
         let deleteExpectation = XCTestExpectation(description: "handler was called for delete")
         let testHash: UInt32 = 552
         
-        eventHistoryDatabase.insert(hash: testHash) { result in
+        eventHistoryDatabase.insert(hash: testHash, timestamp: Date()) { result in
             XCTAssertTrue(result)
             insertExpectation.fulfill()
         }

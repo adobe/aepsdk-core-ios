@@ -169,6 +169,14 @@ class JSONCondition: Codable {
         return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
     }
 
+    /// Queries the EventHistory database for matching entries
+    ///
+    /// For an `.any` search (event order does not matter), the value returned will be the count of all matching events in EventHistory
+    /// For an `.ordered` search (events must occur in the provided order), the value returned will be 1 if the events were found in the provided order, or 0 otherwise.
+    /// If a database error occurred, this method will always return -1
+    ///
+    /// - Parameter parameters: An array of parameters containing, in order, an `ExtensionRuntime`, `[EventHistoryRequest]`, and an `EventHistorySearchType`.
+    /// - Returns: the number of matching records for an `.any` search, or a boolean (1 or 0) indicating whether search conditions were met for an `.ordered` search.
     func getHistoricalEventCount(parameters: [Any]?) -> Int {
         guard let params = parameters,
               let runtime = params[0] as? ExtensionRuntime,
@@ -183,8 +191,13 @@ class JSONCondition: Codable {
         runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
             if searchType == .ordered {
                 for result in results {
-                    if result.count < 1 {
-                        // quick exit on ordered searches if any result has a count < 1
+                    if result.count == -1 {
+                        // database error
+                        returnValue = -1
+                        semaphore.signal()
+                        break
+                    } else if result.count == 0 {
+                        // quick exit on ordered searches if any result has a count == 0
                         returnValue = 0
                         semaphore.signal()
                         break
@@ -194,7 +207,14 @@ class JSONCondition: Codable {
                 }
             } else {
                 for result in results {
-                    returnValue += result.count
+                    if result.count == -1 {
+                        // database error
+                        returnValue = -1
+                        semaphore.signal()
+                        break
+                    } else {
+                        returnValue += result.count
+                    }
                 }
             }
 

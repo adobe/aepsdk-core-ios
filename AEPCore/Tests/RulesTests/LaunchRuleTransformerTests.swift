@@ -9,9 +9,11 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
-import AEPCoreMocks
 import XCTest
+
+import AEPCoreMocks
+
+@testable import AEPCore
 
 class LaunchRuleTransformerTests: XCTestCase {
 

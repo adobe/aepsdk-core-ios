@@ -9,11 +9,13 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
-import AEPCoreMocks
 import XCTest
 
-class TokenFinderTests: XCTestCase {
+import AEPCoreMocks
+
+@testable import AEPCore
+
+class TokenFinderTests: XCTestCase, AnyCodableAsserts {
     func testGetTokenValue_event_type_source() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event
         let runtime = TestableExtensionRuntime()
@@ -90,7 +92,7 @@ class TokenFinderTests: XCTestCase {
             return
         }
         /// Then
-        XCTAssertEqual(json, #"{"key1":"value1","key2":{"key22":22}}"#)
+        assertEqual(expected: #"{"key1":"value1","key2":{"key22":22}}"#, actual: json)
     }
 
     func testGetTokenValue_json_empty_kvp() {

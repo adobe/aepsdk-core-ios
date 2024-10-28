@@ -10,11 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-import Foundation
-@testable import AEPLifecycle
-import AEPServices
-import AEPServicesMocks
 import XCTest
+
+import AEPCoreMocks
+import AEPServices
+
+@testable import AEPLifecycle
 
 class LifecycleV2MetricsBuilderTests: XCTestCase {
     private let startDate = Date(milliseconds: 1483889568123)
@@ -24,7 +25,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         "operatingSystemVersion": "test-os-version",
         "operatingSystem": "test-os-name",
         "type": "application",
-        "_dc": ["language": "en-US"]
+        "_dc": ["language": "es-US"]
     ] as [String : Any]
     
     let expectedDeviceInfo = [
@@ -57,6 +58,7 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
         mockSystemInfoService.displayInformation = (100, 200)
         mockSystemInfoService.deviceType = .PHONE
         mockSystemInfoService.activeLocaleName = "en_US"
+        mockSystemInfoService.systemLocaleName = "es_US"
         mockSystemInfoService.runMode = "Application"
         ServiceProvider.shared.systemInfoService = mockSystemInfoService
     }
@@ -70,7 +72,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
             "version": "version-number (build-number)",
             "isInstall": true,
             "isLaunch": true,
-            "id": "test-app-id"
+            "id": "test-app-id",
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -91,7 +94,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
             "version": "version-number (build-number)",
             "isUpgrade": true,
             "isLaunch": true,
-            "id": "test-app-id"
+            "id": "test-app-id",
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -111,7 +115,8 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
             "name": "test-app-name",
             "version": "version-number (build-number)",
             "isLaunch": true,
-            "id": "test-app-id"
+            "id": "test-app-id",
+            "_dc": ["language": "en-US"]
         ] as [String : Any]
         
         let expected = ["application": application,
@@ -186,46 +191,63 @@ class LifecycleV2MetricsBuilderTests: XCTestCase {
     }
     
     // List of tests for verifying getFormattedLocaleBCPString function
-    // [$0: Locale identifier string to test, $1: expected result]
+    // [$0: Locale identifier string to test, $1: expected result on iOS 16+, $2: expected result on iOS less than 16]
     let localeBCPStringTests = [
-        ("es-US", "es-US"), // language + region
-        ("en_US", "en-US"), // language + region (underscore)
-        ("de", "de"), // language only
-        ("-US", nil), // region only
-        ("--POSIX", nil), // variant only
-        ("und", "und"), // undefined
-        ("de-POSIX", "de"), // language + variant
-        ("de--POSIX", "de"), // language + variant (double hyphen)
-        ("de-DE-POSIX", "de-DE"), // language + region + variant
-        ("de-Latn-DE-POSIX", "de-DE"), // language + script + region + variant
-        ("zh-Hant-HK", "zh-HK"), // Chinese Hong Kong
-        ("zh-Hans-CN", "zh-CN"), // Chinese China
-        ("zh-Hans", "zh"), // language + script
-        ("-Hans-CN", nil), // script + region
-        ("no-NO-NY", "no-NO"), // Norwegian Nynorsk (special case)
-        ("sr-Latn-ME", "sr-ME"), // Serbian Montenegro
-        ("it-Latn", "it"), // language + variant
-        ("ja-JP-JP", "ja-JP"), // Japanese (special case)
-        ("ja-JP-u-ca-japanese", "ja-JP"), // Japanese calendar BCP
-        ("ja-JP@calendar=japanese", "ja-JP"), // Japanese calender ICU
-        ("TH-TH-TH", "th-TH"), // Thai (special case)
-        ("th-TH-u-ca-buddhist", "th-TH"), // Thai buddhist calendar BCP
-        ("th-TH@calendar=buddhist", "th-TH"), // Thai buddhist calendar ICU
-        ("en-US@calendar=buddhist", "en-US"), // English US buddhist calendar ICU
-        ("en@calendar=buddhist;numbers=thai", "en"), // English buddhist calendar with Thai numbers
-        ("i-klingon", "tlh") // Grandfathered case Klingon
+        ("es-US", "es-US", "es-US"), // language + region
+        ("en_US", "en-US", "en-US"), // language + region (underscore)
+        ("de", "de", "de"), // language only
+        ("-US", "und-US", nil), // region only
+        ("--POSIX", "und-u-va-posix", nil), // variant only
+        ("und", "und", "und"), // undefined
+        ("de-POSIX", "de-u-va-posix", "de"), // language + variant
+        ("de--POSIX", "de-u-va-posix", "de"), // language + variant (double hyphen)
+        ("de-DE-POSIX", "de-DE-u-va-posix", "de-DE"), // language + region + variant
+        ("de-Latn-DE-POSIX", "de-DE-u-va-posix", "de-DE"), // language + script + region + variant
+        ("zh-Hant-HK", "zh-Hant-HK", "zh-HK"), // Chinese Hong Kong
+        ("zh-Hans-CN", "zh-Hans-CN", "zh-CN"), // Chinese China
+        ("zh-Hans", "zh-Hans", "zh"), // language + script
+        ("-Hans-CN", "und-Hans-CN", nil), // script + region
+        ("no-NO-NY", "no-NO-x-lvariant-ny", "no-NO"), // Norwegian Nynorsk (special case)
+        ("sr-Latn-ME", "sr-Latn-ME", "sr-ME"), // Serbian Montenegro
+        ("it-Latn", "it", "it"), // langauge + variant
+        ("ja-JP-JP", "ja-JP-x-lvariant-jp", "ja-JP"), // Japanese (special case)
+        ("ja-JP-u-ca-japanese", "ja-JP-u-ca-japanese", "ja-JP"), // Japanese calendar BCP
+        ("ja-JP@calendar=japanese", "ja-JP-u-ca-japanese", "ja-JP"), // Japanese calender ICU
+        ("TH-TH-TH", "th-TH-x-lvariant-th", "th-TH"), // Thai (special case)
+        ("th-TH-u-ca-buddhist", "th-TH-u-ca-buddhist", "th-TH"), // Thai buddhist calendar BCP
+        ("th-TH@calendar=buddhist", "th-TH-u-ca-buddhist", "th-TH"), // Thai buddhist calendar ICU
+        ("en-US@calendar=buddhist", "en-US-u-ca-buddhist", "en-US"), // English US buddhist calendar ICU
+        ("en@calendar=buddhist;numbers=thai", "en-u-ca-buddhist-nu-thai", "en"), // English buddhist calendar with Thai numbers
+        ("i-klingon", "tlh", "tlh") // Grandfathered case Klingon
     ]
-    
-    func testGetFormattedLocaleBCPString() {
+
+    func testBcpFormattedActiveLocaleName() {
         XCTAssertFalse(localeBCPStringTests.isEmpty)
         
         localeBCPStringTests.forEach {
             mockSystemInfoService.activeLocaleName = $0
-            let result = mockSystemInfoService.getFormattedLocaleBCPString()
-            XCTAssertEqual($1, result, "Locale '\($0)' failed!")
+            let result = mockSystemInfoService.getActiveLocaleName().bcpFormattedLocale
+            if #available(iOS 16, tvOS 16, *) {
+                XCTAssertEqual($1, result, "Locale '\($0)' failed on iOS 16 or greater!")
+            } else {
+                XCTAssertEqual($2, result, "Locale '\($0)' failed on iOS less than 16!")
+            }
         }
     }
     
+    func testBcpFormattedSystemLocaleName() {
+        XCTAssertFalse(localeBCPStringTests.isEmpty)
+        
+        localeBCPStringTests.forEach {
+            mockSystemInfoService.systemLocaleName = $0
+            let result = mockSystemInfoService.getSystemLocaleName().bcpFormattedLocale
+            if #available(iOS 16, tvOS 16, *) {
+                XCTAssertEqual($1, result, "Locale '\($0)' failed on iOS 16 or greater!")
+            } else {
+                XCTAssertEqual($2, result, "Locale '\($0)' failed on iOS less than 16!")
+            }
+        }
+    }
 }
 
 private extension Date {

@@ -16,6 +16,6 @@ extension DataQueueService {
     /// clear cached `DataQueue` objects
     /// this function is for testing purpose
     internal func cleanCache() {
-        threadSafeDictionary = ThreadSafeDictionary<String, DataQueue>()
+        store = [String: DataQueue]()
     }
 }

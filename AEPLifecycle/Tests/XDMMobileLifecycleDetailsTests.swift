@@ -10,10 +10,13 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPLifecycle
 import XCTest
 
-class XDMMobileLifecycleDetailsTests: XCTestCase {
+import AEPCoreMocks
+
+@testable import AEPLifecycle
+
+class XDMMobileLifecycleDetailsTests: XCTestCase, AnyCodableAsserts {
 
     // MARK: Encodable Tests
 
@@ -76,7 +79,7 @@ class XDMMobileLifecycleDetailsTests: XCTestCase {
         }
         """
 
-        XCTAssertEqual(expected, dataStr)
+        assertEqual(expected: expected, actual: dataStr)
     }
 
 }

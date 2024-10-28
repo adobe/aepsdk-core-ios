@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.
 class EventHistory {
@@ -42,7 +43,7 @@ class EventHistory {
             return
         }
 
-        db.insert(hash: event.eventHash, handler: handler)
+        db.insert(hash: event.eventHash, timestamp: event.timestamp, handler: handler)
     }
 
     /// Retrieves a count of historical events matching the provided requests.
@@ -62,6 +63,7 @@ class EventHistory {
                 let from = previousEventOldestOccurrence ?? event.fromDate
                 let semaphore = DispatchSemaphore(value: 0)
                 db.select(hash: eventHash, from: from, to: event.toDate) { result in
+                    Log.debug(label: "EventHistory", "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(from?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder enabled returned \(result.count) record(s).")
                     previousEventOldestOccurrence = result.oldestOccurrence
                     results.append(result)
                     semaphore.signal()
@@ -73,6 +75,7 @@ class EventHistory {
                 let semaphore = DispatchSemaphore(value: 0)
                 let eventHash = event.mask.fnv1a32()
                 db.select(hash: eventHash, from: event.fromDate, to: event.toDate) { result in
+                    Log.debug(label: "EventHistory", "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(event.fromDate?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder disabled returned \(result.count) record(s).")
                     results.append(result)
                     semaphore.signal()
                 }
@@ -91,9 +94,12 @@ class EventHistory {
     func deleteEvents(_ requests: [EventHistoryRequest], handler: ((Int) -> Void)? = nil) {
         var rowsDeleted = 0
         for request in requests {
+            let semaphore = DispatchSemaphore(value: 0)
             db.delete(hash: request.mask.fnv1a32(), from: request.fromDate, to: request.toDate) { count in
                 rowsDeleted += count
+                semaphore.signal()
             }
+            semaphore.wait()
         }
 
         handler?(rowsDeleted)

@@ -1,0 +1,92 @@
+{
+  "name": "Adobe Experience Platform SDKs",
+  "overview": "The Adobe Experience Platform SDKs maintained by Adobe",
+  "keywords": ["aep, adobe, adobe experience platform"],
+  "packages": [
+    {
+      "url": "https://github.com/adobe/aepsdk-core-ios.git",
+      "summary": "Adobe Experience Platform Core SDK",
+      "keywords": ["mobile core, core, lifecycle, signal, identity"]      
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-userprofile-ios",
+      "summary": "Adobe Experience Platform User Profile SDK",
+      "keywords": ["profile", "user profile"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-assurance-ios.git",
+      "summary": "Adobe Experience Platform Assurance SDK",
+      "keywords": ["assurance", "griffon", "validation"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-edge-ios.git",
+      "summary": "Adobe Experience Platform Edge SDK",
+      "keywords": ["edge"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-edgeconsent-ios.git",
+      "summary": "Adobe Experience Platform Consent Collection SDK",
+      "keywords": ["consent", "edge consent"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-edgeidentity-ios.git",
+      "summary": "Adobe Experience Platform Edge Identity SDK",
+      "keywords": ["identity", "edge identity"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-edgemedia-ios.git",
+      "summary": "Adobe Experience Platform Edge Media SDK",
+      "keywords": ["edge media", "media analytics"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-edgebridge-ios.git",
+      "summary": "Adobe Experience Platform Edge Bridge SDK",
+      "keywords": ["edge", "edge bridge", "analytics", "migration"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-messaging-ios.git",
+      "summary": "Adobe Experience Platform Messaging SDK",
+      "keywords": ["messaging", "iam", "in-app messaging", "ajo", "adobe journey optimizer"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-optimize-ios.git",
+      "summary": "Adobe Experience Platform Optimize SDK",
+      "keywords": ["optimize", "ajo", "adobe journey optimizer", "decisioning"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-analytics-ios.git",
+      "summary": "Adobe Experience Platform Analytics SDK",
+      "keywords": ["analytics"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-audience-ios.git",
+      "summary": "Adobe Experience Platform Audience Manager SDK",
+      "keywords": ["audience manager", "aam"]
+    }, 
+    {
+      "url": "https://github.com/adobe/aepsdk-media-ios.git",
+      "summary": "Adobe Experience Platform Media Analytics SDK",
+      "keywords": ["media analytics", "media", "media collection"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-campaign-ios.git",
+      "summary": "Adobe Experience Platform Campaign SDK",
+      "keywords": ["campaign", "campaign standard"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-campaignclassic-ios",
+      "summary": "Adobe Experience Platform Campaign Classic SDK",
+      "keywords": ["campaign", "campaign classic"]
+    },
+    {
+      "url": "https://github.com/adobe/aepsdk-places-ios.git",
+      "summary": "Adobe Experience Platform Places SDK",
+      "keywords": ["places"]
+    },   
+    {
+      "url": "https://github.com/adobe/aepsdk-target-ios.git",
+      "summary": "Adobe Experience Platform Target SDK",
+      "keywords": ["target"]
+    }
+  ]
+}

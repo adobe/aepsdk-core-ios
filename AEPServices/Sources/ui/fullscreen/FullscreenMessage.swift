@@ -40,6 +40,7 @@
         var payloadUsingLocalAssets: String?
         var listener: FullscreenMessageDelegate?
         public internal(set) var webView: UIView?
+        private var tempHtmlFile: URL?
         private(set) var transparentBackgroundView: UIView?
         private(set) var messageMonitor: MessageMonitoring
 
@@ -95,6 +96,21 @@
             show(withMessagingDelegateControl: true)
         }
 
+        deinit {
+            NotificationCenter.default.removeObserver(self)
+
+            // remove the temporary html if it exists
+            if let tempFile = self.tempHtmlFile {
+                do {
+                    try FileManager.default.removeItem(at: tempFile)
+                    self.tempHtmlFile = nil
+                } catch {
+                    Log.debug(label: self.LOG_PREFIX, "Unable to remove temporary HTML file for dismissed in-app message: \(error)")
+                }
+            }
+        }
+
+        private var observerSet = false
         public func show(withMessagingDelegateControl delegateControl: Bool) {
             // check if the webview has already been created
             if let webview = self.webView as? WKWebView {
@@ -103,22 +119,33 @@
             }
 
             DispatchQueue.main.async {
+
+                // add observer to handle device rotation
+                if !self.observerSet {
+                    NotificationCenter.default.addObserver(self,
+                                                           selector: #selector(self.handleDeviceRotation(notification:)),
+                                                           name: UIDevice.orientationDidChangeNotification,
+                                                           object: nil)
+                    self.observerSet = true
+                }
+
                 // create the webview
                 let wkWebView = self.getConfiguredWebView(newFrame: self.frameBeforeShow)
 
                 // save the HTML payload to a local file if the cached image is being used
                 var useTempHTML = false
                 var cacheFolderURL: URL?
-                var tempHTMLFile: URL?
                 let cacheFolder: URL? = self.fileManager.getCacheDirectoryPath()
                 if cacheFolder != nil {
                     cacheFolderURL = cacheFolder?.appendingPathComponent(self.DOWNLOAD_CACHE)
-                    tempHTMLFile = cacheFolderURL?.appendingPathComponent(self.TEMP_FILE_NAME).appendingPathExtension(self.HTML_EXTENSION)
-                    if self.isLocalImageUsed, let file = tempHTMLFile {
+                    let tempHTMLFileName = "\(self.TEMP_FILE_NAME)_\(self.hash)"
+                    self.tempHtmlFile = cacheFolderURL?.appendingPathComponent(tempHTMLFileName).appendingPathExtension(self.HTML_EXTENSION)
+
+                    if self.isLocalImageUsed, let file = self.tempHtmlFile {
                         // We have to use loadFileURL so we can allow read access to these image files in the cache but loadFileURL
                         // expects a file URL and not the string representation of the HTML payload. As a workaround, we can write the
-                        // payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp.html and pass that file
-                        // URL to loadFileURL.
+                        // payload string to a temporary HTML file located at cachePath/adbdownloadcache/temp_[self.hash].html
+                        // and pass that file URL to loadFileURL.
                         do {
                             try FileManager.default.createDirectory(atPath: cacheFolderURL?.path ?? "", withIntermediateDirectories: true, attributes: nil)
                             var tempHtml: Data?
@@ -140,7 +167,7 @@
                 // loadFileURL:allowingReadAccessToURL: to load the html from local file, which will give us the correct
                 // permission to read cached files
                 if useTempHTML {
-                    self.loadingNavigation = wkWebView.loadFileURL(URL(fileURLWithPath: tempHTMLFile?.path ?? ""), allowingReadAccessTo: URL(fileURLWithPath: cacheFolder?.path ?? ""))
+                    self.loadingNavigation = wkWebView.loadFileURL(URL(fileURLWithPath: self.tempHtmlFile?.path ?? ""), allowingReadAccessTo: URL(fileURLWithPath: cacheFolder?.path ?? ""))
                 } else {
                     self.loadingNavigation = wkWebView.loadHTMLString(self.payload, baseURL: Bundle.main.bundleURL)
                 }
@@ -149,12 +176,25 @@
             }
         }
 
+        @objc private func handleDeviceRotation(notification: NSNotification) {
+            DispatchQueue.main.async {
+                if self.transparentBackgroundView != nil {
+                    self.transparentBackgroundView?.frame = CGRect(x: 0, y: 0, width: self.screenWidth, height: self.screenHeight + self.safeAreaHeight)
+                }
+                self.webView?.frame = self.frameWhenVisible
+            }
+        }
+
         private func handleShouldShow(webview: WKWebView, delegateControl: Bool) {
             // get off main thread while delegate has control to prevent pause on main thread
             DispatchQueue.global().async {
                 // only show the message if the monitor allows it
-                guard self.messageMonitor.show(message: self, delegateControl: delegateControl) else {
+                let (shouldShow, error) = self.messageMonitor.show(message: self, delegateControl: delegateControl)
+                guard shouldShow else {
                     self.listener?.onShowFailure()
+                    if let error = error {
+                        self.listener?.onError?(message: self, error: error)
+                    }                    
                     return
                 }
 
@@ -171,33 +211,28 @@
 
         public func dismiss() {
             DispatchQueue.main.async {
+                // remove device orientation observer
+                NotificationCenter.default.removeObserver(self)
+                self.observerSet = false
+
                 if self.messageMonitor.dismiss() == false {
                     return
                 }
 
                 self.dismissWithAnimation(shouldDeallocateWebView: true)
-                // Notifying all listeners
+
+                // notify all listeners
                 self.listener?.onDismiss(message: self)
                 self.messagingDelegate?.onDismiss(message: self)
 
                 // remove the temporary html if it exists
-                guard var cacheFolder: URL = self.fileManager.getCacheDirectoryPath() else {
-                    return
-                }
-                cacheFolder.appendPathComponent(self.DOWNLOAD_CACHE)
-                cacheFolder.appendPathComponent(self.TEMP_FILE_NAME)
-                cacheFolder.appendPathExtension(self.HTML_EXTENSION)
-                let tempHTMLFilePath = cacheFolder.absoluteString
-
-                guard let tempHTMLFilePathUrl = URL(string: tempHTMLFilePath) else {
-                    Log.debug(label: self.LOG_PREFIX, "Unable to dismiss, error converting temp path \(tempHTMLFilePath) to URL")
-                    return
-                }
-
-                do {
-                    try FileManager.default.removeItem(at: tempHTMLFilePathUrl)
-                } catch {
-                    Log.debug(label: self.LOG_PREFIX, "Unable to dismiss \(error)")
+                if let tempFile = self.tempHtmlFile {
+                    do {
+                        try FileManager.default.removeItem(at: tempFile)
+                        self.tempHtmlFile = nil
+                    } catch {
+                        Log.debug(label: self.LOG_PREFIX, "Unable to remove temporary HTML file for dismissed in-app message: \(error)")
+                    }
                 }
             }
         }
@@ -260,7 +295,8 @@
             wkWebView.navigationDelegate = self
             wkWebView.scrollView.bounces = false
             wkWebView.scrollView.layer.cornerRadius = settings?.cornerRadius ?? 0.0
-            wkWebView.backgroundColor = UIColor.clear
+            wkWebView.scrollView.backgroundColor = .clear
+            wkWebView.backgroundColor = .clear
             wkWebView.isOpaque = false
             wkWebView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
@@ -314,6 +350,14 @@
         }
 
         private func displayWithAnimation(webView: WKWebView) {
+            // MOB-20427 - only display the WKWebView if we have html to show
+            guard !self.payload.isEmpty else {
+                Log.trace(label: self.LOG_PREFIX, "Suppressing the display of a FullscreenMessage because it has no HTML to be shown.")
+                // reset the monitor so it doesn't think a message is being shown
+                self.messageMonitor.dismissMessage()
+                return
+            }
+
             DispatchQueue.main.async {
                 let keyWindow = UIApplication.shared.getKeyWindow()
 
@@ -378,4 +422,5 @@
             }
         }
     }
+
 #endif

@@ -48,7 +48,8 @@ class SignalHitProcessor: HitProcessing {
 
         let request = NetworkRequest(url: signalHit.url, httpMethod: httpMethod, connectPayload: signalHit.postBody ?? "", httpHeaders: headers, connectTimeout: timeout, readTimeout: timeout)
 
-        networkService.connectAsync(networkRequest: request) { connection in
+        networkService.connectAsync(networkRequest: request) { [weak self] connection in
+            guard let self = self else { return }
             self.handleNetworkResponse(hit: signalHit, connection: connection, completion: completion)
         }
     }
@@ -69,6 +70,10 @@ class SignalHitProcessor: HitProcessing {
         } else if NetworkServiceConstants.RECOVERABLE_ERROR_CODES.contains(connection.responseCode ?? -1) {
             // retry this hit later
             Log.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(hit.url.absoluteString)")
+            completion(false)
+        } else if let error = connection.error as? URLError, error.isRecoverable {
+            // retry this hit later as the request failed with a recoverable transport error
+            Log.debug(label: LOG_TAG, "Signal request failed with recoverable error \(connection.error?.localizedDescription ?? "") and status code \(connection.responseCode ?? -1). Will retry sending the request later: \(urlString)")
             completion(false)
         } else {
             // unrecoverable error. delete the hit from the database and continue

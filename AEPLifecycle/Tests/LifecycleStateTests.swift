@@ -10,10 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPLifecycle
-import AEPServices
-import AEPServicesMocks
 import XCTest
+
+import AEPServices
+
+@testable import AEPCoreMocks
+@testable import AEPLifecycle
 
 class LifecycleStateTests: XCTestCase {
     var lifecycleState: LifecycleState!
@@ -35,6 +37,7 @@ class LifecycleStateTests: XCTestCase {
         for key in UserDefaults.standard.dictionaryRepresentation().keys {
             UserDefaults.standard.removeObject(forKey: key)
         }
+        NamedCollectionDataStore.clear()
     }
 
     private func setupDates() {

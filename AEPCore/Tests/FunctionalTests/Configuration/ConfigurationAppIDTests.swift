@@ -10,12 +10,12 @@
  governing permissions and limitations under the License.
  */
 
-@testable import AEPCore
 import XCTest
+
 import AEPCoreMocks
-import AEPServices
-import AEPServicesMocks
-import XCTest
+
+@testable import AEPCore
+@testable import AEPServices
 
 class ConfigurationAppIDTests: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
@@ -26,12 +26,15 @@ class ConfigurationAppIDTests: XCTestCase {
     }
 
     override func setUp() {
-        UserDefaults.clear()
         ServiceProvider.shared.namedKeyValueService = MockDataStore()
         mockRuntime = TestableExtensionRuntime()
         configuration = Configuration(runtime: mockRuntime)
         configuration.onRegistered()
         mockRuntime.resetDispatchedEventAndCreatedSharedStates()
+    }
+
+    override func tearDown() {
+        ServiceProvider.shared.reset()
     }
 
     // MARK: configureWith(appId) tests
@@ -74,7 +77,38 @@ class ConfigurationAppIDTests: XCTestCase {
 
         // Should have been removed from storage
         XCTAssertNil(mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as Any?)
+    }
 
+    func testInternalConfigureWithAppIdIsDroppedIfAppIdDiffersFromPersistedAppId() {
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
+        ServiceProvider.shared.networkService = mockNetworkService
+        let validAppId = "valid-app-id"
+        let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId)
+
+        // test
+        mockRuntime.simulateComingEvents(appIdEvent)
+
+        // Should be in storage
+        XCTAssertEqual(validAppId, mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as? String)
+
+        let appIdEvent2 = ConfigurationAppIDTests.createConfigAppIdEvent(appId: "valid-app-id2", isInternal: true)
+        mockRuntime.simulateComingEvents(appIdEvent2)
+
+        // appIdEvent2 should be dropped.
+        XCTAssertEqual(validAppId, mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as? String)
+    }
+
+    func testInternalConfigureWithAppIdIsNotDroppedIfNoPersistedAppIdExists() {
+        let mockNetworkService = MockConfigurationDownloaderNetworkService(responseType: .success)
+        ServiceProvider.shared.networkService = mockNetworkService
+        let validAppId = "valid-app-id"
+        let appIdEvent = ConfigurationAppIDTests.createConfigAppIdEvent(appId: validAppId, isInternal: true)
+
+        // test
+        mockRuntime.simulateComingEvents(appIdEvent)
+
+        // Should be in storage
+        XCTAssertEqual(validAppId, mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as? String)
     }
 
     // Tests that when we hit the retry queue, we properly send a configuration request event
@@ -167,8 +201,8 @@ class ConfigurationAppIDTests: XCTestCase {
         XCTAssertEqual(16, mockRuntime.secondSharedState?.count)
     }
 
-    static func createConfigAppIdEvent(appId: String) -> Event {
+    static func createConfigAppIdEvent(appId: String, isInternal: Bool = false) -> Event {
         return Event(name: "Configure with AppId", type: EventType.configuration, source: EventSource.requestContent,
-                     data: ["config.appId": appId])
+                     data: isInternal ? ["config.appId": appId, "config.isinternalevent": isInternal] : ["config.appId": appId])
     }
 }

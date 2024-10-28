@@ -53,12 +53,11 @@ class EventHistoryDatabase {
     ///
     /// Fails if a connection to the database cannot be established, and calls the `handler` with a value of `false`.
     ///
-    /// The current timestamp will always be used on this insert.
-    ///
     /// - Parameters:
     ///   - hash: the hashed value representing an event.
+    ///   - timestamp: the event timestamp
     ///   - handler: called with the `Bool` result of the insert statement.
-    func insert(hash: UInt32, handler: ((Bool) -> Void)? = nil) {
+    func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
         dispatchQueue.async {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
@@ -68,7 +67,7 @@ class EventHistoryDatabase {
 
             let insertStatement = """
             INSERT INTO \(self.tableName) (\(self.columnHash), \(self.columnTimestamp))
-            VALUES (\(hash), \(Date().millisecondsSince1970))
+            VALUES (\(hash), \(timestamp.millisecondsSince1970))
             """
 
             let result = SQLiteWrapper.execute(database: connection, sql: insertStatement)
@@ -102,7 +101,7 @@ class EventHistoryDatabase {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database.")
-                handler(EventHistoryResult(count: 0))
+                handler(EventHistoryResult(count: -1))
                 return
             }
 
@@ -114,11 +113,11 @@ class EventHistoryDatabase {
             AND \(self.columnTimestamp) <= \(to?.millisecondsSince1970 ?? Date().millisecondsSince1970)
             """
 
-            // a nil result means there was no query results to be returned
+            // a nil result means something went wrong with the database query
             guard let result = SQLiteWrapper.query(database: connection, sql: selectStatement),
                   let row = result.first else {
-                Log.trace(label: self.LOG_PREFIX, "No query results were returned for event '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
-                handler(EventHistoryResult(count: 0))
+                Log.warning(label: self.LOG_PREFIX, "An error occurred when attempting to query for event(s) '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
+                handler(EventHistoryResult(count: -1))
                 return
             }
 

@@ -10,10 +10,12 @@
  */
 
 import XCTest
+
+import AEPCoreMocks
+
 @testable import AEPCore
-import AEPServicesMocks
-import AEPServices
 @testable import AEPIdentity
+@testable import AEPServices
 
 private struct MockIDParser: IDParsing {
     func convertStringToIds(idString: String?) -> [[String : Any]] {
@@ -60,6 +62,7 @@ class V5MigratorTests: XCTestCase {
         v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.SuccessfulClose")
         v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_Lifecycle.LaunchesAfterUpgrade")
         v5Defaults.removeObject(forKey: "Adobe.AdobeMobile_ConfigState.config.overridden.map")
+        ServiceProvider.shared.reset()
     }
 
     /// Tests that on a fresh install that all values are nil and nothing is migrated
