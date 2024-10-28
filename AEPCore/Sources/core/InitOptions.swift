@@ -14,8 +14,9 @@ import Foundation
 import UIKit
 import AEPServices
 
-public struct InitOptions {
-    
+@objc(AEPInitOptions)
+public class InitOptions: NSObject {
+
     var logLevel: LogLevel?
     var wrapperType: WrapperType?
     var additionalContextData: [String: Any]?

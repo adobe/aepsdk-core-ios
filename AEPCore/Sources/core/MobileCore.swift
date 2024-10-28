@@ -41,6 +41,7 @@ public final class MobileCore: NSObject {
     
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
+    @objc(initialize:options:completion:)
     public static func initialize(with id: String, options: InitOptions?, _ completion: (() -> Void)? = nil) {
         if let logLevel = options?.logLevel {
             setLogLevel(logLevel)
