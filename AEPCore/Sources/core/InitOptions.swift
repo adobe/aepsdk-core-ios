@@ -17,25 +17,15 @@ import AEPServices
 @objc(AEPInitOptions)
 public class InitOptions: NSObject {
 
-    public private(set) var logLevel: LogLevel?
-    public private(set) var wrapperType: WrapperType?
-    public private(set) var additionalContextData: [String: Any]?
-    public private(set) var enableLifecycleTracking: Bool
+    @objc public private(set) var disableAutomaticLifecycleTracking: Bool
+    @objc public private(set) var additionalContextData: [String: Any]?
 
     @objc
-    public convenience init(logLevel: LogLevel, enableLifecycleTracking: Bool, additionalContextData: [String: Any]) {
-        self.init(logLevel: logLevel, wrapperType: nil, additionalContextData: additionalContextData, enableLifecycleTracking: enableLifecycleTracking)
-    }
-
     public init(
-        logLevel: LogLevel? = nil,
-        wrapperType: WrapperType? = nil,
-        additionalContextData: [String: Any]? = nil,
-        enableLifecycleTracking: Bool = true
+        disableAutomaticLifecycleTracking: Bool = false,
+        additionalContextData: [String: Any]? = nil
     ) {
-        self.logLevel = logLevel
-        self.wrapperType = wrapperType
         self.additionalContextData = additionalContextData
-        self.enableLifecycleTracking = enableLifecycleTracking
+        self.disableAutomaticLifecycleTracking = disableAutomaticLifecycleTracking
     }
 }

@@ -43,13 +43,6 @@ public final class MobileCore: NSObject {
     @available(tvOSApplicationExtension, unavailable)
     @objc(initialize:options:completion:)
     public static func initialize(with id: String, options: InitOptions? = nil, _ completion: (() -> Void)? = nil) {
-        if let logLevel = options?.logLevel {
-            setLogLevel(logLevel)
-        }
-
-        if let wrapperType = options?.wrapperType {
-            setWrapperType(wrapperType)
-        }
 
         // Register Extensions, call configureWithAppId from callback
         DispatchQueue.global().async {
@@ -59,7 +52,7 @@ public final class MobileCore: NSObject {
                 configureWith(appId: id)
                 
                 // If enableLifecycleTracking flag is true, set lifecycle notification listeners
-                guard let enableLifecycleTracking = options?.enableLifecycleTracking, enableLifecycleTracking == true else {
+                guard let disableAutomaticLifecycleTracking = options?.disableAutomaticLifecycleTracking, disableAutomaticLifecycleTracking == false else {
                     var usingSceneDelegate = false
                     if #available(iOS 13.0, tvOS 13.0, *) {
                         let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
