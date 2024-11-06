@@ -18,6 +18,10 @@ import UIKit
 @objc(AEPMobileCore)
 public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
+
+    // Flag if 'initialized' was called
+    private static let initialized = AtomicCounter()
+
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         let wrapperType = EventHub.shared.getWrapperType()
@@ -44,6 +48,11 @@ public final class MobileCore: NSObject {
     @objc(initialize:options:completion:)
     public static func initialize(with id: String, options: InitOptions? = nil, _ completion: (() -> Void)? = nil) {
 
+        if initialized.incrementAndGet() != 1 {
+            Log.warning(label: LOG_TAG, "initialize - ignoring as it was already called.")
+            return
+        }
+
         // Register Extensions, call configureWithAppId from callback
         DispatchQueue.global().async {
             let classList = ClassFinder.classes(conformToProtocol: Extension.self)
@@ -60,7 +69,6 @@ public final class MobileCore: NSObject {
                             usingSceneDelegate = true
                         }
                     }
-                    // TODO - only call once
                     setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options?.additionalContextData)
                     return
                 }
