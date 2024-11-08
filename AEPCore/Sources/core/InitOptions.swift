@@ -10,22 +10,26 @@
 // governing permissions and limitations under the License.
 //
 
-import Foundation
-import UIKit
-import AEPServices
-
 @objc(AEPInitOptions)
 public class InitOptions: NSObject {
 
-    @objc public private(set) var disableAutomaticLifecycleTracking: Bool
-    @objc public private(set) var additionalContextData: [String: Any]?
+    /// Flag to disable automatic lifecycle tracking
+    @objc public var disableAutomaticLifecycleTracking: Bool
+
+    /// Additional context data for lifecycle tracking
+    @objc public var lifecycleAdditionalContextData: [String: Any]?
+
+    /// App group used to share user defaults and files among containing app and extension apps.
+    @objc public var appGroup: String?
 
     @objc
     public init(
         disableAutomaticLifecycleTracking: Bool = false,
-        additionalContextData: [String: Any]? = nil
+        lifecycleAdditionalContextData: [String: Any]? = nil,
+        appGroup: String? = nil
     ) {
-        self.additionalContextData = additionalContextData
         self.disableAutomaticLifecycleTracking = disableAutomaticLifecycleTracking
+        self.lifecycleAdditionalContextData = lifecycleAdditionalContextData
+        self.appGroup = appGroup
     }
 }

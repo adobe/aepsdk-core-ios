@@ -53,6 +53,10 @@ public final class MobileCore: NSObject {
             return
         }
 
+        if options?.appGroup != nil {
+            MobileCore.setAppGroup(options?.appGroup)
+        }
+
         // Register Extensions, call configureWithAppId from callback
         DispatchQueue.global().async {
             let classList = ClassFinder.classes(conformToProtocol: Extension.self)
@@ -61,7 +65,7 @@ public final class MobileCore: NSObject {
                 configureWith(appId: id)
                 
                 // If disableAutomaticLifecycleTracking flag is false, set lifecycle notification listeners
-                guard let disableAutomaticLifecycleTracking = options?.disableAutomaticLifecycleTracking, disableAutomaticLifecycleTracking == true else {
+                if let disableAutomaticLifecycleTracking = options?.disableAutomaticLifecycleTracking, disableAutomaticLifecycleTracking == false {
                     var usingSceneDelegate = false
                     if #available(iOS 13.0, tvOS 13.0, *) {
                         let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
@@ -69,8 +73,10 @@ public final class MobileCore: NSObject {
                             usingSceneDelegate = true
                         }
                     }
-                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options?.additionalContextData)
-                    return
+                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options?.lifecycleAdditionalContextData)
+                    Log.trace(label: LOG_TAG, "MobileCore.initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
+                } else {
+                    Log.trace(label: LOG_TAG, "MobileCore.initialize - automatic lifecycle tracking disabled.")
                 }
 
                 completion?()

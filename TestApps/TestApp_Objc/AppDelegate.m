@@ -27,11 +27,13 @@ governing permissions and limitations under the License.
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [AEPMobileCore setLogLevel:AEPLogLevelTrace];
-     
-    [AEPMobileCore registerExtensions:@[AEPMobileLifecycle.class, AEPMobileSignal.class, AEPMobileIdentity.class] completion:^{
-        [AEPMobileCore updateConfiguration:@{@"lifecycle.sessionTimeout":@1}];
-        [AEPMobileCore configureWithAppId:@""];
-        
+
+    AEPInitOptions *options = [AEPInitOptions alloc];
+    options.disableAutomaticLifecycleTracking = false;
+    options.lifecycleAdditionalContextData = @{@"autoTracking": @"enabled"};
+
+    [AEPMobileCore initialize:@"" options:options completion:^{
+        [AEPLog debugWithLabel:@"AppDelegate" message:@"Mobile Core initialized."];
     }];
     
     return YES;
