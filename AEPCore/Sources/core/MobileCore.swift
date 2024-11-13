@@ -46,7 +46,7 @@ public final class MobileCore: NSObject {
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     @objc(initialize:options:completion:)
-    public static func initialize(with id: String, options: InitOptions? = nil, _ completion: (() -> Void)? = nil) {
+    public static func initialize(appId: String, options: InitOptions? = nil, _ completion: (() -> Void)? = nil) {
 
         if initialized.incrementAndGet() != 1 {
             Log.warning(label: LOG_TAG, "initialize - ignoring as it was already called.")
@@ -62,8 +62,8 @@ public final class MobileCore: NSObject {
             let classList = ClassFinder.classes(conformToProtocol: Extension.self)
             let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
             registerExtensions(filteredClassList) {
-                configureWith(appId: id)
-                
+                configureWith(appId: appId)
+
                 // If disableAutomaticLifecycleTracking flag is false, set lifecycle notification listeners
                 if let disableAutomaticLifecycleTracking = options?.disableAutomaticLifecycleTracking, disableAutomaticLifecycleTracking == false {
                     var usingSceneDelegate = false

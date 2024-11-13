@@ -14,22 +14,11 @@
 public class InitOptions: NSObject {
 
     /// Flag to disable automatic lifecycle tracking
-    @objc public var disableAutomaticLifecycleTracking: Bool
+    @objc public var disableAutomaticLifecycleTracking: Bool = false
 
     /// Additional context data for lifecycle tracking
     @objc public var lifecycleAdditionalContextData: [String: Any]?
 
     /// App group used to share user defaults and files among containing app and extension apps.
     @objc public var appGroup: String?
-
-    @objc
-    public init(
-        disableAutomaticLifecycleTracking: Bool = false,
-        lifecycleAdditionalContextData: [String: Any]? = nil,
-        appGroup: String? = nil
-    ) {
-        self.disableAutomaticLifecycleTracking = disableAutomaticLifecycleTracking
-        self.lifecycleAdditionalContextData = lifecycleAdditionalContextData
-        self.appGroup = appGroup
-    }
 }
