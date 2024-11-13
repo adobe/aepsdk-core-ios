@@ -41,8 +41,6 @@ public class EventSource: NSObject {
     public static let trackMedia = "com.adobe.eventSource.trackMedia"
     public static let contentComplete = "com.adobe.eventSource.contentComplete"
     public static let debug = "com.adobe.eventSource.debug"
-    public static let startScanEventSource = "com.adobe.eventSource.startScan"
-    public static let scanScreenshot = "com.adobe.eventSource.scanScreenshot"
-    public static let stopScanEventSource = "com.adobe.eventSource.stopScan"
-    public static let readyForScanSource = "com.adobe.eventSource.readyForScan"
+    public static let screenInfo = "com.adobe.eventSource.screenInfo"
+    public static let appScan = "com.adobe.eventSource.appScan"
 }
