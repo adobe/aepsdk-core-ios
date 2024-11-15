@@ -48,5 +48,5 @@ public class EventType: NSObject {
     public static let userProfile = "com.adobe.eventType.userProfile"
     public static let wildcard = "com.adobe.eventType._wildcard_"
     public static let assurance = "com.adobe.eventType.assurance"
-    public static let pearlEvent = "com.adobe.eventType.pearl"
+    public static let pearl = "com.adobe.eventType.pearl"
 }
