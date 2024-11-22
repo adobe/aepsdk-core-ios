@@ -14,7 +14,7 @@
 public class InitOptions: NSObject {
 
     /// Flag to disable automatic lifecycle tracking
-    @objc public var disableAutomaticLifecycleTracking: Bool = false
+    @objc public var automaticLifecycleTracking: Bool = true
 
     /// Additional context data for lifecycle tracking
     @objc public var lifecycleAdditionalContextData: [String: Any]?

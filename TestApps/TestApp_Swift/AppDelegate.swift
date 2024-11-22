@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         MobileCore.setLogLevel(.trace)
         var options = InitOptions()
-        options.disableAutomaticLifecycleTracking = false
+        options.automaticLifecycleTracking = true
         options.lifecycleAdditionalContextData = ["autoTracking": "enabled"]
         MobileCore.initialize(appId: LAUNCH_ENVIRONMENT_FILE_ID, options: options)
 
