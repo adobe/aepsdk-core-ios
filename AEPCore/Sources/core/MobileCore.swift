@@ -45,16 +45,25 @@ public final class MobileCore: NSObject {
     
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
-    @objc(initialize:options:completion:)
-    public static func initialize(appId: String, options: InitOptions? = nil, _ completion: (() -> Void)? = nil) {
+    @objc(initializeWithAppId:completion:)
+    public static func initialize(appId: String, _ completion: (() -> Void)? = nil) {
+        let options = InitOptions()
+        options.appId = appId
+        initialize(options: options, completion)
+    }
+
+    @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
+    @objc(initializeWithOptions:completion:)
+    public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
 
         if initialized.incrementAndGet() != 1 {
             Log.warning(label: LOG_TAG, "initialize - ignoring as it was already called.")
             return
         }
 
-        if options?.appGroup != nil {
-            MobileCore.setAppGroup(options?.appGroup)
+        if options.appGroup != nil {
+            setAppGroup(options.appGroup)
         }
 
         // Register Extensions, call configureWithAppId from callback
@@ -62,10 +71,13 @@ public final class MobileCore: NSObject {
             let classList = ClassFinder.classes(conformToProtocol: Extension.self)
             let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
             registerExtensions(filteredClassList) {
-                configureWith(appId: appId)
+
+                if let appId = options.appId {
+                    configureWith(appId: appId)
+                }
 
                 // If disableAutomaticLifecycleTracking flag is false, set lifecycle notification listeners
-                if let automaticLifecycleTracking = options?.automaticLifecycleTracking, automaticLifecycleTracking == true {
+                if options.automaticLifecycleTracking == true {
                     var usingSceneDelegate = false
                     if #available(iOS 13.0, tvOS 13.0, *) {
                         let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
@@ -73,7 +85,7 @@ public final class MobileCore: NSObject {
                             usingSceneDelegate = true
                         }
                     }
-                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options?.lifecycleAdditionalContextData)
+                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options.lifecycleAdditionalContextData)
                     Log.trace(label: LOG_TAG, "MobileCore.initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
                 } else {
                     Log.trace(label: LOG_TAG, "MobileCore.initialize - automatic lifecycle tracking disabled.")

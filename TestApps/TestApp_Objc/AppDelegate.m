@@ -29,10 +29,11 @@ governing permissions and limitations under the License.
     [AEPMobileCore setLogLevel:AEPLogLevelTrace];
 
     AEPInitOptions *options = [[AEPInitOptions alloc] init];
+    options.appId = @"";
     options.automaticLifecycleTracking = true;
     options.lifecycleAdditionalContextData = @{@"autoTracking": @"enabled"};
 
-    [AEPMobileCore initialize:@"" options:options completion:^{
+    [AEPMobileCore initializeWithOptions:options completion:^{
         [AEPLog debugWithLabel:@"AppDelegate" message:@"Mobile Core initialized."];
     }];
     

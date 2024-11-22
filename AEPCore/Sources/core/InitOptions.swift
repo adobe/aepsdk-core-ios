@@ -13,12 +13,15 @@
 @objc(AEPInitOptions)
 public class InitOptions: NSObject {
 
+    /// A unique identifier assigned to the app instance by Adobe Launch and passed to `MobileCore.configureWith(appId:)`
+    @objc public var appId: String?
+
     /// Flag to disable automatic lifecycle tracking
     @objc public var automaticLifecycleTracking: Bool = true
 
-    /// Additional context data for lifecycle tracking
+    /// Additional context data for lifecycle tracking passed to `MobileCore.lifecycleStart(additionalContextData:)`
     @objc public var lifecycleAdditionalContextData: [String: Any]?
 
-    /// App group used to share user defaults and files among containing app and extension apps.
+    /// App group used to share user defaults and files among containing app and extension apps. Passed to `MobleCore.setAppGroup()`
     @objc public var appGroup: String?
 }
