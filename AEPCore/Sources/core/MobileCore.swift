@@ -47,9 +47,7 @@ public final class MobileCore: NSObject {
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithAppId:completion:)
     public static func initialize(appId: String, _ completion: (() -> Void)? = nil) {
-        let options = InitOptions()
-        options.appId = appId
-        initialize(options: options, completion)
+        initialize(options: InitOptions(appId: appId), completion)
     }
 
     @available(iOSApplicationExtension, unavailable)
@@ -74,6 +72,8 @@ public final class MobileCore: NSObject {
 
                 if let appId = options.appId {
                     configureWith(appId: appId)
+                } else if let filePath = options.filePath {
+                    configureWith(filePath: filePath)
                 }
 
                 // If disableAutomaticLifecycleTracking flag is false, set lifecycle notification listeners

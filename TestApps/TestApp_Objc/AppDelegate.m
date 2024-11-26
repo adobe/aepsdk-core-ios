@@ -28,8 +28,7 @@ governing permissions and limitations under the License.
     // Override point for customization after application launch.
     [AEPMobileCore setLogLevel:AEPLogLevelTrace];
 
-    AEPInitOptions *options = [[AEPInitOptions alloc] init];
-    options.appId = @"";
+    AEPInitOptions *options = [[AEPInitOptions alloc] initWithAppId:@""];
     options.automaticLifecycleTracking = true;
     options.lifecycleAdditionalContextData = @{@"autoTracking": @"enabled"};
 

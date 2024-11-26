@@ -13,8 +13,13 @@
 @objc(AEPInitOptions)
 public class InitOptions: NSObject {
 
-    /// A unique identifier assigned to the app instance by Adobe Launch and passed to `MobileCore.configureWith(appId:)`
-    @objc public var appId: String?
+    /// A unique identifier assigned to the app instance by Adobe Launch, passed to `MobileCore.configureWith(appId:)`
+    @objc
+    private(set) var appId: String?
+
+    /// Absolute path to a local configuration file, passed to `MobileCore.configureWith(filePath:)`
+    @objc
+    private(set) var filePath: String?
 
     /// Flag to disable automatic lifecycle tracking
     @objc public var automaticLifecycleTracking: Bool = true
@@ -24,4 +29,20 @@ public class InitOptions: NSObject {
 
     /// App group used to share user defaults and files among containing app and extension apps. Passed to `MobleCore.setAppGroup()`
     @objc public var appGroup: String?
+
+    /// Returns an instance of `InitOptions` without the configuration options of either `appId` or `filePath`.
+    @objc
+    public override init() {}
+
+    /// Returns an instance of `InitOptions` with the given `appId`.
+    @objc(initWithAppId:)
+    public init(appId: String) {
+        self.appId = appId
+    }
+
+    /// Returns an instance of `InitOptions` with the given `filePath`.
+    @objc(initWithFilePath:)
+    public init(filePath: String) {
+        self.filePath = filePath
+    }
 }
