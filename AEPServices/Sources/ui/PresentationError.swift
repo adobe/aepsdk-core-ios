@@ -17,7 +17,7 @@ import Foundation
 public class PresentationError: NSObject {
     static let CONFLICT = PresentationError(.showFailure("Conflict"))
     static let SUPPRESSED_BY_APP_DEVELOPER = PresentationError(.showFailure("SuppressedByAppDeveloper"))
-    
+
     /// Internal enum that allows capturing a reason for the provided kind of failure
     enum ErrorType {
         case showFailure(String)

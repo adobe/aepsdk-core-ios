@@ -70,7 +70,7 @@ public extension HttpConnection {
         if #available(iOS 13, tvOS 13, *) {
             return response?.value(forHTTPHeaderField: forKey)
         }
-        
+
         return response?.lowercasedHeaders[forKey.lowercased()] as? String
     }
 }
@@ -83,7 +83,7 @@ extension HTTPURLResponse {
                 lcHeaders[keyAsString.lowercased()] = value
             }
         }
-        
+
         return lcHeaders
     }
 }

@@ -18,7 +18,7 @@ public class MockUnzipper: Unzipping {
     public var unzipCalled = false
 
     public init() {}
-    
+
     public func unzipItem(at _: URL, to _: URL) -> [String] {
         unzipCalled = true
         return unzippedResults
