@@ -18,18 +18,45 @@ import AEPServices
 /// Instrumented extension that registers a wildcard listener for intercepting events in current session. Use it along with `TestBase`
 @available(*, deprecated, message: "A new class for capturing events using MobileCore.registerEventListener will be added in the next version. Please avoid using InstrumentedExtension directly in your tests.")
 public class InstrumentedExtension: NSObject, Extension {
+    private static let queue = DispatchQueue(label: "com.adobe.instrumentedextension.syncqueue")
+
     private static let logTag = "InstrumentedExtension"
     public var name = "com.adobe.InstrumentedExtension"
     public var friendlyName = "InstrumentedExtension"
-    public static var extensionVersion = "1.0.0"
+    private static var _extensionVersion = "1.0.0"
+    public static var extensionVersion: String {
+        get {
+            return queue.sync { _extensionVersion }
+        }
+        set {
+            queue.sync { _extensionVersion = newValue }
+        }
+    }
+
     public var metadata: [String: String]?
     public var runtime: ExtensionRuntime
 
     // Expected events Dictionary - key: EventSpec, value: the expected count
-    static var expectedEvents = ThreadSafeDictionary<EventSpec, CountDownLatch>()
+    private static var _expectedEvents = ThreadSafeDictionary<EventSpec, CountDownLatch>()
+    static var expectedEvents: ThreadSafeDictionary<EventSpec, CountDownLatch> {
+        get {
+            return queue.sync { _expectedEvents }
+        }
+        set {
+            queue.sync { _expectedEvents = newValue }
+        }
+    }
 
     // All the events seen by this listener that are not of type instrumentedExtension - key: EventSpec, value: received events with EventSpec type and source
-    static var receivedEvents = ThreadSafeDictionary<EventSpec, [Event]>()
+    private static var _receivedEvents = ThreadSafeDictionary<EventSpec, [Event]>()
+    static var receivedEvents: ThreadSafeDictionary<EventSpec, [Event]> {
+        get {
+            return queue.sync { _receivedEvents }
+        }
+        set {
+            queue.sync { _receivedEvents = newValue }
+        }
+    }
 
     public func onRegistered() {
         runtime.registerListener(type: EventType.wildcard, source: EventSource.wildcard, listener: wildcardListenerProcessor)
@@ -112,7 +139,9 @@ public class InstrumentedExtension: NSObject, Extension {
     }
 
     public static func reset() {
-        receivedEvents = ThreadSafeDictionary<EventSpec, [Event]>()
-        expectedEvents = ThreadSafeDictionary<EventSpec, CountDownLatch>()
+        queue.sync {
+            _receivedEvents = ThreadSafeDictionary<EventSpec, [Event]>()
+            _expectedEvents = ThreadSafeDictionary<EventSpec, CountDownLatch>()
+        }
     }
 }
