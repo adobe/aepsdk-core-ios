@@ -12,7 +12,17 @@
 import AEPServices
 
 public class MockDataStore: NamedCollectionProcessing {
-    public var dict = ThreadSafeDictionary<String, Any>()
+    private let queue = DispatchQueue(label: "com.adobe.mockdatastore.syncqueue")
+
+    private var _dict = ThreadSafeDictionary<String, Any>()
+    public var dict: ThreadSafeDictionary<String, Any> {
+        get {
+            return queue.sync { _dict }
+        }
+        set {
+            queue.sync { _dict = newValue }
+        }
+    }
     private var appGroup: String?
 
     public init() {}
