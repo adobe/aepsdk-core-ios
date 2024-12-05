@@ -15,14 +15,48 @@ import Foundation
 @testable import AEPCore
 
 public class MockExtension: NSObject, Extension {
+    private static let queue = DispatchQueue(label: "com.adobe.mockextension.syncqueue")
+
     public var name = "com.adobe.mockExtension"
     public var friendlyName = "mockExtension"
-    public static var extensionVersion = "0.0.1"
+    private static var _extensionVersion = "0.0.1"
+    public static var extensionVersion: String {
+        get {
+            return queue.sync { _extensionVersion }
+        }
+        set {
+            queue.sync { _extensionVersion = newValue }
+        }
+    }
     public var metadata: [String: String]?
 
-    public static var registrationClosure: (() -> Void)?
-    public static var unregistrationClosure: (() -> Void)?
-    public static var eventReceivedClosure: ((Event) -> Void)?
+    private static var _registrationClosure: (() -> Void)?
+    public static var registrationClosure: (() -> Void)? {
+        get {
+            return queue.sync { _registrationClosure }
+        }
+        set {
+            queue.sync { _registrationClosure = newValue }
+        }
+    }
+    private static var _unregistrationClosure: (() -> Void)?
+    public static var unregistrationClosure: (() -> Void)? {
+        get {
+            return queue.sync { _unregistrationClosure }
+        }
+        set {
+            queue.sync { _unregistrationClosure = newValue }
+        }
+    }
+    private static var _eventReceivedClosure: ((Event) -> Void)?
+    public static var eventReceivedClosure: ((Event) -> Void)? {
+        get {
+            return queue.sync { _eventReceivedClosure }
+        }
+        set {
+            queue.sync { _eventReceivedClosure = newValue }
+        }
+    }
 
     public let runtime: ExtensionRuntime
 
