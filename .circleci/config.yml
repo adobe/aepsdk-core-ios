@@ -97,7 +97,7 @@ commands:
 jobs:
   validate-code:
     macos:
-      xcode: 15.1 # Specify the Xcode version to use
+      xcode: 16.0.0 # Specify the Xcode version to use
 
     steps:
       - checkout
@@ -107,6 +107,10 @@ jobs:
       - run:
           name: Lint Source Code
           command: make lint
+      
+      - run:          
+          name: Verify APIs
+          command: make api-check
 
   test-ios-core:
     macos:

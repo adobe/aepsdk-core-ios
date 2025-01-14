@@ -49,6 +49,9 @@
             return ServiceProvider.shared.messagingDelegate
         }
 
+        /// Observes key window frame changes to trigger frame updates for Fullscreen Message.
+        private var windowFrameObserver: NSKeyValueObservation?
+
         /// Creates `FullscreenMessage` instance with the payload provided.
         /// WARNING: This API consumes HTML/CSS/JS using an embedded browser control.
         /// This means it is subject to all the risks of rendering untrusted web pages and running untrusted JS.
@@ -97,7 +100,8 @@
         }
 
         deinit {
-            NotificationCenter.default.removeObserver(self)
+            windowFrameObserver?.invalidate()
+            windowFrameObserver = nil
 
             // remove the temporary html if it exists
             if let tempFile = self.tempHtmlFile {
@@ -120,12 +124,16 @@
 
             DispatchQueue.main.async {
 
-                // add observer to handle device rotation
                 if !self.observerSet {
-                    NotificationCenter.default.addObserver(self,
-                                                           selector: #selector(self.handleDeviceRotation(notification:)),
-                                                           name: UIDevice.orientationDidChangeNotification,
-                                                           object: nil)
+
+                    // Register to observe changes to frame of application's key window
+                    // This observer will also recognize the device orientation changes
+                    if let keyWindow = UIApplication.shared.getKeyWindow() {
+                        self.windowFrameObserver = keyWindow.observe(\.frame, options: [.new]) { [weak self] _, _ in
+                            self?.reframeMessage()
+                        }
+                    }
+
                     self.observerSet = true
                 }
 
@@ -176,7 +184,7 @@
             }
         }
 
-        @objc private func handleDeviceRotation(notification: NSNotification) {
+        @objc private func reframeMessage() {
             DispatchQueue.main.async {
                 if self.transparentBackgroundView != nil {
                     self.transparentBackgroundView?.frame = CGRect(x: 0, y: 0, width: self.screenWidth, height: self.screenHeight + self.safeAreaHeight)
@@ -211,8 +219,9 @@
 
         public func dismiss() {
             DispatchQueue.main.async {
-                // remove device orientation observer
-                NotificationCenter.default.removeObserver(self)
+                // remove window frame observer
+                self.windowFrameObserver?.invalidate()
+                self.windowFrameObserver = nil
                 self.observerSet = false
 
                 if self.messageMonitor.dismiss() == false {
