@@ -21,8 +21,8 @@ public class InitOptions: NSObject {
     @objc
     private(set) var filePath: String?
 
-    /// Flag to disable automatic lifecycle tracking
-    @objc public var automaticLifecycleTracking: Bool = true
+    /// Flag indicating whether Lifecycle tracking is enabled automatically
+    @objc public var lifecycleAutomaticTracking: Bool = true
 
     /// Additional context data for lifecycle tracking passed to `MobileCore.lifecycleStart(additionalContextData:)`
     @objc public var lifecycleAdditionalContextData: [String: Any]?
@@ -35,12 +35,14 @@ public class InitOptions: NSObject {
     public override init() {}
 
     /// Returns an instance of `InitOptions` with the given `appId`.
+    /// Once initialized, configures the SDK by downloading the remote configuration file hosted on Adobe servers specified by the given application ID..
     @objc(initWithAppId:)
     public init(appId: String) {
         self.appId = appId
     }
 
     /// Returns an instance of `InitOptions` with the given `filePath`.
+    /// Once initialized, configures the SDK by reading a local file containing the JSON configuration.
     @objc(initWithFilePath:)
     public init(filePath: String) {
         self.filePath = filePath

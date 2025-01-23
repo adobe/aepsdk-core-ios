@@ -77,7 +77,7 @@ public final class MobileCore: NSObject {
                 }
 
                 // If disableAutomaticLifecycleTracking flag is false, set lifecycle notification listeners
-                if options.automaticLifecycleTracking == true {
+                if options.lifecycleAutomaticTracking == true {
                     var usingSceneDelegate = false
                     if #available(iOS 13.0, tvOS 13.0, *) {
                         let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)

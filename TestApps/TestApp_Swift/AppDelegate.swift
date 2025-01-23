@@ -16,18 +16,18 @@ import BackgroundTasks
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    private let LAUNCH_ENVIRONMENT_FILE_ID = "94f571f308d5/ca7843295125/launch-1a7715d5a453-development"
+    private let LAUNCH_ENVIRONMENT_FILE_ID = ""
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
         MobileCore.setLogLevel(.trace)
-//        let options = InitOptions(appId: LAUNCH_ENVIRONMENT_FILE_ID)
-//        options.automaticLifecycleTracking = true
-//        options.lifecycleAdditionalContextData = ["autoTracking": "enabled"]
-//        MobileCore.initialize(options: options)
+        let options = InitOptions(appId: LAUNCH_ENVIRONMENT_FILE_ID)
+        options.lifecycleAutomaticTracking = true
+        options.lifecycleAdditionalContextData = ["autoTracking": "enabled"]
+        MobileCore.initialize(options: options)
 
-        MobileCore.initialize(appId: LAUNCH_ENVIRONMENT_FILE_ID)
+        //MobileCore.initialize(appId: LAUNCH_ENVIRONMENT_FILE_ID)
 
         return true
     }

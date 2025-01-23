@@ -29,7 +29,7 @@ governing permissions and limitations under the License.
     [AEPMobileCore setLogLevel:AEPLogLevelTrace];
 
     AEPInitOptions *options = [[AEPInitOptions alloc] initWithAppId:@""];
-    options.automaticLifecycleTracking = true;
+    options.lifecycleAutomaticTracking = true;
     options.lifecycleAdditionalContextData = @{@"autoTracking": @"enabled"};
 
     [AEPMobileCore initializeWithOptions:options completion:^{
