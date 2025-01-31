@@ -19,7 +19,7 @@ import UIKit
 public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
 
-    // Flag if 'initialized' was called
+    // Flag if 'initialize' was called
     private static let initialized = AtomicCounter()
 
     /// Current version of the Core extension
@@ -56,7 +56,7 @@ public final class MobileCore: NSObject {
     public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
 
         if initialized.incrementAndGet() != 1 {
-            Log.warning(label: LOG_TAG, "initialize - ignoring as it was already called.")
+            Log.debug(label: LOG_TAG, "initialize - ignoring as it was already called.")
             return
         }
 
@@ -76,7 +76,7 @@ public final class MobileCore: NSObject {
                     configureWith(filePath: filePath)
                 }
 
-                // If disableAutomaticLifecycleTracking flag is false, set lifecycle notification listeners
+                // If lifecycleAutomaticTracking flag is false, set lifecycle notification listeners
                 if options.lifecycleAutomaticTracking == true {
                     var usingSceneDelegate = false
                     if #available(iOS 13.0, tvOS 13.0, *) {
@@ -86,9 +86,9 @@ public final class MobileCore: NSObject {
                         }
                     }
                     setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options.lifecycleAdditionalContextData)
-                    Log.trace(label: LOG_TAG, "MobileCore.initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
+                    Log.trace(label: LOG_TAG, "initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
                 } else {
-                    Log.trace(label: LOG_TAG, "MobileCore.initialize - automatic lifecycle tracking disabled.")
+                    Log.trace(label: LOG_TAG, "initialize - automatic lifecycle tracking disabled.")
                 }
 
                 completion?()
