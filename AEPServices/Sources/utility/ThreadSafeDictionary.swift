@@ -33,6 +33,16 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     public var keys: [K] {
         return queue.sync { return Array(self.dictionary.keys) }
     }
+    
+    /// A collection containing the values of the dictionary.
+    public var values: [V] {
+        return queue.sync { Array(dictionary.values) }
+    }
+    
+    /// A boolean to check if dictionary is empty or not.
+    public var isEmpty: Bool {
+        return queue.sync { dictionary.isEmpty }
+    }
 
     // Gets a non-thread-safe shallow copy of the backing dictionary
     public var shallowCopy: [K: V] {
@@ -62,6 +72,56 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     @inlinable public func removeValue(forKey key: K) -> V? {
         return queue.sync {
             return self.dictionary.removeValue(forKey: key)
+        }
+    }
+    
+    @inlinable public func filter(_ isIncluded: (Element) -> Bool) -> ThreadSafeDictionary<K, V> {
+        let filteredDictionary = ThreadSafeDictionary<K, V>()
+        queue.sync {
+            for (key, value) in dictionary where isIncluded((key, value)) {
+                filteredDictionary[key] = value
+            }
+        }
+        return filteredDictionary
+    }
+    
+    @inlinable public func contains(where predicate: (Element) -> Bool) -> Bool {
+        return queue.sync {
+            return dictionary.contains(where: predicate)
+        }
+    }
+    
+    @inlinable public func removeAll() {
+        queue.async {
+            self.dictionary.removeAll()
+        }
+    }
+    
+    @inlinable public func merge(_ other: [K: V], uniquingKeysWith combine: @escaping (V, V) -> V) {
+        queue.async {
+            self.dictionary.merge(other, uniquingKeysWith: combine)
+        }
+    }
+    
+}
+
+extension ThreadSafeDictionary: Codable where K: Codable, V: Codable {
+    // Encode function for Encodable conformance
+    public func encode(to encoder: Encoder) throws {
+        try queue.sync {
+            var container = encoder.singleValueContainer()
+            try container.encode(dictionary)
+        }
+    }
+
+    // Decode initializer for Decodable conformance
+    public convenience init(from decoder: Decoder) throws {
+        self.init()
+        let container = try decoder.singleValueContainer()
+        let decodedDictionary = try container.decode([K: V].self)
+        
+        queue.sync {
+            self.dictionary = decodedDictionary
         }
     }
 }

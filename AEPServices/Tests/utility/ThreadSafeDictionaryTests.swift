@@ -152,6 +152,73 @@ class ThreadSafeDictionaryTests: XCTestCase {
 
         XCTAssertEqual(testDictionary.keys.count, count)
     }
+    
+    func testGetValues() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+
+        // get values on empty dictionary
+        XCTAssertEqual(testDictionary.values,[])
+
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+
+        XCTAssertEqual(testDictionary.values.count, count)
+    }
+    
+    func testIsEmpty() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+
+        XCTAssertTrue(testDictionary.isEmpty)
+
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+
+        XCTAssertFalse(testDictionary.isEmpty)
+    }
+    
+    func testFilter() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+        
+        let filteredDictionary = testDictionary.filter { $0.key % 2 == 0 }
+        
+        // Verify the filtered dictionary size is half
+        XCTAssertEqual(filteredDictionary.count, count / 2)
+        
+    }
+    
+    func testMerge() {
+        let dict1 = ["key1" : "value1"]
+        let testDictionary = ThreadSafeDictionary<String, String>()
+
+        testDictionary.merge(dict1) { (_, new) in new }
+        
+        let dict2 = ["k1": "v1", "k2": "v2", "k3": "v3", "k4": "v4"]
+
+        testDictionary.merge(dict2) { (_, new) in new }
+        
+        //verify
+        XCTAssertEqual(testDictionary.count, 5)
+    }
+    
+    func testContain() {
+        
+        let testDictionary = ThreadSafeDictionary<String, String>()
+        let dict2 = ["k1": "v1", "k2": "v2", "k3": "v3", "k4": "v4"]
+
+        testDictionary.merge(dict2) { (_, new) in new }
+        
+        //verify
+        XCTAssertTrue(testDictionary.contains(where: { $0.key == "k1" }))
+    }
 
     private func dispatchSyncWithDict(i: Int) {
         dispatchQueueSerial.sync {
