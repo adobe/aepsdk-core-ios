@@ -15,8 +15,17 @@
 import XCTest
 
 class ClassFinderTests: XCTestCase {
-    
-    func testClassFinderBasic() {
+
+
+    func testClassFinderSimple() {
+        let foundExtensions = ClassFinder.classes(conformToProtocol: Extension.self)
+        XCTAssertEqual(foundExtensions.count, 3)
+        XCTAssertTrue(foundExtensions.contains { return $0 == SampleExtensionOne.self })
+        XCTAssertTrue(foundExtensions.contains { return $0 == SampleExtensionTwo.self })
+        XCTAssertTrue(foundExtensions.contains { return $0 == SampleExtensionThree.self })
+    }
+
+    func testClassFinderSimpleLoop() {
         let measureOptions = XCTMeasureOptions()
         measureOptions.iterationCount = 10
         if #available(iOS 13.0, *) {
@@ -27,7 +36,6 @@ class ClassFinderTests: XCTestCase {
         }
     }
 }
-
 
 class SampleExtensionOne: NSObject, Extension {
     var name: String = "com.adobe.sampleExtensionOne"
