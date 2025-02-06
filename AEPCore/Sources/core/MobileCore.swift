@@ -42,58 +42,30 @@ public final class MobileCore: NSObject {
 
     /// Pending extensions to be registered for legacy support
     static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
-    
+
+    /// Initializes the AEP SDK with the specified `InitOptions`.
+    /// This automatically registers all boundled extensions and sets up lifecycle tracking.
+    /// You can disable automatic lifecycle tracking using `InitOptions`.
+    /// - Parameters:
+    ///   - options: The `InitOptions` used to configure the SDK.
+    ///   - completion: An optional closure triggered once initialization is complete.
+    @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
+    @objc(initializeWithOptions:completion:)
+    public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
+        MobileCoreInitializer.shared.initialize(options: options, completion)
+    }
+
+    /// Initializes the AEP SDK with all bundled extensions, sets up lifecycle tracking,
+    /// and configures the SDK using the specified `appId` via `MobileCore.configureWith(appId:)`.
+    /// - Parameters:
+    ///   - appId: A unique identifier assigned to the app instance by Adobe Tags
+    ///   - completion: An optional closure triggered once initialization is complete.
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithAppId:completion:)
     public static func initialize(appId: String, _ completion: (() -> Void)? = nil) {
         initialize(options: InitOptions(appId: appId), completion)
-    }
-
-    @available(iOSApplicationExtension, unavailable)
-    @available(tvOSApplicationExtension, unavailable)
-    @objc(initializeWithOptions:completion:)
-    public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
-
-        if initialized.incrementAndGet() != 1 {
-            Log.debug(label: LOG_TAG, "initialize - ignoring as it was already called.")
-            return
-        }
-
-        if options.appGroup != nil {
-            setAppGroup(options.appGroup)
-        }
-
-        // Register Extensions, call configureWithAppId from callback
-        DispatchQueue.global().async {
-            let classList = ClassFinder.classes(conformToProtocol: Extension.self)
-            let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
-            registerExtensions(filteredClassList) {
-
-                if let appId = options.appId {
-                    configureWith(appId: appId)
-                } else if let filePath = options.filePath {
-                    configureWith(filePath: filePath)
-                }
-
-                // If lifecycleAutomaticTracking flag is false, set lifecycle notification listeners
-                if options.lifecycleAutomaticTracking == true {
-                    var usingSceneDelegate = false
-                    if #available(iOS 13.0, tvOS 13.0, *) {
-                        let sceneDelegateClasses = ClassFinder.classes(conformToProtocol: UIWindowSceneDelegate.self)
-                        if !sceneDelegateClasses.isEmpty {
-                            usingSceneDelegate = true
-                        }
-                    }
-                    setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options.lifecycleAdditionalContextData)
-                    Log.trace(label: LOG_TAG, "initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
-                } else {
-                    Log.trace(label: LOG_TAG, "initialize - automatic lifecycle tracking disabled.")
-                }
-
-                completion?()
-            }
-        }
     }
 
     /// Registers the extensions with Core and begins event processing
@@ -280,32 +252,5 @@ public final class MobileCore: NSObject {
         let eventData = [CoreConstants.Signal.EventDataKeys.CONTEXT_DATA: data]
         let event = Event(name: CoreConstants.EventNames.COLLECT_PII, type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
         MobileCore.dispatch(event: event)
-    }
-    
-    @available(iOSApplicationExtension, unavailable)
-    @available(tvOSApplicationExtension, unavailable)
-    private static func setupLifecycle(usingSceneDelegate: Bool, additionalContextData: [String: Any]? = nil) {
-        if usingSceneDelegate {
-            self.lifecycleStart(additionalContextData: additionalContextData)
-            
-            if #available(iOS 13.0, tvOS 13.0, *) {
-                NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil) { _ in
-                    self.lifecycleStart(additionalContextData: additionalContextData)
-                }
-                NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
-                    self.lifecyclePause()
-                }
-            }
-        } else {
-            if UIApplication.shared.applicationState != .background {
-                self.lifecycleStart(additionalContextData: additionalContextData)
-            }
-            NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil) { _ in
-                self.lifecycleStart(additionalContextData: additionalContextData)
-            }
-            NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
-                self.lifecyclePause()
-            }
-        }
     }
 }
