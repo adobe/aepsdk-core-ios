@@ -24,7 +24,7 @@ public class InitOptions: NSObject {
     private(set) var filePath: String?
 
     /// Flag indicating whether Lifecycle tracking is enabled automatically
-    @objc public var lifecycleAutomaticTracking: Bool = true
+    @objc public var lifecycleAutomaticTrackingEnabled: Bool = true
 
     /// Additional context data for lifecycle tracking passed to `MobileCore.lifecycleStart(additionalContextData:)`
     @objc public var lifecycleAdditionalContextData: [String: Any]?

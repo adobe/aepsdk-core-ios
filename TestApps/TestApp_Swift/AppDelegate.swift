@@ -22,12 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
 
         MobileCore.setLogLevel(.trace)
-        let options = InitOptions(appId: LAUNCH_ENVIRONMENT_FILE_ID)
-        options.lifecycleAutomaticTracking = true
-        options.lifecycleAdditionalContextData = ["autoTracking": "enabled"]
-        MobileCore.initialize(options: options)
-
-        //MobileCore.initialize(appId: LAUNCH_ENVIRONMENT_FILE_ID)
+        MobileCore.initialize(appId: LAUNCH_ENVIRONMENT_FILE_ID)
 
         return true
     }

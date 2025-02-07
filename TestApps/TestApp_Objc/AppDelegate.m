@@ -12,9 +12,6 @@ governing permissions and limitations under the License.
 
 #import "AppDelegate.h"
 @import AEPCore;
-@import AEPSignal;
-@import AEPLifecycle;
-@import AEPIdentity;
 @import AEPServices;
 
 @interface AppDelegate ()
@@ -29,7 +26,7 @@ governing permissions and limitations under the License.
     [AEPMobileCore setLogLevel:AEPLogLevelTrace];
 
     AEPInitOptions *options = [[AEPInitOptions alloc] initWithAppId:@""];
-    options.lifecycleAutomaticTracking = true;
+    options.lifecycleAutomaticTrackingEnabled = true;
     options.lifecycleAdditionalContextData = @{@"autoTracking": @"enabled"};
 
     [AEPMobileCore initializeWithOptions:options completion:^{

@@ -404,7 +404,7 @@ class MobileCoreInitializerTests: XCTestCase {
         }
 
         let initOptions = InitOptions()
-        initOptions.lifecycleAutomaticTracking = false
+        initOptions.lifecycleAutomaticTrackingEnabled = false
 
         // When enabled, lifecycleStart is called immediately after extension registration
         MobileCore.initialize(options: initOptions) {
