@@ -12,15 +12,11 @@
 
 import AEPServices
 import Foundation
-import UIKit
 
 /// Core extension for the Adobe Experience Platform SDK
 @objc(AEPMobileCore)
 public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
-
-    // Flag if 'initialize' was called
-    private static let initialized = AtomicCounter()
 
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
