@@ -60,15 +60,7 @@ final class MobileCoreInitializer {
             MobileCore.registerExtensions(filteredClassList) {
                 // If lifecycleAutomaticTracking flag is false, set lifecycle notification listeners
                 if options.lifecycleAutomaticTrackingEnabled == true {
-                    var usingSceneDelegate = false
-                    if #available(iOS 13.0, tvOS 13.0, *) {
-                        let sceneDelegateClasses = self.classFinder(UIWindowSceneDelegate.self)
-                        if !sceneDelegateClasses.isEmpty {
-                            usingSceneDelegate = true
-                        }
-                    }
-                    self.setupLifecycle(usingSceneDelegate: usingSceneDelegate, additionalContextData: options.lifecycleAdditionalContextData)
-                    Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
+                    self.setupLifecycle(additionalContextData: options.lifecycleAdditionalContextData)
                 } else {
                     Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking disabled.")
                 }
@@ -80,7 +72,17 @@ final class MobileCoreInitializer {
 
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
-    private func setupLifecycle(usingSceneDelegate: Bool, additionalContextData: [String: Any]? = nil) {
+    private func setupLifecycle(additionalContextData: [String: Any]? = nil) {
+        var usingSceneDelegate = false
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            let sceneDelegateClasses = self.classFinder(UIWindowSceneDelegate.self)
+            if !sceneDelegateClasses.isEmpty {
+                usingSceneDelegate = true
+            }
+        }
+
+        Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
+
         if usingSceneDelegate {
             MobileCore.lifecycleStart(additionalContextData: additionalContextData)
 
