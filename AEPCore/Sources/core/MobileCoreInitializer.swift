@@ -47,18 +47,17 @@ final class MobileCoreInitializer {
             MobileCore.setAppGroup(options.appGroup)
         }
 
-        // Register Extensions, call configureWithAppId from callback
+        if let appId = options.appId {
+            MobileCore.configureWith(appId: appId)
+        } else if let filePath = options.filePath {
+            MobileCore.configureWith(filePath: filePath)
+        }
+
+        // Register Extensions
         DispatchQueue.global().async {
             let classList = self.classFinder(Extension.self)
             let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
             MobileCore.registerExtensions(filteredClassList) {
-
-                if let appId = options.appId {
-                    MobileCore.configureWith(appId: appId)
-                } else if let filePath = options.filePath {
-                    MobileCore.configureWith(filePath: filePath)
-                }
-
                 // If lifecycleAutomaticTracking flag is false, set lifecycle notification listeners
                 if options.lifecycleAutomaticTrackingEnabled == true {
                     var usingSceneDelegate = false
