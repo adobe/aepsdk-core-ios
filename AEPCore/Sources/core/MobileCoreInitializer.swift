@@ -35,10 +35,6 @@ final class MobileCoreInitializer {
     static let shared = MobileCoreInitializer()
 #endif
 
-    init() {
-
-    }
-
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {

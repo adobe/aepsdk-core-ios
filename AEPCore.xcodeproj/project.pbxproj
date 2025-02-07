@@ -514,6 +514,7 @@
 		BF4A70AE26CCD27900612434 /* rules_dispatch_consequence.json in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */; };
 		BF4A70BE26CCD30800612434 /* rules_dispatch_consequence.zip in Resources */ = {isa = PBXBuildFile; fileRef = BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */; };
 		BFFD6ECE2D4C94D7000D3224 /* MobileCoreInitializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */; };
+		BFFD6ED02D5575D4000D3224 /* MobileCoreInitializerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */; };
 		C0FC8CAF8ADDBE9FBAE4C374 /* Pods_AEPLifecycleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */; };
 		D42C989C26CAE6DA002E3184 /* LifecycleV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */; };
 		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
@@ -1235,6 +1236,7 @@
 		BF4A70AD26CCD27900612434 /* rules_dispatch_consequence.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_dispatch_consequence.json; sourceTree = "<group>"; };
 		BF4A70BD26CCD30800612434 /* rules_dispatch_consequence.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = rules_dispatch_consequence.zip; sourceTree = "<group>"; };
 		BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializer.swift; sourceTree = "<group>"; };
+		BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializerTests.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
 		D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2Constants.swift; sourceTree = "<group>"; };
@@ -1487,6 +1489,7 @@
 				3F3951F724CA096100F7325B /* MobileCore+ConfigurationTests.swift */,
 				3F39153224CB7E2400B58C3E /* MobileCore+IdentityTests.swift */,
 				24CF603A2538C7E4006473BA /* MobileCore+TrackingTests.swift */,
+				BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */,
 				3F3951E824CA096100F7325B /* MobileCoreTests.swift */,
 				21CAC0E62422917600C11388 /* Info.plist */,
 			);
@@ -3365,6 +3368,7 @@
 				24E255D5270F406300AB9F07 /* EventData+FNV1A32Tests.swift in Sources */,
 				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				216A15F5257818EF00D43848 /* Data+HexStringTests.swift in Sources */,
+				BFFD6ED02D5575D4000D3224 /* MobileCoreInitializerTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				24B4BE5F2714F7C80000C3AA /* EventHistoryDatabaseTests.swift in Sources */,
 				21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */,
