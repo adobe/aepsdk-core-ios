@@ -55,16 +55,15 @@ final class MobileCoreInitializer {
 
         // Register Extensions
         DispatchQueue.global().async {
+            if options.lifecycleAutomaticTrackingEnabled == true {
+                self.setupLifecycle(additionalContextData: options.lifecycleAdditionalContextData)
+            } else {
+                Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking disabled.")
+            }
+
             let classList = self.classFinder(Extension.self)
             let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
             MobileCore.registerExtensions(filteredClassList) {
-                // If lifecycleAutomaticTracking flag is false, set lifecycle notification listeners
-                if options.lifecycleAutomaticTrackingEnabled == true {
-                    self.setupLifecycle(additionalContextData: options.lifecycleAdditionalContextData)
-                } else {
-                    Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking disabled.")
-                }
-
                 completion?()
             }
         }
@@ -83,7 +82,7 @@ final class MobileCoreInitializer {
 
         Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
 
-        // Call lifecycleStart immediately after registration
+        // Call lifecycleStart immediately
         DispatchQueue.main.async {
             if UIApplication.shared.applicationState != .background {
                 MobileCore.lifecycleStart(additionalContextData: additionalContextData)
