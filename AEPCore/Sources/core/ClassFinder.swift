@@ -12,7 +12,7 @@
 
 import Foundation
 
-public struct ClassFinder {
+struct ClassFinder {
     private static func allClasses() -> [AnyClass] {
         let numberOfClasses = Int(objc_getClassList(nil, 0))
         if numberOfClasses > 0 {
@@ -26,7 +26,7 @@ public struct ClassFinder {
         return []
     }
 
-    public static func classes(conformToProtocol `protocol`: Protocol) -> [AnyClass] {
+    static func classes(conformToProtocol `protocol`: Protocol) -> [AnyClass] {
         let classes = self.allClasses().filter { foundClass in
             var anyClass: AnyClass? = foundClass
             while let foundClass = anyClass {
