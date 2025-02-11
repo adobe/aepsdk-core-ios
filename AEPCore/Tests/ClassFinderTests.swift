@@ -25,14 +25,13 @@ class ClassFinderTests: XCTestCase {
         XCTAssertTrue(foundExtensions.contains { return $0 == SampleExtensionThree.self })
     }
 
+    @available(iOS 13.0, tvOS 13.0, *)
     func testClassFinderSimpleLoop() {
         let measureOptions = XCTMeasureOptions()
         measureOptions.iterationCount = 10
-        if #available(iOS 13.0, *) {
-            measure(metrics: [XCTClockMetric(), XCTMemoryMetric(), XCTCPUMetric()], options: measureOptions) {
-                let foundExtensions = ClassFinder.classes(conformToProtocol: Extension.self)
-                XCTAssertEqual(foundExtensions.count, 13) // All Extensions in AEPCore
-            }
+        measure(metrics: [XCTClockMetric(), XCTMemoryMetric(), XCTCPUMetric()], options: measureOptions) {
+            let foundExtensions = ClassFinder.classes(conformToProtocol: Extension.self)
+            XCTAssertEqual(foundExtensions.count, 13) // All Extensions in AEPCore
         }
     }
 }
