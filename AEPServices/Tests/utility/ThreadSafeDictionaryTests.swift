@@ -209,6 +209,42 @@ class ThreadSafeDictionaryTests: XCTestCase {
         XCTAssertEqual(testDictionary.count, 5)
     }
     
+    func testMergeWithMultipleConflictingKeys() {
+        // Initial dictionary
+        let dict1 = [
+            "key1": "value1",
+            "key2": "Value2",
+            "key3": "Value3",
+            "key4": "Value4"
+        ]
+        
+        // Another dictionary with conflicting keys
+        let dict2 = [
+            "key2": "newValue2",
+            "key3": "newValue3",
+            "key4": "newValue4",
+            "key5": "value5"
+        ]
+
+        let testDictionary = ThreadSafeDictionary<String, String>()
+        
+        testDictionary.merge(dict1) { _, new in new }
+        
+        // merge with conflicting keys
+        testDictionary.merge(dict2) { _, new in new }
+
+        // Verify the dictionary count
+        XCTAssertEqual(testDictionary.count, 5)
+
+        // Verify dictionary values
+        XCTAssertEqual(testDictionary["key1"], "value1")
+        XCTAssertEqual(testDictionary["key2"], "newValue2")
+        XCTAssertEqual(testDictionary["key3"], "newValue3")
+        XCTAssertEqual(testDictionary["key4"], "newValue4")
+        XCTAssertEqual(testDictionary["key5"], "value5")
+    }
+
+    
     func testContain() {
         
         let testDictionary = ThreadSafeDictionary<String, String>()
@@ -218,6 +254,26 @@ class ThreadSafeDictionaryTests: XCTestCase {
         
         //verify
         XCTAssertTrue(testDictionary.contains(where: { $0.key == "k1" }))
+    }
+    
+    func testChainedOperations() {
+        let dict = ThreadSafeDictionary<Int, String>()
+        
+        // Apply merge operation
+        dict.merge([1: "One", 2: "Two", 3: "Three", 4: "Four"]) { _, new in new }
+        
+        // Apply filter to keep only even keys
+        let filtered = dict.filter { key, _ in key % 2 == 0 }
+        
+        // Check if the filtered dictionary contains a specific value
+        let containsTwo = filtered.contains { _, value in value == "Two" }
+        XCTAssertTrue(containsTwo)
+        
+        // Remove all elements from the filtered dictionary
+        filtered.removeAll()
+        
+        // verify
+        XCTAssertTrue(filtered.isEmpty)
     }
 
     private func dispatchSyncWithDict(i: Int) {
