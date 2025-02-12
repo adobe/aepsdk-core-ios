@@ -18,8 +18,8 @@ class ClassFinderTests: XCTestCase {
 
 
     func testClassFinderSimple() {
-        let foundExtensions = ClassFinder.classes(conformToProtocol: Extension.self)
-        XCTAssertEqual(foundExtensions.count, 13) // All Extensions in AEPCore
+        let foundExtensions = ClassFinder.classes(conformToProtocol: ExtensionDiscovery.self)
+        XCTAssertEqual(foundExtensions.count, 3) // All Extensions in AEPCore
         XCTAssertTrue(foundExtensions.contains { return $0 == SampleExtensionOne.self })
         XCTAssertTrue(foundExtensions.contains { return $0 == SampleExtensionTwo.self })
         XCTAssertTrue(foundExtensions.contains { return $0 == SampleExtensionThree.self })
@@ -30,94 +30,16 @@ class ClassFinderTests: XCTestCase {
         let measureOptions = XCTMeasureOptions()
         measureOptions.iterationCount = 10
         measure(metrics: [XCTClockMetric(), XCTMemoryMetric(), XCTCPUMetric()], options: measureOptions) {
-            let foundExtensions = ClassFinder.classes(conformToProtocol: Extension.self)
-            XCTAssertEqual(foundExtensions.count, 13) // All Extensions in AEPCore
+            let foundExtensions = ClassFinder.classes(conformToProtocol: ExtensionDiscovery.self)
+            XCTAssertEqual(foundExtensions.count, 3) // All Extensions in AEPCore
         }
     }
 }
 
-class SampleExtensionOne: NSObject, Extension {
-    var name: String = "com.adobe.sampleExtensionOne"
-    
-    var friendlyName: String = "SampleExtensionOne"
-    
-    static var extensionVersion: String = "1.0.0"
-    
-    var metadata: [String : String]?
-    
-    var runtime: AEPCore.ExtensionRuntime
-    
-    func onRegistered() {
-        
-    }
-    
-    func onUnregistered() {
-        
-    }
-    
-    required init?(runtime: AEPCore.ExtensionRuntime) {
-        self.runtime = runtime
-    }
-    
-    func readyForEvent(_ event: Event) -> Bool {
-        return true
-    }
-    
-    
-}
+@objc protocol ExtensionDiscovery { }
 
-class SampleExtensionTwo: NSObject, Extension {
-    var name: String = "com.adobe.sampleExtensionTwo"
-    
-    var friendlyName: String = "SampleExtensionTwo"
-    
-    static var extensionVersion: String = "1.0.0"
-    
-    var metadata: [String : String]?
-    
-    var runtime: AEPCore.ExtensionRuntime
-    
-    func onRegistered() {
-        
-    }
-    
-    func onUnregistered() {
-        
-    }
-    
-    required init?(runtime: AEPCore.ExtensionRuntime) {
-        self.runtime = runtime
-    }
-    
-    func readyForEvent(_ event: Event) -> Bool {
-        return true
-    }
-}
+class SampleExtensionOne: NSObject, ExtensionDiscovery {}
 
-class SampleExtensionThree: NSObject, Extension {
-    var name: String = "com.adobe.SampleExtensionThree"
-    
-    var friendlyName: String = "SampleExtensionThree"
-    
-    static var extensionVersion: String = "1.0.0"
-    
-    var metadata: [String : String]?
-    
-    var runtime: AEPCore.ExtensionRuntime
-    
-    func onRegistered() {
-        
-    }
-    
-    func onUnregistered() {
-        
-    }
-    
-    required init?(runtime: AEPCore.ExtensionRuntime) {
-        self.runtime = runtime
-    }
-    
-    func readyForEvent(_ event: Event) -> Bool {
-        return true
-    }
-}
+class SampleExtensionTwo: NSObject, ExtensionDiscovery {}
+
+class SampleExtensionThree: NSObject, ExtensionDiscovery {}
