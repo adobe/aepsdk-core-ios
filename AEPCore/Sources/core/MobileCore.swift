@@ -36,9 +36,6 @@ public final class MobileCore: NSObject {
         }
     #endif
 
-    /// Pending extensions to be registered for legacy support
-    static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
-
     /// Initializes the AEP SDK with the specified `InitOptions`.
     /// This automatically registers all boundled extensions and sets up lifecycle tracking.
     /// You can disable automatic lifecycle tracking using `InitOptions`.
