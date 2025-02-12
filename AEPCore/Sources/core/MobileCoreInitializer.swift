@@ -53,8 +53,12 @@ final class MobileCoreInitializer {
             MobileCore.configureWith(filePath: filePath)
         }
 
-        // Register Extensions
-        DispatchQueue.global().async {
+        // Setup Lifecycle tracking if enabled and register extensions.
+        // ClassFinder Extension discover requires a small but non-negligible amount of time to run, so
+        // use background thread to allow caller process to continue during initialization.
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+
             if options.lifecycleAutomaticTrackingEnabled == true {
                 self.setupLifecycle(additionalContextData: options.lifecycleAdditionalContextData)
             } else {
@@ -62,6 +66,7 @@ final class MobileCoreInitializer {
             }
 
             let classList = self.classFinder(Extension.self)
+            // EventHub automatically registers Configuration and the Placeholder extensions, filter them out from list to prevent duplicate registration warnings.
             let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
             MobileCore.registerExtensions(filteredClassList) {
                 completion?()
