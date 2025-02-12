@@ -17691,8 +17691,8 @@
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "ThreadSafeDictionary",
-                "printedName": "AEPServices.ThreadSafeDictionary<τ_0_0, τ_0_1>",
+                "name": "Dictionary",
+                "printedName": "[τ_0_0 : τ_0_1]",
                 "children": [
                   {
                     "kind": "TypeNominal",
@@ -17705,7 +17705,7 @@
                     "printedName": "τ_0_1"
                   }
                 ],
-                "usr": "s:11AEPServices20ThreadSafeDictionaryC"
+                "usr": "s:SD"
               },
               {
                 "kind": "TypeFunc",
@@ -17742,8 +17742,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:11AEPServices20ThreadSafeDictionaryC6filteryACyxq_GSbx3key_q_5valuet_tXEF",
-            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC6filteryACyxq_GSbx3key_q_5valuet_tXEF",
+            "usr": "s:11AEPServices20ThreadSafeDictionaryC6filterySDyxq_GSbx3key_q_5valuet_tXEF",
+            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC6filterySDyxq_GSbx3key_q_5valuet_tXEF",
             "moduleName": "AEPServices",
             "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
             "sugared_genericSig": "<K, V where K : Swift.Hashable>",
@@ -17902,76 +17902,6 @@
               "Inlinable"
             ],
             "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "encode",
-            "printedName": "encode(to:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Encoder",
-                "printedName": "any Swift.Encoder",
-                "usr": "s:s7EncoderP"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:11AEPServices20ThreadSafeDictionaryCAASeRzSERzSeR_SER_rlE6encode2toys7Encoder_p_tKF",
-            "mangledName": "$s11AEPServices20ThreadSafeDictionaryCAASeRzSERzSeR_SER_rlE6encode2toys7Encoder_p_tKF",
-            "moduleName": "AEPServices",
-            "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Decodable, τ_0_0 : Swift.Encodable, τ_0_0 : Swift.Hashable, τ_0_1 : Swift.Decodable, τ_0_1 : Swift.Encodable>",
-            "sugared_genericSig": "<K, V where K : Swift.Decodable, K : Swift.Encodable, K : Swift.Hashable, V : Swift.Decodable, V : Swift.Encodable>",
-            "declAttributes": [
-              "Final"
-            ],
-            "isFromExtension": true,
-            "throwing": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init(from:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "ThreadSafeDictionary",
-                "printedName": "AEPServices.ThreadSafeDictionary<τ_0_0, τ_0_1>",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_0_0"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "GenericTypeParam",
-                    "printedName": "τ_0_1"
-                  }
-                ],
-                "usr": "s:11AEPServices20ThreadSafeDictionaryC"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Decoder",
-                "printedName": "any Swift.Decoder",
-                "usr": "s:s7DecoderP"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "s:11AEPServices20ThreadSafeDictionaryCAASeRzSERzSeR_SER_rlE4fromACyxq_Gs7Decoder_p_tKcfc",
-            "mangledName": "$s11AEPServices20ThreadSafeDictionaryCAASeRzSERzSeR_SER_rlE4fromACyxq_Gs7Decoder_p_tKcfc",
-            "moduleName": "AEPServices",
-            "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Decodable, τ_0_0 : Swift.Encodable, τ_0_0 : Swift.Hashable, τ_0_1 : Swift.Decodable, τ_0_1 : Swift.Encodable>",
-            "sugared_genericSig": "<K, V where K : Swift.Decodable, K : Swift.Encodable, K : Swift.Hashable, V : Swift.Decodable, V : Swift.Encodable>",
-            "isFromExtension": true,
-            "throwing": true,
-            "init_kind": "Convenience"
           }
         ],
         "declKind": "Class",
@@ -17997,20 +17927,6 @@
             "printedName": "Escapable",
             "usr": "s:s9EscapableP",
             "mangledName": "$ss9EscapableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Decodable",
-            "printedName": "Decodable",
-            "usr": "s:Se",
-            "mangledName": "$sSe"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Encodable",
-            "printedName": "Encodable",
-            "usr": "s:SE",
-            "mangledName": "$sSE"
           }
         ]
       },
