@@ -262,18 +262,22 @@ class ThreadSafeDictionaryTests: XCTestCase {
         // Apply merge operation
         dict.merge([1: "One", 2: "Two", 3: "Three", 4: "Four"]) { _, new in new }
         
-        // Apply filter to keep only even keys
-        var filtered = dict.filter { key, _ in key % 2 == 0 }
-        
-        // Check if the filtered dictionary contains a specific value
-        let containsTwo = filtered.contains { _, value in value == "Two" }
+        // Check if the dict contains a specific value
+        let containsTwo = dict.contains { _, value in value == "Two" }
         XCTAssertTrue(containsTwo)
         
-        // Remove all elements from the filtered dictionary
-        filtered.removeAll()
+        // Apply filter on thread safe dictionary to keep only even keys
+        let filtered = dict.filter { key, _ in key % 2 == 0 }
+        
+        XCTAssertEqual(filtered.count, 2)
+        XCTAssertTrue(filtered.contains(where: { $0.key == 2 }))
+        XCTAssertTrue(filtered.contains(where: { $0.key == 4 }))
+        
+        // Remove all elements from the thread safe dictionary
+        dict.removeAll()
         
         // verify
-        XCTAssertTrue(filtered.isEmpty)
+        XCTAssertTrue(dict.isEmpty)
     }
 
     private func dispatchSyncWithDict(i: Int) {
