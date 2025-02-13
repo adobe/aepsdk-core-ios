@@ -18,6 +18,12 @@ import Foundation
 public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
 
+#if DEBUG
+    internal static var mobileCoreInitializer = MobileCoreInitializer()
+#else
+    private static let mobileCoreInitializer = MobileCoreInitializer()
+#endif
+
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         let wrapperType = EventHub.shared.getWrapperType()
@@ -46,7 +52,7 @@ public final class MobileCore: NSObject {
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithOptions:completion:)
     public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
-        MobileCoreInitializer.shared.initialize(options: options, completion)
+        mobileCoreInitializer.initialize(options: options, completion)
     }
 
     /// Initializes the AEP SDK with all bundled extensions, sets up lifecycle tracking,

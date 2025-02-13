@@ -20,19 +20,12 @@ final class MobileCoreInitializer {
     // Flag if 'initialize()' was called
     private let initialized = AtomicCounter()
 
-#if DEBUG
-    // Function to return list of classes; (Protocol) -> [AnyClass]
-    public internal(set) var classFinder = ClassFinder.classes(conformToProtocol:)
-#else
-    // Function to return list of classes; (Protocol) -> [AnyClass]
-    private let classFinder = ClassFinder.classes(conformToProtocol:)
-#endif
+    // Function to return list of classes; see `ClassFinder`
+    private let classFinder: (Protocol) -> [AnyClass]
 
-#if DEBUG
-    public internal(set) static var shared = MobileCoreInitializer()
-#else
-    static let shared = MobileCoreInitializer()
-#endif
+    init(classFinder: @escaping (Protocol) -> [AnyClass] = ClassFinder.classes(conformToProtocol:)) {
+        self.classFinder = classFinder
+    }
 
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)

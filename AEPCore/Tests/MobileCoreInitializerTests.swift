@@ -40,12 +40,12 @@ class MobileCoreInitializerTests: XCTestCase {
         expectation.assertForOverFulfill = true
 
         // Set ClassFinder func to return just two extensions
-        MobileCoreInitializer.shared.classFinder = { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtension.self,
                 MockExtensionTwo.self
             ]
-        }
+        })
 
         // test
         MobileCore.initialize(options: InitOptions()) {
@@ -79,29 +79,29 @@ class MobileCoreInitializerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
         expectation.assertForOverFulfill = true
 
-        // Set ClassFinder func to return MockExtension for first call
-        MobileCoreInitializer.shared.classFinder = { _ in
-            return [
-                MockExtension.self,
-            ]
-        }
+        var finderExecutionCount = 0
+        // Set ClassFinder func to return MockExtension for first call and MockExtensionTwo for second call
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+            finderExecutionCount += 1
+            if finderExecutionCount == 1 {
+                return [MockExtension.self]
+            } else {
+                return [MockExtensionTwo.self]
+            }
+        })
+
+        let options = InitOptions()
+        options.lifecycleAutomaticTrackingEnabled = false // Disable lifecycle tracking to prevent addtional ClassFinder calls
 
         // First call
-        MobileCore.initialize(options: InitOptions()) {
+        MobileCore.initialize(options: options) {
             expectation.fulfill()
         }
 
-        wait(for: [expectation], timeout: 1)
-
-        // Set ClassFinder func to return MockExtensionTwo for second call
-        MobileCoreInitializer.shared.classFinder = { _ in
-            return [
-                MockExtensionTwo.self,
-            ]
-        }
+        wait(for: [expectation], timeout: 10)
 
         // Second call, callback is not called
-        MobileCore.initialize(options: InitOptions()) {
+        MobileCore.initialize(options: options) {
             XCTFail("Completion closure should not be called from subsequent calls to initialize().")
         }
 
@@ -134,11 +134,11 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         }
 
-        MobileCoreInitializer.shared.classFinder = { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtensionTwo.self,
             ]
-        }
+        })
 
         // test
         MobileCore.initialize(appId: expectedAppId)
@@ -160,11 +160,11 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         }
 
-        MobileCoreInitializer.shared.classFinder = { _ in
+            MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtensionTwo.self,
             ]
-        }
+        })
 
         // test
         MobileCore.initialize(options: InitOptions(appId: expectedAppId))
@@ -187,11 +187,11 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         }
 
-        MobileCoreInitializer.shared.classFinder = { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtensionTwo.self,
             ]
-        }
+        })
 
         // test
         MobileCore.initialize(options: InitOptions(filePath: expectedFilePath))
@@ -211,11 +211,11 @@ class MobileCoreInitializerTests: XCTestCase {
                 XCTFail("Event of type Configuration and source Request Content not expected.")
             }
 
-            MobileCoreInitializer.shared.classFinder = { _ in
+            MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
                 return [
                     MockExtensionTwo.self,
                 ]
-            }
+            })
 
             // test
             MobileCore.initialize(options: InitOptions()) {
@@ -234,11 +234,11 @@ class MobileCoreInitializerTests: XCTestCase {
 
         let expectedAppGroup = "testAppGroup"
 
-        MobileCoreInitializer.shared.classFinder = { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder:{ _ in
             return [
                 MockExtension.self,
             ]
-        }
+        })
 
         let initOptions = InitOptions()
         initOptions.appGroup = expectedAppGroup
@@ -272,11 +272,9 @@ class MobileCoreInitializerTests: XCTestCase {
         // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
         // However, that check just verifies ClassFinder returns a non-zero list so the mocked
         // function below will pass the test.
-        MobileCoreInitializer.shared.classFinder = { _ in
-            return [
-                MockExtensionTwo.self
-            ]
-        }
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+                return [MockExtensionTwo.self]
+        })
 
         // After extension registration, for a SceneDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: InitOptions())
@@ -302,9 +300,9 @@ class MobileCoreInitializerTests: XCTestCase {
         // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
         // However, that check just verifies ClassFinder returns a non-zero list.
         // Returing an empty list will trigger the use of UIWindowApplicationDelegate.
-        MobileCoreInitializer.shared.classFinder = { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return []
-        }
+        })
 
         // After extension registration, for an AppDelegate app,
         // lifecycleStart is called immediately if the application is not in the background.
@@ -335,11 +333,11 @@ class MobileCoreInitializerTests: XCTestCase {
         // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
         // However, that check just verifies ClassFinder returns a non-zero list so the mocked
         // function below will pass the test.
-        MobileCoreInitializer.shared.classFinder = { _ in
+            MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtensionTwo.self
             ]
-        }
+        })
 
         let initOptions = InitOptions()
         initOptions.lifecycleAdditionalContextData = expectedLifecycleAdditionalContextData
@@ -371,9 +369,9 @@ class MobileCoreInitializerTests: XCTestCase {
         // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
         // However, that check just verifies ClassFinder returns a non-zero list.
         // Returing an empty list will trigger the use of UIWindowApplicationDelegate.
-        MobileCoreInitializer.shared.classFinder = { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return []
-        }
+        })
 
         let initOptions = InitOptions()
         initOptions.lifecycleAdditionalContextData = expectedLifecycleAdditionalContextData
@@ -396,11 +394,11 @@ class MobileCoreInitializerTests: XCTestCase {
             XCTFail("Event with type Generic Lifecycle and source Request Context not expected.")
         }
 
-        MobileCoreInitializer.shared.classFinder = { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtensionTwo.self,
             ]
-        }
+        })
 
         let initOptions = InitOptions()
         initOptions.lifecycleAutomaticTrackingEnabled = false

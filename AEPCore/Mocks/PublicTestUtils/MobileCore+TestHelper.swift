@@ -17,6 +17,6 @@ public extension MobileCore {
     static func resetSDK() {
         EventHub.shared.shutdown()
         EventHub.shared = EventHub()
-        MobileCoreInitializer.shared = MobileCoreInitializer()
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer()
     }
 }
