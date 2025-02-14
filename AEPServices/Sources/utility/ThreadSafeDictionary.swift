@@ -33,6 +33,16 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     public var keys: [K] {
         return queue.sync { return Array(self.dictionary.keys) }
     }
+    
+    /// A collection containing the values of the dictionary.
+    public var values: [V] {
+        return queue.sync { Array(dictionary.values) }
+    }
+    
+    /// A boolean to check if dictionary is empty or not.
+    public var isEmpty: Bool {
+        return queue.sync { dictionary.isEmpty }
+    }
 
     // Gets a non-thread-safe shallow copy of the backing dictionary
     public var shallowCopy: [K: V] {
@@ -55,13 +65,54 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
         }
     }
 
+    /// Returns the first element in the dictionary that satisfies the given predicate.
+    /// - Parameter predicate: A throwing closure that takes a key-value pair and returns `true` if the element matches.
+    /// - Returns: The first matching key-value pair, or `nil` if no match is found.
     @inlinable public func first(where predicate: (Element) throws -> Bool) rethrows -> Element? {
         return queue.sync { return try? self.dictionary.first(where: predicate) }
     }
 
+    /// Removes the value associated with the given key and returns it.
+    /// - Parameter key: The key to remove.
+    /// - Returns: The removed value if it exists, otherwise `nil`.
     @inlinable public func removeValue(forKey key: K) -> V? {
         return queue.sync {
             return self.dictionary.removeValue(forKey: key)
+        }
+    }
+    
+    /// Returns a new `Dictionary` containing only the elements that satisfy the given predicate.
+    /// - Parameter isIncluded: A closure that takes a key-value pair and returns `true` if the element should be included.
+    /// - Returns: A new `Dictionary` with the filtered elements.
+    @inlinable public func filter(_ isIncluded: (Element) -> Bool) -> [K: V] {
+        queue.sync {
+            dictionary.filter(isIncluded)
+        }
+    }
+    
+    /// Checks if any element in the dictionary satisfies the given predicate.
+    /// - Parameter predicate: A closure that takes a key-value pair and returns `true` if the condition is met.
+    /// - Returns: `true` if any element satisfies the condition; otherwise, `false`.
+    @inlinable public func contains(where predicate: (Element) -> Bool) -> Bool {
+        queue.sync {
+            dictionary.contains(where: predicate)
+        }
+    }
+    
+    /// Removes all key-value pairs from the dictionary asynchronously to avoid blocking.
+    @inlinable public func removeAll() {
+        queue.async {
+            self.dictionary.removeAll()
+        }
+    }
+    
+    /// Merges another dictionary into this `ThreadSafeDictionary`, resolving key conflicts using a provided closure.
+    /// - Parameters:
+    ///   - other: The dictionary to merge.
+    ///   - combine: A closure that determines how to resolve conflicts when the same key exists in both dictionaries.
+    @inlinable public func merge(_ other: [K: V], uniquingKeysWith combine: @escaping (V, V) -> V) {
+        queue.async {
+            self.dictionary.merge(other, uniquingKeysWith: combine)
         }
     }
 }

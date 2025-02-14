@@ -334,7 +334,6 @@
 		3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF829482507F8AA00483C74 /* rules_lifecycle.json */; };
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
-		4C7B340F2C59B2B7009FA7A2 /* ThreadSafeDictionary+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B340E2C59B2B7009FA7A2 /* ThreadSafeDictionary+TestHelper.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
 		4CF0285F2C2CCBD3008ADE05 /* EventSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028182C2CCA0F008ADE05 /* EventSpec.swift */; };
@@ -397,7 +396,6 @@
 		4CF791892CAB4F97003C1FD8 /* URL+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281E2C2CCA0F008ADE05 /* URL+TestHelper.swift */; };
 		4CF7918A2CAB4F97003C1FD8 /* UserDefaults+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */; };
 		4CF7918B2CAB4F97003C1FD8 /* XCTestCase+AnyCodableAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */; };
-		4CF7918C2CAB4F97003C1FD8 /* ThreadSafeDictionary+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7B340E2C59B2B7009FA7A2 /* ThreadSafeDictionary+TestHelper.swift */; };
 		4CF7918D2CAB517F003C1FD8 /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		4CF7918E2CAB517F003C1FD8 /* MockFullscreenListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */; };
 		4CF7918F2CAB517F003C1FD8 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
@@ -1094,7 +1092,6 @@
 		3FF8296B2509942300483C74 /* rules_signal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_signal.json; sourceTree = "<group>"; };
 		4107BA7054E313DACA0D4EF4 /* Pods-AEPCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		41E5D22C6D72CCCF26904EDE /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
-		4C7B340E2C59B2B7009FA7A2 /* ThreadSafeDictionary+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThreadSafeDictionary+TestHelper.swift"; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
 		4CF028182C2CCA0F008ADE05 /* EventSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventSpec.swift; sourceTree = "<group>"; };
@@ -2204,7 +2201,6 @@
 				4CF0281E2C2CCA0F008ADE05 /* URL+TestHelper.swift */,
 				4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */,
 				4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */,
-				4C7B340E2C59B2B7009FA7A2 /* ThreadSafeDictionary+TestHelper.swift */,
 			);
 			path = PublicTestUtils;
 			sourceTree = "<group>";
@@ -3576,7 +3572,6 @@
 				4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */,
 				4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */,
 				4CF0285F2C2CCBD3008ADE05 /* EventSpec.swift in Sources */,
-				4C7B340F2C59B2B7009FA7A2 /* ThreadSafeDictionary+TestHelper.swift in Sources */,
 				4CF028602C2CCBD3008ADE05 /* FileManager+TestHelper.swift in Sources */,
 				4CF028612C2CCBD3008ADE05 /* HttpConnection+DeepCopy.swift in Sources */,
 				4CF028622C2CCBD3008ADE05 /* MockDataQueue.swift in Sources */,
@@ -3751,7 +3746,6 @@
 				4CF7918A2CAB4F97003C1FD8 /* UserDefaults+TestHelper.swift in Sources */,
 				4CF7919B2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift in Sources */,
 				4CF7918B2CAB4F97003C1FD8 /* XCTestCase+AnyCodableAsserts.swift in Sources */,
-				4CF7918C2CAB4F97003C1FD8 /* ThreadSafeDictionary+TestHelper.swift in Sources */,
 				4CF0287D2C2CCBE1008ADE05 /* TestableNetworkService.swift in Sources */,
 				4CF0289C2C2D401E008ADE05 /* MockExtension.swift in Sources */,
 				4CF0289E2C2D401E008ADE05 /* EventHub+TestHelper.swift in Sources */,
