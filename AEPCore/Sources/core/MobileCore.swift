@@ -17,6 +17,13 @@ import Foundation
 @objc(AEPMobileCore)
 public final class MobileCore: NSObject {
     private static let LOG_TAG = "MobileCore"
+
+#if DEBUG
+    internal static var mobileCoreInitializer = MobileCoreInitializer()
+#else
+    private static let mobileCoreInitializer = MobileCoreInitializer()
+#endif
+
     /// Current version of the Core extension
     @objc public static var extensionVersion: String {
         let wrapperType = EventHub.shared.getWrapperType()
@@ -35,8 +42,30 @@ public final class MobileCore: NSObject {
         }
     #endif
 
-    /// Pending extensions to be registered for legacy support
-    static var pendingExtensions = ThreadSafeArray<Extension.Type>(identifier: "com.adobe.pendingExtensions.queue")
+    /// Initializes the AEP SDK with the specified `InitOptions`.
+    /// This automatically registers all boundled extensions and sets up lifecycle tracking.
+    /// You can disable automatic lifecycle tracking using `InitOptions`.
+    /// - Parameters:
+    ///   - options: The `InitOptions` used to configure the SDK.
+    ///   - completion: An optional closure triggered once initialization is complete.
+    @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
+    @objc(initializeWithOptions:completion:)
+    public static func initialize(options: InitOptions, _ completion: (() -> Void)? = nil) {
+        mobileCoreInitializer.initialize(options: options, completion)
+    }
+
+    /// Initializes the AEP SDK with all bundled extensions, sets up lifecycle tracking,
+    /// and configures the SDK using the specified `appId` via `MobileCore.configureWith(appId:)`.
+    /// - Parameters:
+    ///   - appId: A unique identifier assigned to the app instance by Adobe Tags
+    ///   - completion: An optional closure triggered once initialization is complete.
+    @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
+    @objc(initializeWithAppId:completion:)
+    public static func initialize(appId: String, _ completion: (() -> Void)? = nil) {
+        initialize(options: InitOptions(appId: appId), completion)
+    }
 
     /// Registers the extensions with Core and begins event processing
     /// - Parameter extensions: The extensions to be registered

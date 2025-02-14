@@ -27,6 +27,13 @@
       },
       {
         "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "AEPCore"
+      },
+      {
+        "kind": "Import",
         "name": "_Concurrency",
         "printedName": "_Concurrency",
         "declKind": "Import",
@@ -322,6 +329,535 @@
       },
       {
         "kind": "TypeDecl",
+        "name": "InitOptions",
+        "printedName": "InitOptions",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "lifecycleAutomaticTrackingEnabled",
+            "printedName": "lifecycleAutomaticTrackingEnabled",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(py)lifecycleAutomaticTrackingEnabled",
+            "mangledName": "$s7AEPCore11InitOptionsC33lifecycleAutomaticTrackingEnabledSbvp",
+            "moduleName": "AEPCore",
+            "declAttributes": [
+              "HasInitialValue",
+              "ObjC",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)lifecycleAutomaticTrackingEnabled",
+                "mangledName": "$s7AEPCore11InitOptionsC33lifecycleAutomaticTrackingEnabledSbvg",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)setLifecycleAutomaticTrackingEnabled:",
+                "mangledName": "$s7AEPCore11InitOptionsC33lifecycleAutomaticTrackingEnabledSbvs",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore11InitOptionsC33lifecycleAutomaticTrackingEnabledSbvM",
+                "mangledName": "$s7AEPCore11InitOptionsC33lifecycleAutomaticTrackingEnabledSbvM",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "lifecycleAdditionalContextData",
+            "printedName": "lifecycleAdditionalContextData",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Any]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Any]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(py)lifecycleAdditionalContextData",
+            "mangledName": "$s7AEPCore11InitOptionsC30lifecycleAdditionalContextDataSDySSypGSgvp",
+            "moduleName": "AEPCore",
+            "declAttributes": [
+              "HasInitialValue",
+              "ObjC",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Any]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)lifecycleAdditionalContextData",
+                "mangledName": "$s7AEPCore11InitOptionsC30lifecycleAdditionalContextDataSDySSypGSgvg",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Any]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)setLifecycleAdditionalContextData:",
+                "mangledName": "$s7AEPCore11InitOptionsC30lifecycleAdditionalContextDataSDySSypGSgvs",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore11InitOptionsC30lifecycleAdditionalContextDataSDySSypGSgvM",
+                "mangledName": "$s7AEPCore11InitOptionsC30lifecycleAdditionalContextDataSDySSypGSgvM",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "appGroup",
+            "printedName": "appGroup",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(py)appGroup",
+            "mangledName": "$s7AEPCore11InitOptionsC8appGroupSSSgvp",
+            "moduleName": "AEPCore",
+            "declAttributes": [
+              "HasInitialValue",
+              "ObjC",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)appGroup",
+                "mangledName": "$s7AEPCore11InitOptionsC8appGroupSSSgvg",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)setAppGroup:",
+                "mangledName": "$s7AEPCore11InitOptionsC8appGroupSSSgvs",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "declAttributes": [
+                  "ObjC"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore11InitOptionsC8appGroupSSSgvM",
+                "mangledName": "$s7AEPCore11InitOptionsC8appGroupSSSgvM",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "InitOptions",
+                "printedName": "AEPCore.InitOptions",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)init",
+            "mangledName": "$s7AEPCore11InitOptionsCACycfc",
+            "moduleName": "AEPCore",
+            "overriding": true,
+            "objc_name": "init",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Override"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(appId:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "InitOptions",
+                "printedName": "AEPCore.InitOptions",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)initWithAppId:",
+            "mangledName": "$s7AEPCore11InitOptionsC5appIdACSS_tcfc",
+            "moduleName": "AEPCore",
+            "objc_name": "initWithAppId:",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "init_kind": "Designated"
+          },
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(filePath:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "InitOptions",
+                "printedName": "AEPCore.InitOptions",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions(im)initWithFilePath:",
+            "mangledName": "$s7AEPCore11InitOptionsC8filePathACSS_tcfc",
+            "moduleName": "AEPCore",
+            "objc_name": "initWithFilePath:",
+            "declAttributes": [
+              "ObjC"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions",
+        "mangledName": "$s7AEPCore11InitOptionsC",
+        "moduleName": "AEPCore",
+        "objc_name": "AEPInitOptions",
+        "declAttributes": [
+          "ObjC"
+        ],
+        "superclassUsr": "c:objc(cs)NSObject",
+        "inheritsConvenienceInitializers": true,
+        "superclassNames": [
+          "ObjectiveC.NSObject"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CVarArg",
+            "printedName": "CVarArg",
+            "usr": "s:s7CVarArgP",
+            "mangledName": "$ss7CVarArgP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObservingPublishing",
+            "printedName": "_KeyValueCodingAndObservingPublishing",
+            "usr": "s:10Foundation37_KeyValueCodingAndObservingPublishingP",
+            "mangledName": "$s10Foundation37_KeyValueCodingAndObservingPublishingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "_KeyValueCodingAndObserving",
+            "printedName": "_KeyValueCodingAndObserving",
+            "usr": "s:10Foundation27_KeyValueCodingAndObservingP",
+            "mangledName": "$s10Foundation27_KeyValueCodingAndObservingP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomStringConvertible",
+            "printedName": "CustomStringConvertible",
+            "usr": "s:s23CustomStringConvertibleP",
+            "mangledName": "$ss23CustomStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "CustomDebugStringConvertible",
+            "printedName": "CustomDebugStringConvertible",
+            "usr": "s:s28CustomDebugStringConvertibleP",
+            "mangledName": "$ss28CustomDebugStringConvertibleP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
         "name": "MobileCore",
         "printedName": "MobileCore",
         "children": [
@@ -371,6 +907,120 @@
                 "accessorKind": "get"
               }
             ]
+          },
+          {
+            "kind": "Function",
+            "name": "initialize",
+            "printedName": "initialize(options:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "InitOptions",
+                "printedName": "AEPCore.InitOptions",
+                "usr": "c:@M@AEPCore@objc(cs)AEPInitOptions"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(() -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "() -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ]
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPCore@objc(cs)AEPMobileCore(cm)initializeWithOptions:completion:",
+            "mangledName": "$s7AEPCore10MobileCoreC10initialize7options_yAA11InitOptionsC_yycSgtFZ",
+            "moduleName": "AEPCore",
+            "static": true,
+            "objc_name": "initializeWithOptions:completion:",
+            "declAttributes": [
+              "Final",
+              "ObjC",
+              "Available",
+              "Available"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "initialize",
+            "printedName": "initialize(appId:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(() -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "() -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ]
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPCore@objc(cs)AEPMobileCore(cm)initializeWithAppId:completion:",
+            "mangledName": "$s7AEPCore10MobileCoreC10initialize5appId_ySS_yycSgtFZ",
+            "moduleName": "AEPCore",
+            "static": true,
+            "objc_name": "initializeWithAppId:completion:",
+            "declAttributes": [
+              "Final",
+              "ObjC",
+              "Available",
+              "Available"
+            ],
+            "funcSelfKind": "NonMutating"
           },
           {
             "kind": "Function",
