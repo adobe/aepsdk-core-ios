@@ -85,21 +85,17 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     /// - Parameter isIncluded: A closure that takes a key-value pair and returns `true` if the element should be included.
     /// - Returns: A new `Dictionary` with the filtered elements.
     @inlinable public func filter(_ isIncluded: (Element) -> Bool) -> [K: V] {
-        var filteredDictionary = [K: V]()
         queue.sync {
-            for (key, value) in dictionary where isIncluded((key, value)) {
-                filteredDictionary[key] = value
-            }
+            dictionary.filter(isIncluded)
         }
-        return filteredDictionary
     }
     
     /// Checks if any element in the dictionary satisfies the given predicate.
     /// - Parameter predicate: A closure that takes a key-value pair and returns `true` if the condition is met.
     /// - Returns: `true` if any element satisfies the condition; otherwise, `false`.
     @inlinable public func contains(where predicate: (Element) -> Bool) -> Bool {
-        return queue.sync {
-            return dictionary.contains(where: predicate)
+        queue.sync {
+            dictionary.contains(where: predicate)
         }
     }
     
