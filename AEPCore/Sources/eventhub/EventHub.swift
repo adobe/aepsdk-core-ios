@@ -25,7 +25,11 @@ final class EventHub {
     private let eventHubQueue = DispatchQueue(label: "com.adobe.eventHub.queue")
     private var registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventHub.registeredExtensions.queue")
     private let eventNumberMap = ThreadSafeDictionary<UUID, Int>(identifier: "com.adobe.eventHub.eventNumber.queue")
-    private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventHub.response.queue")
+    #if DEBUG
+        internal let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventHub.response.queue")
+    #else
+        private let responseEventListeners = ThreadSafeArray<EventListenerContainer>(identifier: "com.adobe.eventHub.response.queue")
+    #endif
     private var eventNumberCounter = AtomicCounter()
     private let eventQueue = OperationOrderer<Event>("EventHub")
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
@@ -165,10 +169,18 @@ final class EventHub {
     /// Registers an `EventListener` which will be invoked when the response `Event` to `triggerEvent` is dispatched
     /// - Parameters:
     ///   - triggerEvent: An `Event` which will trigger a response `Event`
-    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`
+    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`.
+    ///            Use `.infinity` to wait indefinitely without `EventHub` triggering timeout.
     ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives the response `Event` for `triggerEvent`
     func registerResponseListener(triggerEvent: Event, timeout: TimeInterval, listener: @escaping EventResponseListener) {
         let triggerEventId = triggerEvent.id
+
+        guard timeout.isFinite else {
+            let responseListenerContainer = EventListenerContainer(listener: listener, triggerEventId: triggerEventId, timeout: nil)
+            responseEventListeners.append(responseListenerContainer)
+            return
+        }
+
         let timeoutTask = DispatchWorkItem { [weak self, triggerEventId] in
             guard let self = self else { return }
             // Make sure we remove the listeners before we call them to avoid race conditions

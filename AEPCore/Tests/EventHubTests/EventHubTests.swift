@@ -388,6 +388,20 @@ class EventHubTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
+    func testEventHubTestResponseListenerWithInfiniteTimeout() {
+        // setup
+        let requestEvent = Event(name: "testEvent", type: EventType.analytics, source: EventSource.requestContent, data: nil)
+
+        // test
+        eventHub.registerResponseListener(triggerEvent: requestEvent, timeout: .infinity) { event in
+            XCTFail()
+        }
+
+        let listener = eventHub.responseEventListeners.shallowCopy.first { $0.triggerEventId == requestEvent.id }
+        XCTAssertNotNil(listener)
+        XCTAssertNil(listener?.timeoutTask)
+    }
+
     func testEventHubDispatchesEventsWithBlockingListener() {
         // setup
         let expectation = XCTestExpectation(description: "Invoke blocking listener with matching Event and ignored Event of non-matching type and source")
