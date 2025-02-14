@@ -12,7 +12,48 @@ Set up a mobile property as outlined in the Adobe Experience Platform [docs](htt
 
 Now that a Mobile Property is created, head over to the [install instructions](https://github.com/adobe/aepsdk-core-ios#installation) to install the SDK.
 
-## Initial SDK Setup
+## Initial SDK Setup using `initialize` API
+
+The `initialize(appId:)` API, added in AEPCore version 5.4.0, will automatically register all extensions included with the application while also enabling Lifecycle data collection without additional code changes. Lifecycle data collection requires the AEPLifecycle extension included as a dependency to your application.
+
+In the `AppDelegate` file:
+
+```swift
+import AEPCore
+
+...
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+ MobileCore.setLogLevel(level: .trace)  // Enable debug logging
+ 
+ MobileCore.initialize(appId: "your-app-id")
+ return true
+}
+```
+
+Manually calling the Lifecycle APIs `lifecycleStart(additionalContextData:)` and `lifecyclePause()` is not required when enabling automatic Lifecycle tracking using the `initialize(appId:)` API. If your application needs more control over the Lifecycle APIs, you can disable automatic Lifecycle tracking using the `InitOptions` object with the `initialize(options:)` API and [implementing the Lifecycle APIs](#implement-lifecycle-data-collection).
+
+In the `AppDelegate` file:
+
+```swift
+import AEPCore
+
+...
+
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+ MobileCore.setLogLevel(level: .trace)  // Enable debug logging
+
+ let options = InitOptions(appId: "your-app-id")
+ options.lifecycleAutomaticTrackingEnabled = false
+
+ MobileCore.initialize(options: options, {
+    // handle completion
+ })
+ return true
+}
+```
+
+## Initial SDK Setup using `registerExtensions` API
 
 1. Import each of the core extensions in the `AppDelegate` file:
 
@@ -41,7 +82,7 @@ func application(_ application: UIApplication, didFinishLaunchingWithOptions lau
 }
 ```
 
-## Implement Lifecycle Metrics
+## Implement Lifecycle data collection
 
 Lifecycle metrics is an optional, yet valuable feature provided by the Adobe Experience Platform SDK. It offers out-of-the-box, application lifecycle information about an app user. These metrics contain information on the app user's engagement lifecycle, such as device information, install or upgrade information, session start and pause times, and more.
 
