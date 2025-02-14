@@ -14,7 +14,7 @@ Now that a Mobile Property is created, head over to the [install instructions](h
 
 ## Initial SDK Setup using `initialize` API
 
-The `initialize(appId:)` API, added in AEPCore version 5.4.0, will automatically register all extensions included with the application while also enabling Lifecycle data collection without additional code changes. Lifecycle data collection requires the AEPLifecycle extension included as a dependency to your application.
+The `initialize(appId:)` API, added in AEPCore version 5.4.0, will automatically register all extensions included with the application while also enabling Lifecycle data collection without additional code. Lifecycle data collection requires the AEPLifecycle extension included as a dependency to your application.
 
 In the `AppDelegate` file:
 
@@ -25,7 +25,7 @@ import AEPCore
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
  MobileCore.setLogLevel(level: .trace)  // Enable debug logging
- 
+
  MobileCore.initialize(appId: "your-app-id")
  return true
 }

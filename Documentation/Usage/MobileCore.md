@@ -36,10 +36,12 @@ NSString *version = [AEPMobileCore extensionVersion];
 
 ##### Registering all extensions and enabling Lifecycle data collection:
 
+> [!NOTE]
+> API `initialize(appId:)` added since AEPCore 5.4.0
+
 > [!IMPORTANT]
 > All Adobe Mobile SDK extensions listed as a dependency in your application are automatically registered when calling `initialize(appId:)`.
-
-> [!NOTE]
+>
 > Automatic Lifecycle data collection requires **AEPLifecycle** extension included as an app dependency.
 
 ###### Swift
@@ -48,7 +50,7 @@ NSString *version = [AEPMobileCore extensionVersion];
 import AEPCore
 
 // ...
-MobileCore.initialize(appId: "your app id", {
+MobileCore.initialize(appId: "your-app-id", {
    // handle completion
 })
 ```
@@ -65,6 +67,9 @@ MobileCore.initialize(appId: "your app id", {
 ```
 
 ##### Registering all extensions while disabling Lifecycle data collection:
+
+> [!NOTE]
+> API `initialize(options:)` added since AEPCore 5.4.0
 
 > [!IMPORTANT]
 > All Adobe Mobile SDK extensions listed as a dependency in your application are automatically registered when calling `initialize(options:)`.
