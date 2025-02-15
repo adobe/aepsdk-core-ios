@@ -174,6 +174,40 @@
             XCTAssertTrue(mockMessagingDelegate.onShowCalled)
             let webview = fullscreenMessage?.webView as? WKWebView
             XCTAssertEqual(1, webview?.gestureRecognizers?.count)
+            XCTAssertEqual(false, webview?.scrollView.isScrollEnabled)
+        }
+        
+        func testShowWithEmptyGesturesScrollingIsEnabled() {
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
+            let mockGestures: [MessageGesture: URL] = [:]
+            mockMessageSettings.setGestures(mockGestures)
+            fullscreenMessage?.show()
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
+            XCTAssertTrue(mockFullscreenListener.onShowCalled)
+            XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+            XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+            let webview = fullscreenMessage?.webView as? WKWebView
+            XCTAssertNil(webview?.gestureRecognizers)
+            XCTAssertEqual(true, webview?.scrollView.isScrollEnabled)
+        }
+        
+        func testShowWithNilGesturesScrollingIsEnabled() {
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
+            mockMessageSettings.setGestures(nil)
+            fullscreenMessage?.show()
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
+            XCTAssertTrue(mockFullscreenListener.onShowCalled)
+            XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+            XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+            let webview = fullscreenMessage?.webView as? WKWebView
+            XCTAssertNil(webview?.gestureRecognizers)
+            XCTAssertEqual(true, webview?.scrollView.isScrollEnabled)
         }
     
         func testHide() throws {

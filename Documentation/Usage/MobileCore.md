@@ -34,6 +34,73 @@ let version = MobileCore.extensionVersion
 NSString *version = [AEPMobileCore extensionVersion];
 ```
 
+##### Registering all extensions and enabling Lifecycle data collection:
+
+> [!NOTE]
+> API `initialize(appId:)` added since AEPCore 5.4.0
+
+> [!IMPORTANT]
+> All Adobe Mobile SDK extensions listed as a dependency in your application are automatically registered when calling `initialize(appId:)`.
+>
+> Automatic Lifecycle data collection requires **AEPLifecycle** extension included as an app dependency.
+
+###### Swift
+
+```swift
+import AEPCore
+
+// ...
+MobileCore.initialize(appId: "your-app-id", {
+   // handle completion
+})
+```
+
+###### Objective-C
+
+```objective-c
+@import AEPCore;
+
+// ...
+[AEPMobileCore initializeWithAppId:@"your-app-id" completion:^{
+    // handle completion
+}];
+```
+
+##### Registering all extensions while disabling Lifecycle data collection:
+
+> [!NOTE]
+> API `initialize(options:)` added since AEPCore 5.4.0
+
+> [!IMPORTANT]
+> All Adobe Mobile SDK extensions listed as a dependency in your application are automatically registered when calling `initialize(options:)`.
+
+###### Swift
+
+```swift
+import AEPCore
+
+// ...
+let options = InitOptions(appId: "your-app-id")
+options.lifecycleAutomaticTrackingEnabled = false
+MobileCore.initialize(options: options, {
+    // handle completion
+})
+```
+
+###### Objective-C
+
+```objective-c
+@import AEPCore;
+
+// ...
+AEPInitOptions *options = [[AEPInitOptions alloc] initWithAppId:@"your-app-id"];
+options.lifecycleAutomaticTrackingEnabled = false;
+
+[AEPMobileCore initializeWithOptions:options completion:^{
+    // handle completion
+}];
+```
+
 ##### Registering multiple extensions and starting the SDK:
 
 ###### Swift
