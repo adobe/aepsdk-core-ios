@@ -12349,6 +12349,110 @@
           },
           {
             "kind": "Var",
+            "name": "values",
+            "printedName": "values",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[τ_0_1]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_1"
+                  }
+                ],
+                "usr": "s:Sa"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices20ThreadSafeDictionaryC6valuesSayq_Gvp",
+            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC6valuesSayq_Gvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "Final"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[τ_0_1]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_1"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices20ThreadSafeDictionaryC6valuesSayq_Gvg",
+                "mangledName": "$s11AEPServices20ThreadSafeDictionaryC6valuesSayq_Gvg",
+                "moduleName": "AEPServices",
+                "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
+                "sugared_genericSig": "<K, V where K : Swift.Hashable>",
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "isEmpty",
+            "printedName": "isEmpty",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices20ThreadSafeDictionaryC7isEmptySbvp",
+            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC7isEmptySbvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "Final"
+            ],
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices20ThreadSafeDictionaryC7isEmptySbvg",
+                "mangledName": "$s11AEPServices20ThreadSafeDictionaryC7isEmptySbvg",
+                "moduleName": "AEPServices",
+                "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
+                "sugared_genericSig": "<K, V where K : Swift.Hashable>",
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
             "name": "shallowCopy",
             "printedName": "shallowCopy",
             "children": [
@@ -12660,6 +12764,225 @@
             "declKind": "Func",
             "usr": "s:11AEPServices20ThreadSafeDictionaryC11removeValue6forKeyq_Sgx_tF",
             "mangledName": "$s11AEPServices20ThreadSafeDictionaryC11removeValue6forKeyq_Sgx_tF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
+            "sugared_genericSig": "<K, V where K : Swift.Hashable>",
+            "declAttributes": [
+              "Final",
+              "Inlinable"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "filter",
+            "printedName": "filter(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[τ_0_0 : τ_0_1]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_0"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_1"
+                  }
+                ],
+                "usr": "s:SD"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "((key: τ_0_0, value: τ_0_1)) -> Swift.Bool",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(key: τ_0_0, value: τ_0_1)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_0"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_1"
+                      }
+                    ]
+                  }
+                ],
+                "typeAttributes": [
+                  "noescape"
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices20ThreadSafeDictionaryC6filterySDyxq_GSbx3key_q_5valuet_tXEF",
+            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC6filterySDyxq_GSbx3key_q_5valuet_tXEF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
+            "sugared_genericSig": "<K, V where K : Swift.Hashable>",
+            "declAttributes": [
+              "Final",
+              "Inlinable"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "contains",
+            "printedName": "contains(where:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "((key: τ_0_0, value: τ_0_1)) -> Swift.Bool",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(key: τ_0_0, value: τ_0_1)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_0"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_1"
+                      }
+                    ]
+                  }
+                ],
+                "typeAttributes": [
+                  "noescape"
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices20ThreadSafeDictionaryC8contains5whereS2bx3key_q_5valuet_tXE_tF",
+            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC8contains5whereS2bx3key_q_5valuet_tXE_tF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
+            "sugared_genericSig": "<K, V where K : Swift.Hashable>",
+            "declAttributes": [
+              "Final",
+              "Inlinable"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "removeAll",
+            "printedName": "removeAll()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices20ThreadSafeDictionaryC9removeAllyyF",
+            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC9removeAllyyF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
+            "sugared_genericSig": "<K, V where K : Swift.Hashable>",
+            "declAttributes": [
+              "Final",
+              "Inlinable"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "merge",
+            "printedName": "merge(_:uniquingKeysWith:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[τ_0_0 : τ_0_1]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_0"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_1"
+                  }
+                ],
+                "usr": "s:SD"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(τ_0_1, τ_0_1) -> τ_0_1",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_1"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Tuple",
+                    "printedName": "(τ_0_1, τ_0_1)",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_1"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices20ThreadSafeDictionaryC5merge_16uniquingKeysWithySDyxq_G_q_q__q_tctF",
+            "mangledName": "$s11AEPServices20ThreadSafeDictionaryC5merge_16uniquingKeysWithySDyxq_G_q_q__q_tctF",
             "moduleName": "AEPServices",
             "genericSig": "<τ_0_0, τ_0_1 where τ_0_0 : Swift.Hashable>",
             "sugared_genericSig": "<K, V where K : Swift.Hashable>",
