@@ -38,6 +38,7 @@ jobs:
       command: make aep-core-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepcore-ios-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-services-unit-test:
@@ -51,6 +52,7 @@ jobs:
       command: make aep-services-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepservices-ios-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-lifecycle-unit-test:
@@ -64,6 +66,7 @@ jobs:
       command: make aep-lifecycle-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aeplifecycle-ios-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-identity-unit-test:
@@ -77,6 +80,7 @@ jobs:
       command: make aep-identity-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepidentity-ios-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-signal-unit-test:
@@ -90,6 +94,7 @@ jobs:
       command: make aep-signal-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepsignal-ios-tests
       xcode-version: "15.1"
     secrets: inherit
   integration-test:
@@ -101,8 +106,6 @@ jobs:
       tvos-device-names: '["Apple TV"]'
       tvos-versions: '["18.1"]'
       command: make integration-test
-      result-bundle-path: build
-      enable-codecov: true
       xcode-version: "15.1"
     secrets: inherit
   aep-core-tvos-unit-test:
@@ -116,6 +119,7 @@ jobs:
       command: make aep-core-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepcore-tvos-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-services-tvos-unit-test:
@@ -129,6 +133,7 @@ jobs:
       command: make aep-services-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepservices-tvos-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-lifecycle-tvos-unit-test:
@@ -142,6 +147,7 @@ jobs:
       command: make aep-lifecycle-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aeplifecycle-tvos-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-identity-tvos-unit-test:
@@ -155,6 +161,7 @@ jobs:
       command: make aep-identity-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepidentity-tvos-tests
       xcode-version: "15.1"
     secrets: inherit
   aep-signal-tvos-unit-test:
@@ -168,6 +175,7 @@ jobs:
       command: make aep-signal-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
+      codecov-flag: aepsignal-tvos-tests
       xcode-version: "15.1"
     secrets: inherit
   integration-tvos-test:
@@ -179,8 +187,6 @@ jobs:
       tvos-device-names: '["Apple TV"]'
       tvos-versions: '["18.1"]'
       command: make integration-tvos-test
-      result-bundle-path: build
-      enable-codecov: true
       xcode-version: "15.1"
     secrets: inherit
   test-spm-podspec-archive:
@@ -192,7 +198,5 @@ jobs:
       tvos-device-names: '["Apple TV"]'
       tvos-versions: '["18.1"]'
       command: make ci-archive && make test-SPM-integration
-      result-bundle-path: build
-      enable-codecov: true
       xcode-version: "15.1"
     secrets: inherit
