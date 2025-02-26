@@ -20,6 +20,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make lint && make api-check
       xcode-version: "16.1"
     secrets: inherit
@@ -27,6 +31,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-core-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -36,6 +44,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-services-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -45,6 +57,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-lifecycle-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -54,6 +70,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-identity-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -63,6 +83,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-signal-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -72,6 +96,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make integration-test
       result-bundle-path: build
       enable-codecov: true
@@ -81,6 +109,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-core-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -90,6 +122,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-services-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -99,6 +135,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-lifecycle-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -108,6 +148,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-identity-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -117,6 +161,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make aep-signal-tvos-unit-test
       result-bundle-path: build
       enable-codecov: true
@@ -126,6 +174,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make integration-tvos-test
       result-bundle-path: build
       enable-codecov: true
@@ -135,6 +187,10 @@ jobs:
     name: "CI"
     uses: timkimadobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@update-ios-coverage
     with:
+      ios-device-names: '["iPhone 15"]'
+      ios-versions: '["18.1"]'
+      tvos-device-names: '["Apple TV"]'
+      tvos-versions: '["18.1"]'
       command: make ci-archive && make test-SPM-integration
       result-bundle-path: build
       enable-codecov: true
