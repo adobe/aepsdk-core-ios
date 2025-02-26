@@ -24,7 +24,7 @@ jobs:
       ios-versions: '["18.1"]'
       tvos-device-names: '["Apple TV"]'
       tvos-versions: '["18.1"]'
-      command: aep-core-unit-test
+      command: make aep-core-unit-test
       result-bundle-path: build/
       enable-codecov: true
       xcode-version: "15.1"
