@@ -97,7 +97,7 @@ jobs:
     needs: setup-configuration
     permissions:
         contents: write
-    uses: adobe/aepsdk-commons/.github/workflows/ios-release.yml@update-ios-coverage
+    uses: timkimadobe/aepsdk-commons/.github/workflows/ios-release.yml@update-ios-coverage
     with:
       tag: ${{ github.event.inputs.tag }}
       create-github-release: ${{ github.event.inputs.create-github-release == 'true' && 'AEPServices, AEPCore, AEPIdentity, AEPLifecycle, AEPSignal' || '' }}
