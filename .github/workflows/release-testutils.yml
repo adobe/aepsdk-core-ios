@@ -26,19 +26,20 @@ on:
         required: true
 
 jobs:
-  release-testutils:
-    runs-on: macos-14
+  validate-version:
+    name: Validate version
+    uses: timkimadobe/aepsdk-commons/.github/workflows/versions.yml@update-ios-coverage
+    with:
+      version: ${{ github.event.inputs.version }}
+      branch: main
+      dependencies: AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}
+      paths: AEPTestUtils.podspec
+      update: false
 
+  release-testutils:
+    needs: validate-version
+    runs-on: macos-14
     steps:
-    - name: Validate version
-      uses: timkimadobe/aepsdk-commons/.github/workflows/versions.yml@update-ios-coverage
-      with:
-        version: ${{ github.event.inputs.version }}
-        branch: main
-        dependencies: AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}
-        paths: AEPTestUtils.podspec
-        update: false
-    
     - name: Checkout
       uses: actions/checkout@v4.2.2
       with:
