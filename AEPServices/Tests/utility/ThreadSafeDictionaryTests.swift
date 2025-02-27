@@ -152,6 +152,133 @@ class ThreadSafeDictionaryTests: XCTestCase {
 
         XCTAssertEqual(testDictionary.keys.count, count)
     }
+    
+    func testGetValues() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+
+        // get values on empty dictionary
+        XCTAssertEqual(testDictionary.values,[])
+
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+
+        XCTAssertEqual(testDictionary.values.count, count)
+    }
+    
+    func testIsEmpty() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+
+        XCTAssertTrue(testDictionary.isEmpty)
+
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+
+        XCTAssertFalse(testDictionary.isEmpty)
+    }
+    
+    func testFilter() {
+        let count = 100
+        let testDictionary = ThreadSafeDictionary<Int, Int>()
+
+        for i in 0 ..< count {
+            testDictionary[i] = i
+        }
+        
+        let filteredDictionary = testDictionary.filter { $0.key % 2 == 0 }
+        
+        // Verify the filtered dictionary size is half
+        XCTAssertEqual(filteredDictionary.count, count / 2)
+        
+    }
+    
+    func testMerge() {
+        let dict1 = ["key1" : "value1"]
+        let testDictionary = ThreadSafeDictionary<String, String>()
+
+        testDictionary.merge(dict1) { (_, new) in new }
+        
+        let dict2 = ["k1": "v1", "k2": "v2", "k3": "v3", "k4": "v4"]
+
+        testDictionary.merge(dict2) { (_, new) in new }
+        
+        //verify
+        XCTAssertEqual(testDictionary.count, 5)
+    }
+    
+    func testMergeWithMultipleConflictingKeys() {
+        // Initial dictionary
+        let dict1 = [
+            "key1": "value1",
+            "key2": "Value2",
+            "key3": "Value3",
+            "key4": "Value4"
+        ]
+        
+        // Another dictionary with conflicting keys
+        let dict2 = [
+            "key2": "newValue2",
+            "key3": "newValue3",
+            "key4": "newValue4",
+            "key5": "value5"
+        ]
+
+        let testDictionary = ThreadSafeDictionary<String, String>()
+        
+        testDictionary.merge(dict1) { _, new in new }
+        
+        // merge with conflicting keys
+        testDictionary.merge(dict2) { _, new in new }
+
+        // Verify the dictionary count
+        XCTAssertEqual(testDictionary.count, 5)
+
+        // Verify dictionary values
+        XCTAssertEqual(testDictionary["key1"], "value1")
+        XCTAssertEqual(testDictionary["key2"], "newValue2")
+        XCTAssertEqual(testDictionary["key3"], "newValue3")
+        XCTAssertEqual(testDictionary["key4"], "newValue4")
+        XCTAssertEqual(testDictionary["key5"], "value5")
+    }
+
+    
+    func testContain() {
+        
+        let testDictionary = ThreadSafeDictionary<String, String>()
+        let dict2 = ["k1": "v1", "k2": "v2", "k3": "v3", "k4": "v4"]
+
+        testDictionary.merge(dict2) { (_, new) in new }
+        
+        //verify
+        XCTAssertTrue(testDictionary.contains(where: { $0.key == "k1" }))
+    }
+    
+    func testChainedOperations() {
+        let dict = ThreadSafeDictionary<Int, String>()
+        
+        // Apply merge operation
+        dict.merge([1: "One", 2: "Two", 3: "Three", 4: "Four"]) { _, new in new }
+        
+        // Check if the dict contains a specific value
+        let containsTwo = dict.contains { _, value in value == "Two" }
+        XCTAssertTrue(containsTwo)
+        
+        // Apply filter on thread safe dictionary to keep only even keys
+        let filtered = dict.filter { key, _ in key % 2 == 0 }
+        
+        XCTAssertEqual(filtered.count, 2)
+        XCTAssertTrue(filtered.contains(where: { $0.key == 2 }))
+        XCTAssertTrue(filtered.contains(where: { $0.key == 4 }))
+        
+        // Remove all elements from the thread safe dictionary
+        dict.removeAll()
+        
+        // verify
+        XCTAssertTrue(dict.isEmpty)
+    }
 
     private func dispatchSyncWithDict(i: Int) {
         dispatchQueueSerial.sync {

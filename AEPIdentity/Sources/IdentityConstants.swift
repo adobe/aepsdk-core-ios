@@ -14,7 +14,7 @@ import Foundation
 enum IdentityConstants {
     static let EXTENSION_NAME = "com.adobe.module.identity"
     static let FRIENDLY_NAME = "Identity"
-    static let EXTENSION_VERSION = "5.3.2"
+    static let EXTENSION_VERSION = "5.4.0"
 
     static let DATASTORE_NAME = EXTENSION_NAME
 
