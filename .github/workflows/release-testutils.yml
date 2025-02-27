@@ -17,6 +17,7 @@ on:
     inputs:
       version:
         description: 'The tag (version) to be released (ex: 1.2.3 - workflow will create tag `testutils-1.2.3`).'
+        type: string
         required: true
 
       core-dependency:
