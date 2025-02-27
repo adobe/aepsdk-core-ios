@@ -1,0 +1,46 @@
+name: Release AEPTestUtils
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The tag (version) to be released (ex: 1.2.3 - workflow will create tag `testutils-1.2.3`).'
+        required: true
+
+      core-dependency:
+        description: 'The AEPCore and AEPServices dependency versions in the podspec to be validated (ex: 1.2.3).'
+        type: string
+        required: true
+
+jobs:
+  release-testutils:
+    runs-on: macos-14
+
+    steps:
+    - name: Validate version
+      uses: timkimadobe/aepsdk-commons/.github/workflows/versions.yml@update-ios-coverage
+      with:
+        version: ${{ github.event.inputs.version }}
+        branch: main
+        dependencies: AEPCore ${{ github.event.inputs.core-dependency }}, AEPServices ${{ github.event.inputs.core-dependency }}
+        paths: AEPTestUtils.podspec
+        update: false
+    
+    - name: Checkout
+      uses: actions/checkout@v4.2.2
+      with:
+        ref: main
+
+    - name: Install XcodeGen
+      run: brew install xcodegen
+
+    - name: Run test Podspec script
+      run: make test-podspec-testutils
+
+    - name: Release AEPTestUtils git tag
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        tag_name="testutils-${{ github.event.inputs.version }}"
+        git tag -a "$tag_name" -m "Release $tag_name"
+        git push origin "$tag_name"

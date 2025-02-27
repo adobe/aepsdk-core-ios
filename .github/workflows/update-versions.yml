@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'The new version to use for the extension (ex: 1.2.3).'
+        description: 'The new version to use for AEPCore, AEPIdentity, AEPLifecycle, AEPSignal, and AEPServices (ex: 1.2.3).'
         type: string
         required: true
 
