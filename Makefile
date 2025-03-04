@@ -17,8 +17,6 @@ IOS_ARCHIVE_PATH = ./build/ios.xcarchive/Products/Library/Frameworks/
 TVOS_ARCHIVE_PATH = ./build/tvos.xcarchive/Products/Library/Frameworks/
 IOS_ARCHIVE_DSYM_PATH = $(CURR_DIR)/build/ios.xcarchive/dSYMs/
 TVOS_ARCHIVE_DSYM_PATH = $(CURR_DIR)/build/tvos.xcarchive/dSYMs/
-# IOS_DESTINATION = 'platform=iOS Simulator,name=iPhone 16'
-# TVOS_DESTINATION = 'platform=tvOS Simulator,name=Apple TV'
 NC='\033[0m'
 RED='\033[0;31m'
 GREEN='\033[0;32m'
