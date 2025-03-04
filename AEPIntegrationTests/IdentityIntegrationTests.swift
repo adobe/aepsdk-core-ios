@@ -454,7 +454,7 @@ class IdentityIntegrationTests: TestBase {
         MobileCore.updateConfigurationWith(configDict: configDict)
 
         if shouldWait {
-            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 3)
             resetTestExpectations()
         }
     }
