@@ -15,6 +15,7 @@ import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.
 class EventHistory {
+    let LOG_TAG = "EventHistory"
     var db: EventHistoryDatabase
 
     /// Default initializer.
@@ -39,11 +40,33 @@ class EventHistory {
     ///   - handler: called with a `Bool` indicating a successful database insert.
     func recordEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
         guard event.eventHash != 0 else {
+            Log.debug(label: LOG_TAG, "Failed to record event in history - event hash is 0")
             handler?(false)
             return
         }
 
         db.insert(hash: event.eventHash, timestamp: event.timestamp, handler: handler)
+    }
+
+    /// Checks if an `Event` with the same hash exists in the Event History database.
+    ///
+    /// The hash is calculated based on the provided `event`'s data.
+    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
+    /// If the hash value for the provided `event` is `0`, the method will return `false`.
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` to check for existence in the Event History database
+    ///   - handler: called with a `Bool` indicating if an event with the same hash exists
+    func eventExists(_ event: Event, handler: @escaping (Bool) -> Void) {
+        guard event.eventHash != 0 else {
+            Log.debug(label: LOG_TAG, "Event does not exist in history - event hash is 0")
+            handler(false)
+            return
+        }
+
+        db.select(hash: event.eventHash, from: nil, to: nil) { result in
+            handler(result.count > 0)
+        }
     }
 
     /// Retrieves a count of historical events matching the provided requests.

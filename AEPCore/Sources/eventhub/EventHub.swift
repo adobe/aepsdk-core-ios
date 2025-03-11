@@ -356,6 +356,33 @@ final class EventHub {
         eventHistory?.getEvents(requests, enforceOrder: enforceOrder, handler: handler)
     }
 
+    /// Records an `Event` in the Event History database.
+    ///
+    /// The event will be recorded based on its calculated hash.
+    /// The hash is generated based on the provided `event`'s data.
+    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
+    /// If the hash value for the provided `event` is `0`, no record will be created in the database.
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` to be recorded in the Event History database
+    ///   - handler: called with a `Bool` indicating a successful database insert
+    func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
+        eventHistory?.recordEvent(event, handler: handler)
+    }
+
+    /// Checks if an `Event` with the same hash exists in the Event History database.
+    ///
+    /// The hash is calculated based on the provided `event`'s data.
+    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
+    /// If the hash value for the provided `event` is `0`, the method will return `false`.
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` to check for existence in the Event History database
+    ///   - handler: called with a `Bool` indicating if an event with the same hash exists
+    func historicalEventExists(_ event: Event, handler: @escaping (Bool) -> Void) {
+        eventHistory?.eventExists(event, handler: handler) ?? handler(false)
+    }
+
     /// Sets wrapper type if `Eventhub` has not started
     /// - Parameter type: A `WrapperType` denoting the type of wrapper
     func setWrapperType(_ type: WrapperType) {
@@ -369,7 +396,7 @@ final class EventHub {
         }
     }
 
-    /// Returns wrapper type, if not previously set returns `WrapperType.none`    
+    /// Returns wrapper type, if not previously set returns `WrapperType.none`
     /// - Returns: A `WrapperType` denoting the type of wrapper
     func getWrapperType() -> WrapperType {
         return eventHubQueue.sync { [weak self] in

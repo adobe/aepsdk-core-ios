@@ -30,6 +30,10 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_TYPE_DISPATCH = "dispatch"
     private static let CONSEQUENCE_DETAIL_ACTION_COPY = "copy"
     private static let CONSEQUENCE_DETAIL_ACTION_NEW = "new"
+    private static let CONSEQUENCE_TYPE_SCHEMA = "schema"
+    private static let CONSEQUENCE_SCHEMA_EVENT_HISTORY = "https://ns.adobe.com/personalization/eventHistoryOperation"
+    private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT = "insert"
+    private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS = "insertIfNotExists"
     /// Do not process Dispatch consequence if chained event count is greater than max
     private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
 
@@ -114,7 +118,7 @@ public class LaunchRulesEngine {
 
     /// Evaluates the current rules against the supplied `Event`.
     ///
-    /// Instead of dispatching consequence `Event`s for matching rules, this method returns 
+    /// Instead of dispatching consequence `Event`s for matching rules, this method returns
     /// an array of `RuleConsequence` objects.
     ///
     /// Calling this method will not check for `self.waitingEvents`, but rather it's assumed that the caller
@@ -189,6 +193,8 @@ public class LaunchRulesEngine {
                     // Keep track of dispatch consequence events to prevent triggering of infinite dispatch consequences
                     dispatchChainedEventsCount[dispatchEvent.id] = (dispatchChainCount ?? 0) + 1
 
+                case LaunchRulesEngine.CONSEQUENCE_TYPE_SCHEMA:
+                    processSchemaConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent, data: traversableTokenFinder)
                 default:
                     if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent) {
                         Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
@@ -330,6 +336,123 @@ public class LaunchRulesEngine {
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_TYPE] = consequence.type
         return parentEvent.createChainedEvent(name: LaunchRulesEngine.CONSEQUENCE_EVENT_NAME, type: EventType.rulesEngine, source: EventSource.responseContent, data: [LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_CONSEQUENCE: dict])
     }
+
+    /// Process a schema consequence event. Handles different schema types including event history operations.
+    /// - Parameters:
+    ///   - consequence: the RuleConsequence which contains the schema details
+    ///   - processedEvent: the event that triggered the rule
+    ///   - data: a `Traversable` object used for token resolution
+    private func processSchemaConsequence(consequence: RuleConsequence, processedEvent: Event, data: Traversable) {
+        guard let schema = consequence.schema else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process a Schema Consequence, 'schema' is missing from 'details'")
+            return
+        }
+
+        switch schema {
+        case LaunchRulesEngine.CONSEQUENCE_SCHEMA_EVENT_HISTORY:
+            processEventHistoryOperation(consequence: consequence, processedEvent: processedEvent, data: data)
+        default:
+            Log.debug(label: LOG_TAG, "(\(self.name)) : Unsupported schema type: \(schema)")
+        }
+    }
+
+    /// Process an event history operation consequence. Records events in the Event History database.
+    /// - Parameters:
+    ///   - consequence: the RuleConsequence which contains the event history operation details
+    ///   - processedEvent: the event that triggered the rule
+    ///   - data: a `Traversable` object used for token resolution
+    private func processEventHistoryOperation(consequence: RuleConsequence, processedEvent: Event, data: Traversable) {
+        guard let schemaData = consequence.schemaData,
+              let operation = schemaData["operation"] as? String else {
+            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an EventHistoryOperation Consequence, required 'operation' field missing from 'details'")
+            return
+        }
+
+        var eventDataKeys: [String] = []
+        var tokenKeys: [String] = []
+
+        // Separate keys provided in `keys` as event data keys or token keys, based on the reserved prefix
+        if let keys = schemaData["keys"] as? [String] {
+            for key in keys {
+                if key.hasPrefix("~") {
+                    tokenKeys.append(key)
+                } else {
+                    eventDataKeys.append(key)
+                }
+            }
+        }
+
+        // Wrap each token key value in the Rules Engine delimiter so they are resolved correctly as tokens
+        var tokenDictionary: [String: Any?] = [:]
+        if !tokenKeys.isEmpty {
+            for key in tokenKeys {
+                tokenDictionary[key] = "\(LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER)\(key)\(LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER)"
+            }
+        }
+
+        // Resolve the token dictionary values
+        let resolvedTokenDictionary = replaceToken(in: tokenDictionary, data: data)
+
+        // Create the event data payload to be recorded into the event history, using the triggering event as the base
+        var recordEventHistoryData: [String: Any] = processedEvent.data ?? [:]
+
+        // Merge the resolved token dictionary
+        if !resolvedTokenDictionary.isEmpty {
+            recordEventHistoryData = EventDataMerger.merging(to: recordEventHistoryData, from: resolvedTokenDictionary, overwrite: true)
+        }
+
+        // Create the final mask by combining the values from consequence properties:
+        // `keys` - Event data keys, token keys
+        // `content` - keys from the key value pairs
+        var maskData: [String] = eventDataKeys + tokenKeys
+
+        // Merge the content key value pairs if available
+        // Note `content` doesn't need to be resolved because it was already resolved by evaluateRules
+        if let content: [String: Any] = schemaData["content"] as? [String: Any] {
+            recordEventHistoryData = EventDataMerger.merging(to: recordEventHistoryData, from: content, overwrite: true)
+            // Also add the keys from `content` into the final event key mask
+            maskData.append(contentsOf: content.keys.map { $0 })
+        }
+
+        // Create a new event with the final mask data
+        let eventToRecord = Event(name: "EventHistoryOperation",
+                     type: EventType.rulesEngine,
+                     source: EventSource.responseContent,
+                     data: recordEventHistoryData,
+                     mask: maskData)
+
+        switch operation {
+        case LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT,
+            LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS:
+
+            // For INSERT_IF_NOT_EXISTS, check if the event exists first
+            if operation == LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS {
+                let eventHash = eventToRecord.eventHash
+                if eventHash == 0 {
+                    Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process 'insertIfNotExists' operation, event hash is 0")
+                    return
+                }
+
+                // Check if the event exists before inserting
+                extensionRuntime.historicalEventExists(eventToRecord) { exists in
+                    if exists {
+                        Log.debug(label: self.LOG_TAG, "(\(self.name)) : Event already exists in history, skipping 'insertIfNotExists' operation")
+                        return
+                    }
+                }
+            }
+
+            Log.trace(label: self.LOG_TAG, "(\(self.name)) : Recording event in history with operation '\(operation)'")
+            self.extensionRuntime.recordHistoricalEvent(eventToRecord) { success in
+                if !success {
+                    Log.warning(label: self.LOG_TAG, "(\(self.name)) : Failed to record event in history with operation '\(operation)'")
+                }
+            }
+
+        default:
+            Log.warning(label: LOG_TAG, "(\(self.name)) : Unsupported event history operation: \(operation)")
+        }
+    }
 }
 
 /// Extend RuleConsequence with helper methods for processing Dispatch Consequence events.
@@ -344,5 +467,13 @@ extension RuleConsequence {
 
     public var eventDataAction: String? {
         return details["eventdataaction"] as? String
+    }
+
+    public var schema: String? {
+        return details["schema"] as? String
+    }
+
+    public var schemaData: [String: Any]? {
+        return details["data"] as? [String: Any]
     }
 }

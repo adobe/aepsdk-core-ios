@@ -59,7 +59,7 @@ public protocol ExtensionRuntime {
     /// - Returns: a `SharedStateResolver` that should be called with the `SharedState` data when it is ready
     func createPendingSharedState(event: Event?) -> SharedStateResolver
 
-    /// Gets the `SharedState` data for a specified extension    
+    /// Gets the `SharedState` data for a specified extension
     /// - Parameters:
     ///   - extensionName: An extension name whose `SharedState` will be returned
     ///   - event: If not nil, will retrieve the `SharedState` that corresponds with this event's version or latest if not yet versioned. If event is nil will return the latest `SharedState`
@@ -123,4 +123,27 @@ public protocol ExtensionRuntime {
     ///                   from date
     ///   - handler: contains an `EventHistoryResult` for each provided request
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void)
+
+    /// Records an `Event` in the Event History database.
+    ///
+    /// The event will be recorded based on its calculated hash.
+    /// The hash is generated based on the provided `event`'s data.
+    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
+    /// If the hash value for the provided `event` is `0`, no record will be created in the database.
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` to be recorded in the Event History database
+    ///   - handler: called with a `Bool` indicating a successful database insert
+    func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)?)
+
+    /// Checks if an `Event` with the same hash exists in the Event History database.
+    ///
+    /// The hash is calculated based on the provided `event`'s data.
+    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
+    /// If the hash value for the provided `event` is `0`, the method will return `false`.
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` to check for existence in the Event History database
+    ///   - handler: called with a `Bool` indicating if an event with the same hash exists
+    func historicalEventExists(_ event: Event, handler: @escaping (Bool) -> Void)
 }

@@ -61,6 +61,7 @@ class EventHistoryDatabase {
         dispatchQueue.async {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
+                Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database for insert operation.")
                 handler?(false)
                 return
             }
@@ -146,6 +147,7 @@ class EventHistoryDatabase {
         dispatchQueue.async {
             // first verify we can get a connection handle
             guard let connection = self.connection else {
+                Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database for delete operation.")
                 handler?(0)
                 return
             }
