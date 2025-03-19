@@ -10,7 +10,7 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)
+//#if os(iOS)
     import Foundation
     import UIKit
 
@@ -19,8 +19,10 @@
     ///
     @objc(AEPUIServiceProtocol)
     @available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
     public protocol UIService {
 
+#if os(iOS)
         /// Creates a `FullscreenPresentable`
         /// - Parameters:
         ///     - payload: The payload used in the FullscreenPresentable as a string
@@ -43,6 +45,7 @@
                                               isLocalImageUsed: Bool,
                                               settings: MessageSettings?) -> FullscreenPresentable
 
+        #endif
         /// Creates a `FloatingButtonPresentable`
         /// - Parameters:
         ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
@@ -50,4 +53,4 @@
         @objc
         func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
     }
-#endif
+//#endif

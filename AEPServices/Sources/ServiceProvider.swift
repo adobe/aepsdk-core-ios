@@ -149,10 +149,10 @@ extension ServiceProvider {
     private struct Holder {
         static var overrideURLService: URLOpening?
         static var defaultURLService = URLService()
-        #if os(iOS)
+        //#if os(iOS)
             static var overrideUIService: UIService?
             static var defaultUIService = AEPUIService()
-        #endif
+        //#endif
     }
 
     public var urlService: URLOpening {
@@ -168,7 +168,7 @@ extension ServiceProvider {
         }
     }
 
-    #if os(iOS)
+    //#if os(iOS)
         public var uiService: UIService {
             get {
                 return queue.sync {
@@ -181,7 +181,7 @@ extension ServiceProvider {
                 }
             }
         }
-    #endif
+    //#endif
 
     internal func resetAppOnlyServices() {
         queue.async {

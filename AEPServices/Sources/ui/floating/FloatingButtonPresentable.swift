@@ -9,7 +9,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-#if os(iOS)
+//#if os(iOS)
     import Foundation
 
     ///
@@ -17,6 +17,7 @@
     ///
     @objc(AEPFloatingButtonPresentable)
     @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
     public protocol FloatingButtonPresentable: Showable, Dismissible {
 
         /// Set the Image for the floating button.
@@ -32,4 +33,4 @@
         ///     - position : The `FloatingButtonPosition` defining the initial position of the floating button.
         func setInitial(position: FloatingButtonPosition)
     }
-#endif
+//#endif

@@ -9,13 +9,14 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-#if os(iOS)
+
     import Foundation
     import UIKit
 
     /// This class is used to create a floating button
     @objc(AEPFloatingButton)
     @available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
     public class FloatingButton: NSObject, FloatingButtonPresentable {
 
         private let LOG_PREFIX = "FloatingButton"
@@ -50,7 +51,9 @@
                 }
 
                 self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.bringFloatingButtonToFront), userInfo: nil, repeats: true)
+#if os(iOS)
                 NotificationCenter.default.addObserver(self, selector: #selector(self.handleDeviceRotation), name: UIDevice.orientationDidChangeNotification, object: nil)
+#endif
             }
         }
 
@@ -191,4 +194,3 @@
             return newFrame
         }
     }
-#endif

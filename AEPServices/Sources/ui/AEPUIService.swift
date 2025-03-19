@@ -10,13 +10,15 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)
+
     import Foundation
     import UIKit
 
     @available(iOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension , unavailable)
     class AEPUIService: UIService {
 
+#if os(iOS)
         private var messageMonitor = MessageMonitor()
 
         func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
@@ -26,9 +28,10 @@
         func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
             return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
         }
+        #endif
 
         func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
             return FloatingButton(listener: listener)
         }
     }
-#endif
+
