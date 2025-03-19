@@ -19,6 +19,14 @@ import Foundation
 /// Enable easy setup for the input and verification of the output of an extension
 /// See also AEPCore/Mocks
 public class TestableExtensionRuntime: ExtensionRuntime {
+    public func recordHistoricalEvent(_ event: AEPCore.Event, handler: ((Bool) -> Void)?) {
+        //noop
+    }
+    
+    public func historicalEventExists(_ event: AEPCore.Event, handler: @escaping (Bool) -> Void) {
+        //noop
+    }
+    
     private let queue = DispatchQueue(label: "com.adobe.testableextensionruntime.syncqueue")
 
     public var listeners: [String: EventListener] = [:]

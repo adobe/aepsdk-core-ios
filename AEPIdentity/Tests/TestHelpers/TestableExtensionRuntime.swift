@@ -15,6 +15,14 @@ import Foundation
 @testable import AEPCore
 
 class TestableExtensionRuntime: ExtensionRuntime {
+    func recordHistoricalEvent(_ event: AEPCore.Event, handler: ((Bool) -> Void)?) {
+        //noop
+    }
+    
+    func historicalEventExists(_ event: AEPCore.Event, handler: @escaping (Bool) -> Void) {
+        //noop
+    }
+    
     var listeners: [String: EventListener] = [:]
     var dispatchedEvents: [Event] = []
     var createdSharedStates: [[String: Any]?] = []
