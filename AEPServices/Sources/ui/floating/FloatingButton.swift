@@ -101,6 +101,16 @@
             self.buttonImageView?.backgroundColor = .clear
             self.buttonImageView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
+            // Make button focusable on tvOS
+            #if os(tvOS)
+            self.buttonImageView?.canBecomeFocused = true
+            self.buttonImageView?.isUserInteractionEnabled = true
+            // Add tap gesture for tvOS
+            let tvOSTap = UITapGestureRecognizer(target: self, action: #selector(tapDetected))
+            tvOSTap.allowedPressTypes = [NSNumber(value: UIPress.PressType.select.rawValue)]
+            self.buttonImageView?.addGestureRecognizer(tvOSTap)
+            #endif
+
             // gesture
             self.panner = UIPanGestureRecognizer(target: self, action: #selector(panWasRecognized))
 
