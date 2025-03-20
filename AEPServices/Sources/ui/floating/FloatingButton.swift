@@ -24,7 +24,7 @@
             if context.nextFocusedView == self {
                 // Button is focused
                 self.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
-            } else if context.previousFocusedView == self {
+            } else if context.previouslyFocusedView == self {
                 // Button lost focus
                 self.transform = .identity
             }
