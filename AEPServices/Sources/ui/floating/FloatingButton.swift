@@ -18,6 +18,17 @@
         override var canBecomeFocused: Bool {
             return true
         }
+
+        override func didUpdateFocus(in context: UIFocusUpdateContext, with coordinator: UIFocusAnimationCoordinator) {
+            super.didUpdateFocus(in: context, with: coordinator)
+            if context.nextFocusedView == self {
+                // Button is focused
+                self.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+            } else if context.previousFocusedView == self {
+                // Button lost focus
+                self.transform = .identity
+            }
+        }
     }
     #endif
 
@@ -181,7 +192,12 @@
 
         @objc private func tapDetected(recognizer: UITapGestureRecognizer) {
             DispatchQueue.main.async {
+                #if os(tvOS)
+                // On tvOS, we don't want to dismiss the button on tap
                 self.listener?.onTapDetected()
+                #else
+                self.listener?.onTapDetected()
+                #endif
             }
         }
 
