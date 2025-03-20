@@ -13,10 +13,18 @@
     import Foundation
     import UIKit
 
+    #if os(tvOS)
+    private class FocusableImageView: UIImageView {
+        override var canBecomeFocused: Bool {
+            return true
+        }
+    }
+    #endif
+
     /// This class is used to create a floating button
     @objc(AEPFloatingButton)
     @available(iOSApplicationExtension, unavailable)
-@available(tvOSApplicationExtension, unavailable)
+    @available(tvOSApplicationExtension, unavailable)
     public class FloatingButton: NSObject, FloatingButtonPresentable {
 
         private let LOG_PREFIX = "FloatingButton"
@@ -85,7 +93,11 @@
                 Log.debug(label: LOG_PREFIX, "Floating button couldn't be displayed, failed to create a new frame.")
                 return false
             }
+            #if os(tvOS)
+            self.buttonImageView = FocusableImageView(frame: newFrame)
+            #else
             self.buttonImageView = UIImageView(frame: newFrame)
+            #endif
 
             // color
             guard let imageData: Data = Data.init(base64Encoded: UIUtils.ENCODED_BACKGROUND_PNG, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters) else {
@@ -103,7 +115,6 @@
 
             // Make button focusable on tvOS
             #if os(tvOS)
-            self.buttonImageView?.canBecomeFocused = true
             self.buttonImageView?.isUserInteractionEnabled = true
             // Add tap gesture for tvOS
             let tvOSTap = UITapGestureRecognizer(target: self, action: #selector(tapDetected))
