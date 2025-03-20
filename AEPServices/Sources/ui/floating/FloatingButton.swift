@@ -39,7 +39,6 @@ private class FocusableImageView: UIImageView {
 @objc(AEPFloatingButton)
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
-@available(tvOS 13.0, *)
 public class FloatingButton: NSObject, FloatingButtonPresentable {
 
     private let LOG_PREFIX = "FloatingButton"
