@@ -9,6 +9,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
+#if os(iOS)
 import Foundation
 import UIKit
 
@@ -59,10 +60,10 @@ public class MessageSettings: NSObject {
     /// See `MessageGesture`
     public private(set) var gestures: [MessageGesture: URL]?
 
-    /// Defines the animation to be used when the message is dismissed. See `MessageAnimation`.
+    /// Defines the animation to be used when the message is dismissed. See `MessageAnimation`.
     public private(set) var dismissAnimation: MessageAnimation?
 
-    /// Defines the animation to be used when the message is displayed. See `MessageAnimation`.
+    /// Defines the animation to be used when the message is displayed. See `MessageAnimation`.
     public private(set) var displayAnimation: MessageAnimation?
 
     public init(parent: Any? = nil) {
@@ -159,3 +160,4 @@ public class MessageSettings: NSObject {
         return self
     }
 }
+#endif

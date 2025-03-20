@@ -11,13 +11,9 @@
  */
 
 import Foundation
-import AEPServices
 import UIKit
 #if os(iOS)
     import WebKit
-#elseif os(tvOS)
-    import SwiftUI
-    
 #endif
 
 @available(iOSApplicationExtension, unavailable)
@@ -26,16 +22,6 @@ import UIKit
 class AEPUIService: UIService {
 
 #if os(iOS)
-    private var messageMonitor = MessageMonitor()
-
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
-        return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
-    }
-
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
-        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
-    }
-#elseif os(tvOS)
     private var messageMonitor = MessageMonitor()
 
     func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {

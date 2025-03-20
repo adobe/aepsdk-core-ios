@@ -13,7 +13,7 @@
     import Foundation
 #if os(iOS)
     import WebKit
-#endif
+
 
     /// Fullscreen message lifecycle event listener
     @available(iOSApplicationExtension, unavailable)
@@ -60,3 +60,4 @@
         optional func onError(message: FullscreenMessage, error: PresentationError)
     }
 
+#endif
