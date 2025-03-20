@@ -10,9 +10,11 @@
  governing permissions and limitations under the License.
  */
 
+import Foundation
+import UIKit
+import AEPServices
+
 #if os(iOS)
-    import Foundation
-    import UIKit
     import WebKit
 
     /// This class is used to create and display fullscreen messages on the current view.
@@ -202,7 +204,7 @@
                     self.listener?.onShowFailure()
                     if let error = error {
                         self.listener?.onError?(message: self, error: error)
-                    }                    
+                    }
                     return
                 }
 
@@ -432,4 +434,129 @@
         }
     }
 
+#elseif os(tvOS)
+    import SwiftUI
+
+    /// This class is used to create and display fullscreen messages on tvOS using SwiftUI.
+    @objc(AEPFullscreenMessage)
+    @available(tvOSApplicationExtension, unavailable)
+    @available(tvOS 13.0, *)
+    public class FullscreenMessage: NSObject, FullscreenPresentable {
+        private let LOG_PREFIX = "FullscreenMessage"
+        private let ANIMATION_DURATION = 0.3
+        private var screenWidth: CGFloat = 0
+        private var screenHeight: CGFloat = 0
+        private var frameWhenVisible: CGRect = .zero
+        private var frameAfterDismiss: CGRect = .zero
+        private var frameBeforeShow: CGRect = .zero
+        private var settings: MessageSettings?
+        private var listener: FullscreenMessageDelegate?
+        private var messageMonitor: MessageMonitoring
+        private var messagingDelegate: MessagingDelegate?
+        private var hostingController: UIHostingController<FullscreenMessageView>?
+        private var payload: String
+
+        init(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, messageMonitor: MessageMonitoring, settings: MessageSettings? = nil) {
+            self.payload = payload
+            self.listener = listener
+            self.messageMonitor = messageMonitor
+            self.settings = settings
+            super.init()
+            setupFrames()
+        }
+
+        private func setupFrames() {
+            let screen = UIScreen.main.bounds
+            screenWidth = screen.width
+            screenHeight = screen.height
+
+            // Calculate frames based on settings
+            let width = settings?.width ?? 75
+            let height = settings?.height ?? 75
+            let x = (screenWidth - CGFloat(width)) / 2
+            let y = (screenHeight - CGFloat(height)) / 2
+
+            frameWhenVisible = CGRect(x: x, y: y, width: CGFloat(width), height: CGFloat(height))
+            frameBeforeShow = frameWhenVisible.offsetBy(dx: 0, dy: screenHeight)
+            frameAfterDismiss = frameBeforeShow
+        }
+
+        public func show() {
+            DispatchQueue.main.async {
+                let messageView = FullscreenMessageView(payload: self.payload)
+                self.hostingController = UIHostingController(rootView: messageView)
+
+                guard let hostingController = self.hostingController else { return }
+
+                // Configure the hosting controller
+                hostingController.view.frame = self.frameWhenVisible
+                hostingController.view.backgroundColor = .clear
+
+                // Add to window
+                if let keyWindow = UIApplication.shared.getKeyWindow() {
+                    keyWindow.addSubview(hostingController.view)
+
+                    // Animate in
+                    hostingController.view.frame = self.frameBeforeShow
+                    UIView.animate(withDuration: self.ANIMATION_DURATION, delay: 0, options: .curveEaseIn) {
+                        hostingController.view.frame = self.frameWhenVisible
+                    }
+
+                    // Notify listeners
+                    self.listener?.onShow(message: self)
+                    self.messagingDelegate?.onShow(message: self)
+                }
+            }
+        }
+
+        public func dismiss() {
+            DispatchQueue.main.async {
+                guard let hostingController = self.hostingController else { return }
+
+                UIView.animate(withDuration: self.ANIMATION_DURATION, delay: 0, options: .curveEaseOut) {
+                    hostingController.view.frame = self.frameAfterDismiss
+                } completion: { _ in
+                    hostingController.view.removeFromSuperview()
+                    self.hostingController = nil
+
+                    // Notify listeners
+                    self.listener?.onDismiss(message: self)
+                    self.messagingDelegate?.onDismiss(message: self)
+                }
+            }
+        }
+
+        public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
+            // No-op for tvOS since we don't support JavaScript
+        }
+    }
+
+    // SwiftUI view for the fullscreen message
+    @available(tvOS 13.0, *)
+    private struct FullscreenMessageView: View {
+        let payload: String
+
+        var body: some View {
+            VStack {
+                Text("Fullscreen Message")
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding()
+
+                Text(payload)
+                    .foregroundColor(.white)
+                    .padding()
+
+                Button("Close") {
+                    // Handle close action
+                }
+                .padding()
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.black.opacity(0.8))
+        }
+    }
 #endif

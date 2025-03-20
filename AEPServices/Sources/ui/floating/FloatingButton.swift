@@ -12,6 +12,10 @@
 
     import Foundation
     import UIKit
+    import SwiftUI
+#if os(iOS)
+    import WebKit
+#endif
 
     #if os(tvOS)
     private class FocusableImageView: UIImageView {
@@ -36,6 +40,7 @@
     @objc(AEPFloatingButton)
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
+    @available(tvOS 13.0, *)
     public class FloatingButton: NSObject, FloatingButtonPresentable {
 
         private let LOG_PREFIX = "FloatingButton"
@@ -49,11 +54,69 @@
         private var timer: Timer?
         private var buttonImageView: UIImageView?
         private var buttonPosition: FloatingButtonPosition = .center
+        #if os(tvOS)
+        private var fullscreenMessage: FullscreenPresentable?
+        #endif
 
         private var listener: FloatingButtonDelegate?
 
         init(listener: FloatingButtonDelegate?) {
             self.listener = listener
+            super.init()
+            #if os(tvOS)
+            // Create fullscreen message for tvOS
+            let settings = MessageSettings()
+            settings.setWidth(75)
+            settings.setHeight(75)
+            settings.setUiTakeover(true)
+            settings.setDisplayAnimation(MessageAnimation.fade)
+            settings.setDismissAnimation(MessageAnimation.fade)
+
+            let sampleHTML = """
+            <html>
+            <head>
+                <style>
+                    body {
+                        background-color: rgba(0, 0, 0, 0.8);
+                        color: white;
+                        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    h1 {
+                        font-size: 24px;
+                        margin-bottom: 20px;
+                    }
+                    p {
+                        font-size: 18px;
+                        margin-bottom: 30px;
+                    }
+                    button {
+                        background-color: #007AFF;
+                        border: none;
+                        border-radius: 8px;
+                        color: white;
+                        font-size: 18px;
+                        padding: 12px 24px;
+                        cursor: pointer;
+                    }
+                    button:hover {
+                        background-color: #0056b3;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Welcome to tvOS</h1>
+                <p>This is a sample message displayed when the floating button is tapped.</p>
+                <button onclick="window.webkit.messageHandlers.iOS.postMessage('close')">Close</button>
+            </body>
+            </html>
+            """
+
+            if let uiService = ServiceProvider.shared.uiService as? AEPUIService {
+                fullscreenMessage = uiService.createFullscreenMessage(payload: sampleHTML, listener: self, isLocalImageUsed: false, settings: settings)
+            }
+            #endif
         }
 
         /// Display the floating button on the screen
@@ -193,8 +256,8 @@
         @objc private func tapDetected(recognizer: UITapGestureRecognizer) {
             DispatchQueue.main.async {
                 #if os(tvOS)
-                // On tvOS, we don't want to dismiss the button on tap
-                self.listener?.onTapDetected()
+                // On tvOS, show the fullscreen message
+                self.fullscreenMessage?.show()
                 #else
                 self.listener?.onTapDetected()
                 #endif
@@ -231,3 +294,24 @@
             return newFrame
         }
     }
+
+#if os(tvOS)
+@available(tvOSApplicationExtension, unavailable)
+extension FloatingButton: FullscreenMessageDelegate {
+    public func onShow(message: FullscreenMessage) {
+        // Handle show event
+    }
+
+    public func onDismiss(message: FullscreenMessage) {
+        // Handle dismiss event
+    }
+
+    public func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool {
+        return true
+    }
+
+    public func onShowFailure() {
+        // Handle show failure
+    }
+}
+#endif

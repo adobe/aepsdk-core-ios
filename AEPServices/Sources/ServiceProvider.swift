@@ -18,10 +18,9 @@ import Foundation
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
-    #if os(iOS)
-        /// MessagingDelegate which is used to listen for message visibility updates.
-        public weak var messagingDelegate: MessagingDelegate?
-    #endif
+    /// MessagingDelegate which is used to listen for message visibility updates.
+    public weak var messagingDelegate: MessagingDelegate?
+
     // Provide thread safety on the getters and setters
     private let queue = DispatchQueue(label: "com.adobe.serviceProvider.queue")
 

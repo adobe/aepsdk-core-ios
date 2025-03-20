@@ -34,13 +34,11 @@ public final class MobileCore: NSObject {
         return ConfigurationConstants.EXTENSION_VERSION + "-" + wrapperType.rawValue
     }
 
-    #if os(iOS)
-        @objc public static var messagingDelegate: MessagingDelegate? {
-            @available(*, unavailable)
-            get { ServiceProvider.shared.messagingDelegate }
-            set { ServiceProvider.shared.messagingDelegate = newValue }
-        }
-    #endif
+    @objc public static var messagingDelegate: MessagingDelegate? {
+        @available(*, unavailable)
+        get { ServiceProvider.shared.messagingDelegate }
+        set { ServiceProvider.shared.messagingDelegate = newValue }
+    }
 
     /// Initializes the AEP SDK with the specified `InitOptions`.
     /// This automatically registers all boundled extensions and sets up lifecycle tracking.
@@ -64,7 +62,7 @@ public final class MobileCore: NSObject {
     @available(tvOSApplicationExtension, unavailable)
     @objc(initializeWithAppId:completion:)
     public static func initialize(appId: String, _ completion: (() -> Void)? = nil) {
-        initialize(options: InitOptions(appId: appId), completion)
+        mobileCoreInitializer.initialize(appId: appId, completion)
     }
 
     /// Registers the extensions with Core and begins event processing
@@ -148,109 +146,4 @@ public final class MobileCore: NSObject {
     /// Dispatches an `Event` through the `EventHub` and invokes a closure with the response `Event`.
     /// - Parameters:
     ///   - event: The trigger `Event` to be dispatched through the `EventHub`
-    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `Event`.
-    ///            Use `.infinity` to wait indefinitely without `EventHub` triggering timeout.
-    ///   - responseCallback: Callback to be invoked with `event`'s response `Event`
-    @objc(dispatch:timeout:responseCallback:)
-    public static func dispatch(event: Event, timeout: TimeInterval = 1, responseCallback: @escaping (Event?) -> Void) {
-        EventHub.shared.registerResponseListener(triggerEvent: event, timeout: timeout) { event in
-            responseCallback(event)
-        }
-
-        EventHub.shared.dispatch(event: event)
-    }
-
-    /// Registers an `EventListener` to perform on the global system queue (Qos = .default) which will be invoked whenever an event with matched type and source is dispatched.
-    /// - Parameters:
-    ///   - type: A `String` indicating the event type the current listener is listening for
-    ///   - source: A `String` indicating the event source the current listener is listening for
-    ///   - listener: An `EventResponseListener` which will be invoked whenever the `EventHub` receives an event with matched type and source.
-    @objc(registerEventListenerWithType:source:listener:)
-    public static func registerEventListener(type: String, source: String, listener: @escaping EventListener) {
-        EventHub.shared.registerEventListener(type: type, source: source) { event in
-            DispatchQueue.global(qos: .default).async {
-                listener(event)
-            }
-        }
-    }
-
-    /// Submits a generic event containing the provided IDFA with event type `generic.identity`.
-    /// - Parameter identifier: the advertising identifier string.
-    @objc(setAdvertisingIdentifier:)
-    public static func setAdvertisingIdentifier(_ identifier: String?) {
-        let data = [CoreConstants.Keys.ADVERTISING_IDENTIFIER: identifier ?? ""]
-        let event = Event(name: CoreConstants.EventNames.SET_ADVERTISING_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
-        MobileCore.dispatch(event: event)
-    }
-
-    /// Submits a generic event containing the provided push token with event type `generic.identity`.
-    /// - Parameter deviceToken: the device token for push notifications
-    @objc(setPushIdentifier:)
-    public static func setPushIdentifier(_ deviceToken: Data?) {
-        let data = [CoreConstants.Keys.PUSH_IDENTIFIER: deviceToken?.hexDescription ?? ""]
-        let event = Event(name: CoreConstants.EventNames.SET_PUSH_IDENTIFIER, type: EventType.genericIdentity, source: EventSource.requestContent, data: data)
-        MobileCore.dispatch(event: event)
-    }
-
-    /// Sets the wrapper type for the SDK. Only applicable when being used in a cross platform environment such as React Native
-    /// - Parameter type: the `WrapperType` corresponding to the current platform
-    @objc(setWrapperType:)
-    public static func setWrapperType(_ type: WrapperType) {
-        EventHub.shared.setWrapperType(type)
-    }
-
-    /// Sets the logging level for the SDK
-    /// - Parameter level: The desired log level
-    @objc(setLogLevel:)
-    public static func setLogLevel(_ level: LogLevel) {
-        Log.logFilter = level
-    }
-
-    /// Sets the app group used to sharing user defaults and files among containing app and extension apps.
-    /// This must be called in AppDidFinishLaunching and before any other interactions with the Adobe Mobile library have happened.
-    /// - Parameter group: the app group name
-    @objc(setAppGroup:)
-    public static func setAppGroup(_ group: String?) {
-        ServiceProvider.shared.namedKeyValueService.setAppGroup(group)
-    }
-
-    /// For scenarios where the app is launched as a result of notification tap
-    /// - Parameter messageInfo: Dictionary of data relevant to the expected use case
-    @objc(collectMessageInfo:)
-    public static func collectMessageInfo(_ messageInfo: [String: Any]) {
-        guard !messageInfo.isEmpty else {
-            Log.trace(label: LOG_TAG, "collectMessageInfo - data was empty, no event was dispatched")
-            return
-        }
-
-        let event = Event(name: CoreConstants.EventNames.COLLECT_DATA, type: EventType.genericData, source: EventSource.os, data: messageInfo)
-        MobileCore.dispatch(event: event)
-    }
-
-    /// For scenarios where the app is launched as a result of push message or deep link click-throughs
-    /// - Parameter userInfo: Dictionary of data relevant to the expected use case
-    @objc(collectLaunchInfo:)
-    public static func collectLaunchInfo(_ userInfo: [String: Any]) {
-        guard !userInfo.isEmpty else {
-            Log.trace(label: LOG_TAG, "collectLaunchInfo - data was empty, no event was dispatched")
-            return
-        }
-        let event = Event(name: CoreConstants.EventNames.COLLECT_DATA, type: EventType.genericData, source: EventSource.os,
-                          data: DataMarshaller.marshalLaunchInfo(userInfo))
-        MobileCore.dispatch(event: event)
-    }
-
-    /// Submits a generic PII collection request event with type `generic.pii`.
-    /// - Parameter data: a dictionary containing PII data
-    @objc(collectPii:)
-    public static func collectPii(_ data: [String: Any]) {
-        guard !data.isEmpty else {
-            Log.trace(label: LOG_TAG, "collectPii - data was empty, no event was dispatched")
-            return
-        }
-
-        let eventData = [CoreConstants.Signal.EventDataKeys.CONTEXT_DATA: data]
-        let event = Event(name: CoreConstants.EventNames.COLLECT_PII, type: EventType.genericPii, source: EventSource.requestContent, data: eventData)
-        MobileCore.dispatch(event: event)
-    }
-}
+    ///   - timeout A timeout in seconds, if the response listener is not invoked within the timeout, then the `EventHub` invokes the response listener with a nil `

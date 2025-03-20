@@ -10,13 +10,15 @@
  governing permissions and limitations under the License.
  */
 
-#if os(iOS)
     import Foundation
+#if os(iOS)
     import WebKit
+#endif
 
     /// Fullscreen message lifecycle event listener
     @available(iOSApplicationExtension, unavailable)
-    @objc(AEPFullscreenMessageDelegate) 
+@available (tvOSApplicationExtension, unavailable)
+    @objc(AEPFullscreenMessageDelegate)
     public protocol FullscreenMessageDelegate {
         /// Invoked when the fullscreen message is displayed
         /// - Parameters:
@@ -38,11 +40,12 @@
         @objc(overrideUrlLoadFullscreenMessage:url:)
         func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
 
+        #if os(iOS)
         /// Invoked when the fullscreen message finished loading its first content on the webView.
         /// - Parameter webView - the `WKWebView` instance that completed loading its initial content.
         @objc(webViewDidFinishInitialLoading:)
         optional func webViewDidFinishInitialLoading(webView: WKWebView)
-
+        #endif
         ///
         /// Invoked when the FullscreenMessage failed to be displayed
         ///
@@ -56,4 +59,4 @@
         @objc(onErrorFullscreenMessage:error:)
         optional func onError(message: FullscreenMessage, error: PresentationError)
     }
-#endif
+

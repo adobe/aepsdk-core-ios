@@ -10,28 +10,45 @@
  governing permissions and limitations under the License.
  */
 
+import Foundation
+import AEPServices
+import UIKit
+#if os(iOS)
+    import WebKit
+#elseif os(tvOS)
+    import SwiftUI
+    
+#endif
 
-    import Foundation
-    import UIKit
-
-    @available(iOSApplicationExtension, unavailable)
-    @available(tvOSApplicationExtension , unavailable)
-    class AEPUIService: UIService {
+@available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
+@available(tvOS 13.0, *)
+class AEPUIService: UIService {
 
 #if os(iOS)
-        private var messageMonitor = MessageMonitor()
+    private var messageMonitor = MessageMonitor()
 
-        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
-            return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
-        }
-
-        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
-            return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
-        }
-        #endif
-
-        func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
-            return FloatingButton(listener: listener)
-        }
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
+        return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
     }
+
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
+        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
+    }
+#elseif os(tvOS)
+    private var messageMonitor = MessageMonitor()
+
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
+        return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
+    }
+
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
+        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
+    }
+#endif
+
+    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
+        return FloatingButton(listener: listener)
+    }
+}
 
