@@ -29,7 +29,7 @@ public class FullscreenMessageNative: NSObject, FullscreenPresentable {
     var payload: String
     var listener: FullscreenMessageNativeDelegate?
     private(set) var messageMonitor: MessageMonitoring
-    private var hostingController: UIHostingController<FullscreenMessageView>?
+    private var hostingController: UIHostingController<MessageView>?
     private var transparentBackgroundView: UIView?
 
     var messagingDelegate: MessagingDelegate? {
@@ -111,7 +111,7 @@ public class FullscreenMessageNative: NSObject, FullscreenPresentable {
             let keyWindow = UIApplication.shared.getKeyWindow()
 
             // Create SwiftUI view
-            let messageView = FullscreenMessageView(content: self.payload, settings: self.settings)
+            let messageView = MessageView(content: self.payload, settings: self.settings)
             let hostingController = UIHostingController(rootView: messageView)
             self.hostingController = hostingController
 
@@ -205,30 +205,27 @@ public class FullscreenMessageNative: NSObject, FullscreenPresentable {
 // MARK: - SwiftUI View
 
 @available(tvOS 13.0, *)
-struct FullscreenMessageView: View {
+struct MessageView: View {
     let content: String
     let settings: MessageSettings?
 
     var body: some View {
-        VStack {
-            #if os(tvOS)
-            Text(content)
-                .foregroundColor(.white)
-                .font(.system(size: 32)) // Larger font for TV
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(settings?.getBackgroundColor().color ?? Color.black)
-                .cornerRadius(settings?.cornerRadius ?? 0)
-            #else
-            Text(content)
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(settings?.getBackgroundColor().color ?? Color.black)
-                .cornerRadius(settings?.cornerRadius ?? 0)
-            #endif
+        ZStack {
+            // Background
+            Color(settings?.getBackgroundColor() ?? .black)
+                .edgesIgnoringSafeArea(.all)
+
+            // Content
+            VStack {
+                Text(content)
+                    .foregroundColor(.white)
+                    .font(.system(size: 32)) // Larger font for TV
+                    .multilineTextAlignment(.center)
+                    .padding()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .cornerRadius(settings?.cornerRadius ?? 0)
     }
 }
 

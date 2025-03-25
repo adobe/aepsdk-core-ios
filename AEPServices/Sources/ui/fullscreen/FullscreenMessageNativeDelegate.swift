@@ -16,6 +16,7 @@ import Foundation
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
 @objc(AEPFullscreenMessageNativeDelegate)
+@available(tvOS 13.0, *)
 public protocol FullscreenMessageNativeDelegate {
     /// Invoked when the fullscreen message is displayed
     /// - Parameters:
