@@ -12,7 +12,6 @@
 
 import Foundation
 import UIKit
-import AEPServices
 
 #if os(iOS)
     import WebKit

@@ -9,7 +9,7 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-#if os(iOS)
+
 import Foundation
 import UIKit
 
@@ -55,10 +55,12 @@ public class MessageSettings: NSObject {
     /// Defines the angle to use when rounding the message's webview.
     public private(set) var cornerRadius: CGFloat?
 
+    #if os(iOS)
     /// A mapping of gestures and their associated behaviors.
     /// The URL will be executed as javascript in the message's underlying webview.
     /// See `MessageGesture`
     public private(set) var gestures: [MessageGesture: URL]?
+    #endif
 
     /// Defines the animation to be used when the message is dismissed. See `MessageAnimation`.
     public private(set) var dismissAnimation: MessageAnimation?
@@ -145,10 +147,12 @@ public class MessageSettings: NSObject {
         return self
     }
 
+    #if os(iOS)
     @discardableResult public func setGestures(_ gestures: [MessageGesture: URL]?) -> MessageSettings {
         self.gestures = gestures
         return self
     }
+    #endif
 
     @discardableResult public func setDisplayAnimation(_ animation: MessageAnimation?) -> MessageSettings {
         self.displayAnimation = animation ?? MessageAnimation.none
@@ -160,4 +164,3 @@ public class MessageSettings: NSObject {
         return self
     }
 }
-#endif

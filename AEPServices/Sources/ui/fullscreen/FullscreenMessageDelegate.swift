@@ -9,15 +9,13 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
-    import Foundation
 #if os(iOS)
+    import Foundation
     import WebKit
 
 
     /// Fullscreen message lifecycle event listener
     @available(iOSApplicationExtension, unavailable)
-@available (tvOSApplicationExtension, unavailable)
     @objc(AEPFullscreenMessageDelegate)
     public protocol FullscreenMessageDelegate {
         /// Invoked when the fullscreen message is displayed
@@ -40,12 +38,11 @@
         @objc(overrideUrlLoadFullscreenMessage:url:)
         func overrideUrlLoad(message: FullscreenMessage, url: String?) -> Bool
 
-        #if os(iOS)
         /// Invoked when the fullscreen message finished loading its first content on the webView.
         /// - Parameter webView - the `WKWebView` instance that completed loading its initial content.
         @objc(webViewDidFinishInitialLoading:)
         optional func webViewDidFinishInitialLoading(webView: WKWebView)
-        #endif
+        
         ///
         /// Invoked when the FullscreenMessage failed to be displayed
         ///
