@@ -42,6 +42,12 @@ public protocol UIService {
                                           listener: FullscreenMessageDelegate?,
                                           isLocalImageUsed: Bool,
                                           settings: MessageSettings?) -> FullscreenPresentable
+    #elseif os(tvOS)
+    @available(tvOS 13.0, *)
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageNativeDelegate?) -> FullscreenPresentable
+
+    @available(tvOS 13.0, *)
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageNativeDelegate?, settings: MessageSettings?) -> FullscreenPresentable
     #endif
 
     /// Creates a `FloatingButtonPresentable`
