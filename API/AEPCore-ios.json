@@ -10146,6 +10146,110 @@
             ],
             "reqNewWitnessTableEntry": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "recordHistoricalEvent",
+            "printedName": "recordHistoricalEvent(_:handler:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Event",
+                "printedName": "AEPCore.Event",
+                "usr": "c:@M@AEPCore@objc(cs)AEPEvent"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "((Swift.Bool) -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(Swift.Bool) -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      }
+                    ]
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPCore@objc(pl)AEPExtensionRuntime(im)recordHistoricalEvent:handler:",
+            "mangledName": "$s7AEPCore16ExtensionRuntimeP21recordHistoricalEvent_7handleryAA0F0C_ySbcSgtF",
+            "moduleName": "AEPCore",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPCore.ExtensionRuntime>",
+            "sugared_genericSig": "<Self where Self : AEPCore.ExtensionRuntime>",
+            "protocolReq": true,
+            "declAttributes": [
+              "ObjC"
+            ],
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "historicalEventExists",
+            "printedName": "historicalEventExists(_:handler:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Event",
+                "printedName": "AEPCore.Event",
+                "usr": "c:@M@AEPCore@objc(cs)AEPEvent"
+              },
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(Swift.Bool) -> ()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@M@AEPCore@objc(pl)AEPExtensionRuntime(im)historicalEventExists:handler:",
+            "mangledName": "$s7AEPCore16ExtensionRuntimeP21historicalEventExists_7handleryAA0E0C_ySbctF",
+            "moduleName": "AEPCore",
+            "genericSig": "<τ_0_0 where τ_0_0 : AEPCore.ExtensionRuntime>",
+            "sugared_genericSig": "<Self where Self : AEPCore.ExtensionRuntime>",
+            "protocolReq": true,
+            "declAttributes": [
+              "ObjC"
+            ],
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Protocol",
@@ -12661,6 +12765,142 @@
                 "declKind": "Accessor",
                 "usr": "s:7AEPCore15RuleConsequenceV15eventDataActionSSSgvg",
                 "mangledName": "$s7AEPCore15RuleConsequenceV15eventDataActionSSSgvg",
+                "moduleName": "AEPCore",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "schema",
+            "printedName": "schema",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7AEPCore15RuleConsequenceV6schemaSSSgvp",
+            "mangledName": "$s7AEPCore15RuleConsequenceV6schemaSSSgvp",
+            "moduleName": "AEPCore",
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore15RuleConsequenceV6schemaSSSgvg",
+                "mangledName": "$s7AEPCore15RuleConsequenceV6schemaSSSgvg",
+                "moduleName": "AEPCore",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "schemaData",
+            "printedName": "schemaData",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Any]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Any]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7AEPCore15RuleConsequenceV10schemaDataSDySSypGSgvp",
+            "mangledName": "$s7AEPCore15RuleConsequenceV10schemaDataSDySSypGSgvp",
+            "moduleName": "AEPCore",
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Any]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore15RuleConsequenceV10schemaDataSDySSypGSgvg",
+                "mangledName": "$s7AEPCore15RuleConsequenceV10schemaDataSDySSypGSgvg",
                 "moduleName": "AEPCore",
                 "isFromExtension": true,
                 "accessorKind": "get"
