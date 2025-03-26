@@ -31,6 +31,18 @@ class AEPUIService: UIService {
     }
     #endif
 
+    #if os(tvOS)
+    @available(tvOS 13.0, *)
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageNativeDelegate?) -> FullscreenPresentable {
+        return createFullscreenMessage(payload: payload, listener: listener, settings: nil)
+    }
+
+    @available(tvOS 13.0, *)
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageNativeDelegate?, settings: MessageSettings? = nil) -> FullscreenPresentable {
+        return FullscreenMessageNative(payload: payload, listener: listener, messageMonitor: messageMonitor, settings: settings)
+    }
+    #endif
+
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
         return FloatingButton(listener: listener)
     }
