@@ -406,7 +406,7 @@ public class LaunchRulesEngine {
         var maskData: [String] = eventDataKeys + tokenKeys
 
         // Merge the content key value pairs if available
-        // Note `content` doesn't need to be resolved because it was already resolved by evaluateRules
+        // Note `content` doesn't need to be resolved here because it was already resolved by evaluateRules
         if let content: [String: Any] = schemaData["content"] as? [String: Any] {
             recordEventHistoryData = EventDataMerger.merging(to: recordEventHistoryData, from: content, overwrite: true)
             // Also add the keys from `content` into the final event key mask
@@ -414,11 +414,11 @@ public class LaunchRulesEngine {
         }
 
         // Create a new event with the final mask data
-        let eventToRecord = Event(name: "EventHistoryOperation",
-                     type: EventType.rulesEngine,
-                     source: EventSource.responseContent,
-                     data: recordEventHistoryData,
-                     mask: maskData)
+        let eventToRecord = processedEvent.createChainedEvent(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
+                                                              type: EventType.rulesEngine,
+                                                              source: EventSource.responseContent,
+                                                              data: recordEventHistoryData,
+                                                              mask: maskData)
 
         switch operation {
         case LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT,
@@ -433,7 +433,8 @@ public class LaunchRulesEngine {
                 }
 
                 // Check if the event exists before inserting
-                extensionRuntime.historicalEventExists(eventToRecord) { exists in
+                extensionRuntime.historicalEventExists(eventToRecord) { [weak self] exists in
+                    guard let self = self else { return }
                     if exists {
                         Log.debug(label: self.LOG_TAG, "(\(self.name)) : Event already exists in history, skipping 'insertIfNotExists' operation")
                         return
@@ -442,8 +443,11 @@ public class LaunchRulesEngine {
             }
 
             Log.trace(label: self.LOG_TAG, "(\(self.name)) : Recording event in history with operation '\(operation)'")
-            self.extensionRuntime.recordHistoricalEvent(eventToRecord) { success in
-                if !success {
+            self.extensionRuntime.recordHistoricalEvent(eventToRecord) { [weak self] success in
+                guard let self = self else { return }
+                if success {
+                    self.extensionRuntime.dispatch(event: eventToRecord)
+                } else {
                     Log.error(label: self.LOG_TAG, "(\(self.name)) : Failed to record event in history with operation '\(operation)'")
                 }
             }
