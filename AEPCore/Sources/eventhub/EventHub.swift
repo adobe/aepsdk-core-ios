@@ -370,19 +370,6 @@ final class EventHub {
         eventHistory?.recordEvent(event, handler: handler)
     }
 
-    /// Checks if an `Event` with the same hash exists in the Event History database.
-    ///
-    /// The hash is calculated based on the provided `event`'s data.
-    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
-    /// If the hash value for the provided `event` is `0`, the method will return `false`.
-    ///
-    /// - Parameters:
-    ///   - event: the `Event` to check for existence in the Event History database
-    ///   - handler: called with a `Bool` indicating if an event with the same hash exists
-    func historicalEventExists(_ event: Event, handler: @escaping (Bool) -> Void) {
-        eventHistory?.eventExists(event, handler: handler) ?? handler(false)
-    }
-
     /// Sets wrapper type if `Eventhub` has not started
     /// - Parameter type: A `WrapperType` denoting the type of wrapper
     func setWrapperType(_ type: WrapperType) {

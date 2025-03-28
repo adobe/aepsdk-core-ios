@@ -433,9 +433,13 @@ public class LaunchRulesEngine {
                 }
 
                 // Check if the event exists before inserting
-                extensionRuntime.historicalEventExists(eventToRecord) { [weak self] exists in
+                extensionRuntime.getHistoricalEvents([eventToRecord.toEventHistoryRequest()], enforceOrder: false) { [weak self] results in
                     guard let self = self else { return }
-                    if exists {
+                    guard let result = results.first else {
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to get valid historical result for event. Skipping 'insertIfNotExists' operation.")
+                        return
+                    }
+                    if result.count >= 1 {
                         Log.debug(label: self.LOG_TAG, "(\(self.name)) : Event already exists in history, skipping 'insertIfNotExists' operation")
                         return
                     }

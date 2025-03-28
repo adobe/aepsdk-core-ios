@@ -135,15 +135,4 @@ public protocol ExtensionRuntime {
     ///   - event: the `Event` to be recorded in the Event History database
     ///   - handler: called with a `Bool` indicating a successful database insert
     func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)?)
-
-    /// Checks if an `Event` with the same hash exists in the Event History database.
-    ///
-    /// The hash is calculated based on the provided `event`'s data.
-    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
-    /// If the hash value for the provided `event` is `0`, the method will return `false`.
-    ///
-    /// - Parameters:
-    ///   - event: the `Event` to check for existence in the Event History database
-    ///   - handler: called with a `Bool` indicating if an event with the same hash exists
-    func historicalEventExists(_ event: Event, handler: @escaping (Bool) -> Void)
 }

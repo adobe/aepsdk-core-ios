@@ -103,6 +103,7 @@ class ExtensionContainer {
 // MARK: - ExtensionContainer public extension
 
 extension ExtensionContainer: ExtensionRuntime {
+    
     func unregisterExtension() {
         guard let exten = exten, let eventHub = eventHub else { return }
         eventHub.unregisterExtension(type(of: exten), completion: {_ in })
@@ -171,14 +172,6 @@ extension ExtensionContainer: ExtensionRuntime {
     func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)?) {
         guard let eventHub = eventHub else { return }
         eventHub.recordHistoricalEvent(event, handler: handler)
-    }
-
-    func historicalEventExists(_ event: Event, handler: @escaping (Bool) -> Void) {
-        guard let eventHub = eventHub else {
-            handler(false)
-            return
-        }
-        eventHub.historicalEventExists(event, handler: handler)
     }
 
     func startEvents() {
