@@ -14,7 +14,7 @@ import Foundation
 import AEPServices
 
 class EventHistoryDatabase {
-    let LOG_PREFIX = "Event History Database"
+    static let LOG_PREFIX = "Event History Database"
 
     let dispatchQueue: DispatchQueue
 
@@ -33,11 +33,11 @@ class EventHistoryDatabase {
     init?(dispatchQueue: DispatchQueue) {
         self.dispatchQueue = dispatchQueue
         guard createTable() else {
-            Log.warning(label: LOG_PREFIX, "Failed to initialize Event History Database.")
+            Log.warning(label: Self.LOG_PREFIX, "Failed to initialize Event History Database.")
             return nil
         }
         guard let dbConnection = connect() else {
-            Log.warning(label: LOG_PREFIX, "Failed to connect to Event History Database.")
+            Log.warning(label: Self.LOG_PREFIX, "Failed to connect to Event History Database.")
             return nil
         }
         self.connection = dbConnection
@@ -58,10 +58,16 @@ class EventHistoryDatabase {
     ///   - timestamp: the event timestamp
     ///   - handler: called with the `Bool` result of the insert statement.
     func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
-        dispatchQueue.async {
+        dispatchQueue.async { [weak self] in
+            guard let self = self else {
+                Log.warning(label: EventHistoryDatabase.LOG_PREFIX, "EventHistoryDatabase instance is deallocated. Unable to perform insert operation.")
+                handler?(false)
+                return
+            }
+            
             // first verify we can get a connection handle
             guard let connection = self.connection else {
-                Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database for insert operation.")
+                Log.warning(label: Self.LOG_PREFIX, "Unable to get a connection to the event history database for insert operation.")
                 handler?(false)
                 return
             }
@@ -98,10 +104,16 @@ class EventHistoryDatabase {
     ///   - to: represents the upper bounds of the date range to use when searching for the hash
     ///   - handler: a callback which will contain `EventHistoryResult` representing matching events
     func select(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: @escaping (EventHistoryResult) -> Void) {
-        dispatchQueue.sync {
+        dispatchQueue.sync { [weak self] in
+            guard let self = self else {
+                Log.warning(label: EventHistoryDatabase.LOG_PREFIX, "EventHistoryDatabase instance is deallocated. Unable to perform select operation.")
+                handler(EventHistoryResult(count: -1))
+                return
+            }
+            
             // first verify we can get a connection handle
             guard let connection = self.connection else {
-                Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database.")
+                Log.warning(label: Self.LOG_PREFIX, "Unable to get a connection to the event history database.")
                 handler(EventHistoryResult(count: -1))
                 return
             }
@@ -117,7 +129,7 @@ class EventHistoryDatabase {
             // a nil result means something went wrong with the database query
             guard let result = SQLiteWrapper.query(database: connection, sql: selectStatement),
                   let row = result.first else {
-                Log.warning(label: self.LOG_PREFIX, "An error occurred when attempting to query for event(s) '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
+                Log.warning(label: Self.LOG_PREFIX, "An error occurred when attempting to query for event(s) '\(hash)' between \(String(describing: from)) and \(String(describing: to)).")
                 handler(EventHistoryResult(count: -1))
                 return
             }
@@ -144,10 +156,16 @@ class EventHistoryDatabase {
     ///   - to: represents the upper bounds of the date range to use when searching for the hash
     ///   - handler: a callback which will contain the number of records deleted
     func delete(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: ((Int) -> Void)? = nil) {
-        dispatchQueue.async {
+        dispatchQueue.async { [weak self] in
+            guard let self = self else {
+                Log.warning(label: EventHistoryDatabase.LOG_PREFIX, "EventHistoryDatabase instance is deallocated. Unable to perform delete operation.")
+                handler?(0)
+                return
+            }
+            
             // first verify we can get a connection handle
             guard let connection = self.connection else {
-                Log.warning(label: self.LOG_PREFIX, "Unable to get a connection to the event history database for delete operation.")
+                Log.warning(label: Self.LOG_PREFIX, "Unable to get a connection to the event history database for delete operation.")
                 handler?(0)
                 return
             }
@@ -182,7 +200,7 @@ class EventHistoryDatabase {
         if let database = SQLiteWrapper.connect(databaseFilePath: dbFilePath, databaseName: dbName) {
             return database
         } else {
-            Log.warning(label: LOG_PREFIX, "Failed to connect to database: \(dbName).")
+            Log.warning(label: Self.LOG_PREFIX, "Failed to connect to database: \(dbName).")
             return nil
         }
     }
@@ -212,9 +230,9 @@ class EventHistoryDatabase {
 
             let result = SQLiteWrapper.execute(database: connection, sql: createTableStatement)
             if result {
-                Log.trace(label: LOG_PREFIX, "Successfully created table '\(tableName)'.")
+                Log.trace(label: Self.LOG_PREFIX, "Successfully created table '\(tableName)'.")
             } else {
-                Log.warning(label: LOG_PREFIX, "Failed to create table '\(tableName)'.")
+                Log.warning(label: Self.LOG_PREFIX, "Failed to create table '\(tableName)'.")
             }
 
             return result
