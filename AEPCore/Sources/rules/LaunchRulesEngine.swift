@@ -36,6 +36,12 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS = "insertIfNotExists"
     /// Do not process Dispatch consequence if chained event count is greater than max
     private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
+    
+    // Event History Operation Constants
+    private static let EVENT_HISTORY_OPERATION_KEY = "operation"
+    private static let EVENT_HISTORY_KEYS_KEY = "keys"
+    private static let EVENT_HISTORY_CONTENT_KEY = "content"
+    private static let EVENT_HISTORY_TOKEN_PREFIX = "~"
 
     private let transformer: Transforming
     private let name: String
@@ -362,7 +368,7 @@ public class LaunchRulesEngine {
     ///   - processedEvent: the event that triggered the rule
     ///   - data: a `Traversable` object used for token resolution
     private func processEventHistoryOperation(consequence: RuleConsequence, processedEvent: Event, data: Traversable) {
-        guard let schemaData = consequence.data, let operation = schemaData["operation"] as? String else {
+        guard let schemaData = consequence.data, let operation = schemaData[Self.EVENT_HISTORY_OPERATION_KEY] as? String else {
             Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process an EventHistoryOperation Consequence with ID: \(consequence.id). Required 'operation' field missing from 'detail.data'.")
             return
         }
@@ -371,9 +377,9 @@ public class LaunchRulesEngine {
         var tokenKeys: [String] = []
 
         // Separate keys provided in `keys` as event data keys or token keys, based on the reserved prefix
-        if let keys = schemaData["keys"] as? [String] {
+        if let keys = schemaData[Self.EVENT_HISTORY_KEYS_KEY] as? [String] {
             for key in keys {
-                if key.hasPrefix("~") {
+                if key.hasPrefix(Self.EVENT_HISTORY_TOKEN_PREFIX) {
                     tokenKeys.append(key)
                 } else {
                     eventDataKeys.append(key)
@@ -407,7 +413,7 @@ public class LaunchRulesEngine {
 
         // Merge the content key value pairs if available
         // Note `content` doesn't need to be resolved here because it was already resolved by evaluateRules
-        if let content: [String: Any] = schemaData["content"] as? [String: Any] {
+        if let content: [String: Any] = schemaData[Self.EVENT_HISTORY_CONTENT_KEY] as? [String: Any] {
             recordEventHistoryData = EventDataMerger.merging(to: recordEventHistoryData, from: content, overwrite: true)
             // Also add the keys from `content` into the final event key mask
             maskData.append(contentsOf: content.keys.map { $0 })
