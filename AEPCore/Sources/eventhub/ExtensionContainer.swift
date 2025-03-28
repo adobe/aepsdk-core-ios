@@ -165,12 +165,18 @@ extension ExtensionContainer: ExtensionRuntime {
     }
 
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
-        guard let eventHub = eventHub else { return }
+        guard let eventHub = eventHub else {
+            handler([])
+            return
+        }
         eventHub.getHistoricalEvents(requests, enforceOrder: enforceOrder, handler: handler)
     }
 
     func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)?) {
-        guard let eventHub = eventHub else { return }
+        guard let eventHub = eventHub else {
+            handler?(false)
+            return
+        }
         eventHub.recordHistoricalEvent(event, handler: handler)
     }
 

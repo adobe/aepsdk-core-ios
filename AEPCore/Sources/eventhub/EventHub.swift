@@ -353,7 +353,7 @@ final class EventHub {
     ///                   from date
     ///   - handler: contains an `EventHistoryResult` for each provided request
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
-        eventHistory?.getEvents(requests, enforceOrder: enforceOrder, handler: handler)
+        eventHistory?.getEvents(requests, enforceOrder: enforceOrder, handler: handler) ?? handler([])
     }
 
     /// Records an `Event` in the Event History database.
@@ -367,7 +367,7 @@ final class EventHub {
     ///   - event: the `Event` to be recorded in the Event History database
     ///   - handler: called with a `Bool` indicating a successful database insert
     func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
-        eventHistory?.recordEvent(event, handler: handler)
+        eventHistory?.recordEvent(event, handler: handler) ?? handler?(false)
     }
 
     /// Sets wrapper type if `Eventhub` has not started
