@@ -344,7 +344,7 @@ public class LaunchRulesEngine {
     ///   - data: a `Traversable` object used for token resolution
     private func processSchemaConsequence(consequence: RuleConsequence, processedEvent: Event, data: Traversable) {
         guard let schema = consequence.schema, let _ = consequence.data, let _ = consequence.detailID else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process Schema Consequence with ID: \(consequence.id). A Schema Consequence requires 'schema', 'data', and 'id' properties.")
+            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process Schema Consequence with ID: \(consequence.id). A Schema Consequence requires 'schema', 'data', and 'id' properties.")
             return
         }
 
@@ -363,7 +363,7 @@ public class LaunchRulesEngine {
     ///   - data: a `Traversable` object used for token resolution
     private func processEventHistoryOperation(consequence: RuleConsequence, processedEvent: Event, data: Traversable) {
         guard let schemaData = consequence.data, let operation = schemaData["operation"] as? String else {
-            Log.error(label: LOG_TAG, "(\(self.name)) : Unable to process an EventHistoryOperation Consequence with ID: \(consequence.id). Required 'operation' field missing from 'detail.data'.")
+            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process an EventHistoryOperation Consequence with ID: \(consequence.id). Required 'operation' field missing from 'detail.data'.")
             return
         }
 
@@ -452,7 +452,7 @@ public class LaunchRulesEngine {
                 if success {
                     self.extensionRuntime.dispatch(event: eventToRecord)
                 } else {
-                    Log.error(label: self.LOG_TAG, "(\(self.name)) : Failed to record event in history with operation '\(operation)'")
+                    Log.warning(label: self.LOG_TAG, "(\(self.name)) : Failed to record event in history with operation '\(operation)'")
                 }
             }
 
