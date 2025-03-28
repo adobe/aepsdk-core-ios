@@ -83,14 +83,6 @@ class TestableExtensionRuntime: ExtensionRuntime {
         return otherXDMSharedStates["\(extensionName)-\(String(describing: event?.id))"] ?? nil
     }
 
-    public func recordHistoricalEvent(_ event: AEPCore.Event, handler: ((Bool) -> Void)?) {
-        // no-op
-    }
-
-    public func historicalEventExists(_ event: AEPCore.Event, handler: @escaping (Bool) -> Void) {
-        // no-op
-    }
-
     func simulateSharedState(extensionName: String, event: Event?, data: (value: [String: Any]?, status: SharedStateStatus)) {
         var sharedStateValue : [String: Any]?
         if data.status == .pending {
@@ -121,10 +113,31 @@ class TestableExtensionRuntime: ExtensionRuntime {
     public var receivedEventHistoryRequests: [EventHistoryRequest] = []
     public var receivedEnforceOrder: Bool = false
     public var mockEventHistoryResults: [EventHistoryResult] = []
+
+    /// Tracks whether ``recordHistoricalEvent(_:handler:)`` was called.
+    public var recordHistoricalEventCalled = false
+
+    /// Controls the success/failure value that will be passed to the handler in ``recordHistoricalEvent(_:handler:)``
+    /// Set to `true` to simulate success, `false` to simulate failure.
+    public var recordHistoricalEventResult = true
+
     public func getHistoricalEvents(_ events: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
         receivedEventHistoryRequests = events
         receivedEnforceOrder = enforceOrder
         handler(mockEventHistoryResults)
+    }
+
+    /// Records a historical event
+    /// - Parameters:
+    ///   - event: The event to record
+    ///   - handler: Callback with operation result
+    ///
+    /// The success or failure passed to the handler is controlled by setting the
+    /// `recordHistoricalEventResult` property (true = success, false = failure).
+    /// The `recordHistoricalEventCalled` property can be used to verify this method was called.
+    public func recordHistoricalEvent(_ event: AEPCore.Event, handler: ((Bool) -> Void)?) {
+        recordHistoricalEventCalled = true
+        handler?(recordHistoricalEventResult)
     }
 
     func startEvents() {}
