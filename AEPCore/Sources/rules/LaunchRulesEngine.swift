@@ -409,14 +409,19 @@ public class LaunchRulesEngine {
         // Create the final mask by combining the values from consequence properties:
         // `keys` - Event data keys, token keys
         // `content` - keys from the key value pairs
-        var maskData: [String] = eventDataKeys + tokenKeys
+        var maskKeys: [String] = eventDataKeys + tokenKeys
 
         // Merge the content key value pairs if available
         // Note `content` doesn't need to be resolved here because it was already resolved by evaluateRules
         if let content: [String: Any] = schemaData[Self.EVENT_HISTORY_CONTENT_KEY] as? [String: Any] {
             recordEventHistoryData = EventDataMerger.merging(to: recordEventHistoryData, from: content, overwrite: true)
             // Also add the keys from `content` into the final event key mask
-            maskData.append(contentsOf: content.keys.map { $0 })
+            maskKeys.append(contentsOf: content.keys.map { $0 })
+        }
+
+        if maskKeys.isEmpty {
+            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process '\(operation)' operation, no keys to record were specified in the consequence.")
+            return
         }
 
         // Create a new event with the final mask data
@@ -424,7 +429,7 @@ public class LaunchRulesEngine {
                                                               type: EventType.rulesEngine,
                                                               source: EventSource.responseContent,
                                                               data: recordEventHistoryData,
-                                                              mask: maskData)
+                                                              mask: maskKeys)
 
         switch operation {
         case LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT,
