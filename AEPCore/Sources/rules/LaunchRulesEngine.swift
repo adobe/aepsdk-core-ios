@@ -373,63 +373,17 @@ public class LaunchRulesEngine {
             return
         }
 
-        var eventDataKeys: [String] = []
-        var tokenKeys: [String] = []
-
-        // Separate keys provided in `keys` as event data keys or token keys, based on the reserved prefix
-        if let keys = schemaData[Self.EVENT_HISTORY_KEYS_KEY] as? [String] {
-            for key in keys {
-                if key.hasPrefix(Self.EVENT_HISTORY_TOKEN_PREFIX) {
-                    tokenKeys.append(key)
-                } else {
-                    eventDataKeys.append(key)
-                }
-            }
-        }
-
-        // Wrap each token key value in the Rules Engine delimiter so they are resolved correctly as tokens
-        var tokenDictionary: [String: Any?] = [:]
-        if !tokenKeys.isEmpty {
-            for key in tokenKeys {
-                tokenDictionary[key] = "\(LaunchRulesEngine.LAUNCH_RULE_TOKEN_LEFT_DELIMITER)\(key)\(LaunchRulesEngine.LAUNCH_RULE_TOKEN_RIGHT_DELIMITER)"
-            }
-        }
-
-        // Resolve the token dictionary values
-        let resolvedTokenDictionary = replaceToken(in: tokenDictionary, data: data)
-
-        // Create the event data payload to be recorded into the event history, using the triggering event as the base
-        var recordEventHistoryData: [String: Any] = processedEvent.data ?? [:]
-
-        // Merge the resolved token dictionary
-        if !resolvedTokenDictionary.isEmpty {
-            recordEventHistoryData = EventDataMerger.merging(to: recordEventHistoryData, from: resolvedTokenDictionary, overwrite: true)
-        }
-
-        // Create the final mask by combining the values from consequence properties:
-        // `keys` - Event data keys, token keys
-        // `content` - keys from the key value pairs
-        var maskKeys: [String] = eventDataKeys + tokenKeys
-
-        // Merge the content key value pairs if available
         // Note `content` doesn't need to be resolved here because it was already resolved by evaluateRules
-        if let content: [String: Any] = schemaData[Self.EVENT_HISTORY_CONTENT_KEY] as? [String: Any] {
-            recordEventHistoryData = EventDataMerger.merging(to: recordEventHistoryData, from: content, overwrite: true)
-            // Also add the keys from `content` into the final event key mask
-            maskKeys.append(contentsOf: content.keys.map { $0 })
-        }
-
-        if maskKeys.isEmpty {
+        guard let content: [String: Any] = schemaData[Self.EVENT_HISTORY_CONTENT_KEY] as? [String: Any] else {
             Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process '\(operation)' operation, no keys to record were specified in the consequence.")
             return
         }
 
-        // Create a new event with the final mask data
+        // Create the event to record into history using the provided `content` data, and also dispatch as a rules consequence event
         let eventToRecord = processedEvent.createChainedEvent(name: LaunchRulesEngine.CONSEQUENCE_DISPATCH_EVENT_NAME,
                                                               type: EventType.rulesEngine,
                                                               source: EventSource.responseContent,
-                                                              data: recordEventHistoryData,
-                                                              mask: maskKeys)
+                                                              data: content)
 
         switch operation {
         case LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT,
@@ -443,7 +397,7 @@ public class LaunchRulesEngine {
                     return
                 }
 
-                // Check if the event exists before inserting
+                // Checking if the event exists before inserting
                 extensionRuntime.getHistoricalEvents([eventToRecord.toEventHistoryRequest()], enforceOrder: false) { [weak self] results in
                     guard let self = self else { return }
                     guard let result = results.first else {
