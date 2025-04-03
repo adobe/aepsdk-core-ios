@@ -373,14 +373,16 @@ public class LaunchRulesEngine {
             return
         }
 
-        // Note that `content` doesn't need to be resolved here because it was already resolved by evaluateRules
+        let operationDescription = "'\(operation)' operation for consequence \(consequence.id)"
+
+        // Note `content` doesn't need to be resolved here because it was already resolved by evaluateRules
         guard let content: [String: Any] = schemaData[Self.EVENT_HISTORY_CONTENT_KEY] as? [String: Any] else {
-            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process '\(operation)' operation for consequence \(consequence.id) — `content` is either missing or improperly formatted.")
+            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process \(operationDescription) — `content` is either missing or improperly formatted.")
             return
         }
 
         if content.isEmpty {
-            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process '\(operation)' operation for consequence \(consequence.id) — the consequence `content` does not contain any keys to record.")
+            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process \(operationDescription) — the consequence `content` does not contain any keys to record.")
             return
         }
 
@@ -394,35 +396,33 @@ public class LaunchRulesEngine {
         case LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT,
              LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS:
 
-            // For INSERT_IF_NOT_EXISTS, check if the event exists first
             if operation == LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS {
                 let eventHash = eventToRecord.eventHash
                 if eventHash == 0 {
-                    Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process '\(operation)' operation for consequence \(consequence.id) — event hash is 0.")
+                    Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process \(operationDescription) — event hash is 0.")
                     return
                 }
 
-                // Checking if the event exists before inserting
                 extensionRuntime.getHistoricalEvents([eventToRecord.toEventHistoryRequest()], enforceOrder: false) { [weak self] results in
                     guard let self = self else { return }
                     guard let result = results.first else {
-                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to get valid historical result for event — skipping '\(operation)' operation for consequence \(consequence.id).")
+                        Log.error(label: LOG_TAG, "(\(self.name)) : Unable to get valid historical result for event — skipping \(operationDescription).")
                         return
                     }
                     if result.count >= 1 {
-                        Log.debug(label: self.LOG_TAG, "(\(self.name)) : Event already exists in history — skipping '\(operation)' operation for consequence \(consequence.id).")
+                        Log.debug(label: self.LOG_TAG, "(\(self.name)) : Event already exists in history — skipping \(operationDescription).")
                         return
                     }
                 }
             }
 
-            Log.trace(label: self.LOG_TAG, "(\(self.name)) : Recording event in history for '\(operation)' operation for consequence \(consequence.id): \(eventToRecord)")
+            Log.trace(label: self.LOG_TAG, "(\(self.name)) : Recording event in history for \(operationDescription): \(eventToRecord)")
             self.extensionRuntime.recordHistoricalEvent(eventToRecord) { [weak self] success in
                 guard let self = self else { return }
                 if success {
                     self.extensionRuntime.dispatch(event: eventToRecord)
                 } else {
-                    Log.warning(label: self.LOG_TAG, "(\(self.name)) : Failed to record event in history for '\(operation)' operation for consequence \(consequence.id).")
+                    Log.warning(label: self.LOG_TAG, "(\(self.name)) : Failed to record event in history for \(operationDescription).")
                 }
             }
 
@@ -430,6 +430,7 @@ public class LaunchRulesEngine {
             Log.warning(label: LOG_TAG, "(\(self.name)) : Unsupported event history operation '\(operation)' for consequence \(consequence.id).")
         }
     }
+
 }
 
 /// Extend RuleConsequence with helper methods for processing Dispatch Consequence events.
