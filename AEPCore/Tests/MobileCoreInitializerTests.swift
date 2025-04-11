@@ -160,7 +160,7 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         }
 
-            MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtensionTwo.self,
             ]
@@ -273,7 +273,7 @@ class MobileCoreInitializerTests: XCTestCase {
         // However, that check just verifies ClassFinder returns a non-zero list so the mocked
         // function below will pass the test.
         MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
-                return [MockExtensionTwo.self]
+            return [MockExtensionTwo.self]
         })
 
         // After extension registration, for a SceneDelegate app, lifecycleStart is called immediately.
@@ -333,7 +333,7 @@ class MobileCoreInitializerTests: XCTestCase {
         // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
         // However, that check just verifies ClassFinder returns a non-zero list so the mocked
         // function below will pass the test.
-            MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
             return [
                 MockExtensionTwo.self
             ]

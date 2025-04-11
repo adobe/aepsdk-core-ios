@@ -33,7 +33,7 @@
         /// Native functions that can be called from javascript
         /// See `addHandler:forScriptMessage:`
         var scriptHandlers: [String: (Any?) -> Void] = [:]
-        
+
         /// If `fitToContent` is enabled in `settings`, this value will contain the desired height for the webview
         var fitToContentHeight: CGFloat?
 
@@ -84,7 +84,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 if self.messageMonitor.dismiss() == false {
                     return
                 }
@@ -134,7 +134,6 @@
                 guard let self = self else {
                     return
                 }
-                
 
                 if !self.observerSet {
                     // Register to observe changes to frame of application's key window
@@ -200,7 +199,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 if self.transparentBackgroundView != nil {
                     self.transparentBackgroundView?.frame = CGRect(x: 0, y: 0, width: self.screenWidth, height: self.screenHeight + self.safeAreaHeight)
                 }
@@ -214,7 +213,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 // only show the message if the monitor allows it
                 let (shouldShow, error) = self.messageMonitor.show(message: self, delegateControl: delegateControl)
                 guard shouldShow else {
@@ -234,7 +233,7 @@
                     guard let self = self else {
                         return
                     }
-                    
+
                     self.displayWithAnimation(webView: webview)
                 }
             }
@@ -245,7 +244,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 // remove window frame observer
                 self.windowFrameObserver?.invalidate()
                 self.windowFrameObserver = nil
@@ -283,7 +282,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 // don't add the handler if it's already been added
                 guard self.scriptHandlers[name] == nil else {
                     return
@@ -317,12 +316,13 @@
         }
 
         // MARK: - private methods
-        
+
         private func handleAutoResize(_ height: Any?) {
             if let strHeight = height as? String,
-               let intHeight = Int(strHeight) {
+               let intHeight = Int(strHeight),
+               intHeight != 0 {
                 fitToContentHeight = CGFloat(intHeight)
-                
+
                 // when enabled, this method isn't called until the html is loaded, requiring a redraw with the correct height
                 reframeMessage()
             }
@@ -333,11 +333,11 @@
 
             // set the callback for auto-resizing if fitToContent is set in MessageSettings
             if let fitToContent = self.settings?.fitToContent,
-                fitToContent,
-                self.scriptHandlers[FIT_TO_CONTENT_HANDLER_NAME] == nil {
+               fitToContent,
+               self.scriptHandlers[FIT_TO_CONTENT_HANDLER_NAME] == nil {
                 self.scriptHandlers[FIT_TO_CONTENT_HANDLER_NAME] = handleAutoResize(_:)
             }
-            
+
             // load javascript handlers
             let contentController = WKUserContentController()
             scriptHandlers.forEach {
@@ -394,7 +394,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 guard let recognizer = sender as? MessageGestureRecognizer else {
                     Log.trace(label: self.LOG_PREFIX, "Unable to handle message gesture - failed to convert UIGestureRecognizer to MessageGestureRecognizer.")
                     return
@@ -423,7 +423,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 let keyWindow = UIApplication.shared.getKeyWindow()
 
                 if let animation = self.settings?.displayAnimation, animation != .none {
@@ -453,7 +453,7 @@
                 guard let self = self else {
                     return
                 }
-                
+
                 if let animation = self.settings?.dismissAnimation, animation != .none {
                     UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
                         self.webView?.frame = self.frameAfterDismiss

@@ -138,7 +138,7 @@
             if let fitToContentHeight = fitToContentHeight {
                 return fitToContentHeight > screenHeight ? screenHeight : fitToContentHeight
             }
-            
+
             if let settingsHeight = settings?.height {
                 return screenHeight * CGFloat(settingsHeight) / 100
             }
