@@ -45,6 +45,9 @@
 
         /// If true, a displayed message will prevent the user from other UI interactions.
         public private(set) var uiTakeover: Bool?
+        
+        /// If true, the SDK will automatically try to resize the window of the message to fit its content.
+        public private(set) var fitToContent: Bool?
 
         /// Defines the color of the backdrop shown when a uiTakeover message is displayed.
         private var backdropColor: String?
@@ -127,6 +130,11 @@
 
         @discardableResult public func setUiTakeover(_ uiTakeover: Bool?) -> MessageSettings {
             self.uiTakeover = uiTakeover ?? false
+            return self
+        }
+        
+        @discardableResult public func setFitToContent(_ fitToContent: Bool?) -> MessageSettings {
+            self.fitToContent = fitToContent ?? false
             return self
         }
 
