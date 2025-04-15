@@ -319,12 +319,18 @@
 
         private func handleAutoResize(_ height: Any?) {
             if let strHeight = height as? String,
-               let intHeight = Int(strHeight),
-               intHeight != 0 {
-                fitToContentHeight = CGFloat(intHeight)
+               let doubleHeight = Double(strHeight) {
 
+                if doubleHeight <= 0 {
+                    Log.debug(label: self.LOG_PREFIX, "Invalid height value received for auto-resize: \(doubleHeight). Height must be positive.")
+                    return
+                }
+
+                fitToContentHeight = CGFloat(doubleHeight)
                 // when enabled, this method isn't called until the html is loaded, requiring a redraw with the correct height
                 reframeMessage()
+            } else {
+                Log.debug(label: self.LOG_PREFIX, "Failed to parse height value for auto-resize: \(String(describing: height))")
             }
         }
 
@@ -332,8 +338,7 @@
             let webViewConfiguration = WKWebViewConfiguration()
 
             // set the callback for auto-resizing if fitToContent is set in MessageSettings
-            if let fitToContent = self.settings?.fitToContent,
-               fitToContent,
+            if self.settings?.fitToContent == true,               
                self.scriptHandlers[FIT_TO_CONTENT_HANDLER_NAME] == nil {
                 self.scriptHandlers[FIT_TO_CONTENT_HANDLER_NAME] = handleAutoResize(_:)
             }
