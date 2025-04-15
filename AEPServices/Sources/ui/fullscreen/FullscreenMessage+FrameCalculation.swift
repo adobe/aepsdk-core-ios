@@ -119,13 +119,17 @@
         /// width in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen width.
         /// default value is full screen width.
+        /// if no maxWidth is provided, use `Int.max` for the maxWidth (essentially, it will never be used)
+        /// width used should resolve using the following logic:
+        ///   settings.width != nil ? min(settings.width, settings.maxWidth) : min(screenWidth, settings.maxWidth)
         /// this method should only be called from the main thread
         private var width: CGFloat {
+            let maxWidthFloat = CGFloat(settings?.maxWidth ?? Int.max)
             if let settingsWidth = settings?.width {
-                return screenWidth * CGFloat(settingsWidth) / 100
+                return min((screenWidth * CGFloat(settingsWidth) / 100), maxWidthFloat)
             }
 
-            return screenWidth
+            return min(screenWidth, maxWidthFloat)
         }
 
         /// height in settings represents a percentage of the screen.
