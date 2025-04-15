@@ -15,6 +15,7 @@ import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.
 class EventHistory {
+    let LOG_TAG = "EventHistory"
     var db: EventHistoryDatabase
 
     /// Default initializer.
@@ -39,6 +40,7 @@ class EventHistory {
     ///   - handler: called with a `Bool` indicating a successful database insert.
     func recordEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
         guard event.eventHash != 0 else {
+            Log.debug(label: LOG_TAG, "Failed to record event in history - event hash is 0")
             handler?(false)
             return
         }
