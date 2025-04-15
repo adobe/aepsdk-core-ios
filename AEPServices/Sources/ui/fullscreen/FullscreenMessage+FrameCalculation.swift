@@ -131,8 +131,14 @@
         /// height in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen height.
         /// default value is full screen height.
+        /// if fitToContentHeight has been set, prefer to use that value instead,
+        /// but don't allow the height to be greater than the screenHeight.
         /// this method should only be called from the main thread
         private var height: CGFloat {
+            if let fitToContentHeight = fitToContentHeight {
+                return fitToContentHeight > screenHeight ? screenHeight : fitToContentHeight
+            }
+
             if let settingsHeight = settings?.height {
                 return screenHeight * CGFloat(settingsHeight) / 100
             }
