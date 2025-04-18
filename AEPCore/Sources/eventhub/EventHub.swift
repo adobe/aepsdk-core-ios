@@ -38,7 +38,7 @@ final class EventHub {
     private var wrapperType: WrapperType = .none
     #if DEBUG
         public internal(set) static var shared = EventHub()
-        var eventHistory: EventHistory?
+        var eventHistory: EventHistory? = EventHistory()
     #else
         internal static let shared = EventHub()
         private var eventHistory = EventHistory()
