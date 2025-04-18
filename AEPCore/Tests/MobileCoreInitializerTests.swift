@@ -121,6 +121,46 @@ class MobileCoreInitializerTests: XCTestCase {
         XCTAssertFalse(registeredExtensions.keys.contains { $0 == "com.adobe.mockExtensionTwo" })
     }
 
+    func testInitializeFiltersOutAnalyticsBaseAndAnalyticsAppExtension() {
+        let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
+        expectation.assertForOverFulfill = true
+
+        // Set ClassFinder func to return just two extensions
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+            return [
+                MockExtension.self,
+                AnalyticsBase.self,
+                AnalyticsAppExtension.self
+            ]
+        })
+
+        // test
+        MobileCore.initialize(options: InitOptions()) {
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)
+
+        let eventHubState = EventHub.shared.getSharedState(extensionName: EventHubConstants.NAME, event: nil)?.value
+
+        guard let registeredExtensions = eventHubState?["extensions"] as? [String: Any] else {
+            XCTFail("Found no registered extensions!")
+            return
+        }
+
+        let expectedExtensions = [
+            "com.adobe.module.configuration",
+            "com.adobe.mockExtension"
+        ]
+
+        XCTAssertEqual(registeredExtensions.count, expectedExtensions.count)
+
+        for e in expectedExtensions {
+            XCTAssertTrue(registeredExtensions.keys.contains { $0 == e })
+        }
+    }
+
     func testInitializeCallsConfigWithAppId() {
         let expectation = XCTestExpectation(description: "Configure with app id dispatches a configuration request content with the app id")
         expectation.assertForOverFulfill = true
@@ -411,4 +451,52 @@ class MobileCoreInitializerTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
+}
+
+private class AnalyticsBase: NSObject, Extension {
+    var name: String = "com.adobe.fake.analytics"
+
+    var friendlyName: String = "Fake Analytics Base"
+
+    static var extensionVersion: String  = "0.0.1"
+
+    var metadata: [String : String]?
+
+    var runtime: any AEPCore.ExtensionRuntime
+
+    func onRegistered() {}
+
+    func onUnregistered() {}
+
+    required init?(runtime: any AEPCore.ExtensionRuntime) {
+        self.runtime = runtime
+    }
+    
+    func readyForEvent(_: Event) -> Bool {
+        return true
+    }
+}
+
+public class AnalyticsAppExtension: NSObject, Extension {
+    public var name: String = "com.adobe.fake.analyticsappextension"
+
+    public var friendlyName: String = "Fake Analytics App Extension"
+
+    public static var extensionVersion: String  = "0.0.1"
+
+    public var metadata: [String : String]?
+
+    public var runtime: any AEPCore.ExtensionRuntime
+
+    public func onRegistered() {}
+
+    public func onUnregistered() {}
+
+    public required init?(runtime: any AEPCore.ExtensionRuntime) {
+        self.runtime = runtime
+    }
+
+    public func readyForEvent(_: Event) -> Bool {
+        return true
+    }
 }
