@@ -13,12 +13,12 @@
 import Foundation
 
 extension Event {
-    /// Creates an `EventHistoryRequest` from this event.
-    /// 
+    /// Returns an ``EventHistoryRequest`` based on this event's ``Event/data``, applying the ``Event/mask`` if one is set.
+    ///
     /// - Parameters:
-    ///   - from: Date that represents the lower bounds of the date range used when looking up an Event
-    ///   - to: Date that represents the upper bounds of the date range used when looking up an Event
-    /// - Returns: An `EventHistoryRequest` with mask derived from this event's data
+    ///   - from: The start date of the range to use for historical lookup. If `nil`, the lookup starts from the earliest available event.
+    ///   - to: The end date of the range to use for historical lookup. If `nil`, the lookup includes events up to the most recent.
+    /// - Returns: An ``EventHistoryRequest`` with the ``EventHistoryRequest/mask`` derived from this event's ``Event/data``, filtered by its event ``Event/mask`` if set.
     public func toEventHistoryRequest(from: Date? = nil, to: Date? = nil) -> EventHistoryRequest {
         let flattenedData = data?.flattening() ?? [:]
 
