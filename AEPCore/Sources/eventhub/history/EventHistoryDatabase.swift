@@ -11,6 +11,7 @@
  */
 
 import Foundation
+
 import AEPServices
 
 class EventHistoryDatabase: EventHistoryStore {
@@ -42,6 +43,15 @@ class EventHistoryDatabase: EventHistoryStore {
         }
         self.connection = dbConnection
     }
+
+    #if DEBUG
+    /// Initializer for testing purposes only. Doesn’t use sqlite
+    init(testingWith dispatchQueue: DispatchQueue = DispatchQueue(label: "dummy")) {
+        self.dispatchQueue = dispatchQueue
+        // skip createTable() and connect(), or stub them out
+        self.connection = nil
+    }
+    #endif
 
     deinit {
         if let dbConnection = connection {
