@@ -336,6 +336,7 @@
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
 		4C0111D12DB1C3F000996757 /* EventHistorySpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0111D02DB1C3F000996757 /* EventHistorySpy.swift */; };
 		4C0111D32DB1C4FD00996757 /* EventHubHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0111D22DB1C4FD00996757 /* EventHubHistoryTests.swift */; };
+		4C0111D52DB1D41700996757 /* Event+EventHistoryRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C0111D42DB1D41600996757 /* Event+EventHistoryRequestTests.swift */; };
 		4CCC21A62D9623BC00F75340 /* Event+EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
@@ -1097,6 +1098,7 @@
 		41E5D22C6D72CCCF26904EDE /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4C0111D02DB1C3F000996757 /* EventHistorySpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistorySpy.swift; sourceTree = "<group>"; };
 		4C0111D22DB1C4FD00996757 /* EventHubHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHubHistoryTests.swift; sourceTree = "<group>"; };
+		4C0111D42DB1D41600996757 /* Event+EventHistoryRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequestTests.swift"; sourceTree = "<group>"; };
 		4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequest.swift"; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
@@ -1701,6 +1703,7 @@
 		24E255D3270F403A00AB9F07 /* HistoryTests */ = {
 			isa = PBXGroup;
 			children = (
+				4C0111D42DB1D41600996757 /* Event+EventHistoryRequestTests.swift */,
 				24E255D4270F406300AB9F07 /* EventData+FNV1A32Tests.swift */,
 				24B4BE5E2714F7C80000C3AA /* EventHistoryDatabaseTests.swift */,
 				24B4BE582714F5A40000C3AA /* EventHistoryRequestTests.swift */,
@@ -1939,7 +1942,6 @@
 				246B1A2A272B48A80017716A /* EventTests.swift */,
 				4C0111D22DB1C4FD00996757 /* EventHubHistoryTests.swift */,
 				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
-				4C0111D02DB1C3F000996757 /* EventHistorySpy.swift */,
 			);
 			path = EventHubTests;
 			sourceTree = "<group>";
@@ -2001,6 +2003,7 @@
 		3F3951F824CA096100F7325B /* TestHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				4C0111D02DB1C3F000996757 /* EventHistorySpy.swift */,
 				3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */,
 				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
@@ -3401,6 +3404,7 @@
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				24B4BE5F2714F7C80000C3AA /* EventHistoryDatabaseTests.swift in Sources */,
 				21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */,
+				4C0111D52DB1D41700996757 /* Event+EventHistoryRequestTests.swift in Sources */,
 				3F39522024CA096200F7325B /* LaunchIDManagerTests.swift in Sources */,
 				BF402E412D5AB8CD00263339 /* ClassFinderTests.swift in Sources */,
 				3F08FF9D24DA0DCF00D34DE3 /* RulesDownloaderTests.swift in Sources */,
