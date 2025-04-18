@@ -11,6 +11,7 @@
  */
 
 import Foundation
+
 import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.
@@ -28,6 +29,13 @@ class EventHistory {
 
         self.db = db
     }
+
+    #if DEBUG
+    /// Initializer for testing purposes only. Allows for providing a mock `EventHistoryDatabase`.
+    init(mockDB: EventHistoryDatabase) {
+        self.db = mockDB
+    }
+    #endif
 
     /// Records an `Event` based on its calculated hash.
     ///

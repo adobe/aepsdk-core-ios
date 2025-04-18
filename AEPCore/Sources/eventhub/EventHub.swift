@@ -10,8 +10,9 @@
  governing permissions and limitations under the License.
  */
 
-import AEPServices
 import Foundation
+
+import AEPServices
 
 public typealias EventListener = (Event) -> Void
 public typealias EventResponseListener = (Event?) -> Void
@@ -34,12 +35,13 @@ final class EventHub {
     private let eventQueue = OperationOrderer<Event>("EventHub")
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
     private var started = false // true if the `EventHub` is started, false otherwise. Should only be accessed from within the `eventHubQueue`
-    private var eventHistory = EventHistory()
     private var wrapperType: WrapperType = .none
     #if DEBUG
         public internal(set) static var shared = EventHub()
+        var eventHistory: EventHistory?
     #else
         internal static let shared = EventHub()
+        private var eventHistory = EventHistory()
     #endif
 
     // MARK: - Internal API

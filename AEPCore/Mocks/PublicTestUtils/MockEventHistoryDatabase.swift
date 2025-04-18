@@ -23,8 +23,8 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
     var returnSelect: EventHistoryResult?
     var returnDelete: Int = 0
 
-    init?() {
-        super.init(dispatchQueue: DispatchQueue(label: "mockEventHistoryDatabase"))
+    init() {
+        super.init(testingWith: DispatchQueue(label: "mockEventHistoryDatabase"))
     }
 
     override func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
