@@ -23,6 +23,18 @@ final class MobileCoreInitializer {
     // Function to return list of classes; see `ClassFinder`
     private let classFinder: (Protocol) -> [AnyClass]
 
+    // Filter function to exclude Extensions from the final list passed to `MobileCore.registerExtensions`.
+    // EventHub automatically registers Configuration and the Placeholder extensions, filter them out from list to prevent duplicate registration warnings.
+    // Analytics defines AnalyticsBase and AnalyticsAppExtension classes which adopt Extension, filter them out to prevent registering multiple Analytics extensions.
+    private let extensionClassFilter: (AnyClass) -> Bool = {
+        let className = String(describing: type(of: $0))
+        return ![$0 === AEPCore.EventHubPlaceholderExtension.self,
+                $0 === AEPCore.Configuration.self,
+                className == "AnalyticsBase.Type",
+                className == "AnalyticsAppExtension.Type"]
+            .contains(true)
+    }
+
     init(classFinder: @escaping (Protocol) -> [AnyClass] = ClassFinder.classes(conformToProtocol:)) {
         self.classFinder = classFinder
     }
@@ -59,8 +71,8 @@ final class MobileCoreInitializer {
             }
 
             let classList = self.classFinder(Extension.self)
-            // EventHub automatically registers Configuration and the Placeholder extensions, filter them out from list to prevent duplicate registration warnings.
-            let filteredClassList = classList.filter { $0 !== AEPCore.EventHubPlaceholderExtension.self && $0 !== AEPCore.Configuration.self }.compactMap { $0 as? NSObject.Type }
+            let filteredClassList = classList.filter(extensionClassFilter).compactMap { $0 as? NSObject.Type }
+
             MobileCore.registerExtensions(filteredClassList) {
                 completion?()
             }
