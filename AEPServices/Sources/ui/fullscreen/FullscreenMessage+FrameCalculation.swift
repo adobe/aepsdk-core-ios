@@ -221,5 +221,14 @@
             // handle center alignment, y is (screen height - message height) / 2
             return (screenHeight - height) / 2 + safeAreaHeight
         }
+
+        #if DEBUG
+            /// Calculates the visible frame for the message, taking into account fitToContentHeight
+            /// This method is primarily used for testing purposes
+            /// this method should only be called from the main thread
+            func calculateVisibleFrame() -> CGRect? {
+                return frameWhenVisible
+            }
+        #endif
     }
 #endif
