@@ -36,8 +36,7 @@ public protocol SystemInfoService {
     func getDeviceName() -> String
 
     /// Gets the mobile carrier name
-    /// - Return: `String` the mobile carrier name
-    @available(iOS, deprecated: 16.0, message: "Apple has deprecated the CTCarrier API without replacement.")
+    /// - Return: `String` the mobile carrier name, or nil on iOS versions 16 or greater as CTCarrier has been deprecated for those versions
     func getMobileCarrierName() -> String?
 
     /// Gets the run mode (Extension, or Application) as a string

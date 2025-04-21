@@ -1049,9 +1049,6 @@
             "genericSig": "<τ_0_0 where τ_0_0 : AEPServices.SystemInfoService>",
             "sugared_genericSig": "<Self where Self : AEPServices.SystemInfoService>",
             "protocolReq": true,
-            "declAttributes": [
-              "Available"
-            ],
             "reqNewWitnessTableEntry": true,
             "funcSelfKind": "NonMutating"
           },
