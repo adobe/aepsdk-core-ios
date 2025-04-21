@@ -116,6 +116,7 @@
 
         // MARK: - private vars
 
+        /// calculates the width for the message's frame, in pixels
         /// width in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen width.
         /// default value is full screen width.
@@ -132,6 +133,7 @@
             return min(screenWidth, maxWidthFloat)
         }
 
+        /// calculates the height for the message's frame, in pixels
         /// height in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen height.
         /// default value is full screen height.
