@@ -32,6 +32,8 @@ class EventHistoryDatabase {
     ///
     /// - Returns `nil` if the `DispatchQueue` cannot be initialized.
     init?(dispatchQueue: DispatchQueue) {
+        // IMPORTANT: Changes to this initialization logic MUST be reflected in the
+        // testing initializer to keep tests aligned with production behavior.
         self.dispatchQueue = dispatchQueue
         guard createTable() else {
             Log.warning(label: Self.LOG_PREFIX, "Failed to initialize Event History Database.")
@@ -45,10 +47,13 @@ class EventHistoryDatabase {
     }
 
     #if DEBUG
-    /// Initializer for testing purposes only. Doesn’t use sqlite
-    init(testingWith dispatchQueue: DispatchQueue = DispatchQueue(label: "dummy")) {
+    /// Initializer for testing purposes. Bypasses SQLite setup; does not create tables
+    /// or connect to a database.
+    ///
+    /// - Parameter dispatchQueue: The dispatch queue to use for operations.
+    /// - Note: This testing initializer MUST reflect the production initializer’s setup logic to keep tests aligned with production behavior.
+    init(testingWith dispatchQueue: DispatchQueue = DispatchQueue(label: "EventHistoryDatabase.testing.queue")) {
         self.dispatchQueue = dispatchQueue
-        // skip createTable() and connect(), or stub them out
         self.connection = nil
     }
     #endif

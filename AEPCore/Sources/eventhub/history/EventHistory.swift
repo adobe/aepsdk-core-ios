@@ -23,6 +23,8 @@ class EventHistory {
     ///
     /// - Returns `nil` if the database cannot be initialized.
     init?() {
+        // IMPORTANT: Changes to this initialization logic MUST be reflected in the
+        // testing initializer to keep tests aligned with production behavior.
         guard let db = EventHistoryDatabase(dispatchQueue: DispatchQueue.init(label: "EventHistory")) else {
             return nil
         }
@@ -31,7 +33,10 @@ class EventHistory {
     }
 
     #if DEBUG
-    /// Initializer for testing purposes only. Allows for providing a mock `EventHistoryDatabase`.
+    /// Initializer for testing purposes only.
+    ///
+    /// - Parameter mockDB: A mock or stub `EventHistoryDatabase` instance.
+    /// - Note: This testing initializer MUST reflect the production initializer’s setup logic to keep tests aligned with production behavior.
     init(mockDB: EventHistoryDatabase) {
         self.db = mockDB
     }
