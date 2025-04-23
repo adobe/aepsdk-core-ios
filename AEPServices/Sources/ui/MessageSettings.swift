@@ -28,6 +28,9 @@
         /// Width of the view in which the message is displayed. Represented in percentage of the total screen width.
         public private(set) var width: Int?
 
+        /// Maximum width of the view in which the message is displayed. Represented in pixels.
+        public private(set) var maxWidth: Int?
+
         /// Height of the view in which the message is displayed. Represented in percentage of the total screen height.
         public private(set) var height: Int?
 
@@ -100,6 +103,11 @@
 
         @discardableResult public func setWidth(_ width: Int?) -> MessageSettings {
             self.width = width
+            return self
+        }
+
+        @discardableResult public func setMaxWidth(_ maxWidth: Int?) -> MessageSettings {
+            self.maxWidth = maxWidth
             return self
         }
 

@@ -116,18 +116,24 @@
 
         // MARK: - private vars
 
+        /// calculates the width for the message's frame, in pixels
         /// width in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen width.
         /// default value is full screen width.
+        /// if no maxWidth is provided, use `Int.max` for the maxWidth (essentially, it will never be used)
+        /// width used should resolve using the following logic:
+        ///   settings.width != nil ? min(settings.width, settings.maxWidth) : min(screenWidth, settings.maxWidth)
         /// this method should only be called from the main thread
         private var width: CGFloat {
+            let maxWidthFloat = CGFloat(settings?.maxWidth ?? Int.max)
             if let settingsWidth = settings?.width {
-                return screenWidth * CGFloat(settingsWidth) / 100
+                return min((screenWidth * CGFloat(settingsWidth) / 100), maxWidthFloat)
             }
 
-            return screenWidth
+            return min(screenWidth, maxWidthFloat)
         }
 
+        /// calculates the height for the message's frame, in pixels
         /// height in settings represents a percentage of the screen.
         /// e.g. - 80 = 80% of the screen height.
         /// default value is full screen height.
@@ -217,5 +223,14 @@
             // handle center alignment, y is (screen height - message height) / 2
             return (screenHeight - height) / 2 + safeAreaHeight
         }
+
+        #if DEBUG
+            /// Calculates the visible frame for the message, taking into account fitToContentHeight
+            /// This method is primarily used for testing purposes
+            /// this method should only be called from the main thread
+            func calculateVisibleFrame() -> CGRect? {
+                return frameWhenVisible
+            }
+        #endif
     }
 #endif

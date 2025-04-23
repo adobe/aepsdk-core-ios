@@ -495,6 +495,19 @@
                 }
             }
         }
+
+        // MARK: - debug methods below are used for testing purposes only
+
+        #if DEBUG
+            func callReframeMessage() {
+                self.reframeMessage()
+            }
+
+            func callHandleAutoResize(_ height: Any?) {
+                self.handleAutoResize(height)
+            }
+        #endif
+
     }
 
 #endif
