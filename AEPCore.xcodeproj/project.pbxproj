@@ -1955,6 +1955,7 @@
 		3F3951EC24CA096100F7325B /* TestResources */ = {
 			isa = PBXGroup;
 			children = (
+				4C0111DC2DB81DD700996757 /* RulesEngineHistoricalTests */,
 				3F3951F024CA096100F7325B /* ADBMobileConfig.json */,
 				3F3951EF24CA096100F7325B /* rules_1.json */,
 				3F08FF9A24DA0DA100D34DE3 /* rules_functional_1.zip */,
@@ -2014,6 +2015,7 @@
 				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
 				3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */,
+				4C0111DA2DB811D200996757 /* RulesEngineTestBase.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
@@ -2053,6 +2055,7 @@
 				3F16762B24F032E60041B970 /* ContractExtensionTwo.swift */,
 				3F16762724F031A00041B970 /* EventHubContractTests.swift */,
 				3F08FF9824DA03F000D34DE3 /* RulesEngineFunctionalTests.swift */,
+				4C0111D82DB8113F00996757 /* RulesEngineHistoricalTests.swift */,
 			);
 			path = FunctionalTests;
 			sourceTree = "<group>";
@@ -2194,6 +2197,33 @@
 				3FF8296B2509942300483C74 /* rules_signal.json */,
 			);
 			path = resources;
+			sourceTree = "<group>";
+		};
+		4C0111DC2DB81DD700996757 /* RulesEngineHistoricalTests */ = {
+			isa = PBXGroup;
+			children = (
+				4C01120D2DB99CE900996757 /* consequence_rules_testSchemaEventHistoryInsertIfNotExists.json */,
+				4C01120B2DB99B4900996757 /* consequence_rules_testSchemaEventHistoryInsert_withTokens.json */,
+				4C0111FD2DB99A0100996757 /* consequence_rules_testDataContentEmpty.json */,
+				4C0111FE2DB99A0100996757 /* consequence_rules_testDataContentMissing.json */,
+				4C0111FF2DB99A0100996757 /* consequence_rules_testDataContentNull.json */,
+				4C0112002DB99A0100996757 /* consequence_rules_testDataOperationEmpty.json */,
+				4C0112012DB99A0100996757 /* consequence_rules_testDataOperationInvalid.json */,
+				4C0112022DB99A0100996757 /* consequence_rules_testDataOperationMissing.json */,
+				4C0112032DB99A0100996757 /* consequence_rules_testDataOperationNull.json */,
+				4C0111F32DB9944400996757 /* consequence_rules_testSchemaEventHistoryInsert.json */,
+				4C0111F12DB992AC00996757 /* consequence_rules_testSchemaDataEmpty.json */,
+				4C0111EF2DB9926D00996757 /* consequence_rules_testSchemaDataNull.json */,
+				4C0111ED2DB9922300996757 /* consequence_rules_testSchemaDataMissing.json */,
+				4C0111EB2DB9916F00996757 /* consequence_rules_testSchemaSchemaInvalid.json */,
+				4C0111E92DB990E500996757 /* consequence_rules_testSchemaSchemaEmpty.json */,
+				4C0111E72DB98FF200996757 /* consequence_rules_testSchemaSchemaNull.json */,
+				4C0111E52DB98F9A00996757 /* consequence_rules_testSchemaSchemaMissing.json */,
+				4C0111E32DB98E7300996757 /* consequence_rules_testSchemaIdEmpty.json */,
+				4C0111E12DB8638B00996757 /* consequence_rules_testSchemaIdNull.json */,
+				4C0111DD2DB857F900996757 /* consequence_rules_testSchemaIdMissing.json */,
+			);
+			path = RulesEngineHistoricalTests;
 			sourceTree = "<group>";
 		};
 		75341CD72B9674870090CE3A /* PublicTestUtils */ = {
@@ -2799,28 +2829,40 @@
 			buildActionMask = 2147483647;
 			files = (
 				2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */,
+				4C0111E42DB98E7300996757 /* consequence_rules_testSchemaIdEmpty.json in Resources */,
 				BB3E86DE24F86B6700E39C53 /* rules_testUrlenc.json in Resources */,
+				4C0111DE2DB857F900996757 /* consequence_rules_testSchemaIdMissing.json in Resources */,
 				BBA512A724F4A18B0030DAD1 /* rules_testMatcherNc.json in Resources */,
 				BBA512B424F5CF380030DAD1 /* rules_testModifyData.json in Resources */,
 				BF4A6F2726BB4A1B00612434 /* rules_testDispatchEventInvalidAction.json in Resources */,
 				BF4A6EE726BB47FE00612434 /* rules_testDispatchEventNewData.json in Resources */,
 				3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */,
+				4C0111E82DB98FF200996757 /* consequence_rules_testSchemaSchemaNull.json in Resources */,
 				3F39520C24CA096100F7325B /* rules_1.json in Resources */,
 				BBA512A524F4A1790030DAD1 /* rules_testMatcherCo.json in Resources */,
 				BBA512A924F4A7EE0030DAD1 /* rules_testMatcherNx.json in Resources */,
+				4C0111EA2DB990E500996757 /* consequence_rules_testSchemaSchemaEmpty.json in Resources */,
 				BBA512A124F4A15C0030DAD1 /* rules_testMatcherLt.json in Resources */,
 				BB3E86E224F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json in Resources */,
 				3F39520D24CA096100F7325B /* ADBMobileConfig.json in Resources */,
 				24A1FCE72704CE6000D28D26 /* rules_testHistory.json in Resources */,
 				75ED44D12B56F0B400F2CEB1 /* rules_testAttachDataArray.json in Resources */,
+				4C0111F02DB9926D00996757 /* consequence_rules_testSchemaDataNull.json in Resources */,
 				BBA5129D24F4899B0030DAD1 /* rules_testMatcherGt.json in Resources */,
 				BF4A6F0526BB48A200612434 /* rules_testDispatchEventNewNoData.json in Resources */,
 				BF4A6F2826BB4A1B00612434 /* rules_testDispatchEventNoSource.json in Resources */,
+				4C0111E62DB98F9A00996757 /* consequence_rules_testSchemaSchemaMissing.json in Resources */,
+				4C0111EE2DB9922300996757 /* consequence_rules_testSchemaDataMissing.json in Resources */,
 				BF4A6EB826BB3B9D00612434 /* rules_testDispatchEventCopy.json in Resources */,
+				4C0111F22DB992AC00996757 /* consequence_rules_testSchemaDataEmpty.json in Resources */,
 				3F39520F24CA096100F7325B /* testRulesDownloader.zip in Resources */,
 				BF4A6F2626BB4A1B00612434 /* rules_testDispatchEventNoAction.json in Resources */,
+				4C0111F42DB9944400996757 /* consequence_rules_testSchemaEventHistoryInsert.json in Resources */,
 				3F39520A24CA096100F7325B /* TestRules.zip in Resources */,
 				3F39520E24CA096100F7325B /* TestConfig.json in Resources */,
+				4C0111E22DB8638B00996757 /* consequence_rules_testSchemaIdNull.json in Resources */,
+				4C01120C2DB99B4900996757 /* consequence_rules_testSchemaEventHistoryInsert_withTokens.json in Resources */,
+				4C0111EC2DB9916F00996757 /* consequence_rules_testSchemaSchemaInvalid.json in Resources */,
 				3F39520B24CA096100F7325B /* TestImage.png in Resources */,
 				BF4A6F2926BB4A1B00612434 /* rules_testDispatchEventNoType.json in Resources */,
 				BBA512BB24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json in Resources */,
@@ -2828,6 +2870,14 @@
 				BBA512A324F4A16A0030DAD1 /* rules_testMatcherLe.json in Resources */,
 				BBA5129B24F477550030DAD1 /* rules_testMatcherNe.json in Resources */,
 				BBA5129924F46C770030DAD1 /* rules_testGroupLogicalOperators.json in Resources */,
+				4C01120E2DB99CE900996757 /* consequence_rules_testSchemaEventHistoryInsertIfNotExists.json in Resources */,
+				4C0112042DB99A0100996757 /* consequence_rules_testDataContentEmpty.json in Resources */,
+				4C0112052DB99A0100996757 /* consequence_rules_testDataOperationEmpty.json in Resources */,
+				4C0112062DB99A0100996757 /* consequence_rules_testDataOperationMissing.json in Resources */,
+				4C0112072DB99A0100996757 /* consequence_rules_testDataContentNull.json in Resources */,
+				4C0112082DB99A0100996757 /* consequence_rules_testDataOperationInvalid.json in Resources */,
+				4C0112092DB99A0100996757 /* consequence_rules_testDataOperationNull.json in Resources */,
+				4C01120A2DB99A0100996757 /* consequence_rules_testDataContentMissing.json in Resources */,
 				BBA5129F24F4A14C0030DAD1 /* rules_testMatcherGe.json in Resources */,
 				BB244F7D2666DBAE00F427BC /* rules_testMatcherGt_2_types.json in Resources */,
 				BF4A6F8D26BBAE6500612434 /* rules_testDispatchEventChain.json in Resources */,
@@ -3389,6 +3439,7 @@
 				3F08FF9724D9F1F300D34DE3 /* EventDataMergeTests.swift in Sources */,
 				216A15F5257818EF00D43848 /* Data+HexStringTests.swift in Sources */,
 				BFFD6ED02D5575D4000D3224 /* MobileCoreInitializerTests.swift in Sources */,
+				4C0111D92DB8113F00996757 /* RulesEngineHistoricalTests.swift in Sources */,
 				3F39520824CA096100F7325B /* SharedStateTest.swift in Sources */,
 				24B4BE5F2714F7C80000C3AA /* EventHistoryDatabaseTests.swift in Sources */,
 				21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */,
@@ -3412,6 +3463,7 @@
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
 				78AA4EC42513AD2000205AE9 /* ConfigurationFileInPathTests.swift in Sources */,
+				4C0111DB2DB811D200996757 /* RulesEngineTestBase.swift in Sources */,
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */,

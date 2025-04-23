@@ -17,28 +17,7 @@ import AEPServices
 @testable import AEPCore
 
 /// Functional tests for the rules engine feature
-class RulesEngineFunctionalTests: XCTestCase {
-    var mockSystemInfoService: MockSystemInfoService!
-    var mockRuntime: TestableExtensionRuntime!
-    var rulesEngine: LaunchRulesEngine!
-    var defaultEvent: Event!
-
-    override func setUp() {
-        continueAfterFailure = false
-        mockRuntime = TestableExtensionRuntime()
-        defaultEvent = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
-                             data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
-        Log.logFilter = .trace
-        rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: mockRuntime)
-        rulesEngine.trace { _, _, _, failure in
-            print(failure ?? "unknown failure")
-        }
-    }
-
-    static var rulesUrl: URL? {
-        return Bundle(for: self).url(forResource: "rules_functional_1", withExtension: ".zip")
-    }
-
+class RulesEngineFunctionalTests: RulesEngineTestBase {
     func testLoadRulesFromRemoteURL() {
         /// Given:
         let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip")
@@ -1343,27 +1322,4 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual(1, mockRuntime.receivedEventHistoryRequests.count)
         XCTAssertEqual(false, mockRuntime.receivedEnforceOrder)
     }
-
-    private func resetRulesEngine(withNewRules rulesJsonFileName: String) {
-        let testBundle = Bundle(for: type(of: self))
-        guard let url = testBundle.url(forResource: rulesJsonFileName, withExtension: "json"), let data = try? Data(contentsOf: url) else {
-            XCTFail()
-            return
-        }
-        guard let rules = JSONRulesParser.parse(data, runtime: mockRuntime) else {
-            XCTFail()
-            return
-        }
-        rulesEngine.rulesEngine.clearRules()
-        rulesEngine.rulesEngine.addRules(rules: rules)
-    }
-
-    private func waitForProcessing(interval: TimeInterval = 0.5) {
-        let expectation = XCTestExpectation()
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + interval - 0.05) {
-            expectation.fulfill()
-        }
-        wait(for:[expectation], timeout: interval)
-    }
-
 }
