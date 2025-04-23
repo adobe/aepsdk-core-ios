@@ -14,18 +14,6 @@ import XCTest
 
 @testable import AEPCore
 
-/// Functional tests for the rules engine feature
-///
-/// for each test case generally:
-/// 1. in comments explain the historical consequence being used/tested
-/// 2. load the rule into rules engine
-/// 3. build and an event that triggers this rule (the event itself any anything related to it outside of causing the consequence is not the point)
-/// 4. have rules engine evaluate the rule
-/// 5. based on the test case, validate that the event is recorded (or not) - what is dispatched is what is recorded
-///
-/// however, i think there should be an integration test that it is working e2e, recording and not recording
-///
-///
 class RulesEngineHistoricalTests: RulesEngineTestBase {
     override func setUp() {
         super.setUp()
