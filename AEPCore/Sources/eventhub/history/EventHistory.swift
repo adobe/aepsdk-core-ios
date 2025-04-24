@@ -11,7 +11,6 @@
  */
 
 import Foundation
-
 import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.

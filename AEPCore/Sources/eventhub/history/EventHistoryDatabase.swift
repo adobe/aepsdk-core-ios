@@ -11,7 +11,6 @@
  */
 
 import Foundation
-
 import AEPServices
 
 class EventHistoryDatabase: EventHistoryStore {
@@ -32,8 +31,6 @@ class EventHistoryDatabase: EventHistoryStore {
     ///
     /// - Returns `nil` if the `DispatchQueue` cannot be initialized.
     init?(dispatchQueue: DispatchQueue) {
-        // IMPORTANT: Changes to this initialization logic MUST be reflected in the
-        // testing initializer to keep tests aligned with production behavior.
         self.dispatchQueue = dispatchQueue
         guard createTable() else {
             Log.warning(label: Self.LOG_PREFIX, "Failed to initialize Event History Database.")
