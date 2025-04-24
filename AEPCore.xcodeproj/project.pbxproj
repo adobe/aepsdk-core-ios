@@ -376,6 +376,8 @@
 		4CF0289F2C2D401E008ADE05 /* Event+AnyCodableComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028972C2D401E008ADE05 /* Event+AnyCodableComparable.swift */; };
 		4CF028A02C2D401E008ADE05 /* TestBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028982C2D401E008ADE05 /* TestBase.swift */; };
 		4CF028A12C2D401E008ADE05 /* TestableExtensionRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028992C2D401E008ADE05 /* TestableExtensionRuntime.swift */; };
+		4CF7079D2DB9C86500C54A7F /* EventHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF7079C2DB9C86500C54A7F /* EventHistoryService.swift */; };
+		4CF707A12DB9CDE000C54A7F /* EventHistoryDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF707A02DB9CDE000C54A7F /* EventHistoryDatabaseService.swift */; };
 		4CF791752CAB4F84003C1FD8 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF791742CAB4F84003C1FD8 /* XCTest.framework */; };
 		4CF791762CAB4F84003C1FD8 /* XCTest.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4CF791742CAB4F84003C1FD8 /* XCTest.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4CF791792CAB4F97003C1FD8 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
@@ -1122,6 +1124,8 @@
 		4CF028972C2D401E008ADE05 /* Event+AnyCodableComparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Event+AnyCodableComparable.swift"; sourceTree = "<group>"; };
 		4CF028982C2D401E008ADE05 /* TestBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestBase.swift; sourceTree = "<group>"; };
 		4CF028992C2D401E008ADE05 /* TestableExtensionRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestableExtensionRuntime.swift; sourceTree = "<group>"; };
+		4CF7079C2DB9C86500C54A7F /* EventHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryService.swift; sourceTree = "<group>"; };
+		4CF707A02DB9CDE000C54A7F /* EventHistoryDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabaseService.swift; sourceTree = "<group>"; };
 		4CF791742CAB4F84003C1FD8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/AppleTVOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4CF7919A2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TestHelper.swift"; sourceTree = "<group>"; };
 		57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1710,13 +1714,15 @@
 		24EDE32F26EFB7000068A65F /* history */ = {
 			isa = PBXGroup;
 			children = (
+				4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */,
 				24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */,
 				24EDE33026EFB7170068A65F /* EventHistory.swift */,
 				24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */,
+				4CF707A02DB9CDE000C54A7F /* EventHistoryDatabaseService.swift */,
 				24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */,
 				24EDE33A26F39F450068A65F /* EventHistoryResult.swift */,
+				4CF7079C2DB9C86500C54A7F /* EventHistoryService.swift */,
 				24EDE33826F10BA10068A65F /* String+FNV1A32.swift */,
-				4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */,
 			);
 			path = history;
 			sourceTree = "<group>";
@@ -3273,6 +3279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CF707A12DB9CDE000C54A7F /* EventHistoryDatabaseService.swift in Sources */,
 				4CCC21A62D9623BC00F75340 /* Event+EventHistoryRequest.swift in Sources */,
 				7522C4842C233ACD004AF637 /* Event+Debug.swift in Sources */,
 				218C813B24EC3EBC009B4F31 /* V5Migrator.swift in Sources */,
@@ -3321,6 +3328,7 @@
 				24CF602B2538AC79006473BA /* MobileCore+Tracking.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
+				4CF7079D2DB9C86500C54A7F /* EventHistoryService.swift in Sources */,
 				3FB66AC624CA004400502CAF /* MobileCore.swift in Sources */,
 				3FB66AD824CA004400502CAF /* Extension.swift in Sources */,
 				BB00E26E24D9BFB700C578C1 /* URLUtility.swift in Sources */,
