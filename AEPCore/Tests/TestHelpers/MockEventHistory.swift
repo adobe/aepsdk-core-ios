@@ -13,33 +13,38 @@
 @testable import AEPCore
 @testable import AEPCoreMocks
 
-class EventHistorySpy: EventHistory {
-    override init() {
-        super.init(mockDB: MockEventHistoryDatabase())
-    }
-
+class MockEventHistory: EventHistoryService {
     var didCallGetEvents = false
     var receivedRequests: [EventHistoryRequest]?
     var receivedEnforceOrder: Bool?
-    var stubbedResults: [EventHistoryResult] = []
+    var mockGetEventsResult: [EventHistoryResult] = []
 
-    override func getEvents(_ requests: [EventHistoryRequest],
-                            enforceOrder: Bool,
-                            handler: @escaping ([EventHistoryResult]) -> Void) {
+    func getEvents(_ requests: [EventHistoryRequest],
+                   enforceOrder: Bool,
+                   handler: @escaping ([EventHistoryResult]) -> Void) {
         didCallGetEvents = true
         receivedRequests = requests
         receivedEnforceOrder = enforceOrder
-        handler(stubbedResults)
+        handler(mockGetEventsResult)
     }
 
     var didCallRecordEvent = false
     var recordedEvent: Event?
-    var recordHandlerWasCalledWith: Bool?
+    var mockRecordEventHandlerResult: Bool = true
 
-    override func recordEvent(_ event: Event, handler: ((Bool) -> Void)?) {
+    func recordEvent(_ event: Event, handler: ((Bool) -> Void)?) {
         didCallRecordEvent = true
         recordedEvent = event
-        handler?(true)
-        recordHandlerWasCalledWith = true
+        handler?(mockRecordEventHandlerResult)
+    }
+
+    var didCallDeleteEvents = false
+    var receivedDeleteRequests: [EventHistoryRequest]?
+    var mockDeleteCount: Int = 0
+
+    func deleteEvents(_ requests: [EventHistoryRequest], handler: ((Int) -> Void)?) {
+        didCallDeleteEvents = true
+        receivedDeleteRequests = requests
+        handler?(mockDeleteCount)
     }
 }
