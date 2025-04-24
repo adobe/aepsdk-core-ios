@@ -1,4 +1,3 @@
-//
 /*
  Copyright 2025 Adobe. All rights reserved.
  This file is licensed to you under the Apache License, Version 2.0 (the "License");
@@ -12,6 +11,7 @@
 */
 
 import XCTest
+
 import AEPCoreMocks
 import AEPServices
 
