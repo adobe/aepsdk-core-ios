@@ -14,7 +14,9 @@ import Foundation
 
 @testable import AEPCore
 
-class MockEventHistoryDatabase: EventHistoryDatabase {
+class MockEventHistoryDatabase: EventHistoryDatabaseService {
+    let dispatchQueue = DispatchQueue(label: "mockEventHistoryDatabase")
+
     var paramHash: UInt32?
     var paramTimestamp: Date?
     var paramFrom: Date?
@@ -23,11 +25,7 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
     var returnSelect: EventHistoryResult?
     var returnDelete: Int = 0
 
-    init() {
-        super.init(testingWith: DispatchQueue(label: "mockEventHistoryDatabase"))
-    }
-
-    override func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
+    func insert(hash: UInt32, timestamp: Date, handler: ((Bool) -> Void)? = nil) {
         dispatchQueue.async {
             self.paramHash = hash
             self.paramTimestamp = timestamp
@@ -35,7 +33,7 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
         }
     }
 
-    override func select(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: @escaping (EventHistoryResult) -> Void) {
+    func select(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: @escaping (EventHistoryResult) -> Void) {
         dispatchQueue.async {
             self.paramHash = hash
             self.paramFrom = from
@@ -44,7 +42,7 @@ class MockEventHistoryDatabase: EventHistoryDatabase {
         }
     }
 
-    override func delete(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: ((Int) -> Void)? = nil) {
+    func delete(hash: UInt32, from: Date? = nil, to: Date? = nil, handler: ((Int) -> Void)? = nil) {
         dispatchQueue.async {
             self.paramHash = hash
             self.paramFrom = from

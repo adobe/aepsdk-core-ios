@@ -15,16 +15,14 @@ import Foundation
 import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.
-class EventHistory {
+class EventHistory: EventHistoryService {
     let LOG_TAG = "EventHistory"
-    var db: EventHistoryDatabase
+    var db: EventHistoryDatabaseService
 
     /// Default initializer.
     ///
     /// - Returns `nil` if the database cannot be initialized.
     init?() {
-        // IMPORTANT: Changes to this initialization logic MUST be reflected in the
-        // testing initializer to keep tests aligned with production behavior.
         guard let db = EventHistoryDatabase(dispatchQueue: DispatchQueue.init(label: "EventHistory")) else {
             return nil
         }
@@ -32,25 +30,15 @@ class EventHistory {
         self.db = db
     }
 
-    #if DEBUG
-    /// Initializer for testing purposes only.
-    ///
-    /// - Parameter mockDB: A mock or stub `EventHistoryDatabase` instance.
-    /// - Note: This testing initializer MUST reflect the production initializer’s setup logic to keep tests aligned with production behavior.
-    init(mockDB: EventHistoryDatabase) {
-        self.db = mockDB
-    }
-    #endif
-
     /// Records an `Event` based on its calculated hash.
     ///
     /// The hash is generated based on the provided `event`'s data.
     /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
-    /// If the hash value for the provided `event` is `0`, no record will be created in the database.
+    /// If the hash value for the provided `event` is `0`, no record will be created in event history.
     ///
     /// - Parameters:
-    ///   - event: the `Event` to be recorded in the Event History database.
-    ///   - handler: called with a `Bool` indicating a successful database insert.
+    ///   - event: the `Event` to be recorded in event history.
+    ///   - handler: called with `true` if the event was successfully recorded, `false` otherwise.
     func recordEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
         guard event.eventHash != 0 else {
             Log.debug(label: LOG_TAG, "Failed to record event in history - event hash is 0")
@@ -64,10 +52,10 @@ class EventHistory {
     /// Retrieves a count of historical events matching the provided requests.
     ///
     /// - Parameters:
-    ///   - requests: an array of `EventHistoryRequest`s used to generate the hash and timeframe for the event lookup
+    ///   - requests: an array of `EventHistoryRequest`s used to generate the hash and timeframe for the event lookup.
     ///   - enforceOrder: if `true`, consecutive lookups will use the oldest timestamp from the previous event as their
-    ///                   from date
-    ///   - handler: contains an `EventHistoryResult` for each provided request
+    ///                   from date.
+    ///   - handler: contains an `EventHistoryResult` for each provided request.
     func getEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
         var results: [EventHistoryResult] = []
 
@@ -104,8 +92,8 @@ class EventHistory {
     /// Deletes events with matching hashes to those provided in `requests`.
     ///
     /// - Parameters:
-    ///   - requests: an array of `EventHistoryRequest`s used to generate the hash and timeframe for the event lookup
-    ///   - handler: called with the number of records deleted
+    ///   - requests: an array of `EventHistoryRequest`s used to generate the hash and timeframe for the event lookup.
+    ///   - handler: called with the number of records deleted.
     func deleteEvents(_ requests: [EventHistoryRequest], handler: ((Int) -> Void)? = nil) {
         var rowsDeleted = 0
         for request in requests {

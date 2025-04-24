@@ -16,43 +16,39 @@ import XCTest
 @testable import AEPCore
 @testable import AEPCoreMocks
 
-class EventHubHistoryTests: XCTestCase {
+class EventHubEventHistoryTests: XCTestCase {
     var eventHub: EventHub!
+    var mockEventHistory: MockEventHistory!
 
     override func setUp() {
         super.setUp()
-        eventHub = EventHub()
-        // Start each test with no history
-        EventHub.shared.eventHistory = nil
+        mockEventHistory = MockEventHistory()
+        eventHub = EventHub(eventHistory: mockEventHistory)
     }
 
     func testGetHistoricalEvents_whenHistoryIsNil_callsHandlerWithEmpty() {
         let expectation = XCTestExpectation(description: "handler should be called even when history is nil")
-        EventHub.shared.getHistoricalEvents([], enforceOrder: false) { results in
+        eventHub.getHistoricalEvents([], enforceOrder: false) { results in
             XCTAssertTrue(results.isEmpty, "Expected an empty array when eventHistory is nil")
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 1)
     }
 
-    func testGetHistoricalEvents_withSpy_delegatesToEventHistory() {
-        let spy = EventHistorySpy()
-
-        let stubbedResult = EventHistoryResult(count: 42,
+    func testGetHistoricalEvents_delegatesToEventHistory() {
+        let mockResult = EventHistoryResult(count: 42,
                                              oldest: Date(timeIntervalSince1970: 1),
                                              newest: Date(timeIntervalSince1970: 2))
-        spy.stubbedResults = [stubbedResult]
-
-        EventHub.shared.eventHistory = spy
+        mockEventHistory.mockGetEventsResult = [mockResult]
 
         let req = EventHistoryRequest(mask: ["a": "b"], from: Date(), to: Date())
         let expectation = XCTestExpectation(description: "handler called with spy results")
 
-        EventHub.shared.getHistoricalEvents([req], enforceOrder: true) { results in
-            XCTAssertTrue(spy.didCallGetEvents, "Expected EventHub to call through to eventHistory.getEvents")
-            XCTAssertEqual([req], spy.receivedRequests, "Expected the same request array to be forwarded")
-            XCTAssertEqual(true, spy.receivedEnforceOrder, "Expected the enforceOrder flag to be forwarded")
-            XCTAssertEqual(spy.stubbedResults, results, "Expected the handler to receive spy.stubbedResults")
+        eventHub.getHistoricalEvents([req], enforceOrder: true) { results in
+            XCTAssertTrue(self.mockEventHistory.didCallGetEvents, "Expected EventHub to call through to eventHistory.getEvents")
+            XCTAssertEqual([req], self.mockEventHistory.receivedRequests, "Expected the same request array to be forwarded")
+            XCTAssertEqual(true, self.mockEventHistory.receivedEnforceOrder, "Expected the enforceOrder flag to be forwarded")
+            XCTAssertEqual(self.mockEventHistory.mockGetEventsResult, results, "Expected the handler to receive spy.stubbedResults")
             expectation.fulfill()
         }
 
@@ -60,11 +56,12 @@ class EventHubHistoryTests: XCTestCase {
     }
 
     func testRecordHistoricalEvent_whenHistoryIsNil_callsHandlerWithFalse() {
+        eventHub = EventHub(eventHistory: nil)
         let testEvent = Event(name: "x", type: "y", source: "z", data: nil, mask: nil)
         let expectation = XCTestExpectation(description: "handler should be called with false when history is nil")
         var callbackValue: Bool?
 
-        EventHub.shared.recordHistoricalEvent(testEvent) { success in
+        eventHub.recordHistoricalEvent(testEvent) { success in
             callbackValue = success
             expectation.fulfill()
         }
@@ -73,23 +70,20 @@ class EventHubHistoryTests: XCTestCase {
         XCTAssertEqual(false, callbackValue, "Expected recordHistoricalEvent to callback false when history is nil")
     }
 
-    func testRecordHistoricalEvent_withSpy_delegatesToEventHistory() {
-        let spy = EventHistorySpy()
-        EventHub.shared.eventHistory = spy
-
+    func testRecordHistoricalEvent_delegatesToEventHistory() {
         let testEvent = Event(name: "x", type: "y", source: "z", data: nil, mask: nil)
         let expectation = XCTestExpectation(description: "handler should be called with true from spy")
         var callbackValue: Bool?
 
-        EventHub.shared.recordHistoricalEvent(testEvent) { success in
+        eventHub.recordHistoricalEvent(testEvent) { success in
             callbackValue = success
             expectation.fulfill()
         }
 
         wait(for: [expectation], timeout: 1)
 
-        XCTAssertTrue(spy.didCallRecordEvent, "Expected EventHub to call through to eventHistory.recordEvent")
-        XCTAssertEqual(testEvent, spy.recordedEvent, "Expected the same Event to be forwarded")
+        XCTAssertTrue(mockEventHistory.didCallRecordEvent, "Expected EventHub to call through to eventHistory.recordEvent")
+        XCTAssertEqual(testEvent, mockEventHistory.recordedEvent, "Expected the same Event to be forwarded")
         XCTAssertEqual(true, callbackValue, "Expected handler to receive true from spy")
     }
 
