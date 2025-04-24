@@ -8,13 +8,15 @@
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
-*/
+ */
 
 import XCTest
 
+import AEPServicesMocks
+
 @testable import AEPCore
 
-class RulesEngineHistoricalTests: RulesEngineTestBase {
+class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
     override func setUp() {
         super.setUp()
         defaultEvent = Event(name: "Test Event",
@@ -50,7 +52,7 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         XCTAssertTrue(mockRuntime.recordHistoricalEventCalled)
     }
 
-    func testSchemaConsequenceInsert_doesDispatchAndRecord() {
+    func testSchemaConsequenceInsert_doesDispatchAndRecord() throws {
         // Given: a schema type rule consequence with a valid format
         //    ---------- schema based consequence details ----------
         //        "detail": {
@@ -79,13 +81,68 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should be dispatched
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         // Should attempt to record into event history
         XCTAssertTrue(mockRuntime.recordHistoricalEventCalled)
+        // Should be dispatched
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+
+        // Validate that the event that was recorded is equal to what was dispatched
+        let recordedEvent = try XCTUnwrap(mockRuntime.receivedRecordHistoricalEvent, "Expected recorded event to be non-nil")
+        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
+
+        XCTAssertEqual(recordedEvent, dispatchedEvent)
+
+        // Validate the expected consequence event properties: parentID, name, type, source, data
+        let expectedEventData = """
+        {
+          "stringKey": "stringValue",
+          "numberKey": 123,
+          "booleanKey": true,
+          "arrayKey": [
+            "value1",
+            2,
+            false
+          ],
+          "objectKey": {
+            "nestedKey1": "nestedValue1",
+            "nestedKey2": 456,
+            "nestedKey3": false
+          },
+          "nullKey": null
+        }
+        """
+        assertEqual(expected: expectedEventData, actual: recordedEvent.data)
+        XCTAssertEqual(recordedEvent.parentID, defaultEvent.id)
+        XCTAssertEqual(recordedEvent.name, "Dispatch Consequence Result")
+        XCTAssertEqual(recordedEvent.type, "com.adobe.eventType.rulesEngine")
+        XCTAssertEqual(recordedEvent.source, "com.adobe.eventSource.responseContent")
     }
 
-    func testSchemaConsequenceInsert_doesDispatchAndRecord_whenTokenReplacement() {
+    func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenContentIsEmpty() {
+        // Given: a schema type rule consequence with an invalid format for event history operation: ('content' empty)
+        //    ---------- schema based consequence details ----------
+        //        "detail": {
+        //          "id": "test-id",
+        //          "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
+        //          "data": {
+        //              "operation": "invalid",
+        //              "content": {}
+        //          }
+        //        }
+        //    --------------------------------------
+        resetRulesEngine(withNewRules: "consequence_rules_testDataContentEmpty")
+
+        // When:
+        rulesEngine.process(event: defaultEvent)
+
+        // Then: Event history consequence event:
+        // Should not attempt to record into event history
+        XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
+
+    func testSchemaConsequenceInsert_doesDispatchAndRecord_whenTokenReplacement() throws {
         // Given: a schema type rule consequence with a valid format
         //    ---------- schema based consequence details ----------
         //        "detail": {
@@ -95,8 +152,8 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         //          "operation": "insert",
         //          "content": {
         //            "key1": "value1",
-        //            "tokenKey": "{%~timestampu%}",
-        //            "tokenKey2": "{%~sdkver%}"
+        //            "tokenKey_type": "{%~type%}",
+        //            "tokenKey_source": "{%~source%}"
         //          }
         //        }
         //      }
@@ -107,10 +164,50 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should be dispatched
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         // Should attempt to record into event history
         XCTAssertTrue(mockRuntime.recordHistoricalEventCalled)
+        // Should be dispatched
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        // Validate the proper construction of the historical event when tokens are used
+        let recordedEvent = try XCTUnwrap(mockRuntime.receivedRecordHistoricalEvent, "Expected recorded event to be non-nil")
+        let expectedEventData = """
+        {
+          "key1": "value1",
+          "tokenKey_type": "com.adobe.eventType.generic.track",
+          "tokenKey_source": "com.adobe.eventSource.requestContent"
+        }
+        """
+        assertEqual(expected: expectedEventData, actual: recordedEvent.data)
+    }
+
+    func testSchemaConsequenceInsert_doesNotDispatch_whenRecordHistoricalEventFails() {
+        // Given: a schema type rule consequence with a valid format
+        //    ---------- schema based consequence details ----------
+        //        "detail": {
+        //        "id": "test-id",
+        //        "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
+        //        "data": {
+        //          "operation": "insert",
+        //          "content": {
+        //            "stringKey": "stringValue",
+        //            ...
+        //          }
+        //        }
+        //      }
+        //    --------------------------------------
+        resetRulesEngine(withNewRules: "consequence_rules_testSchemaEventHistoryInsert")
+
+        // Configure recordHistoricalEvent to return failure
+        mockRuntime.recordHistoricalEventResult = false
+
+        // When:
+        rulesEngine.process(event: defaultEvent)
+
+        // Then: Event history consequence event:
+        // Should attempt to record into event history
+        XCTAssertTrue(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsertIfNotExists_doesDispatchAndRecord_whenEventNotInEventHistory() {
@@ -145,10 +242,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should be dispatched
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         // Should attempt to record into event history
         XCTAssertTrue(mockRuntime.recordHistoricalEventCalled)
+        // Should be dispatched
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsertIfNotExists_doesNotDispatchAndRecord_whenEventInEventHistory() {
@@ -161,15 +258,7 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         //          "operation": "insertIfNotExists",
         //          "content": {
         //            "stringKey": "stringValue",
-        //            "numberKey": 123,
-        //            "booleanKey": true,
-        //            "arrayKey": ["value1", 2, false],
-        //            "objectKey": {
-        //              "nestedKey1": "nestedValue1",
-        //              "nestedKey2": 456,
-        //              "nestedKey3": false
-        //            },
-        //            "nullKey": null
+        //            ...
         //          }
         //        }
         //      }
@@ -183,10 +272,43 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+    }
+
+    func testSchemaConsequenceInsertIfNotExists_doesNotDispatchAndRecord_whenEventHistoryTimesOut() {
+        // Given: a schema type rule consequence with a valid format
+        //    ---------- schema based consequence details ----------
+        //        "detail": {
+        //        "id": "test-id",
+        //        "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
+        //        "data": {
+        //          "operation": "insertIfNotExists",
+        //          "content": {
+        //            "stringKey": "stringValue",
+        //            ...
+        //          }
+        //        }
+        //      }
+        //    --------------------------------------
+        resetRulesEngine(withNewRules: "consequence_rules_testSchemaEventHistoryInsertIfNotExists")
+
+        // Mock getHistoricalEvents to say event is not in event history
+        mockRuntime.mockEventHistoryResults = [EventHistoryResult(count: 0)]
+        // Configure the mock to not return with the results until after the rules engine
+        // timeout: `LaunchRulesEngine.EVENT_HISTORY_LOOKUP_TIMEOUT_SEC`
+        mockRuntime.getHistoricalEventsDelaySec = 2
+
+        // When:
+        rulesEngine.process(event: defaultEvent)
+
+        // Then: Event history consequence event:
+        // Should not attempt to record into event history
+        XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     // MARK: - Invalid input tests
@@ -210,10 +332,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailIdIsNull() {
@@ -236,10 +358,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailSchemaIsMissing() {
@@ -261,10 +383,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailSchemaIsNull() {
@@ -287,10 +409,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailSchemaIsEmpty() {
@@ -313,10 +435,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailSchemaIsInvalid() {
@@ -339,10 +461,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailDataIsMissing() {
@@ -359,10 +481,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailDataIsNull() {
@@ -380,10 +502,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailDataIsEmpty() {
@@ -401,10 +523,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     // MARK: Invalid `schema` type rule consequence `detail.data` formats
@@ -427,10 +549,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenOperationIsNull() {
@@ -453,10 +575,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenOperationIsEmpty() {
@@ -479,10 +601,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenOperationIsInvalid() {
@@ -505,10 +627,10 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenContentIsMissing() {
@@ -528,20 +650,20 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
+        // Should not be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
-    func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenContentIsInvalid() {
+    func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenContentIsNull() {
         // Given: a schema type rule consequence with an invalid format for event history operation: ('content' null)
         //    ---------- schema based consequence details ----------
         //        "detail": {
         //          "id": "test-id",
         //          "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
         //          "data": {
-        //              "operation": "invalid",
+        //              "operation": "insert",
         //              "content": null
         //          }
         //        }
@@ -552,34 +674,9 @@ class RulesEngineHistoricalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         // Then: Event history consequence event:
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
-    }
-
-    // This is not an invalid format, but validates the logic for event history operation
-    func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenContentIsEmpty() {
-        // Given: a schema type rule consequence with an invalid format for event history operation: ('content' empty)
-        //    ---------- schema based consequence details ----------
-        //        "detail": {
-        //          "id": "test-id",
-        //          "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
-        //          "data": {
-        //              "operation": "invalid",
-        //              "content": {}
-        //          }
-        //        }
-        //    --------------------------------------
-        resetRulesEngine(withNewRules: "consequence_rules_testDataContentEmpty")
-
-        // When:
-        rulesEngine.process(event: defaultEvent)
-
-        // Then: Event history consequence event:
         // Should not be dispatched
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
-        // Should not attempt to record into event history
-        XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
     }
 }

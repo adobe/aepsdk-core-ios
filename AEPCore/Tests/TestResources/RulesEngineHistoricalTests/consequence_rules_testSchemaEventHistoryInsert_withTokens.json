@@ -29,8 +29,8 @@
                 "operation": "insert",
                 "content": {
                   "key1": "value1",
-                  "tokenKey": "{%~timestampu%}",
-                  "tokenKey2": "{%~sdkver%}"
+                  "tokenKey_type": "{%~type%}",
+                  "tokenKey_source": "{%~source%}"
                 }
               }
             }
