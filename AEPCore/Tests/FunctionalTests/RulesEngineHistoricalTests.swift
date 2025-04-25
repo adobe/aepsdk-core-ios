@@ -278,7 +278,7 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
-    func testSchemaConsequenceInsertIfNotExists_doesNotDispatchAndRecord_whenEventHistoryTimesOut() {
+    func testSchemaConsequenceInsertIfNotExists_doesNotDispatchAndRecord_whenDatabaseError() {
         // Given: a schema type rule consequence with a valid format
         //    ---------- schema based consequence details ----------
         //        "detail": {
@@ -295,11 +295,8 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         //    --------------------------------------
         resetRulesEngine(withNewRules: "consequence_rules_testSchemaEventHistoryInsertIfNotExists")
 
-        // Mock getHistoricalEvents to say event is not in event history
-        mockRuntime.mockEventHistoryResults = [EventHistoryResult(count: 0)]
-        // Configure the mock to not return with the results until after the rules engine
-        // timeout: `LaunchRulesEngine.EVENT_HISTORY_LOOKUP_TIMEOUT_SEC`
-        mockRuntime.getHistoricalEventsDelaySec = 2
+        // Mock getHistoricalEvents to return a database error result
+        mockRuntime.mockEventHistoryResults = [EventHistoryResult(count: -1)]
 
         // When:
         rulesEngine.process(event: defaultEvent)

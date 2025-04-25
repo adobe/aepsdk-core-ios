@@ -31,7 +31,6 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var receivedEnforceOrder: Bool = false
     public var mockEventHistoryResults: [EventHistoryResult] = []
     public var ignoredEvents = Set<String>()
-    public var getHistoricalEventsDelaySec = 0
 
     public var receivedRecordHistoricalEvent: Event? = nil
     /// Tracks whether ``recordHistoricalEvent(_:handler:)`` was called.
@@ -202,13 +201,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public func getHistoricalEvents(_ events: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
         receivedEventHistoryRequests = events
         receivedEnforceOrder = enforceOrder
-        if getHistoricalEventsDelaySec > 0 {
-            DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(getHistoricalEventsDelaySec)) {
-                handler(self.mockEventHistoryResults)
-            }
-        } else {
-            handler(mockEventHistoryResults)
-        }
+        handler(mockEventHistoryResults)
     }
 }
 
