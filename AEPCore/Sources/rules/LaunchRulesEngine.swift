@@ -405,22 +405,21 @@ public class LaunchRulesEngine {
 
                 guard let self = self else { return }
 
-                guard let result = results.first else {
-                    Log.warning(label: LOG_TAG, "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation")
+                // Check that a valid result exists and that a database error (-1) was not returned
+                guard let result = results.first, result.count >= 0 else {
+                    Log.warning(label: LOG_TAG, "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation. Returned with result value: \(String(describing: results.first?.count))")
                     return
                 }
                 if result.count >= 1 {
                     Log.trace(label: LOG_TAG, "\(logPrefix) - Event already exists in history, skipping '\(operation)' operation")
                     return
                 }
+
                 eventExistsInEventHistory = false
             }
-            let timeoutResult = semaphore.wait(timeout: .now() + .seconds(LaunchRulesEngine.EVENT_HISTORY_LOOKUP_TIMEOUT_SEC))
 
-            if timeoutResult == .timedOut {
-                Log.warning(label: LOG_TAG, "\(logPrefix) - Timed out waiting for historical event lookup, skipping '\(operation)' operation")
-                return
-            }
+            // Wait for `getHistoricalEvents` operation to complete
+            semaphore.wait()
 
             if eventExistsInEventHistory {
                 return
