@@ -406,7 +406,9 @@ public class LaunchRulesEngine {
 
                 // Check that a valid result exists and that a database error (-1) was not returned
                 guard let result = results.first, result.count >= 0 else {
-                    Log.warning(label: LOG_TAG, "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation. Returned with result value: \(String(describing: results.first?.count))")
+                    Log.warning(label: LOG_TAG,
+                        "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation. " +
+                        "Returned with result value: \(String(describing: results.first?.count))")
                     return
                 }
                 if result.count >= 1 {
