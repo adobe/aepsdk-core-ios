@@ -388,30 +388,48 @@ public class LaunchRulesEngine {
             return
         }
 
-        // For INSERT_IF_NOT_EXISTS, check if the event exists first
+        // For INSERT_IF_NOT_EXISTS, check if the event exists in event history first
         if operation == LaunchRulesEngine.CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS {
             let eventHash = eventToRecord.eventHash
             if eventHash == 0 {
                 Log.warning(label: LOG_TAG, "\(logPrefix) - Unable to process '\(operation)' operation, event hash is 0")
                 return
             }
+            // Default `insertIfNotExists` to skip writing to event history due to early exit paths
+            var eventExistsInEventHistory = true
+            let semaphore = DispatchSemaphore(value: 0)
 
             extensionRuntime.getHistoricalEvents([eventToRecord.toEventHistoryRequest()], enforceOrder: false) { [weak self] results in
+                defer { semaphore.signal() }
+
                 guard let self = self else { return }
-                guard let result = results.first else {
-                    Log.warning(label: LOG_TAG, "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation")
+
+                // Check that a valid result exists and that a database error (-1) was not returned
+                guard let result = results.first, result.count >= 0 else {
+                    Log.warning(label: LOG_TAG,
+                        "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation. " +
+                        "Returned with result value: \(String(describing: results.first?.count))")
                     return
                 }
                 if result.count >= 1 {
                     Log.trace(label: LOG_TAG, "\(logPrefix) - Event already exists in history, skipping '\(operation)' operation")
                     return
                 }
+
+                eventExistsInEventHistory = false
+            }
+
+            // Wait for `getHistoricalEvents` operation to complete
+            semaphore.wait()
+
+            if eventExistsInEventHistory {
+                return
             }
         }
 
+        // For INSERT and INSERT_IF_NOT_EXISTS (which passed not exists check), insert the event
         Log.trace(label: LOG_TAG, "\(logPrefix) - Recording event in history with operation '\(operation)'")
 
-        // For INSERT and INSERT_IF_NOT_EXISTS (which passed not exists check), insert the event
         self.extensionRuntime.recordHistoricalEvent(eventToRecord) { [weak self] success in
             guard let self = self else { return }
             if success {
