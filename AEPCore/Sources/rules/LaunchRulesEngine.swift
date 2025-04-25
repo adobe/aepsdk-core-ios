@@ -40,7 +40,6 @@ public class LaunchRulesEngine {
     // Event History Operation constants
     private static let EVENT_HISTORY_OPERATION_KEY = "operation"
     private static let EVENT_HISTORY_CONTENT_KEY = "content"
-    private static let EVENT_HISTORY_LOOKUP_TIMEOUT_SEC = 1
 
     private let transformer: Transforming
     private let name: String
