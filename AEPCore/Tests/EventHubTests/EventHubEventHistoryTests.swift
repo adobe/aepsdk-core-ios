@@ -42,13 +42,13 @@ class EventHubEventHistoryTests: XCTestCase {
         mockEventHistory.mockGetEventsResult = [mockResult]
 
         let req = EventHistoryRequest(mask: ["a": "b"], from: Date(), to: Date())
-        let expectation = XCTestExpectation(description: "handler called with spy results")
+        let expectation = XCTestExpectation(description: "handler called with mock results")
 
         eventHub.getHistoricalEvents([req], enforceOrder: true) { results in
             XCTAssertTrue(self.mockEventHistory.didCallGetEvents, "Expected EventHub to call through to eventHistory.getEvents")
             XCTAssertEqual([req], self.mockEventHistory.receivedRequests, "Expected the same request array to be forwarded")
             XCTAssertEqual(true, self.mockEventHistory.receivedEnforceOrder, "Expected the enforceOrder flag to be forwarded")
-            XCTAssertEqual(self.mockEventHistory.mockGetEventsResult, results, "Expected the handler to receive spy.stubbedResults")
+            XCTAssertEqual(self.mockEventHistory.mockGetEventsResult, results, "Expected the handler to receive mock.mockGetEventsResult")
             expectation.fulfill()
         }
 
@@ -57,7 +57,7 @@ class EventHubEventHistoryTests: XCTestCase {
 
     func testRecordHistoricalEvent_whenHistoryIsNil_callsHandlerWithFalse() {
         eventHub = EventHub(eventHistory: nil)
-        let testEvent = Event(name: "x", type: "y", source: "z", data: nil, mask: nil)
+        let testEvent = Event(name: "test", type: "type", source: "source", data: nil, mask: nil)
         let expectation = XCTestExpectation(description: "handler should be called with false when history is nil")
         var callbackValue: Bool?
 
@@ -71,8 +71,8 @@ class EventHubEventHistoryTests: XCTestCase {
     }
 
     func testRecordHistoricalEvent_delegatesToEventHistory() {
-        let testEvent = Event(name: "x", type: "y", source: "z", data: nil, mask: nil)
-        let expectation = XCTestExpectation(description: "handler should be called with true from spy")
+        let testEvent = Event(name: "test", type: "type", source: "source", data: nil, mask: nil)
+        let expectation = XCTestExpectation(description: "handler should be called with true from mock")
         var callbackValue: Bool?
 
         eventHub.recordHistoricalEvent(testEvent) { success in
@@ -84,7 +84,6 @@ class EventHubEventHistoryTests: XCTestCase {
 
         XCTAssertTrue(mockEventHistory.didCallRecordEvent, "Expected EventHub to call through to eventHistory.recordEvent")
         XCTAssertEqual(testEvent, mockEventHistory.recordedEvent, "Expected the same Event to be forwarded")
-        XCTAssertEqual(true, callbackValue, "Expected handler to receive true from spy")
+        XCTAssertEqual(true, callbackValue, "Expected handler to receive true from mock")
     }
-
 }
