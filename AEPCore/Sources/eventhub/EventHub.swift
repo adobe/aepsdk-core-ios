@@ -34,7 +34,7 @@ final class EventHub {
     private let eventQueue = OperationOrderer<Event>("EventHub")
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
     private var started = false // true if the `EventHub` is started, false otherwise. Should only be accessed from within the `eventHubQueue`
-    private var eventHistory = EventHistory()
+    private let eventHistory: EventHistoryProvider?
     private var wrapperType: WrapperType = .none
     #if DEBUG
         public internal(set) static var shared = EventHub()
@@ -45,7 +45,8 @@ final class EventHub {
     // MARK: - Internal API
 
     /// Creates a new instance of `EventHub`
-    init() {
+    init(eventHistory: EventHistoryProvider? = EventHistory()) {
+        self.eventHistory = eventHistory
         // setup a place-holder extension container for `EventHub` so we can shared and retrieve state
         registerExtension(EventHubPlaceholderExtension.self, completion: { _ in })
 

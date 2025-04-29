@@ -13,7 +13,7 @@
 import Foundation
 import AEPServices
 
-class EventHistoryDatabase {
+class EventHistoryDatabase: EventHistoryStore {
     static let LOG_PREFIX = "Event History Database"
 
     let dispatchQueue: DispatchQueue
