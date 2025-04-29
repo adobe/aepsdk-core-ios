@@ -35,16 +35,6 @@ class EventHistory: EventHistoryProvider {
         self.storage = storage
     }
 
-    #if DEBUG
-    /// Initializer for testing purposes only.
-    ///
-    /// - Parameter mockDB: A mock or stub `EventHistoryDatabase` instance.
-    /// - Note: This testing initializer MUST reflect the production initializer’s setup logic to keep tests aligned with production behavior.
-    init(mockDB: EventHistoryDatabase) {
-        self.db = mockDB
-    }
-    #endif
-
     /// Records an `Event` based on its calculated hash.
     ///
     /// The hash is generated based on the provided `event`'s data.

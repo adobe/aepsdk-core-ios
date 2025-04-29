@@ -43,18 +43,6 @@ class EventHistoryDatabase: EventHistoryStore {
         self.connection = dbConnection
     }
 
-    #if DEBUG
-    /// Initializer for testing purposes. Bypasses SQLite setup; does not create tables
-    /// or connect to a database.
-    ///
-    /// - Parameter dispatchQueue: The dispatch queue to use for operations.
-    /// - Note: This testing initializer MUST reflect the production initializer’s setup logic to keep tests aligned with production behavior.
-    init(testingWith dispatchQueue: DispatchQueue = DispatchQueue(label: "EventHistoryDatabase.testing.queue")) {
-        self.dispatchQueue = dispatchQueue
-        self.connection = nil
-    }
-    #endif
-
     deinit {
         if let dbConnection = connection {
             disconnect(database: dbConnection)
