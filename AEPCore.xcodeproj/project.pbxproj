@@ -1944,9 +1944,9 @@
 			isa = PBXGroup;
 			children = (
 				24E255D3270F403A00AB9F07 /* HistoryTests */,
+				4C2157802DC0620C0055C8C9 /* EventHubEventHistoryTests.swift */,
 				3F3951EB24CA096100F7325B /* EventHubTests.swift */,
 				246B1A2A272B48A80017716A /* EventTests.swift */,
-				4C2157802DC0620C0055C8C9 /* EventHubEventHistoryTests.swift */,
 				3F3951EA24CA096100F7325B /* SharedStateTest.swift */,
 			);
 			path = EventHubTests;

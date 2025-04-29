@@ -25,18 +25,54 @@ class Event_EventHistoryRequestTests: XCTestCase {
         XCTAssertNil(request.toDate)
     }
 
-    func testToEventHistoryRequest_dataNotNilAndMaskNil_returnsAllData() {
+    func testToEventHistoryRequest_dataNotNilAndMaskNil_returnsAllDataWithFlattenedKeys() {
         let data: [String: Any] = [
             "stringKey": "value",
-            "intKey": 42
+            "intKey": 42,
+            "doubleKey": 3.14,
+            "boolKey": true,
+            "nullKey": NSNull(),
+            "arrayKey": ["stringInArray", 123, 4.56, false, NSNull()],
+            "dictionaryKey": [
+                "nestedString": "nestedValue",
+                "nestedInt": 100,
+                "nestedDouble": 9.81,
+                "nestedBool": false,
+                "nestedNull": NSNull()
+            ]
         ]
         let event = Event(name: "test", type: "type", source: "source", data: data, mask: nil)
 
         let request = event.toEventHistoryRequest()
 
-        XCTAssertEqual(request.mask.count, data.count)
-        XCTAssertEqual(request.mask["stringKey"] as? String, "value")
-        XCTAssertEqual(request.mask["intKey"] as? Int, 42)
+        // 6 top-level keys + 5 flattened inner dictionary keys
+        XCTAssertEqual(11, request.mask.count)
+
+        // Primitive top-level types
+        XCTAssertEqual("value", request.mask["stringKey"] as? String)
+        XCTAssertEqual(42, request.mask["intKey"] as? Int)
+        XCTAssertEqual(3.14, request.mask["doubleKey"] as? Double)
+        XCTAssertEqual(true, request.mask["boolKey"] as? Bool)
+
+        // Null at top level
+        XCTAssertEqual(NSNull(), request.mask["nullKey"] as? NSNull)
+
+        // Array
+        let arrayValue = request.mask["arrayKey"] as? [Any]
+        XCTAssertNotNil(arrayValue)
+        XCTAssertEqual(5, arrayValue?.count)
+        XCTAssertEqual("stringInArray", arrayValue?[0] as? String)
+        XCTAssertEqual(123, arrayValue?[1] as? Int)
+        XCTAssertEqual(4.56, arrayValue?[2] as? Double)
+        XCTAssertEqual(false, arrayValue?[3] as? Bool)
+        XCTAssertTrue(arrayValue?[4] is NSNull)
+
+        // Flattened nested dictionary keys
+        XCTAssertEqual("nestedValue", request.mask["dictionaryKey.nestedString"] as? String)
+        XCTAssertEqual(100, request.mask["dictionaryKey.nestedInt"] as? Int)
+        XCTAssertEqual(9.81, request.mask["dictionaryKey.nestedDouble"] as? Double)
+        XCTAssertEqual(false, request.mask["dictionaryKey.nestedBool"] as? Bool)
+        XCTAssertEqual(NSNull(), request.mask["dictionaryKey.nestedNull"] as? NSNull)
     }
 
     func testToEventHistoryRequest_dataNotNilAndMaskEmpty_returnsEmptyMask() {
@@ -54,15 +90,21 @@ class Event_EventHistoryRequestTests: XCTestCase {
     func testToEventHistoryRequest_maskFiltersData() {
         let data: [String: Any] = [
             "keep": "yes",
-            "drop": "no"
+            "drop": "no",
+            "dictionaryKey": [
+                "dropNestedString": "nestedValue",
+                "keepNestedInt": 100,
+            ]
         ]
-        let event = Event(name: "test", type: "type", source: "source", data: data, mask: ["keep"])
+        let event = Event(name: "test", type: "type", source: "source", data: data, mask: ["keep", "dictionaryKey.keepNestedInt"])
 
         let request = event.toEventHistoryRequest()
 
-        XCTAssertEqual(request.mask.count, 1)
-        XCTAssertEqual(request.mask["keep"] as? String, "yes")
+        XCTAssertEqual(2, request.mask.count)
+        XCTAssertEqual("yes", request.mask["keep"] as? String)
+        XCTAssertEqual(100, request.mask["dictionaryKey.keepNestedInt"] as? Int)
         XCTAssertNil(request.mask["drop"])
+        XCTAssertNil(request.mask["dictionaryKey.dropNestedString"])
     }
 
     func testToEventHistoryRequest_withFromAndTo_setsRange() {
@@ -77,4 +119,3 @@ class Event_EventHistoryRequestTests: XCTestCase {
         XCTAssertEqual(toDate, request.toDate)
     }
 }
-
