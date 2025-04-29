@@ -1998,10 +1998,10 @@
 			isa = PBXGroup;
 			children = (
 				3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */,
-				4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */,
 				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
 				3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */,
+				4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
