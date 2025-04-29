@@ -13,7 +13,9 @@
 @testable import AEPCore
 @testable import AEPCoreMocks
 
-class MockEventHistory: EventHistoryService {
+class MockEventHistory: EventHistoryProvider {
+    var storage: EventHistoryStore = MockEventHistoryDatabase()
+
     var didCallGetEvents = false
     var receivedRequests: [EventHistoryRequest]?
     var receivedEnforceOrder: Bool?
