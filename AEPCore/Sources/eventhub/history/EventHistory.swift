@@ -14,19 +14,25 @@ import Foundation
 import AEPServices
 
 /// Provides CRUD support for storing `Event` objects in a local database.
-class EventHistory: EventHistoryService {
+class EventHistory: EventHistoryProvider {
     let LOG_TAG = "EventHistory"
-    var db: EventHistoryDatabaseService
+    let storage: EventHistoryStore
 
-    /// Default initializer.
+    /// Initializes a new `EventHistory` instance with the provided storage or a default implementation.
     ///
-    /// - Returns `nil` if the database cannot be initialized.
-    init?() {
-        guard let db = EventHistoryDatabase(dispatchQueue: DispatchQueue.init(label: "EventHistory")) else {
+    /// If a custom `EventHistoryStore` is provided, it will be used for event history operations.
+    /// If `nil` is provided, the initializer attempts to create a default `EventHistoryDatabase`
+    /// backed by a new serial `DispatchQueue`.
+    ///
+    /// - Parameter storage: An optional `EventHistoryStore` to use. If `nil`, a default `EventHistoryDatabase` is created.
+    /// - Returns: `nil` if no storage is provided and the default `EventHistoryDatabase` fails to initialize.
+    init?(storage: EventHistoryStore? = nil) {
+        // Use the provided storage if available.
+        // Otherwise, attempt to initialize a default `EventHistoryDatabase`.
+        guard let storage = storage ?? EventHistoryDatabase(dispatchQueue: DispatchQueue(label: "EventHistory")) else {
             return nil
         }
-
-        self.db = db
+        self.storage = storage
     }
 
     /// Records an `Event` based on its calculated hash.
@@ -45,7 +51,7 @@ class EventHistory: EventHistoryService {
             return
         }
 
-        db.insert(hash: event.eventHash, timestamp: event.timestamp, handler: handler)
+        storage.insert(hash: event.eventHash, timestamp: event.timestamp, handler: handler)
     }
 
     /// Retrieves a count of historical events matching the provided requests.
@@ -64,7 +70,7 @@ class EventHistory: EventHistoryService {
                 let eventHash = event.mask.fnv1a32()
                 let from = previousEventOldestOccurrence ?? event.fromDate
                 let semaphore = DispatchSemaphore(value: 0)
-                db.select(hash: eventHash, from: from, to: event.toDate) { result in
+                storage.select(hash: eventHash, from: from, to: event.toDate) { result in
                     Log.debug(label: "EventHistory", "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(from?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder enabled returned \(result.count) record(s).")
                     previousEventOldestOccurrence = result.oldestOccurrence
                     results.append(result)
@@ -76,7 +82,7 @@ class EventHistory: EventHistoryService {
             for event in requests {
                 let semaphore = DispatchSemaphore(value: 0)
                 let eventHash = event.mask.fnv1a32()
-                db.select(hash: eventHash, from: event.fromDate, to: event.toDate) { result in
+                storage.select(hash: eventHash, from: event.fromDate, to: event.toDate) { result in
                     Log.debug(label: "EventHistory", "EventHistoryRequest[\(event.hashValue)] - request for events with hash (\(eventHash)) between (\(event.fromDate?.millisecondsSince1970 ?? 0)) and (\(event.toDate?.millisecondsSince1970 ?? 0)) with enforceOrder disabled returned \(result.count) record(s).")
                     results.append(result)
                     semaphore.signal()
@@ -97,7 +103,7 @@ class EventHistory: EventHistoryService {
         var rowsDeleted = 0
         for request in requests {
             let semaphore = DispatchSemaphore(value: 0)
-            db.delete(hash: request.mask.fnv1a32(), from: request.fromDate, to: request.toDate) { count in
+            storage.delete(hash: request.mask.fnv1a32(), from: request.fromDate, to: request.toDate) { count in
                 rowsDeleted += count
                 semaphore.signal()
             }

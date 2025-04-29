@@ -12,7 +12,7 @@
 
 import Foundation
 
-protocol EventHistoryDatabaseService {
+protocol EventHistoryStore {
     /// Inserts a record in the EventHistory database.
     ///
     /// Fails if a connection to the database cannot be established, and calls the `handler` with a value of `false`.

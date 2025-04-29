@@ -14,7 +14,7 @@ import Foundation
 
 @testable import AEPCore
 
-class MockEventHistoryDatabase: EventHistoryDatabaseService {
+class MockEventHistoryDatabase: EventHistoryStore {
     let dispatchQueue = DispatchQueue(label: "mockEventHistoryDatabase")
 
     var paramHash: UInt32?

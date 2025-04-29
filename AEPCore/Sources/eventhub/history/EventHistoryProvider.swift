@@ -12,7 +12,15 @@
 
 import Foundation
 
-protocol EventHistoryService {
+protocol EventHistoryProvider {
+    /// Provides direct access to the underlying `EventHistoryStore`.
+    ///
+    /// This property exposes the lower-level storage operations (insert, select, delete) used by the event history system.
+    ///
+    /// - Note: Use caution when interacting directly with `storage` to avoid bypassing important event history logic
+    ///         enforced at the `EventHistoryProvider` level.
+    var storage: EventHistoryStore { get }
+
     /// Records an `Event` based on its calculated hash.
     ///
     /// The hash is generated based on the provided `event`'s data.

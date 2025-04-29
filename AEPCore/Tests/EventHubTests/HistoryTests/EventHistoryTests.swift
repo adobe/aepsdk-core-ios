@@ -23,9 +23,8 @@ class EventHistoryTests: XCTestCase {
     var expectedHash: UInt32!
     
     override func setUp() {
-        eventHistory = EventHistory()
         mockEventHistoryDatabase = MockEventHistoryDatabase()
-        eventHistory.db = mockEventHistoryDatabase
+        eventHistory = EventHistory(storage: mockEventHistoryDatabase)
         
         // hashed string will be "key:valuenumeric:552" - 1254850096
         expectedHash = 1254850096
