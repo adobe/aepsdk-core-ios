@@ -84,7 +84,15 @@ enum ConditionType: String, Codable {
 
 enum EventHistorySearchType: String, Codable {
     case any
+    case mostRecent
     case ordered
+
+    init?(_ optionalValue: String?) {
+        guard let value = optionalValue, let enumValue = EventHistorySearchType(rawValue: value) else {
+            return nil
+        }
+        self = enumValue
+    }
 }
 
 class JSONCondition: Codable {
@@ -146,6 +154,9 @@ class JSONCondition: Codable {
         // ensure we have the required values to process this historical lookup
         guard let events = definition.events, let matcherString = definition.matcher, let runtime = runtime,
               let matcher = JSONCondition.matcherMapping[matcherString], let valueAsInt = definition.value?.intValue else {
+            Log.warning(label: JSONRulesParser.LOG_LABEL,
+                        "Failed to extract historical condition. " +
+                        "Missing or invalid required fields in definition: \(definition)")
             return nil
         }
 
@@ -157,14 +168,26 @@ class JSONCondition: Codable {
         if let toTs = definition.to {
             toDate = Date(milliseconds: toTs)
         }
-        let searchType = EventHistorySearchType(rawValue: definition.searchType ?? "any") ?? .any
+        // Attempt to convert to a valid EventHistorySearchType.
+        // If conversion fails, log a warning and fall back to .any.
+        let searchType = EventHistorySearchType(definition.searchType) ?? {
+            Log.warning(label: JSONRulesParser.LOG_LABEL,
+                        "Unknown historical condition searchType '\(definition.searchType ?? "nil")', falling back to .any")
+            return .any
+        }()
 
         let requestEvents = events.map({
             EventHistoryRequest(mask: $0, from: fromDate, to: toDate)
         })
 
         let params: [Any] = [runtime, requestEvents, searchType]
-        let historyOperand = Operand<Int>(function: getHistoricalEventCount, parameters: params)
+        let historyOperand: Operand<Int>
+        if searchType == .mostRecent {
+            historyOperand = Operand<Int>(function: getMostRecentHistoricalEvent, parameters: params)
+        } else {
+            // .any or .ordered
+            historyOperand = Operand<Int>(function: getHistoricalEventCount, parameters: params)
+        }
 
         return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
     }
@@ -179,6 +202,7 @@ class JSONCondition: Codable {
     /// - Returns: the number of matching records for an `.any` search, or a boolean (1 or 0) indicating whether search conditions were met for an `.ordered` search.
     func getHistoricalEventCount(parameters: [Any]?) -> Int {
         guard let params = parameters,
+              params.count >= 3,
               let runtime = params[0] as? ExtensionRuntime,
               let requestEvents = params[1] as? [EventHistoryRequest],
               let searchType = params[2] as? EventHistorySearchType else {
@@ -189,17 +213,16 @@ class JSONCondition: Codable {
         let semaphore = DispatchSemaphore(value: 0)
 
         runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
+            defer { semaphore.signal() }
             if searchType == .ordered {
                 for result in results {
                     if result.count == -1 {
                         // database error
                         returnValue = -1
-                        semaphore.signal()
                         break
                     } else if result.count == 0 {
                         // quick exit on ordered searches if any result has a count == 0
                         returnValue = 0
-                        semaphore.signal()
                         break
                     } else {
                         returnValue = 1
@@ -210,19 +233,63 @@ class JSONCondition: Codable {
                     if result.count == -1 {
                         // database error
                         returnValue = -1
-                        semaphore.signal()
                         break
                     } else {
                         returnValue += result.count
                     }
                 }
             }
-
-            semaphore.signal()
         }
 
         semaphore.wait()
         return returnValue
+    }
+
+    /// Returns the index of the most recent historical event based on occurrence date.
+    /// If no events are found or an error occurs during lookup, the method returns `-1`.
+    /// If duplicate EventHistoryRequests are provided, the index of the last instance will be returned.
+    ///
+    /// - Parameter parameters: An array expected to contain, in order:
+    ///     - An `ExtensionRuntime` instance used to perform historical event lookups.
+    ///     - An array of `EventHistoryRequest` objects specifying the search criteria.
+    ///
+    /// - Returns: The index of the event with the most recent occurrence, or `-1` if none are found or there is an error.
+    func getMostRecentHistoricalEvent(parameters: [Any]?) -> Int {
+        guard let params = parameters,
+              params.count >= 2,
+              let runtime = params[0] as? ExtensionRuntime,
+              let requestEvents = params[1] as? [EventHistoryRequest] else {
+            return -1
+        }
+
+        var mostRecentIndex = -1
+        var mostRecentDate = Date.distantPast
+        let semaphore = DispatchSemaphore(value: 0)
+
+        runtime.getHistoricalEvents(requestEvents, enforceOrder: false) { eventResults in
+            defer { semaphore.signal() }
+
+            for (index, result) in eventResults.enumerated() {
+                // If a database error is returned for any result, early exit and return the error value
+                if result.count == -1 {
+                    mostRecentIndex = -1
+                    return
+                }
+                // Check that there is a newest occurrence date for this result
+                guard let newestOccurrence = result.newestOccurrence else {
+                    continue
+                }
+                // Check if the current result is newer than the current most recent date
+                if newestOccurrence > mostRecentDate {
+                    mostRecentDate = newestOccurrence
+                    mostRecentIndex = index
+                }
+            }
+        }
+
+        semaphore.wait()
+
+        return mostRecentIndex
     }
 
     func convert(key: String, matcher: String, anyCodable: AnyCodable) -> Evaluable? {
