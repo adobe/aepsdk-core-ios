@@ -185,7 +185,7 @@ class EventHistoryTests: XCTestCase {
         // Given two distinct queued results
         let expectedResults = [
             EventHistoryResult(count: 1, oldest: nil, newest: nil),
-            EventHistoryResult(count: 1, oldest: nil, newest: nil)
+            EventHistoryResult(count: 2, oldest: nil, newest: nil)
         ]
         mockEventHistoryDatabase.returnSelectResultsQueue = expectedResults
 
