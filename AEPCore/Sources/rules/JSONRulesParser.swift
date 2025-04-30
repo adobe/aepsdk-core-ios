@@ -86,13 +86,6 @@ enum EventHistorySearchType: String, Codable {
     case any
     case mostRecent
     case ordered
-
-    init?(_ optionalValue: String?) {
-        guard let value = optionalValue, let enumValue = EventHistorySearchType(rawValue: value) else {
-            return nil
-        }
-        self = enumValue
-    }
 }
 
 class JSONCondition: Codable {
@@ -168,13 +161,9 @@ class JSONCondition: Codable {
         if let toTs = definition.to {
             toDate = Date(milliseconds: toTs)
         }
-        // Attempt to convert to a valid EventHistorySearchType.
-        // If conversion fails, log a warning and fall back to .any.
-        let searchType = EventHistorySearchType(definition.searchType) ?? {
-            Log.warning(label: JSONRulesParser.LOG_LABEL,
-                        "Unknown historical condition searchType '\(definition.searchType ?? "nil")', falling back to .any")
-            return .any
-        }()
+
+        // Default search type is `.any`. Replaced by a valid type from `definition.searchType` if provided.
+        let searchType = definition.searchType.flatMap(EventHistorySearchType.init) ?? .any
 
         let requestEvents = events.map({
             EventHistoryRequest(mask: $0, from: fromDate, to: toDate)
@@ -182,11 +171,11 @@ class JSONCondition: Codable {
 
         let params: [Any] = [runtime, requestEvents, searchType]
         let historyOperand: Operand<Int>
-        if searchType == .mostRecent {
-            historyOperand = Operand<Int>(function: getMostRecentHistoricalEvent, parameters: params)
-        } else {
-            // .any or .ordered
+        switch searchType {
+        case .any, .ordered:
             historyOperand = Operand<Int>(function: getHistoricalEventCount, parameters: params)
+        case .mostRecent:
+            historyOperand = Operand<Int>(function: getMostRecentHistoricalEvent, parameters: params)
         }
 
         return ComparisonExpression(lhs: historyOperand, operationName: matcher, rhs: Operand(integerLiteral: valueAsInt))
@@ -208,35 +197,43 @@ class JSONCondition: Codable {
               let searchType = params[2] as? EventHistorySearchType else {
             return 0
         }
+        // Early exit with error value for unsupported search types
+        guard searchType != .mostRecent else {
+            Log.warning(label: JSONRulesParser.LOG_LABEL, "Unsupported EventHistorySearchType 'mostRecent' in getHistoricalEventCount")
+            return -1
+        }
 
         var returnValue: Int = 0
         let semaphore = DispatchSemaphore(value: 0)
 
         runtime.getHistoricalEvents(requestEvents, enforceOrder: searchType == .ordered) { results in
             defer { semaphore.signal() }
-            if searchType == .ordered {
+            switch searchType {
+            case .any:
                 for result in results {
-                    if result.count == -1 {
-                        // database error
+                    // If a database error is returned for any result, early exit and return the error value
+                    guard result.count != -1 else {
                         returnValue = -1
                         break
-                    } else if result.count == 0 {
-                        // quick exit on ordered searches if any result has a count == 0
+                    }
+                    returnValue += result.count
+                }
+            case .mostRecent:
+                // Should be impossible to reach due to early exit guard
+                returnValue = -1
+            case .ordered:
+                for result in results {
+                    // If a database error is returned for any result, early exit and return the error value
+                    guard result.count != -1 else {
+                        returnValue = -1
+                        break
+                    }
+                    // Early exit on ordered searches if any event result returned no records
+                    if result.count == 0 {
                         returnValue = 0
                         break
-                    } else {
-                        returnValue = 1
                     }
-                }
-            } else {
-                for result in results {
-                    if result.count == -1 {
-                        // database error
-                        returnValue = -1
-                        break
-                    } else {
-                        returnValue += result.count
-                    }
+                    returnValue = 1
                 }
             }
         }
@@ -245,7 +242,7 @@ class JSONCondition: Codable {
         return returnValue
     }
 
-    /// Returns the index of the most recent historical event based on occurrence date.
+    /// Returns the index of the most recent historical event based on occurrence timestamp.
     /// If no events are found or an error occurs during lookup, the method returns `-1`.
     /// If duplicate ``EventHistoryRequest``s are provided, the index of the first instance will be returned.
     ///
