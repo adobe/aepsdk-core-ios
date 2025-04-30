@@ -113,7 +113,47 @@ class EventHistoryTests: XCTestCase {
         XCTAssertEqual(mockOldestDate, mockEventHistoryDatabase.paramFrom)
         XCTAssertEqual(mockNewestDate, mockEventHistoryDatabase.paramTo)
     }
-    
+
+    func testGetEvents_MultipleRequests_EnforceOrder_UsesPreviousOldest() {
+        // Given
+        let expectation = expectation(description: "handler")
+
+        // Two queued results; the first result's `oldestOccurrence` should be used
+        // as the `from` date for the second request in enforce-order mode.
+        let oldest1 = Date(timeIntervalSince1970: 100)
+        let oldest2 = Date(timeIntervalSince1970: 200)
+        let result1 = EventHistoryResult(count: 1, oldest: oldest1, newest: nil)
+        let result2 = EventHistoryResult(count: 1, oldest: oldest2, newest: nil)
+        mockEventHistoryDatabase.returnSelectResultsQueue = [result1, result2]
+
+        // Original from/to dates.
+        // In enforce-order mode, the second request's `from` should be overridden by `oldest1`.
+        let from1 = Date(timeIntervalSince1970: 1)
+        let to1 = Date(timeIntervalSince1970: 2)
+        let from2 = Date(timeIntervalSince1970: 3)
+        let to2 = Date(timeIntervalSince1970: 4)
+
+        // Requests
+        let request1 = EventHistoryRequest(mask: ["a": 1], from: from1, to: to1)
+        let request2 = EventHistoryRequest(mask: ["b": 2], from: from2, to: to2)
+        let requests = [request1, request2]
+
+        // When
+        eventHistory.getEvents(requests, enforceOrder: true) { results in
+            // Then
+            // Result array matches database order
+            XCTAssertEqual([result1, result2], results)
+            // Exactly one select per request, in order
+            let expectedHashes = [request1.mask.fnv1a32(), request2.mask.fnv1a32()]
+            XCTAssertEqual(expectedHashes, self.mockEventHistoryDatabase.paramHashesList)
+            // `from` for second call is previous event's `oldestOccurrence` Date
+            XCTAssertEqual([from1, oldest1], self.mockEventHistoryDatabase.paramFromList)
+            expectation.fulfill()
+        }
+
+        wait(for: [expectation], timeout: 1)
+    }
+
     func testGetEventsDoNotEnforceOrder() throws {
         // setup
         let expectation = XCTestExpectation(description: "handler called")
@@ -140,7 +180,33 @@ class EventHistoryTests: XCTestCase {
         XCTAssertEqual(mockOldestDate, mockEventHistoryDatabase.paramFrom)
         XCTAssertEqual(mockNewestDate, mockEventHistoryDatabase.paramTo)
     }
-    
+
+    func testGetEvents_MultipleRequests_NoOrder_ReturnsResultsInSameOrder() {
+        // Given two distinct queued results
+        let expectedResults = [
+            EventHistoryResult(count: 1, oldest: nil, newest: nil),
+            EventHistoryResult(count: 1, oldest: nil, newest: nil)
+        ]
+        mockEventHistoryDatabase.returnSelectResultsQueue = expectedResults
+
+        let request1 = EventHistoryRequest(mask: ["a":1], from: nil, to: nil)
+        let request2 = EventHistoryRequest(mask: ["b":2], from: nil, to: nil)
+
+        let expectation = expectation(description: "handler")
+
+        // When
+        eventHistory.getEvents([request1, request2], enforceOrder: false) { results in
+            // Then
+            // Should return one result per request, in the same order as the requests.
+            XCTAssertEqual(expectedResults, results)
+            // Should invoke select once per request, in the correct order.
+            let expectedHashes = [request1.mask.fnv1a32(), request2.mask.fnv1a32()]
+            XCTAssertEqual(expectedHashes, self.mockEventHistoryDatabase.paramHashesList)
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1)
+    }
+
     func testDeleteEvents() throws {
         // setup
         let expectation = XCTestExpectation(description: "handler called")
