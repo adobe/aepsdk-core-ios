@@ -360,6 +360,7 @@
 		4C2157E62DC159270055C8C9 /* consequence_rules_testSchemaDataNull.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157C92DC159270055C8C9 /* consequence_rules_testSchemaDataNull.json */; };
 		4C2157E72DC159270055C8C9 /* consequence_rules_testDataOperationEmpty.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157C32DC159270055C8C9 /* consequence_rules_testDataOperationEmpty.json */; };
 		4C2157ED2DC178270055C8C9 /* JSONConditionMostRecentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */; };
+		4C2157EF2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */; };
 		4CCC21A62D9623BC00F75340 /* Event+EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
@@ -1147,6 +1148,7 @@
 		4C2157D22DC159270055C8C9 /* consequence_rules_testSchemaSchemaMissing.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = consequence_rules_testSchemaSchemaMissing.json; sourceTree = "<group>"; };
 		4C2157D32DC159270055C8C9 /* consequence_rules_testSchemaSchemaNull.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = consequence_rules_testSchemaSchemaNull.json; sourceTree = "<group>"; };
 		4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConditionMostRecentTests.swift; sourceTree = "<group>"; };
+		4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testHistoryMostRecent.json; sourceTree = "<group>"; };
 		4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequest.swift"; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
@@ -2019,6 +2021,7 @@
 				BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */,
 				BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */,
 				24A1FCE62704CE6000D28D26 /* rules_testHistory.json */,
+				4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */,
 				BBA512A424F4A1790030DAD1 /* rules_testMatcherCo.json */,
 				BB244F7C2666DBAE00F427BC /* rules_testMatcherGt_2_types.json */,
 				BBA5129E24F4A14C0030DAD1 /* rules_testMatcherGe.json */,
@@ -2902,6 +2905,7 @@
 				4C2157E02DC159270055C8C9 /* consequence_rules_testSchemaEventHistoryInsert_withTokens.json in Resources */,
 				4C2157E12DC159270055C8C9 /* consequence_rules_testDataContentNull.json in Resources */,
 				4C2157E22DC159270055C8C9 /* consequence_rules_testDataOperationInvalid.json in Resources */,
+				4C2157EF2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json in Resources */,
 				4C2157E32DC159270055C8C9 /* consequence_rules_testSchemaSchemaEmpty.json in Resources */,
 				4C2157E42DC159270055C8C9 /* consequence_rules_testDataOperationMissing.json in Resources */,
 				4C2157E52DC159270055C8C9 /* consequence_rules_testSchemaIdEmpty.json in Resources */,
