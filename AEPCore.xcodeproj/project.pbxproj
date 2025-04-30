@@ -359,6 +359,8 @@
 		4C2157E52DC159270055C8C9 /* consequence_rules_testSchemaIdEmpty.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157CD2DC159270055C8C9 /* consequence_rules_testSchemaIdEmpty.json */; };
 		4C2157E62DC159270055C8C9 /* consequence_rules_testSchemaDataNull.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157C92DC159270055C8C9 /* consequence_rules_testSchemaDataNull.json */; };
 		4C2157E72DC159270055C8C9 /* consequence_rules_testDataOperationEmpty.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157C32DC159270055C8C9 /* consequence_rules_testDataOperationEmpty.json */; };
+		4C2157ED2DC178270055C8C9 /* JSONConditionMostRecentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */; };
+		4C2157EF2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */; };
 		4CCC21A62D9623BC00F75340 /* Event+EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
@@ -1145,6 +1147,8 @@
 		4C2157D12DC159270055C8C9 /* consequence_rules_testSchemaSchemaInvalid.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = consequence_rules_testSchemaSchemaInvalid.json; sourceTree = "<group>"; };
 		4C2157D22DC159270055C8C9 /* consequence_rules_testSchemaSchemaMissing.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = consequence_rules_testSchemaSchemaMissing.json; sourceTree = "<group>"; };
 		4C2157D32DC159270055C8C9 /* consequence_rules_testSchemaSchemaNull.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = consequence_rules_testSchemaSchemaNull.json; sourceTree = "<group>"; };
+		4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConditionMostRecentTests.swift; sourceTree = "<group>"; };
+		4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testHistoryMostRecent.json; sourceTree = "<group>"; };
 		4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequest.swift"; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
@@ -1967,6 +1971,7 @@
 				BBE1294E24DBBBD60045CD8D /* Dictionary+FlattenTests.swift */,
 				3F08FF9624D9F1F300D34DE3 /* EventDataMergeTests.swift */,
 				3F39152F24CA47B600B58C3E /* JSONRulesParserTests.swift */,
+				4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */,
 				BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */,
 				3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */,
 				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
@@ -2016,6 +2021,7 @@
 				BF4A6F2526BB4A1B00612434 /* rules_testDispatchEventNoType.json */,
 				BBA5129724F4588E0030DAD1 /* rules_testGroupLogicalOperators.json */,
 				24A1FCE62704CE6000D28D26 /* rules_testHistory.json */,
+				4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */,
 				BBA512A424F4A1790030DAD1 /* rules_testMatcherCo.json */,
 				BB244F7C2666DBAE00F427BC /* rules_testMatcherGt_2_types.json */,
 				BBA5129E24F4A14C0030DAD1 /* rules_testMatcherGe.json */,
@@ -2899,6 +2905,7 @@
 				4C2157E02DC159270055C8C9 /* consequence_rules_testSchemaEventHistoryInsert_withTokens.json in Resources */,
 				4C2157E12DC159270055C8C9 /* consequence_rules_testDataContentNull.json in Resources */,
 				4C2157E22DC159270055C8C9 /* consequence_rules_testDataOperationInvalid.json in Resources */,
+				4C2157EF2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json in Resources */,
 				4C2157E32DC159270055C8C9 /* consequence_rules_testSchemaSchemaEmpty.json in Resources */,
 				4C2157E42DC159270055C8C9 /* consequence_rules_testDataOperationMissing.json in Resources */,
 				4C2157E52DC159270055C8C9 /* consequence_rules_testSchemaIdEmpty.json in Resources */,
@@ -3039,9 +3046,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3056,9 +3067,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3095,9 +3110,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3156,9 +3175,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3195,9 +3218,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3503,6 +3530,7 @@
 				3F39521024CA096100F7325B /* SlowMockExtension.swift in Sources */,
 				3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */,
 				2130A59D260AB448005DBA0F /* MockLegacyExtension.swift in Sources */,
+				4C2157ED2DC178270055C8C9 /* JSONConditionMostRecentTests.swift in Sources */,
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
 				78AA4EC42513AD2000205AE9 /* ConfigurationFileInPathTests.swift in Sources */,

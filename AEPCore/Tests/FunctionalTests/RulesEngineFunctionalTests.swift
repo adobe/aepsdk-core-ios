@@ -1322,4 +1322,84 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         XCTAssertEqual(1, mockRuntime.receivedEventHistoryRequests.count)
         XCTAssertEqual(false, mockRuntime.receivedEnforceOrder)
     }
+
+    // MARK: - Historical condition most recent
+    func testHistoricalMostRecentCondition_NotPassing() {
+        // ---------- historical condition with mostRecent search type ----------
+        //        "condition": {
+        //          "type": "historical",
+        //          "definition": {
+        //            "events": [
+        //              {
+        //                "key": "eventA"
+        //              },
+        //              {
+        //                "key": "eventB"
+        //              }
+        //            ],
+        //            "searchType": "mostRecent",
+        //            "matcher": "eq",
+        //            "value": 1
+        //          }
+        //        }
+        resetRulesEngine(withNewRules: "rules_testHistoryMostRecent")
+        // Runtime returns two results with no newestOccurrence
+        mockRuntime.mockEventHistoryResults = [
+            EventHistoryResult(count: 0, oldest: nil, newest: nil),
+            EventHistoryResult(count: 0, oldest: nil, newest: nil)
+        ]
+
+        // When
+        rulesEngine.process(event: defaultEvent)
+
+        // Then:
+        // No rule consequence should be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        // Two history requests should be made (one for each event in the condition)
+        XCTAssertEqual(2, mockRuntime.receivedEventHistoryRequests.count)
+        // Enforce order should be disabled for mostRecent
+        XCTAssertFalse(mockRuntime.receivedEnforceOrder)
+    }
+
+    func testHistoricalMostRecentCondition_Passing() {
+        // ---------- historical condition with mostRecent search type ----------
+        //        "condition": {
+        //          "type": "historical",
+        //          "definition": {
+        //            "events": [
+        //              {
+        //                "key": "eventA"
+        //              },
+        //              {
+        //                "key": "eventB"
+        //              }
+        //            ],
+        //            "searchType": "mostRecent",
+        //            "matcher": "eq",
+        //            "value": 1
+        //          }
+        //        }
+        resetRulesEngine(withNewRules: "rules_testHistoryMostRecent")
+
+        // Simulate two historical results:
+        // - First has an older newestOccurrence
+        // - Second is the most recent (index 1 should match the rule's "value": 1)
+        let older = Date().addingTimeInterval(-1)
+        let newer = Date()
+        mockRuntime.mockEventHistoryResults = [
+            EventHistoryResult(count: 1, oldest: nil, newest: older),
+            EventHistoryResult(count: 1, oldest: nil, newest: newer)
+        ]
+
+        // When
+        rulesEngine.process(event: defaultEvent)
+
+        // Then:
+        // Rule should fire once because index 1 is the most recent
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        // Two history requests should be made (one for each event in the condition)
+        XCTAssertEqual(2, mockRuntime.receivedEventHistoryRequests.count)
+        // Enforce order should be disabled for mostRecent
+        XCTAssertFalse(mockRuntime.receivedEnforceOrder)
+    }
 }
