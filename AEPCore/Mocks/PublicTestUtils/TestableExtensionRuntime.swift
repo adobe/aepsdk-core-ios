@@ -31,7 +31,8 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var receivedEnforceOrder: Bool = false
     public var mockEventHistoryResults: [EventHistoryResult] = []
     public var ignoredEvents = Set<String>()
-    
+
+    public var receivedRecordHistoricalEvent: Event? = nil
     /// Tracks whether ``recordHistoricalEvent(_:handler:)`` was called.
     public var recordHistoricalEventCalled = false
     
@@ -112,6 +113,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     /// `recordHistoricalEventResult` property (true = success, false = failure).
     /// The `recordHistoricalEventCalled` property can be used to verify this method was called.
     public func recordHistoricalEvent(_ event: AEPCore.Event, handler: ((Bool) -> Void)?) {
+        receivedRecordHistoricalEvent = event
         recordHistoricalEventCalled = true
         handler?(recordHistoricalEventResult)
     }
