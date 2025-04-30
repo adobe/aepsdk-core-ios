@@ -247,11 +247,11 @@ class JSONCondition: Codable {
 
     /// Returns the index of the most recent historical event based on occurrence date.
     /// If no events are found or an error occurs during lookup, the method returns `-1`.
-    /// If duplicate EventHistoryRequests are provided, the index of the last instance will be returned.
+    /// If duplicate ``EventHistoryRequest``s are provided, the index of the first instance will be returned.
     ///
     /// - Parameter parameters: An array expected to contain, in order:
-    ///     - An `ExtensionRuntime` instance used to perform historical event lookups.
-    ///     - An array of `EventHistoryRequest` objects specifying the search criteria.
+    ///     - An ``ExtensionRuntime`` instance used to perform historical event lookups.
+    ///     - An array of ``EventHistoryRequest`` objects specifying the search criteria.
     ///
     /// - Returns: The index of the event with the most recent occurrence, or `-1` if none are found or there is an error.
     func getMostRecentHistoricalEvent(parameters: [Any]?) -> Int {
