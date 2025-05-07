@@ -251,6 +251,13 @@ extension AnyCodable: Equatable {
 
 // MARK: Codable Helpers
 extension Encodable {
+    // Deprecated on v5.5.0
+    @available(
+        *,
+         deprecated,
+         message: "Use `aep.dictionary(dateEncodingStrategy:)` instead",
+         renamed: "aep.dictionary(dateEncodingStrategy:)"
+    )
     public func asDictionary(dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate
     ) -> [String: Any]? {
         let encoder = JSONEncoder()

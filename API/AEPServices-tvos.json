@@ -11261,6 +11261,182 @@
       },
       {
         "kind": "TypeDecl",
+        "name": "AEPNamespace",
+        "printedName": "AEPNamespace",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "base",
+            "printedName": "base",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "GenericTypeParam",
+                "printedName": "τ_0_0"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices12AEPNamespaceV4basexvp",
+            "mangledName": "$s11AEPServices12AEPNamespaceV4basexvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_0"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices12AEPNamespaceV4basexvg",
+                "mangledName": "$s11AEPServices12AEPNamespaceV4basexvg",
+                "moduleName": "AEPServices",
+                "genericSig": "<τ_0_0>",
+                "sugared_genericSig": "<Base>",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "dictionary",
+            "printedName": "dictionary(dateEncodingStrategy:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Any]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Any]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "DateEncodingStrategy",
+                "printedName": "Foundation.JSONEncoder.DateEncodingStrategy",
+                "hasDefaultArg": true,
+                "usr": "s:10Foundation11JSONEncoderC20DateEncodingStrategyO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices12AEPNamespaceVAASERzlE10dictionary20dateEncodingStrategySDySSypGSg10Foundation11JSONEncoderC04DateeF0O_tF",
+            "mangledName": "$s11AEPServices12AEPNamespaceVAASERzlE10dictionary20dateEncodingStrategySDySSypGSg10Foundation11JSONEncoderC04DateeF0O_tF",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : Swift.Encodable>",
+            "sugared_genericSig": "<Base where Base : Swift.Encodable>",
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "from",
+            "printedName": "from(_:dateDecodingStrategy:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "τ_0_0?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_0"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "DateDecodingStrategy",
+                "printedName": "Foundation.JSONDecoder.DateDecodingStrategy",
+                "hasDefaultArg": true,
+                "usr": "s:10Foundation11JSONDecoderC20DateDecodingStrategyO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices12AEPNamespaceVAASeRzlE4from_20dateDecodingStrategyxSgSDySSypG_10Foundation11JSONDecoderC04DateeF0OtFZ",
+            "mangledName": "$s11AEPServices12AEPNamespaceVAASeRzlE4from_20dateDecodingStrategyxSgSDySSypG_10Foundation11JSONDecoderC04DateeF0OtFZ",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : Swift.Decodable>",
+            "sugared_genericSig": "<Base where Base : Swift.Decodable>",
+            "static": true,
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Struct",
+        "usr": "s:11AEPServices12AEPNamespaceV",
+        "mangledName": "$s11AEPServices12AEPNamespaceV",
+        "moduleName": "AEPServices",
+        "genericSig": "<τ_0_0>",
+        "sugared_genericSig": "<Base>",
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
         "name": "OperationOrderer",
         "printedName": "OperationOrderer",
         "children": [
@@ -14105,13 +14281,171 @@
             "moduleName": "AEPServices",
             "genericSig": "<τ_0_0 where τ_0_0 : Swift.Encodable>",
             "sugared_genericSig": "<Self where Self : Swift.Encodable>",
+            "deprecated": true,
+            "declAttributes": [
+              "Available"
+            ],
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "aep",
+            "printedName": "aep",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "AEPNamespace",
+                "printedName": "AEPServices.AEPNamespace<τ_0_0>",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_0"
+                  }
+                ],
+                "usr": "s:11AEPServices12AEPNamespaceV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:SE11AEPServicesE3aepAA12AEPNamespaceVyxGvp",
+            "mangledName": "$sSE11AEPServicesE3aepAA12AEPNamespaceVyxGvp",
+            "moduleName": "AEPServices",
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "AEPNamespace",
+                    "printedName": "AEPServices.AEPNamespace<τ_0_0>",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_0"
+                      }
+                    ],
+                    "usr": "s:11AEPServices12AEPNamespaceV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:SE11AEPServicesE3aepAA12AEPNamespaceVyxGvg",
+                "mangledName": "$sSE11AEPServicesE3aepAA12AEPNamespaceVyxGvg",
+                "moduleName": "AEPServices",
+                "genericSig": "<τ_0_0 where τ_0_0 : Swift.Encodable>",
+                "sugared_genericSig": "<Self where Self : Swift.Encodable>",
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
           }
         ],
         "declKind": "Protocol",
         "usr": "s:SE",
         "mangledName": "$sSE",
+        "moduleName": "Swift",
+        "isExternal": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Decodable",
+        "printedName": "Decodable",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "aep",
+            "printedName": "aep",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Metatype",
+                "printedName": "AEPServices.AEPNamespace<τ_0_0>.Type",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "AEPNamespace",
+                    "printedName": "AEPServices.AEPNamespace<τ_0_0>",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "GenericTypeParam",
+                        "printedName": "τ_0_0"
+                      }
+                    ],
+                    "usr": "s:11AEPServices12AEPNamespaceV"
+                  }
+                ]
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:Se11AEPServicesE3aepAA12AEPNamespaceVyxGmvpZ",
+            "mangledName": "$sSe11AEPServicesE3aepAA12AEPNamespaceVyxGmvpZ",
+            "moduleName": "AEPServices",
+            "static": true,
+            "isFromExtension": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "AEPServices.AEPNamespace<τ_0_0>.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "AEPNamespace",
+                        "printedName": "AEPServices.AEPNamespace<τ_0_0>",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "GenericTypeParam",
+                            "printedName": "τ_0_0"
+                          }
+                        ],
+                        "usr": "s:11AEPServices12AEPNamespaceV"
+                      }
+                    ]
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:Se11AEPServicesE3aepAA12AEPNamespaceVyxGmvgZ",
+                "mangledName": "$sSe11AEPServicesE3aepAA12AEPNamespaceVyxGmvgZ",
+                "moduleName": "AEPServices",
+                "genericSig": "<τ_0_0 where τ_0_0 : Swift.Decodable>",
+                "sugared_genericSig": "<Self where Self : Swift.Decodable>",
+                "static": true,
+                "isFromExtension": true,
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:Se",
+        "mangledName": "$sSe",
         "moduleName": "Swift",
         "isExternal": true,
         "conformances": [
