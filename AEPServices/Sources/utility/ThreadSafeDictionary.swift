@@ -33,12 +33,12 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
     public var keys: [K] {
         return queue.sync { return Array(self.dictionary.keys) }
     }
-    
+
     /// A collection containing the values of the dictionary.
     public var values: [V] {
         return queue.sync { Array(dictionary.values) }
     }
-    
+
     /// A boolean to check if dictionary is empty or not.
     public var isEmpty: Bool {
         return queue.sync { dictionary.isEmpty }
@@ -80,7 +80,7 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
             return self.dictionary.removeValue(forKey: key)
         }
     }
-    
+
     /// Returns a new `Dictionary` containing only the elements that satisfy the given predicate.
     /// - Parameter isIncluded: A closure that takes a key-value pair and returns `true` if the element should be included.
     /// - Returns: A new `Dictionary` with the filtered elements.
@@ -89,7 +89,7 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
             dictionary.filter(isIncluded)
         }
     }
-    
+
     /// Checks if any element in the dictionary satisfies the given predicate.
     /// - Parameter predicate: A closure that takes a key-value pair and returns `true` if the condition is met.
     /// - Returns: `true` if any element satisfies the condition; otherwise, `false`.
@@ -98,14 +98,14 @@ public final class ThreadSafeDictionary<K: Hashable, V> {
             dictionary.contains(where: predicate)
         }
     }
-    
+
     /// Removes all key-value pairs from the dictionary asynchronously to avoid blocking.
     @inlinable public func removeAll() {
         queue.async {
             self.dictionary.removeAll()
         }
     }
-    
+
     /// Merges another dictionary into this `ThreadSafeDictionary`, resolving key conflicts using a provided closure.
     /// - Parameters:
     ///   - other: The dictionary to merge.

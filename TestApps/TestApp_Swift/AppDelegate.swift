@@ -25,13 +25,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         MobileCore.initialize(appId: LAUNCH_ENVIRONMENT_FILE_ID)
 
         // If testing background, edit test app scheme -> options -> background fetch -> Check "launch app due to background fetch event"
-         BGTaskScheduler.shared.register(forTaskWithIdentifier: "testBackground", using: nil) { task in
-             // Check if we can retrieve from file from background
-             self.backgroundTask()
-             task.setTaskCompleted(success: true)
-             self.scheduleAppRefresh()
-         }
-        
+        BGTaskScheduler.shared.register(forTaskWithIdentifier: "testBackground", using: nil) { task in
+            // Check if we can retrieve from file from background
+            self.backgroundTask()
+            task.setTaskCompleted(success: true)
+            self.scheduleAppRefresh()
+        }
+
         return true
     }
 
