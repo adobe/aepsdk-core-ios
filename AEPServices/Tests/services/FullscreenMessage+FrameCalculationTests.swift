@@ -252,5 +252,220 @@
             // in a unit test, there is no UI and therefore no screen to calculate. return 0 in this case
             assertEqual(0, message.safeAreaHeight)
         }
+        
+        func testSafeAreaHeight() {
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            
+            // In a unit test environment, there is no UI, so the safe area height should be 0
+            XCTAssertEqual(0, message?.safeAreaHeight)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContent() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = 200.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(200.0, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndNilHeight() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = nil
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightGreaterThanScreen() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height + 100.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightLessThanScreen() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - 100.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height - 100.0, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreen() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeArea() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight)
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height - (message.safeAreaHeight), frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaMinusOne() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) - 1.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height - (message.safeAreaHeight) - 1.0, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaPlusOne() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) + 1.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaMinusTwo() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) - 2.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height - (message.safeAreaHeight) - 2.0, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaPlusTwo() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) + 2.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaMinusThree() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) - 3.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height - (message.safeAreaHeight) - 3.0, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaPlusThree() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) + 3.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaMinusFour() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) - 4.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height - (message.safeAreaHeight) - 4.0, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaPlusFour() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) + 4.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaMinusFive() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) - 5.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height - (message.safeAreaHeight) - 5.0, frame?.height)
+        }
+        
+        func testCalculateVisibleFrameWithFitToContentAndHeightEqualToScreenMinusSafeAreaPlusFive() throws {
+            // Setup
+            message = FullscreenMessage(payload: "", listener: nil, isLocalImageUsed: false, messageMonitor: monitor, settings: noAnimationSettings)
+            message.fitToContentHeight = UIScreen.main.bounds.height - (message.safeAreaHeight) + 5.0
+            
+            // Test
+            let frame = message.calculateVisibleFrame()
+            
+            // Verify
+            XCTAssertNotNil(frame)
+            XCTAssertEqual(UIScreen.main.bounds.height, frame?.height)
+        }
     }
 #endif
