@@ -251,18 +251,38 @@ extension AnyCodable: Equatable {
 
 // MARK: Codable Helpers
 extension Encodable {
-    // Deprecated on v5.5.0
-    @available(
-        *,
-         deprecated,
-         message: "Use `aep.dictionary(dateEncodingStrategy:)` instead",
-         renamed: "aep.dictionary(dateEncodingStrategy:)"
-    )
-    public func asDictionary(dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate
-    ) -> [String: Any]? {
+    /// Converts the value to a `[String: Any]` dictionary using JSON encoding.
+    ///
+    /// - Parameter dateEncodingStrategy: The strategy to use for encoding `Date` values.
+    ///   Defaults to `.deferredToDate`.
+    /// - Returns: A dictionary representation of the encoded value, or `nil` if encoding fails.
+    public func asDictionary(dateEncodingStrategy: JSONEncoder.DateEncodingStrategy = .deferredToDate) -> [String: Any]? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = dateEncodingStrategy
         guard let data = try? encoder.encode(self) else { return nil }
         return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }
+
+extension Decodable {
+    /// Creates an instance of `Self` from a `[String: Any]` dictionary.
+    ///
+    /// - Parameters:
+    ///   - dictionary: The source dictionary.
+    ///   - dateDecodingStrategy: How `Date` values should be decoded.
+    ///     Defaults to `.deferredToDate`.
+    /// - Returns: A fully-decoded instance of `Self`, or `nil` if decoding fails.
+    static func fromDictionary(
+        _ dictionary: [String: Any],
+        dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate
+    ) -> Self? {
+        guard JSONSerialization.isValidJSONObject(dictionary),
+              let data = try? JSONSerialization.data(withJSONObject: dictionary) else {
+            return nil
+        }
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = dateDecodingStrategy
+        return try? decoder.decode(Self.self, from: data)
+    }
+}
+

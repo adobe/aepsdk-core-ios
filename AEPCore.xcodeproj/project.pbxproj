@@ -336,7 +336,6 @@
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
 		4C2157E92DC16C5E0055C8C9 /* TokenReplacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2157E82DC16C5E0055C8C9 /* TokenReplacementTests.swift */; };
 		4C2157EB2DC16F040055C8C9 /* TestableTraversable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */; };
-		4C89A38B2DCBFF5E00439BE1 /* CodableHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C89A38A2DCBFF5E00439BE1 /* CodableHelpers.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
 		4CF0285F2C2CCBD3008ADE05 /* EventSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028182C2CCA0F008ADE05 /* EventSpec.swift */; };
@@ -1097,7 +1096,6 @@
 		41E5D22C6D72CCCF26904EDE /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4C2157E82DC16C5E0055C8C9 /* TokenReplacementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReplacementTests.swift; sourceTree = "<group>"; };
 		4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableTraversable.swift; sourceTree = "<group>"; };
-		4C89A38A2DCBFF5E00439BE1 /* CodableHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableHelpers.swift; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
 		4CF028182C2CCA0F008ADE05 /* EventSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventSpec.swift; sourceTree = "<group>"; };
@@ -1803,7 +1801,6 @@
 				3F0397E724BE60910019F095 /* unzip */,
 				3F0397F124BE60910019F095 /* AnyCodable.swift */,
 				3F0397E624BE60910019F095 /* AtomicCounter.swift */,
-				4C89A38A2DCBFF5E00439BE1 /* CodableHelpers.swift */,
 				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
 				3F0397EE24BE60910019F095 /* OperationOrderer.swift */,
 				BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */,
@@ -3510,7 +3507,6 @@
 				3F0397FF24BE60910019F095 /* AnyCodable.swift in Sources */,
 				3F0397D124BE5FF30019F095 /* HttpConnection.swift in Sources */,
 				3F0397D824BE5FF30019F095 /* DataQueuing.swift in Sources */,
-				4C89A38B2DCBFF5E00439BE1 /* CodableHelpers.swift in Sources */,
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
 				246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */,
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
