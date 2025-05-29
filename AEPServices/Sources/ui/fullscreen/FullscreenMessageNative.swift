@@ -18,6 +18,7 @@ import SwiftUI
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
 @available(tvOS 13.0, *)
+@available(iOS 13.0, *)
 public class FullscreenMessageNative: NSObject, FullscreenPresentable {
     private let LOG_PREFIX = "FullscreenMessageNative"
     private let ANIMATION_DURATION = 0.3
@@ -26,23 +27,22 @@ public class FullscreenMessageNative: NSObject, FullscreenPresentable {
     @objc
     public var settings: MessageSettings?
 
-    var payload: String
-    var listener: FullscreenMessageNativeDelegate?
-    private(set) var messageMonitor: MessageMonitoring
-    private var hostingController: UIHostingController<MessageView>?
-    private var transparentBackgroundView: UIView?
+    private let payload: any View
+    private let listener: FullscreenMessageNativeDelegate?
+    private let messageMonitor: MessageMonitoring
+    private var hostingController: UIHostingController<AnyView>?
 
     var messagingDelegate: MessagingDelegate? {
         return ServiceProvider.shared.messagingDelegate
     }
 
-    /// Creates `FullscreenMessageNative` instance with the payload provided.
+    /// Creates `FullscreenMessageNative` instance with the SwiftUI view provided.
     /// - Parameters:
-    ///     - payload: String content to be displayed with the message
+    ///     - payload: SwiftUI view to be displayed
     ///     - listener: `FullscreenMessageNativeDelegate` listener to listening the message lifecycle.
     ///     - messageMonitor: The message monitor to control message display
     ///     - settings: The `MessageSettings` object defining layout and behavior of the new message
-    init(payload: String, listener: FullscreenMessageNativeDelegate?, messageMonitor: MessageMonitoring, settings: MessageSettings? = nil) {
+    init(payload: any View, listener: FullscreenMessageNativeDelegate?, messageMonitor: MessageMonitoring, settings: MessageSettings? = nil) {
         self.payload = payload
         self.listener = listener
         self.messageMonitor = messageMonitor
@@ -83,7 +83,7 @@ public class FullscreenMessageNative: NSObject, FullscreenPresentable {
 
             // dispatch UI activity back to main thread
             DispatchQueue.main.async {
-                self.displayWithAnimation()
+                self.showWithAnimation()
             }
         }
     }
@@ -106,75 +106,26 @@ public class FullscreenMessageNative: NSObject, FullscreenPresentable {
 
     // MARK: - Private Methods
 
-    private func displayWithAnimation() {
-        DispatchQueue.main.async {
-            let keyWindow = UIApplication.shared.getKeyWindow()
-
-            // Create SwiftUI view
-            let messageView = MessageView(content: self.payload, settings: self.settings)
-            let hostingController = UIHostingController(rootView: messageView)
-            self.hostingController = hostingController
-
-            if let animation = self.settings?.displayAnimation, animation != .none {
-                let isFade = animation == .fade
-                hostingController.view.alpha = isFade ? 0.0 : 1.0
-
-                if let takeover = self.settings?.uiTakeover, takeover {
-                    self.transparentBackgroundView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                    self.transparentBackgroundView?.backgroundColor = self.settings?.getBackgroundColor(opacity: 0.0)
-                    self.transparentBackgroundView?.addSubview(hostingController.view)
-                    keyWindow?.addSubview(self.transparentBackgroundView!)
-                } else {
-                    keyWindow?.addSubview(hostingController.view)
-                }
-
-                UIView.animate(withDuration: self.ANIMATION_DURATION) {
-                    hostingController.view.frame = self.frameWhenVisible
-                    hostingController.view.alpha = 1.0
-                    self.transparentBackgroundView?.backgroundColor = self.settings?.getBackgroundColor()
-                }
-            } else {
-                hostingController.view.frame = self.frameWhenVisible
-                keyWindow?.addSubview(hostingController.view)
-            }
+    private func showWithAnimation() {
+        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else {
+            Log.warning(label: LOG_PREFIX, "Unable to show message, root view controller is nil")
+            return
         }
+
+        let hostingController = UIHostingController(rootView: AnyView(payload))
+        hostingController.modalPresentationStyle = .fullScreen
+        hostingController.view.backgroundColor = .clear
+
+        rootViewController.present(hostingController, animated: true) {
+            self.listener?.onShow(message: self)
+        }
+        self.hostingController = hostingController
     }
 
     private func dismissWithAnimation(shouldDeallocateView: Bool) {
-        DispatchQueue.main.async {
-            if let animation = self.settings?.dismissAnimation, animation != .none {
-                UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
-                    self.hostingController?.view.frame = self.frameAfterDismiss
-                    if animation == .fade {
-                        self.hostingController?.view.alpha = 0.0
-                    }
-                    if let bgView = self.transparentBackgroundView {
-                        bgView.backgroundColor = self.settings?.getBackgroundColor(opacity: 0.0)
-                    }
-                }) { _ in
-                    if let bgView = self.transparentBackgroundView {
-                        bgView.removeFromSuperview()
-                    } else {
-                        self.hostingController?.view.removeFromSuperview()
-                    }
-                    if shouldDeallocateView {
-                        self.hostingController = nil
-                    } else {
-                        self.hostingController?.view.frame = self.frameBeforeShow
-                    }
-                }
-            } else {
-                if let bgView = self.transparentBackgroundView {
-                    bgView.removeFromSuperview()
-                }
-
-                self.hostingController?.view.removeFromSuperview()
-
-                if shouldDeallocateView {
-                    self.hostingController = nil
-                } else {
-                    self.hostingController?.view.frame = self.frameBeforeShow
-                }
+        hostingController?.dismiss(animated: true) {
+            if shouldDeallocateView {
+                self.hostingController = nil
             }
         }
     }
@@ -199,41 +150,5 @@ public class FullscreenMessageNative: NSObject, FullscreenPresentable {
 
     private var frameAfterDismiss: CGRect {
         return CGRect(x: 0, y: -screenHeight, width: screenWidth, height: screenHeight)
-    }
-}
-
-// MARK: - SwiftUI View
-
-@available(tvOS 13.0, *)
-struct MessageView: View {
-    let content: String
-    let settings: MessageSettings?
-
-    var body: some View {
-        ZStack {
-            // Background
-            Color(settings?.getBackgroundColor() ?? .black)
-                .edgesIgnoringSafeArea(.all)
-
-            // Content
-            VStack {
-                Text(content)
-                    .foregroundColor(.white)
-                    .font(.system(size: 32)) // Larger font for TV
-                    .multilineTextAlignment(.center)
-                    .padding()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .cornerRadius(settings?.cornerRadius ?? 0)
-    }
-}
-
-// MARK: - Color Extension
-
-@available(tvOS 13.0, *)
-extension UIColor {
-    var color: Color {
-        return Color(self)
     }
 }

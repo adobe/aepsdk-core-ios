@@ -12,28 +12,31 @@
 
 import Foundation
 import UIKit
+#if os(tvOS)
+import SwiftUI
+#endif
 
 ///
 /// UIService for creating UI elements
 ///
+#if os(iOS)
 @objc(AEPUIServiceProtocol)
-@available(tvOSApplicationExtension, unavailable)
 @available(iOSApplicationExtension, unavailable)
 public protocol UIService {
-    #if os(iOS)
     /// Creates a `FullscreenPresentable`
     /// - Parameters:
-    ///     - payload: The payload used in the FullscreenPresentable as a string
-    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
+    ///     - payload: The payload used in the FullscreenPresentable as a SwiftUI View
+    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageNativeDelegate`
     ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
     /// - Returns: A `FullscreenPresentable` implementation
+
     @objc
     func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
-
+    
     /// Creates a `FullscreenPresentable`
     /// - Parameters:
-    ///     - payload: The payload used in the FullscreenPresentable as a string
-    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
+    ///     - payload: The payload used in the FullscreenPresentable as a SwiftUI View
+    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageNativeDelegate`
     ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
     ///     - settings: The `MessageSettings` that define construction, behavior and ownership of the newly created message
     /// - Returns: A `FullscreenPresentable` implementation
@@ -42,14 +45,8 @@ public protocol UIService {
                                           listener: FullscreenMessageDelegate?,
                                           isLocalImageUsed: Bool,
                                           settings: MessageSettings?) -> FullscreenPresentable
-    #elseif os(tvOS)
-    @available(tvOS 13.0, *)
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageNativeDelegate?) -> FullscreenPresentable
-
-    @available(tvOS 13.0, *)
-    func createFullscreenMessage(payload: String, listener: FullscreenMessageNativeDelegate?, settings: MessageSettings?) -> FullscreenPresentable
-    #endif
-
+    
+    
     /// Creates a `FloatingButtonPresentable`
     /// - Parameters:
     ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
@@ -57,3 +54,14 @@ public protocol UIService {
     @objc
     func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
 }
+#elseif os(tvOS)
+@available(tvOS 13.0, *)
+@available(tvOSApplicationExtension, unavailable)
+public protocol UIService {
+    func createFullscreenMessage(payload: any View, listener: FullscreenMessageNativeDelegate?) -> FullscreenPresentable
+
+    func createFullscreenMessage(payload: any View, listener: FullscreenMessageNativeDelegate?, settings: MessageSettings?) -> FullscreenPresentable
+
+    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
+}
+#endif
