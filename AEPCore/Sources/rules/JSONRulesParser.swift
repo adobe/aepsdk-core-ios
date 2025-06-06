@@ -133,7 +133,10 @@ class JSONCondition: Codable {
                             operands.append(operand)
                         }
                     }
-                    return operands.count == 0 ? nil : LogicalExpression(operationName: "or", operands: operands)
+                    // For "ne" (not equals) and "nc" (not contains) matchers, use "and" logic instead of "or"
+                    // This ensures all conditions must be true: value != A AND value != B AND value != C
+                    let logicalOperation = (matcher == "ne" || matcher == "nc") ? "and" : "or"
+                    return operands.count == 0 ? nil : LogicalExpression(operationName: logicalOperation, operands: operands)
                 }
             }
             return nil
