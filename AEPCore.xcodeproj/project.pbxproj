@@ -361,6 +361,7 @@
 		4C2157E72DC159270055C8C9 /* consequence_rules_testDataOperationEmpty.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157C32DC159270055C8C9 /* consequence_rules_testDataOperationEmpty.json */; };
 		4C2157ED2DC178270055C8C9 /* JSONConditionMostRecentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */; };
 		4C2157EF2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */; };
+		4CA311542DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA311532DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift */; };
 		4CCC21A62D9623BC00F75340 /* Event+EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
@@ -1149,6 +1150,7 @@
 		4C2157D32DC159270055C8C9 /* consequence_rules_testSchemaSchemaNull.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = consequence_rules_testSchemaSchemaNull.json; sourceTree = "<group>"; };
 		4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConditionMostRecentTests.swift; sourceTree = "<group>"; };
 		4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testHistoryMostRecent.json; sourceTree = "<group>"; };
+		4CA311532DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConditionHistoricalCountTests.swift; sourceTree = "<group>"; };
 		4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequest.swift"; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
@@ -1974,6 +1976,7 @@
 				4C2157EC2DC178270055C8C9 /* JSONConditionMostRecentTests.swift */,
 				BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */,
 				3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */,
+				4CA311532DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift */,
 				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
 				BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */,
 			);
@@ -3537,6 +3540,7 @@
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */,
+				4CA311542DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift in Sources */,
 				24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */,
 				4C2157BA2DC158F40055C8C9 /* RulesEngineFunctionalTests.swift in Sources */,
 				4C2157BB2DC158F40055C8C9 /* RulesEngineHistoricalTests.swift in Sources */,
