@@ -200,10 +200,9 @@ public class LaunchRulesEngine {
                 case LaunchRulesEngine.CONSEQUENCE_TYPE_SCHEMA:
                     processSchemaConsequence(consequence: consequenceWithConcreteValue, processedEvent: processedEvent)
                 default:
-                    if let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent) {
-                        Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
-                        extensionRuntime.dispatch(event: event)
-                    }
+                    let event = generateConsequenceEvent(consequence: consequenceWithConcreteValue, parentEvent: processedEvent)
+                    Log.trace(label: LOG_TAG, "(\(self.name)) : Generating new consequence event \(event)")
+                    extensionRuntime.dispatch(event: event)
                 }
             }
         }
@@ -333,7 +332,7 @@ public class LaunchRulesEngine {
     /// Generate a consequence event with provided consequence data
     /// - Parameter consequence: a consequence of the rule
     /// - Returns: a consequence `Event`
-    private func generateConsequenceEvent(consequence: RuleConsequence, parentEvent: Event) -> Event? {
+    private func generateConsequenceEvent(consequence: RuleConsequence, parentEvent: Event) -> Event {
         var dict: [String: Any] = [:]
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_DETAIL] = consequence.details
         dict[LaunchRulesEngine.CONSEQUENCE_EVENT_DATA_KEY_ID] = consequence.id
@@ -354,7 +353,10 @@ public class LaunchRulesEngine {
         if schema == LaunchRulesEngine.CONSEQUENCE_SCHEMA_EVENT_HISTORY {
             processEventHistoryOperation(consequence: consequence, processedEvent: processedEvent)
         } else {
-            Log.warning(label: LOG_TAG, "(\(self.name)) : Unable to process Schema Consequence for consequence \(consequence.id), unsupported schema type \(schema)")
+            let consequenceEvent = generateConsequenceEvent(consequence: consequence, parentEvent: processedEvent)
+            Log.trace(label: LOG_TAG,
+                      "(\(self.name)) : evaluateRulesConsequence - Dispatching consequence event \(consequenceEvent.id)")
+            extensionRuntime.dispatch(event: consequenceEvent)
         }
     }
 

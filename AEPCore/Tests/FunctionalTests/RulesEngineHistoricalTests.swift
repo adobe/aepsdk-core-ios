@@ -412,8 +412,8 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
-    func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailSchemaIsEmpty() {
-        // Given: a schema type rule consequence with an invalid format for event history operation: ('schema' = "")
+    func testSchemaConsequenceInsert_whenDetailSchemaIsEmpty() throws {
+        // Given: a schema type rule consequence with an empty schema: ('schema' = "")
         //    ---------- schema based consequence details ----------
         //        "detail": {
         //          "id": "test-id",
@@ -431,19 +431,40 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         // When:
         rulesEngine.process(event: defaultEvent)
 
-        // Then: Event history consequence event:
+        // Then: Schema consequence event:
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        // Should be dispatched
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        // Validate the event payload
+        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
+        let expectedEventData = """
+        {
+          "triggeredconsequence": {
+            "type": "schema",
+            "id": "test-id",
+            "detail": {
+              "schema": "",
+              "id": "test-id",
+              "data": {
+                "content": {
+                  "key1": "value1"
+                },
+                "operation": "insert"
+              }
+            }
+          }
+        }
+        """
+        assertEqual(expected: expectedEventData, actual: dispatchedEvent.data)
     }
 
-    func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailSchemaIsInvalid() {
+    func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailSchemaIsNotEventHistoryOperation() throws {
         // Given: a schema type rule consequence with an invalid format for event history operation: ('schema' invalidSchema)
         //    ---------- schema based consequence details ----------
         //        "detail": {
         //          "id": "test-id",
-        //          "schema": "https://ns.adobe.com/personalization/invalidSchema",
+        //          "schema": "https://ns.adobe.com/personalization/message/in-app",
         //          "data": {
         //              "operation": "insert",
         //              "content": {
@@ -452,16 +473,37 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         //          }
         //        }
         //    --------------------------------------
-        resetRulesEngine(withNewRules: "consequence_rules_testSchemaSchemaInvalid")
+        resetRulesEngine(withNewRules: "consequence_rules_testSchemaInAppDetailSchema")
 
         // When:
         rulesEngine.process(event: defaultEvent)
 
-        // Then: Event history consequence event:
+        // Then: Schema consequence event:
         // Should not attempt to record into event history
         XCTAssertFalse(mockRuntime.recordHistoricalEventCalled)
-        // Should not be dispatched
-        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        // Should be dispatched
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        // Validate the event payload
+        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
+        let expectedEventData = """
+        {
+          "triggeredconsequence": {
+            "type": "schema",
+            "id": "test-id",
+            "detail": {
+              "schema": "https://ns.adobe.com/personalization/message/in-app",
+              "id": "test-id",
+              "data": {
+                "content": {
+                  "key1": "value1"
+                },
+                "operation": "insert"
+              }
+            }
+          }
+        }
+        """
+        assertEqual(expected: expectedEventData, actual: dispatchedEvent.data)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatchOrRecord_whenDetailDataIsMissing() {
