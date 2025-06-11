@@ -19234,6 +19234,89 @@
       },
       {
         "kind": "TypeDecl",
+        "name": "Decodable",
+        "printedName": "Decodable",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "fromDictionary",
+            "printedName": "fromDictionary(_:dateDecodingStrategy:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "τ_0_0?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_0"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "DateDecodingStrategy",
+                "printedName": "Foundation.JSONDecoder.DateDecodingStrategy",
+                "hasDefaultArg": true,
+                "usr": "s:10Foundation11JSONDecoderC20DateDecodingStrategyO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:Se11AEPServicesE14fromDictionary_20dateDecodingStrategyxSgSDySSypG_10Foundation11JSONDecoderC04DateeF0OtFZ",
+            "mangledName": "$sSe11AEPServicesE14fromDictionary_20dateDecodingStrategyxSgSDySSypG_10Foundation11JSONDecoderC04DateeF0OtFZ",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : Swift.Decodable>",
+            "sugared_genericSig": "<Self where Self : Swift.Decodable>",
+            "static": true,
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:Se",
+        "mangledName": "$sSe",
+        "moduleName": "Swift",
+        "isExternal": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
         "name": "URLError",
         "printedName": "URLError",
         "children": [
