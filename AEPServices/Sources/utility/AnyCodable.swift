@@ -272,7 +272,7 @@ extension Decodable {
     ///   - dateDecodingStrategy: How `Date` values should be decoded.
     ///     Defaults to `.deferredToDate`.
     /// - Returns: A fully-decoded instance of `Self`, or `nil` if decoding fails.
-    static func fromDictionary(
+    public static func fromDictionary(
         _ dictionary: [String: Any],
         dateDecodingStrategy: JSONDecoder.DateDecodingStrategy = .deferredToDate
     ) -> Self? {
