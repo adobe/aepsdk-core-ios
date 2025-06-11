@@ -285,4 +285,3 @@ extension Decodable {
         return try? decoder.decode(Self.self, from: data)
     }
 }
-
