@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "AEPCore"
-  s.version          = "5.5.0"
+  s.version          = "5.5.1"
 
   s.summary          = "Core library for Adobe Experience Platform Mobile SDK. Written and maintained by Adobe."
   s.description      = <<-DESC
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = { 'BUILD_LIBRARY_FOR_DISTRIBUTION' => 'YES' }
 
   s.dependency 'AEPRulesEngine', '>= 5.0.0', '< 6.0.0'
-  s.dependency 'AEPServices', '>= 5.5.0', '< 6.0.0'
+  s.dependency 'AEPServices', '>= 5.5.1', '< 6.0.0'
 
   s.source_files          = 'AEPCore/Sources/**/*.swift'
   s.resource_bundles        = { 'AEPCore_Resources' => ['AEPCore/Sources/PrivacyInfo.xcprivacy'] }
