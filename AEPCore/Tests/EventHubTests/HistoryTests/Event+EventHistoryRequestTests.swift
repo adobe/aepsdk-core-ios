@@ -46,7 +46,7 @@ class Event_EventHistoryRequestTests: XCTestCase {
         let request = event.toEventHistoryRequest()
 
         // 6 top-level keys + 5 flattened inner dictionary keys
-        XCTAssertEqual(11, request.mask.count)
+        XCTAssertEqual(15, request.mask.count)
 
         // Primitive top-level types
         XCTAssertEqual("value", request.mask["stringKey"] as? String)
@@ -58,14 +58,11 @@ class Event_EventHistoryRequestTests: XCTestCase {
         XCTAssertEqual(NSNull(), request.mask["nullKey"] as? NSNull)
 
         // Array
-        let arrayValue = request.mask["arrayKey"] as? [Any]
-        XCTAssertNotNil(arrayValue)
-        XCTAssertEqual(5, arrayValue?.count)
-        XCTAssertEqual("stringInArray", arrayValue?[0] as? String)
-        XCTAssertEqual(123, arrayValue?[1] as? Int)
-        XCTAssertEqual(4.56, arrayValue?[2] as? Double)
-        XCTAssertEqual(false, arrayValue?[3] as? Bool)
-        XCTAssertTrue(arrayValue?[4] is NSNull)
+        XCTAssertEqual("stringInArray", request.mask["arrayKey.0"] as? String)
+        XCTAssertEqual(123, request.mask["arrayKey.1"] as? Int)
+        XCTAssertEqual(4.56, request.mask["arrayKey.2"] as? Double)
+        XCTAssertEqual(false, request.mask["arrayKey.3"] as? Bool)
+        XCTAssertTrue(request.mask["arrayKey.4"] is NSNull)
 
         // Flattened nested dictionary keys
         XCTAssertEqual("nestedValue", request.mask["dictionaryKey.nestedString"] as? String)

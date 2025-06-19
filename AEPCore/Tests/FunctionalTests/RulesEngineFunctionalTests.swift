@@ -1402,4 +1402,55 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         // Enforce order should be disabled for mostRecent
         XCTAssertFalse(mockRuntime.receivedEnforceOrder)
     }
+
+    func testArrayFlatteningNotationMatcherAndToken() {
+        // Given:
+        // A rule with:
+        // - a matcher condition checking if "items.1" equals "b"
+        // - a consequence that adds {"matchedItem":"{%items.1%}"} to the event
+        //
+        // "condition": {
+        //   "type": "matcher",
+        //   "definition": {
+        //     "key": "items.1",
+        //     "matcher": "eq",
+        //     "values": [
+        //       "b"
+        //     ]
+        //   }
+        // },
+        // "consequences": [
+        //   {
+        //     "id": "R1",
+        //     "type": "add",
+        //     "detail": {
+        //       "eventdata": {
+        //         "matchedItem": "{%items.1%}"
+        //       }
+        //     }
+        //   }
+        // ]
+        resetRulesEngine(withNewRules: "rules_testArrayFlatteningNotation")
+
+        let eventData: [String: Any] = ["items": ["a", "b", "c"]]
+        let event = Event(name: "Array flattening test",
+                          type: EventType.lifecycle,
+                          source: EventSource.responseContent,
+                          data: eventData)
+
+        // When:
+        // The event is processed by the rules engine
+        let processedEvent = rulesEngine.process(event: event)
+
+        // Then:
+        // No consequence event of type "add" should be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // The original event should have "matchedItem": "b" added via token replacement
+        guard let matched = processedEvent.data?["matchedItem"] as? String else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("b", matched)
+    }
 }
