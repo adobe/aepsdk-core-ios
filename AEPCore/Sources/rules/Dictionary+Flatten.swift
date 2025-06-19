@@ -13,12 +13,11 @@
 import Foundation
 
 extension Dictionary where Key == String, Value == Any {
-    /// Recursively flattens a `[String: Any]` dictionary into a single-level dictionary with dot separated keys.
+    /// Recursively flattens a `[String: Any]` dictionary into a single-level dictionary with dot-separated key paths.
     ///
-    /// - Nested dictionaries and arrays are flattened into key paths where each segment is separated by a dot (`.`).
-    /// - Dictionary keys are appended directly to the path.
-    /// - Array indexes are included in the path as numeric segments (ex: `array.0.key`).
-    /// - This method does not escape dots (`.`) in dictionary key names. If two distinct keys flatten to the same path, later entries overwrite earlier ones, but the order is undefined.
+    /// - Keys from nested structures are concatenated using dots (`.`).
+    /// - When `flattenArrays` is `false`, arrays are left as-is and stored under their current key path.
+    /// - Key names are not escaped; if flattened keys collide, the last value written wins. The resolution order in this case is undefined and may change.
     ///
     /// ### Example
     /// ```swift
@@ -41,23 +40,22 @@ extension Dictionary where Key == String, Value == Any {
     /// // ]
     /// ```
     ///
-    /// - Parameter prefix: A string to prefix all resulting keys with (used for recursion; default is empty).
-    /// - Returns: A flattened `[String: Any]` dictionary with dot separated key paths.
+    /// - Parameters:
+    ///   - prefix: Internal recursion parameter representing the key path prefix. Defaults to `""`.
+    ///   - flattenArrays: Controls whether arrays are flattened (`true`) or preserved as-is (`false`). Defaults to `true`.
+    /// - Returns: A single-level dictionary where keys represent the original structure via dot-separated paths.
     /// - SeeAlso: ``Array.flattening(prefix:)``
-    func flattening(prefix: String = "") -> [String: Any] {
+    func flattening(prefix: String = "", flattenArrays: Bool = true) -> [String: Any] {
         var result: [String: Any] = [:]
         let keyPrefix = prefix.isEmpty ? "" : "\(prefix)."
 
         for (key, value) in self {
             let path = "\(keyPrefix)\(key)"
-            switch value {
-            case let dict as [String: Any]:
-                result.merge(dict.flattening(prefix: path)) { _, new in new }
-
-            case let array as [Any]:
+            if let dict = value as? [String: Any] {
+                result.merge(dict.flattening(prefix: path, flattenArrays: flattenArrays)) { _, new in new }
+            } else if flattenArrays, let array = value as? [Any] {
                 result.merge(array.flattening(prefix: path)) { _, new in new }
-
-            default:
+            } else {
                 result[path] = value
             }
         }

@@ -13,11 +13,10 @@
 import Foundation
 
 extension Array where Element == Any {
-    /// Recursively flattens a nested `[Any]` array into a `[String: Any]` dictionary using dot separated index paths.
+    /// Recursively flattens an `[Any]` array into a single-level `[String: Any]` dictionary using dot-separated index paths.
     ///
-    /// - Elements within the array are assigned keys based on their index position, appended to any provided prefix.
-    /// - If an element is a dictionary (`[String: Any]`), it is recursively flattened using the index as part of the path.
-    /// - If an element is another array (`[Any]`), it is also recursively flattened with indexes forming the key path.
+    /// - Arrays are expanded into key paths where each index is used as a segment (e.g., `"0.key"`).
+    /// - Key names are not escaped; if flattened keys collide, the last value written wins. The resolution order in this case is undefined and may change.
     ///
     /// ### Example
     /// ```swift
@@ -34,8 +33,8 @@ extension Array where Element == Any {
     /// // ]
     /// ```
     ///
-    /// - Parameter prefix: A string to prefix all resulting keys with (used for recursion; default is empty).
-    /// - Returns: A flattened `[String: Any]` dictionary with dot-separated key paths for array elements.
+    /// - Parameter prefix: Internal recursion parameter representing the key path prefix. Defaults to `""`.
+    /// - Returns: A single-level dictionary where keys represent the original structure via dot-separated paths.
     /// - SeeAlso: ``Dictionary.flattening(prefix:)``
     func flattening(prefix: String = "") -> [String: Any] {
         var result: [String: Any] = [:]
@@ -43,14 +42,11 @@ extension Array where Element == Any {
         for (index, element) in enumerated() {
             let path = prefix.isEmpty ? "\(index)" : "\(prefix).\(index)"
 
-            switch element {
-            case let dict as [String: Any]:
+            if let dict = element as? [String: Any] {
                 result.merge(dict.flattening(prefix: path)) { _, new in new }
-
-            case let subArray as [Any]:
-                result.merge(subArray.flattening(prefix: path)) { _, new in new }
-
-            default:
+            } else if let array = element as? [Any] {
+                result.merge(array.flattening(prefix: path)) { _, new in new }
+            } else {
                 result[path] = element
             }
         }

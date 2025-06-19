@@ -69,6 +69,53 @@ class TokenFinderTests: XCTestCase, AnyCodableAsserts {
         XCTAssertTrue(urlQueryString == "key1=value1&key2.key22=22.0" || urlQueryString == "key2.key22=22.0&key1=value1")
     }
 
+    func testGetTokenValue_urlArrays() {
+        // Given: event data with complex arrays
+        let runtime = TestableExtensionRuntime()
+        let eventData: [String: Any] = [
+            "numbers": [1, 2.2, false, NSNull(), "a"],
+            "meta": ["key1": "value1"],
+            "mix": [
+                ["nestedObj": ["nestedKey1": "nestedValue1"]],
+                1
+            ]
+        ]
+
+        let tokenFinder = TokenFinder(event: Event(name: "eventName", type: "eventType", source: "eventSource", data: eventData), extensionRuntime: runtime)
+
+        // When
+        guard let query = tokenFinder.get(key: "~all_url") as? String else {
+            XCTFail("Expected non-nil url query string")
+            return
+        }
+
+        // Convert query params into easier to parse format
+        let pairs = Dictionary(uniqueKeysWithValues: query.removingPercentEncoding!
+            .split(separator: "&")
+            .map { kvp -> (String, String) in
+                let parts = kvp.split(separator: "=", maxSplits: 1).map(String.init)
+                return (parts[0], parts[1])
+            })
+
+        // Then: we should have exactly three segments
+        XCTAssertEqual(3, pairs.count)
+        // 1. Primitive array: comma-joined values
+        XCTAssertEqual("1,2.2,false,<null>,a", pairs["numbers"])
+        // No flattening
+        XCTAssertNil(pairs["numbers.0"])
+
+        // 2. Nested dictionary: key is flattened
+        XCTAssertEqual("value1", pairs["meta.key1"])
+
+        // 3. Complex array with nested object: -> comma-joined values
+        let expectedMix = """
+        ["nestedObj": ["nestedKey1": "nestedValue1"]],1
+        """
+        XCTAssertEqual(expectedMix, pairs["mix"])
+        // No flattening
+        XCTAssertNil(pairs["mix.0"])
+    }
+
     func testGetTokenValue_url_empty_kvp() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event whose event data property is `nil`
         let runtime = TestableExtensionRuntime()
