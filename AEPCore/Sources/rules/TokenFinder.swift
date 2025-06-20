@@ -78,7 +78,7 @@ class TokenFinder: Traversable {
                 Log.debug(label: LOG_TAG, "Current event data is nil, can not use it to generate an url query string")
                 return EMPTY_STRING
             }
-            return URLUtility.generateQueryString(parameters: dict.flattening())
+            return URLUtility.generateQueryString(parameters: dict.flattening(flattenArrays: false))
         case TOKEN_KEY_ALL_JSON:
             return generateJsonString(AnyCodable.from(dictionary: event.data))
 
