@@ -21,15 +21,15 @@ extension Array where Element == Any {
     /// ### Example
     /// ```swift
     /// let input: [Any] = [
-    ///     ["a": 1],
-    ///     ["b": [2, 3]]
+    ///     ["dict": "value"],
+    ///     ["array": [1, 2]]
     /// ]
     /// let flattened = input.flattening()
     /// // Result:
     /// // [
-    /// //   "0.a": 1,
-    /// //   "1.b.0": 2,
-    /// //   "1.b.1": 3
+    /// //   "0.dict": "value",
+    /// //   "1.array.0": 1,
+    /// //   "1.array.1": 2
     /// // ]
     /// ```
     ///

@@ -22,21 +22,17 @@ extension Dictionary where Key == String, Value == Any {
     /// ### Example
     /// ```swift
     /// let input: [String: Any] = [
-    ///     "a": [
-    ///         "b": [
-    ///             "c": 1
-    ///         ],
-    ///         "d": [2, 3]
-    ///     ],
-    ///     "e": "value"
+    ///     "array": [1, 2],
+    ///     "nested": ["a": "b"],
+    ///     "key": "value"
     /// ]
     /// let flattened = input.flattening()
     /// // Result:
     /// // [
-    /// //   "a.b.c": 1,
-    /// //   "a.d.0": 2,
-    /// //   "a.d.1": 3,
-    /// //   "e": "value"
+    /// //   "array.0": 1,
+    /// //   "array.1": 2,
+    /// //   "nested.a": "b",
+    /// //   "key": "value"
     /// // ]
     /// ```
     ///
