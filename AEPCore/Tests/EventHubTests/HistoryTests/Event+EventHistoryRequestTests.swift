@@ -45,7 +45,7 @@ class Event_EventHistoryRequestTests: XCTestCase {
 
         let request = event.toEventHistoryRequest()
 
-        // 6 top-level keys + 5 flattened inner dictionary keys
+        // 6 top-level keys + 5 flattened inner dictionary keys + 5 flattened inner array values
         XCTAssertEqual(15, request.mask.count)
 
         // Primitive top-level types

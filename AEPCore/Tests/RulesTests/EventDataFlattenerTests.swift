@@ -132,6 +132,13 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqual(flattenedDictionary.count, 2)
     }
 
+    func testSameKeyPathFromDifferentShapes() {
+        let dottedKey: [String: Any] = ["a.b": 1]
+        let nestedKey: [String: Any] = ["a": ["b": 1]]
+
+        XCTAssertEqualDictionaries(dottedKey.flattening(), nestedKey.flattening())
+    }
+
     func testEmptyDictionaryReturnsEmpty() {
         let actual: [String: Any] = [:]
         XCTAssertTrue(actual.flattening().isEmpty)
