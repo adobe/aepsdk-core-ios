@@ -15,6 +15,7 @@ import XCTest
 
 class EventDataFlattenerTests: XCTestCase {
     // MARK: - Dictionary root tests
+    /// A flat dictionary should remain unchanged after flattening.
     func testFlatDictionaryRemainsUnchanged() {
         let actual: [String: Any] = [
             "a": 1,
@@ -27,6 +28,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, actual.flattening())
     }
 
+    /// A dictionary with all primitive types should flatten to itself.
     func testDictionaryWithPrimitives() {
         let actual: [String: Any] = [
             "int": 1,
@@ -45,6 +47,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, actual.flattening())
     }
 
+    /// A deeply nested dictionary should flatten into dot-separated keys.
     func testNestedDictionaryIsFlattened() {
         let actual: [String: Any] = [
             "a": [
@@ -57,6 +60,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, actual.flattening())
     }
 
+    /// A dictionary with an array of primitives should flatten each array element with index keys.
     func testDictionaryWithArrayOfPrimitives() {
         let actual: [String: Any] = ["nums": [1, true, 1.23, "a", NSNull()]]
         let expected: [String: Any] = [
@@ -69,6 +73,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, actual.flattening())
     }
 
+    /// A dictionary with an array of dictionaries should flatten nested values by index and key.
     func testDictionaryWithArrayOfDictionaries() {
         let actual: [String: Any] = [
             "arr": [
@@ -83,6 +88,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, actual.flattening())
     }
 
+    /// Mixed nested arrays and dictionaries should flatten fully with correct paths.
     func testMixedNestedStructures() {
         let actual: [String: Any] = [
             "dict": [
@@ -106,6 +112,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, actual.flattening())
     }
 
+    /// Keys that are numeric strings should not interfere with array indexing.
     func testDictionaryNumericalKeys() {
         let actual: [String: Any] = [
             "0": [0],
@@ -119,6 +126,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, actual.flattening())
     }
 
+    /// Dotted keys are not escaped; a key like "a.b" is treated as literal.
     func testDictionaryWithDotInKeyIsNotEscaped() {
         let actual: [String: Any] = [
             "a.b": ["c": 1],
@@ -132,19 +140,118 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqual(flattenedDictionary.count, 2)
     }
 
+    /// Different shapes ("a.b" vs nested "a": "b") must flatten to the same key path.
     func testSameKeyPathFromDifferentShapes() {
-        let dottedKey: [String: Any] = ["a.b": 1]
-        let nestedKey: [String: Any] = ["a": ["b": 1]]
+        let dotted: [String: Any] = ["a.b": 1]
+        let nested: [String: Any] = ["a": ["b": 1]]
 
-        XCTAssertEqualDictionaries(dottedKey.flattening(), nestedKey.flattening())
+        let expected: [String: Any] = ["a.b": 1]
+        XCTAssertEqualDictionaries(expected, dotted.flattening())
+        XCTAssertEqualDictionaries(expected, nested.flattening())
     }
 
+    /// An empty dictionary should flatten to an empty dictionary.
     func testEmptyDictionaryReturnsEmpty() {
         let actual: [String: Any] = [:]
         XCTAssertTrue(actual.flattening().isEmpty)
     }
 
+    // MARK: Flatten arrays false cases
+    /// When `flattenArrays` is false, dictionaries must still flatten while any array value is left as-is.
+    func testDictionaryFlatteningStillWorksWhenArrayFlatteningDisabled() {
+        let input: [String: Any] = [
+            "outer": [
+                "int": 1,
+                "inner": [
+                    "bool": true
+                ]
+            ],
+            "path.with.dot": [
+                "inner": "value"
+            ],
+            "arr": [10, 20, 30]
+        ]
+
+        let expected: [String: Any] = [
+            "outer.int": 1,
+            "outer.inner.bool": true,
+            "path.with.dot.inner": "value",
+            "arr": [10, 20, 30]
+        ]
+
+        let result = input.flattening(flattenArrays: false)
+
+        XCTAssertEqualDictionaries(expected, result)
+        XCTAssertTrue(result["arr"] is [Any])
+    }
+
+    /// A top-level array of primitives should stay as `[Any]`
+    func testArrayOfPrimitivesIsPreservedWhenFlattenDisabled() {
+        let input: [String: Any] = [
+            "primitives": [10, "a", true, 1.23, NSNull()]
+        ]
+        let expected: [String: Any] = [
+            "primitives": [10, "a", true, 1.23, NSNull()]
+        ]
+
+        let result = input.flattening(flattenArrays: false)
+
+        XCTAssertEqualDictionaries(expected, result)
+        XCTAssertTrue(result["primitives"] is [Any])
+    }
+
+    /// An array nested inside dictionaries is also preserved
+    func testNestedArrayIsPreservedWhenFlattenDisabled() {
+        let input: [String: Any] = [
+            "outer": [
+                "inner": [1, 2, 3]
+            ]
+        ]
+        let expected: [String: Any] = [
+            "outer.inner": [1, 2, 3]
+        ]
+
+        let result = input.flattening(flattenArrays: false)
+
+        XCTAssertEqualDictionaries(expected, result)
+        XCTAssertTrue(result["outer.inner"] is [Any])
+    }
+
+    /// An array of dictionaries should remain an array; none of the dictionaries inside the array are flattened.
+    func testArrayOfDictionariesIsPreservedWhenFlattenDisabled() {
+        let input: [String: Any] = [
+            "arr": [
+                [
+                    "a": 1,
+                    "b": 2
+                ],
+                [
+                    "c": 3,
+                    "d": 4
+                ]
+            ]
+        ]
+        let expected: [String: Any] = [
+            "arr": [
+                [
+                    "a": 1,
+                    "b": 2
+                ],
+                [
+                    "c": 3,
+                    "d": 4
+                ]
+            ]
+        ]
+
+        let result = input.flattening(flattenArrays: false)
+
+        XCTAssertEqualDictionaries(expected, result)
+        XCTAssertTrue(result["arr"] is [Any])
+    }
+
     // MARK: - Array root tests
+    /// A top-level array of primitives should flatten with index keys.
     func testArrayRootOfPrimitives() {
         let input: [Any] = [10, "a", true, 1.23, NSNull()]
         let expected: [String: Any] = [
@@ -157,6 +264,7 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, input.flattening())
     }
 
+    /// A top-level array of mixed objects should flatten deeply by index and key.
     func testArrayRootOfMixedObjects() {
         let input: [Any] = [
             ["a": 1],
@@ -170,21 +278,24 @@ class EventDataFlattenerTests: XCTestCase {
         XCTAssertEqualDictionaries(expected, input.flattening())
     }
 
+    /// Nested arrays should be flattened with multi-level index paths.
     func testNestedArrayInArray() {
         let input: [Any] = [
             [
                 ["x": "y"]
             ]
         ]
-        let expected = ["0.0.x": "y"] as [String: Any]
+        let expected: [String: Any] = ["0.0.x": "y"]
         XCTAssertEqualDictionaries(expected, input.flattening())
     }
 
+    /// An empty array should flatten to an empty dictionary.
     func testEmptyArrayReturnsEmpty() {
         let input: [Any] = []
         XCTAssertTrue(input.flattening().isEmpty)
     }
 
+    /// Dictionaries with array and numeric-string keys should produce the same flattened result.
     func testKeyCollisionForArrayAndDictionaryKeys() {
         let valueArr: [String: Any] = [
             "a": [
@@ -204,7 +315,9 @@ class EventDataFlattenerTests: XCTestCase {
                 ]
             ]
         ]
-        XCTAssertEqualDictionaries(valueArr.flattening(), valueDict.flattening())
+        let expected: [String: Any] = ["a.0.b.c": "d"]
+        XCTAssertEqualDictionaries(expected, valueArr.flattening())
+        XCTAssertEqualDictionaries(expected, valueDict.flattening())
     }
 
     private func XCTAssertEqualDictionaries(
