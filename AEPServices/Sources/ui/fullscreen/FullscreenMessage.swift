@@ -256,10 +256,6 @@
 
                 self.dismissWithAnimation(shouldDeallocateWebView: true)
 
-                // notify all listeners
-                self.listener?.onDismiss(message: self)
-                self.messagingDelegate?.onDismiss(message: self)
-
                 // remove the temporary html if it exists
                 if let tempFile = self.tempHtmlFile {
                     do {
@@ -476,6 +472,10 @@
                         }
                         if shouldDeallocateWebView {
                             self.webView = nil
+                            // notify all listeners
+                            self.listener?.onDismiss(message: self)
+                            self.messagingDelegate?.onDismiss(message: self)
+
                         } else {
                             self.webView?.frame = self.frameBeforeShow
                         }
@@ -489,6 +489,9 @@
 
                     if shouldDeallocateWebView {
                         self.webView = nil
+                        // notify all listeners
+                        self.listener?.onDismiss(message: self)
+                        self.messagingDelegate?.onDismiss(message: self)
                     } else {
                         self.webView?.frame = self.frameBeforeShow
                     }
