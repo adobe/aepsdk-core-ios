@@ -15,22 +15,6 @@ import XCTest
 @testable import AEPCore
 @testable import AEPServices
 
-extension Dictionary where Key == String, Value == Any {
-    func flattening(prefix: String = "") -> [String: Any] {
-        let keyPrefix = (prefix.count > 0) ? (prefix + ".") : prefix
-        var flattenedDict = [String: Any]()
-        for (key, value) in self {
-            let expandedKey = keyPrefix + key
-            if let dict = value as? [String: Any] {
-                flattenedDict.merge(dict.flattening(prefix: expandedKey)) { _, new in new }
-            } else {
-                flattenedDict[expandedKey] = value
-            }
-        }
-        return flattenedDict
-    }
-}
-
 class EventDataMergeTests: XCTestCase {
     func testSimpleMerge() {
         let toData = """

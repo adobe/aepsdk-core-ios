@@ -1,0 +1,28 @@
+{
+    "version": 1,
+    "rules": [
+      {
+        "condition": {
+          "type": "matcher",
+          "definition": {
+            "key": "items.1",
+            "matcher": "eq",
+            "values": [
+              "b"
+            ]
+          }
+        },
+        "consequences": [
+          {
+            "id": "R1",
+            "type": "add",
+            "detail": {
+              "eventdata": {
+                "matchedItem": "{%items.1%}"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }

@@ -383,4 +383,137 @@ class EventData_FNV1A32Tests: XCTestCase {
         // 1:1222:222A:2Ba:4Bc:10R:8Z:5a:1ba:3bc:9r:7z:6
         XCTAssertEqual(2933724447, result)
     }
+    
+    func testArrayOfMaps() throws {
+        // setup - equivalent to Android testGetFnv1aHash_ArrayOfMaps
+        let map1: [String: Any] = [
+            "aaa": "1",
+            "zzz": true
+        ]
+        let map2: [String: Any] = [
+            "number": 123,
+            "double": 1.5
+        ]
+        let list: [Any] = [map1, map2]
+        dictionary["key"] = list
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify flattened map string "key.0.aaa:1key.0.zzz:truekey.1.double:1.5key.1.number:123"
+        XCTAssertEqual(2410759527, result)
+    }
+    
+    func testArrayOfLists() throws {
+        // setup - equivalent to Android testGetFnv1aHash_ArrayOfLists
+        let innerList: [Any] = ["aaa", "zzz", 111]
+        let innerList2: [Any] = ["2"]
+        let list: [Any] = [innerList, innerList2]
+        dictionary["key"] = list
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify flattened map string "key.0.0:aaakey.0.1:zzzkey.0.2:111key.1.0:2"
+        XCTAssertEqual(2441202563, result)
+    }
+    
+    func testWithEmptyMask() throws {
+        // setup - equivalent to Android testGetFnv1aHash_WithEmptyMask
+        dictionary["a"] = "1"
+        dictionary["b"] = "2"
+        let mask: [String] = []
+        
+        // test
+        let result = dictionary.fnv1a32(mask: mask)
+        
+        // verify - no hash generated due to empty mask
+        XCTAssertEqual(0, result)
+    }
+    
+    func testNullAndEmptyMapValuesPresent_WithKeysForNullAndEmptyValuesInMask() throws {
+        // setup - equivalent to Android testGetFnv1aHash_NullAndEmptyMapValuesPresent_WithKeysForNullAndEmptyValuesInMask
+        dictionary["a"] = "1"
+        dictionary["b"] = "2"
+        dictionary["c"] = ""
+        dictionary["d"] = NSNull()
+        let mask = ["c", "d"]
+        
+        // test
+        let result = dictionary.fnv1a32(mask: mask)
+        
+        // verify - no hash generated due to mask keys being present for null and empty values
+        XCTAssertEqual(0, result)
+    }
+    
+    func testNullAndEmptyMapValuesPresentInInnerMap_WithAllKeysInMask() throws {
+        // setup - equivalent to Android testGetFnv1aHash_NullAndEmptyMapValuesPresentInInnerMap_WithAllKeysInMask
+        let inner: [String: Any] = [
+            "a": "1",
+            "b": "2",
+            "c": "",
+            "d": NSNull()
+        ]
+        dictionary["inner"] = inner
+        let mask = ["inner.a", "inner.b"]
+        
+        // test
+        let result = dictionary.fnv1a32(mask: mask)
+        
+        // verify flattened map string "inner.a:1inner.b:2"
+        XCTAssertEqual(3328417429, result)
+    }
+    
+    func testNullAndEmptyMapValuesPresentInMultipleNestedInnerMaps() throws {
+        // setup - equivalent to Android testGetFnv1aHash_NullAndEmptyMapValuesPresentInMultipleNestedInnerMaps
+        let nestedNestedInner: [String: Any] = [
+            "k": "5",
+            "l": "6",
+            "m": "",
+            "n": NSNull()
+        ]
+        let nestedInner: [String: Any] = [
+            "f": "3",
+            "g": "4",
+            "h": "",
+            "i": NSNull(),
+            "nestedNestedInner": nestedNestedInner
+        ]
+        let inner: [String: Any] = [
+            "a": "1",
+            "b": "2",
+            "c": "",
+            "d": NSNull(),
+            "nestedInner": nestedInner
+        ]
+        dictionary["inner"] = inner
+        let mask = [
+            "inner.a",
+            "inner.b",
+            "inner.nestedInner.g",
+            "inner.nestedInner.nestedNestedInner.l"
+        ]
+        
+        // test
+        let result = dictionary.fnv1a32(mask: mask)
+        
+        // verify flattened map string "inner.a:1inner.b:2inner.nestedInner.g:4inner.nestedInner.nestedNestedInner.l:6"
+        XCTAssertEqual(4160127196, result)
+    }
+    
+    func testNullAndEmptyMapValuesPresent_WithNoMask() throws {
+        // setup - equivalent to Android testGetFnv1aHash_NullAndEmptyMapValuesPresent_WithNoMask
+        dictionary["a"] = "1"
+        dictionary["b"] = "2"
+        dictionary["c"] = ""
+        dictionary["d"] = NSNull()
+        dictionary["e"] = 3
+        dictionary["f"] = "4"
+        
+        // test
+        let result = dictionary.fnv1a32(mask: nil)
+        
+        // verify flattened map string "a:1b:2e:3f:4" (null and empty values are filtered out)
+        XCTAssertEqual(3916945161, result)
+    }
 }

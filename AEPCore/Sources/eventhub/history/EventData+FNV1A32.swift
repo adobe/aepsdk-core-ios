@@ -76,6 +76,8 @@ extension Dictionary where Key == String, Value == Any {
                     valueAsString = String(describing: (value as! Double))
                 case is Bool:
                     valueAsString = String(describing: (value as! Bool))
+                case is NSNull:
+                    valueAsString = ""
                 case is AnyCodable:
                     if let codableValue = (value as? AnyCodable)?.value {
                         valueAsString = String(describing: codableValue)
