@@ -26,7 +26,7 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
     }
 
     // MARK: - Valid input tests
-    func testSchemaConsequenceInsert_doesDispatchAndRecord_whenDetailIdIsEmpty() {
+    func testSchemaConsequenceInsert_doesDispatchAndRecord_whenDetailIdIsEmpty() throws {
         // Given: a schema type rule consequence with a valid format
         //    ---------- schema based consequence details ----------
         //        "detail": {
@@ -50,6 +50,37 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
         // Should attempt to record into event history
         XCTAssertTrue(mockRuntime.recordHistoricalEventCalled)
+
+        // Validate the recorded event payload
+        let recordedEvent = try XCTUnwrap(mockRuntime.receivedRecordHistoricalEvent, "Expected recorded event to be non-nil")
+        let expectedRecordedEventData = """
+        {
+          "key1": "value1"
+        }
+        """
+        assertEqual(expected: expectedRecordedEventData, actual: recordedEvent.data)
+
+        // Validate the dispatched consequence event payload
+        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
+        let expectedDispatchedEventData = """
+        {
+          "triggeredconsequence": {
+            "type": "schema",
+            "id": "test-id",
+            "detail": {
+              "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
+              "id": "",
+              "data": {
+                "operation": "insert",
+                "content": {
+                  "key1": "value1"
+                }
+              }
+            }
+          }
+        }
+        """
+        assertEqual(expected: expectedDispatchedEventData, actual: dispatchedEvent.data)
     }
 
     func testSchemaConsequenceInsert_doesDispatchAndRecord() throws {
@@ -88,30 +119,63 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
 
         // Validate that the event that was recorded is equal to what was dispatched
         let recordedEvent = try XCTUnwrap(mockRuntime.receivedRecordHistoricalEvent, "Expected recorded event to be non-nil")
-        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
 
-        XCTAssertEqual(recordedEvent, dispatchedEvent)
-
-        // Validate the expected consequence event properties: parentID, name, type, source, data
-        let expectedEventData = """
+        let expectedRecordedEventData = """
         {
-          "stringKey": "stringValue",
-          "numberKey": 123,
           "booleanKey": true,
-          "arrayKey": [
-            "value1",
-            2,
-            false
-          ],
+          "numberKey": 123,
+          "nullKey": null,
+          "arrayKey": ["value1", 2, false],
+          "stringKey": "stringValue",
           "objectKey": {
             "nestedKey1": "nestedValue1",
-            "nestedKey2": 456,
-            "nestedKey3": false
-          },
-          "nullKey": null
+            "nestedKey3": false,
+            "nestedKey2": 456
+          }
         }
         """
-        assertEqual(expected: expectedEventData, actual: recordedEvent.data)
+
+        assertEqual(expected: expectedRecordedEventData, actual: recordedEvent.data)
+        XCTAssertEqual(recordedEvent.parentID, defaultEvent.id)
+        XCTAssertEqual(recordedEvent.name, "Dispatch Consequence Result")
+        XCTAssertEqual(recordedEvent.type, "com.adobe.eventType.rulesEngine")
+        XCTAssertEqual(recordedEvent.source, "com.adobe.eventSource.responseContent")
+
+        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
+
+        // Validate the expected consequence event properties: parentID, name, type, source, data
+        let expectedDispatchedEventData = """
+        {
+          "triggeredconsequence" : {
+            "id" : "test-id",
+            "type" : "schema",
+            "detail" : {
+              "data" : {
+                "operation" : "insert",
+                "content" : {
+                  "stringKey": "stringValue",
+                  "numberKey": 123,
+                  "booleanKey": true,
+                  "arrayKey": [
+                    "value1",
+                    2,
+                    false
+                  ],
+                  "objectKey": {
+                    "nestedKey1": "nestedValue1",
+                    "nestedKey2": 456,
+                    "nestedKey3": false
+                  },
+                  "nullKey": null
+                }
+              },
+              "schema" : "https://ns.adobe.com/personalization/eventHistoryOperation",
+              "id" : "test-id"
+            }
+          }
+        }
+        """
+        assertEqual(expected: expectedDispatchedEventData, actual: dispatchedEvent.data)
         XCTAssertEqual(recordedEvent.parentID, defaultEvent.id)
         XCTAssertEqual(recordedEvent.name, "Dispatch Consequence Result")
         XCTAssertEqual(recordedEvent.type, "com.adobe.eventType.rulesEngine")
@@ -178,6 +242,30 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         }
         """
         assertEqual(expected: expectedEventData, actual: recordedEvent.data)
+
+        // Validate dispatched consequence event payload
+        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
+        let expectedDispatchedEventData = """
+        {
+          "triggeredconsequence": {
+            "type": "schema",
+            "id": "test-id",
+            "detail": {
+              "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
+              "id": "test-id",
+              "data": {
+                "operation": "insert",
+                "content": {
+                  "key1": "value1",
+                  "tokenKey_type": "com.adobe.eventType.generic.track",
+                  "tokenKey_source": "com.adobe.eventSource.requestContent"
+                }
+              }
+            }
+          }
+        }
+        """
+        assertEqual(expected: expectedDispatchedEventData, actual: dispatchedEvent.data)
     }
 
     func testSchemaConsequenceInsert_doesNotDispatch_whenRecordHistoricalEventFails() {
@@ -210,7 +298,7 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
     }
 
-    func testSchemaConsequenceInsertIfNotExists_doesDispatchAndRecord_whenEventNotInEventHistory() {
+    func testSchemaConsequenceInsertIfNotExists_doesDispatchAndRecord_whenEventNotInEventHistory() throws {
         // Given: a schema type rule consequence with a valid format
         //    ---------- schema based consequence details ----------
         //        "detail": {
@@ -246,6 +334,59 @@ class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
         XCTAssertTrue(mockRuntime.recordHistoricalEventCalled)
         // Should be dispatched
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+
+        // Validate the recorded event payload
+        let recordedEvent = try XCTUnwrap(mockRuntime.receivedRecordHistoricalEvent, "Expected recorded event to be non-nil")
+        let expectedRecordedEventData = """
+        {
+          "booleanKey": true,
+          "numberKey": 123,
+          "nullKey": null,
+          "arrayKey": ["value1", 2, false],
+          "stringKey": "stringValue",
+          "objectKey": {
+            "nestedKey1": "nestedValue1",
+            "nestedKey3": false,
+            "nestedKey2": 456
+          }
+        }
+        """
+        assertEqual(expected: expectedRecordedEventData, actual: recordedEvent.data)
+
+        // Validate the dispatched consequence event payload
+        let dispatchedEvent = try XCTUnwrap(mockRuntime.dispatchedEvents.first, "Expected dispatched event to be non-nil")
+        let expectedDispatchedEventData = """
+        {
+          "triggeredconsequence" : {
+            "id" : "test-id",
+            "type" : "schema",
+            "detail" : {
+              "data" : {
+                "operation" : "insertIfNotExists",
+                "content" : {
+                  "stringKey": "stringValue",
+                  "numberKey": 123,
+                  "booleanKey": true,
+                  "arrayKey": [
+                    "value1",
+                    2,
+                    false
+                  ],
+                  "objectKey": {
+                    "nestedKey1": "nestedValue1",
+                    "nestedKey2": 456,
+                    "nestedKey3": false
+                  },
+                  "nullKey": null
+                }
+              },
+              "schema" : "https://ns.adobe.com/personalization/eventHistoryOperation",
+              "id" : "test-id"
+            }
+          }
+        }
+        """
+        assertEqual(expected: expectedDispatchedEventData, actual: dispatchedEvent.data)
     }
 
     func testSchemaConsequenceInsertIfNotExists_doesNotDispatchAndRecord_whenEventInEventHistory() {
