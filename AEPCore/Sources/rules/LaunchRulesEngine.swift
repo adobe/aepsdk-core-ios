@@ -435,7 +435,12 @@ public class LaunchRulesEngine {
         self.extensionRuntime.recordHistoricalEvent(eventToRecord) { [weak self] success in
             guard let self = self else { return }
             if success {
-                self.extensionRuntime.dispatch(event: eventToRecord)
+                // Provide the entire rule consequence in the dispatched consequence event,
+                // not just the inserted key value pairs, so that downstream consumers can
+                // identify it properly
+                let consequenceEvent = generateConsequenceEvent(consequence: consequence, parentEvent: processedEvent)
+                self.extensionRuntime.dispatch(event: consequenceEvent)
+
             } else {
                 Log.warning(label: LOG_TAG, "\(logPrefix) - Failed to record event in history for '\(operation)'")
             }
