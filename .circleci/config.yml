@@ -55,6 +55,8 @@ workflows:
 
 commands: 
   install_dependencies:
+    macos:
+      xcode: 15.3.0 # Specify the Xcode version to use
     steps:
           # restore pods related caches
       - restore_cache:
