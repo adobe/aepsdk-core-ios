@@ -334,6 +334,8 @@
 		3FF829492507F8AA00483C74 /* rules_lifecycle.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF829482507F8AA00483C74 /* rules_lifecycle.json */; };
 		3FF829692509937100483C74 /* SignalIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FF829682509937100483C74 /* SignalIntegrationTests.swift */; };
 		3FF8296D2509942300483C74 /* rules_signal.json in Resources */ = {isa = PBXBuildFile; fileRef = 3FF8296B2509942300483C74 /* rules_signal.json */; };
+		4C2157E92DC16C5E0055C8C9 /* TokenReplacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2157E82DC16C5E0055C8C9 /* TokenReplacementTests.swift */; };
+		4C2157EB2DC16F040055C8C9 /* TestableTraversable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
 		4CF0285F2C2CCBD3008ADE05 /* EventSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028182C2CCA0F008ADE05 /* EventSpec.swift */; };
@@ -467,6 +469,8 @@
 		B3E6E9762859BEC553298E95 /* Pods_AEPCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */; };
 		B6D6A019265EC9D8005042BE /* FloatingButtonPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */; };
 		B6D6A02D26601279005042BE /* FloatingButtonPositionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */; };
+		B6E568C72DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json in Resources */ = {isa = PBXBuildFile; fileRef = B6E568C62DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json */; };
+		B6E568C92DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json in Resources */ = {isa = PBXBuildFile; fileRef = B6E568C82DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json */; };
 		BB00E26824D8C94600C578C1 /* TokenFinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26624D8C94600C578C1 /* TokenFinder.swift */; };
 		BB00E26924D8C94600C578C1 /* Dictionary+Flatten.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */; };
 		BB00E26B24D8C9A600C578C1 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB00E26A24D8C9A600C578C1 /* Date+Format.swift */; };
@@ -1092,6 +1096,8 @@
 		3FF8296B2509942300483C74 /* rules_signal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_signal.json; sourceTree = "<group>"; };
 		4107BA7054E313DACA0D4EF4 /* Pods-AEPCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		41E5D22C6D72CCCF26904EDE /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4C2157E82DC16C5E0055C8C9 /* TokenReplacementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReplacementTests.swift; sourceTree = "<group>"; };
+		4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableTraversable.swift; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
 		4CF028182C2CCA0F008ADE05 /* EventSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventSpec.swift; sourceTree = "<group>"; };
@@ -1190,6 +1196,8 @@
 		B59C21EF8D78FC053D2404B0 /* Pods_TestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6D6A018265EC9D8005042BE /* FloatingButtonPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPosition.swift; sourceTree = "<group>"; };
 		B6D6A02C26601279005042BE /* FloatingButtonPositionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPositionTests.swift; sourceTree = "<group>"; };
+		B6E568C62DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNe_multipleValues.json; sourceTree = "<group>"; };
+		B6E568C82DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testMatcherNc_multipleValues.json; sourceTree = "<group>"; };
 		BB00E26624D8C94600C578C1 /* TokenFinder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenFinder.swift; sourceTree = "<group>"; };
 		BB00E26724D8C94600C578C1 /* Dictionary+Flatten.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Flatten.swift"; sourceTree = "<group>"; };
 		BB00E26A24D8C9A600C578C1 /* Date+Format.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Date+Format.swift"; sourceTree = "<group>"; };
@@ -1910,6 +1918,7 @@
 				BB59402924CF6CA200EE0C6C /* LaunchRulesEngineTests.swift */,
 				3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */,
 				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
+				4C2157E82DC16C5E0055C8C9 /* TokenReplacementTests.swift */,
 				BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */,
 			);
 			path = RulesTests;
@@ -1963,6 +1972,8 @@
 				BBA512A624F4A18B0030DAD1 /* rules_testMatcherNc.json */,
 				BBA5129A24F477550030DAD1 /* rules_testMatcherNe.json */,
 				BBA512A824F4A7EE0030DAD1 /* rules_testMatcherNx.json */,
+				B6E568C82DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json */,
+				B6E568C62DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json */,
 				BB3E86E124F975E000E39C53 /* rules_testMatcherWithDifferentTypesOfParameters.json */,
 				BBA512BA24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json */,
 				BBA512B224F5CF380030DAD1 /* rules_testModifyData.json */,
@@ -1996,6 +2007,7 @@
 				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
 				3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */,
+				4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
@@ -2788,6 +2800,7 @@
 				BF4A6EE726BB47FE00612434 /* rules_testDispatchEventNewData.json in Resources */,
 				3F08FF9B24DA0DA100D34DE3 /* rules_functional_1.zip in Resources */,
 				3F39520C24CA096100F7325B /* rules_1.json in Resources */,
+				B6E568C72DF3AE20006F1741 /* rules_testMatcherNe_multipleValues.json in Resources */,
 				BBA512A524F4A1790030DAD1 /* rules_testMatcherCo.json in Resources */,
 				BBA512A924F4A7EE0030DAD1 /* rules_testMatcherNx.json in Resources */,
 				BBA512A124F4A15C0030DAD1 /* rules_testMatcherLt.json in Resources */,
@@ -2800,6 +2813,7 @@
 				BF4A6F2826BB4A1B00612434 /* rules_testDispatchEventNoSource.json in Resources */,
 				BF4A6EB826BB3B9D00612434 /* rules_testDispatchEventCopy.json in Resources */,
 				3F39520F24CA096100F7325B /* testRulesDownloader.zip in Resources */,
+				B6E568C92DF3B28C006F1741 /* rules_testMatcherNc_multipleValues.json in Resources */,
 				BF4A6F2626BB4A1B00612434 /* rules_testDispatchEventNoAction.json in Resources */,
 				3F39520A24CA096100F7325B /* TestRules.zip in Resources */,
 				3F39520E24CA096100F7325B /* TestConfig.json in Resources */,
@@ -3386,12 +3400,14 @@
 				3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */,
 				2130A59D260AB448005DBA0F /* MockLegacyExtension.swift in Sources */,
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
+				4C2157E92DC16C5E0055C8C9 /* TokenReplacementTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
 				78AA4EC42513AD2000205AE9 /* ConfigurationFileInPathTests.swift in Sources */,
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
 				3F39521A24CA096200F7325B /* MockConfigurationDownloaderNetworkService.swift in Sources */,
 				2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */,
 				24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */,
+				4C2157EB2DC16F040055C8C9 /* TestableTraversable.swift in Sources */,
 				24E255D7270F526D00AB9F07 /* String+FNV1A32Tests.swift in Sources */,
 				3FB5F7D024D2848900F0F6DF /* ConfigurationUpdateTests.swift in Sources */,
 			);
@@ -4066,7 +4082,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4100,7 +4116,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4184,7 +4200,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4216,7 +4232,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4291,7 +4307,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4322,7 +4338,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4466,7 +4482,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4497,7 +4513,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4527,7 +4543,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4558,7 +4574,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4635,7 +4651,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4666,7 +4682,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4744,7 +4760,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4776,7 +4792,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.4.0;
+				MARKETING_VERSION = 5.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
