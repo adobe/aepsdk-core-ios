@@ -224,7 +224,7 @@ jobs:
 
   test-ios-integration:
     macos:
-      xcode: 15.1 # Specify the Xcode version to use
+      xcode: 15.3.0 # Specify the Xcode version to use
 
     steps:
       - checkout
