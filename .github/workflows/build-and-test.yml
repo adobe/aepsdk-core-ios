@@ -15,12 +15,6 @@ name: Build and Test (Core)
 on:
   pull_request:
 
-env:
-  IOS_DEVICE_NAMES: '["iPhone 15"]'
-  IOS_VERSIONS: '["18.1"]'
-  TVOS_DEVICE_NAMES: '["Apple TV"]'
-  TVOS_VERSIONS: '["18.1"]'
-
 jobs:
   validate-code:
     name: Validate Code
@@ -35,8 +29,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      ios-device-names: ${{ env.IOS_DEVICE_NAMES }}
-      ios-versions: ${{ env.IOS_VERSIONS }}
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
       command: make aep-core-unit-test
       enable-codecov: true
       codecov-flag: aepcore-ios-tests
@@ -47,8 +41,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      ios-device-names: ${{ env.IOS_DEVICE_NAMES }}
-      ios-versions: ${{ env.IOS_VERSIONS }}
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
       command: make aep-services-unit-test
       enable-codecov: true
       codecov-flag: aepservices-ios-tests
@@ -59,8 +53,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      ios-device-names: ${{ env.IOS_DEVICE_NAMES }}
-      ios-versions: ${{ env.IOS_VERSIONS }}
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
       command: make aep-lifecycle-unit-test
       enable-codecov: true
       codecov-flag: aeplifecycle-ios-tests
@@ -71,8 +65,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      ios-device-names: ${{ env.IOS_DEVICE_NAMES }}
-      ios-versions: ${{ env.IOS_VERSIONS }}
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
       command: make aep-identity-unit-test
       enable-codecov: true
       codecov-flag: aepidentity-ios-tests
@@ -83,8 +77,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      ios-device-names: ${{ env.IOS_DEVICE_NAMES }}
-      ios-versions: ${{ env.IOS_VERSIONS }}
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
       command: make aep-signal-unit-test
       enable-codecov: true
       codecov-flag: aepsignal-ios-tests
@@ -95,8 +89,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      ios-device-names: ${{ env.IOS_DEVICE_NAMES }}
-      ios-versions: ${{ env.IOS_VERSIONS }}
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
       command: make integration-test
       enable-codecov: false
     secrets: inherit
@@ -109,8 +103,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      tvos-device-names: ${{ env.TVOS_DEVICE_NAMES }}
-      tvos-versions: ${{ env.TVOS_VERSIONS }}
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
       command: make aep-core-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepcore-tvos-tests
@@ -121,8 +115,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      tvos-device-names: ${{ env.TVOS_DEVICE_NAMES }}
-      tvos-versions: ${{ env.TVOS_VERSIONS }}
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
       command: make aep-services-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepservices-tvos-tests
@@ -133,8 +127,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      tvos-device-names: ${{ env.TVOS_DEVICE_NAMES }}
-      tvos-versions: ${{ env.TVOS_VERSIONS }}
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
       command: make aep-lifecycle-tvos-unit-test
       enable-codecov: true
       codecov-flag: aeplifecycle-tvos-tests
@@ -145,8 +139,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      tvos-device-names: ${{ env.TVOS_DEVICE_NAMES }}
-      tvos-versions: ${{ env.TVOS_VERSIONS }}
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
       command: make aep-identity-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepidentity-tvos-tests
@@ -157,8 +151,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      tvos-device-names: ${{ env.TVOS_DEVICE_NAMES }}
-      tvos-versions: ${{ env.TVOS_VERSIONS }}
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
       command: make aep-signal-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepsignal-tvos-tests
@@ -169,8 +163,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      tvos-device-names: ${{ env.TVOS_DEVICE_NAMES }}
-      tvos-versions: ${{ env.TVOS_VERSIONS }}
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
       command: make integration-tvos-test
       enable-codecov: false
     secrets: inherit
@@ -184,8 +178,8 @@ jobs:
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
-      ios-device-names: ${{ env.IOS_DEVICE_NAMES }}
-      ios-versions: ${{ env.IOS_VERSIONS }}
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
       command: make ci-archive && make test-SPM-integration
       enable-codecov: false
     secrets: inherit 
