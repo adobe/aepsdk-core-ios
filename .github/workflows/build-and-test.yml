@@ -34,6 +34,7 @@ jobs:
       command: make aep-core-unit-test
       enable-codecov: true
       codecov-flag: aepcore-ios-tests
+      result-bundle-path: build/
     secrets: inherit
 
   ios-services-unit:
@@ -46,6 +47,7 @@ jobs:
       command: make aep-services-unit-test
       enable-codecov: true
       codecov-flag: aepservices-ios-tests
+      result-bundle-path: build/
     secrets: inherit
 
   ios-lifecycle-unit:
@@ -58,6 +60,7 @@ jobs:
       command: make aep-lifecycle-unit-test
       enable-codecov: true
       codecov-flag: aeplifecycle-ios-tests
+      result-bundle-path: build/
     secrets: inherit
 
   ios-identity-unit:
@@ -70,6 +73,7 @@ jobs:
       command: make aep-identity-unit-test
       enable-codecov: true
       codecov-flag: aepidentity-ios-tests
+      result-bundle-path: build/
     secrets: inherit
 
   ios-signal-unit:
@@ -82,6 +86,7 @@ jobs:
       command: make aep-signal-unit-test
       enable-codecov: true
       codecov-flag: aepsignal-ios-tests
+      result-bundle-path: build/
     secrets: inherit
 
   ios-integration:
@@ -108,6 +113,7 @@ jobs:
       command: make aep-core-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepcore-tvos-tests
+      result-bundle-path: build/
     secrets: inherit
 
   tvos-services-unit:
@@ -120,6 +126,7 @@ jobs:
       command: make aep-services-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepservices-tvos-tests
+      result-bundle-path: build/
     secrets: inherit
 
   tvos-lifecycle-unit:
@@ -132,6 +139,7 @@ jobs:
       command: make aep-lifecycle-tvos-unit-test
       enable-codecov: true
       codecov-flag: aeplifecycle-tvos-tests
+      result-bundle-path: build/
     secrets: inherit
 
   tvos-identity-unit:
@@ -144,6 +152,7 @@ jobs:
       command: make aep-identity-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepidentity-tvos-tests
+      result-bundle-path: build/
     secrets: inherit
 
   tvos-signal-unit:
@@ -156,6 +165,7 @@ jobs:
       command: make aep-signal-tvos-unit-test
       enable-codecov: true
       codecov-flag: aepsignal-tvos-tests
+      result-bundle-path: build/
     secrets: inherit
 
   tvos-integration:
