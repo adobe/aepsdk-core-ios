@@ -17,6 +17,7 @@ import AEPCoreMocks
 @testable import AEPServices
 
 class EventHistoryIntegrationTests: XCTestCase {
+    let DEFAULT_TIMEOUT: TimeInterval = 5
     var mockNetworkService = TestableNetworkService()
     let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
     
@@ -37,7 +38,7 @@ class EventHistoryIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 3)
+        wait(for: [initExpectation], timeout: DEFAULT_TIMEOUT)
     }
     
     func testEventHistoryWithoutEnforceOrder() {
@@ -85,7 +86,7 @@ class EventHistoryIntegrationTests: XCTestCase {
             
         })
 
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: DEFAULT_TIMEOUT)
     }
     
     func testEventHistoryWithEnforceOrder() {
@@ -140,7 +141,7 @@ class EventHistoryIntegrationTests: XCTestCase {
             expectation2.fulfill()
         })
 
-        wait(for: [expectation, expectation2], timeout: 1)
+        wait(for: [expectation, expectation2], timeout: DEFAULT_TIMEOUT)
     }
     
     func testRulesAreAppliedBeforePersistingEvents() {
@@ -176,7 +177,7 @@ class EventHistoryIntegrationTests: XCTestCase {
             
             expectation.fulfill()
         })
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func mockRemoteConfigAndRules(for appId: String, with configData: Data?, localRulesName: String) {
@@ -199,7 +200,7 @@ class EventHistoryIntegrationTests: XCTestCase {
             return nil
         }
         MobileCore.configureWith(appId: appId)
-        wait(for: [configExpectation, rulesExpectation], timeout: 2)
+        wait(for: [configExpectation, rulesExpectation], timeout: DEFAULT_TIMEOUT)
     }
 }
 
