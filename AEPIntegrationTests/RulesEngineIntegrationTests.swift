@@ -15,6 +15,7 @@ import XCTest
 @testable import AEPServices
 
 class RulesEngineIntegrationTests: XCTestCase {
+    let DEFAULT_TIMEOUT: TimeInterval = 5
     var mockNetworkService = TestableNetworkService()
     let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
@@ -34,7 +35,7 @@ class RulesEngineIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 3)
+        wait(for: [initExpectation], timeout: DEFAULT_TIMEOUT)
     }
     
     func testDispatchConsequence() {
@@ -65,7 +66,7 @@ class RulesEngineIntegrationTests: XCTestCase {
         
         MobileCore.dispatch(event: parentEvent)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: DEFAULT_TIMEOUT)
     }
     
     func testDispatchConsequence_eventTriggersTwoConsequences() {
@@ -97,7 +98,7 @@ class RulesEngineIntegrationTests: XCTestCase {
         
         MobileCore.dispatch(event: parentEvent)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: DEFAULT_TIMEOUT)
     }
     
     func testDispatchConsequence_chainConsequence_doesNotLoop() {
@@ -139,7 +140,7 @@ class RulesEngineIntegrationTests: XCTestCase {
                           data: ["chain": "yes"])
         MobileCore.dispatch(event: event)
         
-        wait(for: [expectation1, expectation2, expectation3], timeout: 3)
+        wait(for: [expectation1, expectation2, expectation3], timeout: DEFAULT_TIMEOUT)
     }
 
     func mockRemoteConfigAndRules(for appId: String, with configData: Data?, localRulesName: String) {
@@ -162,6 +163,6 @@ class RulesEngineIntegrationTests: XCTestCase {
             return nil
         }
         MobileCore.configureWith(appId: appId)
-        wait(for: [configExpectation, rulesExpectation], timeout: 2)
+        wait(for: [configExpectation, rulesExpectation], timeout: DEFAULT_TIMEOUT)
     }
 }

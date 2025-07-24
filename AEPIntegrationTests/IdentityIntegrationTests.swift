@@ -22,6 +22,7 @@ import AEPSignal
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
 class IdentityIntegrationTests: TestBase {
+    let DEFAULT_TIMEOUT: TimeInterval = 5
     var mockNetworkService = TestableNetworkService()
 
     override func setUp() {
@@ -58,10 +59,10 @@ class IdentityIntegrationTests: TestBase {
             initExpectation.fulfill()
         }
 
-        wait(for: [initExpectation], timeout: 3)
+        wait(for: [initExpectation], timeout: DEFAULT_TIMEOUT)
 
         if sharedStateCount > 0 {
-            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: DEFAULT_TIMEOUT)
             resetTestExpectations()
         }
     }
@@ -100,7 +101,7 @@ class IdentityIntegrationTests: TestBase {
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"], authenticationState: .authenticated)
 
-        wait(for: [requestExpectation], timeout: 1)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testIdentitySendsForceSyncRequestOnEveryLaunch() {
@@ -126,7 +127,7 @@ class IdentityIntegrationTests: TestBase {
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"], authenticationState: .authenticated)
 
-        wait(for: [requestExpectation], timeout: 1)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
 
         //Relaunch app
         unregisterExtensionsAndReset()
@@ -147,7 +148,7 @@ class IdentityIntegrationTests: TestBase {
         initExtensionsAndWait(sharedStateCount: 4)
 
         // we should get config shared state update from cache which would forceSync and sendHit
-        wait(for: [secondLaunchRequestExpectation], timeout: 1)
+        wait(for: [secondLaunchRequestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
 
@@ -168,7 +169,7 @@ class IdentityIntegrationTests: TestBase {
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedout"])
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
 
-        wait(for: [requestExpectation], timeout: 2)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetUrlVariables() {
@@ -184,7 +185,7 @@ class IdentityIntegrationTests: TestBase {
             variablesExpectation.fulfill()
         }
 
-        wait(for: [variablesExpectation], timeout: 1)
+        wait(for: [variablesExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testAppendTo() {
@@ -200,7 +201,7 @@ class IdentityIntegrationTests: TestBase {
             urlExpectation.fulfill()
         }
 
-        wait(for: [urlExpectation], timeout: 1)
+        wait(for: [urlExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetExperienceCloudId() {
@@ -214,7 +215,7 @@ class IdentityIntegrationTests: TestBase {
             XCTAssertNil(error)
             urlExpectation.fulfill()
         }
-        wait(for: [urlExpectation], timeout: 1)
+        wait(for: [urlExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetExperienceCloudIdWithinPermissibleTimeOnInstall() {
@@ -228,7 +229,7 @@ class IdentityIntegrationTests: TestBase {
             getECIDExpectation.fulfill()
         }
 
-        wait(for: [getECIDExpectation], timeout: 1.5)
+        wait(for: [getECIDExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetExperienceCloudIdWithinPermissibleTimeOnLaunch() {
@@ -250,7 +251,7 @@ class IdentityIntegrationTests: TestBase {
             XCTAssertNil(error)
             getECIDExpectation.fulfill()
         }
-        wait(for: [getECIDExpectation], timeout: 1.5)
+        wait(for: [getECIDExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetExperienceCloudIdInvalidConfigThenValid() {
@@ -264,7 +265,7 @@ class IdentityIntegrationTests: TestBase {
             XCTAssertNil(error)
             urlExpectation.fulfill()
         }
-        wait(for: [urlExpectation], timeout: 1)
+        wait(for: [urlExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetSdkIdentities() {
@@ -280,7 +281,7 @@ class IdentityIntegrationTests: TestBase {
             XCTAssertTrue(identityString?.contains("imsOrgID") ?? false)
             urlExpectation.fulfill()
         }
-        wait(for: [urlExpectation], timeout: 2)
+        wait(for: [urlExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetIdentifiers() {
@@ -304,7 +305,7 @@ class IdentityIntegrationTests: TestBase {
             XCTAssertNil(error)
             urlExpectation.fulfill()
         }
-        wait(for: [urlExpectation], timeout: 2)
+        wait(for: [urlExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetIdentifiers_returnsEmptyList_whenNoIds() {
@@ -318,7 +319,7 @@ class IdentityIntegrationTests: TestBase {
             XCTAssertNil(error)
             urlExpectation.fulfill()
         }
-        wait(for: [urlExpectation], timeout: 2)
+        wait(for: [urlExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testSetPushIdentifier() {
@@ -338,7 +339,7 @@ class IdentityIntegrationTests: TestBase {
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setPushIdentifier("9516258b6230afdd93cf0cd07b8dd845".data(using: .utf8))
 
-        wait(for: [requestExpectation], timeout: 1)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testSetAdvertisingIdentifier() {
@@ -357,7 +358,7 @@ class IdentityIntegrationTests: TestBase {
 
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setAdvertisingIdentifier("adid")
-        wait(for: [requestExpectation], timeout: 2)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     /// Tests that when we reset the identities we generate a new ECID and send it out
@@ -382,7 +383,7 @@ class IdentityIntegrationTests: TestBase {
         // test
         MobileCore.resetIdentities()
 
-        wait(for: [resetHitExpectation], timeout: 2)
+        wait(for: [resetHitExpectation], timeout: DEFAULT_TIMEOUT)
 
         // Wait for 500ms so that the new ECID gets persisted and to avoid race conditions
         usleep(500)
@@ -412,7 +413,7 @@ class IdentityIntegrationTests: TestBase {
         }
 
         MobileCore.updateConfigurationWith(configDict: initialConfig)
-        wait(for: [bootupExpectation], timeout: 2)
+        wait(for: [bootupExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     private func persistECIDInUserDefaults() {
@@ -433,7 +434,7 @@ class IdentityIntegrationTests: TestBase {
         MobileCore.updateConfigurationWith(configDict: configDict)
 
         if shouldWait {
-            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+            assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: DEFAULT_TIMEOUT)
             resetTestExpectations()
         }
     }

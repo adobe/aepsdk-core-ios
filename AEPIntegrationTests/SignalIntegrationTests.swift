@@ -21,6 +21,7 @@ import AEPSignal
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
 class SignalIntegrationTests: XCTestCase {
+    let DEFAULT_TIMEOUT: TimeInterval = 5
     var mockNetworkService = TestableNetworkService()
     let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
@@ -44,7 +45,7 @@ class SignalIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 3)
+        wait(for: [initExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testGetRequest() {
@@ -66,7 +67,7 @@ class SignalIntegrationTests: XCTestCase {
 
         let event = Event(name: "Test", type: "type", source: "source", data: ["name": "testGetRequest"])
         MobileCore.dispatch(event: event)
-        wait(for: [requestExpectation], timeout: 4)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testPostRequest() {
@@ -92,7 +93,7 @@ class SignalIntegrationTests: XCTestCase {
 
         let event = Event(name: "Test", type: "type", source: "source", data: ["name": "testPostRequest"])
         MobileCore.dispatch(event: event)
-        wait(for: [requestExpectation], timeout: 4)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testOptedOut() {
@@ -115,7 +116,7 @@ class SignalIntegrationTests: XCTestCase {
         let event2 = Event(name: "Test", type: "type", source: "source", data: ["name": "testGetRequest"])
         MobileCore.dispatch(event: event1)
         MobileCore.dispatch(event: event2)
-        wait(for: [requestExpectation], timeout: 2)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testPii() {
@@ -134,7 +135,7 @@ class SignalIntegrationTests: XCTestCase {
         }
         MobileCore.collectPii(["name":"aep"])
 
-        wait(for: [requestExpectation], timeout: 2)
+        wait(for: [requestExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
 

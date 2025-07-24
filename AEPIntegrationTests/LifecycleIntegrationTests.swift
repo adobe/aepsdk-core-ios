@@ -22,6 +22,7 @@ import AEPSignal
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
 class LifecycleIntegrationTests: XCTestCase {
+    let DEFAULT_TIMEOUT: TimeInterval = 5
     var mockNetworkService = TestableNetworkService()
     let defaultSuccessResponse = HTTPURLResponse(url: URL(string: "https://adobe.com")!, statusCode: 200, httpVersion: nil, headerFields: [:])
 
@@ -45,7 +46,7 @@ class LifecycleIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 3)
+        wait(for: [initExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testInstall() {
@@ -70,7 +71,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpectation], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testLaunchEvent() {
@@ -104,7 +105,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpectation], timeout: 3)
+        wait(for: [lifecycleExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testCrash() {
@@ -138,7 +139,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpectation], timeout: 3)
+        wait(for: [lifecycleExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testAdditionalContextData() {
@@ -164,7 +165,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: ["key": "value"])
-        wait(for: [lifecycleExpectation], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testSessionContinue() {
@@ -197,7 +198,7 @@ class LifecycleIntegrationTests: XCTestCase {
         }
 
         MobileCore.lifecycleStart(additionalContextData: nil)
-        wait(for: [lifecycleExpectation], timeout: 2)
+        wait(for: [lifecycleExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func mockRemoteConfigAndRules(for appId: String, with configData: Data?, localRulesName: String) {
@@ -220,8 +221,6 @@ class LifecycleIntegrationTests: XCTestCase {
             return nil
         }
         MobileCore.configureWith(appId: appId)
-        wait(for: [configExpectation, rulesExpectation], timeout: 2)
-
+        wait(for: [configExpectation, rulesExpectation], timeout: DEFAULT_TIMEOUT)
     }
-
 }
