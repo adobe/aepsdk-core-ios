@@ -167,6 +167,33 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         }
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
+    
+    // Matcher: ne
+    func testMatcherNe_multipleValues() {
+        /// Given:
+        resetRulesEngine(withNewRules: "rules_testMatcherNe_multipleValues")
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        /// When:
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        /// When:
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "Blue"]], status: .set))
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+    
 
     // Matcher: ex
     func testMatcherEx() {
@@ -362,6 +389,32 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
 
         /// When:
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "Verizon"]], status: .set))
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: nc (Not Contains) with multiple values
+    func testMatcherNc_multipleValues() {
+        /// Given:
+        resetRulesEngine(withNewRules: "rules_testMatcherNc_multipleValues")
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T Wireless"]], status: .set))
+        /// When:
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        /// When:
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "T-Mobile USA"]], status: .set))
         rulesEngine.process(event: defaultEvent)
         /// Then:
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
