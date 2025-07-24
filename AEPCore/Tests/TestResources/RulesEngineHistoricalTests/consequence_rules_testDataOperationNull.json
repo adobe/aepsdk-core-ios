@@ -1,0 +1,41 @@
+{
+    "version": 1,
+    "rules": [
+      {
+        "condition": {
+          "type": "group",
+          "definition": {
+            "logic": "and",
+            "conditions": [
+              {
+                "type": "matcher",
+                "definition": {
+                  "key": "~source",
+                  "matcher": "eq",
+                  "values": [
+                    "com.adobe.eventSource.requestContent"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "consequences": [
+          {
+            "id": "test-id",
+            "type": "schema",
+            "detail": {
+              "id": "test-id",
+              "schema": "https://ns.adobe.com/personalization/eventHistoryOperation",
+              "data": {
+                "operation": null,
+                "content": {
+                  "key1": "value1"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }

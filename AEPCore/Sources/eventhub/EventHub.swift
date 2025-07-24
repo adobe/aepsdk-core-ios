@@ -34,7 +34,7 @@ final class EventHub {
     private let eventQueue = OperationOrderer<Event>("EventHub")
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
     private var started = false // true if the `EventHub` is started, false otherwise. Should only be accessed from within the `eventHubQueue`
-    private var eventHistory = EventHistory()
+    private let eventHistory: EventHistoryProvider?
     private var wrapperType: WrapperType = .none
     #if DEBUG
         public internal(set) static var shared = EventHub()
@@ -45,7 +45,8 @@ final class EventHub {
     // MARK: - Internal API
 
     /// Creates a new instance of `EventHub`
-    init() {
+    init(eventHistory: EventHistoryProvider? = EventHistory()) {
+        self.eventHistory = eventHistory
         // setup a place-holder extension container for `EventHub` so we can shared and retrieve state
         registerExtension(EventHubPlaceholderExtension.self, completion: { _ in })
 
@@ -353,7 +354,21 @@ final class EventHub {
     ///                   from date
     ///   - handler: contains an `EventHistoryResult` for each provided request
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
-        eventHistory?.getEvents(requests, enforceOrder: enforceOrder, handler: handler)
+        eventHistory?.getEvents(requests, enforceOrder: enforceOrder, handler: handler) ?? handler([])
+    }
+
+    /// Records an `Event` in the Event History database.
+    ///
+    /// The event will be recorded based on its calculated hash.
+    /// The hash is generated based on the provided `event`'s data.
+    /// The `event`'s `mask` value, if provided, will filter what values in the event data are used for hash generation.
+    /// If the hash value for the provided `event` is `0`, no record will be created in the database.
+    ///
+    /// - Parameters:
+    ///   - event: the `Event` to be recorded in the Event History database
+    ///   - handler: called with a `Bool` indicating a successful database insert
+    func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)? = nil) {
+        eventHistory?.recordEvent(event, handler: handler) ?? handler?(false)
     }
 
     /// Sets wrapper type if `Eventhub` has not started
@@ -369,7 +384,7 @@ final class EventHub {
         }
     }
 
-    /// Returns wrapper type, if not previously set returns `WrapperType.none`    
+    /// Returns wrapper type, if not previously set returns `WrapperType.none`
     /// - Returns: A `WrapperType` denoting the type of wrapper
     func getWrapperType() -> WrapperType {
         return eventHubQueue.sync { [weak self] in
