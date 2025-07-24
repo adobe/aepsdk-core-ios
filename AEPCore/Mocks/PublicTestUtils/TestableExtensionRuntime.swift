@@ -32,6 +32,14 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var mockEventHistoryResults: [EventHistoryResult] = []
     public var ignoredEvents = Set<String>()
 
+    public var receivedRecordHistoricalEvent: Event? = nil
+    /// Tracks whether ``recordHistoricalEvent(_:handler:)`` was called.
+    public var recordHistoricalEventCalled = false
+    
+    /// Controls the success/failure value that will be passed to the handler in ``recordHistoricalEvent(_:handler:)``
+    /// Set to `true` to simulate success, `false` to simulate failure.
+    public var recordHistoricalEventResult = true
+
     public init() {}
 
     // MARK: - ExtensionRuntime methods implementation
@@ -96,6 +104,20 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         return mockedXdmSharedStates["\(extensionName)"]
     }
 
+    /// Records a historical event
+    /// - Parameters:
+    ///   - event: The event to record
+    ///   - handler: Callback with operation result
+    /// 
+    /// The success or failure passed to the handler is controlled by setting the
+    /// `recordHistoricalEventResult` property (true = success, false = failure).
+    /// The `recordHistoricalEventCalled` property can be used to verify this method was called.
+    public func recordHistoricalEvent(_ event: AEPCore.Event, handler: ((Bool) -> Void)?) {
+        receivedRecordHistoricalEvent = event
+        recordHistoricalEventCalled = true
+        handler?(recordHistoricalEventResult)
+    }
+    
     public func startEvents() {}
 
     public func stopEvents() {}
