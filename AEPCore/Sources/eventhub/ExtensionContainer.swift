@@ -188,9 +188,16 @@ extension ExtensionContainer: ExtensionRuntime {
         eventOrderer.stop()
     }
 
+#if DEBUG
+    func shutdown() {
+        eventOrderer.stopAndWaitUntilIdle()
+    }
+#else
     func shutdown() {
         eventOrderer.waitToStop()
     }
+#endif
+
 }
 
 // MARK: - ExtensionContainer private extension
