@@ -363,5 +363,178 @@
             XCTAssertFalse(handlerCalled)
             XCTAssertNil(handlerContent)
         }
+        
+        func testHandleAutoResizeWithValidHeight() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            mockMessageSettings.setFitToContent(true)
+            
+            // Test
+            fullscreenMessage?.callHandleAutoResize("100.0")
+            
+            // Verify
+            XCTAssertEqual(100.0, fullscreenMessage?.fitToContentHeight)
+        }
+        
+        func testHandleAutoResizeWithInvalidHeight() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            mockMessageSettings.setFitToContent(true)
+            
+            // Test
+            fullscreenMessage?.callHandleAutoResize("-1.0")
+            
+            // Verify
+            XCTAssertNil(fullscreenMessage?.fitToContentHeight)
+        }
+        
+        func testHandleAutoResizeWithNonNumericValue() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            mockMessageSettings.setFitToContent(true)
+            
+            // Test
+            fullscreenMessage?.callHandleAutoResize("not a number")
+            
+            // Verify
+            XCTAssertNil(fullscreenMessage?.fitToContentHeight)
+        }
+        
+        func testHandleAutoResizeWithNilValue() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            mockMessageSettings.setFitToContent(true)
+            
+            // Test
+            fullscreenMessage?.callHandleAutoResize(nil)
+            
+            // Verify
+            XCTAssertNil(fullscreenMessage?.fitToContentHeight)
+        }
+        
+        func testReframeMessage() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            let mockWebView = WKWebView()
+            fullscreenMessage?.webView = mockWebView
+            
+            // Test
+            fullscreenMessage?.callReframeMessage()
+            
+            // Verify - in a test environment, we can't fully verify the frame values
+            // but we can verify the method doesn't crash
+            XCTAssertNotNil(fullscreenMessage?.webView)
+        }
+        
+        func testHandleGesture() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            let mockWebView = WKWebView()
+            fullscreenMessage?.webView = mockWebView
+            
+            // Create a mock gesture recognizer
+            let mockGestureRecognizer = MessageGestureRecognizer(gesture: .swipeUp, dismissAnimation: MessageAnimation.none, url: URL(string: "https://adobe.com"), target: nil, action: nil)
+            
+            // Test
+            fullscreenMessage?.handleGesture(mockGestureRecognizer)
+            
+            // Verify - in a test environment, we can't fully verify the JavaScript execution
+            // but we can verify the method doesn't crash
+            XCTAssertNotNil(fullscreenMessage?.webView)
+        }
+        
+        func testHandleGestureWithInvalidRecognizer() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            
+            // Create an invalid gesture recognizer (not a MessageGestureRecognizer)
+            let mockGestureRecognizer = UITapGestureRecognizer()
+            
+            // Test
+            fullscreenMessage?.handleGesture(mockGestureRecognizer)
+            
+            // Verify - the method should handle the invalid recognizer gracefully
+            XCTAssertNotNil(fullscreenMessage)
+        }
+        
+        func testHandleTap() throws {
+            // Setup
+            fullscreenMessage = FullscreenMessage(payload: mockHtml, listener: mockFullscreenListener, isLocalImageUsed: false, messageMonitor: messageMonitor, settings: mockMessageSettings)
+            messageMonitor.displayMessage()
+            
+            // Create expectation for dismiss
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Dismiss FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
+            
+            // Test
+            fullscreenMessage?.handleTap()
+            
+            // Verify
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
+            XCTAssertTrue(mockFullscreenListener.onDismissCalled)
+            XCTAssertTrue(mockMessagingDelegate.onDismissCalled)
+        }
+        
+        func testShowWithMessagingDelegateControl() throws {
+            // Setup
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
+            messageMonitor.dismissMessage()
+            
+            // Test
+            fullscreenMessage?.show(withMessagingDelegateControl: true)
+            
+            // Verify
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
+            XCTAssertTrue(mockFullscreenListener.onShowCalled)
+            XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+            XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+        }
+        
+        func testShowWithMessagingDelegateControlFalse() throws {
+            // Setup
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
+            messageMonitor.dismissMessage()
+            
+            // Test
+            fullscreenMessage?.show(withMessagingDelegateControl: false)
+            
+            // Verify
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
+            XCTAssertTrue(mockFullscreenListener.onShowCalled)
+            XCTAssertFalse(mockMessagingDelegate.shouldShowMessageCalled)
+            XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+        }
+        
+        func testFitToContentEnabled() throws {
+            // Setup
+            fullscreenListenerExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage with fitToContent")
+            mockFullscreenListener.setExpectation(fullscreenListenerExpectation!)
+            messagingDelegateExpectation = XCTestExpectation(description: "Testing Show FullscreenMessage with fitToContent")
+            mockMessagingDelegate.setExpectation(messagingDelegateExpectation!)
+            mockMessageSettings.setFitToContent(true)
+            messageMonitor.dismissMessage()
+            
+            // Test
+            fullscreenMessage?.show()
+            
+            // Verify
+            wait(for: [fullscreenListenerExpectation!, messagingDelegateExpectation!], timeout: 2.0)
+            XCTAssertTrue(mockFullscreenListener.onShowCalled)
+            XCTAssertTrue(mockMessagingDelegate.shouldShowMessageCalled)
+            XCTAssertTrue(mockMessagingDelegate.onShowCalled)
+            
+            // Verify that the fitToContent handler was added
+            let webview = fullscreenMessage?.webView as? WKWebView
+            XCTAssertNotNil(webview)
+            XCTAssertNotNil(fullscreenMessage?.scriptHandlers["inAppContentHeightHandler"])
+        }
     }
 #endif

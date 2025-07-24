@@ -11336,6 +11336,66 @@
           },
           {
             "kind": "Var",
+            "name": "maxWidth",
+            "printedName": "maxWidth",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Int?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices15MessageSettingsC8maxWidthSiSgvp",
+            "mangledName": "$s11AEPServices15MessageSettingsC8maxWidthSiSgvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "HasInitialValue",
+              "SetterAccess",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.Int?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Int",
+                        "printedName": "Swift.Int",
+                        "usr": "s:Si"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices15MessageSettingsC8maxWidthSiSgvg",
+                "mangledName": "$s11AEPServices15MessageSettingsC8maxWidthSiSgvg",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
             "name": "height",
             "printedName": "height",
             "children": [
@@ -11688,6 +11748,66 @@
                 "declKind": "Accessor",
                 "usr": "s:11AEPServices15MessageSettingsC10uiTakeoverSbSgvg",
                 "mangledName": "$s11AEPServices15MessageSettingsC10uiTakeoverSbSgvg",
+                "moduleName": "AEPServices",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "fitToContent",
+            "printedName": "fitToContent",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Bool?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:11AEPServices15MessageSettingsC12fitToContentSbSgvp",
+            "mangledName": "$s11AEPServices15MessageSettingsC12fitToContentSbSgvp",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "HasInitialValue",
+              "SetterAccess",
+              "HasStorage"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.Bool?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:11AEPServices15MessageSettingsC12fitToContentSbSgvg",
+                "mangledName": "$s11AEPServices15MessageSettingsC12fitToContentSbSgvg",
                 "moduleName": "AEPServices",
                 "implicit": true,
                 "accessorKind": "get"
@@ -12067,6 +12187,41 @@
           },
           {
             "kind": "Function",
+            "name": "setMaxWidth",
+            "printedName": "setMaxWidth(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "MessageSettings",
+                "printedName": "AEPServices.MessageSettings",
+                "usr": "c:@M@AEPServices@objc(cs)AEPMessageSettings"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Int?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices15MessageSettingsC11setMaxWidthyACSiSgF",
+            "mangledName": "$s11AEPServices15MessageSettingsC11setMaxWidthyACSiSgF",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "DiscardableResult"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
             "name": "setHeight",
             "printedName": "setHeight(_:)",
             "children": [
@@ -12269,6 +12424,41 @@
             "declKind": "Func",
             "usr": "s:11AEPServices15MessageSettingsC13setUiTakeoveryACSbSgF",
             "mangledName": "$s11AEPServices15MessageSettingsC13setUiTakeoveryACSbSgF",
+            "moduleName": "AEPServices",
+            "declAttributes": [
+              "DiscardableResult"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "setFitToContent",
+            "printedName": "setFitToContent(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "MessageSettings",
+                "printedName": "AEPServices.MessageSettings",
+                "usr": "c:@M@AEPServices@objc(cs)AEPMessageSettings"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Bool?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:11AEPServices15MessageSettingsC15setFitToContentyACSbSgF",
+            "mangledName": "$s11AEPServices15MessageSettingsC15setFitToContentyACSbSgF",
             "moduleName": "AEPServices",
             "declAttributes": [
               "DiscardableResult"
@@ -19023,6 +19213,89 @@
         "declKind": "Protocol",
         "usr": "s:SE",
         "mangledName": "$sSE",
+        "moduleName": "Swift",
+        "isExternal": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "Decodable",
+        "printedName": "Decodable",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "fromDictionary",
+            "printedName": "fromDictionary(_:dateDecodingStrategy:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "τ_0_0?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "GenericTypeParam",
+                    "printedName": "τ_0_0"
+                  }
+                ],
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "DateDecodingStrategy",
+                "printedName": "Foundation.JSONDecoder.DateDecodingStrategy",
+                "hasDefaultArg": true,
+                "usr": "s:10Foundation11JSONDecoderC20DateDecodingStrategyO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:Se11AEPServicesE14fromDictionary_20dateDecodingStrategyxSgSDySSypG_10Foundation11JSONDecoderC04DateeF0OtFZ",
+            "mangledName": "$sSe11AEPServicesE14fromDictionary_20dateDecodingStrategyxSgSDySSypG_10Foundation11JSONDecoderC04DateeF0OtFZ",
+            "moduleName": "AEPServices",
+            "genericSig": "<τ_0_0 where τ_0_0 : Swift.Decodable>",
+            "sugared_genericSig": "<Self where Self : Swift.Decodable>",
+            "static": true,
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:Se",
+        "mangledName": "$sSe",
         "moduleName": "Swift",
         "isExternal": true,
         "conformances": [
