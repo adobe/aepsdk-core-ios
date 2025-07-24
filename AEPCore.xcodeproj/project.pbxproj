@@ -364,6 +364,8 @@
 		4C2157EF2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json in Resources */ = {isa = PBXBuildFile; fileRef = 4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */; };
 		4CA311542DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA311532DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift */; };
 		4CA311562DFA2BFE00C6A24B /* consequence_rules_testSchemaInAppDetailSchema.json in Resources */ = {isa = PBXBuildFile; fileRef = 4CA311552DFA2BFE00C6A24B /* consequence_rules_testSchemaInAppDetailSchema.json */; };
+		4CB003FD2E32C8CB002152B0 /* TokenReplacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB003FC2E32C8CB002152B0 /* TokenReplacementTests.swift */; };
+		4CB003FF2E32C8D2002152B0 /* TestableTraversable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB003FE2E32C8D2002152B0 /* TestableTraversable.swift */; };
 		4CCC21A62D9623BC00F75340 /* Event+EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */; };
 		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
@@ -1157,6 +1159,8 @@
 		4C2157EE2DC19CC10055C8C9 /* rules_testHistoryMostRecent.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testHistoryMostRecent.json; sourceTree = "<group>"; };
 		4CA311532DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONConditionHistoricalCountTests.swift; sourceTree = "<group>"; };
 		4CA311552DFA2BFE00C6A24B /* consequence_rules_testSchemaInAppDetailSchema.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = consequence_rules_testSchemaInAppDetailSchema.json; sourceTree = "<group>"; };
+		4CB003FC2E32C8CB002152B0 /* TokenReplacementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReplacementTests.swift; sourceTree = "<group>"; };
+		4CB003FE2E32C8D2002152B0 /* TestableTraversable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableTraversable.swift; sourceTree = "<group>"; };
 		4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequest.swift"; sourceTree = "<group>"; };
 		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
@@ -1986,8 +1990,8 @@
 				3F5D45F9251904C50040E298 /* LaunchRuleTransformerTests.swift */,
 				4CA311532DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift */,
 				3F08FF9C24DA0DCF00D34DE3 /* RulesDownloaderTests.swift */,
-				4C2157E82DC16C5E0055C8C9 /* TokenReplacementTests.swift */,
 				BBE1295024DBCE870045CD8D /* TokenFinderTests.swift */,
+				4CB003FC2E32C8CB002152B0 /* TokenReplacementTests.swift */,
 			);
 			path = RulesTests;
 			sourceTree = "<group>";
@@ -2076,12 +2080,12 @@
 			isa = PBXGroup;
 			children = (
 				3F3951FA24CA096100F7325B /* MockConfigurationDownloader.swift */,
+				4CB003FE2E32C8D2002152B0 /* TestableTraversable.swift */,
 				4C2157BC2DC1591D0055C8C9 /* MockEventHistory.swift */,
 				4C2157BD2DC1591D0055C8C9 /* RulesEngineTestBase.swift */,
 				3F3951FF24CA096100F7325B /* MockConfigurationDownloaderNetworkService.swift */,
 				3F3951FD24CA096100F7325B /* MockRulesDownloaderNetworkService.swift */,
 				3F3951FE24CA096100F7325B /* SharedStateTestHelper.swift */,
-				4C2157EA2DC16F040055C8C9 /* TestableTraversable.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
@@ -3525,6 +3529,7 @@
 				3F16762A24F032C60041B970 /* ContractExtensionOne.swift in Sources */,
 				3F39521924CA096200F7325B /* SharedStateTestHelper.swift in Sources */,
 				21CD581124EC7B8900D9D590 /* V5MigratorTests.swift in Sources */,
+				4CB003FF2E32C8D2002152B0 /* TestableTraversable.swift in Sources */,
 				24E255D5270F406300AB9F07 /* EventData+FNV1A32Tests.swift in Sources */,
 				4C2157BE2DC1591D0055C8C9 /* MockEventHistory.swift in Sources */,
 				4C2157BF2DC1591D0055C8C9 /* RulesEngineTestBase.swift in Sources */,
@@ -3549,11 +3554,11 @@
 				3F39521E24CA096200F7325B /* ConfigurationDownloaderTests.swift in Sources */,
 				3F39153324CB7E2400B58C3E /* MobileCore+IdentityTests.swift in Sources */,
 				3F39521024CA096100F7325B /* SlowMockExtension.swift in Sources */,
+				4CB003FD2E32C8CB002152B0 /* TokenReplacementTests.swift in Sources */,
 				3F39520724CA096100F7325B /* MobileCoreTests.swift in Sources */,
 				2130A59D260AB448005DBA0F /* MockLegacyExtension.swift in Sources */,
 				4C2157ED2DC178270055C8C9 /* JSONConditionMostRecentTests.swift in Sources */,
 				3F39521D24CA096200F7325B /* ConfigurationStateTests.swift in Sources */,
-				4C2157E92DC16C5E0055C8C9 /* TokenReplacementTests.swift in Sources */,
 				3F39521524CA096200F7325B /* MockConfigurationDownloader.swift in Sources */,
 				78AA4EC42513AD2000205AE9 /* ConfigurationFileInPathTests.swift in Sources */,
 				3F39153024CA47B600B58C3E /* JSONRulesParserTests.swift in Sources */,
