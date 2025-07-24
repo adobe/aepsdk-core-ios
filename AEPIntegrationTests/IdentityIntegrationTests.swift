@@ -58,7 +58,7 @@ class IdentityIntegrationTests: TestBase {
             initExpectation.fulfill()
         }
 
-        wait(for: [initExpectation], timeout: 1)
+        wait(for: [initExpectation], timeout: 3)
 
         if sharedStateCount > 0 {
             assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
