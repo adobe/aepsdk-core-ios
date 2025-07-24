@@ -22,46 +22,25 @@ import AEPSignal
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
 class IdentityIntegrationTests: TestBase {
+    var mockNetworkService = TestableNetworkService()
 
     override func setUp() {
         NamedCollectionDataStore.clear()
         resetTestExpectations()
+        ServiceProvider.shared.networkService = mockNetworkService
     }
 
     override func tearDown() {
         unregisterExtensionsAndReset()
+        mockNetworkService = TestableNetworkService()
     }
 
     func unregisterExtensionsAndReset() {
-        let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
-        unregisterExpectation.expectedFulfillmentCount = 4
-        MobileCore.unregisterExtension(Identity.self) {
-            unregisterExpectation.fulfill()
-        }
-
-        MobileCore.unregisterExtension(Signal.self) {
-            unregisterExpectation.fulfill()
-        }
-
-        MobileCore.unregisterExtension(Lifecycle.self) {
-            unregisterExpectation.fulfill()
-        }
-
-        // Used for event related assertions
-        MobileCore.unregisterExtension(InstrumentedExtension.self) {
-            unregisterExpectation.fulfill()
-        }
-
-        wait(for: [unregisterExpectation], timeout: 3)
-
-        // NOTE: There may be some test cases where there are carryover events due to the race condition interactions
-        // between the shutdown process of extension containers and the singleton nature of the EventHub.
-        // If it needs to be addressed, the architecture should be updated to allow for definitive stopping
-        // of event dispatching in extension containers in the shutdown process.
         EventHub.shared.shutdown()
         ServiceProvider.shared.reset()
         EventHub.reset()
     }
+    
     /// Initializes the test case extensions and waits for their shared state events.
     ///
     /// - Parameter sharedStateCount: The number of shared state events to wait for. Defaults to 2 (Hub and Lifecycle).
