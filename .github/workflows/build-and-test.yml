@@ -10,7 +10,7 @@
 # governing permissions and limitations under the License.
 #
 
-name: Build and Test (Core)
+name: CI
 
 on:
   pull_request:
@@ -25,7 +25,7 @@ jobs:
   # iOS unit / integration test jobs
   # ---------------------------------------------------
   ios-core-unit:
-    name: "Unit Test – AEPCore (iOS)"
+    name: "AEPCore (iOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -38,7 +38,7 @@ jobs:
     secrets: inherit
 
   ios-services-unit:
-    name: "Unit Test – AEPServices (iOS)"
+    name: "AEPServices (iOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -51,7 +51,7 @@ jobs:
     secrets: inherit
 
   ios-lifecycle-unit:
-    name: "Unit Test – AEPLifecycle (iOS)"
+    name: "AEPLifecycle (iOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -64,7 +64,7 @@ jobs:
     secrets: inherit
 
   ios-identity-unit:
-    name: "Unit Test – AEPIdentity (iOS)"
+    name: "AEPIdentity (iOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -77,7 +77,7 @@ jobs:
     secrets: inherit
 
   ios-signal-unit:
-    name: "Unit Test – AEPSignal (iOS)"
+    name: "AEPSignal (iOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -90,7 +90,7 @@ jobs:
     secrets: inherit
 
   ios-integration:
-    name: "Integration Tests (iOS)"
+    name: "iOS integration tests"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -104,7 +104,7 @@ jobs:
   # tvOS unit / integration test jobs
   # ---------------------------------------------------
   tvos-core-unit:
-    name: "Unit Test – AEPCore (tvOS)"
+    name: "AEPCore (tvOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -117,7 +117,7 @@ jobs:
     secrets: inherit
 
   tvos-services-unit:
-    name: "Unit Test – AEPServices (tvOS)"
+    name: "AEPServices (tvOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -130,7 +130,7 @@ jobs:
     secrets: inherit
 
   tvos-lifecycle-unit:
-    name: "Unit Test – AEPLifecycle (tvOS)"
+    name: "AEPLifecycle (tvOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -143,7 +143,7 @@ jobs:
     secrets: inherit
 
   tvos-identity-unit:
-    name: "Unit Test – AEPIdentity (tvOS)"
+    name: "AEPIdentity (tvOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -156,7 +156,7 @@ jobs:
     secrets: inherit
 
   tvos-signal-unit:
-    name: "Unit Test – AEPSignal (tvOS)"
+    name: "AEPSignal (tvOS) unit test"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
@@ -169,7 +169,7 @@ jobs:
     secrets: inherit
 
   tvos-integration:
-    name: "Integration Tests (tvOS)"
+    name: "tvOS integration tests"
     needs: validate-code
     uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
     with:
