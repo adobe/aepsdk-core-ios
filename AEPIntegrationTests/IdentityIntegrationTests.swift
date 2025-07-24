@@ -242,7 +242,7 @@ class IdentityIntegrationTests: TestBase {
 
         // Test - when valid ECID and config items are in persistence
         // API should return a valid value and NOT a timeout error
-        initExtensions()
+        initExtensionsAndWait(sharedStateCount: -1)
 
         let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 second with valid ECID when ECID is cached on Launch")
 
