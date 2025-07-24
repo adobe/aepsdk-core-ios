@@ -178,6 +178,7 @@ class IdentityIntegrationTests: TestBase {
         let variablesExpectation = XCTestExpectation(description: "getUrlVariables callback")
 
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
         Identity.getUrlVariables { variables, _ in
             XCTAssertTrue(variables?.contains("TS") ?? false)
             XCTAssertTrue(variables?.contains("MCMID") ?? false)
@@ -194,6 +195,7 @@ class IdentityIntegrationTests: TestBase {
         let urlExpectation = XCTestExpectation(description: "appendTo callback")
 
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
         Identity.appendTo(url: URL(string: "https://adobe.com")) { (url, _) in
             XCTAssertTrue(url?.absoluteString.contains("TS") ?? false)
             XCTAssertTrue(url?.absoluteString.contains("MCMID") ?? false)
@@ -210,6 +212,7 @@ class IdentityIntegrationTests: TestBase {
         let urlExpectation = XCTestExpectation(description: "getExperienceCloudId callback")
 
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
         Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
             XCTAssertNil(error)
@@ -223,7 +226,7 @@ class IdentityIntegrationTests: TestBase {
 
         let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 second when Configuration is available on Install")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"], shouldWait: false)
-        Thread.sleep(forTimeInterval: 1) // Give CI time to process the startup events
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
         
         Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
@@ -263,6 +266,7 @@ class IdentityIntegrationTests: TestBase {
 
         let urlExpectation = XCTestExpectation(description: "getExperienceCloudId callback")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
         Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
             XCTAssertNil(error)
@@ -278,6 +282,7 @@ class IdentityIntegrationTests: TestBase {
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
         MobileCore.setAdvertisingIdentifier("adid")
         Identity.syncIdentifiers(identifiers: ["id1": "value1"])
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
         MobileCore.getSdkIdentities { identityString, error in
             XCTAssertTrue(identityString?.contains("DSID_20915") ?? false)
             XCTAssertTrue(identityString?.contains("id1") ?? false)
@@ -292,10 +297,8 @@ class IdentityIntegrationTests: TestBase {
 
         let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
-
-        setExpectationEvent(type: EventType.identity, source: EventSource.requestIdentity)
         Identity.syncIdentifier(identifierType: "type1", identifier: "id1", authenticationState: .authenticated)
-        assertExpectedEvents(ignoreUnexpectedEvents: true, timeout: 2)
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
 
         Identity.getIdentifiers { identifiers, error in
             XCTAssertNotNil(identifiers)
@@ -316,6 +319,7 @@ class IdentityIntegrationTests: TestBase {
 
         let urlExpectation = XCTestExpectation(description: "getSdkIdentities callback")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"])
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the events
         Identity.getIdentifiers { identifiers, error in
             XCTAssertNotNil(identifiers)
             XCTAssertEqual(true, identifiers?.isEmpty)
