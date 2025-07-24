@@ -223,6 +223,8 @@ class IdentityIntegrationTests: TestBase {
 
         let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 second when Configuration is available on Install")
         updateConfigurationAndWait(configDict: ["experienceCloud.org": "orgid", "experienceCloud.server": "test.com", "global.privacy": "optedin"], shouldWait: false)
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the startup events
+        
         Identity.getExperienceCloudId { ecid, error in
             XCTAssertFalse(ecid!.isEmpty)
             XCTAssertNil(error)
@@ -243,6 +245,7 @@ class IdentityIntegrationTests: TestBase {
         // Test - when valid ECID and config items are in persistence
         // API should return a valid value and NOT a timeout error
         initExtensionsAndWait(sharedStateCount: -1)
+        Thread.sleep(forTimeInterval: 1) // Give CI time to process the startup events
 
         let getECIDExpectation = XCTestExpectation(description: "getExperienceCloudId should return within 1 second with valid ECID when ECID is cached on Launch")
 
@@ -386,7 +389,7 @@ class IdentityIntegrationTests: TestBase {
         wait(for: [resetHitExpectation], timeout: DEFAULT_TIMEOUT)
 
         // Wait for 500ms so that the new ECID gets persisted and to avoid race conditions
-        usleep(500)
+        Thread.sleep(forTimeInterval: 0.5)
 
         // assert new ECID on last hit
         props.loadFromPersistence()
