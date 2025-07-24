@@ -41,7 +41,7 @@ on:
 
 jobs:
   release_core_bundle:
-    runs-on: macos-13
+    runs-on: macos-14
     steps:
     - uses: actions/checkout@v2
       with:
