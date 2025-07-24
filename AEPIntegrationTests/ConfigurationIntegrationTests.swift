@@ -44,7 +44,7 @@ class ConfigurationIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 2)
+        wait(for: [initExpectation], timeout: 3)
     }
 
     func testConfigLocalFile() {

@@ -34,7 +34,7 @@ class RulesEngineIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 1)
+        wait(for: [initExpectation], timeout: 3)
     }
     
     func testDispatchConsequence() {

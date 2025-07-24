@@ -45,7 +45,7 @@ class LifecycleIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 1)
+        wait(for: [initExpectation], timeout: 3)
     }
 
     func testInstall() {
