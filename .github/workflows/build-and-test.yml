@@ -1,0 +1,195 @@
+#
+# Copyright 2025 Adobe. All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
+#
+
+name: Build and Test (Core)
+
+on:
+  pull_request:
+
+jobs:
+  validate-code:
+    name: Validate Code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-validate-code.yml@gha-ios-5.3.2
+    secrets: inherit
+
+  # ---------------------------------------------------
+  # iOS unit / integration test jobs
+  # ---------------------------------------------------
+  ios-core-unit:
+    name: "Unit Test – AEPCore (iOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
+      command: make aep-core-unit-test
+      enable-codecov: true
+      codecov-flag: aepcore-ios-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  ios-services-unit:
+    name: "Unit Test – AEPServices (iOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
+      command: make aep-services-unit-test
+      enable-codecov: true
+      codecov-flag: aepservices-ios-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  ios-lifecycle-unit:
+    name: "Unit Test – AEPLifecycle (iOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
+      command: make aep-lifecycle-unit-test
+      enable-codecov: true
+      codecov-flag: aeplifecycle-ios-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  ios-identity-unit:
+    name: "Unit Test – AEPIdentity (iOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
+      command: make aep-identity-unit-test
+      enable-codecov: true
+      codecov-flag: aepidentity-ios-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  ios-signal-unit:
+    name: "Unit Test – AEPSignal (iOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
+      command: make aep-signal-unit-test
+      enable-codecov: true
+      codecov-flag: aepsignal-ios-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  ios-integration:
+    name: "Integration Tests (iOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
+      command: make integration-test
+      enable-codecov: false
+    secrets: inherit
+
+  # ---------------------------------------------------
+  # tvOS unit / integration test jobs
+  # ---------------------------------------------------
+  tvos-core-unit:
+    name: "Unit Test – AEPCore (tvOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
+      command: make aep-core-tvos-unit-test
+      enable-codecov: true
+      codecov-flag: aepcore-tvos-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  tvos-services-unit:
+    name: "Unit Test – AEPServices (tvOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
+      command: make aep-services-tvos-unit-test
+      enable-codecov: true
+      codecov-flag: aepservices-tvos-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  tvos-lifecycle-unit:
+    name: "Unit Test – AEPLifecycle (tvOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
+      command: make aep-lifecycle-tvos-unit-test
+      enable-codecov: true
+      codecov-flag: aeplifecycle-tvos-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  tvos-identity-unit:
+    name: "Unit Test – AEPIdentity (tvOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
+      command: make aep-identity-tvos-unit-test
+      enable-codecov: true
+      codecov-flag: aepidentity-tvos-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  tvos-signal-unit:
+    name: "Unit Test – AEPSignal (tvOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
+      command: make aep-signal-tvos-unit-test
+      enable-codecov: true
+      codecov-flag: aepsignal-tvos-tests
+      result-bundle-path: build/
+    secrets: inherit
+
+  tvos-integration:
+    name: "Integration Tests (tvOS)"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      tvos-device-names: ${{ vars.CI_TVOS_DEVICE_NAMES }}
+      tvos-versions: ${{ vars.CI_TVOS_VERSIONS }}
+      command: make integration-tvos-test
+      enable-codecov: false
+    secrets: inherit
+
+  # ---------------------------------------------------
+  # XCFramework + SPM validation job (only for main and staging branches)
+  # ---------------------------------------------------
+  xcframework-and-spm:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging'
+    name: "Archive XCFramework & Validate SPM/Podspec"
+    needs: validate-code
+    uses: adobe/aepsdk-commons/.github/workflows/ios-custom-command-build-and-test.yml@gha-ios-5.3.2
+    with:
+      ios-device-names: ${{ vars.CI_IOS_DEVICE_NAMES }}
+      ios-versions: ${{ vars.CI_IOS_VERSIONS }}
+      command: make ci-archive && make test-SPM-integration
+      enable-codecov: false
+    secrets: inherit
