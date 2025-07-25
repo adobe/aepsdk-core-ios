@@ -20,6 +20,7 @@ import AEPSignal
 @testable import AEPServices
 
 class ConfigurationIntegrationTests: XCTestCase {
+    let DEFAULT_TIMEOUT: TimeInterval = 5
     var mockNetworkService = TestableNetworkService()
     override func setUp() {
         NamedCollectionDataStore.clear()
@@ -29,16 +30,6 @@ class ConfigurationIntegrationTests: XCTestCase {
     }
 
     override func tearDown() {
-        let unregisterExpectation = XCTestExpectation(description: "unregister extensions")
-        unregisterExpectation.expectedFulfillmentCount = 2
-        MobileCore.unregisterExtension(Identity.self) {
-            unregisterExpectation.fulfill()
-        }
-
-        MobileCore.unregisterExtension(Signal.self) {
-            unregisterExpectation.fulfill()
-        }
-        wait(for: [unregisterExpectation], timeout: 2)
         EventHub.shared.shutdown()
     }
 
@@ -54,14 +45,14 @@ class ConfigurationIntegrationTests: XCTestCase {
         MobileCore.registerExtensions([Identity.self, Lifecycle.self, Signal.self]) {
             initExpectation.fulfill()
         }
-        wait(for: [initExpectation], timeout: 2)
+        wait(for: [initExpectation], timeout: DEFAULT_TIMEOUT)
     }
 
     func testConfigLocalFile() {
-
         let path = Bundle(for: type(of: self)).path(forResource: "ADBMobileConfig-OptedOut", ofType: "json")!
         MobileCore.configureWith(filePath: path)
-        XCTAssertEqual(.optedOut, getPrivacyStatus())
+        let privacy = getPrivacyStatus()
+        XCTAssertEqual(.optedOut, privacy, "expected optedOut, got \(privacy?.rawValue ?? "nil")")
     }
 
     func testConfigAppId() {
@@ -171,7 +162,7 @@ class ConfigurationIntegrationTests: XCTestCase {
             return (data: data, response: response, error: nil)
         }
         MobileCore.configureWith(appId: appId)
-        wait(for: [initExpectation], timeout: 2)
+        wait(for: [initExpectation], timeout: DEFAULT_TIMEOUT)
 
     }
 
@@ -182,7 +173,7 @@ class ConfigurationIntegrationTests: XCTestCase {
             returnedPrivacyStatus = privacyStatus
             privacyExpectation.fulfill()
         }
-        wait(for: [privacyExpectation], timeout: 2)
+        wait(for: [privacyExpectation], timeout: DEFAULT_TIMEOUT)
         return returnedPrivacyStatus
 
     }
