@@ -397,28 +397,28 @@ final class EventHub {
     /// DEBUG ONLY: Shuts down the EventHub. Guarantee that all asynchronous processing is fully
     /// completed before returning.
     func shutdown() {
-        // Snapshot currently registered extensions (thread-safe via `eventHubQueue`).
+        // Get all the currently registered extensions
         let currentExtensions: [ExtensionContainer] = eventHubQueue.sync { [weak self] in
             guard let self = self else { return [] }
             return Array(self.registeredExtensions.shallowCopy.values)
         }
 
-        // Call `onUnregistered` callbacks on each extension which may dispatch additional events.
+        // Call `onUnregistered` callbacks on each extension which may dispatch additional events
         currentExtensions.forEach { $0.unregisterExtension() }
 
-        // Wait for all work enqueued on the hub queue by step 2 to finish.
+        // Wait for all work enqueued on the hub queue to finish
         eventHubQueue.sync { /* barrier */ }
 
-        // Drain the primary EventHub event queue so that every event dispatched so far is processed.
+        // Drain the primary EventHub event queue so that every event dispatched so far is processed
         eventQueue.waitUntilIdle()
 
-        // Now that no further events are being produced, shut down each extension’s queue.
+        // Shut down each extension's queue
         currentExtensions.forEach { $0.shutdown() }
 
-        // Finally stop the EventHub queue itself to prevent any new work slipping in afterwards.
+        // Stop the EventHub queue itself
         eventQueue.stopAndWaitUntilIdle()
 
-        // Reset containers for a fresh state ready for the next test.
+        // Reset containers for a fresh state ready for the next test
         eventHubQueue.sync { [weak self] in
             guard let self = self else { return }
             self.registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventHub.registeredExtensions.queue")

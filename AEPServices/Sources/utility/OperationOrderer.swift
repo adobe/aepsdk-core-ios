@@ -138,25 +138,22 @@ public class OperationOrderer<T> {
 
 #if DEBUG
     // MARK: - Synchronization helpers (DEBUG builds only)
-
-    /// Blocks the current thread until all operations that were enqueued **before** this call have been processed.
-    ///
-    /// Achieved by performing a synchronous no-op on the internal serial queue.
+    /// Blocks the current thread until all operations that were queued **before** this call have been processed.
     public func waitUntilIdle() {
         queue.sync { /* barrier */ }
     }
 
-    /// Transitions the queue to an inactive state and drains all pending operations
+    /// Transitions the queue to an inactive state and drains all queued operations.
     ///
-    /// After this call returns, every item added before invocation is guaranteed to have been handled (or skipped)
+    /// After this call returns, every item added before calling is guaranteed to have been processed
     /// and no further items will be processed until `start()` is called again.
     public func stopAndWaitUntilIdle() {
-        // First, prevent any further processing by deactivating the queue.
+        // Prevent any further processing by deactivating the queue
         queue.sync {
             self.active = false
         }
 
-        // Then wait for work that was already in-flight to complete.
+        // Wait for work that was already in flight to complete
         waitUntilIdle()
     }
 #endif
