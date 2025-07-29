@@ -12,7 +12,7 @@ workflows:
   build-test:
     jobs:
       # - validate-code
-      - test-ios-core:
+      - test-ios-core
           # NOTE: works, but only if the job is run from a branch in the same repo, not forks
           # context: Codecov global upload token
           # requires:
