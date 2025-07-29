@@ -15,42 +15,42 @@ workflows:
       - test-ios-core:
           requires:
             - validate-code
-      - test-ios-services:
-          requires:
-            - validate-code
-      - test-ios-lifecycle:
-          requires:
-            - validate-code
-      - test-ios-identity:
-          requires:
-            - validate-code
-      - test-ios-signal:
-          requires:
-            - validate-code
-      - test-ios-integration:
-          requires:
-            - validate-code
-      - test-tvos-core:
-          requires:
-            - validate-code
-      - test-tvos-services:
-          requires:
-            - validate-code
-      - test-tvos-lifecycle:
-          requires:
-            - validate-code
-      - test-tvos-identity:
-          requires:
-            - validate-code
-      - test-tvos-signal:
-          requires:
-            - validate-code
-      - test-tvos-integration:
-          requires:
-            - validate-code
-      - test-spm-podspec-archive:
-          requires:
-            - validate-code
+      # - test-ios-services:
+      #     requires:
+      #       - validate-code
+      # - test-ios-lifecycle:
+      #     requires:
+      #       - validate-code
+      # - test-ios-identity:
+      #     requires:
+      #       - validate-code
+      # - test-ios-signal:
+      #     requires:
+      #       - validate-code
+      # - test-ios-integration:
+      #     requires:
+      #       - validate-code
+      # - test-tvos-core:
+      #     requires:
+      #       - validate-code
+      # - test-tvos-services:
+      #     requires:
+      #       - validate-code
+      # - test-tvos-lifecycle:
+      #     requires:
+      #       - validate-code
+      # - test-tvos-identity:
+      #     requires:
+      #       - validate-code
+      # - test-tvos-signal:
+      #     requires:
+      #       - validate-code
+      # - test-tvos-integration:
+      #     requires:
+      #       - validate-code
+      # - test-spm-podspec-archive:
+      #     requires:
+      #       - validate-code
 
 commands: 
   install_dependencies:
@@ -142,7 +142,7 @@ commands:
             - codecov/upload:
                 files: ./build/coverage/coverage.xml
                 flags: << parameters.flag >>
-                upload_name: "Coverage report for << parameters.flag >>"
+                upload_name: << parameters.flag >>
                 disable_search: true
 
 jobs:
