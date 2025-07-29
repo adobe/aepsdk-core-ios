@@ -92,6 +92,58 @@ commands:
           platform: "tvOS"
           device: "Apple TV"
           version: "17.4"
+      
+  parse_and_upload_coverage:
+    description: "Convert .xcresult → Cobertura XML and upload to Codecov"
+    parameters:
+      # Directory or file created by -resultBundlePath (ex: build/AEPCore-ios.xcresult)
+      path: { type: string }
+      # Codecov flag (ex: aepcore-ios-tests)
+      flag: { type: string }
+      enable_upload: { type: boolean, default: true }
+    steps:
+      - when:
+          condition: << parameters.enable_upload >>
+          steps:
+            - run:
+                name: Install xcresultparser
+                command: brew list xcresultparser || brew install xcresultparser
+
+            - run:
+                name: Parse .xcresult bundle(s)
+                command: |
+                  set -eo pipefail
+                  mkdir -p ./build/coverage
+
+                  BUNDLE="<< parameters.path >>"
+
+                  if [ -d "$BUNDLE" ]; then
+                    echo "Directory given; searching for .xcresult…"
+                    RESULT_FILES=$(find "$BUNDLE" -name "*.xcresult")
+                    [ -z "$RESULT_FILES" ] && { echo "No .xcresult found"; exit 0; }
+
+                    # Merge if there is more than one bundle
+                    COUNT=$(echo "$RESULT_FILES" | wc -w)
+                    if [ "$COUNT" -gt 1 ]; then
+                      echo "Merging $COUNT result bundles"
+                      MERGE_CMD="xcrun xccov merge --output ./build/Merged.xcresult"
+                      for f in $RESULT_FILES; do MERGE_CMD="$MERGE_CMD $f"; done
+                      eval "$MERGE_CMD"
+                      xcresultparser --output-format cobertura ./build/Merged.xcresult > ./build/coverage/coverage.xml
+                    else
+                      echo "Single bundle found"
+                      xcresultparser --output-format cobertura $RESULT_FILES > ./build/coverage/coverage.xml
+                    fi
+                  else
+                    echo "File given; parsing $BUNDLE"
+                    xcresultparser --output-format cobertura "$BUNDLE" > ./build/coverage/coverage.xml
+                  fi
+
+            - codecov/upload:
+                files: ./build/coverage/coverage.xml
+                flags: << parameters.flag >>
+                upload_name: "Coverage report for << parameters.flag >>"
+                disable_search: true
 
 jobs:
   validate-code:
@@ -126,9 +178,9 @@ jobs:
           name: Run AEPCore Tests
           command: make aep-core-unit-test
 
-      - codecov/upload:
-          flags: aepcore-ios-tests
-          upload_name: Coverage report for AEPCore iOS Tests
+      - parse_and_upload_coverage:
+          path: build/AEPCore-ios.xcresult
+          flag: aepcore-ios-tests
 
   test-ios-services:
     macos:
