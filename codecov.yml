@@ -1,5 +1,4 @@
 codecov:
-  token: secret:v2::oiBKV5W2VK/m0XuUbo9M3u/dXZdplMohu9dK6euL9IPE40P98UVM+wX7ecaXCrkJTNd+zfDkSYRjBL2UF8R/9teTXrhuIscDlHZVZgfEDcg=
   notify:
     require_ci_to_pass: yes
 
