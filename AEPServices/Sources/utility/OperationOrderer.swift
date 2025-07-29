@@ -135,4 +135,26 @@ public class OperationOrderer<T> {
             return
         }
     }
+
+#if DEBUG
+    // MARK: - Synchronization helpers (DEBUG builds only)
+    /// Blocks the current thread until all operations that were queued **before** this call have been processed.
+    public func waitUntilIdle() {
+        queue.sync { /* barrier */ }
+    }
+
+    /// Transitions the queue to an inactive state and drains all queued operations.
+    ///
+    /// After this call returns, every item added before calling is guaranteed to have been processed
+    /// and no further items will be processed until `start()` is called again.
+    public func stopAndWaitUntilIdle() {
+        // Prevent any further processing by deactivating the queue
+        queue.sync {
+            self.active = false
+        }
+
+        // Wait for work that was already in flight to complete
+        waitUntilIdle()
+    }
+#endif
 }
