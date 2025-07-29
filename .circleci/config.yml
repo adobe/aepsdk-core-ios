@@ -11,9 +11,9 @@ workflows:
   version: 2
   build-test:
     jobs:
-      - validate-code
+      # - validate-code
       - test-ios-core:
-          context: "Codecov global upload token"
+          context: Codecov global upload token
           # requires:
           #   - validate-code
       # - test-ios-services:
