@@ -1,6 +1,7 @@
 codecov:
   notify:
     require_ci_to_pass: yes
+  token: secret:v2::zHx1SkVdn7OxGU2Hw81FgsSCxcbxkD6ZKLSxXeGOzXgTiv3syphfm/dzcEONK4UqkoFVGE07gjD2abHiPWgzfupLGe576CBmRGrn1XoxxY8=
 
 coverage:
   precision: 2
