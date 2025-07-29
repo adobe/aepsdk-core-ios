@@ -1,9 +1,22 @@
+#
+# Copyright 2020 Adobe. All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
+#
+
 # For a detailed guide to building and testing on iOS, read the docs:
 # https://circleci.com/docs/2.0/testing-ios/
 
 version: 2.1
 
 orbs:
+  # Note that with secrets security, codecov token will not be available to forks
   codecov: codecov/codecov@5.4.3
   macos: circleci/macos@2
 
@@ -11,48 +24,61 @@ workflows:
   version: 2
   build-test:
     jobs:
-      # - validate-code
-      - test-ios-core
-          # NOTE: works, but only if the job is run from a branch in the same repo, not forks
-          # context: Codecov global upload token
-          # requires:
-          #   - validate-code
-      # - test-ios-services:
-      #     requires:
-      #       - validate-code
-      # - test-ios-lifecycle:
-      #     requires:
-      #       - validate-code
-      # - test-ios-identity:
-      #     requires:
-      #       - validate-code
-      # - test-ios-signal:
-      #     requires:
-      #       - validate-code
-      # - test-ios-integration:
-      #     requires:
-      #       - validate-code
-      # - test-tvos-core:
-      #     requires:
-      #       - validate-code
-      # - test-tvos-services:
-      #     requires:
-      #       - validate-code
-      # - test-tvos-lifecycle:
-      #     requires:
-      #       - validate-code
-      # - test-tvos-identity:
-      #     requires:
-      #       - validate-code
-      # - test-tvos-signal:
-      #     requires:
-      #       - validate-code
-      # - test-tvos-integration:
-      #     requires:
-      #       - validate-code
-      # - test-spm-podspec-archive:
-      #     requires:
-      #       - validate-code
+      - validate-code
+      - test-ios-core:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-ios-services:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-ios-lifecycle:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-ios-identity:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-ios-signal:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-ios-integration:
+          requires:
+            - validate-code
+      - test-tvos-core:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-tvos-services:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-tvos-lifecycle:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-tvos-identity:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-tvos-signal:
+          context: Codecov global upload token
+          requires:
+            - validate-code
+      - test-tvos-integration:
+          requires:
+            - validate-code
+      - test-spm-podspec-archive:
+          requires:
+            - validate-code
+          filters:
+            branches:
+              only:
+                - main
+                - staging
 
 commands: 
   install_dependencies:
@@ -195,12 +221,9 @@ jobs:
           name: Run AEPServices Tests
           command: make aep-services-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepservices-ios-tests
-      #     upload_name: Coverage Report for AEPServices iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPServices-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPServices-ios.xcresult
+          flag: aepservices-ios-tests
   
   test-ios-lifecycle:
     macos:
@@ -217,12 +240,9 @@ jobs:
           name: Run AEPLifecycle Tests
           command: make aep-lifecycle-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aeplifecycle-ios-tests
-      #     upload_name: Coverage Report for AEPLifecycle iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPLifecycle-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPLifecycle-ios.xcresult
+          flag: aeplifecycle-ios-tests
 
   test-ios-identity:
     macos:
@@ -239,12 +259,9 @@ jobs:
           name: Run AEPIdentity Tests
           command: make aep-identity-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepidentity-ios-tests
-      #     upload_name: Coverage Report for AEPIdentity iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPIdentity-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPIdentity-ios.xcresult
+          flag: aepidentity-ios-tests
 
   test-ios-signal:
     macos:
@@ -261,12 +278,9 @@ jobs:
           name: Run AEPSignal Tests
           command: make aep-signal-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepsignal-ios-tests
-      #     upload_name: Coverage Report for AEPSignal iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPSignal-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPSignal-ios.xcresult
+          flag: aepsignal-ios-tests
 
   test-ios-integration:
     macos:
@@ -298,12 +312,9 @@ jobs:
           name: Run AEPCore tvOS Tests
           command: make aep-core-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepcore-tvos-tests
-      #     upload_name: Coverage Report for AEPCore tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPCore-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPCore-tvos.xcresult
+          flag: aepcore-tvos-tests
 
   test-tvos-services:
     macos:
@@ -320,12 +331,9 @@ jobs:
           name: Run AEPServices tvOS Tests
           command: make aep-services-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepservices-tvos-tests
-      #     upload_name: Coverage Report for AEPServices tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPServices-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPServices-tvos.xcresult
+          flag: aepservices-tvos-tests
 
   test-tvos-lifecycle:
     macos:
@@ -342,12 +350,9 @@ jobs:
           name: Run AEPLifecycle tvOS Tests
           command: make aep-lifecycle-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aeplifecycle-tvos-tests
-      #     upload_name: Coverage Report for AEPLifecycle tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPLifecycle-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPLifecycle-tvos.xcresult
+          flag: aeplifecycle-tvos-tests
 
   test-tvos-identity:
     macos:
@@ -364,12 +369,9 @@ jobs:
           name: Run AEPIdentity tvOS Tests
           command: make aep-identity-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepidentity-tvos-tests
-      #     upload_name: Coverage Report for AEPIdentity tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPIdentity-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPIdentity-tvos.xcresult
+          flag: aepidentity-tvos-tests
 
   test-tvos-signal:
     macos:
@@ -386,12 +388,9 @@ jobs:
           name: Run AEPSignal tvOS Tests
           command: make aep-signal-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepsignal-tvos-tests
-      #     upload_name: Coverage Report for AEPSignal tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPSignal-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPSignal-tvos.xcresult
+          flag: aepsignal-tvos-tests
 
   test-tvos-integration:
     macos:
@@ -420,22 +419,12 @@ jobs:
       # verify XCFramework archive builds
       - run:
           name: Build XCFramework
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
-              make ci-archive
-            fi
+          command: make ci-archive
       # verify podspec is valid
-      ## TODO: - Add this back in once we update the script to use gemfile cocoapods
-      # - run:
-      #     name: Test Podspec
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
-      #         make test-podspec
-      #       fi
+      - run:
+          name: Test Podspec
+          command: make test-podspec
       # verify SPM works
       - run:
           name: Test SPM 
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
-              make test-SPM-integration
-            fi
+          command: make test-SPM-integration
