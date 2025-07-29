@@ -393,6 +393,41 @@ final class EventHub {
         }
     }
 
+#if DEBUG
+    /// DEBUG ONLY: Shuts down the EventHub. Guarantee that all asynchronous processing is fully
+    /// completed before returning.
+    func shutdown() {
+        // Get all the currently registered extensions
+        let currentExtensions: [ExtensionContainer] = eventHubQueue.sync { [weak self] in
+            guard let self = self else { return [] }
+            return Array(self.registeredExtensions.shallowCopy.values)
+        }
+
+        // Call `onUnregistered` callbacks on each extension which may dispatch additional events
+        currentExtensions.forEach { $0.unregisterExtension() }
+
+        // Wait for all work enqueued on the hub queue to finish
+        eventHubQueue.sync { /* barrier */ }
+
+        // Drain the primary EventHub event queue so that every event dispatched so far is processed
+        eventQueue.waitUntilIdle()
+
+        // Shut down each extension's queue
+        currentExtensions.forEach { $0.shutdown() }
+
+        // Stop the EventHub queue itself
+        eventQueue.stopAndWaitUntilIdle()
+
+        // Reset containers for a fresh state ready for the next test
+        eventHubQueue.sync { [weak self] in
+            guard let self = self else { return }
+            self.registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventHub.registeredExtensions.queue")
+            self.responseEventListeners.clear()
+            self.eventNumberMap.removeAll()
+            self.eventNumberCounter = AtomicCounter()
+        }
+    }
+#else
     /// shut down the event hub, wait for the event queue to stop and unregister all the extensions
     func shutdown() {
         eventQueue.waitToStop()
@@ -406,10 +441,11 @@ final class EventHub {
         }
         eventHubQueue.sync { [weak self] in
             guard let self = self else { return }
-            // just wait
             self.registeredExtensions = ThreadSafeDictionary<String, ExtensionContainer>(identifier: "com.adobe.eventHub.registeredExtensions.queue")
         }
     }
+#endif
+
 
     // MARK: - Private
 
