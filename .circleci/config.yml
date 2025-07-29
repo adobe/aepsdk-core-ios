@@ -13,8 +13,9 @@ workflows:
     jobs:
       - validate-code
       - test-ios-core:
-          requires:
-            - validate-code
+          context: "Codecov global upload token"
+          # requires:
+          #   - validate-code
       # - test-ios-services:
       #     requires:
       #       - validate-code
@@ -100,50 +101,46 @@ commands:
       path: { type: string }
       # Codecov flag (ex: aepcore-ios-tests)
       flag: { type: string }
-      enable_upload: { type: boolean, default: true }
     steps:
-      - when:
-          condition: << parameters.enable_upload >>
-          steps:
-            - run:
-                name: Install xcresultparser
-                command: brew list xcresultparser || brew install xcresultparser
+      - run:
+          name: Install xcresultparser
+          command: brew list xcresultparser || brew install xcresultparser
 
-            - run:
-                name: Parse .xcresult bundle(s)
-                command: |
-                  set -eo pipefail
-                  mkdir -p ./build/coverage
+      - run:
+          name: Parse .xcresult bundle(s)
+          command: |
+            set -eo pipefail
+            mkdir -p ./build/coverage
 
-                  BUNDLE="<< parameters.path >>"
+            BUNDLE="<< parameters.path >>"
 
-                  if [ -d "$BUNDLE" ]; then
-                    echo "Directory given; searching for .xcresult…"
-                    RESULT_FILES=$(find "$BUNDLE" -name "*.xcresult")
-                    [ -z "$RESULT_FILES" ] && { echo "No .xcresult found"; exit 0; }
+            if [ -d "$BUNDLE" ]; then
+              echo "Directory given; searching for .xcresult…"
+              RESULT_FILES=$(find "$BUNDLE" -name "*.xcresult")
+              [ -z "$RESULT_FILES" ] && { echo "No .xcresult found"; exit 0; }
 
-                    # Merge if there is more than one bundle
-                    COUNT=$(echo "$RESULT_FILES" | wc -w)
-                    if [ "$COUNT" -gt 1 ]; then
-                      echo "Merging $COUNT result bundles"
-                      MERGE_CMD="xcrun xccov merge --output ./build/Merged.xcresult"
-                      for f in $RESULT_FILES; do MERGE_CMD="$MERGE_CMD $f"; done
-                      eval "$MERGE_CMD"
-                      xcresultparser --output-format cobertura ./build/Merged.xcresult > ./build/coverage/coverage.xml
-                    else
-                      echo "Single bundle found"
-                      xcresultparser --output-format cobertura $RESULT_FILES > ./build/coverage/coverage.xml
-                    fi
-                  else
-                    echo "File given; parsing $BUNDLE"
-                    xcresultparser --output-format cobertura "$BUNDLE" > ./build/coverage/coverage.xml
-                  fi
+              # Merge if there is more than one bundle
+              COUNT=$(echo "$RESULT_FILES" | wc -w)
+              if [ "$COUNT" -gt 1 ]; then
+                echo "Merging $COUNT result bundles"
+                MERGE_CMD="xcrun xccov merge --output ./build/Merged.xcresult"
+                for f in $RESULT_FILES; do MERGE_CMD="$MERGE_CMD $f"; done
+                eval "$MERGE_CMD"
+                xcresultparser --output-format cobertura ./build/Merged.xcresult > ./build/coverage/coverage.xml
+              else
+                echo "Single bundle found"
+                xcresultparser --output-format cobertura $RESULT_FILES > ./build/coverage/coverage.xml
+              fi
+            else
+              echo "File given; parsing $BUNDLE"
+              xcresultparser --output-format cobertura "$BUNDLE" > ./build/coverage/coverage.xml
+            fi
 
-            - codecov/upload:
-                files: ./build/coverage/coverage.xml
-                flags: << parameters.flag >>
-                upload_name: << parameters.flag >>
-                disable_search: true
+      - codecov/upload:
+          files: ./build/coverage/coverage.xml
+          flags: << parameters.flag >>
+          upload_name: << parameters.flag >>
+          disable_search: true
 
 jobs:
   validate-code:
