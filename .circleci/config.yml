@@ -4,10 +4,9 @@
 version: 2.1
 
 orbs:
-  # codecov: codecov/codecov@3.3.0
+  codecov: codecov/codecov@5.4.3
   macos: circleci/macos@2
-  
-# Workflows orchestrate a set of jobs to be run;
+
 workflows:
   version: 2
   build-test:
@@ -97,7 +96,7 @@ commands:
 jobs:
   validate-code:
     macos:
-      xcode: 16.0.0 # Specify the Xcode version to use
+      xcode: 16.0.0
 
     steps:
       - checkout
@@ -114,7 +113,7 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -127,16 +126,13 @@ jobs:
           name: Run AEPCore Tests
           command: make aep-core-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepcore-ios-tests
-      #     upload_name: Coverage Report for AEPCore iOS Tests
-      #     xtra_args: -c -v --xc --xp  build/AEPCore-ios.xcresult
+      - codecov/upload:
+          flags: aepcore-ios-tests
+          upload_name: Coverage report for AEPCore iOS Tests
 
   test-ios-services:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -158,7 +154,7 @@ jobs:
   
   test-ios-lifecycle:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -180,7 +176,7 @@ jobs:
 
   test-ios-identity:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -202,7 +198,7 @@ jobs:
 
   test-ios-signal:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -224,7 +220,7 @@ jobs:
 
   test-ios-integration:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -239,7 +235,7 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -261,7 +257,7 @@ jobs:
 
   test-tvos-services:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -283,7 +279,7 @@ jobs:
 
   test-tvos-lifecycle:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -305,7 +301,7 @@ jobs:
 
   test-tvos-identity:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -327,7 +323,7 @@ jobs:
 
   test-tvos-signal:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -349,7 +345,7 @@ jobs:
 
   test-tvos-integration:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
 
     steps:
       - checkout
@@ -364,7 +360,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
     
     steps:
       - checkout
