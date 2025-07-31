@@ -36,7 +36,7 @@ class ExtensionContainer {
     private var xdmSharedState: SharedState?
 
     /// The shared state name associated with the extension
-    private var _sharedStateName = "invalidSharedStateName"    
+    private var _sharedStateName = "invalidSharedStateName"
     var sharedStateName: String {
         get { containerQueue.sync { self._sharedStateName } }
         set { containerQueue.async { self._sharedStateName = newValue } }
@@ -55,8 +55,8 @@ class ExtensionContainer {
     private let eventListeners: ThreadSafeArray<EventListenerContainer>
 
     /// The last `Event` that was processed by this extension, nil if no events have been processed
-    private var _lastProcessedEvent: Event?        
-    var lastProcessedEvent: Event? { 
+    private var _lastProcessedEvent: Event?
+    var lastProcessedEvent: Event? {
         get { containerQueue.sync { self._lastProcessedEvent } }
         set { containerQueue.async { self._lastProcessedEvent = newValue } }
     }
@@ -103,6 +103,7 @@ class ExtensionContainer {
 // MARK: - ExtensionContainer public extension
 
 extension ExtensionContainer: ExtensionRuntime {
+    
     func unregisterExtension() {
         guard let exten = exten, let eventHub = eventHub else { return }
         eventHub.unregisterExtension(type(of: exten), completion: {_ in })
@@ -164,8 +165,19 @@ extension ExtensionContainer: ExtensionRuntime {
     }
 
     func getHistoricalEvents(_ requests: [EventHistoryRequest], enforceOrder: Bool, handler: @escaping ([EventHistoryResult]) -> Void) {
-        guard let eventHub = eventHub else { return }
+        guard let eventHub = eventHub else {
+            handler([])
+            return
+        }
         eventHub.getHistoricalEvents(requests, enforceOrder: enforceOrder, handler: handler)
+    }
+
+    func recordHistoricalEvent(_ event: Event, handler: ((Bool) -> Void)?) {
+        guard let eventHub = eventHub else {
+            handler?(false)
+            return
+        }
+        eventHub.recordHistoricalEvent(event, handler: handler)
     }
 
     func startEvents() {

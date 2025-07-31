@@ -17,28 +17,7 @@ import AEPServices
 @testable import AEPCore
 
 /// Functional tests for the rules engine feature
-class RulesEngineFunctionalTests: XCTestCase {
-    var mockSystemInfoService: MockSystemInfoService!
-    var mockRuntime: TestableExtensionRuntime!
-    var rulesEngine: LaunchRulesEngine!
-    var defaultEvent: Event!
-
-    override func setUp() {
-        continueAfterFailure = false
-        mockRuntime = TestableExtensionRuntime()
-        defaultEvent = Event(name: "Configure with file path", type: EventType.lifecycle, source: EventSource.responseContent,
-                             data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
-        Log.logFilter = .trace
-        rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: mockRuntime)
-        rulesEngine.trace { _, _, _, failure in
-            print(failure ?? "unknown failure")
-        }
-    }
-
-    static var rulesUrl: URL? {
-        return Bundle(for: self).url(forResource: "rules_functional_1", withExtension: ".zip")
-    }
-
+class RulesEngineFunctionalTests: RulesEngineTestBase {
     func testLoadRulesFromRemoteURL() {
         /// Given:
         let filePath = Bundle(for: RulesEngineFunctionalTests.self).url(forResource: "rules_functional_1", withExtension: ".zip")
@@ -188,6 +167,33 @@ class RulesEngineFunctionalTests: XCTestCase {
         }
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
+    
+    // Matcher: ne
+    func testMatcherNe_multipleValues() {
+        /// Given:
+        resetRulesEngine(withNewRules: "rules_testMatcherNe_multipleValues")
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T"]], status: .set))
+        /// When:
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        /// When:
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "Blue"]], status: .set))
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+    
 
     // Matcher: ex
     func testMatcherEx() {
@@ -383,6 +389,32 @@ class RulesEngineFunctionalTests: XCTestCase {
 
         /// When:
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "Verizon"]], status: .set))
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        let consequenceEvent = mockRuntime.dispatchedEvents[0]
+        XCTAssertEqual(EventType.rulesEngine, consequenceEvent.type)
+        XCTAssertEqual(EventSource.responseContent, consequenceEvent.source)
+        guard let data = consequenceEvent.data?["triggeredconsequence"], let dataWithType = data as? [String: Any] else {
+            XCTFail()
+            return
+        }
+        XCTAssertEqual("pb", dataWithType["type"] as! String)
+    }
+
+    // Matcher: nc (Not Contains) with multiple values
+    func testMatcherNc_multipleValues() {
+        /// Given:
+        resetRulesEngine(withNewRules: "rules_testMatcherNc_multipleValues")
+
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T Wireless"]], status: .set))
+        /// When:
+        rulesEngine.process(event: defaultEvent)
+        /// Then:
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        /// When:
+        mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "T-Mobile USA"]], status: .set))
         rulesEngine.process(event: defaultEvent)
         /// Then:
         XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
@@ -1344,26 +1376,134 @@ class RulesEngineFunctionalTests: XCTestCase {
         XCTAssertEqual(false, mockRuntime.receivedEnforceOrder)
     }
 
-    private func resetRulesEngine(withNewRules rulesJsonFileName: String) {
-        let testBundle = Bundle(for: type(of: self))
-        guard let url = testBundle.url(forResource: rulesJsonFileName, withExtension: "json"), let data = try? Data(contentsOf: url) else {
+    // MARK: - Historical condition most recent
+    func testHistoricalMostRecentCondition_NotPassing() {
+        // ---------- historical condition with mostRecent search type ----------
+        //        "condition": {
+        //          "type": "historical",
+        //          "definition": {
+        //            "events": [
+        //              {
+        //                "key": "eventA"
+        //              },
+        //              {
+        //                "key": "eventB"
+        //              }
+        //            ],
+        //            "searchType": "mostRecent",
+        //            "matcher": "eq",
+        //            "value": 1
+        //          }
+        //        }
+        resetRulesEngine(withNewRules: "rules_testHistoryMostRecent")
+        // Runtime returns two results with no newestOccurrence
+        mockRuntime.mockEventHistoryResults = [
+            EventHistoryResult(count: 0, oldest: nil, newest: nil),
+            EventHistoryResult(count: 0, oldest: nil, newest: nil)
+        ]
+
+        // When
+        rulesEngine.process(event: defaultEvent)
+
+        // Then:
+        // No rule consequence should be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+        // Two history requests should be made (one for each event in the condition)
+        XCTAssertEqual(2, mockRuntime.receivedEventHistoryRequests.count)
+        // Enforce order should be disabled for mostRecent
+        XCTAssertFalse(mockRuntime.receivedEnforceOrder)
+    }
+
+    func testHistoricalMostRecentCondition_Passing() {
+        // ---------- historical condition with mostRecent search type ----------
+        //        "condition": {
+        //          "type": "historical",
+        //          "definition": {
+        //            "events": [
+        //              {
+        //                "key": "eventA"
+        //              },
+        //              {
+        //                "key": "eventB"
+        //              }
+        //            ],
+        //            "searchType": "mostRecent",
+        //            "matcher": "eq",
+        //            "value": 1
+        //          }
+        //        }
+        resetRulesEngine(withNewRules: "rules_testHistoryMostRecent")
+
+        // Simulate two historical results:
+        // - First has an older newestOccurrence
+        // - Second is the most recent (index 1 should match the rule's "value": 1)
+        let older = Date().addingTimeInterval(-1)
+        let newer = Date()
+        mockRuntime.mockEventHistoryResults = [
+            EventHistoryResult(count: 1, oldest: nil, newest: older),
+            EventHistoryResult(count: 1, oldest: nil, newest: newer)
+        ]
+
+        // When
+        rulesEngine.process(event: defaultEvent)
+
+        // Then:
+        // Rule should fire once because index 1 is the most recent
+        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        // Two history requests should be made (one for each event in the condition)
+        XCTAssertEqual(2, mockRuntime.receivedEventHistoryRequests.count)
+        // Enforce order should be disabled for mostRecent
+        XCTAssertFalse(mockRuntime.receivedEnforceOrder)
+    }
+
+    func testArrayFlatteningNotationMatcherAndToken() {
+        // Given:
+        // A rule with:
+        // - a matcher condition checking if "items.1" equals "b"
+        // - a consequence that adds {"matchedItem":"{%items.1%}"} to the event
+        //
+        // "condition": {
+        //   "type": "matcher",
+        //   "definition": {
+        //     "key": "items.1",
+        //     "matcher": "eq",
+        //     "values": [
+        //       "b"
+        //     ]
+        //   }
+        // },
+        // "consequences": [
+        //   {
+        //     "id": "R1",
+        //     "type": "add",
+        //     "detail": {
+        //       "eventdata": {
+        //         "matchedItem": "{%items.1%}"
+        //       }
+        //     }
+        //   }
+        // ]
+        resetRulesEngine(withNewRules: "rules_testArrayFlatteningNotation")
+
+        let eventData: [String: Any] = ["items": ["a", "b", "c"]]
+        let event = Event(name: "Array flattening test",
+                          type: EventType.lifecycle,
+                          source: EventSource.responseContent,
+                          data: eventData)
+
+        // When:
+        // The event is processed by the rules engine
+        let processedEvent = rulesEngine.process(event: event)
+
+        // Then:
+        // No consequence event of type "add" should be dispatched
+        XCTAssertEqual(0, mockRuntime.dispatchedEvents.count)
+
+        // The original event should have "matchedItem": "b" added via token replacement
+        guard let matched = processedEvent.data?["matchedItem"] as? String else {
             XCTFail()
             return
         }
-        guard let rules = JSONRulesParser.parse(data, runtime: mockRuntime) else {
-            XCTFail()
-            return
-        }
-        rulesEngine.rulesEngine.clearRules()
-        rulesEngine.rulesEngine.addRules(rules: rules)
+        XCTAssertEqual("b", matched)
     }
-
-    private func waitForProcessing(interval: TimeInterval = 0.5) {
-        let expectation = XCTestExpectation()
-        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + interval - 0.05) {
-            expectation.fulfill()
-        }
-        wait(for:[expectation], timeout: interval)
-    }
-
 }

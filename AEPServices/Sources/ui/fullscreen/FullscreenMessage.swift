@@ -24,6 +24,7 @@ import UIKit
         private let DOWNLOAD_CACHE = "adbdownloadcache"
         private let HTML_EXTENSION = "html"
         private let TEMP_FILE_NAME = "temp"
+        private let FIT_TO_CONTENT_HANDLER_NAME = "inAppContentHeightHandler"
         private let ANIMATION_DURATION = 0.3
 
         /// Assignable in the constructor, `settings` control the layout and behavior of the message
@@ -33,6 +34,9 @@ import UIKit
         /// Native functions that can be called from javascript
         /// See `addHandler:forScriptMessage:`
         var scriptHandlers: [String: (Any?) -> Void] = [:]
+
+        /// If `fitToContent` is enabled in `settings`, this value will contain the desired height for the webview
+        var fitToContentHeight: CGFloat?
 
         let fileManager = FileManager()
 
@@ -77,7 +81,11 @@ import UIKit
         ///
         /// Important Note : When you are completed using an Fullscreen message. You must call dismiss() to remove it from memory
         public func hide() {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 if self.messageMonitor.dismiss() == false {
                     return
                 }
@@ -123,10 +131,12 @@ import UIKit
                 return
             }
 
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
 
                 if !self.observerSet {
-
                     // Register to observe changes to frame of application's key window
                     // This observer will also recognize the device orientation changes
                     if let keyWindow = UIApplication.shared.getKeyWindow() {
@@ -186,7 +196,11 @@ import UIKit
         }
 
         @objc private func reframeMessage() {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 if self.transparentBackgroundView != nil {
                     self.transparentBackgroundView?.frame = CGRect(x: 0, y: 0, width: self.screenWidth, height: self.screenHeight + self.safeAreaHeight)
                 }
@@ -196,7 +210,11 @@ import UIKit
 
         private func handleShouldShow(webview: WKWebView, delegateControl: Bool) {
             // get off main thread while delegate has control to prevent pause on main thread
-            DispatchQueue.global().async {
+            DispatchQueue.global().async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 // only show the message if the monitor allows it
                 let (shouldShow, error) = self.messageMonitor.show(message: self, delegateControl: delegateControl)
                 guard shouldShow else {
@@ -212,14 +230,22 @@ import UIKit
                 self.messagingDelegate?.onShow(message: self)
 
                 // dispatch UI activity back to main thread
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else {
+                        return
+                    }
+
                     self.displayWithAnimation(webView: webview)
                 }
             }
         }
 
         public func dismiss() {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 // remove window frame observer
                 self.windowFrameObserver?.invalidate()
                 self.windowFrameObserver = nil
@@ -230,10 +256,6 @@ import UIKit
                 }
 
                 self.dismissWithAnimation(shouldDeallocateWebView: true)
-
-                // notify all listeners
-                self.listener?.onDismiss(message: self)
-                self.messagingDelegate?.onDismiss(message: self)
 
                 // remove the temporary html if it exists
                 if let tempFile = self.tempHtmlFile {
@@ -253,7 +275,11 @@ import UIKit
         ///   - name: the name of the message being passed from javascript
         ///   - handler: a method to be called when the javascript message is passed
         @objc public func handleJavascriptMessage(_ name: String, withHandler handler: @escaping (Any?) -> Void) {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 // don't add the handler if it's already been added
                 guard self.scriptHandlers[name] == nil else {
                     return
@@ -288,8 +314,31 @@ import UIKit
 
         // MARK: - private methods
 
+        private func handleAutoResize(_ height: Any?) {
+            if let strHeight = height as? String,
+               let doubleHeight = Double(strHeight) {
+
+                if doubleHeight <= 0 {
+                    Log.debug(label: self.LOG_PREFIX, "Invalid height value received for auto-resize: \(doubleHeight). Height must be positive.")
+                    return
+                }
+
+                fitToContentHeight = CGFloat(doubleHeight)
+                // when enabled, this method isn't called until the html is loaded, requiring a redraw with the correct height
+                reframeMessage()
+            } else {
+                Log.debug(label: self.LOG_PREFIX, "Failed to parse height value for auto-resize: \(String(describing: height))")
+            }
+        }
+
         private func getConfiguredWebView(newFrame: CGRect) -> WKWebView {
             let webViewConfiguration = WKWebViewConfiguration()
+
+            // set the callback for auto-resizing if fitToContent is set in MessageSettings
+            if self.settings?.fitToContent == true,               
+               self.scriptHandlers[FIT_TO_CONTENT_HANDLER_NAME] == nil {
+                self.scriptHandlers[FIT_TO_CONTENT_HANDLER_NAME] = handleAutoResize(_:)
+            }
 
             // load javascript handlers
             let contentController = WKUserContentController()
@@ -343,7 +392,11 @@ import UIKit
         }
 
         @objc func handleGesture(_ sender: UIGestureRecognizer? = nil) {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 guard let recognizer = sender as? MessageGestureRecognizer else {
                     Log.trace(label: self.LOG_PREFIX, "Unable to handle message gesture - failed to convert UIGestureRecognizer to MessageGestureRecognizer.")
                     return
@@ -368,7 +421,11 @@ import UIKit
                 return
             }
 
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 let keyWindow = UIApplication.shared.getKeyWindow()
 
                 if let animation = self.settings?.displayAnimation, animation != .none {
@@ -394,7 +451,11 @@ import UIKit
         }
 
         private func dismissWithAnimation(shouldDeallocateWebView: Bool) {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+
                 if let animation = self.settings?.dismissAnimation, animation != .none {
                     UIView.animate(withDuration: self.ANIMATION_DURATION, animations: {
                         self.webView?.frame = self.frameAfterDismiss
@@ -412,6 +473,10 @@ import UIKit
                         }
                         if shouldDeallocateWebView {
                             self.webView = nil
+                            // notify all listeners
+                            self.listener?.onDismiss(message: self)
+                            self.messagingDelegate?.onDismiss(message: self)
+
                         } else {
                             self.webView?.frame = self.frameBeforeShow
                         }
@@ -425,11 +490,27 @@ import UIKit
 
                     if shouldDeallocateWebView {
                         self.webView = nil
+                        // notify all listeners
+                        self.listener?.onDismiss(message: self)
+                        self.messagingDelegate?.onDismiss(message: self)
                     } else {
                         self.webView?.frame = self.frameBeforeShow
                     }
                 }
             }
         }
+
+        // MARK: - debug methods below are used for testing purposes only
+
+        #if DEBUG
+            func callReframeMessage() {
+                self.reframeMessage()
+            }
+
+            func callHandleAutoResize(_ height: Any?) {
+                self.handleAutoResize(height)
+            }
+        #endif
+
     }
 #endif

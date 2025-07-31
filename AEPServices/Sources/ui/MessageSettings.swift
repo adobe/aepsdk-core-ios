@@ -25,6 +25,9 @@ public class MessageSettings: NSObject {
     /// Object that owns the message created using these settings.
     public let parent: Any?
 
+        /// Maximum width of the view in which the message is displayed. Represented in pixels.
+        public private(set) var maxWidth: Int?
+
     /// Width of the view in which the message is displayed. Represented in percentage of the total screen width.
     public private(set) var width: Int?
 
@@ -43,6 +46,8 @@ public class MessageSettings: NSObject {
     /// Defines the horizontal inset respective to the `horizontalAlign`. Represented in percentage of the total screen width.
     public private(set) var horizontalInset: Int?
 
+        /// If true, the SDK will automatically try to resize the window of the message to fit its content.
+        public private(set) var fitToContent: Bool?
     /// If true, a displayed message will prevent the user from other UI interactions.
     public private(set) var uiTakeover: Bool?
 
@@ -70,6 +75,15 @@ public class MessageSettings: NSObject {
 
     public init(parent: Any? = nil) {
         self.parent = parent
+        @discardableResult public func setMaxWidth(_ maxWidth: Int?) -> MessageSettings {
+            self.maxWidth = maxWidth
+            return self
+
+        }
+        @discardableResult public func setFitToContent(_ fitToContent: Bool?) -> MessageSettings {
+            self.fitToContent = fitToContent ?? false
+            return self
+        }
     }
 
     /// Combines `backdropColor` and `backdropOpacity` to create a UIColor to be used as a background in uiTakeover messages.
