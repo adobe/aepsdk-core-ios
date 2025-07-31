@@ -9,14 +9,14 @@
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
  */
-
 #if os(iOS)
     import Foundation
     import WebKit
 
+
     /// Fullscreen message lifecycle event listener
     @available(iOSApplicationExtension, unavailable)
-    @objc(AEPFullscreenMessageDelegate) 
+    @objc(AEPFullscreenMessageDelegate)
     public protocol FullscreenMessageDelegate {
         /// Invoked when the fullscreen message is displayed
         /// - Parameters:
@@ -42,7 +42,7 @@
         /// - Parameter webView - the `WKWebView` instance that completed loading its initial content.
         @objc(webViewDidFinishInitialLoading:)
         optional func webViewDidFinishInitialLoading(webView: WKWebView)
-
+        
         ///
         /// Invoked when the FullscreenMessage failed to be displayed
         ///
@@ -56,4 +56,5 @@
         @objc(onErrorFullscreenMessage:error:)
         optional func onError(message: FullscreenMessage, error: PresentationError)
     }
+
 #endif

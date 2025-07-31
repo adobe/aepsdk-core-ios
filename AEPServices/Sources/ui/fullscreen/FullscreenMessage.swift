@@ -10,9 +10,10 @@
  governing permissions and limitations under the License.
  */
 
+import Foundation
+import UIKit
+
 #if os(iOS)
-    import Foundation
-    import UIKit
     import WebKit
 
     /// This class is used to create and display fullscreen messages on the current view.
@@ -512,5 +513,4 @@
         #endif
 
     }
-
 #endif

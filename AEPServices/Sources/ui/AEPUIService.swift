@@ -10,25 +10,50 @@
  governing permissions and limitations under the License.
  */
 
+
+import Foundation
+import UIKit
 #if os(iOS)
-    import Foundation
-    import UIKit
-
-    @available(iOSApplicationExtension, unavailable)
-    class AEPUIService: UIService {
-
-        private var messageMonitor = MessageMonitor()
-
-        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
-            return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
-        }
-
-        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
-            return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
-        }
-
-        func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
-            return FloatingButton(listener: listener)
-        }
-    }
+import WebKit
+#elseif os(tvOS)
+import SwiftUI
 #endif
+
+#if os(iOS)
+@available(iOSApplicationExtension, unavailable)
+class AEPUIService: UIService {
+    private var messageMonitor = MessageMonitor()
+
+
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false) -> FullscreenPresentable {
+        return createFullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, settings: nil)
+    }
+
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool = false, settings: MessageSettings? = nil) -> FullscreenPresentable {
+        return FullscreenMessage(payload: payload, listener: listener, isLocalImageUsed: isLocalImageUsed, messageMonitor: messageMonitor, settings: settings)
+    }
+
+    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
+        return FloatingButton(listener: listener)
+    }
+}
+#elseif os(tvOS)
+@available(tvOS 13.0, *)
+@available(tvOSApplicationExtension, unavailable)
+class AEPUIService: UIService {
+    private var messageMonitor = MessageMonitor()
+
+    func createFullscreenMessage(payload: any View, listener: FullscreenMessageNativeDelegate?) -> FullscreenPresentable {
+        return createFullscreenMessage(payload: payload, listener: listener, settings: nil)
+    }
+
+    func createFullscreenMessage(payload: any View, listener: FullscreenMessageNativeDelegate?, settings: MessageSettings? = nil) -> FullscreenPresentable {
+        return FullscreenMessageNative(payload: payload, listener: listener, messageMonitor: messageMonitor, settings: settings)
+    }
+
+    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable {
+        return FloatingButton(listener: listener)
+    }
+}
+#endif
+

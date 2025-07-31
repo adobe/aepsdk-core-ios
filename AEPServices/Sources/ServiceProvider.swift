@@ -18,10 +18,9 @@ import Foundation
 public class ServiceProvider {
     public static let shared = ServiceProvider()
 
-    #if os(iOS)
-        /// MessagingDelegate which is used to listen for message visibility updates.
-        public weak var messagingDelegate: MessagingDelegate?
-    #endif
+    /// MessagingDelegate which is used to listen for message visibility updates.
+    public weak var messagingDelegate: MessagingDelegate?
+
     // Provide thread safety on the getters and setters
     private let queue = DispatchQueue(label: "com.adobe.serviceProvider.queue")
 
@@ -139,58 +138,62 @@ public class ServiceProvider {
 }
 
 ///
-/// ServiceProvider extension which will hold any iOSApplicationExtension restricted Services.
+/// ServiceProvider extension for URL services
 ///
 @available(iOSApplicationExtension, unavailable)
 @available(tvOSApplicationExtension, unavailable)
 extension ServiceProvider {
-    // Because Extensions cannot hold properties, this struct Holder is a work around.
-    // Please note that the static variables work because the ServiceProvider is a singleton.
-    private struct Holder {
+    private struct URLHolder {
         static var overrideURLService: URLOpening?
         static var defaultURLService = URLService()
-        #if os(iOS)
-            static var overrideUIService: UIService?
-            static var defaultUIService = AEPUIService()
-        #endif
     }
 
     public var urlService: URLOpening {
         get {
             return queue.sync {
-                return Holder.overrideURLService ?? Holder.defaultURLService
+                return URLHolder.overrideURLService ?? URLHolder.defaultURLService
             }
         }
         set {
             queue.async {
-                Holder.overrideURLService = newValue
+                URLHolder.overrideURLService = newValue
+            }
+        }
+    }
+}
+
+///
+/// ServiceProvider extension for UI services (requires iOS/tvOS 13.0 for SwiftUI support)
+///
+@available(iOSApplicationExtension, unavailable)
+@available(tvOSApplicationExtension, unavailable)
+@available(iOS 13.0, *)
+@available(tvOS 13.0, *)
+extension ServiceProvider {
+    private struct UIHolder {
+        static var overrideUIService: UIService?
+        static var defaultUIService = AEPUIService()
+    }
+
+    public var uiService: UIService {
+        get {
+            return queue.sync {
+                return UIHolder.overrideUIService ?? UIHolder.defaultUIService
+            }
+        }
+        set {
+            queue.async {
+                UIHolder.overrideUIService = newValue
             }
         }
     }
 
-    #if os(iOS)
-        public var uiService: UIService {
-            get {
-                return queue.sync {
-                    return Holder.overrideUIService ?? Holder.defaultUIService
-                }
-            }
-            set {
-                queue.async {
-                    Holder.overrideUIService = newValue
-                }
-            }
-        }
-    #endif
-
     internal func resetAppOnlyServices() {
         queue.async {
-            Holder.defaultURLService = URLService()
-            Holder.overrideURLService = nil
-            #if os(iOS)
-                Holder.defaultUIService = AEPUIService()
-                Holder.overrideUIService = nil
-            #endif
+            URLHolder.defaultURLService = URLService()
+            URLHolder.overrideURLService = nil
+            UIHolder.defaultUIService = AEPUIService()
+            UIHolder.overrideUIService = nil
         }
     }
 }

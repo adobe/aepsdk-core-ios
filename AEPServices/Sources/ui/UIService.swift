@@ -10,44 +10,58 @@
  governing permissions and limitations under the License.
  */
 
+import Foundation
+import UIKit
+#if os(tvOS)
+import SwiftUI
+#endif
+
+///
+/// UIService for creating UI elements
+///
 #if os(iOS)
-    import Foundation
-    import UIKit
+@objc(AEPUIServiceProtocol)
+@available(iOSApplicationExtension, unavailable)
+public protocol UIService {
+    /// Creates a `FullscreenPresentable`
+    /// - Parameters:
+    ///     - payload: The payload used in the FullscreenPresentable as a SwiftUI View
+    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageNativeDelegate`
+    ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
+    /// - Returns: A `FullscreenPresentable` implementation
 
-    ///
-    /// UIService for creating UI elements
-    ///
-    @objc(AEPUIServiceProtocol)
-    @available(iOSApplicationExtension, unavailable)
-    public protocol UIService {
+    @objc
+    func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
+    
+    /// Creates a `FullscreenPresentable`
+    /// - Parameters:
+    ///     - payload: The payload used in the FullscreenPresentable as a SwiftUI View
+    ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageNativeDelegate`
+    ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
+    ///     - settings: The `MessageSettings` that define construction, behavior and ownership of the newly created message
+    /// - Returns: A `FullscreenPresentable` implementation
+    @objc
+    optional func createFullscreenMessage(payload: String,
+                                          listener: FullscreenMessageDelegate?,
+                                          isLocalImageUsed: Bool,
+                                          settings: MessageSettings?) -> FullscreenPresentable
+    
+    
+    /// Creates a `FloatingButtonPresentable`
+    /// - Parameters:
+    ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
+    /// - Returns: A `FloatingButtonPresentable` implementation
+    @objc
+    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
+}
+#elseif os(tvOS)
+@available(tvOS 13.0, *)
+@available(tvOSApplicationExtension, unavailable)
+public protocol UIService {
+    func createFullscreenMessage(payload: any View, listener: FullscreenMessageNativeDelegate?) -> FullscreenPresentable
 
-        /// Creates a `FullscreenPresentable`
-        /// - Parameters:
-        ///     - payload: The payload used in the FullscreenPresentable as a string
-        ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
-        ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
-        /// - Returns: A `FullscreenPresentable` implementation
-        @objc
-        func createFullscreenMessage(payload: String, listener: FullscreenMessageDelegate?, isLocalImageUsed: Bool) -> FullscreenPresentable
+    func createFullscreenMessage(payload: any View, listener: FullscreenMessageNativeDelegate?, settings: MessageSettings?) -> FullscreenPresentable
 
-        /// Creates a `FullscreenPresentable`
-        /// - Parameters:
-        ///     - payload: The payload used in the FullscreenPresentable as a string
-        ///     - listener: The `FullscreenPresentable`'s `FullscreenMessageDelegate`
-        ///     - isLocalImageUsed: An optional flag indicating if a local image is used instead of the default image provided
-        ///     - settings: The `MessageSettings` that define construction, behavior and ownership of the newly created message
-        /// - Returns: A `FullscreenPresentable` implementation
-        @objc
-        optional func createFullscreenMessage(payload: String,
-                                              listener: FullscreenMessageDelegate?,
-                                              isLocalImageUsed: Bool,
-                                              settings: MessageSettings?) -> FullscreenPresentable
-
-        /// Creates a `FloatingButtonPresentable`
-        /// - Parameters:
-        ///     - listener: The `FloatingButtonPresentable`'s `FloatingButtonDelegate`
-        /// - Returns: A `FloatingButtonPresentable` implementation
-        @objc
-        func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
-    }
+    func createFloatingButton(listener: FloatingButtonDelegate) -> FloatingButtonPresentable
+}
 #endif
