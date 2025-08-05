@@ -16,7 +16,6 @@
 version: 2.1
 
 orbs:
-  # Note that with secrets security, codecov token will not be available to forks
   codecov: codecov/codecov@5.4.3
   macos: circleci/macos@2
 
@@ -26,46 +25,36 @@ workflows:
     jobs:
       - validate-code
       - test-ios-core:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-ios-services:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-ios-lifecycle:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-ios-identity:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-ios-signal:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-ios-integration:
           requires:
             - validate-code
       - test-tvos-core:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-tvos-services:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-tvos-lifecycle:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-tvos-identity:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-tvos-signal:
-          context: Codecov global upload token
           requires:
             - validate-code
       - test-tvos-integration:
