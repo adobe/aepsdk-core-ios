@@ -179,7 +179,7 @@ jobs:
   test-ios-core:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -199,7 +199,7 @@ jobs:
   test-ios-services:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -219,7 +219,7 @@ jobs:
   test-ios-lifecycle:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -239,7 +239,7 @@ jobs:
   test-ios-identity:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -259,7 +259,7 @@ jobs:
   test-ios-signal:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -279,7 +279,7 @@ jobs:
   test-ios-integration:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -295,7 +295,7 @@ jobs:
   test-tvos-core:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -315,7 +315,7 @@ jobs:
   test-tvos-services:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -335,7 +335,7 @@ jobs:
   test-tvos-lifecycle:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -355,7 +355,7 @@ jobs:
   test-tvos-identity:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -375,7 +375,7 @@ jobs:
   test-tvos-signal:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
@@ -395,7 +395,7 @@ jobs:
   test-tvos-integration:
     macos:
       xcode: 15.3.0
-      resource_class: macos.m4pro.medium
+      resource_class: m4pro.medium
 
     steps:
       - checkout
