@@ -90,12 +90,18 @@ class ConfigurationAppIDTests: XCTestCase {
 
         // Should be in storage
         XCTAssertEqual(validAppId, mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as? String)
+        XCTAssertEqual(1, mockRuntime.createdSharedStates.count)
 
         let appIdEvent2 = ConfigurationAppIDTests.createConfigAppIdEvent(appId: "valid-app-id2", isInternal: true)
         mockRuntime.simulateComingEvents(appIdEvent2)
 
         // appIdEvent2 should be dropped.
         XCTAssertEqual(validAppId, mockDataStore.dict[ConfigurationConstants.DataStoreKeys.PERSISTED_APPID] as? String)
+        // Extension should properly resolve the shared state to previous value eventhough it drops the event.
+        XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
+        if (mockRuntime.createdSharedStates.count == 2) {
+            XCTAssertEqual(mockRuntime.firstSharedState?.toAnyCodable(), mockRuntime.secondSharedState?.toAnyCodable())
+        }
     }
 
     func testInternalConfigureWithAppIdIsNotDroppedIfNoPersistedAppIdExists() {

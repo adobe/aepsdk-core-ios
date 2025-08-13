@@ -139,6 +139,7 @@ class Configuration: NSObject, Extension {
 
         guard !isStaleAppIdUpdateRequest(newAppId: appId, isInternalEvent: event.isInternalConfigEvent) else {
             Log.debug(label: name, "An explicit configureWithAppId request has preceded this internal event.")
+            sharedStateResolver(configState.environmentAwareConfiguration)
             return
         }
 
