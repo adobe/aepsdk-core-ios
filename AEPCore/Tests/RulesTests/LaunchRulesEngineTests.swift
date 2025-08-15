@@ -155,4 +155,46 @@ class LaunchRulesEngineTests: XCTestCase {
         let urlString = consequences?.first?.details["url"] as? String
         XCTAssertTrue(urlString?.contains("device=abc") ?? false) // verify token replacement occurred
     }
+    
+    func testReplaceRulesProcessesQueuedEventsOnce() {
+        // setup
+        let runtime = TestableExtensionRuntime()
+        
+        Log.logFilter = .debug
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_testDispatchEventCopy", withExtension: "json"), let data = try? Data(contentsOf: url) else {
+            XCTAssertTrue(false)
+            return
+        }
+
+        guard let rules = JSONRulesParser.parse(data) else {
+            XCTFail("unable to properly parse rules")
+            return
+        }
+        
+        let rulesEngine = LaunchRulesEngine(name: "rulesEngine_custom", extensionRuntime: runtime)
+        
+        // This event is queued as rules engine has no rules yet.
+        let event = Event(name:"test", type: EventType.lifecycle, source: EventSource.applicationLaunch, data:[:])
+        rulesEngine.process(event: event)
+        
+        // Rules engine will dispatch requestReset event after replacing rules
+        rulesEngine.replaceRules(with: rules)
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        XCTAssertEqual(EventType.rulesEngine, runtime.firstEvent?.type)
+        XCTAssertEqual(EventSource.requestReset, runtime.firstEvent?.source)
+        XCTAssertEqual("rulesEngine_custom", runtime.firstEvent?.data?[RulesConstants.Keys.RULES_ENGINE_NAME] as? String)
+        
+        // This event is still queued as rules engine has not received requestReset event
+        rulesEngine.process(event: event)
+        XCTAssertEqual(1, runtime.dispatchedEvents.count)
+        
+        if let requestResetEvent = runtime.firstEvent {
+            rulesEngine.process(event: requestResetEvent)
+            // Process both the queued lifecycle events
+            XCTAssertEqual(3, runtime.dispatchedEvents.count)
+        } else {
+            XCTFail()
+        }
+    }
 }

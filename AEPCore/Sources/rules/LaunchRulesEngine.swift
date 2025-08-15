@@ -36,7 +36,7 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS = "insertIfNotExists"
     /// Do not process Dispatch consequence if chained event count is greater than max
     private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
-    
+
     // Event History Operation constants
     private static let EVENT_HISTORY_OPERATION_KEY = "operation"
     private static let EVENT_HISTORY_CONTENT_KEY = "content"
@@ -106,16 +106,21 @@ public class LaunchRulesEngine {
                 return evaluateRules(for: event)
             }
 
-            // check if this is an event to kick processing of waitingEvents
-            // otherwise, add the event to waitingEvents
-            if (event.data?[RulesConstants.Keys.RULES_ENGINE_NAME] as? String) == name, event.source == EventSource.requestReset, event.type == EventType.rulesEngine {
-                for currentEvent in currentWaitingEvents {
-                    _ = evaluateRules(for: currentEvent)
-                }
-                waitingEvents = nil
-            } else {
+            // If the event is not a "reset" type for this rules engine,
+            // queue it to process after the engine receives the initial ruleset.
+            guard event.source == EventSource.requestReset,
+                  event.type == EventType.rulesEngine,
+                  event.data?[RulesConstants.Keys.RULES_ENGINE_NAME] as? String == name else {
                 waitingEvents?.append(event)
+                return event
             }
+
+            // At this point, we have a "reset" event for this rules engine.
+            // Process all previously waiting events first.
+            for currentEvent in currentWaitingEvents {
+                _ = evaluateRules(for: currentEvent)
+            }
+            // Finally, process the "reset" event itself.
             return evaluateRules(for: event)
         }
     }
