@@ -1,13 +1,24 @@
+#
+# Copyright 2020 Adobe. All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
+#
+
 # For a detailed guide to building and testing on iOS, read the docs:
 # https://circleci.com/docs/2.0/testing-ios/
 
 version: 2.1
 
 orbs:
-  # codecov: codecov/codecov@3.3.0
+  codecov: codecov/codecov@5.4.3
   macos: circleci/macos@2
-  
-# Workflows orchestrate a set of jobs to be run;
+
 workflows:
   version: 2
   build-test:
@@ -52,6 +63,11 @@ workflows:
       - test-spm-podspec-archive:
           requires:
             - validate-code
+          filters:
+            branches:
+              only:
+                - main
+                - staging
 
 commands: 
   install_dependencies:
@@ -93,11 +109,59 @@ commands:
           platform: "tvOS"
           device: "Apple TV"
           version: "17.4"
+      
+  parse_and_upload_coverage:
+    description: "Convert .xcresult → Cobertura XML and upload to Codecov"
+    parameters:
+      # Directory or file created by -resultBundlePath (ex: build/AEPCore-ios.xcresult)
+      path: { type: string }
+      # Codecov flag (ex: aepcore-ios-tests)
+      flag: { type: string }
+    steps:
+      - run:
+          name: Install xcresultparser
+          command: brew list xcresultparser || brew install xcresultparser
+
+      - run:
+          name: Parse .xcresult bundle(s)
+          command: |
+            set -eo pipefail
+            mkdir -p ./build/coverage
+
+            BUNDLE="<< parameters.path >>"
+
+            if [ -d "$BUNDLE" ]; then
+              echo "Directory given; searching for .xcresult…"
+              RESULT_FILES=$(find "$BUNDLE" -name "*.xcresult")
+              [ -z "$RESULT_FILES" ] && { echo "No .xcresult found"; exit 0; }
+
+              # Merge if there is more than one bundle
+              COUNT=$(echo "$RESULT_FILES" | wc -w)
+              if [ "$COUNT" -gt 1 ]; then
+                echo "Merging $COUNT result bundles"
+                MERGE_CMD="xcrun xccov merge --output ./build/Merged.xcresult"
+                for f in $RESULT_FILES; do MERGE_CMD="$MERGE_CMD $f"; done
+                eval "$MERGE_CMD"
+                xcresultparser --output-format cobertura ./build/Merged.xcresult > ./build/coverage/coverage.xml
+              else
+                echo "Single bundle found"
+                xcresultparser --output-format cobertura $RESULT_FILES > ./build/coverage/coverage.xml
+              fi
+            else
+              echo "File given; parsing $BUNDLE"
+              xcresultparser --output-format cobertura "$BUNDLE" > ./build/coverage/coverage.xml
+            fi
+
+      - codecov/upload:
+          files: ./build/coverage/coverage.xml
+          flags: << parameters.flag >>
+          upload_name: << parameters.flag >>
+          disable_search: true
 
 jobs:
   validate-code:
     macos:
-      xcode: 16.0.0 # Specify the Xcode version to use
+      xcode: 16.0.0
 
     steps:
       - checkout
@@ -114,8 +178,8 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -127,17 +191,14 @@ jobs:
           name: Run AEPCore Tests
           command: make aep-core-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepcore-ios-tests
-      #     upload_name: Coverage Report for AEPCore iOS Tests
-      #     xtra_args: -c -v --xc --xp  build/AEPCore-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPCore-ios.xcresult
+          flag: aepcore-ios-tests
 
   test-ios-services:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -149,17 +210,14 @@ jobs:
           name: Run AEPServices Tests
           command: make aep-services-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepservices-ios-tests
-      #     upload_name: Coverage Report for AEPServices iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPServices-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPServices-ios.xcresult
+          flag: aepservices-ios-tests
   
   test-ios-lifecycle:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -171,17 +229,14 @@ jobs:
           name: Run AEPLifecycle Tests
           command: make aep-lifecycle-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aeplifecycle-ios-tests
-      #     upload_name: Coverage Report for AEPLifecycle iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPLifecycle-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPLifecycle-ios.xcresult
+          flag: aeplifecycle-ios-tests
 
   test-ios-identity:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -193,17 +248,14 @@ jobs:
           name: Run AEPIdentity Tests
           command: make aep-identity-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepidentity-ios-tests
-      #     upload_name: Coverage Report for AEPIdentity iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPIdentity-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPIdentity-ios.xcresult
+          flag: aepidentity-ios-tests
 
   test-ios-signal:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -215,16 +267,14 @@ jobs:
           name: Run AEPSignal Tests
           command: make aep-signal-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepsignal-ios-tests
-      #     upload_name: Coverage Report for AEPSignal iOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPSignal-ios.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPSignal-ios.xcresult
+          flag: aepsignal-ios-tests
 
   test-ios-integration:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
+      
 
     steps:
       - checkout
@@ -239,8 +289,8 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -252,17 +302,14 @@ jobs:
           name: Run AEPCore tvOS Tests
           command: make aep-core-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepcore-tvos-tests
-      #     upload_name: Coverage Report for AEPCore tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPCore-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPCore-tvos.xcresult
+          flag: aepcore-tvos-tests
 
   test-tvos-services:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -274,17 +321,14 @@ jobs:
           name: Run AEPServices tvOS Tests
           command: make aep-services-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepservices-tvos-tests
-      #     upload_name: Coverage Report for AEPServices tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPServices-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPServices-tvos.xcresult
+          flag: aepservices-tvos-tests
 
   test-tvos-lifecycle:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -296,17 +340,14 @@ jobs:
           name: Run AEPLifecycle tvOS Tests
           command: make aep-lifecycle-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aeplifecycle-tvos-tests
-      #     upload_name: Coverage Report for AEPLifecycle tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPLifecycle-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPLifecycle-tvos.xcresult
+          flag: aeplifecycle-tvos-tests
 
   test-tvos-identity:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -318,17 +359,14 @@ jobs:
           name: Run AEPIdentity tvOS Tests
           command: make aep-identity-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepidentity-tvos-tests
-      #     upload_name: Coverage Report for AEPIdentity tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPIdentity-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPIdentity-tvos.xcresult
+          flag: aepidentity-tvos-tests
 
   test-tvos-signal:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -340,17 +378,14 @@ jobs:
           name: Run AEPSignal tvOS Tests
           command: make aep-signal-tvos-unit-test
 
-      # Code coverage upload using Codecov
-      # See options explanation here: https://docs.codecov.com/docs/codecov-uploader
-      # - codecov/upload:
-      #     flags: aepsignal-tvos-tests
-      #     upload_name: Coverage Report for AEPSignal tvOS Tests
-      #     xtra_args: -c -v --xc --xp build/AEPSignal-tvos.xcresult
+      - parse_and_upload_coverage:
+          path: build/AEPSignal-tvos.xcresult
+          flag: aepsignal-tvos-tests
 
   test-tvos-integration:
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
-
+      xcode: 15.3.0
+      
     steps:
       - checkout
 
@@ -364,7 +399,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 15.3.0 # Specify the Xcode version to use
+      xcode: 15.3.0
     
     steps:
       - checkout
@@ -374,22 +409,12 @@ jobs:
       # verify XCFramework archive builds
       - run:
           name: Build XCFramework
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
-              make ci-archive
-            fi
+          command: make ci-archive
       # verify podspec is valid
-      ## TODO: - Add this back in once we update the script to use gemfile cocoapods
-      # - run:
-      #     name: Test Podspec
-      #     command: |
-      #       if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
-      #         make test-podspec
-      #       fi
+      - run:
+          name: Test Podspec
+          command: make test-podspec
       # verify SPM works
       - run:
           name: Test SPM 
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "main" ] || [ "${CIRCLE_BRANCH}" == "staging" ]; then
-              make test-SPM-integration
-            fi
+          command: make test-SPM-integration
