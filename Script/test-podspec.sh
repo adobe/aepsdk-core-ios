@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -e # Any subsequent(*) commands which fail will cause the shell script to exit immediately
+# Install any missing gems automatically
+bundle check || bundle install --path vendor/bundle
 
 PROJECT_NAME=TestProject
 
@@ -44,7 +46,7 @@ end
 " >>Podfile
 
 # Install the pods.
-pod install
+bundle exec pod install
 
 # Archive for generic iOS device
 echo '############# Archive for generic iOS device ###############'
@@ -104,7 +106,7 @@ end
 " >>Podfile
 
 # Install the pods.
-pod install
+bundle exec pod install
 # Archive for generic tvOS device
 echo '############# Archive for generic tvOS device ###############'
 xcodebuild archive -scheme TestProject -workspace TestProject.xcworkspace -destination 'generic/platform=tvOS'
