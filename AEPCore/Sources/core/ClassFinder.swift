@@ -13,28 +13,25 @@
 import Foundation
 
 struct ClassFinder {
-    private static func allClasses() -> [AnyClass] {
-        let numberOfClasses = Int(objc_getClassList(nil, 0))
-        if numberOfClasses > 0 {
-            let classesPtr = UnsafeMutablePointer<AnyClass>.allocate(capacity: numberOfClasses)
-            let autoreleasingClasses = AutoreleasingUnsafeMutablePointer<AnyClass>(classesPtr)
-            _ = objc_getClassList(autoreleasingClasses, Int32(numberOfClasses))
-            defer { classesPtr.deallocate() }
-            let classes = (0 ..< numberOfClasses).map { classesPtr[$0] }
-            return classes
+    
+    static func classConformsToProtocol(_ cls: AnyClass?, `protocol`: Protocol) -> Bool {
+        var currentClass: AnyClass? = cls
+        while let someClass = currentClass {
+            if class_conformsToProtocol(someClass, `protocol`) { return true }
+            currentClass = class_getSuperclass(someClass)
         }
-        return []
+        return false
     }
-
+    
     static func classes(conformToProtocol `protocol`: Protocol) -> [AnyClass] {
-        let classes = self.allClasses().filter { foundClass in
-            var anyClass: AnyClass? = foundClass
-            while let foundClass = anyClass {
-                if class_conformsToProtocol(foundClass, `protocol`) { return true }
-                anyClass = class_getSuperclass(foundClass)
-            }
-            return false
-        }
-        return classes
+        var classCount: UInt32 = 0
+        guard let classList = objc_copyClassList(&classCount) else { return [] }
+        defer { free(UnsafeMutableRawPointer(classList)) }
+        
+        guard classCount > 0 else { return [] }
+        
+        let classes = UnsafeBufferPointer(start: classList, count: Int(classCount))
+        let filteredClasses = classes.filter { classConformsToProtocol($0, protocol: `protocol`) }        
+        return filteredClasses
     }
 }

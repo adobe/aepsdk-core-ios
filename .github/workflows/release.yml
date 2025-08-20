@@ -1,220 +1,113 @@
+#
+# Copyright 2021 Adobe. All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
+#
+
 name: Release
 
-
-on: 
+on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'tag/version'     
+        description: 'The tag (version) to be released (ex: 1.2.3).'
+        type: string
         required: true
-        default: '1.0.0'
-      
-      action_tag:
-        description: 'create tag ("no" to skip)'     
+
+      create-github-release:
+        description: 'Create a GitHub release with uploaded artifacts for AEPRulesEngine, AEPServices, AEPCore, AEPIdentity, AEPLifecycle, and AEPSignal. If the provided `tag` does not exist, it will be created.'
+        type: boolean
         required: true
-        default: 'yes'
-        
-      release_AEPServices:
-        description: 'release AEPServices ("no" to skip)'
+        default: true
+
+      pod-publish-AEPServices:
+        description: 'Publish AEPServices to Cocoapods.'
+        type: boolean
         required: true
-        default: 'yes'
-        
-      release_AEPCore:
-        description: 'release AEPCore ("no" to skip)'
+        default: true
+
+      pod-publish-AEPCore:
+        description: 'Publish AEPCore to Cocoapods.'
+        type: boolean
         required: true
-        default: 'yes'
-        
-      release_AEPIdentity:
-        description: 'release AEPIdentity ("no" to skip)'
+        default: true
+
+      pod-publish-AEPIdentity:
+        description: 'Publish AEPIdentity to Cocoapods.'
+        type: boolean
         required: true
-        default: 'yes'
-        
-      release_AEPLifecycle:
-        description: 'release AEPLifecycle ("no" to skip)'
+        default: true
+
+      pod-publish-AEPLifecycle:
+        description: 'Publish AEPLifecycle to Cocoapods.'
+        type: boolean
         required: true
-        default: 'yes'
-        
-      release_AEPSignal:
-        description: 'release AEPSignal ("no" to skip)'
+        default: true
+
+      pod-publish-AEPSignal:
+        description: 'Publish AEPSignal to Cocoapods.'
+        type: boolean
         required: true
-        default: 'yes'
+        default: true
 
 jobs:
-  release_core_bundle:
-    runs-on: macos-13
+  setup-configuration:
+    name: Set up configuration
+    runs-on: ubuntu-24.04
+    outputs:
+      pod-publish-extensions: ${{ steps.define-configuration.outputs.pod-publish-extensions }}
     steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: main
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '15.0.1'
-    
-    - name: Install jq
-      run: brew install jq
-    
-    - name: Install cocoapods
-      run: gem install cocoapods
-
-    - name: Install xcodegen
-      run: brew install xcodegen
-
-    - name: Check version in Podspec
-      run: |
-        set -eo pipefail
-        echo Target version: ${{ github.event.inputs.tag }}
-        make check-version VERSION=${{ github.event.inputs.tag }}
-    
-    - name: Pod repo update
-      run: | 
-        pod repo update
-
-    - name: SPM integration test
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      run: |
-        set -eo pipefail
-        echo SPM integration test starts:
-        make test-SPM-integration
-    
-    - name: podspec file verification
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      run: |
-        set -eo pipefail
-        echo podspec file verification starts:
-        make test-podspec 
-        
-    - name: Build Artifacts
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      run: |
-        make archive
-        make zip
-
-    - name: Detect AEPRulesEngine version
-      if: ${{ github.event.inputs.action_tag == 'yes' }}  
-      shell: bash
-      run: |
-        RULES_VERSION=$(pod spec cat AEPRulesEngine | jq '.version' | tr -d '"')
-        echo $RULES_VERSION
-        echo RULES_VERSION=$RULES_VERSION >> $GITHUB_ENV
-
-    - name: Create GH Release
-      id: create_release
-      uses: release-drafter/release-drafter@v5
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      with:
-        name: v${{ github.event.inputs.tag }}
-        tag: ${{ github.event.inputs.tag }}
-        version: ${{ github.event.inputs.tag }}
-        publish: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload - AEPRulesEngine
-      uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/AEPRulesEngine.xcframework.zip
-        asset_name: AEPRulesEngine-${{ env.RULES_VERSION }}.xcframework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload - AEPServices
-      uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/AEPServices.xcframework.zip
-        asset_name: AEPServices-${{ github.event.inputs.tag }}.xcframework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload - AEPCore
-      uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/AEPCore.xcframework.zip
-        asset_name: AEPCore-${{ github.event.inputs.tag }}.xcframework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload - AEPIdentity
-      uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/AEPIdentity.xcframework.zip
-        asset_name: AEPIdentity-${{ github.event.inputs.tag }}.xcframework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload - AEPLifecycle
-      uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/AEPLifecycle.xcframework.zip
-        asset_name: AEPLifecycle-${{ github.event.inputs.tag }}.xcframework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload - AEPSignal
-      uses: actions/upload-release-asset@v1
-      if: ${{ github.event.inputs.action_tag == 'yes' }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/AEPSignal.xcframework.zip
-        asset_name: AEPSignal-${{ github.event.inputs.tag }}.xcframework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
-    - name: Publish Pods - AEPServices
-      if: ${{ github.event.inputs.release_AEPServices == 'yes' }}
-      run: |
-        set -eo pipefail
-        pod trunk push AEPServices.podspec --allow-warnings --synchronous
-        pod repo update
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-
-    - name: Publish Pods - AEPCore
-      if: ${{ github.event.inputs.release_AEPCore == 'yes' }}
-      run: |
-        set -eo pipefail
-        pod trunk push AEPCore.podspec --allow-warnings --synchronous
-        pod repo update
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-    
-    - name: Publish Pods - AEPIdentity
-      if: ${{ github.event.inputs.release_AEPIdentity == 'yes' }}
-      run: |
-        set -eo pipefail
-        pod trunk push AEPIdentity.podspec --allow-warnings --synchronous
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}   
-    
-    - name: Publish Pods - AEPLifecycle
-      if: ${{ github.event.inputs.release_AEPLifecycle == 'yes' }}
-      run: |
-        set -eo pipefail
-        pod trunk push AEPLifecycle.podspec --allow-warnings --synchronous
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-
-    - name: Publish Pods - AEPSignal
-      if: ${{ github.event.inputs.release_AEPSignal == 'yes' }}
-      run: |
-        set -eo pipefail
-        pod trunk push AEPSignal.podspec --allow-warnings --synchronous
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        
+      - name: Define configuration
+        id: define-configuration
+        shell: bash
+        run: |
+          # Build the list of pods to publish based on booleans
+          extension_list=""
+          if [ "${{ inputs.pod-publish-AEPServices }}" = "true" ]; then
+            extension_list="$extension_list, AEPServices"
+          fi
+          if [ "${{ inputs.pod-publish-AEPCore }}" = "true" ]; then
+            extension_list="$extension_list, AEPCore"
+          fi
+          if [ "${{ inputs.pod-publish-AEPIdentity }}" = "true" ]; then
+            extension_list="$extension_list, AEPIdentity"
+          fi
+          if [ "${{ inputs.pod-publish-AEPLifecycle }}" = "true" ]; then
+            extension_list="$extension_list, AEPLifecycle"
+          fi
+          if [ "${{ inputs.pod-publish-AEPSignal }}" = "true" ]; then
+            extension_list="$extension_list, AEPSignal"
+          fi
+          # Remove the leading ", " if the list is not empty
+          pod_publish_extensions=$(echo "$extension_list" | sed 's/^, //')
+          # Echo values for visibility
+          echo "pod-publish-extensions: $pod_publish_extensions"
+          echo "pod-publish-extensions=$pod_publish_extensions" >> "$GITHUB_OUTPUT"
+  release:
+    needs: setup-configuration
+    permissions:
+        contents: write
+    uses: adobe/aepsdk-commons/.github/workflows/ios-release.yml@gha-ios-5.3.2
+    with:
+      tag: ${{ github.event.inputs.tag }}
+      create-github-release: ${{ github.event.inputs.create-github-release == 'true' && 'AEPServices, AEPCore, AEPIdentity, AEPLifecycle, AEPSignal' || '' }}
+      release-dependency-frameworks: ${{ github.event.inputs.create-github-release == 'true' && 'AEPRulesEngine' || '' }}
+      pod-publish-extensions: ${{ needs.setup-configuration.outputs.pod-publish-extensions }}
+      version-validation-paths: > 
+        AEPCore.xcodeproj/project.pbxproj, 
+        AEPCore.podspec, 
+        AEPCore/Sources/configuration/ConfigurationConstants.swift, 
+        AEPIdentity.podspec, 
+        AEPIdentity/Sources/IdentityConstants.swift, 
+        AEPLifecycle.podspec, 
+        AEPLifecycle/Sources/LifecycleConstants.swift, 
+        AEPSignal.podspec, 
+        AEPSignal/Sources/SignalConstants.swift, 
+        AEPServices.podspec
+    secrets: inherit

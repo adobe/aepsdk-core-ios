@@ -1,0 +1,58 @@
+#
+# Copyright 2022 Adobe. All rights reserved.
+# This file is licensed to you under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License. You may obtain a copy
+# of the License at http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+# OF ANY KIND, either express or implied. See the License for the specific language
+# governing permissions and limitations under the License.
+#
+
+name: Update Versions
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The new version to use for AEPCore, AEPIdentity, AEPLifecycle, AEPSignal, and AEPServices (ex: 1.2.3).'
+        type: string
+        required: true
+
+      branch:
+        description: 'The target branch where the version update will be applied and the pull request will be merged into.'
+        type: string
+        required: true
+
+      rules-engine-dependency:
+        description: 'If a version is provided, update AEPRulesEngine dependency in podspec and Package.swift.'
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  update-versions:
+    permissions:
+      contents: write
+      pull-requests: write
+    uses: adobe/aepsdk-commons/.github/workflows/versions.yml@gha-ios-5.3.2
+    with:
+      version: ${{ github.event.inputs.version }}
+      branch: ${{ github.event.inputs.branch }}
+      dependencies: AEPRulesEngine ${{ github.event.inputs.rules-engine-dependency }}, AEPCore ${{ github.event.inputs.version }}, AEPServices ${{ github.event.inputs.version }}
+      paths: >
+        AEPCore.xcodeproj/project.pbxproj, 
+        Package.swift:swift_spm, 
+        AEPCore.podspec, 
+        AEPIdentity.podspec, 
+        AEPLifecycle.podspec, 
+        AEPSignal.podspec, 
+        AEPServices.podspec, 
+        AEPCore/Sources/configuration/ConfigurationConstants.swift, 
+        AEPCore/Sources/eventhub/EventHubConstants.swift:swift_version_number, 
+        AEPCore/Tests/MobileCoreTests.swift:swift_test_version, 
+        AEPIdentity/Sources/IdentityConstants.swift, 
+        AEPLifecycle/Sources/LifecycleConstants.swift, 
+        AEPSignal/Sources/SignalConstants.swift, 
+      update: true
