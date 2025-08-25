@@ -31,6 +31,8 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
 
         /// When:
         rulesEngine.replaceRules(from: "http://test.com/rules.url")
+        processResetEvent()
+        
         let processedEvent = rulesEngine.process(event: defaultEvent)
 
         /// Then:
@@ -54,6 +56,8 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         if rulesEngine.replaceRulesWithCache(from: "http://test.com/rules.url") == false {
             XCTFail("Failed to replace rules with cache")
         }
+        processResetEvent()
+        
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
 
         // Multiple async functions are queued. Wait for them to complete before processing event. 
@@ -73,6 +77,8 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         }
 
         rulesEngine.replaceRulesWithManifest(from: filePath)
+        processResetEvent()
+        
         mockRuntime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: ["lifecyclecontextdata": ["carriername": "AT&T", "installevent": "Installevent"]], status: .set))
 
         let processedEvent = rulesEngine.process(event: defaultEvent)
@@ -1371,7 +1377,7 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         rulesEngine.process(event: defaultEvent)
 
         /// Then:
-        XCTAssertEqual(1, mockRuntime.dispatchedEvents.count)
+        XCTAssertEqual(2, mockRuntime.dispatchedEvents.count)
         XCTAssertEqual(1, mockRuntime.receivedEventHistoryRequests.count)
         XCTAssertEqual(false, mockRuntime.receivedEnforceOrder)
     }

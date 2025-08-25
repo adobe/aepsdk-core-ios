@@ -120,6 +120,8 @@ public class LaunchRulesEngine {
             for currentEvent in currentWaitingEvents {
                 _ = evaluateRules(for: currentEvent)
             }
+            waitingEvents = nil
+            
             // Finally, process the "reset" event itself.
             return evaluateRules(for: event)
         }
