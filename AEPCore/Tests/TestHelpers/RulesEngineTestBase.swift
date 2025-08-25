@@ -22,7 +22,8 @@ class RulesEngineTestBase: XCTestCase {
     var mockRuntime: TestableExtensionRuntime!
     var rulesEngine: LaunchRulesEngine!
     var defaultEvent: Event!
-
+    let rulesEngineName = "test_rules_engine"
+    
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
@@ -32,7 +33,7 @@ class RulesEngineTestBase: XCTestCase {
                              source: EventSource.responseContent,
                              data: ["lifecyclecontextdata": ["launchevent": "LaunchEvent"]])
         Log.logFilter = .trace
-        rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: mockRuntime)
+        rulesEngine = LaunchRulesEngine(name: rulesEngineName, extensionRuntime: mockRuntime)
         rulesEngine.trace { _, _, _, failure in
             print(failure ?? "unknown failure")
         }
@@ -44,7 +45,7 @@ class RulesEngineTestBase: XCTestCase {
     }
 
     /// Helper to reset the rules engine with new rules from a JSON file
-    func resetRulesEngine(withNewRules rulesJsonFileName: String) {
+    func resetRulesEngine(withNewRules rulesJsonFileName: String, processResetEvent: Bool = true) {
         let testBundle = Bundle(for: type(of: self))
         guard let url = testBundle.url(forResource: rulesJsonFileName, withExtension: "json"),
               let data = try? Data(contentsOf: url),
@@ -55,6 +56,14 @@ class RulesEngineTestBase: XCTestCase {
 
         rulesEngine.rulesEngine.clearRules()
         rulesEngine.rulesEngine.addRules(rules: rules)
+        
+        if processResetEvent {
+            self.processResetEvent()
+        }
+    }
+    
+    func processResetEvent() {
+        rulesEngine.process(event: Event(name: rulesEngineName, type: EventType.rulesEngine, source: EventSource.requestReset, data: [RulesConstants.Keys.RULES_ENGINE_NAME: rulesEngineName]))
     }
 
     /// Waits for the rules engine to process async events

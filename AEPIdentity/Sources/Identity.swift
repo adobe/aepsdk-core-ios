@@ -81,6 +81,10 @@ import Foundation
 
             return areSharedStatesReady
         } else if event.type == EventType.identity, event.source == EventSource.requestIdentity, ( event.baseUrl != nil ||  event.urlVariables ) {
+            guard getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value != nil else {
+                Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state value before processing [event:(\(event.name)) id:(\(event.id)].")
+                return false
+            }
 
             // analytics shared state will be null if analytics extension is not registered. Wait for analytics shared only if the status is pending or none
             if let analyticsSharedState = getSharedState(extensionName: IdentityConstants.SharedStateKeys.ANALYTICS, event: event), analyticsSharedState.status != .set {
@@ -89,13 +93,7 @@ import Foundation
             }
         }
 
-        let isConfigSharedStateSet = getSharedState(extensionName: IdentityConstants.SharedStateKeys.CONFIGURATION, event: event, resolution: .lastSet)?.value != nil
-
-        if !isConfigSharedStateSet {
-            Log.trace(label: "\(name):\(#function)", "Waiting for the Configuration shared state to be set before processing [event:(\(event.name)) id:(\(event.id)].")
-        }
-
-        return isConfigSharedStateSet
+        return true
     }
 
     // MARK: Event Listeners
