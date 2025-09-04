@@ -15,28 +15,33 @@ import Foundation
 import UIKit
 
 final class MobileCoreInitializer {
+
+    typealias NotificationObserver = (NSNotification.Name?, Any?, OperationQueue?, @escaping (Notification) -> Void) -> any NSObjectProtocol
+    
     private let LOG_TAG = "MobileCoreInitializer"
+    
+    private let UIApplicationSceneManifestKey = "UIApplicationSceneManifest"
 
     // Flag if 'initialize()' was called
     private let initialized = AtomicCounter()
-
-    // Function to return list of classes; see `ClassFinder`
-    private let classFinder: (Protocol) -> [AnyClass]
-
-    // Filter function to exclude Extensions from the final list passed to `MobileCore.registerExtensions`.
-    // EventHub automatically registers Configuration and the Placeholder extensions, filter them out from list to prevent duplicate registration warnings.
-    // Analytics defines AnalyticsBase and AnalyticsAppExtension classes which adopt Extension, filter them out to prevent registering multiple Analytics extensions.
-    private let extensionClassFilter: (AnyClass) -> Bool = {
-        let className = String(describing: type(of: $0))
-        return ![$0 === AEPCore.EventHubPlaceholderExtension.self,
-                $0 === AEPCore.Configuration.self,
-                className == "AnalyticsBase.Type",
-                className == "AnalyticsAppExtension.Type"]
-            .contains(true)
-    }
-
-    init(classFinder: @escaping (Protocol) -> [AnyClass] = ClassFinder.classes(conformToProtocol:)) {
-        self.classFinder = classFinder
+    
+    // Function to return list of AEP extensions; see `ExtensionFinder`
+    private let extensionFinder: () -> [NSObject.Type]
+    
+    // Function for bundle information access
+    private let bundleInfoProvider: (String) -> Any?
+    
+    // Function for adding notification observers
+    private let notificationObserver: NotificationObserver
+    
+    init(
+        extensionFinder: @escaping () -> [NSObject.Type] = ExtensionFinder.getExtensions,
+        bundleInfoProvider: @escaping (String) -> Any? = { Bundle.main.object(forInfoDictionaryKey: $0) },
+        notificationObserver: @escaping NotificationObserver = NotificationCenter.default.addObserver
+    ) {
+        self.extensionFinder = extensionFinder
+        self.bundleInfoProvider = bundleInfoProvider
+        self.notificationObserver = notificationObserver
     }
 
     @available(iOSApplicationExtension, unavailable)
@@ -59,21 +64,18 @@ final class MobileCoreInitializer {
         }
 
         // Setup Lifecycle tracking if enabled and register extensions.
-        // ClassFinder Extension discover requires a small but non-negligible amount of time to run, so
-        // use background thread to allow caller process to continue during initialization.
+        // Use background thread to allow caller process to continue during initialization.
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
 
-            if options.lifecycleAutomaticTrackingEnabled == true {
+            if options.lifecycleAutomaticTrackingEnabled {
                 self.setupLifecycle(additionalContextData: options.lifecycleAdditionalContextData)
             } else {
                 Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking disabled.")
             }
-
-            let classList = self.classFinder(Extension.self)
-            let filteredClassList = classList.filter(extensionClassFilter).compactMap { $0 as? NSObject.Type }
-
-            MobileCore.registerExtensions(filteredClassList) {
+            
+            let extensions = self.extensionFinder()
+            MobileCore.registerExtensions(extensions) {
                 completion?()
             }
         }
@@ -82,14 +84,8 @@ final class MobileCoreInitializer {
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     private func setupLifecycle(additionalContextData: [String: Any]? = nil) {
-        var usingSceneDelegate = false
-        if #available(iOS 13.0, tvOS 13.0, *) {
-            let sceneDelegateClasses = self.classFinder(UIWindowSceneDelegate.self)
-            if !sceneDelegateClasses.isEmpty {
-                usingSceneDelegate = true
-            }
-        }
-
+        // https://developer.apple.com/documentation/BundleResources/Information-Property-List/UIApplicationSceneManifest
+        let usingSceneDelegate = bundleInfoProvider(UIApplicationSceneManifestKey) != nil
         Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking enabled for \(usingSceneDelegate ? "UIScene" : "UIApplication").")
 
         // Call lifecycleStart immediately
@@ -101,18 +97,18 @@ final class MobileCoreInitializer {
 
         if usingSceneDelegate {
             if #available(iOS 13.0, tvOS 13.0, *) {
-                NotificationCenter.default.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: nil) { _ in
+                _ = notificationObserver(UIScene.willEnterForegroundNotification, nil, nil) { _ in
                     MobileCore.lifecycleStart(additionalContextData: additionalContextData)
                 }
-                NotificationCenter.default.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
+                _ = notificationObserver(UIScene.didEnterBackgroundNotification, nil, nil) { _ in
                     MobileCore.lifecyclePause()
                 }
             }
         } else {
-            NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: nil) { _ in
+            _ = notificationObserver(UIApplication.willEnterForegroundNotification, nil, nil) { _ in
                 MobileCore.lifecycleStart(additionalContextData: additionalContextData)
             }
-            NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: nil) { _ in
+            _ = notificationObserver(UIApplication.didEnterBackgroundNotification, nil, nil) { _ in
                 MobileCore.lifecyclePause()
             }
         }

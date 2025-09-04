@@ -39,8 +39,8 @@ class MobileCoreInitializerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
         expectation.assertForOverFulfill = true
 
-        // Set ClassFinder func to return just two extensions
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        // Set ExtensionFinder func to return just two extensions
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return [
                 MockExtension.self,
                 MockExtensionTwo.self
@@ -80,8 +80,8 @@ class MobileCoreInitializerTests: XCTestCase {
         expectation.assertForOverFulfill = true
 
         var finderExecutionCount = 0
-        // Set ClassFinder func to return MockExtension for first call and MockExtensionTwo for second call
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        // Set ExtensionFinder func to return MockExtension for first call and MockExtensionTwo for second call
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             finderExecutionCount += 1
             if finderExecutionCount == 1 {
                 return [MockExtension.self]
@@ -90,8 +90,7 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         })
 
-        let options = InitOptions()
-        options.lifecycleAutomaticTrackingEnabled = false // Disable lifecycle tracking to prevent addtional ClassFinder calls
+        let options = InitOptions()        
 
         // First call
         MobileCore.initialize(options: options) {
@@ -121,46 +120,6 @@ class MobileCoreInitializerTests: XCTestCase {
         XCTAssertFalse(registeredExtensions.keys.contains { $0 == "com.adobe.mockExtensionTwo" })
     }
 
-    func testInitializeFiltersOutAnalyticsBaseAndAnalyticsAppExtension() {
-        let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
-        expectation.assertForOverFulfill = true
-
-        // Set ClassFinder func to return just two extensions
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
-            return [
-                MockExtension.self,
-                AnalyticsBase.self,
-                AnalyticsAppExtension.self
-            ]
-        })
-
-        // test
-        MobileCore.initialize(options: InitOptions()) {
-            expectation.fulfill()
-        }
-
-        // verify
-        wait(for: [expectation], timeout: 1)
-
-        let eventHubState = EventHub.shared.getSharedState(extensionName: EventHubConstants.NAME, event: nil)?.value
-
-        guard let registeredExtensions = eventHubState?["extensions"] as? [String: Any] else {
-            XCTFail("Found no registered extensions!")
-            return
-        }
-
-        let expectedExtensions = [
-            "com.adobe.module.configuration",
-            "com.adobe.mockExtension"
-        ]
-
-        XCTAssertEqual(registeredExtensions.count, expectedExtensions.count)
-
-        for e in expectedExtensions {
-            XCTAssertTrue(registeredExtensions.keys.contains { $0 == e })
-        }
-    }
-
     func testInitializeCallsConfigWithAppId() {
         let expectation = XCTestExpectation(description: "Configure with app id dispatches a configuration request content with the app id")
         expectation.assertForOverFulfill = true
@@ -174,7 +133,7 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         }
 
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return [
                 MockExtensionTwo.self,
             ]
@@ -200,7 +159,7 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         }
 
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return [
                 MockExtensionTwo.self,
             ]
@@ -227,7 +186,7 @@ class MobileCoreInitializerTests: XCTestCase {
             }
         }
 
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return [
                 MockExtensionTwo.self,
             ]
@@ -240,31 +199,29 @@ class MobileCoreInitializerTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-    func testInitializeNoConfigOptionSet() {
-        func testInitializeCallsConfigWithFileInPath() {
-            // setup
-            let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
-            expectation.assertForOverFulfill = true
+    func testInitializeNoConfigOptionSet() {        
+        // setup
+        let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
+        expectation.assertForOverFulfill = true
 
-            registerMockExtension(MockExtension.self)
-            EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { _ in
-                XCTFail("Event of type Configuration and source Request Content not expected.")
-            }
-
-            MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
-                return [
-                    MockExtensionTwo.self,
-                ]
-            })
-
-            // test
-            MobileCore.initialize(options: InitOptions()) {
-                expectation.fulfill()
-            }
-
-            // verify
-            wait(for: [expectation], timeout: 1)
+        registerMockExtension(MockExtension.self)
+        EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.configuration, source: EventSource.requestContent) { _ in
+            XCTFail("Event of type Configuration and source Request Content not expected.")
         }
+
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
+            return [
+                MockExtensionTwo.self,
+            ]
+        })
+
+        // test
+        MobileCore.initialize(options: InitOptions()) {
+            expectation.fulfill()
+        }
+
+        // verify
+        wait(for: [expectation], timeout: 1)        
     }
 
     func testInitializeSetsAppGroup() {
@@ -274,7 +231,7 @@ class MobileCoreInitializerTests: XCTestCase {
 
         let expectedAppGroup = "testAppGroup"
 
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder:{ _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return [
                 MockExtension.self,
             ]
@@ -295,88 +252,175 @@ class MobileCoreInitializerTests: XCTestCase {
     }
 
     @available(iOS 13.0, tvOS 13.0, *) // test requires UIWindowSceneDelegate
-    func testInitializeEnablesAutomaticLifecycleTrackingForScreenDelegate() {
+    func testInitializeEnablesAutomaticLifecycleTrackingForSceneDelegate() {
         // setup
-        let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
+        let expectation = XCTestExpectation(description: "lifecycle events received")
+        expectation.expectedFulfillmentCount = 3 // 1 initial start + 1 foreground start + 1 background pause
         expectation.assertForOverFulfill = true
 
         registerMockExtension(MockExtension.self)
+        
+        var capturedEvents: [Event] = []
+        var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
+        
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
-            if let _ = event.data, let action = event.data![CoreConstants.Keys.ACTION] as? String {
-                if (action == CoreConstants.Lifecycle.START) {
-                    expectation.fulfill()
-                }
-            }
+            capturedEvents.append(event)
+            expectation.fulfill()
         }
 
-        // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
-        // However, that check just verifies ClassFinder returns a non-zero list so the mocked
-        // function below will pass the test.
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
-            return [MockExtensionTwo.self]
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
+            return []
+        }, bundleInfoProvider: { $0 == "UIApplicationSceneManifest" ? [:] : nil },
+           notificationObserver: { name, object, queue, handler in
+            // Capture handlers for both foreground and background notifications
+            if let notificationName = name {
+                capturedNotificationHandlers[notificationName] = handler
+            }
+            return NSObject()
         })
 
         // After extension registration, for a SceneDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: InitOptions())
-
+        
+        Thread.sleep(forTimeInterval: 0.5)
+        
+        // Verify only the expected notifications are registered
+        let expectedNotifications: Set<NSNotification.Name> = [
+            UIScene.willEnterForegroundNotification,
+            UIScene.didEnterBackgroundNotification
+        ]
+        let actualNotifications = Set(capturedNotificationHandlers.keys)
+        XCTAssertEqual(actualNotifications, expectedNotifications, "Only UIScene foreground and background notifications should be registered")
+        
+        // Simulate scene foreground notification
+        if let foregroundHandler = capturedNotificationHandlers[UIScene.willEnterForegroundNotification] {
+            let foregroundNotification = Notification(name: UIScene.willEnterForegroundNotification)
+            foregroundHandler(foregroundNotification)
+        }
+        
+        // Simulate scene background notification
+        if let backgroundHandler = capturedNotificationHandlers[UIScene.didEnterBackgroundNotification] {
+            let backgroundNotification = Notification(name: UIScene.didEnterBackgroundNotification)
+            backgroundHandler(backgroundNotification)
+        }
+        
         // verify lifecycle start event dispatched
         wait(for: [expectation], timeout: 2)
+        
+        // Check total count = 3
+        XCTAssertEqual(capturedEvents.count, 3, "Should have exactly 3 lifecycle events")
+        
+        // Filter and check START events = 2
+        let startEvents = capturedEvents.filter { event in
+            event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.START
+        }
+        XCTAssertEqual(startEvents.count, 2, "Should have exactly 2 START events")
+        
+        // Filter and check PAUSE events = 1
+        let pauseEvents = capturedEvents.filter { event in
+            event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.PAUSE
+        }
+        XCTAssertEqual(pauseEvents.count, 1, "Should have exactly 1 PAUSE event")
     }
 
     func testInitializeEnablesAutomaticLifecycleTrackingForAppDelegate() {
         // setup
-        let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
+        let expectation = XCTestExpectation(description: "lifecycle events received")
+        expectation.expectedFulfillmentCount = 3 // 1 initial start + 1 foreground start + 1 background pause
         expectation.assertForOverFulfill = true
 
         registerMockExtension(MockExtension.self)
+        
+        var capturedEvents: [Event] = []
+        var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
+        
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
-            if let _ = event.data, let action = event.data![CoreConstants.Keys.ACTION] as? String {
-                if (action == CoreConstants.Lifecycle.START) {
-                    expectation.fulfill()
-                }
-            }
+            capturedEvents.append(event)
+            expectation.fulfill()
         }
 
-        // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
-        // However, that check just verifies ClassFinder returns a non-zero list.
-        // Returing an empty list will trigger the use of UIWindowApplicationDelegate.
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return []
+        }, bundleInfoProvider: { _ in nil },
+           notificationObserver: { name, object, queue, handler in
+            // Capture handlers for both foreground and background notifications
+            if let notificationName = name {
+                capturedNotificationHandlers[notificationName] = handler
+            }
+            return NSObject()
         })
 
-        // After extension registration, for an AppDelegate app,
-        // lifecycleStart is called immediately if the application is not in the background.
+        // After extension registration, for an AppDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: InitOptions())
-
-        // verify lifecycle start event dispatched
+        
+        Thread.sleep(forTimeInterval: 0.5)
+        
+        // Verify only the expected notifications are registered
+        let expectedNotifications: Set<NSNotification.Name> = [
+            UIApplication.willEnterForegroundNotification,
+            UIApplication.didEnterBackgroundNotification
+        ]
+        let actualNotifications = Set(capturedNotificationHandlers.keys)
+        XCTAssertEqual(actualNotifications, expectedNotifications, "Only UIApplication foreground and background notifications should be registered")
+        
+        // Simulate application foreground notification
+        if let foregroundHandler = capturedNotificationHandlers[UIApplication.willEnterForegroundNotification] {
+            let foregroundNotification = Notification(name: UIApplication.willEnterForegroundNotification)
+            foregroundHandler(foregroundNotification)
+        }
+        
+        // Simulate application background notification
+        if let backgroundHandler = capturedNotificationHandlers[UIApplication.didEnterBackgroundNotification] {
+            let backgroundNotification = Notification(name: UIApplication.didEnterBackgroundNotification)
+            backgroundHandler(backgroundNotification)
+        }
+        
+        // verify lifecycle events dispatched
         wait(for: [expectation], timeout: 2)
+        
+        // Check total count = 3
+        XCTAssertEqual(capturedEvents.count, 3, "Should have exactly 3 lifecycle events")
+        
+        // Filter and check START events = 2
+        let startEvents = capturedEvents.filter { event in
+            event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.START
+        }
+        XCTAssertEqual(startEvents.count, 2, "Should have exactly 2 START events")
+        
+        // Filter and check PAUSE events = 1
+        let pauseEvents = capturedEvents.filter { event in
+            event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.PAUSE
+        }
+        XCTAssertEqual(pauseEvents.count, 1, "Should have exactly 1 PAUSE event")
     }
-
-    @available(iOS 13.0, tvOS 13.0, *) // test requires UIWindowSceneDelegate
+    @available(iOS 13.0, tvOS 13.0, *)
     func testInitializeEnablesAutomaticLifecycleTrackingWithContextDataForSceneDelegate() {
         // setup
-        let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
+        let expectation = XCTestExpectation(description: "lifecycle start events received")
+        expectation.expectedFulfillmentCount = 2 // 1 initial start + 1 foreground start
         expectation.assertForOverFulfill = true
 
         let expectedLifecycleAdditionalContextData = ["key" : "value"]
 
         registerMockExtension(MockExtension.self)
+        
+        var capturedStartEvents: [Event] = []
+        var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
+        
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
-            if let _ = event.data, let action = event.data![CoreConstants.Keys.ACTION] as? String, let additionalData = event.data![CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA] as? [String: String] {
-                if (action == CoreConstants.Lifecycle.START) {
-                    XCTAssertEqual(additionalData, expectedLifecycleAdditionalContextData)
-                    expectation.fulfill()
-                }
-            }
+            capturedStartEvents.append(event)
+            expectation.fulfill()            
         }
 
-        // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
-        // However, that check just verifies ClassFinder returns a non-zero list so the mocked
-        // function below will pass the test.
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
-            return [
-                MockExtensionTwo.self
-            ]
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
+            return []
+        }, bundleInfoProvider: { $0 == "UIApplicationSceneManifest" ? [:] : nil },
+           notificationObserver: { name, object, queue, handler in
+            // Capture handlers for notifications
+            if let notificationName = name {
+                capturedNotificationHandlers[notificationName] = handler
+            }
+            return NSObject()
         })
 
         let initOptions = InitOptions()
@@ -384,46 +428,82 @@ class MobileCoreInitializerTests: XCTestCase {
 
         // After extension registration, for a SceneDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: initOptions)
-
-        // verify lifecycle start event dispatched
+        
+        Thread.sleep(forTimeInterval: 0.5)
+        
+        // Simulate only foreground notification
+        if let foregroundHandler = capturedNotificationHandlers[UIScene.willEnterForegroundNotification] {
+            let foregroundNotification = Notification(name: UIScene.willEnterForegroundNotification)
+            foregroundHandler(foregroundNotification)
+        }
+        
+        // verify lifecycle start events dispatched
         wait(for: [expectation], timeout: 2)
+        
+        // Check that we captured exactly 2 START events with context data
+        XCTAssertEqual(capturedStartEvents.count, 2, "Should have exactly 2 START events with context data")
+        
+        // Verify both events have the expected context data
+        for event in capturedStartEvents {
+            XCTAssertEqual(event.data![CoreConstants.Keys.ACTION] as? String, CoreConstants.Lifecycle.START)
+            XCTAssertEqual(event.data![CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA] as? [String: String], expectedLifecycleAdditionalContextData)
+        }
     }
-
     func testInitializeEnablesAutomaticLifecycleTrackingWithContextData() {
         // setup
-        let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
+        let expectation = XCTestExpectation(description: "lifecycle start events received")
+        expectation.expectedFulfillmentCount = 2 // 1 initial start + 1 foreground start
         expectation.assertForOverFulfill = true
 
         let expectedLifecycleAdditionalContextData = ["key" : "value"]
 
         registerMockExtension(MockExtension.self)
+        
+        var capturedStartEvents: [Event] = []
+        var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
+        
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
-            if let _ = event.data, let action = event.data![CoreConstants.Keys.ACTION] as? String, let additionalData = event.data![CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA] as? [String: String] {
-                if (action == CoreConstants.Lifecycle.START) {
-                    XCTAssertEqual(additionalData, expectedLifecycleAdditionalContextData)
-                    expectation.fulfill()
-                }
-            }
+            capturedStartEvents.append(event)
+            expectation.fulfill()            
         }
 
-        // The ClassFinder function is used to check if UIWindowSceneDelegate is available.
-        // However, that check just verifies ClassFinder returns a non-zero list.
-        // Returing an empty list will trigger the use of UIWindowApplicationDelegate.
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return []
+        }, bundleInfoProvider: { _ in nil },
+           notificationObserver: { name, object, queue, handler in
+            // Capture handlers for notifications
+            if let notificationName = name {
+                capturedNotificationHandlers[notificationName] = handler
+            }
+            return NSObject()
         })
 
         let initOptions = InitOptions()
         initOptions.lifecycleAdditionalContextData = expectedLifecycleAdditionalContextData
 
-        // After extension registration, for an AppDelegate app,
-        // lifecycleStart is called immediately if the application is not in the background.
+        // After extension registration, for an AppDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: initOptions)
-
-        // verify lifecycle start event dispatched
+        
+        Thread.sleep(forTimeInterval: 0.5)
+        
+        // Simulate only foreground notification
+        if let foregroundHandler = capturedNotificationHandlers[UIApplication.willEnterForegroundNotification] {
+            let foregroundNotification = Notification(name: UIApplication.willEnterForegroundNotification)
+            foregroundHandler(foregroundNotification)
+        }
+        
+        // verify lifecycle start events dispatched
         wait(for: [expectation], timeout: 2)
+        
+        // Check that we captured exactly 2 START events with context data
+        XCTAssertEqual(capturedStartEvents.count, 2, "Should have exactly 2 START events with context data")
+        
+        // Verify both events have the expected context data
+        for event in capturedStartEvents {
+            XCTAssertEqual(event.data![CoreConstants.Keys.ACTION] as? String, CoreConstants.Lifecycle.START)
+            XCTAssertEqual(event.data![CoreConstants.Keys.ADDITIONAL_CONTEXT_DATA] as? [String: String], expectedLifecycleAdditionalContextData)
+        }
     }
-
     func testInitializeDisablesAutomaticLifecycleTracking() {
         // setup
         let expectation = XCTestExpectation(description: "initialization completed in timely fashion")
@@ -433,12 +513,11 @@ class MobileCoreInitializerTests: XCTestCase {
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { _ in
             XCTFail("Event with type Generic Lifecycle and source Request Context not expected.")
         }
-
-        MobileCore.mobileCoreInitializer = MobileCoreInitializer(classFinder: { _ in
-            return [
-                MockExtensionTwo.self,
-            ]
-        })
+        
+        MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: { return [] } , notificationObserver: { _, _, _, _ in
+            XCTFail("Lifecycle notification listeners are not expected.")
+            return NSObject()
+        } )
 
         let initOptions = InitOptions()
         initOptions.lifecycleAutomaticTrackingEnabled = false
@@ -451,52 +530,4 @@ class MobileCoreInitializerTests: XCTestCase {
         wait(for: [expectation], timeout: 1)
     }
 
-}
-
-private class AnalyticsBase: NSObject, Extension {
-    var name: String = "com.adobe.fake.analytics"
-
-    var friendlyName: String = "Fake Analytics Base"
-
-    static var extensionVersion: String  = "0.0.1"
-
-    var metadata: [String : String]?
-
-    var runtime: any AEPCore.ExtensionRuntime
-
-    func onRegistered() {}
-
-    func onUnregistered() {}
-
-    required init?(runtime: any AEPCore.ExtensionRuntime) {
-        self.runtime = runtime
-    }
-    
-    func readyForEvent(_: Event) -> Bool {
-        return true
-    }
-}
-
-public class AnalyticsAppExtension: NSObject, Extension {
-    public var name: String = "com.adobe.fake.analyticsappextension"
-
-    public var friendlyName: String = "Fake Analytics App Extension"
-
-    public static var extensionVersion: String  = "0.0.1"
-
-    public var metadata: [String : String]?
-
-    public var runtime: any AEPCore.ExtensionRuntime
-
-    public func onRegistered() {}
-
-    public func onUnregistered() {}
-
-    public required init?(runtime: any AEPCore.ExtensionRuntime) {
-        self.runtime = runtime
-    }
-
-    public func readyForEvent(_: Event) -> Bool {
-        return true
-    }
 }
