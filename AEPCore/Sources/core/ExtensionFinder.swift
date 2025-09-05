@@ -23,7 +23,7 @@ struct ExtensionFinder {
         "AEPSignal.Signal",
         "AEPLifecycle.Lifecycle",
         "AEPAssurance.Assurance",
-        "AEPUserProfile.Profile",
+        "AEPUserProfile.UserProfile",
         "AEPAnalytics.Analytics",
         "AEPAudience.Audience",
         "AEPMedia.Media",
