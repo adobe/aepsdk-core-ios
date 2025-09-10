@@ -67,6 +67,8 @@
 		21F79ABF24E71B03003204C3 /* IDParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABD24E7144F003204C3 /* IDParserTests.swift */; };
 		21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC024E72204003204C3 /* V4MigratorTests.swift */; };
 		21FE152024F03254008A82FF /* IdentityPublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */; };
+		241D9B352E71E8C800969B09 /* EventHistoryDatabaseMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */; };
+		241D9B372E71EB0900969B09 /* FileManager+Directories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B362E71EA8700969B09 /* FileManager+Directories.swift */; };
 		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */ = {isa = PBXBuildFile; fileRef = 2438B92929BF906F001D6F3A /* rules_testTimestampu.json */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
@@ -839,6 +841,8 @@
 		21F79ABD24E7144F003204C3 /* IDParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParserTests.swift; sourceTree = "<group>"; };
 		21F79AC024E72204003204C3 /* V4MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4MigratorTests.swift; sourceTree = "<group>"; };
 		21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPublicAPITests.swift; sourceTree = "<group>"; };
+		241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabaseMigrator.swift; sourceTree = "<group>"; };
+		241D9B362E71EA8700969B09 /* FileManager+Directories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Directories.swift"; sourceTree = "<group>"; };
 		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		2438B92929BF906F001D6F3A /* rules_testTimestampu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTimestampu.json; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
@@ -1437,6 +1441,7 @@
 		21377D3F24E33830004BAC01 /* migration */ = {
 			isa = PBXGroup;
 			children = (
+				241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */,
 				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
 				215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */,
 				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
@@ -1868,6 +1873,7 @@
 		3F0397E124BE60910019F095 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				241D9B362E71EA8700969B09 /* FileManager+Directories.swift */,
 				3F0397E224BE60910019F095 /* hitprocessor */,
 				3F0397E724BE60910019F095 /* unzip */,
 				3F0397F124BE60910019F095 /* AnyCodable.swift */,
@@ -3453,6 +3459,7 @@
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
 				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
 				216A15C8257818B200D43848 /* Data+HexString.swift in Sources */,
+				241D9B352E71E8C800969B09 /* EventHistoryDatabaseMigrator.swift in Sources */,
 				3F2B1DC5263221580030F50B /* LaunchRulesEngine+Downloader.swift in Sources */,
 				3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */,
 				3FB66AE224CA004400502CAF /* Event+Configuration.swift in Sources */,
@@ -3654,6 +3661,7 @@
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
 				246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */,
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
+				241D9B372E71EB0900969B09 /* FileManager+Directories.swift in Sources */,
 				92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
 				92F06D0425BA33F4004C1700 /* Showable.swift in Sources */,

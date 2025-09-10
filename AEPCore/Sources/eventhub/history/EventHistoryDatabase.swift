@@ -199,36 +199,13 @@ class EventHistoryDatabase: EventHistoryStore {
     // MARK: - private methods
 
     private func connect() -> OpaquePointer? {
-        migrateDatabase()
-        
+        EventHistoryDatabaseMigrator.migrate()
+                
         if let database = SQLiteWrapper.connect(databaseFilePath: dbFilePath, databaseName: dbName) {
             return database
         } else {
             Log.warning(label: Self.LOG_PREFIX, "Failed to connect to database: \(dbName).")
             return nil
-        }
-    }
-    
-    private func migrateDatabase() {
-        let fileManager = FileManager.default
-        guard let cachesUrl = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            // Handle the case where the directory URL could not be found
-            fatalError("Could not find the caches directory URL.")
-        }
-        
-        let oldDbFilePath = cachesUrl.appendingPathComponent(dbName).path
-        
-        // migrate existing EventHistory database if it exists
-        if FileManager.default.fileExists(atPath: oldDbFilePath) {
-            guard let applicationSupportUrl = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                fatalError("Could not find the applicationSupport directory URL.")
-            }
-            let newDbFilePath = applicationSupportUrl.appendingPathComponent(dbName).path
-            do {
-                try FileManager.default.moveItem(atPath: oldDbFilePath, toPath: newDbFilePath)
-            } catch {
-                Log.warning(label: Self.LOG_PREFIX, "Failed to migrate database: \(error.localizedDescription).")
-            }
         }
     }
 
