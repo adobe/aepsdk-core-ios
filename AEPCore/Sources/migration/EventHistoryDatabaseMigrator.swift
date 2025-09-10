@@ -13,12 +13,11 @@
 import AEPServices
 
 struct EventHistoryDatabaseMigrator {
-    static let LOG_PREFIX = "EventHistoryDatabaseMigrator"
-    static let dbName = "com.adobe.eventHistory"
-    static let dbFilePath: FileManager.SearchPathDirectory = .applicationSupportDirectory
-    static let legacyDbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
-    
     static func migrate() {
+        let LOG_PREFIX = "EventHistoryDatabaseMigrator"
+        let dbName = "com.adobe.eventHistory"
+        let dbFilePath: FileManager.SearchPathDirectory = .applicationSupportDirectory
+        let legacyDbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
         let fileManager = FileManager.default
         
         guard let legacyDbUrl = fileManager.urls(for: legacyDbFilePath, in: .userDomainMask).first?.appendingPathComponent(dbName),
@@ -40,11 +39,11 @@ struct EventHistoryDatabaseMigrator {
         
         let newDbUrl = applicationSupportUrl.appendingPathComponent(dbName)
         do {
-            Log.debug(label: Self.LOG_PREFIX, "Attempting to migrate EventHistory database from '\(legacyDbUrl)' to '\(newDbUrl)'...")
+            Log.debug(label: LOG_PREFIX, "Attempting to migrate EventHistory database from '\(legacyDbUrl)' to '\(newDbUrl)'...")
             try FileManager.default.moveItem(atPath: legacyDbUrl.path, toPath: newDbUrl.path)
-            Log.debug(label: Self.LOG_PREFIX, "Successfully migrated EventHistory database.")
+            Log.debug(label: LOG_PREFIX, "Successfully migrated EventHistory database.")
         } catch {
-            Log.warning(label: Self.LOG_PREFIX, "Failed to migrate database: \(error.localizedDescription).")
+            Log.warning(label: LOG_PREFIX, "Failed to migrate database: \(error.localizedDescription).")
         }
     }
 }
