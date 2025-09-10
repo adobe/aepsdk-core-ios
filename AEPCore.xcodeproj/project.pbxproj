@@ -1442,14 +1442,14 @@
 			isa = PBXGroup;
 			children = (
 				241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */,
-				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
-				215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */,
-				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
-				218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */,
 				21F79AB624E704C5003204C3 /* IDParser.swift */,
 				21F79ABA24E70CDC003204C3 /* IDParsing.swift */,
 				7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */,
 				7522618C2AABBE9600D59847 /* UserDefaultMigrationConstants.swift */,
+				215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */,
+				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
+				218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */,
+				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -1873,12 +1873,12 @@
 		3F0397E124BE60910019F095 /* utility */ = {
 			isa = PBXGroup;
 			children = (
-				241D9B362E71EA8700969B09 /* FileManager+Directories.swift */,
 				3F0397E224BE60910019F095 /* hitprocessor */,
 				3F0397E724BE60910019F095 /* unzip */,
 				3F0397F124BE60910019F095 /* AnyCodable.swift */,
 				3F0397E624BE60910019F095 /* AtomicCounter.swift */,
 				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
+				241D9B362E71EA8700969B09 /* FileManager+Directories.swift */,
 				3F0397EE24BE60910019F095 /* OperationOrderer.swift */,
 				BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */,
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
