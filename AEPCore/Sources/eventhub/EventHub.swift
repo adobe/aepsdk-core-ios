@@ -34,7 +34,7 @@ final class EventHub {
     private let eventQueue = OperationOrderer<Event>("EventHub")
     private var preprocessors = ThreadSafeArray<EventPreprocessor>(identifier: "com.adobe.eventHub.preprocessors.queue")
     private var started = false // true if the `EventHub` is started, false otherwise. Should only be accessed from within the `eventHubQueue`
-    private let eventHistory: EventHistoryProvider?
+    private var eventHistory: EventHistoryProvider?
     private var wrapperType: WrapperType = .none
     #if DEBUG
         public internal(set) static var shared = EventHub()
@@ -43,10 +43,17 @@ final class EventHub {
     #endif
 
     // MARK: - Internal API
+    /// Creates a new instance of `EventHub`
+    convenience init() {
+        self.init(eventHistory: nil)
+    }
 
     /// Creates a new instance of `EventHub`
-    init(eventHistory: EventHistoryProvider? = EventHistory()) {
-        self.eventHistory = eventHistory
+    /// This initializer should only be called for debugging purposes.
+    /// In production implementations of the SDK, use the convenience `init()` method instead.
+    init(eventHistory: EventHistoryProvider? = nil) {
+        initEventHistory(eventHistory)
+        
         // setup a place-holder extension container for `EventHub` so we can shared and retrieve state
         registerExtension(EventHubPlaceholderExtension.self, completion: { _ in })
 
@@ -94,6 +101,17 @@ final class EventHub {
             }
 
             return true
+        }
+    }
+    
+    private func initEventHistory(_ eventHistory: EventHistoryProvider? = nil) {
+        if eventHistory != nil {
+            self.eventHistory = eventHistory
+            return
+        }
+        
+        DispatchQueue.global().async {
+            self.eventHistory = EventHistory()
         }
     }
 
