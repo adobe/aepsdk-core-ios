@@ -28,7 +28,7 @@ public struct SQLiteWrapper {
             Log.warning(label: LOG_PREFIX, "Failed to open database - database name provided is empty")
             return nil
         }
-        let fileURL = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(databaseName)
+        let fileURL = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(databaseName)
         guard let url = fileURL else {
             Log.warning(label: LOG_PREFIX, "Cannot create database connection due to invalid file path: SearchPathDirectory[\(databaseFilePath.rawValue)]/\(databaseName)")
             return nil

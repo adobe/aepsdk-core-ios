@@ -20,34 +20,31 @@ struct EventHistoryDatabaseMigrator {
     
     static func migrate() {
         let fileManager = FileManager.default
-        guard let cachesUrl = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            Log.warning(label: LOG_PREFIX, "Unable to obtain url for 'Caches' directory from the file manager. EventHistory database migration failed.")
+        
+        guard let legacyDbUrl = fileManager.urls(for: legacyDbFilePath, in: .userDomainMask).first?.appendingPathComponent(dbName),
+              fileManager.fileExists(atPath: legacyDbUrl.path) else {
+            // no migration is needed
             return
         }
         
-        let oldDbFilePath = cachesUrl.appendingPathComponent(dbName).path
+        guard let applicationSupportUrl = fileManager.urls(for: dbFilePath, in: .userDomainMask).first else {
+            Log.warning(label: LOG_PREFIX, "Unable to obtain url for 'Application Support' directory from the file manager. EventHistory database migration failed.")
+            return
+        }
         
-        // migrate existing EventHistory database if it exists
-        if FileManager.default.fileExists(atPath: oldDbFilePath) {
-            guard let applicationSupportUrl = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
-                Log.warning(label: LOG_PREFIX, "Unable to obtain url for 'Application Support' directory from the file manager. EventHistory database migration failed.")
-                return
-            }
-            
-            // create the Application Support directory if it doesn't exist
-            guard FileManager.default.createDirectoryIfNeeded(at: applicationSupportUrl) else {
-                Log.warning(label: LOG_PREFIX, "Unable to create 'Application Support' directory. EventHistory database migration failed.")
-                return
-            }
-            
-            let newDbFilePath = applicationSupportUrl.appendingPathComponent(dbName).path
-            do {
-                Log.debug(label: Self.LOG_PREFIX, "Attempting to migrate EventHistory database from '\(oldDbFilePath)' to '\(newDbFilePath)'...")
-                try FileManager.default.moveItem(atPath: oldDbFilePath, toPath: newDbFilePath)
-                Log.debug(label: Self.LOG_PREFIX, "Successfully migrated EventHistory database.")
-            } catch {
-                Log.warning(label: Self.LOG_PREFIX, "Failed to migrate database: \(error.localizedDescription).")
-            }
+        // create the Application Support directory if it doesn't exist
+        guard fileManager.createDirectoryIfNeeded(at: applicationSupportUrl) else {
+            Log.warning(label: LOG_PREFIX, "Unable to create 'Application Support' directory. EventHistory database migration failed.")
+            return
+        }
+        
+        let newDbUrl = applicationSupportUrl.appendingPathComponent(dbName)
+        do {
+            Log.debug(label: Self.LOG_PREFIX, "Attempting to migrate EventHistory database from '\(legacyDbUrl)' to '\(newDbUrl)'...")
+            try FileManager.default.moveItem(atPath: legacyDbUrl.path, toPath: newDbUrl.path)
+            Log.debug(label: Self.LOG_PREFIX, "Successfully migrated EventHistory database.")
+        } catch {
+            Log.warning(label: Self.LOG_PREFIX, "Failed to migrate database: \(error.localizedDescription).")
         }
     }
 }
