@@ -23,6 +23,7 @@ extension FileManager {
                     // directory does not exist, attempt to create it
                     Log.debug(label: LOG_TAG, "Attempting to create directory at '\(url.path)'")
                     try createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+                    try setAttributes([.protectionKey: FileProtectionType.none], ofItemAtPath: url.path)
                     Log.debug(label: LOG_TAG, "Successfully created directory.")
                 }
             }

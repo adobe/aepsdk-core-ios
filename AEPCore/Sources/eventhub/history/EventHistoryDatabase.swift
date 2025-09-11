@@ -18,11 +18,6 @@ class EventHistoryDatabase: EventHistoryStore {
 
     let dispatchQueue: DispatchQueue
 
-    let dbName = "com.adobe.eventHistory"
-    let dbFilePath: FileManager.SearchPathDirectory = .applicationSupportDirectory
-    let legacyDbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
-    
-
     let tableName = "Events"
     let columnHash = "eventHash"
     let columnTimestamp = "timestamp"
@@ -33,6 +28,8 @@ class EventHistoryDatabase: EventHistoryStore {
     ///
     /// - Returns `nil` if the `DispatchQueue` cannot be initialized.
     init?(dispatchQueue: DispatchQueue) {
+        EventHistoryDatabaseMigrator.migrate()
+        
         self.dispatchQueue = dispatchQueue
         guard createTable() else {
             Log.warning(label: Self.LOG_PREFIX, "Failed to initialize Event History Database.")
@@ -199,12 +196,11 @@ class EventHistoryDatabase: EventHistoryStore {
     // MARK: - private methods
 
     private func connect() -> OpaquePointer? {
-        EventHistoryDatabaseMigrator.migrate()
-                
-        if let database = SQLiteWrapper.connect(databaseFilePath: dbFilePath, databaseName: dbName) {
+        if let database = SQLiteWrapper.connect(databaseFilePath: EventHistoryConstants.dbFilePath,
+                                                databaseName: EventHistoryConstants.dbNameWithSubdirectory) {
             return database
         } else {
-            Log.warning(label: Self.LOG_PREFIX, "Failed to connect to database: \(dbName).")
+            Log.warning(label: Self.LOG_PREFIX, "Failed to connect to database: \(EventHistoryConstants.dbName).")
             return nil
         }
     }

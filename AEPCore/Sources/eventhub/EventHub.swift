@@ -110,7 +110,9 @@ final class EventHub {
             return
         }
         
-        DispatchQueue.global().async {
+        eventHubQueue.async { [weak self] in
+            guard let self = self else { return }
+            
             self.eventHistory = EventHistory()
         }
     }

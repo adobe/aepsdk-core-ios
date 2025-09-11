@@ -69,6 +69,7 @@
 		21FE152024F03254008A82FF /* IdentityPublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */; };
 		241D9B352E71E8C800969B09 /* EventHistoryDatabaseMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */; };
 		241D9B372E71EB0900969B09 /* FileManager+Directories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B362E71EA8700969B09 /* FileManager+Directories.swift */; };
+		241D9B392E73429900969B09 /* EventHistoryConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B382E73428D00969B09 /* EventHistoryConstants.swift */; };
 		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */ = {isa = PBXBuildFile; fileRef = 2438B92929BF906F001D6F3A /* rules_testTimestampu.json */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
@@ -843,6 +844,7 @@
 		21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPublicAPITests.swift; sourceTree = "<group>"; };
 		241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabaseMigrator.swift; sourceTree = "<group>"; };
 		241D9B362E71EA8700969B09 /* FileManager+Directories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Directories.swift"; sourceTree = "<group>"; };
+		241D9B382E73428D00969B09 /* EventHistoryConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryConstants.swift; sourceTree = "<group>"; };
 		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		2438B92929BF906F001D6F3A /* rules_testTimestampu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTimestampu.json; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
@@ -1788,6 +1790,7 @@
 				4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */,
 				24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */,
 				24EDE33026EFB7170068A65F /* EventHistory.swift */,
+				241D9B382E73428D00969B09 /* EventHistoryConstants.swift */,
 				24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */,
 				4CF707A02DB9CDE000C54A7F /* EventHistoryStore.swift */,
 				24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */,
@@ -3485,6 +3488,7 @@
 				21F79AB724E704C5003204C3 /* IDParser.swift in Sources */,
 				ACD0179F2E68F07F00C09F04 /* ExtensionFinder.swift in Sources */,
 				24CF602B2538AC79006473BA /* MobileCore+Tracking.swift in Sources */,
+				241D9B392E73429900969B09 /* EventHistoryConstants.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
 				4CF7079D2DB9C86500C54A7F /* EventHistoryProvider.swift in Sources */,

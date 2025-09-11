@@ -15,18 +15,23 @@ import AEPServices
 struct EventHistoryDatabaseMigrator {
     static func migrate() {
         let LOG_PREFIX = "EventHistoryDatabaseMigrator"
-        let dbName = "com.adobe.eventHistory"
-        let dbFilePath: FileManager.SearchPathDirectory = .applicationSupportDirectory
-        let legacyDbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
+        
         let fileManager = FileManager.default
         
-        guard let legacyDbUrl = fileManager.urls(for: legacyDbFilePath, in: .userDomainMask).first?.appendingPathComponent(dbName),
+        // most common scenario is that the database has already been migrated, so check that first
+        if let existingNewDbUrl = fileManager.urls(for: EventHistoryConstants.dbFilePath, in: .userDomainMask).first?.appendingPathComponent(EventHistoryConstants.dbNameWithSubdirectory) {
+            guard !fileManager.fileExists(atPath: existingNewDbUrl.path) else {
+                return
+            }
+        }
+        
+        // next make sure we have a legacy database to migrate
+        guard let legacyDbUrl = fileManager.urls(for: EventHistoryConstants.legacyDbFilePath, in: .userDomainMask).first?.appendingPathComponent(EventHistoryConstants.dbName),
               fileManager.fileExists(atPath: legacyDbUrl.path) else {
-            // no migration is needed
             return
         }
         
-        guard let applicationSupportUrl = fileManager.urls(for: dbFilePath, in: .userDomainMask).first else {
+        guard let applicationSupportUrl = fileManager.urls(for: EventHistoryConstants.dbFilePath, in: .userDomainMask).first else {
             Log.warning(label: LOG_PREFIX, "Unable to obtain url for 'Application Support' directory from the file manager. EventHistory database migration failed.")
             return
         }
@@ -37,7 +42,7 @@ struct EventHistoryDatabaseMigrator {
             return
         }
         
-        let newDbUrl = applicationSupportUrl.appendingPathComponent(dbName)
+        let newDbUrl = applicationSupportUrl.appendingPathComponent(EventHistoryConstants.dbNameWithSubdirectory)
         do {
             Log.debug(label: LOG_PREFIX, "Attempting to migrate EventHistory database from '\(legacyDbUrl)' to '\(newDbUrl)'...")
             try FileManager.default.moveItem(atPath: legacyDbUrl.path, toPath: newDbUrl.path)
