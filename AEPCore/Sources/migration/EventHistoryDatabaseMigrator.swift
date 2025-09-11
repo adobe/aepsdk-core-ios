@@ -37,7 +37,7 @@ struct EventHistoryDatabaseMigrator {
         }
         
         // create the Application Support directory if it doesn't exist
-        guard fileManager.createDirectoryIfNeeded(at: applicationSupportUrl) else {
+        guard fileManager.createDirectoryIfNeeded(at: applicationSupportUrl.appendingPathComponent(EventHistoryConstants.dbSubdirectoryName)) else {
             Log.warning(label: LOG_PREFIX, "Unable to create 'Application Support' directory. EventHistory database migration failed.")
             return
         }
