@@ -17,23 +17,23 @@ import UIKit
 final class MobileCoreInitializer {
 
     typealias NotificationObserver = (NSNotification.Name?, Any?, OperationQueue?, @escaping (Notification) -> Void) -> any NSObjectProtocol
-    
+
     private let LOG_TAG = "MobileCoreInitializer"
-    
+
     private let UIApplicationSceneManifestKey = "UIApplicationSceneManifest"
 
     // Flag if 'initialize()' was called
     private let initialized = AtomicCounter()
-    
+
     // Function to return list of AEP extensions; see `ExtensionFinder`
     private let extensionFinder: () -> [NSObject.Type]
-    
+
     // Function for bundle information access
     private let bundleInfoProvider: (String) -> Any?
-    
+
     // Function for adding notification observers
     private let notificationObserver: NotificationObserver
-    
+
     init(
         extensionFinder: @escaping () -> [NSObject.Type] = ExtensionFinder.getExtensions,
         bundleInfoProvider: @escaping (String) -> Any? = { Bundle.main.object(forInfoDictionaryKey: $0) },
@@ -73,7 +73,7 @@ final class MobileCoreInitializer {
             } else {
                 Log.trace(label: self.LOG_TAG, "initialize - automatic lifecycle tracking disabled.")
             }
-            
+
             let extensions = self.extensionFinder()
             MobileCore.registerExtensions(extensions) {
                 completion?()

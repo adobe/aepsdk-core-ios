@@ -8,7 +8,9 @@
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
-*/
+ */
+
+import Foundation
 
 extension FileManager {
     /// Creates a directory, if needed, at the provided file system URL's path.
@@ -31,7 +33,7 @@ extension FileManager {
             Log.warning(label: LOG_TAG, "Unable to create directory at '\(url.path)': \(error.localizedDescription)")
             return false
         }
-        
+
         return true
     }
 }

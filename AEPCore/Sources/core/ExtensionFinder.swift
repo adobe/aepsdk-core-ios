@@ -16,7 +16,7 @@ import AEPServices
 /// Utility to find and return AEP extension classes available at runtime.
 struct ExtensionFinder {
     private static let LOG_TAG = "ExtensionFinder"
-    
+
     // EventHub automatically registers Configuration and the Placeholder extensions, don't include them to prevent duplicate registration warnings.
     private static let adobeExtensionClassNames = [
         "AEPIdentity.Identity",
@@ -39,7 +39,7 @@ struct ExtensionFinder {
         "AEPOptimize.Optimize",
         "AEPMessaging.Messaging",
     ]
-    
+
     /// Returns a list of registered Adobe extension classes available at runtime.
     static func getExtensions() -> [NSObject.Type] {
         return adobeExtensionClassNames.compactMap { className in

@@ -8,13 +8,15 @@
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
-*/
+ */
+
+import Foundation
 
 /// Constant values used by `EventHistory`
 enum EventHistoryConstants {
     static let dbName = "com.adobe.eventHistory"
     static let dbSubdirectoryName = "com.adobe.aep.db"
     static let dbNameWithSubdirectory = dbSubdirectoryName + "/" + dbName
-    static let dbFilePath: FileManager.SearchPathDirectory = .applicationSupportDirectory
-    static let legacyDbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
+    static let applicationSupportDirectory = FileManager.SearchPathDirectory.applicationSupportDirectory
+    static let cachesDirectory = FileManager.SearchPathDirectory.cachesDirectory
 }

@@ -53,7 +53,7 @@ final class EventHub {
     /// In production implementations of the SDK, use the convenience `init()` method instead.
     init(eventHistory: EventHistoryProvider? = nil) {
         initEventHistory(eventHistory)
-        
+
         // setup a place-holder extension container for `EventHub` so we can shared and retrieve state
         registerExtension(EventHubPlaceholderExtension.self, completion: { _ in })
 
@@ -103,16 +103,16 @@ final class EventHub {
             return true
         }
     }
-    
+
     private func initEventHistory(_ eventHistory: EventHistoryProvider? = nil) {
         if eventHistory != nil {
             self.eventHistory = eventHistory
             return
         }
-        
+
         eventHubQueue.async { [weak self] in
             guard let self = self else { return }
-            
+
             self.eventHistory = EventHistory()
         }
     }
