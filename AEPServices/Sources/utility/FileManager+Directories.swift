@@ -18,22 +18,16 @@ extension FileManager {
     /// - Returns `true` if the directory was successfully created, or already existed previously.
     public func createDirectoryIfNeeded(at url: URL) -> Bool {
         let LOG_TAG = "FileManager+Directories"
-        var isDirectory: ObjCBool = false
+        
         do {
-            if !fileExists(atPath: url.path, isDirectory: &isDirectory) {
-                if !isDirectory.boolValue {
-                    // directory does not exist, attempt to create it
-                    Log.debug(label: LOG_TAG, "Attempting to create directory at '\(url.path)'")
-                    try createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-                    try setAttributes([.protectionKey: FileProtectionType.none], ofItemAtPath: url.path)
-                    Log.debug(label: LOG_TAG, "Successfully created directory.")
-                }
-            }
+            Log.debug(label: LOG_TAG, "Attempting to create directory at '\(url.path)'")
+            try createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+            try setAttributes([FileAttributeKey.protectionKey: FileProtectionType.none], ofItemAtPath: url.path)
+            Log.debug(label: LOG_TAG, "Successfully created directory.")
+            return true
         } catch {
             Log.warning(label: LOG_TAG, "Unable to create directory at '\(url.path)': \(error.localizedDescription)")
             return false
         }
-
-        return true
     }
 }

@@ -42,6 +42,22 @@ target 'AEPCore' do
   core_main
 end
 
+target 'AEPSignal' do
+  core_main
+end
+
+target 'AEPCoreMocks' do
+  core_main
+end
+
+target 'AEPIdentity' do
+  core_main
+end
+
+target 'AEPLifecycle' do
+  core_main
+end
+
 target 'AEPCoreTests' do
   core_main
 end

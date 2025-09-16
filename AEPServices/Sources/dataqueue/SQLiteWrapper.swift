@@ -21,8 +21,8 @@ public struct SQLiteWrapper {
     /// If either of the `databaseDirectoryPath` or `databaseDirectoryPath` + `subdirectory` directories do not exist,
     /// this method will create those directories.
     /// - Parameters:
-    ///   - databaseDirectoryPath: the path to the database file
-    ///   - subDirectory: a sub directory to `databaseFilePath` that contains the database
+    ///   - databaseDirectoryPath: the path to the database directory
+    ///   - subDirectory: a sub directory to `databaseDirectoryPath` that contains the database
     ///   - databaseName: the database name
     /// - Returns: the database connection
     public static func connect(databaseDirectoryPath: FileManager.SearchPathDirectory, subDirectory: String, databaseName: String) -> OpaquePointer? {

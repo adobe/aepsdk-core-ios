@@ -55,7 +55,10 @@ public extension FileManager {
                     _ = dqService.store.removeValue(forKey: cacheItem.name)
                 }
             } catch {
-                Log.error(label: LOG_TAG, "Error removing cache item, with reason: \(error)")
+                let errorCode = (error as NSError).code
+                if errorCode != NSFileNoSuchFileError, errorCode != NSFileReadNoSuchFileError {
+                    Log.error(label: LOG_TAG, "Error removing cache item, with reason: \(error)")
+                }
             }
         }
     }
@@ -91,7 +94,10 @@ public extension FileManager {
             try fileManager.removeItem(at: directoryUrl)
             Log.debug(label: LOG_TAG, "Successfully removed directory at \(directoryUrl.path).")
         } catch {
-            Log.warning(label: LOG_TAG, "Failed to remove directory at \(directoryUrl.path) with error: \(error)")
+            let errorCode = (error as NSError).code
+            if errorCode != NSFileNoSuchFileError, errorCode != NSFileReadNoSuchFileError {
+                Log.warning(label: LOG_TAG, "Failed to remove directory at \(directoryUrl.path) with error: \(error)")
+            }
         }
     }
 }
