@@ -98,8 +98,8 @@ class SQLiteWrapperTests: XCTestCase {
         
         // When
         let connection = SQLiteWrapper.connect(databaseDirectoryPath: .cachesDirectory, 
-                                             subDirectory: subDirectory, 
-                                             databaseName: databaseName)
+                                               subDirectory: subDirectory, 
+                                               databaseName: databaseName)
         
         // Then
         XCTAssertNotNil(connection, "Connection should be established")
@@ -138,8 +138,8 @@ class SQLiteWrapperTests: XCTestCase {
         
         // When
         let connection = SQLiteWrapper.connect(databaseDirectoryPath: .cachesDirectory,
-                                             subDirectory: subDirectory,
-                                             databaseName: databaseName)
+                                               subDirectory: subDirectory,
+                                               databaseName: databaseName)
         
         // Then
         XCTAssertNotNil(connection, "Connection should be established even when subdirectory already exists")
@@ -162,8 +162,8 @@ class SQLiteWrapperTests: XCTestCase {
         
         // When
         let connection = SQLiteWrapper.connect(databaseDirectoryPath: .cachesDirectory,
-                                             subDirectory: subDirectory,
-                                             databaseName: databaseName)
+                                               subDirectory: subDirectory,
+                                               databaseName: databaseName)
         
         // Then
         // Note: This test might pass on some systems that handle long paths better
@@ -189,8 +189,8 @@ class SQLiteWrapperTests: XCTestCase {
         
         // When
         let connection = SQLiteWrapper.connect(databaseDirectoryPath: .cachesDirectory,
-                                             subDirectory: subDirectory,
-                                             databaseName: databaseName)
+                                               subDirectory: subDirectory,
+                                               databaseName: databaseName)
         
         // Then
         XCTAssertNotNil(connection, "Connection should be established with nested subdirectories")
@@ -226,8 +226,8 @@ class SQLiteWrapperTests: XCTestCase {
         
         // When
         let connection = SQLiteWrapper.connect(databaseDirectoryPath: .cachesDirectory,
-                                             subDirectory: subDirectory,
-                                             databaseName: databaseName)
+                                               subDirectory: subDirectory,
+                                               databaseName: databaseName)
         
         // Then
         XCTAssertNotNil(connection, "Connection should be established even with empty subdirectory")
@@ -249,8 +249,8 @@ class SQLiteWrapperTests: XCTestCase {
         let databaseName = "functional-test-db"
         
         let connection = SQLiteWrapper.connect(databaseDirectoryPath: .cachesDirectory,
-                                             subDirectory: subDirectory,
-                                             databaseName: databaseName)
+                                               subDirectory: subDirectory,
+                                               databaseName: databaseName)
         XCTAssertNotNil(connection)
         
         guard let database = connection else {

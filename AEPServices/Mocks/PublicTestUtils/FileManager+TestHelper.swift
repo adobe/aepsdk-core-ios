@@ -33,16 +33,16 @@ public extension FileManager {
                                         (name: "com.adobe.module.signal", isDirectory: false),
                                         (name: "com.adobe.module.identity", isDirectory: false)
         ]
-        
+
         clearCachedItems(cacheItems, in: .cachesDirectory)
-        
+
         let migratedEventHistoryDb = [(name: "com.adobe.aep.db/com.adobe.eventHistory", isDirectory: false)]
         clearCachedItems(migratedEventHistoryDb, in: .applicationSupportDirectory)
     }
-    
+
     private func clearCachedItems(_ cachedItems: [(name: String, isDirectory: Bool)], in directory: FileManager.SearchPathDirectory) {
         let LOG_TAG = "FileManager"
-        
+
         guard let url = self.urls(for: directory, in: .userDomainMask).first else {
             Log.warning(label: LOG_TAG, "Unable to find valid cache directory path.")
             return

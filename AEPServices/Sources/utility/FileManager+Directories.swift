@@ -18,7 +18,7 @@ extension FileManager {
     /// - Returns `true` if the directory was successfully created, or already existed previously.
     public func createDirectoryIfNeeded(at url: URL) -> Bool {
         let LOG_TAG = "FileManager+Directories"
-        
+
         do {
             Log.debug(label: LOG_TAG, "Attempting to create directory at '\(url.path)'")
             try createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
