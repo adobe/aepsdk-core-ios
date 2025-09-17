@@ -35,7 +35,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
     public var receivedRecordHistoricalEvent: Event? = nil
     /// Tracks whether ``recordHistoricalEvent(_:handler:)`` was called.
     public var recordHistoricalEventCalled = false
-    
+
     /// Controls the success/failure value that will be passed to the handler in ``recordHistoricalEvent(_:handler:)``
     /// Set to `true` to simulate success, `false` to simulate failure.
     public var recordHistoricalEventResult = true
@@ -117,7 +117,7 @@ public class TestableExtensionRuntime: ExtensionRuntime {
         recordHistoricalEventCalled = true
         handler?(recordHistoricalEventResult)
     }
-    
+
     public func startEvents() {}
 
     public func stopEvents() {}

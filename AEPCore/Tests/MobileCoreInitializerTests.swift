@@ -259,10 +259,10 @@ class MobileCoreInitializerTests: XCTestCase {
         expectation.assertForOverFulfill = true
 
         registerMockExtension(MockExtension.self)
-        
+
         var capturedEvents: [Event] = []
         var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
             capturedEvents.append(event)
             expectation.fulfill()
@@ -271,7 +271,7 @@ class MobileCoreInitializerTests: XCTestCase {
         MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return []
         }, bundleInfoProvider: { $0 == "UIApplicationSceneManifest" ? [:] : nil },
-           notificationObserver: { name, object, queue, handler in
+        notificationObserver: { name, object, queue, handler in
             // Capture handlers for both foreground and background notifications
             if let notificationName = name {
                 capturedNotificationHandlers[notificationName] = handler
@@ -281,9 +281,9 @@ class MobileCoreInitializerTests: XCTestCase {
 
         // After extension registration, for a SceneDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: InitOptions())
-        
+
         Thread.sleep(forTimeInterval: 0.5)
-        
+
         // Verify only the expected notifications are registered
         let expectedNotifications: Set<NSNotification.Name> = [
             UIScene.willEnterForegroundNotification,
@@ -291,31 +291,31 @@ class MobileCoreInitializerTests: XCTestCase {
         ]
         let actualNotifications = Set(capturedNotificationHandlers.keys)
         XCTAssertEqual(actualNotifications, expectedNotifications, "Only UIScene foreground and background notifications should be registered")
-        
+
         // Simulate scene foreground notification
         if let foregroundHandler = capturedNotificationHandlers[UIScene.willEnterForegroundNotification] {
             let foregroundNotification = Notification(name: UIScene.willEnterForegroundNotification)
             foregroundHandler(foregroundNotification)
         }
-        
+
         // Simulate scene background notification
         if let backgroundHandler = capturedNotificationHandlers[UIScene.didEnterBackgroundNotification] {
             let backgroundNotification = Notification(name: UIScene.didEnterBackgroundNotification)
             backgroundHandler(backgroundNotification)
         }
-        
+
         // verify lifecycle start event dispatched
         wait(for: [expectation], timeout: 2)
-        
+
         // Check total count = 3
         XCTAssertEqual(capturedEvents.count, 3, "Should have exactly 3 lifecycle events")
-        
+
         // Filter and check START events = 2
         let startEvents = capturedEvents.filter { event in
             event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.START
         }
         XCTAssertEqual(startEvents.count, 2, "Should have exactly 2 START events")
-        
+
         // Filter and check PAUSE events = 1
         let pauseEvents = capturedEvents.filter { event in
             event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.PAUSE
@@ -330,10 +330,10 @@ class MobileCoreInitializerTests: XCTestCase {
         expectation.assertForOverFulfill = true
 
         registerMockExtension(MockExtension.self)
-        
+
         var capturedEvents: [Event] = []
         var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
             capturedEvents.append(event)
             expectation.fulfill()
@@ -342,7 +342,7 @@ class MobileCoreInitializerTests: XCTestCase {
         MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return []
         }, bundleInfoProvider: { _ in nil },
-           notificationObserver: { name, object, queue, handler in
+        notificationObserver: { name, object, queue, handler in
             // Capture handlers for both foreground and background notifications
             if let notificationName = name {
                 capturedNotificationHandlers[notificationName] = handler
@@ -352,9 +352,9 @@ class MobileCoreInitializerTests: XCTestCase {
 
         // After extension registration, for an AppDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: InitOptions())
-        
+
         Thread.sleep(forTimeInterval: 0.5)
-        
+
         // Verify only the expected notifications are registered
         let expectedNotifications: Set<NSNotification.Name> = [
             UIApplication.willEnterForegroundNotification,
@@ -362,31 +362,31 @@ class MobileCoreInitializerTests: XCTestCase {
         ]
         let actualNotifications = Set(capturedNotificationHandlers.keys)
         XCTAssertEqual(actualNotifications, expectedNotifications, "Only UIApplication foreground and background notifications should be registered")
-        
+
         // Simulate application foreground notification
         if let foregroundHandler = capturedNotificationHandlers[UIApplication.willEnterForegroundNotification] {
             let foregroundNotification = Notification(name: UIApplication.willEnterForegroundNotification)
             foregroundHandler(foregroundNotification)
         }
-        
+
         // Simulate application background notification
         if let backgroundHandler = capturedNotificationHandlers[UIApplication.didEnterBackgroundNotification] {
             let backgroundNotification = Notification(name: UIApplication.didEnterBackgroundNotification)
             backgroundHandler(backgroundNotification)
         }
-        
+
         // verify lifecycle events dispatched
         wait(for: [expectation], timeout: 2)
-        
+
         // Check total count = 3
         XCTAssertEqual(capturedEvents.count, 3, "Should have exactly 3 lifecycle events")
-        
+
         // Filter and check START events = 2
         let startEvents = capturedEvents.filter { event in
             event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.START
         }
         XCTAssertEqual(startEvents.count, 2, "Should have exactly 2 START events")
-        
+
         // Filter and check PAUSE events = 1
         let pauseEvents = capturedEvents.filter { event in
             event.data![CoreConstants.Keys.ACTION] as? String == CoreConstants.Lifecycle.PAUSE
@@ -403,10 +403,10 @@ class MobileCoreInitializerTests: XCTestCase {
         let expectedLifecycleAdditionalContextData = ["key" : "value"]
 
         registerMockExtension(MockExtension.self)
-        
+
         var capturedStartEvents: [Event] = []
         var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
             capturedStartEvents.append(event)
             expectation.fulfill()            
@@ -415,7 +415,7 @@ class MobileCoreInitializerTests: XCTestCase {
         MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return []
         }, bundleInfoProvider: { $0 == "UIApplicationSceneManifest" ? [:] : nil },
-           notificationObserver: { name, object, queue, handler in
+        notificationObserver: { name, object, queue, handler in
             // Capture handlers for notifications
             if let notificationName = name {
                 capturedNotificationHandlers[notificationName] = handler
@@ -428,21 +428,21 @@ class MobileCoreInitializerTests: XCTestCase {
 
         // After extension registration, for a SceneDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: initOptions)
-        
+
         Thread.sleep(forTimeInterval: 0.5)
-        
+
         // Simulate only foreground notification
         if let foregroundHandler = capturedNotificationHandlers[UIScene.willEnterForegroundNotification] {
             let foregroundNotification = Notification(name: UIScene.willEnterForegroundNotification)
             foregroundHandler(foregroundNotification)
         }
-        
+
         // verify lifecycle start events dispatched
         wait(for: [expectation], timeout: 2)
-        
+
         // Check that we captured exactly 2 START events with context data
         XCTAssertEqual(capturedStartEvents.count, 2, "Should have exactly 2 START events with context data")
-        
+
         // Verify both events have the expected context data
         for event in capturedStartEvents {
             XCTAssertEqual(event.data![CoreConstants.Keys.ACTION] as? String, CoreConstants.Lifecycle.START)
@@ -458,10 +458,10 @@ class MobileCoreInitializerTests: XCTestCase {
         let expectedLifecycleAdditionalContextData = ["key" : "value"]
 
         registerMockExtension(MockExtension.self)
-        
+
         var capturedStartEvents: [Event] = []
         var capturedNotificationHandlers: [NSNotification.Name: (Notification) -> Void] = [:]
-        
+
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { event in
             capturedStartEvents.append(event)
             expectation.fulfill()            
@@ -470,7 +470,7 @@ class MobileCoreInitializerTests: XCTestCase {
         MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: {
             return []
         }, bundleInfoProvider: { _ in nil },
-           notificationObserver: { name, object, queue, handler in
+        notificationObserver: { name, object, queue, handler in
             // Capture handlers for notifications
             if let notificationName = name {
                 capturedNotificationHandlers[notificationName] = handler
@@ -483,21 +483,21 @@ class MobileCoreInitializerTests: XCTestCase {
 
         // After extension registration, for an AppDelegate app, lifecycleStart is called immediately.
         MobileCore.initialize(options: initOptions)
-        
+
         Thread.sleep(forTimeInterval: 0.5)
-        
+
         // Simulate only foreground notification
         if let foregroundHandler = capturedNotificationHandlers[UIApplication.willEnterForegroundNotification] {
             let foregroundNotification = Notification(name: UIApplication.willEnterForegroundNotification)
             foregroundHandler(foregroundNotification)
         }
-        
+
         // verify lifecycle start events dispatched
         wait(for: [expectation], timeout: 2)
-        
+
         // Check that we captured exactly 2 START events with context data
         XCTAssertEqual(capturedStartEvents.count, 2, "Should have exactly 2 START events with context data")
-        
+
         // Verify both events have the expected context data
         for event in capturedStartEvents {
             XCTAssertEqual(event.data![CoreConstants.Keys.ACTION] as? String, CoreConstants.Lifecycle.START)
@@ -513,7 +513,7 @@ class MobileCoreInitializerTests: XCTestCase {
         EventHub.shared.getExtensionContainer(MockExtension.self)?.registerListener(type: EventType.genericLifecycle, source: EventSource.requestContent) { _ in
             XCTFail("Event with type Generic Lifecycle and source Request Context not expected.")
         }
-        
+
         MobileCore.mobileCoreInitializer = MobileCoreInitializer(extensionFinder: { return [] } , notificationObserver: { _, _, _, _ in
             XCTFail("Lifecycle notification listeners are not expected.")
             return NSObject()

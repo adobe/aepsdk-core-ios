@@ -19,14 +19,15 @@ class EventHistoryDatabaseTests: XCTestCase {
     let testDispatchQueue: DispatchQueue = DispatchQueue(label: "testEventHistoryQueue")
     var eventHistoryDatabase: EventHistoryDatabase!
     var dbConnection: OpaquePointer!
+    let dbSubDirectory = "com.adobe.aep.db"
     let dbName = "com.adobe.eventHistory"
-    let dbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
+    let dbFilePath: FileManager.SearchPathDirectory = .applicationSupportDirectory
     var dbFileUrl: URL?
     
     override func setUp() {
         eventHistoryDatabase = EventHistoryDatabase(dispatchQueue: testDispatchQueue)
         dbConnection = eventHistoryDatabase.connection
-        dbFileUrl = try? FileManager.default.url(for: dbFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(dbName)
+        dbFileUrl = try? FileManager.default.url(for: dbFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(dbSubDirectory).appendingPathComponent(dbName)
     }
     
     override func tearDown() {

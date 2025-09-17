@@ -103,7 +103,7 @@ class ExtensionContainer {
 // MARK: - ExtensionContainer public extension
 
 extension ExtensionContainer: ExtensionRuntime {
-    
+
     func unregisterExtension() {
         guard let exten = exten, let eventHub = eventHub else { return }
         eventHub.unregisterExtension(type(of: exten), completion: {_ in })

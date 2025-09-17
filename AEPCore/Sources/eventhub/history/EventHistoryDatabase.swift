@@ -18,9 +18,6 @@ class EventHistoryDatabase: EventHistoryStore {
 
     let dispatchQueue: DispatchQueue
 
-    let dbName = "com.adobe.eventHistory"
-    let dbFilePath: FileManager.SearchPathDirectory = .cachesDirectory
-
     let tableName = "Events"
     let columnHash = "eventHash"
     let columnTimestamp = "timestamp"
@@ -31,6 +28,8 @@ class EventHistoryDatabase: EventHistoryStore {
     ///
     /// - Returns `nil` if the `DispatchQueue` cannot be initialized.
     init?(dispatchQueue: DispatchQueue) {
+        EventHistoryDatabaseMigrator.migrate()
+
         self.dispatchQueue = dispatchQueue
         guard createTable() else {
             Log.warning(label: Self.LOG_PREFIX, "Failed to initialize Event History Database.")
@@ -64,7 +63,7 @@ class EventHistoryDatabase: EventHistoryStore {
                 handler?(false)
                 return
             }
-            
+
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 Log.warning(label: Self.LOG_PREFIX, "Unable to get a connection to the event history database for insert operation.")
@@ -110,7 +109,7 @@ class EventHistoryDatabase: EventHistoryStore {
                 handler(EventHistoryResult(count: -1))
                 return
             }
-            
+
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 Log.warning(label: Self.LOG_PREFIX, "Unable to get a connection to the event history database.")
@@ -162,7 +161,7 @@ class EventHistoryDatabase: EventHistoryStore {
                 handler?(0)
                 return
             }
-            
+
             // first verify we can get a connection handle
             guard let connection = self.connection else {
                 Log.warning(label: Self.LOG_PREFIX, "Unable to get a connection to the event history database for delete operation.")
@@ -197,10 +196,12 @@ class EventHistoryDatabase: EventHistoryStore {
     // MARK: - private methods
 
     private func connect() -> OpaquePointer? {
-        if let database = SQLiteWrapper.connect(databaseFilePath: dbFilePath, databaseName: dbName) {
+        if let database = SQLiteWrapper.connect(databaseDirectoryPath: EventHistoryConstants.applicationSupportDirectory,
+                                                subDirectory: EventHistoryConstants.dbSubdirectoryName,
+                                                databaseName: EventHistoryConstants.dbName) {
             return database
         } else {
-            Log.warning(label: Self.LOG_PREFIX, "Failed to connect to database: \(dbName).")
+            Log.warning(label: Self.LOG_PREFIX, "Failed to connect to database: \(EventHistoryConstants.dbName).")
             return nil
         }
     }

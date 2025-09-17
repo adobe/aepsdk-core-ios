@@ -10,17 +10,13 @@
  governing permissions and limitations under the License.
  */
 
+import Foundation
 
-import AEPRulesEngine
-
-public class TestableTraversable: Traversable {
-    private var values: [String: Any]
-
-    public init(_ values: [String: Any]) {
-        self.values = values
-    }
-
-    public func get(key: String) -> Any? {
-        return values[key]
-    }
+/// Constant values used by `EventHistory`
+enum EventHistoryConstants {
+    static let dbName = "com.adobe.eventHistory"
+    static let dbSubdirectoryName = "com.adobe.aep.db"
+    static let dbNameWithSubdirectory = dbSubdirectoryName + "/" + dbName
+    static let applicationSupportDirectory = FileManager.SearchPathDirectory.applicationSupportDirectory
+    static let cachesDirectory = FileManager.SearchPathDirectory.cachesDirectory
 }
