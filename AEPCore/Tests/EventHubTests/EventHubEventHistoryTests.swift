@@ -8,7 +8,7 @@
  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
  OF ANY KIND, either express or implied. See the License for the specific language
  governing permissions and limitations under the License.
-*/
+ */
 
 
 import XCTest
@@ -37,8 +37,8 @@ class EventHubEventHistoryTests: XCTestCase {
 
     func testGetHistoricalEvents_delegatesToEventHistory() {
         let mockResult = EventHistoryResult(count: 42,
-                                             oldest: Date(timeIntervalSince1970: 1),
-                                             newest: Date(timeIntervalSince1970: 2))
+                                            oldest: Date(timeIntervalSince1970: 1),
+                                            newest: Date(timeIntervalSince1970: 2))
         mockEventHistory.mockGetEventsResult = [mockResult]
 
         let req = EventHistoryRequest(mask: ["a": "b"], from: Date(), to: Date())

@@ -17,6 +17,29 @@ import SQLite3
 public struct SQLiteWrapper {
     private static let LOG_PREFIX = "SQLiteWrapper"
 
+    /// Connect SQLite database with provided SearchPathDirectory, subDirectory, and database name
+    /// If either of the `databaseDirectoryPath` or `databaseDirectoryPath` + `subdirectory` directories do not exist,
+    /// this method will create those directories.
+    /// - Parameters:
+    ///   - databaseDirectoryPath: the path to the database directory
+    ///   - subDirectory: a sub directory to `databaseDirectoryPath` that contains the database
+    ///   - databaseName: the database name
+    /// - Returns: the database connection
+    public static func connect(databaseDirectoryPath: FileManager.SearchPathDirectory, subDirectory: String, databaseName: String) -> OpaquePointer? {
+        do {
+            let databaseFilePathUrl = try FileManager.default.url(for: databaseDirectoryPath, in: .userDomainMask, appropriateFor: nil, create: true)
+            if !FileManager.default.createDirectoryIfNeeded(at: databaseFilePathUrl.appendingPathComponent(subDirectory)) {
+                Log.warning(label: LOG_PREFIX, "Failed to open database - unable to create the required directories.")
+                return nil
+            }
+        } catch {
+            Log.warning(label: LOG_PREFIX, "Failed to open database - unable to create the required directories. Error: \(error.localizedDescription)")
+            return nil
+        }
+
+        return connect(databaseFilePath: databaseDirectoryPath, databaseName: subDirectory + "/" + databaseName)
+    }
+
     /// Connect SQLite database with provide database name and database file path.
     /// If the database file doesn't exist, a new database will be created and return a database connection
     /// - Parameters:
@@ -28,7 +51,7 @@ public struct SQLiteWrapper {
             Log.warning(label: LOG_PREFIX, "Failed to open database - database name provided is empty")
             return nil
         }
-        let fileURL = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(databaseName)
+        let fileURL = try? FileManager.default.url(for: databaseFilePath, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(databaseName)
         guard let url = fileURL else {
             Log.warning(label: LOG_PREFIX, "Cannot create database connection due to invalid file path: SearchPathDirectory[\(databaseFilePath.rawValue)]/\(databaseName)")
             return nil
