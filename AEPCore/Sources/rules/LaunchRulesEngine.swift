@@ -36,7 +36,7 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS = "insertIfNotExists"
     /// Do not process Dispatch consequence if chained event count is greater than max
     private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
-    
+
     // Event History Operation constants
     private static let EVENT_HISTORY_OPERATION_KEY = "operation"
     private static let EVENT_HISTORY_CONTENT_KEY = "content"
@@ -409,8 +409,8 @@ public class LaunchRulesEngine {
                 // Check that a valid result exists and that a database error (-1) was not returned
                 guard let result = results.first, result.count >= 0 else {
                     Log.warning(label: LOG_TAG,
-                        "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation. " +
-                        "Returned with result value: \(String(describing: results.first?.count))")
+                                "\(logPrefix) - Unable to retrieve historical events, skipping '\(operation)' operation. " +
+                                    "Returned with result value: \(String(describing: results.first?.count))")
                     return
                 }
                 if result.count >= 1 {

@@ -152,7 +152,7 @@ class JSONCondition: Codable {
               let matcher = JSONCondition.matcherMapping[matcherString], let valueAsInt = definition.value?.intValue else {
             Log.warning(label: JSONRulesParser.LOG_LABEL,
                         "Failed to extract historical condition. " +
-                        "Missing or invalid required fields in definition: \(definition)")
+                            "Missing or invalid required fields in definition: \(definition)")
             return nil
         }
 

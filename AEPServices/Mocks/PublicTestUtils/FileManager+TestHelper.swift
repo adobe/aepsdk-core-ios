@@ -24,8 +24,6 @@ public extension FileManager {
     ///   and a `Bool` indicating whether the cache item is a directory (`true`) or a file (`false`). If `nil`, a default list of
     ///   cache items is used.
     func clearCache(_ cacheItems: [(name: String, isDirectory: Bool)]? = nil) {
-        let LOG_TAG = "FileManager"
-
         // Use caller provided values, defaults otherwise.
         let cacheItems = cacheItems ?? [(name: "com.adobe.edge", isDirectory: false),
                                         (name: "com.adobe.edge.consent", isDirectory: false),
@@ -35,19 +33,32 @@ public extension FileManager {
                                         (name: "com.adobe.module.signal", isDirectory: false),
                                         (name: "com.adobe.module.identity", isDirectory: false)
         ]
-        guard let url = self.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+
+        clearCachedItems(cacheItems, in: .cachesDirectory)
+
+        let migratedEventHistoryDb = [(name: "com.adobe.aep.db/com.adobe.eventHistory", isDirectory: false)]
+        clearCachedItems(migratedEventHistoryDb, in: .applicationSupportDirectory)
+    }
+
+    private func clearCachedItems(_ cachedItems: [(name: String, isDirectory: Bool)], in directory: FileManager.SearchPathDirectory) {
+        let LOG_TAG = "FileManager"
+
+        guard let url = self.urls(for: directory, in: .userDomainMask).first else {
             Log.warning(label: LOG_TAG, "Unable to find valid cache directory path.")
             return
         }
 
-        for cacheItem in cacheItems {
+        for cacheItem in cachedItems {
             do {
                 try self.removeItem(at: URL(fileURLWithPath: "\(url.relativePath)/\(cacheItem.name)", isDirectory: cacheItem.isDirectory))
                 if let dqService = ServiceProvider.shared.dataQueueService as? DataQueueService {
                     _ = dqService.store.removeValue(forKey: cacheItem.name)
                 }
             } catch {
-                Log.error(label: LOG_TAG, "Error removing cache item, with reason: \(error)")
+                let errorCode = (error as NSError).code
+                if errorCode != NSFileNoSuchFileError, errorCode != NSFileReadNoSuchFileError {
+                    Log.error(label: LOG_TAG, "Error removing cache item, with reason: \(error)")
+                }
             }
         }
     }
@@ -83,7 +94,10 @@ public extension FileManager {
             try fileManager.removeItem(at: directoryUrl)
             Log.debug(label: LOG_TAG, "Successfully removed directory at \(directoryUrl.path).")
         } catch {
-            Log.warning(label: LOG_TAG, "Failed to remove directory at \(directoryUrl.path) with error: \(error)")
+            let errorCode = (error as NSError).code
+            if errorCode != NSFileNoSuchFileError, errorCode != NSFileReadNoSuchFileError {
+                Log.warning(label: LOG_TAG, "Failed to remove directory at \(directoryUrl.path) with error: \(error)")
+            }
         }
     }
 }

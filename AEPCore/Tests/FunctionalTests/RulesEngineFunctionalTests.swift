@@ -167,7 +167,7 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         }
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
-    
+
     // Matcher: ne
     func testMatcherNe_multipleValues() {
         /// Given:
@@ -193,7 +193,7 @@ class RulesEngineFunctionalTests: RulesEngineTestBase {
         }
         XCTAssertEqual("pb", dataWithType["type"] as! String)
     }
-    
+
 
     // Matcher: ex
     func testMatcherEx() {

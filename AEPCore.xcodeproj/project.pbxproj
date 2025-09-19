@@ -25,7 +25,9 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		0DD8CC428EAC7397F3E3A9DE /* Pods_AEPIdentity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 62D21FF298AE8CE1F0AB582D /* Pods_AEPIdentity.framework */; };
 		1828CCDD7C5AFAAB33BEA6C8 /* Pods_AEPCoreTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 39282143E012E30EEE6674F2 /* Pods_AEPCoreTests.framework */; };
+		1E588FE7F092CC3BEF5923A8 /* Pods_AEPSignal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC41D5506BEDFEC2A9D479C /* Pods_AEPSignal.framework */; };
 		2107F02624C9FDFE002935CF /* PushIDManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02524C9FDFE002935CF /* PushIDManageable.swift */; };
 		2107F02824C9FE1B002935CF /* PushIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02724C9FE1B002935CF /* PushIDManager.swift */; };
 		2107F02A24C9FF46002935CF /* PushIDManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2107F02924C9FF46002935CF /* PushIDManagerTests.swift */; };
@@ -67,6 +69,9 @@
 		21F79ABF24E71B03003204C3 /* IDParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79ABD24E7144F003204C3 /* IDParserTests.swift */; };
 		21F79AC124E72204003204C3 /* V4MigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21F79AC024E72204003204C3 /* V4MigratorTests.swift */; };
 		21FE152024F03254008A82FF /* IdentityPublicAPITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */; };
+		241D9B352E71E8C800969B09 /* EventHistoryDatabaseMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */; };
+		241D9B372E71EB0900969B09 /* FileManager+Directories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B362E71EA8700969B09 /* FileManager+Directories.swift */; };
+		241D9B392E73429900969B09 /* EventHistoryConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B382E73428D00969B09 /* EventHistoryConstants.swift */; };
 		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */ = {isa = PBXBuildFile; fileRef = 2438B92929BF906F001D6F3A /* rules_testTimestampu.json */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
@@ -120,6 +125,8 @@
 		24EDE33726F10B810068A65F /* EventData+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */; };
 		24EDE33926F10BA10068A65F /* String+FNV1A32.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33826F10BA10068A65F /* String+FNV1A32.swift */; };
 		24EDE33B26F39F450068A65F /* EventHistoryResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24EDE33A26F39F450068A65F /* EventHistoryResult.swift */; };
+		24FE30A32E79D63F0050A0F2 /* FileManagerDirectoriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FE30A22E79D63F0050A0F2 /* FileManagerDirectoriesTests.swift */; };
+		24FE30A52E79DAEF0050A0F2 /* EventHistoryDatabaseMigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FE30A42E79DAEF0050A0F2 /* EventHistoryDatabaseMigratorTests.swift */; };
 		24FE9ABE2C9A268E008DA017 /* PresentationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FE9ABD2C9A268E008DA017 /* PresentationError.swift */; };
 		2E00098F26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00098E26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift */; };
 		2E36F6CA26C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */; };
@@ -493,6 +500,7 @@
 		92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92EEA6052589343700DBA3EE /* MessageMonitor.swift */; };
 		92F06BFC25B8F1FE004C1700 /* MessageMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */; };
 		92F06D0425BA33F4004C1700 /* Showable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92F06D0325BA33F3004C1700 /* Showable.swift */; };
+		A992DAF6408E4EF7F6023F33 /* Pods_AEPLifecycle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 561016C58C744A0F4899C05C /* Pods_AEPLifecycle.framework */; };
 		AC1089C926DD87C0004ABAC4 /* XDMLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */; };
 		ACC7A9762A0EA51F001A04FB /* EventHistoryIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACC7A9752A0EA51F001A04FB /* EventHistoryIntegrationTests.swift */; };
 		ACC7A97B2A12AF9D001A04FB /* rules_attach.json in Resources */ = {isa = PBXBuildFile; fileRef = ACC7A9792A12AF9D001A04FB /* rules_attach.json */; };
@@ -554,6 +562,7 @@
 		D42C989E26CAE790002E3184 /* LifecycleV2Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */; };
 		D42C98A026CCB024002E3184 /* XDMEnvironmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21BA2E6A265D946F0011207C /* XDMEnvironmentTests.swift */; };
 		E1D4AFEFF51B009BFC7BDF9E /* Pods_AEPSignalTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 109359E45EEAE020AB32E187 /* Pods_AEPSignalTests.framework */; };
+		F3E5DC536F16C910B482CBE8 /* Pods_AEPCoreMocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F45189B63F077DD02E531C58 /* Pods_AEPCoreMocks.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -839,6 +848,9 @@
 		21F79ABD24E7144F003204C3 /* IDParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDParserTests.swift; sourceTree = "<group>"; };
 		21F79AC024E72204003204C3 /* V4MigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V4MigratorTests.swift; sourceTree = "<group>"; };
 		21FE151F24F03254008A82FF /* IdentityPublicAPITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityPublicAPITests.swift; sourceTree = "<group>"; };
+		241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabaseMigrator.swift; sourceTree = "<group>"; };
+		241D9B362E71EA8700969B09 /* FileManager+Directories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+Directories.swift"; sourceTree = "<group>"; };
+		241D9B382E73428D00969B09 /* EventHistoryConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryConstants.swift; sourceTree = "<group>"; };
 		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		2438B92929BF906F001D6F3A /* rules_testTimestampu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTimestampu.json; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
@@ -901,6 +913,8 @@
 		24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EventData+FNV1A32.swift"; sourceTree = "<group>"; };
 		24EDE33826F10BA10068A65F /* String+FNV1A32.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+FNV1A32.swift"; sourceTree = "<group>"; };
 		24EDE33A26F39F450068A65F /* EventHistoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryResult.swift; sourceTree = "<group>"; };
+		24FE30A22E79D63F0050A0F2 /* FileManagerDirectoriesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerDirectoriesTests.swift; sourceTree = "<group>"; };
+		24FE30A42E79DAEF0050A0F2 /* EventHistoryDatabaseMigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryDatabaseMigratorTests.swift; sourceTree = "<group>"; };
 		24FE9ABD2C9A268E008DA017 /* PresentationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationError.swift; sourceTree = "<group>"; };
 		2E00098E26D59EA100DE1F3B /* LifecycleV2FunctionalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2FunctionalTests.swift; sourceTree = "<group>"; };
 		2E36F6C926C1D8D200B194D9 /* LifecycleV2DataStoreCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2DataStoreCacheTests.swift; sourceTree = "<group>"; };
@@ -1127,6 +1141,7 @@
 		3FF8296B2509942300483C74 /* rules_signal.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_signal.json; sourceTree = "<group>"; };
 		4107BA7054E313DACA0D4EF4 /* Pods-AEPCoreTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreTests.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreTests/Pods-AEPCoreTests.release.xcconfig"; sourceTree = "<group>"; };
 		41E5D22C6D72CCCF26904EDE /* Pods-AEPSignalTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.debug.xcconfig"; sourceTree = "<group>"; };
+		4B438B390579F70D4E66B7FC /* Pods-AEPIdentity.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentity.release.xcconfig"; path = "Target Support Files/Pods-AEPIdentity/Pods-AEPIdentity.release.xcconfig"; sourceTree = "<group>"; };
 		4C0111D42DB1D41600996757 /* Event+EventHistoryRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequestTests.swift"; sourceTree = "<group>"; };
 		4C16E6A42DFBAE3C00B66935 /* Array+Flatten.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Flatten.swift"; sourceTree = "<group>"; };
 		4C16E6A62E04C44100B66935 /* rules_testArrayFlatteningNotation.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = rules_testArrayFlatteningNotation.json; sourceTree = "<group>"; };
@@ -1193,8 +1208,10 @@
 		4CF707A02DB9CDE000C54A7F /* EventHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryStore.swift; sourceTree = "<group>"; };
 		4CF791742CAB4F84003C1FD8 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/AppleTVOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		4CF7919A2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileCore+TestHelper.swift"; sourceTree = "<group>"; };
+		561016C58C744A0F4899C05C /* Pods_AEPLifecycle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPLifecycle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		57BD6E641AFED0510599B36C /* Pods_AEPCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A089B5A7E9F846B8CB9EB34 /* Pods-AEPIntegrationTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIntegrationTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIntegrationTests/Pods-AEPIntegrationTests.debug.xcconfig"; sourceTree = "<group>"; };
+		62D21FF298AE8CE1F0AB582D /* Pods_AEPIdentity.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIdentity.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.debug.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		752261852AA257F600D59847 /* FileSystemNamedCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileSystemNamedCollection.swift; sourceTree = "<group>"; };
 		7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsMigrator.swift; sourceTree = "<group>"; };
@@ -1227,6 +1244,9 @@
 		78B36AB325CA1FCE00D6D25F /* FullscreenPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenPresentable.swift; sourceTree = "<group>"; };
 		78B36AED25CA210E00D6D25F /* FloatingButtonPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingButtonPresentable.swift; sourceTree = "<group>"; };
 		78F2E2D327FF7B900073CE00 /* ServiceProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProviderTests.swift; sourceTree = "<group>"; };
+		79F3A7B4F0396D50E79820A4 /* Pods-AEPSignal.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignal.release.xcconfig"; path = "Target Support Files/Pods-AEPSignal/Pods-AEPSignal.release.xcconfig"; sourceTree = "<group>"; };
+		83D13DAAB345DB1FC0B07A1A /* Pods-AEPIdentity.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentity.debug.xcconfig"; path = "Target Support Files/Pods-AEPIdentity/Pods-AEPIdentity.debug.xcconfig"; sourceTree = "<group>"; };
+		8A3E03E570830C4DCC26DFAA /* Pods-AEPCoreMocks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreMocks.debug.xcconfig"; path = "Target Support Files/Pods-AEPCoreMocks/Pods-AEPCoreMocks.debug.xcconfig"; sourceTree = "<group>"; };
 		8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPLifecycleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92027B3E25C9C1A7007BE140 /* UIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIService.swift; sourceTree = "<group>"; };
 		92027B9825C9EAF2007BE140 /* MockUIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUIService.swift; sourceTree = "<group>"; };
@@ -1244,8 +1264,11 @@
 		92F06BFB25B8F1FE004C1700 /* MessageMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageMonitoring.swift; sourceTree = "<group>"; };
 		92F06D0325BA33F3004C1700 /* Showable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Showable.swift; sourceTree = "<group>"; };
 		93CFCD63764CE54E145E7D8F /* Pods-AEPSignalTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignalTests.release.xcconfig"; path = "Target Support Files/Pods-AEPSignalTests/Pods-AEPSignalTests.release.xcconfig"; sourceTree = "<group>"; };
+		97B3AC66212CDC60B40AE41E /* Pods-AEPSignal.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPSignal.debug.xcconfig"; path = "Target Support Files/Pods-AEPSignal/Pods-AEPSignal.debug.xcconfig"; sourceTree = "<group>"; };
 		9DE12D90D1BAF0798BC007AB /* Pods-AEPCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCore.release.xcconfig"; path = "Target Support Files/Pods-AEPCore/Pods-AEPCore.release.xcconfig"; sourceTree = "<group>"; };
 		A5F5A65742E1DBDC25CF9F98 /* Pods-AEPIdentityTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPIdentityTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPIdentityTests/Pods-AEPIdentityTests.debug.xcconfig"; sourceTree = "<group>"; };
+		A6A5961CCE6FC2BC3C4808A0 /* Pods-AEPLifecycle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycle.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycle/Pods-AEPLifecycle.debug.xcconfig"; sourceTree = "<group>"; };
+		AA406DB9C15FB845D1DE51F0 /* Pods-AEPLifecycle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycle.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycle/Pods-AEPLifecycle.release.xcconfig"; sourceTree = "<group>"; };
 		AA4461A0B65C5DFE219540A5 /* Pods-TestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestApp.release.xcconfig"; path = "Target Support Files/Pods-TestApp/Pods-TestApp.release.xcconfig"; sourceTree = "<group>"; };
 		AC1089C826DD87C0004ABAC4 /* XDMLanguage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XDMLanguage.swift; sourceTree = "<group>"; };
 		AC4D8D4526D9AC0200A86435 /* EventTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTests.swift; sourceTree = "<group>"; };
@@ -1307,9 +1330,12 @@
 		BFFD6ECD2D4C94D7000D3224 /* MobileCoreInitializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializer.swift; sourceTree = "<group>"; };
 		BFFD6ECF2D5575D4000D3224 /* MobileCoreInitializerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCoreInitializerTests.swift; sourceTree = "<group>"; };
 		CBB1F735C1AAEA1CD448B2C0 /* Pods-AEPLifecycleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.debug.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.debug.xcconfig"; sourceTree = "<group>"; };
+		CEA4853D9F0F29877DDF2DFD /* Pods-AEPCoreMocks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPCoreMocks.release.xcconfig"; path = "Target Support Files/Pods-AEPCoreMocks/Pods-AEPCoreMocks.release.xcconfig"; sourceTree = "<group>"; };
 		D42C989B26CAE6DA002E3184 /* LifecycleV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2.swift; sourceTree = "<group>"; };
 		D42C989D26CAE790002E3184 /* LifecycleV2Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleV2Constants.swift; sourceTree = "<group>"; };
 		D855F28C43DD8DA6A4B6ACFE /* Pods_AEPIntegrationTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPIntegrationTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDC41D5506BEDFEC2A9D479C /* Pods_AEPSignal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPSignal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F45189B63F077DD02E531C58 /* Pods_AEPCoreMocks.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AEPCoreMocks.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC7A9CEC59D6694933A01324 /* Pods-AEPLifecycleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AEPLifecycleTests.release.xcconfig"; path = "Target Support Files/Pods-AEPLifecycleTests/Pods-AEPLifecycleTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1340,6 +1366,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E588FE7F092CC3BEF5923A8 /* Pods_AEPSignal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1394,6 +1421,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A992DAF6408E4EF7F6023F33 /* Pods_AEPLifecycle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1411,6 +1439,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DD8CC428EAC7397F3E3A9DE /* Pods_AEPIdentity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1428,6 +1457,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CF791752CAB4F84003C1FD8 /* XCTest.framework in Frameworks */,
+				F3E5DC536F16C910B482CBE8 /* Pods_AEPCoreMocks.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1437,14 +1467,15 @@
 		21377D3F24E33830004BAC01 /* migration */ = {
 			isa = PBXGroup;
 			children = (
-				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
-				215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */,
-				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
-				218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */,
+				241D9B342E71E8B800969B09 /* EventHistoryDatabaseMigrator.swift */,
 				21F79AB624E704C5003204C3 /* IDParser.swift */,
 				21F79ABA24E70CDC003204C3 /* IDParsing.swift */,
 				7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */,
 				7522618C2AABBE9600D59847 /* UserDefaultMigrationConstants.swift */,
+				215A6CE124ED92C500FE0657 /* V4MigrationConstants.swift */,
+				21377D4024E3383E004BAC01 /* V4Migrator.swift */,
+				218C813D24EC4101009B4F31 /* V5MigrationConstants.swift */,
+				218C813A24EC3EBC009B4F31 /* V5Migrator.swift */,
 			);
 			path = migration;
 			sourceTree = "<group>";
@@ -1507,6 +1538,7 @@
 		21F79ABC24E71427003204C3 /* MigrationTests */ = {
 			isa = PBXGroup;
 			children = (
+				24FE30A42E79DAEF0050A0F2 /* EventHistoryDatabaseMigratorTests.swift */,
 				21F79ABD24E7144F003204C3 /* IDParserTests.swift */,
 				7522618E2AAF6E2400D59847 /* UserDefaultMigratorTests.swift */,
 				21F79AC024E72204003204C3 /* V4MigratorTests.swift */,
@@ -1783,6 +1815,7 @@
 				4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */,
 				24EDE33626F10B810068A65F /* EventData+FNV1A32.swift */,
 				24EDE33026EFB7170068A65F /* EventHistory.swift */,
+				241D9B382E73428D00969B09 /* EventHistoryConstants.swift */,
 				24EDE33426EFBDD60068A65F /* EventHistoryDatabase.swift */,
 				4CF707A02DB9CDE000C54A7F /* EventHistoryStore.swift */,
 				24EDE33226EFB7470068A65F /* EventHistoryRequest.swift */,
@@ -1873,6 +1906,7 @@
 				3F0397F124BE60910019F095 /* AnyCodable.swift */,
 				3F0397E624BE60910019F095 /* AtomicCounter.swift */,
 				BB00E26A24D8C9A600C578C1 /* Date+Format.swift */,
+				241D9B362E71EA8700969B09 /* FileManager+Directories.swift */,
 				3F0397EE24BE60910019F095 /* OperationOrderer.swift */,
 				BB8D436125F99CDD0046E230 /* PrettyDictionary.swift */,
 				3F0397ED24BE60910019F095 /* ThreadSafeArray.swift */,
@@ -1948,14 +1982,15 @@
 			isa = PBXGroup;
 			children = (
 				3F03981124BE61520019F095 /* AnyCodableTests.swift */,
+				75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */,
 				249498E0254A0C910045E392 /* Date+FormatTests.swift */,
+				24FE30A22E79D63F0050A0F2 /* FileManagerDirectoriesTests.swift */,
 				3F03980F24BE61520019F095 /* OperationOrdererTests.swift */,
 				3F03981024BE61520019F095 /* PersistentHitQueueTests.swift */,
-				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				BB8D437125F99DFF0046E230 /* PrettyDictionaryTests.swift */,
+				3F03981224BE61520019F095 /* ThreadSafeArrayTests.swift */,
 				3F03981424BE61520019F095 /* ThreadSafeDictionaryTests.swift */,
 				3F03981324BE61520019F095 /* URLEncoderTests.swift */,
-				75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */,
 				2EF54C272BF6C79100685C07 /* URLError+RecoverableTests.swift */,
 			);
 			path = utility;
@@ -2407,6 +2442,10 @@
 				8D83561969E15C045AEBC014 /* Pods_AEPLifecycleTests.framework */,
 				109359E45EEAE020AB32E187 /* Pods_AEPSignalTests.framework */,
 				B59C21EF8D78FC053D2404B0 /* Pods_TestApp.framework */,
+				DDC41D5506BEDFEC2A9D479C /* Pods_AEPSignal.framework */,
+				F45189B63F077DD02E531C58 /* Pods_AEPCoreMocks.framework */,
+				62D21FF298AE8CE1F0AB582D /* Pods_AEPIdentity.framework */,
+				561016C58C744A0F4899C05C /* Pods_AEPLifecycle.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2448,6 +2487,14 @@
 				93CFCD63764CE54E145E7D8F /* Pods-AEPSignalTests.release.xcconfig */,
 				6D652C6627B749495CEE65C1 /* Pods-TestApp.debug.xcconfig */,
 				AA4461A0B65C5DFE219540A5 /* Pods-TestApp.release.xcconfig */,
+				97B3AC66212CDC60B40AE41E /* Pods-AEPSignal.debug.xcconfig */,
+				79F3A7B4F0396D50E79820A4 /* Pods-AEPSignal.release.xcconfig */,
+				8A3E03E570830C4DCC26DFAA /* Pods-AEPCoreMocks.debug.xcconfig */,
+				CEA4853D9F0F29877DDF2DFD /* Pods-AEPCoreMocks.release.xcconfig */,
+				83D13DAAB345DB1FC0B07A1A /* Pods-AEPIdentity.debug.xcconfig */,
+				4B438B390579F70D4E66B7FC /* Pods-AEPIdentity.release.xcconfig */,
+				A6A5961CCE6FC2BC3C4808A0 /* Pods-AEPLifecycle.debug.xcconfig */,
+				AA406DB9C15FB845D1DE51F0 /* Pods-AEPLifecycle.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -2563,6 +2610,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 24B4936424D4C31100AA38D9 /* Build configuration list for PBXNativeTarget "AEPSignal" */;
 			buildPhases = (
+				78A2A6648006A6148C960499 /* [CP] Check Pods Manifest.lock */,
 				24B4934A24D4C31100AA38D9 /* Headers */,
 				24B4934B24D4C31100AA38D9 /* Sources */,
 				24B4934C24D4C31100AA38D9 /* Frameworks */,
@@ -2687,6 +2735,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3FE6DDE224C62EE60065EA05 /* Build configuration list for PBXNativeTarget "AEPLifecycle" */;
 			buildPhases = (
+				86414C1E809F00C4BC143DB2 /* [CP] Check Pods Manifest.lock */,
 				3FE6DDCC24C62EE60065EA05 /* Headers */,
 				3FE6DDCD24C62EE60065EA05 /* Sources */,
 				3FE6DDCE24C62EE60065EA05 /* Frameworks */,
@@ -2729,6 +2778,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3FE6DE4024C642330065EA05 /* Build configuration list for PBXNativeTarget "AEPIdentity" */;
 			buildPhases = (
+				A6D31706130B238F0B70BCD6 /* [CP] Check Pods Manifest.lock */,
 				3FE6DE2A24C642330065EA05 /* Headers */,
 				3FE6DE2B24C642330065EA05 /* Sources */,
 				3FE6DE2C24C642330065EA05 /* Frameworks */,
@@ -2771,6 +2821,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3FF8170F24D89B160064DFA1 /* Build configuration list for PBXNativeTarget "AEPCoreMocks" */;
 			buildPhases = (
+				37D2ABC7EB8025EF619BB9CD /* [CP] Check Pods Manifest.lock */,
 				3FF8170524D89B160064DFA1 /* Headers */,
 				3FF8170624D89B160064DFA1 /* Sources */,
 				3FF8170724D89B160064DFA1 /* Frameworks */,
@@ -3123,6 +3174,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		37D2ABC7EB8025EF619BB9CD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AEPCoreMocks-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		461B02974871EBDBADF78DAF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3231,6 +3304,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		78A2A6648006A6148C960499 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AEPSignal-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		796C1826513F7AC8E1ACEDEE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3290,6 +3385,50 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-AEPIdentityTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		86414C1E809F00C4BC143DB2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AEPLifecycle-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6D31706130B238F0B70BCD6 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-AEPIdentity-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3453,6 +3592,7 @@
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
 				3FB66AC924CA004400502CAF /* MobileCore+Configuration.swift in Sources */,
 				216A15C8257818B200D43848 /* Data+HexString.swift in Sources */,
+				241D9B352E71E8C800969B09 /* EventHistoryDatabaseMigrator.swift in Sources */,
 				3F2B1DC5263221580030F50B /* LaunchRulesEngine+Downloader.swift in Sources */,
 				3FB66AC524CA004400502CAF /* CoreConstants.swift in Sources */,
 				3FB66AE224CA004400502CAF /* Event+Configuration.swift in Sources */,
@@ -3478,6 +3618,7 @@
 				21F79AB724E704C5003204C3 /* IDParser.swift in Sources */,
 				ACD0179F2E68F07F00C09F04 /* ExtensionFinder.swift in Sources */,
 				24CF602B2538AC79006473BA /* MobileCore+Tracking.swift in Sources */,
+				241D9B392E73429900969B09 /* EventHistoryConstants.swift in Sources */,
 				3FB66AE024CA004400502CAF /* ConfigurationState.swift in Sources */,
 				3FB66AE724CA004400502CAF /* PrivacyStatus.swift in Sources */,
 				4CF7079D2DB9C86500C54A7F /* EventHistoryProvider.swift in Sources */,
@@ -3562,6 +3703,7 @@
 				2130A5BB260AB582005DBA0F /* NotAnExtension.swift in Sources */,
 				4CA311542DF8EDC800C6A24B /* JSONConditionHistoricalCountTests.swift in Sources */,
 				24CF603B2538C7E4006473BA /* MobileCore+TrackingTests.swift in Sources */,
+				24FE30A52E79DAEF0050A0F2 /* EventHistoryDatabaseMigratorTests.swift in Sources */,
 				4C2157BA2DC158F40055C8C9 /* RulesEngineFunctionalTests.swift in Sources */,
 				4C2157BB2DC158F40055C8C9 /* RulesEngineHistoricalTests.swift in Sources */,
 				24E255D7270F526D00AB9F07 /* String+FNV1A32Tests.swift in Sources */,
@@ -3654,6 +3796,7 @@
 				3F0397E024BE5FF30019F095 /* URLService.swift in Sources */,
 				246FD07A26C1939900FD130B /* MessageAnimation.swift in Sources */,
 				3F0397CA24BE5FF30019F095 /* Log.swift in Sources */,
+				241D9B372E71EB0900969B09 /* FileManager+Directories.swift in Sources */,
 				92EEA6062589343700DBA3EE /* MessageMonitor.swift in Sources */,
 				3F0397DC24BE5FF30019F095 /* UserDefaultsNamedCollection.swift in Sources */,
 				92F06D0425BA33F4004C1700 /* Showable.swift in Sources */,
@@ -3706,6 +3849,7 @@
 				2EF54C292BF6C87500685C07 /* URLError+RecoverableTests.swift in Sources */,
 				786C004825B8F43E00F26D34 /* DefaultHeadersFormatterTests.swift in Sources */,
 				246FD08626CC529800FD130B /* MessageGestureRecognizerTests.swift in Sources */,
+				24FE30A32E79D63F0050A0F2 /* FileManagerDirectoriesTests.swift in Sources */,
 				78AA4EC02509731B00205AE9 /* FileManager+ZipTests.swift in Sources */,
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
 				246FD08826CC52F200FD130B /* MessagingDelegateTests.swift in Sources */,
@@ -4238,7 +4382,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4272,7 +4416,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.core;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4339,6 +4483,7 @@
 		};
 		24B4936024D4C31100AA38D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 97B3AC66212CDC60B40AE41E /* Pods-AEPSignal.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -4348,6 +4493,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "\"${PODS_CONFIGURATION_BUILD_DIR}/AEPRulesEngine\"";
+				HEADER_SEARCH_PATHS = "\"${PODS_CONFIGURATION_BUILD_DIR}/AEPRulesEngine/AEPRulesEngine.framework/Headers\"";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -4356,7 +4503,12 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				LIBRARY_SEARCH_PATHS = (
+					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
+					"$(inherited)",
+					/usr/lib/swift,
+				);
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4371,6 +4523,7 @@
 		};
 		24B4936124D4C31100AA38D9 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 79F3A7B4F0396D50E79820A4 /* Pods-AEPSignal.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -4380,6 +4533,8 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = "\"${PODS_CONFIGURATION_BUILD_DIR}/AEPRulesEngine\"";
+				HEADER_SEARCH_PATHS = "\"${PODS_CONFIGURATION_BUILD_DIR}/AEPRulesEngine/AEPRulesEngine.framework/Headers\"";
 				INFOPLIST_FILE = AEPSignal/Sources/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -4388,7 +4543,12 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				LIBRARY_SEARCH_PATHS = (
+					"\"${TOOLCHAIN_DIR}/usr/lib/swift/${PLATFORM_NAME}\"",
+					"$(inherited)",
+					/usr/lib/swift,
+				);
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.signal;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4463,7 +4623,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4494,7 +4654,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = come.adobe.aep.services;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4638,7 +4798,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4669,7 +4829,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPServicesMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4682,6 +4842,7 @@
 		};
 		3FE6DDE324C62EE60065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A6A5961CCE6FC2BC3C4808A0 /* Pods-AEPLifecycle.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -4699,7 +4860,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4713,6 +4874,7 @@
 		};
 		3FE6DDE424C62EE60065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AA406DB9C15FB845D1DE51F0 /* Pods-AEPLifecycle.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -4730,7 +4892,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.lifecycle;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4790,6 +4952,7 @@
 		};
 		3FE6DE4124C642330065EA05 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 83D13DAAB345DB1FC0B07A1A /* Pods-AEPIdentity.debug.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -4807,7 +4970,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4821,6 +4984,7 @@
 		};
 		3FE6DE4224C642330065EA05 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B438B390579F70D4E66B7FC /* Pods-AEPIdentity.release.xcconfig */;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ENABLE_MODULES = YES;
@@ -4838,7 +5002,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.identity;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4898,6 +5062,7 @@
 		};
 		3FF8171024D89B160064DFA1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8A3E03E570830C4DCC26DFAA /* Pods-AEPCoreMocks.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -4916,7 +5081,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
@@ -4930,6 +5095,7 @@
 		};
 		3FF8171124D89B160064DFA1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEA4853D9F0F29877DDF2DFD /* Pods-AEPCoreMocks.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_CODE_COVERAGE = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -4948,7 +5114,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 5.6.2;
+				MARKETING_VERSION = 5.7.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.aep.AEPCoreMocks;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;

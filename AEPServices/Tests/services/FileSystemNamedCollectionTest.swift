@@ -24,7 +24,9 @@ class FileSystemNamedCollectionTest: XCTestCase {
         let testKey = "testKey"
         let testValue: String = "testValue"
         service.set(collectionName: collectionName, key: testKey, value: testValue)
-        XCTAssertEqual(service.get(collectionName: collectionName, key: testKey) as? String, testValue)
+        let retrievedValue = service.get(collectionName: collectionName, key: testKey) as? String
+        XCTAssertNotNil(retrievedValue)
+        XCTAssertEqual(retrievedValue, testValue)
     }
 
     func testRemove() {
@@ -33,7 +35,8 @@ class FileSystemNamedCollectionTest: XCTestCase {
         let testValue: String = "testValue"
         service.set(collectionName: collectionName, key: testKey, value: testValue)
         service.remove(collectionName: collectionName, key: testKey)
-        XCTAssertNil(service.get(collectionName: collectionName, key: testKey))
+        let retrievedValue = service.get(collectionName: collectionName, key: testKey) as? String
+        XCTAssertNil(retrievedValue)
     }
 
     func testNamespacing() {
@@ -48,6 +51,8 @@ class FileSystemNamedCollectionTest: XCTestCase {
 
         let firstGet = service.get(collectionName: collectionName, key: testKey)
         let secondGet = service.get(collectionName: collectionName2, key: testKey)
+        XCTAssertNotNil(firstGet)
+        XCTAssertNotNil(secondGet)
         XCTAssertNotEqual(firstGet as? String, secondGet as? String)
         XCTAssertEqual(firstGet as? String, testValue)
         XCTAssertEqual(secondGet as? String, testValue2)
