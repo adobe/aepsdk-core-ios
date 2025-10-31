@@ -50,6 +50,7 @@ final class MobileCoreInitializer {
 
         if initialized.incrementAndGet() != 1 {
             Log.debug(label: LOG_TAG, "initialize - ignoring as it was already called.")
+            completion?()
             return
         }
 
@@ -66,7 +67,10 @@ final class MobileCoreInitializer {
         // Setup Lifecycle tracking if enabled and register extensions.
         // Use background thread to allow caller process to continue during initialization.
         DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
+            guard let self = self else {
+                completion?()
+                return
+            }
 
             if options.lifecycleAutomaticTrackingEnabled {
                 self.setupLifecycle(additionalContextData: options.lifecycleAdditionalContextData)
