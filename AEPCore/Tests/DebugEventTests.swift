@@ -17,7 +17,7 @@ import AEPCoreMocks
 
 @testable import AEPCore
 
-class DebugEventTests: XCTestCase, AnyCodableAsserts {
+class DebugEventTests: XCTestCase {
     private let TEST_EVENT_NAME = "testName"
     private let TEST_EVENT_TYPE = EventType.system
     private let TEST_EVENT_SOURCE = EventSource.debug

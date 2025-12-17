@@ -374,7 +374,25 @@
 		4CB003FD2E32C8CB002152B0 /* TokenReplacementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB003FC2E32C8CB002152B0 /* TokenReplacementTests.swift */; };
 		4CB003FF2E32C8D2002152B0 /* TestableTraversable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CB003FE2E32C8D2002152B0 /* TestableTraversable.swift */; };
 		4CCC21A62D9623BC00F75340 /* Event+EventHistoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */; };
-		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
+		4CDB0DDA2EEA7949000B85D0 /* JSONPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DD82EEA7949000B85D0 /* JSONPath.swift */; };
+		4CDB0DDB2EEA7949000B85D0 /* ValidationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DD92EEA7949000B85D0 /* ValidationEngine.swift */; };
+		4CDB0DDC2EEA7949000B85D0 /* JSONAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DD72EEA7949000B85D0 /* JSONAssertionBuilder.swift */; };
+		4CDB0DDD2EEA7949000B85D0 /* JSONPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DD82EEA7949000B85D0 /* JSONPath.swift */; };
+		4CDB0DDE2EEA7949000B85D0 /* ValidationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DD92EEA7949000B85D0 /* ValidationEngine.swift */; };
+		4CDB0DDF2EEA7949000B85D0 /* JSONAssertionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DD72EEA7949000B85D0 /* JSONAssertionBuilder.swift */; };
+		4CDB0DE52EEE8F39000B85D0 /* JSONValidationScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DE42EEE8F39000B85D0 /* JSONValidationScope.swift */; };
+		4CDB0DE62EEE8F39000B85D0 /* JSONValidationScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DE42EEE8F39000B85D0 /* JSONValidationScope.swift */; };
+		4CDB0DE82EEE9515000B85D0 /* AnyCodableComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DE72EEE9515000B85D0 /* AnyCodableComparable.swift */; };
+		4CDB0DE92EEE9515000B85D0 /* AnyCodableComparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DE72EEE9515000B85D0 /* AnyCodableComparable.swift */; };
+		4CDB0DEB2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DEA2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift */; };
+		4CDB0DEC2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DEA2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift */; };
+		4CDB0DEF2EEFCE1A000B85D0 /* AnyCodableComparableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DEE2EEFCE1A000B85D0 /* AnyCodableComparableTests.swift */; };
+		4CDB0DF12EEFDAFB000B85D0 /* JSONPathTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DF02EEFDAFB000B85D0 /* JSONPathTests.swift */; };
+		4CDB0DF32EEFE7A1000B85D0 /* NodeConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DF22EEFE7A1000B85D0 /* NodeConfigTests.swift */; };
+		4CDB0DF52EEFE831000B85D0 /* ValidationEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DF42EEFE831000B85D0 /* ValidationEngineTests.swift */; };
+		4CDB0DF72EEFE895000B85D0 /* JSONAssertionBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DF62EEFE895000B85D0 /* JSONAssertionBuilderTests.swift */; };
+		4CDB0DF92EEFE938000B85D0 /* XCTestCase_JSONAssertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CDB0DF82EEFE938000B85D0 /* XCTestCase_JSONAssertsTests.swift */; };
+		4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Extensions.swift */; };
 		4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */; };
 		4CF0285F2C2CCBD3008ADE05 /* EventSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028182C2CCA0F008ADE05 /* EventSpec.swift */; };
 		4CF028602C2CCBD3008ADE05 /* FileManager+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028222C2CCA0F008ADE05 /* FileManager+TestHelper.swift */; };
@@ -393,7 +411,6 @@
 		4CF0286D2C2CCBD3008ADE05 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028262C2CCA10008ADE05 /* TestUtils.swift */; };
 		4CF0286E2C2CCBD3008ADE05 /* URL+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281E2C2CCA0F008ADE05 /* URL+TestHelper.swift */; };
 		4CF0286F2C2CCBD3008ADE05 /* UserDefaults+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */; };
-		4CF028702C2CCBD3008ADE05 /* XCTestCase+AnyCodableAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */; };
 		4CF028712C2CCBD3008ADE05 /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		4CF028722C2CCBD3008ADE05 /* MockFullscreenListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */; };
 		4CF028732C2CCBD3008ADE05 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
@@ -437,7 +454,6 @@
 		4CF791882CAB4F97003C1FD8 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028262C2CCA10008ADE05 /* TestUtils.swift */; };
 		4CF791892CAB4F97003C1FD8 /* URL+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281E2C2CCA0F008ADE05 /* URL+TestHelper.swift */; };
 		4CF7918A2CAB4F97003C1FD8 /* UserDefaults+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */; };
-		4CF7918B2CAB4F97003C1FD8 /* XCTestCase+AnyCodableAsserts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */; };
 		4CF7918D2CAB517F003C1FD8 /* MockDiskCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2467E43B24CB54B70022F6BE /* MockDiskCache.swift */; };
 		4CF7918E2CAB517F003C1FD8 /* MockFullscreenListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AA26D401EC008F9EFD /* MockFullscreenListener.swift */; };
 		4CF7918F2CAB517F003C1FD8 /* MockHitQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215C859B24C6492800CCCD26 /* MockHitQueue.swift */; };
@@ -450,7 +466,7 @@
 		4CF791962CAB517F003C1FD8 /* MockURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FE6DDED24C62F610065EA05 /* MockURLSession.swift */; };
 		4CF791972CAB517F003C1FD8 /* MockUIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92027B9825C9EAF2007BE140 /* MockUIService.swift */; };
 		4CF791982CAB517F003C1FD8 /* MockWKScriptMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE74AE26D40278008F9EFD /* MockWKScriptMessage.swift */; };
-		4CF791992CAB5377003C1FD8 /* AnyCodable+Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */; };
+		4CF791992CAB5377003C1FD8 /* AnyCodable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF028162C2CCA0F008ADE05 /* AnyCodable+Extensions.swift */; };
 		4CF7919B2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF7919A2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift */; };
 		752261862AA257F600D59847 /* FileSystemNamedCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752261852AA257F600D59847 /* FileSystemNamedCollection.swift */; };
 		7522618B2AA929E300D59847 /* UserDefaultsMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7522618A2AA929E300D59847 /* UserDefaultsMigrator.swift */; };
@@ -1176,7 +1192,19 @@
 		4CB003FC2E32C8CB002152B0 /* TokenReplacementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenReplacementTests.swift; sourceTree = "<group>"; };
 		4CB003FE2E32C8D2002152B0 /* TestableTraversable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableTraversable.swift; sourceTree = "<group>"; };
 		4CCC21A52D9623BC00F75340 /* Event+EventHistoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Event+EventHistoryRequest.swift"; sourceTree = "<group>"; };
-		4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Array.swift"; sourceTree = "<group>"; };
+		4CDB0DD72EEA7949000B85D0 /* JSONAssertionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONAssertionBuilder.swift; sourceTree = "<group>"; };
+		4CDB0DD82EEA7949000B85D0 /* JSONPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPath.swift; sourceTree = "<group>"; };
+		4CDB0DD92EEA7949000B85D0 /* ValidationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationEngine.swift; sourceTree = "<group>"; };
+		4CDB0DE42EEE8F39000B85D0 /* JSONValidationScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONValidationScope.swift; sourceTree = "<group>"; };
+		4CDB0DE72EEE9515000B85D0 /* AnyCodableComparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableComparable.swift; sourceTree = "<group>"; };
+		4CDB0DEA2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+JSONAsserts.swift"; sourceTree = "<group>"; };
+		4CDB0DEE2EEFCE1A000B85D0 /* AnyCodableComparableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodableComparableTests.swift; sourceTree = "<group>"; };
+		4CDB0DF02EEFDAFB000B85D0 /* JSONPathTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONPathTests.swift; sourceTree = "<group>"; };
+		4CDB0DF22EEFE7A1000B85D0 /* NodeConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeConfigTests.swift; sourceTree = "<group>"; };
+		4CDB0DF42EEFE831000B85D0 /* ValidationEngineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationEngineTests.swift; sourceTree = "<group>"; };
+		4CDB0DF62EEFE895000B85D0 /* JSONAssertionBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONAssertionBuilderTests.swift; sourceTree = "<group>"; };
+		4CDB0DF82EEFE938000B85D0 /* XCTestCase_JSONAssertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestCase_JSONAssertsTests.swift; sourceTree = "<group>"; };
+		4CF028162C2CCA0F008ADE05 /* AnyCodable+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AnyCodable+Extensions.swift"; sourceTree = "<group>"; };
 		4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealNetworkService.swift; sourceTree = "<group>"; };
 		4CF028182C2CCA0F008ADE05 /* EventSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventSpec.swift; sourceTree = "<group>"; };
 		4CF028192C2CCA0F008ADE05 /* MockNetworkService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
@@ -1191,7 +1219,6 @@
 		4CF028222C2CCA0F008ADE05 /* FileManager+TestHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FileManager+TestHelper.swift"; sourceTree = "<group>"; };
 		4CF028232C2CCA0F008ADE05 /* NodeConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeConfig.swift; sourceTree = "<group>"; };
 		4CF028242C2CCA0F008ADE05 /* TestConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestConstants.swift; sourceTree = "<group>"; };
-		4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTestCase+AnyCodableAsserts.swift"; sourceTree = "<group>"; };
 		4CF028262C2CCA10008ADE05 /* TestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtils.swift; sourceTree = "<group>"; };
 		4CF028272C2CCA10008ADE05 /* MockDataStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataStore.swift; sourceTree = "<group>"; };
 		4CF028282C2CCA10008ADE05 /* HttpConnection+DeepCopy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpConnection+DeepCopy.swift"; sourceTree = "<group>"; };
@@ -1981,6 +2008,7 @@
 		3F03980E24BE61520019F095 /* utility */ = {
 			isa = PBXGroup;
 			children = (
+				4CDB0DED2EEFCD17000B85D0 /* JSONValidation */,
 				3F03981124BE61520019F095 /* AnyCodableTests.swift */,
 				75408CF62948EA0A00C44CE1 /* AtomicCounterTests.swift */,
 				249498E0254A0C910045E392 /* Date+FormatTests.swift */,
@@ -2329,10 +2357,38 @@
 			path = RulesEngineHistoricalTests;
 			sourceTree = "<group>";
 		};
+		4CDB0DE02EEA794E000B85D0 /* JSONValidation */ = {
+			isa = PBXGroup;
+			children = (
+				4CDB0DE72EEE9515000B85D0 /* AnyCodableComparable.swift */,
+				4CDB0DD72EEA7949000B85D0 /* JSONAssertionBuilder.swift */,
+				4CDB0DD82EEA7949000B85D0 /* JSONPath.swift */,
+				4CDB0DE42EEE8F39000B85D0 /* JSONValidationScope.swift */,
+				4CF028232C2CCA0F008ADE05 /* NodeConfig.swift */,
+				4CDB0DD92EEA7949000B85D0 /* ValidationEngine.swift */,
+				4CDB0DEA2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift */,
+			);
+			path = JSONValidation;
+			sourceTree = "<group>";
+		};
+		4CDB0DED2EEFCD17000B85D0 /* JSONValidation */ = {
+			isa = PBXGroup;
+			children = (
+				4CDB0DEE2EEFCE1A000B85D0 /* AnyCodableComparableTests.swift */,
+				4CDB0DF62EEFE895000B85D0 /* JSONAssertionBuilderTests.swift */,
+				4CDB0DF02EEFDAFB000B85D0 /* JSONPathTests.swift */,
+				4CDB0DF22EEFE7A1000B85D0 /* NodeConfigTests.swift */,
+				4CDB0DF42EEFE831000B85D0 /* ValidationEngineTests.swift */,
+				4CDB0DF82EEFE938000B85D0 /* XCTestCase_JSONAssertsTests.swift */,
+			);
+			path = JSONValidation;
+			sourceTree = "<group>";
+		};
 		75341CD72B9674870090CE3A /* PublicTestUtils */ = {
 			isa = PBXGroup;
 			children = (
-				4CF028162C2CCA0F008ADE05 /* AnyCodable+Array.swift */,
+				4CDB0DE02EEA794E000B85D0 /* JSONValidation */,
+				4CF028162C2CCA0F008ADE05 /* AnyCodable+Extensions.swift */,
 				4CF0281D2C2CCA0F008ADE05 /* CountDownLatch.swift */,
 				4CF028182C2CCA0F008ADE05 /* EventSpec.swift */,
 				4CF028222C2CCA0F008ADE05 /* FileManager+TestHelper.swift */,
@@ -2344,14 +2400,12 @@
 				4CF0281A2C2CCA0F008ADE05 /* NamedCollectionDataStore+TestHelper.swift */,
 				4CF0281B2C2CCA0F008ADE05 /* NetworkRequest+DeepCopy.swift */,
 				4CF028292C2CCA10008ADE05 /* NetworkRequestHelper.swift */,
-				4CF028232C2CCA0F008ADE05 /* NodeConfig.swift */,
 				4CF028172C2CCA0F008ADE05 /* RealNetworkService.swift */,
 				4CF0281C2C2CCA0F008ADE05 /* TestableNetworkRequest.swift */,
 				4CF028242C2CCA0F008ADE05 /* TestConstants.swift */,
 				4CF028262C2CCA10008ADE05 /* TestUtils.swift */,
 				4CF0281E2C2CCA0F008ADE05 /* URL+TestHelper.swift */,
 				4CF0281F2C2CCA0F008ADE05 /* UserDefaults+TestHelper.swift */,
-				4CF028252C2CCA0F008ADE05 /* XCTestCase+AnyCodableAsserts.swift */,
 			);
 			path = PublicTestUtils;
 			sourceTree = "<group>";
@@ -3835,6 +3889,7 @@
 				246FD08A26CC53E800FD130B /* FullscreenMessage+FrameCalculationTests.swift in Sources */,
 				BB8D437225F99DFF0046E230 /* PrettyDictionaryTests.swift in Sources */,
 				245292632CA2199E00820CD4 /* PresentationErrorTests.swift in Sources */,
+				4CDB0DF52EEFE831000B85D0 /* ValidationEngineTests.swift in Sources */,
 				3F03982624BE61520019F095 /* URLEncoderTests.swift in Sources */,
 				923973CD25AF92140056A3E5 /* FullscreenMessageTests.swift in Sources */,
 				78AA4EBA2502DF2200205AE9 /* ZipArchiveTest.swift in Sources */,
@@ -3854,15 +3909,20 @@
 				3F03981C24BE61520019F095 /* SQLiteWrapperTests.swift in Sources */,
 				246FD08826CC52F200FD130B /* MessagingDelegateTests.swift in Sources */,
 				246FD08026CC520500FD130B /* MessageAlignmentTests.swift in Sources */,
+				4CDB0DF12EEFDAFB000B85D0 /* JSONPathTests.swift in Sources */,
 				92867D6525C0B56400E32CDC /* FloatingButtonTests.swift in Sources */,
 				75550A3F2A9930A500747BB7 /* NamedCollectionDataStoreFunctionalTests.swift in Sources */,
+				4CDB0DF32EEFE7A1000B85D0 /* NodeConfigTests.swift in Sources */,
 				246FD08226CC521E00FD130B /* MessageAnimationTests.swift in Sources */,
 				3F03982524BE61520019F095 /* ThreadSafeArrayTests.swift in Sources */,
 				3F03981F24BE61520019F095 /* NetworkServiceTests.swift in Sources */,
+				4CDB0DF72EEFE895000B85D0 /* JSONAssertionBuilderTests.swift in Sources */,
 				3F03982024BE61520019F095 /* LogLevelTest.swift in Sources */,
 				246FD07E26CB002F00FD130B /* MessageSettingsTests.swift in Sources */,
 				3F03981A24BE61520019F095 /* DiskCacheServiceTests.swift in Sources */,
+				4CDB0DF92EEFE938000B85D0 /* XCTestCase_JSONAssertsTests.swift in Sources */,
 				75408CF72948EA0A00C44CE1 /* AtomicCounterTests.swift in Sources */,
+				4CDB0DEF2EEFCE1A000B85D0 /* AnyCodableComparableTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3885,7 +3945,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Array.swift in Sources */,
+				4CF0285D2C2CCBD3008ADE05 /* AnyCodable+Extensions.swift in Sources */,
 				4CF0285E2C2CCBD3008ADE05 /* CountDownLatch.swift in Sources */,
 				4CF0285F2C2CCBD3008ADE05 /* EventSpec.swift in Sources */,
 				4CF028602C2CCBD3008ADE05 /* FileManager+TestHelper.swift in Sources */,
@@ -3902,18 +3962,23 @@
 				4CF0286B2C2CCBD3008ADE05 /* TestableNetworkRequest.swift in Sources */,
 				4CF0286C2C2CCBD3008ADE05 /* TestConstants.swift in Sources */,
 				4CF0286D2C2CCBD3008ADE05 /* TestUtils.swift in Sources */,
+				4CDB0DDD2EEA7949000B85D0 /* JSONPath.swift in Sources */,
+				4CDB0DDE2EEA7949000B85D0 /* ValidationEngine.swift in Sources */,
+				4CDB0DDF2EEA7949000B85D0 /* JSONAssertionBuilder.swift in Sources */,
 				4CF0286E2C2CCBD3008ADE05 /* URL+TestHelper.swift in Sources */,
 				4CF0286F2C2CCBD3008ADE05 /* UserDefaults+TestHelper.swift in Sources */,
-				4CF028702C2CCBD3008ADE05 /* XCTestCase+AnyCodableAsserts.swift in Sources */,
 				4CF028712C2CCBD3008ADE05 /* MockDiskCache.swift in Sources */,
 				4CF028722C2CCBD3008ADE05 /* MockFullscreenListener.swift in Sources */,
 				4CF028732C2CCBD3008ADE05 /* MockHitQueue.swift in Sources */,
 				4CF028742C2CCBD3008ADE05 /* MockLoggingService.swift in Sources */,
+				4CDB0DE62EEE8F39000B85D0 /* JSONValidationScope.swift in Sources */,
 				4CF028752C2CCBD3008ADE05 /* MockMessagingDelegate.swift in Sources */,
+				4CDB0DE82EEE9515000B85D0 /* AnyCodableComparable.swift in Sources */,
 				4CF028762C2CCBD3008ADE05 /* MockSystemInfoService.swift in Sources */,
 				4CF028772C2CCBD3008ADE05 /* MockTask.swift in Sources */,
 				4CF028782C2CCBD3008ADE05 /* MockUnzipper.swift in Sources */,
 				4CF028792C2CCBD3008ADE05 /* MockURLService.swift in Sources */,
+				4CDB0DEC2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift in Sources */,
 				4CF0287A2C2CCBD3008ADE05 /* MockURLSession.swift in Sources */,
 				4CF0287B2C2CCBD3008ADE05 /* MockUIService.swift in Sources */,
 				4CF0287C2C2CCBD3008ADE05 /* MockWKScriptMessage.swift in Sources */,
@@ -4029,7 +4094,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CF791992CAB5377003C1FD8 /* AnyCodable+Array.swift in Sources */,
+				4CF791992CAB5377003C1FD8 /* AnyCodable+Extensions.swift in Sources */,
 				4CF7918D2CAB517F003C1FD8 /* MockDiskCache.swift in Sources */,
 				4CF7918E2CAB517F003C1FD8 /* MockFullscreenListener.swift in Sources */,
 				4CF7918F2CAB517F003C1FD8 /* MockHitQueue.swift in Sources */,
@@ -4037,7 +4102,12 @@
 				4CF791912CAB517F003C1FD8 /* MockMessagingDelegate.swift in Sources */,
 				4CF791922CAB517F003C1FD8 /* MockSystemInfoService.swift in Sources */,
 				4CF791932CAB517F003C1FD8 /* MockTask.swift in Sources */,
+				4CDB0DEB2EEEA29D000B85D0 /* XCTestCase+JSONAsserts.swift in Sources */,
 				4CF791942CAB517F003C1FD8 /* MockUnzipper.swift in Sources */,
+				4CDB0DDA2EEA7949000B85D0 /* JSONPath.swift in Sources */,
+				4CDB0DDB2EEA7949000B85D0 /* ValidationEngine.swift in Sources */,
+				4CDB0DE52EEE8F39000B85D0 /* JSONValidationScope.swift in Sources */,
+				4CDB0DDC2EEA7949000B85D0 /* JSONAssertionBuilder.swift in Sources */,
 				4CF791952CAB517F003C1FD8 /* MockURLService.swift in Sources */,
 				4CF791962CAB517F003C1FD8 /* MockURLSession.swift in Sources */,
 				4CF791972CAB517F003C1FD8 /* MockUIService.swift in Sources */,
@@ -4053,6 +4123,7 @@
 				4CF791812CAB4F97003C1FD8 /* NamedCollectionDataStore+TestHelper.swift in Sources */,
 				4CF791822CAB4F97003C1FD8 /* NetworkRequest+DeepCopy.swift in Sources */,
 				4CF791832CAB4F97003C1FD8 /* NetworkRequestHelper.swift in Sources */,
+				4CDB0DE92EEE9515000B85D0 /* AnyCodableComparable.swift in Sources */,
 				4CF791842CAB4F97003C1FD8 /* NodeConfig.swift in Sources */,
 				4CF791852CAB4F97003C1FD8 /* RealNetworkService.swift in Sources */,
 				4CF791862CAB4F97003C1FD8 /* TestableNetworkRequest.swift in Sources */,
@@ -4061,7 +4132,6 @@
 				4CF791892CAB4F97003C1FD8 /* URL+TestHelper.swift in Sources */,
 				4CF7918A2CAB4F97003C1FD8 /* UserDefaults+TestHelper.swift in Sources */,
 				4CF7919B2CACCBF0003C1FD8 /* MobileCore+TestHelper.swift in Sources */,
-				4CF7918B2CAB4F97003C1FD8 /* XCTestCase+AnyCodableAsserts.swift in Sources */,
 				4CF0287D2C2CCBE1008ADE05 /* TestableNetworkService.swift in Sources */,
 				4CF0289C2C2D401E008ADE05 /* MockExtension.swift in Sources */,
 				4CF0289E2C2D401E008ADE05 /* EventHub+TestHelper.swift in Sources */,

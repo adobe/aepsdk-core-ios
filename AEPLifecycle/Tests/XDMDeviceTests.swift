@@ -17,7 +17,7 @@ import AEPServices
 
 @testable import AEPLifecycle
 
-class XDMDeviceTests: XCTestCase, AnyCodableAsserts {
+class XDMDeviceTests: XCTestCase {
 
     private func buildAndSetMockInfoService() {
         let mockSystemInfoService = MockSystemInfoService()

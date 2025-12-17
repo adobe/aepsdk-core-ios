@@ -40,4 +40,19 @@ extension AnyCodable: CustomStringConvertible {
         }
     }
 
+    /// Creates an `AnyCodable` from an optional `Any` value, extracting the underlying value if present.
+    ///
+    /// - Parameter value: The optional value to wrap.
+    /// - Returns: An `AnyCodable` instance representing the value, or an `AnyCodable` with `nil` value if the input is `nil`.
+    public static func from(optionalAny value: Any?) -> AnyCodable {
+        guard let value = value else {
+            return AnyCodable(nilLiteral: ())
+        }
+        switch value {
+        case let existing as AnyCodable:
+            return existing
+        default:
+            return AnyCodable(value)
+        }
+    }
 }

@@ -16,7 +16,7 @@ import AEPCoreMocks
 
 @testable import AEPLifecycle
 
-class XDMMobileLifecycleDetailsTests: XCTestCase, AnyCodableAsserts {
+class XDMMobileLifecycleDetailsTests: XCTestCase {
 
     // MARK: Encodable Tests
 

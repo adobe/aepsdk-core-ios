@@ -17,7 +17,7 @@ import AEPServices
 @testable import AEPCore
 @testable import AEPCoreMocks
 
-class ConfigurationStateTests: XCTestCase, AnyCodableAsserts {
+class ConfigurationStateTests: XCTestCase {
     var configState: ConfigurationState!
     let dataStore = NamedCollectionDataStore(name: "ConfigurationStateTests")
     var configDownloader: MockConfigurationDownloader!

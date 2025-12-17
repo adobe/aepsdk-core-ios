@@ -12,11 +12,11 @@
 
 import XCTest
 
-import AEPServicesMocks
+import AEPCoreMocks
 
 @testable import AEPCore
 
-class RulesEngineHistoricalTests: RulesEngineTestBase, AnyCodableAsserts {
+class RulesEngineHistoricalTests: RulesEngineTestBase {
     override func setUp() {
         super.setUp()
         defaultEvent = Event(name: "Test Event",

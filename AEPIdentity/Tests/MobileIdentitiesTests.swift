@@ -17,7 +17,7 @@ import AEPCoreMocks
 @testable import AEPCore
 @testable import AEPIdentity
 
-class MobileIdentitiesTests: XCTestCase, AnyCodableAsserts {
+class MobileIdentitiesTests: XCTestCase {
     let ecid = ECID()
     let configurationSharedState = [ConfigurationConstants.Keys.EXPERIENCE_CLOUD_ORGID: "test-orgid"]
     var identitySharedState: [String: Any] {

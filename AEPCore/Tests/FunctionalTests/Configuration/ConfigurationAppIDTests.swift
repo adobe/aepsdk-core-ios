@@ -100,7 +100,12 @@ class ConfigurationAppIDTests: XCTestCase {
         // Extension should properly resolve the shared state to previous value eventhough it drops the event.
         XCTAssertEqual(2, mockRuntime.createdSharedStates.count)
         if (mockRuntime.createdSharedStates.count == 2) {
-            XCTAssertEqual(mockRuntime.firstSharedState?.toAnyCodable(), mockRuntime.secondSharedState?.toAnyCodable())
+            assertJSON(
+                expected: mockRuntime.firstSharedState ?? [:],
+                actual: mockRuntime.secondSharedState
+            )
+            .equalCount(scope: .subtree)
+            .validate()
         }
     }
 

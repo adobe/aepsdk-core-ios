@@ -15,7 +15,7 @@ import AEPCoreMocks
 
 @testable import AEPCore
 
-class TokenFinderTests: XCTestCase, AnyCodableAsserts {
+class TokenFinderTests: XCTestCase {
     func testGetTokenValue_event_type_source() {
         /// Given: initialize `TokenFinder` with mocked extension runtime & dummy event
         let runtime = TestableExtensionRuntime()

@@ -15,7 +15,7 @@ import AEPCoreMocks
 
 @testable import AEPIdentity
 
-class CustomIdentityTests: XCTestCase, AnyCodableAsserts {
+class CustomIdentityTests: XCTestCase {
 
     // MARK: Codable tests
     
