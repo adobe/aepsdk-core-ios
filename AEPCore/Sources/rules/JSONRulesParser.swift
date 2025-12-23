@@ -63,7 +63,12 @@ struct JSONRuleRoot: Codable {
                         consequences.append(RuleConsequence(id: id, type: type, details: dict))
                     }
                 }
-                let rule = LaunchRule(condition: conditionExpression, consequences: consequences)
+                // Pass the reevaluable flag, defaulting to false if not present
+                let rule = LaunchRule(
+                    condition: conditionExpression,
+                    consequences: consequences,
+                    reevaluable: launchRule.reevaluable ?? false
+                )
                 result.append(rule)
             }
         }
@@ -74,6 +79,9 @@ struct JSONRuleRoot: Codable {
 struct JSONRule: Codable {
     var condition: JSONCondition
     var consequences: [JSONConsequence]
+    /// Indicates whether this rule should trigger re-evaluation when matched.
+    /// Defaults to `false` if not present in the JSON.
+    var reevaluable: Bool?
 }
 
 enum ConditionType: String, Codable {
