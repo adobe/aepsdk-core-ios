@@ -64,6 +64,9 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS = "insertIfNotExists"
     /// Do not process Dispatch consequence if chained event count is greater than max
     private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
+    
+    /// Consequence types that support reevaluation - only schema consequences are reevaluable
+    static let REEVALUABLE_CONSEQUENCE_TYPES: Set<String> = ["schema"]
 
     // Event History Operation constants
     private static let EVENT_HISTORY_OPERATION_KEY = "operation"
@@ -207,52 +210,104 @@ public class LaunchRulesEngine {
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
         
         let matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
+        
+        // If there are no matching rules, nothing to do
         guard !matchedRules.isEmpty else {
             return event
         }
         
-        // Check if we need to handle reevaluation
-        if let interceptor = reevaluationInterceptor {
-            let reevaluableRules = matchedRules.filter { $0.reevaluable }
+        // If no interceptor is set, process consequences immediately
+        guard let interceptor = reevaluationInterceptor else {
+            return processConsequences(
+                for: event,
+                matchedRules: matchedRules,
+                tokenFinder: traversableTokenFinder,
+                dispatchChainCount: dispatchChainCount
+            )
+        }
+        
+        // Get rules that are reevaluable AND have schema consequences
+        let reevaluableRules = getReevaluableRules(from: matchedRules)
+        
+        // If no reevaluable rules, process all consequences immediately
+        if reevaluableRules.isEmpty {
+            return processConsequences(
+                for: event,
+                matchedRules: matchedRules,
+                tokenFinder: traversableTokenFinder,
+                dispatchChainCount: dispatchChainCount
+            )
+        }
+        
+        // Get rules to hold (rules with schema consequences - wait for reevaluation)
+        let rulesToHold = getRulesToHoldForReevaluation(from: matchedRules)
+        
+        // Rules to process immediately = matched rules - rules to hold
+        let rulesToProcess = matchedRules.filter { rule in
+            !rulesToHold.contains { $0 === rule }
+        }
+        
+        Log.trace(label: LOG_TAG, "(\(self.name)) : Found \(reevaluableRules.count) reevaluable rule(s), \(rulesToHold.count) rule(s) to hold, \(rulesToProcess.count) rule(s) to process immediately")
+        
+        // Trigger reevaluation for reevaluable rules
+        interceptor.onReevaluationTriggered(
+            event: event,
+            reevaluableRules: reevaluableRules
+        ) { [weak self] in
+            guard let self = self else { return }
             
-            if !reevaluableRules.isEmpty {
-                Log.trace(label: LOG_TAG, "(\(self.name)) : Found \(reevaluableRules.count) reevaluable rule(s), notifying interceptor")
+            // Re-evaluate rules after interceptor completes (rules may have been updated)
+            self.rulesQueue.async {
+                let newTokenFinder = TokenFinder(event: event, extensionRuntime: self.extensionRuntime)
+                var newlyMatchedRules = self.rulesEngine.evaluate(data: newTokenFinder)
                 
-                // Notify interceptor and defer consequence processing
-                // The interceptor will update rules and call completion when ready
-                interceptor.onReevaluationTriggered(
-                    event: event,
-                    reevaluableRules: reevaluableRules
-                ) { [weak self] in
-                    guard let self = self else { return }
-                    
-                    // Re-evaluate rules after interceptor completes (rules may have been updated)
-                    self.rulesQueue.async {
-                        let newTokenFinder = TokenFinder(event: event, extensionRuntime: self.extensionRuntime)
-                        let newMatchedRules = self.rulesEngine.evaluate(data: newTokenFinder)
-                        
-                        Log.trace(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation complete, processing \(newMatchedRules.count) matched rule(s)")
-                        _ = self.processConsequences(
-                            for: event,
-                            matchedRules: newMatchedRules,
-                            tokenFinder: newTokenFinder,
-                            dispatchChainCount: dispatchChainCount
-                        )
-                    }
+                // Remove rules that were already processed
+                newlyMatchedRules = newlyMatchedRules.filter { newRule in
+                    !rulesToProcess.contains { $0 === newRule }
                 }
                 
-                // Return original event; consequences will be processed asynchronously
-                return event
+                Log.trace(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation complete, processing \(newlyMatchedRules.count) newly matched rule(s)")
+                _ = self.processConsequences(
+                    for: event,
+                    matchedRules: newlyMatchedRules,
+                    tokenFinder: newTokenFinder,
+                    dispatchChainCount: dispatchChainCount
+                )
             }
         }
         
-        // No reevaluation needed - process consequences immediately
-        return processConsequences(
-            for: event,
-            matchedRules: matchedRules,
-            tokenFinder: traversableTokenFinder,
-            dispatchChainCount: dispatchChainCount
-        )
+        // Process non-schema rules immediately
+        if !rulesToProcess.isEmpty {
+            return processConsequences(
+                for: event,
+                matchedRules: rulesToProcess,
+                tokenFinder: traversableTokenFinder,
+                dispatchChainCount: dispatchChainCount
+            )
+        }
+        
+        // Return original event; schema consequences will be processed asynchronously
+        return event
+    }
+    
+    // MARK: - Reevaluation Helper Methods
+    
+    /// Returns rules that are marked as reevaluable AND have schema consequences.
+    /// Only rules with schema consequences can trigger reevaluation.
+    ///
+    /// - Parameter rules: The list of matched rules to filter
+    /// - Returns: Rules that should trigger reevaluation
+    private func getReevaluableRules(from rules: [LaunchRule]) -> [LaunchRule] {
+        return rules.filter { $0.reevaluable && $0.hasReevaluableSupportedConsequence }
+    }
+    
+    /// Returns rules that have schema consequences and should be held until reevaluation completes.
+    /// These rules are not processed immediately because their consequences depend on updated rules.
+    ///
+    /// - Parameter rules: The list of matched rules to filter
+    /// - Returns: Rules that should wait for reevaluation
+    private func getRulesToHoldForReevaluation(from rules: [LaunchRule]) -> [LaunchRule] {
+        return rules.filter { $0.hasReevaluableSupportedConsequence }
     }
     
     /// Processes consequences for matched rules.
@@ -580,5 +635,20 @@ extension RuleConsequence {
 
     public var schema: String? {
         return details["schema"] as? String
+    }
+}
+
+// MARK: - LaunchRule Reevaluation Support Extension
+
+extension LaunchRule {
+    /// Returns `true` if this rule has at least one consequence type that supports reevaluation.
+    /// Currently, only "schema" consequences are considered reevaluable.
+    var hasReevaluableSupportedConsequence: Bool {
+        for consequence in consequences {
+            if LaunchRulesEngine.REEVALUABLE_CONSEQUENCE_TYPES.contains(consequence.type) {
+                return true
+            }
+        }
+        return false
     }
 }
