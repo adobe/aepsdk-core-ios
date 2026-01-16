@@ -74,6 +74,7 @@
 		241D9B392E73429900969B09 /* EventHistoryConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241D9B382E73428D00969B09 /* EventHistoryConstants.swift */; };
 		2420365224E35EEB0069C89D /* SignalHitProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */; };
 		2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */ = {isa = PBXBuildFile; fileRef = 2438B92929BF906F001D6F3A /* rules_testTimestampu.json */; };
+		REEVALUABLE0001 /* rules_reevaluable.json in Resources */ = {isa = PBXBuildFile; fileRef = REEVALUABLE0002 /* rules_reevaluable.json */; };
 		243DCE4724C7AA2800E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; };
 		243DCE4824C7AA7C00E99AD9 /* AEPServices.h in Headers */ = {isa = PBXBuildFile; fileRef = 243DCE4624C7AA2800E99AD9 /* AEPServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		245292632CA2199E00820CD4 /* PresentationErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245292622CA2199400820CD4 /* PresentationErrorTests.swift */; };
@@ -853,6 +854,7 @@
 		241D9B382E73428D00969B09 /* EventHistoryConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHistoryConstants.swift; sourceTree = "<group>"; };
 		2420365124E35EEB0069C89D /* SignalHitProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignalHitProcessorTests.swift; sourceTree = "<group>"; };
 		2438B92929BF906F001D6F3A /* rules_testTimestampu.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_testTimestampu.json; sourceTree = "<group>"; };
+		REEVALUABLE0002 /* rules_reevaluable.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = rules_reevaluable.json; sourceTree = "<group>"; };
 		243DCE4624C7AA2800E99AD9 /* AEPServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AEPServices.h; sourceTree = "<group>"; };
 		245292622CA2199400820CD4 /* PresentationErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationErrorTests.swift; sourceTree = "<group>"; };
 		24543A1324E1DAFC002D8D9A /* MockURLService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockURLService.swift; path = AEPServices/Mocks/MockURLService.swift; sourceTree = SOURCE_ROOT; };
@@ -2086,6 +2088,7 @@
 				BBA512BA24F6C6CA0030DAD1 /* rules_testModifyData_invalidJson.json */,
 				BBA512B224F5CF380030DAD1 /* rules_testModifyData.json */,
 				2438B92929BF906F001D6F3A /* rules_testTimestampu.json */,
+				REEVALUABLE0002 /* rules_reevaluable.json */,
 				3F5D45FC25190E8C0040E298 /* rules_testTransform.json */,
 				BB3E86DF24F86E6200E39C53 /* rules_testUrlenc_invalidFnName.json */,
 				BB3E86DC24F86B4100E39C53 /* rules_testUrlenc.json */,
@@ -2948,6 +2951,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2438B92A29BF906F001D6F3A /* rules_testTimestampu.json in Resources */,
+				REEVALUABLE0001 /* rules_reevaluable.json in Resources */,
 				BB3E86DE24F86B6700E39C53 /* rules_testUrlenc.json in Resources */,
 				BBA512A724F4A18B0030DAD1 /* rules_testMatcherNc.json in Resources */,
 				BBA512B424F5CF380030DAD1 /* rules_testModifyData.json in Resources */,

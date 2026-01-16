@@ -241,10 +241,11 @@ public class LaunchRulesEngine {
         
         // Get rules to hold (rules with schema consequences - wait for reevaluation)
         let rulesToHold = getRulesToHoldForReevaluation(from: matchedRules)
+        let rulesToHoldIds = Set(rulesToHold.flatMap { $0.consequences.map { $0.id } })
         
         // Rules to process immediately = matched rules - rules to hold
         let rulesToProcess = matchedRules.filter { rule in
-            !rulesToHold.contains { $0 === rule }
+            !rule.consequences.contains { rulesToHoldIds.contains($0.id) }
         }
         
         Log.trace(label: LOG_TAG, "(\(self.name)) : Found \(reevaluableRules.count) reevaluable rule(s), \(rulesToHold.count) rule(s) to hold, \(rulesToProcess.count) rule(s) to process immediately")
@@ -261,9 +262,10 @@ public class LaunchRulesEngine {
                 let newTokenFinder = TokenFinder(event: event, extensionRuntime: self.extensionRuntime)
                 var newlyMatchedRules = self.rulesEngine.evaluate(data: newTokenFinder)
                 
-                // Remove rules that were already processed
+                // Remove rules that were already processed (compare by consequence IDs)
+                let processedIds = Set(rulesToProcess.flatMap { $0.consequences.map { $0.id } })
                 newlyMatchedRules = newlyMatchedRules.filter { newRule in
-                    !rulesToProcess.contains { $0 === newRule }
+                    !newRule.consequences.contains { processedIds.contains($0.id) }
                 }
                 
                 Log.trace(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation complete, processing \(newlyMatchedRules.count) newly matched rule(s)")

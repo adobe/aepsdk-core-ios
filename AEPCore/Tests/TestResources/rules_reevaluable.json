@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "reevaluable": true,
+  "rules": [
+    {
+      "condition": {
+        "type": "group",
+        "definition": {
+          "logic": "and",
+          "conditions": [
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~type",
+                "matcher": "eq",
+                "values": [
+                  "com.adobe.eventType.generic.track"
+                ]
+              }
+            },
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "~source",
+                "matcher": "eq",
+                "values": [
+                  "com.adobe.eventSource.requestContent"
+                ]
+              }
+            },
+            {
+              "type": "matcher",
+              "definition": {
+                "key": "action",
+                "matcher": "eq",
+                "values": [
+                  "fullscreen"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "consequences": [
+        {
+          "id": "reevaluable-consequence-id",
+          "type": "schema",
+          "detail": {
+            "id": "reevaluable-consequence-id",
+            "schema": "https://ns.adobe.com/personalization/message/in-app",
+            "data": {
+              "content": "<html><body>Reevaluable Message</body></html>",
+              "contentType": "text/html"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

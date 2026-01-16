@@ -50,6 +50,9 @@ public class JSONRulesParser {
 struct JSONRuleRoot: Codable {
     var version: Int
     var rules: [JSONRule]
+    /// Root-level reevaluable flag. When set, applies to all rules in this ruleset
+    /// unless overridden at the individual rule level.
+    var reevaluable: Bool?
 
     /// Converts itself to `LaunchRule` objects, which can be used in `AEPRulesEngine`
     /// - Returns: an array of `LaunchRule` objects
@@ -63,11 +66,13 @@ struct JSONRuleRoot: Codable {
                         consequences.append(RuleConsequence(id: id, type: type, details: dict))
                     }
                 }
-                // Pass the reevaluable flag, defaulting to false if not present
+                // Priority: rule-level reevaluable > root-level reevaluable > default (false)
+                // This allows individual rules to override the root-level setting
+                let isReevaluable = launchRule.reevaluable ?? reevaluable ?? false
                 let rule = LaunchRule(
                     condition: conditionExpression,
                     consequences: consequences,
-                    reevaluable: launchRule.reevaluable ?? false
+                    reevaluable: isReevaluable
                 )
                 result.append(rule)
             }

@@ -155,4 +155,222 @@ class LaunchRulesEngineTests: XCTestCase {
         let urlString = consequences?.first?.details["url"] as? String
         XCTAssertTrue(urlString?.contains("device=abc") ?? false) // verify token replacement occurred
     }
+    
+    // MARK: - Reevaluation Interceptor Tests
+    
+    func testSetReevaluationInterceptor() {
+        // Given
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let mockInterceptor = MockRuleReevaluationInterceptor()
+        
+        // When
+        rulesEngine.setReevaluationInterceptor(mockInterceptor)
+        
+        // Then - no crash, interceptor is set (we can't directly verify since it's private)
+        // The actual behavior is tested in the following tests
+    }
+    
+    func testReevaluationInterceptorNotCalledForNonReevaluableRules() {
+        // Given
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let mockInterceptor = MockRuleReevaluationInterceptor()
+        rulesEngine.setReevaluationInterceptor(mockInterceptor)
+        
+        // Load non-reevaluable rules
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_1", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let rules = JSONRulesParser.parse(data) else {
+            XCTFail("Could not load rules_1.json")
+            return
+        }
+        
+        rulesEngine.replaceRules(with: rules)
+        
+        // When - process an event that matches
+        runtime.simulateSharedState(for: "com.adobe.module.lifecycle", data: (value: [
+            "lifecyclecontextdata": ["carriername": "AT&T", "devicename": "abc"]
+        ], status: .set))
+        
+        let testEvent = Event(name: "test",
+                              type: "com.adobe.eventType.lifecycle",
+                              source: "com.adobe.eventSource.responseContent",
+                              data: ["lifecyclecontextdata": ["launchevent": true]])
+        
+        _ = rulesEngine.process(event: testEvent)
+        
+        // Then - interceptor should NOT be called (rules are not reevaluable)
+        XCTAssertFalse(mockInterceptor.onReevaluationTriggeredCalled, "Interceptor should not be called for non-reevaluable rules")
+    }
+    
+    func testReevaluationInterceptorCalledForReevaluableRules() {
+        // Given
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let mockInterceptor = MockRuleReevaluationInterceptor()
+        rulesEngine.setReevaluationInterceptor(mockInterceptor)
+        
+        // Load reevaluable rules
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_reevaluable", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let rules = JSONRulesParser.parse(data) else {
+            XCTFail("Could not load rules_reevaluable.json")
+            return
+        }
+        
+        rulesEngine.replaceRules(with: rules)
+        
+        // When - process an event that matches the reevaluable rule
+        let testEvent = Event(name: "test",
+                              type: "com.adobe.eventType.generic.track",
+                              source: "com.adobe.eventSource.requestContent",
+                              data: ["action": "fullscreen"])
+        
+        _ = rulesEngine.process(event: testEvent)
+        
+        // Then - interceptor SHOULD be called
+        XCTAssertTrue(mockInterceptor.onReevaluationTriggeredCalled, "Interceptor should be called for reevaluable rules")
+        XCTAssertEqual(1, mockInterceptor.reevaluableRulesReceived?.count)
+        XCTAssertNotNil(mockInterceptor.eventReceived)
+        XCTAssertNotNil(mockInterceptor.completionReceived)
+    }
+    
+    func testReevaluationCompletionTriggersReEvaluation() {
+        // Given
+        let runtime = TestableExtensionRuntime()
+        let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
+        let mockInterceptor = MockRuleReevaluationInterceptor()
+        mockInterceptor.shouldCallCompletionImmediately = true
+        rulesEngine.setReevaluationInterceptor(mockInterceptor)
+        
+        // Load reevaluable rules
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_reevaluable", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let rules = JSONRulesParser.parse(data) else {
+            XCTFail("Could not load rules_reevaluable.json")
+            return
+        }
+        
+        rulesEngine.replaceRules(with: rules)
+        
+        // When
+        let testEvent = Event(name: "test",
+                              type: "com.adobe.eventType.generic.track",
+                              source: "com.adobe.eventSource.requestContent",
+                              data: ["action": "fullscreen"])
+        
+        _ = rulesEngine.process(event: testEvent)
+        
+        // Wait for async completion
+        let expectation = XCTestExpectation(description: "Wait for re-evaluation")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            expectation.fulfill()
+        }
+        wait(for: [expectation], timeout: 1.0)
+        
+        // Then - completion was called, triggering re-evaluation
+        XCTAssertTrue(mockInterceptor.onReevaluationTriggeredCalled)
+        XCTAssertTrue(mockInterceptor.completionWasCalled)
+    }
+    
+    func testHasReevaluableSupportedConsequence_SchemaType() {
+        // Given - a rule with schema consequence type
+        let jsonWithSchemaConsequence = """
+        {
+            "version": 1,
+            "reevaluable": true,
+            "rules": [
+                {
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["test"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "test-id",
+                            "type": "schema",
+                            "detail": {}
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+        
+        // When
+        let rules = JSONRulesParser.parse(jsonWithSchemaConsequence.data(using: .utf8)!)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertTrue(rules?[0].hasReevaluableSupportedConsequence ?? false, "Schema consequence should be reevaluable supported")
+    }
+    
+    func testHasReevaluableSupportedConsequence_NonSchemaType() {
+        // Given - a rule with non-schema consequence type (e.g., "url")
+        let jsonWithUrlConsequence = """
+        {
+            "version": 1,
+            "reevaluable": true,
+            "rules": [
+                {
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["test"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "test-id",
+                            "type": "url",
+                            "detail": {}
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+        
+        // When
+        let rules = JSONRulesParser.parse(jsonWithUrlConsequence.data(using: .utf8)!)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertFalse(rules?[0].hasReevaluableSupportedConsequence ?? true, "Non-schema consequence should NOT be reevaluable supported")
+    }
+}
+
+// MARK: - Mock Interceptor
+
+class MockRuleReevaluationInterceptor: RuleReevaluationInterceptor {
+    var onReevaluationTriggeredCalled = false
+    var eventReceived: Event?
+    var reevaluableRulesReceived: [LaunchRule]?
+    var completionReceived: (() -> Void)?
+    var completionWasCalled = false
+    var shouldCallCompletionImmediately = false
+    
+    func onReevaluationTriggered(event: Event, reevaluableRules: [LaunchRule], completion: @escaping () -> Void) {
+        onReevaluationTriggeredCalled = true
+        eventReceived = event
+        reevaluableRulesReceived = reevaluableRules
+        completionReceived = completion
+        
+        if shouldCallCompletionImmediately {
+            completionWasCalled = true
+            completion()
+        }
+    }
 }
