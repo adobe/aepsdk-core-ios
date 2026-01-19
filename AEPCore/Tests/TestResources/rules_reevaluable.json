@@ -1,8 +1,10 @@
 {
   "version": 1,
-  "reevaluable": true,
   "rules": [
     {
+      "meta": {
+        "reEvaluable": true
+      },
       "condition": {
         "type": "group",
         "definition": {
@@ -58,4 +60,3 @@
     }
   ]
 }
-

@@ -81,14 +81,16 @@ class JSONRulesParserTests: XCTestCase {
     
     // MARK: - Reevaluable Flag Tests
     
-    func testParseRulesWithRootLevelReevaluableTrue() {
-        // Given: JSON with root-level reevaluable = true
+    func testParseRulesWithMetaReevaluableTrue() {
+        // Given: JSON with meta.reEvaluable = true (backend format)
         let jsonWithReevaluable = """
         {
             "version": 1,
-            "reevaluable": true,
             "rules": [
                 {
+                    "meta": {
+                        "reEvaluable": true
+                    },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -115,17 +117,19 @@ class JSONRulesParserTests: XCTestCase {
         // Then
         XCTAssertNotNil(rules)
         XCTAssertEqual(1, rules?.count)
-        XCTAssertTrue(rules?[0].reevaluable ?? false, "Rule should be marked as reevaluable")
+        XCTAssertTrue(rules?[0].reevaluable ?? false, "Rule should be marked as reevaluable from meta")
     }
     
-    func testParseRulesWithRootLevelReevaluableFalse() {
-        // Given: JSON with root-level reevaluable = false
+    func testParseRulesWithMetaReevaluableFalse() {
+        // Given: JSON with meta.reEvaluable = false
         let jsonWithReevaluableFalse = """
         {
             "version": 1,
-            "reevaluable": false,
             "rules": [
                 {
+                    "meta": {
+                        "reEvaluable": false
+                    },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -153,6 +157,43 @@ class JSONRulesParserTests: XCTestCase {
         XCTAssertNotNil(rules)
         XCTAssertEqual(1, rules?.count)
         XCTAssertFalse(rules?[0].reevaluable ?? true, "Rule should NOT be marked as reevaluable")
+    }
+    
+    func testParseRulesWithRootLevelReevaluableFallback() {
+        // Given: JSON with root-level reevaluable = true (fallback when meta is not present)
+        let jsonWithRootReevaluable = """
+        {
+            "version": 1,
+            "reevaluable": true,
+            "rules": [
+                {
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["com.adobe.eventType.generic.track"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "test-consequence",
+                            "type": "schema",
+                            "detail": {}
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+        
+        // When
+        let rules = JSONRulesParser.parse(jsonWithRootReevaluable.data(using: .utf8)!)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertTrue(rules?[0].reevaluable ?? false, "Rule should be marked as reevaluable from root-level fallback")
     }
     
     func testParseRulesWithoutReevaluableFlag() {

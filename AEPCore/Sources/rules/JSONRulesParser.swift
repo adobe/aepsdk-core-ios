@@ -66,9 +66,9 @@ struct JSONRuleRoot: Codable {
                         consequences.append(RuleConsequence(id: id, type: type, details: dict))
                     }
                 }
-                // Priority: rule-level reevaluable > root-level reevaluable > default (false)
-                // This allows individual rules to override the root-level setting
-                let isReevaluable = launchRule.reevaluable ?? reevaluable ?? false
+                // Priority: rule-level meta.reEvaluable > root-level reevaluable > default (false)
+                // Rule-level comes from meta object, root-level is a fallback
+                let isReevaluable = launchRule.reevaluable || (reevaluable ?? false)
                 let rule = LaunchRule(
                     condition: conditionExpression,
                     consequences: consequences,
@@ -81,12 +81,28 @@ struct JSONRuleRoot: Codable {
     }
 }
 
+/// Metadata associated with a rule, containing optional flags like reevaluation settings
+struct JSONRuleMeta: Codable {
+    /// Indicates whether this rule should trigger re-evaluation when matched.
+    /// Note: Backend sends this as "reEvaluable" (camelCase with capital E)
+    var reEvaluable: Bool?
+    
+    enum CodingKeys: String, CodingKey {
+        case reEvaluable
+    }
+}
+
 struct JSONRule: Codable {
     var condition: JSONCondition
     var consequences: [JSONConsequence]
-    /// Indicates whether this rule should trigger re-evaluation when matched.
-    /// Defaults to `false` if not present in the JSON.
-    var reevaluable: Bool?
+    /// Metadata containing rule-level settings like reevaluation flag
+    var meta: JSONRuleMeta?
+    
+    /// Convenience property to get reevaluable flag from meta
+    /// Returns `false` if meta or reEvaluable is not present
+    var reevaluable: Bool {
+        return meta?.reEvaluable ?? false
+    }
 }
 
 enum ConditionType: String, Codable {
