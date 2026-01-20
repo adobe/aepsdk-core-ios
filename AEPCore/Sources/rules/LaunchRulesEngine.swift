@@ -14,25 +14,13 @@ import AEPServices
 import Foundation
 import AEPRulesEngine
 
-// MARK: - Rule Reevaluation Protocol
-
-/// A protocol for intercepting rule evaluation when reevaluable rules are triggered.
-///
-/// When rules marked as `reevaluable` match an event, the interceptor is notified
-/// and given an opportunity to update the rules before consequences are processed.
-/// This enables dynamic rule updates based on runtime conditions.
+/// Protocol for intercepting rule evaluation when reevaluable rules are triggered
 public protocol RuleReevaluationInterceptor: AnyObject {
-    
-    /// Called when one or more reevaluable rules have matched an event.
-    ///
-    /// The implementer should perform any necessary async work (e.g., fetching updated rules)
-    /// and then call the completion handler to trigger re-evaluation.
-    ///
+    /// Called when reevaluable rules match an event
     /// - Parameters:
-    ///   - event: The event that triggered the reevaluable rules
-    ///   - reevaluableRules: The list of matched rules that have `reevaluable` set to `true`
-    ///   - completion: A closure to call when the interceptor has finished its work.
-    ///                 This triggers re-evaluation of all rules against the same event.
+    ///   - event: The event that triggered the rules
+    ///   - reevaluableRules: Rules marked as reevaluable
+    ///   - completion: Call when done to trigger re-evaluation
     func onReevaluationTriggered(
         event: Event,
         reevaluableRules: [LaunchRule],
@@ -208,35 +196,22 @@ public class LaunchRulesEngine {
     private func evaluateRules(for event: Event) -> Event {
         let dispatchChainCount = dispatchChainedEventsCount.removeValue(forKey: event.id)
         let traversableTokenFinder = TokenFinder(event: event, extensionRuntime: extensionRuntime)
-        
         let matchedRules = rulesEngine.evaluate(data: traversableTokenFinder)
         
-        // If there are no matching rules, nothing to do
         guard !matchedRules.isEmpty else {
             return event
         }
         
         // If no interceptor is set, process consequences immediately
         guard let interceptor = reevaluationInterceptor else {
-            return processConsequences(
-                for: event,
-                matchedRules: matchedRules,
-                tokenFinder: traversableTokenFinder,
-                dispatchChainCount: dispatchChainCount
-            )
+            return processConsequences(for: event, matchedRules: matchedRules, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
         }
         
         // Get rules that are reevaluable AND have schema consequences
         let reevaluableRules = getReevaluableRules(from: matchedRules)
         
-        // If no reevaluable rules, process all consequences immediately
         if reevaluableRules.isEmpty {
-            return processConsequences(
-                for: event,
-                matchedRules: matchedRules,
-                tokenFinder: traversableTokenFinder,
-                dispatchChainCount: dispatchChainCount
-            )
+            return processConsequences(for: event, matchedRules: matchedRules, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
         }
         
         // Get rules to hold (rules with schema consequences - wait for reevaluation)
@@ -250,11 +225,7 @@ public class LaunchRulesEngine {
         
         Log.trace(label: LOG_TAG, "(\(self.name)) : Found \(reevaluableRules.count) reevaluable rule(s), \(rulesToHold.count) rule(s) to hold, \(rulesToProcess.count) rule(s) to process immediately")
         
-        // Trigger reevaluation for reevaluable rules
-        interceptor.onReevaluationTriggered(
-            event: event,
-            reevaluableRules: reevaluableRules
-        ) { [weak self] in
+        interceptor.onReevaluationTriggered(event: event, reevaluableRules: reevaluableRules) { [weak self] in
             guard let self = self else { return }
             
             // Re-evaluate rules after interceptor completes (rules may have been updated)
@@ -269,26 +240,14 @@ public class LaunchRulesEngine {
                 }
                 
                 Log.trace(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation complete, processing \(newlyMatchedRules.count) newly matched rule(s)")
-                _ = self.processConsequences(
-                    for: event,
-                    matchedRules: newlyMatchedRules,
-                    tokenFinder: newTokenFinder,
-                    dispatchChainCount: dispatchChainCount
-                )
+                _ = self.processConsequences(for: event, matchedRules: newlyMatchedRules, tokenFinder: newTokenFinder, dispatchChainCount: dispatchChainCount)
             }
         }
         
-        // Process non-schema rules immediately
         if !rulesToProcess.isEmpty {
-            return processConsequences(
-                for: event,
-                matchedRules: rulesToProcess,
-                tokenFinder: traversableTokenFinder,
-                dispatchChainCount: dispatchChainCount
-            )
+            return processConsequences(for: event, matchedRules: rulesToProcess, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
         }
         
-        // Return original event; schema consequences will be processed asynchronously
         return event
     }
     

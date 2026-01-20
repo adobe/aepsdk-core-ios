@@ -17,17 +17,8 @@ import AEPRulesEngine
 public struct LaunchRule: Rule {
     public let condition: Evaluable
     public let consequences: [RuleConsequence]
-    
-    /// Indicates whether this rule should trigger re-evaluation when matched.
-    /// When `true`, the rules engine will notify registered interceptors and allow them
-    /// to update rules before processing consequences.
     public let reevaluable: Bool
 
-    /// Creates a new LaunchRule instance.
-    /// - Parameters:
-    ///   - condition: The condition that must be satisfied for this rule to match
-    ///   - consequences: The list of consequences to execute when the rule matches
-    ///   - reevaluable: Whether this rule should trigger re-evaluation flow. Defaults to `false`.
     init(condition: Evaluable, consequences: [RuleConsequence], reevaluable: Bool = false) {
         self.condition = condition
         self.consequences = consequences

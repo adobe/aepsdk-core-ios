@@ -50,9 +50,6 @@ public class JSONRulesParser {
 struct JSONRuleRoot: Codable {
     var version: Int
     var rules: [JSONRule]
-    /// Root-level reevaluable flag. When set, applies to all rules in this ruleset
-    /// unless overridden at the individual rule level.
-    var reevaluable: Bool?
 
     /// Converts itself to `LaunchRule` objects, which can be used in `AEPRulesEngine`
     /// - Returns: an array of `LaunchRule` objects
@@ -66,13 +63,10 @@ struct JSONRuleRoot: Codable {
                         consequences.append(RuleConsequence(id: id, type: type, details: dict))
                     }
                 }
-                // Priority: rule-level meta.reEvaluable > root-level reevaluable > default (false)
-                // Rule-level comes from meta object, root-level is a fallback
-                let isReevaluable = launchRule.reevaluable || (reevaluable ?? false)
                 let rule = LaunchRule(
                     condition: conditionExpression,
                     consequences: consequences,
-                    reevaluable: isReevaluable
+                    reevaluable: launchRule.reevaluable
                 )
                 result.append(rule)
             }
@@ -81,10 +75,8 @@ struct JSONRuleRoot: Codable {
     }
 }
 
-/// Metadata associated with a rule, containing optional flags like reevaluation settings
+/// Metadata for a rule containing reevaluation settings
 struct JSONRuleMeta: Codable {
-    /// Indicates whether this rule should trigger re-evaluation when matched.
-    /// Note: Backend sends this as "reEvaluable" (camelCase with capital E)
     var reEvaluable: Bool?
     
     enum CodingKeys: String, CodingKey {
@@ -95,11 +87,8 @@ struct JSONRuleMeta: Codable {
 struct JSONRule: Codable {
     var condition: JSONCondition
     var consequences: [JSONConsequence]
-    /// Metadata containing rule-level settings like reevaluation flag
     var meta: JSONRuleMeta?
     
-    /// Convenience property to get reevaluable flag from meta
-    /// Returns `false` if meta or reEvaluable is not present
     var reevaluable: Bool {
         return meta?.reEvaluable ?? false
     }

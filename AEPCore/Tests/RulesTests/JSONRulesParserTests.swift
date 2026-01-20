@@ -159,12 +159,11 @@ class JSONRulesParserTests: XCTestCase {
         XCTAssertFalse(rules?[0].reevaluable ?? true, "Rule should NOT be marked as reevaluable")
     }
     
-    func testParseRulesWithRootLevelReevaluableFallback() {
-        // Given: JSON with root-level reevaluable = true (fallback when meta is not present)
-        let jsonWithRootReevaluable = """
+    func testParseRulesWithoutMetaObject() {
+        // Given: JSON without meta object at all (should default to false)
+        let jsonWithoutMeta = """
         {
             "version": 1,
-            "reevaluable": true,
             "rules": [
                 {
                     "condition": {
@@ -188,12 +187,12 @@ class JSONRulesParserTests: XCTestCase {
         """
         
         // When
-        let rules = JSONRulesParser.parse(jsonWithRootReevaluable.data(using: .utf8)!)
+        let rules = JSONRulesParser.parse(jsonWithoutMeta.data(using: .utf8)!)
         
         // Then
         XCTAssertNotNil(rules)
         XCTAssertEqual(1, rules?.count)
-        XCTAssertTrue(rules?[0].reevaluable ?? false, "Rule should be marked as reevaluable from root-level fallback")
+        XCTAssertFalse(rules?[0].reevaluable ?? true, "Rule without meta should default to NOT reevaluable")
     }
     
     func testParseRulesWithoutReevaluableFlag() {
