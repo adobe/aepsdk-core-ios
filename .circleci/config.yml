@@ -100,15 +100,15 @@ commands:
     steps:
       - macos/preboot-simulator:
           platform: "iOS"
-          device: "iPhone 15"
-          version: "17.4"
+          device: "iPhone 16"
+          version: "18.5"
 
   prestart_tvos_simulator:
     steps:
       - macos/preboot-simulator:
           platform: "tvOS"
           device: "Apple TV"
-          version: "17.4"
+          version: "18.5"
       
   parse_and_upload_coverage:
     description: "Convert .xcresult → Cobertura XML and upload to Codecov"
@@ -161,7 +161,7 @@ commands:
 jobs:
   validate-code:
     macos:
-      xcode: 16.0.0
+      xcode: 16.4.0
 
     steps:
       - checkout
@@ -178,7 +178,7 @@ jobs:
 
   test-ios-core:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -197,7 +197,7 @@ jobs:
 
   test-ios-services:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -216,7 +216,7 @@ jobs:
   
   test-ios-lifecycle:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -235,7 +235,7 @@ jobs:
 
   test-ios-identity:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -254,7 +254,7 @@ jobs:
 
   test-ios-signal:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -273,7 +273,7 @@ jobs:
 
   test-ios-integration:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
 
     steps:
@@ -289,7 +289,7 @@ jobs:
 
   test-tvos-core:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -308,7 +308,7 @@ jobs:
 
   test-tvos-services:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -327,7 +327,7 @@ jobs:
 
   test-tvos-lifecycle:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -346,7 +346,7 @@ jobs:
 
   test-tvos-identity:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -365,7 +365,7 @@ jobs:
 
   test-tvos-signal:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -384,7 +384,7 @@ jobs:
 
   test-tvos-integration:
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
       
     steps:
       - checkout
@@ -399,7 +399,7 @@ jobs:
 
   test-spm-podspec-archive:  
     macos:
-      xcode: 15.3.0
+      xcode: 16.4.0
     
     steps:
       - checkout
