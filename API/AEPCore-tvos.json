@@ -11987,8 +11987,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:7AEPCore27RuleReevaluationInterceptorP023onReevaluationTriggeredD05event16reevaluableRules10completionyAA5EventC_SayAA06LaunchD0VGyyctF",
-            "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP023onReevaluationTriggeredD05event16reevaluableRules10completionyAA5EventC_SayAA06LaunchD0VGyyctF",
+            "usr": "s:7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGyyctF",
+            "mangledName": "$s7AEPCore27RuleReevaluationInterceptorP02onC9Triggered5event16reevaluableRules10completionyAA5EventC_SayAA06LaunchB0VGyyctF",
             "moduleName": "AEPCore",
             "genericSig": "<τ_0_0 where τ_0_0 : AEPCore.RuleReevaluationInterceptor>",
             "sugared_genericSig": "<Self where Self : AEPCore.RuleReevaluationInterceptor>",
@@ -12006,17 +12006,17 @@
         "conformances": [
           {
             "kind": "Conformance",
-            "name": "Copyable",
-            "printedName": "Copyable",
-            "usr": "s:s8CopyableP",
-            "mangledName": "$ss8CopyableP"
-          },
-          {
-            "kind": "Conformance",
             "name": "Escapable",
             "printedName": "Escapable",
             "usr": "s:s9EscapableP",
             "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
           }
         ]
       },
@@ -12054,6 +12054,37 @@
             "mangledName": "$s7AEPCore17LaunchRulesEngineC4name16extensionRuntimeACSS_AA09ExtensionG0_ptcfc",
             "moduleName": "AEPCore",
             "init_kind": "Designated"
+          },
+          {
+            "kind": "Function",
+            "name": "setReevaluationInterceptor",
+            "printedName": "setReevaluationInterceptor(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(any AEPCore.RuleReevaluationInterceptor)?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "RuleReevaluationInterceptor",
+                    "printedName": "any AEPCore.RuleReevaluationInterceptor",
+                    "usr": "s:7AEPCore27RuleReevaluationInterceptorP"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7AEPCore17LaunchRulesEngineC26setReevaluationInterceptoryyAA04RulefG0_pSgF",
+            "mangledName": "$s7AEPCore17LaunchRulesEngineC26setReevaluationInterceptoryyAA04RulefG0_pSgF",
+            "moduleName": "AEPCore",
+            "funcSelfKind": "NonMutating"
           },
           {
             "kind": "Function",
@@ -12255,37 +12286,6 @@
             "mangledName": "$s7AEPCore17LaunchRulesEngineC07replaceC12WithManifest4fromy10Foundation3URLV_tF",
             "moduleName": "AEPCore",
             "isFromExtension": true,
-            "funcSelfKind": "NonMutating"
-          },
-          {
-            "kind": "Function",
-            "name": "setReevaluationInterceptor",
-            "printedName": "setReevaluationInterceptor(_:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Void",
-                "printedName": "()"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "(any AEPCore.RuleReevaluationInterceptor)?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "RuleReevaluationInterceptor",
-                    "printedName": "any AEPCore.RuleReevaluationInterceptor",
-                    "usr": "s:7AEPCore27RuleReevaluationInterceptorP"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Func",
-            "usr": "s:7AEPCore17LaunchRulesEngineC26setReevaluationInterceptoryyAA0bcfG0_pSgF",
-            "mangledName": "$s7AEPCore17LaunchRulesEngineC26setReevaluationInterceptoryyAA0bcfG0_pSgF",
-            "moduleName": "AEPCore",
             "funcSelfKind": "NonMutating"
           }
         ],
