@@ -3,7 +3,7 @@
   "rules": [
     {
       "meta": {
-        "reEvaluable": true
+        "reEvaluate": true
       },
       "condition": {
         "type": "group",

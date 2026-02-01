@@ -89,7 +89,7 @@ class JSONRulesParserTests: XCTestCase {
             "rules": [
                 {
                     "meta": {
-                        "reEvaluable": true
+                        "reEvaluate": true
                     },
                     "condition": {
                         "type": "matcher",
@@ -128,7 +128,7 @@ class JSONRulesParserTests: XCTestCase {
             "rules": [
                 {
                     "meta": {
-                        "reEvaluable": false
+                        "reEvaluate": false
                     },
                     "condition": {
                         "type": "matcher",

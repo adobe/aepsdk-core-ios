@@ -77,10 +77,10 @@ struct JSONRuleRoot: Codable {
 
 /// Metadata for a rule containing reevaluation settings
 struct JSONRuleMeta: Codable {
-    var reEvaluable: Bool?
+    var reEvaluate: Bool?
     
     enum CodingKeys: String, CodingKey {
-        case reEvaluable
+        case reEvaluate
     }
 }
 
@@ -89,8 +89,9 @@ struct JSONRule: Codable {
     var consequences: [JSONConsequence]
     var meta: JSONRuleMeta?
     
+    /// Returns the reevaluable flag from meta, defaults to false if not present
     var reevaluable: Bool {
-        return meta?.reEvaluable ?? false
+        return meta?.reEvaluate ?? false
     }
 }
 
