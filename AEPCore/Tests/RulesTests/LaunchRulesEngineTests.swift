@@ -284,7 +284,7 @@ class LaunchRulesEngineTests: XCTestCase {
             "version": 1,
             "rules": [
                 {
-                    "meta": { "reEvaluable": true },
+                    "meta": { "reEvaluate": true },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -321,7 +321,7 @@ class LaunchRulesEngineTests: XCTestCase {
             "version": 1,
             "rules": [
                 {
-                    "meta": { "reEvaluable": true },
+                    "meta": { "reEvaluate": true },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -390,7 +390,7 @@ class LaunchRulesEngineTests: XCTestCase {
             "version": 1,
             "rules": [
                 {
-                    "meta": { "reEvaluable": true },
+                    "meta": { "reEvaluate": true },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -463,7 +463,7 @@ class LaunchRulesEngineTests: XCTestCase {
             "version": 1,
             "rules": [
                 {
-                    "meta": { "reEvaluable": true },
+                    "meta": { "reEvaluate": true },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -481,7 +481,7 @@ class LaunchRulesEngineTests: XCTestCase {
                     ]
                 },
                 {
-                    "meta": { "reEvaluable": true },
+                    "meta": { "reEvaluate": true },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -536,7 +536,7 @@ class LaunchRulesEngineTests: XCTestCase {
             "version": 1,
             "rules": [
                 {
-                    "meta": { "reEvaluable": true },
+                    "meta": { "reEvaluate": true },
                     "condition": {
                         "type": "matcher",
                         "definition": {
@@ -803,7 +803,7 @@ class LaunchRulesEngineTests: XCTestCase {
             "version": 1,
             "rules": [
                 {
-                    "meta": { "reEvaluable": true },
+                    "meta": { "reEvaluate": true },
                     "condition": {
                         "type": "matcher",
                         "definition": {
