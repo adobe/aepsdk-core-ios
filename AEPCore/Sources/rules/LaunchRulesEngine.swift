@@ -225,7 +225,11 @@ public class LaunchRulesEngine {
         
         Log.trace(label: LOG_TAG, "(\(self.name)) : Found \(reevaluableRules.count) reevaluable rule(s), \(rulesToHold.count) rule(s) to hold, \(rulesToProcess.count) rule(s) to process immediately")
         
-        interceptor.onReevaluationTriggered(event: event, reevaluableRules: reevaluableRules) { [weak self] in
+        // Process non-schema rules first to get the processed event
+        let processedEvent = processConsequences(for: event, matchedRules: rulesToProcess, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
+        
+        // Pass the processed event to the interceptor
+        interceptor.onReevaluationTriggered(event: processedEvent, reevaluableRules: reevaluableRules) { [weak self] in
             guard let self = self else { return }
             
             // Re-evaluate rules after interceptor completes (rules may have been updated)
@@ -240,15 +244,11 @@ public class LaunchRulesEngine {
                 }
                 
                 Log.trace(label: self.LOG_TAG, "(\(self.name)) : Re-evaluation complete, processing \(newlyMatchedRules.count) newly matched rule(s)")
-                _ = self.processConsequences(for: event, matchedRules: newlyMatchedRules, tokenFinder: newTokenFinder, dispatchChainCount: dispatchChainCount)
+                _ = self.processConsequences(for: processedEvent, matchedRules: newlyMatchedRules, tokenFinder: newTokenFinder, dispatchChainCount: dispatchChainCount)
             }
         }
         
-        if !rulesToProcess.isEmpty {
-            return processConsequences(for: event, matchedRules: rulesToProcess, tokenFinder: traversableTokenFinder, dispatchChainCount: dispatchChainCount)
-        }
-        
-        return event
+        return processedEvent
     }
     
     // MARK: - Reevaluation Helper Methods

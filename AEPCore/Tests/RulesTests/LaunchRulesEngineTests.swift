@@ -420,7 +420,7 @@ class LaunchRulesEngineTests: XCTestCase {
                         {
                             "id": "add-consequence",
                             "type": "add",
-                            "detail": { "eventdata": { "key": "value" } }
+                            "detail": { "eventdata": { "addedKey": "addedValue" } }
                         }
                     ]
                 }
@@ -444,14 +444,23 @@ class LaunchRulesEngineTests: XCTestCase {
         let testEvent = Event(name: "test",
                               type: "com.adobe.eventType.generic.track",
                               source: "com.adobe.eventSource.requestContent",
-                              data: [:])
+                              data: ["originalKey": "originalValue"])
         
         let result = rulesEngine.process(event: testEvent)
         
         // Then - interceptor should be called for reevaluable rule
         XCTAssertTrue(mockInterceptor.onReevaluationTriggeredCalled)
-        // Add rule should be processed immediately (event data modified)
+        
+        // Interceptor should receive the PROCESSED event (with add rule data applied)
+        XCTAssertNotNil(mockInterceptor.eventReceived)
+        XCTAssertEqual("addedValue", mockInterceptor.eventReceived?.data?["addedKey"] as? String,
+                       "Interceptor should receive event with add consequence data")
+        XCTAssertEqual("originalValue", mockInterceptor.eventReceived?.data?["originalKey"] as? String,
+                       "Interceptor should receive event with original data preserved")
+        
+        // Returned event should also have the added data
         XCTAssertNotNil(result)
+        XCTAssertEqual("addedValue", result.data?["addedKey"] as? String)
     }
     
     // MARK: - Multiple Reevaluable Schema Rules
@@ -601,8 +610,9 @@ class LaunchRulesEngineTests: XCTestCase {
     
     // MARK: - Correct Event Passing
     
-    func testCorrectEventPassedToInterceptor() {
-        // Given
+    func testCorrectEventPassedToInterceptor_SchemaOnlyRules() {
+        // Given - rules_reevaluable.json only has schema rules (no add/mod rules)
+        // So the processed event equals the original event
         let runtime = TestableExtensionRuntime()
         let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
         let mockInterceptor = MockRuleReevaluationInterceptor()
@@ -627,18 +637,20 @@ class LaunchRulesEngineTests: XCTestCase {
         
         _ = rulesEngine.process(event: testEvent)
         
-        // Then - interceptor should receive the exact same event
+        // Then - interceptor should receive the processed event
+        // Since there are no add/mod rules, processed event equals original event
         XCTAssertNotNil(mockInterceptor.eventReceived)
         XCTAssertEqual(testEvent.id, mockInterceptor.eventReceived?.id)
         XCTAssertEqual(testEvent.name, mockInterceptor.eventReceived?.name)
         XCTAssertEqual(testEvent.type, mockInterceptor.eventReceived?.type)
         XCTAssertEqual(testEvent.source, mockInterceptor.eventReceived?.source)
+        XCTAssertEqual("customValue", mockInterceptor.eventReceived?.data?["customKey"] as? String)
     }
     
     // MARK: - Event Data Persistence After Reevaluation
     
-    func testEventDataPersistenceAfterReevaluation() {
-        // Given
+    func testEventDataPersistenceAfterReevaluation_SchemaOnlyRules() {
+        // Given - rules_reevaluable.json only has schema rules (no add/mod rules)
         let runtime = TestableExtensionRuntime()
         let rulesEngine = LaunchRulesEngine(name: "test_rules_engine", extensionRuntime: runtime)
         let mockInterceptor = MockRuleReevaluationInterceptor()
@@ -671,7 +683,8 @@ class LaunchRulesEngineTests: XCTestCase {
         }
         wait(for: [expectation], timeout: 1.0)
         
-        // Then - event data should be preserved
+        // Then - interceptor should receive the processed event with original data preserved
+        // Since there are no add/mod rules, processed event equals original event
         XCTAssertEqual("fullscreen", mockInterceptor.eventReceived?.data?["action"] as? String)
         XCTAssertEqual("originalValue", mockInterceptor.eventReceived?.data?["originalKey"] as? String)
     }
