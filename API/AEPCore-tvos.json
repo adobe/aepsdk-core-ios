@@ -11863,6 +11863,91 @@
           },
           {
             "kind": "Var",
+            "name": "meta",
+            "printedName": "meta",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String : Any]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Dictionary",
+                    "printedName": "[Swift.String : Any]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ProtocolComposition",
+                        "printedName": "Any"
+                      }
+                    ],
+                    "usr": "s:SD"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7AEPCore10LaunchRuleV4metaSDySSypGSgvp",
+            "mangledName": "$s7AEPCore10LaunchRuleV4metaSDySSypGSgvp",
+            "moduleName": "AEPCore",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "[Swift.String : Any]?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Dictionary",
+                        "printedName": "[Swift.String : Any]",
+                        "children": [
+                          {
+                            "kind": "TypeNominal",
+                            "name": "String",
+                            "printedName": "Swift.String",
+                            "usr": "s:SS"
+                          },
+                          {
+                            "kind": "TypeNominal",
+                            "name": "ProtocolComposition",
+                            "printedName": "Any"
+                          }
+                        ],
+                        "usr": "s:SD"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7AEPCore10LaunchRuleV4metaSDySSypGSgvg",
+                "mangledName": "$s7AEPCore10LaunchRuleV4metaSDySSypGSgvg",
+                "moduleName": "AEPCore",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
             "name": "reevaluable",
             "printedName": "reevaluable",
             "children": [
@@ -11877,11 +11962,6 @@
             "usr": "s:7AEPCore10LaunchRuleV11reevaluableSbvp",
             "mangledName": "$s7AEPCore10LaunchRuleV11reevaluableSbvp",
             "moduleName": "AEPCore",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "isLet": true,
-            "hasStorage": true,
             "accessors": [
               {
                 "kind": "Accessor",
@@ -11899,7 +11979,6 @@
                 "usr": "s:7AEPCore10LaunchRuleV11reevaluableSbvg",
                 "mangledName": "$s7AEPCore10LaunchRuleV11reevaluableSbvg",
                 "moduleName": "AEPCore",
-                "implicit": true,
                 "accessorKind": "get"
               }
             ]
