@@ -55,18 +55,19 @@ struct JSONRuleRoot: Codable {
     /// - Returns: an array of `LaunchRule` objects
     func convert(_ runtime: ExtensionRuntime? = nil) -> [LaunchRule] {
         var result = [LaunchRule]()
-        for launchRule in rules {
-            if let conditionExpression = launchRule.condition.convert(runtime) {
+        for jsonRule in rules {
+            if let conditionExpression = jsonRule.condition.convert(runtime) {
                 var consequences = [RuleConsequence]()
-                for consequence in launchRule.consequences {
+                for consequence in jsonRule.consequences {
                     if let id = consequence.id, let type = consequence.type, let dict = consequence.detailDict {
                         consequences.append(RuleConsequence(id: id, type: type, details: dict))
                     }
                 }
+                let meta = jsonRule.meta?.compactMapValues { $0.value }
                 let rule = LaunchRule(
                     condition: conditionExpression,
                     consequences: consequences,
-                    reevaluable: launchRule.reevaluable
+                    meta: meta
                 )
                 result.append(rule)
             }
@@ -75,24 +76,10 @@ struct JSONRuleRoot: Codable {
     }
 }
 
-/// Metadata for a rule containing reevaluation settings
-struct JSONRuleMeta: Codable {
-    var reEvaluate: Bool?
-    
-    enum CodingKeys: String, CodingKey {
-        case reEvaluate
-    }
-}
-
 struct JSONRule: Codable {
-    var condition: JSONCondition
-    var consequences: [JSONConsequence]
-    var meta: JSONRuleMeta?
-    
-    /// Returns the reevaluable flag from meta, defaults to false if not present
-    var reevaluable: Bool {
-        return meta?.reEvaluate ?? false
-    }
+    let condition: JSONCondition
+    let consequences: [JSONConsequence]
+    let meta: [String: AnyCodable]?
 }
 
 enum ConditionType: String, Codable {
