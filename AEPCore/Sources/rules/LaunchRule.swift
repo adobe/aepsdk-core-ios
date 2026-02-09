@@ -20,12 +20,6 @@ public struct LaunchRule: Rule {
     
     /// Metadata dictionary for the rule, containing additional rule properties
     public let meta: [String: Any]?
-    
-    /// Indicates whether this rule should trigger reevaluation when matched
-    /// Reads from `meta["reEvaluate"]`, defaults to `false` if not present
-    public var reevaluable: Bool {
-        return meta?["reEvaluate"] as? Bool ?? false
-    }
 
     init(condition: Evaluable, consequences: [RuleConsequence], meta: [String: Any]? = nil) {
         self.condition = condition

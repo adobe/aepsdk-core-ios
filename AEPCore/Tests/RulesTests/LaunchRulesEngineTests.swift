@@ -311,7 +311,7 @@ class LaunchRulesEngineTests: XCTestCase {
         // Then
         XCTAssertNotNil(rules)
         XCTAssertEqual(1, rules?.count)
-        XCTAssertTrue(rules?[0].hasReevaluableSupportedConsequence ?? false, "Schema consequence should be reevaluable supported")
+        XCTAssertTrue(rules?[0].hasReevaluableSupportedConsequence() ?? false, "Schema consequence should be reevaluable supported")
     }
     
     func testHasReevaluableSupportedConsequence_NonSchemaType() {
@@ -348,7 +348,7 @@ class LaunchRulesEngineTests: XCTestCase {
         // Then
         XCTAssertNotNil(rules)
         XCTAssertEqual(1, rules?.count)
-        XCTAssertFalse(rules?[0].hasReevaluableSupportedConsequence ?? true, "Non-schema consequence should NOT be reevaluable supported")
+        XCTAssertFalse(rules?[0].hasReevaluableSupportedConsequence() ?? true, "Non-schema consequence should NOT be reevaluable supported")
     }
     
     // MARK: - No Triggering When No Interceptor Set

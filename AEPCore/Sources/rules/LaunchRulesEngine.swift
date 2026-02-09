@@ -52,9 +52,6 @@ public class LaunchRulesEngine {
     private static let CONSEQUENCE_EVENT_HISTORY_OPERATION_INSERT_IF_NOT_EXISTS = "insertIfNotExists"
     /// Do not process Dispatch consequence if chained event count is greater than max
     private static let MAX_CHAINED_CONSEQUENCE_COUNT = 1
-    
-    /// Consequence types that support reevaluation - only schema consequences are reevaluable
-    static let REEVALUABLE_CONSEQUENCE_TYPES: Set<String> = ["schema"]
 
     // Event History Operation constants
     private static let EVENT_HISTORY_OPERATION_KEY = "operation"
@@ -259,7 +256,7 @@ public class LaunchRulesEngine {
     /// - Parameter rules: The list of matched rules to filter
     /// - Returns: Rules that should trigger reevaluation
     private func getReevaluableRules(from rules: [LaunchRule]) -> [LaunchRule] {
-        return rules.filter { $0.reevaluable && $0.hasReevaluableSupportedConsequence }
+        return rules.filter { $0.reevaluable && $0.hasReevaluableSupportedConsequence() }
     }
     
     /// Returns rules that have schema consequences and should be held until reevaluation completes.
@@ -268,7 +265,7 @@ public class LaunchRulesEngine {
     /// - Parameter rules: The list of matched rules to filter
     /// - Returns: Rules that should wait for reevaluation
     private func getRulesToHoldForReevaluation(from rules: [LaunchRule]) -> [LaunchRule] {
-        return rules.filter { $0.hasReevaluableSupportedConsequence }
+        return rules.filter { $0.hasReevaluableSupportedConsequence() }
     }
     
     /// Processes consequences for matched rules.
@@ -596,20 +593,5 @@ extension RuleConsequence {
 
     public var schema: String? {
         return details["schema"] as? String
-    }
-}
-
-// MARK: - LaunchRule Reevaluation Support Extension
-
-extension LaunchRule {
-    /// Returns `true` if this rule has at least one consequence type that supports reevaluation.
-    /// Currently, only "schema" consequences are considered reevaluable.
-    var hasReevaluableSupportedConsequence: Bool {
-        for consequence in consequences {
-            if LaunchRulesEngine.REEVALUABLE_CONSEQUENCE_TYPES.contains(consequence.type) {
-                return true
-            }
-        }
-        return false
     }
 }

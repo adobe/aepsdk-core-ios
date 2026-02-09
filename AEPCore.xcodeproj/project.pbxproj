@@ -266,6 +266,7 @@
 		3FB66AD724CA004400502CAF /* EventListenerContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB124CA004400502CAF /* EventListenerContainer.swift */; };
 		3FB66AD824CA004400502CAF /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB224CA004400502CAF /* Extension.swift */; };
 		3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB424CA004400502CAF /* LaunchRule.swift */; };
+		AABB00DD24CA004400REEVAL /* LaunchRule+Reevaluable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */; };
 		3FB66ADA24CA004400502CAF /* RulesDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB524CA004400502CAF /* RulesDownloader.swift */; };
 		3FB66ADB24CA004400502CAF /* LaunchRulesEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */; };
 		3FB66ADC24CA004400502CAF /* RulesLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FB66AB724CA004400502CAF /* RulesLoader.swift */; };
@@ -1057,6 +1058,7 @@
 		3FB66AB124CA004400502CAF /* EventListenerContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventListenerContainer.swift; sourceTree = "<group>"; };
 		3FB66AB224CA004400502CAF /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		3FB66AB424CA004400502CAF /* LaunchRule.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchRule.swift; sourceTree = "<group>"; };
+		AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LaunchRule+Reevaluable.swift"; sourceTree = "<group>"; };
 		3FB66AB524CA004400502CAF /* RulesDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesDownloader.swift; sourceTree = "<group>"; };
 		3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchRulesEngine.swift; sourceTree = "<group>"; };
 		3FB66AB724CA004400502CAF /* RulesLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RulesLoader.swift; sourceTree = "<group>"; };
@@ -2216,6 +2218,7 @@
 				3F08FF9424D9F1D200D34DE3 /* EventDataMerger.swift */,
 				3FB66AB824CA004400502CAF /* JSONRulesParser.swift */,
 				3FB66AB424CA004400502CAF /* LaunchRule.swift */,
+				AABB00CC24CA004400REEVAL /* LaunchRule+Reevaluable.swift */,
 				3F5D45F7251903020040E298 /* LaunchRuleTransformer.swift */,
 				3FB66AB624CA004400502CAF /* LaunchRulesEngine.swift */,
 				3F2B1DC4263221580030F50B /* LaunchRulesEngine+Downloader.swift */,
@@ -3591,6 +3594,7 @@
 				24EDE33126EFB7170068A65F /* EventHistory.swift in Sources */,
 				24D2A3D524DB5B370079DCCF /* HitQueuing+PrivacyStatus.swift in Sources */,
 				3FB66AD924CA004400502CAF /* LaunchRule.swift in Sources */,
+				AABB00DD24CA004400REEVAL /* LaunchRule+Reevaluable.swift in Sources */,
 				BB0E397224FD56100050C181 /* RulesEngineNativeLogging.swift in Sources */,
 				21F79ABB24E70CDC003204C3 /* IDParsing.swift in Sources */,
 				3FB66AE524CA004400502CAF /* CachedConfiguration.swift in Sources */,
