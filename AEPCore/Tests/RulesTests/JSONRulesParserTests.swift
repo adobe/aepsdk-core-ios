@@ -78,4 +78,175 @@ class JSONRulesParserTests: XCTestCase {
         let rules = JSONRulesParser.parse(INVALID_JSON_RULE.data(using: .utf8)!)
         XCTAssertNil(rules)
     }
+    
+    // MARK: - Reevaluable Flag Tests
+    
+    func testParseRulesWithMetaReevaluableTrue() {
+        // Given: JSON with meta.reEvaluable = true (backend format)
+        let jsonWithReevaluable = """
+        {
+            "version": 1,
+            "rules": [
+                {
+                    "meta": {
+                        "reEvaluate": true
+                    },
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["com.adobe.eventType.generic.track"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "test-consequence",
+                            "type": "schema",
+                            "detail": {}
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+        
+        // When
+        let rules = JSONRulesParser.parse(jsonWithReevaluable.data(using: .utf8)!)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertTrue(rules?[0].reevaluable ?? false, "Rule should be marked as reevaluable from meta")
+    }
+    
+    func testParseRulesWithMetaReevaluableFalse() {
+        // Given: JSON with meta.reEvaluable = false
+        let jsonWithReevaluableFalse = """
+        {
+            "version": 1,
+            "rules": [
+                {
+                    "meta": {
+                        "reEvaluate": false
+                    },
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["com.adobe.eventType.generic.track"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "test-consequence",
+                            "type": "schema",
+                            "detail": {}
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+        
+        // When
+        let rules = JSONRulesParser.parse(jsonWithReevaluableFalse.data(using: .utf8)!)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertFalse(rules?[0].reevaluable ?? true, "Rule should NOT be marked as reevaluable")
+    }
+    
+    func testParseRulesWithoutMetaObject() {
+        // Given: JSON without meta object at all (should default to false)
+        let jsonWithoutMeta = """
+        {
+            "version": 1,
+            "rules": [
+                {
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["com.adobe.eventType.generic.track"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "test-consequence",
+                            "type": "schema",
+                            "detail": {}
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+        
+        // When
+        let rules = JSONRulesParser.parse(jsonWithoutMeta.data(using: .utf8)!)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertFalse(rules?[0].reevaluable ?? true, "Rule without meta should default to NOT reevaluable")
+    }
+    
+    func testParseRulesWithoutReevaluableFlag() {
+        // Given: JSON without reevaluable flag (should default to false)
+        let jsonWithoutReevaluable = """
+        {
+            "version": 1,
+            "rules": [
+                {
+                    "condition": {
+                        "type": "matcher",
+                        "definition": {
+                            "key": "~type",
+                            "matcher": "eq",
+                            "values": ["com.adobe.eventType.generic.track"]
+                        }
+                    },
+                    "consequences": [
+                        {
+                            "id": "test-consequence",
+                            "type": "url",
+                            "detail": {}
+                        }
+                    ]
+                }
+            ]
+        }
+        """
+        
+        // When
+        let rules = JSONRulesParser.parse(jsonWithoutReevaluable.data(using: .utf8)!)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertFalse(rules?[0].reevaluable ?? true, "Rule should default to NOT reevaluable")
+    }
+    
+    func testParseRulesFromReevaluableJsonFile() {
+        // Given: Load rules from the reevaluable test JSON file
+        let testBundle = Bundle(for: type(of: self))
+        guard let url = testBundle.url(forResource: "rules_reevaluable", withExtension: "json"),
+              let data = try? Data(contentsOf: url) else {
+            XCTFail("Could not load rules_reevaluable.json")
+            return
+        }
+        
+        // When
+        let rules = JSONRulesParser.parse(data)
+        
+        // Then
+        XCTAssertNotNil(rules)
+        XCTAssertEqual(1, rules?.count)
+        XCTAssertTrue(rules?[0].reevaluable ?? false, "Rule from reevaluable JSON should be marked as reevaluable")
+        XCTAssertEqual("schema", rules?[0].consequences[0].type)
+    }
 }
