@@ -11962,6 +11962,7 @@
             "usr": "s:7AEPCore10LaunchRuleV11reevaluableSbvp",
             "mangledName": "$s7AEPCore10LaunchRuleV11reevaluableSbvp",
             "moduleName": "AEPCore",
+            "isFromExtension": true,
             "accessors": [
               {
                 "kind": "Accessor",
@@ -11979,6 +11980,7 @@
                 "usr": "s:7AEPCore10LaunchRuleV11reevaluableSbvg",
                 "mangledName": "$s7AEPCore10LaunchRuleV11reevaluableSbvg",
                 "moduleName": "AEPCore",
+                "isFromExtension": true,
                 "accessorKind": "get"
               }
             ]
